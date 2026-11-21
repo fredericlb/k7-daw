@@ -21,7 +21,7 @@ Number,Name,Tablet id,Mobile id,Desktop id,Canvas boards,Interactions board,Draw
 20,Turntables,20T,20M,20D,"TurntablesPad, TurntablesPhone, TurntablesDesk",Ix20,TRUE,,18316
 21,Library,21T,21M,21D,"LibrariesPad, LibrariesPhone, LibrariesDesk",Ix21,TRUE,01,29528
 22,Frozen chains,22T,22M,22D,,,FALSE,,
-23,App settings,23T,23M,23D,"AppSettingsPad, AppSettingsPhone, AppSettingsDesk, AppSettingsDownloadsPad, AppSettingsDownloadsPhone, AppSettingsDownloadsDesk, AppSettingsAboutPad, AppSettingsAboutPhone, AppSettingsAboutDesk",Ix23,TRUE,,31456
+23,App settings,23T,23M,23D,"AppSettingsPad, AppSettingsPhone, AppSettingsDesk, AppSettingsDownloadsPad, AppSettingsDownloadsPhone, AppSettingsDownloadsDesk, AppSettingsAboutPad, AppSettingsAboutPhone, AppSettingsAboutDesk, AppSettingsGitHubPad, AppSettingsGitHubPhone",Ix23,TRUE,,31456
 24,Logs panel,24T,24M,24D,"LogsPad, LogsPhone, LogsDesk",Ix24,TRUE,,32420
 25,Playlists panel,25T,25M,25D,"PlaylistsPad, PlaylistsPhone, PlaylistsDesk",Ix25,TRUE,,33384
 26,Command editor screen,26T,26M,26D,"CommandEditorPad, CommandEditorPhone, CommandEditorDesk",Ix26,TRUE,,34348
@@ -39,3 +39,5 @@ Number,Name,Tablet id,Mobile id,Desktop id,Canvas boards,Interactions board,Draw
 38,Curves,,,,,,FALSE,,
 39,Chain and module builders,,,,,,FALSE,,
 40,Surfaces,40T,40M,40D,"SurfacesPad, SurfacesPhone, SurfacesDesk, RemoteSurfacePad, RemoteSurfacePhone, RemoteInUseDesk",Ix40,TRUE,,43024
+41,Sign in with GitHub,41T,41M,41D,"GitHubWaysPad, GitHubWaysPhone, CloneWaysPad, CloneWaysPhone, DeviceFlowPad, DeviceFlowPhone, DeviceFlowExpiredPad, DeviceFlowExpiredPhone, GitHubPermissionPad, GitHubPermissionPhone",Ix41,TRUE,,5784
+42,GitHub repositories,42T,42M,42D,"GitHubPickerPad, GitHubPickerPhone, NewRepoPad, NewRepoPhone",Ix42,TRUE,,10604

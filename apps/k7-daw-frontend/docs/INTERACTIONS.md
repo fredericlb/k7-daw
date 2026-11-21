@@ -37,7 +37,7 @@ An interaction is `<screen number>.<nn>` (`03.05`), one id shared by every devic
 | 20 Turntables | 20T (27) | 20M (27) | 20D (27) | TurntablesPad, TurntablesPhone, TurntablesDesk, Ix20 |
 | 21 Library | 21T (6) | 21M (6) | 21D (6) | LibrariesPad, LibrariesPhone, LibrariesDesk, Ix21 |
 | 22 Frozen chains | 22T (0) | 22M (0) | 22D (0) | not drawn |
-| 23 App settings | 23T (15) | 23M (15) | 23D (15) | AppSettingsPad, AppSettingsPhone, AppSettingsDesk, AppSettingsDownloadsPad, AppSettingsDownloadsPhone, AppSettingsDownloadsDesk, AppSettingsAboutPad, AppSettingsAboutPhone, AppSettingsAboutDesk, Ix23 |
+| 23 App settings | 23T (17) | 23M (17) | 23D (17) | AppSettingsPad, AppSettingsPhone, AppSettingsDesk, AppSettingsDownloadsPad, AppSettingsDownloadsPhone, AppSettingsDownloadsDesk, AppSettingsAboutPad, AppSettingsAboutPhone, AppSettingsAboutDesk, AppSettingsGitHubPad, AppSettingsGitHubPhone, Ix23 |
 | 24 Logs panel | 24T (2) | 24M (2) | 24D (2) | LogsPad, LogsPhone, LogsDesk, Ix24 |
 | 25 Playlists panel | 25T (12) | 25M (12) | 25D (13) | PlaylistsPad, PlaylistsPhone, PlaylistsDesk, Ix25 |
 | 26 Command editor screen | 26T (10) | 26M (9) | 26D (10) | CommandEditorPad, CommandEditorPhone, CommandEditorDesk, Ix26 |
@@ -55,6 +55,8 @@ An interaction is `<screen number>.<nn>` (`03.05`), one id shared by every devic
 | 38 Curves | 38T (15) | 38M (15) | 38D (15) | not drawn |
 | 39 Chain and module builders | 39T (26) | 39M (24) | 39D (27) | not drawn |
 | 40 Surfaces | 40T (8) | 40M (8) | 40D (8) | SurfacesPad, SurfacesPhone, SurfacesDesk, RemoteSurfacePad, RemoteSurfacePhone, RemoteInUseDesk, Ix40 |
+| 41 Sign in with GitHub | 41T (7) | 41M (7) | 41D (7) | GitHubWaysPad, GitHubWaysPhone, CloneWaysPad, CloneWaysPhone, DeviceFlowPad, DeviceFlowPhone, DeviceFlowExpiredPad, DeviceFlowExpiredPhone, GitHubPermissionPad, GitHubPermissionPhone, Ix41 |
+| 42 GitHub repositories | 42T (7) | 42M (7) | 42D (7) | GitHubPickerPad, GitHubPickerPhone, NewRepoPad, NewRepoPhone, Ix42 |
 
 ## 01 Home
 
@@ -88,7 +90,7 @@ The home pages behind a floating tab bar (Projects, Surfaces, Tasks, Library, Se
 | 01.15 | Create a project | click "New project" (page header or a band's button) → name and archetype dialog | Enter creates; Esc cancels; arrows pick the archetype | tap | T M D |
 | 01.16 | Pick the target workspace for a new project | click a workspace button in the dialog | — | tap | T M D |
 | 01.17 | Create a workspace | click "New workspace" (also the empty page's main action) → name dialog | Enter creates; Esc cancels | tap | T M D |
-| 01.18 | Clone a workspace from git | click "Clone" → address dialog (see Git screens) | — | tap | T M D |
+| 01.18 | Clone a workspace from git | click "Clone" → clone dialog, opening on Sign in with GitHub / Another host… where the build offers GitHub (see Git screens) | — | tap | T M D |
 | 01.19 | Clone a workspace known from another device | click Clone on a row of "other devices" (name and address pre-filled) | — | tap | T M D |
 | 01.20 | Open a workspace's file tree | click the workspace name on its band | Tab, Enter | tap | T M D |
 | 01.21 | Fold / unfold a workspace band | click the chevron | Enter/Space | tap | T M D |
@@ -100,7 +102,7 @@ The home pages behind a floating tab bar (Projects, Surfaces, Tasks, Library, Se
 | 01.27 | Delete a project | ⋮ → Delete → click the red Delete | Esc cancels | tap | T M D |
 | 01.28 | Open a workspace's menu (git remote, delete) | click ⋮ on its band | Enter, arrows | tap ⋮ | T M D |
 | 01.29 | Delete a workspace | ⋮ → Delete… → type the workspace's name, confirm | type, Enter; Esc cancels | tap | T M D |
-| 01.30 | Connect / change a workspace's git remote | ⋮ → Connect/Change remote → address dialog | — | tap | T M D |
+| 01.30 | Connect / change a workspace's git remote | ⋮ → Connect/Change remote → remote dialog, opening on Sign in with GitHub / Another host… where the build offers GitHub | — | tap | T M D |
 | 01.31† | Import a project file by dropping | drag a `.dawproject` file onto a workspace's row (it lights up) → name dialog | Enter confirms | — | T D |
 | 01.32 | Show or hide the Examples workspace | page ⋮ → "Show examples" (remembered per device; it cannot be hidden while it is the only workspace) | Enter | tap | T M D |
 | 01.33 | Go to Libraries from the missing-library notice | click the notice's link | Enter | tap | T M D |
@@ -114,7 +116,7 @@ The home pages behind a floating tab bar (Projects, Surfaces, Tasks, Library, Se
 
 ### Git screens
 
-The git bar (workspace tree, Home row, project header), the commit dialog, the merge dialog with conflict cards, the remote and clone dialogs, the commit list, the identity form.
+The git bar (workspace tree, Home row, project header), the commit dialog, the merge dialog with conflict cards, the remote and clone dialogs with their Sign in with GitHub ways, the device-flow code and the repository picker, the commit list, the identity form.
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
@@ -741,6 +743,8 @@ No interaction of its own: its controls are listed under .
 | 23.12 | Download, cancel, remove or retry an instrument | click the button on its row (Downloads tab) | Enter | tap | T M D |
 | 23.13 | Open the Engine page | Devices → click the Engine row | Enter | tap | T M D |
 | 23.14 | Read k7's licence, open its source, read a third-party notice | About → Read it; Open; search, click a notice | Enter | tap | T M D |
+| 23.15 | Sign out of GitHub | General → GitHub (shown once signed in): click "Sign out" beside @login; the key k7 added stays on GitHub | Tab, Enter | tap | T M D |
+| 23.16 | Manage this device's keys on GitHub | click "Manage keys on GitHub" (github.com/settings/keys, a new tab) | Tab, Enter | tap | T M D |
 
 ### Git screens
 
@@ -835,10 +839,10 @@ The Mixer (one strip per lane's mixer module, Master as the row's last strip wit
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
-| 29.01 | Enter the ssh address | type in the field (web addresses are refused) | — | tap, type | T M D |
+| 29.01 | Enter the ssh address | type in the field (web addresses are refused); behind "Another host…" where the build offers GitHub | — | tap, type | T M D |
 | 29.02 | Name the clone | type in the name field | — | same | T M D |
 | 29.03 | Copy this device's public key | click Copy (the box selects all on focus) | — | tap Copy | T M D |
-| 29.04 | Connect / Clone | click the submit button | — | tap | T M D |
+| 29.04 | Connect / Clone | click the submit button (absent on the GitHub ways and picker: a pick in Connect connects at once) | — | tap | T M D |
 | 29.05 | Cancel the remote dialog | click Cancel or the backdrop | Esc | tap | T M D |
 
 ## 30 Workspace history
@@ -1006,6 +1010,34 @@ The Surfaces tab lists, by device, the surfaces of the projects open on the netw
 | 40.07 | Play, stop and read the position on another device's surface | click Play or Stop in the transport capsule; click the position to switch bars and seconds | Space plays and stops | tap | T M D |
 | 40.08 | Open a pane another device shows (the device that holds the project) | click the dimmed pane: a toast says “In use on <device>” | its pane key says the same | tap it | T M D |
 
+## 41 Sign in with GitHub
+
+### Git screens
+
+| ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
+|---|---|---|---|---|---|
+| 41.01 | Sign in with GitHub | click "Sign in with GitHub": Connect and Clone open on it beside "Another host…" where the build offers GitHub → the code screen | Tab, Enter | tap | T M D |
+| 41.02 | Choose another host | click "Another host…" (under the two ways, the permission step and the picker) → the ssh address form; typing an address also chooses it | Tab, Enter | tap | T M D |
+| 41.03 | Copy the sign-in code | click "Copy code" (the code box selects all) | — | tap Copy code | T M D |
+| 41.04 | Open GitHub's device page | click "Open github.com/login/device" (a new tab) and type the code there; k7 waits, asking while the page is visible | — | tap | T M D |
+| 41.05 | Try the sign-in again | click "Try again" after "The code expired.", "Sign-in was cancelled on GitHub." or a network error | — | tap | T M D |
+| 41.06 | Cancel the sign-in | click Cancel under the code (back to the two ways) | — | tap | T M D |
+| 41.07 | Grant the repository permission | the first picker opens on a second code ("k7 needs one more permission to list and create your repositories."): copy, open and try again as 41.03–41.05; its Cancel goes to Another host | — | same | T M D |
+
+## 42 GitHub repositories
+
+### Git screens
+
+| ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
+|---|---|---|---|---|---|
+| 42.01 | Filter the repositories | type in "Filter repositories" (matches owner/name) | — | tap, type | T M D |
+| 42.02 | Pick a repository | click a row (k7 workspaces first, then Your repositories, each most recently pushed first; a Private badge and the pushed-ago): Connect connects at once; Clone fills the address and the name and waits for Clone | Tab, Enter | tap | T M D |
+| 42.03 | Start a new repository (Connect only) | click "New repository" → the name prefilled with the workspace's, Private on | Tab, Enter | tap | T M D |
+| 42.04 | Name the new repository | type in "Repository name" | — | tap, type | T M D |
+| 42.05 | Make the new repository public | turn "Private repository" off | Space | tap | T M D |
+| 42.06 | Create and connect | click "Create and connect" (the repository gets the `k7-workspace` topic) | — | tap | T M D |
+| 42.07 | Cancel the new repository | click Cancel (back to the list) | — | tap | T M D |
+
 ## Gaps found while listing
 
 - The ruler's drags (a range across every lane, a vertical drag to zoom) and the keyboard grab have no touch way; clips, edges, fades, lane headers, shots and automation points take a hold, then a drag.
@@ -1024,3 +1056,4 @@ The Surfaces tab lists, by device, the surfaces of the projects open on the netw
 - A chain or OUT card opens no menu on right-click, unlike every other card.
 - Removing a takes crossfade needs Alt, and sizing a timeline crossfade needs a drag: touch gets only the default.
 - `apps/k7-daw-frontend/src/settings/RemoteSlotsSection.tsx` is not referenced by any screen.
+- The GitHub account section (@login
