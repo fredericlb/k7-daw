@@ -56,12 +56,15 @@ export function Action({
   onClick,
   disabled,
   title,
+  disabledReason,
   children,
   danger,
 }: {
   onClick: () => void;
   disabled?: boolean;
   title?: string;
+  /** Why it is disabled; a press then shows it in a toast. */
+  disabledReason?: string;
   children: ReactNode;
   danger?: boolean;
 }) {
@@ -71,6 +74,7 @@ export function Action({
       variant={danger ? "destructive" : "glass"}
       onClick={onClick}
       disabled={disabled}
+      disabledReason={disabledReason}
       title={title}
     >
       {children}

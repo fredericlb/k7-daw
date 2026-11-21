@@ -1,7 +1,7 @@
 // toast.tsx — lightweight notifications, shared by the apps that mount this shell. No external
 // library. Render <Toaster/> once at the app root; call `showToast({ message, variant })` from
 // anywhere. A SUCCESS leaves after `duration`, a WARNING after a longer one; an ERROR stays until
-// dismissed, and hovering any of them holds it. A NEUTRAL toast with progress stays until the code
+// dismissed, and hovering or focusing any of them holds it. A NEUTRAL toast with progress stays until the code
 // dismisses it. The only toast of studio: patch it here — docs/toast.md.
 
 import { Button } from "@studio/ui/button";
@@ -39,6 +39,8 @@ export interface ToastItem {
   /** A 36 px pill after the text (Restart); the toast stays for it until the duration ends. */
   action?: ToastAction;
   progress?: ToastProgress;
+  /** False hides the close button: the toast leaves when the code says so (the engine link is down). */
+  dismissible?: boolean;
 }
 
 export type ToastPlacement = "bottom-right" | "top-right" | "top-centre";
@@ -47,7 +49,7 @@ export type ToastPlacement = "bottom-right" | "top-right" | "top-centre";
 export type ToastVariant = "success" | "warning" | "error" | "neutral";
 
 /** How long a success stays on screen; an error gets 0, meaning it waits to be dismissed. */
-export const TOAST_DURATION_MS = 3000;
+export const TOAST_DURATION_MS = 5000;
 /** A warning is a sentence to read, not a confirmation to glance at. */
 export const WARNING_DURATION_MS = 8000;
 
@@ -88,6 +90,7 @@ export function showToast(opts: {
   icon?: ReactNode;
   action?: ToastAction;
   progress?: ToastProgress;
+  dismissible?: boolean;
 }): number {
   const variant = opts.variant ?? "success";
   const t: ToastItem = {
@@ -100,6 +103,7 @@ export function showToast(opts: {
     icon: opts.icon,
     action: opts.action,
     progress: opts.progress,
+    dismissible: opts.dismissible,
   };
   for (const l of listeners) l(t);
   return t.id;
@@ -148,8 +152,6 @@ export function Toaster({
   const dismiss = (id: number) =>
     setItems((prev) => prev.filter((t) => t.id !== id));
 
-  if (!items.length) return null;
-
   const stack = (placement: ToastPlacement, className: string) => {
     const here = items.filter((t) => t.placement === placement);
     return here.length ? (
@@ -184,7 +186,7 @@ export function Toaster({
         phone === true
           ? topPhone
           : cx(
-              "right-(--toast-right,1rem) top-(--toast-top,1rem) w-[min(var(--k7-toast-max-w),calc(100vw-2rem))] items-stretch",
+              "right-(--toast-right,1rem) top-(--toast-top,calc(var(--k7-header-h)+8px)) w-[min(var(--k7-toast-max-w),calc(100vw-2rem))] items-stretch",
               phone === undefined &&
                 "max-sm:left-4 max-sm:right-4 max-sm:top-(--k7-toast-top-phone) max-sm:w-auto",
             ),
@@ -203,7 +205,7 @@ export function Toaster({
       {stack(
         "top-centre",
         cx(
-          "left-1/2 top-(--toast-top-centre,1rem) w-[min(var(--k7-toast-max-w),calc(100vw-2rem))] -translate-x-1/2 items-stretch !z-(--k7-z-system-toast)",
+          "left-1/2 top-(--toast-top-centre,calc(var(--k7-header-h)+8px)) w-[min(var(--k7-toast-max-w),calc(100vw-2rem))] -translate-x-1/2 items-stretch !z-(--k7-z-system-toast)",
           phone === true && "!top-(--k7-toast-top-phone)",
           phone === undefined && "max-sm:!top-(--k7-toast-top-phone)",
         ),
@@ -240,7 +242,7 @@ function Toast({
   dismissLabel: string;
   onDismiss: () => void;
 }) {
-  // Hovering holds the toast: reading a message must not be a race against its own timer.
+  // Hovering or focusing holds the toast: reading a message must not be a race against its own timer.
   const [held, setHeld] = useState(false);
 
   useEffect(() => {
@@ -254,7 +256,7 @@ function Toast({
   const p = item.progress;
   const total = p?.total ?? 100;
   // A scan the code owns has no Dismiss: it leaves when the code says so.
-  const dismissible = !(item.variant === "neutral" && p);
+  const dismissible = item.dismissible ?? !(item.variant === "neutral" && p);
 
   return (
     <div
@@ -263,6 +265,8 @@ function Toast({
       aria-live={alert ? "assertive" : "polite"}
       onPointerEnter={() => setHeld(true)}
       onPointerLeave={() => setHeld(false)}
+      onFocus={() => setHeld(true)}
+      onBlur={() => setHeld(false)}
       className={cx(
         "float pointer-events-auto flex flex-col gap-2 rounded-(--k7-r-toast) py-2 pr-1 pl-3.5 text-foreground",
         line,

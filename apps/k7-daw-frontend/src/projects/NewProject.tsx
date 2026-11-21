@@ -53,6 +53,7 @@ export function NewProject({
         size="sm"
         variant="glass"
         disabled={Boolean(blocked)}
+        disabledReason={blocked || undefined}
         title={blocked || m["project.newHint"]()}
         aria-label={m["project.newIn"]({ workspace })}
         onClick={() => setOpen(true)}

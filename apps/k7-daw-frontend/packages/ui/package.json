@@ -26,6 +26,7 @@
     "./dropdown-menu": "./src/dropdown-menu.tsx",
     "./lib/utils": "./src/lib/utils.ts",
     "./capsule": "./src/capsule.tsx",
+    "./disabled-reason": "./src/disabled-reason.ts",
     "./row-group": "./src/row-group.tsx",
     "./side-panel": "./src/side-panel.tsx",
     "./editor-dock": "./src/editor-dock.tsx",

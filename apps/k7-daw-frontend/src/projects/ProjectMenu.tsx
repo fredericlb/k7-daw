@@ -54,7 +54,7 @@ export function ProjectMenu({
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger asChild>
+        <DropdownMenuTrigger asChild disabled={Boolean(blocked)}>
           <Button
             variant="ghost"
             size="icon-sm"
@@ -62,6 +62,7 @@ export function ProjectMenu({
             title={blocked || m["project.menu"]({ label })}
             aria-label={m["project.menu"]({ label })}
             disabled={Boolean(blocked)}
+            disabledReason={blocked || undefined}
             // The whole row is a link to the project: without this, opening the menu would open it.
             onClick={(e) => {
               e.preventDefault();
@@ -75,7 +76,7 @@ export function ProjectMenu({
           <DropdownMenuItem
             className="gap-2 text-xs"
             disabled={Boolean(noTarget)}
-            title={noTarget || undefined}
+            disabledReason={noTarget || undefined}
             onSelect={() => setAct("copy")}
           >
             <Copy className="h-3.5 w-3.5 text-muted-foreground" />

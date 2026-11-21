@@ -6,6 +6,7 @@ import { useModalFocus } from "@studio/ui/modal-focus";
 import { forwardRef, useRef } from "react";
 import { useWindowKey } from "../hooks/useWindowKey";
 import { m } from "../paraglide/messages.js";
+import { usePopin } from "../popins";
 import {
   CommandBar,
   type CommandBarHandle,
@@ -40,6 +41,8 @@ export const FloatingCommandBar = forwardRef<
 ) {
   const card = useRef<HTMLDivElement>(null);
   useModalFocus(card, { active: open });
+  // On the Escape ladder, so Esc from a pane clicked to answer an argument closes the bar and not the panel behind it.
+  usePopin(open, onDismiss);
   if (!open) return null;
   return (
     <div className="pointer-events-none fixed inset-0 z-(--k7-z-palette)">
@@ -66,9 +69,6 @@ export const FloatingCommandBar = forwardRef<
           onClose={onDismiss}
           autoFocus
         />
-        <p className="type-status px-1 pt-1 pb-2 text-fg-3 max-[820px]:hidden">
-          {m["shell.commandBar.hints"]()}
-        </p>
       </div>
     </div>
   );

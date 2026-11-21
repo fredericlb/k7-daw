@@ -1,11 +1,12 @@
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
+import { reasonOf, reasonPress } from "./disabled-reason";
 import { cn } from "./lib/utils";
 
 // A control is a pill (radius = height / 2). `glass` and `chip` carry a pressed state through aria-pressed.
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full type-label cursor-pointer transition-colors outline-none focus-visible:shadow-(--k7-focus-ring) disabled:pointer-events-none disabled:opacity-40 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full type-label cursor-pointer transition-colors outline-none focus-visible:shadow-(--k7-focus-ring) disabled:pointer-events-none disabled:opacity-40 aria-disabled:opacity-40 [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -44,11 +45,31 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
+  /** Why it is disabled: it then stays pressable (aria-disabled) and a press shows this in a toast. */
+  disabledReason?: string;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  (
+    { className, variant, size, asChild = false, disabledReason, ...props },
+    ref,
+  ) => {
     const Comp = asChild ? Slot : "button";
+    // A disabled button with a reason stays pressable (aria-disabled) and shows the reason on press.
+    const reason = reasonOf(props.disabled, disabledReason);
+    if (reason) {
+      const { disabled: _d, onClick: _c, ...rest } = props;
+      return (
+        <Comp
+          className={cn(buttonVariants({ variant, size, className }))}
+          ref={ref}
+          aria-disabled
+          title={props.title ?? reason}
+          {...rest}
+          onClick={reasonPress(reason)}
+        />
+      );
+    }
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}

@@ -9,13 +9,20 @@ import { createPortal } from "react-dom";
 import { Button } from "./button";
 import { Maximize2, Minimize2 } from "./icons";
 import { cn } from "./lib/utils";
-import { PanelHeading, type PanelProps, settle } from "./side-panel";
+import {
+  focusTitleOnKeyboardOpen,
+  PanelHeading,
+  type PanelProps,
+  settle,
+} from "./side-panel";
 
 interface DockProps extends PanelProps {
   expanded: boolean;
   onExpandedChange: (expanded: boolean) => void;
   /** The Expand toggle's name, the same in both states: `aria-pressed` says which one it is in. */
   expandLabel: string;
+  /** The toggle's tooltip while expanded; the name stays `expandLabel`. */
+  collapseLabel?: string;
 }
 
 /** The 44 round toggle between the actions and Close. */
@@ -23,14 +30,18 @@ function ExpandButton({
   expanded,
   onExpandedChange,
   expandLabel,
-}: Pick<DockProps, "expanded" | "onExpandedChange" | "expandLabel">) {
+  collapseLabel,
+}: Pick<
+  DockProps,
+  "expanded" | "onExpandedChange" | "expandLabel" | "collapseLabel"
+>) {
   const Glyph = expanded ? Minimize2 : Maximize2;
   return (
     <Button
       variant="ghost"
       size="round"
       aria-label={expandLabel}
-      title={expandLabel}
+      title={expanded ? (collapseLabel ?? expandLabel) : expandLabel}
       aria-pressed={expanded}
       onClick={() => onExpandedChange(!expanded)}
       className="aria-pressed:bg-on-fill aria-pressed:text-lavender aria-pressed:shadow-(--k7-highlight)"
@@ -81,6 +92,7 @@ const headerOf = (
           expanded={p.expanded}
           onExpandedChange={p.onExpandedChange}
           expandLabel={p.expandLabel}
+          collapseLabel={p.collapseLabel}
         />
       </>
     }
@@ -126,7 +138,7 @@ function ResizeHandle({
     const min = px(el, "--k7-dock-min-h") || 120;
     onHeightChange(Math.round(Math.max(min, Math.min(tallest(el), h))));
   };
-  const onPointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     const el = dock.current;
     if (!el) return;
     e.preventDefault();
@@ -155,17 +167,25 @@ function ResizeHandle({
     e.preventDefault();
     set(to[e.key] ?? height);
   };
+  const el = dock.current;
   return (
-    <button
-      type="button"
+    // A 44 px hit area reaching 28 px above the dock, so the header's row stays clear; the pill is unchanged.
+    <div
+      role="separator"
+      aria-orientation="horizontal"
       aria-label={label}
+      aria-valuenow={Math.round(height)}
+      aria-valuemin={el ? px(el, "--k7-dock-min-h") || 120 : 120}
+      aria-valuemax={el ? Math.round(tallest(el)) : undefined}
+      // biome-ignore lint/a11y/noNoninteractiveTabindex: a focusable separator is the WAI-ARIA window splitter.
+      tabIndex={0}
       title={label}
       onPointerDown={onPointerDown}
       onKeyDown={onKeyDown}
-      className="absolute inset-x-0 top-0 mx-auto grid h-4 w-20 cursor-row-resize touch-none place-items-center rounded-full outline-none before:absolute before:-inset-x-4 before:-inset-y-3.5 before:content-[''] focus-visible:shadow-(--k7-focus-ring)"
+      className="absolute inset-x-0 -top-7 mx-auto flex h-11 w-24 cursor-row-resize touch-none items-start justify-center rounded-full pt-[33px] outline-none focus-visible:shadow-(--k7-focus-ring)"
     >
       <span aria-hidden className="h-[5px] w-9 rounded-full bg-white/35" />
-    </button>
+    </div>
   );
 }
 
@@ -202,7 +222,7 @@ export function EditorDock({
         data-slot="panel-frame"
         data-expanded={head.expanded}
         aria-describedby={undefined}
-        onOpenAutoFocus={(e) => e.preventDefault()}
+        onOpenAutoFocus={focusTitleOnKeyboardOpen}
         onInteractOutside={(e) => e.preventDefault()}
         onEscapeKeyDown={settle(onEscapeKeyDown)}
         style={
@@ -250,21 +270,17 @@ export function EditorSheet({
         data-slot="panel-frame"
         data-expanded={head.expanded}
         aria-describedby={undefined}
-        onOpenAutoFocus={head.expanded ? undefined : (e) => e.preventDefault()}
+        onOpenAutoFocus={head.expanded ? undefined : focusTitleOnKeyboardOpen}
         onInteractOutside={
           head.expanded ? undefined : (e) => e.preventDefault()
         }
         onEscapeKeyDown={settle(onEscapeKeyDown)}
         className={cn(
-          "panel-sheet absolute inset-x-0 bottom-0 z-(--k7-z-panel) flex flex-col gap-2.5 rounded-t-(--k7-r-sheet) px-4 pt-1.5 pb-[34px] outline-none animate-[k7-sheet-in_var(--k7-dur-panel)_var(--k7-ease-spring)]",
+          "panel-sheet absolute inset-x-0 bottom-0 z-(--k7-z-panel) flex flex-col gap-2.5 rounded-t-(--k7-r-sheet) px-4 pt-4 pb-[34px] outline-none animate-[k7-sheet-in_var(--k7-dur-panel)_var(--k7-ease-spring)]",
           head.expanded ? "top-(--k7-sheet-top)" : "top-(--k7-dock-sheet-top)",
           className,
         )}
       >
-        <span
-          aria-hidden
-          className="mx-auto mb-1 h-[5px] w-9 shrink-0 rounded-full bg-(--k7-grabber)"
-        />
         {headerOf(head, setSlot, true)}
         <SlotCtx.Provider value={slot}>
           <SheetCtx.Provider value>

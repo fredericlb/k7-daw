@@ -262,7 +262,7 @@ bottom margin for the bar instead.
 
 | piece | file | what it is |
 |---|---|---|
-| header | `shell/ProjectHeader.tsx` | Back, the name over its status, the spinner, the warning chip, the git capsule, the pane switcher (centred), the panel toolbar, the app buttons |
+| header | `shell/ProjectHeader.tsx` | Back, the name over its status, the spinner, the warning chip, the git capsule, the pane switcher (centred), the panel toolbar, the app buttons; laid out in flow: a `flex-1` left cluster, the switcher, a right cluster of the same basis, so nothing overlaps at any width |
 | git capsule | `shell/HeaderGit.tsx` | Commit & Push with its count, a menu (Pull, Commits); while a merge waits, one "Resolve N conflicts" button and a banner |
 | bar | `shell/FloatingBar.tsx`, `shell/ShellTransport.tsx` | the command bar button, the tool, the transport capsule, the pane's capsule (Lane views or Graph views) |
 | panels | `shell/panels.tsx` | the registry: an id, a glyph and a title each, in the kit's `SidePanel` (Pad, Desk) or `Sheet` (Phone) |
@@ -368,8 +368,9 @@ counting in two units make every position a conversion. There is no separate clo
 
 ### On a phone, one menu holds everywhere there is to go
 
-`shell/OverflowMenu.tsx` (`menu "Views and panels"`): the PANE segmented control (`menuitemradio`), the
-current pane's pills (Lane views, or Graph views on the Graph; none on the editor), the PANELS tiles (`menuitem`, pressed while open) and Settings; the command editor opens from the Settings panel's Commands button, not from the header. A panel
+`shell/OverflowMenu.tsx` (`dialog "Views and panels"`, plain toggle buttons with `aria-pressed`, not `role="menu"`;
+focus moves in on open and back to the trigger on close): the PANE segmented control, the
+current pane's pills (Lane views, or Graph views on the Graph; none on the editor), the tool, the metronome with its level slider, the PANELS tiles (pressed while open) and Settings; the command editor opens from the Settings panel's Commands button, not from the header. A panel
 opens as a full-screen sheet.
 
 ### The Mixer is a dock occupant: strips left to right
@@ -1283,7 +1284,8 @@ leaf instead, the shape `TimelineTab` uses ([`timeline.md`](timeline.md)).
 **The status line is live state too.** It carries only what a pane says while it is used, such as a
 drag's snapped cell, restated on every cell, so it is not `App` state: it is the small store in
 `src/statusLine.ts`, read by one leaf, `components/StatusText.tsx`. What a command did is a toast, not
-this line. What
+this line. It takes the free width under the project's name, and a phone draws it under the header, since
+it is the shell's error channel. What
 the panes REPORT to `App` — the caret, the timeline's view, what the editor has open — goes through a
 setter that keeps the current object when the new one says the same thing (`src/shellEquality.ts`), and
 the editor reports an open sequence by PATH, never its text, so a keystroke is not a new shell state.

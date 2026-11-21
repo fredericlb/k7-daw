@@ -214,7 +214,7 @@
   --k7-dock-gap: 12px; /* a right panel ends this far above the dock; the toast too */
   --k7-dock-padding: 14px 6px 14px 14px;
   --k7-dock-sheet-top: 300px; /* phone editor sheet, partial; expanded it takes --k7-sheet-top */
-  --k7-sheet-top: 54px; /* phone sheet; padding 6 16 34; grabber 36 x 5 */
+  --k7-sheet-top: 54px; /* phone sheet; padding 16 16 34, no grabber */
   --k7-toast-max-w: 460px; /* 440 on the Arrange boards */
   --k7-toast-right-panel-open: 428px;
   --k7-toast-bottom-phone: 140px;

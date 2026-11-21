@@ -24,6 +24,15 @@ export interface PanelProps {
   onEscapeKeyDown?: (e: KeyboardEvent) => void;
 }
 
+/** A panel opened from the keyboard takes focus on its title (a pointer open leaves it where it was). */
+export const focusTitleOnKeyboardOpen = (e: Event) => {
+  e.preventDefault();
+  const from = document.activeElement;
+  if (!(from instanceof HTMLElement) || !from.matches(":focus-visible")) return;
+  const frame = (e.currentTarget ?? e.target) as HTMLElement | null;
+  frame?.querySelector<HTMLElement>("[data-slot=panel-title]")?.focus();
+};
+
 export const settle =
   (host?: (e: KeyboardEvent) => void) => (e: KeyboardEvent) => {
     host?.(e);
@@ -49,7 +58,13 @@ export function PanelHeading({
     <div className="flex min-h-11 shrink-0 items-center gap-2.5">
       {row ? (
         <>
-          <Dialog.Title className="sr-only">{title}</Dialog.Title>
+          <Dialog.Title
+            tabIndex={-1}
+            data-slot="panel-title"
+            className="sr-only"
+          >
+            {title}
+          </Dialog.Title>
           <div ref={row} className="flex min-w-0 flex-1 items-center" />
         </>
       ) : null}
@@ -61,8 +76,10 @@ export function PanelHeading({
       {row ? null : (
         <div className="min-w-0 flex-1">
           <Dialog.Title
+            tabIndex={-1}
+            data-slot="panel-title"
             className={cn(
-              "truncate text-foreground",
+              "truncate text-foreground outline-none",
               sheet ? "type-sheet-title" : "type-headline",
             )}
           >
@@ -109,7 +126,7 @@ export function SidePanel({
         role="complementary"
         data-slot="panel-frame"
         aria-describedby={undefined}
-        onOpenAutoFocus={(e) => e.preventDefault()}
+        onOpenAutoFocus={focusTitleOnKeyboardOpen}
         onInteractOutside={(e) => e.preventDefault()}
         onEscapeKeyDown={settle(onEscapeKeyDown)}
         className={cn(
@@ -124,7 +141,7 @@ export function SidePanel({
   );
 }
 
-/** The phone panel: a sheet from the bottom, a grabber, a 20 px title, a round Close. `transport` is an editor's own play row. */
+/** The phone panel: a sheet from the bottom, a 20 px title, a round Close. `transport` is an editor's own play row. */
 export function Sheet({
   children,
   className,
@@ -144,14 +161,10 @@ export function Sheet({
         aria-describedby={undefined}
         onEscapeKeyDown={settle(onEscapeKeyDown)}
         className={cn(
-          "panel-sheet absolute inset-x-0 bottom-0 top-(--k7-sheet-top) z-(--k7-z-panel) flex flex-col gap-2.5 rounded-t-(--k7-r-sheet) px-4 pt-1.5 pb-[34px] outline-none animate-[k7-sheet-in_var(--k7-dur-panel)_var(--k7-ease-spring)]",
+          "panel-sheet absolute inset-x-0 bottom-0 top-(--k7-sheet-top) z-(--k7-z-panel) flex flex-col gap-2.5 rounded-t-(--k7-r-sheet) px-4 pt-4 pb-[34px] outline-none animate-[k7-sheet-in_var(--k7-dur-panel)_var(--k7-ease-spring)]",
           className,
         )}
       >
-        <span
-          aria-hidden
-          className="mx-auto mb-1 h-[5px] w-9 shrink-0 rounded-full bg-(--k7-grabber)"
-        />
         <PanelHeading {...head} sheet />
         {transport}
         <div className="min-h-0 flex-1 overflow-y-auto">{children}</div>

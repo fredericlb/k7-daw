@@ -1,5 +1,8 @@
 // OverflowMenu.tsx — the phone header's one menu: pane, lane views and the panel tiles (300 wide, over a 0.35 scrim).
-// Everything it holds is also a button of the Pad and Desk header: this is the same set, folded.
+// Everything it holds is also a button of the Pad and Desk header: this is the same set, folded. A popover of
+// plain toggle buttons, not role="menu": focus moves in on open and returns to the trigger on close.
+
+import { METRONOME_MIN } from "@studio/engine-protocol/build";
 import { Button } from "@studio/ui/button";
 import {
   CircleHelp,
@@ -74,20 +77,36 @@ export function OverflowMenu({
   /** The timeline tool, which the phone bar does not carry; absent off the Arrangement. */
   tool?: OverflowTool;
   /** The metronome switch, which the phone bar does not carry either. */
-  metronome?: { on: boolean; onPress: () => void };
+  metronome?: {
+    on: boolean;
+    onPress: () => void;
+    /** 0.2 … 1, with the command that commits a new level. */
+    level: number;
+    onLevel: (level: number) => void;
+  };
 }) {
   const [open, setOpen] = useState(false);
-  usePopin(open, () => setOpen(false));
+  const [dragging, setDragging] = useState<number | null>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
   const card = useRef<HTMLDivElement>(null);
+  usePopin(open, () => setOpen(false));
   useModalFocus(card, { active: open });
-  // Focus moves into the card on opening, onto the pane in use, so a screen reader enters it.
+  // Focus goes into the card on open, onto the pane in use, and back to the trigger on close, instead of dropping to the body.
   useEffect(() => {
-    if (open)
-      (
-        card.current?.querySelector<HTMLElement>('[aria-checked="true"]') ??
-        card.current?.querySelector<HTMLElement>("button")
-      )?.focus();
+    if (!open) return;
+    const t = trigger.current;
+    (
+      card.current?.querySelector<HTMLElement>('[aria-checked="true"]') ??
+      card.current?.querySelector<HTMLElement>("button")
+    )?.focus();
+    return () => t?.focus();
   }, [open]);
+  const commitLevel = () => {
+    if (dragging === null || !metronome) return;
+    const v = dragging;
+    setDragging(null);
+    if (Math.abs(v - metronome.level) > 1e-6) metronome.onLevel(v);
+  };
   const run = (fn: () => void) => () => {
     setOpen(false);
     fn();
@@ -95,10 +114,11 @@ export function OverflowMenu({
   return (
     <>
       <Button
+        ref={trigger}
         variant="glass"
         size="round"
         aria-label={m["shell.overflow"]()}
-        aria-haspopup="menu"
+        aria-haspopup="dialog"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
         className="shrink-0"
@@ -109,7 +129,7 @@ export function OverflowMenu({
         <>
           <button
             type="button"
-            aria-label={m["common.close"]()}
+            aria-label={m["shell.overflow.close"]()}
             tabIndex={-1}
             onClick={() => setOpen(false)}
             className="scrim-menu fixed inset-0 z-(--k7-z-menu) cursor-default"
@@ -185,15 +205,31 @@ export function OverflowMenu({
               </>
             )}
             {metronome && (
-              <button
-                type="button"
-                aria-pressed={metronome.on}
-                onClick={run(metronome.onPress)}
-                className="type-label glass mt-1 flex h-11 items-center justify-center gap-1.5 rounded-full text-foreground aria-pressed:bg-on-fill aria-pressed:text-lavender"
-              >
-                <MetronomeIcon className="size-[18px]" />
-                {m["transport.metronome"]()}
-              </button>
+              <div className="mt-1 flex flex-col gap-1">
+                <button
+                  type="button"
+                  aria-pressed={metronome.on}
+                  onClick={run(metronome.onPress)}
+                  className="type-label glass flex h-11 items-center justify-center gap-1.5 rounded-full text-foreground aria-pressed:bg-on-fill aria-pressed:text-lavender"
+                >
+                  <MetronomeIcon className="size-[18px]" />
+                  {m["transport.metronome"]()}
+                </button>
+                {/* The level the bar's right-click gives a Pad: committed on release, one command, one undo. */}
+                <input
+                  type="range"
+                  min={METRONOME_MIN}
+                  max={1}
+                  step={0.05}
+                  value={dragging ?? metronome.level}
+                  onChange={(e) => setDragging(Number(e.target.value))}
+                  onPointerUp={commitLevel}
+                  onKeyUp={commitLevel}
+                  onBlur={commitLevel}
+                  aria-label={m["metro.volumeLabel"]()}
+                  className="mx-3 h-11"
+                />
+              </div>
             )}
             <Heading>{m["shell.overflow.panels"]()}</Heading>
             <div className="grid grid-cols-3 gap-1.5">

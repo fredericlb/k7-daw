@@ -21,6 +21,7 @@ export function LanguageSection() {
             onClick={() => setLocale(l)}
             // The one you are reading is the one you cannot pick: a button that changes nothing is a button that looks broken.
             disabled={l === locale}
+            disabledReason={m["lang.current"]()}
             title={
               l === locale
                 ? m["lang.current"]()
