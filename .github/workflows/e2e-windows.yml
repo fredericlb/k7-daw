@@ -82,6 +82,10 @@ jobs:
         with:
           arch: x64
 
+      # The front encodes an MP3 mixdown through ffmpeg, which the image lacks.
+      - name: ffmpeg
+        run: choco install ffmpeg -y --no-progress > /dev/null && ffmpeg -version | head -1
+
       # The runner has no sound card: a virtual cable gives WASAPI an output to open.
       - uses: LABSN/sound-ci-helpers@d08c889a7bba7d9b1b059f8f76dac4672ea3a9cf # v1
 
