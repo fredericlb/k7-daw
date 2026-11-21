@@ -17,7 +17,7 @@ import { Spinner } from "@studio/ui/spinner";
 import { Switch } from "@studio/ui/switch";
 import { useCallback, useEffect, useState } from "react";
 import { m } from "../paraglide/messages.js";
-import { findAccountFiles } from "../settings/accountFiles";
+import { useAccountFiles } from "../settings/useAccountFiles";
 import { accountFiles, projectHref, workspaceHref } from "./api";
 import { HomeShell } from "./HomeFrame";
 import { PageFrame } from "./PageFrame";
@@ -30,16 +30,7 @@ import {
 
 export function TasksPage() {
   // `undefined` while asked: "none answers" is drawn only once that is the answer.
-  const [fileService, setFileService] = useState<
-    AccountFiles | null | undefined
-  >(undefined);
-  useEffect(() => {
-    let live = true;
-    void findAccountFiles(false).then((f) => live && setFileService(f));
-    return () => {
-      live = false;
-    };
-  }, []);
+  const fileService = useAccountFiles();
 
   const [lists, setLists] = useState<WorkspaceTasks[] | null>(null);
   const [error, setError] = useState<string | null>(null);

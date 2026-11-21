@@ -11,6 +11,7 @@ import {
   prefetchHome,
   takePrefetchedWorkspaces,
 } from "../settings/accountFiles";
+import { useAccountFiles } from "../settings/useAccountFiles";
 import { pollWhileVisible } from "../visiblePoll";
 import { accountFiles } from "./api";
 import { useHomeCommandsChanged } from "./HomeCommandBar";
@@ -21,10 +22,6 @@ import type { AccountFiles } from "./workspaceOps";
 
 /** The médiathèque's own: brisk enough that a change from another replica shows, slow enough to cost nothing on a ten-row list. */
 const POLL_MS = 3000;
-
-/** How often the page asks again for a file service that has not answered yet, and how many times — docs/projects.md. */
-const ASK_AGAIN_MS = 1500;
-const ASK_AGAIN_TIMES = 10;
 
 // As this chunk arrives, which appMain starts beside the sign-in check: the list is then asked once the hello answers, not once the page mounts.
 prefetchHome();
@@ -39,33 +36,7 @@ export function Home() {
   const [error, setError] = useState<string | null>(null);
 
   // The account's file service, or null; `undefined` until asked — "none" is a refusal we draw, "looking" is not.
-  const [fileService, setFileService] = useState<
-    AccountFiles | null | undefined
-  >(undefined);
-
-  /** The account's files on the server, engine or none — and no `hold()`: a claim is a lease ON A PROJECT, which this page has none of. */
-  useEffect(() => {
-    let live = true;
-    let asked = 0;
-    let timer: ReturnType<typeof setTimeout> | undefined;
-    // On a phone the app's file service boots seconds AFTER this page, so its first silence is not an answer.
-    const ask = () => {
-      void homeAccountFiles().then((f) => {
-        if (!live) return;
-        if (f === null && asked < ASK_AGAIN_TIMES) {
-          asked += 1;
-          timer = setTimeout(ask, ASK_AGAIN_MS);
-          return;
-        }
-        setFileService(f);
-      });
-    };
-    ask();
-    return () => {
-      live = false;
-      if (timer) clearTimeout(timer);
-    };
-  }, []);
+  const fileService = useAccountFiles(homeAccountFiles);
 
   // The libraries, read here for the notice and the workspace buttons; they are edited on their own page.
   const [libraries, setLibraries] = useState<AccountLibrary[] | undefined>(

@@ -32,18 +32,26 @@ export function Section({
 export function Row({
   label,
   detail,
+  error,
   children,
 }: {
   label: ReactNode;
   detail?: ReactNode;
+  /** What went wrong with this row, in the error colour and wrapped, never cut. */
+  error?: ReactNode;
   children?: ReactNode;
 }) {
   return (
     <div className="flex min-h-11 items-center gap-4 px-3.5 py-2.5">
       <div className="min-w-0 flex-1">
         <div className="type-body truncate">{label}</div>
-        {detail && (
+        {detail && !error && (
           <div className="type-status truncate text-fg-3">{detail}</div>
+        )}
+        {error && (
+          <div role="alert" className="type-status text-error">
+            {error}
+          </div>
         )}
       </div>
       {children && <div className="flex shrink-0 gap-2">{children}</div>}
