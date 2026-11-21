@@ -125,6 +125,9 @@ export function ProjectsPane({
           : null,
       );
       onChanged();
+      // The new project opens, as FirstProject's does; one that owes modules stays on this page, where the notice says so.
+      if (!missing.length)
+        void go(projectHref(w, { path: project, app: "k7" }));
     },
     [chosen, onChanged],
   );
