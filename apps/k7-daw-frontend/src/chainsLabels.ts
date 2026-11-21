@@ -75,6 +75,9 @@ function chainsLabels(): ChainsLabels {
     portEventOut: (name) => m["chainsUi.portEventOut"]({ name }),
     portFree: (name, type) => m["chainsUi.portFree"]({ name, type }),
     portNamed: (name, type) => m["chainsUi.portNamed"]({ name, type }),
+    canvas: m["chainsUi.canvas"](),
+    portConnectFrom: (name) => m["chainsUi.portConnectFrom"]({ name }),
+    portConnectTo: (name) => m["chainsUi.portConnectTo"]({ name }),
   };
 }
 

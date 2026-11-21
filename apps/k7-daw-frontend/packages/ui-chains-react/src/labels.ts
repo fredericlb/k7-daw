@@ -73,6 +73,11 @@ export interface ChainsLabels {
   portEventOut: (name: string) => string;
   portFree: (name: string, type: string) => string;
   portNamed: (name: string, type: string) => string;
+  /** The canvas itself, focusable for the camera keys. */
+  canvas: string;
+  /** A socket pressed from the keyboard: first the one a cable leaves, then the one it lands on. */
+  portConnectFrom: (name: string) => string;
+  portConnectTo: (name: string) => string;
 }
 
 export const ENGLISH_CHAINS_LABELS: ChainsLabels = {
@@ -152,6 +157,9 @@ export const ENGLISH_CHAINS_LABELS: ChainsLabels = {
     `${name} — drag onto a curve's event plug to make it fire that curve`,
   portFree: (name, type) => `${name} (${type}) — free`,
   portNamed: (name, type) => `${name} (${type})`,
+  canvas: "Graph — arrow keys pan, plus and minus zoom, 0 fits the whole graph",
+  portConnectFrom: (name) => `Connect from ${name}`,
+  portConnectTo: (name) => `Connect to ${name}`,
 };
 
 export const ChainsLabelsContext = createContext<ChainsLabels>(

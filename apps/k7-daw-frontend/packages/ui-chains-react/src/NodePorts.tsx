@@ -128,6 +128,27 @@ export function nodePorts({
                   // Spread across the WIDTH, and it MUST agree with `jackPoint` — docs/hosting.md.
                   left: `${((i + 1) / (all.length + 1)) * 100}%`,
                 }}
+                // A socket that takes part is a button for the keyboard too: Enter picks it, then Tab to the one it lands on.
+                role={plug ? "button" : undefined}
+                tabIndex={plug ? 0 : undefined}
+                aria-label={
+                  plug
+                    ? (patchWant ? l.portConnectTo : l.portConnectFrom)(
+                        p.name ?? p.type,
+                      )
+                    : undefined
+                }
+                onKeyDown={
+                  plug
+                    ? (e) => {
+                        if (e.key !== "Enter" && e.key !== " ") return;
+                        e.preventDefault();
+                        e.stopPropagation();
+                        onTapJack?.(n, side, p, i, "down");
+                        onTapJack?.(n, side, p, i, "up");
+                      }
+                    : undefined
+                }
                 // The press, not the click, since a cable is drawn by DRAGGING out of a socket.
                 onPointerDown={
                   plug

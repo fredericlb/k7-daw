@@ -1032,6 +1032,10 @@ function DomChainsBody({
             <LcdZoomContext.Provider value={lcdZoom}>
               <div
                 ref={hostRef}
+                // Focusable for the camera keys (useChainsCamera.ts): arrows pan, + and − zoom, 0 fits.
+                tabIndex={0}
+                role="application"
+                aria-label={labels.canvas}
                 className={`dgx${panning ? " panning" : ""}`}
                 onPointerDown={onPointerDown}
                 onDoubleClick={canvasDoubleClick}

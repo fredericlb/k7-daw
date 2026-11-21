@@ -12,6 +12,7 @@ import {
   menuH,
   rackBindSymbol,
   stripWidgetRect,
+  widgetDenorm,
   widgetNorm,
   widgetTyped,
 } from "@studio/ui-chains/graph";
@@ -272,6 +273,35 @@ function WidgetInner({
           className: "dgx-w drag",
           onPointerDown: (e) => onDragStart(n, w, e),
           onClick: (e) => e.stopPropagation(),
+          // A slider to assistive technology and the keyboard too, on the normalised 0-100 the drag moves along.
+          role: "slider",
+          tabIndex: 0,
+          "aria-label": tapName(w, padSymbol),
+          "aria-valuemin": 0,
+          "aria-valuemax": 100,
+          "aria-valuenow": known ? Math.round(t * 100) : undefined,
+          "aria-valuetext": known ? String(+value.toFixed(3)) : undefined,
+          onKeyDown: onTypeValue
+            ? (e) => {
+                const big = e.key === "PageUp" || e.key === "PageDown";
+                const up = e.key === "ArrowUp" || e.key === "ArrowRight";
+                const down = e.key === "ArrowDown" || e.key === "ArrowLeft";
+                const to =
+                  e.key === "Home"
+                    ? 0
+                    : e.key === "End"
+                      ? 1
+                      : big || up || down
+                        ? t +
+                          (e.key === "PageUp" || up ? 1 : -1) *
+                            (big ? 0.1 : 0.01)
+                        : null;
+                if (to === null) return;
+                e.preventDefault();
+                e.stopPropagation();
+                onTypeValue(n, w, widgetDenorm(w, to));
+              }
+            : undefined,
         }
       : w.type === "dropdown" || w.type === "filepicker"
         ? {

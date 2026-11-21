@@ -192,6 +192,46 @@ export function useChainsCamera({
     };
     host.addEventListener("wheel", wheel, { passive: false });
 
+    // The keys, only while the canvas itself has focus: arrows pan, plus and minus zoom, 0 frames the graph.
+    const keys = (e: KeyboardEvent) => {
+      if (e.target !== host || fixedRef.current) return;
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+      const PAN = 48;
+      const dx =
+        e.key === "ArrowLeft" ? PAN : e.key === "ArrowRight" ? -PAN : 0;
+      const dy = e.key === "ArrowUp" ? PAN : e.key === "ArrowDown" ? -PAN : 0;
+      const zoom =
+        e.key === "+" || e.key === "="
+          ? 1.25
+          : e.key === "-" || e.key === "_"
+            ? 0.8
+            : 1;
+      if (e.key === "0") {
+        e.preventDefault();
+        fit.current();
+        return;
+      }
+      if (!dx && !dy && zoom === 1) return;
+      e.preventDefault();
+      flight.current = null;
+      userMoved.current = true;
+      const c = cam.current;
+      const g = goal.current;
+      if (zoom !== 1 && !rowRef.current) {
+        anchor.current = {
+          px: host.clientWidth / 2,
+          py: host.clientHeight / 2,
+        };
+        g.k = clampZoom(g.k * zoom);
+      } else {
+        g.k = c.k;
+        c.x = g.x = g.x + dx;
+        if (!rowRef.current) c.y = g.y = g.y + dy;
+      }
+      kick.current();
+    };
+    host.addEventListener("keydown", keys);
+
     // Two fingers where there is no wheel at all — TOUCH events, and absolute, docs/camera.md.
     let pinch: { dist: number; k: number; x: number; y: number } | null = null;
     const onTouchStart = (e: TouchEvent) => {
@@ -226,6 +266,7 @@ export function useChainsCamera({
 
     return () => {
       host.removeEventListener("wheel", wheel);
+      host.removeEventListener("keydown", keys);
       host.removeEventListener("touchstart", onTouchStart);
       host.removeEventListener("touchmove", onTouchMove);
       host.removeEventListener("touchend", onTouchEnd);
