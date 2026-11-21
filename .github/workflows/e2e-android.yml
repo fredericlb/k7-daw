@@ -118,9 +118,10 @@ jobs:
           key: e2e-sccache-android-${{ steps.keys.outputs.run }}
           restore-keys: e2e-sccache-android-
 
+      # --refresh-dependencies: Gradle keeps a 404 as "missing" in its restored cache, and a transient one then fails every later run.
       - name: the e2e APK
         working-directory: apps/k7-daw-android
-        run: ./gradlew --no-daemon :app:assembleE2e
+        run: ./gradlew --no-daemon --refresh-dependencies :app:assembleE2e
 
       # The save comes before the emulator: the build is what is worth keeping, whatever the suite says.
       - if: always() && env.SAVE == 'true'
