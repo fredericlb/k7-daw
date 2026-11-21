@@ -2,7 +2,7 @@
 // What a reader gets wrong: a Worker build leaves other `node:*` imports external and LISTS them — each is a server-only import 3f must move behind a host member.
 
 import { readFileSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import { isAbsolute, join } from "node:path";
 import { gzipSync } from "node:zlib";
 import { build } from "esbuild";
 
@@ -91,7 +91,7 @@ export async function bundleRuntime({ target, outdir, entry }) {
     path,
     bytes: o.bytes,
     gzip: gzipSync(
-      readFileSync(path.startsWith("/") ? path : join(process.cwd(), path)),
+      readFileSync(isAbsolute(path) ? path : join(process.cwd(), path)),
     ).length,
   }));
   const packages = {};
