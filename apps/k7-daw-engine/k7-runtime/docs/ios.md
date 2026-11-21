@@ -39,7 +39,7 @@ interface it has as a program:
 - **Spawning anything** — ffmpeg, the engine's `--decode` — fails at once with a reason, in the
   simulator too (`Processes.cpp`). The simulator would let it through, and it must not promise what a phone refuses.
 
-**stdout and stderr go to the system log** (`StdioLog.swift`), subsystem `se.frediver.k7.daw`, with each line keeping
+**stdout and stderr go to the system log** (`StdioLog.swift`), subsystem `rocks.k7.daw`, with each line keeping
 its own tag (`[host]`, `[engine]`, `files |`). An app's own streams reach no Console a device shows. The engine's
 iostreams are tagged `[engine]` at their source (`EngineEmbed.cpp`), since the process's stderr is shared with the front
 and carries no other mark. `StdioLog.swift` also appends each `[engine]` line to the machine log through
@@ -99,7 +99,7 @@ with the lock screen's controls; `Busy.swift` lets the device go when the app is
 its device after an interruption (a call, Siri), so `AudioSession.swift` only logs it. Each device open and each route
 change is one `[host] audio session` line with the category, the options, `mixWithOthers` and the route.
 `TestHooks.swift` (debug builds with `K7_TEST_HOOKS=1`) sends the system's media buttons through the real handler on
-the simulator, which has no remote to press them: `xcrun simctl spawn booted notifyutil -p se.frediver.k7.daw.test.media-arm`,
+the simulator, which has no remote to press them: `xcrun simctl spawn booted notifyutil -p rocks.k7.daw.test.media-arm`,
 then `...test.remote.<action>`.
 
 ## Busy: the hold is the default, and its release is the decision
@@ -154,7 +154,7 @@ for the team's internal testers.
 Set up once:
 
 - a paid Apple Developer Program team;
-- an App Store Connect app record for the bundle id `se.frediver.k7.daw`;
+- an App Store Connect app record for the bundle id `rocks.k7.daw`;
 - the App ID's iCloud capability for key-value storage, which automatic signing with `-allowProvisioningUpdates` adds;
 - an internal tester group on that record;
 - an App Store Connect API key with the App Manager role, its `.p8` kept in `~/.appstoreconnect/private_keys/`.
@@ -212,7 +212,7 @@ Specs that drive `simctl` itself (stems, `flows.spec.ts`) do not run attached: w
 ## Proven on the simulator
 
 `e2e/specs/app/flows.spec.ts` drives what the host's WebKit never reaches through `TestFlows.swift`'s hooks
-(`notifyutil -p se.frediver.k7.daw.test.flow.<name>`, debug builds with `K7_TEST_HOOKS=1`). Each hook runs the app's own
+(`notifyutil -p rocks.k7.daw.test.flow.<name>`, debug builds with `K7_TEST_HOOKS=1`). Each hook runs the app's own
 code, so the spec reads a result from the `[host]` log line that code writes, never from a page.
 
 | flow | the app's code | the line that proves it |
@@ -304,7 +304,7 @@ Workspaces live in Application Support, as on every platform, and travel by git 
 the device's SSH key (iCloud Keychain, `k7-git`'s `secret_ios.rs`) and the list of the workspaces the person added
 (iCloud's key-value store, `docs/project-sync-plan.md`). `RoamStore.swift` installs two C callbacks before the front starts
 (`k7_roam_install` in `K7Embed.h`), over `NSUbiquitousKeyValueStore`; `k7/k7.entitlements` holds the key-value
-identifier `$(TeamIdentifierPrefix)se.frediver.k7.daw`, which the provisioning profile grants.
+identifier `$(TeamIdentifierPrefix)rocks.k7.daw`, which the provisioning profile grants.
 
 | choice | why |
 |---|---|

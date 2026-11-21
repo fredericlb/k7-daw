@@ -17,7 +17,7 @@ protocol SupervisorListener: AnyObject {
 final class SupervisorHost {
     static let shared = SupervisorHost()
 
-    private let log = Logger(subsystem: "se.frediver.k7.daw", category: "k7-supervisor")
+    private let log = Logger(subsystem: "rocks.k7.daw", category: "k7-supervisor")
     private let lock = NSLock()
     private struct Run {
         let generation: Int

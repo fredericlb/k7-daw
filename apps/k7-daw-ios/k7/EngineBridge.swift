@@ -8,7 +8,7 @@ import Foundation
 import os
 
 enum EngineBridge {
-    private static let log = Logger(subsystem: "se.frediver.k7.daw", category: "k7-runtime")
+    private static let log = Logger(subsystem: "rocks.k7.daw", category: "k7-runtime")
     private static let lock = NSLock()
     private static var started = false
     private static var serving = false

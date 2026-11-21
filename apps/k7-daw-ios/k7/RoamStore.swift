@@ -6,7 +6,7 @@ import Foundation
 import os
 
 enum RoamStore {
-    private static let log = Logger(subsystem: "se.frediver.k7.daw", category: "k7-roam")
+    private static let log = Logger(subsystem: "rocks.k7.daw", category: "k7-roam")
 
     /// Before the front starts: pulls the store, notes what other devices change, and hands the front its callbacks.
     static func install() {

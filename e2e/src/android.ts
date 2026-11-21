@@ -1,5 +1,5 @@
 // android.ts — the suite's `android` target: the app's e2e build on a phone, driven through its own WebView.
-// That build is `se.frediver.k7.daw.e2e` on its own port, installed BESIDE the shipped app, never over it (docs/e2e.md).
+// That build is `rocks.k7.daw.e2e` on its own port, installed BESIDE the shipped app, never over it (docs/e2e.md).
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync } from "node:fs";
 import { homedir } from "node:os";
@@ -17,7 +17,7 @@ import { FileService } from "./files.ts";
 import { seedFixtures } from "./fixtures.ts";
 import type { K7 } from "./target.ts";
 
-export const ANDROID_PACKAGE = "se.frediver.k7.daw.e2e";
+export const ANDROID_PACKAGE = "rocks.k7.daw.e2e";
 
 /** The e2e build's backend port, `E2E_PORT` in apps/k7-daw-android/app/build.gradle.kts. */
 const PHONE_PORT = 18799;

@@ -147,7 +147,6 @@ merge would disagree with them on the same edits.
 | the store is two C callbacks installed by Swift before the front starts, behind a trait whose default does nothing | Android, Windows and Linux have no list and the page shows no section; the tests use a fake |
 | the page reads the list through the front (`GET /git/roam`), at open and every 20 s while visible | a change from another device is applied by iCloud to the store; the next read sees it |
 | iCloud signed out or iCloud Drive off: the list is the device's own and nothing roams | the app works as it does without a list |
-| the container `iCloud.se.frediver.k7.daw` is read once, to move out the workspaces an earlier version put there (`k7-roam`'s `container.rs`) | a workspace is moved by rename or by a verified copy, never over a name that is already here, and never while a file is not downloaded; what cannot move stays in the container and is named in the log |
 
 The Swift side and the Rust side meet through one C call added to `K7Embed.h`, `k7_roam_install(list, put)`: Swift hands the
 front a function that lists the store's `ws.` pairs and one that puts or removes a pair. `apps/k7-daw-backend/docs/roam.md`
@@ -188,7 +187,7 @@ holds the mechanism; `apps/k7-daw-engine/k7-runtime/docs/ios.md` the Apple side.
 
 ## Apple's portal, the user's part
 
-1. Certificates, Identifiers & Profiles: on the App ID `se.frediver.k7.daw`, enable iCloud; the key-value store needs no container.
+1. Certificates, Identifiers & Profiles: on the App ID `rocks.k7.daw`, enable iCloud; the key-value store needs no container.
 2. Regenerate the development and distribution profiles of the App ID: the profile lists `com.apple.developer.ubiquity-kvstore-identifier`.
 3. A device or simulator signed in to an Apple ID with iCloud on; two devices on one Apple ID to see the list travel.
 

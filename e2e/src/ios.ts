@@ -18,7 +18,7 @@ import { FileService } from "./files.ts";
 import { seedFixtures } from "./fixtures.ts";
 import type { K7 } from "./target.ts";
 
-export const IOS_BUNDLE = "se.frediver.k7.daw";
+export const IOS_BUNDLE = "rocks.k7.daw";
 
 /** The app's port for a test run, handed to it as K7_STUDIO_PORT so the tray's stays free. */
 const STUDIO_PORT = 18799;

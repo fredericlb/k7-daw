@@ -41,7 +41,7 @@ android {
     ndkVersion = "29.0.14206865"
 
     defaultConfig {
-        applicationId = "se.frediver.k7.daw"
+        applicationId = "rocks.k7.daw"
         minSdk = 29
         targetSdk = 36
         versionCode = appVersionCode

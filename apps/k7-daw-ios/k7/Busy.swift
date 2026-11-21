@@ -19,7 +19,7 @@ final class Busy: SupervisorListener {
     private var suspended = false
     private var cutWatch: Timer?
     private var cutBefore = false
-    private let log = Logger(subsystem: "se.frediver.k7.daw", category: "k7-busy")
+    private let log = Logger(subsystem: "rocks.k7.daw", category: "k7-busy")
 
     private static let known: Set<String> = ["recording", "armed", "playing", "live", "capture", "awake"]
 

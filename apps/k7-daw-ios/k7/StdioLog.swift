@@ -8,7 +8,7 @@ import Foundation
 import os
 
 enum StdioLog {
-    private static let log = Logger(subsystem: "se.frediver.k7.daw", category: "stdio")
+    private static let log = Logger(subsystem: "rocks.k7.daw", category: "stdio")
 
     /// Once, first thing in the process: what was written before goes to the original streams only.
     static func start() {
@@ -48,7 +48,7 @@ private func fileEngineLine(_ line: String) {
 
 /// One `[host]` line in the machine log and the system log: what the app itself did, as the supervisor's own lines read.
 func hostLog(_ text: String) {
-    Logger(subsystem: "se.frediver.k7.daw", category: "host").info("[host] \(text, privacy: .public)")
+    Logger(subsystem: "rocks.k7.daw", category: "host").info("[host] \(text, privacy: .public)")
     k7_supervisor_log("host", text)
 }
 

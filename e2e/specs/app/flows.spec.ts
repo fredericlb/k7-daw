@@ -17,7 +17,7 @@ import type { FileService } from "../../src/files.ts";
 import { IOS_BUNDLE, simctl, simulator } from "../../src/ios.ts";
 import { expect, TARGET, test } from "../../src/target.ts";
 
-const HOOK = "se.frediver.k7.daw.test.flow.";
+const HOOK = "rocks.k7.daw.test.flow.";
 const udid = () => simulator();
 const container = () => simctl("get_app_container", udid(), IOS_BUNDLE, "data");
 
@@ -68,7 +68,7 @@ async function logged(re: RegExp, wait = 30_000) {
           "--style",
           "compact",
           "--predicate",
-          'subsystem == "se.frediver.k7.daw" AND category == "host"',
+          'subsystem == "rocks.k7.daw" AND category == "host"',
         );
         found = out.split("\n").findLast((l) => re.test(l)) ?? "";
         return Promise.resolve(found);

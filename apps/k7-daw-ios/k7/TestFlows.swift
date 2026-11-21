@@ -1,5 +1,5 @@
 // TestFlows.swift — the native flows a functional run cannot reach from the host's WebKit, started by `notifyutil -p
-// se.frediver.k7.daw.test.flow.<name>` (debug builds, K7_TEST_HOOKS=1): a download, the CA import, an https load, the microphone, a killed page.
+// rocks.k7.daw.test.flow.<name>` (debug builds, K7_TEST_HOOKS=1): a download, the CA import, an https load, the microphone, a killed page.
 // Each hook runs the app's own code path and ends in one `[host] flow:` line; arguments come as files in the app's tmp folder.
 
 import Foundation

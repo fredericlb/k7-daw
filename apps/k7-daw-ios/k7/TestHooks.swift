@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 
 enum TestHooks {
-    private static let prefix = "se.frediver.k7.daw.test."
+    private static let prefix = "rocks.k7.daw.test."
     private static let actions = ["play", "pause", "nexttrack", "previoustrack", "stop", "seekbackward", "seekforward", "seekto"]
 
     static func start() {

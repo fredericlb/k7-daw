@@ -39,7 +39,7 @@ elseif(IOS)
     set_target_properties(k7-runtime PROPERTIES
         FRAMEWORK TRUE
         OUTPUT_NAME k7runtime
-        MACOSX_FRAMEWORK_IDENTIFIER se.frediver.k7.runtime
+        MACOSX_FRAMEWORK_IDENTIFIER rocks.k7.daw.runtime
         LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 else()
     add_executable(k7-runtime main.cpp ${STUDIO_SERVER_SOURCES})

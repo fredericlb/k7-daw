@@ -87,7 +87,7 @@ workspaces. So the run builds `e2e`, a build type of its own in `apps/k7-daw-and
 
 | what differs | why |
 |---|---|
-| the id `se.frediver.k7.daw.e2e` | installed beside the shipped app, with its own data, and removed without touching it |
+| the id `rocks.k7.daw.e2e` | installed beside the shipped app, with its own data, and removed without touching it |
 | the front on port 18799, not standalone.json's | every app of a phone shares one loopback, and the shipped app may be running. The engine needs no such care: its port is the first of a range |
 | the label "k7 e2e" | the two launcher icons are told apart |
 | `E2E_BASE_URL` is the phone's origin, and a device target's verb runner refuses a relative base without one; `android-check.sh` asserts the config sets it | the verb runner is node's and takes a whole URL, and the web default sends every verb to the private instance, which answers 502 |

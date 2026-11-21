@@ -8,7 +8,7 @@ import Network
 import os
 
 enum LanBridge {
-    private static let log = Logger(subsystem: "se.frediver.k7.daw", category: "k7-lan")
+    private static let log = Logger(subsystem: "rocks.k7.daw", category: "k7-lan")
     private static let queue = DispatchQueue(label: "k7-lan")
     private static var browser: NWBrowser?
     private static var listener: NWListener?

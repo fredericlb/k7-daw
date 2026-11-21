@@ -5,7 +5,7 @@
 set -euo pipefail
 
 root="$(cd "$(dirname "$0")/../../.." && pwd)"
-bundle="${K7_IOS_BUNDLE:-se.frediver.k7.daw}"
+bundle="${K7_IOS_BUNDLE:-rocks.k7.daw}"
 studio_port="${K7_STUDIO_PORT:-18799}"
 engine_port=18765
 dd="${K7_IOS_DD:-$HOME/.cache/k7-ios-dd-device}"

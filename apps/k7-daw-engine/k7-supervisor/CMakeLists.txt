@@ -337,7 +337,7 @@ if(IOS)
     set_target_properties(k7-supervisor-embedded PROPERTIES
         FRAMEWORK TRUE
         OUTPUT_NAME k7supervisor
-        MACOSX_FRAMEWORK_IDENTIFIER se.frediver.k7.supervisor
+        MACOSX_FRAMEWORK_IDENTIFIER rocks.k7.daw.supervisor
         LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 endif()
 

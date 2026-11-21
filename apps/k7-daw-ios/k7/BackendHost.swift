@@ -31,7 +31,7 @@ final class BackendHost {
         var message: String?
     }
 
-    private let log = Logger(subsystem: "se.frediver.k7.daw", category: "k7-backend")
+    private let log = Logger(subsystem: "rocks.k7.daw", category: "k7-backend")
     private let lock = NSLock()
     private var started = false
     private var running = false
