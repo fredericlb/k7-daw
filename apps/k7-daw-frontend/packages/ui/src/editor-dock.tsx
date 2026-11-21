@@ -162,7 +162,7 @@ function ResizeHandle({
       title={label}
       onPointerDown={onPointerDown}
       onKeyDown={onKeyDown}
-      className="absolute inset-x-0 top-0 mx-auto grid h-4 w-20 cursor-row-resize touch-none place-items-center rounded-full outline-none focus-visible:shadow-(--k7-focus-ring)"
+      className="absolute inset-x-0 top-0 mx-auto grid h-4 w-20 cursor-row-resize touch-none place-items-center rounded-full outline-none before:absolute before:-inset-x-4 before:-inset-y-3.5 before:content-[''] focus-visible:shadow-(--k7-focus-ring)"
     >
       <span aria-hidden className="h-[5px] w-9 rounded-full bg-white/35" />
     </button>
