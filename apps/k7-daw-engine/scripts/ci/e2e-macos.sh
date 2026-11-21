@@ -100,7 +100,7 @@ for n in "${slots[@]}"; do
   mkdir -p "$blogs" "$bed"
   echo "bed slot $n: front $front, backend $backend, web $web, engine $engine"
   # Nothing of the Mac's answers on the bed's ports: a listener there would shadow the bed's loopback bind.
-  for p in $front $backend $web $engine; do
+  for p in $front $backend $web $engine $((front + 2)); do
     if lsof -nP -iTCP:"$p" -sTCP:LISTEN > /dev/null 2>&1; then
       echo "port $p is held on this Mac:"; lsof -nP -iTCP:"$p" -sTCP:LISTEN; exit 1
     fi
@@ -198,9 +198,16 @@ bring_up() {
 { "registryUrls": ["http://127.0.0.1:$front"], "port": $engine, "instruments": [], "machineName": "e2e-macos$([ "$n" = 1 ] || echo "-$n")" }
 EOF
   set -m
-  start front apps/k7-daw-backend env K7_GIT_ALLOW_FILE=1 K7_FRONT_LISTEN="127.0.0.1:$front" node scripts/dev-front.mjs
+  # The LAN door on the loopback beside the front, the switch on and no discovery: a second front names it below (docs/lan.md).
+  start front apps/k7-daw-backend env K7_GIT_ALLOW_FILE=1 K7_FRONT_LISTEN="127.0.0.1:$front" \
+    K7_LAN_OPEN=1 K7_LAN_LISTEN="127.0.0.1:$((front + 2))" K7_LAN_PEERS=none node scripts/dev-front.mjs
   if [ "$serves" = web ]; then
     start frontend apps/k7-daw-frontend env STUDIO_WEB_PORT=$web STUDIO_BACKEND_URL="http://127.0.0.1:$front" npx vite --host 127.0.0.1 --strictPort
+    # A second front with a home of its own and no engine, serving the same page; it lists the first one's door (e2e/specs/app/lanSurfaces.spec.ts).
+    mkdir -p "$bed/home-b/.k7/dev-files" "$bed/home-b/.studio/mediatek" "$bed/home-b/.studio/k7"
+    start frontb apps/k7-daw-backend env HOME="$bed/home-b" STUDIO_PORTS="k7=$backend" STUDIO_MEDIATEK="$bed/home-b/.studio/mediatek" \
+      STUDIO_FILES_ROOT="$bed/home-b/.k7/dev-files" K7_FRONT_CACHE="$bed/front-cache-b" K7_GIT_ALLOW_FILE=1 K7_FRONT_LISTEN="127.0.0.1:$backend" \
+      K7_LAN_PEERS="127.0.0.1:$((front + 2)):$engine" K7_DEV_FRONTEND="http://127.0.0.1:$web" node scripts/dev-front.mjs
   fi
   # STUDIO_HOME and K7_SETTINGS_DIR: the engine finds its home through macOS, not HOME, and would share the Mac's ~/.k7 and Library/Studio.
   start engine "$tree" env STUDIO_HOME="$home/.k7" K7_SETTINGS_DIR="$home/settings" dist/k7-runtime/k7-supervisor --config "$bed/engine.json"
@@ -211,7 +218,7 @@ for n in "${slots[@]}"; do
   bed_of "$n"
   wait_for front "http://127.0.0.1:$front/auth/me" 300
   relay_up
-  [ "$(suite_of "$n")" != web ] || wait_for frontend "http://127.0.0.1:$web/" 120
+  [ "$(suite_of "$n")" != web ] || { wait_for frontend "http://127.0.0.1:$web/" 120; wait_for frontb "http://127.0.0.1:$backend/auth/me" 300; }
 done
 lap "bed up"
 
@@ -264,7 +271,7 @@ run_suite() {
 }
 web_suite() {
   bed_of "${slots[0]}"
-  E2E_BASE_URL="http://127.0.0.1:$web" run_suite web playwright.config.ts
+  E2E_BASE_URL="http://127.0.0.1:$web" E2E_PEER_URL="http://127.0.0.1:$backend" run_suite web playwright.config.ts
 }
 conformance_suite() {
   bed_of "${slots[${#slots[@]} - 1]}"

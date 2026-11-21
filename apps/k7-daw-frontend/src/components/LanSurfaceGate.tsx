@@ -3,6 +3,7 @@
 // sends nothing to the engine: the main device already holds the project, and opening it from here would
 // run the open sequence there and could interrupt what is playing. See ../../docs/external.md.
 
+import { deviceName } from "@studio/engine-browser/pairing";
 import { configureFileApi } from "@studio/project-shell/fileApi";
 import { GateWait } from "@studio/project-shell/progress";
 import { Button } from "@studio/ui/button";
@@ -67,7 +68,8 @@ export function LanSurfaceGate({ lan }: { lan: LanSurface }) {
         setState({
           k: "ready",
           device,
-          self: self?.name || m["surfaces.thisDevice"](),
+          // A device with no engine of its own has no name to give: the kind of device and browser it is stands in.
+          self: self?.name || deviceName(),
           userEmail,
         });
       } catch {
