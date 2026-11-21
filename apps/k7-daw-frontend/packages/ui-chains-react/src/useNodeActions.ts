@@ -30,7 +30,7 @@ import {
 type WidgetDrag = ReturnType<typeof useWidgetDrag>;
 
 // Map a right-clicked node to the shell's menu context (track id, module node, chain name, curve and its binding).
-function nodeToCtx(n: GraphNode): GraphMenuCtx | null {
+export function nodeToCtx(n: GraphNode): GraphMenuCtx | null {
   switch (n.kind) {
     case "track":
       return { kind: "track", id: n.label };

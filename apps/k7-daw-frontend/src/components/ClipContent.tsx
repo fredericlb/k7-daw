@@ -178,7 +178,7 @@ function ClipWaveform({
               y1={0}
               x2={x}
               y2={100}
-              stroke="#facc15" // yellow-400
+              stroke="var(--k7-mark-window)"
               strokeWidth={0.6}
               strokeDasharray="2 2"
               strokeOpacity={0.3}

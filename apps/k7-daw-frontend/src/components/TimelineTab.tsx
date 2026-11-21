@@ -2028,7 +2028,7 @@ function TimelineTabView({
   // Only with nothing to draw: a failed RE-read keeps the last song on screen while useDocument retries.
   if (error && !proj)
     return (
-      <div role="alert" className="p-4 text-sm text-red-400">
+      <div role="alert" className="p-4 text-sm text-(--k7-error)">
         {m["tl.unavailable"]({ error })}
       </div>
     );
@@ -2887,7 +2887,7 @@ function TimelineTabView({
                               onVideoEdit ? "cursor-grab" : "",
                               provisional
                                 ? "border border-dashed border-amber-400 bg-amber-600/50"
-                                : "bg-violet-600/70",
+                                : "bg-(--k7-picture-fill)",
                               live?.pending && "opacity-60",
                             )}
                             style={{ left: x(toBeats(start)), width: w }}
@@ -3018,7 +3018,7 @@ function TimelineTabView({
                       style={{ width: GUTTER }}
                       {...gutterProps(row)}
                       className={cn(
-                        "flex shrink-0 cursor-pointer select-none items-center gap-1 truncate border-r border-border px-2 text-[10px] text-muted-foreground",
+                        "flex shrink-0 cursor-pointer select-none items-center gap-1 truncate border-r border-border px-2 text-[11px] text-muted-foreground",
                         GUTTER_STICKY,
                         // Indented past its lane: the knob belongs to the lane above.
                         "pl-5",
@@ -3037,7 +3037,7 @@ function TimelineTabView({
                           <title>{lane.param}</title>
                           <polyline
                             fill="none"
-                            stroke="#a889b5"
+                            stroke="var(--k7-curve)"
                             strokeWidth={1.5}
                             vectorEffect="non-scaling-stroke"
                             points={pts
@@ -3489,7 +3489,7 @@ function TimelineTabView({
                                 }}
                                 className={cn(
                                   // `isolate` keeps the activity layer's -z-10 inside this block; `group` is what the name reads.
-                                  "group absolute top-1 flex h-[calc(100%-8px)] cursor-grab overflow-hidden rounded-xl px-2 font-mono text-[10px] active:cursor-grabbing isolate",
+                                  "group absolute top-1 flex h-[calc(100%-8px)] cursor-grab overflow-hidden rounded-xl px-2 font-mono text-[11px] active:cursor-grabbing isolate",
                                   // Disabled: still placed, still readable, plainly off — an event you cannot see is a deleted one.
                                   c.disabled &&
                                     "opacity-40 saturate-0 outline-dashed outline-1 outline-muted-foreground",
@@ -3742,13 +3742,8 @@ function TimelineTabView({
                                     ) : (
                                       <Timer className="h-2.5 w-2.5 shrink-0 opacity-80" />
                                     ))}
-                                  {/* The name a musician knows it by, always there and brightened on hover; the id stays the tooltip's (docs/timeline.md). */}
-                                  <span
-                                    className={cn(
-                                      "truncate opacity-75 transition-opacity group-hover:opacity-100 [@media(hover:none)]:opacity-100",
-                                      (moving || resizing) && "opacity-100",
-                                    )}
-                                  >
+                                  {/* The name a musician knows it by, always at full strength; the id stays the tooltip's (docs/timeline.md). */}
+                                  <span className="truncate">
                                     {clipShownName(
                                       c.name || c.id,
                                       laneName,

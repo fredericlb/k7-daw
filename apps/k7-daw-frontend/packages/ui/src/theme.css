@@ -69,6 +69,13 @@
   --k7-record: #ff5a4e; /* record dot in Takes and the clip editor */
   --k7-clip: #bd93e3; /* clip fill */
   --k7-clip-detail: #f4eaff; /* notes and waveform drawn on a clip */
+  --k7-curve: #a889b5; /* an automation curve's line and a curve card's rail */
+  --k7-mark-window: var(--k7-warn); /* the clip editor's window edges and onset guide lines */
+  --k7-mark-onset: #60a5fa; /* a detected onset in the waveform */
+  --k7-mark-stretch: #a78bfa; /* a stretch point in the waveform */
+  --k7-picture-fill: rgba(124, 58, 237, 0.7); /* a picture clip on its lane */
+  --k7-picture-fill-soft: rgba(124, 58, 237, 0.25); /* a picture placed by a timeline */
+  --k7-picture-line: rgba(167, 139, 250, 0.7);
   --k7-playhead: #ffffff;
   --k7-glyph-tile: rgba(183, 156, 255, 0.16); /* 64/76 px empty-state glyph circle */
 

@@ -32,7 +32,7 @@ export function PlacedShot({
         e.stopPropagation();
         if (clip.timeline) onOpen(clip.timeline);
       }}
-      className="absolute inset-y-0.5 flex items-center gap-0.5 overflow-hidden rounded-sm border border-violet-400/70 border-dashed bg-violet-600/25 px-1 text-[10px] text-white/80"
+      className="absolute inset-y-0.5 flex items-center gap-0.5 overflow-hidden rounded-sm border border-(--k7-picture-line) border-dashed bg-(--k7-picture-fill-soft) px-1 text-[11px] text-white/80"
       style={{ left, width }}
       title={`${name} — ${clip.length}s at ${clip.start}s, placed by timeline ${clip.timeline}`}
     >

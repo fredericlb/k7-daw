@@ -12,6 +12,7 @@ import type { GridFit } from "@studio/ui-chains/gridFit";
 import { rowExit, rowSeams } from "@studio/ui-chains/rowSeams";
 import {
   DomChains,
+  graphMenuCtx,
   type NodeEngines,
   type TapAction,
 } from "@studio/ui-chains-react";
@@ -328,7 +329,7 @@ export function TrackModulesPane({
       </div>,
     );
 
-  if (error) return say(<span className="text-red-500">{error}</span>);
+  if (error) return say(<span className="text-(--k7-error)">{error}</span>);
   if (!laidShown) return say(m["common.loading"]());
   if (!laidShown.nodes.length)
     return say(nodes ? m["chain.noModules"]() : m["chain.laneReachesNone"]());
@@ -443,6 +444,10 @@ export function TrackModulesPane({
           paramsStore={pluginParamsStore}
           onParam={setPluginParam}
           onNativeUI={(module) => void command(`node external-ui ${module}`)}
+          onMenu={(n, x, y) => {
+            const ctx = graphMenuCtx(n);
+            if (ctx) onContextMenu?.(ctx, x, y);
+          }}
         />
       )}
       {cards && glued && !controls && (

@@ -136,7 +136,7 @@ export const Minimap = memo(function Minimap({
               className="absolute inset-x-0"
               style={{ top: ri * rowH, height: rowH }}
             >
-              <div className="absolute inset-x-0 top-1/2 h-px bg-[#a889b5]/60" />
+              <div className="absolute inset-x-0 top-1/2 h-px bg-(--k7-curve)/60" />
             </div>
           ) : row.track.generated ? (
             // A generated lane is hatched like the timeline's: its look-ahead clips would flicker as playback runs.

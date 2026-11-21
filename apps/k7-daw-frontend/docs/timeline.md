@@ -1160,8 +1160,9 @@ mixer strip uses: mute amber, solo lavender, arm the record red. Arm is the one 
 so it keeps its own colour and sits last.
 
 **They sit on a line of their own under the name**, so a long name keeps the gutter's whole width.
-Off touch they are drawn small (20 × 14) so the two lines fit the 28 px row; a pointer needs no
-bigger target, and a taller row would cost every lane its height.
+With a fine pointer they are drawn small (24 × 14) so the two lines fit the 28 px row. A coarse pointer
+(`(pointer: coarse)`, an iPad at any width included, not the phone layout alone) draws them 32 × 16 inside an
+invisible box reaching 44 px tall, since a taller row would cost every lane its height.
 
 **On a phone with Expand on they share that line's width**, sharing the column's
 width, each with an invisible box reaching 44 px tall. Three 44 px squares do not fit a 96 px

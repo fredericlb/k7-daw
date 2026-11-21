@@ -354,7 +354,7 @@ export function WaveformView({
                       y1="0"
                       x2={`${x}%`}
                       y2="100%"
-                      stroke="#facc15" // yellow-400
+                      stroke="var(--k7-mark-window)"
                       strokeWidth={1}
                       strokeDasharray="2 2"
                       strokeOpacity={0.3}
@@ -379,7 +379,7 @@ export function WaveformView({
                     orient="auto"
                     markerUnits="userSpaceOnUse"
                   >
-                    <path d="M0,0 L7,3.5 L0,7 Z" fill="rgb(96,165,250)" />
+                    <path d="M0,0 L7,3.5 L0,7 Z" fill="var(--k7-mark-onset)" />
                   </marker>
                 </defs>
                 {wf.warpMarks.map((mk, i) => {
@@ -403,7 +403,7 @@ export function WaveformView({
                         y1="0"
                         x2={`${t}%`}
                         y2="100%"
-                        stroke="rgb(96,165,250)"
+                        stroke="var(--k7-mark-onset)"
                         strokeWidth={1.5}
                       />
                       {Math.abs(t - o) > 0.4 && (
@@ -412,7 +412,7 @@ export function WaveformView({
                           y1={12}
                           x2={`${t}%`}
                           y2={12}
-                          stroke="rgb(96,165,250)"
+                          stroke="var(--k7-mark-onset)"
                           strokeWidth={1.5}
                           markerEnd="url(#warpArrow)"
                         />
@@ -434,7 +434,7 @@ export function WaveformView({
                   y="0"
                   width={`${(loop.win / wf.clipBeats) * 100}%`}
                   height="100%"
-                  fill="rgb(167,139,250)" // violet-400
+                  fill="var(--k7-mark-stretch)"
                   fillOpacity={0.1}
                 />
                 {visibleRepeats(loop, pxPerBeat).map((b) => (
@@ -444,7 +444,7 @@ export function WaveformView({
                     y1="0"
                     x2={`${(b / wf.clipBeats) * 100}%`}
                     y2="100%"
-                    stroke="rgb(167,139,250)"
+                    stroke="var(--k7-mark-stretch)"
                     strokeWidth={1}
                     strokeOpacity={0.3}
                   />
@@ -456,7 +456,7 @@ export function WaveformView({
                     y1="0"
                     x2={`${(b / wf.clipBeats) * 100}%`}
                     y2="100%"
-                    stroke="rgb(167,139,250)"
+                    stroke="var(--k7-mark-stretch)"
                     strokeWidth={1.5}
                     strokeOpacity={0.8}
                   />
@@ -512,7 +512,7 @@ function AuditionPlayhead({
         y1="0"
         x2={`${x}%`}
         y2="100%"
-        stroke="rgb(245,158,11)" // amber-500
+        stroke="var(--k7-warn)"
         strokeWidth={2}
       />
     </svg>

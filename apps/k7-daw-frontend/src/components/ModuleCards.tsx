@@ -1,13 +1,15 @@
 // ModuleCards.tsx — the chain dock's cards, left to right: the lane's own card, then each module (name, engine chip, warning,
 // native UI, bypass, preset with its arrows, three knobs), a "+" on each seam and a dashed "Add a module at the end".
-// A summary of the lane's row, not a second editor: the controls stay on the full row (the panel's "Controls" chip shows it).
+// Not a second editor: the controls stay on the full row (the panel's "Controls" chip), but a card's "⋯" opens the graph's own menu.
 
 import type { PluginParamsStore } from "@studio/engine-browser/params";
 import {
   ChevronLeft,
   ChevronRight,
+  Ellipsis,
   Plus,
   Power,
+  PowerOff,
   SquareArrowOutUpRight,
 } from "@studio/ui/icons";
 import { Knob } from "@studio/ui/knob";
@@ -53,6 +55,7 @@ export function ModuleCards({
   paramsStore,
   onParam,
   onNativeUI,
+  onMenu,
   className,
 }: {
   /** The row's module cards in signal order. */
@@ -75,6 +78,8 @@ export function ModuleCards({
   onParam?: (id: string, name: string, value: number) => void;
   /** A card's native plugin window, for a module that has one. */
   onNativeUI?: (module: string) => void;
+  /** A card's "⋯": the menu the graph opens on a right-click (remove, move, open the file). */
+  onMenu?: (n: GraphNode, x: number, y: number) => void;
   className?: string;
 }) {
   const tail = seams.find((s) => s.end);
@@ -164,16 +169,40 @@ export function ModuleCards({
                     <SquareArrowOutUpRight className="size-5" />
                   </button>
                 )}
+                {n.bypassed && (
+                  <span className="rounded-full bg-on-fill px-2.5 py-0.5 text-[11px] text-fg-2">
+                    {m["chain.bypassedTag"]()}
+                  </span>
+                )}
                 {onBypass && (
                   <button
                     type="button"
-                    aria-pressed={!off}
+                    aria-pressed={!!n.bypassed}
                     aria-label={m["chain.bypass"]({ name: n.label })}
                     title={m["chain.bypass"]({ name: n.label })}
                     onClick={() => onBypass(id)}
                     className="grid size-11 shrink-0 cursor-pointer place-items-center rounded-full text-fg-2 hover:bg-on-fill aria-pressed:text-lavender focus-visible:shadow-(--k7-focus-ring) focus-visible:outline-none"
                   >
-                    <Power className="size-5" />
+                    {n.bypassed ? (
+                      <PowerOff className="size-5" />
+                    ) : (
+                      <Power className="size-5" />
+                    )}
+                  </button>
+                )}
+                {onMenu && (
+                  <button
+                    type="button"
+                    aria-haspopup="menu"
+                    aria-label={m["chain.moduleMenu"]({ name: n.label })}
+                    title={m["chain.moduleMenu"]({ name: n.label })}
+                    onClick={(e) => {
+                      const r = e.currentTarget.getBoundingClientRect();
+                      onMenu(n, r.left, r.bottom);
+                    }}
+                    className="grid size-11 shrink-0 cursor-pointer place-items-center rounded-full text-fg-2 hover:bg-on-fill focus-visible:shadow-(--k7-focus-ring) focus-visible:outline-none"
+                  >
+                    <Ellipsis className="size-5" />
                   </button>
                 )}
               </div>
@@ -190,6 +219,10 @@ export function ModuleCards({
                   </button>
                   <button
                     type="button"
+                    aria-label={m["chain.presetOf"]({
+                      preset: preset ?? m["chain.preset"](),
+                      name: n.label,
+                    })}
                     onClick={(e) => {
                       const r = e.currentTarget.getBoundingClientRect();
                       onPresets(id, r.left, r.bottom);
@@ -234,7 +267,8 @@ function LaneCardView({ lane }: { lane: LaneCard }) {
         </span>
         {v && lane.onToggle && (
           <div className="flex gap-1">
-            {(["mute", "solo", "arm"] as const).map((c) => (
+            {/* Arm is the header's: one button for one state. */}
+            {(["mute", "solo"] as const).map((c) => (
               <TrackToggle
                 key={c}
                 kind={c}
