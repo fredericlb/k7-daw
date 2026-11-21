@@ -115,8 +115,8 @@ export function PresetPicker({
               save();
             }
           }}
-          placeholder={`save ${node} as…`}
-          title={taken ? `'${clean}' is already kept in ${scope}` : undefined}
+          placeholder={m["preset.saveAs"]({ node })}
+          title={taken ? m["preset.taken"]({ name: clean, scope }) : undefined}
           spellCheck={false}
           autoComplete="off"
           className="min-w-0 flex-1 rounded border border-border bg-transparent px-1 py-0.5 font-mono text-xs outline-none focus:border-primary placeholder:text-faint"
@@ -146,7 +146,11 @@ export function PresetPicker({
         <button
           type="button"
           className={`${BTN} justify-start`}
-          title={`overwrite ${updatable.scope}:${updatable.name} with ${node}'s current values`}
+          title={m["preset.overwrite"]({
+            scope: updatable.scope,
+            name: updatable.name,
+            node,
+          })}
           onClick={() => {
             onUpdate(updatable);
             onClose();
@@ -196,10 +200,12 @@ export function PresetPicker({
       tree={presetTree(data.presets)}
       search={(q) => searchPresets(data.presets, q)}
       searchLimit={SEARCH_LIMIT}
-      placeholder={`search presets of ${data.ref ?? node}…`}
+      placeholder={m["preset.searchOf"]({ ref: data.ref ?? node })}
       menuLabel={m["preset.menu"]()}
       searchLabel={m["preset.searchLabel"]()}
-      emptyLabel={data.presets.length ? "no preset matches" : "no presets yet"}
+      emptyLabel={
+        data.presets.length ? m["preset.noMatch"]() : m["preset.none"]()
+      }
       onPick={onApply}
       onClose={onClose}
       header={header}

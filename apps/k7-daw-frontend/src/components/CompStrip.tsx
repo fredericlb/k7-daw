@@ -5,6 +5,7 @@
 
 import { cn } from "@studio/ui/lib/utils";
 import type { EnvelopeProject } from "../clipEnvelope";
+import { m } from "../paraglide/messages.js";
 import { type TakesEvent, takeColor, takeOfPiece } from "../takes";
 import type { WebClip } from "../types";
 import { ClipContent } from "./ClipContent";
@@ -30,15 +31,15 @@ export function CompStrip({
       {ev.pieces.map((p) => {
         const take = takeOfPiece(p);
         const color = takeColor(ev, take);
-        const label = take === ev.ref ? "the event's own" : take;
+        const label = take === ev.ref ? m["comp.ownPart"]() : take;
         return (
           <button
             key={p.id}
             type="button"
             onClick={() => onSelect(p)}
             aria-pressed={p.id === selected}
-            title={`${label} — click to show and edit this part`}
-            aria-label={`edit the part played by ${label}`}
+            title={m["comp.partTitle"]({ label })}
+            aria-label={m["comp.partLabel"]({ label })}
             className={cn(
               "absolute inset-y-0 overflow-hidden border-t-4 text-left",
               p.id === selected

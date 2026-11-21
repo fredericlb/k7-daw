@@ -75,6 +75,7 @@ export function TrackModulesPane({
   showCurves = false,
   onToggleCurves,
   onTrackInput,
+  onStatus,
 }: {
   /** Play one note through a lane, as the piano roll's click does — what an SFZ kit's pad sounds through. */
   onPreviewNote?: (track: string, key: number, vel: number) => void;
@@ -145,6 +146,8 @@ export function TrackModulesPane({
   ) => void;
   engineWarnings?: Record<string, string>;
   onProblems?: () => void;
+  /** Where a pressed-but-refused control says why (the status line). */
+  onStatus?: (message: string) => void;
   /** Whether the row draws each card's curve cards, spaced in before it — `ui curves`. */
   showCurves?: boolean;
   /** The top-right button's: the shell's `ui curves`, so the button and the command are one. */
@@ -328,11 +331,7 @@ export function TrackModulesPane({
   if (error) return say(<span className="text-red-500">{error}</span>);
   if (!laidShown) return say(m["common.loading"]());
   if (!laidShown.nodes.length)
-    return say(
-      nodes
-        ? "no module here yet"
-        : "this lane reaches no module — nothing to show",
-    );
+    return say(nodes ? m["chain.noModules"]() : m["chain.laneReachesNone"]());
 
   // What both halves share: the same callbacks and stores, so the pinned mixer is a card like any other.
   const shared = {
@@ -413,6 +412,7 @@ export function TrackModulesPane({
           onControls={cards ? () => setControls((v) => !v) : undefined}
           hasInput={hasInput}
           onInput={onInput}
+          onReason={onStatus}
           showCurves={showCurves}
           onToggleCurves={onToggleCurves}
         />

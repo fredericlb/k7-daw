@@ -8,6 +8,7 @@ import type React from "react";
 import { memo } from "react";
 import { type RollHoverStore, useHoverCell } from "../hooks/useRollHover";
 import { noteName } from "../noteNames";
+import { m } from "../paraglide/messages.js";
 import type { RollNote } from "../rollPending";
 
 /** What a note's elements call — stable for the roll's life, reading the gestures' latest closures. */
@@ -69,19 +70,29 @@ export const RollNoteBox = memo(function RollNoteBox({
   // The row the note is DRAWN on, which a vertical drag moves; the velocity gesture never runs at the same time.
   const top = (127 - (at ? at.key : n.key)) * rowH;
   return (
-    // biome-ignore lint/a11y/noStaticElementInteractions: a note is dragged by the pointer; the keyboard edits it through the caret
     <div
       title={
         plays
-          ? `${noteName(n.key)} · ${n.time}–${n.time + n.duration}b · vel ${+vel.toFixed(2)}${
-              caps.vel ? " — drag the white line for velocity" : ""
+          ? `${m["roll.noteTitle"]({ name: noteName(n.key), from: n.time, to: n.time + n.duration, vel: +vel.toFixed(2) })}${
+              caps.vel ? m["roll.noteVelHint"]() : ""
             }${
               caps.range
-                ? `, the body to move${caps.pitch ? " (up or down to transpose)" : ""}, either edge to stretch`
+                ? `${m["roll.noteMoveHint"]()}${caps.pitch ? m["roll.noteTransposeHint"]() : ""}${m["roll.noteStretchHint"]()}`
                 : ""
             }`
-          : `${noteName(n.key)} · ${n.time}–${n.time + n.duration}b — outside this event's window`
+          : m["roll.noteOutside"]({
+              name: noteName(n.key),
+              from: n.time,
+              to: n.time + n.duration,
+            })
       }
+      aria-label={m["roll.noteName"]({
+        name: noteName(n.key),
+        from: n.time,
+        to: n.time + n.duration,
+        vel: +vel.toFixed(2),
+      })}
+      role="img"
       onPointerDown={plays ? (e) => on.down(e, n) : undefined}
       onContextMenu={plays ? (e) => on.menu(e, n) : undefined}
       onPointerMove={plays ? (e) => on.move(e, top) : undefined}

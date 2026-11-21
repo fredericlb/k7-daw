@@ -12,13 +12,12 @@ const CHIP =
 
 /** The two inputs a lane can be given from here, each the `track input` kind it runs. */
 const INPUTS = [
-  { kind: "audio", label: "audio in", Icon: Mic },
-  { kind: "midi", label: "midi in", Icon: KeyboardMusic },
+  { kind: "audio", label: () => m["chain.audioIn"](), Icon: Mic },
+  { kind: "midi", label: () => m["chain.midiIn"](), Icon: KeyboardMusic },
 ] as const;
 
-/** A greyed button still shows its tooltip, which is what says why it is greyed. */
-const DISABLED =
-  "disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-muted-foreground";
+// A taken input stays pressable (aria-disabled) so a press can say why it does nothing.
+const DISABLED = "aria-disabled:cursor-not-allowed aria-disabled:opacity-40";
 
 export function ChainHeader({
   name,
@@ -29,6 +28,7 @@ export function ChainHeader({
   onControls,
   hasInput,
   onInput,
+  onReason,
   showCurves,
   onToggleCurves,
 }: {
@@ -42,6 +42,8 @@ export function ChainHeader({
   onControls?: () => void;
   hasInput: boolean;
   onInput?: (kind: "audio" | "midi") => void;
+  /** Where the reason a taken input chip does nothing goes when it is pressed (the status line). */
+  onReason?: (message: string) => void;
   showCurves: boolean;
   onToggleCurves?: () => void;
 }) {
@@ -82,23 +84,30 @@ export function ChainHeader({
             </button>
           )}
           {onInput &&
-            INPUTS.map(({ kind, label, Icon }) => (
-              <button
-                key={kind}
-                type="button"
-                onClick={() => onInput(kind)}
-                disabled={hasInput}
-                aria-label={label}
-                title={
-                  hasInput
-                    ? `${label} — this lane already has an input`
-                    : `${label} — an input feeding this lane, ahead of its first node`
-                }
-                className={`${CHIP} ${DISABLED}`}
-              >
-                <Icon className="size-4" />
-              </button>
-            ))}
+            INPUTS.map(({ kind, label, Icon }) => {
+              const text = label();
+              return (
+                <button
+                  key={kind}
+                  type="button"
+                  onClick={() =>
+                    hasInput
+                      ? onReason?.(m["chain.inputTaken"]())
+                      : onInput(kind)
+                  }
+                  aria-disabled={hasInput || undefined}
+                  aria-label={text}
+                  title={
+                    hasInput
+                      ? `${text} — ${m["chain.inputTaken"]()}`
+                      : m["chain.inputHint"]({ label: text })
+                  }
+                  className={`${CHIP} ${DISABLED}`}
+                >
+                  <Icon className="size-4" />
+                </button>
+              );
+            })}
           {onToggleCurves && (
             <button
               type="button"
@@ -106,7 +115,7 @@ export function ChainHeader({
               aria-pressed={showCurves}
               aria-label={m["chain.automation"]()}
               title={
-                showCurves ? "hide the curve cards" : "show the curve cards"
+                showCurves ? m["chain.curvesHide"]() : m["chain.curvesShow"]()
               }
               className={`${CHIP} aria-pressed:bg-on-fill aria-pressed:text-lavender`}
             >

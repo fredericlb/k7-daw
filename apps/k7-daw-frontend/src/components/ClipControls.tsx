@@ -76,7 +76,7 @@ export function ClipControls(p: ClipControlsProps) {
               {p.busy === "process" ? (
                 <Loader2 className="h-3.5 w-3.5 animate-spin" />
               ) : (
-                "operations"
+                m["clip.operations"]()
               )}
             </Button>
           </DropdownMenuTrigger>

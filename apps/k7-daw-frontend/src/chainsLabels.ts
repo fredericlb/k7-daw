@@ -68,6 +68,13 @@ function chainsLabels(): ChainsLabels {
     unknownPlugin: m["chainsUi.unknownPlugin"](),
     notSupported: m["chainsUi.notSupported"](),
     emptyStep: m["chainsUi.emptyStep"](),
+    portAutomationOutDrag: m["chainsUi.portAutomationOutDrag"](),
+    portAutomationOut: m["chainsUi.portAutomationOut"](),
+    portEventInBound: m["chainsUi.portEventInBound"](),
+    portEventInUnbound: m["chainsUi.portEventInUnbound"](),
+    portEventOut: (name) => m["chainsUi.portEventOut"]({ name }),
+    portFree: (name, type) => m["chainsUi.portFree"]({ name, type }),
+    portNamed: (name, type) => m["chainsUi.portNamed"]({ name, type }),
   };
 }
 

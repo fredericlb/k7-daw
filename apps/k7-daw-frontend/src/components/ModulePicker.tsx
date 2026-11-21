@@ -64,63 +64,67 @@ export function parseBaseRef(ref: string): {
 const CURRENT = "current";
 
 /** The picker's non-module branch for curves: a curve that already exists is already ON the graph, so the only useful offer is a new one. */
-const CURVE_BRANCH: TreeNode<ModulePick> = {
-  key: "curves",
-  label: "curves",
-  children: [
-    {
-      key: "curves/new",
-      label: "new curve…",
-      hint: "an LFO, a drawn shape, or an envelope fired by note-ons",
-      entry: { newCurve: true, ref: "", namespace: null, type: "", name: "" },
-    },
-  ],
-};
+function curveBranch(): TreeNode<ModulePick> {
+  return {
+    key: "curves",
+    label: msg["module.curves"](),
+    children: [
+      {
+        key: "curves/new",
+        label: msg["module.newCurve"](),
+        hint: msg["module.newCurveHint"](),
+        entry: { newCurve: true, ref: "", namespace: null, type: "", name: "" },
+      },
+    ],
+  };
+}
 
 /** The io SOURCES — the inputs a graph can start from. A sink takes no node: MIX, OUT, CUE, RENDER
  * and VIDEO_OUT are built into every project, which is why they are not on this menu (docs/moduleTypes.md). */
-const INPUT_BRANCH: TreeNode<ModulePick> = {
-  key: "inputs",
-  label: "inputs",
-  children: [
-    {
-      key: "inputs/in",
-      label: "audio input",
-      hint: "io: in — this machine's input, the live rig's IN",
-      entry: { ref: "io/IN", namespace: null, type: "io", name: "IN" },
-    },
-    {
-      key: "inputs/cam",
-      label: "camera",
-      hint: "io: camera — a live picture; the video input",
-      entry: { ref: "io/CAM", namespace: null, type: "io", name: "CAM" },
-    },
-    {
-      key: "inputs/remote-cam",
-      label: "remote camera",
-      hint: "io: camera — a device of yours in camera mode; its card lists the ones that are on",
-      entry: {
-        ref: "io/CAM",
-        namespace: null,
-        type: "io",
-        name: "CAM",
-        camera: REMOTE_CAMERA_PREFIX,
+function inputBranch(): TreeNode<ModulePick> {
+  return {
+    key: "inputs",
+    label: msg["module.inputs"](),
+    children: [
+      {
+        key: "inputs/in",
+        label: msg["module.audioInput"](),
+        hint: msg["module.audioInputHint"](),
+        entry: { ref: "io/IN", namespace: null, type: "io", name: "IN" },
       },
-    },
-    {
-      key: "inputs/file",
-      label: "file source",
-      hint: "io: file — audio off disk; the node carries which file",
-      entry: { ref: "io/FILE", namespace: null, type: "io", name: "FILE" },
-    },
-    {
-      key: "inputs/midi",
-      label: "MIDI input",
-      hint: "io: midi — a MIDI device; wired to a lane, it is what that lane records",
-      entry: { ref: "io/MIDI", namespace: null, type: "io", name: "MIDI" },
-    },
-  ],
-};
+      {
+        key: "inputs/cam",
+        label: msg["module.camera"](),
+        hint: msg["module.cameraHint"](),
+        entry: { ref: "io/CAM", namespace: null, type: "io", name: "CAM" },
+      },
+      {
+        key: "inputs/remote-cam",
+        label: msg["module.remoteCamera"](),
+        hint: msg["module.remoteCameraHint"](),
+        entry: {
+          ref: "io/CAM",
+          namespace: null,
+          type: "io",
+          name: "CAM",
+          camera: REMOTE_CAMERA_PREFIX,
+        },
+      },
+      {
+        key: "inputs/file",
+        label: msg["module.fileSource"](),
+        hint: msg["module.fileSourceHint"](),
+        entry: { ref: "io/FILE", namespace: null, type: "io", name: "FILE" },
+      },
+      {
+        key: "inputs/midi",
+        label: msg["module.midiInput"](),
+        hint: msg["module.midiInputHint"](),
+        entry: { ref: "io/MIDI", namespace: null, type: "io", name: "MIDI" },
+      },
+    ],
+  };
+}
 
 /** The `@engine` catalogue is not offered HERE: a built-in is what a module extends, not a node to drop — docs/commandBar.md. */
 function offered(
@@ -289,7 +293,7 @@ export function searchModules(
 export function searchBuiltins(query: string): TreeNode<ModulePick>[] {
   const ql = query.trim().toLowerCase();
   if (!ql) return [];
-  return [...(INPUT_BRANCH.children ?? []), ...(CURVE_BRANCH.children ?? [])]
+  return [...(inputBranch().children ?? []), ...(curveBranch().children ?? [])]
     .filter((n) =>
       [n.label, n.entry?.ref ?? "", n.entry?.name ?? ""].some((s) =>
         s.toLowerCase().includes(ql),
@@ -316,7 +320,7 @@ export function ModulePicker({
     <TreePicker<ModulePick>
       x={x}
       y={y}
-      tree={[...buildTree(baseModules), INPUT_BRANCH, CURVE_BRANCH]}
+      tree={[...buildTree(baseModules), inputBranch(), curveBranch()]}
       search={(q) => [...searchBuiltins(q), ...searchModules(baseModules, q)]}
       searchLimit={SEARCH_LIMIT}
       placeholder={msg["module.search"]()}

@@ -66,6 +66,13 @@ export interface ChainsLabels {
   unknownPlugin: string;
   notSupported: string;
   emptyStep: string;
+  portAutomationOutDrag: string;
+  portAutomationOut: string;
+  portEventInBound: string;
+  portEventInUnbound: string;
+  portEventOut: (name: string) => string;
+  portFree: (name: string, type: string) => string;
+  portNamed: (name: string, type: string) => string;
 }
 
 export const ENGLISH_CHAINS_LABELS: ChainsLabels = {
@@ -134,6 +141,17 @@ export const ENGLISH_CHAINS_LABELS: ChainsLabels = {
   unknownPlugin: "unknown plugin",
   notSupported: "not supported",
   emptyStep: "empty step",
+  portAutomationOutDrag:
+    "automation out — drag onto a knob to bind this curve to it",
+  portAutomationOut:
+    "automation out — where the cable to the param it drives leaves",
+  portEventInBound: "event in — a note-on restarts this envelope",
+  portEventInUnbound:
+    "event in — bind this curve to a param first, then a note-on can fire it",
+  portEventOut: (name) =>
+    `${name} — drag onto a curve's event plug to make it fire that curve`,
+  portFree: (name, type) => `${name} (${type}) — free`,
+  portNamed: (name, type) => `${name} (${type})`,
 };
 
 export const ChainsLabelsContext = createContext<ChainsLabels>(

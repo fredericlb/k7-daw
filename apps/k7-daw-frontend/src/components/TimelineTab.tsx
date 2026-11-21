@@ -3636,8 +3636,8 @@ function TimelineTabView({
                                           )}
                                           title={
                                             which === "fadeIn"
-                                              ? "Drag to fade in — Ctrl frees the grid"
-                                              : "Drag to fade out — Ctrl frees the grid"
+                                              ? m["timeline.fadeInHint"]()
+                                              : m["timeline.fadeOutHint"]()
                                           }
                                           onPointerDown={(e) => {
                                             e.stopPropagation();

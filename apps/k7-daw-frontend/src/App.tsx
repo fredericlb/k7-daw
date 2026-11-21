@@ -3122,6 +3122,7 @@ export default function App({
           onEdgeInsert={locked ? undefined : insertIntoChain}
           showCurves={trackCurves}
           onToggleCurves={() => void runCommand("ui curves")}
+          onStatus={(message) => setStatus(message)}
           onTrackInput={(kind) =>
             void runCommand(`track input ${graphSlot.trackId} ${kind}`)
           }

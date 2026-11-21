@@ -38,12 +38,17 @@ export type SeqTab = "text" | "roll";
 
 // The two tabs, in the order they read: the file, then its notes.
 const SEQ_TABS = [
-  { id: "text", label: "Text", icon: FileText, title: "the file itself" },
+  {
+    id: "text",
+    label: () => m["editor.tabText"](),
+    icon: FileText,
+    title: () => m["editor.tabTextHint"](),
+  },
   {
     id: "roll",
-    label: "Roll",
+    label: () => m["editor.tabRoll"](),
     icon: Piano,
-    title: "its notes as a piano roll",
+    title: () => m["editor.tabRollHint"](),
   },
 ] as const;
 
@@ -112,7 +117,7 @@ export function EditorToolbar({
               type="button"
               role="tab"
               aria-selected={tab === t.id}
-              title={t.title}
+              title={t.title()}
               className={cn(
                 "flex h-8 items-center gap-1 rounded-full px-3 font-bold text-[13px] transition-colors",
                 tab === t.id
@@ -122,7 +127,7 @@ export function EditorToolbar({
               onClick={() => onTab(t.id)}
             >
               <t.icon className="h-3.5 w-3.5" />
-              {t.label}
+              {t.label()}
             </button>
           ))}
         </div>

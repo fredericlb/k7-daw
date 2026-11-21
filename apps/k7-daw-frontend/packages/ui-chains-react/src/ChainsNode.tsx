@@ -391,6 +391,7 @@ function NodeInner({
 
       {/* Ports. `jacksFor` in graph.ts decides which show; NodePorts.tsx spaces them down the edge. */}
       {nodePorts({
+        l,
         n,
         patchWant,
         onTapJack,

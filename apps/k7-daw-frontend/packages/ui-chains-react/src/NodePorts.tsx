@@ -4,17 +4,19 @@
 
 import { EVENT_IN_AT, eventOutBottom } from "@studio/ui-chains/graph";
 import { cableColorFor, MAUVE } from "./chainsCss";
+import type { ChainsLabels } from "./labels";
 import type { NodeProps } from "./nodeProps";
 
 /** Every socket on the card, in the order the card has always drawn them. */
 export function nodePorts({
+  l,
   n,
   patchWant,
   onTapJack,
   onStartAutomation,
   onStartEvent,
   onLandEvent,
-}: Pick<
+}: { l: ChainsLabels } & Pick<
   NodeProps,
   | "n"
   | "patchWant"
@@ -30,9 +32,7 @@ export function nodePorts({
         <span
           className={`dgx-port cout${onStartAutomation ? " plug" : ""}`}
           title={
-            onStartAutomation
-              ? "automation out — drag onto a knob to bind this curve to it"
-              : "automation out — where the cable to the param it drives leaves"
+            onStartAutomation ? l.portAutomationOutDrag : l.portAutomationOut
           }
           // Where `curveOutPoint` says its cable leaves: the middle of its right edge (chainsCss's `.cout`).
           style={{ ["--jc" as string]: MAUVE }}
@@ -55,11 +55,7 @@ export function nodePorts({
           className={`dgx-port ev evin${
             patchWant?.kind === "event" && n.curveOf?.module ? " plug" : ""
           }`}
-          title={
-            n.curveOf?.module
-              ? "event in — a note-on restarts this envelope"
-              : "event in — bind this curve to a param first, then a note-on can fire it"
-          }
+          title={n.curveOf?.module ? l.portEventInBound : l.portEventInUnbound}
           style={{
             ["--jc" as string]: cableColorFor("event"),
             // The fraction eventPoint uses, so the cable meets the hole.
@@ -83,7 +79,7 @@ export function nodePorts({
         <span
           key={`ev:${name}`}
           className={`dgx-port ev evout${onStartEvent ? " plug" : ""}`}
-          title={`${name} — drag onto a curve's event plug to make it fire that curve`}
+          title={l.portEventOut(name)}
           onPointerDown={
             onStartEvent
               ? (e) => {
@@ -121,7 +117,9 @@ export function nodePorts({
                 className={`dgx-port ${side}${p.free ? " free" : ""}${plug ? " plug" : ""}`}
                 title={
                   p.name
-                    ? `${p.name} (${p.type})${p.free ? " — free" : ""}`
+                    ? p.free
+                      ? l.portFree(p.name, p.type)
+                      : l.portNamed(p.name, p.type)
                     : undefined
                 }
                 style={{
