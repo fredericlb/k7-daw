@@ -1,4 +1,4 @@
-// RepoList.tsx — the account's workspaces and their projects: the Home top bar (title, New, More, the cog), then the
+// RepoList.tsx — the account's workspaces and their projects: the Home top bar (title, New, More), then the
 // workspace cards (ProjectsTable.tsx), "On your other devices" at their foot, or what stands in for them when there is
 // nothing to list. Presentational — the section holds the async and this file draws. See ../../docs/projects.md.
 
@@ -17,8 +17,10 @@ import {
   HardDrive,
   Loader2,
   Plus,
+  Search,
   ServerOff,
 } from "@studio/ui/icons";
+import { Input } from "@studio/ui/input";
 import type { AccountWorkspace, RepoProject } from "@studio/web-protocol";
 import { byPeople, byPeoplePath } from "@studio/web-protocol/tree";
 import { useState } from "react";
@@ -52,6 +54,23 @@ export const pageOrder = (all: AccountWorkspace[]): AccountWorkspace[] =>
 /** …and the same for workspaces, in the heading's summary. */
 const workspacesCount = (n: number): string =>
   (n === 1 ? m["repos.workspaces.one"] : m["repos.workspaces.other"])({ n });
+
+/** The filter field shows from this many projects on. */
+const FILTER_FROM = 6;
+
+/** The workspaces left once `query` has picked: a project by its path, a workspace by its name (then all its projects). */
+export function filterWorkspaces(
+  all: AccountWorkspace[],
+  query: string,
+): AccountWorkspace[] {
+  const q = query.trim().toLowerCase();
+  if (!q) return all;
+  return all.flatMap((w) => {
+    if (w.name.toLowerCase().includes(q)) return [w];
+    const projects = w.projects.filter((p) => p.path.toLowerCase().includes(q));
+    return projects.length ? [{ ...w, projects }] : [];
+  });
+}
 
 export function RepoList({
   workspaces,
@@ -132,9 +151,10 @@ export function RepoList({
   onChanged: () => void;
 }) {
   // Examples is listed when the ⋮ says so, by default only while nothing of one's own is.
-  const [showExamples, setShowExamples] = useShowExamples(
-    workspaces.some((w) => !isExamples(w)),
-  );
+  const hasOwn = workspaces.some((w) => !isExamples(w));
+  const [chosenExamples, setShowExamples] = useShowExamples(hasOwn);
+  // Examples cannot be hidden while it is all there is: the page would be blank.
+  const showExamples = chosenExamples || !hasOwn;
   // A workspace waiting for a merge's choices takes no write from the home page (docs/git.md).
   const merges = useMergingWorkspaces(
     useGitTransport(),
@@ -144,7 +164,10 @@ export function RepoList({
     merges.merging(name) ? Promise.reject(new Error(lockSentence())) : null;
   const listed = workspaces.filter((w) => showExamples || !isExamples(w));
   const projectTotal = listed.reduce((n, w) => n + w.projects.length, 0);
-  const ordered = pageOrder(listed);
+  // The filter appears once the list is long enough to need it; a workspace's own name keeps all its projects.
+  const [query, setQuery] = useState("");
+  const filtering = projectTotal >= FILTER_FROM;
+  const ordered = filterWorkspaces(pageOrder(listed), filtering ? query : "");
   const createIn = (
     name: string,
     folder: string,
@@ -159,6 +182,33 @@ export function RepoList({
   const [making, setMaking] = useState(false);
   const [cloning, setCloning] = useState(false);
   const newBlocked = blockedWorkspace;
+  // The act itself, on the spot: the menu has the same item, but an empty page is read from its middle.
+  const emptyState = (
+    <EmptyState
+      glyph={<Folder />}
+      title={m["repos.emptyTitle"]()}
+      actions={
+        <>
+          <NewWorkspace
+            primary
+            blocked={blockedWorkspace}
+            onCreate={onCreateWorkspace}
+          />
+          <Button
+            variant="glass"
+            disabled={Boolean(blocked)}
+            title={blocked || m["git.cloneHint"]()}
+            onClick={() => setCloning(true)}
+          >
+            <GitBranch />
+            {m["git.clone"]()}
+          </Button>
+        </>
+      }
+    >
+      {m["repos.empty"]()}
+    </EmptyState>
+  );
   return (
     <div className={PAGE_COLUMN}>
       <PageHeader
@@ -205,6 +255,7 @@ export function RepoList({
             <ProjectsMenu
               showExamples={showExamples}
               onShowExamples={setShowExamples}
+              pinned={!hasOwn}
             />
           </>
         }
@@ -253,52 +304,52 @@ export function RepoList({
           <Loader2 className="size-4 animate-spin" /> {m["common.loading"]()}
         </div>
       ) : workspaces.length === 0 ? (
-        // The act itself, on the spot: the menu has the same item, but an empty page is read from its middle.
-        <EmptyState
-          glyph={<Folder />}
-          title={m["repos.emptyTitle"]()}
-          actions={
-            <>
-              <NewWorkspace
-                primary
-                blocked={blockedWorkspace}
-                onCreate={onCreateWorkspace}
-              />
-              <Button
-                variant="glass"
-                disabled={Boolean(blocked)}
-                disabledReason={blocked || undefined}
-                title={blocked || m["git.cloneHint"]()}
-                onClick={() => setCloning(true)}
-              >
-                <GitBranch />
-                {m["git.clone"]()}
-              </Button>
-            </>
-          }
-        >
-          {m["repos.empty"]()}
-        </EmptyState>
+        emptyState
       ) : (
-        <ProjectsTable
-          workspaces={ordered}
-          blocked={blocked}
-          onOpen={onOpen}
-          onDropProject={onDropProject}
-          locked={(w) => merges.merging(w.name)}
-          createIn={createIn}
-          onDelete={(w, p, step) => refuse(w.name) ?? onDelete(w, p, step)}
-          onRename={(w, p, f, step) =>
-            refuse(w.name) ?? onRename(w, p, f, step)
-          }
-          onCopy={(w, p, to, f, step) =>
-            refuse(to.name) ?? onCopy(w, p, to, f, step)
-          }
-          projectHref={projectHref}
-          workspaceHref={workspaceHref}
-          onRemoveWorkspace={onRemoveWorkspace}
-          onChanged={onChanged}
-        />
+        <>
+          {/* First run: the empty state stays above the demos, which are all there is. */}
+          {!hasOwn && emptyState}
+          {filtering && (
+            <div className="relative">
+              <Search
+                className="-translate-y-1/2 pointer-events-none absolute top-1/2 left-3.5 size-5 text-fg-3"
+                aria-hidden
+              />
+              <Input
+                type="search"
+                className="pl-11"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder={m["repos.filter"]()}
+                aria-label={m["repos.filter"]()}
+              />
+            </div>
+          )}
+          {filtering && query.trim() && ordered.length === 0 && (
+            <p role="status" className="type-secondary text-fg-2">
+              {m["repos.filterNone"]({ query: query.trim() })}
+            </p>
+          )}
+          <ProjectsTable
+            workspaces={ordered}
+            blocked={blocked}
+            onOpen={onOpen}
+            onDropProject={onDropProject}
+            locked={(w) => merges.merging(w.name)}
+            createIn={createIn}
+            onDelete={(w, p, step) => refuse(w.name) ?? onDelete(w, p, step)}
+            onRename={(w, p, f, step) =>
+              refuse(w.name) ?? onRename(w, p, f, step)
+            }
+            onCopy={(w, p, to, f, step) =>
+              refuse(to.name) ?? onCopy(w, p, to, f, step)
+            }
+            projectHref={projectHref}
+            workspaceHref={workspaceHref}
+            onRemoveWorkspace={onRemoveWorkspace}
+            onChanged={onChanged}
+          />
+        </>
       )}
 
       {/* The workspaces added on the person's other devices, which git can bring here. */}

@@ -9,7 +9,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@studio/ui/dropdown-menu";
-import { Ellipsis, GitBranch, Loader2, Trash2 } from "@studio/ui/icons";
+import {
+  Ellipsis,
+  FolderOpen,
+  GitBranch,
+  Loader2,
+  Trash2,
+} from "@studio/ui/icons";
 import { EXAMPLES_WORKSPACE } from "@studio/web-protocol/projects";
 import { useEffect, useState } from "react";
 import { useGitTransport } from "../git/GitContext";
@@ -25,6 +31,8 @@ export function WorkspaceMenu({
   onRemove,
   projectCount = 0,
   onConnected,
+  onBrowse,
+  locked = "",
 }: {
   workspace: string;
   /** How many projects the delete takes with it — said in the confirmation. */
@@ -34,6 +42,10 @@ export function WorkspaceMenu({
   onRemove: () => Promise<void>;
   /** After the workspace was connected, so the page reads it again. */
   onConnected?: () => void;
+  /** Opens the workspace's file tree, the read-only developer view. */
+  onBrowse: () => void;
+  /** The sentence of a merge waiting here, which stops the delete; empty when none. */
+  locked?: string;
 }) {
   const [busy, setBusy] = useState(false);
   // One read when the menu opens: the row's own badge keeps the state fresh the rest of the time.
@@ -69,7 +81,7 @@ export function WorkspaceMenu({
       <DropdownMenuTrigger asChild disabled={busy || Boolean(blocked)}>
         <Button
           variant="ghost"
-          size="icon-sm"
+          size="icon"
           className="shrink-0 text-fg-2"
           title={blocked || m["ws.menu"]({ workspace })}
           aria-label={m["ws.menu"]({ workspace })}
@@ -86,13 +98,8 @@ export function WorkspaceMenu({
       <DropdownMenuContent align="end" className="w-56">
         {gitMenuEntries(view, workspace === EXAMPLES_WORKSPACE).map((entry) =>
           entry === "connected" && view.connected ? (
-            <DropdownMenuItem
-              key={entry}
-              disabled
-              className="gap-2 text-xs"
-              title={view.remote}
-            >
-              <GitBranch className="h-3.5 w-3.5" />
+            <DropdownMenuItem key={entry} disabled title={view.remote}>
+              <GitBranch />
               <span className="truncate">
                 {m["git.menuConnected"]({ remote: view.remote })}
               </span>
@@ -100,24 +107,30 @@ export function WorkspaceMenu({
           ) : (
             <DropdownMenuItem
               key={entry}
-              className="gap-2 text-xs"
               onSelect={() =>
                 openConnect(workspace, { changing: view.connected })
               }
             >
-              <GitBranch className="h-3.5 w-3.5" />
+              <GitBranch />
               {entry === "change"
                 ? m["git.menuChange"]()
                 : m["git.menuConnect"]()}
             </DropdownMenuItem>
           ),
         )}
+        <DropdownMenuItem onSelect={onBrowse}>
+          <FolderOpen />
+          {m["ws.browse"]()}
+        </DropdownMenuItem>
         {/* In red: the one act on this row that cannot be undone at all. */}
         <DropdownMenuItem
-          className="gap-2 text-destructive text-xs"
+          className="text-destructive [&_svg]:text-destructive"
+          disabled={Boolean(locked)}
+          disabledReason={locked || undefined}
+          title={locked || undefined}
           onSelect={() => void remove()}
         >
-          <Trash2 className="h-3.5 w-3.5" />
+          <Trash2 />
           {m["ws.deleteEllipsis"]()}
         </DropdownMenuItem>
       </DropdownMenuContent>

@@ -39,6 +39,7 @@ export function ProjectsPane({
   onOpen,
   onChanged,
   libraries,
+  readError = null,
 }: {
   /** The origin's libraries as this account sees them, read by Home; they decide whether a workspace may be made. */
   libraries: AccountLibrary[] | undefined;
@@ -54,11 +55,16 @@ export function ProjectsPane({
   onOpen: (name: string | null) => void;
   /** Call after any write, so the page reloads without waiting for the poll. */
   onChanged: () => void;
+  /** The list's own read failed: said in the one error region, with the writes' errors. */
+  readError?: string | null;
 }) {
   const [error, setError] = useState<string | null>(null);
   // A warning that is not a failure — the library modules a project just created still owes.
   const [notice, setNotice] = useState<string | null>(null);
   const [nodes, setNodes] = useState<FileNode[] | null>(null);
+  // A failed read of the unfolded tree is its own error, drawn by the tree with Retry and Back.
+  const [treeError, setTreeError] = useState<string | null>(null);
+  const [treeTry, setTreeTry] = useState(0);
   const ws = workspaces.find((w) => w.name === openWs) ?? null;
 
   /** What stops a write, in one sentence, or "". Said on the button rather than found on click. */
@@ -122,6 +128,9 @@ export function ProjectsPane({
           : null,
       );
       onChanged();
+      // The new project opens, as FirstProject's does; one that owes modules stays on this page, where the notice says so.
+      if (!missing.length)
+        void go(projectHref(w, { path: project, app: "k7" }));
     },
     [chosen, onChanged],
   );
@@ -207,26 +216,29 @@ export function ProjectsPane({
     [chosen, onChanged],
   );
 
-  /** The unfolded workspace's tree, read off the file service — one request, no retry: it is a `readdir` on a disk that is there. */
+  /** The unfolded workspace's tree, read off the file service — one request; Retry bumps `treeTry`. */
+  // biome-ignore lint/correctness/useExhaustiveDependencies: `treeTry` is the Retry trigger, not a value the read uses.
   useEffect(() => {
     if (!openWs || !fileService) {
       setNodes(null);
+      setTreeError(null);
       return;
     }
     let stop = false;
     setNodes(null);
+    setTreeError(null);
     void accountFiles
       .workspaceTree(fileService, openWs)
       .then((n) => {
         if (!stop) setNodes(n);
       })
       .catch((e: Error) => {
-        if (!stop) setError(e.message);
+        if (!stop) setTreeError(e.message);
       });
     return () => {
       stop = true;
     };
-  }, [openWs, fileService]);
+  }, [openWs, fileService, treeTry]);
 
   const gitTransportOf = useMemo(
     () => (fileService ? gitTransport(fileService) : null),
@@ -255,6 +267,8 @@ export function ProjectsPane({
             workspace={ws}
             files={fileService}
             nodes={nodes}
+            error={treeError}
+            onRetry={() => setTreeTry((n) => n + 1)}
             onBack={() => onOpen(null)}
             projectHref={(path, app) => projectHref(ws, { path, app })}
           />
@@ -262,7 +276,7 @@ export function ProjectsPane({
           <RepoList
             workspaces={workspaces}
             busy={busy}
-            error={error}
+            error={error ?? readError}
             notice={notice}
             hasFileService={fileService !== null}
             lookingForFiles={lookingForFiles}

@@ -1,6 +1,6 @@
 // SettingsPage.tsx — `/settings`, App settings: what a BROWSER may change for its account, under three tabs — General
-// (the language, the commit identity, About, the AI key, the separation chains), Devices (the audio interface, the devices
-// paired with the engine, the row that opens its Engine page) and Downloads (what is coming down, the engine's instruments). A page and not a panel: it is visited on purpose and
+// (the language, the commit identity, the AI key, the separation chains), Devices (the audio interface, the devices
+// paired with the engine, the row that opens its Engine page), Downloads (what is coming down, the engine's instruments) and About. A page and not a panel: it is visited on purpose and
 // rarely. See ../../docs/settings.md.
 
 import { AudioLines, ChevronRight } from "@studio/ui/icons";
@@ -37,7 +37,6 @@ export function SettingsPage() {
       <>
         <LanguageSection />
         <IdentitySection />
-        <AboutSection />
         <AiSection />
         <ChainsSection engineId={engineId} />
       </>
@@ -82,18 +81,22 @@ export function SettingsPage() {
       </>
     ),
   };
+  const about: SettingsTab = {
+    key: "about",
+    label: m["settings.tabAbout"](),
+    content: <AboutSection />,
+  };
   return (
     <HomeShell tabs={false}>
       <PageFrame
         title={m["settings.title"]()}
         summary={m["settings.scope"]()}
         narrow
-        cog={false}
         back
       >
         <SettingsTabs
           label={m["settings.title"]()}
-          tabs={[general, devices, downloads]}
+          tabs={[general, devices, downloads, about]}
         />
       </PageFrame>
     </HomeShell>

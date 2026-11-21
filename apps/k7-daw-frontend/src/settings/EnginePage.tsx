@@ -3,6 +3,8 @@
 // What the command-line engine reads from its config file; the desktop app hands its user no such file. Anywhere else,
 // the phone's own engine. See ../../docs/settings.md.
 
+import { askConfirm } from "@studio/project-shell/ask";
+import { Spinner } from "@studio/ui/spinner";
 import { Switch } from "@studio/ui/switch";
 import { m } from "../paraglide/messages.js";
 import { HomeShell } from "../projects/HomeFrame";
@@ -38,6 +40,16 @@ export function EnginePage() {
   const running = s?.status === "running";
   // Absent from an older supervisor, whose engine always asks pairing.
   const lanOpen = s?.lanOpen ?? false;
+  // Stopping silences every device that plays through this engine, so it asks first.
+  const stopEngine = async () => {
+    const ok = await askConfirm({
+      title: m["engine.stopTitle"](),
+      body: m["engine.stopBody"](),
+      confirmLabel: m["engine.stop"](),
+      danger: true,
+    });
+    if (ok) engineCommand("engine.stop");
+  };
   const engineTab = (
     <>
       <Section title={m["engine.title"]()} hint={m["engine.hint"]()}>
@@ -50,7 +62,7 @@ export function EnginePage() {
               <Action onClick={() => engineCommand("engine.restart")}>
                 {m["engine.restart"]()}
               </Action>
-              <Action danger onClick={() => engineCommand("engine.stop")}>
+              <Action danger onClick={() => void stopEngine()}>
                 {m["engine.stop"]()}
               </Action>
             </>
@@ -110,8 +122,12 @@ export function EnginePage() {
 
   return (
     <HomeShell>
-      <PageFrame title={m["engine.title"]()} narrow cog={false}>
-        {here === undefined ? null : !here ? (
+      <PageFrame title={m["engine.title"]()} narrow back>
+        {here === undefined ? (
+          <div className="type-secondary flex items-center gap-2 text-fg-2">
+            <Spinner /> {m["engine.probing"]()}
+          </div>
+        ) : !here ? (
           <div className="flex min-w-0 flex-col gap-4">
             {/* On the phone the app is the engine's machine: this is where its engine is set. */}
             {onAndroid ? (

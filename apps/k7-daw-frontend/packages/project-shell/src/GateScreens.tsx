@@ -1,6 +1,7 @@
 // GateScreens.tsx — the project gate's screens other than the app itself: the waits, the
 // refusals, sleep and the errors. Each draws one phase and decides nothing. See docs/launch.md.
 
+import { Button } from "@studio/ui/button";
 import {
   FolderGit2,
   FolderSearch,
@@ -16,10 +17,6 @@ import type { ProjectGateStrings } from "./gateTypes.ts";
 /** What a workspace with no project says when the app draws no wizard: nothing is wrong, it is empty. */
 const EMPTY_WORKSPACE =
   "This workspace holds no project yet — add one from the projects page.";
-
-const PRIMARY =
-  "rounded-md bg-primary px-3 py-1.5 text-sm text-primary-foreground";
-const QUIET = "rounded-md px-3 py-1.5 text-sm text-muted-foreground";
 
 /** The one layout every gate screen shares: an icon over a centred column, `wide` for a bar to span. */
 function GateCard({
@@ -46,9 +43,9 @@ function GateCard({
 /** The raw message behind a screen, folded away: the sentence above it is what to do, this is what to report. */
 function Detail({ label, text }: { label: string; text: string }) {
   return (
-    <details className="w-full max-w-full text-left text-xs text-muted-foreground">
+    <details className="w-full max-w-full text-left text-xs text-fg-2">
       <summary className="cursor-pointer select-none">{label}</summary>
-      <code className="mt-1 block max-w-full overflow-x-auto whitespace-pre-wrap rounded bg-muted px-2 py-1">
+      <code className="mt-1 block max-w-full overflow-x-auto whitespace-pre-wrap rounded bg-(--k7-input-fill) px-2 py-1">
         {text}
       </code>
     </details>
@@ -56,11 +53,7 @@ function Detail({ label, text }: { label: string; text: string }) {
 }
 
 function Back({ label, onClick }: { label: string; onClick: () => void }) {
-  return (
-    <button type="button" className={PRIMARY} onClick={onClick}>
-      {label}
-    </button>
-  );
+  return <Button onClick={onClick}>{label}</Button>;
 }
 
 /** "Somebody else opened this project" — one screen, and no Retry. See docs/launch.md. */
@@ -79,9 +72,9 @@ export function ProjectTakenOver({
   onBack: () => void;
 }) {
   return (
-    <GateCard icon={<UserRoundX className="h-10 w-10 text-amber-500" />}>
+    <GateCard icon={<UserRoundX className="h-10 w-10 text-warn" />}>
       <h1 className="text-lg font-semibold">{title}</h1>
-      <p className="text-sm text-muted-foreground">{body(heldBy)}</p>
+      <p className="text-sm text-fg-2">{body(heldBy)}</p>
       <Back label={back} onClick={onBack} />
     </GateCard>
   );
@@ -96,15 +89,12 @@ export function CloningScreen({
   detail: string;
 }) {
   return (
-    <GateCard
-      wide
-      icon={<FolderGit2 className="h-10 w-10 text-muted-foreground" />}
-    >
+    <GateCard wide icon={<FolderGit2 className="h-10 w-10 text-fg-2" />}>
       <h1 className="text-lg font-semibold">{title}</h1>
-      <p className="text-sm text-muted-foreground">{detail}</p>
+      <p className="text-sm text-fg-2">{detail}</p>
       {/* No measure to fill, so the bar only says that something is moving. */}
-      <div className="h-1.5 w-full overflow-hidden rounded bg-muted">
-        <div className="h-full w-1/3 animate-pulse bg-primary" />
+      <div className="h-1.5 w-full overflow-hidden rounded bg-(--k7-progress-track)">
+        <div className="h-full w-1/3 animate-pulse bg-(--k7-progress-fill)" />
       </div>
     </GateCard>
   );
@@ -125,11 +115,9 @@ export function MissingScreen({
   onBack: () => void;
 }) {
   return (
-    <GateCard icon={<FolderSearch className="h-10 w-10 text-amber-500" />}>
+    <GateCard icon={<FolderSearch className="h-10 w-10 text-warn" />}>
       <h1 className="text-lg font-semibold">{strings.missingTitle}</h1>
-      <p className="text-sm text-muted-foreground">
-        {hint ?? strings.missingBody}
-      </p>
+      <p className="text-sm text-fg-2">{hint ?? strings.missingBody}</p>
       {detail && <Detail label={strings.details ?? "Details"} text={detail} />}
       <Back label={strings.back} onClick={onBack} />
     </GateCard>
@@ -148,9 +136,9 @@ export function NoLibrariesScreen({
   onBack: () => void;
 }) {
   return (
-    <GateCard icon={<LibraryBig className="h-10 w-10 text-amber-500" />}>
+    <GateCard icon={<LibraryBig className="h-10 w-10 text-warn" />}>
       <h1 className="text-lg font-semibold">{strings.librariesTitle}</h1>
-      <p className="text-sm text-muted-foreground">{strings.librariesBody}</p>
+      <p className="text-sm text-fg-2">{strings.librariesBody}</p>
       {addOne && <div className="w-full text-left">{addOne}</div>}
       <Back label={strings.back} onClick={onBack} />
     </GateCard>
@@ -166,8 +154,8 @@ export function EmptyWorkspaceScreen({
   onBack: () => void;
 }) {
   return (
-    <GateCard icon={<FolderSearch className="h-10 w-10 text-amber-500" />}>
-      <p className="text-muted-foreground text-sm">
+    <GateCard icon={<FolderSearch className="h-10 w-10 text-warn" />}>
+      <p className="text-fg-2 text-sm">
         {strings.emptyWorkspace ?? EMPTY_WORKSPACE}
       </p>
       <Back label={strings.back} onClick={onBack} />
@@ -186,21 +174,19 @@ export function IdleScreen({
   onBack: () => void;
 }) {
   return (
-    <GateCard icon={<Moon className="h-10 w-10 text-muted-foreground" />}>
+    <GateCard icon={<Moon className="h-10 w-10 text-fg-2" />}>
       <h1 className="text-lg font-semibold">
         {strings.idleTitle ?? "Session suspended"}
       </h1>
-      <p className="text-sm text-muted-foreground">
+      <p className="text-sm text-fg-2">
         {strings.idleBody ??
           "Nothing happened here for a while, so the project was unloaded from the engine and this tab let go of it. Your files are untouched."}
       </p>
       <div className="flex items-center gap-2">
-        <button type="button" className={PRIMARY} onClick={onResume}>
-          {strings.resume ?? "Resume"}
-        </button>
-        <button type="button" className={QUIET} onClick={onBack}>
+        <Button onClick={onResume}>{strings.resume ?? "Resume"}</Button>
+        <Button variant="ghost" onClick={onBack}>
           {strings.back}
-        </button>
+        </Button>
       </div>
     </GateCard>
   );
@@ -221,34 +207,34 @@ export function ErrorScreen({
   onBack: () => void;
 }) {
   return (
-    <GateCard icon={<ServerCrash className="h-10 w-10 text-amber-500" />}>
+    <GateCard icon={<ServerCrash className="h-10 w-10 text-warn" />}>
       <h1 className="text-lg font-semibold">{strings.unreachableTitle}</h1>
-      <p className="text-sm text-muted-foreground">{strings.bothBody}</p>
+      <p className="text-sm text-fg-2">{strings.bothBody}</p>
       <Detail
         label={strings.details ?? "Details"}
         text={lines?.length ? lines.join("\n") : message}
       />
       <div className="flex items-center gap-2">
-        <button
-          type="button"
-          className="rounded-md bg-secondary px-3 py-1.5 text-sm"
-          onClick={onRetry}
-        >
+        <Button variant="glass" onClick={onRetry}>
           {strings.retry}
-        </button>
-        <button type="button" className={QUIET} onClick={onBack}>
+        </Button>
+        <Button variant="ghost" onClick={onBack}>
           {strings.back}
-        </button>
+        </Button>
       </div>
     </GateCard>
   );
 }
 
-/** Resolving: nothing to say yet. */
-export function GateSpinner() {
+/** Resolving: a spinner that says so to a screen reader. */
+export function GateSpinner({ label }: { label: string }) {
   return (
-    <div className="flex h-full items-center justify-center bg-background text-muted-foreground">
-      <Loader2 className="h-5 w-5 animate-spin" />
+    <div
+      role="status"
+      aria-label={label}
+      className="flex h-full items-center justify-center bg-background text-fg-2"
+    >
+      <Loader2 className="h-5 w-5 animate-spin" aria-hidden />
     </div>
   );
 }

@@ -12,6 +12,9 @@ import type { GitState, PullState } from "./gitTypes";
 /** The state is a local read, so the bar asks at the pace the share's bar did. */
 const POLL_MS = 5000;
 
+/** How long a one-shot fetch is given before the card reads the state again. */
+const FETCH_SETTLE_MS = 4000;
+
 export type GitAct = "push" | "pull" | "abort";
 
 export interface GitHandle {
@@ -83,6 +86,14 @@ export function useGitState(
       POLL_MS,
     );
   }, [t, workspace, connected, watch]);
+
+  // A card reads once, so the page asks for one fetch on opening and reads again once it has had time to land.
+  useEffect(() => {
+    if (!t || !workspace || !connected || watch !== "once") return;
+    void git.focus(t, workspace, true, true).catch(() => undefined);
+    const id = window.setTimeout(() => void refresh(), FETCH_SETTLE_MS);
+    return () => window.clearTimeout(id);
+  }, [t, workspace, connected, watch, refresh]);
 
   const act = useCallback(
     async (what: GitAct) => {

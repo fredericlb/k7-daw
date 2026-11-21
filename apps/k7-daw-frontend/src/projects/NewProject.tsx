@@ -50,7 +50,6 @@ export function NewProject({
   return (
     <>
       <Button
-        size="sm"
         variant="glass"
         disabled={Boolean(blocked)}
         disabledReason={blocked || undefined}

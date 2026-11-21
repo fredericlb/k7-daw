@@ -107,7 +107,9 @@ test("a workspace and its project are made, renamed, copied and deleted from the
     await dialog.getByRole("textbox").fill("first");
     await expect(dialog.getByText(`${WS}/first.k7`)).toBeVisible();
     await dialog.getByRole("button", { name: "Create", exact: true }).click();
-    await expect(dialog).toBeHidden({ timeout: 30_000 });
+    // The new project opens on its own; back on Home it is in its card.
+    await expect(page).toHaveURL(/first\.k7/, { timeout: 30_000 });
+    await page.goto("/");
     await expectListed(page, WS, ["first.k7"]);
     await expect(projectLink(page, WS, "first")).toBeVisible(SHOWN);
     await expect(row.getByText("DJ set", { exact: true })).toBeVisible();

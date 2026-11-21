@@ -39,10 +39,10 @@ If the first thing you want at a front door is your own work, then the page list
 the front door, and putting it behind a prefix you have to know how to type would rank it second.
 
 **The home pages share ONE frame** (`HomeFrame.tsx`): a floating tab bar, a round command-bar button beside it, no
-sidebar and no bottom bar. The tabs are Projects, Tasks and Library (the libraries, then the frozen chains), drawn by `@studio/ui/tab-bar`.
+sidebar and no bottom bar. The tabs are Projects, Tasks, Library (the libraries, then the frozen chains) and Settings, drawn by `@studio/ui/tab-bar`.
 They are LINKS, since each page has its own address: a plain click is a router move, a modified click opens like any
-link, and the current page carries `aria-current`. The settings pages are reached by the cog at the right of every
-page's top bar and light no tab.
+link, and the current page carries `aria-current`. Settings is the last tab, lit on App settings and on the Engine page
+under it; App settings itself is a sub-page with its own Back and no tab bar.
 
 | choice | why |
 |---|---|
@@ -50,6 +50,10 @@ page's top bar and light no tab.
 | no mini player and no engine slot on the home | the home plays nothing; engine state reaches a person as toasts, wherever they are |
 | no downloads button | a download is a task, and tasks are read in the Tasks & history panel |
 | the frame holds the command bar, the question host and the toasts | a camera mode, an armed delete or a toast outlives a page change |
+| a workspace's name folds its card, like the chevron; "Browse files" in the workspace menu opens its read-only tree | the name is the biggest target on the card, and the tree is a developer view that has no place behind it |
+| a card whose workspace waits for a merge disables New project, Delete and the project menus and says why on the card | a write refused after a dialog was filled in loses what was typed |
+| a new project opens as soon as it is made, unless it owes library modules, which the page then says | the new row would otherwise land somewhere in a long list, and the person would have to look for it |
+| the list has a filter field from six projects on, matching a project's path or a workspace's name; Help is in the page's ⋮ menu and a `help` command | a long list needs a way in, and the documentation was reachable only from inside a project |
 | the page column ends 144 px above the window's foot | the tab bar floats over it and must never cover the last row |
 
 The round button opens the command bar, which also finds workspaces and projects (`workspace open`, `project open`)
@@ -519,7 +523,7 @@ from here, Tasks, draws the block without one.
 ## The page's hierarchy: one title, one menu for New, violet for state
 
 The top bar (`PageFrame.tsx`) is a large title with a count line under it, and at its right **New** (a menu: New
-workspace, Clone from git), **More** (Show examples) and the cog to App settings. A project is made from its
+workspace, Clone from git), **More** (Show examples). A project is made from its
 workspace's card, where its destination is already known, so the page has no New project button. The list is capped
 at `max-w-5xl`.
 
@@ -610,7 +614,8 @@ The workspace comes **last**, after the person's own, and is **not listed** once
 workspace of one's own: the demos are then the reference rather than the work. **Show examples**,
 in the ⋮ beside the page's heading (`ProjectsMenu.tsx`), brings it back. Until that toggle is used
 it is on only while Examples is the only workspace, since a new account's page would otherwise show
-nothing at all; once used, the browser keeps the choice.
+nothing at all; once used, the browser keeps the choice. While Examples is all there is it cannot be hidden (the
+item is disabled and says why), and the page's empty state, with New workspace and Clone from git, stands above its card.
 
 ### Renaming a project
 
