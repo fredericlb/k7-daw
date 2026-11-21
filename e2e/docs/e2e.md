@@ -138,7 +138,7 @@ drop the mark.
 ## Tier 4 specs are tagged `@tier4` and off by default
 
 Remote engines, remote cameras and the second-device routes are deferred, so their specs (`cameras`, `engines` and `engineJobs` in the
-conformance suite, `/external` and `/settings/engine` in `routes.spec.ts`) carry `{ tag: "@tier4" }` and both configs invert the
+conformance suite, `/settings/engine` in `routes.spec.ts`) carry `{ tag: "@tier4" }` and both configs invert the
 tag unless `E2E_TIER4=1` is set. They stay as the second-device rework's spec rather than being deleted; a bed never runs them, and
 the cameras ticket's 61-s expiry sleep is one of them.
 
