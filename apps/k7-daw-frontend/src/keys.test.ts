@@ -4,6 +4,7 @@
 
 import { describe, expect, it } from "vitest";
 import {
+  blurOnClick,
   type ConditionCtx,
   commandKeyMap,
   effectiveKeys,
@@ -321,5 +322,27 @@ describe("the piano roll's modes", () => {
 
   it("has no rung in select — there is nothing armed to back out of", () => {
     expect(esc({ roll_open: "1", fullscreen: "1" })).toBe("ui global");
+  });
+});
+
+describe("blurOnClick", () => {
+  const button = () => {
+    let blurred = false;
+    return {
+      el: { blur: () => (blurred = true) } as unknown as HTMLElement,
+      blurred: () => blurred,
+    };
+  };
+
+  it("drops focus after a pointer click", () => {
+    const b = button();
+    blurOnClick({ currentTarget: b.el, detail: 1 });
+    expect(b.blurred()).toBe(true);
+  });
+
+  it("keeps focus after a keyboard activation, which has no click count", () => {
+    const b = button();
+    blurOnClick({ currentTarget: b.el, detail: 0 });
+    expect(b.blurred()).toBe(false);
   });
 });
