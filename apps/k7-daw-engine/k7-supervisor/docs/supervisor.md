@@ -330,7 +330,8 @@ loaded, only the separate job says what is missing. The build copies it beside e
 makes, and the staging (`apps/k7-daw-engine/scripts/docs/buildEngine.md`) keeps it there.
 
 **iOS is the one exception.** Microsoft's iOS package is a static xcframework, and a phone has no library to find,
-so it is linked into `k7supervisor.framework` (CocoaPods archive, hash-pinned in `CMakeLists.txt`) and
+so it is linked into `k7supervisor.framework` (the NuGet package macOS takes, whose `runtimes/ios` holds it; the
+CocoaPods host no longer serves a valid certificate) and
 `OnnxSession.cpp` takes `OrtGetApiBase` directly. The app grows by what the linker keeps of it
 (`apps/k7-daw-engine/k7-runtime/docs/ios.md`). CoreML is left out on iOS: it cannot compile HT-Demucs, so a cut is CPU.
 

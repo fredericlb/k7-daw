@@ -124,15 +124,15 @@ FetchContent_MakeAvailable(libdatachannel)
 # A SHARED library, loaded at run time from beside the executable or the tray's resources. Windows
 # takes the DirectML package, which stops at 1.24; a platform with no binary builds without separation.
 # Android is one: it is UNIX and aarch64, but the linux-aarch64 build is glibc and loads on no phone.
-# iOS takes Microsoft's CocoaPods archive, a STATIC xcframework, linked into the framework (nothing on a phone to load).
+# iOS takes the same package's STATIC xcframework, linked into the framework (nothing on a phone to load).
 set(K7_ORT_URL "")
 if(APPLE AND NOT IOS AND (CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64" OR CMAKE_OSX_ARCHITECTURES STREQUAL "arm64"))
     set(K7_ORT_URL https://api.nuget.org/v3-flatcontainer/microsoft.ml.onnxruntime/1.30.0/microsoft.ml.onnxruntime.1.30.0.nupkg)
     set(K7_ORT_HASH 30df119bd9164eaa187666d93147448fdd4a9a1a3caf83f1505daf7af2d1c5d2)
     set(K7_ORT_RID osx-arm64)
 elseif(IOS)
-    set(K7_ORT_URL https://download.onnxruntime.ai/pod-archive-onnxruntime-c-1.30.0.zip)
-    set(K7_ORT_HASH e6f1670c14406fd9f082bb400ab197a9b0a9646058ca6366e440642e2b54a2ea)
+    set(K7_ORT_URL https://api.nuget.org/v3-flatcontainer/microsoft.ml.onnxruntime/1.30.0/microsoft.ml.onnxruntime.1.30.0.nupkg)
+    set(K7_ORT_HASH 30df119bd9164eaa187666d93147448fdd4a9a1a3caf83f1505daf7af2d1c5d2)
 elseif(WIN32 AND CMAKE_SIZEOF_VOID_P EQUAL 8)
     set(K7_ORT_URL https://api.nuget.org/v3-flatcontainer/microsoft.ml.onnxruntime.directml/1.24.4/microsoft.ml.onnxruntime.directml.1.24.4.nupkg)
     set(K7_ORT_HASH 57e9f11b73437bef7a309496135d4c1f96b1a8e9ddba60013fa27bfc1d788681)
@@ -146,7 +146,7 @@ elseif(UNIX AND NOT APPLE AND NOT ANDROID AND CMAKE_SYSTEM_PROCESSOR MATCHES "aa
     set(K7_ORT_RID linux-arm64)
 endif()
 set(K7_ORT_RUNTIME "")
-# iOS's archive under a name of its own: one fetch folder serves the Mac's desktop and iOS builds, and a name holds one download.
+# iOS's package under a name of its own: one fetch folder serves the Mac's desktop and iOS builds, which then never share a download.
 if(IOS)
     set(K7_ORT_NAME onnxruntime_ios)
 else()
@@ -177,9 +177,15 @@ if(K7_ORT_URL)
         else()
             set(K7_ORT_SLICE ios-arm64_x86_64-simulator)
         endif()
-        target_include_directories(k7_onnxruntime INTERFACE ${onnxruntime_SOURCE_DIR}/Headers)
+        # The package holds the xcframework as an archive of its own, unpacked into this build tree once.
+        set(K7_ORT_XCF ${CMAKE_CURRENT_BINARY_DIR}/onnxruntime_ios_xcf)
+        if(NOT EXISTS ${K7_ORT_XCF}/onnxruntime.xcframework/Info.plist)
+            file(ARCHIVE_EXTRACT INPUT ${onnxruntime_SOURCE_DIR}/runtimes/ios/native/onnxruntime.xcframework.zip DESTINATION ${K7_ORT_XCF})
+        endif()
+        set(K7_ORT_FRAMEWORK ${K7_ORT_XCF}/onnxruntime.xcframework/${K7_ORT_SLICE}/onnxruntime.framework)
+        target_include_directories(k7_onnxruntime INTERFACE ${K7_ORT_FRAMEWORK}/Headers)
         target_link_libraries(k7_onnxruntime INTERFACE
-            ${onnxruntime_SOURCE_DIR}/onnxruntime.xcframework/${K7_ORT_SLICE}/onnxruntime.framework/onnxruntime
+            ${K7_ORT_FRAMEWORK}/onnxruntime
             "-framework Foundation" "-framework UIKit" "-framework Network" "-framework CoreML")
     else()
         # The NuGet package: one archive for macOS and Linux, a native folder per runtime identifier.
