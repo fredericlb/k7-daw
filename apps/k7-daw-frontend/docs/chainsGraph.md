@@ -365,9 +365,9 @@ cancels the pan mid-gesture, and two fingers zoom the page instead of the graph.
 the master level already being the bar's. `ChainsTab` keeps the camera, so it hands the bar the fit
 through the shell store (`graphView`) for as long as a laid graph is on screen; the minimap is a card
 with no buttons of its own (`minimapBar={false}`). A lane's chain, in the bottom dock, lists its modules as cards (`ModuleCards.tsx`) left to right in
-signal order, opened by the lane's own card (status, M/S/A, volume and pan, "→ Master"): name, engine chip,
+signal order, opened by the lane's own card (status, M/S, volume and pan, "→ Master"; Arm is the header's alone): name, engine chip,
 the engine's warning as an amber icon that opens Logs on its problems, the native plugin window,
-bypass, the preset with its arrows, the panel's first three knobs, a "+" on each seam and a dashed
+bypass (pressed means bypassed, with a "Bypassed" tag), a "⋯" that opens the graph's own menu for the card (remove, move, open the file), the preset with its arrows, the panel's first three knobs, a "+" on each seam and a dashed
 "Add a module at the end", scrolling sideways when they overflow. The track's name over its status, Arm and
 its chain controls are the dock's header row (`ChainHeader.tsx`). The cards summarise the row; the **Controls** chip shows the full row beside them,
 because the knobs live there and a second editor of the same parameters would drift.
