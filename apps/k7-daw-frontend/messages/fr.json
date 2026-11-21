@@ -1312,6 +1312,8 @@
   "tl.clipInstanceOther": "une autre occurrence sur {count}",
   "tl.clipInstanceFirst": "première sur {count}",
   "tl.clipHint": "cliquez pour sélectionner, double-cliquez pour ouvrir, glissez pour déplacer (maj : hors grille)",
+  "tl.autoPoint": "Point à {tc}, valeur {value}",
+  "tl.autoPointHint": "Glisser pour déplacer ; Suppr l'enlève ; les flèches haut et bas changent sa valeur. Toucher la ligne ajoute un point.",
   "tl.converting": "conversion pour le navigateur…",
   "tl.unavailable": "timeline indisponible — {error}",
   "tl.lanesLocked": "les pistes restent repliées tant qu'un panneau du bas est ouvert",

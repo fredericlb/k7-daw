@@ -147,6 +147,7 @@ import {
   rulerScale,
   rulerTicks,
 } from "./Ruler";
+import { AutomationPoints } from "./timeline/AutomationPoints";
 import { GROW } from "./timeline/grow";
 import { LaneAlternative } from "./timeline/LaneAlternative";
 import { LaneChip } from "./timeline/LaneChip";
@@ -492,6 +493,7 @@ function TimelineTabView({
   const {
     setStatus,
     openContextMenu: onContextMenu,
+    runCommand,
     seek: onSeek,
     setLoop: onSetLoop,
   } = useVerbs();
@@ -2976,13 +2978,16 @@ function TimelineTabView({
                           proj?.timeSigNumerator ?? 4,
                           proj?.timeSigDenominator ?? 4,
                         ),
+                        tc: pt.time,
                         v: Math.min(1, Math.max(0, pt.value)),
                       };
                     } catch {
                       return null; // an unreadable timecode is one point, not a broken row
                     }
                   })
-                  .filter((pt): pt is { b: number; v: number } => !!pt)
+                  .filter(
+                    (pt): pt is { b: number; tc: string; v: number } => !!pt,
+                  )
                   .sort((a, b) => a.b - b.b);
                 return (
                   <div
@@ -3031,27 +3036,35 @@ function TimelineTabView({
                       <span className="truncate">{lane.param}</span>
                     </div>
                     <div className="relative flex-1 overflow-hidden">
-                      {pts.length > 1 && (
-                        // `vectorEffect` so the stroke keeps its width whatever the viewBox does — the x axis here is an extreme aspect.
-                        <svg
-                          className="pointer-events-none absolute inset-0 h-full w-full"
-                          aria-hidden="true"
-                        >
-                          <title>{lane.param}</title>
-                          <polyline
-                            fill="none"
-                            stroke="var(--k7-curve)"
-                            strokeWidth={1.5}
-                            vectorEffect="non-scaling-stroke"
-                            points={pts
-                              .map(
-                                (pt) =>
-                                  `${x(pt.b)},${(1 - pt.v) * (ROW_H - 6) + 3}`,
-                              )
-                              .join(" ")}
-                          />
-                        </svg>
-                      )}
+                      <AutomationPoints
+                        curve={lane.curve}
+                        param={lane.param}
+                        points={pts}
+                        rowH={ROW_H}
+                        x={x}
+                        beatAt={(localX) => beatLo + localX / ppb}
+                        tcAt={(beat) =>
+                          beatsToPosition(
+                            nearestTick(bars, beat) ?? beat,
+                            proj?.timeSigNumerator ?? 4,
+                            proj?.timeSigDenominator ?? 4,
+                          )
+                        }
+                        readOnly={readOnly}
+                        run={(line) => void runCommand(line)}
+                        onMenu={(tc, cx, cy) =>
+                          onContextMenu?.(
+                            {
+                              kind: "curve-point",
+                              curve: lane.curve,
+                              param: lane.param,
+                              tc,
+                            },
+                            cx,
+                            cy,
+                          )
+                        }
+                      />
                     </div>
                   </div>
                 );

@@ -1312,6 +1312,8 @@
   "tl.clipInstanceOther": "another instance of {count}",
   "tl.clipInstanceFirst": "first of {count}",
   "tl.clipHint": "click to select, double-click to open, drag to move (shift: off the grid)",
+  "tl.autoPoint": "Point at {tc}, value {value}",
+  "tl.autoPointHint": "Drag to move; Delete removes it; up and down arrows change its value. Tap the row to add a point.",
   "tl.converting": "converting for the browser…",
   "tl.unavailable": "timeline unavailable — {error}",
   "tl.lanesLocked": "lanes stay folded while a bottom panel is open",
