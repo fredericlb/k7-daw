@@ -1,5 +1,5 @@
 Gap
-"One-finger drags on timeline clips, edges, fade corners, headers and shots scroll the pane (`touch-action: pan-x pan-y`), so move, resize, fade, reorder and range select have no touch way."
+"The ruler's drags (a range across every lane, a vertical drag to zoom) and the keyboard grab have no touch way; clips, edges, fades, lane headers, shots and automation points take a hold, then a drag."
 "The piano roll lane takes a one-finger swipe as a native scroll, which competes with drawing notes and framing rectangles by touch."
 `apps/k7-daw-frontend/docs/timeline.md` says the mouse wheel zooms the timeline; the code zooms only on ⌘/Ctrl+wheel or a pinch.
 "The bare wheel zooms in the audio clip panel and the graph but scrolls in the timeline, the piano roll and the waveform strip."
@@ -7,13 +7,11 @@ Gap
 "HTML5 drag and drop rows have no touch path: OS files and resources onto lanes, timeline tabs, file tree moves, parameter binding in the module builder, records onto decks."
 "Double-tap rows rely on the browser's `dblclick` and are untested on iOS and Android (gain reset, stretch points, curve points, graph zoom, turntables resets)."
 "Takes mode has no key in either panel, and the timeline's mute tool has none either."
-"Hover-only affordances have no touch twin: marker names, shot spans, lint messages, history row lighting, minimap peek, command bar row reasons, the cable `+`."
+"Hover-only affordances have no touch twin: marker names, shot spans, lint messages, minimap peek, command bar row reasons, the cable `+`."
 The audio panel's loop braces drag free while the piano roll's snap (Alt frees); the two describe the same widget differently.
 A click on the wave (standard and warp views) and on the waveform strip does nothing: no seek is wired.
-"The master output fader is hidden on phones, leaving no touch way to set the song's level; ""fix"" has no touch path either."
+"""fix"", beside the clip light, has no touch path."
 Binding a shortcut on the Commands page needs a hardware keyboard.
-Help has no button: on touch it is reachable only by typing `ui help`.
 "A chain or OUT card opens no menu on right-click, unlike every other card."
 "Removing a takes crossfade needs Alt, and sizing a timeline crossfade needs a drag: touch gets only the default."
-"The in-project Settings panel's Account tab label is hard-coded in French (""Compte"")."
 `apps/k7-daw-frontend/src/settings/RemoteSlotsSection.tsx` is not referenced by any screen.

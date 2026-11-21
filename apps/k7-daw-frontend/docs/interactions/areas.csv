@@ -1,8 +1,8 @@
 Area,Intro
 Global (every screen),"Applies on every screen: the keymap, the Esc ladder, the undo journal, app questions, toasts, engine strips and dialogs, floating windows."
-Home and its pages,"The projects page: a sidebar (Projects, Tasks, Libraries, Frozen chains, account menu), workspace bands with project rows, search, the engine light, the command bar. The Libraries page is read-only."
+Home and its pages,"The home pages behind a floating tab bar (Projects, Surfaces, Tasks, Library, Settings) with the round command-bar button: workspace cards with their project rows, Pull and Commit & Push, a filter field once the list is long, the projects ⋮ menu (Show examples, Help). The Library page is read-only and holds the frozen chains."
 Git screens,"The git bar (workspace tree, Home row, project header), the commit dialog, the merge dialog with conflict cards, the remote and clone dialogs, the commit list, the identity form."
-Project header and transport,"The project bar (sidebar drawer, name, page icons, engine light, minimap, viewport toggle), the transport, the footer (tempo, meter, metronome, notes, panel tabs, master meter) and the phone's hamburger and Info popover."
+Project header and transport,"The header (Back, the name over its status line, spinner, warning chip, git capsule, the pane switcher, the panel toolbar, Settings; on a phone the status line sits under it and the rest folds into the Views and panels dialog), the floating bar (command bar, tool, transport with Record's chevron, position, overview, tempo, metronome, master volume, the view's capsule) and the editor dock."
 Context menus,"The right-click menu on any entity: tabs per kind of thing, rows, a status line."
 Arrange,"The timeline pane: tool strip, ruler with markers and task flags, timeline tabs, lane headers (M/S/A, alternative badge, meters), lanes with clips, picture lanes with shots, automation rows, reference bar and stems bar. Keys work while the pane is active. Clip, edge and shot drags snap to the grid: ⇧ frees, ⌘/Ctrl keeps whole grid steps from where the item was."
 Chain graph and builders,"The graph canvas (Chains page, Graph and Mix panels, a lane's module row, the builder preview): cards, sockets, cables, knobs, the minimap; the chains list; the module, asset, preset and icon pickers; the chain, module and rack builders."
@@ -11,14 +11,14 @@ Source editor and file tree,"The editor pane (CodeMirror with autosave, vim mode
 Resources,The imported clips list.
 Tasks & history,"The task list with project tags, the edit journal, the commit list, the sync history."
 Export,"The share panel: timeline choice, audio exports, video export row."
-Settings,"The `/settings` page (General, Devices), the engine page (Engine, Instruments, Chains, Plugins; a phone variant), the in-project settings panel (cog) and the full-screen Commands page."
+Settings,"The `/settings` page (General, Devices, Downloads, About), the engine page (Engine, Instruments, Chains, Plugins; a phone variant), the in-project Settings panel (Editor, I/O, Project) and the full-screen command editor."
 Piano roll,"The roll: mode strip (select, create, remove, takes), key gutter, note lanes with grid caret, loop braces, song ruler; notes with velocity line, edges and body. Also the simple roll of a sequence file."
 Takes,"The takes view in the audio and roll panels: take rows, record button, span, crossfade tool, comp strip."
 Command bar,The floating command line with its suggestion list and parameter fields.
 Turntables,"The DJ desk: two decks (vinyl, waveform, BPM fader, hot cues, loop row, censor, echo), the mixer column (knobs, channel faders, crossfader), the song browser."
 Logs,The log list.
 Playlists,"The set list picker, the playlist rows, the library search, the stems bar, the playlist text editor."
-Mixer,"The Mix panel (one strip per mixer module, a row graph), the mastering tab, the I/O tab's meters."
-Help,"The documentation popin: a table of contents on the left, the pages on the right."
+Mixer,"The Mixer (one strip per lane's mixer module, Master as the row's last strip with its fader, pan read as L / C / R), the mastering controls under OUT, the I/O tab's meters."
+Help,"The documentation popin: a table of contents on the left (a Contents button on narrow screens), the pages on the right."
 Curves,"The curve editor dialog: name, shape, sliders, ADSR knobs, run conditions, a drawable plot."
-Surfaces,"A surface pane draws what its type declares; a lone surface adds a mini transport, a command line and a footer; the surface index lists them; pairing asks the engine's machine."
+Surfaces,"The Surfaces tab lists, by device, the surfaces of the projects open on the network; a surface opened on another device draws alone, with a round Home button, a command line and the transport; the device that holds the project dims the pane a remote shows; pairing asks the engine's machine."

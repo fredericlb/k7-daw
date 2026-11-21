@@ -19,9 +19,9 @@ Number,Name,Tablet id,Mobile id,Desktop id,Canvas boards,Interactions board,Draw
 18,Command palette,18T,18M,18D,"CommandPad, CommandPhone, CommandDesk",Ix18,TRUE,,16388
 19,Command palette · argument,19T,19M,19D,"CommandArgPad, CommandArgPhone, CommandArgDesk",Ix19,TRUE,,17352
 20,Turntables,20T,20M,20D,"TurntablesPad, TurntablesPhone, TurntablesDesk",Ix20,TRUE,,18316
-21,Libraries,21T,21M,21D,"LibrariesPad, LibrariesPhone, LibrariesDesk",Ix21,TRUE,01,29528
-22,Frozen chains,22T,22M,22D,"FrozenPad, FrozenPhone, FrozenDesk",Ix22,TRUE,,30492
-23,App settings,23T,23M,23D,"AppSettingsPad, AppSettingsPhone, AppSettingsDesk",Ix23,TRUE,,31456
+21,Library,21T,21M,21D,"LibrariesPad, LibrariesPhone, LibrariesDesk",Ix21,TRUE,01,29528
+22,Frozen chains,22T,22M,22D,,,FALSE,,
+23,App settings,23T,23M,23D,"AppSettingsPad, AppSettingsPhone, AppSettingsDesk, AppSettingsDownloadsPad, AppSettingsDownloadsPhone, AppSettingsDownloadsDesk, AppSettingsAboutPad, AppSettingsAboutPhone, AppSettingsAboutDesk",Ix23,TRUE,,31456
 24,Logs panel,24T,24M,24D,"LogsPad, LogsPhone, LogsDesk",Ix24,TRUE,,32420
 25,Playlists panel,25T,25M,25D,"PlaylistsPad, PlaylistsPhone, PlaylistsDesk",Ix25,TRUE,,33384
 26,Command editor screen,26T,26M,26D,"CommandEditorPad, CommandEditorPhone, CommandEditorDesk",Ix26,TRUE,,34348
@@ -38,4 +38,4 @@ Number,Name,Tablet id,Mobile id,Desktop id,Canvas boards,Interactions board,Draw
 37,Help,,,,,,FALSE,,
 38,Curves,,,,,,FALSE,,
 39,Chain and module builders,,,,,,FALSE,,
-40,Surfaces,,,,,,FALSE,,
+40,Surfaces,40T,40M,40D,"SurfacesPad, SurfacesPhone, SurfacesDesk, RemoteSurfacePad, RemoteSurfacePhone, RemoteInUseDesk",Ix40,TRUE,,43024

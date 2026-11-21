@@ -17,17 +17,17 @@ An interaction is `<screen number>.<nn>` (`03.05`), one id shared by every devic
 |---|---|---|---|---|
 | 01 Home | 01T (41) | 01M (37) | 01D (43) | Artboard-hb0q, HomePhone, HomeDesk, Ix01 |
 | 02 Tasks | 02T (4) | 02M (4) | 02D (4) | TasksPad, TasksPhone, TasksDesk, Ix02 |
-| 03 Arrangement · Audio | 03T (77) | 03M (64) | 03D (92) | ArrangePad, ArrangePhone, ArrangeDesk, Ix03 |
-| 04 Arrangement · Video | 04T (5) | 04M (5) | 04D (9) | ArrangeVideoPad, ArrangeVideoPhone, ArrangeVideoDesk, Ix04 |
+| 03 Arrangement · Audio | 03T (81) | 03M (70) | 03D (90) | ArrangePad, ArrangePhone, ArrangeDesk, Ix03 |
+| 04 Arrangement · Video | 04T (8) | 04M (8) | 04D (9) | ArrangeVideoPad, ArrangeVideoPhone, ArrangeVideoDesk, Ix04 |
 | 05 Graph | 05T (50) | 05M (48) | 05D (53) | GraphPad, GraphPhone, GraphDesk, Ix05 |
 | 06 Source | 06T (23) | 06M (20) | 06D (25) | SourcePad, SourcePhone, SourceDesk, Ix06 |
 | 07 Resources panel | 07T (7) | 07M (7) | 07D (7) | ResourcesPad, ResourcesPhone, ResourcesDesk, Ix07 |
 | 08 Tasks & history panel | 08T (9) | 08M (9) | 08D (10) | LogPad, LogPhone, LogDesk, Ix08 |
 | 09 Export panel | 09T (6) | 09M (6) | 09D (6) | SharePad, SharePhone, ShareDesk, Ix09 |
-| 10 Settings panel | 10T (7) | 10M (7) | 10D (7) | SettingsPad, SettingsPhone, SettingsDesk, Ix10 |
-| 11 Clip editor | 11T (27) | 11M (27) | 11D (27) | ClipZoomPad, ClipPhone, ClipZoomDesk, Ix11 |
+| 10 Settings panel | 10T (5) | 10M (5) | 10D (5) | SettingsPad, SettingsPhone, SettingsDesk, Ix10 |
+| 11 Clip editor | 11T (28) | 11M (28) | 11D (28) | ClipZoomPad, ClipPhone, ClipZoomDesk, Ix11 |
 | 12 Piano roll | 12T (21) | 12M (20) | 12D (25) | PianoSidePad, PianoPhone, PianoSideDesk, Ix12 |
-| 13 Node chain editor | 13T (9) | 13M (9) | 13D (9) | ChainSidePad, ChainPhone, ChainSideDesk, Ix13 |
+| 13 Node chain editor | 13T (10) | 13M (10) | 13D (10) | ChainSidePad, ChainPhone, ChainSideDesk, Ix13 |
 | 14 Export · folder picker | 14T (0) | 14M (0) | 14D (0) | ExportPickPad, ExportPickPhone, ExportPickDesk, Ix14 |
 | 15 Export · saved | 15T (0) | 15M (0) | 15D (0) | ExportDonePad, ExportDonePhone, ExportDoneDesk, Ix15 |
 | 16 Pull in place | 16T (1) | 16M (1) | 16D (1) | PullPad, PullPhone, PullDesk, Ix16 |
@@ -35,9 +35,9 @@ An interaction is `<screen number>.<nn>` (`03.05`), one id shared by every devic
 | 18 Command palette | 18T (3) | 18M (3) | 18D (4) | CommandPad, CommandPhone, CommandDesk, Ix18 |
 | 19 Command palette · argument | 19T (4) | 19M (4) | 19D (4) | CommandArgPad, CommandArgPhone, CommandArgDesk, Ix19 |
 | 20 Turntables | 20T (27) | 20M (27) | 20D (27) | TurntablesPad, TurntablesPhone, TurntablesDesk, Ix20 |
-| 21 Libraries | 21T (0) | 21M (0) | 21D (0) | LibrariesPad, LibrariesPhone, LibrariesDesk, Ix21 |
-| 22 Frozen chains | 22T (6) | 22M (6) | 22D (6) | FrozenPad, FrozenPhone, FrozenDesk, Ix22 |
-| 23 App settings | 23T (9) | 23M (9) | 23D (9) | AppSettingsPad, AppSettingsPhone, AppSettingsDesk, Ix23 |
+| 21 Library | 21T (6) | 21M (6) | 21D (6) | LibrariesPad, LibrariesPhone, LibrariesDesk, Ix21 |
+| 22 Frozen chains | 22T (0) | 22M (0) | 22D (0) | not drawn |
+| 23 App settings | 23T (15) | 23M (15) | 23D (15) | AppSettingsPad, AppSettingsPhone, AppSettingsDesk, AppSettingsDownloadsPad, AppSettingsDownloadsPhone, AppSettingsDownloadsDesk, AppSettingsAboutPad, AppSettingsAboutPhone, AppSettingsAboutDesk, Ix23 |
 | 24 Logs panel | 24T (2) | 24M (2) | 24D (2) | LogsPad, LogsPhone, LogsDesk, Ix24 |
 | 25 Playlists panel | 25T (12) | 25M (12) | 25D (13) | PlaylistsPad, PlaylistsPhone, PlaylistsDesk, Ix25 |
 | 26 Command editor screen | 26T (10) | 26M (9) | 26D (10) | CommandEditorPad, CommandEditorPhone, CommandEditorDesk, Ix26 |
@@ -51,10 +51,10 @@ An interaction is `<screen number>.<nn>` (`03.05`), one id shared by every devic
 | 34 Commit & Push | 34T (3) | 34M (3) | 34D (3) | CommitPad, CommitPhone, CommitDesk, Ix34 |
 | 35 Workspace tree | 35T (4) | 35M (4) | 35D (4) | not drawn |
 | 36 Engine page | 36T (11) | 36M (11) | 36D (11) | not drawn |
-| 37 Help | 37T (3) | 37M (2) | 37D (3) | not drawn |
+| 37 Help | 37T (3) | 37M (3) | 37D (3) | not drawn |
 | 38 Curves | 38T (15) | 38M (15) | 38D (15) | not drawn |
 | 39 Chain and module builders | 39T (26) | 39M (24) | 39D (27) | not drawn |
-| 40 Surfaces | 40T (6) | 40M (6) | 40D (6) | not drawn |
+| 40 Surfaces | 40T (8) | 40M (8) | 40D (8) | SurfacesPad, SurfacesPhone, SurfacesDesk, RemoteSurfacePad, RemoteSurfacePhone, RemoteInUseDesk, Ix40 |
 
 ## 01 Home
 
@@ -64,23 +64,23 @@ Applies on every screen: the keymap, the Esc ladder, the undo journal, app quest
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
-| 01.01 | Open the command bar | click the Terminal icon at the bar's left (project and Home) | ⌘/Ctrl+⇧P (works inside the text editor); double-tap Shift | tap the Terminal icon (Home) or the Terminal item in the hamburger menu (project) | T M D |
+| 01.01 | Open the command bar | click the command-bar button (square terminal): the floating bar's left in a project, beside the tab bar on Home | ⌘/Ctrl+⇧P (works inside the text editor); double-tap Shift | tap the command-bar button (the floating bar's right end on a phone) | T M D |
 | 01.02 | Run a bound command by key | — | single keys from the keymap, each one runs a command: `1`–`4` pages, `f` fullscreen the focused pane, `F6`/`⇧F6` next/previous page, `?` help, `Space` play/stop, `⇧Space` replay, `Enter` rewind, `t` locate, `,` `.` step the playhead, `⇧R` record enable; every key can be rebound | — | T D |
 | 01.03 | Step aside for typing or a focused control | — | a field owns every key; a focused button/link/select keeps all keys but Esc and the transport keys; `F6` walks out of both | — | T D |
 | 01.04 | Copy selected page text | — | ⌘/Ctrl+C with a text selection stays the browser's copy | — | T D |
 | 01.05 | Block the trackpad's back swipe | a two-finger sideways swipe that nothing scrolls is cancelled | — | — | D |
 | 01.06 | Drop files from the OS | drag files over a drop target (timeline lane, workspace row); internal drags are refused | — | — | D |
 | 01.07 | Answer an app question (text or confirm) | click an answer; click the backdrop or Cancel to cancel | Enter answers (last button is the default), Esc cancels; a tool key (Space in the tempo question) presses the tool button | tap the buttons | T M D |
-| 01.08 | Dismiss a toast | click the ×; hovering holds it | — | tap the × | T M D |
+| 01.08 | Dismiss a toast | click the ×; hovering or focus holds it; the engine-offline toast has no × while the link is down | — | tap the × | T M D |
 | 01.09† | Approve or deny a device asking to pair | click Approve or Deny on the prompt or card | — | tap | T M D |
-| 01.10† | Retry or dismiss the "engine lost" strip | click Retry now or the × | — | tap | T M D |
+| 01.10† | Restart the engine when it is lost | click Restart on the engine-offline toast (it cannot be dismissed while the link is down) | — | tap | T M D |
 | 01.11† | Take the engine back from another device | click the banner's button | — | tap | T M D |
 | 01.12† | Import a .dawproject | click Import / Open imported / Cancel (locked mid-import) | Esc cancels when idle | tap | T M D |
-| 01.13† | Clear finished downloads | click Clear in the downloads popover | — | tap | T M D |
+| 01.45 | Read why a control is disabled | click it: it stays pressable, drawn dimmed, and a toast gives the reason | Enter / Space on it | tap it | T M D |
 
 ### Home and its pages · Projects
 
-The projects page: a sidebar (Projects, Tasks, Libraries, Frozen chains, account menu), workspace bands with project rows, search, the engine light, the command bar. The Libraries page is read-only.
+The home pages behind a floating tab bar (Projects, Surfaces, Tasks, Library, Settings) with the round command-bar button: workspace cards with their project rows, Pull and Commit & Push, a filter field once the list is long, the projects ⋮ menu (Show examples, Help). The Library page is read-only and holds the frozen chains.
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
@@ -93,7 +93,7 @@ The projects page: a sidebar (Projects, Tasks, Libraries, Frozen chains, account
 | 01.20 | Open a workspace's file tree | click the workspace name on its band | Tab, Enter | tap | T M D |
 | 01.21 | Fold / unfold a workspace band | click the chevron | Enter/Space | tap | T M D |
 | 01.22 | Create the first project of an empty workspace | click "Create the first project" | Enter | tap | T M D |
-| 01.23 | Search projects | type in the search field (matches workspace, path, tags); click the clear button | Esc clears a non-empty search | tap, type; tap clear | T M D |
+| 01.23 | Filter projects | type in the Filter projects field (shown once there are 6 projects or more) | Tab to the field, type | tap, type | T M D |
 | 01.24 | Open a project's menu (copy, rename, delete) | click ⋮ on the row | Enter on ⋮, arrows, Enter | tap ⋮ | T M D |
 | 01.25 | Rename a project | ⋮ → Rename → name dialog | Enter confirms; Esc cancels | tap | T M D |
 | 01.26 | Copy a project to another workspace | ⋮ → Copy → pick the workspace, set the name | Enter confirms; Esc cancels | tap | T M D |
@@ -102,15 +102,15 @@ The projects page: a sidebar (Projects, Tasks, Libraries, Frozen chains, account
 | 01.29 | Delete a workspace | ⋮ → Delete… → type the workspace's name, confirm | type, Enter; Esc cancels | tap | T M D |
 | 01.30 | Connect / change a workspace's git remote | ⋮ → Connect/Change remote → address dialog | — | tap | T M D |
 | 01.31† | Import a project file by dropping | drag a `.dawproject` file onto a workspace's row (it lights up) → name dialog | Enter confirms | — | T D |
-| 01.32 | Show or hide the Examples workspace | page ⋮ → "Show examples" (remembered per browser) | Enter | tap | T M D |
+| 01.32 | Show or hide the Examples workspace | page ⋮ → "Show examples" (remembered per device; it cannot be hidden while it is the only workspace) | Enter | tap | T M D |
 | 01.33 | Go to Libraries from the missing-library notice | click the notice's link | Enter | tap | T M D |
-| 01.34 | Switch Home page | click a sidebar entry (a link) | Tab, Enter | tap an entry or its rail icon | T M D |
-| 01.35 | Open Settings / Engine / About | click the account icon → menu entry | Enter, arrows | tap the icon | T M D |
-| 01.36 | Fold / unfold the sidebar | click the panel icon at the bar's left | — | tap | T M D |
+| 01.34 | Switch Home page | click a tab of the floating tab bar: Projects, Surfaces, Tasks, Library, Settings (each a link) | Tab, Enter | tap a tab | T M D |
+| 01.35 | Open Settings, the Engine page or About | click the Settings tab; Devices → Engine opens the Engine page; About is its own tab | Tab, Enter | tap the Settings tab | T M D |
 | 01.37† | Open the engine menu, choose where audio plays | click the engine light; "Engine settings", "This machine" or "The engine" | ArrowDown/Enter in the menu | tap | T M D |
 | 01.38 | Run a Home command (new workspace, delete, camera mode…) | type in the command bar | Enter | same | T M D |
 | 01.39† | Stop camera mode | click Stop / ✕ on the camera overlay | — | tap | T M D |
 | 01.40† | Switch the camera lens | click the switch-lens button | — | tap | T M D |
+| 01.44 | Open Help from Home | page ⋮ → Help, or the Help command in the command bar | Enter in the menu | tap | T M D |
 
 ### Git screens
 
@@ -139,46 +139,44 @@ The git bar (workspace tree, Home row, project header), the commit dialog, the m
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
-| 03.01 | Back out one layer (Esc ladder) | — | Esc: pending MIDI learn, popin, graph slot, armed roll tool, waveform mode, held tool, fullscreen, then closes the bottom panel | — | T D |
+| 03.01 | Back out one layer (Esc ladder) | — | Esc: pending MIDI learn, popin, graph slot, armed roll tool, waveform mode, held tool, fullscreen, then closes the editor dock | — | T D |
 | 03.02 | Undo / redo the project journal | — | ⌘/Ctrl+Z undo; ⌘/Ctrl+Y or ⌘/Ctrl+⇧Z redo (the text editor spends its own history first) | — | T D |
 | 03.03 | Save (shows the "saved automatically" notice) | — | ⌘/Ctrl+S outside the text editor | — | T D |
 | 03.04 | Focus a pane (keys follow it) | click anywhere in a pane | `F6` / `⇧F6` | tap in a pane | T M D |
-| 03.05 | Leave a project with unsaved work | click the project name, Back or a Home link, then answer | Enter / Esc | tap | T M D |
+| 03.05 | Leave a project with unsaved work | click Back, then answer (the question names the act, and a recording still running) | Enter / Esc | tap | T M D |
 | 03.06† | Reload after a failed engine sync | click Reload (Esc and outside clicks are ignored) | — | tap | T M D |
 | 03.07† | Dismiss the missing samples/plugins dialog | click Dismiss or the backdrop | Esc | tap Dismiss | T M D |
 | 03.08† | Confirm undoing a process step | click Confirm / Cancel | Esc cancels | tap | T M D |
 
 ### Project header and transport
 
-The project bar (sidebar drawer, name, page icons, engine light, minimap, viewport toggle), the transport, the footer (tempo, meter, metronome, notes, panel tabs, master meter) and the phone's hamburger and Info popover.
+The header (Back, the name over its status line, spinner, warning chip, git capsule, the pane switcher, the panel toolbar, Settings; on a phone the status line sits under it and the rest folds into the Views and panels dialog), the floating bar (command bar, tool, transport with Record's chevron, position, overview, tempo, metronome, master volume, the view's capsule) and the editor dock.
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
-| 03.09 | Open the Home sidebar drawer over a project | click the panel icon; click it again or the dimmed area to close | Esc closes | tap the icon; tap the dimmed area | T M D |
-| 03.10 | Go back to the projects page | click the project name (middle-click: new tab) | Enter on the link | tap the name in the Info popover | T M D |
+| 03.10 | Go back to the projects page | click Back (middle-click: new tab); leaving stops and unloads the project in the engine | Enter on Back | tap Back | T M D |
 | 03.11 | Play / pause | click Play/Pause | Space | tap | T M D |
 | 03.12 | Stop and rewind | click Stop | Enter | tap | T M D |
 | 03.13 | Replay from the last start | — | ⇧Space | — | T D |
 | 03.14 | Toggle loop | click Repeat | ⇧L (selection → loop, again clears) | tap | T M D |
-| 03.15 | Toggle record enable | click Record (arms a track first if none) | ⇧R | tap | T M D |
-| 03.16 | Record the output (no arrangement) | click the output record button | — | tap | T M D |
+| 03.15 | Toggle record enable | click Record (arms a track first if none); where the project records its output, Record's chevron or a right-click opens Record the output… | ⇧R; ↓ on Record opens the output menu | tap; a long-press or the chevron opens Record the output… | T M D |
+| 03.16 | Record the output (no arrangement) | click the output record button (a set); with an arrangement, Record's chevron → Record the output | — | tap | T M D |
 | 03.17† | Move the playhead or scrub from the minimap | click the strip; press and drag to scrub | — | tap to seek; drag to scrub | T M D |
 | 03.18† | Peek the full map | hover the minimap: it unfolds to every lane | — | — (stays folded) | D |
 | 03.19 | Edit the tempo | click "N bpm" → question with a Tap button | Space taps, Enter confirms, Esc cancels | tap the bpm, tap Tap repeatedly | T M D |
 | 03.20 | Edit the meter | click "N/M" → question | Enter / Esc | tap | T M D |
-| 03.21 | Toggle the metronome | click the metronome button | Enter/Space on it (repeat ignored) | tap | T M D |
-| 03.22 | Set the metronome volume | right-click the metronome button, drag the slider | ArrowDown opens it; arrows move it (written on key up) | long-press, drag the slider | T M D |
-| 03.23 | Set the song's output level | drag the master meter's handle (written on release) | arrows on the focused fader (0.5 dB) | — (hidden on phones) | T D |
+| 03.21 | Toggle the metronome | click the metronome button | Enter/Space on it (repeat ignored) | tap; on a phone, Metronome in Views and panels | T M D |
+| 03.22 | Set the metronome volume | right-click the metronome button, drag the slider | ArrowDown opens it; arrows move it (written on key up) | long-press, drag the slider; on a phone, the slider under Metronome in Views and panels | T M D |
+| 03.23 | Set the song's output level | drag the master volume in the floating bar (written on release) | arrows on the focused fader (0.5 dB) | drag the master volume; on a phone, the one in the info strip above the bar | T M D |
 | 03.24 | Fix a clipped mix | click "fix" next to the clip light | — | — | D |
 | 03.25† | Show / hide the graph notes | click the notes button | — | tap | T M D |
-| 03.26 | Open the mix panel or a bottom panel | click a footer tab | — | tap a tab | T M D |
-| 03.27 | Close the bottom panel | click its ✕ | Esc | tap ✕ | T M D |
-| 03.28 | Resize the bottom panel | drag the bar above it (120 px min) | — | drag the bar | T M D |
-| 03.29 | Open / close a side panel (playlists, references, resources, tasks, history, logs, share) | click its footer icon (or hamburger entry); the same icon or the panel's ✕ closes it | the key bound to `ui <panel>` | tap the icon in the phone menu; tap ✕ | T M D |
-| 03.30 | Switch page (editor / timeline / chains / turntables) | click the page icon | `1` `2` `3` `4`; `F6` / `⇧F6` | tap the page in the hamburger | T M D |
-| 03.31† | Show / hide the viewport window | click the viewport toggle | — | tap Viewport in the hamburger | T M D |
-| 03.32 | Open the hamburger menu (phone) | — | Esc closes | tap the menu button; tap outside | T M D |
-| 03.33 | Open the Info popover (phone) | — | Esc closes | tap the info icon | T M D |
+| 03.26 | Open the Mixer or the Events dock | click Mixer in the header's panel toolbar; opening a clip, a take or a roll opens Events | the key bound to `ui mixer` | tap Mixer in Views and panels | T M D |
+| 03.27 | Close the editor dock | click Close editor in the dock header | Esc | tap Close editor | T M D |
+| 03.28 | Resize the editor dock | drag the separator over its top edge (44 px tall, 120 px min); Expand editor fills the screen | ↑ / ↓ on the focused separator | drag the separator | T M D |
+| 03.29 | Open / close a panel (resources, playlists, logs, tasks and history, export, settings) | click its button in the header's panel toolbar (a pressed button shows its name); the same button or the panel's Close closes it | the key bound to `ui <panel>` | tap its tile in Views and panels (phone); tap Close | T M D |
+| 03.30 | Switch pane (Arrangement / Graph / Source / Turntables) | click the pane switcher (its tooltip names the key); a pane another device shows is dimmed and says why | `1` `2` `3` `4`; `F6` / `⇧F6` | tap the pane in Views and panels (phone) | T M D |
+| 03.31 | Show / hide the viewport window | click Picture: the viewport in Lane views (a project with a picture) | — | tap Picture in Views and panels (phone) | T M D |
+| 03.32 | Open Views and panels (phone) | — | Esc closes; Tab stays inside it | tap the ⋯ button; tap outside or Close menu | T M D |
 | 03.34 | Browse the file breadcrumb | click a segment → its menu; folder drills in, file opens, ▶ opens a project; click outside closes | — | tap | T M D |
 
 ### Context menus
@@ -209,7 +207,7 @@ The timeline pane: tool strip, ruler with markers and task flags, timeline tabs,
 | 03.47 | Read a marker's name | hover its flag | — | — | D |
 | 03.48 | Delete a marker | right-click the flag → "Delete a marker" | — | long-press the flag | T M D |
 | 03.49 | Read a task's text | hover or focus the task flag (a click seeks) | Tab to the flag | tap (seeks) | T M D |
-| 03.50 | Switch the ruler between bars and seconds | click the clock button | — | tap | T M D |
+| 03.50 | Switch the ruler between bars and seconds | click the position in the floating bar; the rulers follow | — | tap | T M D |
 
 ### Arrange · Tracks
 
@@ -219,15 +217,15 @@ The timeline pane: tool strip, ruler with markers and task flags, timeline tabs,
 | 03.52 | Pick several lanes | ⇧-click the headers | — | — | D |
 | 03.53 | Group the picked lanes | right-click a picked header → "Group the N tracks" | — | long-press | T M D |
 | 03.54 | Aim the other panes at a lane | double-click the header | — | double-tap | T M D |
-| 03.55 | Reorder a lane | drag the header onto a row of the same kind | — | — | D |
-| 03.56 | Mute / solo / arm a lane | click M, S or A (A arms audio in the engine, MIDI in the browser) | `m` / `s` / `r` on the caret's lane | tap; on a phone, second line when expanded | T M D |
+| 03.55 | Reorder a lane | drag the header onto a row of the same kind | — | hold the header, then drag | T M D |
+| 03.56 | Mute / solo / arm a lane | click M, S or A (A arms audio in the engine, MIDI in the browser) | `m` / `s` / `r` on the caret's lane | tap (32 × 16 inside a 44 px box on a touch screen); on a phone, second line when expanded | T M D |
 | 03.57 | Mute / solo a group | right-click the group header → Mute / Solo | `m` / `s` on the group label | long-press | T M D |
 | 03.58 | Track menu entries | right-click a lane → Move, Duplicate (with or without events), Rename, Add an input, Hide, Mute, Solo, Highlight 10 dB, Automate / Stop automating, Bounce through a chain, Copy to a timeline, Delete, Arm, Put a clip, Record notes into a sequence, Open the track's file | — | long-press | T M D |
 | 03.59 | Add a lane | click "+ lane" (Audio / Video lane when the song has a frame) | `+` | tap | T M D |
 | 03.60 | Switch a lane's attribute set | click the alternative badge → a set, New alternative…, Copy this one…, Freeze / Unfreeze | — | tap the badge | T M D |
-| 03.61 | Expand / fold lanes | click the stretch button (disabled with a bottom panel open) | — | tap | T M D |
-| 03.62 | Show / hide automation lanes | click the spline button | — | tap | T M D |
-| 03.63 | Add / move / remove an automation point | right-click an automation row → point add / move / remove at the pointer | — | long-press | T M D |
+| 03.61 | Expand / fold lanes | click Lanes in Lane views (disabled with a dock open) | — | tap | T M D |
+| 03.62 | Show / hide automation lanes | click Automation in Lane views | — | tap | T M D |
+| 03.63 | Add / move / remove an automation point | click an automation row to add a point; drag a point; right-click for the point menu | ↑ / ↓ change the focused point; Delete removes it | tap the row to add a point; hold a point, then drag | T M D |
 | 03.64 | Put the caret on a lane cell | click the empty lane (clears the selection) | — | tap the empty lane | T M D |
 | 03.65 | Walk the caret | — | ←/`h`, →/`l` a beat; ↑/`k`, ↓/`j` a row | — | T D |
 
@@ -236,23 +234,23 @@ The timeline pane: tool strip, ruler with markers and task flags, timeline tabs,
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
 | 03.66 | Select a clip | click it | — | tap | T M D |
-| 03.67 | Open a clip in the clip panel (a placed timeline opens that timeline; a frozen render opens its notes) | double-click it | `e` on the caret's clip | double-tap | T M D |
-| 03.68 | Move a clip along its lane | drag it | — | — | D |
-| 03.69 | Move a clip to another lane | drag it onto a lane of the same material (lights up) | — | — | D |
+| 03.67 | Open a clip in the Events dock (a placed timeline opens that timeline; a frozen render opens its notes) | double-click it | `e` on the caret's clip | double-tap | T M D |
+| 03.68 | Move a clip along its lane | drag it | — | hold it, then drag | T M D |
+| 03.69 | Move a clip to another lane | drag it onto a lane of the same material (lights up) | — | hold it, then drag onto a lane of the same material | T M D |
 | 03.70 | Grab, nudge and drop a clip | — | `g` grabs; `h`/← `l`/→ nudge a beat; Enter drops; Esc cancels | — | T D |
-| 03.71 | Resize a clip by an edge | drag the 6 px strip at its start or end | — | — | D |
-| 03.72 | Fade a clip in / out | drag the corner square (whole beats; ⌘/Ctrl or ⇧ frees) | — | — | D |
+| 03.71 | Resize a clip by an edge | drag the strip at its start or end (wider on the selected clip, which shows a grip) | — | hold the edge, then drag | T M D |
+| 03.72 | Fade a clip in / out | drag the corner square (whole beats; ⌘/Ctrl or ⇧ frees) | — | hold the corner square, then drag | T M D |
 | 03.73 | Cancel a move, resize or fade | release where it started | Esc during a keyboard move | — | T D |
-| 03.74 | Pick the tool (arrow, blade, eraser, mute, crossfade) | click a tool strip button | `a`, `b`, `d`, `x` (mute has none); Esc back to arrow | tap a button | T M D |
+| 03.74 | Pick the tool (arrow, blade, eraser, mute, crossfade) | click the tool button in the floating bar → its menu | `a`, `b`, `d`, `x` (mute has none); Esc back to arrow | tap the tool button | T M D |
 | 03.75 | Cut a clip | click it with the blade (refused at head or tail) | ⌘/Ctrl+B at the playhead on the caret's lane | tap with the blade | T M D |
 | 03.76 | Erase a clip | click it with the eraser | Backspace / Delete on the caret's clip or the rectangle | tap with the eraser | T M D |
 | 03.77 | Mute / unmute a clip | click it with the mute tool | — | tap with the mute tool | T M D |
 | 03.78 | Crossfade two clips | click near a clip's end (default half beat); drag sideways to size; Alt-click removes | — | tap (default size only) | T M D |
-| 03.79 | Draw a selection rectangle | ⇧-drag from any lane cell | `v` toggles; `h j k l`/arrows grow it; Esc leaves | — | T D |
+| 03.79 | Draw a selection rectangle | ⇧-drag from any lane cell | `v` toggles; `h j k l`/arrows grow it; Esc leaves | hold an empty cell, then drag | T M D |
 | 03.80 | Copy / paste the selection (clips; notes in the piano roll) | — | `c` or ⌘/Ctrl+C; `p` or ⌘/Ctrl+V at the caret | — | T D |
-| 03.81 | Clip menu entries | right-click a clip → Open file; with a rectangle: move, consolidate, to a timeline; Move, Mute, Warp, Pick / remove take, comp seam crossfade, Crossfade, Slice, Gain, Loop, Loop points, Fade in, Fade out, Re-time, Split, Trim silence, Bounce, Remove | — | long-press | T M D |
+| 03.81 | Clip menu entries | right-click a clip → Open file; with a rectangle: move, consolidate, to a timeline; Move, Mute, Warp, Pick / remove take, comp seam crossfade, Crossfade, Slice, Gain, Loop, Loop points, Fade in, Fade out, Re-time, Split, Trim silence, Bounce, Remove | — | long-press, or hold and release in place; the clip's ⋮ | T M D |
 | 03.82 | Drop an audio or video file on a lane (audio or picture) | drag a file from the OS over the lane (caret shows where) | — | — | D |
-| 03.83 | Drop a resource on a lane | drag an audio or video resource from the Resources panel | — | — | D |
+| 03.83 | Drop a resource on a lane | drag an audio or video resource from the Resources panel; or the lane's menu → Place <resource> | the lane's menu → Place <resource> | long-press the lane header → Place <resource> | T M D |
 | 03.84 | Place a whole timeline on a lane | drag a timeline tab onto a lane | — | — | D |
 
 ### Arrange · Navigation and zoom
@@ -261,8 +259,8 @@ The timeline pane: tool strip, ruler with markers and task flags, timeline tabs,
 |---|---|---|---|---|---|
 | 03.85 | Scroll (also the piano roll and the clip file's waveform strip) | wheel / trackpad slide, scrollbars | — | one-finger drag | T M D |
 | 03.86 | Zoom under the pointer (also the piano roll and the waveform strip) | ⌘/Ctrl+wheel (15% a notch); trackpad pinch | — | two-finger pinch | T M D |
-| 03.87 | Pan by dragging (also the piano roll, the strip, the audio clip panel) | middle-button drag | — | — | D |
-| 03.88 | Zoom to the rectangle / out / whole song | — | `z` / `⇧Z` / `0` | — | T D |
+| 03.87 | Pan by dragging (also the piano roll, the strip, the clip editor) | middle-button drag | — | — | D |
+| 03.88 | Zoom to the rectangle / out / whole song | Zoom into the selection, Zoom out one level, Fit the whole song in Lane views | `z` / `⇧Z` / `0` | tap them in Lane views | T D |
 | 03.89 | Switch timeline tab | click Main or a timeline tab | — | tap | T M D |
 | 03.90 | New timeline | click "+ timeline" | — | tap | T M D |
 | 03.91 | Timeline tab menu | right-click a tab → Play it alone, Rename, Set length, Add a lane, other timeline verbs | — | long-press | T M D |
@@ -286,9 +284,9 @@ The timeline pane: tool strip, ruler with markers and task flags, timeline tabs,
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
 | 04.02 | Hide / solo / arm the camera | click M, S, A (A hidden on a shapes lane) | `m` / `s` / `r` on the caret's lane | tap | T M D |
-| 04.03 | Move a shot | drag its body | — | — | D |
-| 04.04 | Trim a shot's head | drag the 8 px left strip (start, in-point and length together) | — | — | D |
-| 04.05 | Trim a shot's tail | drag the 8 px right strip | — | — | D |
+| 04.03 | Move a shot | drag its body | — | hold it, then drag | T M D |
+| 04.04 | Trim a shot's head | drag the 8 px left strip (start, in-point and length together) | — | hold the strip, then drag | T M D |
+| 04.05 | Trim a shot's tail | drag the 8 px right strip | — | hold the strip, then drag | T M D |
 | 04.06 | Cut / erase a shot | click with the blade or the eraser (mute and crossfade do nothing) | ⌘/Ctrl+B at the playhead | tap with the tool | T M D |
 | 04.07 | Shot menu entries | right-click a shot → Move to…, Trim the head to…, Set the length…, Silence / hear again, Delete | — | long-press | T M D |
 | 04.08 | Picture lane menu entries | right-click its header → Rename, Delete, Move, Add a shot, Hide / Solo, Copy to a timeline, Arm, Open the lane's file | — | long-press | T M D |
@@ -340,7 +338,7 @@ The graph canvas (Chains page, Graph and Mix panels, a lane's module row, the bu
 | 05.36 | Pick a track's input device | click the input name in the track card | — | tap | T M D |
 | 05.37 | Audition the chain at OUT | click Play on OUT | — | tap | T M D |
 | 05.38 | Work a rack tap (add, trigger, note, sample, mute, remove) | click `+`, the pad, the chips, mute, ✕ | — | tap | T M D |
-| 05.39 | Fit all, stack view, organize | click the minimap bar buttons | — | tap | T M D |
+| 05.39 | Zoom fit, Auto layout, Stack | click Zoom fit, Auto layout or Stack in the Graph views capsule | — | tap them; on a phone, in Views and panels | T M D |
 | 05.40 | Recentre from the minimap | press or drag on the minimap | — | drag | T M D |
 | 05.41 | Toggle a lane's curve cards | click the spline button in the row's strip | — | tap | T M D |
 | 05.42 | Add a lane input | click an icon in the row's strip | — | tap | T M D |
@@ -391,7 +389,7 @@ The editor pane (CodeMirror with autosave, vim mode, preview gutter, docked wave
 | 06.07 | Read a lint message | hover the squiggle | — | — | D |
 | 06.08 | Open a referenced entity | ⌘/Ctrl+click the underlined name | — | — | D |
 | 06.09 | Audition a sample from the gutter | click the play triangle | — | tap | T M D |
-| 06.10 | Use vim mode | — | normal / insert / visual / ex keys; one change is one undo | hardware keyboard only | T D |
+| 06.10 | Use vim mode (off by default) | — | normal / insert / visual / ex keys; one change is one undo | hardware keyboard only | T D |
 | 06.11 | Open the module in the Builder | click "Builder" (module files) | — | tap | T M D |
 | 06.12 | Edit the module behind a node beside it | type in the side pane | same keys | same | T M D |
 | 06.13 | Set a picture reader's in / out frame | use the readers strip | — | tap / drag | T M D |
@@ -478,17 +476,15 @@ The share panel: timeline choice, audio exports, video export row.
 
 ### Settings · In-project settings panel
 
-The `/settings` page (General, Devices), the engine page (Engine, Instruments, Chains, Plugins; a phone variant), the in-project settings panel (cog) and the full-screen Commands page.
+The `/settings` page (General, Devices, Downloads, About), the engine page (Engine, Instruments, Chains, Plugins; a phone variant), the in-project Settings panel (Editor, I/O, Project) and the full-screen command editor.
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
-| 10.01 | Switch tab (Editor / I/O / Project / Account) | click the tab | `ui settings <tab>` in the bar | tap | T M D |
+| 10.01 | Switch tab (Editor / I/O / Project) | click the tab | `ui settings <tab>` in the bar | tap | T M D |
 | 10.02 | Close the settings panel | click ✕ | Esc | tap ✕ | T M D |
-| 10.03 | Open the Commands page | click the command icon in the header | `ui settings commands` | tap | T M D |
-| 10.04 | Toggle vim mode (Editor tab) | click On/Off | `ui vim` | tap | T M D |
+| 10.03 | Open the Commands page | click Commands and shortcuts in the Editor tab | `ui settings commands` | tap | T M D |
+| 10.04 | Toggle vim mode (Editor tab) | click its switch (off by default) | `ui vim` | tap | T M D |
 | 10.05 | Choose the summing console (Project tab) | pick in the select | native select keys | tap | T M D |
-| 10.06 | Open engine settings / leave the workspace (Account tab) | click the row | — | tap | T M D |
-| 10.07 | Change language (Account tab) | pick in the locale select | native select keys | tap | T M D |
 
 ## 11 Clip editor
 
@@ -507,18 +503,18 @@ The `/settings` page (General, Devices), the engine page (Engine, Instruments, C
 | 11.04 | Zoom the bar window | bare wheel zooms about the cursor; ⌘/Ctrl+wheel or trackpad pinch zooms smoothly | — | two-finger pinch | T M D |
 | 11.05 | Show every bar | click "all bars" (when zoomed in) | — | tap | T M D |
 | 11.06 | Frame the event again | click "the event" (when moved off it) | — | tap | T M D |
-| 11.07 | Set the event's gain | drag the gain slider (written on release) | arrows (written on key up) | drag | T M D |
+| 11.07 | Set the event's gain | drag the Gain slider (written on release) | arrows (written on key up) | drag | T M D |
 | 11.08 | Reset the gain to 0 dB | double-click the slider | — | double-tap | T M D |
 | 11.09 | Toggle the event's loop (also in the roll header) | click Loop | Tab, Space/Enter | tap | T M D |
 | 11.10 | Move the loop's start or end | drag a brace handle on the bars ruler (free) | — | drag | T M D |
 | 11.11 | Set the onset sensitivity (onsets view) | drag the threshold slider | arrows | drag | T M D |
-| 11.12 | Open the trim gate | click "trim" (the kept part is drawn over the wave) | Tab, Enter | tap | T M D |
-| 11.13 | Set the trim gate threshold | drag the dB slider in the trim menu | arrows | drag | T M D |
-| 11.14 | Trim the event to the gate | click "trim" in the menu | Tab, Enter | tap | T M D |
-| 11.15 | Run an operation chain on the clip | click "operations", search, click a chain | arrows, Enter | tap | T M D |
+| 11.12 | Open the trim gate | click Trim, a pressed pill: the gate card opens under it (the kept part is drawn over the wave) | Tab, Enter | tap | T M D |
+| 11.13 | Set the trim gate threshold | drag the dB slider in the gate card | arrows | drag | T M D |
+| 11.14 | Trim the event to the gate | click Trim in the gate card | Tab, Enter | tap | T M D |
+| 11.15 | Run an operation chain on the clip | click Operations, search, click a chain | arrows, Enter | tap | T M D |
 | 11.16 | Discard the take | click the trash button | — | tap | T M D |
-| 11.17 | Finish editing | click the check (Done) | — | tap | T M D |
-| 11.18 | Close the panel | click ✕ atop the mode strip | Esc at the end of the ladder | tap | T M D |
+| 11.17 | Finish editing | click Done (files the take as reviewed) | — | tap | T M D |
+| 11.18 | Close the editor | click Close editor in the dock header | Esc at the end of the ladder | tap | T M D |
 
 ### Clip editor / Waveform · Waveform
 
@@ -533,6 +529,7 @@ The `/settings` page (General, Devices), the engine page (Engine, Instruments, C
 | 11.25 | Trim the event's window | drag an edge handle of the lit band | — | drag | T M D |
 | 11.26 | Edit a comped part's edges (takes view) | drag the band's edges | — | drag | T M D |
 | 11.27 | Draw a selection band | drag past 4 px (nothing written) | — | drag | T M D |
+| 11.28 | Add an onset or a stretch point by value (List tool) | type the time in Add at (seconds), click Add onset or Add stretch point | Enter adds | tap, type, tap | T M D |
 
 ## 12 Piano roll
 
@@ -598,6 +595,12 @@ The roll: mode strip (select, create, remove, takes), key gutter, note lanes wit
 | 13.07 | Pick the engine a module runs as | click an engine in the side list | — | tap | T M D |
 | 13.08 | Apply a preset | click a preset | Enter after search | tap | T M D |
 | 13.09 | Pick an icon | type to search, click an icon or "none" | — | tap | T M D |
+
+### Chain graph and builders · Canvas and cards
+
+| ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
+|---|---|---|---|---|---|
+| 13.10 | Open a module card's menu | click ⋯ on the card | Enter on ⋯ | tap ⋯ | T M D |
 
 ## 14 Export · folder picker
 
@@ -696,11 +699,7 @@ The DJ desk: two decks (vinyl, waveform, BPM fader, hot cues, loop row, censor, 
 | 20.26 | Toggle quantise | click Quantise | — | tap | T M D |
 | 20.27 | Refresh the set list | click refresh | — | tap | T M D |
 
-## 21 Libraries
-
-No interaction of its own: its controls are listed under 01.
-
-## 22 Frozen chains
+## 21 Library
 
 ### Home and its pages · Frozen chains
 
@@ -718,19 +717,18 @@ No interaction of its own: its controls are listed under 01.
 |---|---|---|---|---|---|
 | 22.06† | Save a bench chain | click "Save to chain" (bench only) | — | tap | T M D |
 
+## 22 Frozen chains (not drawn)
+
+No interaction of its own: its controls are listed under .
+
 ## 23 App settings
-
-### Git screens
-
-| ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
-|---|---|---|---|---|---|
-| 23.01 | Save the commit identity (Settings) | type name and email, click Save | — | tap | T M D |
 
 ### Settings · Settings page and engine page
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
-| 23.02 | Switch tab | click the tab (kept in `?tab=`) | ←/→ | tap | T M D |
+| 01.13 | Clear finished downloads | Settings → Downloads → Clear finished | — | tap | T M D |
+| 23.02 | Switch tab | click the tab: General, Devices, Downloads, About (kept in `?tab=`) | ←/→ | tap | T M D |
 | 23.03 | Change the language | click a language button | Enter | tap | T M D |
 | 23.04 | Save the Claude API key | type in the password field, click Save | Enter saves | tap, type | T M D |
 | 23.05 | Remove the Claude API key | click Remove | — | tap | T M D |
@@ -738,6 +736,17 @@ No interaction of its own: its controls are listed under 01.
 | 23.07 | Revoke a paired device | click Revoke | — | tap | T M D |
 | 23.08 | Choose the separation chains | pick in the select | ↑/↓, Enter | tap, pick | T M D |
 | 23.09 | Download a missing model | click the link under the select | — | tap | T M D |
+| 23.10 | Choose the primary audio interface | click Primary → pick an interface | Enter, arrows | tap, pick | T M D |
+| 23.11 | Choose the fallback audio interface | click Fallback → pick an interface or None (the primary is not offered) | Enter, arrows | tap, pick | T M D |
+| 23.12 | Download, cancel, remove or retry an instrument | click the button on its row (Downloads tab) | Enter | tap | T M D |
+| 23.13 | Open the Engine page | Devices → click the Engine row | Enter | tap | T M D |
+| 23.14 | Read k7's licence, open its source, read a third-party notice | About → Read it; Open; search, click a notice | Enter | tap | T M D |
+
+### Git screens
+
+| ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
+|---|---|---|---|---|---|
+| 23.01 | Save the commit identity (Settings) | type name and email; they save themselves | — | tap | T M D |
 
 ## 24 Logs panel
 
@@ -800,11 +809,11 @@ The set list picker, the playlist rows, the library search, the stems bar, the p
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
-| 27.01 | Walk along a row graph (Mix panel, module row) | wheel scrolls sideways | — | horizontal drag | T M D |
+| 27.01 | Walk along a row graph (Mixer, module row) | wheel scrolls sideways | — | horizontal drag | T M D |
 
 ### Mixer
 
-The Mix panel (one strip per mixer module, a row graph), the mastering tab, the I/O tab's meters.
+The Mixer (one strip per lane's mixer module, Master as the row's last strip with its fader, pan read as L / C / R), the mastering controls under OUT, the I/O tab's meters.
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
@@ -914,12 +923,12 @@ The Mix panel (one strip per mixer module, a row graph), the mastering tab, the 
 
 ### Help
 
-The documentation popin: a table of contents on the left, the pages on the right.
+The documentation popin: a table of contents on the left (a Contents button on narrow screens), the pages on the right.
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
-| 37.01 | Open Help | — (command `ui help`) | `?` | through the command bar | T M D |
-| 37.02 | Jump to a documentation section | click an entry in the table of contents | Tab, Enter; ⌘/Ctrl+F searches the page | — (contents hidden on narrow screens: scroll) | T D |
+| 37.01 | Open Help | Home: page ⋮ → Help; a phone: the Help tile in Views and panels; anywhere: `ui help` in the command bar | `?` | tap Help in the projects ⋮ menu or in Views and panels | T M D |
+| 37.02 | Jump to a documentation section | click an entry in the table of contents | Tab, Enter; ⌘/Ctrl+F searches the page | tap Contents (narrow screens), then an entry | T M D |
 | 37.03 | Close Help | click Back | Esc | tap Back | T M D |
 
 ## 38 Curves (not drawn)
@@ -965,7 +974,7 @@ The curve editor dialog: name, shape, sliders, ADSR knobs, run conditions, a dra
 | 39.11 | Bind a parameter to a widget | drag a parameter row onto a widget, an empty cell or the inspector | — | — | D |
 | 39.12 | Cut / copy / paste a widget | right-click a widget or cell → grid menu | Esc closes | long-press | T M D |
 | 39.13 | Delete a widget | click Delete in the inspector | — | tap | T M D |
-| 39.14 | Organize / AI organize | click the palette buttons | — | tap | T M D |
+| 39.14 | Auto layout / AI organize | click the palette buttons | — | tap | T M D |
 | 39.15 | Rename / reorder / remove / add a tab | name field, up/down/remove icons, add button | Enter commits, Esc cancels | tap | T M D |
 | 39.16 | Switch builder pane (Parameters / grid / text) | click a pane button | — | tap | T M D |
 | 39.17 | Save the module | click Save | ⌘/Ctrl+S | tap | T M D |
@@ -980,24 +989,26 @@ The curve editor dialog: name, shape, sliders, ADSR knobs, run conditions, a dra
 | 39.26 | Reorder, remove, add a tap effect | up / down / remove icons; "add" opens the picker | — | tap | T M D |
 | 39.27 | Close a builder popin | click ✕ or the backdrop | — | tap | T M D |
 
-## 40 Surfaces (not drawn)
+## 40 Surfaces
 
 ### Surfaces
 
-A surface pane draws what its type declares; a lone surface adds a mini transport, a command line and a footer; the surface index lists them; pairing asks the engine's machine.
+The Surfaces tab lists, by device, the surfaces of the projects open on the network; a surface opened on another device draws alone, with a round Home button, a command line and the transport; the device that holds the project dims the pane a remote shows; pairing asks the engine's machine.
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
 | 40.01 | Run a command from a lone surface | type in the line | Enter runs | on-screen keyboard | T M D |
 | 40.02 | Toggle fullscreen | click the footer button | — | tap | T M D |
-| 40.03 | Back to the surface list | click "Surfaces" | — | tap | T M D |
-| 40.04 | Open a surface from the index | click its row | Enter | tap | T M D |
-| 40.05 | Refresh the surface list | click refresh | — | tap | T M D |
-| 40.06 | Ask to pair this device | click "Pair" (the code shows large) | — | tap | T M D |
+| 40.03 | Back to the surface list | click the round Home button (another device's surface) or Surfaces in the foot (a surface on its own machine) | — | tap | T M D |
+| 40.04 | Open a surface from the index | click its row on the Surfaces tab (a row that cannot open stays greyed, with its reason) | Enter | tap | T M D |
+| 40.05 | Refresh the surface list | click Refresh on the Surfaces tab (it also asks again every 5 s) | — | tap | T M D |
+| 40.06† | Ask to pair this device | click "Pair" (the code shows large) | — | tap | T M D |
+| 40.07 | Play, stop and read the position on another device's surface | click Play or Stop in the transport capsule; click the position to switch bars and seconds | Space plays and stops | tap | T M D |
+| 40.08 | Open a pane another device shows (the device that holds the project) | click the dimmed pane: a toast says “In use on <device>” | its pane key says the same | tap it | T M D |
 
 ## Gaps found while listing
 
-- One-finger drags on timeline clips, edges, fade corners, headers and shots scroll the pane (`touch-action: pan-x pan-y`), so move, resize, fade, reorder and range select have no touch way.
+- The ruler's drags (a range across every lane, a vertical drag to zoom) and the keyboard grab have no touch way; clips, edges, fades, lane headers, shots and automation points take a hold, then a drag.
 - The piano roll lane takes a one-finger swipe as a native scroll, which competes with drawing notes and framing rectangles by touch.
 - `apps/k7-daw-frontend/docs/timeline.md` says the mouse wheel zooms the timeline; the code zooms only on ⌘/Ctrl+wheel or a pinch.
 - The bare wheel zooms in the audio clip panel and the graph but scrolls in the timeline, the piano roll and the waveform strip.
@@ -1005,13 +1016,11 @@ A surface pane draws what its type declares; a lone surface adds a mini transpor
 - HTML5 drag and drop rows have no touch path: OS files and resources onto lanes, timeline tabs, file tree moves, parameter binding in the module builder, records onto decks.
 - Double-tap rows rely on the browser's `dblclick` and are untested on iOS and Android (gain reset, stretch points, curve points, graph zoom, turntables resets).
 - Takes mode has no key in either panel, and the timeline's mute tool has none either.
-- Hover-only affordances have no touch twin: marker names, shot spans, lint messages, history row lighting, minimap peek, command bar row reasons, the cable `+`.
+- Hover-only affordances have no touch twin: marker names, shot spans, lint messages, minimap peek, command bar row reasons, the cable `+`.
 - The audio panel's loop braces drag free while the piano roll's snap (Alt frees); the two describe the same widget differently.
 - A click on the wave (standard and warp views) and on the waveform strip does nothing: no seek is wired.
-- The master output fader is hidden on phones, leaving no touch way to set the song's level; "fix" has no touch path either.
+- "fix", beside the clip light, has no touch path.
 - Binding a shortcut on the Commands page needs a hardware keyboard.
-- Help has no button: on touch it is reachable only by typing `ui help`.
 - A chain or OUT card opens no menu on right-click, unlike every other card.
 - Removing a takes crossfade needs Alt, and sizing a timeline crossfade needs a drag: touch gets only the default.
-- The in-project Settings panel's Account tab label is hard-coded in French ("Compte").
 - `apps/k7-daw-frontend/src/settings/RemoteSlotsSection.tsx` is not referenced by any screen.
