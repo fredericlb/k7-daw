@@ -97,7 +97,9 @@ export function AudioInterfaceSection({
               label={m["engine.primary"]()}
               value={primary ?? ""}
               options={options}
-              onChange={(name) => send(name, fallback)}
+              onChange={(name) =>
+                send(name, fallback === name ? null : fallback)
+              }
             />
           </Row>
           <Row label={m["engine.fallback"]()}>
