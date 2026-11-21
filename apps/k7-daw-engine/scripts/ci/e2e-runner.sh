@@ -77,10 +77,15 @@ EOF
 # Windows reads its home from USERPROFILE, and sccache cannot start under the bed's: there the front's cargo runs without it.
 wrapper=${RUSTC_WRAPPER:-}
 [ "$windows" = 0 ] || wrapper=
+# cargo and rustup keep the runner's own homes: under the bed's HOME rustup finds no toolchain.
+realhome=$HOME
+[ "$windows" = 0 ] || realhome=$(cygpath -m "$USERPROFILE")
+cargo_home=${CARGO_HOME:-$realhome/.cargo}
+rustup_home=${RUSTUP_HOME:-$realhome/.rustup}
 start() {
   local name=$1 dir=$2
   shift 2
-  (cd "$dir" && exec env HOME="$home" USERPROFILE="$home" STUDIO_PORTS="k7=$front" RUSTC_WRAPPER="$wrapper" \
+  (cd "$dir" && exec env HOME="$home" USERPROFILE="$home" STUDIO_PORTS="k7=$front" RUSTC_WRAPPER="$wrapper" CARGO_HOME="$cargo_home" RUSTUP_HOME="$rustup_home" \
     STUDIO_MEDIATEK="$mediatek" STUDIO_FILES_ROOT="$files" K7_FRONT_CACHE="$bed/front-cache" "$@") > "$logs/$name.log" 2>&1 &
   echo $! > "$bed/$name.pid"
 }
