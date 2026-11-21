@@ -10,11 +10,18 @@ import {
   parseLaunch,
   projectBasename,
 } from "@studio/project-shell/launch";
-import { isHomePage } from "@studio/web-protocol/projects";
+import {
+  isHomePage,
+  LAN_REPO,
+  type LanSurface,
+  parseLanSurface,
+} from "@studio/web-protocol/projects";
 
 export type Scope =
   | { kind: "external-index"; key: string; basename: string }
   | { kind: "home"; key: string; basename: string }
+  /** One surface of another device's project: no gates of the editor, the remote view alone (docs/external.md). */
+  | { kind: "lan-surface"; key: string; basename: string; lan: LanSurface }
   | {
       kind: "project";
       key: string;
@@ -34,6 +41,13 @@ export function scopeOf(pathname: string, base: string): Scope {
   const at = parseLaunch(pathname, "k7", base);
   if (!at) return { kind: "home", key: "home", basename: base };
   const basename = projectBasename(pathname, "k7", base);
+  // Another device's surface; a `@lan` address that names none is a dead end, so the home draws.
+  if (at.repo === LAN_REPO) {
+    const lan = parseLanSurface(pathname, "k7", base);
+    return lan
+      ? { kind: "lan-surface", key: `lan:${basename}`, basename, lan }
+      : { kind: "home", key: "home", basename: base };
+  }
   return {
     kind: "project",
     key: `project:${basename}`,

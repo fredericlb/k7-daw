@@ -259,6 +259,52 @@ export function externalOf(projectUrl: string, surface: string): string {
   return `${projectUrl}/${EXTERNAL_SEGMENT}/${encodeSegment(surface)}`;
 }
 
+/** The SURFACES page, `/surfaces` — the surfaces of every project open on the LAN; reserved and routed like the libraries. */
+export const SURFACES_PAGE = "surfaces";
+
+/** `@lan` — the reserved repository of a surface that belongs to ANOTHER device: `/@lan/<engineId>/<workspace>/<project>/@external/<surface>`. */
+export const LAN_REPO = "@lan";
+
+/** One surface of a project on another device, as its address names it. */
+export interface LanSurface {
+  /** The other device's engine id, which names it on the LAN. */
+  engineId: string;
+  workspace: string;
+  /** The project inside the workspace, "." when the workspace is the project. */
+  project: string;
+  surface: string;
+}
+
+/** Where a surface of another device opens: below the project like `externalUrl`, under that device's id. */
+export function lanSurfaceUrl(
+  origin: string,
+  l: Omit<LanSurface, "surface">,
+  surface: string,
+  app: ProjectApp,
+): string {
+  const where = l.project === "." ? l.workspace : `${l.workspace}/${l.project}`;
+  return externalOf(
+    launchUrl(origin, LAN_REPO, `${l.engineId}/${where}`, app),
+    surface,
+  );
+}
+
+/** Read a `@lan` surface address, or null for anything else — an `@lan` with no surface after it is not one. */
+export function parseLanSurface(
+  pathname: string,
+  app: ProjectApp,
+  base: string,
+): LanSurface | null {
+  const at = parseLaunch(pathname, app, base);
+  if (!at || at.repo !== LAN_REPO) return null;
+  const surface = parseExternal(pathname, app, base);
+  if (!surface) return null;
+  const [engineId, ...rest] = at.project.split("/");
+  const target = localTarget(rest.join("/"));
+  if (!engineId || !target) return null;
+  return { engineId, ...target, surface };
+}
+
 /** The MENU of those addresses, `/external` — a RESERVED repository short name; see docs/addresses.md. */
 export const EXTERNAL_INDEX = "external";
 
@@ -307,6 +353,7 @@ export function isHomePage(pathname: string, base: string): boolean {
     isReservedPrefix(pathname, base, SETTINGS_PAGE) ||
     isReservedPrefix(pathname, base, ABOUT_PAGE) ||
     isReservedPrefix(pathname, base, TASKS_PAGE) ||
+    isReservedPrefix(pathname, base, SURFACES_PAGE) ||
     isReservedPrefix(pathname, base, MEDIA_PAGE)
   );
 }

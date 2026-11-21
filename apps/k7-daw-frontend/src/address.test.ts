@@ -7,7 +7,14 @@ const url = (p: string) => new URL(p, ORIGIN);
 
 describe("scopeOf", () => {
   it("reads the root and the pages hanging off it as ONE home scope", () => {
-    for (const p of ["/", "/libraries", "/settings", "/media/songs", "/tasks"])
+    for (const p of [
+      "/",
+      "/libraries",
+      "/settings",
+      "/media/songs",
+      "/tasks",
+      "/surfaces",
+    ])
       expect(scopeOf(p, B)).toMatchObject({ kind: "home", key: "home" });
   });
 
@@ -29,6 +36,26 @@ describe("scopeOf", () => {
   it("names the surface a project tab draws", () => {
     const s = scopeOf("/@local/songs/first.k7/@external/desk", B);
     expect(s).toMatchObject({ kind: "project", external: "desk" });
+  });
+});
+
+describe("a surface of another device", () => {
+  it("is its own scope, keyed by its basename, with the surface read out", () => {
+    const s = scopeOf("/@lan/e1/band/mix.k7/@external/desk", B);
+    expect(s).toMatchObject({
+      kind: "lan-surface",
+      basename: "/@lan/e1/band/mix.k7",
+      lan: {
+        engineId: "e1",
+        workspace: "band",
+        project: "mix.k7",
+        surface: "desk",
+      },
+    });
+  });
+
+  it("falls to the home when the address names no surface", () => {
+    expect(scopeOf("/@lan/e1/band/mix.k7", B).kind).toBe("home");
   });
 });
 

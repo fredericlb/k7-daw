@@ -13,11 +13,14 @@ import {
   isExternalIndex,
   isHomePage,
   isLocal,
+  LAN_REPO,
   LOCAL_REPO,
+  lanSurfaceUrl,
   launchUrl,
   localProjectUrl,
   localTarget,
   parseExternal,
+  parseLanSurface,
   parseLaunch,
   projectApp,
   projectBasename,
@@ -352,5 +355,50 @@ describe("which addresses are the home's own pages", () => {
     expect(isHomePage("/k7/media/find", "/k7/")).toBe(true);
     // Only the head: a workspace may hold a project of that name.
     expect(isHomePage("/songs/media", "/")).toBe(false);
+  });
+});
+
+describe("a surface of another device", () => {
+  const where = { engineId: "e-9f", workspace: "band", project: "mix.k7" };
+
+  it("round-trips through lanSurfaceUrl and parseLanSurface", () => {
+    const url = new URL(lanSurfaceUrl("https://x.test", where, "desk", "k7"));
+    expect(url.pathname).toBe(`/${LAN_REPO}/e-9f/band/mix.k7/@external/desk`);
+    expect(parseLanSurface(url.pathname, "k7", "/")).toEqual({
+      ...where,
+      surface: "desk",
+    });
+  });
+
+  it("keeps a project nested in its workspace and a workspace that is the project", () => {
+    const nested = { ...where, project: "songs/mix.k7" };
+    const url = lanSurfaceUrl("https://x.test", nested, "a b", "k7");
+    expect(parseLanSurface(new URL(url).pathname, "k7", "/")).toEqual({
+      ...nested,
+      surface: "a b",
+    });
+    const whole = { engineId: "e", workspace: "mix.k7", project: "." };
+    expect(
+      parseLanSurface(
+        new URL(lanSurfaceUrl("https://x.test", whole, "d", "k7")).pathname,
+        "k7",
+        "/",
+      ),
+    ).toMatchObject({ workspace: "mix.k7", surface: "d" });
+  });
+
+  it("reads nothing out of an address that is not one", () => {
+    for (const p of [
+      "/@lan/e/band/mix.k7",
+      "/@lan/e/band/mix.k7/@external",
+      "/@local/band/mix.k7/@external/desk",
+      "/@lan/e/@external/desk",
+    ])
+      expect(parseLanSurface(p, "k7", "/"), p).toBe(null);
+  });
+
+  it("makes /surfaces a home page, and only that word", () => {
+    expect(isHomePage("/surfaces", "/")).toBe(true);
+    expect(isHomePage("/surfaces2", "/")).toBe(false);
   });
 });
