@@ -100,7 +100,7 @@ export function MetronomeButton({
           </span>
         </label>
         {/* Said out loud, because a slider stopping short of zero otherwise looks like a bug. */}
-        <p className="mt-2 text-[10px] text-muted-foreground leading-snug">
+        <p className="mt-2 text-[11px] text-muted-foreground leading-snug">
           {m["metro.floorHint"]({ min: Math.round(METRONOME_MIN * 100) })}
         </p>
       </DropdownMenuContent>

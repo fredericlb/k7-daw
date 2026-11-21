@@ -106,7 +106,7 @@ export function CurveKnob({
           />
         </svg>
       </div>
-      <span className="text-[10px] uppercase tracking-wide text-muted-foreground">
+      <span className="text-[11px] uppercase tracking-wide text-muted-foreground">
         {label}
       </span>
       <span className="font-mono text-xs tabular-nums">

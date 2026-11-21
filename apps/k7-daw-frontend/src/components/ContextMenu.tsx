@@ -182,7 +182,7 @@ export function ContextMenu({
           <span className="shrink-0 text-muted-foreground">…</span>
         )}
         {key && (
-          <kbd className="shrink-0 rounded border border-border px-1 font-mono text-[10px] text-muted-foreground">
+          <kbd className="shrink-0 rounded border border-border px-1 font-mono text-[11px] text-muted-foreground">
             {key}
           </kbd>
         )}

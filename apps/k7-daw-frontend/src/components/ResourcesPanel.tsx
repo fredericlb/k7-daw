@@ -166,7 +166,7 @@ function ResourceRow({
             <TriangleAlert className="h-3 w-3" /> {m["res.missingShort"]()}
           </span>
         ) : (
-          <span className="shrink-0 pr-1 font-mono text-[10px] text-muted-foreground tabular-nums">
+          <span className="shrink-0 pr-1 font-mono text-[11px] text-muted-foreground tabular-nums">
             {formatBytes(r.bytes)}
           </span>
         )}

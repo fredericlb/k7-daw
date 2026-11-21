@@ -722,7 +722,7 @@ export function PianoRoll({
             style={{ width: gutter + laneW, height: rulersH + gridH }}
           >
             {/* ONE ruler, sticky: the song's positions when the clip is placed, else the file's own bars. */}
-            <div className="sticky top-0 z-20 bg-background text-[10px] text-muted-foreground">
+            <div className="sticky top-0 z-20 bg-background text-[11px] text-muted-foreground">
               <div className="flex" style={{ height: RULER_H }}>
                 <div
                   className="sticky left-0 z-10 shrink-0 border-b border-r border-border bg-background"

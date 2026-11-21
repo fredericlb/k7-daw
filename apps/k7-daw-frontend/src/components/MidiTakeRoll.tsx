@@ -150,7 +150,7 @@ export function MidiTakeRoll({
             return (
               <div
                 key={k}
-                className={`absolute left-0 right-0 border-b border-border/40 pl-0.5 text-[8px] leading-none text-muted-foreground ${black ? "bg-muted" : ""}`}
+                className={`absolute left-0 right-0 border-b border-border/40 pl-0.5 text-[11px] leading-none text-muted-foreground ${black ? "bg-muted" : ""}`}
                 style={{ top: `${y(k)}%`, height: `${100 / rows}%` }}
               >
                 {k % 12 === 0 ? `C${Math.floor(k / 12) - 1}` : ""}

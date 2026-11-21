@@ -189,8 +189,8 @@ const keptNotice = (kept: string[]) =>
 function ChangeView({ c }: { c: SyncChange }) {
   const side = (label: string, text: string | null) => (
     <div className="min-w-0 flex-1">
-      <div className="text-[10px] text-muted-foreground">{label}</div>
-      <pre className="max-h-40 overflow-auto whitespace-pre-wrap break-all rounded bg-muted/40 p-1 text-[10px]">
+      <div className="text-[11px] text-muted-foreground">{label}</div>
+      <pre className="max-h-40 overflow-auto whitespace-pre-wrap break-all rounded bg-muted/40 p-1 text-[11px]">
         {text ?? "—"}
       </pre>
     </div>

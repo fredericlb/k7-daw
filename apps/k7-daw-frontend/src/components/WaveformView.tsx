@@ -301,7 +301,7 @@ export function WaveformView({
                       {/* No name on a hollow band: it is not a window, it is two handles. */}
                       {!r.hollow && (
                         <span
-                          className="absolute left-0.5 top-0.5 rounded bg-background/70 px-0.5 font-mono text-[10px] text-primary-text"
+                          className="absolute left-0.5 top-0.5 rounded bg-background/70 px-0.5 font-mono text-[11px] text-primary-text"
                           style={r.color ? { color: r.color } : undefined}
                         >
                           {r.symbol}

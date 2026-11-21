@@ -100,7 +100,7 @@ export function TasksPanel({
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <ProcessesSection />
-      <p className="shrink-0 pb-2 font-mono text-[10px] text-muted-foreground">
+      <p className="shrink-0 pb-2 font-mono text-[11px] text-muted-foreground">
         {TASKS_FILE}
       </p>
 
@@ -214,7 +214,7 @@ export function TasksPanel({
                     type="button"
                     disabled={!here}
                     onClick={() => t.at && onSeek(t.at.timecode)}
-                    className="font-mono text-[10px] text-muted-foreground enabled:cursor-pointer enabled:text-primary-text enabled:hover:underline"
+                    className="font-mono text-[11px] text-muted-foreground enabled:cursor-pointer enabled:text-primary-text enabled:hover:underline"
                     title={
                       here
                         ? m["tasks.seek"]()

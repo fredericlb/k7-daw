@@ -100,7 +100,7 @@ const KeyRow = memo(function KeyRow({
             ? noteName(k)
             : undefined
       }
-      className={`flex w-full items-center justify-end pr-1 text-[9px] text-muted-foreground cursor-pointer hover:bg-accent ${lit ? "bg-accent/70 text-foreground" : isBlack(k) ? "bg-muted/50" : ""}`}
+      className={`flex w-full items-center justify-end pr-1 text-[11px] text-muted-foreground cursor-pointer hover:bg-accent ${lit ? "bg-accent/70 text-foreground" : isBlack(k) ? "bg-muted/50" : ""}`}
       style={{ height: rowH, lineHeight: `${rowH}px` }}
     >
       {!showLabels ? (

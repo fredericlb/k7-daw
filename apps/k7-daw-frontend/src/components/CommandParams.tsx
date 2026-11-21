@@ -105,7 +105,7 @@ export function CommandParams({
       {/* What Enter does THIS press, which is not always "run" (see `enterAction`). */}
       <span
         className={cn(
-          "shrink-0 font-mono text-[10px] text-muted-foreground",
+          "shrink-0 font-mono text-[11px] text-muted-foreground",
           enterDoes === "run" && "text-foreground",
         )}
       >

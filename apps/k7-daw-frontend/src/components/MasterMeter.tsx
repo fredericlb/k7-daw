@@ -223,14 +223,14 @@ export function MasterMeter({
             onFix();
           }}
           title={m["meter.fixHint"]({ target: TARGET_DB })}
-          className="shrink-0 rounded border border-meter-clip/40 px-1 py-px font-medium text-[10px] text-meter-clip leading-none hover:bg-meter-clip/10"
+          className="shrink-0 rounded border border-meter-clip/40 px-1 py-px font-medium text-[11px] text-meter-clip leading-none hover:bg-meter-clip/10"
         >
           fix
         </button>
       )}
       {/* The number, tabular so the row does not shuffle as the digits change under a drag. */}
       {fader && (
-        <span className="w-8 shrink-0 text-right font-mono text-[10px] text-muted-foreground tabular-nums">
+        <span className="w-8 shrink-0 text-right font-mono text-[11px] text-muted-foreground tabular-nums">
           {level > 0 ? "+" : ""}
           {level.toFixed(1)}
         </span>

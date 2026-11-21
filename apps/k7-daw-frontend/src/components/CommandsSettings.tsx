@@ -401,7 +401,7 @@ const CommandRow = memo(function CommandRow({
         >
           <span
             className={cn(
-              "shrink-0 font-mono text-[10px] uppercase",
+              "shrink-0 font-mono text-[11px] uppercase",
               l === locale ? "text-foreground" : "text-faint",
             )}
           >

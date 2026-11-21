@@ -104,7 +104,7 @@ export function DocsSite({ homeUrl }: { homeUrl: string }) {
             {nav.map((group) => (
               <div key={group.label} className="flex flex-col">
                 {group.label && (
-                  <div className="px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-foreground/70">
+                  <div className="px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-foreground/70">
                     {group.label}
                   </div>
                 )}

@@ -92,7 +92,7 @@ function Level<T>({
               >
                 <span className="flex min-w-0 items-center gap-2">
                   {n.badge ? (
-                    <span className="w-10 shrink-0 rounded bg-muted px-1 text-center font-mono text-[10px] uppercase text-muted-foreground">
+                    <span className="w-10 shrink-0 rounded bg-muted px-1 text-center font-mono text-[11px] uppercase text-muted-foreground">
                       {n.badge}
                     </span>
                   ) : null}

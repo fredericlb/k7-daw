@@ -117,7 +117,7 @@ function CommandRow({
         ))}
       </code>
       {shortcut && (
-        <kbd className="shrink-0 rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-[10px] leading-none text-muted-foreground">
+        <kbd className="shrink-0 rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-[11px] leading-none text-muted-foreground">
           {shortcut}
         </kbd>
       )}
@@ -249,7 +249,7 @@ function Toc() {
     <>
       {DOC_PARTS.map((part) => (
         <div key={part.part} className="flex flex-col">
-          <div className="px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-foreground/70">
+          <div className="px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-foreground/70">
             {part.label}
           </div>
           {part.part === "commands" && (
