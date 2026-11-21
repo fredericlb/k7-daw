@@ -58,6 +58,7 @@ import { PaneBoundary } from "./PaneBoundary";
 import { m } from "./paraglide/messages.js";
 import { queryClient } from "./queries/client";
 import { forgetLeftScope } from "./scopeLeave";
+import { followSystemTextSize } from "./textScale";
 import { spawnBrowserWorker } from "./verbs/browserWorker";
 import { installPageVerbs } from "./verbs/pageHost";
 
@@ -214,6 +215,8 @@ function DialogLabels({ children }: { children: ReactNode }) {
     </DialogCloseLabel.Provider>
   );
 }
+
+followSystemTextSize();
 
 // The gates before the editor, and NO React.StrictMode — its double-mount freezes Firefox's WebGL context (docs/shell.md).
 wasmReady().finally(() => {
