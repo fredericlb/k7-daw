@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["packages/k7-front", "packages/k7-embed", "packages/k7-local", "packages/k7-engine", "packages/k7-js", "packages/k7-mediatek", "packages/k7-hub", "packages/k7-sync", "packages/k7-picture", "packages/k7-file-service", "packages/k7-replica", "packages/k7-capture", "packages/k7-libraries", "packages/k7-git", "packages/k7-roam"]
+members = ["packages/k7-front", "packages/k7-embed", "packages/k7-local", "packages/k7-engine", "packages/k7-js", "packages/k7-mediatek", "packages/k7-hub", "packages/k7-sync", "packages/k7-picture", "packages/k7-file-service", "packages/k7-replica", "packages/k7-capture", "packages/k7-libraries", "packages/k7-git", "packages/k7-roam", "packages/k7-lan"]
 exclude = ["packages/waveform"]
 
 [workspace.package]
@@ -23,6 +23,7 @@ k7-capture = { path = "packages/k7-capture" }
 k7-libraries = { path = "packages/k7-libraries" }
 k7-git = { path = "packages/k7-git" }
 k7-roam = { path = "packages/k7-roam" }
+k7-lan = { path = "packages/k7-lan" }
 # libgit2 with no https and no ssh feature: those bring OpenSSL and libssh2, k7 has its own transports (docs/git.md).
 git2 = { version = "0.21", default-features = false }
 # The device's keychain, for a git token or key: Keychain, Credential Manager and the Secret Service over zbus, no C build (docs/git.md).

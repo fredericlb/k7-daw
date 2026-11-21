@@ -243,6 +243,16 @@ impl Registry {
         self.lock().get(id, now).cloned()
     }
 
+    /// The engine this machine runs, the one whose latest heartbeat came from loopback; the LAN door answers for it.
+    pub fn local_entry(&self) -> Option<Entry> {
+        let now = self.clock.now_ms();
+        let mut s = self.lock();
+        let ids = s.live_ids(now);
+        ids.iter()
+            .filter_map(|id| s.get(id, now).cloned())
+            .find(|e| on_this_machine(e, now))
+    }
+
     pub fn on_this_machine(&self, id: &str) -> bool {
         let now = self.clock.now_ms();
         self.lock()

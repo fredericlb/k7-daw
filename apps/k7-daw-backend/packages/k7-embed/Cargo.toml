@@ -11,4 +11,5 @@ crate-type = ["cdylib", "staticlib"]
 [dependencies]
 k7-front.workspace = true
 k7-roam.workspace = true
+k7-lan.workspace = true
 serde_json.workspace = true
