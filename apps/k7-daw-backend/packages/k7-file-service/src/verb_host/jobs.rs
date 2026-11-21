@@ -204,10 +204,21 @@ impl Table {
 
     /// Stops the jobs nobody polled for `HEARTBEAT` and forgets the ones ended `KEEP` ago; the stopped ids.
     pub fn tick(&self, now: Duration) -> Vec<String> {
+        self.tick_where(now, |_| true)
+    }
+
+    /// The same for `account`'s jobs alone: a clock turned for one account leaves the others' be.
+    pub fn tick_of(&self, account: &str, now: Duration) -> Vec<String> {
+        self.tick_where(now, |a| a == account)
+    }
+
+    fn tick_where(&self, now: Duration, mine: impl Fn(&str) -> bool) -> Vec<String> {
         let mut jobs = self.lock();
-        jobs.retain(|_, j| j.ended.is_none_or(|e| now.saturating_sub(e) <= KEEP));
+        jobs.retain(|_, j| {
+            !mine(&j.account) || j.ended.is_none_or(|e| now.saturating_sub(e) <= KEEP)
+        });
         let mut stopped = Vec::new();
-        for (id, j) in jobs.iter_mut() {
+        for (id, j) in jobs.iter_mut().filter(|(_, j)| mine(&j.account)) {
             if j.beat && j.ended.is_none() && now.saturating_sub(j.last_poll) > HEARTBEAT {
                 j.cancel.store(true, Ordering::Relaxed);
                 j.state = State::Failed {

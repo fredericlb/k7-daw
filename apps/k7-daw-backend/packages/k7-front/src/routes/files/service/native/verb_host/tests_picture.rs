@@ -245,7 +245,7 @@ async fn a_second_render_while_one_runs_is_refused_and_the_job_outlives_the_page
         (409, Some("a picture render is already running"))
     );
     // Nobody polls for ten minutes: a render is not stopped for it.
-    Table::global().tick(now() + Duration::from_secs(600));
+    Table::global().tick_of("pf", now() + Duration::from_secs(600));
     let job = a["job"].as_str().unwrap();
     let state = r.polled("pf", job).await;
     assert_eq!(state["state"], "running", "{state}");

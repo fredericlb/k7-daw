@@ -92,7 +92,7 @@ pub(super) async fn active_of(_c: &Call, ctx: &Ctx) -> Result<Option<String>, Bo
 /// The reads' lossy flag, counted once per read of the journal's file (1796).
 pub(super) fn count_lossy(ctx: &Ctx) {
     if Journals::global().take_lossy(&gate_root(ctx)).any() {
-        super::stats::Stats::bump(&super::stats::global().lossy);
+        super::stats::Stats::bump(&ctx.stats.lossy);
     }
 }
 

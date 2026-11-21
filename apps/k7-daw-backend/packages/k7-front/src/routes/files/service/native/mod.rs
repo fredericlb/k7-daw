@@ -98,6 +98,8 @@ pub struct Ctx {
     pub log: Log,
     /// What answering may hold at once (1057).
     pub gate: &'static answering::Gate,
+    /// Where its counts go: the process's own, a test's apart.
+    pub stats: &'static stats::Stats,
     /// Filled only for a docs tag.
     pub docs: Option<docs::Docs>,
     /// The origin's published versions, asked before the walk (1431); empty for any listing but the levels.
@@ -153,6 +155,7 @@ impl Ctx {
             account: req.slug.to_string(),
             log: req.log.clone(),
             gate: answering::global(),
+            stats: stats::global(),
             docs: (tag.piece() == Piece::Docs
                 || matches!(
                     tag,
@@ -192,7 +195,7 @@ impl Ctx {
 
     /// A decline said once per workspace and reason, noted for the refusal that follows (1010).
     pub fn declined(&self, why: &'static str) {
-        stats::global().say_declined(self, why);
+        self.stats.say_declined(self, why);
     }
 }
 

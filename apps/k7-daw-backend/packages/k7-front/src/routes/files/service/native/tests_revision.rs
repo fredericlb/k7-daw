@@ -88,7 +88,7 @@ async fn declines_a_library_project() {
     let dir = project("rev-declined", 1);
     let lines = Lines::default();
     let c = ctx(&dir, Tag::Revision, "", &lines);
-    let before = counted(&super::stats::global().declined);
+    let before = counted(&super::tests::stats_of(&dir).declined);
     std::fs::write(
         dir.join("home/workspace/.active-projects/songs"),
         "_libraries/x/p.k7",
@@ -96,7 +96,7 @@ async fn declines_a_library_project() {
     .unwrap();
     assert!(revision::answer(&c).await.is_none());
     std::fs::remove_file(dir.join("home/workspace/.active-projects/songs")).unwrap();
-    assert!(counted(&super::stats::global().declined) > before);
+    assert!(counted(&super::tests::stats_of(&dir).declined) > before);
     std::fs::remove_dir_all(dir).unwrap();
 }
 

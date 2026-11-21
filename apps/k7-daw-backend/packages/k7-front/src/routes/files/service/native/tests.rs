@@ -52,6 +52,7 @@ pub(super) fn ctx(dir: &std::path::Path, tag: Tag, rel: &str, lines: &Lines) -> 
         account: "acct".into(),
         log: log_to(lines),
         gate: super::answering::global(),
+        stats: stats_of(dir),
         docs: None,
         remote: None,
         verbs: None,
@@ -83,6 +84,19 @@ pub(super) async fn until(what: &str, f: impl Fn() -> bool) {
         assert!(std::time::Instant::now() < by, "never: {what}");
         tokio::time::sleep(Duration::from_millis(10)).await;
     }
+}
+
+/// The counts of every context made over `dir`: a test reads its own, never another's that runs beside it.
+pub(super) fn stats_of(dir: &std::path::Path) -> &'static super::stats::Stats {
+    static BY_DIR: Mutex<Vec<(std::path::PathBuf, &'static super::stats::Stats)>> =
+        Mutex::new(Vec::new());
+    let mut held = BY_DIR.lock().unwrap_or_else(|p| p.into_inner());
+    if let Some((_, s)) = held.iter().find(|(d, _)| d == dir) {
+        return s;
+    }
+    let s: &'static super::stats::Stats = Box::leak(Box::default());
+    held.push((dir.to_path_buf(), s));
+    s
 }
 
 pub(super) fn counted(c: &std::sync::atomic::AtomicU64) -> u64 {

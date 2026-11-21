@@ -379,18 +379,18 @@ async fn a_lossy_journal_read_is_counted_once_per_read_of_the_file() {
     b.plant(&journal);
     let list = b.ans(Tag::HistoryEntries, json!({})).await.1;
     assert_eq!(list[0]["label"], json!("a\u{fffd}b"));
-    assert_eq!(counted(&super::stats::global().lossy), 1);
+    assert_eq!(counted(&super::tests::stats_of(&b.dir).lossy), 1);
     b.ans(Tag::History, json!({})).await;
     b.ans(Tag::HistoryEntries, json!({})).await;
     assert_eq!(
-        counted(&super::stats::global().lossy),
+        counted(&super::tests::stats_of(&b.dir).lossy),
         1,
         "the same read, not counted again"
     );
     // A longer file is a new read.
     b.plant(&[&journal[..], b" "].concat());
     b.ans(Tag::History, json!({})).await;
-    assert_eq!(counted(&super::stats::global().lossy), 2);
-    assert!(super::stats::global().line().contains(" lossy=2 "));
+    assert_eq!(counted(&super::tests::stats_of(&b.dir).lossy), 2);
+    assert!(super::tests::stats_of(&b.dir).line().contains(" lossy=2 "));
     let _ = std::fs::remove_dir_all(&b.dir);
 }
