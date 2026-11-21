@@ -140,11 +140,12 @@ export function engineCommand(cmd: string, arg?: string): void {
   })();
 }
 
-const toastRefusal = (reason: string): void =>
+function toastRefusal(reason: string): void {
   showToast({
     message: m["engine.commandFailed"]({ reason }),
     variant: "error",
   });
+}
 
 /** The engine's state, pushed from the first frame on; null until one arrives, or when there is no engine here. */
 export function useDesktopEngine(): DesktopEngineState | null {
