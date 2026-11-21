@@ -486,6 +486,7 @@
   "engine.stoppedByYou": "Stopped — start it again when you need it",
   "engine.id": "Engine {id}",
   "engine.start": "Start",
+  "engine.probing": "Looking for this machine's engine…",
   "engine.stopTitle": "Stop the engine?",
   "engine.stopBody": "Every device playing through this engine loses its sound until you start it again.",
   "engine.commandFailed": "The engine did not take the command: {reason}",

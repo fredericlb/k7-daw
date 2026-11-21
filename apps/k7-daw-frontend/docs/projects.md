@@ -50,6 +50,10 @@ under it; App settings itself is a sub-page with its own Back and no tab bar.
 | no mini player and no engine slot on the home | the home plays nothing; engine state reaches a person as toasts, wherever they are |
 | no downloads button | a download is a task, and tasks are read in the Tasks & history panel |
 | the frame holds the command bar, the question host and the toasts | a camera mode, an armed delete or a toast outlives a page change |
+| a workspace's name folds its card, like the chevron; "Browse files" in the workspace menu opens its read-only tree | the name is the biggest target on the card, and the tree is a developer view that has no place behind it |
+| a card whose workspace waits for a merge disables New project, Delete and the project menus and says why on the card | a write refused after a dialog was filled in loses what was typed |
+| a new project opens as soon as it is made, unless it owes library modules, which the page then says | the new row would otherwise land somewhere in a long list, and the person would have to look for it |
+| the list has a filter field from six projects on, matching a project's path or a workspace's name; Help is in the page's ⋮ menu and a `help` command | a long list needs a way in, and the documentation was reachable only from inside a project |
 | the page column ends 144 px above the window's foot | the tab bar floats over it and must never cover the last row |
 
 The round button opens the command bar, which also finds workspaces and projects (`workspace open`, `project open`)
@@ -610,7 +614,8 @@ The workspace comes **last**, after the person's own, and is **not listed** once
 workspace of one's own: the demos are then the reference rather than the work. **Show examples**,
 in the ⋮ beside the page's heading (`ProjectsMenu.tsx`), brings it back. Until that toggle is used
 it is on only while Examples is the only workspace, since a new account's page would otherwise show
-nothing at all; once used, the browser keeps the choice.
+nothing at all; once used, the browser keeps the choice. While Examples is all there is it cannot be hidden (the
+item is disabled and says why), and the page's empty state, with New workspace and Clone from git, stands above its card.
 
 ### Renaming a project
 

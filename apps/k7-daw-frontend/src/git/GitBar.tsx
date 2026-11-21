@@ -266,7 +266,6 @@ export function CardGitPills({
   if (g.state && g.state.mode !== "connected" && !demo)
     return (
       <Button
-        size="sm"
         variant="glass"
         onClick={() => openConnect(workspace)}
         title={m["git.menuConnect"]()}
@@ -279,7 +278,7 @@ export function CardGitPills({
   if (!v.show || !v.remote) return null;
   if (v.merge !== null)
     return (
-      <Button size="sm" onClick={() => openConflict(workspace)}>
+      <Button onClick={() => openConflict(workspace)}>
         <GitMerge className="size-5" />
         {(v.merge === 1 ? m["git.mergeOpen.one"] : m["git.mergeOpen.other"])({
           n: v.merge,
@@ -305,7 +304,6 @@ export function CardGitPills({
     <>
       {(pulling || refused || v.toPull > 0) && (
         <Button
-          size="sm"
           variant="glass"
           aria-label={pulling ? m["git.card.pulling"]() : pullName}
           // Said, not disabled: a disabled button shows no tooltip, and this one has a reason to give.
@@ -339,7 +337,6 @@ export function CardGitPills({
       )}
       {(pulling || pushable) && (
         <Button
-          size="sm"
           variant="glass"
           aria-label={
             v.changed > 0

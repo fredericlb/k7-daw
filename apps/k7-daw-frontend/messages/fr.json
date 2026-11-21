@@ -486,6 +486,7 @@
   "engine.stoppedByYou": "Arrêté — relancez-le quand vous en avez besoin",
   "engine.id": "Moteur {id}",
   "engine.start": "Démarrer",
+  "engine.probing": "Recherche du moteur de cette machine…",
   "engine.stopTitle": "Arrêter le moteur ?",
   "engine.stopBody": "Tous les appareils qui jouent par ce moteur perdent le son jusqu'à ce que vous le redémarriez.",
   "engine.commandFailed": "Le moteur n'a pas pris la commande : {reason}",

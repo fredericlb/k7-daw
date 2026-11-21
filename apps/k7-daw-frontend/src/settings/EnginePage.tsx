@@ -4,6 +4,7 @@
 // the phone's own engine. See ../../docs/settings.md.
 
 import { askConfirm } from "@studio/project-shell/ask";
+import { Spinner } from "@studio/ui/spinner";
 import { Switch } from "@studio/ui/switch";
 import { m } from "../paraglide/messages.js";
 import { HomeShell } from "../projects/HomeFrame";
@@ -122,7 +123,11 @@ export function EnginePage() {
   return (
     <HomeShell>
       <PageFrame title={m["engine.title"]()} narrow back>
-        {here === undefined ? null : !here ? (
+        {here === undefined ? (
+          <div className="type-secondary flex items-center gap-2 text-fg-2">
+            <Spinner /> {m["engine.probing"]()}
+          </div>
+        ) : !here ? (
           <div className="flex min-w-0 flex-col gap-4">
             {/* On the phone the app is the engine's machine: this is where its engine is set. */}
             {onAndroid ? (
