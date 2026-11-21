@@ -1,5 +1,6 @@
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import * as React from "react";
+import { reasonOf, showReason } from "./disabled-reason";
 import { cn } from "./lib/utils";
 
 const DropdownMenu = DropdownMenuPrimitive.Root;
@@ -28,16 +29,23 @@ DropdownMenuContent.displayName = DropdownMenuPrimitive.Content.displayName;
 const DropdownMenuItem = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item>
->(({ className, ...props }, ref) => (
-  <DropdownMenuPrimitive.Item
-    ref={ref}
-    className={cn(
-      "type-body relative flex min-h-11 cursor-pointer select-none items-center gap-2.5 rounded-xl px-3 py-2 outline-none transition-colors focus:bg-on-fill data-[disabled]:pointer-events-none data-[disabled]:opacity-40 [&_svg]:size-[19px] [&_svg]:text-primary-text",
-      className,
-    )}
-    {...props}
-  />
-));
+>(({ className, ...props }, ref) => {
+  // A disabled item with a reason stays selectable (aria-disabled); choosing it shows the reason.
+  const reason = reasonOf(props.disabled, props.title);
+  const { disabled: _d, onSelect: _s, ...rest } = props;
+  return (
+    <DropdownMenuPrimitive.Item
+      ref={ref}
+      className={cn(
+        "type-body relative flex min-h-11 cursor-pointer select-none items-center gap-2.5 rounded-xl px-3 py-2 outline-none transition-colors focus:bg-on-fill data-[disabled]:pointer-events-none data-[disabled]:opacity-40 aria-disabled:opacity-40 [&_svg]:size-[19px] [&_svg]:text-primary-text",
+        className,
+      )}
+      {...(reason
+        ? { ...rest, "aria-disabled": true, onSelect: () => showReason(reason) }
+        : props)}
+    />
+  );
+});
 DropdownMenuItem.displayName = DropdownMenuPrimitive.Item.displayName;
 
 const DropdownMenuLabel = React.forwardRef<
