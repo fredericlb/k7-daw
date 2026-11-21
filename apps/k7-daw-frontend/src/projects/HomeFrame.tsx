@@ -16,7 +16,12 @@ import { lazy, type ReactNode, Suspense, useMemo, useState } from "react";
 import { useHref, useLocation, useNavigate } from "react-router-dom";
 import { AskHostK7 } from "../AskHostK7";
 import { m } from "../paraglide/messages.js";
-import { LIBRARIES_ROUTE, SETTINGS_ROUTE, SURFACES_ROUTE, TASKS_ROUTE } from "./api";
+import {
+  LIBRARIES_ROUTE,
+  SETTINGS_ROUTE,
+  SURFACES_ROUTE,
+  TASKS_ROUTE,
+} from "./api";
 import { HomeCommandBar, HomeCommandsButton } from "./HomeCommandBar";
 import { HelpContext } from "./homeHelp";
 import { usePluginScanToast } from "./usePluginScanToast";
