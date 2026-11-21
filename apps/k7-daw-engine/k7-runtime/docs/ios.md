@@ -146,6 +146,35 @@ root (`stageCodeRoot.mjs`). Every run writes `build/staged/version.xcconfig`, th
 | no Quit on iOS, in k7's settings or the tray | review refuses an app that ends its own process; an engine starts again when the person closes k7 and opens it |
 | `ITSAppUsesNonExemptEncryption` false | the app uses only standard protocols (TLS, SSH, signatures) through the system and its libraries, which the export rules exempt; without the key every upload asks |
 
+## TestFlight
+
+`apps/k7-daw-ios/scripts/testflight.sh` stages a device build, archives it in Release and uploads it to App Store Connect
+for the team's internal testers.
+
+Set up once:
+
+- a paid Apple Developer Program team;
+- an App Store Connect app record for the bundle id `se.frediver.k7.daw`;
+- the App ID's iCloud capability for key-value storage, which automatic signing with `-allowProvisioningUpdates` adds;
+- an internal tester group on that record;
+- an App Store Connect API key with the App Manager role, its `.p8` kept in `~/.appstoreconnect/private_keys/`.
+
+```
+K7_IOS_TEAM=<team id> K7_ASC_KEY_ID=<key id> K7_ASC_ISSUER=<issuer id> \
+  apps/k7-daw-ios/scripts/testflight.sh [--no-stage] [--export-only] [--allow-dirty] [--dry-run]
+```
+
+`K7_ASC_KEY_PATH` names the `.p8` when it is not at the default path, and `K7_GITHUB_CLIENT_ID` is baked into the build
+for Sign in with GitHub. `--no-stage` reuses the last staging, `--export-only` writes the `.ipa` and uploads nothing
+(no API key needed), `--allow-dirty` builds an uncommitted tree, `--dry-run` prints the `xcodebuild` commands and runs none.
+
+| choice | why |
+|---|---|
+| internal testing only (`testFlightInternalTestingOnly`) | no Beta App Review, and a build cannot slip to external testers |
+| the API key rather than an Xcode sign-in | one command and no Xcode window; the script passes only the key's path, never its content |
+| a dirty tree refused | the build number names a commit, and a build from other files would carry a number that is not its own |
+| archives kept per build number under `~/.cache/k7-ios-testflight` | the archive holds the symbols a crash report is read with |
+
 ## On a phone
 
 The kit is `apps/k7-daw-ios/scripts/device.sh`: a build signed by the developer's own team and reinstalled from the Mac (a free
@@ -239,9 +268,9 @@ libgit2 is linked into `libk7_embed.a` with its own transports (`apps/k7-daw-bac
   so a render continues with the app behind.
 - **Not run on a phone**, only on the simulator (below); the kit and its checklist are "On a phone". The
   local-network prompt is compiled, not driven; the flows under "Proven on the simulator" are.
-- **No release signing.** No CI job builds the iPhone app: a developer builds it in Xcode, signed by the
-  developer's own team.
-- **No updates**: a new build is installed from Xcode.
+- **TestFlight builds come from the script above, run by hand on the Mac.** No CI job builds the iPhone app, and the
+  App Store itself is not submitted to.
+- **No in-app updates**: a tester installs a new build from TestFlight, and a build expires after 90 days.
 - **Stem separation is on the CPU**, ONNX Runtime linked statically (`apps/k7-daw-engine/k7-supervisor/docs/supervisor.md`, "A cut on a phone"); a cut's time and memory on a phone are not measured.
 - **No picture render, `ffmpeg`, whisper or `--decode`**: no app may start a process; each member that needs one says so (above).
 
