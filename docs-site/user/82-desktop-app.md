@@ -109,7 +109,7 @@ A phone or tablet on the same network can drive the engine once you approve it. 
 
 ## Where K7 DAW keeps your files
 
-Your workspaces and preferences go into the operating system's folder for K7 DAW's data (`org.parapluie.studio.engine-tray`, for example `%APPDATA%` on Windows):
+Your workspaces and preferences go into the operating system's folder for K7 DAW's data (`rocks.k7.daw`, for example `%APPDATA%` on Windows):
 
 | Inside that folder | What it holds |
 |---|---|

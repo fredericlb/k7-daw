@@ -45,7 +45,7 @@ npm run dev --workspace k7-desktop      # tauri dev
 npm run build --workspace k7-desktop    # the installers
 ```
 
-`apps/k7-daw-desktop/scripts/stage.mjs` builds the resources: the backend bundle, `bin/` from `stageEngine`, and node. The bundle identifier `org.parapluie.studio.engine-tray` must not change: Windows and Linux key the install on it, and the OS's data folder is named after it. The engine and supervisor must have been built first ([87](./87-engine-build-and-shipping.md)). `cargo test` in `apps/k7-daw-desktop/src-tauri` and `npx vitest run src/localEngine` in `apps/k7/backend` are the unit tests; `apps/k7-daw-desktop/AGENTS.md` gives the behavioural check.
+`apps/k7-daw-desktop/scripts/stage.mjs` builds the resources: the backend bundle, `bin/` from `stageEngine`, and node. The bundle identifier `rocks.k7.daw` names the OS's data folder and keys the Windows and Linux install; `src-tauri/src/idmove.rs` moves the folders of the old identifier at startup (`apps/k7-daw-desktop/docs/app.md`). The engine and supervisor must have been built first ([87](./87-engine-build-and-shipping.md)). `cargo test` in `apps/k7-daw-desktop/src-tauri` and `npx vitest run src/localEngine` in `apps/k7/backend` are the unit tests; `apps/k7-daw-desktop/AGENTS.md` gives the behavioural check.
 
 ## `apps/k7-daw-android`
 

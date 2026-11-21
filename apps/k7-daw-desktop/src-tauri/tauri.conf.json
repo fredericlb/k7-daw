@@ -3,7 +3,7 @@
   "productName": "K7 DAW",
   "mainBinaryName": "k7-desktop",
   "version": "../../../package.json",
-  "identifier": "org.parapluie.studio.engine-tray",
+  "identifier": "rocks.k7.daw",
   "build": {
     "frontendDist": "../ui"
   },

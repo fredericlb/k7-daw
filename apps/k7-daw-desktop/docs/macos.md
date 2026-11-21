@@ -5,7 +5,7 @@ K7 DAW is the Mac's k7: Apple silicon, macOS 13 or later.
 | choice | why |
 |---|---|
 | Apple silicon only, macOS 13 as the floor | AudioWorklet, WKDownload and the media-capture delegate are there; an Intel Mac was never served |
-| the same bundle identifier as the other desktop builds | the dev session's data already lives under it, and a Developer ID signature does not care about the prefix |
+| the same bundle identifier as the other desktop builds | one identifier names the data folder on every OS, and a Developer ID signature does not care about the prefix |
 | a regular app (Dock icon, app menu, Cmd-Q) | `docs/desktop.md` |
 | targets `app` and `dmg` | the DMG is the download |
 
