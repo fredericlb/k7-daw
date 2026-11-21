@@ -44,7 +44,9 @@ const CAMERA_MODE_COMMAND: HomeCommandSpec = {
     {
       name: "name",
       kind: "text",
-      hint: "the name projects list it under — this device's, left blank",
+      get hint() {
+        return msg["hc.hint.cameraName"]();
+      },
       optional: true,
     },
   ],
@@ -57,7 +59,15 @@ export const HOME_COMMANDS: HomeCommandSpec[] = [
       en: "Find a workspace and open its files",
       fr: "Trouver un espace de travail et ouvrir ses fichiers",
     },
-    args: [{ name: "workspace", kind: "choice", hint: "a workspace's name" }],
+    args: [
+      {
+        name: "workspace",
+        kind: "choice",
+        get hint() {
+          return msg["hc.hint.workspace"]();
+        },
+      },
+    ],
   },
   {
     canonical: "project open",
@@ -69,7 +79,9 @@ export const HOME_COMMANDS: HomeCommandSpec[] = [
       {
         name: "project",
         kind: "choice",
-        hint: "workspace/project, as listed",
+        get hint() {
+          return msg["hc.hint.projectRef"]();
+        },
       },
     ],
   },
@@ -88,7 +100,9 @@ export const HOME_COMMANDS: HomeCommandSpec[] = [
       {
         name: "name",
         kind: "text",
-        hint: "its name — the folder gets the .k7 suffix",
+        get hint() {
+          return msg["hc.hint.projectName"]();
+        },
       },
     ],
   },
@@ -99,12 +113,26 @@ export const HOME_COMMANDS: HomeCommandSpec[] = [
       fr: "Copier un projet vers un autre espace de travail",
     },
     args: [
-      { name: "name", kind: "file", hint: "a project of the open workspace" },
-      { name: "workspace", kind: "choice", hint: "where the copy lands" },
+      {
+        name: "name",
+        kind: "file",
+        get hint() {
+          return msg["hc.hint.projectOfWs"]();
+        },
+      },
+      {
+        name: "workspace",
+        kind: "choice",
+        get hint() {
+          return msg["hc.hint.destination"]();
+        },
+      },
       {
         name: "new_name",
         kind: "text",
-        hint: "the copy's name — the source's, left blank",
+        get hint() {
+          return msg["hc.hint.copyName"]();
+        },
         optional: true,
       },
     ],
@@ -116,11 +144,19 @@ export const HOME_COMMANDS: HomeCommandSpec[] = [
       fr: "Renommer un projet",
     },
     args: [
-      { name: "name", kind: "file", hint: "a project of the open workspace" },
+      {
+        name: "name",
+        kind: "file",
+        get hint() {
+          return msg["hc.hint.projectOfWs"]();
+        },
+      },
       {
         name: "new_name",
         kind: "text",
-        hint: "its new name — the suffix is kept",
+        get hint() {
+          return msg["hc.hint.newName"]();
+        },
       },
     ],
   },
@@ -132,7 +168,13 @@ export const HOME_COMMANDS: HomeCommandSpec[] = [
       fr: "Désigner le projet à supprimer, et dire ce que ça fait",
     },
     args: [
-      { name: "name", kind: "file", hint: "a project of the open workspace" },
+      {
+        name: "name",
+        kind: "file",
+        get hint() {
+          return msg["hc.hint.projectOfWs"]();
+        },
+      },
     ],
   },
   {
@@ -141,7 +183,23 @@ export const HOME_COMMANDS: HomeCommandSpec[] = [
       en: "Delete the project just named",
       fr: "Supprimer le projet désigné",
     },
-    args: [{ name: "name", kind: "file", hint: "the same project again" }],
+    args: [
+      {
+        name: "name",
+        kind: "file",
+        get hint() {
+          return msg["hc.hint.sameAgain"]();
+        },
+      },
+    ],
+  },
+  {
+    canonical: "help",
+    readable: {
+      en: "Open the documentation",
+      fr: "Ouvrir la documentation",
+    },
+    args: [],
   },
   ...(CAMERA_MODE_LISTED ? [CAMERA_MODE_COMMAND] : []),
   {
@@ -154,7 +212,9 @@ export const HOME_COMMANDS: HomeCommandSpec[] = [
       {
         name: "name",
         kind: "text",
-        hint: "its name — the folder takes it, and it starts empty",
+        get hint() {
+          return msg["hc.hint.workspaceName"]();
+        },
       },
     ],
   },
@@ -291,6 +351,8 @@ export interface HomeDeps extends HomeContext {
   armed: { current: ArmedDelete | null };
   /** Turn this device into a camera under that name, null for its own — or the sentence saying why it cannot. */
   cameraMode?: (name: string | null) => string | null;
+  /** Open the documentation over the page. */
+  help?: () => void;
   /** Go to a workspace's files, or to one of its projects. */
   open?: (workspace: string, project?: RepoProject) => void;
 }
@@ -331,8 +393,12 @@ export async function runHomeCommand(
       const cut = rest.indexOf("/");
       const ws = d.workspaces.find((w) => w.name === rest.slice(0, cut));
       const p = ws && cut > 0 ? findProject(ws, rest.slice(cut + 1)) : null;
-      if (!ws || !p)
-        return use(d.refuse, msg["hc.noWorkspaceNamed"]({ name: rest }));
+      if (!ws)
+        return use(
+          d.refuse,
+          msg["hc.noWorkspaceNamed"]({ name: rest.slice(0, cut) || rest }),
+        );
+      if (!p) return use(d.refuse, projectGripe(ws, rest.slice(cut + 1)));
       d.open?.(ws.name, p);
       return true;
     }
@@ -340,8 +406,7 @@ export async function runHomeCommand(
     case "project new": {
       const [type, ...words] = rest.split(/\s+/).filter(Boolean);
       const name = words.join(" ");
-      if (!type || !name)
-        return use(d.refuse, "usage: project new <type> <name>");
+      if (!type || !name) return use(d.refuse, msg["hc.usage.projectNew"]());
       if (!(PROJECT_SHAPES as readonly string[]).includes(type))
         return use(
           d.refuse,
@@ -368,21 +433,22 @@ export async function runHomeCommand(
                 project,
                 modules: missing.join(", "),
               })
-            : `+ ${found.ws.name}/${project}`,
+            : msg["hc.projectMade"]({ path: `${found.ws.name}/${project}` }),
         );
       } catch (e) {
-        d.refuse(`project new: ${(e as Error).message}`);
+        d.refuse(
+          msg["hc.failed"]({
+            command: "project new",
+            reason: (e as Error).message,
+          }),
+        );
       }
       return true;
     }
 
     case "project copy": {
       const [name, to, ...words] = rest.split(/\s+/).filter(Boolean);
-      if (!name || !to)
-        return use(
-          d.refuse,
-          "usage: project copy <project> <workspace> [name of the copy]",
-        );
+      if (!name || !to) return use(d.refuse, msg["hc.usage.projectCopy"]());
       const found = resolveWorkspace(d);
       if ("error" in found) return use(d.refuse, found.error);
       const p = findProject(found.ws, name);
@@ -403,9 +469,14 @@ export async function runHomeCommand(
       try {
         await d.acts.copy(m, found.ws.name, p.path, dest.name, folder, d.say);
         d.changed();
-        d.say(`+ ${to}/${folder}`);
+        d.say(msg["hc.copied"]({ path: `${to}/${folder}` }));
       } catch (e) {
-        d.refuse(`project copy: ${(e as Error).message}`);
+        d.refuse(
+          msg["hc.failed"]({
+            command: "project copy",
+            reason: (e as Error).message,
+          }),
+        );
       }
       return true;
     }
@@ -414,7 +485,7 @@ export async function runHomeCommand(
       const [name, ...words] = rest.split(/\s+/).filter(Boolean);
       const label = words.join(" ");
       if (!name || !label)
-        return use(d.refuse, "usage: project rename <project> <new name>");
+        return use(d.refuse, msg["hc.usage.projectRename"]());
       const found = resolveWorkspace(d);
       if ("error" in found) return use(d.refuse, found.error);
       const p = findProject(found.ws, name);
@@ -429,15 +500,20 @@ export async function runHomeCommand(
       try {
         await d.acts.rename(m, found.ws.name, p.path, folder, d.say);
         d.changed();
-        d.say(`${p.path} → ${folder}`);
+        d.say(msg["hc.renamed"]({ from: p.path, to: folder }));
       } catch (e) {
-        d.refuse(`project rename: ${(e as Error).message}`);
+        d.refuse(
+          msg["hc.failed"]({
+            command: "project rename",
+            reason: (e as Error).message,
+          }),
+        );
       }
       return true;
     }
 
     case "project delete init": {
-      if (!rest) return use(d.refuse, "usage: project delete init <project>");
+      if (!rest) return use(d.refuse, msg["hc.usage.deleteInit"]());
       const found = resolveWorkspace(d);
       if ("error" in found) return use(d.refuse, found.error);
       const p = findProject(found.ws, rest);
@@ -449,8 +525,7 @@ export async function runHomeCommand(
     }
 
     case "project delete confirm": {
-      if (!rest)
-        return use(d.refuse, "usage: project delete confirm <project>");
+      if (!rest) return use(d.refuse, msg["hc.usage.deleteConfirm"]());
       if (!armed) return use(d.refuse, msg["hc.nothingArmed"]({ name: rest }));
       const found = resolveWorkspace(d);
       if ("error" in found) return use(d.refuse, found.error);
@@ -468,12 +543,21 @@ export async function runHomeCommand(
       try {
         await d.acts.remove(m, armed.workspace, p.path, d.say);
         d.changed();
-        d.say(`− ${armed.workspace}/${p.path}`);
+        d.say(msg["hc.deleted"]({ path: `${armed.workspace}/${p.path}` }));
       } catch (e) {
-        d.refuse(`project delete: ${(e as Error).message}`);
+        d.refuse(
+          msg["hc.failed"]({
+            command: "project delete",
+            reason: (e as Error).message,
+          }),
+        );
       }
       return true;
     }
+
+    case "help":
+      d.help?.();
+      return true;
 
     case "camera mode": {
       if (!d.cameraMode) return use(d.refuse, msg["hc.cameraUnavailable"]());
@@ -482,7 +566,7 @@ export async function runHomeCommand(
     }
 
     case "system workspace new": {
-      if (!rest) return use(d.refuse, "usage: system workspace new <name>");
+      if (!rest) return use(d.refuse, msg["hc.usage.workspaceNew"]());
       const { folder, error } = workspaceFolderName(rest);
       if (error) return use(d.refuse, error);
       const m = machineOf(d);
@@ -493,7 +577,12 @@ export async function runHomeCommand(
         // Said out loud: it holds nothing, and the editor is where the first project is chosen.
         d.say(msg["hc.workspaceMade"]({ workspace }));
       } catch (e) {
-        d.refuse(`system workspace new: ${(e as Error).message}`);
+        d.refuse(
+          msg["hc.failed"]({
+            command: "system workspace new",
+            reason: (e as Error).message,
+          }),
+        );
       }
       return true;
     }

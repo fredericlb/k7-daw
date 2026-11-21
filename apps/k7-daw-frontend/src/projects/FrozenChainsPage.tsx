@@ -78,7 +78,8 @@ function Row({
     : [
         ...(input ? [input] : []),
         ...chain.steps.map(
-          (s) => `${s.module.split("/").pop()}${s.bypass ? " (bypass)" : ""}`,
+          (s) =>
+            `${s.module.split("/").pop()}${s.bypass ? m["frozen.bypass"]() : ""}`,
         ),
       ].join(" → ");
   // The bench plays it live, so a chain that cannot run live is edited nowhere: the reason says why.
@@ -118,7 +119,7 @@ function Row({
       </span>
       {onEdit && (
         <Button
-          size="icon-sm"
+          size="icon"
           variant="ghost"
           disabled={!!chain.liveRefusal}
           onClick={onEdit}
@@ -129,10 +130,10 @@ function Row({
         </Button>
       )}
       <Button
-        size="icon-sm"
+        size="icon"
         variant="ghost"
         onClick={onCopy}
-        aria-label={m["frozen.duplicate"]()}
+        aria-label={m["frozen.duplicateNamed"]({ name: chain.name })}
         title={m["frozen.duplicate"]()}
       >
         <Copy className="size-5" />
@@ -147,10 +148,10 @@ function Row({
       )}
       {onDelete && (
         <Button
-          size="icon-sm"
+          size="icon"
           variant="ghost"
           onClick={onDelete}
-          aria-label={m["frozen.delete"]()}
+          aria-label={m["frozen.deleteNamed"]({ name: chain.name })}
           title={m["frozen.delete"]()}
         >
           <Trash2 className="size-5" />
@@ -248,10 +249,12 @@ export function FrozenChainsSection({ files }: { files: AccountFiles | null }) {
         initial: copyName(c.name, taken),
         placeholder: m["frozen.namePlaceholder"](),
         confirmLabel: m["frozen.duplicate"](),
+        // A bad name is said in the dialog, which stays open with what was typed.
+        validate: (v) =>
+          FROZEN_NAME.test(v.trim()) ? "" : m["frozen.badName"](),
       })
     )?.trim();
     if (!name) return;
-    if (!FROZEN_NAME.test(name)) return setError(m["frozen.badName"]());
     setError(null);
     try {
       await accountFiles.copyFrozenChain(files, c.ref, name);

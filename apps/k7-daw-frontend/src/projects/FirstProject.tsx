@@ -18,9 +18,11 @@ export function FirstProject({
   workspace,
   /** Re-runs the gate's whole resolve, so what opens is what the file service now holds. */
   onCreated,
+  onBack,
 }: {
   workspace: string;
   onCreated: () => void;
+  onBack: () => void;
 }) {
   const [name, setName] = useState("");
   const [shape, setShape] = useState<ProjectShape>("arrangement");
@@ -87,7 +89,10 @@ export function FirstProject({
           </p>
         )}
 
-        <div className="flex justify-end">
+        <div className="flex items-center justify-between gap-3">
+          <Button variant="ghost" onClick={onBack}>
+            {m["project.backToProjects"]()}
+          </Button>
           {owed ? (
             <Button onClick={onCreated}>{m["common.continue"]()}</Button>
           ) : (

@@ -67,6 +67,8 @@ export function ProjectGate({
   renderEmpty?: (ctx: {
     workspace: string;
     onCreated: () => void;
+    /** Leaves the gate, as every other screen's Back does. */
+    onBack: () => void;
   }) => ReactNode;
   /** What to draw when the account has NO library — k7 puts the card that adds one here; `onAdded` re-runs the resolve. */
   renderNoLibraries?: (ctx: { onAdded: () => void }) => ReactNode;
@@ -162,7 +164,11 @@ export function ProjectGate({
     // What a first project IS — which archetype, which suffix — is the app's vocabulary, so the app draws the wizard.
     case "empty":
       return renderEmpty ? (
-        renderEmpty({ workspace: phase.workspace, onCreated: resume })
+        renderEmpty({
+          workspace: phase.workspace,
+          onCreated: resume,
+          onBack: quit,
+        })
       ) : (
         <EmptyWorkspaceScreen strings={strings} onBack={quit} />
       );
@@ -179,6 +185,6 @@ export function ProjectGate({
         />
       );
     default:
-      return <GateSpinner />;
+      return <GateSpinner label={strings.opening ?? OPENING} />;
   }
 }

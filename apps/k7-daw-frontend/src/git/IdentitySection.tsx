@@ -2,30 +2,32 @@
 // It saves itself (debounced, and on blur), with a quiet note. One identity per device, shared with the commit dialog through ./identity (apps/k7-daw-backend/docs/files/git.md).
 
 import { Input } from "@studio/ui/input";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { m } from "../paraglide/messages.js";
-import { findAccountFiles } from "../settings/accountFiles";
 import { Row, Section } from "../settings/Section";
+import { useAccountFiles } from "../settings/useAccountFiles";
 import { explain, type GitTransport } from "./gitApi";
 import { saveIdentity, useIdentity } from "./identity";
 import { accountTransport } from "./transports";
 
+/** How long "Saved" stays beside the field. */
+const SAVED_FLASH_MS = 3000;
+
 export function IdentitySection() {
   const known = useIdentity();
-  const [t, setT] = useState<GitTransport | null>(null);
+  const files = useAccountFiles();
+  const t = useMemo<GitTransport | null>(
+    () => (files ? accountTransport(files) : null),
+    [files],
+  );
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [said, setSaid] = useState("");
-
-  useEffect(() => {
-    let live = true;
-    void findAccountFiles(false).then((files) => {
-      if (live && files) setT(accountTransport(files));
-    });
-    return () => {
-      live = false;
-    };
-  }, []);
+  // What the last save came to, and which field it is said under; "Saved" fades by itself.
+  const [said, setSaid] = useState<{
+    field: "name" | "email";
+    text: string;
+    error: boolean;
+  } | null>(null);
 
   // A save made elsewhere (the commit dialog) lands here too.
   useEffect(() => {
@@ -40,17 +42,29 @@ export function IdentitySection() {
     if (name.trim() === known.name && email.trim() === known.email) return;
     try {
       await saveIdentity(t, { name, email });
-      setSaid(m["git.identitySaved"]());
+      setSaid({ field: "email", text: m["git.identitySaved"](), error: false });
     } catch (e) {
-      setSaid(explain(e));
+      // The route names no field: an empty name is the name's, anything else the email's.
+      setSaid({
+        field: name.trim() ? "email" : "name",
+        text: explain(e),
+        error: true,
+      });
     }
   };
   // The latest save, so a timer set by an older render never writes older text.
   const latest = useRef(save);
   latest.current = save;
+  // "Saved" is a flash: it goes after a moment, and an error goes with the next edit.
+  useEffect(() => {
+    if (!said || said.error) return;
+    const id = setTimeout(() => setSaid(null), SAVED_FLASH_MS);
+    return () => clearTimeout(id);
+  }, [said]);
   // An edit saves itself once the typing pauses; leaving a field saves at once.
   useEffect(() => {
     if (!known) return;
+    setSaid((s) => (s?.error ? null : s));
     const id = setTimeout(() => void latest.current(), 800);
     return () => clearTimeout(id);
   }, [name, email, known]);
@@ -58,7 +72,11 @@ export function IdentitySection() {
   const ready = known !== null;
   return (
     <Section title={m["git.identityTitle"]()} hint={m["git.identityHint"]()}>
-      <Row label={m["git.identityName"]()}>
+      <Row
+        label={m["git.identityName"]()}
+        detail={said?.field === "name" && !said.error ? said.text : undefined}
+        error={said?.field === "name" && said.error ? said.text : undefined}
+      >
         <Input
           aria-label={m["git.identityName"]()}
           value={name}
@@ -67,7 +85,11 @@ export function IdentitySection() {
           onBlur={() => void save()}
         />
       </Row>
-      <Row label={m["git.identityEmail"]()} detail={said || undefined}>
+      <Row
+        label={m["git.identityEmail"]()}
+        detail={said?.field === "email" && !said.error ? said.text : undefined}
+        error={said?.field === "email" && said.error ? said.text : undefined}
+      >
         <Input
           aria-label={m["git.identityEmail"]()}
           value={email}

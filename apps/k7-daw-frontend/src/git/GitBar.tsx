@@ -15,6 +15,8 @@ import {
 } from "@studio/ui/icons";
 import { useEffect, useState } from "react";
 import { m } from "../paraglide/messages.js";
+import { getLocale } from "../paraglide/runtime.js";
+import { editedAgo } from "../projects/projectKind";
 import { useGitTransport } from "./GitContext";
 import type { GitTransport } from "./gitApi";
 import { openCommitAndPush, openConflict, openConnect } from "./gitScreens";
@@ -239,7 +241,10 @@ export function CardPullBar({
         <div className="h-full w-1/3 animate-pulse rounded-[3px] bg-(--k7-progress-fill)" />
       </div>
       <span className="type-status text-fg-3">
-        {m["git.card.merging"]({ branch: v.branch })}
+        {m["git.card.pullingFrom"]({
+          branch: v.branch,
+          remote: v.remote ? remoteName(v.remote) : "",
+        })}
       </span>
     </div>
   );
@@ -261,7 +266,6 @@ export function CardGitPills({
   if (g.state && g.state.mode !== "connected" && !demo)
     return (
       <Button
-        size="sm"
         variant="glass"
         onClick={() => openConnect(workspace)}
         title={m["git.menuConnect"]()}
@@ -274,7 +278,7 @@ export function CardGitPills({
   if (!v.show || !v.remote) return null;
   if (v.merge !== null)
     return (
-      <Button size="sm" onClick={() => openConflict(workspace)}>
+      <Button onClick={() => openConflict(workspace)}>
         <GitMerge className="size-5" />
         {(v.merge === 1 ? m["git.mergeOpen.one"] : m["git.mergeOpen.other"])({
           n: v.merge,
@@ -289,14 +293,17 @@ export function CardGitPills({
   if (!pulling && !refused && v.toPull === 0 && !pushable)
     return (
       <span role="status" className="type-secondary shrink-0 text-fg-2">
-        {m["git.card.upToDate"]()}
+        {g.state?.lastFetch?.at
+          ? m["git.card.checkedAgo"]({
+              when: editedAgo(g.state.lastFetch.at, Date.now(), getLocale()),
+            })
+          : m["git.card.upToDate"]()}
       </span>
     );
   return (
     <>
       {(pulling || refused || v.toPull > 0) && (
         <Button
-          size="sm"
           variant="glass"
           aria-label={pulling ? m["git.card.pulling"]() : pullName}
           // Said, not disabled: a disabled button shows no tooltip, and this one has a reason to give.
@@ -330,7 +337,6 @@ export function CardGitPills({
       )}
       {(pulling || pushable) && (
         <Button
-          size="sm"
           variant="glass"
           aria-label={
             v.changed > 0

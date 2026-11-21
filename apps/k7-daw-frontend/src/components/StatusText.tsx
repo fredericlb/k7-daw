@@ -30,7 +30,7 @@ export function StatusText({
       className={cn(
         "truncate",
         // Only when the app's OWN last word was a refusal: a menu hint borrows this line and is nobody's verdict.
-        !hint && refused && "text-amber-400",
+        !hint && refused && "text-warn",
       )}
     >
       {shown}

@@ -1,4 +1,4 @@
-// MetronomeButton.tsx — the bar's click toggle, with its LEVEL under a right-click. Two
+// MetronomeButton.tsx — the bar's click toggle, with its LEVEL under a right-click or a press and hold. Two
 // questions on one control: whether the metronome sounds (the click) and how loud (the menu).
 // Both are project settings written to settings.k7x; see @studio/song docs/metronome.md.
 
@@ -14,10 +14,15 @@ import {
   type MouseEvent as ReactMouseEvent,
   type PointerEvent as ReactPointerEvent,
   useEffect,
+  useRef,
   useState,
 } from "react";
 import { m } from "../paraglide/messages.js";
 import { MetronomeIcon } from "../shellMeta";
+
+/** A touch screen as the main pointer: there the level is behind a press and hold, not a right click. */
+const coarse = (): boolean =>
+  typeof matchMedia === "function" && matchMedia("(pointer: coarse)").matches;
 
 export function MetronomeButton({
   on,
@@ -33,6 +38,13 @@ export function MetronomeButton({
   onLevel: (level: number) => void;
 }) {
   const [open, setOpen] = useState(false);
+  // A press and hold opens the level on touch, where there is no right click; the release then is not a toggle.
+  const holdTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const held = useRef(false);
+  const endHold = () => {
+    if (holdTimer.current) clearTimeout(holdTimer.current);
+    holdTimer.current = null;
+  };
   /** What the slider shows while it is being dragged — the command rewrites settings.k7x, so it goes on RELEASE. */
   const [dragging, setDragging] = useState<number | null>(null);
   const shown = dragging ?? level;
@@ -55,9 +67,22 @@ export function MetronomeButton({
       <DropdownMenuTrigger asChild>
         <CapsuleButton
           pressed={on}
-          onClick={onToggle}
+          onClick={() => {
+            if (held.current) return;
+            onToggle();
+          }}
           // Radix's trigger opens on POINTERDOWN, so a left click would toggle and open the menu at once; a cancelled pointerdown skips it and leaves the click.
-          onPointerDown={(e: ReactPointerEvent) => e.preventDefault()}
+          onPointerDown={(e: ReactPointerEvent) => {
+            e.preventDefault();
+            held.current = false;
+            if (e.pointerType === "mouse") return;
+            holdTimer.current = setTimeout(() => {
+              held.current = true;
+              setOpen(true);
+            }, 500);
+          }}
+          onPointerUp={endHold}
+          onPointerLeave={endHold}
           onKeyDown={(e: ReactKeyboardEvent) => {
             // Its own two keys, for the same reason; ArrowDown is left to the trigger, as the way to the level without a mouse.
             if (e.key !== "Enter" && e.key !== " ") return;
@@ -69,7 +94,7 @@ export function MetronomeButton({
             e.preventDefault();
             setOpen(true);
           }}
-          title={m["metro.hint"]({
+          title={m[coarse() ? "metro.hintTouch" : "metro.hint"]({
             name: m["transport.metronome"](),
             level: Math.round(level * 100),
           })}
@@ -80,7 +105,7 @@ export function MetronomeButton({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56 p-3">
         <label className="flex items-center gap-2 text-xs">
-          volume
+          {m["metro.volume"]()}
           <input
             type="range"
             min={METRONOME_MIN}

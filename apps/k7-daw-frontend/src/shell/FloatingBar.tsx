@@ -35,6 +35,7 @@ import { m } from "../paraglide/messages.js";
 import { TransportClock } from "../shellMeta";
 import { TOOLS, type Tool } from "../timelineTools";
 import type { ShellLayout } from "../useIsMobile";
+import { summonChord } from "./modKey";
 import { OutputRecordButton } from "./OutputRecordButton";
 import { ShellTransport } from "./ShellTransport";
 import { TempoMeter } from "./TempoMeter";
@@ -135,7 +136,10 @@ export function FloatingBar({
       type="button"
       onClick={onCommandBar}
       aria-label={label}
-      title={`${m["commandBar.list"]()} (Ctrl+Shift+P)`}
+      title={m["shell.commandBar.tip"]({
+        name: m["commandBar.list"](),
+        keys: summonChord(),
+      })}
       className="float pointer-events-auto grid size-14 shrink-0 cursor-pointer place-items-center rounded-full text-foreground outline-none focus-visible:shadow-(--k7-focus-ring) [&_svg]:size-6"
     >
       <SquareTerminal />

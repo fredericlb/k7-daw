@@ -45,7 +45,7 @@ export function TempoMeter({
           })
         }
       >
-        {recInfo.tempo} bpm
+        {recInfo.tempo} {m["transport.bpm"]()}
       </button>
 
       <button

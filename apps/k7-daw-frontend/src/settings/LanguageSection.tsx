@@ -18,9 +18,9 @@ export function LanguageSection() {
         {locales.map((l) => (
           <Action
             key={l}
-            onClick={() => setLocale(l)}
-            // The one you are reading is the one you cannot pick: a button that changes nothing is a button that looks broken.
-            disabled={l === locale}
+            onClick={() => l !== locale && setLocale(l)}
+            // The one you are reading is lit rather than greyed: a disabled button reads as unavailable.
+            pressed={l === locale}
             title={
               l === locale
                 ? m["lang.current"]()

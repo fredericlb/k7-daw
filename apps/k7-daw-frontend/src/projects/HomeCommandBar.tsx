@@ -41,6 +41,7 @@ import {
   runHomeCommand,
   WS_PARAM,
 } from "./homeCommands";
+import { useHomeHelp } from "./homeHelp";
 import type { AccountFiles } from "./workspaceOps";
 
 /** The name this device was last a camera under, so a phone on a stand keeps its name across sessions. */
@@ -75,6 +76,7 @@ export function HomeCommandBar({ children }: { children: ReactNode }) {
   const [params, setParams] = useSearchParams();
   const openWs = params.get(WS_PARAM);
   const cmdRef = useRef<CommandBarHandle>(null);
+  const openHelp = useHomeHelp();
   // Hidden until summoned, as in the editor (../../docs/commandBar.md).
   const [open, setOpen] = useState(false);
   const [pending, setPending] = useState(false);
@@ -161,6 +163,7 @@ export function HomeCommandBar({ children }: { children: ReactNode }) {
         },
         armed,
         cameraMode,
+        help: openHelp,
       });
       // A line these pages do not know is refused HERE: no service behind it to pass it to.
       if (!known)
@@ -169,7 +172,7 @@ export function HomeCommandBar({ children }: { children: ReactNode }) {
           variant: "warning",
         });
     },
-    [readWorkspaces, cameraMode, setParams],
+    [readWorkspaces, cameraMode, setParams, openHelp],
   );
 
   const onChanged = useCallback((listener: () => void) => {

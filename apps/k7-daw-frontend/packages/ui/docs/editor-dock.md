@@ -29,7 +29,12 @@ time; the right panel (`side-panel`) is for the vertical lists.
   a host registering the dock in an Escape ladder must do the same in its closer.
 - **The height is the host's.** `EditorDock` is controlled (`height`, `onHeightChange`) so the host can
   place what sits beside it (a right panel ends `--k7-dock-gap` above the dock, toasts too). The
-  grabber clamps the drag between `--k7-dock-min-h` and the expanded height, and is a button, so the
-  arrow keys (Up and Down by 16 px, Home and End for the extremes) resize it as well.
+  grabber clamps the drag between `--k7-dock-min-h` and the expanded height, and is a focusable
+  `separator` with `aria-valuenow`, so the arrow keys (Up and Down by 16 px, Home and End for the
+  extremes) resize it as well. Its hit area is 44 px tall, reaching above the dock so the header's
+  row stays clear; the pill is 5 px.
+- **A phone sheet has no grabber.** Nothing drags it, so nothing pretends to; Close is the way out.
+- **The Expand tooltip follows the state** (`collapseLabel` while expanded); the accessible name
+  stays `expandLabel`, `aria-pressed` carries the state.
 - **The phone sheet is partial and non-modal** (`--k7-dock-sheet-top`) so the lanes stay in view;
   expanded it takes `--k7-sheet-top` and traps focus like any sheet.

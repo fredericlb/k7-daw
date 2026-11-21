@@ -1,6 +1,6 @@
 // ShellTransport.tsx — the bar's buttons: play/pause, stop, loop and record, each dropping focus on click so the
-// keys stay the shell's. A set draws only the first two. Record's long press (or right click, or ArrowDown) offers
-// the output recording, which the arrangement's record does not cover.
+// keys stay the shell's. A set has no arrangement to record: its Record is the output recording alone. With an
+// arrangement the chevron beside Record (or a long press, a right click, ArrowDown) offers the output recording.
 import type { EngineClient } from "@studio/engine-browser";
 import type { TransportAction } from "@studio/engine-protocol";
 import { CapsuleButton } from "@studio/ui/capsule";
@@ -10,7 +10,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@studio/ui/dropdown-menu";
-import { Circle, Pause, Play, Repeat, Square } from "@studio/ui/icons";
+import {
+  ChevronDown,
+  Circle,
+  Pause,
+  Play,
+  Repeat,
+  Square,
+} from "@studio/ui/icons";
 import { Spinner } from "@studio/ui/spinner";
 import {
   type KeyboardEvent as ReactKeyboardEvent,
@@ -23,6 +30,7 @@ import type { SetStatus } from "../hooks/useLogs";
 import { blurOnClick } from "../keys";
 import { midiUnavailableText } from "../midiMessage";
 import { m } from "../paraglide/messages.js";
+import { OutputRecordButton } from "./OutputRecordButton";
 
 /** How long a press on Record is held before it means "record the output". */
 const LONG_PRESS_MS = 500;
@@ -96,12 +104,54 @@ export function ShellTransport({
     if (!recordEnabled) armForRecord?.();
     engineRef.current?.setRecordEnabled(!recordEnabled);
   };
+  // Record alone: its press arms and rolls; with an output recorder the chevron beside it opens the menu.
+  const recordButton = (
+    <CapsuleButton
+      pressed={recordEnabled}
+      // Not turned ON while the project loads: the load's silent dry run would roll it and its stop switch it off.
+      disabled={transportWaiting && !recordEnabled}
+      onPointerDown={startPress}
+      onPointerUp={endPress}
+      onPointerLeave={endPress}
+      onClick={(e) => {
+        blurOnClick(e);
+        if (longPressed.current) return;
+        toggleRecord();
+      }}
+      onKeyDown={(e: ReactKeyboardEvent) => {
+        if (output && e.key === "ArrowDown") {
+          e.preventDefault();
+          setMenu(true);
+          return;
+        }
+        if (e.key !== "Enter" && e.key !== " ") return;
+        e.preventDefault();
+        if (!e.repeat) toggleRecord();
+      }}
+      onContextMenu={(e) => {
+        if (!output) return;
+        e.preventDefault();
+        setMenu(true);
+      }}
+      title={m["transport.record"]()}
+      aria-label={m["transport.recordLabel"]()}
+    >
+      <Circle className={recordEnabled ? "fill-record text-record" : ""} />
+    </CapsuleButton>
+  );
   return (
     <>
       <CapsuleButton
         pressed={playing}
         // Dead while the engine loads a project, and in record mode with nothing armed — a rolling transport can always stop.
         disabled={transportWaiting || (!playing && recordWithoutArm)}
+        disabledReason={
+          transportWaiting
+            ? m["transport.loading"]()
+            : !playing && recordWithoutArm
+              ? m["transport.noArm"]()
+              : undefined
+        }
         onClick={(e) => {
           transport(playing ? "stop" : "play");
           blurOnClick(e);
@@ -159,55 +209,32 @@ export function ShellTransport({
           <Repeat />
         </CapsuleButton>
       )}
-      {!noArrangement && (
+      {noArrangement && output && <OutputRecordButton {...output} />}
+      {!noArrangement && recordButton}
+      {!noArrangement && output && (
         <DropdownMenu open={menu} onOpenChange={setMenu}>
           <DropdownMenuTrigger asChild>
             <CapsuleButton
-              pressed={recordEnabled}
-              // Not turned ON while the project loads: the load's silent dry run would roll it and its stop switch it off.
-              disabled={transportWaiting && !recordEnabled}
-              onPointerDown={startPress}
-              onPointerUp={endPress}
-              onPointerLeave={endPress}
-              onClick={(e) => {
-                blurOnClick(e);
-                if (longPressed.current) return;
-                toggleRecord();
-              }}
-              onKeyDown={(e: ReactKeyboardEvent) => {
-                // Enter and Space are the press; ArrowDown stays the trigger's own way into the menu.
-                if (e.key !== "Enter" && e.key !== " ") return;
-                e.preventDefault();
-                if (!e.repeat) toggleRecord();
-              }}
-              onContextMenu={(e) => {
-                if (!output) return;
-                e.preventDefault();
-                setMenu(true);
-              }}
-              title={m["transport.record"]()}
-              aria-label={m["transport.recordLabel"]()}
+              className="min-w-6 px-1 [&_svg]:size-4"
+              title={m["transport.recordMenu"]()}
+              aria-label={m["transport.recordMenu"]()}
             >
-              <Circle
-                className={recordEnabled ? "fill-record text-record" : ""}
-              />
+              <ChevronDown />
             </CapsuleButton>
           </DropdownMenuTrigger>
-          {output && (
-            <DropdownMenuContent align="start" side="top" className="w-[260px]">
-              <DropdownMenuItem
-                disabled={output.filing || !output.ready}
-                onSelect={output.onToggle}
-              >
-                <Circle
-                  className={
-                    output.recording ? "fill-record text-record" : undefined
-                  }
-                />
-                {outLabel}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          )}
+          <DropdownMenuContent align="start" side="top" className="w-[260px]">
+            <DropdownMenuItem
+              disabled={output.filing || !output.ready}
+              onSelect={output.onToggle}
+            >
+              <Circle
+                className={
+                  output.recording ? "fill-record text-record" : undefined
+                }
+              />
+              {outLabel}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
         </DropdownMenu>
       )}
     </>

@@ -303,7 +303,7 @@ describe("project rename", () => {
     expect(h.seen.rename).toEqual([
       [FILES, "songs", "hiver.k7", "printemps.k7"],
     ]);
-    expect(h.said.join(" ")).toMatch(/hiver\.k7 → printemps\.k7/);
+    expect(h.said.join(" ")).toMatch(/Renamed hiver\.k7 to printemps\.k7/);
     expect(h.changes()).toBe(1);
   });
 

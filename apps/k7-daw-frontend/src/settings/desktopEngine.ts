@@ -2,8 +2,10 @@
 // the supervisor's latest picture, pushed over /api/local/engine/events, and the few commands a page may send.
 // A server or a phone's backend runs none, and the probe says so. See ../../docs/localApp.md.
 
+import { showToast } from "@studio/project-shell/toast";
 import { useEffect, useState } from "react";
 import { useLocalApp } from "../localApp";
+import { m } from "../paraglide/messages.js";
 
 /** What this page draws of the supervisor's snapshot (apps/k7-daw-engine/k7-supervisor/schema/hostProtocol.schema.json). */
 export interface DesktopEngineSnapshot {
@@ -118,11 +120,31 @@ export function useOnDesktopEngine(): boolean | undefined {
 
 /** Ask the supervisor; the backend takes only the commands its allow-list names (apps/k7-daw-backend/packages/k7-front/src/routes/local/routes.rs). */
 export function engineCommand(cmd: string, arg?: string): void {
-  void fetch("/api/local/engine/cmd", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify(arg === undefined ? { cmd } : { cmd, arg }),
-  }).catch(() => {});
+  void (async () => {
+    // A refusal or a dead backend is said as a toast: a button that does nothing visible is worse than an error.
+    try {
+      const res = await fetch("/api/local/engine/cmd", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(arg === undefined ? { cmd } : { cmd, arg }),
+      });
+      if (res.ok) return;
+      const said = await res
+        .json()
+        .then((b: { error?: string }) => b.error)
+        .catch(() => undefined);
+      toastRefusal(said ?? `${res.status}`);
+    } catch (e) {
+      toastRefusal((e as Error).message);
+    }
+  })();
+}
+
+function toastRefusal(reason: string): void {
+  showToast({
+    message: m["engine.commandFailed"]({ reason }),
+    variant: "error",
+  });
 }
 
 /** The engine's state, pushed from the first frame on; null until one arrives, or when there is no engine here. */
