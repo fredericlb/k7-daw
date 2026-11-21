@@ -516,5 +516,5 @@ ID,Screen,Interaction,Mouse / trackpad,Keyboard,Touch,Devices,Not drawn,Area,Not
 42.05,42,Make the new repository public,"turn ""Private repository"" off",Space,tap,T M D,FALSE,Git screens,
 42.06,42,Create and connect,"click ""Create and connect"" (the repository gets the `k7-workspace` topic)",—,tap,T M D,FALSE,Git screens,
 42.07,42,Cancel the new repository,click Cancel (back to the list),—,tap,T M D,FALSE,Git screens,
-23.15,23,Sign out of GitHub,"General → GitHub (shown once signed in): click ""Sign out"" beside @login; the key k7 added stays on GitHub","Tab, Enter",tap,T M D,FALSE,Settings · Settings page and engine page,"the docs say Settings, Devices (see Gaps)"
+23.15,23,Sign out of GitHub,"General → GitHub (shown once signed in): click ""Sign out"" beside @login; the key k7 added stays on GitHub","Tab, Enter",tap,T M D,FALSE,Settings · Settings page and engine page,"user, 2026-11-21: stays in General; docs fixed"
 23.16,23,Manage this device's keys on GitHub,"click ""Manage keys on GitHub"" (github.com/settings/keys, a new tab)","Tab, Enter",tap,T M D,FALSE,Settings · Settings page and engine page,

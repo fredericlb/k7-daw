@@ -28,7 +28,7 @@ against the remote. The routes are `apps/k7-daw-backend/docs/files/git.md`, the 
 | a commit takes the whole tree: the dialog lists the changed files with their sizes and marks large files, it does not select | what is committed is what the person sees, and a partial commit would leave a tree no one has tested |
 | a file the status flags `tooLarge` (over 2 GB) is left out of the commit, and a line names it with its size; the dialog sends it as the commit's `exclude` | the host would refuse it, the person's file stays where it is, and the next commit leaves it out again until it is shrunk or removed |
 | the state's `changed` and the dialog's "nothing to commit" ignore a `tooLarge` file | a file the commit cannot take must not look like a change waiting |
-| a commit asks for a name and an email when the device has none, and keeps them (settings, Devices) | git needs an author; it is per device because two machines of one person may sign differently |
+| a commit asks for a name and an email when the device has none, and keeps them (settings, General) | git needs an author; it is per device because two machines of one person may sign differently |
 | the dialog has an address and no sign-in field: no token, no password, no user name, no pasted key | k7 is ssh only; the address carries the user (`git@host:…`) and the device's own key signs in |
 | an `https://`, `http://` or `git://` address is said at once ("k7 syncs over SSH only") and cannot be sent; any other address goes to the route, whose `ssh-only` answer is the same sentence | the page names the way on from the first keystroke, and the route stays the one judge of what is an ssh address (the e2e bed's `file://` seam passes) |
 | Connect and Clone open on two ways: **Sign in with GitHub** and **Another host…**; where the front says the path is off (or cannot answer `GET /git/github`) the dialog is the plain ssh one | the GitHub path is an addition, never a requirement: the address form stays one click away and is the whole dialog wherever GitHub is off |
@@ -67,7 +67,7 @@ against the remote. The routes are `apps/k7-daw-backend/docs/files/git.md`, the 
 | the bar | above the project bar in the editor, and above a workspace's tree on the home page |
 | Commit & Push and the Conflict screen | dialogs opened through `gitScreens.tsx` (`openCommitAndPush`, `openConflict`), by the header and the workspace card |
 | Commits | the History panel's second list, shown when the workspace is under git |
-| the commit author, and the GitHub account with its Sign out | settings, Devices |
+| the commit author, and the GitHub account with its Sign out | settings, General |
 
 ## Tests
 
