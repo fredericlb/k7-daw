@@ -9,6 +9,7 @@ import {
 } from "@studio/project-shell/fileApi";
 import { GateWait, releaseSplash } from "@studio/project-shell/progress";
 import { clearDevPerfEntries } from "@studio/ui/dev-perf";
+import { DialogCloseLabel } from "@studio/ui/dialog";
 import { registerWorker } from "@studio/vite-config/register";
 import { projectLabel } from "@studio/web-protocol/projects";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -51,7 +52,7 @@ import { PROFILING } from "@studio/project-shell/profiling";
 import { shell } from "./appShell";
 import { installFreezeWatchdog, reportCommit, tally } from "./freezeWatchdog";
 import { currentRevision } from "./hooks/useRevision";
-import { LocaleProvider } from "./i18n";
+import { LocaleProvider, useLocale } from "./i18n";
 import { installLongPress } from "./longPress";
 import { PaneBoundary } from "./PaneBoundary";
 import { m } from "./paraglide/messages.js";
@@ -204,6 +205,16 @@ function Root() {
   );
 }
 
+/** Gives every kit dialog its close button's name in the language on show. */
+function DialogLabels({ children }: { children: ReactNode }) {
+  useLocale();
+  return (
+    <DialogCloseLabel.Provider value={m["common.close"]()}>
+      {children}
+    </DialogCloseLabel.Provider>
+  );
+}
+
 // The gates before the editor, and NO React.StrictMode — its double-mount freezes Firefox's WebGL context (docs/shell.md).
 wasmReady().finally(() => {
   // Mounted once the module's compile settles, whatever its outcome: a curve drawn before it throws `unavailable`.
@@ -217,7 +228,9 @@ wasmReady().finally(() => {
     // One cache for the page: the panes' shared reads, keyed by what they follow (queries/client.ts) — and cleared between projects.
     <QueryClientProvider client={queryClient}>
       <LocaleProvider>
-        <Root />
+        <DialogLabels>
+          <Root />
+        </DialogLabels>
       </LocaleProvider>
     </QueryClientProvider>,
   );

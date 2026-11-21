@@ -28,7 +28,7 @@ export const TrackToggle = React.forwardRef<
       "type-label grid size-[34px] shrink-0 cursor-pointer place-items-center rounded-(--k7-r-track-btn) outline-none transition-colors focus-visible:shadow-(--k7-focus-ring) disabled:pointer-events-none disabled:opacity-40",
       on
         ? ON[kind]
-        : "bg-(--k7-track-btn-off) text-foreground hover:bg-on-fill",
+        : "bg-(--k7-track-btn-off) text-foreground shadow-[inset_0_0_0_1px_var(--k7-track-btn-line)] hover:bg-on-fill",
       className,
     )}
     {...props}

@@ -204,12 +204,14 @@ export function MasterMeter({
       </div>
       {/* Always drawn, dark when nothing clipped: a light only there when it is on cannot be looked at to check. */}
       <span
+        role="img"
         aria-label={clipped ? m["meter.didClip"]() : m["meter.noClip"]()}
         className={cn(
-          "h-1.5 w-1.5 shrink-0 rounded-full",
+          "shrink-0",
+          // Lit is a larger square, unlit a small round dot: the shape says it as the colour does.
           clipped
-            ? "bg-meter-clip shadow-[0_0_4px_1px] shadow-meter-clip/60"
-            : "bg-foreground/20",
+            ? "h-2 w-2 rounded-[1px] bg-meter-clip shadow-[0_0_4px_1px] shadow-meter-clip/60"
+            : "h-1.5 w-1.5 rounded-full bg-foreground/20",
         )}
       />
       {/* …and unlike the light this one comes and goes: it is an offer to act, not a reading to be checked (docs/masterMeter.md). */}
