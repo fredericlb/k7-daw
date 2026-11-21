@@ -141,6 +141,11 @@ import { useProjectImport } from "./hooks/useProjectDialogs";
 import { useProjectDoc } from "./hooks/useProjectDoc";
 import { useProjectTasks } from "./hooks/useProjectTasks";
 import {
+  SWITCHER_ORDER,
+  useRemoteHolds,
+  useRemoteTakeover,
+} from "./hooks/useRemoteHolds";
+import {
   noteQuietRevision,
   noteRevision,
   useRevision,
@@ -905,6 +910,12 @@ export default function App({
     [surfaces],
   );
   const hasTurntables = !!turntablesSurface;
+  /** The panes a remote shows of this project, which this device cannot open (docs/external.md, "The exclusion"). */
+  const remote = useRemoteHolds({
+    timeline: timelineSurface?.id ?? null,
+    turntables: turntablesSurface?.id ?? null,
+    viewport: viewportSurface?.id ?? null,
+  });
 
   const turntableDeck = useTurntableDeck({
     store,
@@ -1039,6 +1050,11 @@ export default function App({
   /** Give one pane the whole screen — the ONE road there, and the point where a layout without that pane refuses out loud. */
   const fullscreen = useCallback(
     (p: Pane) => {
+      const taken = remote.reasonOf(p);
+      if (taken) {
+        setStatus(taken);
+        return;
+      }
       if (!layout.fullscreen.includes(p)) {
         setStatus(
           m["status.noSuchSurface"]({
@@ -1052,8 +1068,19 @@ export default function App({
       setFull(p);
       focusOn(p);
     },
-    [focusOn, layout, full],
+    [focusOn, layout, full, remote.reasonOf],
   );
+  useRemoteTakeover({
+    inUse: remote.inUse,
+    full,
+    order: SWITCHER_ORDER.filter((p) => layout.fullscreen.includes(p)),
+    moveTo: fullscreen,
+    viewportOpen,
+    closeViewport: useCallback(
+      () => setViewportWindow(() => ({ open: false })),
+      [setViewportWindow],
+    ),
+  });
 
   const backToArrangement = useCallback(
     () => fullscreen("timeline"),
@@ -1696,6 +1723,7 @@ export default function App({
     closeEvent,
     hasViewport,
     setViewportWindow,
+    blockedReason: remote.reasonOf,
     openHelp,
     closeHelp,
     toggleRight,
@@ -2747,6 +2775,7 @@ export default function App({
             label: m["shell.pane.arrangement"](),
             icon: AudioLines,
             shortcut: "2",
+            blocked: remote.reasonOf("timeline"),
           },
         ]
       : []),
@@ -2757,6 +2786,7 @@ export default function App({
             label: m["shell.pane.turntables"](),
             icon: Disc3,
             shortcut: "4",
+            blocked: remote.reasonOf("turntables"),
           },
         ]
       : []),

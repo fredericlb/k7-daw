@@ -4,6 +4,7 @@
 
 import { METRONOME_MIN } from "@studio/engine-protocol/build";
 import { Button } from "@studio/ui/button";
+import { showReason } from "@studio/ui/disabled-reason";
 import { Ellipsis, type LucideIcon, Settings } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
 import { type ReactNode, useEffect, useRef, useState } from "react";
@@ -18,6 +19,8 @@ export interface OverflowPane {
   id: string;
   label: string;
   icon: LucideIcon;
+  /** Why this pane cannot be opened now; a press says it instead of opening. */
+  blocked?: string;
 }
 
 export interface OverflowLaneView {
@@ -139,8 +142,13 @@ export function OverflowMenu({
                   key={p.id}
                   type="button"
                   aria-pressed={pane === p.id}
-                  onClick={run(() => onPane(p.id))}
-                  className="type-label flex h-11 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-full px-1 text-foreground aria-pressed:bg-on-fill aria-pressed:text-lavender"
+                  aria-disabled={p.blocked ? true : undefined}
+                  onClick={
+                    p.blocked
+                      ? run(() => showReason(p.blocked ?? ""))
+                      : run(() => onPane(p.id))
+                  }
+                  className="type-label flex h-11 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-full px-1 text-foreground aria-disabled:opacity-40 aria-pressed:bg-on-fill aria-pressed:text-lavender"
                 >
                   <p.icon className="size-[18px] shrink-0" />
                   <span className="truncate">{p.label}</span>

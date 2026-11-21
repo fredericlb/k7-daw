@@ -89,6 +89,8 @@ export interface LocalCtx {
   closeEvent: () => void;
   hasViewport: boolean;
   setViewportWindow: (next: (cur: FloatState) => Partial<FloatState>) => void;
+  /** "In use on <device>" for a pane a remote shows; undefined when this device may open it. */
+  blockedReason: (control: string) => string | undefined;
   openHelp: () => void;
   closeHelp: () => void;
   toggleRight: (which: RightPanelId) => void;
