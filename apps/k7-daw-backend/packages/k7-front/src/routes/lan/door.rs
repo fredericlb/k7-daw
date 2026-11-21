@@ -147,10 +147,15 @@ impl Lan {
 
 async fn read_served(state: &AppState) -> Option<ServedInfo> {
     let held = files_json(state, "/engine/served").await?;
+    let rows = files_json(state, "/workspaces/surfaces").await?;
+    crossing(&held, &rows)
+}
+
+/// `/engine/served` crossed with `/workspaces/surfaces` (`{ projects: [...] }`): the held project's row, None for the bench.
+fn crossing(held: &Value, rows: &Value) -> Option<ServedInfo> {
     let workspace = held.pointer("/project/workspace")?.as_str()?.to_string();
     let path = held.pointer("/project/path")?.as_str()?.to_string();
-    let rows = files_json(state, "/workspaces/surfaces").await?;
-    let row = rows.as_array()?.iter().find(|r| {
+    let row = rows.get("projects")?.as_array()?.iter().find(|r| {
         r["workspace"].as_str() == Some(&workspace) && r["path"].as_str() == Some(&path)
     })?;
     let label = if path == "." {
@@ -287,6 +292,23 @@ async fn files(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn the_held_project_is_crossed_with_its_row_of_the_surfaces_listing() {
+        let held = json!({ "project": { "workspace": "band", "path": "mix.k7" } });
+        let rows = json!({ "projects": [
+            { "workspace": "other", "path": "x.k7", "app": "k7", "surfaces": [] },
+            { "workspace": "band", "path": "mix.k7", "app": "k7", "surfaces": [{ "id": "desk", "type": "turntables" }] },
+        ] });
+        let info = crossing(&held, &rows).expect("the row is found");
+        assert_eq!(info.label, "band / mix.k7");
+        assert_eq!(info.surfaces[0]["id"], "desk");
+        // Nothing held, a project the listing lacks (the bench) and a bare array all list nothing.
+        assert!(crossing(&json!({ "project": null }), &rows).is_none());
+        let bench = json!({ "project": { "workspace": "Banc", "path": "live.k7" } });
+        assert!(crossing(&bench, &rows).is_none());
+        assert!(crossing(&held, &rows["projects"]).is_none());
+    }
 
     #[test]
     fn private_and_loopback_peers_only() {
