@@ -15,12 +15,12 @@ export function setDisabledReasonSink(fn: Say): () => void {
   };
 }
 
-/** The reason of a disabled control: its title, when it is a sentence. */
+/** The reason a control is disabled, when it is disabled and says why (`disabledReason`). */
 export function reasonOf(
   disabled: boolean | undefined,
-  title: unknown,
+  disabledReason: string | undefined,
 ): string | undefined {
-  return disabled && typeof title === "string" && title ? title : undefined;
+  return disabled && disabledReason ? disabledReason : undefined;
 }
 
 /** Shows a reason through the host's sink. */

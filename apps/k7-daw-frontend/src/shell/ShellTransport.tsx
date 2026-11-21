@@ -102,6 +102,13 @@ export function ShellTransport({
         pressed={playing}
         // Dead while the engine loads a project, and in record mode with nothing armed — a rolling transport can always stop.
         disabled={transportWaiting || (!playing && recordWithoutArm)}
+        disabledReason={
+          transportWaiting
+            ? m["transport.loading"]()
+            : !playing && recordWithoutArm
+              ? m["transport.noArm"]()
+              : undefined
+        }
         onClick={(e) => {
           transport(playing ? "stop" : "play");
           blurOnClick(e);

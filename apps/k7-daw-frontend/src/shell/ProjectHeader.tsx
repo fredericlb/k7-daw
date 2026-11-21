@@ -176,6 +176,7 @@ export function ProjectHeader({
                       key={p.id}
                       pressed={p.pressed}
                       disabled={p.disabled}
+                      disabledReason={p.title}
                       aria-label={def.title()}
                       title={p.title ?? def.title()}
                       onClick={p.onPress}

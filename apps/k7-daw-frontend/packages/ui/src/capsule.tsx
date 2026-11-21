@@ -22,10 +22,14 @@ Capsule.displayName = "Capsule";
 // `pressed` shows the on state (lavender, on-fill, inset) and is announced through aria-pressed.
 export const CapsuleButton = React.forwardRef<
   HTMLButtonElement,
-  React.ButtonHTMLAttributes<HTMLButtonElement> & { pressed?: boolean }
->(({ className, pressed, type = "button", ...props }, ref) => {
+  React.ButtonHTMLAttributes<HTMLButtonElement> & {
+    pressed?: boolean;
+    /** Why it is disabled: it then stays pressable and a press shows this in a toast. */
+    disabledReason?: string;
+  }
+>(({ className, pressed, type = "button", disabledReason, ...props }, ref) => {
   // A disabled button with a reason stays pressable (aria-disabled) and shows the reason on press.
-  const reason = reasonOf(props.disabled, props.title);
+  const reason = reasonOf(props.disabled, disabledReason);
   const { disabled: _d, onClick: _c, ...rest } = props;
   return (
     <button
@@ -37,7 +41,12 @@ export const CapsuleButton = React.forwardRef<
         className,
       )}
       {...(reason
-        ? { ...rest, "aria-disabled": true, onClick: reasonPress(reason) }
+        ? {
+            ...rest,
+            title: props.title ?? reason,
+            "aria-disabled": true,
+            onClick: reasonPress(reason),
+          }
         : props)}
     />
   );

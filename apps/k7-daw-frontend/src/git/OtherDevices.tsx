@@ -50,6 +50,7 @@ function CloneRow({
         size="sm"
         variant="glass"
         disabled={Boolean(blocked) || !t}
+        disabledReason={blocked || undefined}
         title={blocked || m["git.cloneHint"]()}
         onClick={() => {
           setName(cloneName(entry.name, taken));

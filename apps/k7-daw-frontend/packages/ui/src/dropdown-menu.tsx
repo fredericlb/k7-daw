@@ -28,10 +28,13 @@ DropdownMenuContent.displayName = DropdownMenuPrimitive.Content.displayName;
 
 const DropdownMenuItem = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Item>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item>
->(({ className, ...props }, ref) => {
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item> & {
+    /** Why it is disabled: it then stays selectable (aria-disabled) and choosing it shows this in a toast. */
+    disabledReason?: string;
+  }
+>(({ className, disabledReason, ...props }, ref) => {
   // A disabled item with a reason stays selectable (aria-disabled); choosing it shows the reason.
-  const reason = reasonOf(props.disabled, props.title);
+  const reason = reasonOf(props.disabled, disabledReason);
   const { disabled: _d, onSelect: _s, ...rest } = props;
   return (
     <DropdownMenuPrimitive.Item
@@ -41,7 +44,12 @@ const DropdownMenuItem = React.forwardRef<
         className,
       )}
       {...(reason
-        ? { ...rest, "aria-disabled": true, onSelect: () => showReason(reason) }
+        ? {
+            ...rest,
+            title: props.title ?? reason,
+            "aria-disabled": true,
+            onSelect: () => showReason(reason),
+          }
         : props)}
     />
   );

@@ -45,13 +45,18 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
+  /** Why it is disabled: it then stays pressable (aria-disabled) and a press shows this in a toast. */
+  disabledReason?: string;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  (
+    { className, variant, size, asChild = false, disabledReason, ...props },
+    ref,
+  ) => {
     const Comp = asChild ? Slot : "button";
     // A disabled button with a reason stays pressable (aria-disabled) and shows the reason on press.
-    const reason = reasonOf(props.disabled, props.title);
+    const reason = reasonOf(props.disabled, disabledReason);
     if (reason) {
       const { disabled: _d, onClick: _c, ...rest } = props;
       return (
@@ -59,8 +64,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           className={cn(buttonVariants({ variant, size, className }))}
           ref={ref}
           aria-disabled
-          onClick={reasonPress(reason)}
+          title={props.title ?? reason}
           {...rest}
+          onClick={reasonPress(reason)}
         />
       );
     }

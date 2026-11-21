@@ -66,7 +66,7 @@ export function WorkspaceMenu({
 
   return (
     <DropdownMenu onOpenChange={(open) => open && void git.refresh()}>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger asChild disabled={busy || Boolean(blocked)}>
         <Button
           variant="ghost"
           size="icon-sm"
@@ -74,6 +74,7 @@ export function WorkspaceMenu({
           title={blocked || m["ws.menu"]({ workspace })}
           aria-label={m["ws.menu"]({ workspace })}
           disabled={busy || Boolean(blocked)}
+          disabledReason={blocked || undefined}
         >
           {busy ? (
             <Loader2 className="h-4 w-4 animate-spin" />
