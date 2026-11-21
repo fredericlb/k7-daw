@@ -20,8 +20,8 @@ sit at the other: they are the machine's, so they are drawn on its engine page a
 Inside the Android app (`apps/k7-daw-engine/k7-runtime/docs/android.md`) the line above moves, and for the
 reason it was drawn: the process on the machine is the app k7 is running in, and the phone has no
 config file to hand its user. So the Engine page (below) opens on **this phone's engine** —
-`settings/AndroidEngineSection.tsx`: the engine's state and Quit, full screen (Android only, a
-setting of the device rather than the account), the instruments it downloads, the private CA. The Downloads section is the
+`settings/AndroidEngineSection.tsx`: the engine's state, Quit and full screen (Android only: an iOS app never
+ends itself, and full screen is a setting of the device rather than the account), the instruments it downloads, the private CA. The Downloads section is the
 computer's engine page's own (`settings/InstrumentsSection.tsx`), since what a phone keeps is chosen the same
 way (`apps/k7-daw-engine/k7-supervisor/docs/instruments.md`). The hint that sends a browser to the engine's machine is not drawn there, since
 that machine is this one.

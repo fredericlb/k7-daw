@@ -41,7 +41,7 @@ async fn a_read_the_gate_cannot_weigh_is_a_busy_decline() {
     // 6 MiB held three times over is more than the 8 MiB of the gate has beside the base.
     std::fs::write(ws.join("big.txt"), "b".repeat(6 << 20)).unwrap();
     let lines = Lines::default();
-    let shed = || counted(&super::stats::global().shed);
+    let shed = || counted(&super::tests::stats_of(&dir).shed);
     let before = shed();
     let mut c = ctx(&dir, Tag::File, "small.txt", &lines);
     c.gate = gate(2 * BASE_WEIGHT, 2 * BASE_WEIGHT);

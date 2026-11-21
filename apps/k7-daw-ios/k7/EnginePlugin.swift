@@ -1,7 +1,7 @@
 // EnginePlugin.swift — the shell page's way to the supervisor (web/src/native.ts, K7Runtime): its snapshots as
 // `state` events, the engine's exit as `engineExit`, and the few commands the tray sends — EnginePlugin.kt's
-// methods, one for one. k7's settings panel reaches the same through StudioBridge.swift; what both do beyond a
-// command is EngineOps.swift. See apps/k7-daw-engine/k7-runtime/docs/ios.md.
+// methods but `quit`, since an iOS app never ends itself. k7's settings panel reaches the same through
+// StudioBridge.swift; what both do beyond a command is EngineOps.swift. See apps/k7-daw-engine/k7-runtime/docs/ios.md.
 
 import Capacitor
 import UIKit
@@ -18,7 +18,6 @@ public class EnginePlugin: CAPPlugin, CAPBridgedPlugin, SupervisorListener, UIDo
         CAPPluginMethod(name: "casInfo", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "importCa", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "forgetCas", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "quit", returnType: CAPPluginReturnPromise),
     ]
 
     private var pending: CAPPluginCall?
@@ -85,11 +84,6 @@ public class EnginePlugin: CAPPlugin, CAPBridgedPlugin, SupervisorListener, UIDo
 
     @objc func forgetCas(_ call: CAPPluginCall) {
         EngineOps.forgetCas { Self.settle(call, $0) }
-    }
-
-    @objc func quit(_ call: CAPPluginCall) {
-        call.resolve()
-        AppDelegate.quit()
     }
 
     private static func settle(_ call: CAPPluginCall, _ done: Result<[String: Any], Error>) {

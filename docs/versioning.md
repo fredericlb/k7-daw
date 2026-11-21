@@ -33,7 +33,8 @@ build that may replace another. A count of ancestors grows with every descendant
 same for a commit wherever it is built, and needs no counter stored anywhere; a CI run number would
 differ between the workflow that built a snapshot and the one that built its release. The cost is
 a full history: the jobs that build a phone app check out with `fetch-depth: 0` and no blobs, and
-Gradle refuses a shallow clone rather than count one commit.
+Gradle refuses a shallow clone rather than count one commit, as `apps/k7-daw-ios/scripts/stage.mjs` does when it writes
+the iPhone app's number into `build/staged/version.xcconfig`.
 
 ## Where it shows
 

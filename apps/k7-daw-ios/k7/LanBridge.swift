@@ -16,9 +16,10 @@ enum LanBridge {
 
     /// Before the front starts: the advertiser as a C callback, then the browse.
     static func install() {
+        // A C function pointer captures nothing: the type is named, never the implicit `self` of a static member.
         k7_lan_install({ record in
             let text = record.map { String(cString: $0) }
-            queue.async { advertise(text) }
+            LanBridge.queue.async { LanBridge.advertise(text) }
         })
         queue.async { browse() }
     }

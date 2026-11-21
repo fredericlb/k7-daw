@@ -78,8 +78,8 @@ pub(super) fn value(s: &str) -> Value {
 }
 
 /// What docs declined: its own counter, which the reads' `declined` never holds.
-pub(super) fn declined() -> u64 {
-    super::stats::global()
+pub(super) fn declined(dir: &Path) -> u64 {
+    super::tests::stats_of(dir)
         .docs_declined
         .load(std::sync::atomic::Ordering::Relaxed)
 }
@@ -105,7 +105,7 @@ async fn a_route_answers_from_the_shared_session() {
         session_holds(&acct, &dir) >= 1,
         "the front compiled in the shared session"
     );
-    assert_eq!(declined(), 0, "{:?}", lines.lock().unwrap());
+    assert_eq!(declined(&dir), 0, "{:?}", lines.lock().unwrap());
     std::fs::remove_dir_all(dir).unwrap();
 }
 
@@ -119,9 +119,11 @@ async fn the_nine_routes_are_answered_natively() {
         assert_eq!(ours.0, 200, "{h:?}: {}", ours.1);
         value(&ours.1);
     }
-    assert_eq!(declined(), 0, "{:?}", lines.lock().unwrap());
+    assert_eq!(declined(&dir), 0, "{:?}", lines.lock().unwrap());
     assert_eq!(
-        super::stats::global().docs_answered.load(Ordering::Relaxed),
+        super::tests::stats_of(&dir)
+            .docs_answered
+            .load(Ordering::Relaxed),
         9
     );
     std::fs::remove_dir_all(dir).unwrap();
@@ -139,13 +141,20 @@ async fn a_docs_decline_is_counted_apart_from_the_reads() {
     let c = answering(&acct, &dir, Tag::ProjectDoc, &lines);
     let ours = route(&dir, H::ProjectDoc, "", Some(c)).await;
     assert_eq!(ours.0, 409, "{}", ours.1);
-    assert_eq!(declined(), 1, "{:?}", lines.lock().unwrap());
-    assert_eq!(super::stats::global().declined.load(Ordering::Relaxed), 0);
+    assert_eq!(declined(&dir), 1, "{:?}", lines.lock().unwrap());
     assert_eq!(
-        super::stats::global().docs_answered.load(Ordering::Relaxed),
+        super::tests::stats_of(&dir)
+            .declined
+            .load(Ordering::Relaxed),
         0
     );
-    let line = super::stats::global().line();
+    assert_eq!(
+        super::tests::stats_of(&dir)
+            .docs_answered
+            .load(Ordering::Relaxed),
+        0
+    );
+    let line = super::tests::stats_of(&dir).line();
     assert!(
         line.contains(" declined=0 docsAnswered=0 docsDeclined=1 "),
         "{line}"
@@ -166,7 +175,7 @@ async fn the_engine_doc_is_the_docs_slice_of_the_engine_view() {
         "{body}"
     );
     assert!(doc.get("tracks").is_some() || doc.get("tempo").is_some() || doc.is_object());
-    assert_eq!(declined(), 0);
+    assert_eq!(declined(&dir), 0);
     std::fs::remove_dir_all(dir).unwrap();
 }
 
@@ -178,7 +187,7 @@ async fn what_the_native_side_cannot_prove_is_refused_with_a_sentence() {
     let c = answering(&acct, &dir, Tag::Graph, &lines);
     let at = route(&dir, H::Graph, "at=p.k7", Some(c)).await;
     assert_eq!(at.0, 200, "a graph of another folder: {}", at.1);
-    assert_eq!(declined(), 0);
+    assert_eq!(declined(&dir), 0);
     // A library as the open project: the roots cannot be made, the ask is refused with a sentence (4-7), the decline said once.
     std::fs::write(
         dir.join("home/workspace/.active-projects/songs"),
@@ -190,7 +199,7 @@ async fn what_the_native_side_cannot_prove_is_refused_with_a_sentence() {
         let ours = route(&dir, H::Hints, "", Some(c)).await;
         assert_eq!(ours.0, 409, "ask {asked}: {}", ours.1);
         assert_eq!(value(&ours.1)["declined"], "library-active");
-        assert_eq!(declined(), asked, "ask {asked}");
+        assert_eq!(declined(&dir), asked, "ask {asked}");
     }
     let legacy = |l: &String| l.contains("library-active");
     let said = lines.lock().unwrap().iter().filter(|l| legacy(l)).count();
@@ -216,9 +225,11 @@ async fn a_project_that_does_not_compile_is_a_400_with_the_compiler_s_words() {
         assert_eq!(ours.0, 400, "{h:?}: {}", ours.1);
         assert!(value(&ours.1)["error"].is_string(), "{h:?}: {}", ours.1);
     }
-    assert_eq!(declined(), 0, "{:?}", lines.lock().unwrap());
+    assert_eq!(declined(&dir), 0, "{:?}", lines.lock().unwrap());
     assert_eq!(
-        super::stats::global().docs_answered.load(Ordering::Relaxed),
+        super::tests::stats_of(&dir)
+            .docs_answered
+            .load(Ordering::Relaxed),
         2
     );
     super::tests::remove_tree(&dir);
@@ -236,7 +247,7 @@ async fn a_workspace_with_no_active_project_is_answered_not_refused() {
     req.root = other.display().to_string();
     let ours = text(routes::dispatch(H::ProjectDoc, &req).await).await;
     assert!(value(&ours.1).get("declined").is_none(), "{ours:?}");
-    assert_eq!(declined(), 0);
+    assert_eq!(declined(&dir), 0);
     std::fs::remove_dir_all(dir).unwrap();
 }
 
@@ -252,9 +263,9 @@ async fn no_weight_to_be_had_is_a_busy_refusal() {
     assert_eq!(ours.0, 503, "{}", ours.1);
     assert_eq!(value(&ours.1)["declined"], "busy");
     // A busy decline is a shed (1780a), not a decline.
-    assert_eq!(declined(), 0);
+    assert_eq!(declined(&dir), 0);
     assert_eq!(
-        super::stats::global()
+        super::tests::stats_of(&dir)
             .shed
             .load(std::sync::atomic::Ordering::Relaxed),
         1
@@ -276,7 +287,7 @@ async fn a_session_that_panicked_is_made_again_by_the_next_ask() {
     assert!(gone.is_err());
     let c = answering(&acct, &dir, Tag::ProjectDoc, &lines);
     assert_eq!(route(&dir, H::ProjectDoc, "", Some(c)).await, first);
-    assert_eq!(declined(), 0);
+    assert_eq!(declined(&dir), 0);
     std::fs::remove_dir_all(dir).unwrap();
 }
 
@@ -343,7 +354,7 @@ async fn compiled_deep(name: &str, depth: usize) {
     assert!(
         started.elapsed() < Duration::from_secs(if cfg!(target_env = "musl") { 30 } else { 5 })
     );
-    assert_eq!(declined(), 0, "{:?}", lines.lock().unwrap());
+    assert_eq!(declined(&dir), 0, "{:?}", lines.lock().unwrap());
     std::fs::remove_dir_all(dir).unwrap();
 }
 
@@ -362,12 +373,12 @@ async fn a_compile_that_panics_is_counted_said_and_refused() {
     assert_eq!(ours.0, 500, "{}", ours.1);
     assert_eq!(value(&ours.1)["declined"], "panic");
     assert_eq!(
-        super::stats::global()
+        super::tests::stats_of(&dir)
             .panics
             .load(std::sync::atomic::Ordering::Relaxed),
         1
     );
-    assert_eq!(declined(), 1);
+    assert_eq!(declined(&dir), 1);
     let said = lines.lock().unwrap().clone();
     assert!(
         said.iter().any(|l| l.contains("GET /hints panicked")),

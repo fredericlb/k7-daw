@@ -82,9 +82,10 @@ The microphone goes to k7's own origin only. It is asked at the first launch, an
 answer (`MicAccess.swift`): inputs open once with the device, so a grant given before the start is the one that
 needs no restart. A recording app without its microphone is not worth the wait it saves, and the wait happens
 once. A run with `K7_TEST_HOOKS` skips that prompt, since nobody answers it. A refusal iOS remembers offers the
-app's Settings when something needs the microphone. A grant that comes after the engine started reaches it at the
-next start, and Quit is the one restart there is. Quitting is the app ending its own process, which an App Store app does not do:
-it is kept because a stopped engine cannot start again in the same process.
+app's Settings when something needs the microphone; iOS ends an app whose privacy setting changes, so a grant
+given there opens the inputs at the launch that follows. A grant that comes after the engine started reaches it at
+the next start, which is the person's to make: the iOS app has no Quit, since App Store review refuses an app that
+ends its own process, and a stopped engine cannot start again in the same one.
 
 **A media player to the system**, as on Android: `media-session.js` relays the page's Media Session, and
 `MediaPlayback.swift` holds Now Playing and the remote commands. The bar may play through the engine, which
@@ -124,7 +125,7 @@ open apps/k7-daw-ios/k7.xcodeproj                 # pick a team under Signing, t
 `stage.mjs` builds the engine's `ios-arm64` preset and the supervisor's, each as an xcframework, builds the front
 (`k7-embed`, a static library) and fetches the CA bundle as pinned. It builds the
 shell page and lays it out as `cap copy` would, and stages what the front reads: the built page, `k7-core`, its code
-root (`stageCodeRoot.mjs`).
+root (`stageCodeRoot.mjs`). Every run writes `build/staged/version.xcconfig`, the build number the target reads.
 `--only=<part,…>` restages some parts.
 
 | choice | why |
@@ -134,7 +135,45 @@ root (`stageCodeRoot.mjs`).
 | the project file written by hand, its sources a folder Xcode keeps in sync | no generator to install, and a new Swift file joins the target by being in `k7/` |
 | the app links `-lz` and `-liconv` beside `-lresolv` | libgit2 inside `libk7_embed.a` takes zlib and iconv from the SDK, which the cargo build never links |
 | signing left to the developer's own team | no team is committed; `CODE_SIGN_STYLE` is automatic |
+| the build number staged as the commit count, never a number in the project file (`docs/versioning.md`) | App Store Connect refuses an upload whose number it has already seen; a fixed `1` would ship once |
 | JUCE's `juceaide` built at the Mac's own deployment target (`engine/patches/tracktion.cmake`) | JUCE builds that tool for the build machine in a nested CMake and hands it the preset's deployment target, which under `ios-arm64` is an iPhone floor no macOS has |
+
+## What the App Store asks of the app
+
+| choice | why |
+|---|---|
+| `k7/PrivacyInfo.xcprivacy`: no tracking, no data collected, a reason for each required-reason API (`UserDefaults`, file timestamps, boot time, disk space) | App Store Connect refuses an upload whose code calls those APIs without a manifest; Swift, the Rust front and the JUCE core call all four, and nothing leaves the device for the developer |
+| no Quit on iOS, in k7's settings or the tray | review refuses an app that ends its own process; an engine starts again when the person closes k7 and opens it |
+| `ITSAppUsesNonExemptEncryption` false | the app uses only standard protocols (TLS, SSH, signatures) through the system and its libraries, which the export rules exempt; without the key every upload asks |
+
+## TestFlight
+
+`apps/k7-daw-ios/scripts/testflight.sh` stages a device build, archives it in Release and uploads it to App Store Connect
+for the team's internal testers.
+
+Set up once:
+
+- a paid Apple Developer Program team;
+- an App Store Connect app record for the bundle id `se.frediver.k7.daw`;
+- the App ID's iCloud capability for key-value storage, which automatic signing with `-allowProvisioningUpdates` adds;
+- an internal tester group on that record;
+- an App Store Connect API key with the App Manager role, its `.p8` kept in `~/.appstoreconnect/private_keys/`.
+
+```
+K7_IOS_TEAM=<team id> K7_ASC_KEY_ID=<key id> K7_ASC_ISSUER=<issuer id> \
+  apps/k7-daw-ios/scripts/testflight.sh [--no-stage] [--export-only] [--allow-dirty] [--dry-run]
+```
+
+`K7_ASC_KEY_PATH` names the `.p8` when it is not at the default path, and `K7_GITHUB_CLIENT_ID` is baked into the build
+for Sign in with GitHub. `--no-stage` reuses the last staging, `--export-only` writes the `.ipa` and uploads nothing
+(no API key needed), `--allow-dirty` builds an uncommitted tree, `--dry-run` prints the `xcodebuild` commands and runs none.
+
+| choice | why |
+|---|---|
+| internal testing only (`testFlightInternalTestingOnly`) | no Beta App Review, and a build cannot slip to external testers |
+| the API key rather than an Xcode sign-in | one command and no Xcode window; the script passes only the key's path, never its content |
+| a dirty tree refused | the build number names a commit, and a build from other files would carry a number that is not its own |
+| archives kept per build number under `~/.cache/k7-ios-testflight` | the archive holds the symbols a crash report is read with |
 
 ## On a phone
 
@@ -229,9 +268,9 @@ libgit2 is linked into `libk7_embed.a` with its own transports (`apps/k7-daw-bac
   so a render continues with the app behind.
 - **Not run on a phone**, only on the simulator (below); the kit and its checklist are "On a phone". The
   local-network prompt is compiled, not driven; the flows under "Proven on the simulator" are.
-- **No release signing.** No CI job builds the iPhone app: a developer builds it in Xcode, signed by the
-  developer's own team.
-- **No updates**: a new build is installed from Xcode.
+- **TestFlight builds come from the script above, run by hand on the Mac.** No CI job builds the iPhone app, and the
+  App Store itself is not submitted to.
+- **No in-app updates**: a tester installs a new build from TestFlight, and a build expires after 90 days.
 - **Stem separation is on the CPU**, ONNX Runtime linked statically (`apps/k7-daw-engine/k7-supervisor/docs/supervisor.md`, "A cut on a phone"); a cut's time and memory on a phone are not measured.
 - **No picture render, `ffmpeg`, whisper or `--decode`**: no app may start a process; each member that needs one says so (above).
 

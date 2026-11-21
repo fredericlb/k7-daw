@@ -72,7 +72,7 @@ async fn a_project_that_will_not_compile_is_worded_as_the_compiler_throws_it() {
             assert!(value(&ours.1)["error"].is_string(), "{what} {h:?}");
         }
     }
-    assert_eq!(declined(), 0, "{:?}", lines.lock().unwrap());
+    assert_eq!(declined(&dir), 0, "{:?}", lines.lock().unwrap());
     super::tests::remove_tree(&dir);
 }
 
@@ -92,6 +92,6 @@ async fn no_open_project_is_what_the_route_answers_and_never_a_decline() {
             ours.1
         );
     }
-    assert_eq!(declined(), 0, "{:?}", lines.lock().unwrap());
+    assert_eq!(declined(&dir), 0, "{:?}", lines.lock().unwrap());
     super::tests::remove_tree(&dir);
 }

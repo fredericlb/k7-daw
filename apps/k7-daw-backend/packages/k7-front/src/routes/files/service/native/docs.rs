@@ -347,7 +347,7 @@ fn no_project(c: &Call, ctx: &Ctx, view: View) -> Response {
             &docs_failure::no_project_line(&ctx.workspace, ctx.tag.route()),
         );
     }
-    Stats::bump(&super::stats::global().docs_answered);
+    Stats::bump(&ctx.stats.docs_answered);
     crate::routes::files::json_answer(status, &body)
 }
 
@@ -391,7 +391,7 @@ pub async fn answer(c: &Call, ctx: &Ctx) -> Option<Response> {
         Ok(Ok(t)) => t,
         Ok(Err(why)) => return decline(ctx, why),
         Err(Failed::Panicked) => {
-            Stats::bump(&super::stats::global().panics);
+            Stats::bump(&ctx.stats.panics);
             (ctx.log)(&format!("[native] {} panicked", ctx.tag.route()));
             return decline(ctx, "panic");
         }
@@ -399,7 +399,7 @@ pub async fn answer(c: &Call, ctx: &Ctx) -> Option<Response> {
     };
     // A project that will not compile is the song crate's findings, worded as the compiler's throw (4-7).
     if text.starts_with(FAILURE) {
-        Stats::bump(&super::stats::global().docs_answered);
+        Stats::bump(&ctx.stats.docs_answered);
         return Some(docs_failure::compile_failure(&text));
     }
     // The catalogue is parsed, so it weighs six times its text on top (1516).
@@ -414,7 +414,7 @@ pub async fn answer(c: &Call, ctx: &Ctx) -> Option<Response> {
         Ok(s) => s,
         Err(why) => return decline(ctx, why),
     };
-    Stats::bump(&super::stats::global().docs_answered);
+    Stats::bump(&ctx.stats.docs_answered);
     Some(match sent {
         Sent::Whole(t) => {
             let n = t.len();

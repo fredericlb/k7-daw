@@ -92,7 +92,7 @@ async fn two_small_saves_at_once_answer_natively() {
     ));
     let answers = burst(&b, gate, 2).await;
     assert!(answers.iter().all(|a| *a == Some(200)), "{answers:?}");
-    assert_eq!(counted(&super::stats::global().shed), 0);
+    assert_eq!(counted(&super::tests::stats_of(&b.dir).shed), 0);
     let _ = std::fs::remove_dir_all(&b.dir);
 }
 
@@ -104,7 +104,7 @@ async fn measure_340_real_saves_at_once_all_answer_natively() {
     let gate: &'static Gate = Box::leak(Box::new(Gate::new(PROCESS_WEIGHT, ACCOUNT_SHARE)));
     let answers = burst(&b, gate, 340).await;
     assert!(answers.iter().all(|a| *a == Some(200)), "{answers:?}");
-    assert_eq!(counted(&super::stats::global().shed), 0);
+    assert_eq!(counted(&super::tests::stats_of(&b.dir).shed), 0);
     let _ = std::fs::remove_dir_all(&b.dir);
 }
 
@@ -133,9 +133,9 @@ async fn a_save_over_half_the_share_declines_busy_past_it() {
     );
     assert_eq!(
         (
-            counted(&super::stats::global().shed),
-            counted(&super::stats::global().shed_lone),
-            counted(&super::stats::global().declined)
+            counted(&super::tests::stats_of(&b.dir).shed),
+            counted(&super::tests::stats_of(&b.dir).shed_lone),
+            counted(&super::tests::stats_of(&b.dir).declined)
         ),
         (1, 1, 0)
     );
@@ -150,8 +150,8 @@ async fn a_save_over_half_the_share_declines_busy_past_it() {
     assert!(super::journal::answer(&call, native).await.is_none());
     assert_eq!(
         (
-            counted(&super::stats::global().shed),
-            counted(&super::stats::global().shed_lone)
+            counted(&super::tests::stats_of(&b.dir).shed),
+            counted(&super::tests::stats_of(&b.dir).shed_lone)
         ),
         (2, 1)
     );
@@ -190,7 +190,7 @@ async fn a_save_with_a_big_base_file_declines_where_one_without_a_base_fits() {
     let account = b.call(Tag::FilePut, json!({})).native.unwrap().account;
     let _half = gate.take(&account, share / 2).await.unwrap();
     assert!(!one_save(&b, gate, "p.k7/big.txt", Some("0")).await);
-    assert_eq!(counted(&super::stats::global().shed), 1);
+    assert_eq!(counted(&super::tests::stats_of(&b.dir).shed), 1);
     assert!(one_save(&b, gate, "p.k7/small.txt", None).await);
     let _ = std::fs::remove_dir_all(&b.dir);
 }
@@ -214,7 +214,7 @@ async fn a_save_on_a_project_with_a_big_image_declines_past_the_share() {
     assert!(Journals::global().image_bytes(&b.gate_root()) >= 500 << 10);
     let _half = gate.take(&account, share / 2).await.unwrap();
     assert!(!one_save(&b, gate, "p.k7/b.txt", None).await);
-    assert_eq!(counted(&super::stats::global().shed), 1);
+    assert_eq!(counted(&super::tests::stats_of(&b.dir).shed), 1);
     let _ = std::fs::remove_dir_all(&b.dir);
 }
 

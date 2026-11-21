@@ -51,9 +51,11 @@ export function Tray({ state, engineExit, certFailed }: TrayProps) {
 
       <PrivateCa certFailed={certFailed} />
 
-      <Button variant="outline" onClick={() => K7Runtime.quit()}>
-        Quit
-      </Button>
+      {ON_IOS ? null : (
+        <Button variant="outline" onClick={() => K7Runtime.quit()}>
+          Quit
+        </Button>
+      )}
     </main>
   );
 }

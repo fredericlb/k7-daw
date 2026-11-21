@@ -44,6 +44,7 @@
 		AA0000000000000000000206 /* backend */ = {isa = PBXFileReference; lastKnownFileType = folder; path = resources/backend; sourceTree = "<group>"; };
 		AA0000000000000000000208 /* page-scripts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "resources/page-scripts"; sourceTree = "<group>"; };
 		AA0000000000000000000209 /* cacert.pem */ = {isa = PBXFileReference; lastKnownFileType = text; path = resources/cacert.pem; sourceTree = "<group>"; };
+		AA0000000000000000000210 /* version.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = version.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -103,6 +104,7 @@
 				AA0000000000000000000206 /* backend */,
 				AA0000000000000000000208 /* page-scripts */,
 				AA0000000000000000000209 /* cacert.pem */,
+				AA0000000000000000000210 /* version.xcconfig */,
 			);
 			name = Staged;
 			path = build/staged;
@@ -253,11 +255,11 @@
 		};
 		AA0000000000000000000903 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AA0000000000000000000210 /* version.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = k7/k7.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				EXCLUDED_ARCHS = x86_64;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = k7/Info.plist;
@@ -287,11 +289,11 @@
 		};
 		AA0000000000000000000904 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AA0000000000000000000210 /* version.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = k7/k7.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				EXCLUDED_ARCHS = x86_64;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = k7/Info.plist;
