@@ -1653,7 +1653,7 @@
   "shell.panel.chain": "Chain",
   "shell.panel.close": "Close panel",
   "shell.dock.expand": "Expand editor",
-  "shell.dock.resize": "Resize the dock: drag up or down",
+  "shell.dock.resize": "Resize the dock: drag, or use the up and down arrows",
   "shell.dock.close": "Close dock",
   "shell.segment.resources": "External",
   "shell.segment.references": "References",

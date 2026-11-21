@@ -1653,7 +1653,7 @@
   "shell.panel.chain": "Chaîne",
   "shell.panel.close": "Fermer le panneau",
   "shell.dock.expand": "Agrandir l'éditeur",
-  "shell.dock.resize": "Redimensionner le dock : glisser vers le haut ou le bas",
+  "shell.dock.resize": "Redimensionner le dock : glisser, ou utiliser les flèches haut et bas",
   "shell.dock.close": "Fermer le dock",
   "shell.segment.resources": "Externes",
   "shell.segment.references": "Références",
