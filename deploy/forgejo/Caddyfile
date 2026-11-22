@@ -1,0 +1,10 @@
+# The one door of the server (docs/forgejo-server.md): the git host to Forgejo, with automatic TLS.
+# What a reader gets wrong: SCHEME=http serves plain HTTP for a local trial; a device needs https.
+
+{
+	email {$ACME_EMAIL}
+}
+
+{$SCHEME}://{$GIT_HOST} {
+	reverse_proxy forgejo:3000
+}

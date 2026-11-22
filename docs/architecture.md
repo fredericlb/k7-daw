@@ -52,7 +52,7 @@ Every package is private to this tree: k7 is the only consumer, and nothing is p
 
 Notes for the whole repo — CI, deployment, the dev session — are in `docs/`:
 [dev.md](dev.md) (what `npm run dev` starts), [versioning.md](versioning.md) (the
-build stamp), [site.md](site.md) (the static site `k7.rocks`),
+build stamp), [site.md](site.md) (the static site `k7.rocks`), [forgejo-server.md](forgejo-server.md) (a self-hosted Forgejo for k7 workspaces, kit in `deploy/forgejo/`),
 [publishing.md](publishing.md) (the four packages published for apps outside this repository), [release.md](release.md) (the CI that remains: GitHub's `k7.yml`, `caches.yml` and `pages.yml`; no job releases anything),
 and the plan/recipe pages, [platter-plan.md](platter-plan.md) (the DJ deck's
 playback: a stretcher inside the platter, and the hybrid it deletes),

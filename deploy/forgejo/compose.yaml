@@ -1,0 +1,45 @@
+# A self-hosted Forgejo for k7 workspaces (docs/forgejo-server.md): Forgejo with LFS and SSH, and Caddy in
+# front with automatic TLS.
+# What a reader gets wrong: ROOT_URL must be reachable over HTTPS from every device, since LFS data goes there.
+# Every value comes from .env (copy .env.example); nothing secret lives in this file.
+
+name: k7-forge
+
+services:
+  forgejo:
+    image: codeberg.org/forgejo/forgejo:17.0.1
+    restart: unless-stopped
+    environment:
+      USER_UID: "1000"
+      USER_GID: "1000"
+      FORGEJO__server__DOMAIN: ${GIT_HOST:?set GIT_HOST in .env}
+      FORGEJO__server__ROOT_URL: ${SCHEME:-https}://${GIT_HOST}/
+      FORGEJO__server__HTTP_PORT: "3000"
+      FORGEJO__server__SSH_DOMAIN: ${GIT_HOST}
+      FORGEJO__server__SSH_PORT: ${SSH_PORT:-2222}
+      FORGEJO__server__SSH_LISTEN_PORT: "22"
+      FORGEJO__server__LFS_START_SERVER: "true"
+      FORGEJO__database__DB_TYPE: sqlite3
+      FORGEJO__security__INSTALL_LOCK: "true"
+      FORGEJO__service__DISABLE_REGISTRATION: "true"
+    volumes:
+      - ${DATA_DIR:-./data}/forgejo:/data
+    ports:
+      - ${BIND_ADDRESS:-0.0.0.0}:${SSH_PORT:-2222}:22
+
+  caddy:
+    image: caddy:2.11.8
+    restart: unless-stopped
+    depends_on: [forgejo]
+    environment:
+      GIT_HOST: ${GIT_HOST}
+      SCHEME: ${SCHEME:-https}
+      ACME_EMAIL: ${ACME_EMAIL:?set ACME_EMAIL in .env}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ${DATA_DIR:-./data}/caddy:/data
+      - ${DATA_DIR:-./data}/caddy-config:/config
+    ports:
+      - ${BIND_ADDRESS:-0.0.0.0}:${HTTP_PORT:-80}:80
+      - ${BIND_ADDRESS:-0.0.0.0}:${HTTPS_PORT:-443}:443
+      - ${BIND_ADDRESS:-0.0.0.0}:${HTTPS_PORT:-443}:443/udp
