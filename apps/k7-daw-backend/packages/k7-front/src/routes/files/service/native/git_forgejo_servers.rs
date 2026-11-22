@@ -27,7 +27,8 @@ pub(super) struct Server {
     pub id: String,
     /// The address the person gave, without a trailing slash: the web pages and, under `/api/v1`, the API.
     pub url: String,
-    /// The OAuth2 application the person registered on the server.
+    /// The OAuth2 application the person registered on the server; empty for Forgejo's built-in one.
+    #[serde(default)]
     pub client_id: String,
     pub ssh_host: String,
     pub ssh_port: u16,
@@ -220,11 +221,13 @@ fn host_ok(h: &str) -> bool {
             .all(|c| c.is_ascii_alphanumeric() || matches!(c, '.' | '-'))
 }
 
-/// `POST /git/forges { url, clientId, sshHost?, sshPort? }`: the server probed, then kept; a new client id signs out.
+/// `POST /git/forges { url, clientId?, sshHost?, sshPort? }`: the server probed, then kept; a new client id signs out.
 pub(super) async fn add(ctx: &Ctx, b: &Value) -> Response {
-    let (Some(typed), Some(client_id)) = (field(b, "url"), field(b, "clientId")) else {
-        return bad("an address and a client id are required");
+    let Some(typed) = field(b, "url") else {
+        return bad("an address is required");
     };
+    // No client id is Forgejo's built-in client, which every server has unless its admin turned it off.
+    let client_id = field(b, "clientId").unwrap_or("");
     if !client_id
         .chars()
         .all(|c| c.is_ascii_alphanumeric() || matches!(c, '-' | '_' | '.'))

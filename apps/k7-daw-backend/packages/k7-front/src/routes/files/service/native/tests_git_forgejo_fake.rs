@@ -62,17 +62,31 @@ fn to(location: &str) -> Response {
         .unwrap()
 }
 
-/// A registered redirect: the app's scheme exactly, or the loopback path on literal 127.0.0.1 with any port.
-fn registered(uri: &str) -> bool {
-    if uri == "rocks.k7.daw://callback" {
+/// Forgejo's built-in "Git Credential Manager" client, registered with `http://127.0.0.1` alone.
+pub const BUILTIN: &str = "e90ee53c-94e2-48ac-9358-a874fb9e0662";
+
+/// Whether `client` may sign in: the person's registered one, or the built-in one every server has.
+fn known(st: &St, client: &str) -> bool {
+    client == st.client_id || client == BUILTIN
+}
+
+/// A registered redirect as Forgejo matches a public client's: a loopback's port stripped, then the address exactly.
+fn registered(client: &str, uri: &str) -> bool {
+    let builtin = client == BUILTIN;
+    if !builtin && uri == "rocks.k7.daw://callback" {
         return true;
     }
     let Ok(u) = url::Url::parse(uri) else {
         return false;
     };
+    let path = if builtin {
+        "/"
+    } else {
+        "/api/files/git/forge/callback"
+    };
     u.scheme() == "http"
         && u.host_str() == Some("127.0.0.1")
-        && u.path() == "/api/files/git/forge/callback"
+        && u.path() == path
         && u.query().is_none()
 }
 
@@ -88,7 +102,8 @@ fn pair(st: &mut St) -> Value {
 fn authorize(st: &mut St, q: &HashMap<String, String>) -> Response {
     let get = |k: &str| q.get(k).cloned().unwrap_or_default();
     let (redirect, state) = (get("redirect_uri"), get("state"));
-    if get("client_id") != st.client_id || !registered(&redirect) {
+    let client = get("client_id");
+    if !known(st, &client) || !registered(&client, &redirect) {
         return reply(400, json!({ "message": "Unregistered Redirect URI" }));
     }
     let back = |pairs: &[(&str, &str)]| {
@@ -130,10 +145,7 @@ fn token(st: &mut St, b: &Value) -> Response {
                 return no("invalid_grant", "client is not authorized");
             };
             let hashed = URL_SAFE_NO_PAD.encode(Sha256::digest(s("code_verifier").as_bytes()));
-            if redirect != s("redirect_uri")
-                || hashed != challenge
-                || s("client_id") != st.client_id
-            {
+            if redirect != s("redirect_uri") || hashed != challenge || !known(st, &s("client_id")) {
                 return no("unauthorized_client", "failed PKCE code challenge");
             }
             reply(200, pair(st))

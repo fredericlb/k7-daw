@@ -94,7 +94,8 @@ impl Forge {
     pub fn available(&self) -> bool {
         match self {
             Forge::GitHub(g) => g.client_id.is_some(),
-            Forge::Forgejo(g) => !g.server.client_id.is_empty(),
+            // No client id of the person's own is Forgejo's built-in client, which every server has.
+            Forge::Forgejo(_) => true,
         }
     }
 

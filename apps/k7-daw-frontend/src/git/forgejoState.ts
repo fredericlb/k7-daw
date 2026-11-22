@@ -52,9 +52,8 @@ export function sshPort(typed: string): number | undefined | "bad" {
   return Number.isInteger(n) && n > 0 && n < 65536 ? n : "bad";
 }
 
-/** Add is ready with a client id typed and no bad port. */
-export const canAdd = (clientId: string, port: string): boolean =>
-  clientId.trim() !== "" && sshPort(port) !== "bad";
+/** Add is ready with no bad port: no client id is Forgejo's built-in client (`docs/git.md`). */
+export const canAdd = (port: string): boolean => sshPort(port) !== "bad";
 
 export type SignIn =
   | { phase: "starting" }

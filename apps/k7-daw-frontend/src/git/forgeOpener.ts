@@ -1,5 +1,5 @@
 // forgeOpener.ts — how a Forgejo sign-in reaches the server's page on each host, and how it comes back to k7.
-// What a reader gets wrong: the phone apps return through the app's scheme, not the loopback; docs/git.md says why.
+// What a reader gets wrong: the phones ask for the app's scheme, which only a registered client gets; docs/git.md says why.
 
 import { engineCall } from "../settings/androidEngine";
 

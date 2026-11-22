@@ -90,10 +90,11 @@ async fn forgejo_server_is_probed_added_listed_and_removed() {
             want
         );
     }
+    // No client id is Forgejo's built-in one: accepted, and replaced by the registered one below.
     let no_client = json!({ "url": url });
     assert_eq!(
         post(&d, Kind::ForgeAdd, "/git/forges", no_client).await.0,
-        400
+        200
     );
     let add = json!({ "url": url, "clientId": "cid" });
     assert_eq!(post(&d, Kind::ForgeAdd, "/git/forges", add).await.0, 200);
@@ -153,6 +154,27 @@ async fn forgejo_sign_in_ends_at_the_callback_with_the_token_kept_and_the_key_up
     assert_eq!(poll(&d, &id).await["state"], "expired");
     let (_, status, _) = ask(&d, on(&id, Verb::Status), "GET", "/", None).await;
     assert_eq!(status["login"], LOGIN);
+}
+
+#[tokio::test(flavor = "multi_thread")]
+async fn forgejo_built_in_client_signs_in_through_the_front_root_and_never_the_app_scheme() {
+    let (f, url) = fake::start().await;
+    let mut d = device("fj-builtin");
+    d.ctx.port = 43210;
+    let (s, v, _) = post(&d, Kind::ForgeAdd, "/git/forges", json!({ "url": url })).await;
+    assert_eq!(s, 200, "{v}");
+    let id = id_of(&url);
+    // A phone asks for the app's scheme, which the built-in client is not registered with: the root it is.
+    for body in [json!({}), json!({ "redirect": "app" })] {
+        let (_, began, _) = post(&d, on(&id, Verb::Start), "/start", body).await;
+        assert_eq!(began["redirect"], "http://127.0.0.1:43210/", "{began}");
+        let at = began["authorizeUrl"].as_str().unwrap();
+        assert!(at.contains(&format!("client_id={}", fake::BUILTIN)), "{at}");
+    }
+    let (s, page) = sign_in(&d, &id).await;
+    assert_eq!(s, 200, "{page}");
+    assert_eq!(poll(&d, &id).await["login"], LOGIN);
+    assert_eq!(f.lock().unwrap().keys.len(), 1);
 }
 
 #[tokio::test(flavor = "multi_thread")]

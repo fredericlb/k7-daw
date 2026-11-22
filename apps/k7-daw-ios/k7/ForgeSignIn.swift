@@ -1,7 +1,8 @@
 // ForgeSignIn.swift — a Forgejo sign-in in iOS's web sheet (ASWebAuthenticationSession), asked by k7's page through
 // StudioBridge's `forgeSignIn`. The server sends the sheet back to `rocks.k7.daw://callback`, which closes it by itself;
 // its query is forwarded here to the front's own callback, and the page's poll says how it ended.
-// What a reader gets wrong: the sheet never loads the loopback page; see apps/k7-daw-engine/k7-runtime/docs/ios.md.
+// What a reader gets wrong: with a client the person registered the sheet never loads the loopback page; Forgejo's built-in
+// client returns to it, the sheet staying until Done (apps/k7-daw-frontend/docs/git.md).
 
 import AuthenticationServices
 import UIKit

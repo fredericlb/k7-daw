@@ -746,11 +746,11 @@ No interaction of its own: its controls are listed under .
 | 23.15 | Sign out of GitHub | Services → GitHub (shown once signed in): click "Sign out" beside @login; the key k7 added stays on GitHub | Tab, Enter | tap | T M D |
 | 23.16 | Manage this device's keys on GitHub | click "Manage keys on GitHub" (github.com/settings/keys, a new tab) | Tab, Enter | tap | T M D |
 | 23.17 | Add a Forgejo server | Services → Forgejo servers: click "Add a Forgejo server" → the server's address and Check | Tab, Enter | tap | T M D |
-| 23.18 | Check the server's address | type the address (`git.example.com`), click Check → "Forgejo <version> answered.", "Large files (LFS) are on." or the warning that audio files will not sync, and whether the server's web address answers; then the registration step | Enter checks | tap, type | T M D |
-| 23.19 | Copy a redirect URI | click Copy beside each of the two addresses, to paste as the redirect URIs of an OAuth2 application made on the server (Settings → Applications → OAuth2 applications, "Confidential client" unticked) | — | tap Copy | T M D |
-| 23.20 | Enter the Client ID | paste the application's Client ID in "Client ID" | — | tap, type | T M D |
+| 23.18 | Check the server's address | type the address (`git.example.com`), click Check → "Forgejo <version> answered.", "Large files (LFS) are on." or the warning that audio files will not sync, and whether the server's web address answers; then Add server, nothing to register | Enter checks | tap, type | T M D |
+| 23.19 | Copy a redirect URI | only when the server's admin turned off its built-in sign-in apps: open "The server's admin turned off its built-in sign-in apps", then click Copy beside each of the two addresses, to paste as the redirect URIs of an OAuth2 application made on the server (Settings → Applications → OAuth2 applications, "Confidential client" unticked) | — | tap Copy | T M D |
+| 23.20 | Enter the Client ID | in the same disclosure, paste the application's Client ID in "Client ID" | — | tap, type | T M D |
 | 23.21 | Give the server's SSH host and port | open "SSH host and port, if different", type SSH host and SSH port | Enter on the disclosure | tap, type | T M D |
-| 23.22 | Add the server | click "Add server" (on once a Client ID is typed) → the server's section, Not signed in | — | tap | T M D |
+| 23.22 | Add the server | click "Add server" (on once the address is checked) → the server's section, Not signed in | — | tap | T M D |
 | 23.23 | Cancel adding a server | click Cancel under the form | — | tap | T M D |
 | 23.24 | Remove a Forgejo server | in the server's section click Remove → "Remove <server> from this device?" in place → "Remove server", or Cancel | Tab, Enter | tap | T M D |
 

@@ -72,7 +72,37 @@ async fn route(state: &Arc<AppState>, req: Request) -> Response {
     if under(&path, "/api") {
         return api::answer(state, req).await;
     }
+    if let Some(to) = forge_return(req.method(), &path, req.uri().query()) {
+        return redirect(&to);
+    }
     tail(state, req).await
+}
+
+/// A Forgejo sign-in sent back to the root, the only loopback path its built-in client takes: on to the callback.
+fn forge_return(method: &hyper::Method, path: &str, query: Option<&str>) -> Option<String> {
+    let query = query.filter(|_| method == hyper::Method::GET && path == "/")?;
+    let has = |k: &str| {
+        url::form_urlencoded::parse(query.as_bytes()).any(|(n, v)| n == k && !v.is_empty())
+    };
+    let back = has("state") && (has("code") || has("error"));
+    back.then(|| {
+        format!(
+            "{}?{query}",
+            crate::routes::files::service::native::FORGE_CALLBACK
+        )
+    })
+}
+
+fn redirect(to: &str) -> Response {
+    let mut r = StatusCode::FOUND.into_response();
+    if let Ok(v) = HeaderValue::from_str(to) {
+        r.headers_mut().insert(hyper::header::LOCATION, v);
+    }
+    r.headers_mut().insert(
+        hyper::header::CACHE_CONTROL,
+        HeaderValue::from_static("no-store"),
+    );
+    r
 }
 
 /// What every route passed on meets last: the page, then Express's 404.
@@ -97,6 +127,21 @@ fn under(path: &str, prefix: &str) -> bool {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn a_sign_in_back_at_the_root_goes_on_to_the_callback() {
+        let get = hyper::Method::GET;
+        assert_eq!(
+            forge_return(&get, "/", Some("code=c&state=s")).as_deref(),
+            Some("/api/files/git/forge/callback?code=c&state=s")
+        );
+        assert!(forge_return(&get, "/", Some("error=access_denied&state=s")).is_some());
+        // The page itself, a state alone, another path or another method is the page.
+        assert!(forge_return(&get, "/", None).is_none());
+        assert!(forge_return(&get, "/", Some("state=s")).is_none());
+        assert!(forge_return(&get, "/settings", Some("code=c&state=s")).is_none());
+        assert!(forge_return(&hyper::Method::POST, "/", Some("code=c&state=s")).is_none());
+    }
 
     #[test]
     fn under_is_a_path_boundary() {

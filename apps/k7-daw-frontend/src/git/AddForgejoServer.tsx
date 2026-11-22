@@ -1,5 +1,5 @@
-// AddForgejoServer.tsx — "Add a Forgejo server": an address, what a check read from it, then the application to register.
-// What a reader gets wrong: the client id is public and typed by hand; the person registers the two redirects on the server first.
+// AddForgejoServer.tsx — "Add a Forgejo server": an address, what a check read from it, then Add.
+// What a reader gets wrong: no client id is typed unless the server's admin turned off Forgejo's built-in clients (docs/git.md).
 
 import { Button } from "@studio/ui/button";
 import { Check, Copy, Loader2 } from "@studio/ui/icons";
@@ -100,7 +100,7 @@ export function AddForgejoServer({
     try {
       const done = await git.forgeAdd(t, {
         url: probe.url,
-        clientId: clientId.trim(),
+        clientId: clientId.trim() || undefined,
         sshHost: host.trim() || undefined,
         sshPort: p,
       });
@@ -143,18 +143,25 @@ export function AddForgejoServer({
       {probe && (
         <>
           <ProbeFacts probe={probe} />
-          <p className="type-label">{m["git.fj.registerTitle"]()}</p>
-          <Note>{m["git.fj.registerHow"]()}</Note>
-          {probe.redirects.map((r) => (
-            <CopyLine key={r} text={r} />
-          ))}
-          <Input
-            aria-label={m["git.fj.clientId"]()}
-            placeholder={m["git.fj.clientId"]()}
-            autoComplete="off"
-            value={clientId}
-            onChange={(e) => setClientId(e.target.value)}
-          />
+          {/* A server whose admin turned off the built-in clients takes an application registered on it instead. */}
+          <details className="type-secondary text-fg-2">
+            <summary className="cursor-pointer">
+              {m["git.fj.registerTitle"]()}
+            </summary>
+            <div className="mt-2 flex flex-col gap-2">
+              <Note>{m["git.fj.registerHow"]()}</Note>
+              {probe.redirects.map((r) => (
+                <CopyLine key={r} text={r} />
+              ))}
+              <Input
+                aria-label={m["git.fj.clientId"]()}
+                placeholder={m["git.fj.clientId"]()}
+                autoComplete="off"
+                value={clientId}
+                onChange={(e) => setClientId(e.target.value)}
+              />
+            </div>
+          </details>
           <details className="type-secondary text-fg-2">
             <summary className="cursor-pointer">
               {m["git.fj.sshMore"]()}
@@ -182,7 +189,7 @@ export function AddForgejoServer({
         {probe && (
           <Button
             size="sm"
-            disabled={!canAdd(clientId, port) || busy}
+            disabled={!canAdd(port) || busy}
             onClick={() => void add()}
           >
             {state.phase === "adding" && (

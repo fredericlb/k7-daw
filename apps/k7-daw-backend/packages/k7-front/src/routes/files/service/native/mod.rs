@@ -22,6 +22,8 @@ mod git_forge_api;
 pub mod git_forge_routes;
 mod git_forge_token;
 mod git_forgejo;
+/// Where a sign-in that came back to the front's root is sent on (`routes/last`).
+pub(crate) use git_forgejo::CALLBACK as FORGE_CALLBACK;
 mod git_forgejo_flow;
 mod git_forgejo_servers;
 mod git_github;

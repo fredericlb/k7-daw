@@ -59,7 +59,9 @@ fn random() -> String {
 
 /// `POST /git/forges/<id>/start { redirect? }`: the page to open; `redirect: "app"` returns through the app's scheme.
 pub(super) fn start(ctx: &Ctx, f: &Forgejo, b: &Value) -> Response {
-    let app = b.get("redirect").and_then(Value::as_str) == Some("app");
+    // The built-in client accepts a loopback root alone, so the app's scheme is for a client the person registered.
+    let builtin = f.builtin();
+    let app = !builtin && b.get("redirect").and_then(Value::as_str) == Some("app");
     if !app && ctx.port == 0 {
         return fail(
             503,
@@ -69,6 +71,8 @@ pub(super) fn start(ctx: &Ctx, f: &Forgejo, b: &Value) -> Response {
     }
     let redirect = if app {
         APP_REDIRECT.to_string()
+    } else if builtin {
+        format!("http://127.0.0.1:{}/", ctx.port)
     } else {
         format!("http://127.0.0.1:{}{CALLBACK}", ctx.port)
     };

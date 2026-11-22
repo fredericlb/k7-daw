@@ -1,9 +1,10 @@
-// forgejo-signin.spec.ts — Add a Forgejo server in Settings → Services (address, check, registration, client id), sign in
+// forgejo-signin.spec.ts — Add a Forgejo server in Settings → Services (address, check, nothing registered), sign in
 // through the server's page in a second browser tab, then Connect lists its repositories and picking a folder connects.
 import { execFileSync } from "node:child_process";
 import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { pathToFileURL } from "node:url";
 import { fakeForgejo } from "../../src/fakeForgejo.ts";
 import { workspaceCard } from "../../src/home.ts";
 import { expect, test } from "../../src/target.ts";
@@ -22,7 +23,11 @@ test("a workspace is connected after adding and signing in to a Forgejo server",
   execFileSync("git", ["init", "--bare", "-b", "main", bare]);
   const forgejo = await fakeForgejo(PORT, [
     { name: "plain", topics: [], sshUrl: "git@forgejo.invalid:fred/plain.git" },
-    { name: "songs", topics: ["k7-workspace"], sshUrl: `file://${bare}` },
+    {
+      name: "songs",
+      topics: ["k7-workspace"],
+      sshUrl: pathToFileURL(bare).href,
+    },
   ]);
   const id = `127.0.0.1:${PORT}`;
   const files = await k7.files();
@@ -45,10 +50,7 @@ test("a workspace is connected after adding and signing in to a Forgejo server",
       SHOWN,
     );
     await expect(adding.getByText("Large files (LFS) are on.")).toBeVisible();
-    await expect(
-      adding.getByText("rocks.k7.daw://callback", { exact: true }),
-    ).toBeVisible();
-    await adding.getByLabel("Client ID").fill(forgejo.clientId);
+    // No client id: the server's built-in client signs in, so nothing is registered on it.
     await adding.getByRole("button", { name: "Add server" }).click();
 
     const server = page.getByRole("region", { name: id });
@@ -63,9 +65,8 @@ test("a workspace is connected after adding and signing in to a Forgejo server",
     await tab.waitForLoadState();
     await expect(tab.getByText(/you can close this tab/i)).toBeVisible(SHOWN);
     await tab.close();
-    expect(forgejo.redirects()[0]).toMatch(
-      /\/api\/files\/git\/forge\/callback$/,
-    );
+    // The built-in client comes back to the front's root, which sends the browser on to the callback.
+    expect(forgejo.redirects()[0]).toMatch(/^http:\/\/127\.0\.0\.1:\d+\/$/);
     await expect(server.getByText("Signed in as @fred")).toBeVisible(SHOWN);
     expect(forgejo.keys).toHaveLength(1);
 

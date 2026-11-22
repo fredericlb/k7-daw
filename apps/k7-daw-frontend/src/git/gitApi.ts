@@ -154,7 +154,7 @@ export const git = {
     call<ForgeProbe>(t, "forges/probe", { json: { url } }),
   forgeAdd: (
     t: GitTransport,
-    s: { url: string; clientId: string; sshHost?: string; sshPort?: number },
+    s: { url: string; clientId?: string; sshHost?: string; sshPort?: number },
   ) => call<ForgeProbe & { added: boolean }>(t, "forges", { json: s }),
   forgeRemove: (t: GitTransport, id: string) =>
     call<{ ok: boolean }>(t, `forges/${enc(id)}/remove`, { post: true }),

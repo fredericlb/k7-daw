@@ -64,9 +64,9 @@ describe("adding a Forgejo server", () => {
   });
 
   it("is ready with a client id and no bad port", () => {
-    expect(canAdd("", "")).toBe(false);
-    expect(canAdd("cid", "")).toBe(true);
-    expect(canAdd("cid", "abc")).toBe(false);
+    expect(canAdd("")).toBe(true);
+    expect(canAdd("2222")).toBe(true);
+    expect(canAdd("abc")).toBe(false);
   });
 });
 

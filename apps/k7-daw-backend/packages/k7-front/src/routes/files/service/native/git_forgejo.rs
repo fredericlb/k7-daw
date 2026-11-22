@@ -12,8 +12,10 @@ use super::git_forgejo_servers::Server;
 
 /// The scopes k7 asks, once: the key upload needs the first, the repositories the second.
 pub(super) const SCOPES: [&str; 2] = ["write:user", "write:repository"];
-/// The one path Forgejo sends the browser back to; the person registers it without a port, which Forgejo then ignores.
-pub(super) const CALLBACK: &str = "/api/files/git/forge/callback";
+/// The path the sign-in ends on; a client the person registered has it as its redirect, without a port, which Forgejo ignores.
+pub(crate) const CALLBACK: &str = "/api/files/git/forge/callback";
+/// Forgejo's built-in "Git Credential Manager" client, on every server unless its admin turned it off (`docs/files/git.md`).
+pub(super) const BUILTIN_CLIENT_ID: &str = "e90ee53c-94e2-48ac-9358-a874fb9e0662";
 /// The redirect an app shell catches when its sheet cannot end on a loopback page; it forwards the query to `CALLBACK`.
 pub(super) const APP_REDIRECT: &str = "rocks.k7.daw://callback";
 
@@ -64,10 +66,24 @@ impl Forgejo {
         Forgejo { server, profile }
     }
 
+    /// Whether the server uses Forgejo's built-in client: no client id was given when it was added.
+    pub fn builtin(&self) -> bool {
+        self.server.client_id.is_empty()
+    }
+
+    /// The client id the sign-in names: the person's own, else the built-in one.
+    pub fn client_id(&self) -> &str {
+        if self.builtin() {
+            BUILTIN_CLIENT_ID
+        } else {
+            &self.server.client_id
+        }
+    }
+
     /// The page that asks the person's consent; the browser opens it, never the front.
     pub fn authorize_url(&self, redirect: &str, state: &str, challenge: &str) -> String {
         let query = url::form_urlencoded::Serializer::new(String::new())
-            .append_pair("client_id", &self.server.client_id)
+            .append_pair("client_id", self.client_id())
             .append_pair("redirect_uri", redirect)
             .append_pair("response_type", "code")
             .append_pair("scope", &SCOPES.join(" "))
@@ -91,7 +107,7 @@ impl Forgejo {
         verifier: &str,
     ) -> Result<Tokens, String> {
         let sent = json!({
-            "grant_type": "authorization_code", "client_id": self.server.client_id,
+            "grant_type": "authorization_code", "client_id": self.client_id(),
             "code": code, "redirect_uri": redirect, "code_verifier": verifier,
         });
         let r = self.token(sent).await?;
@@ -101,7 +117,7 @@ impl Forgejo {
     /// The refresh token spent for a new pair; the caller keeps the new refresh token before using the access token.
     pub async fn refresh(&self, refresh: &str) -> Result<Tokens, Refresh> {
         let sent = json!({
-            "grant_type": "refresh_token", "client_id": self.server.client_id,
+            "grant_type": "refresh_token", "client_id": self.client_id(),
             "refresh_token": refresh,
         });
         let r = self.token(sent).await.map_err(Refresh::Offline)?;

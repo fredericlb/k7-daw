@@ -13,6 +13,8 @@ export interface FakeForgejo {
 }
 
 const CLIENT_ID = "e2e-forgejo";
+/** Forgejo's built-in "Git Credential Manager" client, registered with `http://127.0.0.1` alone. */
+export const BUILTIN_CLIENT_ID = "e90ee53c-94e2-48ac-9358-a874fb9e0662";
 const LOGIN = "fred";
 
 /** Listens on `port`, listing `repos` (name, topics, ssh address) for the signed-in account. */
@@ -29,13 +31,16 @@ export async function fakeForgejo(
     res.writeHead(status, { "content-type": "application/json" });
     res.end(JSON.stringify(body));
   };
-  const registered = (uri: string) => {
+  // As Forgejo matches a public client's redirect: a loopback's port stripped, then the registered address exactly.
+  const registered = (client: string | null, uri: string) => {
+    const path =
+      client === BUILTIN_CLIENT_ID ? "/" : "/api/files/git/forge/callback";
     try {
       const u = new URL(uri);
       return (
         u.protocol === "http:" &&
         u.hostname === "127.0.0.1" &&
-        u.pathname === "/api/files/git/forge/callback" &&
+        u.pathname === path &&
         !u.search
       );
     } catch {
@@ -65,7 +70,9 @@ export async function fakeForgejo(
       if (route === "GET /login/oauth/authorize") {
         const q = url.searchParams;
         const redirect = q.get("redirect_uri") ?? "";
-        if (q.get("client_id") !== CLIENT_ID || !registered(redirect))
+        const client = q.get("client_id");
+        const known = client === CLIENT_ID || client === BUILTIN_CLIENT_ID;
+        if (!known || !registered(client, redirect))
           return reply(res, { message: "Unregistered Redirect URI" }, 400);
         redirects.unshift(redirect);
         n += 1;
