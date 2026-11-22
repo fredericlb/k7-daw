@@ -23,6 +23,25 @@ adb logcat -c || true
 adb logcat -v time > "$logs/logcat.txt" 2>&1 &
 trap 'kill $! 2> /dev/null || true' EXIT
 
+# How long the app's engine takes to answer whoami on its loopback socket, which the page's engine gate gives 3 s (docs/e2e-runners.md).
+adb shell am start -W -n rocks.k7.daw.e2e/se.frediver.k7.MainActivity > /dev/null
+adb forward tcp:8765 tcp:8765
+sleep 30
+(cd e2e && node -e '
+  const WebSocket = require("ws");
+  const once = () => new Promise((done) => {
+    const ws = new WebSocket("ws://127.0.0.1:8765/");
+    const t0 = Date.now();
+    let sent = 0;
+    const end = (what) => { try { ws.close(); } catch {} done(`${what} after ${Date.now() - t0} ms (open to reply ${sent ? Date.now() - sent : "-"} ms)`); };
+    const timer = setTimeout(() => end("no reply"), 30000);
+    ws.on("open", () => { sent = Date.now(); ws.send(JSON.stringify({ type: "whoami" })); });
+    ws.on("message", (d) => { if (String(d).includes("whoami")) { clearTimeout(timer); end("whoami"); } });
+    ws.on("error", (e) => { clearTimeout(timer); end(`error ${e.message}`); });
+  });
+  (async () => { for (let i = 0; i < 5; i++) console.log(`engine probe ${i + 1}: ${await once()}`); })();
+') 2>&1 | tee "$logs/engine-probe.txt" || true
+
 flags=
 [ "${E2E_RETRIES:-0}" = 0 ] || flags="--retries=$E2E_RETRIES"
 [ "${E2E_MAX_FAILURES:-0}" = 0 ] || flags="$flags --max-failures=$E2E_MAX_FAILURES"
