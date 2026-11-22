@@ -3,10 +3,7 @@
 // control changes and hands back a 0..1; echoes a value back to the device that sent it when
 // that device also has an output. The MAP itself is a file — see @studio/song's controller.ts.
 
-/** Web MIDI's types ship in the DOM lib; only `requestMIDIAccess` is behind a feature check. */
-type MidiNavigator = Navigator & {
-  requestMIDIAccess?: (opts?: { sysex?: boolean }) => Promise<MIDIAccess>;
-};
+import { MidiListeners, midiAccess } from "./midiAccess";
 
 /** One mapped control: the message to listen for, and the caller's name for what it drives. */
 export interface CcRoute {
@@ -33,6 +30,7 @@ const key = (ch: number, cc: number) => `${ch}:${cc}`;
 /** The live MIDI control surface — one instance for the app, its routes replaced wholesale whenever the graph reloads. */
 export class MidiControl {
   private access?: MIDIAccess;
+  private listeners = new MidiListeners();
   private routes = new Map<string, CcRoute[]>();
   private learning: ((l: LearnedCc) => void) | null = null;
   private onValue: CcHandler;
@@ -47,16 +45,14 @@ export class MidiControl {
 
   /** Ask for access and attach. False when the browser has no Web MIDI, or the user refused. */
   async init(): Promise<boolean> {
-    const nav = navigator as MidiNavigator;
-    if (!nav.requestMIDIAccess) return false;
-    try {
-      this.access = await nav.requestMIDIAccess();
-    } catch {
-      return false; // refused, or blocked by permissions policy — the app works without it
-    }
+    if (this.access) return true;
+    // Refused, or blocked by permissions policy, is null: the app works without it.
+    const access = await midiAccess();
+    if (!access) return false;
+    this.access = access;
     this.attach();
     // A controller plugged in mid-session appears here, so re-attach rather than miss it.
-    this.access.onstatechange = () => this.attach();
+    this.listeners.onState(access, () => this.attach());
     return true;
   }
 
@@ -72,8 +68,7 @@ export class MidiControl {
 
   private attach(): void {
     if (!this.access) return;
-    for (const input of this.access.inputs.values())
-      input.onmidimessage = (e) => this.onMessage(e);
+    this.listeners.listen(this.access, (_, e) => this.onMessage(e));
   }
 
   /** Replace the whole map. Called on every graph reload — see the class comment. */
@@ -129,11 +124,7 @@ export class MidiControl {
   }
 
   dispose(): void {
-    if (this.access) {
-      for (const input of this.access.inputs.values())
-        input.onmidimessage = null;
-      this.access.onstatechange = null;
-    }
+    this.listeners.clear();
     this.access = undefined;
     this.routes.clear();
     this.lastInput.clear();
