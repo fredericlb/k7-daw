@@ -2,7 +2,7 @@
 // pin or an admin's overlay, and a library still in one folder as its own version 1 — see
 // ../../../../../docs/library-versions-plan.md.
 
-import { mkdirSync, mkdtempSync, rmSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
@@ -47,6 +47,12 @@ describe("library versions", () => {
     expect(moduleLibraryDirs(project)).toEqual([join(lib, "2", "modules")]);
     pin({ "k7-core": "draft" });
     expect(libraryRoot("k7-core", project)).toBe(join(lib, "draft"));
+  });
+
+  it("reads a pinned number this machine lacks at the newest number it holds, and leaves the pin", () => {
+    pin({ "k7-core": 7 });
+    expect(libraryRoot("k7-core", project)).toBe(join(lib, "2"));
+    expect(readFileSync(join(ws, "_library-pins.k7x"), "utf8")).toContain("7");
   });
 
   it("names a version folder's library by its path, and keeps a module inside the version it was loaded from", () => {

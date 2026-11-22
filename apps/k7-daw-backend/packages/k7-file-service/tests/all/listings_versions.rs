@@ -45,7 +45,8 @@ fn a_pinned_version_says_what_it_requires_and_what_is_newer() {
         VersionRow {
             pinned: Version::Number(2),
             requires: Some(1),
-            upgrade: Some(3)
+            upgrade: Some(3),
+            used: None
         }
     );
 }
@@ -62,7 +63,8 @@ fn a_draft_pin_has_no_requirement_and_no_upgrade() {
         VersionRow {
             pinned: Version::Draft,
             requires: None,
-            upgrade: None
+            upgrade: None,
+            used: None
         }
     );
 }

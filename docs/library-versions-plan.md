@@ -68,6 +68,12 @@ drums(2)
   `_modules`.
 - A library the file does not name resolves to the version that was current when versions arrived,
   and the first open WRITES that pin, so no song changes sound unasked.
+- **A device lacking the pinned version opens the workspace with the newest version it holds, and
+  says so.** No server keeps old versions and each weighs about 71 MB, so a device holds only what
+  its app bundles, and a workspace cloned from another device can pin a version this one never had.
+  The pin file is not rewritten: the editor shows one line ("pins k7-core 1, which this device
+  doesn't have; it opens with k7-core 8") with a button that moves the pin, a change the person
+  commits. A `draft` pin is never substituted.
 - A new workspace pins the newest version its k7 can run.
 - An admin's workspace pins `draft`, new or not: an admin authors the library from their own
   workspaces, and a frozen version refuses the write.
@@ -115,8 +121,8 @@ A ref keeps naming exactly one folder: nothing shadows `@k7-core/x` in place. Ov
 
 ## How the server opens any song
 
-It reads the workspace's `_library-pins.k7x`, resolves `@<name>/…` in `libraries/<name>/<pin>/`,
-and `@account/…` in the account's own folder. The server holds every pinned version, every account
+It reads the workspace's `_library-pins.k7x`, resolves `@<name>/…` in `libraries/<name>/<pin>/`
+(the newest version held when that folder is missing), and `@account/…` in the account's own folder. The server holds every pinned version, every account
 library and every workspace, and runs at the highest level, so latest, old and forked all open.
 
 ## Lots
@@ -126,7 +132,9 @@ library and every workspace, and runs at the highest level, so latest, old and f
    admin's ask, and `LibraryStore.publish` (`k7-libraries`).
 2. **Built.** `_library-pins.k7x`: the compile, the file tree and the presets read the pinned
    folder, and `ensureLibraryPins` (`apps/k7-daw-backend/packages/k7-file-service/src/pins.rs`) writes it on
-   workspace creation and on the first open.
+   workspace creation and on the first open. A pin this machine lacks reads the newest version held
+   (`played_version`, `apps/k7-daw-backend/packages/k7-file-service/src/libraries.rs`), and
+   `LibraryUpgrades.tsx` says so with a button that moves the pin.
 3. **Built:** Publish on the Libraries page, `POST /account/libraries/<name>/publish`, and each
    library's versions in `GET /account/libraries`.
 4. **Built:** `library versions` and `library upgrade` (`../apps/k7-daw-frontend/packages/commands/src/verbs/library.ts`),

@@ -172,13 +172,48 @@ fn is_versioned(home: &Home, name: &str) -> bool {
     })
 }
 
+/// The published versions of a versioned library `name` this machine holds, by one listing; `None` for one in a single folder.
+fn held_numbers(home: &Home, name: &str) -> Option<Vec<u32>> {
+    let entries = std::fs::read_dir(home.library_home(name)).ok()?;
+    let mut versioned = false;
+    let mut numbers = Vec::new();
+    for e in entries.flatten() {
+        if !e.file_type().is_ok_and(|t| t.is_dir()) {
+            continue;
+        }
+        match version_of_dir(&e.file_name().to_string_lossy()) {
+            Some(Version::Number(n)) => {
+                versioned = true;
+                numbers.push(n);
+            }
+            Some(Version::Draft) => versioned = true,
+            None => {}
+        }
+    }
+    versioned.then_some(numbers)
+}
+
+/// The version pinned `v` plays among `held`: the newest held when the pinned number is not among them.
+fn played_among(held: &[u32], v: Version) -> Version {
+    match v {
+        Version::Number(n) if !held.contains(&n) => {
+            held.iter().max().map_or(v, |m| Version::Number(*m))
+        }
+        _ => v,
+    }
+}
+
+/// The version a pin of `name` at `v` is played at on this machine, which never rewrites the pin.
+pub fn played_version(home: &Home, name: &str, v: Version) -> Version {
+    held_numbers(home, name).map_or(v, |held| played_among(&held, v))
+}
+
 /// The folder version `v` of `name` is read from; a library still in one folder is every version of itself.
 fn version_root(home: &Home, name: &str, v: Version) -> String {
     let library = home.library_home(name);
-    if is_versioned(home, name) {
-        join(&[&library, &v.spelling()])
-    } else {
-        library
+    match held_numbers(home, name) {
+        Some(held) => join(&[&library, &played_among(&held, v).spelling()]),
+        None => library,
     }
 }
 
@@ -228,7 +263,7 @@ pub fn library_of(home: &Home, path: &str) -> Option<Library> {
     })
 }
 
-/// `libraryRoot` for the workspace `from` stands in (1033); a `Declined` where its pins are in the YAML spelling.
+/// `libraryRoot` for the workspace `from` stands in (1033); a pinned number this machine lacks reads its newest held.
 pub fn library_root(home: &Home, name: &str, from: Option<&str>) -> Result<String, Declined> {
     if name == ACCOUNT_LIBRARY {
         return Ok(home.account_home());

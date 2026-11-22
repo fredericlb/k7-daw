@@ -58,6 +58,7 @@ mod media_onsets;
 mod media_region;
 mod module_origins;
 mod paths_vectors;
+mod pin_fallback;
 mod pins;
 mod projects_hostile;
 mod projects_info;

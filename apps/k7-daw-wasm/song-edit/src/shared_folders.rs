@@ -83,14 +83,26 @@ pub fn is_versioned_library(fs: &dyn Fs, env: &Env, name: &str) -> bool {
     !version_dirs(fs, env, name).is_empty()
 }
 
-/// The folder version `v` of library `name` is read from.
+/// The version pinned `v` plays among the `held` folders: the newest number held when a pinned number is not there.
+fn played_among(held: &[String], v: &str) -> String {
+    if v == "draft" || held.iter().any(|h| h == v) {
+        return v.to_owned();
+    }
+    held.iter()
+        .filter_map(|h| h.parse::<u32>().ok())
+        .max()
+        .map_or_else(|| v.to_owned(), |n| n.to_string())
+}
+
+/// The folder version `v` of library `name` is read from; a pinned number this machine lacks reads its newest held.
 #[must_use]
 pub fn library_version_root(fs: &dyn Fs, env: &Env, name: &str, v: &str) -> String {
     let home = library_home_of(env, name);
-    if is_versioned_library(fs, env, name) {
-        join(&[&home, v])
-    } else {
+    let held = version_dirs(fs, env, name);
+    if held.is_empty() {
         home
+    } else {
+        join(&[&home, &played_among(&held, v)])
     }
 }
 

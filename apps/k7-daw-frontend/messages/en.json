@@ -509,6 +509,8 @@
   "libs.upgradeReady": "@{name} plays v{from} — v{to} is ready",
   "libs.upgrade": "Upgrade",
   "libs.engineTooOld": "@{name} v{version} needs level {need}; this engine's machine runs level {level} — update k7 there",
+  "libs.pinMissing": "This workspace pins {name} {pinned}, which this device doesn't have; it opens with {name} {used}. Sounds may differ where a module changed.",
+  "libs.pinUsed": "Pin {name} {used}",
   "downloads.title": "Downloads: {done} of {total} done",
   "downloads.heading": "Downloads",
   "downloads.left": "{left} left",

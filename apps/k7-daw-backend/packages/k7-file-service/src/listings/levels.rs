@@ -96,6 +96,9 @@ fn version_json(out: &mut Vec<u8>, row: &VersionRow) {
     if let Some(u) = row.upgrade {
         out.extend_from_slice(format!(",\"upgrade\":{u}").as_bytes());
     }
+    if let Some(u) = row.used {
+        out.extend_from_slice(format!(",\"used\":{u}").as_bytes());
+    }
     out.push(b'}');
 }
 

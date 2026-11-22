@@ -509,6 +509,8 @@
   "libs.upgradeReady": "@{name} joue la v{from} — la v{to} est prête",
   "libs.upgrade": "Mettre à jour",
   "libs.engineTooOld": "@{name} v{version} demande le niveau {need} ; la machine de ce moteur est au niveau {level} — mettez k7 à jour là-bas",
+  "libs.pinMissing": "Cet espace de travail épingle {name} {pinned}, que cet appareil n'a pas ; il s'ouvre avec {name} {used}. Le son peut différer là où un module a changé.",
+  "libs.pinUsed": "Épingler {name} {used}",
   "downloads.title": "Téléchargements : {done} sur {total} terminés",
   "downloads.heading": "Téléchargements",
   "downloads.left": "{left} restant(s)",

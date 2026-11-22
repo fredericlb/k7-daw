@@ -112,6 +112,11 @@ export interface ModuleLibrary {
   wavetables?: FileNode[];
   /** …and its shared amp MODELS, what an amp's `model` may pick besides its own assets. */
   models?: FileNode[];
-  /** For one of the origin's libraries: the version this workspace plays, and the newest this k7 could move to. */
-  version?: { pinned: number | "draft"; requires?: number; upgrade?: number };
+  /** For one of the origin's libraries: the version this workspace pins, the newest this k7 could move to, and `used`, the version played when this machine lacks the pinned one. */
+  version?: {
+    pinned: number | "draft";
+    requires?: number;
+    upgrade?: number;
+    used?: number;
+  };
 }

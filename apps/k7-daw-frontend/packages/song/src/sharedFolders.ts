@@ -140,10 +140,21 @@ export function newestRunnableVersion(
   return runnable.length ? Math.max(...runnable) : UNPINNED_VERSION;
 }
 
-/** The folder version `v` of library `name` is read from; a library still in one folder is every version of itself. */
+/** The version pinned `v` plays among `held`: the newest number held when a pinned number is not there. */
+function playedAmong(
+  held: readonly LibraryVersion[],
+  v: LibraryVersion,
+): LibraryVersion {
+  if (v === DRAFT_VERSION || held.includes(v)) return v;
+  const numbers = held.filter((h): h is number => h !== DRAFT_VERSION);
+  return numbers.length ? Math.max(...numbers) : v;
+}
+
+/** The folder version `v` of library `name` is read from; a pinned number this machine lacks reads its newest held. */
 export function libraryVersionRoot(name: string, v: LibraryVersion): string {
   const home = libraryHomeOf(name);
-  return isVersionedLibrary(name) ? join(home, String(v)) : home;
+  const held = versionDirs(name);
+  return held.length ? join(home, String(playedAmong(held, v))) : home;
 }
 
 /** The pins of the workspace `from` stands in: the nearest `_library-pins.k7x` above it, else none. */

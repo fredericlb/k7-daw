@@ -5,7 +5,7 @@
 use std::collections::HashMap;
 
 use super::families::library_names;
-use crate::libraries::{Home, Version, version_of_dir, workspace_pins};
+use crate::libraries::{Home, Version, played_version, version_of_dir, workspace_pins};
 use crate::paths::join;
 use crate::read::open_regular;
 use crate::space::Declined;
@@ -30,6 +30,8 @@ pub struct VersionRow {
     pub pinned: Version,
     pub requires: Option<u32>,
     pub upgrade: Option<u32>,
+    /// The version played instead of the pinned one, which this machine lacks: its newest held.
+    pub used: Option<u32>,
 }
 
 /// `libraryManifestData`'s `requires` of a `library.k7x` text: `None` when it is no manifest.
@@ -185,13 +187,21 @@ pub fn versions_at(
             pinned,
             requires: None,
             upgrade: None,
+            used: None,
         };
         if let Version::Number(p) = pinned {
             let none = Vec::new();
             let lib = local_versions(home, &name, limits)?;
             let newest = newest(&lib, remote.by_name.get(&name).unwrap_or(&none), limits)?;
-            row.requires = manifest_requires(&lib, p, limits)?;
-            row.upgrade = (newest > p).then_some(newest);
+            // The same substitution as `library_root`'s, so the row names the version the compile reads.
+            if let Version::Number(u) = played_version(home, &name, pinned)
+                && u != p
+            {
+                row.used = Some(u);
+            }
+            let played = row.used.unwrap_or(p);
+            row.requires = manifest_requires(&lib, played, limits)?;
+            row.upgrade = (newest > played).then_some(newest);
         }
         out.insert(name, row);
     }

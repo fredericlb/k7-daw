@@ -44,6 +44,14 @@ resolves that library at that version, so a module reads its own library's files
 loaded. A library still in one folder, with no version folder in it, is every version of itself.
 The plan and what remains of it: `docs/library-versions-plan.md`.
 
+**A pinned number this machine lacks reads the newest number it holds**, and the pin stays as it
+is. No server keeps every version and each one weighs about 71 MB, so a phone holds only what its
+app bundles, and a workspace cloned from another device may pin a version it never had: refusing
+it would open no song at all, reading nothing would fail every `extends`. The module listing's
+`version.used` names the version read, the strip above the file tree says it in one line, and its
+button pins that version through `library upgrade` — the person's change to commit. A `draft` pin
+is never substituted.
+
 **Still found by location, never declared.** `accountLibraries()` is the folders under
 `librariesHome()` whose name a library could have (`isLibraryName`); the SETTING that lists
 them is the hub's, and resolution never reads it. A folder there is a root,
