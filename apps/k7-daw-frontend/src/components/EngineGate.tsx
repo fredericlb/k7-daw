@@ -22,6 +22,10 @@ import { EngineTakenBanner } from "./EngineTakenBanner";
 import { holdsClaim, type Taken } from "./engineTaken";
 import { ProjectGate } from "./ProjectGate";
 
+/** How many more looks an owned engine that did not answer gets, and how far apart (docs/shell.md). */
+const OWNED_RETRIES = 3;
+const OWNED_RETRY_MS = 5_000;
+
 export function EngineGate({
   /** The surface this tab was opened on, when the address named one — forwarded, not acted on: this gate's job is the engine. */
   external,
@@ -121,14 +125,34 @@ export function EngineGate({
     setGeneration((g) => g + 1);
   }, []);
 
+  // Looks left for an engine this device owns that did not answer: a page still loading can hold its reply past the probe's 3 s.
+  const retriesLeft = useRef(OWNED_RETRIES);
+  const retryTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(
+    () => () => {
+      if (retryTimer.current) clearTimeout(retryTimer.current);
+    },
+    [],
+  );
+
   /** Looks for the engine on this machine; a step that threw answers like none being usable: the project stays open and silent. */
   const look = useCallback(async (): Promise<void> => {
     try {
       const { ranked } = await engines.find();
       const here = localEngineOf(ranked);
       if (here) take(here);
-      // Said once per look, to the console a phone's logcat carries: what was offered, and why none is this device's.
-      else
+      else {
+        // The registry names an engine of this account that was silent: looked for again, a few times, rather than left silent.
+        if (
+          retriesLeft.current > 0 &&
+          ranked.some((r) => r.engine.access === "owner" && r.token === null)
+        ) {
+          retriesLeft.current--;
+          retryTimer.current = setTimeout(() => {
+            if (!chosenRef.current) void lookRef.current();
+          }, OWNED_RETRY_MS);
+        }
+        // Said once per look, to the console a phone's logcat carries: what was offered, and why none is this device's.
         console.info(
           "[engine-gate] no engine of this device among",
           JSON.stringify(
@@ -142,6 +166,7 @@ export function EngineGate({
             })),
           ),
         );
+      }
     } catch {
       // No engine: the bar says so, and the engine page starts one.
     } finally {
@@ -151,6 +176,8 @@ export function EngineGate({
       setSearching(false);
     }
   }, [take]);
+  const lookRef = useRef(look);
+  lookRef.current = look;
 
   useEffect(() => {
     // StrictMode runs this twice in dev; both probes are harmless, and a ref guard would strand the search.

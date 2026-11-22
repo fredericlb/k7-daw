@@ -17,6 +17,12 @@ search is reached without a reconnect delay; an engine found later — the bar's
 opens — is joined without a remount, unless its files are not the hub's. Once an engine is held, the files'
 ticket names it, and that is what binds it at the hub (`apps/k7-daw-backend/docs/files/hub.md`).
 
+**An owned engine that did not answer is looked for again**, three times, five seconds apart. The
+probe gives an address 3 s to answer `whoami`, and a page still loading (a slow phone, or an emulator
+drawing on the CPU) can hold the reply past that while the engine answered in milliseconds; the
+registry naming an engine of this account is the evidence that one is there. An unowned engine is
+never retried, as it is never taken. When none is found, the gate says on the console what it was offered.
+
 **Every wait is one bar along the bottom** (`@studio/project-shell/progress`), never a screen: the
 sign-in check, the files, the address resolved, the sync, then — with the project already drawn —
 the engine looked for, the engine's plugin scan when the project names an external plugin, the
