@@ -9,6 +9,7 @@ use k7_git::auth::Secrets;
 use k7_roam::{Fake, ListStore, NoStore};
 use serde_json::{Value, json};
 
+use super::git::Kind;
 use super::git_forge_routes::Verb;
 use super::git_forgejo_servers::{Server, forget_in, keep_in, list_in};
 use super::tests_git::ask;
@@ -173,4 +174,50 @@ fn a_server_kept_before_the_store_existed_is_pushed_to_it() {
     assert!(roam.pairs().is_empty());
     assert_eq!(list_in(&roam, &a).len(), 1);
     assert_eq!(roam.pairs().len(), 1);
+}
+
+fn key_posts(f: &super::tests_git_forgejo_fake::Fake) -> usize {
+    let st = f.lock().unwrap();
+    st.asked
+        .iter()
+        .filter(|a| *a == "POST /api/v1/user/keys")
+        .count()
+}
+
+async fn until(mut done: impl FnMut() -> bool) {
+    for _ in 0..100 {
+        if done() {
+            return;
+        }
+        tokio::time::sleep(std::time::Duration::from_millis(50)).await;
+    }
+}
+
+#[tokio::test(flavor = "multi_thread")]
+async fn a_synced_sign_in_gets_this_devices_key_uploaded_once_when_the_accounts_are_read() {
+    let (d, f, id) = added("fj-own-key").await;
+    sign_in(&d, &id).await;
+    // As if the token came from another device: the key is not on the host and this device never confirmed it.
+    f.lock().unwrap().keys.clear();
+    let marker = format!("key-on:{id}");
+    let public = k7_git::auth::public_key(&*d.ctx.secrets).unwrap();
+    let ours = super::git_forge_token::fingerprint(&public).unwrap();
+    d.ctx.secrets.delete(&marker, &ours).unwrap();
+    let before = key_posts(&f);
+    let (s, _, _) = ask(&d, Kind::Forges, "GET", "/git/forges", None).await;
+    assert_eq!(s, 200);
+    let kept = || d.ctx.secrets.get(&marker, &ours).unwrap().is_some();
+    until(kept).await;
+    assert!(kept());
+    assert_eq!(f.lock().unwrap().keys.len(), 1);
+    assert!(!k7_git::auth::is_token(&marker), "the marker never travels");
+    let after_first = key_posts(&f);
+    assert_eq!(after_first, before + 1);
+    ask(&d, Kind::Forges, "GET", "/git/forges", None).await;
+    tokio::time::sleep(std::time::Duration::from_millis(300)).await;
+    assert_eq!(
+        key_posts(&f),
+        after_first,
+        "a second read does not upload again"
+    );
 }

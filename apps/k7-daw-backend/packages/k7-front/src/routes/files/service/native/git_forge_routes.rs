@@ -12,7 +12,7 @@ use super::git_forge::{
     Forge, Saved, Step, Tokens, accounts, drop_token, fail, find, repo_of, saved, sign_in_again,
 };
 use super::git_forge_api::{Reply, next_page};
-use super::git_forge_token::{finish, fresh};
+use super::git_forge_token::{ensure_key, ensure_keys_later, finish, fresh, unmark};
 use super::git_forgejo_servers;
 use crate::routes::files::json_answer;
 
@@ -110,9 +110,11 @@ pub(super) fn status(ctx: &Ctx, f: &Forge) -> Response {
     json_answer(200, &status_of(ctx, f))
 }
 
-/// `GET /git/forges`: every account this device offers, each with its status; no network call.
+/// `GET /git/forges`: every account this device offers, each with its status; no network call is waited on.
 pub(super) fn list(ctx: &Ctx) -> Response {
-    let forges: Vec<Value> = accounts(ctx)
+    let all = accounts(ctx);
+    ensure_keys_later(ctx, &all);
+    let forges: Vec<Value> = all
         .iter()
         .map(|f| {
             let p = f.profile();
@@ -196,7 +198,9 @@ async fn with_repo(ctx: &Ctx, f: &Forge) -> Result<Saved, Response> {
             &format!("{}'s repositories need one more permission", p.name),
         ));
     }
-    fresh(ctx, f, s).await
+    let s = fresh(ctx, f, s).await?;
+    ensure_key(ctx, f).await;
+    Ok(s)
 }
 
 /// `GET /git/forges/<id>/repos`: the account's repositories in the forge's order, with their topics.
@@ -279,6 +283,7 @@ pub(super) async fn create(ctx: &Ctx, f: &Forge, b: &Value) -> Response {
 
 /// `POST /git/forges/<id>/signout`: the token goes; the uploaded key stays, it is the device's git access.
 pub(super) fn signout(ctx: &Ctx, f: &Forge) -> Response {
+    unmark(ctx, f);
     match drop_token(ctx, f) {
         Ok(()) => json_answer(200, &json!({ "ok": true })),
         Err(e) => fail(500, "keychain", &format!("the device's keychain: {e}")),

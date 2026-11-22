@@ -285,7 +285,7 @@ async fn sign_in(ssh: &mut Handle<Pin>, net: &Net, user: &str) -> Result<(), Err
         Ok(())
     } else {
         Err(Error::Auth(
-            "the server refused the device's key for this user: add the public key to the host"
+            "the server refused the device's key for this user: open Settings → Services to add this device's key, or add its public key to the host"
                 .into(),
         ))
     }

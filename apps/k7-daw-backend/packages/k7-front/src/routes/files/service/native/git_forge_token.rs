@@ -62,7 +62,7 @@ pub(super) async fn finish(ctx: &Ctx, f: &Forge, t: Tokens) -> Result<Done, Refu
         let said = format!("the device's keychain: {e}");
         return Err((500, "keychain".into(), said));
     }
-    let note = upload_key(ctx, f, &t.access).await;
+    let note = upload_key(ctx, f, &t.access).await.err();
     f.trust_host(ctx).await;
     Ok(Done {
         login,
@@ -80,15 +80,89 @@ pub(super) fn fingerprint(line: &str) -> Option<String> {
     ))
 }
 
+/// The device's key on the account after a sign-in: a sentence when it cannot be, the marker set when it is.
+async fn upload_key(ctx: &Ctx, f: &Forge, token: &str) -> Result<(), String> {
+    let done = put_key(ctx, f, token).await;
+    if done.is_ok() {
+        mark(ctx, f);
+    }
+    done
+}
+
+/// The per-device marker's entry: a host `is_token` does not name, so it never reaches iCloud Keychain.
+fn marker(ctx: &Ctx, f: &Forge) -> Option<(String, String)> {
+    let ours = fingerprint(&auth::public_key(&*ctx.secrets).ok()?)?;
+    Some((format!("key-on:{}", f.profile().id), ours))
+}
+
+pub(super) fn marked(ctx: &Ctx, f: &Forge) -> bool {
+    marker(ctx, f).is_some_and(|(h, u)| ctx.secrets.get(&h, &u).is_ok_and(|v| v.is_some()))
+}
+
+fn mark(ctx: &Ctx, f: &Forge) {
+    if let Some((h, u)) = marker(ctx, f) {
+        let _ = ctx.secrets.set(&h, &u, "1");
+    }
+}
+
+/// Signing out forgets the marker: the next account on this forge has not seen the device's key.
+pub(super) fn unmark(ctx: &Ctx, f: &Forge) {
+    if let Some((h, u)) = marker(ctx, f) {
+        let _ = ctx.secrets.delete(&h, &u);
+    }
+}
+
+/// Makes sure THIS device's key is on the signed-in account, whichever device signed in; one line on a failure.
+pub(super) async fn ensure_key(ctx: &Ctx, f: &Forge) {
+    if !f.available() || marked(ctx, f) {
+        return;
+    }
+    let Some(s) = saved(ctx, f) else { return };
+    let Ok(s) = fresh(ctx, f, s).await else {
+        return;
+    };
+    if let Err(why) = upload_key(ctx, f, &s.token).await {
+        eprintln!(
+            "k7-front: this device's key is not on {}: {why}",
+            f.profile().id
+        );
+    }
+}
+
+/// `ensure_key` for every signed-in account, each on a task of its own so the answer never waits on a forge.
+pub(super) fn ensure_keys_later(ctx: &Ctx, accounts: &[Forge]) {
+    static BUSY: OnceLock<Mutex<std::collections::HashSet<String>>> = OnceLock::new();
+    for f in accounts {
+        if !f.available() || saved(ctx, f).is_none() || marked(ctx, f) {
+            continue;
+        }
+        let key = format!("{}\n{}", ctx.account_home, f.profile().id);
+        let busy = BUSY.get_or_init(Default::default);
+        let first = busy
+            .lock()
+            .unwrap_or_else(|p| p.into_inner())
+            .insert(key.clone());
+        if !first {
+            continue;
+        }
+        let (c, f) = (ctx.clone(), f.clone());
+        tokio::spawn(async move {
+            ensure_key(&c, &f).await;
+            let busy = BUSY.get_or_init(Default::default);
+            busy.lock().unwrap_or_else(|p| p.into_inner()).remove(&key);
+        });
+    }
+}
+
 /// Puts the device's public key on the account unless it is there; a sentence when it cannot be.
-async fn upload_key(ctx: &Ctx, f: &Forge, token: &str) -> Option<String> {
+async fn put_key(ctx: &Ctx, f: &Forge, token: &str) -> Result<(), String> {
     let p = f.profile();
-    let public = auth::public_key(&*ctx.secrets).ok()?;
-    let ours = fingerprint(&public)?;
+    let public = auth::public_key(&*ctx.secrets).map_err(|e| e.to_string())?;
+    let ours = fingerprint(&public).ok_or("the device's key has no fingerprint")?;
     let listed = match p.api.get(token, &f.keys_path(&ours)).await {
         Ok(r) if r.ok() => r,
-        Ok(r) => return Some(r.message()),
-        Err(e) => return Some(e),
+        Ok(r) => return Err(r.message()),
+        Err(e) => return Err(e),
     };
     let there = listed.body.as_array().is_some_and(|a| {
         a.iter().any(|k| {
@@ -99,7 +173,7 @@ async fn upload_key(ctx: &Ctx, f: &Forge, token: &str) -> Option<String> {
         })
     });
     if there {
-        return None;
+        return Ok(());
     }
     let title = if auth::key_is_synced(&*ctx.secrets) {
         "k7".to_string()
@@ -120,12 +194,12 @@ async fn upload_key(ctx: &Ctx, f: &Forge, token: &str) -> Option<String> {
         sent = post(format!("{title} ({short})")).await;
     }
     match sent {
-        Ok(r) if r.ok() => None,
+        Ok(r) if r.ok() => Ok(()),
         Ok(r) if r.status == 422 && !r.message().contains("title has been used") => {
-            Some(f.key_elsewhere())
+            Err(f.key_elsewhere())
         }
-        Ok(r) => Some(r.message()),
-        Err(e) => Some(e),
+        Ok(r) => Err(r.message()),
+        Err(e) => Err(e),
     }
 }
 
