@@ -266,6 +266,8 @@ mod tests_git_forgejo;
 #[cfg(test)]
 mod tests_git_forgejo_fake;
 #[cfg(test)]
+mod tests_git_forgejo_sync;
+#[cfg(test)]
 mod tests_git_github;
 #[cfg(test)]
 mod tests_git_history;

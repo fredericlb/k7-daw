@@ -9,6 +9,8 @@ export interface ForgeStatus {
   available: boolean;
   login?: string;
   scopes: string[];
+  /** Whether signing out (and, for a Forgejo server, removing it) reaches the person's other Apple devices too. */
+  synced?: boolean;
 }
 
 /** One entry of `GET /git/forges`: the account's id (its forge's host), its kind and its name. */

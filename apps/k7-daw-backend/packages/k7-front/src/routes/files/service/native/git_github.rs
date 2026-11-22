@@ -1,6 +1,6 @@
 //! git_github.rs — GitHub behind the forge seam (`docs/files/git.md`): its profile, the device flow, the scopes from
 //! `X-OAuth-Scopes`, github.com's pinned host key and the topic list. What a reader gets wrong: the token keeps its own
-//! `github-oauth` keychain entry, so nobody is signed out by the seam; both base URLs are overridable
+//! `github-oauth` keychain entry (`k7_git::auth::GITHUB_TOKEN_HOST`), so nobody is signed out by the seam; both base URLs are overridable
 //! (`K7_GITHUB_WEB_URL`, `K7_GITHUB_API_URL`), honoured on 127.0.0.1, ::1 and localhost only.
 
 use std::collections::HashMap;
@@ -80,7 +80,7 @@ impl GitHub {
             code: "github",
             ssh_host: ID.into(),
             entry: Entry {
-                host: "github-oauth".into(),
+                host: k7_git::auth::GITHUB_TOKEN_HOST.into(),
                 user: "k7",
             },
             api: Api {

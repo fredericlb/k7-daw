@@ -1,6 +1,7 @@
 # The list of workspaces
 
-What roams between a person's Apple devices besides git: the list of the workspaces they added. The decisions of what travels how are
+What roams between a person's Apple devices besides git: the list of the workspaces they added, and the Forgejo servers
+(`k7_roam::forges`, read and written by `git_forgejo_servers.rs`). The decisions of what travels how are
 `docs/project-sync-plan.md`; the Apple side is `apps/k7-daw-engine/k7-runtime/docs/ios.md`. The crate is `k7-roam`, the route is
 `routes/files/service/native/git_roam.rs`.
 
@@ -21,7 +22,17 @@ What roams between a person's Apple devices besides git: the list of the workspa
 | Examples is never listed | every device has its own copy of the demos |
 | the route answers `{available, entries, here}`: the live entries, and the ids this device holds | the page decides what is offered (a remote, not here); the host stays free of screens |
 
+## The Forgejo servers
+
+| choice | why |
+|---|---|
+| one key per server, `forge.<id>`, the value the server's JSON as `.k7-forges.json` holds it; a removal leaves `{id, deleted, at}` | the same last-writer-wins cells as the workspaces; a device that still lists a removed server drops it instead of bringing it back |
+| every read of the list merges: the store's body wins, a server only in the file is pushed, a tombstone drops it from the file, and the file is rewritten when it changed | the file is the copy the device reads off Apple platforms and when iCloud is off; a server added before the store existed reaches it on the first read |
+| a tombstone goes after 30 days, at a read | as the workspaces' |
+| the host's store passes `ws.` and `forge.` keys only (`store::KEY_PREFIXES`) | nothing else of the person's key-value store is k7's |
+| the store is the `Ctx`'s, `store::current()` in the front | the tests each hold their own and never meet the one the roaming route's test installs |
+
 ## Tests
 
-`k7-roam`'s unit tests cover the encoding, the id, the tombstone rules, the sweep and the callbacks; the route's test is
-`tests_roam.rs` in `k7-front`.
+`k7-roam`'s unit tests cover the encoding, the id, the tombstone rules, the sweep, the callbacks and the servers' merge; the
+route's test is `tests_roam.rs` in `k7-front`, the servers' `tests_git_forgejo_sync.rs`.

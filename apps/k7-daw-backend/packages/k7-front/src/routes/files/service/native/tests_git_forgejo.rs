@@ -10,7 +10,7 @@ use super::git_forge_routes::Verb;
 use super::tests_git::{Dev, ask, device, post};
 use super::tests_git_forgejo_fake::{self as fake, Fake, LOGIN};
 
-fn on(id: &str, v: Verb) -> Kind {
+pub(super) fn on(id: &str, v: Verb) -> Kind {
     Kind::Forge(id.into(), v)
 }
 
@@ -19,7 +19,7 @@ fn id_of(url: &str) -> String {
     url.trim_start_matches("http://").to_string()
 }
 
-async fn added(name: &str) -> (Dev, Fake, String) {
+pub(super) async fn added(name: &str) -> (Dev, Fake, String) {
     let (f, url) = fake::start().await;
     let mut d = device(name);
     d.ctx.port = 43210;
@@ -30,7 +30,7 @@ async fn added(name: &str) -> (Dev, Fake, String) {
 }
 
 /// Start, the browser's visit to the consent page, and the callback; answers the callback's page.
-async fn sign_in(d: &Dev, id: &str) -> (u16, String) {
+pub(super) async fn sign_in(d: &Dev, id: &str) -> (u16, String) {
     let (_, began, _) = post(d, on(id, Verb::Start), "/start", json!({})).await;
     let (s, at) = fake::visit(began["authorizeUrl"].as_str().unwrap()).await;
     assert_eq!(s, 302);
@@ -51,7 +51,7 @@ async fn poll(d: &Dev, id: &str) -> Value {
     post(d, on(id, Verb::Poll), "/poll", json!({})).await.1
 }
 
-fn kept(d: &Dev, id: &str) -> Value {
+pub(super) fn kept(d: &Dev, id: &str) -> Value {
     let text = d.ctx.secrets.get(&format!("forge:{id}"), "k7").unwrap();
     text.map_or(Value::Null, |t| serde_json::from_str(&t).unwrap())
 }

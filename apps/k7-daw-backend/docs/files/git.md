@@ -25,20 +25,20 @@ over `apps/k7-daw-backend/packages/k7-git` (`../git.md`). The choices of the rep
 
 ### Forges: sign in with GitHub or a Forgejo server (`git_forge_routes.rs`)
 
-A forge is one account's server: GitHub, built in, and each Forgejo server the person added on this device. Every route
+A forge is one account's server: GitHub, built in, and each Forgejo server the person added. Every route
 is `/git/forges/<id>/...`, `<id>` being the forge's host (`github.com`), with its port when it is not the scheme's
 (`git.example:3000`); `/git/github/...` is the same route for GitHub under its first name, which the page and the e2e
 spec call. The codes below are GitHub's: a forge's own prefix replaces `github` (`forgejo-signout`).
 
 | route | body or query | answer |
 |---|---|---|
-| `GET /git/forges` | | `{ forges: [{ id, kind: "github" \| "forgejo", name, available, login?, scopes[], url? }] }`, every account this device offers, signed in or not, `url` being a Forgejo server's address; no network call |
+| `GET /git/forges` | | `{ forges: [{ id, kind: "github" \| "forgejo", name, available, login?, scopes[], synced, url? }] }`, every account this device offers, signed in or not, `url` being a Forgejo server's address, `synced` whether a sign-out (and a Forgejo server's removal) reaches the person's other Apple devices; no network call |
 | `GET /git/forges/<id>` (`/git/github`) | | `{ available, login?, scopes[] }`; `available` is false only when the front runs with an empty `K7_GITHUB_CLIENT_ID`, and every other route here but `signout` then answers 404 `github-unavailable`; an id no account has is 404 `unknown-forge`; no network call |
 | `POST …/start` | `{ scopes }` | `{ userCode, verificationUri, interval, expiresIn }`; the device code stays in the front |
 | `POST …/poll` | | `{ state: "pending" \| "slow_down" \| "expired" \| "denied" \| "ok", interval, login?, keyNote? }`; on `ok` the token is kept, the device's key is uploaded and GitHub's ed25519 host key is trusted for `github.com:22` before the answer; `keyNote` is a sentence when the key could not be added (already used on another account) |
 | `GET …/repos` | | `{ repos: [{ fullName, sshUrl, private, pushedAt, k7 }] }`, most recently pushed first, up to ten pages of a hundred; 403 `scope` without `repo`, 401 `github-signout` when GitHub refuses the token (it is dropped) |
 | `POST …/repos` | `{ name, private? }` (private by default) | `{ sshUrl, fullName }`; the repository gets the `k7-workspace` topic; a refusal such as a taken name is 422 `invalid` with GitHub's sentence |
-| `POST …/signout` | | `{ ok }`; the token goes, the uploaded key stays |
+| `POST …/signout` | | `{ ok }`; the token goes, from every Apple device where it syncs; the uploaded key stays |
 
 ### Forgejo (`git_forgejo.rs`, `git_forgejo_flow.rs`, `git_forgejo_servers.rs`)
 
@@ -49,7 +49,7 @@ then gives k7 its client id. The rows below are Forgejo's where they differ from
 |---|---|---|
 | `POST /git/forges/probe` | `{ url }` (`https://` when no scheme is typed) | `{ id, url, version, pageSize, lfs, rootUrl, rootAnswers, redirects, scopes }`, read without a token from `/api/v1/version`, `/settings/api` (`max_response_items`), `/settings/repository` (`lfs_disabled`) and the OpenID configuration's `issuer` (the server's ROOT_URL); `redirects` is `["http://127.0.0.1/api/files/git/forge/callback", "rocks.k7.daw://callback"]`, the two to register; nothing is kept; 400 `bad-address`, 502 `offline` or `not-forgejo` |
 | `POST /git/forges` | `{ url, clientId, sshHost?, sshPort? }` (the address's host and 22 by default) | the probe's answer with `added: true`; the server is kept, replacing one of the same id, and a new client id drops its token |
-| `POST …/remove` | | `{ ok }`: the token and the server go, the uploaded key stays; GitHub is 400 `built-in` |
+| `POST …/remove` | | `{ ok }`: the token and the server go, from every Apple device where they sync; the uploaded key stays; GitHub is 400 `built-in` |
 | `POST …/start` | `{ redirect?: "app" }` | `{ authorizeUrl, redirect, expiresIn }`: the page opens `authorizeUrl` in the browser; the redirect is `http://127.0.0.1:<the front's port>/api/files/git/forge/callback`, or `rocks.k7.daw://callback` with `"app"` |
 | `GET /git/forge/callback` | `?code&state`, or `?error&error_description&state` | a small HTML page for the browser tab ("Signed in to … : you can close this tab", or the error); the code is exchanged, the token kept and the key uploaded before it answers; an app shell that catches `rocks.k7.daw://callback?…` forwards the same query here |
 | `POST …/poll` | | `{ state: "pending" \| "ok" \| "denied" \| "error" \| "expired", login?, scopes?, keyNote?, error? }`: how the callback ended, said once, then `expired` |
@@ -64,20 +64,20 @@ then gives k7 its client id. The rows below are Forgejo's where they differ from
 | `Forge` is an enum, one variant and one file per forge (`git_github.rs`), rather than a trait object | the sign-in is async, and a new forge then touches the seam's matches, never another forge's file |
 | every route over a forge is shared (`git_forge_routes.rs`): the end of a sign-in, the key, the repository pages over `Link`, creation, the topic after a connect, the sign-out | one place holds the token's rules: read from the keychain per call, never answered, a 401 drops it |
 | the key is looked up by its `SHA256:` fingerprint before it is posted | Forgejo refuses a key already on any account and can filter its list by fingerprint; GitHub's list compares the same way |
-| an account's token sits in its own keychain entry; GitHub keeps `github-oauth`, a Forgejo server takes `forge:<id>` | the entry is never the synced one, and nobody signed in before the seam is signed out by it |
+| an account's token sits in its own keychain entry; GitHub keeps `github-oauth`, a Forgejo server takes `forge:<id>` | nobody signed in before the seam is signed out by it; on Apple devices these entries sync (`../git.md`, "Credentials") |
 
 ### Forgejo's choices
 
 | choice | why |
 |---|---|
-| the Forgejo servers are a list in the account's own folder (`.k7-forges.json`): id, address, client id, ssh host and port, page size; never synced | each device registers its redirects and holds its own grant; a server reachable from home only is a device's affair |
+| the Forgejo servers are a list (id, address, client id, ssh host and port, page size) in the host's roaming store, one key `forge.<id>` per server, copied to the account's own `.k7-forges.json`; off Apple devices the file is the only list (`../roam.md`) | the person adds a server once for all their Apple devices; a client id is no secret, and the two redirects are the same on every device |
 | a server is kept only once `/api/v1/version` answered; LFS being off or ROOT_URL not answering is said (`lfs`, `rootAnswers`), not refused | LFS goes over HTTP(S) to ROOT_URL, not over SSH, so a device that cannot reach it syncs no large file; the person may still want the rest |
 | an address may be `http://` | a server on the home network often has no certificate; the person typed it |
 | the sign-in is an authorization code with PKCE S256 in the browser, scopes `write:user write:repository` asked once | Forgejo has no device flow, requires PKCE of a public client, and refuses a later sign-in that asks other scopes |
 | the loopback redirect is one exact path on literal `127.0.0.1`, registered without a port; the app's scheme is the second redirect | Forgejo matches the path exactly, takes any port on `127.0.0.1` only (not `localhost` nor `[::1]`); a platform sheet that cannot end on a loopback page returns through the scheme, with nothing registered again |
 | the callback is answered without k7's session cookie (`apps/k7-daw-backend/packages/k7-front/src/routes/files/hub/proxy.rs` lets that one GET through); the 32-byte `state` the front drew is what ties it to the sign-in, and it is spent on first use | the browser arrives from the server, cross-site, or is the system browser that never held the cookie; the PKCE verifier stays in the front, so a stolen code is worth nothing |
 | an access token within a minute of its expiry is refreshed before the call, under a lock per account, and the new refresh token is in the keychain before the new access token is used | a refresh token is single-use: one lost between the exchange and the keychain would leave nothing to refresh with, and two calls refreshing at once would spend the same one twice |
-| a refused refresh drops the token and answers `forgejo-signout` (sign in again); a server that cannot be reached answers `offline` and keeps it | Forgejo keeps one grant per user and application, so another device's sign-in, or a reuse ("token was already used", which also revokes the newest token), ends this one for good; git never needs the token, only Setup, Connect and Clone do |
+| the entry is read again under the lock before a refresh; after a refusal it is read once more, and a refresh token other than the one spent is tried once; only then is the token dropped, unless the entry moved on meanwhile, and the answer is `forgejo-signout`; a server that cannot be reached answers `offline` and keeps it | on Apple devices the entry is shared, and Forgejo keeps one grant per user and application: another device may have spent the token and kept the next; a reuse ("token was already used") revokes the newest token on Forgejo 17, so the retry saves a sign-in only where the server does not, and the read before the refresh is what avoids the reuse; git never needs the token, only Setup, Connect and Clone do |
 | the key is looked up with `?fingerprint=` before it is posted, titled `k7 — <device>`; a taken title is tried once more with the key's short fingerprint beside it; a 422 "has been used" after a miss is "This key belongs to another account on <server>" | Forgejo refuses a key already on any account with the same sentence, and a title is unique per account |
 | the topic is `PUT /repos/{o}/{r}/topics/k7-workspace`, on a new repository and after connecting an existing one, silent on 403 | it adds one topic and keeps the others; `topics` is ignored at creation; a collaborator cannot tag |
 | a new repository is `{ private: true, auto_init: false, default_branch: "main" }` | the workspace's first push makes its history; Forgejo's `private` defaults to false |
@@ -95,7 +95,7 @@ A refusal is `{ error, code }` with the codes of `k7-git`'s errors (`ssh-only`, 
 | the routes run libgit2 on a blocking thread through `Net::blocking` | the front's runtime is never held by a clone |
 | a pull with changes and no `message` is `uncommitted` (409); with one it commits first | "mine" is then always a commit |
 | every route answers 403 `device-only` on a server front, a device's own front (`STUDIO_LOCAL_USER`; no médiathèque is needed) only, and a front started with `K7_GIT_ALLOW_FILE`, which is a test bed | a server would keep tokens and keys in a plain file and `connect` could make it call its own loopback services |
-| the token is kept in the device's secrets store under its own entry, never the synced one, with GitHub's granted scopes read from `X-OAuth-Scopes`; no route answers it | a token is the person's whole account, so it never leaves the device nor reaches the page |
+| the token is kept in the device's secrets store under its own entry, with GitHub's granted scopes read from `X-OAuth-Scopes`; no route answers it | a token is the person's whole account: it reaches no page, and leaves the device only as an iCloud Keychain item on Apple devices |
 | the device flow, the key list and the repositories are called from the front with the front's own HTTPS client; the base addresses are `K7_GITHUB_WEB_URL` and `K7_GITHUB_API_URL`, honoured only when their host is 127.0.0.1, ::1 or localhost (a test's fake) and ignored with one log line otherwise; the client id is k7's registered OAuth App, compiled in, and `K7_GITHUB_CLIENT_ID` overrides it at run only (empty turns the path off), because a variable read at build would rebuild the front | the login endpoints have no CORS, and the client id is public; the variables are the tests' seam |
 | only github.com's ed25519 key is trusted, and a different key already listed is never replaced | the trusted list holds one fingerprint per host, the ssh client meets ed25519 first, and `host-key-changed` keeps refusing as for any host |
 | connecting an existing github.com repository adds the `k7-workspace` topic after the connection, on a task of its own, and ignores any failure | a repository the person cannot administer must still connect, and the connect never waits on GitHub's REST API |

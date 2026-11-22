@@ -27,6 +27,8 @@ pub(super) struct St {
     pub client_id: String,
     pub ttl: u64,
     pub deny: bool,
+    /// A server that refuses a reused refresh token without revoking the grant.
+    pub keep_on_reuse: bool,
     codes: HashMap<String, (String, String, String)>,
     access: HashMap<String, Instant>,
     pub refresh: Option<String>,
@@ -143,8 +145,10 @@ fn token(st: &mut St, b: &Value) -> Response {
                 return reply(200, pair(st));
             }
             if st.used.contains(&given) {
-                st.refresh = None;
-                st.access.clear();
+                if !st.keep_on_reuse {
+                    st.refresh = None;
+                    st.access.clear();
+                }
                 return no("unauthorized_client", "token was already used");
             }
             no("invalid_grant", "unable to parse refresh token")

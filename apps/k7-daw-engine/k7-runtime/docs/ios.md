@@ -302,16 +302,18 @@ On the iOS 26.5 simulator (iPhone 17) on an Apple Silicon Mac, with the real fro
 `apps/k7-daw-backend/packages/k7-file-service/src/watcher.rs` is the one place a watcher is made. The app holds about 130 descriptors
 after the suite, against about 13,000 with kqueue.
 
-## iCloud holds the key and the list
+## iCloud holds the keys and the lists
 
-Workspaces live in Application Support, as on every platform, and travel by git alone. iCloud carries two small things:
-the device's SSH key (iCloud Keychain, `k7-git`'s `secret_ios.rs`) and the list of the workspaces the person added
-(iCloud's key-value store, `docs/project-sync-plan.md`). `RoamStore.swift` installs two C callbacks before the front starts
+Workspaces live in Application Support, as on every platform, and travel by git alone. iCloud carries small things:
+the device's SSH key and the GitHub and Forgejo sign-ins (iCloud Keychain, `k7-git`'s `secret_apple.rs` and `synced.rs`),
+the list of the workspaces the person added and their Forgejo servers (iCloud's key-value store, `docs/project-sync-plan.md`,
+`apps/k7-daw-backend/docs/roam.md`). `RoamStore.swift` installs two C callbacks before the front starts
 (`k7_roam_install` in `K7Embed.h`), over `NSUbiquitousKeyValueStore`; `k7/k7.entitlements` holds the key-value
-identifier `$(TeamIdentifierPrefix)rocks.k7.daw`, which the provisioning profile grants.
+identifier `$(TeamIdentifierPrefix)rocks.k7.daw` and the keychain group `$(AppIdentifierPrefix)rocks.k7.daw`, which the
+Mac app names too (`apps/k7-daw-desktop/docs/icloud.md`).
 
 | choice | why |
 |---|---|
-| the callbacks pass only keys `ws.<id>`, and capture nothing | a C function pointer cannot capture, and nothing else of the store is the list's |
+| the callbacks pass only keys `ws.<id>` and `forge.<id>`, and capture nothing | a C function pointer cannot capture, and nothing else of the store is k7's |
 | the change notification is logged, and the page reads the store through the front every 20 s | iCloud applies a change to the store itself; a read is always current, and no event has to cross to Rust |
 | a signed-out device or an unsigned build lists nothing from other devices and keeps its own list | the app works the same with no iCloud, and CI runs unsigned |

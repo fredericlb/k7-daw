@@ -1,8 +1,8 @@
 //! git_forge.rs — the forge seam (`docs/files/git.md`, "Forges"): what differs per forge is a `Profile` of data and the
 //! few `Forge` methods matched per variant (the sign-in, the refresh, the host-key policy, the key lookup, the topic);
 //! every route over it is shared (`git_forge_routes.rs`). What a reader gets wrong: a forge is one account's server,
-//! GitHub built in and each Forgejo server from the device's own list, and its token sits in its own keychain entry,
-//! never the synced one, never answered.
+//! GitHub built in and each Forgejo server from the list, and its token sits in its own keychain entry, synced between
+//! the person's Apple devices (`k7_git::auth::is_token`), never answered.
 
 use axum::response::Response;
 use serde::{Deserialize, Serialize};
@@ -19,7 +19,7 @@ use crate::routes::files::json_answer;
 /// The topic that marks a repository as a k7 workspace.
 pub(super) const TOPIC: &str = "k7-workspace";
 
-/// The keychain entry of one account's token: its host is never the SSH key's, so it is never the synced one.
+/// The keychain entry of one account's token: a host `k7_git::auth::is_token` names, so it syncs on Apple devices.
 #[derive(Clone, Debug)]
 pub(super) struct Entry {
     pub host: String,

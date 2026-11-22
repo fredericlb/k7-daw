@@ -119,7 +119,11 @@ function ServerRows({
       <Section title={name}>
         <Row
           label={m["git.fj.removeAsk"]({ server: name })}
-          detail={m["git.fj.removeNote"]()}
+          detail={
+            account.synced
+              ? m["git.fj.removeNoteSynced"]()
+              : m["git.fj.removeNote"]()
+          }
         >
           <Button size="sm" variant="destructive" onClick={() => void remove()}>
             {m["git.fj.removeConfirm"]()}

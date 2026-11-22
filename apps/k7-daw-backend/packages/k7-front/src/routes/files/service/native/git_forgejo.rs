@@ -53,7 +53,7 @@ impl Forgejo {
             code: "forgejo",
             ssh_host,
             entry: Entry {
-                host: format!("forge:{}", server.id),
+                host: k7_git::auth::forge_token_host(&server.id),
                 user: "k7",
             },
             api: api_of(&server.url),

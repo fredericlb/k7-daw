@@ -41,6 +41,14 @@ describe("Settings → Services, GitHub", () => {
     expect(out).toContain("one more permission");
   });
 
+  it("says a sign-out reaches the other Apple devices when the sign-in syncs", () => {
+    const signed = { available: true, login: "octo", scopes: ["repo"] };
+    expect(html({ ...signed, synced: true })).toContain(
+      "your other Apple devices",
+    );
+    expect(html(signed)).not.toContain("Apple devices");
+  });
+
   it("says the build has no GitHub sign-in where it is off", () => {
     expect(html({ available: false, scopes: [] })).toContain(
       "no GitHub sign-in",

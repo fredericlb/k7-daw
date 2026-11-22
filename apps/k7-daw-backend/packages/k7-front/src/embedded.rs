@@ -83,6 +83,17 @@ pub fn stop() -> bool {
     true
 }
 
+/// The roaming store a host implements: the Mac app's iCloud key-value store (`apps/k7-daw-desktop/docs/icloud.md`).
+pub use k7_roam::ListStore;
+/// The keys a host's store passes, every other key of its store being someone else's.
+pub use k7_roam::store::KEY_PREFIXES;
+
+/// A Mac app signed with its provisioning profile, before `start`: the forge tokens sync and `store` holds the lists.
+pub fn use_icloud(store: std::sync::Arc<dyn ListStore>) {
+    k7_git::auth::use_icloud_keychain();
+    k7_roam::store::install(store);
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

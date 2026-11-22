@@ -1,7 +1,7 @@
 //! git_forge_token.rs — a forge token's life (`docs/files/git.md`, "The forge seam"): a sign-in's end (the token kept,
 //! the device's key uploaded, the host trusted) and the refresh before a call. What a reader gets wrong: a rotating
-//! refresh token is single-use, so the new one is in the keychain before the new access token is used, and two calls
-//! never refresh at once.
+//! refresh token is single-use and the keychain entry is shared with the person's other Apple devices, so the entry is
+//! read again before a refresh and after a refusal, and the new token is kept before it is used.
 
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex, OnceLock};
@@ -155,14 +155,56 @@ pub(super) async fn fresh(ctx: &Ctx, f: &Forge, s: Saved) -> Result<Saved, Respo
     }
     let lock = lock_of(ctx, f);
     let _held = lock.lock().await;
-    // Read again under the lock: the call that held it may have refreshed already.
+    // Read again under the lock: another call, or another device, may have refreshed already.
     let Some(s) = saved(ctx, f) else {
         return Err(sign_in_again(f));
     };
-    let Some(refresh) = s.refresh.clone().filter(|_| stale(&s)) else {
+    let Some(spent) = s.refresh.clone().filter(|_| stale(&s)) else {
         return Ok(s);
     };
-    match f.refresh(&refresh).await {
+    match spend(ctx, f, s, &spent).await? {
+        Some(next) => Ok(next),
+        None => retry(ctx, f, &spent).await,
+    }
+}
+
+/// After a refusal: another device may have spent the token and kept a newer one, which is tried once.
+#[allow(
+    clippy::result_large_err,
+    reason = "the refusal is the answer to give, built once"
+)]
+async fn retry(ctx: &Ctx, f: &Forge, spent: &str) -> Result<Saved, Response> {
+    let newer = saved(ctx, f).filter(|n| n.refresh.as_deref().is_some_and(|r| r != spent));
+    let Some(n) = newer else {
+        drop_if_still(ctx, f, spent);
+        return Err(sign_in_again(f));
+    };
+    let Some(again) = n.refresh.clone().filter(|_| stale(&n)) else {
+        return Ok(n);
+    };
+    match spend(ctx, f, n, &again).await? {
+        Some(next) => Ok(next),
+        None => {
+            drop_if_still(ctx, f, &again);
+            Err(sign_in_again(f))
+        }
+    }
+}
+
+/// Drops the sign-in unless the entry moved on meanwhile: a sign-in on another device is not this refusal's to end.
+fn drop_if_still(ctx: &Ctx, f: &Forge, spent: &str) {
+    if saved(ctx, f).is_none_or(|s| s.refresh.as_deref() == Some(spent)) {
+        let _ = drop_token(ctx, f);
+    }
+}
+
+/// One refresh: the new pair kept before it is used, none on a refusal, the answer to give when offline.
+#[allow(
+    clippy::result_large_err,
+    reason = "the refusal is the answer to give, built once"
+)]
+async fn spend(ctx: &Ctx, f: &Forge, s: Saved, refresh: &str) -> Result<Option<Saved>, Response> {
+    match f.refresh(refresh).await {
         Ok(t) => {
             let next = Saved {
                 token: t.access,
@@ -173,12 +215,9 @@ pub(super) async fn fresh(ctx: &Ctx, f: &Forge, s: Saved) -> Result<Saved, Respo
             };
             keep(ctx, f, &next)
                 .map_err(|e| fail(500, "keychain", &format!("the device's keychain: {e}")))?;
-            Ok(next)
+            Ok(Some(next))
         }
         Err(Refresh::Offline(e)) => Err(fail(502, "offline", &e)),
-        Err(Refresh::Refused) => {
-            let _ = drop_token(ctx, f);
-            Err(sign_in_again(f))
-        }
+        Err(Refresh::Refused) => Ok(None),
     }
 }

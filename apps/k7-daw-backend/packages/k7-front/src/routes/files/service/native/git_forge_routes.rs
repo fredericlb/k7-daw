@@ -85,13 +85,23 @@ pub(super) async fn answer(ctx: &Ctx, f: &Forge, verb: Verb, b: &Value) -> Respo
     }
 }
 
+/// Whether signing out, or removing the server, reaches the person's other Apple devices too.
+fn synced(ctx: &Ctx, f: &Forge) -> bool {
+    let e = &f.profile().entry;
+    let list = matches!(f, Forge::Forgejo(_)) && ctx.roam.available();
+    list || ctx.secrets.is_synced(&e.host, e.user)
+}
+
 fn status_of(ctx: &Ctx, f: &Forge) -> Value {
+    let synced = synced(ctx, f);
     if !f.available() {
-        return json!({ "available": false, "scopes": [] });
+        return json!({ "available": false, "scopes": [], "synced": synced });
     }
     match saved(ctx, f) {
-        Some(s) => json!({ "available": true, "login": s.login, "scopes": s.scopes }),
-        None => json!({ "available": true, "scopes": [] }),
+        Some(s) => {
+            json!({ "available": true, "login": s.login, "scopes": s.scopes, "synced": synced })
+        }
+        None => json!({ "available": true, "scopes": [], "synced": synced }),
     }
 }
 

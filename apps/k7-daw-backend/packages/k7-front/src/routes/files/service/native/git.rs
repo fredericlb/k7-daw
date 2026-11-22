@@ -104,7 +104,7 @@ impl Kind {
         let verb = Verb::of(method, rest)?;
         // A browser's encoder writes the port's colon as %3A; nothing else is decoded.
         let id = id.replace("%3A", ":").replace("%3a", ":");
-        git_forge_routes::id_ok(&id).then(|| Kind::Forge(id, verb))
+        git_forge_routes::id_ok(&id).then_some(Kind::Forge(id, verb))
     }
 }
 
@@ -125,6 +125,8 @@ pub struct Ctx {
     pub fetchers: Arc<Fetchers>,
     /// The account's capture, to start one on a workspace a clone made.
     pub account: Option<Arc<k7_capture::account::Account>>,
+    /// The host's roaming store (`k7_roam::store::current`), where the Forgejo servers sync; a test's own.
+    pub roam: Arc<dyn k7_roam::ListStore>,
 }
 
 pub(super) fn answer_error(e: &Error) -> Response {
@@ -229,6 +231,7 @@ fn ctx_of(who: &Who<'_>, home: &Home) -> Ctx {
         port: PORT.load(Ordering::Relaxed),
         land: account.as_ref().map(|a| a.landing()),
         fetchers: fetchers(),
+        roam: k7_roam::store::current(),
         account,
     }
 }

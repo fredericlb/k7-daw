@@ -1,12 +1,15 @@
 //! git_forgejo_servers.rs — the Forgejo servers this device signs in to (`docs/files/git.md`, "Forgejo"): the list in
-//! the account's own folder (`.k7-forges.json`, never synced), the probe, the add and the removal. What a reader gets
-//! wrong: the probe needs no token, and a server is kept only once its API answered as Forgejo's.
+//! the host's roaming store where it has one (`k7_roam::forges`), copied to the account's own `.k7-forges.json`, the
+//! probe, the add and the removal. What a reader gets wrong: off Apple devices the file is the only list.
 
 use std::path::Path;
 
 use axum::response::Response;
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
+
+use k7_roam::forges;
+use k7_roam::store::ListStore;
 
 use super::git::{Ctx, bad, field};
 use super::git_forge::{Forge, drop_token, fail};
@@ -37,17 +40,71 @@ struct Kept {
     servers: Vec<Server>,
 }
 
-pub(super) fn list(ctx: &Ctx) -> Vec<Server> {
-    let at = Path::new(&ctx.account_home).join(FILE);
-    let text = std::fs::read_to_string(at).unwrap_or_default();
+fn now_ms() -> u64 {
+    std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .map_or(0, |d| d.as_millis() as u64)
+}
+
+fn read_file(home: &str) -> Vec<Server> {
+    let text = std::fs::read_to_string(Path::new(home).join(FILE)).unwrap_or_default();
     serde_json::from_str::<Kept>(&text)
         .map(|k| k.servers)
         .unwrap_or_default()
 }
 
-fn store(ctx: &Ctx, servers: Vec<Server>) -> std::io::Result<()> {
+fn write_file(home: &str, servers: Vec<Server>) -> std::io::Result<()> {
     let text = serde_json::to_string_pretty(&Kept { servers }).map_err(std::io::Error::other)?;
-    crate::atomic::write_atomic(Path::new(&ctx.account_home), FILE, &text)
+    crate::atomic::write_atomic(Path::new(home), FILE, &text)
+}
+
+pub(super) fn list(ctx: &Ctx) -> Vec<Server> {
+    list_in(ctx.roam.as_ref(), &ctx.account_home)
+}
+
+/// The servers of every device where the host has a store, the file brought up to them; the file alone elsewhere.
+pub(super) fn list_in(roam: &dyn ListStore, home: &str) -> Vec<Server> {
+    let here = read_file(home);
+    if !roam.available() {
+        return here;
+    }
+    let values: Vec<Value> = here
+        .iter()
+        .filter_map(|s| serde_json::to_value(s).ok())
+        .collect();
+    let merged: Vec<Server> = forges::merge(roam, &values, now_ms())
+        .into_iter()
+        .filter_map(|v| serde_json::from_value(v).ok())
+        .collect();
+    if merged != here {
+        let _ = write_file(home, merged.clone());
+    }
+    merged
+}
+
+/// Keeps one server, replacing the one of the same id, in the file and the store.
+pub(super) fn keep_in(roam: &dyn ListStore, home: &str, server: Server) -> std::io::Result<()> {
+    let mut servers = list_in(roam, home);
+    servers.retain(|s| s.id != server.id);
+    if roam.available()
+        && let Ok(v) = serde_json::to_value(&server)
+    {
+        forges::put(roam, &server.id, &v);
+    }
+    servers.push(server);
+    write_file(home, servers)
+}
+
+/// Drops one server from the file, and leaves its tombstone in the store.
+pub(super) fn forget_in(roam: &dyn ListStore, home: &str, id: &str) -> std::io::Result<()> {
+    let servers = list_in(roam, home)
+        .into_iter()
+        .filter(|s| s.id != id)
+        .collect();
+    if roam.available() {
+        forges::forget(roam, id, now_ms());
+    }
+    write_file(home, servers)
 }
 
 /// The base address and the id of what the person typed: http or https, a host, no credentials, query nor fragment.
@@ -195,23 +252,23 @@ pub(super) async fn add(ctx: &Ctx, b: &Value) -> Response {
         ssh_port: ssh_port as u16,
         page_size: v["pageSize"].as_u64().unwrap_or(50) as u32,
     };
-    let mut servers = list(ctx);
-    let before = servers.iter().position(|s| s.id == id);
-    if let Some(i) = before {
-        let old = servers.remove(i);
-        if old.client_id != server.client_id {
-            let _ = drop_token(ctx, &Forge::Forgejo(super::git_forgejo::Forgejo::new(old)));
-        }
+    let roam = ctx.roam.clone();
+    let before = list_in(roam.as_ref(), &ctx.account_home)
+        .into_iter()
+        .find(|s| s.id == id);
+    if let Some(old) = before
+        && old.client_id != server.client_id
+    {
+        let _ = drop_token(ctx, &Forge::Forgejo(super::git_forgejo::Forgejo::new(old)));
     }
-    servers.push(server);
-    if let Err(e) = store(ctx, servers) {
+    if let Err(e) = keep_in(roam.as_ref(), &ctx.account_home, server) {
         return fail(500, "io", &format!("the server list was not kept: {e}"));
     }
     v["added"] = json!(true);
     json_answer(200, &v)
 }
 
-/// `POST /git/forges/<id>/remove`: the token and the server go; the uploaded key stays on the server.
+/// `POST /git/forges/<id>/remove`: the token and the server go, from every Apple device where they sync; the key stays.
 pub(super) fn remove(ctx: &Ctx, f: &Forge) -> Response {
     let Forge::Forgejo(g) = f else {
         return fail(400, "built-in", "GitHub is built in: sign out instead");
@@ -219,11 +276,7 @@ pub(super) fn remove(ctx: &Ctx, f: &Forge) -> Response {
     if let Err(e) = drop_token(ctx, f) {
         return fail(500, "keychain", &format!("the device's keychain: {e}"));
     }
-    let servers = list(ctx)
-        .into_iter()
-        .filter(|s| s.id != g.server.id)
-        .collect();
-    match store(ctx, servers) {
+    match forget_in(ctx.roam.as_ref(), &ctx.account_home, &g.server.id) {
         Ok(()) => json_answer(200, &json!({ "ok": true })),
         Err(e) => fail(500, "io", &format!("the server list was not kept: {e}")),
     }
