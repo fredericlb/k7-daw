@@ -175,6 +175,7 @@ for Sign in with GitHub. `--no-stage` reuses the last staging, `--export-only` w
 | internal testing only (`testFlightInternalTestingOnly`) | no Beta App Review, and a build cannot slip to external testers |
 | Xcode's account signs, the API key only uploads | an App Manager key that signs is refused ("Cloud signing permission error"): cloud signing wants an Admin key, while Xcode's account signs with the team's cloud certificate; altool takes the key's folder, never its content |
 | the ids in a file under `~/.config`, never in the repository | the repository is public, and the API key's `.p8` stays the one secret on disk |
+| the two frameworks' Info.plist from `server/ios/Framework-Info.plist.in`, with the root's version and the deployment target as `MinimumOSVersion` | App Store Connect refuses an embedded framework without them (ITMS-90056, 90057, 90208, 90360), and CMake's own template leaves them empty |
 | a dirty tree refused | the build number names a commit, and a build from other files would carry a number that is not its own |
 | archives kept per build number under `~/.cache/k7-ios-testflight` | the archive holds the symbols a crash report is read with |
 

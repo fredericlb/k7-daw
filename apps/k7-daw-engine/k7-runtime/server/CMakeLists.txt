@@ -35,12 +35,14 @@ if(ANDROID)
     # studio_engine call but do not link themselves.
     target_link_libraries(k7-runtime PRIVATE android log OpenSLES)
 elseif(IOS)
+    include(${CMAKE_CURRENT_LIST_DIR}/ios/framework-plist.cmake)
     add_library(k7-runtime SHARED ${STUDIO_SERVER_SOURCES} ios/EngineEmbed.cpp)
     set_target_properties(k7-runtime PROPERTIES
         FRAMEWORK TRUE
         OUTPUT_NAME k7runtime
         MACOSX_FRAMEWORK_IDENTIFIER rocks.k7.daw.runtime
         LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+    k7_ios_framework_plist(k7-runtime)
 else()
     add_executable(k7-runtime main.cpp ${STUDIO_SERVER_SOURCES})
     # Keep the binary at build/<preset>/k7-runtime.

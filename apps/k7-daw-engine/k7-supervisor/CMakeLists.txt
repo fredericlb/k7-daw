@@ -339,6 +339,8 @@ if(IOS)
         OUTPUT_NAME k7supervisor
         MACOSX_FRAMEWORK_IDENTIFIER rocks.k7.daw.supervisor
         LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+    include(${CMAKE_CURRENT_LIST_DIR}/../k7-runtime/server/ios/framework-plist.cmake)
+    k7_ios_framework_plist(k7-supervisor-embedded)
 endif()
 
 # --- tests: the engine's tiny harness, one binary, no device and no network -----------------------
