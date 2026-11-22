@@ -12,8 +12,9 @@ use http_body_util::BodyExt;
 use serde_json::{Value, json};
 
 use super::git::Ctx;
-use super::git_github as gh;
-use super::git_github_api::Hub;
+use super::git_forge::{Forge, repo_of};
+use super::git_forge_routes::{self as fr, Verb};
+use super::git_github::GitHub;
 use super::tests_git::device;
 
 /// What the fake GitHub is told to answer, and what it was asked.
@@ -147,7 +148,7 @@ fn repo(full: &str, topics: &[&str]) -> Value {
     json!({ "full_name": full, "ssh_url": format!("git@github.com:{full}.git"), "private": true, "pushed_at": "2026-11-01T00:00:00Z", "topics": topics })
 }
 
-async fn fake() -> (Arc<Fake>, Hub) {
+async fn fake() -> (Arc<Fake>, Forge) {
     let f = Arc::new(Fake::default());
     *f.key_status.lock().unwrap() = 201;
     *f.scopes.lock().unwrap() = "read:user, write:public_key".into();
@@ -157,11 +158,7 @@ async fn fake() -> (Arc<Fake>, Hub) {
     tokio::spawn(async move { axum::serve(listener, app).await.unwrap() });
     (
         f,
-        Hub {
-            client_id: "cid".into(),
-            web: url.clone(),
-            api: url,
-        },
+        Forge::GitHub(GitHub::new(Some("cid".into()), url.clone(), url)),
     )
 }
 
@@ -174,35 +171,34 @@ async fn json_of(r: Response) -> (u16, Value) {
     )
 }
 
-async fn start(ctx: &Ctx, hub: &Hub, scopes: &[&str]) -> Value {
-    let (s, v) = json_of(gh::start(ctx, Some(hub), &json!({ "scopes": scopes })).await).await;
+async fn start(ctx: &Ctx, hub: &Forge, scopes: &[&str]) -> Value {
+    let (s, v) = json_of(hub.start(ctx, &json!({ "scopes": scopes })).await).await;
     assert_eq!(s, 200);
     v
 }
 
-async fn signed_in(ctx: &Ctx, hub: &Hub, f: &Fake) {
+async fn signed_in(ctx: &Ctx, hub: &Forge, f: &Fake) {
     f.polls
         .lock()
         .unwrap()
         .push_back(json!({ "access_token": "tok" }));
     start(ctx, hub, &["read:user", "write:public_key"]).await;
-    assert_eq!(
-        json_of(gh::poll(ctx, Some(hub)).await).await.1["state"],
-        "ok"
-    );
+    assert_eq!(json_of(fr::poll(ctx, hub).await).await.1["state"], "ok");
 }
 
 #[tokio::test(flavor = "multi_thread")]
 async fn github_is_not_offered_without_a_client_id() {
     let d = device("gh-none");
-    let (s, v) = json_of(gh::status(&d.ctx, None)).await;
+    let none = Forge::GitHub(GitHub::new(
+        None,
+        "http://127.0.0.1:1".into(),
+        "http://127.0.0.1:1".into(),
+    ));
+    let (s, v) = json_of(fr::status(&d.ctx, &none)).await;
     assert_eq!((s, &v["available"]), (200, &json!(false)));
-    assert_eq!(
-        json_of(gh::start(&d.ctx, None, &json!({ "scopes": ["repo"] })).await)
-            .await
-            .0,
-        404
-    );
+    let started = fr::answer(&d.ctx, &none, Verb::Start, &json!({ "scopes": ["repo"] })).await;
+    let (s, v) = json_of(started).await;
+    assert_eq!((s, &v["code"]), (404, &json!("github-unavailable")));
 }
 
 #[tokio::test(flavor = "multi_thread")]
@@ -227,7 +223,7 @@ async fn github_device_flow_answers_each_state_and_ends_signed_in() {
         json!({ "error": "slow_down" }),
     ] {
         f.polls.lock().unwrap().push_back(answer);
-        let (_, v) = json_of(gh::poll(&d.ctx, Some(&hub)).await).await;
+        let (_, v) = json_of(fr::poll(&d.ctx, &hub).await).await;
         states.push((
             v["state"].as_str().unwrap().to_string(),
             v["interval"].as_u64().unwrap(),
@@ -241,7 +237,7 @@ async fn github_device_flow_answers_each_state_and_ends_signed_in() {
         .lock()
         .unwrap()
         .push_back(json!({ "access_token": "tok" }));
-    let (_, ok) = json_of(gh::poll(&d.ctx, Some(&hub)).await).await;
+    let (_, ok) = json_of(fr::poll(&d.ctx, &hub).await).await;
     assert_eq!(
         (ok["state"].clone(), ok["login"].clone()),
         (json!("ok"), json!("octo"))
@@ -250,7 +246,7 @@ async fn github_device_flow_answers_each_state_and_ends_signed_in() {
         !ok.to_string().contains("tok\""),
         "the token is never answered"
     );
-    let (_, now) = json_of(gh::status(&d.ctx, Some(&hub))).await;
+    let (_, now) = json_of(fr::status(&d.ctx, &hub)).await;
     assert_eq!(now["login"], "octo");
     assert_eq!(now["scopes"], json!(["read:user", "write:public_key"]));
 }
@@ -260,19 +256,19 @@ async fn github_device_flow_ends_on_a_denial_or_an_expiry_and_a_poll_without_sta
     let (f, hub) = fake().await;
     let d = device("gh-end");
     assert_eq!(
-        json_of(gh::poll(&d.ctx, Some(&hub)).await).await.1["state"],
+        json_of(fr::poll(&d.ctx, &hub).await).await.1["state"],
         "expired"
     );
     for (said, state) in [("access_denied", "denied"), ("expired_token", "expired")] {
         start(&d.ctx, &hub, &["repo"]).await;
         f.polls.lock().unwrap().push_back(json!({ "error": said }));
         assert_eq!(
-            json_of(gh::poll(&d.ctx, Some(&hub)).await).await.1["state"],
+            json_of(fr::poll(&d.ctx, &hub).await).await.1["state"],
             state
         );
     }
     assert!(
-        json_of(gh::status(&d.ctx, Some(&hub)))
+        json_of(fr::status(&d.ctx, &hub))
             .await
             .1
             .get("login")
@@ -311,7 +307,7 @@ async fn github_key_in_use_elsewhere_is_a_sentence_and_the_sign_in_stands() {
         .unwrap()
         .push_back(json!({ "access_token": "tok" }));
     start(&d.ctx, &hub, &["read:user", "write:public_key"]).await;
-    let (_, v) = json_of(gh::poll(&d.ctx, Some(&hub)).await).await;
+    let (_, v) = json_of(fr::poll(&d.ctx, &hub).await).await;
     assert_eq!(v["state"], "ok");
     assert!(
         v["keyNote"]
@@ -325,9 +321,9 @@ async fn github_key_in_use_elsewhere_is_a_sentence_and_the_sign_in_stands() {
 async fn github_repos_follow_the_pages_flag_the_topic_and_need_the_repo_scope() {
     let (f, hub) = fake().await;
     let d = device("gh-repos");
-    assert_eq!(json_of(gh::repos(&d.ctx, Some(&hub)).await).await.0, 401);
+    assert_eq!(json_of(fr::repos(&d.ctx, &hub).await).await.0, 401);
     signed_in(&d.ctx, &hub, &f).await;
-    let (s, v) = json_of(gh::repos(&d.ctx, Some(&hub)).await).await;
+    let (s, v) = json_of(fr::repos(&d.ctx, &hub).await).await;
     assert_eq!((s, v["code"].clone()), (403, json!("scope")));
     *f.scopes.lock().unwrap() = "read:user, write:public_key, repo".into();
     f.polls
@@ -335,8 +331,8 @@ async fn github_repos_follow_the_pages_flag_the_topic_and_need_the_repo_scope() 
         .unwrap()
         .push_back(json!({ "access_token": "tok2" }));
     start(&d.ctx, &hub, &["read:user", "write:public_key", "repo"]).await;
-    json_of(gh::poll(&d.ctx, Some(&hub)).await).await;
-    let (s, v) = json_of(gh::repos(&d.ctx, Some(&hub)).await).await;
+    json_of(fr::poll(&d.ctx, &hub).await).await;
+    let (s, v) = json_of(fr::repos(&d.ctx, &hub).await).await;
     let names: Vec<_> = v["repos"]
         .as_array()
         .unwrap()
@@ -360,15 +356,8 @@ async fn github_creates_a_repository_marked_as_a_workspace_and_says_a_taken_name
     let d = device("gh-create");
     *f.scopes.lock().unwrap() = "repo".into();
     signed_in(&d.ctx, &hub, &f).await;
-    let (s, v) = json_of(
-        gh::create(
-            &d.ctx,
-            Some(&hub),
-            &json!({ "name": "mine", "private": true }),
-        )
-        .await,
-    )
-    .await;
+    let (s, v) =
+        json_of(fr::create(&d.ctx, &hub, &json!({ "name": "mine", "private": true })).await).await;
     assert_eq!(
         (s, v["sshUrl"].clone()),
         (200, json!("git@github.com:octo/mine.git"))
@@ -377,7 +366,7 @@ async fn github_creates_a_repository_marked_as_a_workspace_and_says_a_taken_name
         f.topics.lock().unwrap().get("octo/mine").unwrap(),
         &["k7-workspace"]
     );
-    let (s, v) = json_of(gh::create(&d.ctx, Some(&hub), &json!({ "name": "taken" })).await).await;
+    let (s, v) = json_of(fr::create(&d.ctx, &hub, &json!({ "name": "taken" })).await).await;
     assert_eq!(s, 422);
     assert!(v["error"].as_str().unwrap().contains("already exists"));
 }
@@ -392,18 +381,17 @@ async fn github_topic_is_added_to_an_existing_repository_and_a_failure_is_silent
         .lock()
         .unwrap()
         .insert("octo/song".into(), vec!["rust".into()]);
-    gh::tag_topic(&d.ctx, &hub, "git@github.com:octo/song.git").await;
+    fr::tag_topic(&d.ctx, &hub, "git@github.com:octo/song.git").await;
     assert_eq!(
         f.topics.lock().unwrap().get("octo/song").unwrap(),
         &["rust", "k7-workspace"]
     );
-    gh::tag_topic(&d.ctx, &hub, "git@gitlab.com:octo/other.git").await;
+    fr::tag_topic(&d.ctx, &hub, "git@gitlab.com:octo/other.git").await;
     assert!(f.topics.lock().unwrap().get("octo/other").is_none());
-    let dead = Hub {
-        api: "http://127.0.0.1:1".into(),
-        ..hub
-    };
-    gh::tag_topic(&d.ctx, &dead, "git@github.com:octo/song.git").await;
+    let Forge::GitHub(mut g) = hub;
+    g.profile.api.base = "http://127.0.0.1:1".into();
+    let dead = Forge::GitHub(g);
+    fr::tag_topic(&d.ctx, &dead, "git@github.com:octo/song.git").await;
 }
 
 #[tokio::test(flavor = "multi_thread")]
@@ -411,9 +399,9 @@ async fn github_sign_out_drops_the_token_and_keeps_the_key() {
     let (f, hub) = fake().await;
     let d = device("gh-out");
     signed_in(&d.ctx, &hub, &f).await;
-    assert_eq!(json_of(gh::signout(&d.ctx)).await.0, 200);
+    assert_eq!(json_of(fr::signout(&d.ctx, &hub)).await.0, 200);
     assert!(
-        json_of(gh::status(&d.ctx, Some(&hub)))
+        json_of(fr::status(&d.ctx, &hub))
             .await
             .1
             .get("login")
@@ -426,13 +414,13 @@ async fn github_sign_out_drops_the_token_and_keeps_the_key() {
 #[test]
 fn github_repo_is_read_from_an_ssh_address_of_github_only() {
     assert_eq!(
-        gh::repo_of("git@github.com:o/r.git").as_deref(),
+        repo_of("git@github.com:o/r.git", "github.com").as_deref(),
         Some("o/r")
     );
     assert_eq!(
-        gh::repo_of("ssh://git@github.com/o/r").as_deref(),
+        repo_of("ssh://git@github.com/o/r", "github.com").as_deref(),
         Some("o/r")
     );
-    assert_eq!(gh::repo_of("git@gitlab.com:o/r.git"), None);
-    assert_eq!(gh::repo_of("git@github.com:o/r/x.git"), None);
+    assert_eq!(repo_of("git@gitlab.com:o/r.git", "github.com"), None);
+    assert_eq!(repo_of("git@github.com:o/r/x.git", "github.com"), None);
 }

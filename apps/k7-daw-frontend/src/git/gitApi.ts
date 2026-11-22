@@ -3,6 +3,7 @@
 
 import { HttpError } from "@studio/http-client/call";
 import { m } from "../paraglide/messages.js";
+import type { ForgeAccount } from "./forgeState";
 import type {
   DeviceCode,
   GithubRepo,
@@ -133,6 +134,8 @@ export const git = {
     call<{ ok: boolean; forgotten: boolean }>(t, "forget-host", {
       json: target,
     }),
+  /** Every forge account this build offers, each with who is signed in on this device. */
+  forges: (t: GitTransport) => call<{ forges: ForgeAccount[] }>(t, "forges"),
   /** Whether the GitHub path exists in this build, and who is signed in on this device. */
   githubStatus: (t: GitTransport) => call<GithubStatus>(t, "github"),
   githubStart: (t: GitTransport, scopes: string[]) =>

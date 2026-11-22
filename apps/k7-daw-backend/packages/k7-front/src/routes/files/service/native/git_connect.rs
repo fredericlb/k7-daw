@@ -86,10 +86,7 @@ pub async fn connect(ctx: &Ctx, root: &Path, b: &Value) -> Answer {
     };
     let fetch = ctx.fetchers.of(&root.display().to_string());
     fetch.lock().unwrap_or_else(|p| p.into_inner()).opened();
-    if let Some(hub) = super::git_github_api::Hub::from_env() {
-        let (c, url) = (ctx.clone(), origin.url.clone());
-        tokio::spawn(async move { super::git_github::tag_topic(&c, &hub, &url).await });
-    }
+    super::git_forge_routes::tag_later(ctx, &origin.url);
     let mut answered = json!({ "ok": true, "remote": origin.url });
     if let Some(w) = warning {
         answered["lfsWarning"] = json!(w);

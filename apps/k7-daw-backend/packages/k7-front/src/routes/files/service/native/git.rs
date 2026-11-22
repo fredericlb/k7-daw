@@ -23,8 +23,8 @@ use serde_json::{Value, json};
 
 use super::git_connect;
 use super::git_fetch::Fetchers;
+use super::git_forge_routes::{self, Verb};
 use super::git_github;
-use super::git_github_api::Hub;
 use super::git_keys;
 use super::git_lock;
 use super::git_roam;
@@ -33,7 +33,7 @@ use crate::routes::files::json_answer;
 use crate::routes::files::service::body;
 use crate::routes::files::service::{Who, claim_root, workspace_name_ok};
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Kind {
     State,
     Status,
@@ -52,12 +52,9 @@ pub enum Kind {
     SetIdentity,
     Focus,
     Roam,
-    GithubStatus,
-    GithubStart,
-    GithubPoll,
-    GithubRepos,
-    GithubCreate,
-    GithubSignout,
+    Forges,
+    /// One account's route: its id (`github.com`) and what is asked of it.
+    Forge(String, Verb),
 }
 
 impl Kind {
@@ -81,14 +78,21 @@ impl Kind {
             "/git/identity" if post => Some(Kind::SetIdentity),
             "/git/focus" if post => Some(Kind::Focus),
             "/git/roam" if get => Some(Kind::Roam),
-            "/git/github" if get => Some(Kind::GithubStatus),
-            "/git/github/start" if post => Some(Kind::GithubStart),
-            "/git/github/poll" if post => Some(Kind::GithubPoll),
-            "/git/github/repos" if get => Some(Kind::GithubRepos),
-            "/git/github/repos" if post => Some(Kind::GithubCreate),
-            "/git/github/signout" if post => Some(Kind::GithubSignout),
-            _ => None,
+            "/git/forges" if get => Some(Kind::Forges),
+            _ => Kind::forge(method, path),
         }
+    }
+
+    /// `/git/forges/<id>/...`, and `/git/github/...`, which is GitHub's under its first name.
+    fn forge(method: &Method, path: &str) -> Option<Kind> {
+        if let Some(rest) = path.strip_prefix("/git/github") {
+            let verb = Verb::of(method, rest)?;
+            return Some(Kind::Forge(git_github::ID.into(), verb));
+        }
+        let after = path.strip_prefix("/git/forges/")?;
+        let (id, rest) = after.find('/').map_or((after, ""), |i| after.split_at(i));
+        let verb = Verb::of(method, rest)?;
+        git_forge_routes::id_ok(id).then(|| Kind::Forge(id.into(), verb))
     }
 }
 
@@ -274,7 +278,7 @@ pub async fn hook(ctx: &Ctx, kind: Kind, req: Request) -> Response {
 }
 
 /// Whether the kind reads or writes the repository, so it takes the workspace's lock.
-fn locks(kind: Kind) -> bool {
+fn locks(kind: &Kind) -> bool {
     matches!(
         kind,
         Kind::Connect | Kind::Commit | Kind::Push | Kind::Pull | Kind::Resolve | Kind::Abort
@@ -282,7 +286,7 @@ fn locks(kind: Kind) -> bool {
 }
 
 /// Whether the kind fetches or pushes, so it also takes the remote's lock the background fetch holds.
-fn moves_remote_refs(kind: Kind) -> bool {
+fn moves_remote_refs(kind: &Kind) -> bool {
     matches!(kind, Kind::Connect | Kind::Push | Kind::Pull)
 }
 
@@ -298,12 +302,8 @@ async fn dispatch(ctx: &Ctx, kind: Kind, b: Value, query: String) -> Response {
         Kind::ForgetHost => return git_keys::forget_host(ctx, &b),
         Kind::Clone => return clone(ctx, &b).await,
         Kind::Roam => return git_roam::list(ctx).await,
-        Kind::GithubStatus
-        | Kind::GithubStart
-        | Kind::GithubPoll
-        | Kind::GithubRepos
-        | Kind::GithubCreate
-        | Kind::GithubSignout => return git_github_route(ctx, kind, &b).await,
+        Kind::Forges => return git_forge_routes::list(ctx),
+        Kind::Forge(id, verb) => return git_forge_routes::route(ctx, &id, verb, &b).await,
         _ => {}
     }
     let name = if matches!(kind, Kind::State | Kind::Status | Kind::Log | Kind::Merge) {
@@ -322,7 +322,7 @@ async fn dispatch(ctx: &Ctx, kind: Kind, b: Value, query: String) -> Response {
         );
     }
     let key = root.display().to_string();
-    let _held = if locks(kind) {
+    let _held = if locks(&kind) {
         match git_lock::try_take(&key) {
             Some(g) => Some(g),
             None => return busy(),
@@ -330,7 +330,7 @@ async fn dispatch(ctx: &Ctx, kind: Kind, b: Value, query: String) -> Response {
     } else {
         None
     };
-    let _remote = if moves_remote_refs(kind) {
+    let _remote = if moves_remote_refs(&kind) {
         match git_lock::try_take_remote(&key) {
             Some(g) => Some(g),
             None => return busy(),
@@ -361,19 +361,6 @@ async fn dispatch(ctx: &Ctx, kind: Kind, b: Value, query: String) -> Response {
         git_roam::sweep_later(ctx.workspaces.clone(), ctx.account_home.clone());
     }
     done.unwrap_or_else(|e| answer_error(&e))
-}
-
-async fn git_github_route(ctx: &Ctx, kind: Kind, b: &Value) -> Response {
-    let hub = Hub::from_env();
-    let hub = hub.as_ref();
-    match kind {
-        Kind::GithubStatus => git_github::status(ctx, hub),
-        Kind::GithubStart => git_github::start(ctx, hub, b).await,
-        Kind::GithubPoll => git_github::poll(ctx, hub).await,
-        Kind::GithubRepos => git_github::repos(ctx, hub).await,
-        Kind::GithubCreate => git_github::create(ctx, hub, b).await,
-        _ => git_github::signout(ctx),
-    }
 }
 
 pub(super) type Answer = Result<Response, Error>;

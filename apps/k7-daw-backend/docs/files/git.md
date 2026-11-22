@@ -1,6 +1,6 @@
 # The git routes (`/api/files/git/*`)
 
-A workspace under git, its remote, its commits and its merges, answered by `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/git.rs` (with `git_sync.rs`, `git_keys.rs` and `git_github.rs`)
+A workspace under git, its remote, its commits and its merges, answered by `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/git.rs` (with `git_sync.rs`, `git_keys.rs` and the forge seam: `git_forge.rs`, `git_forge_routes.rs`, `git_forge_api.rs`, `git_github.rs`)
 over `apps/k7-daw-backend/packages/k7-git` (`../git.md`). The choices of the repository, the transports, LFS and the merge are on that page; this one is the contract.
 
 ## The routes
@@ -23,16 +23,31 @@ over `apps/k7-daw-backend/packages/k7-git` (`../git.md`). The choices of the rep
 | `POST /git/forget-host` | `{ host, port? }` | `{ ok, forgotten }` |
 | `POST /git/focus` | `{ workspace, front, opened? }` | `{ ok }`: the page says it is in front, which drives the fetch; the page repeats it with each state poll, and a page silent for 10 minutes (two fetch periods) is no longer in front |
 
-### Sign in with GitHub (`git_github.rs`)
+### Forges: sign in with GitHub (`git_forge_routes.rs`)
+
+A forge is one account's server (today GitHub only). Every route is `/git/forges/<id>/...`, `<id>` being the forge's host
+(`github.com`); `/git/github/...` is the same route for GitHub under its first name, which the page and the e2e spec call.
+The codes below are GitHub's: a forge's own prefix replaces `github`.
 
 | route | body or query | answer |
 |---|---|---|
-| `GET /git/github` | | `{ available, login?, scopes[] }`; `available` is false only when the front runs with an empty `K7_GITHUB_CLIENT_ID`, and every other route here then answers 404 `github-unavailable`; no network call |
-| `POST /git/github/start` | `{ scopes }` | `{ userCode, verificationUri, interval, expiresIn }`; the device code stays in the front |
-| `POST /git/github/poll` | | `{ state: "pending" \| "slow_down" \| "expired" \| "denied" \| "ok", interval, login?, keyNote? }`; on `ok` the token is kept, the device's key is uploaded and GitHub's ed25519 host key is trusted for `github.com:22` before the answer; `keyNote` is a sentence when the key could not be added (already used on another account) |
-| `GET /git/github/repos` | | `{ repos: [{ fullName, sshUrl, private, pushedAt, k7 }] }`, most recently pushed first, up to ten pages of a hundred; 403 `scope` without `repo`, 401 `github-signout` when GitHub refuses the token (it is dropped) |
-| `POST /git/github/repos` | `{ name, private? }` (private by default) | `{ sshUrl, fullName }`; the repository gets the `k7-workspace` topic; a refusal such as a taken name is 422 `invalid` with GitHub's sentence |
-| `POST /git/github/signout` | | `{ ok }`; the token goes, the uploaded key stays |
+| `GET /git/forges` | | `{ forges: [{ id, kind, name, available, login?, scopes[] }] }`, every account this build offers, signed in or not; no network call |
+| `GET /git/forges/<id>` (`/git/github`) | | `{ available, login?, scopes[] }`; `available` is false only when the front runs with an empty `K7_GITHUB_CLIENT_ID`, and every other route here but `signout` then answers 404 `github-unavailable`; an id no account has is 404 `unknown-forge`; no network call |
+| `POST …/start` | `{ scopes }` | `{ userCode, verificationUri, interval, expiresIn }`; the device code stays in the front |
+| `POST …/poll` | | `{ state: "pending" \| "slow_down" \| "expired" \| "denied" \| "ok", interval, login?, keyNote? }`; on `ok` the token is kept, the device's key is uploaded and GitHub's ed25519 host key is trusted for `github.com:22` before the answer; `keyNote` is a sentence when the key could not be added (already used on another account) |
+| `GET …/repos` | | `{ repos: [{ fullName, sshUrl, private, pushedAt, k7 }] }`, most recently pushed first, up to ten pages of a hundred; 403 `scope` without `repo`, 401 `github-signout` when GitHub refuses the token (it is dropped) |
+| `POST …/repos` | `{ name, private? }` (private by default) | `{ sshUrl, fullName }`; the repository gets the `k7-workspace` topic; a refusal such as a taken name is 422 `invalid` with GitHub's sentence |
+| `POST …/signout` | | `{ ok }`; the token goes, the uploaded key stays |
+
+### The forge seam (`git_forge.rs`)
+
+| choice | why |
+|---|---|
+| what differs per forge is data in a `Profile` (id, name, ssh host, keychain entry, REST base and media type, the repository list's first page and page count, the repository scope) plus a few `Forge` methods matched per variant: the sign-in (`start`, `poll`, a `Step` that ends with a token), the granted scopes, the host-key policy, the key list's address, the topic on a new and on an existing repository | forges differ there and nowhere else: GitHub has a device flow and publishes its host keys, while a self-hosted Forgejo has neither (an authorization code with PKCE, and the host key asked on the first connect); the keys, repositories and topics are the same calls |
+| `Forge` is an enum, one variant and one file per forge (`git_github.rs`), rather than a trait object | the sign-in is async, and a new forge then touches the seam's matches, never another forge's file |
+| every route over a forge is shared (`git_forge_routes.rs`): the end of a sign-in, the key, the repository pages over `Link`, creation, the topic after a connect, the sign-out | one place holds the token's rules: read from the keychain per call, never answered, a 401 drops it |
+| the key is looked up by its `SHA256:` fingerprint before it is posted | Forgejo refuses a key already on any account and can filter its list by fingerprint; GitHub's list compares the same way |
+| an account's token sits in its own keychain entry; GitHub keeps `github-oauth`, a new forge takes `forge:<host>` | the entry is never the synced one, and nobody signed in before the seam is signed out by it |
 
 A refusal is `{ error, code }` with the codes of `k7-git`'s errors (`ssh-only`, `unauthorized`, `behind`, `uncommitted`, `unknown-host` with `fingerprint`,
 `host-key-changed` with `expected` and `fingerprint`, `no-lfs`, `offline`, `unresolved`, `unparsable`, `merge-moved`, `bad-path`, ...).
@@ -46,7 +61,7 @@ A refusal is `{ error, code }` with the codes of `k7-git`'s errors (`ssh-only`, 
 | the routes run libgit2 on a blocking thread through `Net::blocking` | the front's runtime is never held by a clone |
 | a pull with changes and no `message` is `uncommitted` (409); with one it commits first | "mine" is then always a commit |
 | every route answers 403 `device-only` on a server front, a device's own front (`STUDIO_LOCAL_USER`; no médiathèque is needed) only, and a front started with `K7_GIT_ALLOW_FILE`, which is a test bed | a server would keep tokens and keys in a plain file and `connect` could make it call its own loopback services |
-| the token is kept in the device's secrets store under its own entry, never the synced one, with the granted scopes read from `X-OAuth-Scopes`; no route answers it | a token is the person's whole account, so it never leaves the device nor reaches the page |
+| the token is kept in the device's secrets store under its own entry, never the synced one, with GitHub's granted scopes read from `X-OAuth-Scopes`; no route answers it | a token is the person's whole account, so it never leaves the device nor reaches the page |
 | the device flow, the key list and the repositories are called from the front with the front's own HTTPS client; the base addresses are `K7_GITHUB_WEB_URL` and `K7_GITHUB_API_URL`, honoured only when their host is 127.0.0.1, ::1 or localhost (a test's fake) and ignored with one log line otherwise; the client id is k7's registered OAuth App, compiled in, and `K7_GITHUB_CLIENT_ID` overrides it at run only (empty turns the path off), because a variable read at build would rebuild the front | the login endpoints have no CORS, and the client id is public; the variables are the tests' seam |
 | only github.com's ed25519 key is trusted, and a different key already listed is never replaced | the trusted list holds one fingerprint per host, the ssh client meets ed25519 first, and `host-key-changed` keeps refusing as for any host |
 | connecting an existing github.com repository adds the `k7-workspace` topic after the connection, on a task of its own, and ignores any failure | a repository the person cannot administer must still connect, and the connect never waits on GitHub's REST API |
