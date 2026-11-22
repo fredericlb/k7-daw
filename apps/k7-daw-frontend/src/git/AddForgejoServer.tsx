@@ -11,6 +11,7 @@ import {
   addAfter,
   canAdd,
   probeOf,
+  shortVersion,
   sshPort,
   startAdding,
 } from "./forgejoState";
@@ -54,7 +55,7 @@ const Note = ({ children, bad }: { children: ReactNode; bad?: boolean }) => (
 export function ProbeFacts({ probe }: { probe: ForgeProbe }) {
   return (
     <div className="flex flex-col gap-1">
-      <Note>{m["git.fj.found"]({ version: probe.version })}</Note>
+      <Note>{m["git.fj.found"]({ version: shortVersion(probe.version) })}</Note>
       <Note bad={!probe.lfs}>
         {probe.lfs ? m["git.fj.lfsOn"]() : m["git.fj.lfsOff"]()}
       </Note>

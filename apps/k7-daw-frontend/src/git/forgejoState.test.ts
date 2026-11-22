@@ -3,6 +3,7 @@ import {
   addAfter,
   canAdd,
   probeOf,
+  shortVersion,
   signInAfter,
   sshPort,
   startAdding,
@@ -66,6 +67,13 @@ describe("adding a Forgejo server", () => {
     expect(canAdd("", "")).toBe(false);
     expect(canAdd("cid", "")).toBe(true);
     expect(canAdd("cid", "abc")).toBe(false);
+  });
+});
+
+describe("a server's version", () => {
+  it("drops the build metadata after the first plus", () => {
+    expect(shortVersion("17.0.2+gitea-1.22.0")).toBe("17.0.2");
+    expect(shortVersion("17.0.2")).toBe("17.0.2");
   });
 });
 

@@ -41,6 +41,9 @@ export function addAfter(s: AddServer, e: AddEvent): AddServer {
   }
 }
 
+/** A server's version without its build metadata: "17.0.2+gitea-1.22.0" is "17.0.2". */
+export const shortVersion = (v: string): string => v.split("+")[0].trim();
+
 /** The ssh port field: empty is the default, anything else a whole port or "bad". */
 export function sshPort(typed: string): number | undefined | "bad" {
   const t = typed.trim();
