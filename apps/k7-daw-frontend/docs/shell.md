@@ -728,6 +728,9 @@ which can be before the write's answer reaches the page; a poll then reads the n
 `saved` still holds the old one, and a buffer undone to that old text looks clean and would be
 replaced by the read, the undo lost with no write. So the text being written stands in for `saved`
 in that decision (`writing` in `decideDiskSync`).
+Likewise a buffer found equal to the disk takes that disk text as its base (`onClean(fresh)`), not
+the buffer as it reads when the update applies: an undo landing in between would become the base,
+and the autosave would see nothing to write.
 
 ### Space is the transport, wherever the last click landed
 

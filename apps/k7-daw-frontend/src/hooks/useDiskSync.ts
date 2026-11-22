@@ -72,8 +72,8 @@ export function useDiskSync({
   saved: string;
   /** Replace the buffer with this text — a silent refresh, or the user choosing "update". */
   onAdopt: (text: string) => void;
-  /** The buffer turned out to match disk after all: it is not dirty any more. */
-  onClean: () => void;
+  /** The buffer turned out to match disk after all: `fresh` is the base now, never the buffer read later, which may have moved. */
+  onClean: (fresh: string) => void;
   /** "Keep editing" about this disk text: it becomes the base the next write is checked against, so the buffer may go over it. */
   onKeep?: (fresh: string) => void;
   /** The text of the write in flight, null when none: read live, a write being shorter than a render. */
@@ -144,7 +144,7 @@ export function useDiskSync({
           dismissed.current = null;
           break;
         case "clean":
-          cur.onClean();
+          cur.onClean(fresh);
           setConflict(null);
           dismissed.current = null;
           break;
@@ -179,7 +179,7 @@ export function useDiskSync({
 
   const raise = useCallback((fresh: string) => {
     const cur = state.current;
-    if (fresh === (cur.content ?? "")) return cur.onClean();
+    if (fresh === (cur.content ?? "")) return cur.onClean(fresh);
     dismissed.current = null;
     setConflict(fresh);
   }, []);

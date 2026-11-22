@@ -981,14 +981,8 @@ function EditorTabView({
       setFile((f) => (f ? { ...f, content: text } : f));
       setSaved(text);
     }, []),
-    onClean: useCallback(
-      () =>
-        setFile((f) => {
-          if (f) setSaved(f.content);
-          return f;
-        }),
-      [],
-    ),
+    // The disk text the buffer was found equal to: an edit made since (an undo) stays unsaved rather than becoming the base.
+    onClean: setSaved,
     onKeep: setSaved,
     writing,
     reloadKey,
