@@ -250,6 +250,8 @@ function EditorTabView({
   const [opSearch, setOpSearch] = useState("");
   // What is on disk for the open file; dirty is derived from it and the buffer, never a flag that could disagree.
   const [saved, setSaved] = useState("");
+  // The text of the write in flight: the disk sync's base until the write answers and `saved` catches up.
+  const writing = useRef<string | null>(null);
   const dirty = !!file && !file.binary && file.content !== saved;
   // The file on screen NOW, for a write that lands after the pane moved on to another one.
   const shownPath = useRef<string | null>(null);
@@ -979,15 +981,10 @@ function EditorTabView({
       setFile((f) => (f ? { ...f, content: text } : f));
       setSaved(text);
     }, []),
-    onClean: useCallback(
-      () =>
-        setFile((f) => {
-          if (f) setSaved(f.content);
-          return f;
-        }),
-      [],
-    ),
+    // The disk text the buffer was found equal to: an edit made since (an undo) stays unsaved rather than becoming the base.
+    onClean: setSaved,
     onKeep: setSaved,
+    writing,
     reloadKey,
   });
   const raiseConflict = diskSync.raise;
@@ -998,10 +995,12 @@ function EditorTabView({
       const path = file?.path;
       if (!path) return;
       let forked: Awaited<ReturnType<typeof api.write>>["forked"];
+      writing.current = text;
       try {
         // Checked against what this buffer was edited from: a disk that moved since is asked about, never overwritten.
         ({ forked } = await api.write(path, text, saved));
       } catch (e) {
+        writing.current = null;
         if (isStaleWrite(e) && shownPath.current === path)
           void api
             .read(path)
@@ -1011,6 +1010,7 @@ function EditorTabView({
             .catch(() => {});
         throw e;
       }
+      writing.current = null;
       // A write that lands after the pane moved to another file says nothing about the file now shown.
       if (shownPath.current !== path) {
         onChanged();

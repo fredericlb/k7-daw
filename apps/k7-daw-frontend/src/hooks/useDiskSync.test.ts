@@ -66,4 +66,21 @@ describe("a file that changed on disk", () => {
     // …but a disk that moved PAST that save is a real change.
     expect(decide("theirs", "v2", true, null, "v1")).toBe("conflict");
   });
+
+  it("keeps an undo made while its own write is in flight, the write read back before it answers", () => {
+    // The write of 150 landed and the poll read it, but `saved` still says 120: the undo back to 120 looks clean.
+    const p = {
+      fresh: "150",
+      buffer: "120",
+      dirty: false,
+      dismissed: null,
+      saved: "120",
+    };
+    expect(decideDiskSync(p)).toBe("adopt");
+    expect(decideDiskSync({ ...p, writing: "150" })).toBe("ignore");
+    // Disk moved by someone else during the write is still asked about.
+    expect(decideDiskSync({ ...p, fresh: "theirs", writing: "150" })).toBe(
+      "conflict",
+    );
+  });
 });

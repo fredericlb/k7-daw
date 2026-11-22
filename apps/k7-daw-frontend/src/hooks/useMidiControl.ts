@@ -6,6 +6,7 @@ import type { WebGraph, WebWidget } from "@studio/graph-model";
 import { panelWidgets } from "@studio/graph-model/panel";
 import { pairValue, widgetDenorm, widgetNorm } from "@studio/ui-chains/graph";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { hasWebMidi } from "../midiAccess";
 import {
   type CcRoute,
   ccKey,
@@ -123,7 +124,8 @@ export function useMidiControl({
   /** Send a param's value, in the param's own units. */
   setParam: (m: MappedParam, value: number) => void;
 }): MidiControlApi {
-  const [ready, setReady] = useState(false);
+  // Web MIDI is asked for once something needs it, a mapped control or a learn: each ask has a cost on Android (docs/midi.md).
+  const [ready, setReady] = useState(hasWebMidi);
   const [learning, setLearning] = useState<{
     module: string;
     param: string;
@@ -154,10 +156,13 @@ export function useMidiControl({
 
   useEffect(() => {
     const mc = midi.current;
-    if (!mc) return;
-    void mc.init().then(setReady);
-    return () => mc.dispose();
+    return () => mc?.dispose();
   }, []);
+
+  const wanted = mapped.length > 0;
+  useEffect(() => {
+    if (wanted) void midi.current?.init().then(setReady);
+  }, [wanted]);
 
   // The routes ARE the graph's map, replaced wholesale on every reload: there is no incremental state worth keeping in step.
   useEffect(() => {
@@ -198,18 +203,25 @@ export function useMidiControl({
   const learn = useCallback(
     (module: string, param: string, onDone: (l: LearnedCc | null) => void) => {
       const mc = midi.current;
-      if (!mc?.ready) {
+      if (!mc) {
         onDone(null);
         return;
       }
-      cancelRef.current?.(); // one learn at a time; a second arm replaces the first
-      setLearning({ module, param });
-      doneRef.current = onDone;
-      cancelRef.current = mc.learn((l) => {
-        cancelRef.current = null;
-        doneRef.current = null;
-        setLearning(null);
-        onDone(l);
+      void mc.init().then((ok) => {
+        setReady(ok);
+        if (!ok) {
+          onDone(null);
+          return;
+        }
+        cancelRef.current?.(); // one learn at a time; a second arm replaces the first
+        setLearning({ module, param });
+        doneRef.current = onDone;
+        cancelRef.current = mc.learn((l) => {
+          cancelRef.current = null;
+          doneRef.current = null;
+          setLearning(null);
+          onDone(l);
+        });
       });
     },
     [],

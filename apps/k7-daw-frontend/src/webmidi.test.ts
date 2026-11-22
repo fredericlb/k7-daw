@@ -12,34 +12,34 @@ const NOTE_OFF = (key: number) => [0x80, key, 0];
 function recorderWithAccess(inputs: [string, string][]) {
   const beat = { now: 0 };
   const rec = new MidiRecorder(() => beat.now);
-  const handlers = new Map<string, ((e: unknown) => void) | null>();
-  const ports = new Map<
-    string,
-    { id: string; name: string; onmidimessage: unknown }
-  >();
+  const handlers = new Map<string, Set<(e: unknown) => void>>();
+  const ports = new Map<string, unknown>();
   for (const [id, name] of inputs) {
-    const input: { id: string; name: string; onmidimessage: unknown } = {
+    handlers.set(id, new Set());
+    ports.set(id, {
       id,
       name,
-      onmidimessage: null,
-    };
-    Object.defineProperty(input, "onmidimessage", {
-      get: () => handlers.get(id) ?? null,
-      set: (h) => handlers.set(id, h as (e: unknown) => void),
+      open: async () => {},
+      addEventListener: (_: string, h: (e: unknown) => void) =>
+        handlers.get(id)?.add(h),
+      removeEventListener: (_: string, h: (e: unknown) => void) =>
+        handlers.get(id)?.delete(h),
     });
-    ports.set(id, input);
   }
   const access = {
     inputs: { values: () => ports.values() },
-    onstatechange: null,
+    addEventListener: () => {},
+    removeEventListener: () => {},
   };
   (rec as unknown as { access?: unknown }).access = access;
   return {
     rec,
     beat,
     listInputs: (): MidiInputInfo[] => rec.listInputs(),
-    send: (id: string, data: number[]) =>
-      handlers.get(id)?.({ data: Uint8Array.from(data) }),
+    send: (id: string, data: number[]) => {
+      for (const h of handlers.get(id) ?? [])
+        h({ data: Uint8Array.from(data) });
+    },
   };
 }
 

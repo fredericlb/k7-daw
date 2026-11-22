@@ -66,7 +66,7 @@ impl Transfer for Local {
 
 /// The remote's git folder named by a `file://` address or a path.
 fn local_gitdir(url: &str) -> PathBuf {
-    let p = PathBuf::from(url.strip_prefix("file://").unwrap_or(url));
+    let p = crate::transport::file_path(url);
     if p.join("objects").is_dir() {
         p
     } else {
@@ -76,7 +76,7 @@ fn local_gitdir(url: &str) -> PathBuf {
 
 pub(crate) fn connect(net: &Arc<Net>, origin: &Origin) -> Result<Box<dyn Transfer>> {
     let url = origin.url.as_str();
-    if url.starts_with("ssh://") || (!url.contains("://") && url.contains(':')) {
+    if url.starts_with("ssh://") || crate::transport::scp_like(url) {
         crate::transport::ssh::parse(url)?;
         return Ok(Box::new(batch::Http::new(
             net.clone(),

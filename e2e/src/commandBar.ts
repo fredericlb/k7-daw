@@ -33,11 +33,13 @@ async function openCommandBar(page: Page): Promise<Locator> {
     return bar;
   }
   // A phone's toast sits where the popin's suggestions open, and covers them until it is closed.
+  // A toast also leaves on its own timer: one gone between the look and the click is already out of the way.
   for (const close of await page
     .getByRole("region", { name: "Notifications" })
     .getByRole("button", { name: "Dismiss", exact: true })
     .all())
-    if (await close.isVisible()) await close.click();
+    if (await close.isVisible())
+      await close.click({ timeout: 2_000 }).catch(() => {});
   if (!(await bar.isVisible()))
     await page
       .getByRole("button", {

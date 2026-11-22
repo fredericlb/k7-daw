@@ -113,6 +113,11 @@ function noteLoopback(url: string, answered: boolean): void {
   else loopbackMisses.set(url, Date.now());
 }
 
+/** Lets this engine's loopback be tried again at once: a look made because it is known to be there must not skip it. */
+export function retryLoopback(e: ProbeTarget): void {
+  loopbackMisses.delete(`ws://${e.addresses.loopback}:${e.addresses.port}`);
+}
+
 /** Whether that address refused us too recently to be worth another attempt on this look. */
 const loopbackResting = (url: string): boolean =>
   isLoopbackUrl(url) &&

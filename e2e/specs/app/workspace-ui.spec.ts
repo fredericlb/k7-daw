@@ -7,6 +7,7 @@ import { gzipSync, strToU8, zipSync } from "fflate";
 import { FileService } from "../../src/files.ts";
 import { FIXTURES_DIR } from "../../src/fixtures.ts";
 import { newMenu, projectLink, workspaceCard } from "../../src/home.ts";
+import { folded } from "../../src/nav.ts";
 import { expect, test } from "../../src/target.ts";
 import { watchPage } from "../../src/watch.ts";
 
@@ -109,10 +110,13 @@ test("a workspace and its project are made, renamed, copied and deleted from the
     await dialog.getByRole("button", { name: "Create", exact: true }).click();
     // The new project opens on its own; back on Home it is in its card.
     await expect(page).toHaveURL(/first\.k7/, { timeout: 30_000 });
-    await page.goto("/");
+    await k7.open("/");
     await expectListed(page, WS, ["first.k7"]);
     await expect(projectLink(page, WS, "first")).toBeVisible(SHOWN);
-    await expect(row.getByText("DJ set", { exact: true })).toBeVisible();
+    // The kind's tag is hidden on a phone's width, where the row's tile glyph says it (ProjectRow.tsx).
+    const tag = row.getByText("DJ set", { exact: true });
+    if (await folded(page)) await expect(tag).toBeAttached();
+    else await expect(tag).toBeVisible();
   });
 
   await test.step("rename it", async () => {

@@ -1,6 +1,6 @@
 // files.ts — the e2e account's file service, reached the way the browser reaches it: through /api/files with a hub ticket.
 // Writes go over HTTP, never to disk: the capture reads a folder deleted behind its back as an edit (docs/e2e.md).
-import type { APIRequestContext, Page } from "@playwright/test";
+import { type APIRequestContext, type Page, request } from "@playwright/test";
 import { until } from "./until.ts";
 import { runVerb, type VerbService } from "./verbs.ts";
 
@@ -12,6 +12,9 @@ export type TreeNode = { path: string; dir: boolean; children?: TreeNode[] };
 
 /** One workspace of GET /workspaces/projects, with its project folders. */
 export type WorkspaceListing = { name: string; projects: { path: string }[] };
+
+/** One cookie-less session per phone origin, since `ofPage` is called on every poll of a read. */
+const phoneContexts = new Map<string, Promise<APIRequestContext>>();
 
 export class FileService {
   private constructor(
@@ -37,9 +40,22 @@ export class FileService {
   }
 
   /** The service as the PAGE reaches it, with its cookies at its origin: it sees what the account driving the screen wrote. */
-  static ofPage(page: Page): Promise<FileService> {
+  static async ofPage(page: Page): Promise<FileService> {
     const url = new URL(page.url());
     const http = url.protocol === "http:" || url.protocol === "https:";
+    // A phone's WebView gives Playwright no cookies (Storage.getCookies), and its front signs the local user in without one.
+    if (process.env.E2E_TARGET === "android" && http) {
+      let api = phoneContexts.get(url.origin);
+      if (!api) {
+        // `/auth/me` hands the context a cookie of its own, as the app's view is handed one (android.ts).
+        api = request.newContext().then(async (ctx) => {
+          await ctx.get(`${url.origin}/auth/me`);
+          return ctx;
+        });
+        phoneContexts.set(url.origin, api);
+      }
+      return FileService.connect(await api, url.origin);
+    }
     return FileService.connect(page.request, http ? url.origin : "");
   }
 

@@ -32,14 +32,18 @@ async function openProject(page: Page): Promise<void> {
 /** Opens project.k7x in the editor and retypes the tempo, in vim's keys when the editor is in vim mode (off by default). */
 async function typeTempo(page: Page, tempo: number): Promise<void> {
   await (await pane(page, "Source")).click();
-  // A phone folds the file tree into a drawer, opened by its "Files" button (EditorTab.tsx).
-  if (await folded(page)) {
+  // A phone folds the file tree into a sheet, opened by its "Files" button (EditorTab.tsx).
+  const phone = await folded(page);
+  if (phone) {
     const files = button(page, "Files");
     if ((await files.getAttribute("aria-expanded")) !== "true")
       await files.click();
   }
   await page
-    .getByRole("complementary", { name: "Files", exact: true })
+    .getByRole(phone ? "dialog" : "complementary", {
+      name: "Files",
+      exact: true,
+    })
     .getByRole("button", { name: "project.k7x", exact: true })
     .click();
   const text = editorText(page, "project.k7x");
@@ -53,9 +57,8 @@ async function typeTempo(page: Page, tempo: number): Promise<void> {
     await expect(vimStatus(page)).toHaveText("NORMAL");
     return;
   }
-  await page.keyboard.press("ControlOrMeta+Home");
-  await page.keyboard.press("ArrowDown");
-  await page.keyboard.press("ArrowDown");
+  // The tempo's line clicked, as a person reaches it: a phone's WebView takes no Ctrl+Home.
+  await text.getByText("tempo: 120").click();
   await page.keyboard.press("End");
   await page.keyboard.press("ArrowLeft");
   for (let i = 0; i < 3; i++) await page.keyboard.press("Backspace");

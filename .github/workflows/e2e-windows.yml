@@ -89,6 +89,19 @@ jobs:
       # The runner has no sound card: a virtual cable gives WASAPI an output to open.
       - uses: LABSN/sound-ci-helpers@d08c889a7bba7d9b1b059f8f76dac4672ea3a9cf # v1
 
+      # Windows Server denies desktop apps the microphone, so the cable's capture side would not open and no lane could arm.
+      - name: microphone access
+        shell: pwsh
+        run: |
+          foreach ($root in 'HKLM:', 'HKCU:') {
+            foreach ($key in 'microphone', 'microphone\NonPackaged') {
+              $p = "$root\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\$key"
+              New-Item -Path $p -Force | Out-Null
+              Set-ItemProperty -Path $p -Name Value -Value Allow
+            }
+          }
+          Get-CimInstance Win32_SoundDevice | Format-Table Name, Status
+
       - name: restore the engine's dependencies
         uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:

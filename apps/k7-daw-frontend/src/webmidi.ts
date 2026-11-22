@@ -3,10 +3,7 @@
 // it records audio only). Notes are timed in SONG beats via a caller-supplied beatNow(),
 // and committed through `sequence.recordNotes`. Raw timing — no quantize, deliberately.
 
-// Web MIDI's types ship in the DOM lib; only `requestMIDIAccess` is behind a feature check, so narrow for that.
-type MidiNavigator = Navigator & {
-  requestMIDIAccess?: () => Promise<MIDIAccess>;
-};
+import { MidiListeners, midiAccess } from "./midiAccess";
 
 // A captured note in SONG beats; the caller subtracts the placement start to get the clip-local `t`.
 export interface CapturedNote {
@@ -44,6 +41,7 @@ const MIN_DURATION = 1 / 32;
 
 export class MidiRecorder {
   private access?: MIDIAccess;
+  private listeners = new MidiListeners();
   private beatNow: () => number;
   private recording = false;
   // The device being captured, by a midi-in node's label: "" any, null NONE — no node feeds the armed lane.
@@ -79,19 +77,15 @@ export class MidiRecorder {
   // Ask for MIDI access and attach; false when there is none, and the caller records no MIDI.
   async init(): Promise<boolean> {
     if (this.access) return true;
-    const nav = navigator as MidiNavigator;
-    if (!nav.requestMIDIAccess) return false;
-    try {
-      this.access = await nav.requestMIDIAccess();
-    } catch {
-      return false;
-    }
+    const access = await midiAccess();
+    if (!access) return false;
+    this.access = access;
     this.attach();
     // Inputs can appear/disappear (a keyboard plugged in mid-session); re-attach on change.
-    this.access.onstatechange = () => {
+    this.listeners.onState(access, () => {
       this.attach();
       this.onInputsChanged?.();
-    };
+    });
     return true;
   }
 
@@ -118,9 +112,10 @@ export class MidiRecorder {
       this.device === null ? [] : matchMidiDevice(this.device, names),
     );
     // Every input is heard, for the LED; only the selected ones play and record.
-    inputs.forEach((input, i) => {
-      const listened = on.has(names[i]);
-      input.onmidimessage = (e) => this.onMessage(e, names[i], listened);
+    const nameOf = new Map(inputs.map((input, i) => [input, names[i]]));
+    this.listeners.listen(this.access, (input, e) => {
+      const name = nameOf.get(input) ?? input.id;
+      this.onMessage(e, name, on.has(name));
     });
   }
 
@@ -161,13 +156,9 @@ export class MidiRecorder {
     return this.notes;
   }
 
-  // Detach from every input and drop the access. Safe to call more than once.
+  // Detach from every input; the page keeps the shared access. Safe to call more than once.
   dispose(): void {
-    if (this.access) {
-      for (const input of this.access.inputs.values())
-        input.onmidimessage = null;
-      this.access.onstatechange = null;
-    }
+    this.listeners.clear();
     this.access = undefined;
     this.recording = false;
     this.open.clear();

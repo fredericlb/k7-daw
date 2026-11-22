@@ -24,6 +24,28 @@ pub(crate) fn ssh_check(url: &str) -> crate::Result<()> {
     ssh::parse(url).map(drop)
 }
 
+/// Whether `url` starts with a Windows drive (`C:\x`, `C:/x`), the spelling of a local path there.
+pub(crate) fn drive_path(url: &str) -> bool {
+    let b = url.as_bytes();
+    b.len() >= 3 && b[0].is_ascii_alphabetic() && b[1] == b':' && matches!(b[2], b'\\' | b'/')
+}
+
+/// Whether `url` is ssh's `user@host:path` form: a colon and no scheme, and on Windows no drive.
+pub(crate) fn scp_like(url: &str) -> bool {
+    !url.contains("://") && url.contains(':') && !(cfg!(windows) && drive_path(url))
+}
+
+/// The folder a `file://` address or a path names: `file:///C:/x` is `C:/x` on Windows, not `/C:/x`.
+pub(crate) fn file_path(url: &str) -> std::path::PathBuf {
+    let Some(rest) = url.strip_prefix("file://") else {
+        return url.into();
+    };
+    match rest.strip_prefix('/') {
+        Some(drive) if cfg!(windows) && drive_path(drive) => drive.into(),
+        _ => rest.into(),
+    }
+}
+
 /// The default bound on a read or write that moves no byte: a stalled server must not hold a call forever.
 pub const IDLE: std::time::Duration = std::time::Duration::from_secs(60);
 
@@ -179,9 +201,45 @@ fn register() {
 
 /// The host and explicit port an ssh address names, as trusted servers are keyed: none for any other address.
 pub fn remote_host(url: &str) -> Option<(String, Option<u16>)> {
-    if url.starts_with("ssh://") || (!url.contains("://") && url.contains(':')) {
+    if url.starts_with("ssh://") || scp_like(url) {
         let a = ssh::parse(url).ok()?;
         return Some((a.host, a.explicit_port.then_some(a.port)));
     }
     None
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{drive_path, file_path, scp_like};
+
+    #[test]
+    fn a_drive_is_a_local_path_on_windows_alone() {
+        assert!(drive_path("C:\\Users\\x\\remote.git") && drive_path("c:/x"));
+        assert!(!drive_path("git@github.com:o/r.git") && !drive_path("C:"));
+        assert!(
+            scp_like("git@github.com:o/r.git") && !scp_like("ssh://h/r") && !scp_like("/tmp/r")
+        );
+        assert_eq!(scp_like("C:/x/remote.git"), !cfg!(windows));
+    }
+
+    #[test]
+    fn a_file_url_names_its_folder() {
+        assert_eq!(
+            file_path("file:///tmp/r.git"),
+            std::path::PathBuf::from("/tmp/r.git")
+        );
+        assert_eq!(
+            file_path("/tmp/r.git"),
+            std::path::PathBuf::from("/tmp/r.git")
+        );
+        let want = if cfg!(windows) {
+            "C:/k7/r.git"
+        } else {
+            "/C:/k7/r.git"
+        };
+        assert_eq!(
+            file_path("file:///C:/k7/r.git"),
+            std::path::PathBuf::from(want)
+        );
+    }
 }

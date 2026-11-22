@@ -5,6 +5,7 @@
 // to resolve, and a lost one leaves the project open under a banner. See ../../docs/shell.md.
 
 import type { HostedFiles } from "@studio/engine-browser/access";
+import { retryLoopback } from "@studio/engine-browser/probe";
 import { type GateEngine, projectResolved } from "@studio/project-shell/gate";
 import { parseLaunch, projectClaimKey } from "@studio/project-shell/launch";
 import { GateWait } from "@studio/project-shell/progress";
@@ -21,6 +22,10 @@ import type { RankedEngine } from "../types";
 import { EngineTakenBanner } from "./EngineTakenBanner";
 import { holdsClaim, type Taken } from "./engineTaken";
 import { ProjectGate } from "./ProjectGate";
+
+/** How many more looks an owned engine that did not answer gets, and how far apart (docs/shell.md). */
+const OWNED_RETRIES = 3;
+const OWNED_RETRY_MS = 5_000;
 
 export function EngineGate({
   /** The surface this tab was opened on, when the address named one — forwarded, not acted on: this gate's job is the engine. */
@@ -121,12 +126,51 @@ export function EngineGate({
     setGeneration((g) => g + 1);
   }, []);
 
+  // Looks left for an engine this device owns that did not answer: a page still loading can hold its reply past the probe's 3 s.
+  const retriesLeft = useRef(OWNED_RETRIES);
+  const retryTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(
+    () => () => {
+      if (retryTimer.current) clearTimeout(retryTimer.current);
+    },
+    [],
+  );
+
   /** Looks for the engine on this machine; a step that threw answers like none being usable: the project stays open and silent. */
   const look = useCallback(async (): Promise<void> => {
     try {
       const { ranked } = await engines.find();
       const here = localEngineOf(ranked);
       if (here) take(here);
+      else {
+        // The registry names an engine of this account that was silent: looked for again, a few times, rather than left silent.
+        const silent = ranked.filter(
+          (r) => r.engine.access === "owner" && r.token === null,
+        );
+        if (retriesLeft.current > 0 && silent.length) {
+          retriesLeft.current--;
+          retryTimer.current = setTimeout(() => {
+            if (chosenRef.current) return;
+            // The loopback that just missed rests two minutes otherwise, and is the very address this look is for.
+            for (const r of silent) retryLoopback(r.engine);
+            void lookRef.current();
+          }, OWNED_RETRY_MS);
+        }
+        // Said once per look, to the console a phone's logcat carries: what was offered, and why none is this device's.
+        console.info(
+          "[engine-gate] no engine of this device among",
+          JSON.stringify(
+            ranked.map((r) => ({
+              id: r.engine.id,
+              wsUrl: r.wsUrl,
+              answered: r.token !== null,
+              networkMs: r.latency?.networkMs ?? null,
+              access: r.engine.access,
+              addresses: r.engine.addresses,
+            })),
+          ),
+        );
+      }
     } catch {
       // No engine: the bar says so, and the engine page starts one.
     } finally {
@@ -136,6 +180,8 @@ export function EngineGate({
       setSearching(false);
     }
   }, [take]);
+  const lookRef = useRef(look);
+  lookRef.current = look;
 
   useEffect(() => {
     // StrictMode runs this twice in dev; both probes are harmless, and a ref guard would strand the search.

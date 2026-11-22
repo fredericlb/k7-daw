@@ -17,6 +17,14 @@ search is reached without a reconnect delay; an engine found later — the bar's
 opens — is joined without a remount, unless its files are not the hub's. Once an engine is held, the files'
 ticket names it, and that is what binds it at the hub (`apps/k7-daw-backend/docs/files/hub.md`).
 
+**An owned engine that did not answer is looked for again**, three times, five seconds apart. The
+probe gives an address 3 s to answer `whoami`, and a page still loading (a slow phone, or an emulator
+drawing on the CPU) can hold the reply past that while the engine answered in milliseconds; the
+registry naming an engine of this account is the evidence that one is there. An unowned engine is
+never retried, as it is never taken. A retry lifts the two-minute rest a loopback that missed is given
+(`retryLoopback` in `@studio/engine-browser/probe`), since that address is the one it looks for. When none
+is found, the gate says on the console what it was offered.
+
 **Every wait is one bar along the bottom** (`@studio/project-shell/progress`), never a screen: the
 sign-in check, the files, the address resolved, the sync, then — with the project already drawn —
 the engine looked for, the engine's plugin scan when the project names an external plugin, the
@@ -722,6 +730,15 @@ so the next write goes over it, which is what the person chose; "take the disk" 
 The project journal flushes every pane before it moves (`HistoryDeps.flush`), so Ctrl+Z never
 lands under a pending autosave. A write that lands after the pane moved to another file updates
 nothing of the file now shown.
+
+A write in flight is the base until it answers. The revision moves when the disk takes the write,
+which can be before the write's answer reaches the page; a poll then reads the new text back while
+`saved` still holds the old one, and a buffer undone to that old text looks clean and would be
+replaced by the read, the undo lost with no write. So the text being written stands in for `saved`
+in that decision (`writing` in `decideDiskSync`).
+Likewise a buffer found equal to the disk takes that disk text as its base (`onClean(fresh)`), not
+the buffer as it reads when the update applies: an undo landing in between would become the base,
+and the autosave would see nothing to write.
 
 ### Space is the transport, wherever the last click landed
 

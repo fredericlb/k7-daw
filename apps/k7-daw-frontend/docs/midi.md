@@ -69,6 +69,14 @@ through a ref only to arm a learn.
 Incoming values go out through the same `setPluginParam` a knob drag uses, so a param moved by
 hand and one moved by a controller are indistinguishable downstream.
 
+## One access, asked for late
+
+| choice | why |
+|---|---|
+| one `MIDIAccess` per page (`src/midiAccess.ts`), shared by the controller and the recorder and never released | Android's WebView registers a MIDI device listener each time its MIDI service starts and never removes it; past the platform's per-app cap the WebView aborts and takes the app, its engine included, with it |
+| each user listens with `addEventListener` and takes only its own listeners off (`MidiListeners`) | the two share the same port objects, so an `onmidimessage` one of them set would replace the other's |
+| the controller asks only once the graph maps a control or a learn is armed, as the recorder asks only when a lane is armed | a page that plays nothing from MIDI starts no MIDI service at all |
+
 ## What is deliberately not bindable
 
 - **A lane's mixer control** (`@output-volume` on a lane's node) — a lane is a module
