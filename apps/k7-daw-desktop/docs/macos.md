@@ -24,6 +24,9 @@ before programs), at the end of `npm run stage`, with the hardened runtime.
 
 No sandbox: the app runs the engine, which opens any audio device and any plugin folder.
 
+**iCloud** (the workspace list, the Forgejo servers and the forge sign-ins shared with the iPhone and iPad) is on only
+in a build given a provisioning profile, which adds its own entitlements: `docs/icloud.md`.
+
 **The microphone** belongs to the responsible process, the app: the engine records through it, so `Info.plist`
 carries `NSMicrophoneUsageDescription` and `NSCameraUsageDescription`, and the app's entitlements carry the two
 device keys. Without the plist key macOS hands the engine silence.

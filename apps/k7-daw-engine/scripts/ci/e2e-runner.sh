@@ -150,7 +150,7 @@ cd e2e
 rm -rf test-results
 echo "=== the $suite suite ==="
 if [ "$suite" = web ]; then
-  export E2E_BASE_URL="http://127.0.0.1:$web" E2E_PEER_URL="http://127.0.0.1:$backend" E2E_GITHUB_PORT=$((front + 3))
+  export E2E_BASE_URL="http://127.0.0.1:$web" E2E_PEER_URL="http://127.0.0.1:$backend" E2E_GITHUB_PORT=$((front + 3)) E2E_FORGEJO_PORT=$((front + 4))
   config=playwright.config.ts
 else
   export E2E_BASE_URL="http://127.0.0.1:$front" CONFORMANCE_INTERNAL_SECRET=k7-dev-front CONFORMANCE_FILES_ROOT="$files" \

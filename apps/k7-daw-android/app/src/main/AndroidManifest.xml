@@ -42,6 +42,13 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <!-- A Forgejo sign-in coming back from the browser (ForgeReturn.kt). -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="rocks.k7.daw" android:host="callback" />
+            </intent-filter>
         </activity>
         <!-- k7 opened again once the old process is gone, from a process of its own that only waits (Relaunch.kt). -->
         <activity

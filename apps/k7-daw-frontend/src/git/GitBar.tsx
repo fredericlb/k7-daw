@@ -290,6 +290,18 @@ export function CardGitPills({
     v.toPull > 0 ? m["git.card.pullN"]({ n: v.toPull }) : m["git.pull"]();
   const pushable = v.commit || v.push;
   // With nothing incoming and nothing to send, the pills step aside for a lasting line.
+  if (!pulling && !refused && v.toPull === 0 && !pushable && v.remoteEmpty)
+    return (
+      <span
+        role="status"
+        className="type-secondary flex shrink-0 flex-col text-fg-2"
+      >
+        <span>{m["git.card.remoteEmpty"]({ repo: remoteName(v.remote) })}</span>
+        <span className="type-status text-fg-3">
+          {m["git.card.remoteEmptyHint"]()}
+        </span>
+      </span>
+    );
   if (!pulling && !refused && v.toPull === 0 && !pushable)
     return (
       <span role="status" className="type-secondary shrink-0 text-fg-2">

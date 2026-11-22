@@ -1,12 +1,10 @@
 // githubState.ts — the rules of "Sign in with GitHub" as data: the device-flow screen's states, and how the picker orders,
 // filters and dates a list of repositories. What a reader gets wrong: nothing here holds a token, the backend keeps it.
 
-/** What `GET /git/github` says: the path exists in this build, and who is signed in. */
-export interface GithubStatus {
-  available: boolean;
-  login?: string;
-  scopes: string[];
-}
+import type { ForgeStatus } from "./forgeState";
+
+/** What `GET /git/github` says: GitHub's account under the forge seam. */
+export type GithubStatus = ForgeStatus;
 
 export interface GithubRepo {
   fullName: string;
@@ -39,10 +37,6 @@ export const signedIn = (s: GithubStatus | null): boolean =>
 
 export const hasRepoScope = (s: GithubStatus | null): boolean =>
   Boolean(s?.scopes.includes("repo"));
-
-/** Connect and Clone show GitHub's picker only to a person signed in with `repo`; nobody else sees GitHub there. */
-export const canPick = (s: GithubStatus | null): boolean =>
-  signedIn(s) && hasRepoScope(s);
 
 export type SignIn =
   | { phase: "starting" }

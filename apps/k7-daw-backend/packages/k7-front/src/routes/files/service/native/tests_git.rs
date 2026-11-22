@@ -46,8 +46,10 @@ pub(super) fn device(name: &str) -> Dev {
         workspaces: super::tests::slashed(&dir.join("workspace")),
         account_home: super::tests::slashed(&dir),
         device: "Test device".into(),
+        port: 0,
         land: None,
         fetchers: Arc::default(),
+        roam: Arc::new(k7_roam::NoStore),
         account: None,
     };
     Dev { ctx, dir }
@@ -411,4 +413,43 @@ async fn a_commit_leaves_out_what_it_is_told_to_and_the_status_keeps_naming_it()
         1_000_001
     );
     k7_git::set_default_max_file(k7_git::MAX_FILE);
+}
+
+#[tokio::test(flavor = "multi_thread")]
+async fn a_fetch_time_is_in_milliseconds_and_a_remote_nobody_pushed_to_says_so() {
+    let (a, remote) = (
+        device("a-empty"),
+        device("remote-empty").dir.join("bare.git"),
+    );
+    bare(&remote);
+    let root = ws(&a, "band");
+    let c = json!({ "workspace": "band", "url": url(&remote) });
+    let (s, ..) = post(&a, Kind::Connect, "/git/connect", c).await;
+    assert_eq!(s, 200);
+    let (_, v, _) = ask(&a, Kind::State, "GET", "/git/state?workspace=band", None).await;
+    assert!(
+        v.get("remoteEmpty").is_none(),
+        "no fetch has completed: {v}"
+    );
+    let cadence = a.ctx.fetchers.of(&root.display().to_string());
+    cadence
+        .lock()
+        .unwrap()
+        .done(super::git_fetch::now(), Ok(()));
+    let (_, v, _) = ask(&a, Kind::State, "GET", "/git/state?workspace=band", None).await;
+    assert_eq!(v["remoteEmpty"], true, "{v}");
+    let since = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH);
+    let ms = since.unwrap().as_millis() as i64;
+    let at = v["lastFetch"]["at"].as_i64().unwrap();
+    assert!((ms - at).abs() < 5_000, "{at} vs {ms}");
+    let failed = Err(("net".to_string(), "down".to_string()));
+    cadence
+        .lock()
+        .unwrap()
+        .done(super::git_fetch::now(), failed);
+    let (_, v, _) = ask(&a, Kind::State, "GET", "/git/state?workspace=band", None).await;
+    assert!(
+        v.get("remoteEmpty").is_none(),
+        "a failed fetch says nothing: {v}"
+    );
 }

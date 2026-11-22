@@ -20,13 +20,13 @@ import {
   ready,
   request,
 } from "./connectState";
+import type { PickedRepo } from "./ForgePicker";
+import { ForgeWays } from "./ForgeWays";
+import { canPickFrom } from "./forgeState";
 import { useGitTransport } from "./GitContext";
-import type { PickedRepo } from "./GitHubPicker";
-import { GitHubWays } from "./GitHubWays";
 import { explain, GitError, type Remote } from "./gitApi";
-import { canPick } from "./githubState";
 import { RemoteFields } from "./RemoteFields";
-import { useGithub } from "./useGithub";
+import { useForges } from "./useForges";
 
 export function RemoteDialog({
   open,
@@ -65,11 +65,12 @@ export function RemoteDialog({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const t = useGitTransport();
-  const github = useGithub(open ? t : null);
-  // The person's explicit way ("Another host…"); until then GitHub's picker leads for a person signed in and nothing was typed.
+  const forges = useForges(open ? t : null);
+  // The person's explicit way ("Another host…"); until then the pickers lead for a person signed in and nothing was typed.
   const [chosen, setChosen] = useState<"other" | null>(null);
   const [fromGithub, setFromGithub] = useState(false);
-  const offered = canPick(github.status) && t !== null;
+  const pickable = (forges.accounts ?? []).filter(canPickFrom);
+  const offered = pickable.length > 0 && t !== null;
   const ways = offered && !chosen && !initialUrl;
   // Typing an address is choosing the other way, whenever the status arrived.
   const edit = (e: FormEvent) => {
@@ -148,11 +149,11 @@ export function RemoteDialog({
             void go();
           }}
         >
-          {ways && t && github.status ? (
-            <GitHubWays
+          {ways && t ? (
+            <ForgeWays
               t={t}
-              status={github.status}
-              refresh={github.refresh}
+              accounts={pickable}
+              refresh={forges.refresh}
               createName={createName}
               disabled={busy}
               onPick={pick}

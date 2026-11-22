@@ -5,17 +5,19 @@
 mod hosts;
 mod keys;
 mod secret;
-#[cfg(target_os = "ios")]
-mod secret_ios;
+#[cfg(any(target_os = "ios", target_os = "macos"))]
+mod secret_apple;
 #[cfg(not(any(target_os = "android", target_os = "ios")))]
 mod secret_map;
+mod synced;
 
 pub use hosts::{HOSTS_FILE, KnownHosts};
 pub(crate) use keys::device_key;
 pub use keys::{key_is_synced, public_key};
 pub use secret::{
     FileSecrets, MemorySecrets, SERVICE, Secrets, StoreSpec, WithFile, account_tag, device_store,
-    entry_name, is_shared, store_spec,
+    entry_name, is_shared, store_spec, use_icloud_keychain,
 };
 #[cfg(not(any(target_os = "android", target_os = "ios")))]
 pub use secret_map::{Os, means_absent};
+pub use synced::{FORGE_TOKEN_PREFIX, GITHUB_TOKEN_HOST, Synced, forge_token_host, is_token};

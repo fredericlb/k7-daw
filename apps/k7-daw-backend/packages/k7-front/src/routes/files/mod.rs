@@ -64,6 +64,7 @@ impl Files {
             );
             return None;
         }
+        service::native::git::listening_on(port);
         Some(Arc::new(Files {
             owned: AtomicBool::new(false),
             hub: hub::State::new(config, settings, port),

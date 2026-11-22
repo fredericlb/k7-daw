@@ -23,7 +23,7 @@ pub trait Secrets: Send + Sync {
     }
 }
 
-/// How an Apple device's keychain stores one entry; the shared SSH key is the only synchronizable one (docs/files/git.md).
+/// How an Apple device's keychain stores one entry: synchronizable (iCloud Keychain) or this device's alone (docs/git.md).
 #[derive(Debug, PartialEq, Eq)]
 pub struct StoreSpec {
     pub cloud_sync: bool,
@@ -31,9 +31,17 @@ pub struct StoreSpec {
     pub access_policy: Option<&'static str>,
 }
 
-/// The device's SSH key is the one entry shared across the person's Apple devices.
+/// What an iPhone or iPad shares with the person's other Apple devices: the SSH key and the forge tokens.
 pub fn is_shared(host: &str) -> bool {
-    host == super::keys::KEY_HOST
+    host == super::keys::KEY_HOST || super::synced::is_token(host)
+}
+
+/// Whether this Mac app carries its iCloud entitlements, said once by the host before the front starts (docs/git.md).
+static MAC_ICLOUD: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
+
+/// The Mac app's word that it is signed with its provisioning profile: the forge tokens then sync; a no-op elsewhere.
+pub fn use_icloud_keychain() {
+    MAC_ICLOUD.store(true, std::sync::atomic::Ordering::Relaxed);
 }
 
 pub fn store_spec(shared: bool) -> StoreSpec {
@@ -189,18 +197,37 @@ impl<S: Secrets> Secrets for WithFile<S> {
 pub fn device_store(folder: PathBuf, account: &str) -> std::sync::Arc<dyn Secrets> {
     #[cfg(not(any(target_os = "android", target_os = "ios")))]
     {
-        std::sync::Arc::new(WithFile {
+        let here = WithFile {
             keychain: Keychain {
                 account: account.to_string(),
             },
             file: FileSecrets(folder),
-        })
+        };
+        #[cfg(target_os = "macos")]
+        if MAC_ICLOUD.load(std::sync::atomic::Ordering::Relaxed) {
+            // The tokens travel; the SSH key stays this Mac's own, the one its forges already hold.
+            return std::sync::Arc::new(super::synced::Synced {
+                synced: super::secret_apple::Protected {
+                    account: account.to_string(),
+                    cloud: true,
+                },
+                local: here,
+                travels: super::synced::is_token,
+            });
+        }
+        std::sync::Arc::new(here)
     }
     #[cfg(target_os = "ios")]
     {
         let _ = folder;
-        std::sync::Arc::new(super::secret_ios::Keychain {
+        let protected = |cloud| super::secret_apple::Protected {
             account: account.to_string(),
+            cloud,
+        };
+        std::sync::Arc::new(super::synced::Synced {
+            synced: protected(true),
+            local: protected(false),
+            travels: is_shared,
         })
     }
     #[cfg(target_os = "android")]
@@ -261,10 +288,11 @@ mod tests {
     use super::*;
 
     #[test]
-    fn the_shared_key_entry_syncs_and_has_no_this_device_only_class() {
+    fn the_shared_entries_sync_and_have_no_this_device_only_class() {
         let spec = store_spec(is_shared(super::super::keys::KEY_HOST));
         assert!(spec.cloud_sync);
         assert_eq!(spec.access_policy, None);
+        assert!(is_shared("github-oauth") && is_shared("forge:git.example"));
         let local = store_spec(is_shared("nas.example"));
         assert!(!local.cloud_sync);
         assert!(local.access_policy.unwrap().ends_with("this-device-only"));

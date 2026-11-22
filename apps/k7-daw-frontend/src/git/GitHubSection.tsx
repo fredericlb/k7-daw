@@ -90,7 +90,14 @@ export function GitHubRows({
     }
   };
   return (
-    <Section title={title} hint={m["git.gh.signOutNote"]()}>
+    <Section
+      title={title}
+      hint={
+        status.synced
+          ? m["git.gh.signOutNoteSynced"]()
+          : m["git.gh.signOutNote"]()
+      }
+    >
       <Row
         label={m["git.gh.accountLogin"]({ login: status.login ?? "" })}
         detail={note || (repos ? undefined : m["git.gh.repoWhy"]())}

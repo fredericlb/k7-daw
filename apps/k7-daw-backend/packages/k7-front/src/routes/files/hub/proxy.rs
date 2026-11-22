@@ -54,6 +54,11 @@ fn header(h: &HeaderMap, name: &str) -> Option<String> {
         .map(|v| String::from_utf8_lossy(v.as_bytes()).into_owned())
 }
 
+/// A forge's sign-in coming back from the browser holds no cookie; its `state` is what proves the sign-in (`docs/files/git.md`).
+fn forge_callback(req: &Request) -> bool {
+    req.method() == Method::GET && req.uri().path() == "/api/files/git/forge/callback"
+}
+
 /// `/api/files[/*]`: the ticket or the session says who, the libraries' paths go to their service, the rest to the account's.
 pub async fn files(State(state): State<Arc<AppState>>, req: Request) -> Response {
     let hub = &files_of(&state).hub;
@@ -65,7 +70,7 @@ pub async fn files(State(state): State<Arc<AppState>>, req: Request) -> Response
     let ticket = (!presented.is_empty())
         .then(|| k7_hub::ticket::read(&hub.ticket_key, &presented, crate::session::now_ms()))
         .flatten();
-    if ticket.is_none() && !session_of(&state, &req) {
+    if ticket.is_none() && !session_of(&state, &req) && !forge_callback(&req) {
         return error(
             StatusCode::UNAUTHORIZED,
             "no valid files ticket, and no session",

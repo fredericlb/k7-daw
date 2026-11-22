@@ -9,7 +9,7 @@
   "scripts": {
     "stage": "node scripts/stage.mjs",
     "dev": "node ../../scripts/dev-desktop.mjs",
-    "desktop:build": "tauri build",
+    "desktop:build": "node scripts/desktopBuild.mjs",
     "tauri": "tauri",
     "test": "node --test \"scripts/*.test.mjs\" \"../k7-daw-engine/scripts/*.test.mjs\" \"../k7-daw-backend/scripts/*.test.mjs\""
   },

@@ -11,6 +11,8 @@ mod backend;
 mod exports;
 mod handlers;
 mod http;
+#[cfg(target_os = "macos")]
+mod icloud;
 mod idmove;
 mod job;
 mod logbus;
@@ -73,6 +75,10 @@ fn main() {
                 port: backend::port(&handle),
             }));
             app.manage(shared);
+
+            // Before the front starts: its keychain and its roaming store are chosen once.
+            #[cfg(target_os = "macos")]
+            logbus::line("host", icloud::install());
 
             appmenu::install(&handle)?;
             window::create(&handle)?;

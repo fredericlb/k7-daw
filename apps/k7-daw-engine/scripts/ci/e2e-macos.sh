@@ -100,7 +100,7 @@ for n in "${slots[@]}"; do
   mkdir -p "$blogs" "$bed"
   echo "bed slot $n: front $front, backend $backend, web $web, engine $engine"
   # Nothing of the Mac's answers on the bed's ports: a listener there would shadow the bed's loopback bind.
-  for p in $front $backend $web $engine $((front + 2)) $((front + 3)); do
+  for p in $front $backend $web $engine $((front + 2)) $((front + 3)) $((front + 4)); do
     if lsof -nP -iTCP:"$p" -sTCP:LISTEN > /dev/null 2>&1; then
       echo "port $p is held on this Mac:"; lsof -nP -iTCP:"$p" -sTCP:LISTEN; exit 1
     fi
@@ -272,7 +272,7 @@ run_suite() {
 }
 web_suite() {
   bed_of "${slots[0]}"
-  E2E_BASE_URL="http://127.0.0.1:$web" E2E_PEER_URL="http://127.0.0.1:$backend" E2E_GITHUB_PORT=$((front + 3)) run_suite web playwright.config.ts
+  E2E_BASE_URL="http://127.0.0.1:$web" E2E_PEER_URL="http://127.0.0.1:$backend" E2E_GITHUB_PORT=$((front + 3)) E2E_FORGEJO_PORT=$((front + 4)) run_suite web playwright.config.ts
 }
 conformance_suite() {
   bed_of "${slots[${#slots[@]} - 1]}"

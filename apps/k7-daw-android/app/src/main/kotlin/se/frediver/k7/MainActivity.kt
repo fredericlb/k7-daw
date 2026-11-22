@@ -8,6 +8,7 @@
 package se.frediver.k7
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -82,6 +83,12 @@ class MainActivity : BridgeActivity() {
         if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) return
         notificationsAsked = true
         notifications.launch(Manifest.permission.POST_NOTIFICATIONS)
+    }
+
+    // singleTask: a Forgejo sign-in's return lands here, the activity and its backend still alive (ForgeReturn.kt).
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        ForgeReturn.take(intent)
     }
 
     override fun onDestroy() {

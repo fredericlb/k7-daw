@@ -6,6 +6,7 @@
 import { AudioLines, ChevronRight } from "@studio/ui/icons";
 import { Link } from "react-router-dom";
 import { AboutSection } from "../about/AboutSection";
+import { ForgejoSection } from "../git/ForgejoSection";
 import { GitHubSection } from "../git/GitHubSection";
 import { IdentitySection } from "../git/IdentitySection";
 import { m } from "../paraglide/messages.js";
@@ -73,7 +74,12 @@ export function SettingsPage() {
   const services: SettingsTab = {
     key: "services",
     label: m["settings.tabServices"](),
-    content: <GitHubSection />,
+    content: (
+      <>
+        <GitHubSection />
+        <ForgejoSection />
+      </>
+    ),
   };
   const downloads: SettingsTab = {
     key: "downloads",

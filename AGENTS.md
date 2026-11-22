@@ -89,7 +89,8 @@ engine registry, the relay or a gate, `docs/audit-moteur.md`. The repo's own che
 A branch works in its own worktree. To merge it: merge `main` into the branch (a generated file is never
 merged by hand: git keeps one side, `npm run rebuild:generated` writes it from the merged sources), run
 `bash scripts/agent/gate.sh` until it is green, then fast-forward local `main` to the branch (`docs/agent-playbook.md`,
-"Merging"). Never push `main`, and never use PowerShell for text in a tracked file.
+"Merging"). `main` is pushed to GitHub only when the user says so or by a scheduled task (the nightly run), never after
+each change and never by force; never use PowerShell for text in a tracked file.
 
 ## Rust builds and the CI's checks
 
@@ -103,7 +104,7 @@ How a build stays fast and where a branch is checked — `docs/rust-builds.md`, 
 - **A branch is checked on the Mac**: no CI job releases, and Windows is set aside until the user brings it back
   (`docs/agent-playbook.md`). A milestone ends with `bash scripts/agent/gate.sh --milestone` (the quick
   checks, `check:changed`, `mac-checks.sh`); before a merge, `gate.sh` adds `win-clippy.sh` and `android-check.sh`, and
-  `npm run ci:local` runs on `main` after merges. Never push `main`.
+  `npm run ci:local` runs on `main` after merges. `main` is pushed only when the user asks or by a scheduled task, never by force.
 - **The web and conformance suites run on the Mac's own e2e beds, never in CI**, two at once (`apps/k7-daw-engine/scripts/ci/e2e-macos.sh`, `e2e/docs/e2e.md`).
 - **A test server listens on `127.0.0.1`**, never on every interface: on macOS another process's loopback bind
   shadows it.

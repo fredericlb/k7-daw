@@ -56,10 +56,34 @@ describe("the workspace bar", () => {
   it("says a failed fetch", () => {
     const v = barView(
       conn({
-        lastFetch: { at: 1, error: { code: "unreachable", error: "down" } },
+        lastFetch: {
+          at: 1_760_000_000_000,
+          error: { code: "unreachable", error: "down" },
+        },
       }),
     );
     expect(v.fetchError).toBe("down");
+  });
+});
+
+describe("an empty remote", () => {
+  const fetched = { at: 1_760_000_000_000, error: null };
+
+  it("says nothing was pushed, and offers nothing, on a clean clone", () => {
+    const v = barView(conn({ remoteEmpty: true, lastFetch: fetched }));
+    expect(v.remoteEmpty).toBe(true);
+    expect(v.commit || v.push || v.pull).toBe(false);
+  });
+
+  it("keeps Commit and Push on the device that has the projects", () => {
+    const v = barView(
+      conn({ remoteEmpty: true, changed: 3, ahead: 0, lastFetch: fetched }),
+    );
+    expect(v.commit).toBe(true);
+    const w = barView(
+      conn({ remoteEmpty: true, ahead: 2, lastFetch: fetched }),
+    );
+    expect(w.push).toBe(true);
   });
 });
 

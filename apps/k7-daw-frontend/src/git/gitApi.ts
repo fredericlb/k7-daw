@@ -4,6 +4,12 @@
 import { HttpError } from "@studio/http-client/call";
 import { m } from "../paraglide/messages.js";
 import type {
+  ForgeAccount,
+  ForgePoll,
+  ForgeProbe,
+  ForgeStart,
+} from "./forgeState";
+import type {
   DeviceCode,
   GithubRepo,
   GithubStatus,
@@ -133,20 +139,42 @@ export const git = {
     call<{ ok: boolean; forgotten: boolean }>(t, "forget-host", {
       json: target,
     }),
+  /** Every forge account this build offers, each with who is signed in on this device. */
+  forges: (t: GitTransport) => call<{ forges: ForgeAccount[] }>(t, "forges"),
   /** Whether the GitHub path exists in this build, and who is signed in on this device. */
   githubStatus: (t: GitTransport) => call<GithubStatus>(t, "github"),
   githubStart: (t: GitTransport, scopes: string[]) =>
     call<DeviceCode>(t, "github/start", { json: { scopes } }),
   githubPoll: (t: GitTransport) =>
     call<PollAnswer>(t, "github/poll", { post: true }),
-  githubRepos: (t: GitTransport) =>
-    call<{ repos: GithubRepo[] }>(t, "github/repos"),
-  githubCreate: (t: GitTransport, name: string, isPrivate: boolean) =>
-    call<{ sshUrl: string; fullName: string }>(t, "github/repos", {
-      json: { name, private: isPrivate },
-    }),
   githubSignout: (t: GitTransport) =>
     call<{ ok: boolean }>(t, "github/signout", { post: true }),
+  /** What a Forgejo server answers without a token, and the two redirects to register on it. */
+  forgeProbe: (t: GitTransport, url: string) =>
+    call<ForgeProbe>(t, "forges/probe", { json: { url } }),
+  forgeAdd: (
+    t: GitTransport,
+    s: { url: string; clientId: string; sshHost?: string; sshPort?: number },
+  ) => call<ForgeProbe & { added: boolean }>(t, "forges", { json: s }),
+  forgeRemove: (t: GitTransport, id: string) =>
+    call<{ ok: boolean }>(t, `forges/${enc(id)}/remove`, { post: true }),
+  forgeStart: (t: GitTransport, id: string, redirect?: "app") =>
+    call<ForgeStart>(t, `forges/${enc(id)}/start`, {
+      json: redirect ? { redirect } : {},
+    }),
+  forgePoll: (t: GitTransport, id: string) =>
+    call<ForgePoll>(t, `forges/${enc(id)}/poll`, { post: true }),
+  forgeRepos: (t: GitTransport, id: string) =>
+    call<{ repos: GithubRepo[] }>(t, `forges/${enc(id)}/repos`),
+  forgeCreate: (
+    t: GitTransport,
+    id: string,
+    name: string,
+    isPrivate: boolean,
+  ) =>
+    call<{ sshUrl: string; fullName: string }>(t, `forges/${enc(id)}/repos`, {
+      json: { name, private: isPrivate },
+    }),
   /** Says the page is in front (or left), which drives the fetch. */
   focus: (t: GitTransport, workspace: string, front: boolean, opened = false) =>
     call<{ ok: boolean }>(t, "focus", { json: { workspace, front, opened } }),

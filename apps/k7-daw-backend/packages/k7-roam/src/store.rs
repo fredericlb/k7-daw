@@ -5,6 +5,9 @@
 use std::collections::BTreeMap;
 use std::sync::{Arc, Mutex, RwLock};
 
+/// The key prefixes of k7's pairs, the workspace list's and the Forgejo servers'; a host's store passes these only.
+pub const KEY_PREFIXES: [&str; 2] = [crate::entry::PREFIX, crate::forges::PREFIX];
+
 /// A store of string keys to string values; each key is its own last-writer-wins cell.
 pub trait ListStore: Send + Sync {
     /// Every pair in the store.

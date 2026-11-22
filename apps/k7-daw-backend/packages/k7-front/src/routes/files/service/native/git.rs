@@ -5,6 +5,7 @@
 
 use std::ops::Not;
 use std::path::{Path, PathBuf};
+use std::sync::atomic::{AtomicU16, Ordering};
 use std::sync::{Arc, Mutex, OnceLock};
 
 use axum::extract::Request;
@@ -23,8 +24,10 @@ use serde_json::{Value, json};
 
 use super::git_connect;
 use super::git_fetch::Fetchers;
+use super::git_forge_routes::{self, Verb};
+use super::git_forgejo_flow;
+use super::git_forgejo_servers;
 use super::git_github;
-use super::git_github_api::Hub;
 use super::git_keys;
 use super::git_lock;
 use super::git_roam;
@@ -33,7 +36,7 @@ use crate::routes::files::json_answer;
 use crate::routes::files::service::body;
 use crate::routes::files::service::{Who, claim_root, workspace_name_ok};
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Kind {
     State,
     Status,
@@ -52,12 +55,13 @@ pub enum Kind {
     SetIdentity,
     Focus,
     Roam,
-    GithubStatus,
-    GithubStart,
-    GithubPoll,
-    GithubRepos,
-    GithubCreate,
-    GithubSignout,
+    Forges,
+    ForgeAdd,
+    ForgeProbe,
+    /// Where a forge sends the browser back after a sign-in, cookie-less (`git_forgejo_flow.rs`).
+    ForgeCallback,
+    /// One account's route: its id (`github.com`) and what is asked of it.
+    Forge(String, Verb),
 }
 
 impl Kind {
@@ -81,14 +85,26 @@ impl Kind {
             "/git/identity" if post => Some(Kind::SetIdentity),
             "/git/focus" if post => Some(Kind::Focus),
             "/git/roam" if get => Some(Kind::Roam),
-            "/git/github" if get => Some(Kind::GithubStatus),
-            "/git/github/start" if post => Some(Kind::GithubStart),
-            "/git/github/poll" if post => Some(Kind::GithubPoll),
-            "/git/github/repos" if get => Some(Kind::GithubRepos),
-            "/git/github/repos" if post => Some(Kind::GithubCreate),
-            "/git/github/signout" if post => Some(Kind::GithubSignout),
-            _ => None,
+            "/git/forges" if get => Some(Kind::Forges),
+            "/git/forges" if post => Some(Kind::ForgeAdd),
+            "/git/forges/probe" if post => Some(Kind::ForgeProbe),
+            "/git/forge/callback" if get => Some(Kind::ForgeCallback),
+            _ => Kind::forge(method, path),
         }
+    }
+
+    /// `/git/forges/<id>/...`, and `/git/github/...`, which is GitHub's under its first name.
+    fn forge(method: &Method, path: &str) -> Option<Kind> {
+        if let Some(rest) = path.strip_prefix("/git/github") {
+            let verb = Verb::of(method, rest)?;
+            return Some(Kind::Forge(git_github::ID.into(), verb));
+        }
+        let after = path.strip_prefix("/git/forges/")?;
+        let (id, rest) = after.find('/').map_or((after, ""), |i| after.split_at(i));
+        let verb = Verb::of(method, rest)?;
+        // A browser's encoder writes the port's colon as %3A; nothing else is decoded.
+        let id = id.replace("%3A", ":").replace("%3a", ":");
+        git_forge_routes::id_ok(&id).then_some(Kind::Forge(id, verb))
     }
 }
 
@@ -103,10 +119,14 @@ pub struct Ctx {
     /// The account's own folder, where the device keeps what is not a workspace's (`.k7-roam.json`).
     pub account_home: String,
     pub device: String,
+    /// The front's own port, which a browser sign-in's loopback redirect names.
+    pub port: u16,
     pub land: Option<Land>,
     pub fetchers: Arc<Fetchers>,
     /// The account's capture, to start one on a workspace a clone made.
     pub account: Option<Arc<k7_capture::account::Account>>,
+    /// The host's roaming store (`k7_roam::store::current`), where the Forgejo servers sync; a test's own.
+    pub roam: Arc<dyn k7_roam::ListStore>,
 }
 
 pub(super) fn answer_error(e: &Error) -> Response {
@@ -156,6 +176,13 @@ pub(super) fn merge_waits(root: &Path) -> Option<Response> {
     })
 }
 
+static PORT: AtomicU16 = AtomicU16::new(0);
+
+/// The port the front listens on, told once at its start.
+pub fn listening_on(port: u16) {
+    PORT.store(port, Ordering::Relaxed);
+}
+
 fn device_name() -> String {
     ["HOSTNAME", "COMPUTERNAME"]
         .iter()
@@ -201,8 +228,10 @@ fn ctx_of(who: &Who<'_>, home: &Home) -> Ctx {
         workspaces: workspace_dir(home),
         account_home: home.account_home(),
         device: device_name(),
+        port: PORT.load(Ordering::Relaxed),
         land: account.as_ref().map(|a| a.landing()),
         fetchers: fetchers(),
+        roam: k7_roam::store::current(),
         account,
     }
 }
@@ -274,7 +303,7 @@ pub async fn hook(ctx: &Ctx, kind: Kind, req: Request) -> Response {
 }
 
 /// Whether the kind reads or writes the repository, so it takes the workspace's lock.
-fn locks(kind: Kind) -> bool {
+fn locks(kind: &Kind) -> bool {
     matches!(
         kind,
         Kind::Connect | Kind::Commit | Kind::Push | Kind::Pull | Kind::Resolve | Kind::Abort
@@ -282,7 +311,7 @@ fn locks(kind: Kind) -> bool {
 }
 
 /// Whether the kind fetches or pushes, so it also takes the remote's lock the background fetch holds.
-fn moves_remote_refs(kind: Kind) -> bool {
+fn moves_remote_refs(kind: &Kind) -> bool {
     matches!(kind, Kind::Connect | Kind::Push | Kind::Pull)
 }
 
@@ -298,12 +327,11 @@ async fn dispatch(ctx: &Ctx, kind: Kind, b: Value, query: String) -> Response {
         Kind::ForgetHost => return git_keys::forget_host(ctx, &b),
         Kind::Clone => return clone(ctx, &b).await,
         Kind::Roam => return git_roam::list(ctx).await,
-        Kind::GithubStatus
-        | Kind::GithubStart
-        | Kind::GithubPoll
-        | Kind::GithubRepos
-        | Kind::GithubCreate
-        | Kind::GithubSignout => return git_github_route(ctx, kind, &b).await,
+        Kind::Forges => return git_forge_routes::list(ctx),
+        Kind::ForgeAdd => return git_forgejo_servers::add(ctx, &b).await,
+        Kind::ForgeProbe => return git_forgejo_servers::probe_route(&b).await,
+        Kind::ForgeCallback => return git_forgejo_flow::callback(ctx, &query).await,
+        Kind::Forge(id, verb) => return git_forge_routes::route(ctx, &id, verb, &b).await,
         _ => {}
     }
     let name = if matches!(kind, Kind::State | Kind::Status | Kind::Log | Kind::Merge) {
@@ -322,7 +350,7 @@ async fn dispatch(ctx: &Ctx, kind: Kind, b: Value, query: String) -> Response {
         );
     }
     let key = root.display().to_string();
-    let _held = if locks(kind) {
+    let _held = if locks(&kind) {
         match git_lock::try_take(&key) {
             Some(g) => Some(g),
             None => return busy(),
@@ -330,7 +358,7 @@ async fn dispatch(ctx: &Ctx, kind: Kind, b: Value, query: String) -> Response {
     } else {
         None
     };
-    let _remote = if moves_remote_refs(kind) {
+    let _remote = if moves_remote_refs(&kind) {
         match git_lock::try_take_remote(&key) {
             Some(g) => Some(g),
             None => return busy(),
@@ -363,19 +391,6 @@ async fn dispatch(ctx: &Ctx, kind: Kind, b: Value, query: String) -> Response {
     done.unwrap_or_else(|e| answer_error(&e))
 }
 
-async fn git_github_route(ctx: &Ctx, kind: Kind, b: &Value) -> Response {
-    let hub = Hub::from_env();
-    let hub = hub.as_ref();
-    match kind {
-        Kind::GithubStatus => git_github::status(ctx, hub),
-        Kind::GithubStart => git_github::start(ctx, hub, b).await,
-        Kind::GithubPoll => git_github::poll(ctx, hub).await,
-        Kind::GithubRepos => git_github::repos(ctx, hub).await,
-        Kind::GithubCreate => git_github::create(ctx, hub, b).await,
-        _ => git_github::signout(ctx),
-    }
-}
-
 pub(super) type Answer = Result<Response, Error>;
 
 pub(super) fn open(root: &Path) -> Result<Repo, Error> {
@@ -406,12 +421,15 @@ async fn state(ctx: &Ctx, root: &Path) -> Answer {
         .clone();
     run(ctx, root, move |r| {
         let origin = r.origin_config();
-        let (ahead, behind) = match r.ahead_behind()? {
+        let tracked = r.ahead_behind()?;
+        let fetched = last.as_ref().is_some_and(|o| o.error.is_none());
+        let remote_empty = origin.is_some() && fetched && tracked.is_none();
+        let (ahead, behind) = match tracked {
             Some(ab) => ab,
             None => (r.head_commits()?, 0),
         };
         let pending = r.merge_pending()?;
-        Ok(json!({
+        let mut v = json!({
             "mode": if origin.is_some() { "connected" } else { "local" },
             "branch": r.branch(),
             "remote": origin.as_ref().map(|o| o.url.clone()),
@@ -419,8 +437,12 @@ async fn state(ctx: &Ctx, root: &Path) -> Answer {
             "ahead": ahead, "behind": behind,
             "changed": r.status()?.iter().filter(|e| !e.too_large).count(),
             "merge": pending.as_ref().map(|p| p.conflicts.iter().filter(|c| c.choice.is_none()).count()),
-            "lastFetch": last.map(|o| json!({ "at": o.at, "error": o.error.map(|(c, m)| json!({ "code": c, "error": m })) })),
-        }))
+            "lastFetch": last.map(|o| json!({ "at": o.at.saturating_mul(1000), "error": o.error.map(|(c, m)| json!({ "code": c, "error": m })) })),
+        });
+        if remote_empty {
+            v["remoteEmpty"] = json!(true);
+        }
+        Ok(v)
     })
     .await
 }

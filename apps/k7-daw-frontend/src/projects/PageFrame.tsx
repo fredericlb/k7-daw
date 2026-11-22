@@ -6,6 +6,7 @@ import { ChevronLeft } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
 import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
+import k7Logo from "../../icon/k7.svg";
 import { m } from "../paraglide/messages.js";
 
 /** The column every home-side page sits in; the foot leaves room for the tab bar (66 px at 28 from the bottom). */
@@ -48,7 +49,7 @@ export function PageHeader({
       <div className="flex min-w-0 items-start gap-3">
         {back && <BackButton />}
         <img
-          src="/icon/k7.svg"
+          src={k7Logo}
           alt=""
           className="mt-1.5 h-7 w-auto shrink-0"
           draggable={false}

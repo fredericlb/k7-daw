@@ -27,6 +27,8 @@ export interface BarView {
   pullBlocked: Blocked;
   /** The last fetch failed: its sentence, said once by the host; null when it worked or never ran. */
   fetchError: string | null;
+  /** The remote answered and holds nothing yet: an empty workspace here is not a sync that lost projects. */
+  remoteEmpty: boolean;
   /** The editors refuse every write while a merge waits. */
   readOnly: boolean;
 }
@@ -45,6 +47,7 @@ const HIDDEN: BarView = {
   pull: false,
   pullBlocked: null,
   fetchError: null,
+  remoteEmpty: false,
   readOnly: false,
 };
 
@@ -69,6 +72,7 @@ export function barView(s: GitState | null): BarView {
     pull: false,
     pullBlocked: null,
     fetchError: s.lastFetch?.error?.error ?? null,
+    remoteEmpty: connected && s.remoteEmpty === true,
     readOnly: merging,
   };
   // While a merge waits only its own screen is offered: a commit would be a second history.

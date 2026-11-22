@@ -1,4 +1,4 @@
-// GitHubPicker.tsx — the person's repositories as a list to pick from: k7 workspaces first, a filter, a way to make one.
+// ForgePicker.tsx — one account's repositories as a list to pick from: k7 workspaces first, a filter, a way to make one.
 // What a reader gets wrong: it never signs in nor asks a permission; that is Settings → Services, before it is ever shown.
 
 import { Button } from "@studio/ui/button";
@@ -7,6 +7,7 @@ import { Loader2, Lock, Plus } from "@studio/ui/icons";
 import { Input } from "@studio/ui/input";
 import { useEffect, useId, useState } from "react";
 import { m } from "../paraglide/messages.js";
+import { droppedSignIns, isSignout } from "./forgeState";
 import { explain, GitError, type GitTransport, git } from "./gitApi";
 import {
   type Ago,
@@ -32,14 +33,24 @@ const AGO = {
 
 const agoText = ({ unit, n }: Ago): string => AGO[unit](n);
 
-export function GitHubPicker({
+/** The account a picker lists: its id in the routes, and the name a refusal says. */
+export interface PickerForge {
+  id: string;
+  name: string;
+}
+
+export const GITHUB: PickerForge = { id: "github.com", name: "GitHub" };
+
+export function ForgePicker({
   t,
+  forge = GITHUB,
   refresh,
   createName,
   disabled,
   onPick,
 }: {
   t: GitTransport;
+  forge?: PickerForge;
   refresh: () => Promise<void>;
   /** The workspace's name, which a new repository takes; absent where a repository cannot be made (Clone). */
   createName?: string;
@@ -54,20 +65,21 @@ export function GitHubPicker({
   useEffect(() => {
     let live = true;
     git
-      .githubRepos(t)
+      .forgeRepos(t, forge.id)
       .then((a) => live && setRepos(a.repos))
       .catch((e) => {
         if (!live) return;
         if (e instanceof GitError && e.code === "scope")
           setError(m["git.gh.signInAgain"]());
-        else if (e instanceof GitError && e.code === "github-signout")
+        else if (e instanceof GitError && isSignout(e.code)) {
+          droppedSignIns.add(forge.id);
           void refresh();
-        else setError(explain(e));
+        } else setError(explain(e));
       });
     return () => {
       live = false;
     };
-  }, [t, refresh]);
+  }, [t, forge.id, refresh]);
 
   const shown = arrange(repos ?? [], filter);
   const now = Date.now();
@@ -104,6 +116,7 @@ export function GitHubPicker({
       {making && createName !== undefined ? (
         <NewRepository
           t={t}
+          forge={forge}
           initial={shortName(createName)}
           disabled={disabled}
           onMade={onPick}
@@ -157,12 +170,14 @@ export function GitHubPicker({
 
 function NewRepository({
   t,
+  forge,
   initial,
   disabled,
   onMade,
   onCancel,
 }: {
   t: GitTransport;
+  forge: PickerForge;
   initial: string;
   disabled: boolean;
   onMade: (r: PickedRepo) => void;
@@ -177,9 +192,13 @@ function NewRepository({
     setBusy(true);
     setError("");
     try {
-      onMade(await git.githubCreate(t, name.trim(), isPrivate));
+      onMade(await git.forgeCreate(t, forge.id, name.trim(), isPrivate));
     } catch (e) {
-      setError(explain(e));
+      setError(
+        e instanceof GitError && e.code === "taken"
+          ? m["git.fj.taken"]({ name: name.trim(), server: forge.name })
+          : explain(e),
+      );
     } finally {
       setBusy(false);
     }
