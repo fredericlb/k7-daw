@@ -3,7 +3,7 @@
 import type { Page } from "@playwright/test";
 import { runCommand } from "../../src/commandBar.ts";
 import { FIXTURES_WORKSPACE } from "../../src/fixtures.ts";
-import { pane, tempoReadout } from "../../src/nav.ts";
+import { folded, pane, tempoReadout } from "../../src/nav.ts";
 import { openPanel } from "../../src/panels.ts";
 import { expect, type K7, test } from "../../src/target.ts";
 import { engineUp } from "../../src/transport.ts";
@@ -94,10 +94,14 @@ const FEATURES: Record<string, { check: Check; bug?: string }> = {
       // The meter button sits beside the tempo's, in the transport or in a phone's Info popover.
       await expect(await tempoReadout(page, 96)).toBeVisible();
       await expect(button(page, "3/4")).toBeVisible();
+      // A phone keeps the metronome in its "Views and panels" sheet, not in the transport.
+      const phone = await folded(page);
+      if (phone) await button(page, "Views and panels").click();
       await expect(button(page, "Metronome")).toHaveAttribute(
         "aria-pressed",
         "true",
       );
+      if (phone) await page.keyboard.press("Escape");
     },
   },
   "chains-only.k7": {
