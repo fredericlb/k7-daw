@@ -2,7 +2,7 @@
 //! version of each library this machine holds.
 
 use crate::atomic::write_atomic;
-use crate::libraries::{Home, PINS_FILE};
+use crate::libraries::{Home, PINS_FILE, Version, played_version};
 use crate::listings::families::library_names;
 use crate::listings::versions::newest_here;
 use crate::paths::join;
@@ -20,7 +20,7 @@ fn bare(name: &str) -> bool {
 #[derive(Clone, Copy, PartialEq, Eq)]
 enum Pinning {
     Newest,
-    /// The open's pins: version 1, before versions existed.
+    /// The open's pins: version 1, before versions existed, or the newest held where this device lacks 1.
     Opened,
     /// A made workspace's pins: the newest runnable version.
     Made,
@@ -36,7 +36,7 @@ pub fn ensure_made(home: &Home, root: &str) -> Result<bool, Declined> {
     ensure(home, root, Pinning::Made)
 }
 
-/// `ensureLibraryPins(root, {fresh: false})`, which `/open` runs: a workspace from before versions keeps version 1.
+/// `ensureLibraryPins(root, {fresh: false})`, which `/open` runs: version 1 where this device holds it, else its newest.
 pub fn ensure_opened(home: &Home, root: &str) -> Result<bool, Declined> {
     ensure(home, root, Pinning::Opened)
 }
@@ -52,7 +52,10 @@ fn ensure(home: &Home, root: &str, how: Pinning) -> Result<bool, Declined> {
             return Err(Declined::WouldThrow);
         }
         let version = match how {
-            Pinning::Opened => "1".to_string(),
+            Pinning::Opened => match played_version(home, &name, Version::Number(1)) {
+                Version::Number(n) => n.to_string(),
+                Version::Draft => "1".to_string(),
+            },
             Pinning::Newest | Pinning::Made => {
                 newest_here(home, &name, &Limits::default())?.to_string()
             }

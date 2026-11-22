@@ -67,7 +67,9 @@ drums(2)
 - Per workspace, not per song: every project of a workspace shares one catalogue, as they share
   `_modules`.
 - A library the file does not name resolves to the version that was current when versions arrived,
-  and the first open WRITES that pin, so no song changes sound unasked.
+  and the first open WRITES that pin, so no song changes sound unasked. A device that lacks that
+  version writes the newest it holds instead: a pin to a version it lacks would only bring the
+  notice below on every open.
 - **A device lacking the pinned version opens the workspace with the newest version it holds, and
   says so.** No server keeps old versions and each weighs about 71 MB, so a device holds only what
   its app bundles, and a workspace cloned from another device can pin a version this one never had.

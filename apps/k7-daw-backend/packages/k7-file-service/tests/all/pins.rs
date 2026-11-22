@@ -40,8 +40,9 @@ fn a_workspace_with_no_pins_gets_the_newest_runnable_version_of_each_library_in_
 }
 
 #[test]
-fn an_open_pins_version_one_never_over_a_file() {
+fn an_open_pins_version_one_where_it_is_held_never_over_a_file() {
     let s = Scratch::new("pins-opened");
+    s.file("libraries/k7-core/1/library.k7x", &manifest(1, 1));
     s.file("libraries/k7-core/2/library.k7x", &manifest(2, 1));
     s.file("libraries/zed/1/library.k7x", &manifest(1, 1));
     let plain = s.path("home/workspace/A");
@@ -52,4 +53,19 @@ fn an_open_pins_version_one_never_over_a_file() {
     assert_eq!(read(&plain), "k7-core(1)\nzed(1)\n");
     assert_eq!(ensure_opened(&s.home(), &plain), Ok(false));
     assert_eq!(read(&plain), "k7-core(1)\nzed(1)\n");
+}
+
+#[test]
+fn an_open_on_a_device_lacking_version_one_pins_its_newest_held() {
+    let s = Scratch::new("pins-opened-newest");
+    s.file("libraries/k7-core/2/library.k7x", &manifest(2, 1));
+    s.file("libraries/k7-core/8/library.k7x", &manifest(8, 1));
+    s.dir("libraries/k7-core/draft");
+    s.file("libraries/zed/1/library.k7x", &manifest(1, 1));
+    let plain = s.path("home/workspace/A");
+    std::fs::create_dir_all(&plain).unwrap();
+    assert_eq!(ensure_opened(&s.home(), &plain), Ok(true));
+    let text = std::fs::read_to_string(format!("{plain}/_library-pins.k7x")).unwrap();
+    // A pin to a version this device lacks would only bring the notice on every open.
+    assert_eq!(text, "k7-core(8)\nzed(1)\n");
 }

@@ -50,7 +50,9 @@ app bundles, and a workspace cloned from another device may pin a version it nev
 it would open no song at all, reading nothing would fail every `extends`. The module listing's
 `version.used` names the version read, the strip above the file tree says it in one line, and its
 button pins that version through `library upgrade` — the person's change to commit. A `draft` pin
-is never substituted.
+is never substituted. A workspace with no pins file gets one on its first open: version 1 where
+this machine holds it, else the newest it holds, so a pin is never born pointing at a version
+that is not there.
 
 **Still found by location, never declared.** `accountLibraries()` is the folders under
 `librariesHome()` whose name a library could have (`isLibraryName`); the SETTING that lists
