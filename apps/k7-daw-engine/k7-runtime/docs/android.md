@@ -518,6 +518,16 @@ libgit2 and zlib are compiled into `libk7_embed.so` by the NDK's clang (`buildFr
 | a large file | add a 20 MB WAV, commit, push, then clone it on another device | the repository holds a pointer, the host's LFS holds the file, the clone plays offline after its pull |
 | no second TLS or SSH stack | `strings` on the staged library | no OpenSSL and no libssh2 in it |
 
+**A Forgejo sign-in** opens in the device's browser, as every new tab does, and comes back through the app's scheme
+(`ForgeReturn.kt`, `apps/k7-daw-frontend/docs/git.md`).
+
+| choice | why |
+|---|---|
+| the browser through `Intent.ACTION_VIEW`, not a Custom Tab | `androidx.browser` is not a dependency of the app, and the new-tab path (`WindowProbe.kt`) already hands any `http(s)` page to the browser |
+| the server redirects to `rocks.k7.daw://callback`, an intent filter of `MainActivity`, which forwards the query to the front's `/api/files/git/forge/callback`; the page's poll says the end | the redirect brings k7 back to the front by itself; the loopback redirect works too, the browser reaching the front on 127.0.0.1, but leaves the person on the "you can close this tab" page, to find k7 again |
+| `MainActivity` forwards only in `onNewIntent` | the activity is `singleTask` and the backend lives exactly as long as it, so a sign-in that comes back to a fresh process had nothing left to finish |
+| an emulator reaches a Forgejo on the Mac at `127.0.0.1` through `adb reverse tcp:<port> tcp:<port>` | the server's ROOT_URL is then the same address for the Mac, the simulator and the emulator; `10.0.2.2` would be a ROOT_URL only the emulator reaches |
+
 ## What it does not have yet
 
 - **The standalone app has not been built and run as one APK yet.** Its backend and file service

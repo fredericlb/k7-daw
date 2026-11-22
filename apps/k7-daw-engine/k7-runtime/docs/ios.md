@@ -74,6 +74,7 @@ Where iOS does a thing itself, the app lets it:
 | an export goes to a folder picked with the system folder picker, kept as a security-scoped bookmark (`ExportFolders.swift`, `apps/k7-daw-frontend/docs/export.md`) | the person says where it lands; Files shows any folder they grant, and the grant outlives the launch |
 | `download.js` fetching blobs in 512 KiB chunks | `WKDownload`, which takes a `blob:`, `data:` or same-origin URL with the session's cookies; the file lands in Documents/Downloads, which the Files app shows under k7 |
 | `back.js` and the Back button | the edge swipe, over the view's own history |
+| a Forgejo sign-in in the system browser, back through the app's scheme (`ForgeReturn.kt`) | `ASWebAuthenticationSession` (`ForgeSignIn.swift`), below |
 | `CertTrust.kt` checking the leaf's name and dates | iOS's own trust evaluation with the imported CAs as anchors (`TrustedCas.swift`): a wrong name, an expired date or a certificate iOS's TLS rules refuse is refused here too. Android's rule stands: an imported non-CA is trusted as that exact leaf and never as an issuer, read from its DER since iOS has no public API for extensions (`CertTrust.swift`) |
 | the window's insets | the safe area; the strip under the status bar is painted the app's top colour, and the status bar's icons follow its luminance |
 | a renderer lost: the view destroyed, the shell's Retry makes a new one (`RendererLoss.kt`) | WebKit keeps the view usable, so a view whose content process died reloads, twice in a minute at most; past that the shell page is told with a `loadError` and its Retry reloads, since a page that runs out of memory as it loads would otherwise reload forever |
@@ -260,6 +261,17 @@ libgit2 is linked into `libk7_embed.a` with its own transports (`apps/k7-daw-bac
 | pull with a conflict | change the same lines here and on another machine, push there, pull here | the conflict is listed, both sides are shown, choosing one finishes the merge as one history entry |
 | a large file | add a 20 MB WAV, commit, push, then clone it on another device | the repository holds a pointer, the host's LFS holds the file, the clone plays offline after its pull |
 | no second TLS or SSH stack | `strings` on the staged library | no OpenSSL and no libssh2 in it |
+
+**A Forgejo sign-in** opens in iOS's web sheet, asked by the page through the bridge's `forgeSignIn`
+(`ForgeSignIn.swift`, `apps/k7-daw-frontend/docs/git.md`).
+
+| choice | why |
+|---|---|
+| `ASWebAuthenticationSession`, never Safari | the sheet keeps k7 in front, so its front keeps answering; Safari would put the app behind, where iOS may suspend it before the browser comes back |
+| the sign-in returns through `rocks.k7.daw://callback`, the session's `callbackURLScheme`; the shell forwards the query to the front's `/api/files/git/forge/callback` and the page's poll says the end | the sheet closes by itself the moment the server redirects there; a loopback redirect would leave the sheet on the front's "you can close this tab" page, which only Done (or a bridge call back from the poll) closes |
+| the session is ephemeral | no cookie is shared with Safari, so iOS asks no "wants to use … to sign in" question first; the person signs in to the server once per device anyway |
+| the sheet opens as soon as the front answered the start, and the page's button opens it again | the person pressed Sign in already; a sheet closed by mistake is one tap from coming back |
+| the sheet's anchor is the app's own window | while a system alert is up (the microphone's question at the first launch) the app is not active and the session refuses to start (`presentationContextInvalid`); the page's button opens it once the alert is answered |
 
 ## What it does not have yet
 

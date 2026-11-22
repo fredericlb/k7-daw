@@ -79,7 +79,8 @@ export function engineCall<T = Record<string, never>>(
     | "exportBegin"
     | "exportChunk"
     | "exportEnd"
-    | "shareExport",
+    | "shareExport"
+    | "forgeSignIn",
   arg?: Record<string, string>,
 ): Promise<T> {
   if (!channel) return Promise.reject(new Error("not in a phone app"));

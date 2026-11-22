@@ -158,8 +158,10 @@ export const git = {
   ) => call<ForgeProbe & { added: boolean }>(t, "forges", { json: s }),
   forgeRemove: (t: GitTransport, id: string) =>
     call<{ ok: boolean }>(t, `forges/${enc(id)}/remove`, { post: true }),
-  forgeStart: (t: GitTransport, id: string) =>
-    call<ForgeStart>(t, `forges/${enc(id)}/start`, { json: {} }),
+  forgeStart: (t: GitTransport, id: string, redirect?: "app") =>
+    call<ForgeStart>(t, `forges/${enc(id)}/start`, {
+      json: redirect ? { redirect } : {},
+    }),
   forgePoll: (t: GitTransport, id: string) =>
     call<ForgePoll>(t, `forges/${enc(id)}/poll`, { post: true }),
   forgeRepos: (t: GitTransport, id: string) =>
