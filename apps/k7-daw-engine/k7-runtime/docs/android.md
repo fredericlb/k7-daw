@@ -335,6 +335,9 @@ On Android, JUCE posts every message through an `android.os.Handler` it creates 
 which binds to the Looper of **the thread that first creates the MessageManager**. That decides the
 whole shape:
 
+- `BackendHost` hands the front `TMPDIR`, the app's cache folder. Android 16 sets it for an app and Android
+  14 does not, and Rust's `temp_dir()` then answers `/data/local/tmp`, which no app may write: every
+  mixdown export failed there with "Permission denied".
 - `EngineBridge` sets the engine's environment (its identity, its roots) through `nativeSetenv` as well as
   `Os.setenv`, once `Java.initialiseJUCE` has loaded the library. On an x86_64 emulator the arm64 engine
   runs under Android's ARM translation with a C library of its own, so a variable set from Java alone never

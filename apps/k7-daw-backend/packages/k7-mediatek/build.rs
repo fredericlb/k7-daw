@@ -4,8 +4,10 @@
 use std::path::Path;
 
 fn main() {
-    let wasm = Path::new(env!("CARGO_MANIFEST_DIR"))
-        .join("../../../k7-daw-frontend/packages/audio-analysis/waveform.wasm");
+    // Read when cargo runs the script, not compiled in: a cached build script carries the checkout that compiled it.
+    let dir = std::env::var("CARGO_MANIFEST_DIR").expect("cargo sets CARGO_MANIFEST_DIR");
+    let wasm =
+        Path::new(&dir).join("../../../k7-daw-frontend/packages/audio-analysis/waveform.wasm");
     println!("cargo:rerun-if-changed={}", wasm.display());
     let out =
         Path::new(&std::env::var("OUT_DIR").expect("cargo sets OUT_DIR")).join("waveform.wasm");

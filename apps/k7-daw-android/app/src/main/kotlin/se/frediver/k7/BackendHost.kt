@@ -244,6 +244,8 @@ object BackendHost {
         out["K7_FILES"] = "front"
         // The hub copies `k7` from the bundle the first time it has no folder for it.
         out["STUDIO_LIBRARY_SEED"] = "k7-core=" + File(dirs.bundle, dirs.table.getString("library")).absolutePath
+        // A folder of its own for scratch files: without TMPDIR, Android 14 leaves the front /data/local/tmp, which no app may write (docs/android.md).
+        out["TMPDIR"] = context.cacheDir.absolutePath
         // The front's code root, unpacked from backend.zip: what its actor reads (apps/k7-daw-backend/docs/service.md).
         out["K7_CODE_ROOT"] = File(dirs.bundle, "code").absolutePath
         // The page, built into the bundle at its repo path (apps/k7-daw-backend/scripts/stageBundle.mjs).
