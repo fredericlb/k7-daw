@@ -1,6 +1,6 @@
-# A self-hosted Forgejo that serves k7.rocks with git-pages (docs/forgejo-pages.md): Forgejo, its Actions
-# runner and the runner's own Docker, git-pages, and Caddy in front with automatic TLS.
-# What a reader gets wrong: Caddy routes only git.<DOMAIN>, <DOMAIN> and www.<DOMAIN>; git-pages never sees another host.
+# A self-hosted Forgejo for k7 workspaces (docs/forgejo-server.md): Forgejo with LFS and SSH, and Caddy in
+# front with automatic TLS.
+# What a reader gets wrong: ROOT_URL must be reachable over HTTPS from every device, since LFS data goes there.
 # Every value comes from .env (copy .env.example); nothing secret lives in this file.
 
 name: k7-forge
@@ -12,56 +12,27 @@ services:
     environment:
       USER_UID: "1000"
       USER_GID: "1000"
-      FORGEJO__server__DOMAIN: git.${DOMAIN:?set DOMAIN in .env}
-      FORGEJO__server__ROOT_URL: ${SCHEME:-https}://git.${DOMAIN}/
+      FORGEJO__server__DOMAIN: ${GIT_HOST:?set GIT_HOST in .env}
+      FORGEJO__server__ROOT_URL: ${SCHEME:-https}://${GIT_HOST}/
       FORGEJO__server__HTTP_PORT: "3000"
-      FORGEJO__server__SSH_DOMAIN: git.${DOMAIN}
+      FORGEJO__server__SSH_DOMAIN: ${GIT_HOST}
       FORGEJO__server__SSH_PORT: ${SSH_PORT:-2222}
       FORGEJO__server__SSH_LISTEN_PORT: "22"
       FORGEJO__server__LFS_START_SERVER: "true"
       FORGEJO__database__DB_TYPE: sqlite3
       FORGEJO__security__INSTALL_LOCK: "true"
       FORGEJO__service__DISABLE_REGISTRATION: "true"
-      FORGEJO__actions__ENABLED: "true"
     volumes:
       - ${DATA_DIR:-./data}/forgejo:/data
     ports:
       - ${BIND_ADDRESS:-0.0.0.0}:${SSH_PORT:-2222}:22
 
-  # The runner's jobs run in this Docker, never in the host's: a job cannot reach the host's containers.
-  docker:
-    image: docker:29.9.2-dind
-    restart: unless-stopped
-    privileged: true
-    environment:
-      DOCKER_TLS_CERTDIR: ""
-    command: ["dockerd", "-H", "tcp://0.0.0.0:2375", "--tls=false"]
-    volumes:
-      - docker-data:/var/lib/docker
-
-  runner:
-    image: code.forgejo.org/forgejo/runner:13.2.1
-    restart: unless-stopped
-    depends_on: [forgejo, docker]
-    environment:
-      DOCKER_HOST: tcp://docker:2375
-    configs:
-      - source: runner
-        target: /etc/forgejo-runner/config.yml
-    command: ["forgejo-runner", "daemon", "--config", "/etc/forgejo-runner/config.yml"]
-
-  pages:
-    image: codeberg.org/git-pages/git-pages:0.10.1
-    restart: unless-stopped
-    volumes:
-      - ${DATA_DIR:-./data}/pages:/app/data
-
   caddy:
     image: caddy:2.11.8
     restart: unless-stopped
-    depends_on: [forgejo, pages]
+    depends_on: [forgejo]
     environment:
-      DOMAIN: ${DOMAIN}
+      GIT_HOST: ${GIT_HOST}
       SCHEME: ${SCHEME:-https}
       ACME_EMAIL: ${ACME_EMAIL:?set ACME_EMAIL in .env}
     volumes:
@@ -72,30 +43,3 @@ services:
       - ${BIND_ADDRESS:-0.0.0.0}:${HTTP_PORT:-80}:80
       - ${BIND_ADDRESS:-0.0.0.0}:${HTTPS_PORT:-443}:443
       - ${BIND_ADDRESS:-0.0.0.0}:${HTTPS_PORT:-443}:443/udp
-
-volumes:
-  docker-data:
-
-configs:
-  # Written from .env at start, so the runner's token stays out of the repository.
-  runner:
-    content: |
-      log:
-        level: info
-      runner:
-        capacity: 1
-        timeout: 1h
-        labels:
-          - docker:docker://node:24.22.2-bookworm
-      cache:
-        enabled: false
-      container:
-        network: ""
-        docker_host: "-"
-      server:
-        connections:
-          forgejo:
-            # The public address: the runner hands it to the jobs, which clone from it.
-            url: ${SCHEME:-https}://git.${DOMAIN}/
-            uuid: ${RUNNER_UUID:-set-RUNNER_UUID-in-.env}
-            token: ${RUNNER_TOKEN:-set-RUNNER_TOKEN-in-.env}

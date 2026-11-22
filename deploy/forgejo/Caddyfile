@@ -1,19 +1,10 @@
-# The one door of the server (docs/forgejo-pages.md): git.<DOMAIN> to Forgejo, <DOMAIN> to git-pages.
-# What a reader gets wrong: only these hosts reach git-pages, so it serves k7.rocks and no domain someone else points here.
-# SCHEME=https gets certificates from Let's Encrypt on its own; SCHEME=http serves plain HTTP (a local trial).
+# The one door of the server (docs/forgejo-server.md): the git host to Forgejo, with automatic TLS.
+# What a reader gets wrong: SCHEME=http serves plain HTTP for a local trial; a device needs https.
 
 {
 	email {$ACME_EMAIL}
 }
 
-{$SCHEME}://git.{$DOMAIN} {
+{$SCHEME}://{$GIT_HOST} {
 	reverse_proxy forgejo:3000
-}
-
-{$SCHEME}://{$DOMAIN} {
-	reverse_proxy pages:3000
-}
-
-{$SCHEME}://www.{$DOMAIN} {
-	redir {$SCHEME}://{$DOMAIN}{uri} permanent
 }
