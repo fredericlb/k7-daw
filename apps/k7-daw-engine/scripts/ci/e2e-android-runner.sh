@@ -63,7 +63,7 @@ sleep 30
         let ws;
         try { ws = new WebSocket(u); } catch (e) { return done([`threw ${e}`]); }
         ws.onopen = () => { at("open"); ws.send(JSON.stringify({ type: "whoami" })); };
-        ws.onmessage = (e) => { at(`message ${String(e.data).slice(0, 80)}`); ws.close(); };
+        ws.onmessage = (e) => { at(`message ${String(e.data)}`); ws.close(); };
         ws.onerror = () => at("error");
         ws.onclose = (e) => { at(`close ${e.code} ${e.reason}`); done(log); };
         setTimeout(() => { at("timeout"); done(log); }, 10000);
@@ -73,6 +73,8 @@ sleep 30
     await device.close();
   })().catch((e) => console.log(`webview probe failed: ${e.message}`));
 ') 2>&1 | tee -a "$logs/engine-probe.txt" || true
+# The id the engine registered under, which the page's probe matches the whoami against.
+adb logcat -d | grep -oE "\[registry\] engine [0-9a-f-]+" | sort -u | tee -a "$logs/engine-probe.txt" || true
 
 flags=
 [ "${E2E_RETRIES:-0}" = 0 ] || flags="--retries=$E2E_RETRIES"
