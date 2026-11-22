@@ -102,7 +102,9 @@ impl Kind {
         let after = path.strip_prefix("/git/forges/")?;
         let (id, rest) = after.find('/').map_or((after, ""), |i| after.split_at(i));
         let verb = Verb::of(method, rest)?;
-        git_forge_routes::id_ok(id).then(|| Kind::Forge(id.into(), verb))
+        // A browser's encoder writes the port's colon as %3A; nothing else is decoded.
+        let id = id.replace("%3A", ":").replace("%3a", ":");
+        git_forge_routes::id_ok(&id).then(|| Kind::Forge(id, verb))
     }
 }
 

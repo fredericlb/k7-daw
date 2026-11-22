@@ -56,6 +56,14 @@ fn forge_routes_and_their_github_aliases_name_the_same_verb() {
         assert_eq!(Kind::of(&m, old), forge(v), "{m} {old}");
     }
     assert_eq!(Kind::of(&Method::GET, "/git/forges"), Some(Kind::Forges));
+    // A server's id carries its port; a browser's encoder writes the colon as %3A, and the route is the same.
+    for p in [
+        "/git/forges/127.0.0.1:28793/start",
+        "/git/forges/127.0.0.1%3A28793/start",
+    ] {
+        let want = Kind::Forge("127.0.0.1:28793".into(), Verb::Start);
+        assert_eq!(Kind::of(&Method::POST, p), Some(want), "{p}");
+    }
     for (m, p) in [
         (Method::POST, "/git/forges/github.com"),
         (Method::GET, "/git/forges/"),
