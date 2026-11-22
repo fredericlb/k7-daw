@@ -46,6 +46,7 @@ pub(super) fn device(name: &str) -> Dev {
         workspaces: super::tests::slashed(&dir.join("workspace")),
         account_home: super::tests::slashed(&dir),
         device: "Test device".into(),
+        port: 0,
         land: None,
         fetchers: Arc::default(),
         account: None,

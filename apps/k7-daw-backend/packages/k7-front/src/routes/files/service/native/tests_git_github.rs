@@ -388,7 +388,9 @@ async fn github_topic_is_added_to_an_existing_repository_and_a_failure_is_silent
     );
     fr::tag_topic(&d.ctx, &hub, "git@gitlab.com:octo/other.git").await;
     assert!(f.topics.lock().unwrap().get("octo/other").is_none());
-    let Forge::GitHub(mut g) = hub;
+    let Forge::GitHub(mut g) = hub else {
+        panic!("the fake is GitHub's");
+    };
     g.profile.api.base = "http://127.0.0.1:1".into();
     let dead = Forge::GitHub(g);
     fr::tag_topic(&d.ctx, &dead, "git@github.com:octo/song.git").await;

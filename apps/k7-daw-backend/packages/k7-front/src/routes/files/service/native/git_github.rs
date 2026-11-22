@@ -10,9 +10,9 @@ use axum::response::Response;
 use serde_json::{Value, json};
 
 use super::git::{Ctx, bad};
-use super::git_forge::{Entry, Profile, Step, TOPIC, fail};
+use super::git_forge::{Entry, Profile, Step, TOPIC, Tokens, fail};
 use super::git_forge_api::{Api, Reply, base};
-use super::git_forge_routes::fingerprint;
+use super::git_forge_token::fingerprint;
 use crate::routes::files::json_answer;
 
 /// GitHub's account id in the routes (`/git/forges/github.com`), and its ssh host.
@@ -177,7 +177,11 @@ impl GitHub {
         };
         if let Some(token) = r.body.get("access_token").and_then(Value::as_str) {
             take(ctx);
-            return Step::Token(token.to_string());
+            return Step::Token(Tokens {
+                access: token.to_string(),
+                refresh: None,
+                expiry: None,
+            });
         }
         let state =
             |s: &str, interval: u64| json_answer(200, &json!({ "state": s, "interval": interval }));

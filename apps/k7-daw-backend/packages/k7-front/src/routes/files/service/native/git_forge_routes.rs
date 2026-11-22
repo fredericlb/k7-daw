@@ -1,20 +1,19 @@
 //! git_forge_routes.rs — the routes every forge shares (`docs/files/git.md`): `/git/forges`, one account's status,
-//! the end of a sign-in (the key uploaded, the host trusted), the repository pages, creation, the topic, the sign-out.
-//! What a reader gets wrong: the token is read from the keychain on each call and never answered nor logged.
+//! the end of a device-flow sign-in, the repository pages, creation, the topic, the sign-out, a server's removal.
+//! What a reader gets wrong: the token is read from the keychain on each call, refreshed there when it expires, and
+//! never answered nor logged.
 
 use axum::response::Response;
-use base64::Engine;
-use base64::engine::general_purpose::{STANDARD, STANDARD_NO_PAD};
 use hyper::Method;
-use k7_git::auth;
 use serde_json::{Value, json};
-use sha2::{Digest, Sha256};
 
 use super::git::{Ctx, bad, field};
 use super::git_forge::{
-    Forge, Saved, Step, accounts, drop_token, fail, find, keep, repo_of, saved,
+    Forge, Saved, Step, Tokens, accounts, drop_token, fail, find, repo_of, saved, sign_in_again,
 };
 use super::git_forge_api::{Reply, next_page};
+use super::git_forge_token::{finish, fresh};
+use super::git_forgejo_servers;
 use crate::routes::files::json_answer;
 
 /// What a route asks of one account.
@@ -26,6 +25,7 @@ pub enum Verb {
     Repos,
     Create,
     Signout,
+    Remove,
 }
 
 impl Verb {
@@ -39,6 +39,7 @@ impl Verb {
             "/repos" if get => Some(Verb::Repos),
             "/repos" if post => Some(Verb::Create),
             "/signout" if post => Some(Verb::Signout),
+            "/remove" if post => Some(Verb::Remove),
             _ => None,
         }
     }
@@ -62,15 +63,15 @@ fn gone(f: &Forge) -> Response {
 }
 
 pub(super) async fn route(ctx: &Ctx, id: &str, verb: Verb, b: &Value) -> Response {
-    match find(id) {
+    match find(ctx, id) {
         Some(f) => answer(ctx, &f, verb, b).await,
         None => fail(404, "unknown-forge", &format!("no account here is {id}")),
     }
 }
 
-/// One verb on one forge: a forge this build cannot sign in to answers its status and its sign-out only.
+/// One verb on one forge: a forge this build cannot sign in to answers its status, its sign-out and its removal only.
 pub(super) async fn answer(ctx: &Ctx, f: &Forge, verb: Verb, b: &Value) -> Response {
-    if !f.available() && !matches!(verb, Verb::Status | Verb::Signout) {
+    if !f.available() && !matches!(verb, Verb::Status | Verb::Signout | Verb::Remove) {
         return gone(f);
     }
     match verb {
@@ -80,6 +81,7 @@ pub(super) async fn answer(ctx: &Ctx, f: &Forge, verb: Verb, b: &Value) -> Respo
         Verb::Repos => repos(ctx, f).await,
         Verb::Create => create(ctx, f, b).await,
         Verb::Signout => signout(ctx, f),
+        Verb::Remove => git_forgejo_servers::remove(ctx, f),
     }
 }
 
@@ -98,9 +100,9 @@ pub(super) fn status(ctx: &Ctx, f: &Forge) -> Response {
     json_answer(200, &status_of(ctx, f))
 }
 
-/// `GET /git/forges`: every account this build offers, each with its status; no network call.
+/// `GET /git/forges`: every account this device offers, each with its status; no network call.
 pub(super) fn list(ctx: &Ctx) -> Response {
-    let forges: Vec<Value> = accounts()
+    let forges: Vec<Value> = accounts(ctx)
         .iter()
         .map(|f| {
             let p = f.profile();
@@ -108,6 +110,9 @@ pub(super) fn list(ctx: &Ctx) -> Response {
             v["id"] = json!(p.id);
             v["kind"] = json!(p.kind);
             v["name"] = json!(p.name);
+            if let (Some(m), Some(x)) = (v.as_object_mut(), f.extra().as_object()) {
+                m.extend(x.clone());
+            }
             v
         })
         .collect();
@@ -118,98 +123,38 @@ pub(super) fn list(ctx: &Ctx) -> Response {
 pub(super) async fn poll(ctx: &Ctx, f: &Forge) -> Response {
     match f.poll(ctx).await {
         Step::Answer(r) => r,
-        Step::Token(t) => signed_in(ctx, f, &t).await,
+        Step::Token(t) => signed_in(ctx, f, t).await,
     }
 }
 
 /// The token is kept, then the key is uploaded and the host trusted, before the answer.
-pub(super) async fn signed_in(ctx: &Ctx, f: &Forge, token: &str) -> Response {
-    let p = f.profile();
-    let me = match p.api.get(token, "/user").await {
-        Ok(r) if r.ok() => r,
-        Ok(r) => return fail(502, p.code, &r.message()),
-        Err(e) => return fail(502, "offline", &e),
-    };
-    let login = me
-        .body
-        .get("login")
-        .and_then(Value::as_str)
-        .unwrap_or("")
-        .to_string();
-    let s = Saved {
-        token: token.to_string(),
-        login: login.clone(),
-        scopes: f.granted(&me),
-    };
-    if let Err(e) = keep(ctx, f, &s) {
-        return fail(500, "keychain", &format!("the device's keychain: {e}"));
-    }
-    let note = upload_key(ctx, f, token).await;
-    f.trust_host(ctx).await;
-    let mut out = json!({ "state": "ok", "login": login, "scopes": s.scopes });
-    if let Some(n) = note {
-        out["keyNote"] = json!(n);
-    }
-    json_answer(200, &out)
-}
-
-/// `SHA256:` and the unpadded base64 of the hash of the key's blob, as the SSH client names a key.
-pub(super) fn fingerprint(line: &str) -> Option<String> {
-    let blob = STANDARD.decode(line.split_whitespace().nth(1)?).ok()?;
-    Some(format!(
-        "SHA256:{}",
-        STANDARD_NO_PAD.encode(Sha256::digest(blob))
-    ))
-}
-
-/// Puts the device's public key on the account unless it is there; a sentence when it cannot be.
-async fn upload_key(ctx: &Ctx, f: &Forge, token: &str) -> Option<String> {
-    let p = f.profile();
-    let public = auth::public_key(&*ctx.secrets).ok()?;
-    let ours = fingerprint(&public)?;
-    let listed = match p.api.get(token, &f.keys_path(&ours)).await {
-        Ok(r) if r.ok() => r,
-        Ok(r) => return Some(r.message()),
-        Err(e) => return Some(e),
-    };
-    let there = listed.body.as_array().is_some_and(|a| {
-        a.iter().any(|k| {
-            k.get("key")
-                .and_then(Value::as_str)
-                .and_then(fingerprint)
-                .is_some_and(|k| k == ours)
-        })
-    });
-    if there {
-        return None;
-    }
-    let title = if auth::key_is_synced(&*ctx.secrets) {
-        "k7".to_string()
-    } else {
-        format!("k7 — {}", ctx.device)
-    };
-    let sent = json!({ "title": title, "key": public });
-    match p.api.send("POST", token, "/user/keys", sent).await {
-        Ok(r) if r.ok() => None,
-        Ok(r) if r.status == 422 => Some(format!(
-            "this device's key is already used on another {} account, so it was not added to this one",
-            p.name
-        )),
-        Ok(r) => Some(r.message()),
-        Err(e) => Some(e),
+async fn signed_in(ctx: &Ctx, f: &Forge, t: Tokens) -> Response {
+    match finish(ctx, f, t).await {
+        Ok(d) => {
+            let mut out = json!({ "state": "ok", "login": d.login, "scopes": d.scopes });
+            if let Some(n) = d.note {
+                out["keyNote"] = json!(n);
+            }
+            json_answer(200, &out)
+        }
+        Err((status, code, said)) => fail(status, &code, &said),
     }
 }
 
 /// A token the forge refuses is gone for good: it is dropped and the page asks to sign in again.
-fn refused(ctx: &Ctx, f: &Forge, r: &Reply) -> Response {
+fn refused(ctx: &Ctx, f: &Forge, r: &Reply, name: Option<&str>) -> Response {
     let p = f.profile();
     if r.status == 401 {
         let _ = drop_token(ctx, f);
-        return fail(
-            401,
-            &format!("{}-signout", p.code),
-            &format!("{} no longer accepts this sign-in: sign in again", p.name),
+        return sign_in_again(f);
+    }
+    if r.status == 409 {
+        let said = format!(
+            "{} is already taken on {}",
+            name.unwrap_or("this name"),
+            p.id
         );
+        return fail(409, "taken", &said);
     }
     let code = if r.status == 422 { "invalid" } else { p.code };
     let detail = r.body.pointer("/errors/0/message").and_then(Value::as_str);
@@ -220,12 +165,12 @@ fn refused(ctx: &Ctx, f: &Forge, r: &Reply) -> Response {
     fail(if r.status == 422 { 422 } else { 502 }, code, &message)
 }
 
-/// The token if the person is signed in with the repository scope, else the answer to give.
+/// The token if the person is signed in with the repository scope, refreshed when it expires, else the answer to give.
 #[allow(
     clippy::result_large_err,
     reason = "the refusal is the answer to give, built once"
 )]
-fn with_repo(ctx: &Ctx, f: &Forge) -> Result<Saved, Response> {
+async fn with_repo(ctx: &Ctx, f: &Forge) -> Result<Saved, Response> {
     let p = f.profile();
     let Some(s) = saved(ctx, f) else {
         return Err(fail(
@@ -234,20 +179,19 @@ fn with_repo(ctx: &Ctx, f: &Forge) -> Result<Saved, Response> {
             &format!("sign in with {} first", p.name),
         ));
     };
-    if s.scopes.iter().any(|x| x == p.repo_scope) {
-        Ok(s)
-    } else {
-        Err(fail(
+    if !s.scopes.iter().any(|x| x == p.repo_scope) {
+        return Err(fail(
             403,
             "scope",
             &format!("{}'s repositories need one more permission", p.name),
-        ))
+        ));
     }
+    fresh(ctx, f, s).await
 }
 
 /// `GET /git/forges/<id>/repos`: the account's repositories in the forge's order, with their topics.
 pub(super) async fn repos(ctx: &Ctx, f: &Forge) -> Response {
-    let s = match with_repo(ctx, f) {
+    let s = match with_repo(ctx, f).await {
         Ok(s) => s,
         Err(r) => return r,
     };
@@ -263,7 +207,7 @@ pub(super) async fn repos(ctx: &Ctx, f: &Forge) -> Response {
         };
         let r = match got {
             Ok(r) if r.ok() => r,
-            Ok(r) => return refused(ctx, f, &r),
+            Ok(r) => return refused(ctx, f, &r, None),
             Err(e) => return fail(502, "offline", &e),
         };
         list.extend(r.body.as_array().into_iter().flatten().filter_map(row));
@@ -274,21 +218,23 @@ pub(super) async fn repos(ctx: &Ctx, f: &Forge) -> Response {
 
 fn row(r: &Value) -> Option<Value> {
     let topics: Vec<&str> = r
-        .get("topics")?
-        .as_array()?
-        .iter()
+        .get("topics")
+        .and_then(Value::as_array)
+        .into_iter()
+        .flatten()
         .filter_map(Value::as_str)
         .collect();
+    let pushed = r.get("pushed_at").or_else(|| r.get("updated_at"));
     Some(json!({
         "fullName": r.get("full_name")?, "sshUrl": r.get("ssh_url")?,
         "private": r.get("private").and_then(Value::as_bool).unwrap_or(false),
-        "pushedAt": r.get("pushed_at"), "k7": topics.contains(&super::git_forge::TOPIC),
+        "pushedAt": pushed, "k7": topics.contains(&super::git_forge::TOPIC),
     }))
 }
 
 /// `POST /git/forges/<id>/repos { name, private }`: a new repository, marked as a k7 workspace.
 pub(super) async fn create(ctx: &Ctx, f: &Forge, b: &Value) -> Response {
-    let s = match with_repo(ctx, f) {
+    let s = match with_repo(ctx, f).await {
         Ok(s) => s,
         Err(r) => return r,
     };
@@ -296,15 +242,17 @@ pub(super) async fn create(ctx: &Ctx, f: &Forge, b: &Value) -> Response {
         return bad("a name is required");
     };
     let private = b.get("private").and_then(Value::as_bool).unwrap_or(true);
-    let sent = json!({ "name": name, "private": private });
-    let made = match f
-        .profile()
-        .api
-        .send("POST", &s.token, "/user/repos", sent)
-        .await
-    {
+    let sent = match f {
+        Forge::GitHub(_) => json!({ "name": name, "private": private }),
+        Forge::Forgejo(_) => json!({
+            "name": name, "private": private, "auto_init": false,
+            "default_branch": "main", "description": "A k7 workspace",
+        }),
+    };
+    let api = &f.profile().api;
+    let made = match api.send("POST", &s.token, "/user/repos", sent).await {
         Ok(r) if r.ok() => r,
-        Ok(r) => return refused(ctx, f, &r),
+        Ok(r) => return refused(ctx, f, &r, Some(name)),
         Err(e) => return fail(502, "offline", &e),
     };
     let text = |k: &str| {
@@ -329,15 +277,17 @@ pub(super) fn signout(ctx: &Ctx, f: &Forge) -> Response {
 
 /// Connecting an existing repository of the forge marks it as a k7 workspace; best effort, a failure (no admin) is silent.
 pub(super) async fn tag_topic(ctx: &Ctx, f: &Forge, url: &str) {
-    let (Some(repo), Ok(s)) = (repo_of(url, &f.profile().ssh_host), with_repo(ctx, f)) else {
+    let Some(repo) = repo_of(url, &f.profile().ssh_host) else {
         return;
     };
-    f.tag_existing(&s.token, &repo).await;
+    if let Ok(s) = with_repo(ctx, f).await {
+        f.tag_existing(&s.token, &repo).await;
+    }
 }
 
 /// After a connect: the topic on the account whose forge the address names, on a task of its own.
 pub(super) fn tag_later(ctx: &Ctx, url: &str) {
-    for f in accounts().into_iter().filter(Forge::available) {
+    for f in accounts(ctx).into_iter().filter(Forge::available) {
         if repo_of(url, &f.profile().ssh_host).is_none() {
             continue;
         }

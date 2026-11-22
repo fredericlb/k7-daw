@@ -5,6 +5,7 @@
 
 use std::ops::Not;
 use std::path::{Path, PathBuf};
+use std::sync::atomic::{AtomicU16, Ordering};
 use std::sync::{Arc, Mutex, OnceLock};
 
 use axum::extract::Request;
@@ -24,6 +25,8 @@ use serde_json::{Value, json};
 use super::git_connect;
 use super::git_fetch::Fetchers;
 use super::git_forge_routes::{self, Verb};
+use super::git_forgejo_flow;
+use super::git_forgejo_servers;
 use super::git_github;
 use super::git_keys;
 use super::git_lock;
@@ -53,6 +56,10 @@ pub enum Kind {
     Focus,
     Roam,
     Forges,
+    ForgeAdd,
+    ForgeProbe,
+    /// Where a forge sends the browser back after a sign-in, cookie-less (`git_forgejo_flow.rs`).
+    ForgeCallback,
     /// One account's route: its id (`github.com`) and what is asked of it.
     Forge(String, Verb),
 }
@@ -79,6 +86,9 @@ impl Kind {
             "/git/focus" if post => Some(Kind::Focus),
             "/git/roam" if get => Some(Kind::Roam),
             "/git/forges" if get => Some(Kind::Forges),
+            "/git/forges" if post => Some(Kind::ForgeAdd),
+            "/git/forges/probe" if post => Some(Kind::ForgeProbe),
+            "/git/forge/callback" if get => Some(Kind::ForgeCallback),
             _ => Kind::forge(method, path),
         }
     }
@@ -107,6 +117,8 @@ pub struct Ctx {
     /// The account's own folder, where the device keeps what is not a workspace's (`.k7-roam.json`).
     pub account_home: String,
     pub device: String,
+    /// The front's own port, which a browser sign-in's loopback redirect names.
+    pub port: u16,
     pub land: Option<Land>,
     pub fetchers: Arc<Fetchers>,
     /// The account's capture, to start one on a workspace a clone made.
@@ -160,6 +172,13 @@ pub(super) fn merge_waits(root: &Path) -> Option<Response> {
     })
 }
 
+static PORT: AtomicU16 = AtomicU16::new(0);
+
+/// The port the front listens on, told once at its start.
+pub fn listening_on(port: u16) {
+    PORT.store(port, Ordering::Relaxed);
+}
+
 fn device_name() -> String {
     ["HOSTNAME", "COMPUTERNAME"]
         .iter()
@@ -205,6 +224,7 @@ fn ctx_of(who: &Who<'_>, home: &Home) -> Ctx {
         workspaces: workspace_dir(home),
         account_home: home.account_home(),
         device: device_name(),
+        port: PORT.load(Ordering::Relaxed),
         land: account.as_ref().map(|a| a.landing()),
         fetchers: fetchers(),
         account,
@@ -303,6 +323,9 @@ async fn dispatch(ctx: &Ctx, kind: Kind, b: Value, query: String) -> Response {
         Kind::Clone => return clone(ctx, &b).await,
         Kind::Roam => return git_roam::list(ctx).await,
         Kind::Forges => return git_forge_routes::list(ctx),
+        Kind::ForgeAdd => return git_forgejo_servers::add(ctx, &b).await,
+        Kind::ForgeProbe => return git_forgejo_servers::probe_route(&b).await,
+        Kind::ForgeCallback => return git_forgejo_flow::callback(ctx, &query).await,
         Kind::Forge(id, verb) => return git_forge_routes::route(ctx, &id, verb, &b).await,
         _ => {}
     }
