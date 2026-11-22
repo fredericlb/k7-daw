@@ -15,4 +15,4 @@ Binding a shortcut on the Commands page needs a hardware keyboard.
 "A chain or OUT card opens no menu on right-click, unlike every other card."
 "Removing a takes crossfade needs Alt, and sizing a timeline crossfade needs a drag: touch gets only the default."
 `apps/k7-daw-frontend/src/settings/RemoteSlotsSection.tsx` is not referenced by any screen.
-"Screen 41's boards (GitHubWays, CloneWays, GitHubPermission) still draw Sign in with GitHub inside Connect and Clone; it is in Settings → Services, and Services has no board."
+"The App settings boards of the General, Devices, Downloads and About tabs still draw four tabs; only the Services boards (screens 23 and 41) draw the Services tab."
