@@ -46,13 +46,13 @@ Every package is private to this tree: k7 is the only consumer, and nothing is p
 
 **The apps run on devices.** k7 is K7 DAW (Windows, Linux, macOS), the Android app, and the iOS app: each carries its own front, file service, engine registry and engine, and moves workspaces by git (and iCloud keys on Apple devices). There is no hosted app, no account on a server and no server to pair with.
 
-**`k7.rocks` is a static site.** GitHub Pages serves the front page and the documentation at `k7.rocks/docs`, built from this repository by `.github/workflows/pages.yml`; no server runs. Mobile apps come from the stores, desktop builds from the GitHub release page, and no app updates itself (`docs/site.md`). `docs/versioning.md` is the page on versions.
+**`k7.rocks` is a static site.** GitHub Pages serves the front page and the documentation at `k7.rocks/docs`, built from this repository by `.github/workflows/pages.yml`; no server runs. A self-hosted Forgejo can serve the same site with git-pages, published by `.forgejo/workflows/pages.yml` from the kit in `deploy/forgejo/`, once the DNS points there (`docs/forgejo-pages.md`). Mobile apps come from the stores, desktop builds from the GitHub release page, and no app updates itself (`docs/site.md`). `docs/versioning.md` is the page on versions.
 
 ## The repo-wide pages in `docs/`
 
 Notes for the whole repo — CI, deployment, the dev session — are in `docs/`:
 [dev.md](dev.md) (what `npm run dev` starts), [versioning.md](versioning.md) (the
-build stamp), [site.md](site.md) (the static site `k7.rocks`),
+build stamp), [site.md](site.md) (the static site `k7.rocks`), [forgejo-pages.md](forgejo-pages.md) (the same site from a self-hosted Forgejo),
 [publishing.md](publishing.md) (the four packages published for apps outside this repository), [release.md](release.md) (the CI that remains: GitHub's `k7.yml`, `caches.yml` and `pages.yml`; no job releases anything),
 and the plan/recipe pages, [platter-plan.md](platter-plan.md) (the DJ deck's
 playback: a stretcher inside the platter, and the hybrid it deletes),

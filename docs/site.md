@@ -3,6 +3,8 @@
 `k7.rocks` is a static site built from this repository and served by GitHub Pages: a front page, and the
 documentation under `k7.rocks/docs`. No server runs: k7 itself runs on devices, mobile apps come from the
 stores, and desktop builds are attached to the GitHub release page.
+A self-hosted Forgejo can serve the same build instead, with git-pages ([forgejo-pages.md](forgejo-pages.md)); the DNS
+records decide which host answers.
 
 ## Choices
 
