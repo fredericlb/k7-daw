@@ -3,6 +3,7 @@
 pub mod audio_def;
 mod audition;
 mod comp;
+mod distinct;
 mod doc;
 mod id;
 mod paths;
@@ -15,6 +16,7 @@ mod warp;
 
 pub use audition::{audition_hosts, audition_timeline, material_ref_of, with_take_hole};
 pub use comp::{comp_clips, cut_hole, mark_crossfades, slice_clip};
+pub use distinct::{Distinct, REPEAT_SEP, distinct_ids, without_repeat};
 pub use doc::{
     ClipDoc, ClipKind, CompMark, CrossfadeMark, EventDoc, NestDoc, NoteDoc, PatternPlugin, Plays, TimelineDoc,
     TimelineLaneDoc, WarpDoc,

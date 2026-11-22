@@ -8,8 +8,8 @@ use super::notes::{Notes, finding};
 use super::plugins::CompiledPlugins;
 use super::{PluginDoc, TrackDoc, highlighted, text_weight};
 use crate::clips::{
-    Budget, ClipDoc, Half, Leaf, PatternPlugin, PatternShare, Placer, mark_crossfades, pattern_plugins, pattern_shares,
-    read_pattern, sample_banks,
+    Budget, ClipDoc, Half, Leaf, PatternPlugin, PatternShare, Placer, distinct_ids, mark_crossfades, pattern_plugins,
+    pattern_shares, read_pattern, sample_banks,
 };
 use crate::files::{Finding, Severity};
 use crate::lanes::{Lane, LaneKind, Material, is_pattern_lane, pattern_lanes};
@@ -194,10 +194,11 @@ pub(super) fn lane_tracks<'c>(env: &mut LaneEnv<'_, 'c>, name: &'c str, lane: &L
             t.input_gain = i.gain;
         }
         let placed = |env: &mut LaneEnv<'_, 'c>| -> Vec<ClipDoc> {
-            per_half[hi]
-                .iter()
-                .flat_map(|&li| env.placer.place(&leaves[li]))
-                .collect()
+            let d = distinct_ids(per_half[hi].iter().map(|&li| env.placer.place(&leaves[li])));
+            for (r, start) in &d.twins {
+                twin_warning(env, name, &label, r, *start);
+            }
+            d.clips
         };
         if let Some(render) = env.fp.render_on.get(half.id) {
             t.clips = vec![frozen_clip(half.id, render)];
@@ -207,7 +208,8 @@ pub(super) fn lane_tracks<'c>(env: &mut LaneEnv<'_, 'c>, name: &'c str, lane: &L
                 if !env.budget.charge(sound.iter().map(ClipDoc::weight).sum()) {
                     return None;
                 }
-                t.clips = mark_crossfades(sound.clone(), env.placer.budget());
+                let sound = distinct_ids(sound.iter().map(|c| vec![c.clone()])).clips;
+                t.clips = mark_crossfades(sound, env.placer.budget());
             }
         } else {
             let all = placed(env);
@@ -231,6 +233,20 @@ pub(super) fn lane_tracks<'c>(env: &mut LaneEnv<'_, 'c>, name: &'c str, lane: &L
         out.push(t);
     }
     Some(out)
+}
+
+/// A WARNING for an event placed again exactly where an identical one already plays: almost always a duplicate by accident.
+fn twin_warning(env: &mut LaneEnv<'_, '_>, lane: &str, label: &str, r: &str, start: f64) {
+    let at = song_schema::beats_to_position(start, env.placer.grid().sig).unwrap_or_else(|_| start.to_string());
+    env.notes.push(finding(
+        label,
+        Severity::Warning,
+        format!(
+            "the same clip '{}' is placed twice at {at} on lane '{}'",
+            quote(r),
+            quote(lane)
+        ),
+    ));
 }
 
 fn wiring_error(env: &mut LaneEnv<'_, '_>, lane: &str, r: &str, m: Material, halves: &[Half<'_>], label: &str) {

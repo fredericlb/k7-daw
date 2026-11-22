@@ -6,7 +6,7 @@ use crate::clips_support;
 use clips_support::{event, grid, world};
 use serde_json::{Value, json};
 use song::Placement;
-use song::clips::{ClipDoc, Materials, Placer, fixed_fields_of};
+use song::clips::{ClipDoc, Materials, Placer, distinct_ids, fixed_fields_of};
 
 /// Clips kick (one second long), a sequence of twelve beats, and the timeline `verse` of both.
 fn project(verse: Value, more: &[(&str, Value)]) -> Materials {
@@ -326,4 +326,30 @@ fn thirty_one_levels_still_play() {
     assert!(findings.is_empty());
     assert_eq!(clips.len(), 1);
     assert_eq!(clips[0].nest.as_ref().map(|n| n.ref_.as_str()), Some("t0"));
+}
+
+#[test]
+fn a_timeline_placed_twice_at_one_beat_numbers_the_clips_of_its_second_pass() {
+    let m = project(json!({}), &[]);
+    let evs: Vec<Placement> = [
+        json!({"ref": "verse", "start": "3:1"}),
+        json!({"ref": "verse", "start": "3:1"}),
+    ]
+    .into_iter()
+    .map(event)
+    .collect();
+    let mut placer = Placer::new(grid(120.0), &m);
+    let leaves = placer.expand_events(&evs, "nodes/song.k7x");
+    let d = distinct_ids(leaves.iter().map(|l| placer.place(l)));
+    let ids: Vec<&str> = d.clips.iter().map(|c| c.id.as_str()).collect();
+    assert_eq!(
+        ids,
+        [
+            "verse@8>kick@0",
+            "verse@8>bassline@0",
+            "verse@8>kick@0#2",
+            "verse@8>bassline@0#2"
+        ]
+    );
+    assert_eq!(song::clips::material_ref_of(ids[2]), "kick");
 }

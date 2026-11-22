@@ -31,12 +31,12 @@ fn js_finite(s: &str) -> bool {
     t.parse::<f64>().is_ok_and(f64::is_finite)
 }
 
-/// `materialRefOf`: the material a placement id names, split on the LAST `@` and only before a number.
+/// `materialRefOf`: the material a placement id names, split on the LAST `@` and only before a number, a repeat's `#n` aside.
 pub fn material_ref_of(nested: &str) -> &str {
     let clip = nested.rsplit_once('>').map_or(nested, |(_, c)| c);
     match clip.rfind('@') {
         Some(at) if at > 0 => {
-            let tail = &clip[at + 1..];
+            let tail = super::distinct::without_repeat(&clip[at + 1..]);
             if !tail.is_empty() && js_finite(tail) {
                 &clip[..at]
             } else {

@@ -70,11 +70,15 @@ fn js_finite(s: &str) -> bool {
     mantissa_ok && exp_ok && t.parse::<f64>().is_ok_and(f64::is_finite)
 }
 
-/// The MATERIAL a placement id names: after the last `>`, split on the LAST `@` and only before a number.
+/// The MATERIAL a placement id names: after the last `>`, split on the LAST `@` and only before a number, a repeat's `#n` aside.
 pub fn material_ref_of(nested: &str) -> &str {
     let clip = nested.rfind('>').map_or(nested, |i| &nested[i + 1..]);
     match clip.rfind('@') {
-        Some(at) if at > 0 && !clip[at + 1..].is_empty() && js_finite(&clip[at + 1..]) => &clip[..at],
+        Some(at)
+            if at > 0 && !clip[at + 1..].is_empty() && js_finite(super::distinct::without_repeat(&clip[at + 1..])) =>
+        {
+            &clip[..at]
+        }
         _ => clip,
     }
 }

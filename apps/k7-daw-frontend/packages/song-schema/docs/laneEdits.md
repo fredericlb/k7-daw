@@ -88,8 +88,15 @@ back by every surface that has to find the file behind a clip. It is kept out of
 which reaches for `node:fs` and `node:child_process`, for the reason `graph-model` is its own tier.
 
 Two placements of one material are the ordinary case — a split makes a pair of them, and any lane may
-drop the same sample twice — so the material's name alone cannot identify one. The start does,
-because two placements cannot begin at the same beat on one lane without being the same placement.
+drop the same sample twice — so the material's name alone cannot identify one. The start almost
+does: one lane may still place one material twice at one beat, each with its own window, and the
+engine keys every map by id. So a placement repeated at a beat of one track takes `#2`, `#3`… in
+event order (`<ref>@<start>#2`), the suffix the engine's own safety net spells. A comp's pieces take
+their event's suffix and so does their `comp.of`, so they still fold into one event. The ordinal
+follows the event's order in the list, which a recompile keeps, so the engine diffs the same clips
+and rebuilds none (`apps/k7-daw-wasm/song/src/clips/distinct.rs`). Two such placements that also
+play the same window are almost always a paste by accident: the compile says so in a WARNING on the
+lane's file, and changes nothing.
 
 It is `@` and the start IN BEATS. Start rather than an index into `events:`, because the list's order
 is not meaningful: a split appends its tail, so an index would renumber the neighbours of every cut.
@@ -100,9 +107,9 @@ what the engine logs and what a `/waveform` request carries.
 `materialRefOf` is the inverse, for the readers that want the file rather than the placement: a
 clip's own `clips/<ref>.k7x`, its onset corrections, and the editor asked to open "the clip's own
 definition" from a right-click. All are properties of the material, shared by every placement of it.
-It splits on the LAST `@` and only when what follows is a number — a ref may legitimately contain
-one, nothing forbidding it in an entity name — and a string it cannot parse is returned whole, which
-is the right answer for the material names it is also handed directly.
+It splits on the LAST `@` and only when what follows is a number, a repeat's `#n` aside — a ref may
+legitimately contain one, nothing forbidding it in an entity name — and a string it cannot parse is
+returned whole, which is the right answer for the material names it is also handed directly.
 
 ## `spliceTime`
 
