@@ -150,7 +150,7 @@ jobs:
           cores: 4
           ram-size: 6144M
           disk-size: 8G
-          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -no-boot-anim -camera-back none -camera-front none
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -no-boot-anim -camera-back emulated -camera-front emulated
           disable-animations: true
           script: bash apps/k7-daw-engine/scripts/ci/e2e-android-runner.sh
 

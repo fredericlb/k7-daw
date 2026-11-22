@@ -57,9 +57,10 @@ impl Mixed {
 
     /// The file's length and its body, read in 256 KiB chunks; the folder is removed when the body ends or is dropped (2524).
     pub async fn into_body(self) -> Result<(Body, u64), String> {
+        // The path in the error: a bare "Permission denied" says nothing of which file.
         let file = tokio::fs::File::open(&self.path)
             .await
-            .map_err(|e| e.to_string())?;
+            .map_err(|e| format!("opening {}: {e}", self.path.display()))?;
         let len = file.metadata().await.map_err(|e| e.to_string())?.len();
         let stream =
             futures_util::stream::unfold((file, self.folder), |(mut f, folder)| async move {
@@ -92,7 +93,8 @@ pub async fn export_mix(
         return Err(k7_file_service::shares::no_engine("mixdown"));
     }
     let mixdoc = ports.views.mix_doc(dir, timeline).await?;
-    let folder = Folder::make(&acct.tmp, "tbmix-").map_err(|e| e.to_string())?;
+    let folder = Folder::make(&acct.tmp, "tbmix-")
+        .map_err(|e| format!("a folder under {}: {e}", acct.tmp.display()))?;
     let manifest = ports
         .mixdown
         .render(&mixdoc.doc, folder.path(), false)
