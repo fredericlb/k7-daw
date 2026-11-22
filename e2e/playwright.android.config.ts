@@ -17,6 +17,8 @@ export default defineConfig({
   // One worker: one phone, one engine, one app.
   workers: 1,
   retries: 0,
+  // Tier 4 (remote engines, the second-device routes) is deferred: as on the web, its specs run only with E2E_TIER4=1.
+  grepInvert: process.env.E2E_TIER4 ? undefined : /@tier4/,
   timeout: 120_000,
   reporter: [
     ["list"],
