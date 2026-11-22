@@ -37,7 +37,9 @@ async function openCommandBar(page: Page): Promise<Locator> {
     .getByRole("region", { name: "Notifications" })
     .getByRole("button", { name: "Dismiss", exact: true })
     .all())
-    if (await close.isVisible()) await close.click();
+    // A toast also leaves on its own timer: one gone between the look and the click is already out of the way.
+    if (await close.isVisible())
+      await close.click({ timeout: 2_000 }).catch(() => {});
   if (!(await bar.isVisible()))
     await page
       .getByRole("button", {

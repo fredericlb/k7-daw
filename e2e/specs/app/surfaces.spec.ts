@@ -8,7 +8,7 @@ import { FIXTURES_DIR, FIXTURES_WORKSPACE } from "../../src/fixtures.ts";
 import { pane } from "../../src/nav.ts";
 import { openPanel } from "../../src/panels.ts";
 import { expect, type K7, TARGET, test } from "../../src/target.ts";
-import { engineUp, play, transportBar } from "../../src/transport.ts";
+import { engineUp, play, transportBar, uncover } from "../../src/transport.ts";
 import { watchPage } from "../../src/watch.ts";
 
 const WORKSPACE = "E2E-surfaces";
@@ -223,6 +223,7 @@ for (const [shape, { draws, transport }] of Object.entries(ARCHETYPES)) {
     await draws(page);
     if (transport) {
       await play(page, 90_000);
+      await uncover(page);
       await transportBar(page)
         .getByRole("button", { name: "Stop", exact: true })
         .click();

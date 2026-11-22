@@ -57,9 +57,8 @@ async function typeTempo(page: Page, tempo: number): Promise<void> {
     await expect(vimStatus(page)).toHaveText("NORMAL");
     return;
   }
-  await page.keyboard.press("ControlOrMeta+Home");
-  await page.keyboard.press("ArrowDown");
-  await page.keyboard.press("ArrowDown");
+  // The tempo's line clicked, as a person reaches it: a phone's WebView takes no Ctrl+Home.
+  await text.getByText("tempo: 120").click();
   await page.keyboard.press("End");
   await page.keyboard.press("ArrowLeft");
   for (let i = 0; i < 3; i++) await page.keyboard.press("Backspace");

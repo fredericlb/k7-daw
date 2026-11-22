@@ -1,6 +1,7 @@
 // transport.ts — rolling a project's transport from its bar at the foot, the way a person does.
 // Play is pressed ONCE, as soon as it is offered: it reads "loading the project" until the engine holds it (docs/e2e.md).
 import { expect, type Locator, type Page } from "@playwright/test";
+import { folded } from "./nav.ts";
 
 /** The transport group, where the buttons and the clock are. */
 export const transportBar = (page: Page): Locator =>
@@ -10,8 +11,23 @@ export const transportBar = (page: Page): Locator =>
 export const clockOf = (page: Page): Locator =>
   transportBar(page).getByRole("timer");
 
+/** On a phone a panel is a full-screen sheet over the transport (docs/shell.md): closed first, as a person would. */
+export async function uncover(page: Page): Promise<void> {
+  if (!(await folded(page))) return;
+  for (const sheet of await page
+    .locator('[role="dialog"][data-slot="panel-frame"]')
+    .all())
+    if (await sheet.isVisible())
+      await sheet
+        .getByRole("button", { name: /^Close/ })
+        .first()
+        .click({ timeout: 5_000 })
+        .catch(() => {});
+}
+
 /** Presses Play the moment it is enabled and checks the clock leaves where it stood; returns that reading. */
 export async function play(page: Page, timeoutMs = 30_000): Promise<string> {
+  await uncover(page);
   const clock = clockOf(page);
   const button = transportBar(page).getByRole("button", {
     name: "Play",

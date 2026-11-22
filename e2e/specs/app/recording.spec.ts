@@ -3,7 +3,13 @@
 import type { Page } from "@playwright/test";
 import type { FileService, TreeNode } from "../../src/files.ts";
 import { expect, type K7, test } from "../../src/target.ts";
-import { clockOf, engineUp, rolls, transportBar } from "../../src/transport.ts";
+import {
+  clockOf,
+  engineUp,
+  rolls,
+  transportBar,
+  uncover,
+} from "../../src/transport.ts";
 import { watchPage } from "../../src/watch.ts";
 
 const WORKSPACE = "E2E-recording";
@@ -104,6 +110,7 @@ async function recordTake(page: Page, lane: string) {
   await expect(clockOf(page)).not.toHaveText(before, { timeout: 10_000 });
   // Four beats past the count-in: the take holds sound and picture, which the stop then files.
   await rolls(page, 4);
+  await uncover(page);
   await transportBar(page)
     .getByRole("button", { name: "Stop", exact: true })
     .click();
