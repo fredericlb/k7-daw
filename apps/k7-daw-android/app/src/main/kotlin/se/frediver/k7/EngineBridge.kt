@@ -23,6 +23,13 @@ object EngineBridge {
 
     @JvmStatic private external fun nativeServe(port: Int): Int
     @JvmStatic private external fun nativeQuit()
+    @JvmStatic private external fun nativeSetenv(key: String, value: String, overwrite: Boolean)
+
+    /** Set for the process and for the engine's own C library, which ARM translation keeps apart from it (docs/android.md). */
+    private fun setenv(key: String, value: String, overwrite: Boolean = true) {
+        Os.setenv(key, value, overwrite)
+        nativeSetenv(key, value, overwrite)
+    }
 
     /** Serve with the supervisor's identity, once; `onExit` gets serve()'s exit code, on the engine's thread. */
     @Synchronized
@@ -31,22 +38,22 @@ object EngineBridge {
             Log.w(TAG, "engine already started in this process — a restart needs a new process")
             return
         }
+        // Loads libk7runtime (Java's static block), whose native methods the environment below goes through.
+        Java.initialiseJUCE(context.applicationContext)
         // What the supervisor's spawn passes on desktop, read by serve() when it starts.
-        Os.setenv("STUDIO_HOME", stateDir(context).absolutePath, true)
+        setenv("STUDIO_HOME", stateDir(context).absolutePath)
         // The backend sends its own paths, outside `.k7`: without these the engine drops every clip and sample.
-        Os.setenv("STUDIO_ENGINE_ROOTS", BackendHost.engineRoots(context).joinToString(":") { it.absolutePath }, true)
-        Os.setenv("STUDIO_ENGINE_HOST", host, true)
-        Os.setenv("STUDIO_ENGINE_ID", id, true)
-        Os.setenv("STUDIO_ENGINE_TOKEN", token, true)
-        Os.setenv("STUDIO_ENGINE_ALLOWED_ORIGINS", origins, true)
+        setenv("STUDIO_ENGINE_ROOTS", BackendHost.engineRoots(context).joinToString(":") { it.absolutePath })
+        setenv("STUDIO_ENGINE_HOST", host)
+        setenv("STUDIO_ENGINE_ID", id)
+        setenv("STUDIO_ENGINE_TOKEN", token)
+        setenv("STUDIO_ENGINE_ALLOWED_ORIGINS", origins)
         // An app process has no HOME, and Surge XT's storage throws without one: it writes nothing there (docs/surgePlugin.md).
-        Os.setenv("HOME", context.filesDir.absolutePath, false)
+        setenv("HOME", context.filesDir.absolutePath, false)
         val mic = context.checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
         startedWithMic = mic
         // Without it the engine opens no inputs: asked for anyway, they fail the output with them (docs/android.md).
-        Os.setenv("STUDIO_ENGINE_INPUTS", if (mic) "1" else "0", true)
-        // Loads libk7runtime (Java's static block), whose JNI_OnLoad registered this very method.
-        Java.initialiseJUCE(context.applicationContext)
+        setenv("STUDIO_ENGINE_INPUTS", if (mic) "1" else "0")
         thread = Thread({
             Looper.prepare()
             onExit(nativeServe(port))

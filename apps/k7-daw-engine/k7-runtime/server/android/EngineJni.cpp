@@ -1,4 +1,4 @@
-// EngineJni.cpp — the Android app's two doors into the engine: serve on a port, and stop serving.
+// EngineJni.cpp — the Android app's doors into the engine: its environment, serve on a port, and stop serving.
 // nativeServe BLOCKS, and must be called on a thread that has PREPARED a Looper and loops nothing yet —
 // not a HandlerThread, which already is inside loop() — because the first JUCE call on it makes it JUCE's
 // message thread, and EngineHost::run loops that Looper. Java.initialiseJUCE must have run first.
@@ -11,6 +11,7 @@
 #include <unistd.h>
 
 #include <cstdio>
+#include <cstdlib>
 #include <string>
 #include <thread>
 
@@ -40,6 +41,16 @@ void stderrToLogcat() {
 }
 
 }  // namespace
+
+// Os.setenv writes the process's C library; under a native bridge this code reads a copy of its own, so the app sets each variable here too.
+extern "C" JNIEXPORT void JNICALL
+Java_se_frediver_k7_EngineBridge_nativeSetenv(JNIEnv* env, jclass, jstring key, jstring value, jboolean overwrite) {
+    const char* k = env->GetStringUTFChars(key, nullptr);
+    const char* v = env->GetStringUTFChars(value, nullptr);
+    if (k && v) setenv(k, v, overwrite ? 1 : 0);
+    if (v) env->ReleaseStringUTFChars(value, v);
+    if (k) env->ReleaseStringUTFChars(key, k);
+}
 
 extern "C" JNIEXPORT jint JNICALL
 Java_se_frediver_k7_EngineBridge_nativeServe(JNIEnv*, jclass, jint port) {
