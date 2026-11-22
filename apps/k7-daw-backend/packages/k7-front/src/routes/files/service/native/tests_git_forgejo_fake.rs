@@ -42,6 +42,9 @@ pub(super) struct St {
     pub topics: HashMap<String, Vec<String>>,
     pub created: Vec<Value>,
     pub asked: Vec<String>,
+    /// What `/user` says of the account besides its login.
+    pub full_name: String,
+    pub email: String,
 }
 
 pub(super) type Fake = Arc<Mutex<St>>;
@@ -215,7 +218,10 @@ fn api(
     base: &str,
 ) -> Response {
     match (method, path) {
-        ("GET", "/user") => reply(200, json!({ "id": 1, "login": LOGIN })),
+        ("GET", "/user") => reply(
+            200,
+            json!({ "id": 1, "login": LOGIN, "full_name": st.full_name, "email": st.email }),
+        ),
         ("GET", "/user/keys") => {
             let want = q.get("fingerprint");
             let rows: Vec<Value> = st

@@ -14,9 +14,9 @@ use crate::routes::files::json_answer;
 
 use super::git::{Answer, Ctx, bad, field, merge_waits, open, run};
 
-/// The device's stored identity; none stored is an empty one, which `who_am_i` refuses.
+/// The device's identity as a commit uses it: what was typed, each empty field filled from a source (`git_author.rs`).
 pub(super) fn prefilled(ctx: &Ctx) -> Result<Identity, Error> {
-    Ok(ctx.identity.load()?.unwrap_or_default())
+    Ok(super::git_author::resolve(ctx)?.id)
 }
 
 pub(super) fn who_am_i(ctx: &Ctx) -> Result<Identity, Error> {
@@ -32,6 +32,7 @@ pub(super) async fn commit(ctx: &Ctx, root: &Path, b: &Value) -> Answer {
     if let Some(r) = merge_waits(root) {
         return Ok(r);
     }
+    super::git_author::ensure(ctx).await;
     let (id, device) = (who_am_i(ctx)?, ctx.device.clone());
     let message = field(b, "message")
         .ok_or_else(|| Error::BadPath("a message is required".into()))?

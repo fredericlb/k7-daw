@@ -15,6 +15,7 @@ pub(crate) mod docs_failure;
 pub mod engine;
 pub mod entries;
 pub mod git;
+mod git_author;
 pub mod git_connect;
 pub mod git_fetch;
 mod git_forge;
@@ -262,6 +263,8 @@ mod tests_entries;
 mod tests_entries_end;
 #[cfg(test)]
 mod tests_git;
+#[cfg(test)]
+mod tests_git_author;
 #[cfg(test)]
 mod tests_git_forge;
 #[cfg(test)]

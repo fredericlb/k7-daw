@@ -78,12 +78,20 @@ against the remote. The routes are `apps/k7-daw-backend/docs/files/git.md`, the 
 | the bar | above the project bar in the editor, and above a workspace's tree on the home page |
 | Commit & Push and the Conflict screen | dialogs opened through `gitScreens.tsx` (`openCommitAndPush`, `openConflict`), by the header and the workspace card |
 | Commits | the History panel's second list, shown when the workspace is under git |
-| the commit author | settings, General |
+| the commit author | settings, General (an empty field is prefilled, with its source under it; see below) |
 | Sign in with GitHub, the account, Manage keys and Sign out | settings, Services |
 | the Forgejo servers: Add, Sign in, Sign in again, Remove | settings, Services, under GitHub |
+
+## The commit author
+
+An empty name or email is prefilled, each field on its own, from the first source that has it: the signed-in forge account (GitHub first, then the Forgejo servers in list order), the desktop's global git config, then the system account's full name (a Mac or a Linux desktop; a name only). A typed field is never replaced, and the prefill is never stored: the page sends a field still showing its suggestion as empty, so it keeps following its source, and a commit uses the suggestion as if typed.
+
+- The iPad and iPhone have no OS source, which is why the forge account comes first: a signed-in account is the one thing every device has.
+- A GitHub account that hides its email answers GitHub's own commit address (`<id>+<login>@users.noreply.github.com`), so a private email stays private and the commits still link to the account.
+- The identity stays per device. What a forge said of the account is cached in a per-device file, never in the keychain entry iCloud syncs, and the email goes nowhere it did not already go.
 
 ## Tests
 
 `gitState.test.ts` holds the rules of the bar as data; `connectState.test.ts` (the address, the trust, the refused web addresses), `copyText.test.ts` (the clipboard and its fallback), `mergeState.test.ts`, `commitState.test.ts` and
 `logState.test.ts` hold the reducers and their refusals; `roamState.test.ts` and `OtherDevices.test.tsx` the list's reducer and the section; `gitLock.test.ts` the gate that keeps the editors still, with its wiring
-into `App.tsx`; `GitBar.test.tsx` renders the bar and the cards; `githubState.test.ts` holds the device-flow screen's states and the picker's order, filter and dates, `ForgeWays.test.tsx` the pickers' place in the dialogs, `forgejoState.test.ts` the add and sign-in screens' states, `forgeOpener.test.ts` the sign-in's way per host, `ForgejoSection.test.tsx` the servers' section and the check's facts, `GitHubSection.test.tsx` the Services section's states. The functional specs are `e2e/specs/app/git-sync.spec.ts` and, per forge, `github-signin.spec.ts` and `forgejo-signin.spec.ts`.
+into `App.tsx`; `GitBar.test.tsx` renders the bar and the cards; `githubState.test.ts` holds the device-flow screen's states and the picker's order, filter and dates, `ForgeWays.test.tsx` the pickers' place in the dialogs, `forgejoState.test.ts` the add and sign-in screens' states, `forgeOpener.test.ts` the sign-in's way per host, `ForgejoSection.test.tsx` the servers' section and the check's facts, `GitHubSection.test.tsx` the Services section's states, `identitySource.test.ts` the source line under a prefilled author. The functional specs are `e2e/specs/app/git-sync.spec.ts` and, per forge, `github-signin.spec.ts` and `forgejo-signin.spec.ts`.

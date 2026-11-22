@@ -10,7 +10,7 @@ use serde_json::{Value, json};
 use crate::routes::files::json_answer;
 
 use super::git::{Answer, Ctx, answer_error, bad, field};
-use super::git_sync::prefilled;
+use super::git_author::{Source, resolve};
 
 pub(super) async fn focus(ctx: &Ctx, root: &Path, b: &Value) -> Answer {
     let cadence = ctx.fetchers.of(&root.display().to_string());
@@ -27,8 +27,15 @@ pub(super) async fn focus(ctx: &Ctx, root: &Path, b: &Value) -> Answer {
 }
 
 pub(super) fn identity(ctx: &Ctx) -> Response {
-    match prefilled(ctx) {
-        Ok(id) => json_answer(200, &json!({ "name": id.name, "email": id.email })),
+    match resolve(ctx) {
+        Ok(r) => json_answer(
+            200,
+            &json!({
+                "name": r.id.name, "email": r.id.email,
+                "nameSource": r.name_from.map(Source::code),
+                "emailSource": r.email_from.map(Source::code),
+            }),
+        ),
         Err(e) => answer_error(&e),
     }
 }

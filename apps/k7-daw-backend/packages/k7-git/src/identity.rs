@@ -20,6 +20,24 @@ impl Identity {
     pub fn is_complete(&self) -> bool {
         !self.name.trim().is_empty() && !self.email.trim().is_empty()
     }
+
+    /// `user.name` and `user.email` of the global git config (`~/.gitconfig`, the XDG file, `%USERPROFILE%` on Windows).
+    pub fn from_global_config() -> Identity {
+        git2::Config::open_default().map_or_else(|_| Identity::default(), |c| Identity::of(&c))
+    }
+
+    /// The same from one config file; a missing file is empty.
+    pub fn from_config_file(path: &Path) -> Identity {
+        git2::Config::open(path).map_or_else(|_| Identity::default(), |c| Identity::of(&c))
+    }
+
+    fn of(cfg: &git2::Config) -> Identity {
+        let get = |k: &str| cfg.get_string(k).unwrap_or_default().trim().to_string();
+        Identity {
+            name: get("user.name"),
+            email: get("user.email"),
+        }
+    }
 }
 
 /// The identity file of one device.

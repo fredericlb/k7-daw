@@ -8,10 +8,18 @@ import { Row, Section } from "../settings/Section";
 import { useAccountFiles } from "../settings/useAccountFiles";
 import { explain, type GitTransport } from "./gitApi";
 import { saveIdentity, useIdentity } from "./identity";
+import { sourceNote } from "./identitySource";
 import { accountTransport } from "./transports";
 
 /** How long "Saved" stays beside the field. */
 const SAVED_FLASH_MS = 3000;
+
+/** The source line of a field that still shows what was suggested. */
+const suggested = (
+  value: string,
+  shown: string | undefined,
+  source: string | null | undefined,
+) => (value.trim() === shown ? sourceNote(source) : undefined);
 
 export function IdentitySection() {
   const known = useIdentity();
@@ -40,8 +48,14 @@ export function IdentitySection() {
   const save = async () => {
     if (!t || !known) return;
     if (name.trim() === known.name && email.trim() === known.email) return;
+    // A field still showing its suggestion is not typed: it is sent empty so the suggestion keeps following its source.
+    const typed = (v: string, shown: string, source?: string | null) =>
+      source && v.trim() === shown ? "" : v;
     try {
-      await saveIdentity(t, { name, email });
+      await saveIdentity(t, {
+        name: typed(name, known.name, known.nameSource),
+        email: typed(email, known.email, known.emailSource),
+      });
       setSaid({ field: "email", text: m["git.identitySaved"](), error: false });
     } catch (e) {
       // The route names no field: an empty name is the name's, anything else the email's.
@@ -74,7 +88,11 @@ export function IdentitySection() {
     <Section title={m["git.identityTitle"]()} hint={m["git.identityHint"]()}>
       <Row
         label={m["git.identityName"]()}
-        detail={said?.field === "name" && !said.error ? said.text : undefined}
+        detail={
+          said?.field === "name" && !said.error
+            ? said.text
+            : suggested(name, known?.name, known?.nameSource)
+        }
         error={said?.field === "name" && said.error ? said.text : undefined}
       >
         <Input
@@ -87,7 +105,11 @@ export function IdentitySection() {
       </Row>
       <Row
         label={m["git.identityEmail"]()}
-        detail={said?.field === "email" && !said.error ? said.text : undefined}
+        detail={
+          said?.field === "email" && !said.error
+            ? said.text
+            : suggested(email, known?.email, known?.emailSource)
+        }
         error={said?.field === "email" && said.error ? said.text : undefined}
       >
         <Input

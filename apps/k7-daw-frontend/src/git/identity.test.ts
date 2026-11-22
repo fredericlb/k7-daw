@@ -1,7 +1,14 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("./gitApi", () => ({
-  git: { setIdentity: vi.fn(async () => ({ ok: true })) },
+  git: {
+    setIdentity: vi.fn(async () => ({ ok: true })),
+    identity: vi.fn(async () => ({
+      name: "Ada",
+      email: "a@x.org",
+      emailSource: "github",
+    })),
+  },
 }));
 vi.mock("../settings/accountFiles", () => ({ findAccountFiles: vi.fn() }));
 vi.mock("../paraglide/messages.js", () => ({

@@ -50,6 +50,7 @@ pub(super) fn device(name: &str) -> Dev {
         land: None,
         fetchers: Arc::default(),
         roam: Arc::new(k7_roam::NoStore),
+        local: Default::default,
         account: None,
     };
     Dev { ctx, dir }

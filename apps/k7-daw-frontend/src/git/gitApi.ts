@@ -193,4 +193,7 @@ export const git = {
 export interface Identity {
   name: string;
   email: string;
+  /** Where a field the person left empty was filled from; absent when it was typed. */
+  nameSource?: string | null;
+  emailSource?: string | null;
 }

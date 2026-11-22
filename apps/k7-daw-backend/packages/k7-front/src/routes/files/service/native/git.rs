@@ -130,6 +130,8 @@ pub struct Ctx {
     pub account: Option<Arc<k7_capture::account::Account>>,
     /// The host's roaming store (`k7_roam::store::current`), where the Forgejo servers sync; a test's own.
     pub roam: Arc<dyn k7_roam::ListStore>,
+    /// What the desktop knows of its user (git config, account name); a test's own, so a developer's `~/.gitconfig` never leaks in.
+    pub local: fn() -> super::git_author::Local,
 }
 
 pub(super) fn answer_error(e: &Error) -> Response {
@@ -235,6 +237,7 @@ fn ctx_of(who: &Who<'_>, home: &Home) -> Ctx {
         land: account.as_ref().map(|a| a.landing()),
         fetchers: fetchers(),
         roam: k7_roam::store::current(),
+        local: super::git_author::desktop,
         account,
     }
 }

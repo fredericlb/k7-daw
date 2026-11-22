@@ -114,6 +114,7 @@ pub(super) fn status(ctx: &Ctx, f: &Forge) -> Response {
 pub(super) fn list(ctx: &Ctx) -> Response {
     let all = accounts(ctx);
     ensure_keys_later(ctx, &all);
+    super::git_author::refresh_later(ctx, &all);
     let forges: Vec<Value> = all
         .iter()
         .map(|f| {

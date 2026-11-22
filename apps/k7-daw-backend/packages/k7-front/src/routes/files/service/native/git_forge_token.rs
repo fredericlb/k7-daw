@@ -62,6 +62,7 @@ pub(super) async fn finish(ctx: &Ctx, f: &Forge, t: Tokens) -> Result<Done, Refu
         let said = format!("the device's keychain: {e}");
         return Err((500, "keychain".into(), said));
     }
+    super::git_author::learn(ctx, f, &me.body);
     let note = upload_key(ctx, f, &t.access).await.err();
     f.trust_host(ctx).await;
     Ok(Done {

@@ -27,7 +27,9 @@ export async function saveIdentity(
 ): Promise<Identity> {
   const next = { name: id.name.trim(), email: id.email.trim() };
   await git.setIdentity(t, next);
-  setKnownIdentity(next);
+  // The route's answer carries the sources of the fields still empty; the typed ones are all this page knows.
+  const read = await git.identity(t).catch(() => null);
+  setKnownIdentity(read ?? next);
   return next;
 }
 
