@@ -25,7 +25,17 @@ export function decideDiskSync(p: {
   dismissed: string | null;
   /** What this editor last wrote or read; disk still holding it means only the typing since is new. */
   saved?: string;
+  /** The text of a write still in flight: until it answers, it is the base, and `saved` is out of date. */
+  writing?: string | null;
 }): DiskAction {
+  // An undo back to the old text while the write is in flight is an edit, not a clean buffer (docs/shell.md).
+  if (p.writing != null)
+    return decideDiskSync({
+      ...p,
+      saved: p.writing,
+      dirty: p.buffer !== p.writing,
+      writing: null,
+    });
   if (p.fresh === p.buffer) return p.dirty ? "clean" : "ignore";
   // Our own last save, read back while the person keeps typing: nothing changed underneath.
   if (p.dirty && p.saved !== undefined && p.fresh === p.saved) return "ignore";
@@ -52,6 +62,7 @@ export function useDiskSync({
   onAdopt,
   onClean,
   onKeep,
+  writing,
   reloadKey,
 }: {
   path: string | null;
@@ -65,6 +76,8 @@ export function useDiskSync({
   onClean: () => void;
   /** "Keep editing" about this disk text: it becomes the base the next write is checked against, so the buffer may go over it. */
   onKeep?: (fresh: string) => void;
+  /** The text of the write in flight, null when none: read live, a write being shorter than a render. */
+  writing?: { current: string | null };
   /** Bumped by the shell after a command, so an action is noticed without waiting for the next tick. */
   reloadKey: number;
 }): DiskSync {
@@ -79,8 +92,18 @@ export function useDiskSync({
     onAdopt,
     onClean,
     onKeep,
+    writing,
   });
-  state.current = { path, content, dirty, saved, onAdopt, onClean, onKeep };
+  state.current = {
+    path,
+    content,
+    dirty,
+    saved,
+    onAdopt,
+    onClean,
+    onKeep,
+    writing,
+  };
   // The version the user already said 'keep editing' about: dismissing must not re-prompt for the SAME text, but a further change is new.
   const dismissed = useRef<string | null>(null);
 
@@ -112,6 +135,7 @@ export function useDiskSync({
           dirty: cur.dirty,
           dismissed: dismissed.current,
           saved: cur.saved,
+          writing: cur.writing?.current,
         })
       ) {
         case "adopt":

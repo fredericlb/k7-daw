@@ -723,6 +723,12 @@ The project journal flushes every pane before it moves (`HistoryDeps.flush`), so
 lands under a pending autosave. A write that lands after the pane moved to another file updates
 nothing of the file now shown.
 
+A write in flight is the base until it answers. The revision moves when the disk takes the write,
+which can be before the write's answer reaches the page; a poll then reads the new text back while
+`saved` still holds the old one, and a buffer undone to that old text looks clean and would be
+replaced by the read, the undo lost with no write. So the text being written stands in for `saved`
+in that decision (`writing` in `decideDiskSync`).
+
 ### Space is the transport, wherever the last click landed
 
 The key listener draws a line between two groups rather than standing aside for one list of tag names
