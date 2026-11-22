@@ -1959,6 +1959,8 @@
   "git.card.pullingFrom": "Récupération de {branch} depuis {remote}…",
   "git.card.checkedAgo": "À jour · vérifié {when}",
   "git.card.upToDate": "À jour",
+  "git.card.remoteEmpty": "Rien n'a encore été poussé vers {repo}",
+  "git.card.remoteEmptyHint": "Validez et poussez depuis l'appareil qui a les projets ; celui-ci les récupérera.",
   "git.card.connect": "Connecter à git",
   "pluginScan.title": "Analyse des plugins",
   "pluginScan.looking": "Recherche des plugins…",

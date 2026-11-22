@@ -17,6 +17,7 @@ against the remote. The routes are `apps/k7-daw-backend/docs/files/git.md`, the 
 | Abort asks inside the Conflict screen, as a nested `dialog "Abort the merge?"`, not as a popin | the screen is a full-screen layer above every popin, which would be drawn under it |
 | the remote dialog has no HTTPS / SSH choice | k7 is ssh only: a choice with a refused option would only be a trap |
 | the command editor is a full-screen editor; its Save writes the whole draft, and a key taken from another command is said under the filter row | a shortcut saved one at a time would half-apply when the person leaves |
+| a clean workspace over an empty remote says "Nothing pushed to {repo} yet" with the next step, instead of "Up to date"; a device with changes or commits keeps Commit & Push | an empty clone must never read as a sync that lost the projects |
 | a merge waiting shows only its own button: no Commit, Push or Pull | a commit during a merge would be a second history |
 | a pull that diverged opens the merge screen at once | the person was waiting for the answer to the pull |
 | the Conflict screen is a full screen over the project (a region, no dialog): a list of conflicts (marked "To choose" until picked) beside the open conflict's two sides and its choices: Keep mine, Keep theirs, Keep both only where the route says, keep or remove for a file one side removed; Previous and Next walk the list | "both" has a meaning only for a keyed list item, or for a binary kept beside under a free name, and the screen never offers what the merge would refuse |

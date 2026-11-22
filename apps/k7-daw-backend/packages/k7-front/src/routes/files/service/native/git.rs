@@ -406,12 +406,15 @@ async fn state(ctx: &Ctx, root: &Path) -> Answer {
         .clone();
     run(ctx, root, move |r| {
         let origin = r.origin_config();
-        let (ahead, behind) = match r.ahead_behind()? {
+        let tracked = r.ahead_behind()?;
+        let fetched = last.as_ref().is_some_and(|o| o.error.is_none());
+        let remote_empty = origin.is_some() && fetched && tracked.is_none();
+        let (ahead, behind) = match tracked {
             Some(ab) => ab,
             None => (r.head_commits()?, 0),
         };
         let pending = r.merge_pending()?;
-        Ok(json!({
+        let mut v = json!({
             "mode": if origin.is_some() { "connected" } else { "local" },
             "branch": r.branch(),
             "remote": origin.as_ref().map(|o| o.url.clone()),
@@ -419,8 +422,12 @@ async fn state(ctx: &Ctx, root: &Path) -> Answer {
             "ahead": ahead, "behind": behind,
             "changed": r.status()?.iter().filter(|e| !e.too_large).count(),
             "merge": pending.as_ref().map(|p| p.conflicts.iter().filter(|c| c.choice.is_none()).count()),
-            "lastFetch": last.map(|o| json!({ "at": o.at, "error": o.error.map(|(c, m)| json!({ "code": c, "error": m })) })),
-        }))
+            "lastFetch": last.map(|o| json!({ "at": o.at.saturating_mul(1000), "error": o.error.map(|(c, m)| json!({ "code": c, "error": m })) })),
+        });
+        if remote_empty {
+            v["remoteEmpty"] = json!(true);
+        }
+        Ok(v)
     })
     .await
 }

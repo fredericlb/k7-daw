@@ -7,7 +7,7 @@ over `apps/k7-daw-backend/packages/k7-git` (`../git.md`). The choices of the rep
 
 | route | body or query | answer |
 |---|---|---|
-| `GET /git/state?workspace=` | | `{ mode: "none" \| "local" \| "connected", branch, remote, user, ahead, behind, changed, merge, lastFetch }`; `merge` is the number of conflicts without a choice, absent when no merge waits; a remote with no branch yet makes `ahead` the number of commits on `HEAD` and `behind` 0 |
+| `GET /git/state?workspace=` | | `{ mode: "none" \| "local" \| "connected", branch, remote, user, ahead, behind, changed, merge, lastFetch, remoteEmpty? }`; `lastFetch.at` is in milliseconds since the epoch (the fetch cadence keeps seconds); `remoteEmpty: true` when connected, a fetch worked and `origin/<branch>` does not exist (nobody has pushed), absent otherwise; `merge` is the number of conflicts without a choice, absent when no merge waits; a remote with no branch yet makes `ahead` the number of commits on `HEAD` and `behind` 0 |
 | `GET /git/status?workspace=` | | `{ entries: [{ path, change, from?, size, binary, lfs, tooLarge }] }` |
 | `GET /git/log?workspace=&limit=&before=` | | `{ commits: [{ id, subject, author, time, device, files_changed }] }` |
 | `POST /git/connect` | `{ workspace, url, hostKey? }`; `url` is an ssh address, anything else is 400 `ssh-only` | `{ ok, remote, lfsWarning? }`; the repository is made when there is none, the device's key signs in and the sign-in is proved by a fetch through an anonymous remote before the workspace points at the address |

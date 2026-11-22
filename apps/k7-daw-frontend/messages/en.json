@@ -1959,6 +1959,8 @@
   "git.card.pullingFrom": "Pulling {branch} from {remote}…",
   "git.card.checkedAgo": "Up to date · checked {when}",
   "git.card.upToDate": "Up to date",
+  "git.card.remoteEmpty": "Nothing pushed to {repo} yet",
+  "git.card.remoteEmptyHint": "Commit and push from the device that has the projects; this one will pull them.",
   "git.card.connect": "Connect to git",
   "pluginScan.title": "Scanning plugins",
   "pluginScan.looking": "Looking for plugins…",

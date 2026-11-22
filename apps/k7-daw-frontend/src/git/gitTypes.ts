@@ -10,7 +10,10 @@ export interface GitState {
   changed?: number;
   /** Conflicts still without a choice; absent when no merge waits. */
   merge?: number | null;
+  /** True when connected, a fetch worked, and the remote has no branch yet: nobody has pushed. */
+  remoteEmpty?: boolean;
   lastFetch?: {
+    /** Milliseconds since the epoch, like Date.now(). */
     at: number;
     error?: { code: string; error: string } | null;
   } | null;
