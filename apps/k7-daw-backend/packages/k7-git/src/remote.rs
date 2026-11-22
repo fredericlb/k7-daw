@@ -28,7 +28,9 @@ fn vet(net: &Net, url: &str) -> Result<()> {
     }
     // `user@host:path`; anything else is a local path.
     match url.split_once(':') {
-        Some((host, _)) if !host.is_empty() && !host.contains('/') && crate::transport::scp_like(url) => {
+        Some((host, _))
+            if !host.is_empty() && !host.contains('/') && crate::transport::scp_like(url) =>
+        {
             crate::transport::ssh_check(url)
         }
         _ if net.allow_file && Path::new(url).exists() => Ok(()),

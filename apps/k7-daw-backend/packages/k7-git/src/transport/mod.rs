@@ -216,15 +216,30 @@ mod tests {
     fn a_drive_is_a_local_path_on_windows_alone() {
         assert!(drive_path("C:\\Users\\x\\remote.git") && drive_path("c:/x"));
         assert!(!drive_path("git@github.com:o/r.git") && !drive_path("C:"));
-        assert!(scp_like("git@github.com:o/r.git") && !scp_like("ssh://h/r") && !scp_like("/tmp/r"));
+        assert!(
+            scp_like("git@github.com:o/r.git") && !scp_like("ssh://h/r") && !scp_like("/tmp/r")
+        );
         assert_eq!(scp_like("C:/x/remote.git"), !cfg!(windows));
     }
 
     #[test]
     fn a_file_url_names_its_folder() {
-        assert_eq!(file_path("file:///tmp/r.git"), std::path::PathBuf::from("/tmp/r.git"));
-        assert_eq!(file_path("/tmp/r.git"), std::path::PathBuf::from("/tmp/r.git"));
-        let want = if cfg!(windows) { "C:/k7/r.git" } else { "/C:/k7/r.git" };
-        assert_eq!(file_path("file:///C:/k7/r.git"), std::path::PathBuf::from(want));
+        assert_eq!(
+            file_path("file:///tmp/r.git"),
+            std::path::PathBuf::from("/tmp/r.git")
+        );
+        assert_eq!(
+            file_path("/tmp/r.git"),
+            std::path::PathBuf::from("/tmp/r.git")
+        );
+        let want = if cfg!(windows) {
+            "C:/k7/r.git"
+        } else {
+            "/C:/k7/r.git"
+        };
+        assert_eq!(
+            file_path("file:///C:/k7/r.git"),
+            std::path::PathBuf::from(want)
+        );
     }
 }
