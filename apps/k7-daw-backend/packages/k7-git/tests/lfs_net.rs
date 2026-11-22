@@ -203,7 +203,7 @@ async fn over_ssh_the_grant_of_git_lfs_authenticate_opens_the_endpoint_and_is_re
     let cmds = r.sshd.commands.lock().unwrap().clone();
     let asked = cmds
         .iter()
-        .filter(|c| c.starts_with("git-lfs-authenticate '/r.git' upload"))
+        .filter(|c| c.starts_with("git-lfs-authenticate /r.git upload"))
         .count();
     assert_eq!(asked, 1, "the grant is reused until it expires: {cmds:?}");
     let hits = r.web.lfs.hits.lock().unwrap().clone();

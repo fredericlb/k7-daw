@@ -216,6 +216,24 @@ impl russh::server::Handler for Conn {
         let cmd = String::from_utf8_lossy(data).to_string();
         self.m.commands.lock().unwrap().push(cmd.clone());
         if cmd.starts_with("git-lfs-authenticate ") {
+            // GitHub does not unquote this path: a quoted one is a repository that does not exist.
+            if cmd.contains('\'') {
+                let Some(channel) = self.channels.remove(&id) else {
+                    return Ok(());
+                };
+                session.channel_success(id)?;
+                let handle = session.handle();
+                tokio::spawn(async move {
+                    let _ = channel
+                        .make_writer_ext(Some(1))
+                        .write_all(b"ERROR: invalid repository\n")
+                        .await;
+                    let _ = channel.exit_status(1).await;
+                    let _ = channel.eof().await;
+                    let _ = handle.close(id).await;
+                });
+                return Ok(());
+            }
             let Some(channel) = self.channels.remove(&id) else {
                 return Ok(());
             };

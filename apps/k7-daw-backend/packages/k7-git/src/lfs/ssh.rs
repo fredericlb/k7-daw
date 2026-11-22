@@ -101,6 +101,19 @@ fn now_epoch() -> i64 {
         .unwrap_or(0)
 }
 
+/// The path as git-lfs sends it: bare when it holds only safe characters, shell-quoted otherwise (docs/git.md).
+fn lfs_path(path: &str) -> String {
+    let safe = !path.is_empty()
+        && path
+            .chars()
+            .all(|c| c.is_ascii_alphanumeric() || "/._-~+@:,=".contains(c));
+    if safe { path.to_string() } else { quote(path) }
+}
+
+fn authenticate_command(path: &str, op: &str) -> String {
+    format!("git-lfs-authenticate {} {op}", lfs_path(path))
+}
+
 /// The grant for `url`'s repository and `op` (`upload` or `download`), asked of the server unless a live one is kept.
 pub(crate) fn authenticate(
     net: &Arc<Net>,
@@ -123,12 +136,7 @@ pub(crate) fn authenticate(
     {
         return Ok(g.clone());
     }
-    let reply = run(
-        net,
-        &addr,
-        Some(who),
-        format!("git-lfs-authenticate {} {op}", quote(&addr.path)),
-    )?;
+    let reply = run(net, &addr, Some(who), authenticate_command(&addr.path, op))?;
     let a = read_grant(&reply.stdout, &reply.stderr, reply.status, &addr.host)?;
     let life = match (a.expires_in, a.expires_at.as_deref().and_then(epoch_of)) {
         (Some(s), _) => s,
@@ -153,6 +161,18 @@ mod tests {
 
     fn say(out: &str, err: &str, status: u32) -> Result<Answer> {
         read_grant(out.as_bytes(), err.as_bytes(), Some(status), "h")
+    }
+
+    #[test]
+    fn the_repository_path_is_bare_unless_it_needs_quoting() {
+        assert_eq!(
+            authenticate_command("fredericlb/K7-berfin.git", "upload"),
+            "git-lfs-authenticate fredericlb/K7-berfin.git upload"
+        );
+        assert_eq!(
+            authenticate_command("/srv/a b.git", "download"),
+            "git-lfs-authenticate '/srv/a b.git' download"
+        );
     }
 
     #[test]
