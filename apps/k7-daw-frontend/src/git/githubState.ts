@@ -38,10 +38,6 @@ export const signedIn = (s: GithubStatus | null): boolean =>
 export const hasRepoScope = (s: GithubStatus | null): boolean =>
   Boolean(s?.scopes.includes("repo"));
 
-/** Connect and Clone show GitHub's picker only to a person signed in with `repo`; nobody else sees GitHub there. */
-export const canPick = (s: GithubStatus | null): boolean =>
-  signedIn(s) && hasRepoScope(s);
-
 export type SignIn =
   | { phase: "starting" }
   | { phase: "waiting"; code: string; uri: string; interval: number }

@@ -130,6 +130,8 @@ target's alone and needs the front started with `K7_GIT_ALLOW_FILE` (`apps/k7-da
 
 `github-signin.spec.ts` signs in through Settings → Services, then connects through the picker, against `src/fakeGithub.ts`, a GitHub the spec starts on the port the bed gives it (`E2E_GITHUB_PORT`, the front's port + 3). The fake grants exactly the scopes the code asked, as github.com does, so a sign-in that forgot `repo` shows. The bed starts the front with `K7_GITHUB_CLIENT_ID` and both base URLs on that port; the dialogs open on GitHub only while the device is signed in, so a spec that wants the address form takes **Another host…** when it is there (`chooseAnotherHost`).
 
+`forgejo-signin.spec.ts` adds a Forgejo server through the UI (address, check, registration, client id), signs in, then connects through the picker, against `src/fakeForgejo.ts`, a Forgejo the spec starts on `E2E_FORGEJO_PORT` (the front's port + 4). The front needs no variable for it: servers are added at run time, and `K7_GIT_ALLOW_FILE` lets one listen on the loopback. The sign-in link opens a second tab, which the spec catches as a page event; the fake redirects it to the front's callback, so the tab is a real browser tab and nothing is followed by hand.
+
 A spec runs on both targets unless what it checks exists on one only, and then it says so in its
 `test.skip`: a signed-out visitor or Chromium's fake microphone is the web's.
 

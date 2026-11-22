@@ -34,6 +34,23 @@ synced. **Settings, Services** shows the account and **Sign out**, which removes
 account (it is this device's git access; remove it at github.com/settings/keys). **Another host…** in the dialog is the form
 described above, for any other host.
 
+## Your own Forgejo server
+
+A Forgejo server (your own, or a friend's) signs in like GitHub, once registered. Open **Settings, Services** and press
+**Add a Forgejo server**:
+
+1. Type the server's address and press **Check**. k7 reads the Forgejo version, says whether large files (LFS) are on (if they
+   are off, audio files will not sync) and whether the server's own web address answers.
+2. On the server open **Settings, Applications, OAuth2 applications** and create an application: paste the two addresses k7 shows
+   (each has a **Copy** button) as redirect URIs and leave **Confidential client** unticked. Copy its Client ID into k7 and press
+   **Add server**. If the server's ssh host or port differ from its web address, open **SSH host and port, if different** first.
+3. Press **Sign in** on the server's section: k7 gives you a button that opens the server in a new browser tab, where you allow
+   k7. The tab says it can be closed and k7 shows who is signed in. k7 adds this device's key to your account on the server.
+
+Connect and Clone then open on one list of repositories per account you signed in to, GitHub's and each server's, with
+**Another host…** beside them. If a server ends the sign-in (another device signed in, or you revoked k7 there), its section says
+**Sign in again**. **Remove** forgets the server and its sign-in on this device; the key stays on the server, where you can delete it.
+
 ## Connect a workspace
 
 1. On the projects page, open the **⋮** menu of the workspace and choose **Connect to git…**.
