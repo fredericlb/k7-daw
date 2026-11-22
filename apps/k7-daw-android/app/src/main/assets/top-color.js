@@ -54,7 +54,10 @@
     });
     if (document.body)
       new MutationObserver(queue).observe(document.body, { attributes: true });
-    matchMedia("(prefers-color-scheme: dark)").addEventListener("change", queue);
+    matchMedia("(prefers-color-scheme: dark)").addEventListener(
+      "change",
+      queue,
+    );
     addEventListener("resize", queue);
     queue();
   };
