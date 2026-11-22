@@ -43,16 +43,21 @@
     requestAnimationFrame(sample);
   };
 
-  new MutationObserver(queue).observe(document.documentElement, {
-    childList: true,
-    subtree: true,
-  });
-  new MutationObserver(queue).observe(document.documentElement, {
-    attributes: true,
-  });
-  if (document.body)
-    new MutationObserver(queue).observe(document.body, { attributes: true });
-  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", queue);
-  addEventListener("resize", queue);
-  queue();
+  // Run during a reload, the script can come before the document has an element to observe.
+  const start = () => {
+    new MutationObserver(queue).observe(document.documentElement, {
+      childList: true,
+      subtree: true,
+    });
+    new MutationObserver(queue).observe(document.documentElement, {
+      attributes: true,
+    });
+    if (document.body)
+      new MutationObserver(queue).observe(document.body, { attributes: true });
+    matchMedia("(prefers-color-scheme: dark)").addEventListener("change", queue);
+    addEventListener("resize", queue);
+    queue();
+  };
+  if (document.documentElement) start();
+  else addEventListener("DOMContentLoaded", start, { once: true });
 })();
