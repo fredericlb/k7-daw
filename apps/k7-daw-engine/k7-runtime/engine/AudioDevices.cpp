@@ -164,11 +164,21 @@ bool openDefaultOutputIfNone(juce::AudioDeviceManager& jdm) {
         setup.inputDeviceName = ins.contains(out) ? out : ins[juce::jmax(0, type->getDefaultDeviceIndex(true))];
         setup.useDefaultInputChannels = true;
         setup.useDefaultOutputChannels = true;
-        const auto err = jdm.setAudioDeviceSetup(setup, true);
+        auto err = jdm.setAudioDeviceSetup(setup, true);
         auto* dev = jdm.getCurrentAudioDevice();
+        // An input that will not open must not cost the output: the same output again, with no input.
+        if ((err.isNotEmpty() || dev == nullptr || dev->getActiveOutputChannels().isZero()) && setup.inputDeviceName.isNotEmpty()) {
+            std::cerr << "[audio] fallback output '" << out << "' with input '" << setup.inputDeviceName << "' did not open: " << err
+                      << "; again with no input\n";
+            setup.inputDeviceName = {};
+            setup.useDefaultInputChannels = false;
+            setup.inputChannels.clear();
+            err = jdm.setAudioDeviceSetup(setup, true);
+            dev = jdm.getCurrentAudioDevice();
+        }
         if (err.isEmpty() && dev != nullptr && !dev->getActiveOutputChannels().isZero()) {
             std::cerr << "[audio] the restored setup had no output: fell back to '" << out << "' ["
-                      << type->getTypeName() << "]\n";
+                      << type->getTypeName() << "]" << (setup.inputDeviceName.isEmpty() ? " with no input" : "") << "\n";
             return true;
         }
         std::cerr << "[audio] fallback output '" << out << "' [" << type->getTypeName()

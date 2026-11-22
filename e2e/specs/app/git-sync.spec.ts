@@ -4,6 +4,7 @@ import { execFileSync } from "node:child_process";
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { pathToFileURL } from "node:url";
 import type { Locator, Page } from "@playwright/test";
 import { chooseAnotherHost } from "../../src/home.ts";
 import { expect, test } from "../../src/target.ts";
@@ -58,7 +59,7 @@ test("a workspace is connected, pushed, cloned and merged through a bare reposit
   const dir = mkdtempSync(join(tmpdir(), "k7-git-e2e-"));
   const bare = join(dir, "remote.git");
   execFileSync("git", ["init", "--bare", "-b", "main", bare]);
-  const url = `file://${bare}`;
+  const url = pathToFileURL(bare).href;
   const files = await k7.files();
   for (const w of [A, B]) await files.removeWorkspace(w);
   await files.createWorkspace(A);

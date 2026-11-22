@@ -4,6 +4,7 @@ import { execFileSync } from "node:child_process";
 import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { pathToFileURL } from "node:url";
 import { fakeGithub } from "../../src/fakeGithub.ts";
 import { workspaceCard } from "../../src/home.ts";
 import { expect, test } from "../../src/target.ts";
@@ -22,7 +23,11 @@ test("a workspace is connected after Sign in with GitHub in Settings", async ({
   execFileSync("git", ["init", "--bare", "-b", "main", bare]);
   const github = await fakeGithub(PORT, [
     { name: "plain", topics: [], sshUrl: "git@github.invalid:octo/plain.git" },
-    { name: "songs", topics: ["k7-workspace"], sshUrl: `file://${bare}` },
+    {
+      name: "songs",
+      topics: ["k7-workspace"],
+      sshUrl: pathToFileURL(bare).href,
+    },
   ]);
   const files = await k7.files();
   await files.removeWorkspace(WS);

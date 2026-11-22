@@ -54,6 +54,10 @@ opens the default output of the first backend that has one. The OS's shared endp
 ASIO there: an ASIO driver may be for an interface that is not plugged in, and is single-client.
 A ranked interface (`audioPriority`, below) still moves the engine afterwards.
 
+An output is opened with no input when its input will not open: a blocked microphone, a
+virtual cable whose capture side is off, or input and output at different rates. Sound with no
+recording beats a silent engine whose playhead never moves.
+
 ## Three places could remember, and they are not interchangeable
 
 | where | who writes it | who applies it | when |
