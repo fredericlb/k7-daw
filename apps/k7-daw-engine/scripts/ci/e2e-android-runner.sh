@@ -41,6 +41,38 @@ sleep 30
   });
   (async () => { for (let i = 0; i < 5; i++) console.log(`engine probe ${i + 1}: ${await once()}`); })();
 ') 2>&1 | tee "$logs/engine-probe.txt" || true
+# The same whoami from inside the app's WebView, every event it sees: the page's own probe is the one the gate trusts.
+(cd e2e && node -e '
+  const { _android } = require("@playwright/test");
+  (async () => {
+    const [device] = await _android.devices({ omitDriverInstall: true });
+    const view = await device.webView({ pkg: "rocks.k7.daw.e2e" }, { timeout: 60000 });
+    // k7 is one page among the WebView'"'"'s pages, the one on the phone'"'"'s origin, as e2e/src/android.ts finds it.
+    let page;
+    for (let i = 0; i < 30 && !page; i++) {
+      page = (await view.page()).context().pages().find((p) => p.url().startsWith("http://127.0.0.1:18799/"));
+      if (!page) await new Promise((r) => setTimeout(r, 2000));
+    }
+    if (!page) throw new Error("k7 never showed in the WebView");
+    console.log("webview page", page.url(), await page.evaluate(() => navigator.userAgent));
+    for (const url of ["ws://127.0.0.1:8765/", "ws://localhost:8765/"]) {
+      const said = await page.evaluate((u) => new Promise((done) => {
+        const log = [];
+        const t0 = performance.now();
+        const at = (s) => log.push(`${Math.round(performance.now() - t0)}ms ${s}`);
+        let ws;
+        try { ws = new WebSocket(u); } catch (e) { return done([`threw ${e}`]); }
+        ws.onopen = () => { at("open"); ws.send(JSON.stringify({ type: "whoami" })); };
+        ws.onmessage = (e) => { at(`message ${String(e.data).slice(0, 80)}`); ws.close(); };
+        ws.onerror = () => at("error");
+        ws.onclose = (e) => { at(`close ${e.code} ${e.reason}`); done(log); };
+        setTimeout(() => { at("timeout"); done(log); }, 10000);
+      }), url);
+      console.log(`webview probe ${url}: ${said.join(" | ")}`);
+    }
+    await device.close();
+  })().catch((e) => console.log(`webview probe failed: ${e.message}`));
+') 2>&1 | tee -a "$logs/engine-probe.txt" || true
 
 flags=
 [ "${E2E_RETRIES:-0}" = 0 ] || flags="--retries=$E2E_RETRIES"
