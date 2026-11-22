@@ -1,4 +1,4 @@
-// ForgejoSignIn.tsx — one Forgejo sign-in: a button that opens the server's page in a browser tab, while k7 polls the front.
+// ForgejoSignIn.tsx — one Forgejo sign-in: the server's page in a browser tab, or iOS's sheet, while k7 polls the front.
 // What a reader gets wrong: polling goes on while this page is hidden, since the person is in the other tab; the front says each end once.
 
 import { Button, buttonVariants } from "@studio/ui/button";
@@ -6,6 +6,7 @@ import { ExternalLink, Loader2 } from "@studio/ui/icons";
 import { useEffect, useReducer, useRef, useState } from "react";
 import { m } from "../paraglide/messages.js";
 import { POLL_MS, signInAfter, startingSignIn } from "./forgejoState";
+import { openSheet, type SignInWay, signInWay } from "./forgeOpener";
 import { explain, type GitTransport, git } from "./gitApi";
 
 export function ForgejoSignIn({
@@ -13,18 +14,22 @@ export function ForgejoSignIn({
   server,
   onDone,
   onCancel,
+  way = signInWay,
 }: {
   t: GitTransport;
   server: { id: string; name: string };
   onDone: (login: string, keyNote?: string) => void;
   onCancel: () => void;
+  way?: SignInWay;
 }) {
   const [state, dispatch] = useReducer(signInAfter, startingSignIn);
   const [attempt, setAttempt] = useState(0);
   const live = useRef({ onDone });
   live.current = { onDone };
+  // A sheet the person closed changes nothing: the poll says how the sign-in ended, or Cancel ends it.
+  const sheet = (url: string) => void openSheet(url).catch(() => {});
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: `attempt` restarts the flow; `server.id` names it.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: `attempt` restarts the flow; `server.id` names it; `way` is fixed per page.
   useEffect(() => {
     let stopped = false;
     let timer: ReturnType<typeof setTimeout> | undefined;
@@ -44,10 +49,12 @@ export function ForgejoSignIn({
       }
     };
     git
-      .forgeStart(t, server.id)
+      .forgeStart(t, server.id, way.redirect)
       .then((start) => {
         if (stopped) return;
         dispatch({ type: "started", start });
+        // The sheet opens at once: the person already asked to sign in, and the button opens it again once closed.
+        if (way.open === "sheet") sheet(start.authorizeUrl);
         timer = setTimeout(() => void poll(), POLL_MS);
       })
       .catch(fail);
@@ -88,16 +95,27 @@ export function ForgejoSignIn({
   if (state.phase === "waiting")
     return (
       <div className="flex flex-col gap-3">
-        <a
-          href={state.url}
-          target="_blank"
-          rel="noreferrer"
-          className={buttonVariants({ size: "sm" })}
-          style={{ alignSelf: "flex-start" }}
-        >
-          <ExternalLink className="mr-1 size-3" />
-          {m["git.fj.open"]({ server: server.name })}
-        </a>
+        {way.open === "sheet" ? (
+          <Button
+            size="sm"
+            className="self-start"
+            onClick={() => sheet(state.url)}
+          >
+            <ExternalLink className="mr-1 size-3" />
+            {m["git.fj.open"]({ server: server.name })}
+          </Button>
+        ) : (
+          <a
+            href={state.url}
+            target="_blank"
+            rel="noreferrer"
+            className={buttonVariants({ size: "sm" })}
+            style={{ alignSelf: "flex-start" }}
+          >
+            <ExternalLink className="mr-1 size-3" />
+            {m["git.fj.open"]({ server: server.name })}
+          </a>
+        )}
         <p className="text-fg-2 type-secondary" role="status">
           <Loader2 className="mr-1 inline size-3 animate-spin" />
           {m["git.fj.waiting"]({ server: server.name })}
