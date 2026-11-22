@@ -43,14 +43,12 @@ fail() {
 [ -n "${K7_IOS_TEAM:-}" ] || fail "K7_IOS_TEAM is not set: your paid team's 10-character id (developer.apple.com > Membership details)" 2
 K7_IOS_TEAM="${K7_IOS_TEAM:-TEAMID}"
 
-# The App Store Connect API key signs in for both the provisioning and the upload; only its path is passed, never its content.
+# Xcode's own account signs (Settings > Accounts); the API key only uploads, since an App Manager key may not sign (docs/ios.md).
 key_id="${K7_ASC_KEY_ID:-}"
 issuer="${K7_ASC_ISSUER:-}"
 key_path="${K7_ASC_KEY_PATH:-$HOME/.appstoreconnect/private_keys/AuthKey_${key_id}.p8}"
-auth=()
 if [ -n "$key_id" ] && [ -n "$issuer" ]; then
   [ -f "$key_path" ] || fail "no API key file at $key_path (download it from App Store Connect > Users and Access > Integrations)" 3
-  auth=(-authenticationKeyPath "$key_path" -authenticationKeyID "$key_id" -authenticationKeyIssuerID "$issuer")
 elif [ "$dest" = "upload" ]; then
   fail "K7_ASC_KEY_ID and K7_ASC_ISSUER are not set: the upload needs an App Store Connect API key (--export-only builds the .ipa without one)" 3
 fi
@@ -74,7 +72,7 @@ mkdir -p "$out"
 run rm -rf "$archive" "$export_dir"
 run xcodebuild -project "$ios/k7.xcodeproj" -scheme k7 -configuration Release \
   -destination "generic/platform=iOS" -archivePath "$archive" \
-  -allowProvisioningUpdates ${auth[@]+"${auth[@]}"} \
+  -allowProvisioningUpdates \
   DEVELOPMENT_TEAM="$K7_IOS_TEAM" CODE_SIGN_STYLE=Automatic archive
 
 opts="$out/ExportOptions.plist"
@@ -84,7 +82,7 @@ cat > "$opts" <<PLIST
 <plist version="1.0">
 <dict>
   <key>method</key><string>app-store-connect</string>
-  <key>destination</key><string>$dest</string>
+  <key>destination</key><string>export</string>
   <key>teamID</key><string>$K7_IOS_TEAM</string>
   <key>signingStyle</key><string>automatic</string>
   <key>uploadSymbols</key><true/>
@@ -95,7 +93,15 @@ cat > "$opts" <<PLIST
 PLIST
 
 run xcodebuild -exportArchive -archivePath "$archive" -exportPath "$export_dir" \
-  -exportOptionsPlist "$opts" -allowProvisioningUpdates ${auth[@]+"${auth[@]}"}
+  -exportOptionsPlist "$opts" -allowProvisioningUpdates
+
+# altool reads AuthKey_<id>.p8 from API_PRIVATE_KEYS_DIR: only the key's folder is named, never its content.
+if [ "$dest" = "upload" ]; then
+  ipa="$export_dir/k7.ipa"
+  [ "$dry" = 1 ] || ipa=$(ls "$export_dir"/*.ipa | head -1)
+  run env API_PRIVATE_KEYS_DIR="$(dirname "$key_path")" xcrun altool --upload-package "$ipa" \
+    --api-key "$key_id" --api-issuer "$issuer" --show-progress
+fi
 
 if [ "$dry" = 1 ]; then
   say "dry run: nothing was built or uploaded"
