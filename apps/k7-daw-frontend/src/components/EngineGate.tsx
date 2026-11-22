@@ -127,6 +127,21 @@ export function EngineGate({
       const { ranked } = await engines.find();
       const here = localEngineOf(ranked);
       if (here) take(here);
+      // Said once per look, to the console a phone's logcat carries: what was offered, and why none is this device's.
+      else
+        console.info(
+          "[engine-gate] no engine of this device among",
+          JSON.stringify(
+            ranked.map((r) => ({
+              id: r.engine.id,
+              wsUrl: r.wsUrl,
+              answered: r.token !== null,
+              networkMs: r.latency?.networkMs ?? null,
+              access: r.engine.access,
+              addresses: r.engine.addresses,
+            })),
+          ),
+        );
     } catch {
       // No engine: the bar says so, and the engine page starts one.
     } finally {
