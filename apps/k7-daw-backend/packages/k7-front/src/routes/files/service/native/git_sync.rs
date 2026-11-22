@@ -9,6 +9,7 @@ use k7_git::{Begin, Choice, Error, Identity};
 use serde_json::{Value, json};
 
 use super::git_history;
+use super::git_key_retry::retrying;
 use crate::routes::files::json_answer;
 
 use super::git::{Answer, Ctx, bad, field, merge_waits, open, run};
@@ -58,10 +59,17 @@ pub(super) async fn push(ctx: &Ctx, root: &Path) -> Answer {
         .origin_config()
         .ok_or_else(|| Error::BadUrl("this workspace has no remote".into()))?;
     let (dir, git) = (root.to_path_buf(), root.join(".git"));
-    match ctx.net.push(dir.clone(), git.clone(), origin.clone()).await {
+    let pushed = retrying(ctx, &origin.url, || {
+        ctx.net.push(dir.clone(), git.clone(), origin.clone())
+    })
+    .await;
+    match pushed {
         // A refused push fetches, so the state read next says "to pull" and the bar offers Pull.
         Err(Error::Behind) => {
-            let _ = ctx.net.fetch(dir, git, origin).await;
+            let _ = retrying(ctx, &origin.url, || {
+                ctx.net.fetch(dir.clone(), git.clone(), origin.clone())
+            })
+            .await;
             Err(Error::Behind)
         }
         r => r.map(|()| json_answer(200, &json!({ "ok": true }))),
@@ -69,6 +77,7 @@ pub(super) async fn push(ctx: &Ctx, root: &Path) -> Answer {
 }
 
 /// Everything a pull needs from the capture: the files land through it, so its ledger learns each one first.
+#[derive(Clone)]
 struct Through {
     land: Option<Land>,
     root: PathBuf,
@@ -129,9 +138,11 @@ pub(super) async fn pull(ctx: &Ctx, root: &Path, b: &Value) -> Answer {
     let (net, rootp) = (ctx.net.clone(), root.to_path_buf());
     let committed = Arc::new(std::sync::atomic::AtomicBool::new(false));
     let (said, by) = (committed.clone(), id.as_ref().map(|i| i.name.clone()));
-    let out = ctx
-        .net
-        .blocking(move || {
+    let out = retrying(ctx, &origin.url, || {
+        let (net, rootp, origin) = (net.clone(), rootp.clone(), origin.clone());
+        let (message, id, device) = (message.clone(), id.clone(), device.clone());
+        let (through, said) = (through.clone(), said.clone());
+        ctx.net.blocking(move || {
             let repo = open(&rootp)?;
             if repo.status()?.iter().any(|e| !e.too_large) {
                 let (Some(m), Some(i)) = (&message, &id) else {
@@ -166,7 +177,8 @@ pub(super) async fn pull(ctx: &Ctx, root: &Path, b: &Value) -> Answer {
                 }
             }
         })
-        .await;
+    })
+    .await;
     let at = root.display().to_string();
     if committed.load(std::sync::atomic::Ordering::SeqCst)
         && let Some(m) = field(b, "message")

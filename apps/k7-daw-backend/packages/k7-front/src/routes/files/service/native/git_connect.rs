@@ -8,6 +8,7 @@ use k7_git::{Error, Origin, Repo};
 use serde_json::{Value, json};
 
 use super::git::{Answer, Ctx, field, open, origin_of};
+use super::git_key_retry::retrying;
 use crate::routes::files::json_answer;
 
 /// What one trusted host was before the connect wrote it.
@@ -59,11 +60,10 @@ pub async fn connect(ctx: &Ctx, root: &Path, b: &Value) -> Answer {
     }
     let origin = origin_of(b)?;
     let staged = keep_trust(ctx, &origin, b)?;
-    let (net, root_p, o) = (ctx.net.clone(), root.to_path_buf(), origin.clone());
     let made = !root.join(".git").exists();
-    let proved = ctx
-        .net
-        .blocking(move || {
+    let proved = retrying(ctx, &origin.url, || {
+        let (net, root_p, o) = (ctx.net.clone(), root.to_path_buf(), origin.clone());
+        ctx.net.blocking(move || {
             let repo = if root_p.join(".git").exists() {
                 open(&root_p)?
             } else {
@@ -73,7 +73,8 @@ pub async fn connect(ctx: &Ctx, root: &Path, b: &Value) -> Answer {
             repo.set_origin(&net, &o)?;
             Ok(repo.lfs_probe(&net, &o))
         })
-        .await;
+    })
+    .await;
     let warning = match proved {
         Ok(w) => w,
         Err(e) => {

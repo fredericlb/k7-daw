@@ -97,6 +97,7 @@ A refusal is `{ error, code }` with the codes of `k7-git`'s errors (`ssh-only`, 
 |---|---|
 | a body carries no secret: the device's own key signs in, and a trusted host key in a body is kept per device and never logged | a workspace folder is copied and shared; its secrets are not |
 | a remote that is not an ssh address is refused before any network call, `https://` and `file://` alike, unless the front is started with `K7_GIT_ALLOW_FILE` | HTTPS is not offered: a token typed into a page is a secret one more place; the flag is the tests' and the e2e bed's seam |
+| a key refusal (`unauthorized`) on a clone, connect, pull or push whose remote names the ssh host and port of a signed-in forge account uploads the device's key to that account and retries once; with no such account the refusal stands | the background upload that follows `GET /git/forges` races the first git call, and a "key is on the account" marker can be stale (`git_key_retry.rs`) |
 | the routes run libgit2 on a blocking thread through `Net::blocking` | the front's runtime is never held by a clone |
 | a pull with changes and no `message` is `uncommitted` (409); with one it commits first | "mine" is then always a commit |
 | every route answers 403 `device-only` on a server front, a device's own front (`STUDIO_LOCAL_USER`; no médiathèque is needed) only, and a front started with `K7_GIT_ALLOW_FILE`, which is a test bed | a server would keep tokens and keys in a plain file and `connect` could make it call its own loopback services |

@@ -28,6 +28,7 @@ use super::git_forge_routes::{self, Verb};
 use super::git_forgejo_flow;
 use super::git_forgejo_servers;
 use super::git_github;
+use super::git_key_retry::retrying;
 use super::git_keys;
 use super::git_lock;
 use super::git_roam;
@@ -484,7 +485,11 @@ async fn clone(ctx: &Ctx, b: &Value) -> Response {
         let target = PathBuf::from(resolve(&format!("{}/{name}", ctx.workspaces), ""));
         let _held = git_lock::try_take(&target.display().to_string()).ok_or(Error::Busy)?;
         let staged = git_connect::keep_trust(ctx, &origin, b)?;
-        if let Err(e) = ctx.net.clone_into(origin, target.clone()).await {
+        let cloned = retrying(ctx, &origin.url, || {
+            ctx.net.clone_into(origin.clone(), target.clone())
+        })
+        .await;
+        if let Err(e) = cloned {
             staged.restore(ctx);
             return Err(e);
         }

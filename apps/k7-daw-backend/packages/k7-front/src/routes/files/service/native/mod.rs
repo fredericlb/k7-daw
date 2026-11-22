@@ -28,6 +28,7 @@ mod git_forgejo_flow;
 mod git_forgejo_servers;
 mod git_github;
 pub mod git_history;
+mod git_key_retry;
 mod git_keys;
 pub mod git_lock;
 mod git_roam;
@@ -273,6 +274,8 @@ mod tests_git_forgejo_sync;
 mod tests_git_github;
 #[cfg(test)]
 mod tests_git_history;
+#[cfg(test)]
+mod tests_git_key_retry;
 #[cfg(test)]
 mod tests_git_review;
 #[cfg(test)]
