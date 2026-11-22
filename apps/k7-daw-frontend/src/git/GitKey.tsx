@@ -9,11 +9,13 @@ import { m } from "../paraglide/messages.js";
 import { copyText } from "./copyText";
 import { useGitTransport } from "./GitContext";
 import { explain, git } from "./gitApi";
+import { OldKey } from "./OldKey";
 
 export function GitKey({ fail }: { fail: (message: string) => void }) {
   const t = useGitTransport();
   const [publicKey, setPublicKey] = useState("");
   const [synced, setSynced] = useState(false);
+  const [oldHosts, setOldHosts] = useState<string[] | null>(null);
   const [copy, setCopy] = useState<"idle" | "copied" | "failed">("idle");
   const area = useRef<HTMLTextAreaElement>(null);
   useEffect(() => {
@@ -25,6 +27,7 @@ export function GitKey({ fail }: { fail: (message: string) => void }) {
         if (!live) return;
         setPublicKey(k.publicKey);
         setSynced(k.synced === true);
+        setOldHosts(k.oldKey ? k.oldKey.hosts : null);
       })
       .catch((e) => live && fail(explain(e)));
     return () => {
@@ -69,6 +72,13 @@ export function GitKey({ fail }: { fail: (message: string) => void }) {
             {synced ? m["git.keyShared"]() : m["git.keyLocal"]()}
           </p>
           <p className="text-fg-2 type-secondary">{m["git.keyInstall"]()}</p>
+          {oldHosts && (
+            <OldKey
+              hosts={oldHosts}
+              fail={fail}
+              forgotten={() => setOldHosts(null)}
+            />
+          )}
         </>
       ) : (
         <p className="text-fg-2 type-secondary">

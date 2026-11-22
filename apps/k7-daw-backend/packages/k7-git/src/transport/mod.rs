@@ -62,6 +62,8 @@ pub struct Net {
     /// `git-lfs-authenticate` answers, kept until they expire.
     pub(crate) lfs_auth:
         std::sync::Mutex<std::collections::HashMap<String, crate::lfs::ssh::Granted>>,
+    /// The `host:port` that took the Mac's old key at their last sign-in, having refused the shared one.
+    pub(crate) old_key_hosts: std::sync::Mutex<std::collections::BTreeSet<String>>,
 }
 
 impl Net {
@@ -83,6 +85,7 @@ impl Net {
             http: OnceLock::new(),
             idle: IDLE,
             lfs_auth: Default::default(),
+            old_key_hosts: Default::default(),
         })
     }
 
@@ -96,6 +99,7 @@ impl Net {
             http: OnceLock::new(),
             idle,
             lfs_auth: Default::default(),
+            old_key_hosts: Default::default(),
         })
     }
 
@@ -109,6 +113,20 @@ impl Net {
     pub fn with_idle(self: Arc<Net>, idle: std::time::Duration) -> Arc<Net> {
         let allow = self.allow_file;
         self.rebuilt(allow, idle)
+    }
+
+    /// The hosts that still know only the Mac's old key (`host:port`), as their last sign-in found.
+    pub fn old_key_hosts(&self) -> Vec<String> {
+        let h = self.old_key_hosts.lock().unwrap_or_else(|p| p.into_inner());
+        h.iter().cloned().collect()
+    }
+
+    /// Forgets which hosts took the old key, once the key itself is gone.
+    pub fn clear_old_key_hosts(&self) {
+        self.old_key_hosts
+            .lock()
+            .unwrap_or_else(|p| p.into_inner())
+            .clear();
     }
 
     /// The trusted servers, for the dialog that adds one.

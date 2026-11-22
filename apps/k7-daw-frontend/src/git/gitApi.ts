@@ -133,7 +133,17 @@ export const git = {
     call<{ ok: boolean }>(t, "identity", { json: id }),
   /** The device's public SSH key line, made on first use; the private half never leaves the device. */
   key: (t: GitTransport) =>
-    call<{ publicKey: string; synced?: boolean }>(t, "key"),
+    call<{
+      publicKey: string;
+      synced?: boolean;
+      /** A Mac's own key kept beside the shared one; `hosts` took it at their last sign-in. */
+      oldKey?: { publicKey: string; hosts: string[] };
+    }>(t, "key"),
+  /** Deletes the Mac's old key only; the shared key stays. */
+  forgetOldKey: (t: GitTransport) =>
+    call<{ ok: boolean; forgotten: boolean }>(t, "forget-old-key", {
+      post: true,
+    }),
   /** Takes a server off this account's trusted list, so the next contact shows its key again. */
   forgetHost: (t: GitTransport, target: { host: string; port?: number }) =>
     call<{ ok: boolean; forgotten: boolean }>(t, "forget-host", {

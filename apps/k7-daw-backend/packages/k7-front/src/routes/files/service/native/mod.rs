@@ -276,6 +276,8 @@ mod tests_git_history;
 #[cfg(test)]
 mod tests_git_review;
 #[cfg(test)]
+mod tests_git_shared_key;
+#[cfg(test)]
 #[cfg(test)]
 mod tests_history;
 #[cfg(test)]

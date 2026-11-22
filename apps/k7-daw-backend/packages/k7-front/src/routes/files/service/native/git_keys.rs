@@ -44,13 +44,18 @@ pub(super) fn set_identity(ctx: &Ctx, b: &Value) -> Response {
     }
 }
 
-/// `GET /git/key`: the device's public SSH key, made on first use; the private half never leaves the keychain.
+/// `GET /git/key`: the device's public SSH key, made on first use, and the Mac's old key when one is kept beside it.
 pub(super) fn key(ctx: &Ctx) -> Response {
-    match auth::public_key(&*ctx.secrets) {
-        Ok(public) => json_answer(
-            200,
-            &key_answer(&public, auth::key_is_synced(&*ctx.secrets)),
-        ),
+    let read = || -> Result<Value, Error> {
+        let public = auth::public_key(&*ctx.secrets)?;
+        let mut answer = key_answer(&public, auth::key_is_synced(&*ctx.secrets));
+        if let Some(old) = auth::old_public_key(&*ctx.secrets)? {
+            answer["oldKey"] = json!({ "publicKey": old, "hosts": ctx.net.old_key_hosts() });
+        }
+        Ok(answer)
+    };
+    match read() {
+        Ok(answer) => json_answer(200, &answer),
         Err(e) => answer_error(&e),
     }
 }
@@ -58,6 +63,17 @@ pub(super) fn key(ctx: &Ctx) -> Response {
 /// The page's answer: the public line and whether the key is shared; nothing of the private half.
 fn key_answer(public: &str, synced: bool) -> Value {
     json!({ "publicKey": public, "synced": synced })
+}
+
+/// `POST /git/forget-old-key`: deletes the Mac's old key, and nothing else; the shared key stays.
+pub(super) fn forget_old_key(ctx: &Ctx) -> Response {
+    match auth::forget_old_key(&*ctx.secrets) {
+        Ok(was) => {
+            ctx.net.clear_old_key_hosts();
+            json_answer(200, &json!({ "ok": true, "forgotten": was }))
+        }
+        Err(e) => answer_error(&e),
+    }
 }
 
 /// `POST /git/forget-host`: takes the server off the trusted list, so the next connection meets it as a first contact.

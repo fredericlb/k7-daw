@@ -31,7 +31,7 @@ pub struct StoreSpec {
     pub access_policy: Option<&'static str>,
 }
 
-/// What an iPhone or iPad shares with the person's other Apple devices: the SSH key and the forge tokens.
+/// What an Apple device shares with the person's other ones: the SSH key and the forge tokens.
 pub fn is_shared(host: &str) -> bool {
     host == super::keys::KEY_HOST || super::synced::is_token(host)
 }
@@ -39,7 +39,7 @@ pub fn is_shared(host: &str) -> bool {
 /// Whether this Mac app carries its iCloud entitlements, said once by the host before the front starts (docs/git.md).
 static MAC_ICLOUD: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
 
-/// The Mac app's word that it is signed with its provisioning profile: the forge tokens then sync; a no-op elsewhere.
+/// The Mac app's word that it is signed with its provisioning profile: the tokens and the SSH key then sync; a no-op elsewhere.
 pub fn use_icloud_keychain() {
     MAC_ICLOUD.store(true, std::sync::atomic::Ordering::Relaxed);
 }
@@ -205,14 +205,15 @@ pub fn device_store(folder: PathBuf, account: &str) -> std::sync::Arc<dyn Secret
         };
         #[cfg(target_os = "macos")]
         if MAC_ICLOUD.load(std::sync::atomic::Ordering::Relaxed) {
-            // The tokens travel; the SSH key stays this Mac's own, the one its forges already hold.
+            // The tokens and the SSH key travel; the Mac's own key stays here as the old key (docs/git.md).
             return std::sync::Arc::new(super::synced::Synced {
                 synced: super::secret_apple::Protected {
                     account: account.to_string(),
                     cloud: true,
                 },
                 local: here,
-                travels: super::synced::is_token,
+                travels: is_shared,
+                keeps_old: true,
             });
         }
         std::sync::Arc::new(here)
@@ -228,6 +229,7 @@ pub fn device_store(folder: PathBuf, account: &str) -> std::sync::Arc<dyn Secret
             synced: protected(true),
             local: protected(false),
             travels: is_shared,
+            keeps_old: false,
         })
     }
     #[cfg(target_os = "android")]

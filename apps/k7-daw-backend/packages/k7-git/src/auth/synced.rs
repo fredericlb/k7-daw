@@ -1,10 +1,12 @@
 //! synced.rs — an Apple keychain as two stores: the iCloud-synchronized one for the entries that travel, the device's
 //! own for the rest (`docs/git.md`, "Credentials"). What a reader gets wrong: an entry that travels and is found only in
-//! the device's store was kept by an earlier k7; the first read moves it to the synced store and deletes the old one.
+//! the device's store was kept by an earlier k7; the first read moves it to the synced store and deletes the old one,
+//! except the SSH key where `keeps_old` is set: the device's own key is then kept, local, as the old key.
 
 use std::io;
 
 use super::Secrets;
+use super::keys::{KEY_HOST, OLD_KEY_HOST};
 
 /// The forge tokens' keychain hosts: GitHub's, and every Forgejo server's `forge:<id>`.
 pub const GITHUB_TOKEN_HOST: &str = "github-oauth";
@@ -25,6 +27,23 @@ pub struct Synced<S, L> {
     pub synced: S,
     pub local: L,
     pub travels: fn(&str) -> bool,
+    /// The Mac's rule: the device's own SSH key, replaced by the shared one, stays in `local` as the old key.
+    pub keeps_old: bool,
+}
+
+impl<S: Secrets, L: Secrets> Synced<S, L> {
+    /// The device's own entry once the synced one rules: kept as the old key when it is another key, then dropped.
+    fn retire(&self, host: &str, user: &str, shared: &str) {
+        if !self.keeps_old || host != KEY_HOST {
+            return;
+        }
+        let Ok(Some(own)) = self.local.get(host, user) else {
+            return;
+        };
+        if own == shared || self.local.set(OLD_KEY_HOST, user, &own).is_ok() {
+            let _ = self.local.delete(host, user);
+        }
+    }
 }
 
 impl<S: Secrets, L: Secrets> Secrets for Synced<S, L> {
@@ -33,12 +52,22 @@ impl<S: Secrets, L: Secrets> Secrets for Synced<S, L> {
             return self.local.get(host, user);
         }
         if let Some(p) = self.synced.get(host, user)? {
+            self.retire(host, user, &p);
             return Ok(Some(p));
         }
         let Some(p) = self.local.get(host, user)? else {
             return Ok(None);
         };
+        // Another device's entry may have arrived since the first read: the synced store wins whenever it holds one.
+        if let Some(theirs) = self.synced.get(host, user)? {
+            self.retire(host, user, &theirs);
+            return Ok(Some(theirs));
+        }
         self.synced.set(host, user, &p)?;
+        if self.keeps_old && host == KEY_HOST {
+            // The promoted key is kept too: should another device's write win in iCloud, this Mac still has its own.
+            self.local.set(OLD_KEY_HOST, user, &p)?;
+        }
         let _ = self.local.delete(host, user);
         Ok(Some(p))
     }
@@ -78,6 +107,7 @@ mod tests {
             synced: synced.clone(),
             local: local.clone(),
             travels: is_token,
+            keeps_old: false,
         };
         (synced, local, s)
     }
@@ -129,5 +159,85 @@ mod tests {
         assert_eq!(synced.get_for("device-ssh-key", "k7"), None);
         assert_eq!(synced.get_for("forge:h", "k7").as_deref(), Some("tok"));
         assert!(!s.is_synced("device-ssh-key", "k7"));
+    }
+
+    /// The Mac's two stores: the SSH key travels, and the Mac's own key is kept as the old one.
+    fn mac() -> (
+        MemorySecrets,
+        MemorySecrets,
+        Synced<MemorySecrets, MemorySecrets>,
+    ) {
+        let (synced, local) = (MemorySecrets::default(), MemorySecrets::default());
+        let s = Synced {
+            synced: synced.clone(),
+            local: local.clone(),
+            travels: crate::auth::is_shared,
+            keeps_old: true,
+        };
+        (synced, local, s)
+    }
+
+    #[test]
+    fn a_mac_adopts_the_shared_key_an_iphone_made_and_keeps_its_own_as_the_old_key() {
+        let (synced, local, s) = mac();
+        let phone = crate::auth::public_key(&synced).unwrap();
+        let own = crate::auth::public_key(&local).unwrap();
+        assert_ne!(phone, own);
+        assert_eq!(crate::auth::public_key(&s).unwrap(), phone);
+        assert!(crate::auth::key_is_synced(&s));
+        assert_eq!(local.get_for(KEY_HOST, "k7"), None);
+        assert_eq!(
+            crate::auth::old_public_key(&s).unwrap().as_deref(),
+            Some(own.as_str())
+        );
+    }
+
+    #[test]
+    fn a_mac_promotes_its_key_when_the_store_is_empty_and_the_copy_it_keeps_is_no_old_key() {
+        let (synced, local, s) = mac();
+        let own = crate::auth::public_key(&local).unwrap();
+        assert_eq!(crate::auth::public_key(&s).unwrap(), own);
+        assert_eq!(crate::auth::public_key(&synced).unwrap(), own);
+        assert!(local.get_for(OLD_KEY_HOST, "k7").is_some(), "kept");
+        assert_eq!(crate::auth::old_public_key(&s).unwrap(), None);
+        // Another device's write wins in iCloud: the kept copy is then the old key.
+        let other = MemorySecrets::default();
+        let theirs = crate::auth::public_key(&other).unwrap();
+        synced
+            .set(KEY_HOST, "k7", &other.get_for(KEY_HOST, "k7").unwrap())
+            .unwrap();
+        assert_eq!(crate::auth::public_key(&s).unwrap(), theirs);
+        assert_eq!(
+            crate::auth::old_public_key(&s).unwrap().as_deref(),
+            Some(own.as_str())
+        );
+    }
+
+    #[test]
+    fn forgetting_the_old_key_deletes_it_alone() {
+        let (synced, local, s) = mac();
+        let shared = crate::auth::public_key(&synced).unwrap();
+        crate::auth::public_key(&local).unwrap();
+        crate::auth::public_key(&s).unwrap();
+        assert!(crate::auth::forget_old_key(&s).unwrap());
+        assert_eq!(crate::auth::old_public_key(&s).unwrap(), None);
+        assert_eq!(crate::auth::public_key(&s).unwrap(), shared);
+        assert!(!crate::auth::forget_old_key(&s).unwrap());
+    }
+
+    #[test]
+    fn an_iphone_keeps_no_old_key() {
+        let (synced, local, _) = pair();
+        let s = Synced {
+            synced: synced.clone(),
+            local: local.clone(),
+            travels: crate::auth::is_shared,
+            keeps_old: false,
+        };
+        crate::auth::public_key(&synced).unwrap();
+        crate::auth::public_key(&local).unwrap();
+        crate::auth::public_key(&s).unwrap();
+        assert_eq!(local.get_for(OLD_KEY_HOST, "k7"), None);
+        assert!(local.get_for(KEY_HOST, "k7").is_some(), "left as it was");
     }
 }

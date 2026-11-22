@@ -1,4 +1,5 @@
-//! keys.rs — the device's one SSH key: an ed25519 key made by the app on first need and kept as a secret.
+//! keys.rs — the device's one SSH key: an ed25519 key made by the app on first need and kept as a secret, and on a
+//! Mac with iCloud the Mac's old key, kept beside the shared one as a fallback until the person forgets it.
 //! What a reader gets wrong: the private text goes from `generate` to the store and to the SSH client, never to a
 //! caller outside the crate; `device_key` hands out the PUBLIC line, and a person never brings a key of their own.
 
@@ -18,6 +19,9 @@ const KEY_MARK: &str = "k7-ssh-key:";
 /// The entry the device's key lives in: one per k7 account on the device, whatever the server.
 pub(super) const KEY_HOST: &str = "device-ssh-key";
 pub(super) const KEY_USER: &str = "k7";
+
+/// The Mac's own key once the shared one replaced it: in the device's store only, never synced, never deleted unasked.
+pub(super) const OLD_KEY_HOST: &str = "old-device-ssh-key";
 
 /// Two first calls at once must not each make a key.
 static MAKING: Mutex<()> = Mutex::new(());
@@ -53,13 +57,27 @@ fn io(e: std::io::Error) -> Error {
     Error::Io(format!("the device's keychain: {e}"))
 }
 
+fn decode(kept: &str) -> Result<PrivateKey, Error> {
+    decode_secret_key(&pem_of(kept)?, None).map_err(|e| Error::BadKey(e.to_string()))
+}
+
+fn line_of(key: &PrivateKey) -> Result<String, Error> {
+    key.public_key()
+        .to_openssh()
+        .map_err(|e| Error::BadKey(e.to_string()))
+}
+
 /// The device's key, made and stored when there is none yet.
 pub(crate) fn device_key(secrets: &dyn Secrets) -> Result<PrivateKey, Error> {
     let _one = MAKING.lock().unwrap_or_else(|p| p.into_inner());
     if let Some(kept) = secrets.get(KEY_HOST, KEY_USER).map_err(io)? {
-        return decode_secret_key(&pem_of(&kept)?, None).map_err(|e| Error::BadKey(e.to_string()));
+        return decode(&kept);
     }
     let (pem, _) = generate("k7")?;
+    // A key another device synced meanwhile is adopted: a device makes one only when the store is still empty.
+    if let Some(kept) = secrets.get(KEY_HOST, KEY_USER).map_err(io)? {
+        return decode(&kept);
+    }
     secrets
         .set(KEY_HOST, KEY_USER, &secret_of(&pem))
         .map_err(io)?;
@@ -73,10 +91,29 @@ pub fn key_is_synced(secrets: &dyn Secrets) -> bool {
 
 /// The device's public key as an `authorized_keys` line, made on first use; the private half never leaves.
 pub fn public_key(secrets: &dyn Secrets) -> Result<String, Error> {
-    device_key(secrets)?
-        .public_key()
-        .to_openssh()
-        .map_err(|e| Error::BadKey(e.to_string()))
+    line_of(&device_key(secrets)?)
+}
+
+/// The Mac's old key when it is not the device key itself: the fallback a host that never got the shared key still takes.
+pub(crate) fn old_key(secrets: &dyn Secrets) -> Result<Option<PrivateKey>, Error> {
+    let Some(kept) = secrets.get(OLD_KEY_HOST, KEY_USER).map_err(io)? else {
+        return Ok(None);
+    };
+    let old = decode(&kept)?;
+    let ours = line_of(&device_key(secrets)?)?;
+    Ok((line_of(&old)? != ours).then_some(old))
+}
+
+/// The old key's public line, when there is one apart from the device key.
+pub fn old_public_key(secrets: &dyn Secrets) -> Result<Option<String>, Error> {
+    old_key(secrets)?.as_ref().map(line_of).transpose()
+}
+
+/// Deletes the Mac's old key, and only it: the person's word that every host holds the shared key.
+pub fn forget_old_key(secrets: &dyn Secrets) -> Result<bool, Error> {
+    let was = secrets.get(OLD_KEY_HOST, KEY_USER).map_err(io)?.is_some();
+    secrets.delete(OLD_KEY_HOST, KEY_USER).map_err(io)?;
+    Ok(was)
 }
 
 #[cfg(test)]

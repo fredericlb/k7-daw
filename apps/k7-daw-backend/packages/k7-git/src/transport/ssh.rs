@@ -9,12 +9,12 @@ use std::time::Duration;
 use git2::transport::{Service, SmartSubtransport, SmartSubtransportStream};
 use russh::Disconnect;
 use russh::client::{self, Handle};
-use russh::keys::{HashAlg, PrivateKeyWithHashAlg, PublicKeyOrCertificate};
+use russh::keys::{HashAlg, PrivateKey, PrivateKeyWithHashAlg, PublicKeyOrCertificate};
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 
 use super::{Net, fail, with_op};
 use crate::Error;
-use crate::auth::{KnownHosts, device_key};
+use crate::auth::{KnownHosts, device_key, old_key};
 
 const READY: Duration = Duration::from_secs(20);
 
@@ -241,7 +241,13 @@ fn start(
         let mut ssh = client::connect(config, (addr.host.as_str(), addr.port), pin)
             .await
             .map_err(|e| key_verdict(&verdict, e))?;
-        sign_in(&mut ssh, net, &user).await?;
+        sign_in(
+            &mut ssh,
+            net,
+            &user,
+            &format!("{}:{}", addr.host, addr.port),
+        )
+        .await?;
         let channel = ssh
             .channel_open_session()
             .await
@@ -266,8 +272,7 @@ fn key_verdict(verdict: &Mutex<Option<Error>>, e: russh::Error) -> Error {
         .unwrap_or_else(|| Error::Network(format!("the server cannot be reached: {e}")))
 }
 
-async fn sign_in(ssh: &mut Handle<Pin>, net: &Net, user: &str) -> Result<(), Error> {
-    let key = device_key(&*net.secrets)?;
+async fn offer(ssh: &mut Handle<Pin>, user: &str, key: PrivateKey) -> Result<bool, Error> {
     let hash = if key.algorithm().is_rsa() {
         ssh.best_supported_rsa_hash()
             .await
@@ -276,19 +281,35 @@ async fn sign_in(ssh: &mut Handle<Pin>, net: &Net, user: &str) -> Result<(), Err
     } else {
         None
     };
-    let ok = ssh
+    Ok(ssh
         .authenticate_publickey(user, PrivateKeyWithHashAlg::new(Arc::new(key), hash))
         .await
         .map_err(|e| Error::Network(e.to_string()))?
-        .success();
-    if ok {
-        Ok(())
-    } else {
-        Err(Error::Auth(
-            "the server refused the device's key for this user: open Settings → Services to add this device's key, or add its public key to the host"
-                .into(),
-        ))
+        .success())
+}
+
+/// The device key, then the Mac's old key once when the host refused it; which one worked is noted per host.
+async fn sign_in(ssh: &mut Handle<Pin>, net: &Net, user: &str, at: &str) -> Result<(), Error> {
+    let key = device_key(&*net.secrets)?;
+    let mut old_worked = false;
+    let mut ok = offer(ssh, user, key).await?;
+    if !ok && let Some(old) = old_key(&*net.secrets)? {
+        ok = offer(ssh, user, old).await?;
+        old_worked = ok;
     }
+    if ok {
+        let mut hosts = net.old_key_hosts.lock().unwrap_or_else(|p| p.into_inner());
+        if old_worked {
+            hosts.insert(at.to_string());
+        } else {
+            hosts.remove(at);
+        }
+        return Ok(());
+    }
+    Err(Error::Auth(
+        "the server refused the device's key for this user: open Settings → Services to add this device's key, or add its public key to the host"
+            .into(),
+    ))
 }
 
 struct Stream(Arc<Conn>);

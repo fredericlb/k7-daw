@@ -12,8 +12,8 @@ mod secret_map;
 mod synced;
 
 pub use hosts::{HOSTS_FILE, KnownHosts};
-pub(crate) use keys::device_key;
-pub use keys::{key_is_synced, public_key};
+pub(crate) use keys::{device_key, old_key};
+pub use keys::{forget_old_key, key_is_synced, old_public_key, public_key};
 pub use secret::{
     FileSecrets, MemorySecrets, SERVICE, Secrets, StoreSpec, WithFile, account_tag, device_store,
     entry_name, is_shared, store_spec, use_icloud_keychain,

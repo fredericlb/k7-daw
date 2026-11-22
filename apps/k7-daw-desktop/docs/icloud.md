@@ -2,8 +2,8 @@
 
 A Mac app given a provisioning profile shares with the person's iPhone and iPad what the iOS app keeps in iCloud: the
 workspace list and the Forgejo servers (the key-value store, `apps/k7-daw-backend/docs/roam.md`), and the GitHub and
-Forgejo sign-ins (iCloud Keychain, `apps/k7-daw-backend/docs/git.md`, "Credentials"). A build without a profile is the
-plain one, with every sign-in and list kept on the Mac. The code is `src-tauri/src/icloud.rs` and `scripts/desktopBuild.mjs`.
+Forgejo sign-ins and the one SSH key (iCloud Keychain, `apps/k7-daw-backend/docs/git.md`, "Credentials"). A build without
+a profile is the plain one, with every sign-in, list and key kept on the Mac. The code is `src-tauri/src/icloud.rs` and `scripts/desktopBuild.mjs`.
 
 ## Choices
 
@@ -13,10 +13,11 @@ plain one, with every sign-in and list kept on the Mac. The code is `src-tauri/s
 | the build reads the App ID prefix and the team from the profile and writes literal values (`<prefix>.rocks.k7.daw`) into a copy of `macos/app.entitlements` | codesign expands no `$(TeamIdentifierPrefix)`, which Xcode alone substitutes; a profile of another App ID or without iCloud is refused before the build |
 | the entitlements are `com.apple.application-identifier`, `com.apple.developer.team-identifier`, `keychain-access-groups` (`<prefix>.rocks.k7.daw` first) and `com.apple.developer.ubiquity-kvstore-identifier` (`<team>.rocks.k7.daw`) | the same group and store identifier as the iOS app's `k7.entitlements`, so both read one keychain group and one store |
 | a profile needs a real `APPLE_SIGNING_IDENTITY`, one the profile lists | an ad-hoc signature matches no profile |
-| the app turns iCloud on when its bundle holds `embedded.provisionprofile`, before the front starts: the front's roaming store and the synced keychain for the tokens | the profile and the entitlements come together from the build, so one file says both |
+| the app turns iCloud on when its bundle holds `embedded.provisionprofile`, before the front starts: the front's roaming store and the synced keychain for the tokens and the SSH key | the profile and the entitlements come together from the build, so one file says both |
 | the key-value store is reached through the Objective-C runtime's C functions (`objc_msgSend` cast per message), with no binding crate | a few messages of one class do not earn a dependency; the casts are the price |
 | the store passes the front's keys alone (`ws.`, `forge.`), and is read on every call, never cached | iCloud updates the store in place; a read is current |
-| the Mac's SSH key stays the Mac's | its hosts already list it (`apps/k7-daw-backend/docs/git.md`) |
+| the Mac signs in with the Apple devices' one shared SSH key: it adopts the iPhone's or iPad's when iCloud holds one, and otherwise puts its own there | the user's choice, one key to manage for every Apple device (`apps/k7-daw-backend/docs/git.md`, "Credentials") |
+| the Mac's previous key stays on the Mac as its old key, tried once when a host refuses the shared one, until the person forgets it under the key in the Connect dialog | its hosts list that key: a host not yet given the shared key keeps working, and the page names it |
 | a profile is per machine for development (the Mac's provisioning UDID is in it) and per team for Developer ID | Apple's rule for each kind of profile |
 
 ## How to build with iCloud
