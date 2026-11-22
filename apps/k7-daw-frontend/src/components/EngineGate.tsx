@@ -5,6 +5,7 @@
 // to resolve, and a lost one leaves the project open under a banner. See ../../docs/shell.md.
 
 import type { HostedFiles } from "@studio/engine-browser/access";
+import { retryLoopback } from "@studio/engine-browser/probe";
 import { type GateEngine, projectResolved } from "@studio/project-shell/gate";
 import { parseLaunch, projectClaimKey } from "@studio/project-shell/launch";
 import { GateWait } from "@studio/project-shell/progress";
@@ -143,13 +144,16 @@ export function EngineGate({
       if (here) take(here);
       else {
         // The registry names an engine of this account that was silent: looked for again, a few times, rather than left silent.
-        if (
-          retriesLeft.current > 0 &&
-          ranked.some((r) => r.engine.access === "owner" && r.token === null)
-        ) {
+        const silent = ranked.filter(
+          (r) => r.engine.access === "owner" && r.token === null,
+        );
+        if (retriesLeft.current > 0 && silent.length) {
           retriesLeft.current--;
           retryTimer.current = setTimeout(() => {
-            if (!chosenRef.current) void lookRef.current();
+            if (chosenRef.current) return;
+            // The loopback that just missed rests two minutes otherwise, and is the very address this look is for.
+            for (const r of silent) retryLoopback(r.engine);
+            void lookRef.current();
           }, OWNED_RETRY_MS);
         }
         // Said once per look, to the console a phone's logcat carries: what was offered, and why none is this device's.

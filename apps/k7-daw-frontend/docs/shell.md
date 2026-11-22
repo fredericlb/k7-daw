@@ -21,7 +21,9 @@ ticket names it, and that is what binds it at the hub (`apps/k7-daw-backend/docs
 probe gives an address 3 s to answer `whoami`, and a page still loading (a slow phone, or an emulator
 drawing on the CPU) can hold the reply past that while the engine answered in milliseconds; the
 registry naming an engine of this account is the evidence that one is there. An unowned engine is
-never retried, as it is never taken. When none is found, the gate says on the console what it was offered.
+never retried, as it is never taken. A retry lifts the two-minute rest a loopback that missed is given
+(`retryLoopback` in `@studio/engine-browser/probe`), since that address is the one it looks for. When none
+is found, the gate says on the console what it was offered.
 
 **Every wait is one bar along the bottom** (`@studio/project-shell/progress`), never a screen: the
 sign-in check, the files, the address resolved, the sync, then — with the project already drawn —
