@@ -47,6 +47,7 @@ A row marked DEPARTS differs from the TypeScript; each such case is `ts: false` 
 | 176 | `comp_pieces`, `seam_crossfades` and `comp_clips` answer `None` past the budget; `comp_clips` and `mark_crossfades` take the budget, and `comp_clips` a closure that compiles a take | the caller lends the one budget a pass spends |
 | 177 | the unit tests of `audio_paths` are in `clips_paths.rs` | `clips_placement.rs` stays under 500 lines |
 | 178 | `pattern_shares` answers the shares and the findings: a file serves at most `MAX_FILE_LANES = 32` pattern lanes and a project `MAX_LANES = 128`; a lane past either has no share, so no plugin, and its file gets one ERROR naming its strudel path | each lane carries the file's text (up to 1 MiB) and every claimed name per half, so the cost is the square of the lanes; a realistic project has a handful |
+| 179 | a track's clip ids are unique per PLACEMENT: `distinct_ids` (`clips/distinct.rs`) gives an event repeating an earlier event's id `#2`, `#3`… in event order, its comp's pieces and `comp.of` alike, after the lane is placed and before the crossfades; an event that repeats an earlier one exactly is a WARNING on the lane's file | a clip may be placed many times, even at one beat of one lane, and the engine keys every map by id: without it, its safety net renames the second in memory and warns on every open |
 
 ## The gate
 

@@ -45,6 +45,7 @@ mod curves_hostile;
 mod curves_negative;
 mod decode;
 mod disk_cost;
+mod doc_clip_ids;
 mod doc_compile;
 mod doc_freeze;
 mod doc_golden;

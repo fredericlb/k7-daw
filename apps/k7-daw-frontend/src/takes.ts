@@ -3,7 +3,10 @@
 // takes as rows, and which spans of each row the comp plays. Pure, so the arithmetic is a test.
 // See apps/k7-daw-frontend/packages/song/docs/takes.md and docs/clipEditors.md.
 
-import { materialRefOf } from "@studio/song-schema/placementId";
+import {
+  materialRefOf,
+  placementStartOf,
+} from "@studio/song-schema/placementId";
 import { SERIES_COLORS, seriesColor } from "@studio/song-schema/seriesColors";
 import {
   beatsToDuration,
@@ -56,8 +59,7 @@ export function takesEventOf(
   );
   const clip = pieces[0];
   if (!lane || !clip) return null;
-  const at = eventId.lastIndexOf("@");
-  const start = Number(eventId.slice(at + 1));
+  const start = placementStartOf(eventId);
   const ref = materialRefOf(eventId);
   if (!Number.isFinite(start)) return null;
   const num = project.timeSigNumerator;

@@ -36,7 +36,7 @@ fn fold_group(of: &str, mut pieces: Vec<WebClip>) -> WebClip {
             last = p;
         }
     }
-    let (name, at) = split_of(of);
+    let (name, at) = split_of(crate::clips::without_repeat(of));
     let start = js_number(at).unwrap_or(first.start);
     let folded = WebClip {
         id: of.to_owned(),

@@ -1,6 +1,7 @@
 // clips/timelines.rs — a timeline placed as one event, expanded into the events it holds, each shifted and cut at its end.
 // A reader would get wrong that the expansion happens BEFORE an event is routed to a half: one timeline feeds both of its lane's outputs.
 
+use super::distinct::distinct_ids;
 use super::doc::{ClipDoc, ClipKind, EventDoc, NestDoc, TimelineDoc, TimelineLaneDoc};
 use super::id::{NEST_SEP, js_max, js_min, placement_id, timeline_lane_id};
 use super::placer::{Leaf, Placer, Within};
@@ -287,7 +288,7 @@ impl<'a> Placer<'a> {
                 let events = lane.events.as_deref().unwrap_or(&[]);
                 let mut leaves = Vec::new();
                 self.expand_into(events, &file, None, &mut vec![id.clone()], &mut leaves);
-                let clips = leaves.iter().flat_map(|l| self.place(l)).collect();
+                let clips = distinct_ids(leaves.iter().map(|l| self.place(l))).clips;
                 lanes.push(TimelineLaneDoc {
                     id: timeline_lane_id(id, &lane.lane.0),
                     name: lane.lane.0.clone(),

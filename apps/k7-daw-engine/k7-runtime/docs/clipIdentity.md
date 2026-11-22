@@ -4,7 +4,7 @@ A `ClipDoc` carries two names, and they are not interchangeable:
 
 | field | what it is | unique? |
 |---|---|---|
-| `id` | the PLACEMENT — `placementId(ref, start)` in the compiler | yes, by construction |
+| `id` | the PLACEMENT — `placementId(ref, start)` in the compiler, `#2`, `#3`… on a repeat at one beat of one track | yes, by construction: a clip may be placed many times, even at one beat |
 | `name` | the MATERIAL — `name: ref`, the clip or sequence being placed | **no**: shared by every placement of it |
 
 The diff keys on `id` and is correct. The **engine projection** is where the two can be confused,

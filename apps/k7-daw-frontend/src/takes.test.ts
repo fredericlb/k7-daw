@@ -83,6 +83,19 @@ describe("takesEventOf", () => {
     expect(ev?.comp).toEqual([{ take: "t2", from: 6, to: 8 }]);
   });
 
+  it("finds a placement repeated at one beat by its `#2` id", () => {
+    const own = project.tracks[0].clips[2];
+    const repeat = { ...own, id: "other@16#2" };
+    const twice = {
+      ...project,
+      tracks: [{ ...project.tracks[0], clips: [own, repeat] }],
+    } as unknown as WebProject;
+    expect(takesEventOf(twice, "keys", "other@16#2")).toMatchObject({
+      ref: "other",
+      start: 16,
+    });
+  });
+
   it("says nothing for a clip that is not on that lane", () => {
     expect(takesEventOf(project, "keys", "nope@1")).toBeNull();
   });
