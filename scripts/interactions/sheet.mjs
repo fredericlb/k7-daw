@@ -63,7 +63,7 @@ function screenOf(s) {
     code: c,
     name: s.Name,
     drawn,
-    boards: drawn ? `${s["Canvas boards"]}, ${s["Interactions board"]}` : "",
+    boards: drawn ? s["Canvas boards"] : "",
     y: drawn ? Number(s["Canvas y"]) : null,
     shared: s["Shared with"] ? s["Shared with"].split(/\s+/).map(code) : [],
     rows: [],
@@ -97,7 +97,7 @@ export function loadSheet(dir) {
     "Not drawn",
     "Area",
   ]);
-  const SC = ["Number", "Name", "Canvas boards", "Interactions board"];
+  const SC = ["Number", "Name", "Canvas boards"];
   const sc = table(dir, "screens", [...SC, "Drawn", "Shared with", "Canvas y"]);
   const screens = sc.map(screenOf).sort((a, b) => a.n - b.n);
   const byCode = new Map(screens.map((s) => [s.code, s]));

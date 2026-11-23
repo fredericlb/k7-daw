@@ -1,15 +1,14 @@
 # The interactions Sheet
 
 The [K7 DAW Interactions Sheet](https://claude.ai/artifact/GWymnBJpibPCE4b32ZR1gz) is the single source of truth
-for k7's screens and their interactions, on every device. [INTERACTIONS.md](INTERACTIONS.md) and the
-"Interactions · <screen>" boards of the [design canvas](https://claude.ai/artifact/SdfxjgJHEPVHgzTiimzYY6) are
+for k7's screens and their interactions, on every device. [INTERACTIONS.md](INTERACTIONS.md) and the CSVs are
 generated from it, one way only: neither is edited by hand, and nothing flows back into the Sheet.
 
 ## What the Sheet holds
 
 - **Interactions**: one row per interaction — its ID, its screen, the mouse / trackpad, keyboard and touch ways,
-  the devices (`T` iPad, `M` iPhone, `D` Desktop), whether the element is drawn on the boards, its area.
-- **Screens**: one row per screen of the canvas, with its boards and its place on the canvas.
+  the devices (`T` iPad, `M` iPhone, `D` Desktop), whether the element is drawn on the screen's boards, its area.
+- **Screens**: one row per screen, with the names of its boards on the [design canvas](https://claude.ai/artifact/SdfxjgJHEPVHgzTiimzYY6) and whether it is drawn. The `Interactions board` and `Canvas y` columns are unused.
 - **Areas**: the one-line description that opens each area the first time it appears.
 - **Gaps**: what was found missing or inconsistent while listing.
 
@@ -20,10 +19,10 @@ generated from it, one way only: neither is edited by hand, and nothing flows ba
   Designs, tests and reviews name interactions by ID, so a renumbering would silently repoint them.
 - **The CSVs are committed** ([interactions/](interactions/)), so a refresh shows as a reviewable diff of rows
   before the generated files move.
-- **A branch that changes an interaction updates the Sheet**, then refreshes; it never edits INTERACTIONS.md, the
-  CSVs or a board by hand, since the next refresh would erase that edit.
-- **The boards are published by hand.** A script cannot publish to an Artifact, so the canvas follows the Sheet
-  only when someone publishes the boards.
+- **A branch that changes an interaction updates the Sheet**, then refreshes; it never edits INTERACTIONS.md or the
+  CSVs by hand, since the next refresh would erase that edit.
+- **The canvas holds the screens' boards only.** Interactions live in the Sheet and nothing draws them on the
+  canvas: the canvas is reorganised into pages by hand, and generated interaction boards fought that layout.
 
 ## Refreshing
 
@@ -32,6 +31,4 @@ generated from it, one way only: neither is edited by hand, and nothing flows ba
    Claude Docs connector reads the cells (`readCells`) and writes the same files. The connector has no export
    call for a Sheet.
 2. `node scripts/interactions/build.mjs` writes INTERACTIONS.md.
-3. `node scripts/interactions/boards.mjs <folder>` writes the `Ix<nn>.dc.html` boards and `entries.json`, their
-   place on the canvas.
-4. Publish the boards to the design canvas with the Artifact tool, and commit the CSVs with INTERACTIONS.md.
+3. Commit the CSVs with INTERACTIONS.md.

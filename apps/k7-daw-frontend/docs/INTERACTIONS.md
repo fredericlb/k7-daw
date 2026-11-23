@@ -9,55 +9,55 @@ On touch, a long-press (500 ms, held still) acts as a right-click wherever a rig
 
 ## Identifiers
 
-A screen is a row of the design canvas (an iPad, an iPhone and a Desktop board), numbered top to bottom; each device variant of a screen has its own identifier: `T` iPad (tablet), `M` iPhone (mobile), `D` Desktop. Screens 35 and after are listed here but not drawn on the canvas.
+A screen is a row of the design canvas (an iPad, an iPhone and a Desktop board), numbered top to bottom; each device variant of a screen has its own identifier: `T` iPad (tablet), `M` iPhone (mobile), `D` Desktop. A screen with no board is listed here as not drawn.
 An interaction is `<screen number>.<nn>` (`03.05`), one id shared by every device so the three variants converge on the same behaviour. The Devices column says where it applies: `D` when a mouse, trackpad or keyboard can do it, `T` when touch or an iPad keyboard can, `M` when touch can. A row lives on the first screen that shows its element; global, header, transport, command bar and context-menu rows are not repeated on later screens.
-† marks a row whose element is not drawn on that screen's boards (it is kept on the screen of its area). Each drawn screen has an "Interactions · <screen>" board to the right of its row on the canvas; the counts in the table are the rows each device can do.
+† marks a row whose element is not drawn on that screen's boards (it is kept on the screen of its area). The counts in the table are the rows each device can do.
 
 | Screen | Tablet | Mobile | Desktop | Canvas board(s) |
 |---|---|---|---|---|
-| 01 Home | 01T (41) | 01M (37) | 01D (43) | Artboard-hb0q, HomePhone, HomeDesk, HomeEmptyRemotePad, HomeEmptyRemotePhone, Ix01 |
-| 02 Tasks | 02T (4) | 02M (4) | 02D (4) | TasksPad, TasksPhone, TasksDesk, Ix02 |
-| 03 Arrangement · Audio | 03T (81) | 03M (70) | 03D (90) | ArrangePad, ArrangePhone, ArrangeDesk, Ix03 |
-| 04 Arrangement · Video | 04T (8) | 04M (8) | 04D (9) | ArrangeVideoPad, ArrangeVideoPhone, ArrangeVideoDesk, Ix04 |
-| 05 Graph | 05T (50) | 05M (48) | 05D (53) | GraphPad, GraphPhone, GraphDesk, Ix05 |
-| 06 Source | 06T (23) | 06M (20) | 06D (25) | SourcePad, SourcePhone, SourceDesk, Ix06 |
-| 07 Resources panel | 07T (7) | 07M (7) | 07D (7) | ResourcesPad, ResourcesPhone, ResourcesDesk, Ix07 |
-| 08 Tasks & history panel | 08T (9) | 08M (9) | 08D (10) | LogPad, LogPhone, LogDesk, Ix08 |
-| 09 Export panel | 09T (6) | 09M (6) | 09D (6) | SharePad, SharePhone, ShareDesk, Ix09 |
-| 10 Settings panel | 10T (5) | 10M (5) | 10D (5) | SettingsPad, SettingsPhone, SettingsDesk, Ix10 |
-| 11 Clip editor | 11T (28) | 11M (28) | 11D (28) | ClipZoomPad, ClipPhone, ClipZoomDesk, Ix11 |
-| 12 Piano roll | 12T (21) | 12M (20) | 12D (25) | PianoSidePad, PianoPhone, PianoSideDesk, Ix12 |
-| 13 Node chain editor | 13T (10) | 13M (10) | 13D (10) | ChainSidePad, ChainPhone, ChainSideDesk, Ix13 |
-| 14 Export · folder picker | 14T (0) | 14M (0) | 14D (0) | ExportPickPad, ExportPickPhone, ExportPickDesk, Ix14 |
-| 15 Export · saved | 15T (0) | 15M (0) | 15D (0) | ExportDonePad, ExportDonePhone, ExportDoneDesk, Ix15 |
-| 16 Pull in place | 16T (1) | 16M (1) | 16D (1) | PullPad, PullPhone, PullDesk, Ix16 |
-| 17 Takes mode | 17T (11) | 17M (11) | 17D (12) | TakesPad, TakesPhone, TakesDesk, Ix17 |
-| 18 Command palette | 18T (3) | 18M (3) | 18D (4) | CommandPad, CommandPhone, CommandDesk, Ix18 |
-| 19 Command palette · argument | 19T (4) | 19M (4) | 19D (4) | CommandArgPad, CommandArgPhone, CommandArgDesk, Ix19 |
-| 20 Turntables | 20T (27) | 20M (27) | 20D (27) | TurntablesPad, TurntablesPhone, TurntablesDesk, Ix20 |
-| 21 Library | 21T (6) | 21M (6) | 21D (6) | LibrariesPad, LibrariesPhone, LibrariesDesk, Ix21 |
+| 01 Home | 01T (41) | 01M (37) | 01D (43) | Artboard-hb0q, HomePhone, HomeDesk, HomeEmptyRemotePad, HomeEmptyRemotePhone |
+| 02 Tasks | 02T (4) | 02M (4) | 02D (4) | TasksPad, TasksPhone, TasksDesk |
+| 03 Arrangement · Audio | 03T (81) | 03M (70) | 03D (90) | ArrangePad, ArrangePhone, ArrangeDesk |
+| 04 Arrangement · Video | 04T (8) | 04M (8) | 04D (9) | ArrangeVideoPad, ArrangeVideoPhone, ArrangeVideoDesk |
+| 05 Graph | 05T (50) | 05M (48) | 05D (53) | GraphPad, GraphPhone, GraphDesk |
+| 06 Source | 06T (23) | 06M (20) | 06D (25) | SourcePad, SourcePhone, SourceDesk |
+| 07 Resources panel | 07T (7) | 07M (7) | 07D (7) | ResourcesPad, ResourcesPhone, ResourcesDesk |
+| 08 Tasks & history panel | 08T (9) | 08M (9) | 08D (10) | LogPad, LogPhone, LogDesk |
+| 09 Export panel | 09T (6) | 09M (6) | 09D (6) | SharePad, SharePhone, ShareDesk |
+| 10 Settings panel | 10T (5) | 10M (5) | 10D (5) | SettingsPad, SettingsPhone, SettingsDesk |
+| 11 Clip editor | 11T (28) | 11M (28) | 11D (28) | ClipZoomPad, ClipPhone, ClipZoomDesk |
+| 12 Piano roll | 12T (21) | 12M (20) | 12D (25) | PianoSidePad, PianoPhone, PianoSideDesk |
+| 13 Node chain editor | 13T (10) | 13M (10) | 13D (10) | ChainSidePad, ChainPhone, ChainSideDesk |
+| 14 Export · folder picker | 14T (0) | 14M (0) | 14D (0) | ExportPickPad, ExportPickPhone, ExportPickDesk |
+| 15 Export · saved | 15T (0) | 15M (0) | 15D (0) | ExportDonePad, ExportDonePhone, ExportDoneDesk |
+| 16 Pull in place | 16T (1) | 16M (1) | 16D (1) | PullPad, PullPhone, PullDesk |
+| 17 Takes mode | 17T (11) | 17M (11) | 17D (12) | TakesPad, TakesPhone, TakesDesk |
+| 18 Command palette | 18T (3) | 18M (3) | 18D (4) | CommandPad, CommandPhone, CommandDesk |
+| 19 Command palette · argument | 19T (4) | 19M (4) | 19D (4) | CommandArgPad, CommandArgPhone, CommandArgDesk |
+| 20 Turntables | 20T (27) | 20M (27) | 20D (27) | TurntablesPad, TurntablesPhone, TurntablesDesk |
+| 21 Library | 21T (6) | 21M (6) | 21D (6) | LibrariesPad, LibrariesPhone, LibrariesDesk |
 | 22 Frozen chains | 22T (0) | 22M (0) | 22D (0) | not drawn |
-| 23 App settings | 23T (25) | 23M (25) | 23D (25) | AppSettingsPad, AppSettingsPhone, AppSettingsDesk, AppSettingsDownloadsPad, AppSettingsDownloadsPhone, AppSettingsDownloadsDesk, AppSettingsAboutPad, AppSettingsAboutPhone, AppSettingsAboutDesk, AppSettingsGitHubPad, AppSettingsGitHubPhone, ServicesForgejoPad, ServicesForgejoPhone, ForgejoAddPad, ForgejoAddPhone, Ix23 |
-| 24 Logs panel | 24T (2) | 24M (2) | 24D (2) | LogsPad, LogsPhone, LogsDesk, Ix24 |
-| 25 Playlists panel | 25T (12) | 25M (12) | 25D (13) | PlaylistsPad, PlaylistsPhone, PlaylistsDesk, Ix25 |
-| 26 Command editor screen | 26T (10) | 26M (9) | 26D (10) | CommandEditorPad, CommandEditorPhone, CommandEditorDesk, Ix26 |
-| 27 Mixer panel | 27T (4) | 27M (4) | 27D (4) | MixerPad, MixerPhone, MixerDesk, Ix27 |
-| 28 Events panel | 28T (1) | 28M (1) | 28D (1) | EventsPad, EventsPhone, EventsDesk, Ix28 |
-| 29 Sync settings | 29T (6) | 29M (6) | 29D (6) | ConnectPad, ConnectPhone, ConnectDesk, Ix29 |
-| 30 Workspace history | 30T (3) | 30M (3) | 30D (3) | SyncHistoryPad, SyncHistoryPhone, SyncHistoryDesk, Ix30 |
-| 31 Conflict | 31T (5) | 31M (5) | 31D (5) | ConflictPad, ConflictPhone, ConflictDesk, Ix31 |
-| 32 Host key prompt | 32T (2) | 32M (2) | 32D (2) | HostKeyPad, HostKeyPhone, HostKeyDesk, Ix32 |
-| 33 Saves list | 33T (2) | 33M (2) | 33D (2) | CommitsPad, CommitsPhone, CommitsDesk, Ix33 |
-| 34 Save | 34T (4) | 34M (4) | 34D (4) | CommitPad, CommitPhone, CommitDesk, Ix34 |
+| 23 App settings | 23T (25) | 23M (25) | 23D (25) | AppSettingsPad, AppSettingsPhone, AppSettingsDesk, AppSettingsDownloadsPad, AppSettingsDownloadsPhone, AppSettingsDownloadsDesk, AppSettingsAboutPad, AppSettingsAboutPhone, AppSettingsAboutDesk, AppSettingsGitHubPad, AppSettingsGitHubPhone, ServicesForgejoPad, ServicesForgejoPhone, ForgejoAddPad, ForgejoAddPhone |
+| 24 Logs panel | 24T (2) | 24M (2) | 24D (2) | LogsPad, LogsPhone, LogsDesk |
+| 25 Playlists panel | 25T (12) | 25M (12) | 25D (13) | PlaylistsPad, PlaylistsPhone, PlaylistsDesk |
+| 26 Command editor screen | 26T (10) | 26M (9) | 26D (10) | CommandEditorPad, CommandEditorPhone, CommandEditorDesk |
+| 27 Mixer panel | 27T (4) | 27M (4) | 27D (4) | MixerPad, MixerPhone, MixerDesk |
+| 28 Events panel | 28T (1) | 28M (1) | 28D (1) | EventsPad, EventsPhone, EventsDesk |
+| 29 Sync settings | 29T (6) | 29M (6) | 29D (6) | ConnectPad, ConnectPhone, ConnectDesk |
+| 30 Workspace history | 30T (3) | 30M (3) | 30D (3) | SyncHistoryPad, SyncHistoryPhone, SyncHistoryDesk |
+| 31 Conflict | 31T (5) | 31M (5) | 31D (5) | ConflictPad, ConflictPhone, ConflictDesk |
+| 32 Host key prompt | 32T (2) | 32M (2) | 32D (2) | HostKeyPad, HostKeyPhone, HostKeyDesk |
+| 33 Saves list | 33T (2) | 33M (2) | 33D (2) | CommitsPad, CommitsPhone, CommitsDesk |
+| 34 Save | 34T (4) | 34M (4) | 34D (4) | CommitPad, CommitPhone, CommitDesk |
 | 35 Workspace tree | 35T (4) | 35M (4) | 35D (4) | not drawn |
 | 36 Engine page | 36T (11) | 36M (11) | 36D (11) | not drawn |
 | 37 Help | 37T (3) | 37M (3) | 37D (3) | not drawn |
 | 38 Curves | 38T (15) | 38M (15) | 38D (15) | not drawn |
 | 39 Chain and module builders | 39T (26) | 39M (24) | 39D (27) | not drawn |
-| 40 Surfaces | 40T (8) | 40M (8) | 40D (8) | SurfacesPad, SurfacesPhone, SurfacesDesk, RemoteSurfacePad, RemoteSurfacePhone, RemoteInUseDesk, Ix40 |
-| 41 Forge sign-in | 41T (10) | 41M (10) | 41D (10) | GitHubWaysPad, GitHubWaysPhone, DeviceFlowPad, DeviceFlowPhone, DeviceFlowExpiredPad, DeviceFlowExpiredPhone, GitHubPermissionPad, GitHubPermissionPhone, ForgejoSignInPad, ForgejoSignInPhone, Ix41 |
-| 42 Forge repositories | 42T (7) | 42M (7) | 42D (7) | GitHubPickerPad, GitHubPickerPhone, ConnectAccountsPad, ConnectAccountsPhone, NewRepoPad, NewRepoPhone, Ix42 |
-| 43 Clone a repository | 43T (2) | 43M (2) | 43D (2) | CloneWaysPad, CloneWaysPhone, CloneForgejoPad, CloneForgejoPhone, CloneHostPad, CloneHostPhone, Ix43 |
+| 40 Surfaces | 40T (8) | 40M (8) | 40D (8) | SurfacesPad, SurfacesPhone, SurfacesDesk, RemoteSurfacePad, RemoteSurfacePhone, RemoteInUseDesk |
+| 41 Forge sign-in | 41T (10) | 41M (10) | 41D (10) | GitHubWaysPad, GitHubWaysPhone, DeviceFlowPad, DeviceFlowPhone, DeviceFlowExpiredPad, DeviceFlowExpiredPhone, GitHubPermissionPad, GitHubPermissionPhone, ForgejoSignInPad, ForgejoSignInPhone |
+| 42 Forge repositories | 42T (7) | 42M (7) | 42D (7) | GitHubPickerPad, GitHubPickerPhone, ConnectAccountsPad, ConnectAccountsPhone, NewRepoPad, NewRepoPhone |
+| 43 Clone a repository | 43T (2) | 43M (2) | 43D (2) | CloneWaysPad, CloneWaysPhone, CloneForgejoPad, CloneForgejoPhone, CloneHostPad, CloneHostPhone |
 
 ## 01 Home
 
