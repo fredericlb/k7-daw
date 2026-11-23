@@ -99,12 +99,11 @@ export function SettingsPage() {
     content: <AboutSection />,
   };
   return (
-    <HomeShell tabs={false}>
+    <HomeShell>
       <PageFrame
         title={m["settings.title"]()}
         summary={m["settings.scope"]()}
         narrow
-        back
       >
         <SettingsTabs
           label={m["settings.title"]()}

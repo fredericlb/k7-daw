@@ -42,7 +42,7 @@ the front door, and putting it behind a prefix you have to know how to type woul
 sidebar and no bottom bar. The tabs are Projects, Surfaces, Tasks, Library (the libraries, then the frozen chains) and Settings, drawn by `@studio/ui/tab-bar`.
 They are LINKS, since each page has its own address: a plain click is a router move, a modified click opens like any
 link, and the current page carries `aria-current`. Settings is the last tab, lit on App settings and on the Engine page
-under it; App settings itself is a sub-page with its own Back and no tab bar.
+under it; App settings is a page like the others, under the same tab bar and with no Back, since its tab is the way to it.
 
 | choice | why |
 |---|---|

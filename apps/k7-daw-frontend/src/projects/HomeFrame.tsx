@@ -126,21 +126,14 @@ export function HomeTabs() {
 }
 
 /** The page frame: the page's own column, the tab bar floating over its foot. */
-export function HomeShell({
-  children,
-  tabs = true,
-}: {
-  children: ReactNode;
-  /** A sub-page (App settings) leaves the tab bar out and carries its own Back. */
-  tabs?: boolean;
-}) {
+export function HomeShell({ children }: { children: ReactNode }) {
   return (
     <div className="flex h-full flex-col bg-background text-foreground">
       {/* `contain: layout` holds a page's fixed docks and pop-ins inside its column. */}
       <div className="flex min-h-0 min-w-0 flex-1 flex-col [contain:layout]">
         {children}
       </div>
-      {tabs && <HomeTabs />}
+      <HomeTabs />
     </div>
   );
 }

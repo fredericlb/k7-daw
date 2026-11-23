@@ -26,6 +26,14 @@ test("/settings draws every section with its controls, a tab at a time", async (
   const page = await k7.open("/settings");
   const watch = watchPage(page);
   await expect(page.getByRole("heading", { name: "Settings" })).toBeVisible();
+  // A home page like the others: the tab bar at its foot, its own tab lit, no Back (apps/k7-daw-frontend/docs/projects.md).
+  await expect(homeTab(page, "Settings")).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
+  await expect(
+    page.getByRole("button", { name: "Back", exact: true }),
+  ).toHaveCount(0);
   const sections = async (names: string[]) => {
     for (const name of names)
       await expect(
