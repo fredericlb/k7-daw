@@ -6,7 +6,7 @@ Number,Name,Tablet id,Mobile id,Desktop id,Canvas boards,Interactions board,Draw
 05,Graph,05T,05M,05D,"GraphPad, GraphPhone, GraphDesk",Ix05,TRUE,,3856
 06,Source,06T,06M,06D,"SourcePad, SourcePhone, SourceDesk",Ix06,TRUE,,4820
 07,Resources panel,07T,07M,07D,"ResourcesPad, ResourcesPhone, ResourcesDesk",Ix07,TRUE,,5784
-08,Tasks & history panel,08T,08M,08D,"LogPad, LogPhone, LogDesk",Ix08,TRUE,,6748
+08,Tasks & history panel,08T,08M,08D,"LogPad, LogPhone, LogDesk",Ix08,TRUE,,964
 09,Export panel,09T,09M,09D,"SharePad, SharePhone, ShareDesk",Ix09,TRUE,,7712
 10,Settings panel,10T,10M,10D,"SettingsPad, SettingsPhone, SettingsDesk",Ix10,TRUE,,8676
 11,Clip editor,11T,11M,11D,"ClipZoomPad, ClipPhone, ClipZoomDesk",Ix11,TRUE,,9640
@@ -27,12 +27,12 @@ Number,Name,Tablet id,Mobile id,Desktop id,Canvas boards,Interactions board,Draw
 26,Command editor screen,26T,26M,26D,"CommandEditorPad, CommandEditorPhone, CommandEditorDesk",Ix26,TRUE,,34348
 27,Mixer panel,27T,27M,27D,"MixerPad, MixerPhone, MixerDesk",Ix27,TRUE,,35312
 28,Events panel,28T,28M,28D,"EventsPad, EventsPhone, EventsDesk",Ix28,TRUE,,36276
-29,Connect to git,29T,29M,29D,"ConnectPad, ConnectPhone, ConnectDesk",Ix29,TRUE,,37240
-30,Workspace history,30T,30M,30D,"SyncHistoryPad, SyncHistoryPhone, SyncHistoryDesk",Ix30,TRUE,,38204
-31,Conflict,31T,31M,31D,"ConflictPad, ConflictPhone, ConflictDesk",Ix31,TRUE,,39168
-32,Host key prompt,32T,32M,32D,"HostKeyPad, HostKeyPhone, HostKeyDesk",Ix32,TRUE,,40132
-33,Commits list,33T,33M,33D,"CommitsPad, CommitsPhone, CommitsDesk",Ix33,TRUE,,41096
-34,Commit & Push,34T,34M,34D,"CommitPad, CommitPhone, CommitDesk",Ix34,TRUE,,42060
+29,Sync settings,29T,29M,29D,"ConnectPad, ConnectPhone, ConnectDesk",Ix29,TRUE,,0
+30,Workspace history,30T,30M,30D,"SyncHistoryPad, SyncHistoryPhone, SyncHistoryDesk",Ix30,TRUE,,964
+31,Conflict,31T,31M,31D,"ConflictPad, ConflictPhone, ConflictDesk",Ix31,TRUE,,1928
+32,Host key prompt,32T,32M,32D,"HostKeyPad, HostKeyPhone, HostKeyDesk",Ix32,TRUE,,2892
+33,Saves list,33T,33M,33D,"CommitsPad, CommitsPhone, CommitsDesk",Ix33,TRUE,,3856
+34,Save,34T,34M,34D,"CommitPad, CommitPhone, CommitDesk",Ix34,TRUE,,4820
 35,Workspace tree,,,,,,FALSE,,
 36,Engine page,,,,,,FALSE,,
 37,Help,,,,,,FALSE,,
@@ -40,4 +40,5 @@ Number,Name,Tablet id,Mobile id,Desktop id,Canvas boards,Interactions board,Draw
 39,Chain and module builders,,,,,,FALSE,,
 40,Surfaces,40T,40M,40D,"SurfacesPad, SurfacesPhone, SurfacesDesk, RemoteSurfacePad, RemoteSurfacePhone, RemoteInUseDesk",Ix40,TRUE,,43024
 41,Forge sign-in,41T,41M,41D,"GitHubWaysPad, GitHubWaysPhone, DeviceFlowPad, DeviceFlowPhone, DeviceFlowExpiredPad, DeviceFlowExpiredPhone, GitHubPermissionPad, GitHubPermissionPhone, ForgejoSignInPad, ForgejoSignInPhone",Ix41,TRUE,,5784
-42,Forge repositories,42T,42M,42D,"GitHubPickerPad, GitHubPickerPhone, CloneWaysPad, CloneWaysPhone, ConnectAccountsPad, ConnectAccountsPhone, NewRepoPad, NewRepoPhone",Ix42,TRUE,,10604
+42,Forge repositories,42T,42M,42D,"GitHubPickerPad, GitHubPickerPhone, ConnectAccountsPad, ConnectAccountsPhone, NewRepoPad, NewRepoPhone",Ix42,TRUE,,10604
+43,Clone a repository,43T,43M,43D,"CloneWaysPad, CloneWaysPhone, CloneForgejoPad, CloneForgejoPhone, CloneHostPad, CloneHostPhone",Ix43,TRUE,,6748

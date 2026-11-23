@@ -1,5 +1,5 @@
 ID,Screen,Interaction,Mouse / trackpad,Keyboard,Touch,Devices,Not drawn,Area,Notes
-01.01,01,Open the command bar,"click the command-bar button (square terminal): the floating bar's left in a project, beside the tab bar on Home",⌘/Ctrl+⇧P (works inside the text editor); double-tap Shift,tap the command-bar button (the floating bar's right end on a phone),T M D,FALSE,Global (every screen),
+01.01,01,Open the command bar,"click the command-bar button (square terminal): the floating bar's left in a project, beside the tab bar on Home",⌘/Ctrl+⇧P (works inside the text editor); double-tap Shift,"double-tap the screen with two fingers, anywhere; a tablet also has the command-bar button, beside the logo at the bottom of the sidebar; a phone has no button",T M D,FALSE,Global (every screen),
 01.02,01,Run a bound command by key,—,"single keys from the keymap, each one runs a command: `1`–`4` pages, `f` fullscreen the focused pane, `F6`/`⇧F6` next/previous page, `?` help, `Space` play/stop, `⇧Space` replay, `Enter` rewind, `t` locate, `,` `.` step the playhead, `⇧R` record enable; every key can be rebound",—,T D,FALSE,Global (every screen),
 01.03,01,Step aside for typing or a focused control,—,a field owns every key; a focused button/link/select keeps all keys but Esc and the transport keys; `F6` walks out of both,—,T D,FALSE,Global (every screen),
 01.04,01,Copy selected page text,—,⌘/Ctrl+C with a text selection stays the browser's copy,—,T D,FALSE,Global (every screen),
@@ -16,8 +16,8 @@ ID,Screen,Interaction,Mouse / trackpad,Keyboard,Touch,Devices,Not drawn,Area,Not
 01.15,01,Create a project,"click ""New project"" (page header or a band's button) → name and archetype dialog",Enter creates; Esc cancels; arrows pick the archetype,tap,T M D,FALSE,Home and its pages · Projects,
 01.16,01,Pick the target workspace for a new project,click a workspace button in the dialog,—,tap,T M D,FALSE,Home and its pages · Projects,
 01.17,01,Create a workspace,"click ""New workspace"" (also the empty page's main action) → name dialog",Enter creates; Esc cancels,tap,T M D,FALSE,Home and its pages · Projects,
-01.18,01,Clone a workspace from git,"click ""Clone"" → clone dialog, opening on one repository picker per signed-in account (GitHub, each Forgejo server) and ""Another host…""; on the ssh address form when no account can list repositories (see Git screens)",—,tap,T M D,FALSE,Home and its pages · Projects,
-01.19,01,Clone a workspace known from another device,"click Clone on a row of ""other devices"" (name and address pre-filled)",—,tap,T M D,FALSE,Home and its pages · Projects,"opens on the address form, never on the pickers"
+01.18,01,Clone a workspace from git,"click ""Clone from git"" (the New menu beside Projects; the empty page's second button) → the Clone a repository page (`?clone`), tabs GitHub / Forgejo / Other host, opening on the first that can list repositories, else on Other host (see Git screens)",—,tap,T M D,FALSE,Home and its pages · Projects,
+01.19,01,Clone a workspace known from another device,"click Clone on a row of ""On your other devices"" → the Clone a repository page on Other host, the address and the name filled in",—,tap,T M D,FALSE,Home and its pages · Projects,the section shows only where the host has a list (iOS)
 01.20,01,Open a workspace's file tree,click the workspace name on its band,"Tab, Enter",tap,T M D,FALSE,Home and its pages · Projects,
 01.21,01,Fold / unfold a workspace band,click the chevron,Enter/Space,tap,T M D,FALSE,Home and its pages · Projects,
 01.22,01,Create the first project of an empty workspace,"click ""Create the first project""",Enter,tap,T M D,FALSE,Home and its pages · Projects,
@@ -26,9 +26,9 @@ ID,Screen,Interaction,Mouse / trackpad,Keyboard,Touch,Devices,Not drawn,Area,Not
 01.25,01,Rename a project,⋮ → Rename → name dialog,Enter confirms; Esc cancels,tap,T M D,FALSE,Home and its pages · Projects,
 01.26,01,Copy a project to another workspace,"⋮ → Copy → pick the workspace, set the name",Enter confirms; Esc cancels,tap,T M D,FALSE,Home and its pages · Projects,
 01.27,01,Delete a project,⋮ → Delete → click the red Delete,Esc cancels,tap,T M D,FALSE,Home and its pages · Projects,
-01.28,01,"Open a workspace's menu (git remote, delete)",click ⋮ on its band,"Enter, arrows",tap ⋮,T M D,FALSE,Home and its pages · Projects,
+01.28,01,"Open a workspace's menu (Sync settings, delete)","click ⋮ on its band (connected, the menu names the remote: ""Connected to host/repo"")","Enter, arrows",tap ⋮,T M D,FALSE,Home and its pages · Projects,
 01.29,01,Delete a workspace,"⋮ → Delete… → type the workspace's name, confirm","type, Enter; Esc cancels",tap,T M D,FALSE,Home and its pages · Projects,
-01.30,01,Connect / change a workspace's git remote,"⋮ → Connect/Change remote → remote dialog, opening on one repository picker per signed-in account (GitHub, each Forgejo server) and ""Another host…""; on the ssh address form when no account can list repositories",—,tap,T M D,FALSE,Home and its pages · Projects,
+01.30,01,Open a workspace's Sync settings,"⋮ → ""Sync settings…"", or ""Setup sync"" on the card of a workspace with no remote → the Sync settings page (`?sync=<workspace>`), tabs GitHub / Forgejo / Other host, opening on the first that can list repositories; on Other host when the workspace has a remote (shown there) or no account can list",—,tap,T M D,FALSE,Home and its pages · Projects,not offered for the Examples workspace
 01.31,01,Import a project file by dropping,drag a `.dawproject` file onto a workspace's row (it lights up) → name dialog,Enter confirms,—,T D,TRUE,Home and its pages · Projects,
 01.32,01,Show or hide the Examples workspace,"page ⋮ → ""Show examples"" (remembered per device; it cannot be hidden while it is the only workspace)",Enter,tap,T M D,FALSE,Home and its pages · Projects,
 01.33,01,Go to Libraries from the missing-library notice,click the notice's link,Enter,tap,T M D,FALSE,Home and its pages · Projects,
@@ -38,9 +38,9 @@ ID,Screen,Interaction,Mouse / trackpad,Keyboard,Touch,Devices,Not drawn,Area,Not
 01.38,01,"Run a Home command (new workspace, delete, camera mode…)",type in the command bar,Enter,same,T M D,FALSE,Home and its pages · Projects,
 01.39,01,Stop camera mode,click Stop / ✕ on the camera overlay,—,tap,T M D,TRUE,Home and its pages · Projects,
 01.40,01,Switch the camera lens,click the switch-lens button,—,tap,T M D,TRUE,Home and its pages · Projects,
-01.41,01,Commit changes,click Commit → commit dialog,—,tap,T M D,FALSE,Git screens,
-01.42,01,Pull,click Pull (disabled when nothing to pull or a commit is needed),—,tap,T M D,FALSE,Git screens,"with nothing to pull or push the card says ""Up to date · checked <when>"" (the last fetch), or ""Nothing pushed to <repo> yet"" when the remote holds no commit"
-01.43,01,Push,click Push (disabled until pulled),—,tap,T M D,FALSE,Git screens,
+01.41,01,Save,"click Save on the workspace card (""Save, N changes"") or the tree's bar → one press, no dialog: everything is committed as ""Saved on dd/mm/yyyy hh:mm"", then sent; a toast says Saving…, then Saved",—,tap,T M D,FALSE,Git screens,"nothing changed reads ""Nothing changed since the last save.""; a file over 2 GB is left out and named in a warning toast with its size; every Save of the workspace dims while one runs; the other ends are screen 34's toasts"
+01.42,01,Pull,"click Pull (dimmed when nothing to pull; over unsaved changes it reads ""Save first"", dimmed)",—,tap,T M D,FALSE,Git screens,"with nothing to pull or push the card says ""Up to date · checked <when>"" (the last fetch), or ""Nothing pushed to <repo> yet"" when the remote holds no commit"
+01.43,01,Send the saves waiting,"click Save with no change and saves waiting: it only sends them (""Sent to <remote> · <branch>""); with no remote, Save only records",—,tap,T M D,FALSE,Git screens,there is no Push button: Save sends; dimmed while the branch is behind and nothing changed (pull first)
 02.01,02,Show or hide done tasks,tick the checkbox,Space,tap,T M D,FALSE,Home and its pages · Tasks,
 02.02,02,Refresh the list,click refresh,Enter,tap,T M D,FALSE,Home and its pages · Tasks,
 02.03,02,Open a task's workspace,"click ""Open workspace"" on its heading",Enter,tap,T M D,FALSE,Home and its pages · Tasks,
@@ -240,7 +240,7 @@ ID,Screen,Interaction,Mouse / trackpad,Keyboard,Touch,Devices,Not drawn,Area,Not
 08.07,08,Add a project tag,"type, Enter",Enter,on-screen keyboard,T M D,FALSE,Tasks & history,
 08.08,08,Remove a project tag,click ✕ on the chip,—,tap,T M D,FALSE,Tasks & history,
 08.09,08,Light what an undo step touched,hover a journal row,—,—,D,FALSE,Tasks & history,
-08.10,08,Switch Edits / Commits,click a toggle,—,tap,T M D,FALSE,Tasks & history,
+08.10,08,Switch Edits / Workspace / Saves,click a toggle (Saves only when the workspace is under git),—,tap,T M D,FALSE,Tasks & history,
 09.01,09,Choose the timeline to render,pick in the select,native,native,T M D,FALSE,Export,
 09.02,09,Export MP3 / WAV,click the button,—,tap,T M D,FALSE,Export,
 09.03,09,Export each track (zip),click the button,—,tap,T M D,FALSE,Export,
@@ -406,11 +406,10 @@ ID,Screen,Interaction,Mouse / trackpad,Keyboard,Touch,Devices,Not drawn,Area,Not
 27.03,27,Move a mastering band slider,drag it (written on release),arrows (written on key up or blur),drag,T M D,FALSE,Mixer,
 27.04,27,Choose a mastering option,pick in the select,native,native,T M D,FALSE,Mixer,
 28.01,28,Stop a rolling take (audio or MIDI),click Stop in the header,Esc while an audio take rolls,tap,T M D,FALSE,Clip editor / Waveform · Audio clip panel,
-29.01,29,Enter the ssh address,"type in the field (web addresses are refused); behind ""Another host…"" once an account is signed in (Settings → Services)",—,"tap, type",T M D,FALSE,Git screens,
-29.02,29,Name the clone,type in the name field,—,same,T M D,FALSE,Git screens,
-29.03,29,Copy this device's public key,click Copy (the box selects all on focus),—,tap Copy,T M D,FALSE,Git screens,hidden once a picked repository filled the address (Clone)
-29.04,29,Connect / Clone,click the submit button (absent while the pickers show: a pick in Connect connects at once),—,tap,T M D,FALSE,Git screens,
-29.05,29,Cancel the remote dialog,click Cancel or the backdrop,Esc,tap,T M D,FALSE,Git screens,
+29.01,29,Enter the ssh address,"Other host tab: type the address; an https://, http:// or git:// address reads ""k7 syncs over SSH only"" and cannot be sent",—,"tap, type",T M D,FALSE,Git screens,the tab shows the workspace's current remote; no HTTPS / SSH choice and no sign-in field
+29.03,29,Copy this device's public key,Other host tab: click Copy (the box selects all on focus),—,tap Copy,T M D,FALSE,Git screens,hidden once a picked repository filled the address (Clone)
+29.04,29,Connect / Clone,"Other host tab: click Connect (Sync settings) or Clone (Clone a repository); ""Contacting the server…"" / ""Fetching the repository…"" while it runs",Enter in the address field,tap,T M D,FALSE,Git screens,"a pick in Sync settings connects at once; a connect ends with the toast ""<workspace> is connected to <remote>"""
+29.05,29,Leave Sync settings or Clone,"click ""‹ Projects"" (Back to Projects) at the top of the page",Esc,tap,T M D,FALSE,Git screens,waits while a call runs
 30.01,30,Expand a checkpoint or edit,click the row,—,tap,T M D,FALSE,Tasks & history,
 30.02,30,Restore the workspace to a point,"click the restore icon (on hover; always on touch), confirm",—,tap,T M D,FALSE,Tasks & history,
 30.03,30,Name a checkpoint,"click ""Name"", answer",Enter,tap,T M D,FALSE,Tasks & history,
@@ -421,10 +420,7 @@ ID,Screen,Interaction,Mouse / trackpad,Keyboard,Touch,Devices,Not drawn,Area,Not
 31.05,31,Decide the merge later,click Later or the backdrop,Esc,tap,T M D,FALSE,Git screens,
 32.01,32,Trust a new host key,"click ""Trust"" under the fingerprint",—,tap,T M D,FALSE,Git screens,
 32.02,32,Forget a changed host key,"click ""Forget"" in the red warning",—,tap,T M D,FALSE,Git screens,
-33.01,33,Load older commits,"click ""Older"" / ""more"" at the foot of the commit list",—,tap,T M D,FALSE,Git screens,
-34.01,34,Write the message and commit,"type in the message box, click Commit",Tab between fields,"tap, type, tap Commit",T M D,FALSE,Git screens,
-34.02,34,Fill the commit identity in the dialog (first time),type name and email,—,same,T M D,FALSE,Git screens,
-34.03,34,Cancel the commit,click Cancel or the backdrop (not while busy),Esc,tap,T M D,FALSE,Git screens,
+33.01,33,Load older saves,"click ""Older saves"" at the foot of the Saves list",—,tap,T M D,FALSE,Git screens,"none yet: ""No save yet."""
 35.01,35,Go back to the projects list,"click ""← Projects""",Enter,tap,T M D,FALSE,Home and its pages · Workspace tree,
 35.02,35,Unfold / fold a folder,click the folder row or its chevron,Enter/Space,tap,T M D,FALSE,Home and its pages · Workspace tree,
 35.03,35,Read a file (read-only viewer),click the file row,Enter/Space,tap,T M D,FALSE,Home and its pages · Workspace tree,
@@ -502,16 +498,16 @@ ID,Screen,Interaction,Mouse / trackpad,Keyboard,Touch,Devices,Not drawn,Area,Not
 23.14,23,"Read k7's licence, open its source, read a third-party notice","About → Read it; Open; search, click a notice",Enter,tap,T M D,FALSE,Settings · Settings page and engine page,
 40.07,40,"Play, stop and read the position on another device's surface",click Play or Stop in the transport capsule; click the position to switch bars and seconds,Space plays and stops,tap,T M D,FALSE,Surfaces,
 40.08,40,Open a pane another device shows (the device that holds the project),click the dimmed pane: a toast says “In use on <device>”,its pane key says the same,tap it,T M D,FALSE,Surfaces,
-41.01,41,Sign in with GitHub,"Settings → Services → GitHub: click ""Sign in with GitHub"" (shown while not signed in) → the code screen; the one code asks for the key and the repositories","Tab, Enter",tap,T M D,FALSE,Git screens,"user, 2026-11-21: the sign-in is in Services only; Connect and Clone open on the picker (42) once signed in, and never sign in"
-41.02,41,Choose another host,"click ""Another host…"" (under the pickers, shown once signed in to GitHub or a Forgejo server) → the ssh address form; typing an address also chooses it","Tab, Enter",tap,T M D,FALSE,Git screens,"the form is the whole dialog when no account can list repositories, where GitHub is off, and when Clone from another device pre-fills the address"
+41.01,41,Sign in with GitHub,"Settings → Services → GitHub: click ""Sign in with GitHub"" (shown while not signed in) → the code screen; the one code asks for the key and the repositories","Tab, Enter",tap,T M D,FALSE,Git screens,"user, 2026-11-21: the sign-in is in Services only; Sync settings and Clone open on the GitHub tab's picker (42) once signed in, and never sign in"
+41.02,29,Choose a service tab,"click GitHub, Forgejo or Other host (the page opens on the first service that can list repositories; on Other host with no such account, or with an address to show)","arrows in the tab list, Tab",tap,T M D,FALSE,Git screens,"a picked repository whose host key is unknown moves to Other host, where the question is (32)"
 41.03,41,Copy the sign-in code,"click ""Copy code"" (the code box selects all)",—,tap Copy code,T M D,FALSE,Git screens,
 41.04,41,Open GitHub's device page,"click ""Open github.com/login/device"" (a new tab) and type the code there; k7 waits, asking while the page is visible",—,tap,T M D,FALSE,Git screens,
 41.05,41,Try the sign-in again,"click ""Try again"" after ""The code expired."", ""Sign-in was cancelled on GitHub."" or a network error",—,tap,T M D,FALSE,Git screens,only the expired state is drawn
 41.06,41,Cancel the sign-in,click Cancel under the code (back to Services' GitHub row),—,tap,T M D,FALSE,Git screens,
-41.07,41,Allow repositories,"Services → GitHub, a sign-in GitHub granted without the repository permission: click ""Allow repositories"" → one more code (copy, open and try again as 41.03–41.05); Connect shows no picker until it is done",—,same,T M D,FALSE,Git screens,
+41.07,41,Allow repositories,"Services → GitHub, a sign-in GitHub granted without the repository permission: click ""Allow repositories"" → one more code (copy, open and try again as 41.03–41.05); the git pages' GitHub tab shows no picker until it is done",—,same,T M D,FALSE,Git screens,
 42.01,42,Filter the repositories,"type in ""Filter repositories"" (matches owner/name; one per account's picker)",—,"tap, type",T M D,FALSE,Git screens,
-42.02,42,Pick a repository,"click a row of an account's picker (one per signed-in account, under ""Signed in as @login"" for GitHub or ""Signed in as @login on <server>"" for a Forgejo server; k7 workspaces first, then Your repositories, each most recently pushed first; a Private badge and the pushed-ago): Connect connects at once; Clone fills the address and the name and waits for Clone","Tab, Enter",tap,T M D,FALSE,Git screens,
-42.03,42,Start a new repository (Connect only),"click ""New repository"" in an account's picker → the name prefilled with the workspace's, Private on","Tab, Enter",tap,T M D,FALSE,Git screens,
+42.02,42,Pick a repository,"click a row of an account's picker (one per signed-in account, under ""Signed in as @login"" for GitHub or ""Signed in as @login on <server>"" for a Forgejo server; k7 workspaces first, then Your repositories, each most recently pushed first; a Private badge and the pushed-ago): Sync settings connects at once; Clone fills the address and the name, moves to Other host and waits for Clone","Tab, Enter",tap,T M D,FALSE,Git screens,
+42.03,42,Start a new repository (Sync settings only),"click ""New repository"" in an account's picker → the name prefilled with the workspace's, Private on","Tab, Enter",tap,T M D,FALSE,Git screens,
 42.04,42,Name the new repository,"type in ""Repository name""",—,"tap, type",T M D,FALSE,Git screens,
 42.05,42,Make the new repository public,"turn ""Private repository"" off",Space,tap,T M D,FALSE,Git screens,
 42.06,42,Create and connect,"click ""Create and connect"" (the repository gets the `k7-workspace` topic); a name already taken reads ""A repository named <name> already exists on <server>.""",—,tap,T M D,FALSE,Git screens,
@@ -526,7 +522,15 @@ ID,Screen,Interaction,Mouse / trackpad,Keyboard,Touch,Devices,Not drawn,Area,Not
 23.22,23,Add the server,"click ""Add server"" (on once the address is checked) → the server's section, Not signed in",—,tap,T M D,FALSE,Settings · Settings page and engine page,"a refused add keeps the check, so Add server can be pressed again"
 23.23,23,Cancel adding a server,click Cancel under the form,—,tap,T M D,FALSE,Settings · Settings page and engine page,
 23.24,23,Remove a Forgejo server,"in the server's section click Remove → ""Remove <server> from this device?"" in place → ""Remove server"", or Cancel","Tab, Enter",tap,T M D,FALSE,Settings · Settings page and engine page,the key k7 added to the account on the server stays
-41.08,41,Sign in to a Forgejo server,"Services → the server's section: click ""Sign in"" (Not signed in) or ""Sign in again"" (""The sign-in ended: sign in again"") → ""Asking <server> to sign in…"", then the sign-in link","Tab, Enter",tap,T M D,FALSE,Git screens,the server is named by its host everywhere; Connect and Clone show its picker once signed in
+41.08,41,Sign in to a Forgejo server,"Services → the server's section: click ""Sign in"" (Not signed in) or ""Sign in again"" (""The sign-in ended: sign in again"") → ""Asking <server> to sign in…"", then the sign-in link","Tab, Enter",tap,T M D,FALSE,Git screens,"the server is named by its host everywhere; the Forgejo tab of Sync settings and Clone shows its picker once signed in, and signs in in place (43.01)"
 41.09,41,Open the server's sign-in page,"click ""Open <server> to sign in"" (a new tab) and allow k7 there; ""Waiting for you to allow k7 on <server>…"" until the server answers",—,tap,T M D,FALSE,Git screens,"k7 keeps asking while its own page is hidden; the server's page asks to allow ""Git Credential Manager"", its built-in app, unless a Client ID was given"
 41.10,41,Try the Forgejo sign-in again,"click ""Try again"" after ""The sign-in expired."", ""Sign-in was refused on <server>."" or ""Sign-in failed: …""",—,tap,T M D,TRUE,Git screens,
 41.11,41,Cancel the Forgejo sign-in,click Cancel under the link or the error (back to the server's section),—,tap,T M D,FALSE,Git screens,
+29.02,43,Name the clone,"Clone's Other host tab: type in ""Name of the workspace"" (it follows the address, or the picked repository's name, until typed; a taken or bad name is said under it)",—,"tap, type",T M D,TRUE,Git screens,the canvas draws no name field
+29.06,29,Go to Settings → Services from the GitHub tab,"GitHub tab with no account that lists repositories: click ""Open Settings → Services"" and sign in there (41.01)","Tab, Enter",tap,T M D,TRUE,Git screens,"""This build of k7 has no GitHub sign-in."" where GitHub is off"
+33.02,33,Open the Saves list from the git menu,"the header's git capsule: ⌄ (""More git actions"") → ""Saves"" → the History panel on its Saves list","Enter, arrows in the menu",phone: tap the git button → Saves,T M D,FALSE,Git screens,
+34.04,34,Save from the project header,"click Save in the header's git capsule (""Save N changes""; ""Save: nothing to save"", dimmed, when nothing waits; a spinner while it runs)","Tab, Enter",phone: tap the git button → Save,T M D,FALSE,Git screens,the capsule's ⌄ menu holds Pull and Saves
+34.05,34,Pull after a save not sent,"toast ""Saved on this device, not sent"" · ""The remote has new changes: pull first, then save again."": click Pull",—,tap,T M D,FALSE,Git screens,the save stays on this device
+34.06,34,Retry a save,"toast ""Not saved"", or ""Saved on this device, not sent"" for any failure but a remote ahead: click Retry",—,tap,T M D,FALSE,Git screens,a Retry after the commit only sends: it never commits twice
+34.07,34,Set the author after a save refused,"toast ""Not saved: no author yet"" · ""Set your name and email in Settings, then save again."": click Settings → Settings, General (23.01)",—,tap,T M D,FALSE,Git screens,
+43.01,43,Add or sign in to a Forgejo server in the Forgejo tab,"Forgejo tab with no signed-in server: the Forgejo servers' section of Settings → Services, in place: ""Add a Forgejo server"" (23.17–23.22), ""Sign in"" (41.08)","Tab, Enter",tap,T M D,FALSE,Git screens,"once signed in, the tab shows the server's picker (42)"
