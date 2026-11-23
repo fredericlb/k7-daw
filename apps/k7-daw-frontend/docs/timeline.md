@@ -707,6 +707,14 @@ reaches the browser — the markers stay engine-side), and a **file rewritten in
 same name** (the service folds a content fingerprint into its signature; a browser cannot see
 one).
 
+### Waveforms appear as they are cached
+
+A clip asks for its waveform when it is drawn; on a project's first open the backend is still
+building the cache, and an answer that fails or comes back empty then is not kept. Each new count
+the prewarm reports, and its end, lets every clip still drawn blank ask again
+(`src/waveformsWarmed.ts`), so the waveforms come in one by one while the batch runs. A clip that
+has its picture never asks again for a count, so the bumps cost nothing once the cache is warm.
+
 ## Clicking an event
 
 A click on a clip parks the caret **over it**: the `v` rectangle, anchored at the event's first

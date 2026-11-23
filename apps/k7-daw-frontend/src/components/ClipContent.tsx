@@ -10,6 +10,7 @@ import { api } from "../api";
 import { clipEnvelopeKey, type EnvelopeProject } from "../clipEnvelope";
 import { onLeave } from "../scopeLeave";
 import type { WebClip, WebWaveform } from "../types";
+import { useWaveformsWarmed } from "../waveformsWarmed";
 import { ClipMiniRoll } from "./ClipMiniRoll";
 
 /** Memoised: this is the most numerous thing on the surface once the lanes are expanded, and below here a waveform is fetched per clip. */
@@ -104,14 +105,17 @@ export function useClipWaveform(
 ): WebWaveform | null {
   const key = clip ? clipEnvelopeKey(clip, project, BUCKETS) : null;
   const id = clip?.id ?? null;
+  // A clip asked before the backend had its waveform asks again each time the prewarm caches more.
+  const warmed = useWaveformsWarmed();
   const [wf, setWf] = useState<WebWaveform | null>(() => {
     const hit = id ? wfCache.get(id) : undefined;
     return hit && hit.key === key ? hit.data : null;
   });
+  // biome-ignore lint/correctness/useExhaustiveDependencies: the prewarm's count changing IS the signal to ask again.
   useEffect(() => {
     if (!id || !key) return;
     const hit = wfCache.get(id);
-    if (hit && hit.key === key) {
+    if (hit && hit.key === key && hit.data?.peak.length) {
       setWf(hit.data);
       return;
     }
@@ -127,7 +131,7 @@ export function useClipWaveform(
     return () => {
       cancelled = true;
     };
-  }, [id, key]);
+  }, [id, key, warmed]);
   return id ? wf : null;
 }
 

@@ -16,6 +16,7 @@ import type {
   WorkspaceInfo,
 } from "../types";
 import { pollUntil, pollWhileVisible } from "../visiblePoll";
+import { waveformsWarmed } from "../waveformsWarmed";
 import { useLatest } from "./useLatest";
 import { useRevision } from "./useRevision";
 
@@ -99,6 +100,10 @@ export function useWarmWaveforms(
       warmingRef.current = false;
     }
   }, [show]);
+  // Each new count, and the batch's end, lets a clip still drawn blank ask again: docs/timeline.md, "Waveforms appear as they are cached".
+  useEffect(() => {
+    if (warm.done > 0 || !warm.warming) waveformsWarmed();
+  }, [warm.done, warm.warming]);
   useEffect(() => {
     if (playing) return; // the machine is busy making sound; ask again when it stops
     void warmWaveforms();
