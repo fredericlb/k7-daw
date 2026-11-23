@@ -1,4 +1,4 @@
-// WorkspaceMenu.tsx — the ⋮ at the end of a workspace's row: connect it to git, or delete it (asks for the NAME).
+// WorkspaceMenu.tsx — the ⋮ at the end of a workspace's row: its Sync settings, or delete it (asks for the NAME).
 // See ../../docs/projects.md.
 
 import { askText } from "@studio/project-shell/ask";
@@ -20,7 +20,7 @@ import { EXAMPLES_WORKSPACE } from "@studio/web-protocol/projects";
 import { useEffect, useState } from "react";
 import { useGitTransport } from "../git/GitContext";
 import { onGitMoved } from "../git/gitBus";
-import { openConnect } from "../git/gitScreens";
+import { openSyncSettings } from "../git/gitPages";
 import { gitMenuEntries, menuView } from "../git/gitState";
 import { useGitState } from "../git/useGitState";
 import { m } from "../paraglide/messages.js";
@@ -52,7 +52,7 @@ export function WorkspaceMenu({
   const git = useGitState(useGitTransport(), workspace, "manual");
   const view = menuView(git.state);
 
-  // The connect dialog lives in the git host: its announcement is how this page reads the workspace again.
+  // Sync settings is a page of its own: its announcement is how this page reads the workspace again.
   useEffect(
     () => onGitMoved(workspace, () => onConnected?.()),
     [workspace, onConnected],
@@ -107,14 +107,10 @@ export function WorkspaceMenu({
           ) : (
             <DropdownMenuItem
               key={entry}
-              onSelect={() =>
-                openConnect(workspace, { changing: view.connected })
-              }
+              onSelect={() => openSyncSettings(workspace)}
             >
               <GitBranch />
-              {entry === "change"
-                ? m["git.menuChange"]()
-                : m["git.menuConnect"]()}
+              {m["git.menuSync"]()}
             </DropdownMenuItem>
           ),
         )}

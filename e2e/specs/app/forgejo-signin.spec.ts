@@ -1,12 +1,12 @@
 // forgejo-signin.spec.ts — Add a Forgejo server in Settings → Services (address, check, nothing registered), sign in
-// through the server's page in a second browser tab, then Connect lists its repositories and picking a folder connects.
+// through the server's page in a second browser tab, then Sync settings lists its repositories and picking a folder connects.
 import { execFileSync } from "node:child_process";
 import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { fakeForgejo } from "../../src/fakeForgejo.ts";
-import { workspaceCard } from "../../src/home.ts";
+import { gitPage, workspaceCard } from "../../src/home.ts";
 import { expect, test } from "../../src/target.ts";
 
 const WS = "E2E-forgejo";
@@ -75,17 +75,19 @@ test("a workspace is connected after adding and signing in to a Forgejo server",
     await workspaceCard(page, WS)
       .getByRole("button", { name: `What can be done with ${WS}`, exact: true })
       .click();
-    await page.getByRole("menuitem", { name: "Connect to git…" }).click();
-    const dialog = page.getByRole("dialog", { name: /^Connect .+ to git$/ });
-    await expect(dialog.getByText(`Signed in as @fred on ${id}`)).toBeVisible(
+    await page.getByRole("menuitem", { name: "Sync settings…" }).click();
+    const sync = gitPage(page, `Sync settings for ${WS}`);
+    // GitHub leads when a run before this one left it signed in; a server's pickers are under Forgejo.
+    await sync.getByRole("tab", { name: "Forgejo", exact: true }).click();
+    await expect(sync.getByText(`Signed in as @fred on ${id}`)).toBeVisible(
       SHOWN,
     );
-    const rows = dialog.getByRole("button", { name: /^fred\// });
+    const rows = sync.getByRole("button", { name: /^fred\// });
     await expect(rows).toHaveCount(2, SHOWN);
     await expect(rows.first()).toContainText("fred/songs");
 
     await rows.first().click();
-    await expect(dialog).toBeHidden(SHOWN);
+    await expect(sync).toBeHidden(SHOWN);
     await expect(page.getByText(`${WS} is connected to`)).toBeVisible(SHOWN);
   } finally {
     await forget();

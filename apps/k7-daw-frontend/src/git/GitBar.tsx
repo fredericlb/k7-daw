@@ -1,6 +1,6 @@
-// GitBar.tsx — a workspace under git, two ways: the file tree's bar (`BarBody`: remote, counts, Commit & Push, Pull, the
-// merge) and the home card's pills (`CardGitPills`: Pull in place, Commit & Push, Connect). Neither opens a dialog of its
-// own — gitScreens.tsx does. What a reader gets wrong: nothing here decides a rule (gitState.ts).
+// GitBar.tsx — a workspace under git, two ways: the file tree's bar (`BarBody`: remote, counts, Save, Pull, the merge)
+// and the home card's pills (`CardGitPills`: Pull in place, Save, Setup sync). Save runs in place (saveAct.ts); the merge
+// and Sync settings are screens of their own. What a reader gets wrong: nothing here decides a rule (gitState.ts).
 
 import { showToast } from "@studio/project-shell/toast";
 import { Badge } from "@studio/ui/badge";
@@ -9,9 +9,9 @@ import {
   ArrowDown,
   ArrowDownToLine,
   GitBranch,
-  GitCommitHorizontal,
   GitMerge,
   Loader2,
+  Save,
 } from "@studio/ui/icons";
 import { useEffect, useState } from "react";
 import { m } from "../paraglide/messages.js";
@@ -19,9 +19,11 @@ import { getLocale } from "../paraglide/runtime.js";
 import { editedAgo } from "../projects/projectKind";
 import { useGitTransport } from "./GitContext";
 import type { GitTransport } from "./gitApi";
-import { openCommitAndPush, openConflict, openConnect } from "./gitScreens";
+import { openSyncSettings } from "./gitPages";
+import { openConflict } from "./gitScreens";
 import { type BarView, barView, remoteName } from "./gitState";
 import type { GitState, PullState } from "./gitTypes";
+import { save, useSaving } from "./saveAct";
 import { type GitAct, type GitHandle, useGitState } from "./useGitState";
 
 /** The sentence of a pull's outcome, none for the ones that need no word. */
@@ -113,8 +115,8 @@ export function BarBody({
         )}
         {(v.commit || v.push) && (
           <Button size="xs" disabled={!!busy} onClick={onCommit}>
-            <GitCommitHorizontal className="h-3.5 w-3.5" />
-            {m["shell.git.commitPush"]()}
+            <Save className="h-3.5 w-3.5" />
+            {m["git.save.label"]()}
           </Button>
         )}
         {v.remote && v.merge === null && (
@@ -157,6 +159,8 @@ export function GitBarOf({
   workspace: string;
   row?: boolean;
 }) {
+  const t = useGitTransport();
+  const saving = useSaving(workspace);
   // A pull that diverged opens the merge at once: the person was waiting for it.
   useEffect(() => {
     if (g.pulled === "conflicts") openConflict(workspace);
@@ -165,11 +169,13 @@ export function GitBarOf({
     <BarBody
       row={row}
       state={g.state}
-      busy={g.busy}
+      busy={g.busy ?? (saving ? "push" : null)}
       pulled={g.pulled}
       failure={g.failure}
       onAct={(a) => void g.act(a)}
-      onCommit={() => openCommitAndPush(workspace)}
+      onCommit={() =>
+        t && void save(t, workspace, { onPull: () => void g.act("pull") })
+      }
       onMerge={() => openConflict(workspace)}
     />
   );
@@ -250,7 +256,7 @@ export function CardPullBar({
   );
 }
 
-/** The card's git pills: Pull in place, Commit & Push as one act, the merge when one waits, Connect when there is no remote. */
+/** The card's git pills: Pull in place, Save as one act, the merge when one waits, Setup sync when there is no remote. */
 export function CardGitPills({
   git: g,
   workspace,
@@ -261,15 +267,17 @@ export function CardGitPills({
   /** The bundled demos take no remote. */
   demo?: boolean;
 }) {
+  const t = useGitTransport();
+  const saving = useSaving(workspace);
   const v: BarView = barView(g.state);
   const pulling = g.busy === "pull";
   if (g.state && g.state.mode !== "connected" && !demo)
     return (
       <Button
         variant="glass"
-        onClick={() => openConnect(workspace)}
-        title={m["git.menuConnect"]()}
-        aria-label={m["git.menuConnect"]()}
+        onClick={() => openSyncSettings(workspace)}
+        title={m["git.card.connectName"]({ workspace })}
+        aria-label={m["git.card.connectName"]({ workspace })}
       >
         <GitBranch className="size-5" />
         <span className="max-sm:hidden">{m["git.card.connect"]()}</span>
@@ -289,6 +297,7 @@ export function CardGitPills({
   const pullName =
     v.toPull > 0 ? m["git.card.pullN"]({ n: v.toPull }) : m["git.pull"]();
   const pushable = v.commit || v.push;
+  const busy = !!g.busy || saving;
   // With nothing incoming and nothing to send, the pills step aside for a lasting line.
   if (!pulling && !refused && v.toPull === 0 && !pushable && v.remoteEmpty)
     return (
@@ -319,10 +328,10 @@ export function CardGitPills({
           variant="glass"
           aria-label={pulling ? m["git.card.pulling"]() : pullName}
           // Said, not disabled: a disabled button shows no tooltip, and this one has a reason to give.
-          aria-disabled={refused || !v.pull || !!g.busy || undefined}
+          aria-disabled={refused || !v.pull || busy || undefined}
           title={refused ? m["git.commitFirst"]() : undefined}
           onClick={() => {
-            if (!refused && v.pull && !g.busy) void g.act("pull");
+            if (!refused && v.pull && !busy) void g.act("pull");
           }}
           className={
             refused
@@ -352,17 +361,22 @@ export function CardGitPills({
           variant="glass"
           aria-label={
             v.changed > 0
-              ? m["git.card.commitPushN"]({ n: v.changed })
-              : m["shell.git.commitPush"]()
+              ? m["git.card.saveN"]({ n: v.changed })
+              : m["git.save.label"]()
           }
-          aria-disabled={!pushable || !!g.busy || undefined}
+          aria-disabled={!pushable || busy || undefined}
           onClick={() => {
-            if (pushable && !g.busy) openCommitAndPush(workspace);
+            if (pushable && !busy && t)
+              void save(t, workspace, { onPull: () => void g.act("pull") });
           }}
           className={pulling || !pushable ? "opacity-45" : undefined}
         >
-          <GitCommitHorizontal className="size-5" />
-          <span className="max-sm:hidden">{m["shell.git.commitPush"]()}</span>
+          {saving ? (
+            <Loader2 className="size-5 animate-spin" />
+          ) : (
+            <Save className="size-5" />
+          )}
+          <span className="max-sm:hidden">{m["git.save.label"]()}</span>
           {v.changed > 0 && <Badge variant="count">{v.changed}</Badge>}
         </Button>
       )}

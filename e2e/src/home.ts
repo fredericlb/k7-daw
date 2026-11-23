@@ -30,12 +30,11 @@ export const projectLink = (page: Page, ws: string, project: string): Locator =>
     exact: true,
   });
 
-/** In a Connect or Clone dialog that opens on GitHub, takes the plain way; a dialog without GitHub is already on it. */
-export async function chooseAnotherHost(dialog: Locator): Promise<void> {
-  const other = dialog.getByRole("button", { name: "Another host…" });
-  const shown = await other
-    .waitFor({ state: "visible", timeout: 5_000 })
-    .then(() => true)
-    .catch(() => false);
-  if (shown) await other.click();
+/** A git page of the home (`Sync settings for <workspace>`, `Clone a repository`), found by its region. */
+export const gitPage = (page: Page, name: string): Locator =>
+  page.getByRole("region", { name, exact: true });
+
+/** On a git page, the Other host tab: the ssh address form, whichever service the page opened on. */
+export async function chooseAnotherHost(gitPage: Locator): Promise<void> {
+  await gitPage.getByRole("tab", { name: "Other host", exact: true }).click();
 }

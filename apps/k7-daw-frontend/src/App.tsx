@@ -202,6 +202,7 @@ import { placeSubject, placeWarnings, warningSentence } from "./engineWarnings";
 import { type FloatState, loadFloat, saveFloat } from "./floatingRect";
 import { installGates, lockSentence } from "./git/gitLock";
 import { lockedBy as mergeLockedBy } from "./git/gitState";
+import { askSavesList } from "./git/savesList";
 import { projectTransport } from "./git/transports";
 import { useGitState } from "./git/useGitState";
 import { useLatest } from "./hooks/useLatest";
@@ -2903,9 +2904,13 @@ export default function App({
         gitWorkspace ? (
           <HeaderGit
             git={gitHandle}
+            transport={gitTransport}
             workspace={gitWorkspace}
             phone={isMobile}
-            onCommits={() => setRightPanel("history")}
+            onCommits={() => {
+              askSavesList();
+              setRightPanel("history");
+            }}
           />
         ) : null
       }

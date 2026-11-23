@@ -1,12 +1,12 @@
-// git-sync.spec.ts — a workspace connected to a bare repository, committed, pushed, cloned into a second workspace,
-// edited on both sides and merged. The remote is a folder this spec makes with `git`, so only the web target reaches it.
+// git-sync.spec.ts — a workspace connected to a bare repository from its Sync settings, saved, cloned into a second
+// workspace, edited on both sides and merged. The remote is a folder this spec makes with `git`, so only the web target reaches it.
 import { execFileSync } from "node:child_process";
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import type { Locator, Page } from "@playwright/test";
-import { chooseAnotherHost } from "../../src/home.ts";
+import { chooseAnotherHost, gitPage, newMenu } from "../../src/home.ts";
 import { expect, test } from "../../src/target.ts";
 
 const A = "E2E-git-a";
@@ -24,32 +24,28 @@ async function card(page: Page, ws: string): Promise<Locator> {
   return region;
 }
 
-/** Commit & Push from the card, signing as a test author when the device has none; resolves with the open dialog. */
-async function commitAndPush(
-  page: Page,
-  ws: string,
-  message: string,
-): Promise<Locator> {
-  await (await card(page, ws))
-    .getByRole("button", { name: /^Commit & Push, \d+ changes?$/ })
-    .click();
-  const dialog = page.getByRole("dialog", { name: "Commit & Push" });
-  const name = dialog.getByLabel("Name", { exact: true });
-  // The author question comes once the device's identity is read: isVisible would not wait for it.
-  const asked = await name
-    .waitFor({ state: "visible", timeout: 5_000 })
-    .then(() => true)
-    .catch(() => false);
-  if (asked) {
-    await name.fill("E2E Tester");
-    await dialog.getByLabel("Email", { exact: true }).fill("e2e@example.org");
-  }
-  await dialog.getByLabel("Message", { exact: true }).fill(message);
-  await dialog
-    .getByRole("button", { name: "Commit & Push", exact: true })
-    .click();
-  return dialog;
+/** The device signs its saves: a test author when it has none (Save asks for one in Settings, not on the spot). */
+async function ensureAuthor(page: Page): Promise<void> {
+  const res = await page.request.get("/api/files/git/identity");
+  const id = res.ok()
+    ? ((await res.json()) as { name?: string; email?: string })
+    : {};
+  if (id.name?.trim() && id.email?.trim()) return;
+  await page.request.post("/api/files/git/identity", {
+    data: { name: "E2E Tester", email: "e2e@example.org" },
+  });
 }
+
+/** Save from the card: one press commits everything and pushes, and a toast says how it went. */
+async function saveFromCard(page: Page, ws: string): Promise<void> {
+  await (await card(page, ws))
+    .getByRole("button", { name: /^Save, \d+ changes?$/ })
+    .click();
+}
+
+/** How many commits the bare repository's main holds. */
+const commits = (bare: string): number =>
+  Number(git(bare, "rev-list", "--count", "main").trim());
 
 test("a workspace is connected, pushed, cloned and merged through a bare repository", async ({
   k7,
@@ -66,69 +62,62 @@ test("a workspace is connected, pushed, cloned and merged through a bare reposit
   await files.writeText(A, "notes.txt", "one\ntwo\nthree\n");
   try {
     const page = await k7.open("/");
+    await ensureAuthor(page);
 
-    await test.step("connect the workspace from its menu", async () => {
+    await test.step("connect the workspace from its Sync settings", async () => {
       await (await card(page, A))
         .getByRole("button", {
           name: `What can be done with ${A}`,
           exact: true,
         })
         .click();
-      await page.getByRole("menuitem", { name: "Connect to git…" }).click();
-      const dialog = page.getByRole("dialog", { name: /^Connect .+ to git$/ });
-      await chooseAnotherHost(dialog);
-      await dialog.getByLabel("Repository address").fill(url);
-      await dialog
-        .getByRole("button", { name: "Connect", exact: true })
-        .click();
-      await expect(dialog).toBeHidden(SHOWN);
+      await page.getByRole("menuitem", { name: "Sync settings…" }).click();
+      const sync = gitPage(page, `Sync settings for ${A}`);
+      await chooseAnotherHost(sync);
+      await sync.getByLabel("Repository address").fill(url);
+      await sync.getByRole("button", { name: "Connect", exact: true }).click();
+      await expect(sync).toBeHidden(SHOWN);
     });
 
-    await test.step("commit and push in one act", async () => {
-      const dialog = await commitAndPush(page, A, "first take");
-      // The dialog closes by itself when the push ends, and a toast says what went.
-      await expect(dialog).toBeHidden(SHOWN);
-      await expect(page.getByText("Committed and pushed")).toBeVisible(SHOWN);
+    await test.step("save: commit and push in one press", async () => {
+      await saveFromCard(page, A);
+      // No dialog: the toast says each step, and ends on Saved.
+      await expect(page.getByText("Saved", { exact: true })).toBeVisible(SHOWN);
       await expect
         .poll(() => git(bare, "log", "--format=%s", "main").trim(), SHOWN)
-        .toContain("first take");
+        .toMatch(/^Saved on \d\d\/\d\d\/\d{4} \d\d:\d\d$/m);
     });
 
     await test.step("clone it into a second workspace", async () => {
-      await page
-        .getByRole("button", { name: "New workspace or clone from git" })
-        .click();
-      await page.getByRole("menuitem", { name: "Clone from git" }).click();
-      const dialog = page.getByRole("dialog", { name: "Clone a repository" });
-      await chooseAnotherHost(dialog);
-      await dialog.getByLabel("Name of the workspace").fill(B);
-      await dialog.getByLabel("Repository address").fill(url);
-      await dialog.getByRole("button", { name: "Clone", exact: true }).click();
-      await expect(dialog).toBeHidden(SLOW);
+      await newMenu(page, "Clone from git");
+      const clone = gitPage(page, "Clone a repository");
+      await chooseAnotherHost(clone);
+      await clone.getByLabel("Repository address").fill(url);
+      // The name follows the address until it is typed.
+      await clone.getByLabel("Name of the workspace").fill(B);
+      await clone.getByRole("button", { name: "Clone", exact: true }).click();
+      await expect(clone).toBeHidden(SLOW);
       await expect
         .poll(async () => (await files.projects()).map((w) => w.name), SHOWN)
         .toContain(B);
       expect(await files.readText(B, "notes.txt")).toBe("one\ntwo\nthree\n");
     });
 
-    await test.step("both sides change the same line; the second to push is told to pull first", async () => {
+    await test.step("both sides change the same line; the second to save is told to pull first", async () => {
       await files.writeText(B, "notes.txt", "one\nB says\nthree\n");
       // A card reads its git state once, so a write made outside the page shows on a fresh load.
       await page.reload();
-      const dialogB = await commitAndPush(page, B, "B's line");
-      await expect(dialogB).toBeHidden(SHOWN);
-      await expect
-        .poll(() => git(bare, "log", "--format=%s", "main").trim(), SHOWN)
-        .toContain("B's line");
+      const before = commits(bare);
+      await saveFromCard(page, B);
+      await expect.poll(() => commits(bare), SHOWN).toBe(before + 1);
 
       await files.writeText(A, "notes.txt", "one\nA says\nthree\n");
       await page.reload();
-      const dialogA = await commitAndPush(page, A, "A's line");
-      await expect(dialogA.getByTestId("git-pull-first")).toBeVisible(SLOW);
-      await dialogA
-        .getByRole("button", { name: "Close", exact: true })
-        .first()
-        .click();
+      await saveFromCard(page, A);
+      // The save stays on this device; the toast offers the Pull, which the card offers too.
+      await expect(
+        page.getByText("Saved on this device, not sent"),
+      ).toBeVisible(SLOW);
     });
 
     await test.step("pull, choose mine, finish the merge", async () => {

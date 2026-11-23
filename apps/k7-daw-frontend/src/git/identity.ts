@@ -1,5 +1,5 @@
 // identity.ts — the one identity of this device: the name and email that sign its commits and head the user menu.
-// It lives in the backend's identity file (Settings, the commit dialog); this module is its page-side mirror.
+// It lives in the backend's identity file (Settings, the Save act); this module is its page-side mirror.
 
 import { useEffect, useSyncExternalStore } from "react";
 import { m } from "../paraglide/messages.js";

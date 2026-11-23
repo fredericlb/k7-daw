@@ -112,7 +112,7 @@ export function ShellOverlays({
   paneError: ComponentProps<typeof PaneBoundary>["onError"];
   engineRef: RefObject<EngineClient | undefined>;
   connected: boolean;
-  /** The git screens (Commit & Push, Conflict, Connect) open over every page through this transport. */
+  /** The Conflict screen opens over every page through this transport. */
   gitTransport: GitTransport | null;
 }) {
   const phone = useIsMobile();

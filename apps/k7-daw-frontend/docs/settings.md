@@ -141,7 +141,7 @@ whoever owns it. Where this device runs no engine the section says no machine an
 `git/IdentitySection.tsx`, in General. With no account to say who the person is, the device's identity
 is what they typed here: the author of every git commit. It is stored once, in the backend's identity file
 (`apps/k7-daw-backend/docs/files/git.md`), and `git/identity.ts` mirrors it for every reader, so
-the commit dialog, which asks for it the first time a commit has none, and this section stay in sync.
+Save, which sends the person here when a commit has none, and this section stay in sync.
 The fields save themselves (after a pause in typing, and when one loses focus) and say "Saved." quietly: a Save button would be a step a field does not need.
 
 **There is no fallback author.** An empty identity is a commit the backend refuses (`no-identity`) and the

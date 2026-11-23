@@ -361,13 +361,13 @@ count, its git pills (`git/GitBar.tsx`), New project and ⋮, then its projects 
 
 | choice | why |
 |---|---|
-| a card per workspace, not a table | a workspace has acts of its own (Pull, Commit & Push, New project) that a band squeezed into a column |
+| a card per workspace, not a table | a workspace has acts of its own (Pull, Save, New project) that a band squeezed into a column |
 | a card folds | the list grows by workspace; folding one keeps the others in view |
 | no virtual scroll | a card's rows skip rendering while off screen (`content-visibility`), which costs less than measuring them |
 | the card carries `data-workspace` and the drop handlers | a drop, and a test, find a workspace by its card |
 | Pull runs in place, with a busy pill and no percentage | a pull reports none; a bar that moved would lie |
-| Commit & Push is one act, opened as the shared `dialog "Commit & Push"` | Push alone is retired; the pill stays enabled when only a push is owed |
-| the pills open the git screens through `gitScreens.tsx` | one dialog host per page, never a dialog per card |
+| Save is one act, run in place with its steps as toasts (`git/saveAct.ts`) | Push alone is retired; the pill stays enabled when only a push is owed |
+| the pills open the Conflict screen through `gitScreens.tsx` and Sync settings as a home page (`gitPages.ts`) | one screen host per page, never a dialog per card |
 | "On your other devices" follows the last card | it offers clones, which are rarer than the work above it |
 
 ## `@local` — every project's address

@@ -114,16 +114,16 @@ export function menuView(s: GitState | null): MenuView {
     : { connected: false, remote: null };
 }
 
-/** The git lines of the workspace menu, in order; a connected workspace never offers a plain "connect". */
+/** The git lines of the workspace menu, in order: where it is connected, then its Sync settings. */
 export const gitMenuEntries = (
   v: MenuView,
   // The demos are put back as shipped at each start, so they are never offered a remote.
   demos = false,
-): ("connected" | "change" | "connect")[] =>
+): ("connected" | "sync")[] =>
   demos
     ? v.connected
       ? ["connected"]
       : []
     : v.connected
-      ? ["connected", "change"]
-      : ["connect"];
+      ? ["connected", "sync"]
+      : ["sync"];

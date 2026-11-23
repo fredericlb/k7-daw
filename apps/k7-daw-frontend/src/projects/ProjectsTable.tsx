@@ -1,5 +1,5 @@
 // ProjectsTable.tsx — the home page's workspaces as cards: each a region with its name, its count, its git pills
-// (Pull in place, Commit & Push), New project and ⋮, then its project rows. A card folds.
+// (Pull in place, Save), New project and ⋮, then its project rows. A card folds.
 // What reads wrong: a file dropped on any part of a card imports into that workspace, so the drop handlers sit on
 // the card itself (`data-workspace` stays for the e2e). See ../../docs/projects.md.
 

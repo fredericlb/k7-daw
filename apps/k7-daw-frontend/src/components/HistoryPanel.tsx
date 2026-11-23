@@ -28,6 +28,7 @@ import { api } from "../api";
 import { CommitsList } from "../git/CommitsList";
 import type { GitTransport } from "../git/gitApi";
 import type { GitState } from "../git/gitTypes";
+import { onSavesList, takeSavesList } from "../git/savesList";
 import { type HistoryMark, historyMarks } from "../historyMarks";
 import { historyOffers, restoredKept } from "../historySource";
 import { useQuietWrites, useRevision } from "../hooks/useRevision";
@@ -63,7 +64,7 @@ export function HistoryPanel({
   gitTransport = null,
   onMark,
 }: {
-  /** The workspace's git state: with a repository the panel offers a second list, the commits. */
+  /** The workspace's git state: with a repository the panel offers a third list, the saves. */
   git?: GitState | null;
   gitTransport?: GitTransport | null;
   /** A step's label as a person reads it — its command's sentence and subject; the raw line stays the tooltip. */
@@ -72,7 +73,11 @@ export function HistoryPanel({
   onMark: (mark: HistoryMark | null) => void;
 }) {
   const [steps, setSteps] = useState<HistoryListEntry[]>([]);
-  const [list, setList] = useState<"edits" | "workspace" | "commits">("edits");
+  const [list, setList] = useState<"edits" | "workspace" | "commits">(() =>
+    takeSavesList() ? "commits" : "edits",
+  );
+  // The git menu's Saves, heard while the panel is already open.
+  useEffect(() => onSavesList(() => takeSavesList() && setList("commits")), []);
   const underGit = !!git && git.mode !== "none";
   const showCommits = underGit && list === "commits";
   // Only to tell which node of a touched chain a step's label names; a graph that will not build lights the chain.

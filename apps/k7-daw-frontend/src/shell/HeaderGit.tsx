@@ -1,4 +1,4 @@
-// HeaderGit.tsx — the header's git capsule: Commit & Push with its count (it pushes alone when only commits wait), and a menu (Pull, Commits).
+// HeaderGit.tsx — the header's git capsule: Save with its count (it only pushes when only saves wait), and a menu (Pull, Saves).
 // While a merge waits it is one accent "Resolve N conflicts" button. It decides no rule: gitState.ts's barView does.
 import { showToast } from "@studio/project-shell/toast";
 import { Badge } from "@studio/ui/badge";
@@ -14,14 +14,17 @@ import {
 import {
   ArrowDownToLine,
   ChevronDown,
-  GitCommitHorizontal,
   GitMerge,
   History,
+  Loader2,
+  Save,
 } from "@studio/ui/icons";
 import { useEffect } from "react";
-import { openCommitAndPush, openConflict } from "../git/gitScreens";
+import type { GitTransport } from "../git/gitApi";
+import { openConflict } from "../git/gitScreens";
 import { type BarView, barView } from "../git/gitState";
 import type { PullState } from "../git/gitTypes";
+import { save, useSaving } from "../git/saveAct";
 import type { GitHandle } from "../git/useGitState";
 import { m } from "../paraglide/messages.js";
 
@@ -44,17 +47,25 @@ const resolveLabel = (v: BarView): string | null =>
 
 export function HeaderGit({
   git: g,
+  transport,
   workspace,
   phone,
   onCommits,
 }: {
   git: GitHandle;
+  transport: GitTransport | null;
   workspace: string;
   phone: boolean;
-  /** Open the Commits list (the History panel). */
+  /** Open the Saves list (the History panel). */
   onCommits: () => void;
 }) {
   const v = barView(g.state);
+  const saving = useSaving(workspace);
+  const busy = !!g.busy || saving;
+  const commit = () => {
+    if (!transport || busy) return;
+    void save(transport, workspace, { onPull: () => void g.act("pull") });
+  };
   // A pull that diverged opens the conflict screen at once: the person was waiting for it.
   useEffect(() => {
     if (g.pulled === "conflicts") openConflict(workspace);
@@ -70,23 +81,27 @@ export function HeaderGit({
   if (!v.show) return null;
 
   const resolve = resolveLabel(v);
-  const commitLabel = m["shell.git.commitPush"]();
+  const commitLabel = m["git.save.label"]();
   const commitName =
-    v.changed > 0 ? m["shell.git.commitPushN"]({ n: v.changed }) : commitLabel;
+    v.changed > 0
+      ? m["git.save.n"]({ n: v.changed })
+      : v.push
+        ? commitLabel
+        : m["git.save.nothing"]();
   const caption = v.remote
     ? m["git.caption"]({ branch: v.branch, remote: "origin" })
     : m["git.headlineLocal"]({ branch: v.branch });
-  const pullDisabled = !!g.busy || !v.pull;
+  const pullDisabled = busy || !v.pull;
 
   const menu = (
     <DropdownMenuContent align="end" className="w-[260px]">
       <DropdownMenuLabel className="font-mono">{caption}</DropdownMenuLabel>
       {phone && (
         <DropdownMenuItem
-          disabled={!(v.commit || v.push) || !!g.busy}
-          onSelect={() => openCommitAndPush(workspace)}
+          disabled={!(v.commit || v.push) || busy}
+          onSelect={commit}
         >
-          <GitCommitHorizontal className="size-5 text-primary-text" />
+          <Save className="size-5 text-primary-text" />
           {commitLabel}
           {v.changed > 0 && <Badge variant="count">{v.changed}</Badge>}
         </DropdownMenuItem>
@@ -135,7 +150,7 @@ export function HeaderGit({
               pull: v.toPull,
             })}
           >
-            <GitCommitHorizontal className="size-5" />
+            <Save className="size-5" />
             {v.changed + v.toPull > 0 && (
               <Badge
                 variant="count-sm"
@@ -156,11 +171,11 @@ export function HeaderGit({
       <CapsuleButton
         aria-label={commitName}
         title={commitName}
-        disabled={!(v.commit || v.push) || !!g.busy}
-        onClick={() => openCommitAndPush(workspace)}
+        disabled={!(v.commit || v.push) || busy}
+        onClick={commit}
         className="px-3.5"
       >
-        <GitCommitHorizontal />
+        {saving ? <Loader2 className="animate-spin" /> : <Save />}
         <span className="max-[1279px]:hidden">{commitLabel}</span>
         {v.changed > 0 && <Badge variant="count">{v.changed}</Badge>}
       </CapsuleButton>

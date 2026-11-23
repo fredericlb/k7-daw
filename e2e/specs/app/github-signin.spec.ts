@@ -1,4 +1,4 @@
-// github-signin.spec.ts — Sign in with GitHub in Settings → Services (one code, `repo` included), then Connect lists the
+// github-signin.spec.ts — Sign in with GitHub in Settings → Services (one code, `repo` included), then Sync settings lists the
 // repositories, k7 workspaces first, and picking one whose address is a folder connects the workspace.
 import { execFileSync } from "node:child_process";
 import { mkdtempSync } from "node:fs";
@@ -6,7 +6,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { fakeGithub } from "../../src/fakeGithub.ts";
-import { workspaceCard } from "../../src/home.ts";
+import { gitPage, workspaceCard } from "../../src/home.ts";
 import { expect, test } from "../../src/target.ts";
 
 const WS = "E2E-github";
@@ -53,18 +53,18 @@ test("a workspace is connected after Sign in with GitHub in Settings", async ({
     await workspaceCard(page, WS)
       .getByRole("button", { name: `What can be done with ${WS}`, exact: true })
       .click();
-    await page.getByRole("menuitem", { name: "Connect to git…" }).click();
-    const dialog = page.getByRole("dialog", { name: /^Connect .+ to git$/ });
-    await expect(dialog.getByText("Signed in as @octo")).toBeVisible(SHOWN);
+    await page.getByRole("menuitem", { name: "Sync settings…" }).click();
+    const sync = gitPage(page, `Sync settings for ${WS}`);
+    await expect(sync.getByText("Signed in as @octo")).toBeVisible(SHOWN);
     await expect(
-      dialog.getByRole("button", { name: "Sign in with GitHub" }),
+      sync.getByRole("button", { name: "Sign in with GitHub" }),
     ).toHaveCount(0);
-    const rows = dialog.getByRole("button", { name: /^octo\// });
+    const rows = sync.getByRole("button", { name: /^octo\// });
     await expect(rows).toHaveCount(2, SHOWN);
     await expect(rows.first()).toContainText("octo/songs");
 
     await rows.first().click();
-    await expect(dialog).toBeHidden(SHOWN);
+    await expect(sync).toBeHidden(SHOWN);
     await expect(page.getByText(`${WS} is connected to`)).toBeVisible(SHOWN);
   } finally {
     await page.request.post("/api/files/git/github/signout").catch(() => {});

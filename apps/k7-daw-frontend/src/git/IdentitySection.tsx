@@ -1,5 +1,5 @@
 // IdentitySection.tsx — who this device is: the name and email that sign its commits and head the user menu (Settings).
-// It saves itself (debounced, and on blur), with a quiet note. One identity per device, shared with the commit dialog through ./identity (apps/k7-daw-backend/docs/files/git.md).
+// It saves itself (debounced, and on blur), with a quiet note. One identity per device, shared with the Save act through ./identity (apps/k7-daw-backend/docs/files/git.md).
 
 import { Input } from "@studio/ui/input";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -37,7 +37,7 @@ export function IdentitySection() {
     error: boolean;
   } | null>(null);
 
-  // A save made elsewhere (the commit dialog) lands here too.
+  // A save made elsewhere lands here too.
   useEffect(() => {
     if (!known) return;
     // Keep a draft that only differs by spaces: the save trims it, and the field must not jump under the caret.

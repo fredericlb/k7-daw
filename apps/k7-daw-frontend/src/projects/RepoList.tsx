@@ -25,9 +25,9 @@ import type { AccountWorkspace, RepoProject } from "@studio/web-protocol";
 import { byPeople, byPeoplePath } from "@studio/web-protocol/tree";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { CloneDialog } from "../git/CloneWorkspace";
 import { useGitTransport } from "../git/GitContext";
 import { lockSentence } from "../git/gitLock";
+import { openClone } from "../git/gitPages";
 import { OtherDevices } from "../git/OtherDevices";
 import { useMergingWorkspaces } from "../git/useMergingWorkspaces";
 import { parts } from "../i18nParts";
@@ -178,9 +178,8 @@ export function RepoList({
     if (!w) return Promise.reject(new Error(name));
     return refuse(w.name) ?? onCreate(w, folder, onStep, shape);
   };
-  // The New menu's two dialogs live here: a menu unmounts its items on select, and a dialog inside would go with them.
+  // The New menu's dialog lives here: a menu unmounts its items on select, and a dialog inside would go with them.
   const [making, setMaking] = useState(false);
-  const [cloning, setCloning] = useState(false);
   const newBlocked = blockedWorkspace;
   // The act itself, on the spot: the menu has the same item, but an empty page is read from its middle.
   const emptyState = (
@@ -198,7 +197,7 @@ export function RepoList({
             variant="glass"
             disabled={Boolean(blocked)}
             title={blocked || m["git.cloneHint"]()}
-            onClick={() => setCloning(true)}
+            onClick={() => openClone()}
           >
             <GitBranch />
             {m["git.clone"]()}
@@ -245,7 +244,7 @@ export function RepoList({
                   disabled={Boolean(blocked)}
                   disabledReason={blocked || undefined}
                   title={blocked || m["git.cloneHint"]()}
-                  onSelect={() => setCloning(true)}
+                  onSelect={() => openClone()}
                 >
                   <GitBranch />
                   {m["git.clone"]()}
@@ -265,11 +264,6 @@ export function RepoList({
         onCreate={onCreateWorkspace}
         shown={making}
         onShown={setMaking}
-      />
-      <CloneDialog
-        open={cloning}
-        onClose={() => setCloning(false)}
-        onCloned={onChanged}
       />
 
       {error && (

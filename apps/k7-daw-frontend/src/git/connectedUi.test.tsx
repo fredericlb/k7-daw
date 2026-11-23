@@ -26,18 +26,18 @@ describe("a remote as a person reads it", () => {
 });
 
 describe("the workspace menu's git lines", () => {
-  it("offers Connect on a workspace with no remote", () => {
-    expect(gitMenuEntries(menuView({ mode: "none" }))).toEqual(["connect"]);
-    expect(gitMenuEntries(menuView(null))).toEqual(["connect"]);
+  it("offers Sync settings on a workspace with no remote", () => {
+    expect(gitMenuEntries(menuView({ mode: "none" }))).toEqual(["sync"]);
+    expect(gitMenuEntries(menuView(null))).toEqual(["sync"]);
   });
 
-  it("says the remote and offers Change, never a plain Connect, once connected", () => {
+  it("says the remote and offers Sync settings once connected", () => {
     const v = menuView(connected);
     expect(v).toEqual({
       connected: true,
       remote: "github.com/fredericlb/mahrave_part_2",
     });
-    expect(gitMenuEntries(v)).toEqual(["connected", "change"]);
+    expect(gitMenuEntries(v)).toEqual(["connected", "sync"]);
   });
 
   it("never offers the demos a remote, and still says one they already have", () => {
@@ -68,7 +68,7 @@ describe("the home row's badge", () => {
     expect(out).toContain("2 to pull");
     expect(out).toContain("1 to push");
     expect(out).toContain("93 files changed");
-    expect(out).toContain("Commit");
+    expect(out).toContain(">Save<");
   });
 });
 
