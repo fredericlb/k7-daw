@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # testflight.sh — stages a device build, archives it in Release, and uploads it to App Store Connect for TestFlight.
-# Usage: [K7_IOS_TEAM=<team> K7_ASC_KEY_ID=<key> K7_ASC_ISSUER=<issuer>] testflight.sh [--no-stage] [--export-only] [--allow-dirty] [--dry-run]
+# Usage: [K7_IOS_TEAM=<team> K7_ASC_KEY_ID=<key> K7_ASC_ISSUER=<issuer> K7_ASC_SIGN_KEY_ID=<admin key>] testflight.sh [--no-stage] [--export-only] [--allow-dirty] [--dry-run]
 # Docs: apps/k7-daw-engine/k7-runtime/docs/ios.md, "TestFlight".
 # What a reader gets wrong: the build number is the commit count, so a second upload from the same commit is refused.
 set -euo pipefail
@@ -43,7 +43,7 @@ fail() {
 [ -n "${K7_IOS_TEAM:-}" ] || fail "K7_IOS_TEAM is not set: your paid team's 10-character id (developer.apple.com > Membership details)" 2
 K7_IOS_TEAM="${K7_IOS_TEAM:-TEAMID}"
 
-# Xcode's own account signs (Settings > Accounts); the API key only uploads, since an App Manager key may not sign (docs/ios.md).
+# An Admin key (K7_ASC_SIGN_KEY_ID) signs when set, else Xcode's own account does; the App Manager key only uploads (docs/ios.md).
 key_id="${K7_ASC_KEY_ID:-}"
 issuer="${K7_ASC_ISSUER:-}"
 key_path="${K7_ASC_KEY_PATH:-$HOME/.appstoreconnect/private_keys/AuthKey_${key_id}.p8}"
@@ -51,6 +51,16 @@ if [ -n "$key_id" ] && [ -n "$issuer" ]; then
   [ -f "$key_path" ] || fail "no API key file at $key_path (download it from App Store Connect > Users and Access > Integrations)" 3
 elif [ "$dest" = "upload" ]; then
   fail "K7_ASC_KEY_ID and K7_ASC_ISSUER are not set: the upload needs an App Store Connect API key (--export-only builds the .ipa without one)" 3
+fi
+sign_auth=()
+if [ -n "${K7_ASC_SIGN_KEY_ID:-}" ]; then
+  sign_path="${K7_ASC_SIGN_KEY_PATH:-$HOME/.appstoreconnect/private_keys/AuthKey_${K7_ASC_SIGN_KEY_ID}.p8}"
+  [ -n "$issuer" ] || fail "K7_ASC_SIGN_KEY_ID is set but K7_ASC_ISSUER is not" 3
+  [ -f "$sign_path" ] || fail "no signing key file at $sign_path" 3
+  sign_auth=(-authenticationKeyPath "$sign_path" -authenticationKeyID "$K7_ASC_SIGN_KEY_ID" -authenticationKeyIssuerID "$issuer")
+  say "signing with the Admin API key $K7_ASC_SIGN_KEY_ID"
+else
+  say "signing with the Apple ID signed into Xcode"
 fi
 
 # A build from uncommitted changes would carry a number that names a commit it is not.
@@ -72,7 +82,7 @@ mkdir -p "$out"
 run rm -rf "$archive" "$export_dir"
 run xcodebuild -project "$ios/k7.xcodeproj" -scheme k7 -configuration Release \
   -destination "generic/platform=iOS" -archivePath "$archive" \
-  -allowProvisioningUpdates \
+  -allowProvisioningUpdates ${sign_auth[@]+"${sign_auth[@]}"} \
   DEVELOPMENT_TEAM="$K7_IOS_TEAM" CODE_SIGN_STYLE=Automatic archive
 
 opts="$out/ExportOptions.plist"
@@ -93,7 +103,7 @@ cat > "$opts" <<PLIST
 PLIST
 
 run xcodebuild -exportArchive -archivePath "$archive" -exportPath "$export_dir" \
-  -exportOptionsPlist "$opts" -allowProvisioningUpdates
+  -exportOptionsPlist "$opts" -allowProvisioningUpdates ${sign_auth[@]+"${sign_auth[@]}"}
 
 # altool reads AuthKey_<id>.p8 from API_PRIVATE_KEYS_DIR: only the key's folder is named, never its content.
 if [ "$dest" = "upload" ]; then

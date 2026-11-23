@@ -152,8 +152,8 @@ root (`stageCodeRoot.mjs`). Every run writes `build/staged/version.xcconfig`, th
 
 ## TestFlight
 
-`apps/k7-daw-ios/scripts/testflight.sh` stages a device build, archives and exports it in Release, signed through Xcode's
-account, and uploads the `.ipa` to App Store Connect with `xcrun altool` and the API key, for the team's internal testers.
+`apps/k7-daw-ios/scripts/testflight.sh` stages a device build, archives and exports it in Release, signed with an Admin API key
+(or, without one, through Xcode's account), and uploads the `.ipa` to App Store Connect with `xcrun altool` and the API key, for the team's internal testers.
 
 Set up once:
 
@@ -161,7 +161,7 @@ Set up once:
 - an App Store Connect app record for the bundle id `rocks.k7.daw`;
 - the App ID's iCloud capability for key-value storage, which automatic signing with `-allowProvisioningUpdates` adds;
 - an internal tester group on that record;
-- the team's Apple ID signed in to Xcode (Settings > Accounts), which signs the archive and its export;
+- an App Store Connect API key with the Admin role (`K7_ASC_SIGN_KEY_ID`), which signs the archive and its export; without it, the team's Apple ID signed in to Xcode (Settings > Accounts) signs;
 - an App Store Connect API key with the App Manager role, for the upload, its `.p8` kept in `~/.appstoreconnect/private_keys/` (`AuthKey_<id>.p8`, the name altool looks for).
 
 ```
@@ -169,7 +169,7 @@ K7_IOS_TEAM=<team id> K7_ASC_KEY_ID=<key id> K7_ASC_ISSUER=<issuer id> \
   apps/k7-daw-ios/scripts/testflight.sh [--no-stage] [--export-only] [--allow-dirty] [--dry-run]
 ```
 
-The four ids can live in `~/.config/k7/testflight.env` (`KEY=VALUE` lines, `K7_TESTFLIGHT_ENV` to name another file), which the
+The ids can live in `~/.config/k7/testflight.env` (`KEY=VALUE` lines, `K7_TESTFLIGHT_ENV` to name another file), which the
 script reads, a variable set in the shell winning: they stay out of the public tree. `K7_ASC_KEY_PATH` names the `.p8` when it is not at the default path, and `K7_GITHUB_CLIENT_ID` is baked into the build
 for Sign in with GitHub. `--no-stage` reuses the last staging, `--export-only` writes the `.ipa` and uploads nothing
 (no API key needed), `--allow-dirty` builds an uncommitted tree, `--dry-run` prints the `xcodebuild` and `altool` commands and runs none.
@@ -177,7 +177,7 @@ for Sign in with GitHub. `--no-stage` reuses the last staging, `--export-only` w
 | choice | why |
 |---|---|
 | internal testing only (`testFlightInternalTestingOnly`) | no Beta App Review, and a build cannot slip to external testers |
-| Xcode's account signs, the API key only uploads | an App Manager key that signs is refused ("Cloud signing permission error"): cloud signing wants an Admin key, while Xcode's account signs with the team's cloud certificate; altool takes the key's folder, never its content |
+| an Admin key signs, the App Manager key only uploads | cloud signing from a key wants the Admin role (an App Manager key gets "Cloud signing permission error"), and a key does not expire like Xcode's sign-in, which a scheduled run cannot renew; the Admin key is used for nothing else; altool takes the key's folder, never its content |
 | the ids in a file under `~/.config`, never in the repository | the repository is public, and the API key's `.p8` stays the one secret on disk |
 | the two frameworks' Info.plist from `server/ios/Framework-Info.plist.in`, with the root's version and the deployment target as `MinimumOSVersion` | App Store Connect refuses an embedded framework without them (ITMS-90056, 90057, 90208, 90360), and CMake's own template leaves them empty |
 | a dirty tree refused | the build number names a commit, and a build from other files would carry a number that is not its own |
