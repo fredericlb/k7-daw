@@ -1,7 +1,7 @@
 // AppViews.swift — k7 in one full-screen WKWebView over the shell page (web/src/App.tsx, AppViews), under a
-// status-bar strip painted the colour of k7's own header. It loads from this phone's own backend, never from this
-// app: the page is same-origin with its backend (`/api`, `/auth`, cookie sessions). The view is made the first time it
-// is shown and then only hidden, so k7 keeps its state while the shell page is on screen.
+// status-bar strip painted the colour of k7's own header, and the native home over both (HomeHost.swift). It loads from
+// this phone's own backend: the page is same-origin with its backend (`/api`, `/auth`, cookie sessions). The view is
+// made the first time it is shown and then only hidden, so k7 keeps its state while the shell page is on screen.
 // The same plugin, methods and events as AppViewsPlugin.kt on Android. See apps/k7-daw-engine/k7-runtime/docs/ios.md.
 
 import Capacitor
@@ -29,6 +29,8 @@ public class AppViewsPlugin: CAPPlugin, CAPBridgedPlugin, WKNavigationDelegate, 
     private var appBridge: StudioBridge!
     private var color: UIColor = .clear
     private var view: AppWebView?
+    // The native home in the same frame, which hands over to the web view and back.
+    private var home: HomeHost?
     private var loaded = false
     private var visible = false
     private var localSignInAt = Date.distantPast
@@ -58,6 +60,11 @@ public class AppViewsPlugin: CAPPlugin, CAPBridgedPlugin, WKNavigationDelegate, 
             strip.bottomAnchor.constraint(equalTo: frame.safeAreaLayoutGuide.topAnchor),
         ])
         scripts = Self.pageScripts()
+        let parent = bridge?.viewController
+        home = MainActor.assumeIsolated { HomeHost(parent: parent, frame: frame) }
+        MainActor.assumeIsolated {
+            home?.onShown = { [weak self] _ in self?.paint() }
+        }
         appBridge = StudioBridge(
             isK7: { [weak self] in self?.isK7($0) ?? false },
             onColor: { [weak self] color in
@@ -130,14 +137,20 @@ public class AppViewsPlugin: CAPPlugin, CAPBridgedPlugin, WKNavigationDelegate, 
     }
 
     private func showNow(_ call: CAPPluginCall) {
+        let fresh = view == nil
         let v = view ?? create()
-        // k7 opens as the local user, as the desktop window does.
+        // k7 opens as the local user, as the desktop window does; the page loads under the native home, ready for a project.
         if !loaded, let to = URL(string: BackendHost.home) { v.load(URLRequest(url: to)) }
         loaded = true
         v.isHidden = false
         visible = true
         frame.isHidden = false
         frame.superview?.bringSubviewToFront(frame)
+        MainActor.assumeIsolated {
+            if fresh { home?.attach(v) }
+            // The app's start screen is the native home; a show while a web page is in front leaves it there.
+            if fresh || home?.shown == true { home?.showHome() }
+        }
         paint()
         call.resolve()
     }
@@ -167,8 +180,12 @@ public class AppViewsPlugin: CAPPlugin, CAPBridgedPlugin, WKNavigationDelegate, 
         if let to = URL(string: BackendHost.home) { view?.load(URLRequest(url: to)) }
     }
 
-    // Until the page has said, the shell page's own background shows through.
+    // Until the page has said, the shell page's own background shows through; the native home is dark.
     private func paint() {
+        if MainActor.assumeIsolated({ home?.shown == true }) {
+            MainViewController.current?.statusBarDark = false
+            return
+        }
         strip.backgroundColor = color
         var white: CGFloat = 0
         if color != .clear, color.getWhite(&white, alpha: nil) {
@@ -257,6 +274,11 @@ public class AppViewsPlugin: CAPPlugin, CAPBridgedPlugin, WKNavigationDelegate, 
 
     public func webView(_ webView: WKWebView, navigationResponse: WKNavigationResponse, didBecome download: WKDownload) {
         download.delegate = Downloads.shared
+    }
+
+    // The page's language may have changed in its Settings: the native words follow it.
+    public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        MainActor.assumeIsolated { home?.readLocale() }
     }
 
     public func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {

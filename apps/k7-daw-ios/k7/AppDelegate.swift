@@ -9,9 +9,13 @@ import UIKit
 @main
 final class AppDelegate: UIResponder, UIApplicationDelegate {
     static let supervisorStop: TimeInterval = 4
+    /// Launched by XCTest to host the `k7Tests` bundle (apps/k7-daw-ios/k7Tests).
+    static let unitTestHost = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        // A unit test host starts nothing: the stdio relay would echo XCTest's own output back into itself.
+        if Self.unitTestHost { return true }
         // First of all: the engine, the supervisor and the front write to stdio, which only this makes visible.
         StdioLog.start()
         AudioSession.start()

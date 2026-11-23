@@ -18,7 +18,18 @@
 		AA0000000000000000000111 /* backend in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000206 /* backend */; };
 		AA0000000000000000000113 /* page-scripts in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000208 /* page-scripts */; };
 		AA0000000000000000000114 /* cacert.pem in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000209 /* cacert.pem */; };
+		AA0000000000000000000115 /* messages in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000211 /* messages */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		AA0000000000000000000B01 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AA0000000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AA0000000000000000000601;
+			remoteInfo = k7;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		AA0000000000000000000301 /* Embed Frameworks */ = {
@@ -45,6 +56,8 @@
 		AA0000000000000000000208 /* page-scripts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "resources/page-scripts"; sourceTree = "<group>"; };
 		AA0000000000000000000209 /* cacert.pem */ = {isa = PBXFileReference; lastKnownFileType = text; path = resources/cacert.pem; sourceTree = "<group>"; };
 		AA0000000000000000000210 /* version.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = version.xcconfig; sourceTree = "<group>"; };
+		AA0000000000000000000211 /* messages */ = {isa = PBXFileReference; lastKnownFileType = folder; name = messages; path = "../k7-daw-frontend/messages"; sourceTree = SOURCE_ROOT; };
+		AA0000000000000000000212 /* k7Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = k7Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -68,6 +81,11 @@
 			path = k7;
 			sourceTree = "<group>";
 		};
+		AA0000000000000000000405 /* k7Tests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = k7Tests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +100,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AA0000000000000000000306 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -89,6 +114,8 @@
 			isa = PBXGroup;
 			children = (
 				AA0000000000000000000401 /* k7 */,
+				AA0000000000000000000405 /* k7Tests */,
+				AA0000000000000000000211 /* messages */,
 				AA0000000000000000000403 /* Staged */,
 				AA0000000000000000000404 /* Products */,
 			);
@@ -114,6 +141,7 @@
 			isa = PBXGroup;
 			children = (
 				AA0000000000000000000200 /* k7.app */,
+				AA0000000000000000000212 /* k7Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -146,6 +174,27 @@
 			productReference = AA0000000000000000000200 /* k7.app */;
 			productType = "com.apple.product-type.application";
 		};
+		AA0000000000000000000602 /* k7Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA0000000000000000000803 /* Build configuration list for PBXNativeTarget "k7Tests" */;
+			buildPhases = (
+				AA0000000000000000000305 /* Sources */,
+				AA0000000000000000000306 /* Frameworks */,
+				AA0000000000000000000307 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AA0000000000000000000A01 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				AA0000000000000000000405 /* k7Tests */,
+			);
+			name = k7Tests;
+			productName = k7Tests;
+			productReference = AA0000000000000000000212 /* k7Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -158,6 +207,10 @@
 				TargetAttributes = {
 					AA0000000000000000000601 = {
 						CreatedOnToolsVersion = 26.0;
+					};
+					AA0000000000000000000602 = {
+						CreatedOnToolsVersion = 26.0;
+						TestTargetID = AA0000000000000000000601;
 					};
 				};
 			};
@@ -179,6 +232,7 @@
 			projectRoot = "";
 			targets = (
 				AA0000000000000000000601 /* k7 */,
+				AA0000000000000000000602 /* k7Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -193,6 +247,14 @@
 				AA0000000000000000000111 /* backend in Resources */,
 				AA0000000000000000000113 /* page-scripts in Resources */,
 				AA0000000000000000000114 /* cacert.pem in Resources */,
+				AA0000000000000000000115 /* messages in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA0000000000000000000307 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -206,7 +268,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AA0000000000000000000305 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		AA0000000000000000000A01 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AA0000000000000000000601 /* k7 */;
+			targetProxy = AA0000000000000000000B01 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		AA0000000000000000000901 /* Debug */ = {
@@ -321,6 +398,38 @@
 			};
 			name = Release;
 		};
+		AA0000000000000000000905 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				EXCLUDED_ARCHS = x86_64;
+				GENERATE_INFOPLIST_FILE = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = rocks.k7.daw.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/k7.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/k7";
+			};
+			name = Debug;
+		};
+		AA0000000000000000000906 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				EXCLUDED_ARCHS = x86_64;
+				GENERATE_INFOPLIST_FILE = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = rocks.k7.daw.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/k7.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/k7";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -338,6 +447,15 @@
 			buildConfigurations = (
 				AA0000000000000000000903 /* Debug */,
 				AA0000000000000000000904 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AA0000000000000000000803 /* Build configuration list for PBXNativeTarget "k7Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA0000000000000000000905 /* Debug */,
+				AA0000000000000000000906 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

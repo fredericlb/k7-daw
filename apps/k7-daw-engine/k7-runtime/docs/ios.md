@@ -67,6 +67,9 @@ Android's `window.k7Android` under the platform's name. `apps/k7-daw-frontend/sr
 whichever is there, and the three page scripts both apps inject accept either (`apps/k7-daw-android/app/src/main/assets`).
 The page calls the engine, checked by origin on every message, with Android's short list of commands.
 
+k7's home side is native SwiftUI over that view: the Projects home is the app's start screen, and a project opens in
+k7's view at its address (`HomeHost.swift`, `docs/native-ui-plan.md` at the root). Its unit tests are the `k7Tests` target.
+
 Where iOS does a thing itself, the app lets it:
 
 | Android | iOS |

@@ -444,6 +444,7 @@
   "ws.deleteEllipsis": "Delete workspace…",
   "ws.typeName": "type the workspace's name exactly",
   "home.projects": "Projects",
+  "home.workspaces": "Workspaces",
   "shape.pick": "What the project opens on",
   "shape.arrangement": "Song",
   "shape.arrangementWhat": "record, write and arrange tracks on a timeline — starts with one synth track",

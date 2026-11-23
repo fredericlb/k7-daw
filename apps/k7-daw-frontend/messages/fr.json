@@ -444,6 +444,7 @@
   "ws.deleteEllipsis": "Supprimer l'espace…",
   "ws.typeName": "tapez exactement le nom de l'espace",
   "home.projects": "Projets",
+  "home.workspaces": "Espaces de travail",
   "shape.pick": "Ce sur quoi le projet s'ouvre",
   "shape.arrangement": "Morceau",
   "shape.arrangementWhat": "enregistrer, écrire et arranger des pistes sur une timeline — commence avec une piste de synthé",
