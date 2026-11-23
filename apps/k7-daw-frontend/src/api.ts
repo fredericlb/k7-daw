@@ -52,6 +52,10 @@ const ORIGIN = serviceUrl(globalThis.location?.origin ?? "", "k7");
 /** k7's own preference document — the remembered engine plus the command prefs; widening it is HALF of adding a field, the backend's zod schema deciding the rest. */
 export interface K7Prefs extends EnginePrefs {
   commands?: CommandPrefs;
+  /** k7's language, which the iOS app's native home follows too (localePrefs.ts). */
+  locale?: string;
+  /** The native home's theme, `dark`, `light` or `system`; the web draws dark only (docs/native-ui-plan.md). */
+  theme?: string;
 }
 /** The registry, the probe and the relay, and the preferences with the remembered engine among them: one origin. */
 export const engines = engineAccess<PublicEngine, K7Prefs>(ORIGIN, json, {

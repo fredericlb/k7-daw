@@ -1,6 +1,5 @@
-// LanguageSection.tsx — which language the app speaks. The one setting on this panel that asks no
-// machine anything: it is the BROWSER's, kept in its own localStorage and travelling with nothing.
-// See ../../docs/settings.md.
+// LanguageSection.tsx — which language the app speaks, kept in the account's preferences on this device's backend
+// (../localePrefs.ts), where the iOS app's native home reads it too. See ../../docs/settings.md.
 
 import { useLocale } from "../i18n";
 import { m } from "../paraglide/messages.js";

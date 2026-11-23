@@ -107,6 +107,9 @@ pub fn parse(sent: &Value) -> Result<Map<String, Value>, String> {
     });
     field(o, "playbackTarget", &mut out, &mut issues, string);
     field(o, "favorites", &mut out, &mut issues, strings);
+    // k7's language and theme, read by the web page and the native home alike (docs/native-ui-plan.md).
+    field(o, "locale", &mut out, &mut issues, string);
+    field(o, "theme", &mut out, &mut issues, string);
     if issues.is_empty() {
         Ok(out)
     } else {
@@ -158,10 +161,20 @@ mod tests {
         );
         assert!(parse(&json!({ "engineId": null })).is_err());
         assert!(
-            !parse(&json!({ "theme": "dark" }))
+            !parse(&json!({ "colour": "dark" }))
                 .unwrap()
-                .contains_key("theme")
+                .contains_key("colour")
         );
+    }
+
+    #[test]
+    fn the_language_and_theme_are_kept() {
+        let kept = parse(&json!({ "theme": "light", "locale": "fr" })).unwrap();
+        assert_eq!(
+            Value::Object(kept).to_string(),
+            r#"{"locale":"fr","theme":"light"}"#
+        );
+        assert!(parse(&json!({ "theme": 1 })).is_err());
     }
 
     #[test]

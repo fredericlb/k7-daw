@@ -1,5 +1,5 @@
 // HomeRules.swift — the Projects home's rules, pure: the order and filter of the list, a new folder's name, a project's
-// address, what a workspace's git state offers, and which web address the native home stands in for.
+// address, what a workspace's git state offers, and which web address the native home or Settings stands in for.
 // Each mirrors the web home's own (apps/k7-daw-frontend/src/projects/, src/git/gitState.ts), so both say the same.
 // See docs/native-ui-plan.md.
 
@@ -108,6 +108,7 @@ enum HomeRules {
     static let tasksRoute = "/tasks"
     static let librariesRoute = "/libraries"
     static let settingsRoute = "/settings"
+    static let engineRoute = "/settings/engine"
     static let cloneRoute = "/?clone"
     /// The web home asked for by name: its cards still do Save, Pull and the merge until those are native.
     static let webHomeRoute = "/?web"
@@ -120,11 +121,34 @@ enum HomeRules {
         "/?ws=\(workspace.addingPercentEncoding(withAllowedCharacters: .urlQueryValueAllowed) ?? workspace)"
     }
 
+    /// What the native home draws in place of the web page at `url`: the bare Projects home, or a native Settings page.
+    enum NativePage: Equatable {
+        case projects
+        case settings([SettingsPage])
+    }
+
+    /// The native page standing in for `url`, or nil when it stays web: a `web` item in the query keeps any address web.
+    static func nativePage(_ url: URL, origin: URL) -> NativePage? {
+        guard url.scheme == origin.scheme, url.host == origin.host, url.port == origin.port else { return nil }
+        let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems ?? []
+        if items.contains(where: { $0.name == "web" }) { return nil }
+        switch url.path {
+        case "", "/":
+            return url.query == nil || url.query == "" ? .projects : nil
+        case settingsRoute:
+            guard let asked = items.first(where: { $0.name == "tab" })?.value else { return .settings([]) }
+            guard let tab = SettingsTab(rawValue: asked) else { return .settings([]) }
+            return tab.native ? .settings([.tab(tab)]) : nil
+        case engineRoute:
+            return .settings([.tab(.devices), .engine])
+        default:
+            return nil
+        }
+    }
+
     /// Whether the web page, at `url`, is on the bare Projects home, which the native home replaces.
     static func isNativeHome(_ url: URL, origin: URL) -> Bool {
-        guard url.scheme == origin.scheme, url.host == origin.host, url.port == origin.port else { return false }
-        let bare = url.query == nil || url.query == ""
-        return (url.path.isEmpty || url.path == "/") && bare
+        nativePage(url, origin: origin) == .projects
     }
 
     // MARK: git

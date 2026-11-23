@@ -15,6 +15,9 @@ final class HomeModel: ObservableObject {
     @Published var notice: String?
     @Published private(set) var libraries: Int?
     @Published var query = ""
+    /// The native tab in front, and the Settings pages pushed over its list.
+    @Published var tab: HomeTab = .projects
+    @Published var settingsPath: [SettingsPage] = []
     /// The ⋮'s Show examples, kept on this device as the web keeps it in the page.
     @Published var chosenExamples = UserDefaults.standard.bool(forKey: HomeModel.examplesKey) {
         didSet { UserDefaults.standard.set(chosenExamples, forKey: Self.examplesKey) }
@@ -114,6 +117,13 @@ final class HomeModel: ObservableObject {
             notice = L10n.shared.t("project.missingModules",
                                    ["project": made.project, "modules": made.missing.joined(separator: ", ")])
         }
+    }
+
+    /// A native tab comes to the front; one not native yet opens its web page.
+    func choose(_ next: HomeTab) {
+        if let route = next.webRoute { return openWeb(route) }
+        if next == tab, next == .settings { settingsPath = [] }
+        tab = next
     }
 
     func open(workspace: String, project: String) {

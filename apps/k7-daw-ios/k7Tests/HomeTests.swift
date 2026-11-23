@@ -123,6 +123,7 @@ final class L10nTests: XCTestCase {
             }
         }
         keys.formUnion(HomeTab.allCases.map(\.key))
+        keys.formUnion(SettingsTab.allCases.map(\.key) + Theme.allCases.map(\.key))
         keys.formUnion(HomeRules.shapes.flatMap { [HomeRules.shapeKey($0), HomeRules.shapeKey($0) + "What"] })
         return keys
     }

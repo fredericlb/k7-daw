@@ -53,7 +53,7 @@ import { PROFILING } from "@studio/project-shell/profiling";
 import { shell } from "./appShell";
 import { installFreezeWatchdog, reportCommit, tally } from "./freezeWatchdog";
 import { currentRevision } from "./hooks/useRevision";
-import { LocaleProvider, useLocale } from "./i18n";
+import { LocaleFromPrefs, LocaleProvider, useLocale } from "./i18n";
 import { installLongPress } from "./longPress";
 import { PaneBoundary } from "./PaneBoundary";
 import { m } from "./paraglide/messages.js";
@@ -185,6 +185,7 @@ function Root() {
     <PaneBoundary name="k7" resetKey={scope.key}>
       {/* Above the router, so moving between scopes does not ask who you are again. */}
       <AuthGate>
+        <LocaleFromPrefs />
         <Scoped scope={scope} ready={ready}>
           <Suspense fallback={<Booting />}>
             {scope.kind === "lan-surface" ? (

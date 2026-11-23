@@ -49,6 +49,8 @@ final class K7Client {
     let origin: URL
     private let session: URLSession
     private var files: (base: URL, ticket: String, user: String)?
+    // Whether `/auth/me` has handed the session cookie over, which the front's own routes ask for.
+    private var signed = false
 
     init(origin: URL, session: URLSession = .shared) {
         self.origin = origin
@@ -84,6 +86,7 @@ final class K7Client {
     private func filesService() async throws -> (base: URL, ticket: String, user: String) {
         if let files { return files }
         let me: Me = try await get(origin.appendingPathComponent("auth/me"), headers: [:])
+        signed = true
         let hello: Hello = try await get(origin.appendingPathComponent("api/files-hub"), headers: [:])
         let user = me.user?.email ?? me.user?.sub ?? "unknown"
         let found = (URL(string: origin.absoluteString + hello.path)!, hello.ticket, user)
@@ -92,7 +95,7 @@ final class K7Client {
     }
 
     /// One call to the file service with its headers; a 401 asks the hub for a fresh ticket once.
-    private func files<T: Decodable>(_ path: String, method: String = "GET", workspace: String? = nil,
+    func files<T: Decodable>(_ path: String, method: String = "GET", workspace: String? = nil,
                                      json: [String: Any]? = nil, retried: Bool = false) async throws -> T {
         let f = try await filesService()
         var headers = ["x-studio-user": f.user, "x-studio-engine-token": f.ticket]
@@ -106,11 +109,18 @@ final class K7Client {
         }
     }
 
+    /// The session cookie, once: the front's own routes (the preferences, the AI key, an engine's chains) hold to it.
+    func signIn() async throws {
+        if signed { return }
+        let _: AnyDecodable = try await get(origin.appendingPathComponent("auth/me"), headers: [:])
+        signed = true
+    }
+
     private func get<T: Decodable>(_ url: URL, headers: [String: String]) async throws -> T {
         try await send(url, method: "GET", headers: headers, json: nil)
     }
 
-    private func send<T: Decodable>(_ url: URL, method: String, headers: [String: String], json: [String: Any]?) async throws -> T {
+    func send<T: Decodable>(_ url: URL, method: String, headers: [String: String], json: [String: Any]?) async throws -> T {
         var request = URLRequest(url: url)
         request.httpMethod = method
         for (k, v) in headers { request.setValue(v, forHTTPHeaderField: k) }

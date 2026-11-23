@@ -37,13 +37,15 @@ under the native home.
 |---|---|
 | the web view loads `/` at start, hidden under the native home | opening a project is then k7's in-place navigation, with no cold page load; the cost is the web home's own polling behind the native one |
 | a native page opens an address in the web view by dispatching `k7-desktop-go` with the path | it is the desktop app's way to ask the page for an address (`apps/k7-daw-frontend/src/appNav.ts`): the page's own `go`, which asks about unsaved work; a page that has not heard it in 3 s is loaded at the address instead |
-| the shell watches the web view's address (`WKWebView.url`, which a `pushState` changes too) and shows the native home when it is the bare home: path `/` with no query | leaving a project, by the page's Back, its home navigation, the edge swipe or the web tab bar's Projects, all end on `/`; nothing is injected into the page, so the web needs no change |
-| `/` with a query stays web: `?sync=<ws>` (Sync settings), `?clone` (Clone), `?ws=<ws>` (a workspace's files), `?web` (the web home asked for by name) | those are web pages until their phase; `?web` is the web home's cards, which still do Save, Pull and the merge |
-| tabs and menu entries for pages not native yet open their web route (`/surfaces`, `/tasks`, `/libraries`, `/settings`) | the web page's own tab bar brings the person back to `/`, so the native home |
-| the app takes no deep link yet; when it does, a project address opens in the web view and a home address in the native home, by the same `HomeRules.isNativeHome` | one rule, the address's, decides who draws it |
+| the shell watches the web view's address (`WKWebView.url`, which a `pushState` changes too) and shows the native home when it is one the native home stands in for (`HomeRules.nativePage`): the bare home, path `/` with no query, and Settings, `/settings`, `/settings?tab=<a native tab>`, `/settings/engine` | leaving a project, by the page's Back, its home navigation, the edge swipe or the web tab bar's Projects, all end on `/`; a link to the settings from inside the editor lands on the native Settings; nothing is injected into the page for it |
+| `/` with a query stays web: `?sync=<ws>` (Sync settings), `?clone` (Clone), `?ws=<ws>` (a workspace's files), `?web` (the web home asked for by name); a `web` item keeps any address web, so a native page hands over a web settings tab as `/settings?tab=<tab>&web` | those are web pages until their phase; `?web` is the web home's cards, which still do Save, Pull and the merge |
+| tabs and menu entries for pages not native yet open their web route (`/surfaces`, `/tasks`, `/libraries`) | the web page's own tab bar brings the person back to `/` or `/settings`, so the native page |
+| the app takes no deep link yet; when it does, a project address opens in the web view and a home address in the native home, by the same `HomeRules.nativePage` | one rule, the address's, decides who draws it |
 | a surface opened on its own (`/@lan/<engine>/…/@external/<surface>`) is an editor address: web | it is a project's surface, not a home page |
-| the language the native pages use is the web page's (its `PARAGLIDE_LOCALE`), read from the web view at each return home | k7's language is k7's own setting, not the system's; phase 2 moves it to the preferences so both read one place |
-| the native home is dark, as the mockups | the web home's light theme comes with Settings, phase 2 |
+| the language is the preferences' `locale` (`/api/preferences`, `Prefs.swift`, the web's `src/localePrefs.ts`), read at each return home; with none stored, the web page's own `PARAGLIDE_LOCALE` | k7's language is k7's own setting, not the system's, and one document both sides read cannot disagree; a page that chose before the preferences held it keeps its choice until the next one |
+| a language chosen natively is written to the preferences, then the shell dispatches `k7-prefs-changed` in the web view, and the page reads them again | the page stays loaded under the native home: without a word it would speak the old language until a reload; the event is the same kind of door as `k7-desktop-go` |
+| the theme is the preferences' `theme`: `dark` (the mockups', and the default), `light` or `system`, applied to the native views and the status bar | the native screens are the platform's controls, which draw both; a person reading in daylight asks for it |
+| the web draws dark only, so the theme is chosen in the native Settings alone and the editor stays dark | `@studio/ui`'s tokens are dark only (`apps/k7-daw-frontend/packages/ui/docs/tokens.md`); a web choice that changes nothing on its page would read as broken |
 
 ## Localisation
 
@@ -59,13 +61,22 @@ under the native home.
 The editors (every project address), the surfaces opened alone, and each home page until its phase lands. The web home
 stays the home on Android, Windows and Linux, and in the browser.
 
+Inside the native Settings, these open the web settings page (`/settings?tab=<tab>&web`):
+
+| page | why it is still web |
+|---|---|
+| Services, the whole tab: GitHub and Forgejo sign-ins | the git accounts are phase 3 |
+| Downloads, the whole tab | it lists the downloads the web page itself runs (songs, models, uploads), held in that page's memory; the phone's engine instruments are on the Engine page, as on the web |
+| Devices › Paired devices | the pairing speaks the engine's own WebSocket protocol, whose client is the web page's |
+| About › the licence text and the third-party notices | the notices are a module of the web build; the version and the source link are native |
+
 ## Testing
 
 | choice | why |
 |---|---|
 | XCTest (`apps/k7-daw-ios/k7Tests`, hosted by the app) for the client against a stubbed `URLProtocol`, the rules, the view models and the catalogues | they decide everything a native page shows; a view is then a drawing of tested values |
 | the app hosting the unit tests starts nothing: no backend, supervisor, engine or stdio relay (`AppDelegate.unitTestHost`) | the relay sends stdout to the system log, which XCTest reads back into stdout: a loop that never lets a test finish; the tests stub every route anyway |
-| XCUITest for a native screen's flows comes with the Settings phase, where a screen's flow is more than a list | the Projects home has one gesture per element |
+| no XCUITest target yet: the native pages carry accessibility identifiers (`tab.<tab>`, `settings.<tab>`, `settings.language.<locale>`) for one | in the running app an XCUITest query does not answer within its 60 s snapshot limit (seen on an iOS 26 simulator, Settings phase), so a flow test cannot run in reasonable time; the view models it would check are XCTest's |
 | the Playwright iOS target (`e2e/playwright.ios.config.ts`, `e2e/docs/e2e.md`) keeps driving the app's studio in the host's WebKit | it tests the routes and the editor, which stay shared; it never saw the app's own views |
 
 ## Phases
@@ -74,7 +85,9 @@ stays the home on Android, Windows and Linux, and in the browser.
    editor, New workspace and New project as native sheets, the header and tab bar of the mockups, the iPad's split view.
    The workspace's git line is read-only: Setup sync opens the web Sync settings, and Pull, Save and a waiting merge open
    the web home's cards (`/?web`). The native home is the app's start screen.
-2. **Settings**, with its tabs, the Engine page and About; the language and theme move to the preferences.
+2. **Settings**, with its tabs, the Engine page and About; the language and theme move to the preferences. Done: a
+   list of the web page's tabs, General (language, appearance, commit author, AI key, separation chains), Devices with the
+   Engine page (state, network, instruments, private CA), About; what stays web is listed above.
 3. **The git pages and the accounts**: Sync settings, Clone, Save, Pull and the merge screen, the Forgejo and GitHub
    sign-ins (`ASWebAuthenticationSession`, as `ForgeSignIn.swift` does already), "On your other devices".
 4. **Tasks, Libraries with frozen chains, Surfaces**, and the first-project wizard.

@@ -180,10 +180,10 @@ public class AppViewsPlugin: CAPPlugin, CAPBridgedPlugin, WKNavigationDelegate, 
         if let to = URL(string: BackendHost.home) { view?.load(URLRequest(url: to)) }
     }
 
-    // Until the page has said, the shell page's own background shows through; the native home is dark.
+    // Until the page has said, the shell page's own background shows through; the native home says for itself.
     private func paint() {
         if MainActor.assumeIsolated({ home?.shown == true }) {
-            MainViewController.current?.statusBarDark = false
+            MainViewController.current?.statusBarDark = MainActor.assumeIsolated { home?.darkStatusBar == true }
             return
         }
         strip.backgroundColor = color

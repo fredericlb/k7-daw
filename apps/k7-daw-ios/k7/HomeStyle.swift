@@ -1,23 +1,40 @@
-// HomeStyle.swift — the native home's look, from the design canvas's iOS and iPadOS boards: black ground, grouped cards,
+// HomeStyle.swift — the native home's look, from the design canvas's iOS and iPadOS boards: black ground (a light one too), grouped cards,
 // a violet accent, and Liquid Glass on iOS 26 with a material in its place before. The tabs are the web home's five.
 // See docs/native-ui-plan.md.
 
 import SwiftUI
+import UIKit
 
 enum HomeStyle {
-    static let ground = Color.black
-    static let card = Color(red: 28 / 255, green: 28 / 255, blue: 30 / 255)
-    static let accent = Color(red: 185 / 255, green: 166 / 255, blue: 1)
-    static let accentLight = Color(red: 214 / 255, green: 200 / 255, blue: 1)
+    /// A colour for each look: the mockups' dark, and its light counterpart.
+    static func pair(_ dark: UIColor, _ light: UIColor) -> Color {
+        Color(UIColor { $0.userInterfaceStyle == .light ? light : dark })
+    }
+
+    private static func rgb(_ r: CGFloat, _ g: CGFloat, _ b: CGFloat, _ a: CGFloat = 1) -> UIColor {
+        UIColor(red: r / 255, green: g / 255, blue: b / 255, alpha: a)
+    }
+
+    static let ground = pair(.black, rgb(242, 242, 247))
+    static let card = pair(rgb(28, 28, 30), .white)
+    /// The text drawn on the ground and on cards.
+    static let ink = pair(.white, .black)
+    static let accent = pair(rgb(185, 166, 255), rgb(111, 79, 224))
+    static let accentLight = pair(rgb(214, 200, 255), rgb(75, 47, 192))
     static let primaryTop = Color(red: 132 / 255, green: 103 / 255, blue: 238 / 255)
     static let primary = Color(red: 111 / 255, green: 79 / 255, blue: 224 / 255)
     static let badgeText = Color(red: 75 / 255, green: 47 / 255, blue: 192 / 255)
-    static let secondary = Color(red: 235 / 255, green: 235 / 255, blue: 245 / 255).opacity(0.6)
-    static let tertiary = Color(red: 235 / 255, green: 235 / 255, blue: 245 / 255).opacity(0.3)
-    static let separator = Color(red: 84 / 255, green: 84 / 255, blue: 88 / 255).opacity(0.65)
+    static let secondary = pair(rgb(235, 235, 245, 0.6), rgb(60, 60, 67, 0.6))
+    static let tertiary = pair(rgb(235, 235, 245, 0.3), rgb(60, 60, 67, 0.3))
+    static let separator = pair(rgb(84, 84, 88, 0.65), rgb(60, 60, 67, 0.29))
+    /// A field's or a quiet pill's fill, and the rim drawn round glass.
+    static let fill = pair(UIColor.white.withAlphaComponent(0.10), UIColor.black.withAlphaComponent(0.06))
+    static let rim = pair(UIColor.white.withAlphaComponent(0.18), UIColor.black.withAlphaComponent(0.08))
+    /// An unselected tab's label.
+    static let tabInk = pair(UIColor.white.withAlphaComponent(0.86), UIColor.black.withAlphaComponent(0.78))
     static let videoTile = Color(red: 58 / 255, green: 111 / 255, blue: 216 / 255)
-    static let warn = Color(red: 1, green: 0.8, blue: 0.4)
-    static let error = Color(red: 1, green: 0.45, blue: 0.45)
+    static let warn = pair(rgb(255, 204, 102), rgb(178, 106, 0))
+    static let error = pair(rgb(255, 115, 115), rgb(215, 0, 21))
 
     /// The SF Symbol an archetype's row and picker draw (the web draws lucide's equivalents).
     static func symbol(_ shape: String?) -> String {
@@ -36,7 +53,7 @@ enum HomeStyle {
     }
 }
 
-/// The home's five tabs, as the web home's floating bar has them; only Projects is native so far.
+/// The home's five tabs, as the web home's floating bar has them; Projects and Settings are native so far.
 enum HomeTab: String, CaseIterable, Identifiable {
     case projects, surfaces, tasks, library, settings
     var id: String { rawValue }
@@ -60,7 +77,7 @@ enum HomeTab: String, CaseIterable, Identifiable {
         case .surfaces: return HomeRules.surfacesRoute
         case .tasks: return HomeRules.tasksRoute
         case .library: return HomeRules.librariesRoute
-        case .settings: return HomeRules.settingsRoute
+        case .settings: return nil
         }
     }
 }
@@ -72,7 +89,7 @@ extension View {
             glassEffect(.regular, in: shape)
         } else {
             background(.ultraThinMaterial, in: shape)
-                .overlay(shape.stroke(Color.white.opacity(0.18), lineWidth: 1))
+                .overlay(shape.stroke(HomeStyle.rim, lineWidth: 1))
         }
     }
 }
@@ -118,8 +135,8 @@ struct QuietPill: View {
         .foregroundStyle(HomeStyle.accentLight)
         .padding(.horizontal, 14)
         .frame(height: 34)
-        .background(Color.white.opacity(0.10), in: Capsule())
-        .overlay(Capsule().stroke(Color.white.opacity(0.18), lineWidth: 1))
+        .background(HomeStyle.fill, in: Capsule())
+        .overlay(Capsule().stroke(HomeStyle.rim, lineWidth: 1))
         .frame(minHeight: 44)
     }
 }

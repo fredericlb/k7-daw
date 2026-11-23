@@ -12,8 +12,9 @@ engine page of the backend that runs it (below). Not because moving it here woul
 on that machine, and this page is served to any machine that asks.
 
 So the split is not computer-versus-web. It is **whose disk answers**. The LANGUAGE sits at one end
-of that line: no disk answers for it, and it lives in this browser alone. The separation chains
-sit at the other: they are the machine's, so they are drawn on its engine page and not here.
+of that line: the account's preferences on this page's backend answer for it, and no machine setting
+rides with it. The separation chains sit at the other: they are the machine's, so they are drawn on
+its engine page and not here.
 
 ## On the phone, the machine IS this page's
 
@@ -49,12 +50,18 @@ the sections fall into groups nobody needs at once.
 
 ## The language
 
-`LanguageSection.tsx`, and it is the one row here that asks no machine anything: the language is
-the BROWSER's. Paraglide keeps it under `PARAGLIDE_LOCALE` in `localStorage` — the strategy chain
-this app compiles with is `["localStorage", "baseLocale"]` — so it is per browser and per machine,
-travels with nothing, and survives no account. The same person on another laptop starts in English
-again, which is the honest consequence of storing it where it is stored rather than a gap to fill:
-what language you read in is a property of where you are sitting, not of who you are.
+`LanguageSection.tsx`. The language is kept in the account's preferences (`locale` in
+`/api/preferences`, `apps/k7-daw-frontend/src/localePrefs.ts`), on the backend that serves this page: the device's own.
+
+| choice | why |
+|---|---|
+| the preferences hold it, and the page follows what they hold once per page load and when the iOS app dispatches `k7-prefs-changed` | the iOS app's native home and Settings read and write the same value (`docs/native-ui-plan.md`); one document both sides read cannot disagree |
+| Paraglide's `PARAGLIDE_LOCALE` in `localStorage` stays the strategy chain's first answer (`["localStorage", "baseLocale"]`) | the first paint comes before any request; a stored language different from it switches the page once the preferences answer |
+| a choice is written to both | a page whose preferences cannot be written keeps its own choice, as it did before they held it |
+| it travels with nothing: the same person on another device starts in English again | the preferences are this device's backend's; what language you read in is a property of where you are sitting, not of who you are |
+
+The preferences also hold `theme`, which only the iOS app's native screens draw: the web is dark only
+(`apps/k7-daw-frontend/packages/ui/docs/tokens.md`), so this page offers no theme.
 
 **English unless you say otherwise.** The shared setup
 (`apps/k7-daw-frontend/packages/i18n/src/vite.ts`) puts `preferredLanguage` between the stored choice and the
@@ -70,7 +77,8 @@ read to find the one you want, and the one you are reading is the one you cannot
 that changes nothing is a button that looks broken.
 
 The editor's own settings panel reaches the same value through `ui language <en|fr>`, and there is
-no second store behind it — both doors call the runtime's `setLocale`, which writes that one key.
+no second store behind it — both doors call `useLocale`'s `setLocale` (`src/i18n.ts`), which writes the
+runtime's key and the preferences.
 
 **One module per language in dev, one per message in a build.** The two catalogues (k7's and the
 plugins') follow the Vite command (`outputFor` in `vite.config.ts`).

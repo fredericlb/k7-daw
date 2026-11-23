@@ -1,6 +1,6 @@
 // HomeViews.swift — the native Projects home: on an iPhone a scrolling page under a glass header with the floating tab
 // bar; on an iPad a split view, the tabs and the workspaces in the sidebar. Both list WorkspaceSection.
-// A tab that is not native yet opens its web page (HomeHost). See docs/native-ui-plan.md.
+// Settings is SettingsViews.swift; a tab that is not native yet opens its web page (HomeHost). See docs/native-ui-plan.md.
 
 import SwiftUI
 
@@ -18,21 +18,24 @@ enum HomeSheet: Identifiable {
 
 struct HomeRoot: View {
     @ObservedObject var model: HomeModel
+    @ObservedObject var settings: SettingsModel
+    @ObservedObject var engine: EngineModel
     @ObservedObject var l10n: L10n = .shared
+    @ObservedObject var prefs: AppPrefs = .shared
     @Environment(\.horizontalSizeClass) private var size
     @State private var sheet: HomeSheet?
 
     var body: some View {
         Group {
             if size == .regular {
-                PadHome(model: model, sheet: $sheet)
+                PadHome(model: model, settings: settings, engine: engine, sheet: $sheet)
             } else {
-                PhoneHome(model: model, sheet: $sheet)
+                PhoneHome(model: model, settings: settings, engine: engine, sheet: $sheet)
             }
         }
         // Every word is read when drawn: a language change draws the page again.
         .id(l10n.locale)
-        .preferredColorScheme(.dark)
+        .preferredColorScheme(prefs.theme.scheme)
         .tint(HomeStyle.accent)
         .sheet(item: $sheet) { s in
             switch s {
@@ -132,25 +135,32 @@ struct PageMenu: View {
 
 struct PhoneHome: View {
     @ObservedObject var model: HomeModel
+    @ObservedObject var settings: SettingsModel
+    @ObservedObject var engine: EngineModel
     @Binding var sheet: HomeSheet?
     @State private var searching = false
     @FocusState private var searchFocused: Bool
 
     var body: some View {
         ZStack(alignment: .bottom) {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 0) {
-                    header
-                    if searching { search }
-                    ProjectsList(model: model, wide: false, sheet: $sheet)
+            if model.tab == .settings {
+                SettingsRoot(model: settings, engine: engine, path: $model.settingsPath, bottomInset: 80)
+            } else {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 0) {
+                        header
+                        if searching { search }
+                        ProjectsList(model: model, wide: false, sheet: $sheet)
+                    }
+                    .padding(.bottom, 120)
                 }
-                .padding(.bottom, 120)
+                .scrollDismissesKeyboard(.interactively)
+                // On the list alone: Settings' buttons keep the accent the system draws them in.
+                .foregroundStyle(HomeStyle.ink)
             }
-            .scrollDismissesKeyboard(.interactively)
-            TabBar(onWeb: model.openWeb)
+            TabBar(model: model)
         }
         .background(HomeStyle.ground.ignoresSafeArea())
-        .foregroundStyle(.white)
     }
 
     private var header: some View {
@@ -174,7 +184,7 @@ struct PhoneHome: View {
                 PageMenu(model: model, symbol: "ellipsis")
             }
             .padding(.horizontal, 4)
-            .foregroundStyle(.white)
+            .foregroundStyle(HomeStyle.ink)
             .glass(Capsule())
         }
         .frame(height: 52)
@@ -192,32 +202,31 @@ struct PhoneHome: View {
         }
         .padding(.horizontal, 14)
         .frame(height: 44)
-        .background(Color.white.opacity(0.10), in: Capsule())
+        .background(HomeStyle.fill, in: Capsule())
         .padding(.horizontal, 16)
         .padding(.top, 4)
     }
 }
 
-/// The floating tab bar of the iPhone mockup: Projects here, the others their web pages for now.
+/// The floating tab bar of the iPhone mockup: Projects and Settings here, the others their web pages for now.
 struct TabBar: View {
-    let onWeb: (String) -> Void
+    @ObservedObject var model: HomeModel
 
     var body: some View {
         HStack(spacing: 0) {
             ForEach(HomeTab.allCases) { tab in
-                let current = tab == .projects
-                Button {
-                    if let route = tab.webRoute { onWeb(route) }
-                } label: {
+                let current = tab == model.tab
+                Button { model.choose(tab) } label: {
                     VStack(spacing: 2) {
                         Image(systemName: tab.symbol).font(.system(size: 20))
                         Text(tr(tab.key)).font(.system(size: 10, weight: .semibold)).lineLimit(1).minimumScaleFactor(0.8)
                     }
-                    .foregroundStyle(current ? HomeStyle.accentLight : Color.white.opacity(0.86))
+                    .foregroundStyle(current ? HomeStyle.accentLight : HomeStyle.tabInk)
                     .frame(maxWidth: .infinity, minHeight: 52)
                     .background(current ? HomeStyle.accent.opacity(0.24) : .clear, in: Capsule())
                 }
                 .accessibilityAddTraits(current ? .isSelected : [])
+                .accessibilityIdentifier("tab.\(tab.rawValue)")
             }
         }
         .padding(4)
@@ -232,6 +241,8 @@ struct TabBar: View {
 
 struct PadHome: View {
     @ObservedObject var model: HomeModel
+    @ObservedObject var settings: SettingsModel
+    @ObservedObject var engine: EngineModel
     @Binding var sheet: HomeSheet?
     @State private var target: String?
 
@@ -239,15 +250,19 @@ struct PadHome: View {
         NavigationSplitView {
             sidebar
         } detail: {
-            GeometryReader { geo in
-                ScrollViewReader { reader in
-                    detail(reader, columns: geo.size.width >= Self.columnsFrom)
+            if model.tab == .settings {
+                SettingsRoot(model: settings, engine: engine, path: $model.settingsPath, bottomInset: 0)
+            } else {
+                GeometryReader { geo in
+                    ScrollViewReader { reader in
+                        detail(reader, columns: geo.size.width >= Self.columnsFrom)
+                    }
                 }
+                .background(HomeStyle.ground.ignoresSafeArea())
+                .toolbar(.hidden, for: .navigationBar)
+                .foregroundStyle(HomeStyle.ink)
             }
-            .background(HomeStyle.ground.ignoresSafeArea())
-            .toolbar(.hidden, for: .navigationBar)
         }
-        .foregroundStyle(.white)
     }
 
     /// The width from which a row's kind and date get columns of their own, as on the iPad board.
@@ -272,17 +287,20 @@ struct PadHome: View {
         List {
             Section {
                 ForEach(HomeTab.allCases) { tab in
-                    Button {
-                        if let route = tab.webRoute { model.openWeb(route) }
-                    } label: {
+                    Button { model.choose(tab) } label: {
                         Label(tr(tab.key), systemImage: tab.symbol)
                     }
-                    .listRowBackground(tab == .projects ? HomeStyle.accent.opacity(0.24) : Color.clear)
+                    .listRowBackground(tab == model.tab ? HomeStyle.accent.opacity(0.24) : Color.clear)
+                    .accessibilityAddTraits(tab == model.tab ? .isSelected : [])
+                    .accessibilityIdentifier("tab.\(tab.rawValue)")
                 }
             }
             Section(tr("home.workspaces")) {
                 ForEach(model.listed) { w in
-                    Button { target = w.name } label: {
+                    Button {
+                        model.choose(.projects)
+                        target = w.name
+                    } label: {
                         HStack {
                             Label(w.name, systemImage: "folder")
                             Spacer()
@@ -293,6 +311,7 @@ struct PadHome: View {
             }
         }
         .navigationTitle("K7 DAW")
+        .foregroundStyle(HomeStyle.ink)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button { sheet = .newWorkspace } label: { Image(systemName: "folder.badge.plus") }
@@ -323,7 +342,7 @@ struct PadHome: View {
             .padding(.horizontal, 14)
             .frame(maxWidth: 280)
             .frame(height: 44)
-            .background(Color.white.opacity(0.10), in: Capsule())
+            .background(HomeStyle.fill, in: Capsule())
             HStack(spacing: 0) {
                 PageMenu(model: model, symbol: "ellipsis.circle")
                 Button { sheet = .newWorkspace } label: {

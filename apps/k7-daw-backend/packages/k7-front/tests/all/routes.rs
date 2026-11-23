@@ -122,12 +122,12 @@ async fn preferences_round_trip_into_the_backends_file() {
             "PUT",
             "/api/preferences",
             &[c.clone(), json.clone()],
-            r#"{"theme":"dark"}"#,
+            r#"{"colour":"dark"}"#,
         ),
     )
     .await;
     assert!(
-        refused.starts_with("HTTP/1.1 400") && refused.contains("does not store theme"),
+        refused.starts_with("HTTP/1.1 400") && refused.contains("does not store colour"),
         "{refused}"
     );
     let wrong = send(

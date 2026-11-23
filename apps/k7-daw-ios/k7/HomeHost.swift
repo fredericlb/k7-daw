@@ -1,6 +1,6 @@
-// HomeHost.swift — the native home (HomeViews.swift) over k7's web view, in AppViews' frame, and the handover both ways:
-// a project or a page not native yet is opened in the web view, and the web page reaching the bare home `/` (its own
-// Back, its Projects tab) brings the native home back. The web view watches its own address; nothing is injected.
+// HomeHost.swift — the native home (HomeViews.swift, SettingsViews.swift) over k7's web view, in AppViews' frame, and
+// the handover both ways: a project or a page not native yet is opened in the web view, and the web page reaching an
+// address the native home stands in for (`/`, `/settings`) brings it back. It also applies the preferences' theme.
 // What a reader gets wrong: the web page stays loaded under the native home, so opening a project is k7's in-place `go`.
 // See docs/native-ui-plan.md.
 
@@ -11,22 +11,30 @@ import WebKit
 @MainActor
 final class HomeHost {
     private let model: HomeModel
+    private let settings: SettingsModel
+    private let engine = EngineModel()
+    private let client: K7Client
     private let hosting: UIHostingController<HomeRoot>
     private weak var web: WKWebView?
     private var urlWatch: NSKeyValueObservation?
     private var started = false
     /// Whether the native home covers the web view now.
     private(set) var shown = false
-    /// Told when the home shows or hides, for the status bar.
+    /// Told when the home shows or hides, or its theme changes, for the status bar.
     var onShown: (Bool) -> Void = { _ in }
+
+    /// Whether the status bar's text is dark: the native home is in front and drawn light.
+    var darkStatusBar: Bool { shown && hosting.view.traitCollection.userInterfaceStyle == .light }
 
     init(parent: UIViewController?, frame: UIView) {
         let origin = URL(string: BackendHost.origin)!
-        model = HomeModel(client: K7Client(origin: origin))
-        hosting = UIHostingController(rootView: HomeRoot(model: model))
-        hosting.view.backgroundColor = .black
-        // Dark as the mockups, the split view's sidebar included, which the root's colour scheme does not reach.
-        hosting.overrideUserInterfaceStyle = .dark
+        client = K7Client(origin: origin)
+        model = HomeModel(client: client)
+        settings = SettingsModel(client: client)
+        hosting = UIHostingController(rootView: HomeRoot(model: model, settings: settings, engine: engine))
+        hosting.view.backgroundColor = UIColor { $0.userInterfaceStyle == .light ? Self.lightGround : .black }
+        // The theme set on the host reaches the split view's sidebar too, which the root's colour scheme does not.
+        hosting.overrideUserInterfaceStyle = AppPrefs.shared.theme.style
         hosting.view.isHidden = true
         hosting.view.translatesAutoresizingMaskIntoConstraints = false
         parent?.addChild(hosting)
@@ -39,7 +47,20 @@ final class HomeHost {
         ])
         hosting.didMove(toParent: parent)
         model.openWeb = { [weak self] path in self?.openWeb(path) }
+        settings.openWeb = { [weak self] path in self?.openWeb(path) }
+        settings.engineId = { [weak self] in self?.engine.engineId }
+        AppPrefs.shared.onTheme = { [weak self] theme in
+            guard let self else { return }
+            hosting.overrideUserInterfaceStyle = theme.style
+            onShown(shown)
+        }
+        // The web page reads the preferences again, so its words follow a language chosen here.
+        AppPrefs.shared.onWritten = { [weak self] in
+            self?.web?.evaluateJavaScript("dispatchEvent(new CustomEvent('k7-prefs-changed'))")
+        }
     }
+
+    private static let lightGround = UIColor(red: 242 / 255, green: 242 / 255, blue: 247 / 255, alpha: 1)
 
     /// The web view the home hands over to; its address says when to come back.
     func attach(_ view: WKWebView) {
@@ -50,8 +71,16 @@ final class HomeHost {
     }
 
     private func addressChanged(_ url: URL?) {
-        guard let url, let origin = URL(string: BackendHost.origin) else { return }
-        if HomeRules.isNativeHome(url, origin: origin) { showHome() }
+        guard let url, let origin = URL(string: BackendHost.origin),
+              let page = HomeRules.nativePage(url, origin: origin) else { return }
+        switch page {
+        case .projects:
+            model.tab = .projects
+        case .settings(let path):
+            model.tab = .settings
+            model.settingsPath = path
+        }
+        showHome()
     }
 
     /// The native home in front, its list read again at once and then polled.
@@ -60,6 +89,8 @@ final class HomeHost {
         if !shown { hostLog("home: native") }
         shown = true
         hosting.view.isHidden = false
+        // The page under the native home is out of sight, so out of VoiceOver's reach too.
+        web?.accessibilityElementsHidden = true
         onShown(true)
         readLocale()
         model.start()
@@ -71,7 +102,9 @@ final class HomeHost {
         hostLog("home: web \(path)")
         shown = false
         model.stop()
+        engine.stop()
         hosting.view.isHidden = true
+        web.accessibilityElementsHidden = false
         onShown(false)
         let before = web.url
         guard !web.isLoading, let at = before, Self.isK7(at) else {
@@ -89,10 +122,14 @@ final class HomeHost {
 
     private static let goGrace: TimeInterval = 3
 
-    /// The language the web page chose (paraglide's `PARAGLIDE_LOCALE`), which the native words follow.
+    /// The preferences' language and theme; with no language stored, the web page's own (paraglide's `PARAGLIDE_LOCALE`).
     func readLocale() {
-        web?.evaluateJavaScript("localStorage.getItem('PARAGLIDE_LOCALE')") { value, _ in
-            MainActor.assumeIsolated { L10n.shared.use(value as? String) }
+        Task { [weak self] in
+            guard let self else { return }
+            if await AppPrefs.shared.load(client) { return }
+            web?.evaluateJavaScript("localStorage.getItem('PARAGLIDE_LOCALE')") { value, _ in
+                MainActor.assumeIsolated { L10n.shared.use(value as? String) }
+            }
         }
     }
 
