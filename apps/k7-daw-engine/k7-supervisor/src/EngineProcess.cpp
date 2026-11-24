@@ -224,8 +224,8 @@ int listenerPid(int port)
 #endif
 #endif
 
-// Whether the engine could bind `port` on every interface now, as its server will; a socket we cannot open says yes.
-bool bindable(int port)
+// Whether a fresh socket binds `port` on `host` (network order) now; a socket we cannot open says yes.
+bool bindsOn(int port, unsigned long host)
 {
 #ifdef _WIN32
     SOCKET s = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -243,7 +243,7 @@ bool bindable(int port)
     sockaddr_in addr{};
     addr.sin_family = AF_INET;
     addr.sin_port = htons(static_cast<unsigned short>(port));
-    addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    addr.sin_addr.s_addr = host;
     const bool ok = bind(s, reinterpret_cast<sockaddr*>(&addr), sizeof addr) == 0;
 #ifdef _WIN32
     closesocket(s);
@@ -252,6 +252,15 @@ bool bindable(int port)
 #endif
     return ok;
 }
+}  // namespace
+
+// Wildcard AND loopback: on macOS a wildcard bind succeeds beside another program's 127.0.0.1 listener (docs/supervisor.md).
+bool bindable(int port)
+{
+    return bindsOn(port, htonl(INADDR_ANY)) && bindsOn(port, htonl(INADDR_LOOPBACK));
+}
+
+namespace {
 
 #ifndef K7_ENGINE_IN_APP
 // Who holds `port`, for the log: the program and its pid when the OS says, else only that something does.

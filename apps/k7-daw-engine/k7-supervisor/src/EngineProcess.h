@@ -21,6 +21,9 @@ std::optional<std::filesystem::path> findBinary();
 /** Is an engine up — the pidfile names a live process. */
 bool running();
 
+/** Could the engine bind `port` now, on the wildcard and on loopback alike. */
+bool bindable(int port);
+
 /** Is something serving on this loopback port? Never "is it OURS". Blocks for at most ~300 ms. */
 bool isServing(int port);
 

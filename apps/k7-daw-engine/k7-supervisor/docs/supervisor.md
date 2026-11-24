@@ -101,12 +101,16 @@ needs the port fixed: the registry's presence, the snapshot, the tunnel and the 
 the one the start reports, and the pidfile records it so the next supervisor adopts the engine there.
 
 What holds a port is judged by BINDING it, as the engine will, not by connecting to it: a connect
-cannot tell an engine from any other listener. A port answered by an engine no pidfile names is still
+cannot tell an engine from any other listener. The bind is tried on the wildcard AND on 127.0.0.1:
+on macOS a wildcard bind succeeds beside another program's loopback listener (adb's port forwards
+sit on 127.0.0.1), and the engine, which binds 127.0.0.1, would then fail on the port it was handed.
+A port answered by an engine no pidfile names is still
 adopted, and is never skipped for the next one, or a lost pidfile would put a second engine on the
 audio device. `--port` is for whoever wrote the port down — a firewall rule, a LAN address — and
 there a held port is an error naming its holder, never a silent move.
 
-On the phone the app binds the port it is handed, so there the first port is the only one.
+In the app (a phone, or the iPad app on a Mac) the engine binds the port it is handed once per
+process, so a held port is skipped before the engine is asked, never found by a failed bind.
 
 What ran the descriptors out was the heartbeat: one started every five seconds whether or not the
 last had come back, so a network gone dead — a sleeping laptop, a DNS lookup the request timeout
