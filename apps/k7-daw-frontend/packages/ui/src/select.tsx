@@ -35,7 +35,7 @@ function SelectTrigger({
       data-slot="select-trigger"
       data-size={size}
       className={cn(
-        "type-body flex w-fit items-center justify-between gap-2 rounded-[14px] border border-(--k7-input-line) bg-(--k7-input-fill) px-3.5 whitespace-nowrap transition-colors outline-none focus-visible:border-(--k7-focus-line) focus-visible:shadow-(--k7-focus-ring) disabled:cursor-not-allowed disabled:opacity-40 aria-invalid:border-error data-[placeholder]:text-fg-3 data-[size=default]:h-11 data-[size=sm]:h-9 data-[size=sm]:rounded-[12px] *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-fg-2",
+        "type-body flex w-fit items-center justify-between gap-2 rounded-[14px] border border-(--k7-input-line) bg-(--k7-input-fill) px-3.5 whitespace-nowrap transition-colors outline-none focus-visible:border-(--k7-focus-line) focus-visible:shadow-(--k7-focus-ring) disabled:cursor-not-allowed disabled:opacity-40 aria-invalid:border-error data-[placeholder]:text-fg-3 data-[size=default]:h-11 desk:data-[size=default]:h-8 desk:data-[size=sm]:h-8 data-[size=sm]:h-9 data-[size=sm]:rounded-[12px] *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-fg-2",
         className,
       )}
       {...props}
@@ -107,7 +107,7 @@ function SelectItem({
     <SelectPrimitive.Item
       data-slot="select-item"
       className={cn(
-        "type-body relative flex min-h-11 w-full cursor-default items-center gap-2 rounded-xl py-2 pr-9 pl-3 outline-hidden select-none focus:bg-on-fill data-[state=checked]:text-lavender data-[disabled]:pointer-events-none data-[disabled]:opacity-40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
+        "type-body relative flex min-h-11 w-full cursor-default desk:min-h-8 desk:py-1 items-center gap-2 rounded-xl py-2 pr-9 pl-3 outline-hidden select-none focus:bg-on-fill data-[state=checked]:text-lavender data-[disabled]:pointer-events-none data-[disabled]:opacity-40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
         className,
       )}
       {...props}

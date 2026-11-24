@@ -1,4 +1,4 @@
-// tab-bar.tsx — the Home tab bar: a floating 66 px pill of 112 x 54 tabs on a phone, a 232 px sidebar of 48 px rows elsewhere.
+// tab-bar.tsx — the Home tab bar: a floating 66 px pill of 112 x 54 tabs on a phone, a 232 px sidebar of 48 px rows elsewhere (32 on a desk).
 // A tab is a link (with `href`) or a button; the selected one carries aria-current="page" and the lozenge slides to it.
 
 import * as React from "react";
@@ -72,7 +72,7 @@ export function TabSidebar({
         {box ? (
           <span
             aria-hidden
-            className="pointer-events-none absolute top-0 left-0 h-12 w-full rounded-2xl bg-(--k7-on-fill) shadow-(--k7-highlight) transition-transform duration-500 ease-(--k7-ease-lozenge)"
+            className="pointer-events-none absolute top-0 left-0 h-12 w-full rounded-2xl desk:h-8 desk:rounded-[10px] bg-(--k7-on-fill) shadow-(--k7-highlight) transition-transform duration-500 ease-(--k7-ease-lozenge)"
             style={{ transform: `translateY(${box.y}px)` }}
           />
         ) : null}
@@ -106,14 +106,18 @@ export function TabBarItem({
   const cls = cn(
     "relative z-10 flex cursor-pointer text-fg-2 outline-none transition-colors focus-visible:shadow-(--k7-focus-ring) aria-[current=page]:text-lavender [&_svg]:size-[22px] [&_svg]:shrink-0",
     row
-      ? "h-12 items-center gap-3 rounded-2xl px-3.5 text-left"
+      ? "h-12 items-center gap-3 rounded-2xl px-3.5 text-left desk:h-8 desk:gap-2.5 desk:rounded-[10px] desk:px-2.5 desk:[&_svg]:size-[18px]"
       : "h-[54px] w-28 flex-col items-center justify-center gap-0.5 rounded-[27px]",
     className,
   );
   const body = (
     <>
       {icon}
-      <span className={row ? "text-[15px] font-bold" : "text-xs font-bold"}>
+      <span
+        className={
+          row ? "text-[15px] font-bold desk:text-sm" : "text-xs font-bold"
+        }
+      >
         {label}
       </span>
     </>
@@ -140,7 +144,7 @@ export function TabBarItem({
   );
 }
 
-/** The round button beside the bar, 66 px, or 44 px at the sidebar's foot (square-terminal opens the command bar). */
+/** The round button beside the bar, 66 px, or 44 px at the sidebar's foot (32 on a desk) (square-terminal opens the command bar). */
 export function TabBarRound({
   className,
   small = false,
@@ -152,7 +156,7 @@ export function TabBarRound({
       className={cn(
         "grid cursor-pointer place-items-center rounded-full text-foreground outline-none focus-visible:shadow-(--k7-focus-ring)",
         small
-          ? "size-11 border border-(--k7-hairline-strong) bg-(--k7-on-fill) [&_svg]:size-[22px]"
+          ? "size-11 border border-(--k7-hairline-strong) bg-(--k7-on-fill) [&_svg]:size-[22px] desk:size-8 desk:[&_svg]:size-[18px]"
           : "float size-(--k7-tabbar-h) [&_svg]:size-6",
         className,
       )}

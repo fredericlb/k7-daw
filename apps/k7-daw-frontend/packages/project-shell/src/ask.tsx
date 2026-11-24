@@ -12,7 +12,7 @@ const cx = (...parts: (string | false | undefined)[]): string =>
 
 // The dialog's buttons are 44 px pills: glass for the secondary, accent for the primary, error-red for the one that does not come back.
 const PILL =
-  "type-label inline-flex h-11 cursor-pointer items-center justify-center rounded-full px-[18px] outline-none transition-colors focus-visible:shadow-(--k7-focus-ring) disabled:pointer-events-none disabled:opacity-40";
+  "type-label inline-flex h-11 cursor-pointer desk:h-8 items-center justify-center rounded-full px-[18px] outline-none transition-colors focus-visible:shadow-(--k7-focus-ring) disabled:pointer-events-none disabled:opacity-40";
 const SECONDARY = `${PILL} glass text-foreground hover:brightness-125`;
 const PRIMARY = `${PILL} bg-primary text-primary-foreground shadow-(--k7-highlight) hover:bg-primary-hover`;
 const DANGER = `${PILL} bg-error text-ink hover:brightness-95`;
@@ -238,7 +238,7 @@ function AskDialog({
               value={value}
               placeholder={text.placeholder}
               onChange={(e) => setValue(e.target.value)}
-              className="type-body h-11 rounded-[14px] border border-(--k7-input-line) bg-(--k7-input-fill) px-3.5 text-foreground outline-none focus:border-(--k7-focus-line) focus:bg-(--k7-input-fill-focus) focus:shadow-(--k7-focus-ring)"
+              className="type-body h-11 rounded-[14px] desk:h-8 border border-(--k7-input-line) bg-(--k7-input-fill) px-3.5 text-foreground outline-none focus:border-(--k7-focus-line) focus:bg-(--k7-input-fill-focus) focus:shadow-(--k7-focus-ring)"
             />
             {invalid ? (
               <span className="type-status text-error">{invalid}</span>

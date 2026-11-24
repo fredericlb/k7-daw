@@ -134,7 +134,7 @@ function WorkspaceCard({
       <div className="flex min-h-[60px] flex-wrap items-center gap-x-2 gap-y-1 px-3.5 py-2">
         <button
           type="button"
-          className="grid size-11 shrink-0 cursor-pointer place-items-center rounded-full text-fg-2 outline-none hover:bg-on-fill focus-visible:shadow-(--k7-focus-ring)"
+          className="grid size-11 shrink-0 cursor-pointer desk:size-8 place-items-center rounded-full text-fg-2 outline-none hover:bg-on-fill focus-visible:shadow-(--k7-focus-ring)"
           aria-expanded={open}
           aria-label={
             open

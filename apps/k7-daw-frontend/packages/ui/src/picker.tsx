@@ -134,7 +134,7 @@ export function Picker({
               }}
               aria-label={searchLabel}
               placeholder={searchLabel}
-              className="type-body h-11 w-full rounded-xl border border-(--k7-input-line) bg-(--k7-input-fill) pr-3 pl-9 text-foreground outline-none placeholder:text-fg-3 focus:border-(--k7-focus-line)"
+              className="type-body h-11 w-full rounded-xl desk:h-8 border border-(--k7-input-line) bg-(--k7-input-fill) pr-3 pl-9 text-foreground outline-none placeholder:text-fg-3 focus:border-(--k7-focus-line)"
             />
           </div>
           <div
@@ -156,7 +156,7 @@ export function Picker({
                     onValueChange(i.value);
                     change(false);
                   }}
-                  className="type-body flex min-h-11 w-full cursor-pointer items-center gap-2 rounded-xl px-3 text-left text-foreground outline-none hover:bg-on-fill focus-visible:bg-on-fill aria-selected:text-lavender"
+                  className="type-body flex min-h-11 w-full cursor-pointer desk:min-h-8 items-center gap-2 rounded-xl px-3 text-left text-foreground outline-none hover:bg-on-fill focus-visible:bg-on-fill aria-selected:text-lavender"
                 >
                   <span className="min-w-0 flex-1">
                     <span className="block truncate">{i.label}</span>

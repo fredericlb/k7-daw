@@ -47,7 +47,7 @@ const DialogContent = React.forwardRef<
       >
         {children}
         {showCloseButton && (
-          <DialogPrimitive.Close className="absolute right-3 top-3 grid size-11 cursor-pointer place-items-center rounded-full text-fg-2 outline-none transition-colors hover:bg-on-fill focus-visible:shadow-(--k7-focus-ring)">
+          <DialogPrimitive.Close className="absolute right-3 top-3 grid size-11 cursor-pointer desk:size-8 place-items-center rounded-full text-fg-2 outline-none transition-colors hover:bg-on-fill focus-visible:shadow-(--k7-focus-ring)">
             <XIcon className="size-5" strokeWidth={2.2} />
             <span className="sr-only">{closeLabel}</span>
           </DialogPrimitive.Close>

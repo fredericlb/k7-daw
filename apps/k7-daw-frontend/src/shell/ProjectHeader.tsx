@@ -125,7 +125,7 @@ export function ProjectHeader({
               aria-label={m["shell.processes"]({ n: running })}
               title={m["shell.processes"]({ n: running })}
               onClick={onProcesses}
-              className="grid size-11 shrink-0 cursor-pointer place-items-center rounded-full outline-none focus-visible:shadow-(--k7-focus-ring)"
+              className="grid size-11 shrink-0 cursor-pointer desk:size-8 place-items-center rounded-full outline-none focus-visible:shadow-(--k7-focus-ring)"
             >
               <Spinner />
             </button>

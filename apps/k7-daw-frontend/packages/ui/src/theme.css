@@ -13,6 +13,13 @@
 @import "@fontsource/jetbrains-mono/400.css";
 @import "@fontsource/jetbrains-mono/600.css";
 
+/* A desk is a mouse on a window that is not phone-sized (useShellLayout): its controls are 32 px, not 44 (docs/tokens.md). */
+@custom-variant desk {
+  @media (pointer: fine) and (min-width: 821px) and (min-height: 521px) {
+    @slot;
+  }
+}
+
 :root {
   color-scheme: dark;
 
@@ -200,7 +207,7 @@
   --k7-space-8: 32px; /* section padding */
 
   /* ---- Sizes ---- */
-  --k7-touch: 44px; /* minimum target on every device, desktop included */
+  --k7-touch: 44px; /* minimum target on a touch screen; a desk's controls are 32 */
   --k7-header-h: 60px; /* desktop and iPad; padding 8px 16px, gap 8 */
   --k7-header-phone-h: 48px;
   --k7-header-landscape-h: 52px;

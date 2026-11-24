@@ -319,7 +319,7 @@ function Toast({
             onClick={onDismiss}
             aria-label={dismissLabel}
             title={dismissLabel}
-            className="grid size-11 shrink-0 cursor-pointer place-items-center rounded-full text-fg-2 outline-none transition-colors hover:bg-on-fill hover:text-foreground focus-visible:shadow-(--k7-focus-ring)"
+            className="grid size-11 shrink-0 cursor-pointer desk:size-8 place-items-center rounded-full text-fg-2 outline-none transition-colors hover:bg-on-fill hover:text-foreground focus-visible:shadow-(--k7-focus-ring)"
           >
             <X className="size-[18px]" strokeWidth={2.2} />
           </button>

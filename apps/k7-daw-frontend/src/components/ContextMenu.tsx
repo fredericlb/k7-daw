@@ -163,7 +163,7 @@ export function ContextMenu({
         // The status line follows the pointer, and the KEYBOARD too — walking the menu is a way of reading it.
         onPointerEnter={() => onHint?.(it.description)}
         onFocus={() => onHint?.(it.description)}
-        className={`type-label flex min-h-11 w-full cursor-pointer items-center gap-2 rounded-2xl px-3 text-left outline-none hover:bg-on-fill focus-visible:bg-on-fill ${
+        className={`type-label flex min-h-11 w-full cursor-pointer desk:min-h-8 items-center gap-2 rounded-2xl px-3 text-left outline-none hover:bg-on-fill focus-visible:bg-on-fill ${
           destructive
             ? "text-destructive"
             : "hover:text-accent-foreground focus-visible:text-accent-foreground"
