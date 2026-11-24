@@ -208,11 +208,12 @@ export function HomeCommandBar({ children }: { children: ReactNode }) {
   );
 }
 
-/** The bar's opener, the round button beside the tab bar: a phone has no Ctrl+Shift+P nor double-Shift. */
-export function HomeCommandsButton() {
+/** The bar's opener, beside a phone's tab bar or `small` at the sidebar's foot: a phone has no Ctrl+Shift+P nor double-Shift. */
+export function HomeCommandsButton({ small = false }: { small?: boolean }) {
   const { summon } = useContext(BarContext);
   return (
     <TabBarRound
+      small={small}
       onClick={summon}
       title={`${m["home.commandBar"]()} (Ctrl+Shift+P)`}
       aria-label={m["home.commandBar"]()}

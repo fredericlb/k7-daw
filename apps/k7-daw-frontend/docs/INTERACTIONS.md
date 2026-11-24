@@ -67,7 +67,7 @@ Applies on every screen: the keymap, the Esc ladder, the undo journal, app quest
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
-| 01.01 | Open the command bar | click the command-bar button (square terminal): the floating bar's left in a project, beside the tab bar on Home | ⌘/Ctrl+⇧P (works inside the text editor); double-tap Shift | double-tap the screen with two fingers, anywhere; a tablet also has the command-bar button, beside the logo at the bottom of the sidebar; a phone has no button | T M D |
+| 01.01 | Open the command bar | click the command-bar button (square terminal): the floating bar's left in a project, the bottom right of the sidebar on Home | ⌘/Ctrl+⇧P (works inside the text editor); double-tap Shift | double-tap the screen with two fingers, anywhere; a tablet also has the command-bar button (the floating bar's left in a project, the bottom right of the sidebar on Home); a phone has no button | T M D |
 | 01.02 | Run a bound command by key | — | single keys from the keymap, each one runs a command: `1`–`4` pages, `f` fullscreen the focused pane, `F6`/`⇧F6` next/previous page, `?` help, `Space` play/stop, `⇧Space` replay, `Enter` rewind, `t` locate, `,` `.` step the playhead, `⇧R` record enable; every key can be rebound | — | T D |
 | 01.03 | Step aside for typing or a focused control | — | a field owns every key; a focused button/link/select keeps all keys but Esc and the transport keys; `F6` walks out of both | — | T D |
 | 01.04 | Copy selected page text | — | ⌘/Ctrl+C with a text selection stays the browser's copy | — | T D |

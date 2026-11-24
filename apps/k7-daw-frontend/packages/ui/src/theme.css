@@ -209,6 +209,7 @@
   --k7-info-strip-h: 38px; /* phone strip above the bar */
   --k7-tool-w: 68px;
   --k7-tabbar-h: 66px; /* home; tabs 112 x 54 */
+  --k7-sidebar-w: 232px; /* home sidebar on a tablet or a desk, 16 from the window's edges */
   --k7-panel-w: 400px;
   --k7-panel-right: 12px;
   --k7-panel-gap-top: 8px; /* under the header */

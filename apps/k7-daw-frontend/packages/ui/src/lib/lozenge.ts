@@ -6,6 +6,8 @@ import { type RefObject, useLayoutEffect, useState } from "react";
 export interface LozengeBox {
   x: number;
   w: number;
+  y: number;
+  h: number;
 }
 
 const WATCHED = ["data-state", "aria-checked", "aria-selected", "aria-current"];
@@ -20,7 +22,16 @@ export function useLozenge(
     if (!root) return;
     const measure = () => {
       const el = root.querySelector<HTMLElement>(selector);
-      setBox(el ? { x: el.offsetLeft, w: el.offsetWidth } : null);
+      setBox(
+        el
+          ? {
+              x: el.offsetLeft,
+              w: el.offsetWidth,
+              y: el.offsetTop,
+              h: el.offsetHeight,
+            }
+          : null,
+      );
     };
     measure();
     if (typeof ResizeObserver === "undefined") return;

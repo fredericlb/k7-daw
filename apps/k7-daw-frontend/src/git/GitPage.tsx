@@ -9,6 +9,7 @@ import { type ReactNode, useRef } from "react";
 import { createPortal } from "react-dom";
 import { m } from "../paraglide/messages.js";
 import { PAGE_COLUMN } from "../projects/PageFrame";
+import { useIsMobile } from "../useIsMobile";
 
 export interface ServiceTab {
   key: string;
@@ -44,12 +45,14 @@ export function GitPage({
 }) {
   const ref = useRef<HTMLElement>(null);
   useModalFocus(ref);
+  const phone = useIsMobile();
   // On the body: the home's column holds its fixed children under the tab bar (`contain: layout`).
   return createPortal(
     <section
       ref={ref}
       aria-label={region}
-      className="fixed inset-0 z-50 overflow-y-auto bg-background text-foreground"
+      // Beside the home's sidebar, which stays: only a phone's page covers the whole window.
+      className={`fixed inset-y-0 right-0 z-50 overflow-y-auto bg-background text-foreground ${phone ? "left-0" : "left-[calc(var(--k7-sidebar-w)+32px)]"}`}
       onKeyDown={(e) => {
         // An open menu or question takes its own Escape first.
         if (e.key !== "Escape" || e.defaultPrevented || busy) return;

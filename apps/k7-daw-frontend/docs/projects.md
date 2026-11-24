@@ -38,11 +38,12 @@ This screen is **the front door itself**. k7 answers at the origin root
 If the first thing you want at a front door is your own work, then the page listing that work IS
 the front door, and putting it behind a prefix you have to know how to type would rank it second.
 
-**The home pages share ONE frame** (`HomeFrame.tsx`): a floating tab bar, a round command-bar button beside it, no
-sidebar and no bottom bar. The tabs are Projects, Surfaces, Tasks, Library (the libraries, then the frozen chains) and Settings, drawn by `@studio/ui/tab-bar`.
+**The home pages share ONE frame** (`HomeFrame.tsx`): on a tablet or a desk, a floating sidebar down the left edge with
+the logo and a round command-bar button at its foot; on a phone, a floating tab bar at the foot with that button
+beside it. The tabs are Projects, Surfaces, Tasks, Library (the libraries, then the frozen chains) and Settings, drawn by `@studio/ui/tab-bar`.
 They are LINKS, since each page has its own address: a plain click is a router move, a modified click opens like any
 link, and the current page carries `aria-current`. Settings is the last tab, lit on App settings and on the Engine page
-under it; App settings is a page like the others, under the same tab bar and with no Back, since its tab is the way to it.
+under it; App settings is a page like the others, beside the same tabs and with no Back, since its tab is the way to it.
 
 | choice | why |
 |---|---|
@@ -54,7 +55,10 @@ under it; App settings is a page like the others, under the same tab bar and wit
 | a card whose workspace waits for a merge disables New project, Delete and the project menus and says why on the card | a write refused after a dialog was filled in loses what was typed |
 | a new project opens as soon as it is made, unless it owes library modules, which the page then says | the new row would otherwise land somewhere in a long list, and the person would have to look for it |
 | the list has a filter field from six projects on, matching a project's path or a workspace's name; Help is in the page's ⋮ menu and a `help` command | a long list needs a way in, and the documentation was reachable only from inside a project |
-| the page column ends 144 px above the window's foot | the tab bar floats over it and must never cover the last row |
+| the tabs are a sidebar wherever the window is wide enough, a bottom bar on a phone | a column of rows names every page in full and leaves the page its whole height; a phone has the width for neither |
+| the logo is the sidebar's, so a page's header carries it only on a phone | one logo on screen, at the same place on every page |
+| the git pages (Sync settings, Clone a repository) cover the page beside the sidebar, the whole window on a phone | the tabs stay a way out of them, as on every home page |
+| the page column ends 144 px above the window's foot | a phone's tab bar floats over it and must never cover the last row |
 
 The round button opens the command bar, which also finds workspaces and projects (`workspace open`, `project open`)
 and says what it did as toasts (`commandBar.md`). There is no search field in the page: the bar is the one search.

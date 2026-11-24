@@ -1,5 +1,5 @@
 // PageFrame.tsx — the one page frame of the home side (Projects, Tasks, Libraries, Settings): a column of the same
-// width on every page, and the top bar: a large title over a count line and the page's own actions. The column ends clear of the floating tab bar. See ../../docs/projects.md.
+// width on every page, and the top bar: a large title over a count line and the page's own actions. The column ends clear of a phone's floating tab bar. See ../../docs/projects.md.
 
 import { Button } from "@studio/ui/button";
 import { ChevronLeft } from "@studio/ui/icons";
@@ -8,6 +8,7 @@ import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import k7Logo from "../../icon/k7.svg";
 import { m } from "../paraglide/messages.js";
+import { useIsMobile } from "../useIsMobile";
 
 /** The column every home-side page sits in; the foot leaves room for the tab bar (66 px at 28 from the bottom). */
 export const PAGE_COLUMN =
@@ -44,16 +45,20 @@ export function PageHeader({
   /** A sub-page: a Back button leads the bar. */
   back?: boolean;
 }) {
+  // The sidebar carries the logo; a phone's page carries its own.
+  const phone = useIsMobile();
   return (
     <header className="flex items-start justify-between gap-x-4 gap-y-3 max-sm:flex-wrap">
       <div className="flex min-w-0 items-start gap-3">
         {back && <BackButton />}
-        <img
-          src={k7Logo}
-          alt=""
-          className="mt-1.5 h-7 w-auto shrink-0"
-          draggable={false}
-        />
+        {phone && (
+          <img
+            src={k7Logo}
+            alt=""
+            className="mt-1.5 h-7 w-auto shrink-0"
+            draggable={false}
+          />
+        )}
         <div className="flex min-w-0 flex-col gap-1">
           <h1 className="type-large-title">{title}</h1>
           {summary && (
