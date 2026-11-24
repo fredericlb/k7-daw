@@ -11,6 +11,7 @@ import {
   GitBranch,
   GitMerge,
   Loader2,
+  RefreshCw,
   Save,
 } from "@studio/ui/icons";
 import { useEffect, useState } from "react";
@@ -279,7 +280,7 @@ export function CardGitPills({
         title={m["git.card.connectName"]({ workspace })}
         aria-label={m["git.card.connectName"]({ workspace })}
       >
-        <GitBranch className="size-5" />
+        <RefreshCw className="size-5" />
         <span className="max-sm:hidden">{m["git.card.connect"]()}</span>
       </Button>
     );
