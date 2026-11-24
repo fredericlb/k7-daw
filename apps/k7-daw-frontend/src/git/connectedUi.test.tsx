@@ -65,7 +65,7 @@ describe("the home row's badge", () => {
   it("shows the branch, the counts and the actions in the bar's wording", () => {
     const out = row(connected);
     expect(out).toContain("main");
-    expect(out).toContain("2 to pull");
+    expect(out).toContain("2 to update");
     expect(out).toContain("1 to push");
     expect(out).toContain("93 files changed");
     expect(out).toContain(">Save<");

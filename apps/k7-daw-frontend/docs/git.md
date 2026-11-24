@@ -19,6 +19,8 @@ against the remote. The routes are `apps/k7-daw-backend/docs/files/git.md`, the 
 | the Other host tab has no HTTPS / SSH choice | k7 is ssh only: a choice with a refused option would only be a trap |
 | the command editor is a full-screen editor; its Save writes the whole draft, and a key taken from another command is said under the filter row | a shortcut saved one at a time would half-apply when the person leaves |
 | a clean workspace over an empty remote says "Nothing pushed to {repo} yet" with the next step, instead of "Up to date"; a device with changes or saves keeps Save | an empty clone must never read as a sync that lost the projects |
+| the screens say Update for a pull (Update, Updating…, "update first"); git's own word stays in the code | a person updates a workspace to what the other devices saved; "pull" is a git verb they need not learn |
+| a card with an update incoming shows Update and no Save, unless the update waits for a save | the update comes first, so a Save there would only end on "not sent" |
 | a merge waiting shows only its own button: no Save or Pull | a commit during a merge would be a second history |
 | a pull that diverged opens the merge screen at once | the person was waiting for the answer to the pull |
 | the Conflict screen is a full screen over the project (a region, no dialog): a list of conflicts (marked "To choose" until picked) beside the open conflict's two sides and its choices: Keep mine, Keep theirs, Keep both only where the route says, keep or remove for a file one side removed; Previous and Next walk the list | "both" has a meaning only for a keyed list item, or for a binary kept beside under a free name, and the screen never offers what the merge would refuse |

@@ -193,7 +193,7 @@ export function WorkspaceGitBar({
   return <GitBarOf git={g} workspace={workspace} />;
 }
 
-/** How long "Pulled and merged." stays on the card before the counts are all it says. */
+/** How long "Updated and merged." stays on the card before the counts are all it says. */
 const PULLED_NOTE_MS = 6000;
 
 /** A workspace's git state for its home card: read once and when announced, its failures said as toasts. */
@@ -256,7 +256,7 @@ export function CardPullBar({
   );
 }
 
-/** The card's git pills: Pull in place, Save as one act, the merge when one waits, Setup sync when there is no remote. */
+/** The card's git pills: Update in place, Save as one act, the merge when one waits, Setup sync when there is no remote. */
 export function CardGitPills({
   git: g,
   workspace,
@@ -356,7 +356,8 @@ export function CardGitPills({
           )}
         </Button>
       )}
-      {(pulling || pushable) && (
+      {/* Save waits while an update is incoming, unless the update itself waits for a save. */}
+      {(pulling || pushable) && (refused || v.toPull === 0) && (
         <Button
           variant="glass"
           aria-label={

@@ -122,7 +122,7 @@ test("a workspace is connected, pushed, cloned and merged through a bare reposit
 
     await test.step("pull, choose mine, finish the merge", async () => {
       const ws = await card(page, A);
-      await ws.getByRole("button", { name: /^Pull/ }).click();
+      await ws.getByRole("button", { name: /^Update/ }).click();
       // The Conflict screen is a full-screen modal dialog.
       const dialog = page.getByRole("dialog", { name: "Merge" });
       await expect(dialog).toBeVisible(SLOW);

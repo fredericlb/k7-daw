@@ -30,7 +30,7 @@ describe("the git bar's rendering", () => {
 
   it("says what to pull and push, and the remote", () => {
     const out = html({ ...conn, ahead: 2, behind: 1 });
-    expect(out).toContain("1 to pull");
+    expect(out).toContain("1 to update");
     expect(out).toContain("2 to push");
     expect(out).toContain("https://h/r.git");
   });
