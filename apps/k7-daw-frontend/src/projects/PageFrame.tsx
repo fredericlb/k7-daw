@@ -6,7 +6,6 @@ import { ChevronLeft } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
 import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
-import k7Logo from "../../icon/k7.svg";
 import { m } from "../paraglide/messages.js";
 import { useIsMobile } from "../useIsMobile";
 
@@ -45,22 +44,28 @@ export function PageHeader({
   /** A sub-page: a Back button leads the bar. */
   back?: boolean;
 }) {
-  // The sidebar carries the logo; a phone's page carries its own.
+  // A phone's title shares the top row with the actions; the logo is the sidebar's alone.
   const phone = useIsMobile();
   return (
-    <header className="flex items-start justify-between gap-x-4 gap-y-3 max-sm:flex-wrap">
-      <div className="flex min-w-0 items-start gap-3">
-        {back && <BackButton />}
-        {phone && (
-          <img
-            src={k7Logo}
-            alt=""
-            className="mt-1.5 h-7 w-auto shrink-0"
-            draggable={false}
-          />
+    <header
+      className={cn(
+        "flex justify-between gap-x-4 gap-y-3",
+        phone ? "items-center" : "items-start max-sm:flex-wrap",
+      )}
+    >
+      <div
+        className={cn(
+          "flex min-w-0 gap-3",
+          phone ? "items-center" : "items-start",
         )}
-        <div className="flex min-w-0 flex-col gap-1">
-          <h1 className="type-large-title">{title}</h1>
+      >
+        {back && <BackButton />}
+        <div
+          className={cn("flex min-w-0 flex-col", phone ? "gap-px" : "gap-1")}
+        >
+          <h1 className={phone ? "type-title truncate" : "type-large-title"}>
+            {title}
+          </h1>
           {summary && (
             <p className="type-secondary text-fg-2 tabular-nums">{summary}</p>
           )}

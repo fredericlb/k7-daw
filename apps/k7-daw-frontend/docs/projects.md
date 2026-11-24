@@ -56,7 +56,7 @@ under it; App settings is a page like the others, beside the same tabs and with 
 | a new project opens as soon as it is made, unless it owes library modules, which the page then says | the new row would otherwise land somewhere in a long list, and the person would have to look for it |
 | the list has a filter field from six projects on, matching a project's path or a workspace's name; Help is in the page's ⋮ menu and a `help` command | a long list needs a way in, and the documentation was reachable only from inside a project |
 | the tabs are a sidebar wherever the window is wide enough, a bottom bar on a phone | a column of rows names every page in full and leaves the page its whole height; a phone has the width for neither |
-| the logo is the sidebar's, so a page's header carries it only on a phone | one logo on screen, at the same place on every page |
+| the logo is the sidebar's alone; a phone's page header carries none, its title (28 px) on the same row as the page's actions | a phone has no height to spare above the list, and the logo said nothing the page does not |
 | the git pages (Sync settings, Clone a repository) cover the page beside the sidebar, the whole window on a phone | the tabs stay a way out of them, as on every home page |
 | the page column ends 144 px above the window's foot | a phone's tab bar floats over it and must never cover the last row |
 

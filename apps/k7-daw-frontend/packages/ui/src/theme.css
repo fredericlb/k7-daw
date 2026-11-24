@@ -27,6 +27,7 @@
   /* size / line-height / weight */
   --k7-type-display: 300 calc(40 * var(--k7-u))/calc(48 * var(--k7-u)) var(--k7-font-sans);
   --k7-type-large-title: 700 calc(34 * var(--k7-u))/calc(40 * var(--k7-u)) var(--k7-font-sans); /* Home page titles */
+  --k7-type-title: 700 calc(28 * var(--k7-u))/calc(32 * var(--k7-u)) var(--k7-font-sans); /* a phone's home page title, beside its actions */
   --k7-type-sheet-title: 700 calc(20 * var(--k7-u))/calc(26 * var(--k7-u)) var(--k7-font-sans); /* phone sheet, dialog title */
   --k7-type-headline: 700 calc(17 * var(--k7-u))/calc(21 * var(--k7-u)) var(--k7-font-sans); /* header title, panel title */
   --k7-type-body: 400 calc(15 * var(--k7-u))/calc(21 * var(--k7-u)) var(--k7-font-sans); /* rows, menus, inputs */
@@ -418,6 +419,7 @@
 /* The type scale as utilities: one class sets size, line height, weight and face together. */
 @utility type-display { font: var(--k7-type-display); }
 @utility type-large-title { font: var(--k7-type-large-title); }
+@utility type-title { font: var(--k7-type-title); }
 @utility type-sheet-title { font: var(--k7-type-sheet-title); }
 @utility type-headline { font: var(--k7-type-headline); }
 @utility type-body { font: var(--k7-type-body); }
