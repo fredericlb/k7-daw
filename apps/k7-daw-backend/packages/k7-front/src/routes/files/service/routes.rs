@@ -57,6 +57,8 @@ pub enum H {
     Changes,
     /// A command line run natively (`native/verb_run.rs`).
     Verb,
+    /// The completions of a line under the caret, by the `verbs` crate.
+    VerbComplete,
     VerbBundle,
     VerbLibrary,
     /// A host member's route (3f).
@@ -134,6 +136,7 @@ pub fn route(method: &Method, path: &str) -> Route {
         ("/references", true, _) => H::References,
         ("/changes", _, true) => H::Changes,
         ("/verb", _, true) => H::Verb,
+        ("/verb/complete", _, true) => H::VerbComplete,
         ("/verb-bundle", true, _) => H::VerbBundle,
         ("/verb-bundle/library", true, _) => H::VerbLibrary,
         _ => match native::verb_host::Member::of(method, path) {
@@ -189,7 +192,20 @@ pub struct Call {
     pub media: Option<Arc<super::native::media::Media>>,
     /// The account's engine link: a write inside the open project pushes through it.
     pub engine: Option<Arc<super::native::engine::routes::Engine>>,
+    /// The front's own routes asked as this request's caller, for a verb's host members; none outside `POST /verb`.
+    pub reenter: Option<Reenter>,
 }
+
+/// One request to the front with the caller's headers: its method, its target (path and query) and its JSON body.
+pub type Reenter = Arc<
+    dyn Fn(
+            hyper::Method,
+            String,
+            Value,
+        ) -> std::pin::Pin<Box<dyn std::future::Future<Output = Response> + Send>>
+        + Send
+        + Sync,
+>;
 
 impl Call {
     /// A line node's service would say in its own process: the front's log, and the Logs panel's (`serviceLine`).

@@ -192,6 +192,41 @@ fn lend_workspace(req: &mut Request, path: &str, query: &str) {
     }
 }
 
+/// The front's routes asked again with the caller's headers, through the hub that runs; a 503 when none does.
+fn reenter(user: &str, headers: &hyper::HeaderMap) -> routes::Reenter {
+    let (user, headers) = (user.to_owned(), headers.clone());
+    Arc::new(move |method, target, body| {
+        let (user, headers) = (user.clone(), headers.clone());
+        Box::pin(async move {
+            let unanswered =
+                || json_answer(503, &json!({ "error": "the front cannot ask itself" }));
+            let Some(files) = super::launched() else {
+                return unanswered();
+            };
+            let mut b = Request::builder().method(method).uri(&target);
+            for (k, v) in &headers {
+                if k != CONTENT_LENGTH && k != CONTENT_TYPE {
+                    b = b.header(k, v);
+                }
+            }
+            let bytes = if body.is_null() {
+                Vec::new()
+            } else {
+                body.to_string().into_bytes()
+            };
+            let Ok(req) = b
+                .header(CONTENT_TYPE, "application/json")
+                .body(axum::body::Body::from(bytes))
+            else {
+                return unanswered();
+            };
+            answer(&files, &files.hub.names, &user, &target, req)
+                .await
+                .unwrap_or_else(|_| unanswered())
+        })
+    })
+}
+
 /// The account's request answered natively, or handed back where the front does not take it.
 #[allow(
     clippy::result_large_err,
@@ -381,6 +416,7 @@ async fn answer_scoped(
         Route::Handler(h) => h,
     };
     let (parts, body) = req.into_parts();
+    let reenter = (handler == routes::H::Verb).then(|| reenter(user, &parts.headers));
     let declared = parts
         .headers
         .get(CONTENT_LENGTH)
@@ -455,6 +491,7 @@ async fn answer_scoped(
         native,
         media: held.media.clone(),
         engine: held.engine.clone(),
+        reenter,
     };
     let mut answer = routes::dispatch(handler, &call).await;
     if routes::reports_compiler(handler) {

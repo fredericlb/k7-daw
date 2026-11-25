@@ -125,3 +125,69 @@ async fn a_machine_verb_writes_the_preferences_outside_the_history() {
         "{steps}"
     );
 }
+
+/// What the fake front was asked, in order: `METHOD target body`.
+type Asked = std::sync::Arc<std::sync::Mutex<Vec<String>>>;
+
+impl Bed {
+    /// A line whose routes the fake front answers with `reply(target)`.
+    async fn verb_asking(&self, line: &str, reply: fn(&str) -> Value) -> (Value, Vec<String>) {
+        let acct = start(&self.dir);
+        let mut ctx = super::tests::ctx(&self.dir, Tag::Verb, "", &self.lines);
+        ctx.docs = Some(Docs::of(&acct, &code_root()));
+        let mut c = call(&self.dir, "", json!({ "line": line }), Some(ctx));
+        let asked: Asked = Asked::default();
+        let log = asked.clone();
+        c.reenter = Some(std::sync::Arc::new(move |m, target, body| {
+            log.lock().unwrap().push(format!("{m} {target} {body}"));
+            let answer = reply(&target);
+            Box::pin(async move { crate::routes::files::json_answer(200, &answer) })
+        }));
+        let (status, t) = text(routes::dispatch(H::Verb, &c).await).await;
+        assert_eq!(status, 200, "`{line}`: {t}");
+        let asked = asked.lock().unwrap().clone();
+        (serde_json::from_str(&t).unwrap(), asked)
+    }
+}
+
+// A verb that needs a route's answer runs again with it, and words what it got.
+#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+async fn a_call_is_asked_of_the_front_and_the_line_runs_again_with_its_answer() {
+    let b = clip_lane("verb-call").await;
+    let plugins = |_: &str| json!({ "plugins": [{ "name": "Dexed", "format": "VST3", "manufacturer": "Digital Suburban", "role": "instrument" }] });
+    let (ans, asked) = b.verb_asking("system plugins list", plugins).await;
+    assert_eq!(asked, ["GET /verb-host/plugins null"]);
+    assert_eq!(ans["refused"], json!(false), "{ans}");
+    assert!(ans.get("pending").is_none(), "{ans}");
+    let log = ans["log"].to_string();
+    assert!(log.contains("Dexed"), "{log}");
+}
+
+// An ask goes after the landing, with the open project as `at`, and the lines it answers are said.
+#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+async fn an_ask_is_sent_after_the_line_and_its_lines_are_said() {
+    let b = clip_lane("verb-ask").await;
+    let engine = |_: &str| json!({ "lines": ["engine: playing"] });
+    let (ans, asked) = b.verb_asking("transport play", engine).await;
+    assert_eq!(asked.len(), 1, "{asked:?}");
+    assert!(asked[0].starts_with("POST /verb-host/engine "), "{asked:?}");
+    let body: Value = serde_json::from_str(asked[0].splitn(3, ' ').nth(2).unwrap()).unwrap();
+    assert_eq!(body["op"], json!("transport"));
+    assert_eq!(body["action"], json!("play"));
+    assert!(body["at"].is_string(), "{body}");
+    assert!(ans["log"].to_string().contains("engine: playing"), "{ans}");
+}
+
+// Completion reads the open project and writes nothing.
+#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+async fn a_line_is_completed_under_the_caret() {
+    let b = clip_lane("verb-complete").await;
+    let acct = start(&b.dir);
+    let mut ctx = super::tests::ctx(&b.dir, Tag::VerbComplete, "", &b.lines);
+    ctx.docs = Some(Docs::of(&acct, &code_root()));
+    let c = call(&b.dir, "", json!({ "line": "project tem" }), Some(ctx));
+    let (status, t) = text(routes::dispatch(H::VerbComplete, &c).await).await;
+    assert_eq!(status, 200, "{t}");
+    let ans: Value = serde_json::from_str(&t).unwrap();
+    assert!(ans["items"].to_string().contains("project tempo"), "{ans}");
+}

@@ -75,6 +75,15 @@ impl Virtual {
         format!("/x/{sum}")
     }
 
+    /// The virtual spelling of a real path under one of the roots; `None` for a path under none.
+    pub fn shown(&self, path: &str) -> Option<String> {
+        let p = resolve_all(&[path]);
+        self.pairs
+            .iter()
+            .find(|(real, _)| is_within(real, &p))
+            .map(|(real, virt)| format!("{virt}{}", &p[real.len()..]))
+    }
+
     /// The real path a virtual one names; `None` for a path under no virtual root or one that climbs.
     pub fn real(&self, path: &str) -> Option<String> {
         if path.split('/').any(|s| s == "..") {

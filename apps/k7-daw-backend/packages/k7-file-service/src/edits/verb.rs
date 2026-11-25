@@ -1,10 +1,11 @@
 //! verb.rs — one command line run by the `verbs` crate over a `StagedFs` of the workspace, its writes landed whole (docs/verbs-port.md).
-//! What a reader gets wrong: a verb that refuses or throws lands nothing, even the writes it made before it said no; the caller holds the lock.
+//! What a reader gets wrong: a verb that refuses, throws or waits for a route lands nothing, even the writes it made before; the caller holds the lock.
 
 use song::Cache;
 use song_edit::confine::Env;
 use song_edit::ids::NewId;
-use verbs::{Answer, run_in_env};
+pub use verbs::Replay;
+use verbs::{Answer, Item, complete_in_env, run_replayed};
 
 use super::{StagedFs, env_for, env_of, posix};
 use crate::atomic::Real;
@@ -28,6 +29,8 @@ pub struct Line<'a> {
     pub code_root: &'a str,
     pub project: Option<&'a str>,
     pub line: &'a str,
+    /// What the line's earlier runs fixed: the routes' answers and the stamp.
+    pub replay: Replay,
 }
 
 /// Where a verb may write: the workspace (its project and the shared texts) and the studio's own folder (the preferences).
@@ -62,8 +65,16 @@ pub fn run_verb(
     let (writes, reads) = mounts(at.home, at.root, &env);
     let mut fs = StagedFs::reading(&writes, &reads).map_err(|e| e.to_string())?;
     let dir = at.project.map(posix).unwrap_or_default();
-    let answer = run_in_env(&mut fs, cache, new_id, env, &dir, at.line);
-    if answer.refused || fs.is_empty() {
+    let answer = run_replayed(
+        &mut fs,
+        cache,
+        new_id,
+        env,
+        &dir,
+        at.line,
+        at.replay.clone(),
+    );
+    if answer.refused || answer.pending.is_some() || fs.is_empty() {
         return Ok(Ran {
             answer,
             ..Ran::default()
@@ -85,4 +96,57 @@ pub fn run_verb(
         landed: Some(landed),
         written,
     })
+}
+
+/// The line up to `cursor` UTF-16 units, as a browser's caret counts them; absent, the whole line.
+fn head_of(line: &str, cursor: Option<usize>) -> &str {
+    let Some(cursor) = cursor else {
+        return line;
+    };
+    let mut units = 0;
+    for (i, c) in line.char_indices() {
+        if units >= cursor {
+            return &line[..i];
+        }
+        units += c.len_utf16();
+    }
+    line
+}
+
+/// The completions of `at.line` cut at `cursor`, read over the workspace and written nowhere.
+///
+/// # Errors
+/// A mount that is not absolute.
+pub fn complete_verb(
+    at: &Line<'_>,
+    cursor: Option<usize>,
+    cache: &mut Cache,
+) -> Result<Vec<Item>, String> {
+    let env = at.project.map_or_else(
+        || env_of(at.home, at.code_root),
+        |p| env_for(at.home, at.code_root, p),
+    );
+    let (writes, reads) = mounts(at.home, at.root, &env);
+    let fs = StagedFs::reading(&writes, &reads).map_err(|e| e.to_string())?;
+    let dir = at.project.map(posix).unwrap_or_default();
+    Ok(complete_in_env(
+        &fs,
+        cache,
+        env,
+        &dir,
+        head_of(at.line, cursor),
+    ))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::head_of;
+
+    #[test]
+    fn the_caret_counts_utf16_units() {
+        assert_eq!(head_of("track rename é x", Some(14)), "track rename é");
+        assert_eq!(head_of("a😀b", Some(3)), "a😀");
+        assert_eq!(head_of("ab", None), "ab");
+        assert_eq!(head_of("ab", Some(9)), "ab");
+    }
 }

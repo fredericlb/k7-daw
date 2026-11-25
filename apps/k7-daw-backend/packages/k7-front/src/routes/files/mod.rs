@@ -44,6 +44,15 @@ pub struct Files {
     pub service: service::Services,
 }
 
+/// The hub launched last: a verb asks the front's own routes through it (`service/native/verb_ask.rs`).
+static LAUNCHED: std::sync::Mutex<std::sync::Weak<Files>> =
+    std::sync::Mutex::new(std::sync::Weak::new());
+
+/// The hub this process answers with, while it runs.
+pub fn launched() -> Option<Arc<Files>> {
+    LAUNCHED.lock().unwrap_or_else(|p| p.into_inner()).upgrade()
+}
+
 impl Files {
     /// The family's state when the switch is on and the front can check sessions.
     pub fn start(config: &crate::Config, settings: &Settings, port: u16) -> Option<Arc<Files>> {
@@ -83,6 +92,7 @@ impl Files {
     /// Launch the hub, and take the family from then on.
     pub async fn launch(self: Arc<Self>, state: Arc<AppState>) {
         self.owned.store(true, Ordering::Relaxed);
+        *LAUNCHED.lock().unwrap_or_else(|p| p.into_inner()) = Arc::downgrade(&self);
         eprintln!("k7-front: the file hub is answered here (K7_FILES=front)");
         hub::launch(&state).await;
     }

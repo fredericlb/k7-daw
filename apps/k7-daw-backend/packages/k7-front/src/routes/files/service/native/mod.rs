@@ -58,6 +58,7 @@ pub mod shares;
 pub mod stack;
 pub mod stats;
 mod tag;
+pub mod verb_ask;
 pub mod verb_bundle;
 pub mod verb_host;
 pub mod verb_run;
@@ -174,6 +175,7 @@ impl Ctx {
                     tag,
                     Tag::Changes
                         | Tag::Verb
+                        | Tag::VerbComplete
                         | Tag::VerbBundle
                         | Tag::VerbLibrary
                         | Tag::VerbHost(_)

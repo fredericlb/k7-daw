@@ -60,6 +60,7 @@ pub(super) fn call(
         native,
         media: None,
         engine: None,
+        reenter: None,
     }
 }
 
