@@ -6,7 +6,7 @@ import { cn } from "./lib/utils";
 
 // A control is a pill (radius = height / 2). `glass` and `chip` carry a pressed state through aria-pressed.
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full type-label cursor-pointer transition-colors outline-none focus-visible:shadow-(--k7-focus-ring) disabled:pointer-events-none disabled:opacity-40 aria-disabled:opacity-40 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full type-label cursor-pointer transition-colors outline-none focus-visible:shadow-(--k7-focus-ring) disabled:pointer-events-none disabled:opacity-40 aria-disabled:opacity-40 [&_svg]:pointer-events-none [&_svg]:shrink-0 desk:[&_svg.size-5]:size-[18px]",
   {
     variants: {
       variant: {

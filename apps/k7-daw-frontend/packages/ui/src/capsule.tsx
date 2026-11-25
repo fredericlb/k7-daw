@@ -2,7 +2,7 @@ import * as React from "react";
 import { reasonOf, reasonPress } from "./disabled-reason";
 import { cn } from "./lib/utils";
 
-// A glass pill of icon buttons (44 x 36 each, padding 3; 32 tall on a desk): the header's git, pane and panel capsules and the bar's transport.
+// A glass pill of icon buttons (44 x 36 each, padding 3; 32 tall on a desk, segments 24, icons 18): the header's git, pane and panel capsules and the bar's transport.
 export const Capsule = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
@@ -37,7 +37,7 @@ export const CapsuleButton = React.forwardRef<
       type={type}
       aria-pressed={pressed}
       className={cn(
-        "type-label inline-flex h-9 min-w-11 cursor-pointer desk:h-6 desk:min-w-8 desk:rounded-xl items-center justify-center gap-1.5 rounded-[18px] px-2.5 text-foreground outline-none transition-colors hover:bg-on-fill focus-visible:shadow-(--k7-focus-ring) disabled:pointer-events-none disabled:opacity-40 aria-disabled:opacity-40 aria-pressed:bg-on-fill aria-pressed:text-lavender aria-pressed:shadow-(--k7-highlight) [&_svg]:size-5 [&_svg]:shrink-0",
+        "type-label inline-flex h-9 min-w-11 cursor-pointer desk:h-6 desk:min-w-8 desk:rounded-xl items-center justify-center gap-1.5 rounded-[18px] px-2.5 text-foreground outline-none transition-colors hover:bg-on-fill focus-visible:shadow-(--k7-focus-ring) disabled:pointer-events-none disabled:opacity-40 aria-disabled:opacity-40 aria-pressed:bg-on-fill aria-pressed:text-lavender aria-pressed:shadow-(--k7-highlight) [&_svg]:size-5 desk:[&_svg]:size-[18px] [&_svg]:shrink-0",
         className,
       )}
       {...(reason

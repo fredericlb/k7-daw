@@ -167,13 +167,13 @@ export function HeaderGit({
     );
 
   return (
-    <Capsule aria-label={m["git.bar"]()} className="shrink-0">
+    <Capsule aria-label={m["git.bar"]()} className="shrink-0 desk:p-0">
       <CapsuleButton
         aria-label={commitName}
         title={commitName}
         disabled={!(v.commit || v.push) || busy}
         onClick={commit}
-        className="px-3.5"
+        className="px-3.5 desk:h-[30px] desk:rounded-[15px]"
       >
         {saving ? <Loader2 className="animate-spin" /> : <Save />}
         <span className="max-[1279px]:hidden">{commitLabel}</span>
@@ -182,7 +182,10 @@ export function HeaderGit({
       <CapsuleDivider />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <CapsuleButton aria-label={m["shell.git.more"]()}>
+          <CapsuleButton
+            aria-label={m["shell.git.more"]()}
+            className="desk:h-[30px] desk:rounded-[15px]"
+          >
             <ChevronDown />
           </CapsuleButton>
         </DropdownMenuTrigger>

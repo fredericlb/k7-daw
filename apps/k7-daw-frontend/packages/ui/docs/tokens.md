@@ -14,7 +14,8 @@ meaning colours in its `index.css`.
 - **A control is a pill**: its radius is half its height. On a touch screen its minimum target is
   44 px: buttons are 44 tall, or 36 inside a card, a toast or an editor.
 - **A desk is denser**: under a mouse, in a window that is not phone-sized, buttons, capsules, inputs,
-  menu rows and the sidebar's rows are 32 px (a capsule's segments 24). The `desk:` variant carries it,
+  menu rows and the sidebar's rows are 32 px (a capsule's segments 24, the git capsule's two 30) and a
+  control's 20 px icon is 18. The `desk:` variant carries it,
   and its media query is `useShellLayout`'s Desk, so a touchscreen or a narrow window keeps 44. A mouse
   needs no 44 px target, and the Desk boards draw every control 32 tall.
 - **The accent is a fill, never text.** Accent-coloured text and icons use `--k7-accent-text`
