@@ -72,7 +72,25 @@ whatever wrote it.
 | M4 | `track highlight` | `tracks.rs` |
 | M5 | 44 of 44: nodes, modules, assemblies, the graph's wiring and layout, taps, presets, alternatives, engines, params, freeze | `graph_nodes.rs`, `taps.rs`, `node_state.rs`, `node_values.rs`, `chain_fixture.rs` |
 | M7 | 19 of 19; `system stems` and `system instrumental` store the chain unchecked, since `resolveChain` is TypeScript only | `system.rs`, `transport.rs` |
+| M8 | completion: the 25 providers, their labels and the command words | `complete.rs` |
 | the compile cache | kept from line to line; on `clip-lane`, 1.1 ms a line fresh and 0.7 ms kept, in release | `cache.rs` |
+
+## Completion
+
+`complete(line, ctx)` in `apps/k7-daw-wasm/verbs/src/complete/` answers what `completionItems` answers: the command words while one is
+being typed, then the values of the argument under the caret, each as a whole `line` with an optional `label`.
+
+| choice | why |
+|---|---|
+| the entry reads `&dyn Fs`, never `&mut`, and `{"op":"verb.complete","args":{line, cursor?, project, env?, labelled?}}` answers `{items}` | completion writes nothing, and a command bar asks on every key; a caller keeps one `song::Cache` (`complete_in_env`) so the compile is read again only for what changed |
+| an item is `{line, label?}`, and with `labelled: false` (the default) a bare string, as the page's `runtime.complete` returns | the page that switches to the crate reads the list it reads today |
+| `cursor` counts UTF-16 units and cuts the line; what follows it is not read | a browser's `selectionStart` is in UTF-16, and the TypeScript completes the whole string it is given |
+| `commands.json` carries each argument's `complete:` and `values:` | the dispatch needs no YAML at run time; the provider names are the TypeScript's, so a caller maps both ways |
+| a provider whose read fails answers an empty list | a broken curve file or an unloadable project costs its completion, never the command bar |
+| `surfaceTypes` is the four built-in types | the plugin registry of surface types is the page's, and a native caller has none |
+| `curves` lists `curves/*.k7x` by file id, without parsing each curve | a curve the compile would refuse still has a file to name |
+| a chain project's node is offered by uuid, labelled `<module> · <chain> · step n` | the uuid is what every command carries and the label is what a person reads |
+| the playlists come off the workspace folder, not the project's | a set list belongs to the workspace |
 
 ## How the native app reaches a verb
 

@@ -11,7 +11,7 @@ use std::path::{Path, PathBuf};
 use verbs::{Answer, Host, VerbRequest, run_request};
 
 pub const WS: &str = "/w/ws";
-const META: &str = "/k7/meta";
+pub const META: &str = "/k7/meta";
 
 fn repo() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR")).join("../../..")

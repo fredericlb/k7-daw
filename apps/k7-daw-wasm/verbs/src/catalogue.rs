@@ -1,4 +1,4 @@
-// catalogue.rs — commands.yaml as the crate reads it (`commands.json`, generated): the words, the SID, each argument's shape.
+// catalogue.rs — commands.yaml as the crate reads it (`commands.json`, generated): the words, the SID, each argument's shape and completion.
 // A reader would get wrong that a timecode argument is checked in the song's meter: it is checked at 4/4, as the TypeScript does.
 
 use serde::Deserialize;
@@ -11,6 +11,12 @@ pub struct ArgSpec {
     pub name: String,
     #[serde(default, rename = "type")]
     pub kind: Option<String>,
+    /// The named provider that offers this argument's values (`tracks`, `nodes`…).
+    #[serde(default)]
+    pub complete: Option<String>,
+    /// …or the closed set the command itself fixes.
+    #[serde(default)]
+    pub values: Option<Vec<String>>,
 }
 
 #[derive(Clone, Debug, Deserialize)]

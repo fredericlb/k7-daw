@@ -1,4 +1,4 @@
-// catalogue.mjs — writes commands.json, the crate's copy of commands.yaml: each command's words, SID and argument shapes.
+// catalogue.mjs — writes commands.json, the crate's copy of commands.yaml: each command's words, SID, argument shapes and completions.
 // What a reader gets wrong: `--check` only compares, so a catalogue change fails it until this is run without the flag.
 
 import { readFileSync, writeFileSync } from "node:fs";
@@ -17,6 +17,8 @@ const rows = (parse(readFileSync(YAML, "utf8")) ?? [])
     args: (Array.isArray(c.args) ? c.args : []).map((a) => ({
       name: String(a?.name ?? ""),
       ...(a?.type ? { type: String(a.type) } : {}),
+      ...(a?.complete ? { complete: String(a.complete) } : {}),
+      ...(Array.isArray(a?.values) ? { values: a.values.map(String) } : {}),
     })),
   }));
 const text = `${JSON.stringify(rows, null, 1)}\n`;

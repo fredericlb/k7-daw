@@ -13,7 +13,8 @@
   "sid": "track.group",
   "args": [
    {
-    "name": "tracks"
+    "name": "tracks",
+    "complete": "tracks"
    },
    {
     "name": "name"
@@ -30,7 +31,8 @@
   "sid": "track.order",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    },
    {
     "name": "position"
@@ -42,7 +44,8 @@
   "sid": "track.duplicate",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    }
   ]
  },
@@ -51,7 +54,8 @@
   "sid": "track.duplicate.empty",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    }
   ]
  },
@@ -60,7 +64,8 @@
   "sid": "track.rename",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    },
    {
     "name": "name"
@@ -72,7 +77,8 @@
   "sid": "track.input",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    },
    {
     "name": "kind"
@@ -84,7 +90,8 @@
   "sid": "track.hide",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    }
   ]
  },
@@ -111,7 +118,8 @@
   "sid": "sequence.empty",
   "args": [
    {
-    "name": "tracks"
+    "name": "tracks",
+    "complete": "tracks"
    },
    {
     "name": "from",
@@ -140,7 +148,8 @@
   "sid": "timeline.play",
   "args": [
    {
-    "name": "timeline"
+    "name": "timeline",
+    "complete": "timelines"
    }
   ]
  },
@@ -149,7 +158,8 @@
   "sid": "timeline.rename",
   "args": [
    {
-    "name": "timeline"
+    "name": "timeline",
+    "complete": "timelines"
    },
    {
     "name": "name"
@@ -161,7 +171,8 @@
   "sid": "timeline.length",
   "args": [
    {
-    "name": "timeline"
+    "name": "timeline",
+    "complete": "timelines"
    },
    {
     "name": "length"
@@ -173,7 +184,8 @@
   "sid": "timeline.laneNew",
   "args": [
    {
-    "name": "timeline"
+    "name": "timeline",
+    "complete": "timelines"
    },
    {
     "name": "name"
@@ -185,10 +197,12 @@
   "sid": "timeline.laneCopy",
   "args": [
    {
-    "name": "lane"
+    "name": "lane",
+    "complete": "tracks"
    },
    {
-    "name": "to"
+    "name": "to",
+    "complete": "laneTargets"
    },
    {
     "name": "name"
@@ -200,10 +214,12 @@
   "sid": "timeline.laneRemove",
   "args": [
    {
-    "name": "timeline"
+    "name": "timeline",
+    "complete": "timelines"
    },
    {
-    "name": "lane"
+    "name": "lane",
+    "complete": "timelineLanes"
    }
   ]
  },
@@ -212,7 +228,8 @@
   "sid": "curve.point.add",
   "args": [
    {
-    "name": "curve"
+    "name": "curve",
+    "complete": "curves"
    },
    {
     "name": "time",
@@ -229,7 +246,8 @@
   "sid": "curve.point.move",
   "args": [
    {
-    "name": "curve"
+    "name": "curve",
+    "complete": "curves"
    },
    {
     "name": "time",
@@ -250,7 +268,8 @@
   "sid": "curve.point.remove",
   "args": [
    {
-    "name": "curve"
+    "name": "curve",
+    "complete": "curves"
    },
    {
     "name": "time",
@@ -364,7 +383,8 @@
   "sid": "track.mute",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    }
   ]
  },
@@ -373,7 +393,8 @@
   "sid": "track.solo",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    }
   ]
  },
@@ -382,7 +403,8 @@
   "sid": "track.highlight",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    }
   ]
  },
@@ -391,7 +413,8 @@
   "sid": "track.automation.add",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    },
    {
     "name": "param"
@@ -403,7 +426,8 @@
   "sid": "track.automation.remove",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    },
    {
     "name": "param"
@@ -415,10 +439,12 @@
   "sid": "track.process",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    },
    {
-    "name": "chain"
+    "name": "chain",
+    "complete": "chains"
    }
   ]
  },
@@ -427,10 +453,12 @@
   "sid": "clip.process",
   "args": [
    {
-    "name": "clip"
+    "name": "clip",
+    "complete": "clipTargets"
    },
    {
-    "name": "chain"
+    "name": "chain",
+    "complete": "chains"
    }
   ]
  },
@@ -439,7 +467,8 @@
   "sid": "event.trim",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    },
    {
     "name": "timecode",
@@ -456,7 +485,8 @@
   "sid": "clip.warp",
   "args": [
    {
-    "name": "clip"
+    "name": "clip",
+    "complete": "clipTargets"
    },
    {
     "name": "sec",
@@ -473,7 +503,8 @@
   "sid": "clip.warpRemove",
   "args": [
    {
-    "name": "clip"
+    "name": "clip",
+    "complete": "clipTargets"
    },
    {
     "name": "sec",
@@ -486,7 +517,8 @@
   "sid": "clip.onset.add",
   "args": [
    {
-    "name": "clip"
+    "name": "clip",
+    "complete": "clipTargets"
    },
    {
     "name": "sec",
@@ -499,7 +531,8 @@
   "sid": "clip.onset.remove",
   "args": [
    {
-    "name": "clip"
+    "name": "clip",
+    "complete": "clipTargets"
    },
    {
     "name": "sec",
@@ -512,7 +545,8 @@
   "sid": "clip.onset.move",
   "args": [
    {
-    "name": "clip"
+    "name": "clip",
+    "complete": "clipTargets"
    },
    {
     "name": "from-sec",
@@ -534,7 +568,8 @@
   "sid": "sequence.addNote",
   "args": [
    {
-    "name": "sequence"
+    "name": "sequence",
+    "complete": "sequenceFiles"
    },
    {
     "name": "note",
@@ -555,7 +590,8 @@
   "sid": "sequence.noteVelocity",
   "args": [
    {
-    "name": "sequence"
+    "name": "sequence",
+    "complete": "sequenceFiles"
    },
    {
     "name": "note",
@@ -576,7 +612,8 @@
   "sid": "sequence.noteRepeat",
   "args": [
    {
-    "name": "sequence"
+    "name": "sequence",
+    "complete": "sequenceFiles"
    },
    {
     "name": "note",
@@ -596,7 +633,8 @@
   "sid": "sequence.noteSkip",
   "args": [
    {
-    "name": "sequence"
+    "name": "sequence",
+    "complete": "sequenceFiles"
    },
    {
     "name": "note",
@@ -616,7 +654,8 @@
   "sid": "sequence.noteTimeRange",
   "args": [
    {
-    "name": "sequence"
+    "name": "sequence",
+    "complete": "sequenceFiles"
    },
    {
     "name": "note",
@@ -641,7 +680,8 @@
   "sid": "sequence.moveNote",
   "args": [
    {
-    "name": "sequence"
+    "name": "sequence",
+    "complete": "sequenceFiles"
    },
    {
     "name": "note",
@@ -666,7 +706,8 @@
   "sid": "sequence.splitNote",
   "args": [
    {
-    "name": "sequence"
+    "name": "sequence",
+    "complete": "sequenceFiles"
    },
    {
     "name": "note",
@@ -687,7 +728,8 @@
   "sid": "sequence.double",
   "args": [
    {
-    "name": "sequence"
+    "name": "sequence",
+    "complete": "sequenceFiles"
    }
   ]
  },
@@ -696,7 +738,8 @@
   "sid": "sequence.removeNote",
   "args": [
    {
-    "name": "sequence"
+    "name": "sequence",
+    "complete": "sequenceFiles"
    },
    {
     "name": "note",
@@ -713,7 +756,8 @@
   "sid": "sequence.recordNotes",
   "args": [
    {
-    "name": "sequence"
+    "name": "sequence",
+    "complete": "sequenceFiles"
    },
    {
     "name": "notes"
@@ -725,7 +769,8 @@
   "sid": "sequence.record",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    },
    {
     "name": "notes"
@@ -737,7 +782,8 @@
   "sid": "sequence.notesRemove",
   "args": [
    {
-    "name": "sequence"
+    "name": "sequence",
+    "complete": "sequenceFiles"
    },
    {
     "name": "loNote",
@@ -762,7 +808,8 @@
   "sid": "sequence.notesTranspose",
   "args": [
    {
-    "name": "sequence"
+    "name": "sequence",
+    "complete": "sequenceFiles"
    },
    {
     "name": "loNote",
@@ -791,7 +838,8 @@
   "sid": "sequence.notesQuantize",
   "args": [
    {
-    "name": "sequence"
+    "name": "sequence",
+    "complete": "sequenceFiles"
    },
    {
     "name": "loNote",
@@ -820,7 +868,8 @@
   "sid": "sequence.notesVelocity",
   "args": [
    {
-    "name": "sequence"
+    "name": "sequence",
+    "complete": "sequenceFiles"
    },
    {
     "name": "loNote",
@@ -849,7 +898,8 @@
   "sid": "sequence.notesMove",
   "args": [
    {
-    "name": "sequence"
+    "name": "sequence",
+    "complete": "sequenceFiles"
    },
    {
     "name": "moves"
@@ -870,7 +920,8 @@
   "sid": "curve.set",
   "args": [
    {
-    "name": "curve"
+    "name": "curve",
+    "complete": "curves"
    },
    {
     "name": "fields"
@@ -882,7 +933,8 @@
   "sid": "project.surface.create",
   "args": [
    {
-    "name": "type"
+    "name": "type",
+    "complete": "surfaceTypes"
    },
    {
     "name": "id"
@@ -894,16 +946,19 @@
   "sid": "node.automate",
   "args": [
    {
-    "name": "module"
+    "name": "module",
+    "complete": "modules"
    },
    {
     "name": "param"
    },
    {
-    "name": "curve"
+    "name": "curve",
+    "complete": "curves"
    },
    {
-    "name": "trigger"
+    "name": "trigger",
+    "complete": "modules"
    }
   ]
  },
@@ -962,7 +1017,8 @@
   "sid": "project.marker.delete",
   "args": [
    {
-    "name": "name"
+    "name": "name",
+    "complete": "markerNames"
    }
   ]
  },
@@ -985,7 +1041,8 @@
   "sid": "node.externalUi",
   "args": [
    {
-    "name": "module"
+    "name": "module",
+    "complete": "modules"
    }
   ]
  },
@@ -999,7 +1056,11 @@
   "sid": "system.channel.clear",
   "args": [
    {
-    "name": "dir"
+    "name": "dir",
+    "values": [
+     "in",
+     "out"
+    ]
    },
    {
     "name": "chans"
@@ -1011,7 +1072,11 @@
   "sid": "system.channel.set",
   "args": [
    {
-    "name": "dir"
+    "name": "dir",
+    "values": [
+     "in",
+     "out"
+    ]
    },
    {
     "name": "chans"
@@ -1030,7 +1095,11 @@
     "type": "number"
    },
    {
-    "name": "mode"
+    "name": "mode",
+    "values": [
+     "mono",
+     "stereo"
+    ]
    }
   ]
  },
@@ -1039,7 +1108,8 @@
   "sid": "system.stems",
   "args": [
    {
-    "name": "chain"
+    "name": "chain",
+    "complete": "chains"
    }
   ]
  },
@@ -1048,7 +1118,8 @@
   "sid": "system.instrumental",
   "args": [
    {
-    "name": "chain"
+    "name": "chain",
+    "complete": "chains"
    }
   ]
  },
@@ -1080,7 +1151,8 @@
   "sid": "library.upgrade",
   "args": [
    {
-    "name": "library"
+    "name": "library",
+    "complete": "libraries"
    },
    {
     "name": "version"
@@ -1101,10 +1173,12 @@
   "sid": "playlist.stems",
   "args": [
    {
-    "name": "playlist"
+    "name": "playlist",
+    "complete": "playlists"
    },
    {
-    "name": "chain"
+    "name": "chain",
+    "complete": "chains"
    }
   ]
  },
@@ -1113,7 +1187,8 @@
   "sid": "playlist.song.add",
   "args": [
    {
-    "name": "playlist"
+    "name": "playlist",
+    "complete": "playlists"
    },
    {
     "name": "song"
@@ -1128,7 +1203,8 @@
   "sid": "playlist.song.remove",
   "args": [
    {
-    "name": "playlist"
+    "name": "playlist",
+    "complete": "playlists"
    },
    {
     "name": "position"
@@ -1140,7 +1216,8 @@
   "sid": "playlist.song.move",
   "args": [
    {
-    "name": "playlist"
+    "name": "playlist",
+    "complete": "playlists"
    },
    {
     "name": "from"
@@ -1164,7 +1241,8 @@
   "sid": "picture.laneOrder",
   "args": [
    {
-    "name": "lane"
+    "name": "lane",
+    "complete": "pictureLanes"
    },
    {
     "name": "position"
@@ -1176,7 +1254,8 @@
   "sid": "picture.laneRename",
   "args": [
    {
-    "name": "lane"
+    "name": "lane",
+    "complete": "pictureLanes"
    },
    {
     "name": "name"
@@ -1188,7 +1267,8 @@
   "sid": "picture.laneDelete",
   "args": [
    {
-    "name": "lane"
+    "name": "lane",
+    "complete": "pictureLanes"
    }
   ]
  },
@@ -1197,7 +1277,8 @@
   "sid": "picture.mute",
   "args": [
    {
-    "name": "lane"
+    "name": "lane",
+    "complete": "pictureLanes"
    }
   ]
  },
@@ -1206,7 +1287,8 @@
   "sid": "picture.solo",
   "args": [
    {
-    "name": "lane"
+    "name": "lane",
+    "complete": "pictureLanes"
    }
   ]
  },
@@ -1215,7 +1297,8 @@
   "sid": "picture.rect",
   "args": [
    {
-    "name": "lane"
+    "name": "lane",
+    "complete": "pictureLanes"
    },
    {
     "name": "x"
@@ -1236,7 +1319,8 @@
   "sid": "picture.move",
   "args": [
    {
-    "name": "lane"
+    "name": "lane",
+    "complete": "pictureLanes"
    },
    {
     "name": "at"
@@ -1251,7 +1335,8 @@
   "sid": "picture.length",
   "args": [
    {
-    "name": "lane"
+    "name": "lane",
+    "complete": "pictureLanes"
    },
    {
     "name": "at"
@@ -1266,7 +1351,8 @@
   "sid": "picture.head",
   "args": [
    {
-    "name": "lane"
+    "name": "lane",
+    "complete": "pictureLanes"
    },
    {
     "name": "at"
@@ -1281,7 +1367,8 @@
   "sid": "picture.delete",
   "args": [
    {
-    "name": "lane"
+    "name": "lane",
+    "complete": "pictureLanes"
    },
    {
     "name": "at"
@@ -1293,7 +1380,8 @@
   "sid": "picture.split",
   "args": [
    {
-    "name": "lane"
+    "name": "lane",
+    "complete": "pictureLanes"
    },
    {
     "name": "at"
@@ -1308,7 +1396,8 @@
   "sid": "picture.add",
   "args": [
    {
-    "name": "lane"
+    "name": "lane",
+    "complete": "pictureLanes"
    },
    {
     "name": "ref"
@@ -1329,13 +1418,21 @@
   "sid": "picture.key",
   "args": [
    {
-    "name": "lane"
+    "name": "lane",
+    "complete": "pictureLanes"
    },
    {
     "name": "at"
    },
    {
-    "name": "prop"
+    "name": "prop",
+    "values": [
+     "x",
+     "y",
+     "scale",
+     "opacity",
+     "rotate"
+    ]
    },
    {
     "name": "when"
@@ -1344,7 +1441,14 @@
     "name": "value"
    },
    {
-    "name": "ease"
+    "name": "ease",
+    "values": [
+     "linear",
+     "in",
+     "out",
+     "inout",
+     "hold"
+    ]
    }
   ]
  },
@@ -1353,13 +1457,21 @@
   "sid": "picture.unkey",
   "args": [
    {
-    "name": "lane"
+    "name": "lane",
+    "complete": "pictureLanes"
    },
    {
     "name": "at"
    },
    {
-    "name": "prop"
+    "name": "prop",
+    "values": [
+     "x",
+     "y",
+     "scale",
+     "opacity",
+     "rotate"
+    ]
    },
    {
     "name": "when"
@@ -1371,7 +1483,8 @@
   "sid": "picture.speed",
   "args": [
    {
-    "name": "lane"
+    "name": "lane",
+    "complete": "pictureLanes"
    },
    {
     "name": "at"
@@ -1386,7 +1499,8 @@
   "sid": "picture.prepare",
   "args": [
    {
-    "name": "lane"
+    "name": "lane",
+    "complete": "pictureLanes"
    }
   ]
  },
@@ -1395,10 +1509,15 @@
   "sid": "picture.interchange",
   "args": [
    {
-    "name": "format"
+    "name": "format",
+    "values": [
+     "otio",
+     "edl"
+    ]
    },
    {
-    "name": "lane"
+    "name": "lane",
+    "complete": "pictureLanes"
    }
   ]
  },
@@ -1428,10 +1547,18 @@
   "sid": "picture.render",
   "args": [
    {
-    "name": "format"
+    "name": "format",
+    "values": [
+     "webm",
+     "mp4"
+    ]
    },
    {
-    "name": "sound"
+    "name": "sound",
+    "values": [
+     "wav",
+     "none"
+    ]
    },
    {
     "name": "settings"
@@ -1443,7 +1570,8 @@
   "sid": "picture.sound",
   "args": [
    {
-    "name": "lane"
+    "name": "lane",
+    "complete": "pictureLanes"
    },
    {
     "name": "track"
@@ -1455,7 +1583,8 @@
   "sid": "picture.silence",
   "args": [
    {
-    "name": "lane"
+    "name": "lane",
+    "complete": "pictureLanes"
    },
    {
     "name": "at"
@@ -1467,10 +1596,12 @@
   "sid": "module.create",
   "args": [
    {
-    "name": "category/name"
+    "name": "category/name",
+    "complete": "categories"
    },
    {
-    "name": "extends-ref"
+    "name": "extends-ref",
+    "complete": "baseModules"
    }
   ]
  },
@@ -1479,13 +1610,15 @@
   "sid": "node.new",
   "args": [
    {
-    "name": "category/name"
+    "name": "category/name",
+    "complete": "moduleTargets"
    },
    {
     "name": "node-name"
    },
    {
-    "name": "extends-ref"
+    "name": "extends-ref",
+    "complete": "baseModules"
    },
    {
     "name": "at"
@@ -1497,7 +1630,8 @@
   "sid": "node.delete",
   "args": [
    {
-    "name": "node"
+    "name": "node",
+    "complete": "modules"
    }
   ]
  },
@@ -1506,7 +1640,8 @@
   "sid": "track.delete",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    }
   ]
  },
@@ -1515,7 +1650,8 @@
   "sid": "assembly.new",
   "args": [
    {
-    "name": "ref"
+    "name": "ref",
+    "complete": "assemblyTemplates"
    },
    {
     "name": "name"
@@ -1527,7 +1663,8 @@
   "sid": "assembly.delete",
   "args": [
    {
-    "name": "name"
+    "name": "name",
+    "complete": "assemblies"
    }
   ]
  },
@@ -1536,7 +1673,8 @@
   "sid": "assembly.dissolve",
   "args": [
    {
-    "name": "name"
+    "name": "name",
+    "complete": "assemblies"
    }
   ]
  },
@@ -1545,7 +1683,8 @@
   "sid": "graph.unlink",
   "args": [
    {
-    "name": "node"
+    "name": "node",
+    "complete": "modules"
    }
   ]
  },
@@ -1554,7 +1693,8 @@
   "sid": "module.fork",
   "args": [
    {
-    "name": "ref"
+    "name": "ref",
+    "complete": "baseModules"
    }
   ]
  },
@@ -1563,7 +1703,8 @@
   "sid": "module.own",
   "args": [
    {
-    "name": "ref"
+    "name": "ref",
+    "complete": "engineModules"
    }
   ]
  },
@@ -1572,10 +1713,12 @@
   "sid": "node.replace",
   "args": [
    {
-    "name": "node"
+    "name": "node",
+    "complete": "nodes"
    },
    {
-    "name": "extends-ref"
+    "name": "extends-ref",
+    "complete": "baseModules"
    }
   ]
  },
@@ -1584,7 +1727,8 @@
   "sid": "module.clone",
   "args": [
    {
-    "name": "category/name"
+    "name": "category/name",
+    "complete": "modules"
    },
    {
     "name": "newName"
@@ -1608,10 +1752,15 @@
   "sid": "node.bypass",
   "args": [
    {
-    "name": "node"
+    "name": "node",
+    "complete": "nodes"
    },
    {
-    "name": "state"
+    "name": "state",
+    "values": [
+     "on",
+     "off"
+    ]
    }
   ]
  },
@@ -1620,7 +1769,8 @@
   "sid": "node.alt.create",
   "args": [
    {
-    "name": "node"
+    "name": "node",
+    "complete": "nodes"
    },
    {
     "name": "name"
@@ -1632,7 +1782,8 @@
   "sid": "node.alt.copy",
   "args": [
    {
-    "name": "node"
+    "name": "node",
+    "complete": "nodes"
    },
    {
     "name": "name"
@@ -1644,10 +1795,12 @@
   "sid": "node.alt.select",
   "args": [
    {
-    "name": "node"
+    "name": "node",
+    "complete": "nodes"
    },
    {
-    "name": "name"
+    "name": "name",
+    "complete": "moduleAlternatives"
    }
   ]
  },
@@ -1656,10 +1809,12 @@
   "sid": "node.engine",
   "args": [
    {
-    "name": "node"
+    "name": "node",
+    "complete": "nodes"
    },
    {
-    "name": "name"
+    "name": "name",
+    "complete": "moduleEngines"
    }
   ]
  },
@@ -1668,7 +1823,8 @@
   "sid": "node.preset.apply",
   "args": [
    {
-    "name": "node"
+    "name": "node",
+    "complete": "nodes"
    },
    {
     "name": "scope"
@@ -1683,7 +1839,8 @@
   "sid": "node.preset.save",
   "args": [
    {
-    "name": "node"
+    "name": "node",
+    "complete": "nodes"
    },
    {
     "name": "name"
@@ -1698,7 +1855,8 @@
   "sid": "node.preset.update",
   "args": [
    {
-    "name": "node"
+    "name": "node",
+    "complete": "nodes"
    },
    {
     "name": "scope"
@@ -1713,7 +1871,8 @@
   "sid": "node.tap.note",
   "args": [
    {
-    "name": "node"
+    "name": "node",
+    "complete": "nodes"
    },
    {
     "name": "symbol"
@@ -1728,13 +1887,15 @@
   "sid": "node.tap.sample",
   "args": [
    {
-    "name": "node"
+    "name": "node",
+    "complete": "nodes"
    },
    {
     "name": "symbol"
    },
    {
-    "name": "sample"
+    "name": "sample",
+    "complete": "samples"
    }
   ]
  },
@@ -1743,7 +1904,8 @@
   "sid": "node.tap.add",
   "args": [
    {
-    "name": "node"
+    "name": "node",
+    "complete": "nodes"
    },
    {
     "name": "symbol"
@@ -1755,7 +1917,8 @@
   "sid": "node.tap.at",
   "args": [
    {
-    "name": "node"
+    "name": "node",
+    "complete": "nodes"
    },
    {
     "name": "note",
@@ -1771,7 +1934,8 @@
   "sid": "node.tap.insert",
   "args": [
    {
-    "name": "node"
+    "name": "node",
+    "complete": "nodes"
    },
    {
     "name": "side"
@@ -1789,7 +1953,8 @@
   "sid": "node.tap.rename",
   "args": [
    {
-    "name": "node"
+    "name": "node",
+    "complete": "nodes"
    },
    {
     "name": "symbol"
@@ -1804,7 +1969,8 @@
   "sid": "node.tap.mute",
   "args": [
    {
-    "name": "node"
+    "name": "node",
+    "complete": "nodes"
    },
    {
     "name": "symbol"
@@ -1819,7 +1985,8 @@
   "sid": "node.tap.out",
   "args": [
    {
-    "name": "node"
+    "name": "node",
+    "complete": "nodes"
    },
    {
     "name": "symbol"
@@ -1834,13 +2001,15 @@
   "sid": "node.tap.chain.add",
   "args": [
    {
-    "name": "node"
+    "name": "node",
+    "complete": "nodes"
    },
    {
     "name": "symbol"
    },
    {
-    "name": "module"
+    "name": "module",
+    "complete": "modules"
    }
   ]
  },
@@ -1849,7 +2018,8 @@
   "sid": "node.tap.chain.remove",
   "args": [
    {
-    "name": "node"
+    "name": "node",
+    "complete": "nodes"
    },
    {
     "name": "symbol"
@@ -1864,7 +2034,8 @@
   "sid": "node.tap.chain.move",
   "args": [
    {
-    "name": "node"
+    "name": "node",
+    "complete": "nodes"
    },
    {
     "name": "symbol"
@@ -1882,7 +2053,8 @@
   "sid": "node.tap.remove",
   "args": [
    {
-    "name": "node"
+    "name": "node",
+    "complete": "nodes"
    },
    {
     "name": "symbol"
@@ -1894,7 +2066,8 @@
   "sid": "node.freeze",
   "args": [
    {
-    "name": "node"
+    "name": "node",
+    "complete": "nodes"
    }
   ]
  },
@@ -1903,7 +2076,8 @@
   "sid": "node.param",
   "args": [
    {
-    "name": "node"
+    "name": "node",
+    "complete": "nodes"
    },
    {
     "name": "param"
@@ -1918,7 +2092,8 @@
   "sid": "module.cc",
   "args": [
    {
-    "name": "module"
+    "name": "module",
+    "complete": "modules"
    },
    {
     "name": "param"
@@ -1936,10 +2111,12 @@
   "sid": "event.add",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    },
    {
-    "name": "clip"
+    "name": "clip",
+    "complete": "clipTargets"
    },
    {
     "name": "timecode",
@@ -1970,7 +2147,8 @@
   "sid": "event.move",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    },
    {
     "name": "timecode",
@@ -1981,7 +2159,8 @@
     "type": "timecode"
    },
    {
-    "name": "toTrack"
+    "name": "toTrack",
+    "complete": "tracks"
    }
   ]
  },
@@ -1990,7 +2169,8 @@
   "sid": "events.move",
   "args": [
    {
-    "name": "tracks"
+    "name": "tracks",
+    "complete": "tracks"
    },
    {
     "name": "from",
@@ -2010,7 +2190,8 @@
   "sid": "event.statusMute",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    },
    {
     "name": "timecode",
@@ -2026,7 +2207,8 @@
   "sid": "event.statusWarp",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    },
    {
     "name": "timecode",
@@ -2042,7 +2224,8 @@
   "sid": "event.comp",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    },
    {
     "name": "timecode",
@@ -2066,7 +2249,8 @@
   "sid": "event.comp.fade",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    },
    {
     "name": "timecode",
@@ -2087,7 +2271,8 @@
   "sid": "event.take.remove",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    },
    {
     "name": "timecode",
@@ -2103,7 +2288,8 @@
   "sid": "event.take.arm",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    },
    {
     "name": "timecode",
@@ -2129,7 +2315,8 @@
   "sid": "event.take.midi",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    },
    {
     "name": "timecode",
@@ -2145,7 +2332,8 @@
   "sid": "event.crossfade",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    },
    {
     "name": "a",
@@ -2166,7 +2354,8 @@
   "sid": "event.window",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    },
    {
     "name": "timecode",
@@ -2185,7 +2374,8 @@
   "sid": "event.gain",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    },
    {
     "name": "timecode",
@@ -2201,7 +2391,8 @@
   "sid": "event.loop",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    },
    {
     "name": "timecode",
@@ -2217,7 +2408,8 @@
   "sid": "event.loopPoints",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    },
    {
     "name": "timecode",
@@ -2236,7 +2428,8 @@
   "sid": "event.fadeIn",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    },
    {
     "name": "timecode",
@@ -2253,7 +2446,8 @@
   "sid": "event.fadeOut",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    },
    {
     "name": "timecode",
@@ -2270,7 +2464,8 @@
   "sid": "event.resize",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    },
    {
     "name": "timecode",
@@ -2291,7 +2486,8 @@
   "sid": "event.split",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    },
    {
     "name": "timecode",
@@ -2308,7 +2504,8 @@
   "sid": "selection.consolidate",
   "args": [
    {
-    "name": "tracks"
+    "name": "tracks",
+    "complete": "tracks"
    },
    {
     "name": "from",
@@ -2325,7 +2522,8 @@
   "sid": "selection.timeline",
   "args": [
    {
-    "name": "tracks"
+    "name": "tracks",
+    "complete": "tracks"
    },
    {
     "name": "from",
@@ -2345,14 +2543,16 @@
   "sid": "event.process",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    },
    {
     "name": "timecode",
     "type": "timecode"
    },
    {
-    "name": "chain"
+    "name": "chain",
+    "complete": "chains"
    }
   ]
  },
@@ -2361,7 +2561,8 @@
   "sid": "event.remove",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    },
    {
     "name": "timecode",
@@ -2374,10 +2575,12 @@
   "sid": "node.stack",
   "args": [
    {
-    "name": "node"
+    "name": "node",
+    "complete": "nodes"
    },
    {
-    "name": "new"
+    "name": "new",
+    "complete": "nodes"
    }
   ]
  },
@@ -2386,13 +2589,16 @@
   "sid": "node.insert",
   "args": [
    {
-    "name": "before"
+    "name": "before",
+    "complete": "nodes"
    },
    {
-    "name": "after"
+    "name": "after",
+    "complete": "nodes"
    },
    {
-    "name": "node"
+    "name": "node",
+    "complete": "nodes"
    },
    {
     "name": "at"
@@ -2418,7 +2624,8 @@
   "sid": "graph.move",
   "args": [
    {
-    "name": "node"
+    "name": "node",
+    "complete": "nodes"
    },
    {
     "name": "x"
@@ -2516,10 +2723,15 @@
   "sid": "transport.arm",
   "args": [
    {
-    "name": "track"
+    "name": "track",
+    "complete": "tracks"
    },
    {
-    "name": "state"
+    "name": "state",
+    "values": [
+     "on",
+     "off"
+    ]
    }
   ]
  }
