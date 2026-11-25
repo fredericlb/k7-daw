@@ -9,7 +9,7 @@ pub mod host;
 pub mod run;
 mod verbs;
 
-pub use api::{Answer, VerbRequest, run_in_env, run_request, run_request_cached};
-pub use host::{Host, Thrown};
+pub use api::{Answer, VerbRequest, run_answered, run_in_env, run_request, run_request_cached};
+pub use host::{Failed, Host, Thrown};
 pub use run::run_line;
 pub use verbs::ported;
