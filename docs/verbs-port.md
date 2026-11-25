@@ -66,12 +66,12 @@ whatever wrote it.
 |---|---|---|
 | M0 | the catalogue, the dispatch, the argument shapes, the format and sounding-lane refusals | `project.rs` |
 | M1 | 18 of 18; `events add` checks each pasted field with song's own `Placement` types, so its messages are serde's, not zod's | `events.rs`, `events_add.rs`, `tracks.rs`, `project.rs` |
-| M2 | 25 of 25; `event trim` refuses by `clipEnvelope`, and `event/clip/track process` and an audio `selection consolidate` by `render` | `strip.rs`, `takes.rs`, `clip.rs` |
+| M2 | 25 of 25; `event trim` reads `GET /waveform`, `event/clip/track process` resolve project and library chains and call `peak`, `render` and `separate`, an audio `selection consolidate` calls `render` | `strip.rs`, `takes.rs`, `clip.rs`, `renders.rs` |
 | M3 | 27 of 27: the sequences and their note editor, curves and their points, track and node automation | `sequences.rs`, `curves.rs` |
-| M4 | 36 of 36: lanes (group, arrange, duplicate, input, hide), timelines, time splice, aspect, master, console, tags, surfaces, tasks, libraries, playlists | `lanes_m4.rs`, `timelines.rs`, `project_m4.rs`, `playlists.rs`, `tracks.rs` |
+| M4 | 36 of 36: lanes (group, arrange, duplicate, input, hide), timelines, time splice, aspect, master, console, tags, surfaces, tasks, libraries, playlists; `playlist stems` sends the chain's resolved cold steps | `lanes_m4.rs`, `timelines.rs`, `project_m4.rs`, `playlists.rs`, `tracks.rs` |
 | M4 | `track highlight` | `tracks.rs` |
-| M5 | 44 of 44: nodes, modules, assemblies, the graph's wiring and layout, taps, presets, alternatives, engines, params, freeze | `graph_nodes.rs`, `taps.rs`, `node_state.rs`, `node_values.rs`, `chain_fixture.rs` |
-| M7 | 19 of 19; `system stems` and `system instrumental` store the chain unchecked, since `resolveChain` is TypeScript only | `system.rs`, `transport.rs` |
+| M5 | 44 of 44: nodes, modules, assemblies, the graph's wiring and layout, taps, presets, alternatives, engines, params, freeze (the bounce through `render`, then `frozen:`), `chain save` through `POST /bench/save` | `graph_nodes.rs`, `taps.rs`, `node_state.rs`, `node_values.rs`, `chain_fixture.rs`, `renders.rs` |
+| M7 | 19 of 19; `system stems` and `system instrumental` check their chain against the open project, `system onnx` bare says the machine's list, `transport arm` words the engine's answer | `system.rs`, `transport.rs` |
 | the compile cache | kept from line to line; on `clip-lane`, 1.1 ms a line fresh and 0.7 ms kept, in release | `cache.rs` |
 
 ## How the native app reaches a verb
