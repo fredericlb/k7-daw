@@ -257,7 +257,7 @@ fn surface_type(t: &str) -> Option<(&'static str, Vec<(String, String)>)> {
     })
 }
 
-const SURFACE_TYPES: [&str; 4] = ["turntables", "timeline", "viewport", "mastering"];
+pub(crate) const SURFACE_TYPES: [&str; 4] = ["turntables", "timeline", "viewport", "mastering"];
 
 /// `createSurfaceFile`: `surfaces/<id>.k7x`, refused when the name or the one drawn slot is taken.
 fn create_surface(h: &mut Host, kind: &str, id: &str) -> Result<String, Thrown> {

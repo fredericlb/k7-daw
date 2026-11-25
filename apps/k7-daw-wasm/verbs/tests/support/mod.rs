@@ -15,7 +15,7 @@ use verbs::{Answer, Host, VerbRequest, run_request};
 pub const WS: &str = "/w/ws";
 /// The stamp a test's renders carry.
 pub const STAMP: &str = "261126T120000";
-const META: &str = "/k7/meta";
+pub const META: &str = "/k7/meta";
 /// The studio home every line runs under.
 pub const HOME: &str = "/home-none";
 

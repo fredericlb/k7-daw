@@ -5,11 +5,13 @@
 
 pub mod api;
 pub mod catalogue;
+pub mod complete;
 pub mod host;
 pub mod run;
 mod verbs;
 
 pub use api::{Answer, Replay, VerbRequest, run_answered, run_in_env, run_replayed, run_request, run_request_cached};
+pub use complete::{CompleteRequest, Item, complete_in_env, complete_request};
 pub use host::{Failed, Host, Thrown};
 pub use run::run_line;
 pub use verbs::ported;

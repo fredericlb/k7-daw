@@ -48,6 +48,9 @@ pub enum Request {
     #[cfg(feature = "verbs")]
     #[serde(rename = "verb.run")]
     VerbRun(verbs::VerbRequest),
+    #[cfg(feature = "verbs")]
+    #[serde(rename = "verb.complete")]
+    VerbComplete(crate::verb_ops::CompleteArgs),
     /// The hash of the Rust sources this module was built from (decision 756).
     #[serde(rename = "version")]
     Version,
@@ -107,6 +110,8 @@ impl Session {
             Request::EditBatch(a) => write(out, &crate::edit_ops::batch(a)?),
             #[cfg(feature = "verbs")]
             Request::VerbRun(a) => write(out, &crate::verb_ops::run(a)?),
+            #[cfg(feature = "verbs")]
+            Request::VerbComplete(a) => write(out, &crate::verb_ops::complete(a)?),
             Request::Version => write(
                 out,
                 &VersionAnswer {

@@ -7,6 +7,8 @@ use song::graph::load_graph;
 use song::lanes::inputs::load_inputs;
 use song::lanes::rig::Rig;
 use song::modules::files::{PROJECT_SOUNDS, is_library_file_of};
+use song_edit::Fs;
+use song_edit::confine::Env;
 use song_edit::list_files::{ListOpts, list_files_under};
 use song_edit::loader::roots_for;
 use song_edit::shared_folders::{Family, library_family_roots};
@@ -25,12 +27,17 @@ fn family_of(name: &str) -> Option<Family> {
 
 /// `libraryFiles`: every file of `family` in the project and each library, as `@<level>/<path>`, the project's first.
 pub fn library_files(h: &Host, family: &str) -> Vec<String> {
+    library_files_of(&*h.fs, &h.env, &h.song_path, family)
+}
+
+/// `library_files` over the files and roots alone, for a reader that holds no `Host` (the completion).
+pub fn library_files_of(fs: &dyn Fs, env: &Env, song_path: &str, family: &str) -> Vec<String> {
     let Some(kind) = family_of(family) else {
         return Vec::new();
     };
-    let mut roots = vec![(PROJECT_SOUNDS.to_owned(), format!("{}/{family}", h.song_path))];
+    let mut roots = vec![(PROJECT_SOUNDS.to_owned(), format!("{song_path}/{family}"))];
     roots.extend(
-        library_family_roots(&*h.fs, &h.env, kind, Some(&h.song_path))
+        library_family_roots(fs, env, kind, Some(song_path))
             .into_iter()
             .map(|l| (l.name, l.root)),
     );
@@ -41,7 +48,7 @@ pub fn library_files(h: &Host, family: &str) -> Vec<String> {
     let mut own = Vec::new();
     let mut libs = Vec::new();
     for (name, root) in roots {
-        for path in list_files_under(&*h.fs, &root, &opts) {
+        for path in list_files_under(fs, &root, &opts) {
             let base = path.rsplit('/').next().unwrap_or(&path);
             if is_library_file_of(family, base) {
                 let r = format!("@{name}/{path}");
