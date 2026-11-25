@@ -67,6 +67,8 @@ pub struct Host<'a> {
     /// The decoded files `project()` reuses while their stamps hold: a verb's second compile re-reads only what it wrote.
     pub cache: Cache,
     pub new_id: &'a mut dyn FnMut() -> String,
+    /// The line's `YYMMDDTHHMMSS`, the caller's clock read once per line; None: one is made from a fresh id.
+    pub stamp: Option<String>,
 }
 
 impl<'a> Host<'a> {
@@ -84,6 +86,7 @@ impl<'a> Host<'a> {
             pending: None,
             cache: Cache::new(),
             new_id,
+            stamp: None,
         }
     }
 
@@ -127,6 +130,23 @@ impl<'a> Host<'a> {
             self.pending = Some(serde_json::json!({ "route": route, "args": args }));
         }
         Err(Thrown(format!("{route}: waiting for the answer")))
+    }
+
+    /// The stamp a render's name carries, the same for the whole run; with no clock given, digits drawn from a fresh id.
+    pub fn file_stamp(&mut self) -> String {
+        if let Some(s) = &self.stamp {
+            return s.clone();
+        }
+        let id = (self.new_id)();
+        let mut digits = id
+            .bytes()
+            .filter(u8::is_ascii_hexdigit)
+            .map(|b| char::from(b'0' + b % 10))
+            .cycle();
+        let mut part = |n: usize| (0..n).filter_map(|_| digits.next()).collect::<String>();
+        let made = format!("{}T{}", part(6), part(6));
+        self.stamp = Some(made.clone());
+        made
     }
 
     /// A wav's length in seconds, read from its header; None when it cannot be read.

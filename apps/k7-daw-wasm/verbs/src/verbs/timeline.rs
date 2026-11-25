@@ -184,7 +184,7 @@ pub fn timeline_play(a: &str, h: &mut Host) -> Done {
         h.refuse([format!("no timeline \"{id}\"")]);
         return Ok(());
     }
-    h.ask("timelinePlay", serde_json::json!([id]));
+    super::routes::engine_ask(h, serde_json::json!({ "op": "timelinePlay", "id": id }));
     let Some(id) = id else {
         return Ok(());
     };

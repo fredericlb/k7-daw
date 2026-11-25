@@ -264,11 +264,45 @@ pub fn node_stack(a: &str, h: &mut Host) -> Done {
     Ok(())
 }
 
-/// `chain save [name]` — the bench's run written as one of the account's chains, which only the host knows how to do.
+/// `chain save [name]` — the bench's run written as one of the account's chains by the bench's own route.
 pub fn chain_save(a: &str, h: &mut Host) -> Result<(), Thrown> {
+    use serde_json::Value as Json;
     let name = split_words(a).first().map(|s| (*s).to_owned());
-    let dir = h.song_path.clone();
-    h.ask("saveBenchChain", serde_json::json!([dir, name]));
+    if h.song_path.is_empty() {
+        h.refuse(["chain save: no project is open".to_owned()]);
+        return Ok(());
+    }
+    let args = name.map_or_else(|| serde_json::json!({}), |n| serde_json::json!({ "name": n }));
+    let saved = match h.call(super::routes::BENCH_SAVE, args)? {
+        Ok(v) => v,
+        Err(f) => {
+            h.refuse([format!("chain save: {}", f.error)]);
+            return Ok(());
+        }
+    };
+    let r = saved.get("ref").and_then(Json::as_str).unwrap_or_default();
+    let steps = saved.get("steps").and_then(Json::as_u64).unwrap_or(0);
+    let mut lines = vec![if steps > 0 {
+        let s = if steps == 1 { "" } else { "s" };
+        format!("saved {r} ({steps} step{s}) — clip process <clip> {r}")
+    } else {
+        format!("saved {r}: its input alone")
+    }];
+    let outside: Vec<&str> = saved
+        .get("outside")
+        .and_then(Json::as_array)
+        .into_iter()
+        .flatten()
+        .filter_map(Json::as_str)
+        .collect();
+    // A module the person sees on the bench and the chain leaves out must be said, never dropped quietly.
+    if !outside.is_empty() {
+        lines.push(format!(
+            "not in it: {} — only what sits between IN and fader is the chain",
+            outside.join(", ")
+        ));
+    }
+    h.log(lines);
     Ok(())
 }
 

@@ -1,10 +1,11 @@
 // transport.rs — play, stop, toggle, rewind, panic, record-arm, the click and filing a recording; after verbs/transport.ts and verbs/project.ts.
-// A reader would get wrong that the engine answers here: every engine move is an ask, so no line claims what only its answer could say.
+// A reader would get wrong that the engine answers a move: a move is asked after the writes land; only the arm and the take wait for theirs.
 
+use super::routes::{ENGINE, TAKE_SAVE, call_or_throw, engine_ask, say_lines};
 use super::shared::{Done, join, split_words};
 use crate::host::Host;
 use k7x::edit::{PathSeg, Value, js_number};
-use serde_json::{Map, json};
+use serde_json::{Map, Value as Json, json};
 use song_edit::js_text::{js_trim, str_to_number};
 use song_edit::start_time::js_round;
 use song_edit::yaml_edit::set_file_value;
@@ -13,7 +14,7 @@ use song_edit::yaml_edit::set_file_value;
 const METRONOME_MIN: f64 = 0.2;
 
 fn transport(h: &mut Host, action: &str) -> Done {
-    h.ask("transport", json!([action]));
+    engine_ask(h, json!({ "op": "transport", "action": action }));
     Ok(())
 }
 
@@ -68,13 +69,18 @@ pub fn arm(a: &str, h: &mut Host) -> Done {
         return Ok(());
     }
     let track = t.id.clone();
-    h.ask("arm", json!([track, state.map(|s| s == "on")]));
-    // Armed or not is the engine's echo, which never comes back here: the line says what was asked.
-    h.log([match state {
-        Some("on") => format!("{track}: arm asked"),
-        Some(_) => format!("{track}: disarm asked"),
-        None => format!("{track}: arm toggle asked"),
-    }]);
+    let mut body = Map::new();
+    body.insert("op".to_owned(), json!("arm"));
+    body.insert("track".to_owned(), json!(track));
+    if let Some(s) = state {
+        body.insert("armed".to_owned(), json!(s == "on"));
+    }
+    let answer = call_or_throw(h, ENGINE, Json::Object(body))?;
+    say_lines(h, &answer);
+    // No `armed` is an engine that refused or never answered: its lines already said which.
+    if let Some(armed) = answer.get("armed").and_then(Json::as_bool) {
+        h.log([format!("{track}: {}", if armed { "armed" } else { "disarmed" })]);
+    }
     Ok(())
 }
 
@@ -167,16 +173,27 @@ pub fn record_save(a: &str, h: &mut Host) -> Done {
         h.refuse(["usage: project record save <take.wav|none> [<picture.webm>]".to_owned()]);
         return Ok(());
     };
+    // The engine wrote the take under the project's record folder; a relative picture is the project's.
+    let record_dir = h.project().map(|p| p.record_dir).unwrap_or_default();
     let mut take = Map::new();
+    take.insert("recordDir".to_owned(), json!(record_dir));
     if let Some(f) = &file {
         take.insert("file".to_owned(), json!(f));
     }
     if let Some(v) = &video {
-        take.insert("video".to_owned(), json!(v));
+        let picture = if v.starts_with('/') {
+            v.clone()
+        } else {
+            format!("{}/{v}", h.song_path.trim_end_matches('/'))
+        };
+        take.insert("video".to_owned(), json!(picture));
     }
-    h.ask("saveTake", json!([take]));
-    // Where it lands is the host's answer: the line names what was handed over.
-    let named: Vec<&str> = file.iter().chain(video.iter()).map(String::as_str).collect();
-    h.log([format!("saving {}", named.join(" and "))]);
+    match h.call(TAKE_SAVE, Json::Object(take))? {
+        Ok(saved) => {
+            let path = saved.get("path").and_then(Json::as_str).unwrap_or_default();
+            h.log([format!("saved {path}")]);
+        }
+        Err(f) => h.refuse([format!("could not save the take: {}", f.error)]),
+    }
     Ok(())
 }

@@ -90,13 +90,13 @@ fn a_selection_becomes_a_timeline_placed_in_its_stead() {
     let ran = p.ok("timeline play hits");
     assert_eq!(
         ran.answer.asks,
-        [serde_json::json!({ "member": "timelinePlay", "args": ["hits"] })]
+        [serde_json::json!({ "route": "POST /verb-host/engine", "args": { "op": "timelinePlay", "id": "hits" } })]
     );
     assert_eq!(ran.answer.log, ["playing timeline hits alone, through drums"]);
     let ran = p.ok("timeline play");
     assert_eq!(
         ran.answer.asks,
-        [serde_json::json!({ "member": "timelinePlay", "args": [null] })]
+        [serde_json::json!({ "route": "POST /verb-host/engine", "args": { "op": "timelinePlay", "id": null } })]
     );
     p.refused("timeline play ghost", "no timeline \"ghost\"");
 

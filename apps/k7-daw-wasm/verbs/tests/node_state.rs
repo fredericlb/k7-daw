@@ -1,4 +1,4 @@
-// node_state.rs — bypass, alternatives, freeze and the external UI on real fixtures: the files, the doc, undo and the refusals.
+// node_state.rs — bypass, alternatives, unfreezing and the external UI on real fixtures: the files, the doc, undo and the refusals.
 // A reader would get wrong a bypass's push: a node with a plugin is pushed (`applyProject`), the doc's `enabled` is what plays.
 
 mod support;
@@ -82,9 +82,8 @@ fn an_alternative_is_created_copied_and_selected() {
 }
 
 #[test]
-fn a_freeze_needs_the_host_s_render_and_an_unfreeze_deletes_it() {
+fn an_unfreeze_deletes_its_render() {
     let mut p = Project::open("note-lane");
-    p.refused("node freeze lead", "the bounce is the host's `render`");
     p.refused("node freeze ghost", "freeze: no module \"ghost\" in the chains");
     let lead = format!("{}/nodes/lead.k7x", p.dir);
     let text = p.text("nodes/lead.k7x");
@@ -125,8 +124,10 @@ fn an_external_ui_is_asked_of_the_host() {
     assert!(kinds.iter().any(|k| k == "vst3"), "{kinds:?}");
     let ran = p.ok("node external-ui LEAD");
     assert_eq!(ran.before, ran.after, "a window writes nothing");
-    assert_eq!(ran.answer.asks.len(), 1);
-    assert_eq!(ran.answer.asks[0]["member"], "showNativePluginUI");
+    assert_eq!(
+        ran.answer.asks,
+        [serde_json::json!({ "route": "POST /verb-host/engine", "args": { "op": "showUi", "id": "melody:lead" } })]
+    );
     assert_eq!(ran.answer.log, ["opening lead (vst3) on melody…"]);
     p.refused(
         "node external-ui ghost",

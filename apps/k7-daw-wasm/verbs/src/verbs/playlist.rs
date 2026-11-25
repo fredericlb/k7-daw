@@ -1,9 +1,12 @@
 // playlist.rs — the workspace's set lists under `_playlists/`: new, song add/remove/move and stems, after verbs/playlist.ts.
-// A reader would get wrong `playlist stems`: the separation is the caller's, asked as `playlistStems` with the chain unresolved.
+// A reader would get wrong `playlist stems`: the front's route finds and separates each record; the verb resolves the chain's cold steps.
 
+use super::chain_resolve::resolve_chain;
+use super::routes::PLAYLIST_STEMS;
 use super::shared::{Done, join, split_words};
 use crate::host::Host;
 use k7x::edit::{PathSeg, Scope, StringifyOptions, Value, WriteOptions, stringify};
+use serde_json::{Value as Json, json};
 use song_edit::confine::workspace_dir_of;
 use song_edit::js_text::{js_trim, str_to_number};
 use song_edit::paths::{is_within, resolve};
@@ -401,15 +404,54 @@ pub fn playlist_stems(a: &str, h: &mut Host) -> Done {
         h.refuse([format!("{rel} names no song")]);
         return Ok(());
     }
-    let root = workspace_dir_of(&h.env, &h.song_path);
+    // Resolved against the OPEN PROJECT's module vocabulary, like every cold step.
+    let p = h.project()?;
+    let resolved = match resolve_chain(h, &p, &chain)? {
+        Ok(c) => c,
+        Err(e) => {
+            h.refuse([format!("playlist stems: {e}")]);
+            return Ok(());
+        }
+    };
+    if resolved.cold.is_empty() {
+        h.refuse([format!(
+            "'{chain}' does not separate — this verb runs a chain whose step is an offline module"
+        )]);
+        return Ok(());
+    }
     let songs: Vec<String> = items.into_iter().map(|i| i.song).collect();
-    let n = songs.len();
-    h.ask(
-        "playlistStems",
-        serde_json::json!([{ "root": root, "songs": songs, "chain": chain }]),
-    );
-    h.log([format!(
-        "{rel} through '{chain}': {n} record(s) handed to the separator"
-    )]);
+    let steps: Vec<Json> = resolved
+        .cold
+        .iter()
+        .map(|c| json!({ "step": c.step, "model": c.model, "outputs": c.outputs }))
+        .collect();
+    let answer = h
+        .call(PLAYLIST_STEMS, json!({ "songs": songs, "steps": steps }))?
+        .map_err(super::routes::thrown)?;
+    let (mut lines, mut done, mut skipped) = (Vec::new(), 0, 0);
+    for s in answer.get("songs").and_then(Json::as_array).into_iter().flatten() {
+        let field = |k: &str| s.get(k).and_then(Json::as_str).unwrap_or("");
+        let song = field("song");
+        match field("state") {
+            "held" => skipped += 1,
+            "done" => {
+                done += 1;
+                let n = s.get("files").and_then(Json::as_array).map_or(0, Vec::len);
+                lines.push(format!("{song}: {n} stem(s)"));
+            }
+            "absent" => lines.push(format!("{song}: not in this workspace")),
+            _ => {
+                let error = s.get("error").and_then(Json::as_str).unwrap_or("failed");
+                lines.push(format!("{song}: {}", error.split('\n').next().unwrap_or("")));
+            }
+        }
+    }
+    let held = if skipped > 0 {
+        format!(", {skipped} already done")
+    } else {
+        String::new()
+    };
+    lines.insert(0, format!("{rel} through '{}': {done} separated{held}", resolved.ref_));
+    h.log(lines);
     Ok(())
 }

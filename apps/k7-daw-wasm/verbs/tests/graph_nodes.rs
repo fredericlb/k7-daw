@@ -295,12 +295,27 @@ fn an_assembly_instances_its_template_and_goes_whole() {
 }
 
 #[test]
-fn a_chain_save_is_asked_of_the_host() {
+fn a_chain_save_is_the_bench_route_s() {
+    use serde_json::json;
     let mut p = Project::open("note-lane");
-    let ran = p.ok("chain save warm");
+    let ran = p.ok_answered("chain save warm", |c| {
+        assert_eq!(c["route"], "POST /bench/save");
+        assert_eq!(c["args"], json!({ "name": "warm" }));
+        json!({ "ref": "@account/chains/warm", "steps": 2, "outside": ["meter"] })
+    });
     assert_eq!(ran.before, ran.after);
     assert_eq!(
-        ran.answer.asks,
-        [serde_json::json!({"member": "saveBenchChain", "args": [p.dir, "warm"]})]
+        ran.answer.log,
+        [
+            "saved @account/chains/warm (2 steps) — clip process <clip> @account/chains/warm",
+            "not in it: meter — only what sits between IN and fader is the chain"
+        ]
     );
+    let bare = p.ok_answered("chain save", |c| {
+        assert_eq!(c["args"], json!({}));
+        json!({ "ref": "@account/chains/bench", "steps": 0, "outside": [] })
+    });
+    assert_eq!(bare.answer.log, ["saved @account/chains/bench: its input alone"]);
+    let failed = p.answered("chain save x", |_| json!({ "error": "no bench is open" }));
+    assert_eq!(failed.answer.refuse, ["chain save: no bench is open"]);
 }

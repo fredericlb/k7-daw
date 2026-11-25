@@ -110,7 +110,7 @@ fn arming_is_asked_of_the_host_and_writes_nothing() {
     assert_eq!(
         ran.answer.asks,
         [
-            json!({ "member": "takeArm", "args": [{ "track": "melody", "eventBeats": 0.0, "punch": { "from": 1.0, "to": 4.0 } }] })
+            json!({ "route": "POST /verb-host/engine", "args": { "op": "takeArm", "arm": { "track": "melody", "eventBeats": 0.0, "punch": { "from": 1.0, "to": 4.0 } } } })
         ]
     );
     assert_eq!(
@@ -118,9 +118,12 @@ fn arming_is_asked_of_the_host_and_writes_nothing() {
         ["melody: takes go into the event at 1:1:1, punched 1:2 → 2:1"]
     );
     let open = p.ok("event take arm melody 1:1:1 1:2");
-    assert_eq!(open.answer.asks[0]["args"][0]["punch"], json!({ "from": 1.0 }));
+    assert_eq!(open.answer.asks[0]["args"]["arm"]["punch"], json!({ "from": 1.0 }));
     let off = p.ok("event take disarm");
-    assert_eq!(off.answer.asks, [json!({ "member": "takeArm", "args": [null] })]);
+    assert_eq!(
+        off.answer.asks,
+        [json!({ "route": "POST /verb-host/engine", "args": { "op": "takeArm", "arm": null } })]
+    );
     p.refused(
         "event take arm melody 1:1:1 2:1 1:2",
         "the punch must end after it starts",

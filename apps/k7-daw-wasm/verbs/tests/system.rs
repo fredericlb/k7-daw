@@ -48,14 +48,18 @@ fn channel_labels_are_set_listed_and_cleared() {
 #[test]
 fn a_pair_is_remembered_and_the_engine_asked() {
     let mut p = Project::open("mute-solo");
-    let ran = p.ok("system channel type 4 stereo");
-    assert_eq!(
-        ran.answer.asks,
-        [json!({ "member": "setInputStereo", "args": [4, true] })]
-    );
-    assert!(ran.answer.log[0].starts_with("in 3+4 is one stereo device"));
+    let ran = p.ok_answered("system channel type 4 stereo", |c| {
+        assert_eq!(c["route"], "POST /verb-host/devices/stereo");
+        assert_eq!(c["args"], json!({ "channel": 4, "stereo": true }));
+        json!({ "heard": true })
+    });
+    assert_eq!(ran.answer.log, ["in 3+4 is one stereo device"]);
     assert_eq!(prefs(&p).input_pairs, [3.0]);
-    p.ok("system channel type 3 mono");
+    let unheard = p.ok_answered("system channel type 3 mono", |_| json!({ "heard": false }));
+    assert_eq!(
+        unheard.answer.log,
+        ["in 3+4 is two mono devices — remembered; the engine hears it on its next connect"]
+    );
     assert!(prefs(&p).input_pairs.is_empty());
     p.refused("system channel type 0 mono", "is not a channel");
     p.refused("system channel type 3 quad", "usage: system channel type");
@@ -79,46 +83,106 @@ fn the_cue_pair_takes_numbers_or_a_known_label() {
 }
 
 #[test]
-fn the_separating_chains_are_remembered_unchecked() {
-    let mut p = Project::open("mute-solo");
+fn the_separating_chains_are_checked_and_remembered() {
+    let mut p = Project::open("mute-solo").with_core();
     p.refused("system stems", "nothing on this machine will separate a record");
     let ran = p.ok("system stems @k7-core/stems");
-    assert!(ran.answer.log[0].starts_with("stems are separated with @k7-core/stems — not checked"));
+    assert_eq!(
+        ran.answer.log,
+        ["stems are separated with @k7-core/stems — separates with @k7-core/cold/stemsplit"]
+    );
+    p.refused("system stems @k7-core/process/normalize", "does not separate");
+    p.refused("system instrumental @k7-core/stems", "writes no instrumental");
+    p.refused(
+        "system stems @k7-core/ghost",
+        "system stems: no chain '@k7-core/ghost' — known here:",
+    );
     assert_eq!(prefs(&p).stems_chain.as_deref(), Some("@k7-core/stems"));
     p.refused("system stems", "currently: @k7-core/stems");
     p.ok("system stems ''");
     assert_eq!(prefs(&p).stems_chain, None);
-    p.ok("system instrumental @k7-core/instrumental");
+    let inst = p.ok("system instrumental @k7-core/instrumental");
+    assert_eq!(
+        inst.answer.log,
+        ["the instrumental comes from @k7-core/instrumental — written by @k7-core/cold/instrumental"]
+    );
     assert_eq!(prefs(&p).instrumental_chain.as_deref(), Some("@k7-core/instrumental"));
     let cleared = p.ok("system instrumental \"\"");
     assert_eq!(cleared.answer.log, ["the instrumental chain is cleared"]);
 }
 
 #[test]
-fn onnx_providers_are_asked_of_the_machine() {
+fn onnx_providers_are_set_on_the_machine() {
     let mut p = Project::open("mute-solo");
-    let ran = p.ok("system onnx DML,cpu");
-    assert_eq!(
-        ran.answer.asks,
-        [json!({ "member": "onnxProviders", "args": [["dml", "cpu"]] })]
-    );
+    let ran = p.ok_answered("system onnx DML,cpu", |c| {
+        assert_eq!(c["route"], "POST /verb-host/onnx");
+        assert_eq!(c["args"], json!({ "set": ["dml", "cpu"] }));
+        json!({ "providers": ["dml", "cpu"] })
+    });
     assert_eq!(ran.answer.log.len(), 2, "the dml warning");
     assert_eq!(ran.before, ran.after);
-    let cpu = p.ok("system onnx \"\"");
-    assert_eq!(cpu.answer.asks[0]["args"], json!([[]]));
+    let cpu = p.ok_answered("system onnx \"\"", |c| {
+        assert_eq!(c["args"], json!({ "set": [] }));
+        json!({ "providers": [] })
+    });
+    assert_eq!(cpu.answer.log, ["separation goes back to the CPU"]);
     p.refused("system onnx tpu", "unknown execution provider(s): tpu");
-    p.refused("system onnx", "(onnxProviders)");
+    let now = p.answered("system onnx", |c| {
+        assert_eq!(c["args"], json!({}));
+        json!({ "providers": ["coreml", "cpu"] })
+    });
+    assert_eq!(
+        now.answer.refuse[1],
+        "currently: coreml, cpu — pass \"\" to go back to cpu"
+    );
+    let none = p.answered("system onnx", |_| json!({ "providers": [] }));
+    assert!(none.answer.refuse[1].starts_with("nothing is set"));
+    // No engine chosen and no machine reached are the verb's own refusal, not a throw.
+    for code in ["off", "no-machine"] {
+        let off = p.answered("system onnx cpu", |_| json!({ "error": "x", "code": code }));
+        assert_eq!(
+            off.answer.refuse,
+            ["system onnx: no engine is chosen — the setting lives on its machine"]
+        );
+        assert_eq!(off.answer.threw, None);
+    }
+    let broke = p.answered(
+        "system onnx cpu",
+        |_| json!({ "error": "the machine said no", "code": "busy" }),
+    );
+    assert_eq!(broke.answer.threw.as_deref(), Some("the machine said no"));
 }
 
 #[test]
-fn plugins_are_the_hosts_to_list_and_scan() {
+fn plugins_are_listed_and_scanned_by_the_engine_route() {
     let mut p = Project::open("mute-solo");
-    let list = p.ok("system plugins list vst3");
-    assert_eq!(list.answer.asks, [json!({ "member": "listPlugins", "args": ["vst3"] })]);
-    let all = p.ok("system plugins list");
-    assert_eq!(all.answer.asks[0]["args"], json!([null]));
-    let scan = p.ok("system plugins scan");
-    assert_eq!(scan.answer.asks, [json!({ "member": "rescanPlugins", "args": [] })]);
+    let synth = json!({ "name": "Ext Synth", "format": "VST3", "manufacturer": "Acme", "role": "instrument" });
+    let fx = json!({ "name": "Verb", "format": "VST3", "manufacturer": "Acme", "role": "audioFX" });
+    let list = p.ok_answered("system plugins list vst3", |c| {
+        assert_eq!(c["route"], "GET /verb-host/plugins");
+        assert_eq!(c["args"], json!({ "filter": "vst3" }));
+        json!({ "plugins": [synth, fx] })
+    });
+    assert_eq!(
+        list.answer.log,
+        ["  [inst] Ext Synth  [VST3]  Acme", "        Verb  [VST3]  Acme"]
+    );
+    let all = p.ok_answered("system plugins list", |c| {
+        assert_eq!(c["args"], json!({}));
+        json!({ "plugins": [] })
+    });
+    assert_eq!(all.answer.log, ["no plugins cached — run: k7 engine scan"]);
+    let scan = p.ok_answered("system plugins scan", |c| {
+        assert_eq!(c["route"], "POST /verb-host/plugins/rescan");
+        json!({ "plugins": [synth] })
+    });
+    assert_eq!(
+        scan.answer.log,
+        [
+            "rescanning plugins… (first scan can take a while)",
+            "scanned 1 plugin(s)"
+        ]
+    );
     assert_eq!(scan.before, scan.after);
 }
 
@@ -127,6 +191,8 @@ fn run_without_project(fs: &mut MemFs, line: &str) -> Answer {
         line: line.to_owned(),
         project: String::new(),
         env: json!({ "studioHome": "/home-none", "metaRoot": "/k7/meta" }),
+        answers: Vec::new(),
+        stamp: None,
     };
     run_request(fs, &mut || "id".to_owned(), &req)
 }

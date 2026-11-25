@@ -110,7 +110,7 @@ fn a_crossfade_overlaps_two_hits_and_zero_takes_the_fades_away() {
 }
 
 #[test]
-fn a_sequence_range_is_consolidated_and_audio_wants_a_render() {
+fn a_sequence_range_is_consolidated_as_text() {
     let mut p = Project::open("edit-undo");
     let ran = p.round_trip("selection consolidate melody 1:1:1 2:1");
     assert_eq!(ran.answer.log[1], "  4 notes, from melody");
@@ -120,21 +120,16 @@ fn a_sequence_range_is_consolidated_and_audio_wants_a_render() {
     assert_ne!(clips[0].name, "melody", "the event now plays the new sequence");
     assert_eq!(clips[0].notes.len(), 4);
     p.refused("selection consolidate melody,lead 1:1:1 2:1", "takes ONE track");
-    let mut a = Project::open("clip-lane");
-    a.refused("selection consolidate drums 1:1:1 2:1", "no engine to render with");
 }
 
 #[test]
-fn a_render_or_an_envelope_is_refused_by_the_member_it_needs() {
+fn the_render_verbs_check_their_words_before_any_route() {
     let mut p = Project::open("clip-lane");
-    p.refused("event trim drums 1:1:1 -40", "(clipEnvelope)");
     p.refused("event trim drums 1:1:1 6", "is not a gate in dBFS");
     p.refused("event trim drums 9:1:1", "no event on 'drums'");
-    p.refused("event process drums 1:1:1 @k7-core/amp-room", "(render)");
     p.refused("event process drums 1:3:2 @k7-core/amp-room", "no event on 'drums'");
-    p.refused("clip process kick @k7-core/amp-room", "(render)");
-    p.refused("track process drums @k7-core/amp-room", "(render)");
     p.refused("track process drums", "usage: track process");
+    p.refused("clip process kick", "usage: clip process <clip|path> <chain>");
     let mut s = Project::open("edit-undo");
     s.refused("event process melody 1:1:1 @k7-core/amp-room", "is not audio");
 }

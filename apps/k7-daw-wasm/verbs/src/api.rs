@@ -1,4 +1,4 @@
-// api.rs — a verb as JSON: `{line, project, env, answers?}` in, `{log, refuse, refused, effects, asks?, pending?, threw?}` out, over the caller's `Fs`.
+// api.rs — a verb as JSON: `{line, project, env, answers?, stamp?}` in, `{log, refuse, refused, effects, asks?, pending?, threw?}` out, over the caller's `Fs`.
 // A reader would get wrong where the change set is: in the `Fs`, whose writes the caller lands whole, or drops when the run is refused or pending.
 
 use crate::host::Host;
@@ -22,6 +22,9 @@ pub struct VerbRequest {
     /// The answers of the routes earlier runs of this line called, in order (`Host::call`).
     #[serde(default)]
     pub answers: Vec<Json>,
+    /// The line's `YYMMDDTHHMMSS` in the caller's local time, the same on every run of the line; absent, one is made from an id.
+    #[serde(default)]
+    pub stamp: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
@@ -56,7 +59,11 @@ pub fn run_request_cached(
     req: &VerbRequest,
 ) -> Answer {
     let env = env_from_json(&req.env);
-    run_answered(fs, cache, new_id, env, &req.project, &req.line, req.answers.clone())
+    let replay = Replay {
+        answers: req.answers.clone(),
+        stamp: req.stamp.clone(),
+    };
+    run_replayed(fs, cache, new_id, env, &req.project, &req.line, replay)
 }
 
 /// One line over the project `project` with the roots `env`, as a native caller that holds an `Env` already runs it.
@@ -68,7 +75,7 @@ pub fn run_in_env(
     project: &str,
     line: &str,
 ) -> Answer {
-    run_answered(fs, cache, new_id, env, project, line, Vec::new())
+    run_replayed(fs, cache, new_id, env, project, line, Replay::default())
 }
 
 /// `run_in_env` given the answers of the routes its earlier runs called.
@@ -81,8 +88,30 @@ pub fn run_answered(
     line: &str,
     answers: Vec<Json>,
 ) -> Answer {
+    let replay = Replay { answers, stamp: None };
+    run_replayed(fs, cache, new_id, env, project, line, replay)
+}
+
+/// What a line's earlier runs fix for the next one: the routes' answers, and the stamp its file names carry.
+#[derive(Clone, Debug, Default)]
+pub struct Replay {
+    pub answers: Vec<Json>,
+    pub stamp: Option<String>,
+}
+
+/// `run_answered` with the line's stamp too.
+pub fn run_replayed(
+    fs: &mut dyn Fs,
+    cache: &mut Cache,
+    new_id: &mut dyn FnMut() -> String,
+    env: Env,
+    project: &str,
+    line: &str,
+    replay: Replay,
+) -> Answer {
     let mut h = Host::new(fs, env, project, new_id);
-    h.answers = answers;
+    h.answers = replay.answers;
+    h.stamp = replay.stamp;
     std::mem::swap(&mut h.cache, cache);
     let threw = run_line(&mut h, line).err().map(|t| t.0);
     std::mem::swap(&mut h.cache, cache);

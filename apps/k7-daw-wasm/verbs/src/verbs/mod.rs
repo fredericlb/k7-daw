@@ -5,11 +5,14 @@ use crate::host::Host;
 use shared::Done;
 
 mod automation;
+mod bounce;
+mod chain_resolve;
 mod clip;
 mod crossfade;
 mod curve;
 mod event;
 mod event_edit;
+mod event_process;
 mod event_render;
 mod event_strip;
 mod event_takes;
@@ -18,8 +21,10 @@ pub mod graph_facts;
 mod graph_read;
 mod graph_wire;
 mod library;
+mod material_render;
 mod module_files;
 mod node_edit;
+mod node_freeze;
 mod node_intrinsic;
 mod node_make;
 mod node_param;
@@ -30,6 +35,7 @@ mod node_tap;
 mod playlist;
 mod project;
 mod project_more;
+mod routes;
 mod sequence;
 mod sequence_file;
 mod sequence_notes;
@@ -82,7 +88,7 @@ const TABLE: &[(&str, Handler)] = &[
     ("event.take.disarm", event_takes::take_disarm),
     ("event.take.midi", event_takes::take_midi),
     ("event.trim", event_render::event_trim),
-    ("event.process", event_render::event_process),
+    ("event.process", event_process::event_process),
     ("clip.process", event_render::clip_process),
     ("track.process", event_render::track_process),
     ("selection.consolidate", event_render::selection_consolidate),
@@ -195,7 +201,7 @@ const TABLE: &[(&str, Handler)] = &[
     ("node.alt.copy", node_state::alt_copy),
     ("node.alt.select", node_state::alt_select),
     ("node.bypass", node_state::node_bypass),
-    ("node.freeze", node_state::node_freeze),
+    ("node.freeze", node_freeze::node_freeze),
     ("node.externalUi", node_state::external_ui),
     ("node.param", node_param::node_param),
     ("module.cc", node_intrinsic::module_cc),

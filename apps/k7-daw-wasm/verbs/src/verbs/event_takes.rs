@@ -1,7 +1,8 @@
 // event_takes.rs — an event's takes: comp a span, drop a take, file a MIDI pass, arm the next takes into it; after verbs/eventTakes.ts.
 // A reader would get wrong how the event is found: in the LANE FILE by its start, since a comped event's first piece may start elsewhere.
-// Arming is the host's (`takeArm`), asked in the answer; a MIDI take is named with a fresh id where the TypeScript stamps the clock.
+// Arming is the engine route's `takeArm`, asked after the writes; a MIDI take is named with a fresh id where the TypeScript stamps the clock.
 
+use super::routes::engine_ask;
 use super::shared::{Done, meter, split_words};
 use crate::host::Host;
 use k7x::edit::Value;
@@ -216,10 +217,8 @@ pub fn take_arm(a: &str, h: &mut Host) -> Done {
         Some(t) => json!({ "from": from, "to": t }),
         None => json!({ "from": from }),
     };
-    h.ask(
-        "takeArm",
-        json!([{ "track": ev.track, "eventBeats": ev.at, "punch": punch }]),
-    );
+    let arm = json!({ "track": ev.track, "eventBeats": ev.at, "punch": punch });
+    engine_ask(h, json!({ "op": "takeArm", "arm": arm }));
     h.log([format!(
         "{}: takes go into the event at {}, punched {from_tc} → {}",
         ev.track,
@@ -231,7 +230,7 @@ pub fn take_arm(a: &str, h: &mut Host) -> Done {
 
 /// `event take disarm` — recording goes back onto the lane.
 pub fn take_disarm(_a: &str, h: &mut Host) -> Done {
-    h.ask("takeArm", json!([null]));
+    engine_ask(h, json!({ "op": "takeArm", "arm": null }));
     h.log(["takes disarmed: a take lands on its lane again".to_owned()]);
     Ok(())
 }

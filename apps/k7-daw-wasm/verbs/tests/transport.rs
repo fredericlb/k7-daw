@@ -1,5 +1,5 @@
 // transport.rs — the transport, the arm, the click and filing a recording on real fixtures: what is asked of the host, what is written.
-// A reader would get wrong that a transport verb plays: it asks the host, and only the click's two verbs write a file.
+// A reader would get wrong that a transport verb plays: it asks the engine route, and only the click's two verbs write a file.
 
 mod support;
 
@@ -12,7 +12,10 @@ fn each_transport_move_is_asked_and_writes_nothing() {
     let mut p = Project::open("mute-solo");
     for action in ["play", "stop", "toggle", "rewind", "panic"] {
         let ran = p.ok(&format!("transport {action}"));
-        assert_eq!(ran.answer.asks, [json!({ "member": "transport", "args": [action] })]);
+        assert_eq!(
+            ran.answer.asks,
+            [json!({ "route": "POST /verb-host/engine", "args": { "op": "transport", "action": action } })]
+        );
         assert_eq!(ran.before, ran.after);
         assert!(ran.answer.effects.is_empty());
     }
@@ -35,14 +38,31 @@ fn an_arm_needs_a_lane_with_an_input() {
             .replace("modules({ ", "modules({ mic: [\"kicks\"], ");
     p.fs.write_atomic(&graph, text.as_bytes()).unwrap();
     assert_eq!(p.track("kicks").input_channels, [1]);
-    let ran = p.ok("transport arm kicks on");
-    assert_eq!(ran.answer.asks, [json!({ "member": "arm", "args": ["kicks", true] })]);
-    assert_eq!(ran.answer.log, ["kicks: arm asked"]);
+    let ran = p.ok_answered("transport arm kicks on", |c| {
+        assert_eq!(c["route"], "POST /verb-host/engine");
+        assert_eq!(c["args"], json!({ "op": "arm", "track": "kicks", "armed": true }));
+        json!({ "armed": true, "lines": ["kicks listens on in 1"] })
+    });
+    assert_eq!(ran.answer.log, ["kicks listens on in 1", "kicks: armed"]);
+    assert_eq!(ran.calls.len(), 1);
     assert_eq!(ran.before, ran.after);
-    let off = p.ok("transport arm kicks off");
-    assert_eq!(off.answer.asks[0]["args"], json!(["kicks", false]));
-    let toggle = p.ok("transport arm kicks");
-    assert_eq!(toggle.answer.asks[0]["args"], json!(["kicks", null]));
+    let off = p.ok_answered("transport arm kicks off", |c| {
+        assert_eq!(c["args"]["armed"], false);
+        json!({ "armed": false })
+    });
+    assert_eq!(off.answer.log, ["kicks: disarmed"]);
+    // No `armed` is an engine that never answered: its lines say so, and the verb claims nothing.
+    let toggle = p.ok_answered("transport arm kicks", |c| {
+        assert_eq!(c["args"], json!({ "op": "arm", "track": "kicks" }));
+        json!({ "lines": ["the engine is offline"] })
+    });
+    assert_eq!(toggle.answer.log, ["the engine is offline"]);
+    let failed = p.answered(
+        "transport arm kicks on",
+        |_| json!({ "error": "no engine", "code": "no-engine", "status": 409 }),
+    );
+    assert_eq!(failed.answer.threw.as_deref(), Some("no engine"));
+    assert!(failed.answer.refused);
 }
 
 #[test]
@@ -79,18 +99,31 @@ fn the_click_level_is_kept_to_two_decimals() {
 #[test]
 fn a_take_is_filed_by_the_host() {
     let mut p = Project::open("mute-solo");
-    let ran = p.ok("project record save \"/tmp/a take.wav\" pic.webm");
-    assert_eq!(
-        ran.answer.asks,
-        [json!({ "member": "saveTake", "args": [{ "file": "/tmp/a take.wav", "video": "pic.webm" }] })]
-    );
-    assert_eq!(ran.answer.log, ["saving /tmp/a take.wav and pic.webm"]);
+    let record = p.doc().record_dir;
+    let dir = p.dir.clone();
+    let ran = p.ok_answered("project record save \"/tmp/a take.wav\" pic.webm", |c| {
+        assert_eq!(c["route"], "POST /verb-host/take/save");
+        assert_eq!(
+            c["args"],
+            json!({ "recordDir": record, "file": "/tmp/a take.wav", "video": format!("{dir}/pic.webm") })
+        );
+        json!({ "path": format!("{record}/take-1.wav") })
+    });
+    assert_eq!(ran.answer.log, [format!("saved {record}/take-1.wav")]);
     assert_eq!(ran.before, ran.after);
-    let picture = p.ok("project record save none pic.webm");
-    assert_eq!(picture.answer.asks[0]["args"], json!([{ "video": "pic.webm" }]));
+    let picture = p.ok_answered("project record save none /films/pic.webm", |c| {
+        assert_eq!(c["args"], json!({ "recordDir": record, "video": "/films/pic.webm" }));
+        json!({ "path": "/films/pic.webm" })
+    });
+    assert_eq!(picture.answer.log, ["saved /films/pic.webm"]);
+    let failed = p.answered("project record save take.wav", |_| json!({ "error": "no such take" }));
+    assert_eq!(failed.answer.refuse, ["could not save the take: no such take"]);
     p.refused("project record save none", "usage: project record save");
     p.refused("project record save a b c", "usage: project record save");
     p.refused("project record save \"bad\\q\"", "usage: project record save");
-    let unclosed = p.ok("project record save \"open");
-    assert_eq!(unclosed.answer.asks[0]["args"], json!([{ "file": "\"open" }]));
+    let unclosed = p.ok_answered("project record save \"open", |c| {
+        assert_eq!(c["args"]["file"], "\"open");
+        json!({ "path": "x" })
+    });
+    assert_eq!(unclosed.answer.log, ["saved x"]);
 }

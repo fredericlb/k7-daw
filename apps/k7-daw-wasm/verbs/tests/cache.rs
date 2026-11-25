@@ -20,6 +20,8 @@ fn request(p: &Project, line: &str) -> VerbRequest {
         line: line.to_owned(),
         project: p.dir.clone(),
         env: serde_json::json!({ "studioHome": "/home-none", "metaRoot": "/k7/meta" }),
+        answers: Vec::new(),
+        stamp: None,
     }
 }
 

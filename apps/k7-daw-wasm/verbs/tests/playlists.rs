@@ -1,8 +1,9 @@
-// playlists.rs — the workspace's set lists: new, song add/remove/move, and stems asked of the caller.
+// playlists.rs — the workspace's set lists: new, song add/remove/move, and stems separated by the front's route.
 // A reader would get wrong where a playlist is: `_playlists/` at the workspace root, a file outside the project folder.
 
 mod support;
 
+use serde_json::json;
 use support::{Project, WS};
 
 fn items(p: &Project) -> String {
@@ -11,7 +12,7 @@ fn items(p: &Project) -> String {
 
 #[test]
 fn a_playlist_is_made_filled_and_reordered() {
-    let mut p = Project::open("mute-solo");
+    let mut p = Project::open("mute-solo").with_core();
     let file = format!("{WS}/_playlists/gig.k7x");
     let ran = p.round_trip("playlist new gig");
     assert_eq!(ran.changed(&p.dir), [file.as_str()]);
@@ -47,14 +48,31 @@ fn a_playlist_is_made_filled_and_reordered() {
     p.refused("playlist song add ghost x", "no playlist _playlists/ghost.k7x");
     p.refused("playlist song add gig", "usage: playlist song add");
 
-    let ran = p.ok("playlist stems gig @k7-core/stems");
+    let ran = p.ok_answered("playlist stems gig @k7-core/stems", |c| {
+        assert_eq!(c["route"], "POST /verb-host/playlist-stems");
+        assert_eq!(
+            c["args"],
+            json!({ "songs": ["Thunder", "Back in Black"], "steps": [{
+                "step": "@k7-core/cold/stemsplit",
+                "model": "/home-none/models/htdemucs_fp16weights.onnx",
+                "outputs": ["drums", "bass", "other", "vocals"],
+            }] })
+        );
+        json!({ "job": "j1", "dir": "/jobs/j1", "songs": [
+            { "song": "Thunder", "state": "done", "files": [{ "out": "a" }, { "out": "b" }] },
+            { "song": "Back in Black", "state": "failed", "error": "the model hung\nat 12%" },
+        ] })
+    });
     assert_eq!(
-        ran.answer.asks,
+        ran.answer.log,
         [
-            serde_json::json!({ "member": "playlistStems", "args": [{ "root": WS, "songs": ["Thunder", "Back in Black"], "chain": "@k7-core/stems" }] })
+            "_playlists/gig.k7x through '@k7-core/stems': 1 separated",
+            "Thunder: 2 stem(s)",
+            "Back in Black: the model hung"
         ]
     );
     assert_eq!(ran.before, ran.after);
+    p.refused("playlist stems gig @k7-core/process/normalize", "does not separate");
     p.refused("playlist stems gig", "no separating chain");
     p.ok("playlist new empty");
     p.refused("playlist stems empty @k7-core/stems", "names no song");
