@@ -55,6 +55,8 @@ pub enum H {
     Resources,
     References,
     Changes,
+    /// A command line run natively (`native/verb_run.rs`).
+    Verb,
     VerbBundle,
     VerbLibrary,
     /// A host member's route (3f).
@@ -131,6 +133,7 @@ pub fn route(method: &Method, path: &str) -> Route {
         ("/resources", true, _) => H::Resources,
         ("/references", true, _) => H::References,
         ("/changes", _, true) => H::Changes,
+        ("/verb", _, true) => H::Verb,
         ("/verb-bundle", true, _) => H::VerbBundle,
         ("/verb-bundle/library", true, _) => H::VerbLibrary,
         _ => match native::verb_host::Member::of(method, path) {
@@ -156,6 +159,7 @@ pub fn writes(h: H) -> bool {
             | H::Undo
             | H::Redo
             | H::Changes
+            | H::Verb
             | H::LibraryMove
             | H::Module
     ) || matches!(h, H::VerbHost(m) if m.writes())

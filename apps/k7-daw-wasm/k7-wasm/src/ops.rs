@@ -45,6 +45,9 @@ pub enum Request {
     #[cfg(feature = "song")]
     #[serde(rename = "edit.batch")]
     EditBatch(crate::edit_ops::BatchArgs),
+    #[cfg(feature = "verbs")]
+    #[serde(rename = "verb.run")]
+    VerbRun(verbs::VerbRequest),
     /// The hash of the Rust sources this module was built from (decision 756).
     #[serde(rename = "version")]
     Version,
@@ -102,6 +105,8 @@ impl Session {
             Request::EditCall(a) => write(out, &crate::edit_ops::call(a)?),
             #[cfg(feature = "song")]
             Request::EditBatch(a) => write(out, &crate::edit_ops::batch(a)?),
+            #[cfg(feature = "verbs")]
+            Request::VerbRun(a) => write(out, &crate::verb_ops::run(a)?),
             Request::Version => write(
                 out,
                 &VersionAnswer {

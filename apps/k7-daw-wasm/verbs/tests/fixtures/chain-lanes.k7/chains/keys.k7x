@@ -1,0 +1,7 @@
+// The keys lane: a melody into the 4OSC synth.
+start(true)
+steps([
+  id("00000000-0000-4000-8000-0000000000e1").track("keys"),
+  id("00000000-0000-4000-8000-0000000000e2").extends("@workspace/instruments/fourosc"),
+  to([chain("MIX")]),
+])

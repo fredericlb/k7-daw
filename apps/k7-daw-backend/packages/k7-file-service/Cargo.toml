@@ -20,6 +20,8 @@ sha1.workspace = true
 k7-js.workspace = true
 # The server's own edits of a person's files (3j): the editor is pure and holds no disk, `edits` hands it one.
 song-edit = { path = "../../../k7-daw-wasm/song-edit" }
+# A command line run natively over the staged workspace (`edits/verb.rs`, docs/verbs-port.md).
+verbs = { path = "../../../k7-daw-wasm/verbs" }
 # One watcher for the process (1326): the workspace's own pin, no new crate.
 notify.workspace = true
 # `slotIdOf` folds accents with the full NFD, as `normalize("NFD")` does.

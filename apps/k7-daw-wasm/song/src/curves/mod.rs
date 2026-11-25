@@ -11,7 +11,7 @@ mod resolved;
 pub use bake::{BakedCurve, bake_adsr, bake_curve, cut_points};
 pub use baker::{CurveBaker, MidiWindow};
 pub use conditions::{CurveRun, EnvelopeFire, curve_runs, envelope_fires, is_note_on_event};
-pub(crate) use file::decode_curve;
+pub use file::decode_curve;
 pub use file::{CurveCondition, CurveFile};
 pub use resolved::{Condition, ResolvedCurve};
 

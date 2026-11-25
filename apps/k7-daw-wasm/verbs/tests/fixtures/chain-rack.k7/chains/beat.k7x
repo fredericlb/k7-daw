@@ -1,0 +1,16 @@
+// The beat lane into a drum rack: its kit is the node's own, three taps on the project's samples.
+start(true)
+steps([
+  id("beat-lane").track("beat"),
+  id("kit")
+    .extends("@workspace/instruments/drumrack")
+    .type("rack")
+    .rack({
+      symbols: {
+        BD: { note: 36, sample: "@project/kick.wav" },
+        SN: { note: 38, sample: "@project/snare.wav" },
+        HH: { note: 42, sample: "@project/hat.wav" },
+      },
+    }),
+  to([chain("MIX")]),
+])

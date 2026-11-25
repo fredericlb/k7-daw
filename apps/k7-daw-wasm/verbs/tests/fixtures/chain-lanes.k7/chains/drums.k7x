@@ -1,0 +1,7 @@
+// The drum lane: its clips through a compressor, into the mix.
+start(true)
+steps([
+  id("00000000-0000-4000-8000-0000000000d1").track("drums"),
+  id("00000000-0000-4000-8000-0000000000d2").extends("@workspace/audio/compressor"),
+  to([chain("MIX")]),
+])

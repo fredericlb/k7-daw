@@ -374,7 +374,7 @@ fn clipped(message: &str) -> String {
     out.chars().take(MESSAGE_MAX).collect()
 }
 
-pub(crate) fn decode_curve(file: &str, text: &str) -> Result<CurveFile, Finding> {
+pub fn decode_curve(file: &str, text: &str) -> Result<CurveFile, Finding> {
     decode_with(file, text, read_curve).map_err(|f| Finding {
         message: clipped(&f.message),
         ..f

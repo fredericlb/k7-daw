@@ -1,0 +1,2526 @@
+[
+ {
+  "command": "track new",
+  "sid": "track.new",
+  "args": [
+   {
+    "name": "name"
+   }
+  ]
+ },
+ {
+  "command": "track group",
+  "sid": "track.group",
+  "args": [
+   {
+    "name": "tracks"
+   },
+   {
+    "name": "name"
+   }
+  ]
+ },
+ {
+  "command": "track arrange",
+  "sid": "track.arrange",
+  "args": []
+ },
+ {
+  "command": "track order",
+  "sid": "track.order",
+  "args": [
+   {
+    "name": "track"
+   },
+   {
+    "name": "position"
+   }
+  ]
+ },
+ {
+  "command": "track duplicate",
+  "sid": "track.duplicate",
+  "args": [
+   {
+    "name": "track"
+   }
+  ]
+ },
+ {
+  "command": "track duplicate empty",
+  "sid": "track.duplicate.empty",
+  "args": [
+   {
+    "name": "track"
+   }
+  ]
+ },
+ {
+  "command": "track rename",
+  "sid": "track.rename",
+  "args": [
+   {
+    "name": "track"
+   },
+   {
+    "name": "name"
+   }
+  ]
+ },
+ {
+  "command": "track input",
+  "sid": "track.input",
+  "args": [
+   {
+    "name": "track"
+   },
+   {
+    "name": "kind"
+   }
+  ]
+ },
+ {
+  "command": "track hide",
+  "sid": "track.hide",
+  "args": [
+   {
+    "name": "track"
+   }
+  ]
+ },
+ {
+  "command": "track unhide",
+  "sid": "track.unhide",
+  "args": [
+   {
+    "name": "track"
+   }
+  ]
+ },
+ {
+  "command": "sequence new",
+  "sid": "sequence.new",
+  "args": [
+   {
+    "name": "name"
+   }
+  ]
+ },
+ {
+  "command": "sequence empty",
+  "sid": "sequence.empty",
+  "args": [
+   {
+    "name": "tracks"
+   },
+   {
+    "name": "from",
+    "type": "timecode"
+   },
+   {
+    "name": "to",
+    "type": "timecode"
+   }
+  ]
+ },
+ {
+  "command": "timeline new",
+  "sid": "timeline.new",
+  "args": [
+   {
+    "name": "name"
+   },
+   {
+    "name": "length"
+   }
+  ]
+ },
+ {
+  "command": "timeline play",
+  "sid": "timeline.play",
+  "args": [
+   {
+    "name": "timeline"
+   }
+  ]
+ },
+ {
+  "command": "timeline rename",
+  "sid": "timeline.rename",
+  "args": [
+   {
+    "name": "timeline"
+   },
+   {
+    "name": "name"
+   }
+  ]
+ },
+ {
+  "command": "timeline length",
+  "sid": "timeline.length",
+  "args": [
+   {
+    "name": "timeline"
+   },
+   {
+    "name": "length"
+   }
+  ]
+ },
+ {
+  "command": "timeline lane new",
+  "sid": "timeline.laneNew",
+  "args": [
+   {
+    "name": "timeline"
+   },
+   {
+    "name": "name"
+   }
+  ]
+ },
+ {
+  "command": "timeline lane copy",
+  "sid": "timeline.laneCopy",
+  "args": [
+   {
+    "name": "lane"
+   },
+   {
+    "name": "to"
+   },
+   {
+    "name": "name"
+   }
+  ]
+ },
+ {
+  "command": "timeline lane remove",
+  "sid": "timeline.laneRemove",
+  "args": [
+   {
+    "name": "timeline"
+   },
+   {
+    "name": "lane"
+   }
+  ]
+ },
+ {
+  "command": "curve point add",
+  "sid": "curve.point.add",
+  "args": [
+   {
+    "name": "curve"
+   },
+   {
+    "name": "time",
+    "type": "timecode"
+   },
+   {
+    "name": "value",
+    "type": "number"
+   }
+  ]
+ },
+ {
+  "command": "curve point move",
+  "sid": "curve.point.move",
+  "args": [
+   {
+    "name": "curve"
+   },
+   {
+    "name": "time",
+    "type": "timecode"
+   },
+   {
+    "name": "newTime",
+    "type": "timecode"
+   },
+   {
+    "name": "value",
+    "type": "number"
+   }
+  ]
+ },
+ {
+  "command": "curve point remove",
+  "sid": "curve.point.remove",
+  "args": [
+   {
+    "name": "curve"
+   },
+   {
+    "name": "time",
+    "type": "timecode"
+   }
+  ]
+ },
+ {
+  "command": "project add",
+  "sid": "project.time.add",
+  "args": [
+   {
+    "name": "at",
+    "type": "timecode"
+   },
+   {
+    "name": "length",
+    "type": "timecode"
+   }
+  ]
+ },
+ {
+  "command": "project remove",
+  "sid": "project.time.remove",
+  "args": [
+   {
+    "name": "at",
+    "type": "timecode"
+   },
+   {
+    "name": "length",
+    "type": "timecode"
+   }
+  ]
+ },
+ {
+  "command": "project aspect",
+  "sid": "project.aspect",
+  "args": [
+   {
+    "name": "ratio"
+   }
+  ]
+ },
+ {
+  "command": "project tempo",
+  "sid": "project.tempo",
+  "args": [
+   {
+    "name": "bpm",
+    "type": "number"
+   }
+  ]
+ },
+ {
+  "command": "project meter",
+  "sid": "project.meter",
+  "args": [
+   {
+    "name": "signature"
+   }
+  ]
+ },
+ {
+  "command": "project reload",
+  "sid": "project.reload",
+  "args": []
+ },
+ {
+  "command": "task add",
+  "sid": "task.add",
+  "args": [
+   {
+    "name": "text"
+   }
+  ]
+ },
+ {
+  "command": "task mark",
+  "sid": "task.mark",
+  "args": [
+   {
+    "name": "timecode",
+    "type": "timecode"
+   },
+   {
+    "name": "text"
+   }
+  ]
+ },
+ {
+  "command": "task done",
+  "sid": "task.done",
+  "args": [
+   {
+    "name": "number"
+   }
+  ]
+ },
+ {
+  "command": "task remove",
+  "sid": "task.remove",
+  "args": [
+   {
+    "name": "number"
+   }
+  ]
+ },
+ {
+  "command": "track mute",
+  "sid": "track.mute",
+  "args": [
+   {
+    "name": "track"
+   }
+  ]
+ },
+ {
+  "command": "track solo",
+  "sid": "track.solo",
+  "args": [
+   {
+    "name": "track"
+   }
+  ]
+ },
+ {
+  "command": "track highlight",
+  "sid": "track.highlight",
+  "args": [
+   {
+    "name": "track"
+   }
+  ]
+ },
+ {
+  "command": "track automation add",
+  "sid": "track.automation.add",
+  "args": [
+   {
+    "name": "track"
+   },
+   {
+    "name": "param"
+   }
+  ]
+ },
+ {
+  "command": "track automation remove",
+  "sid": "track.automation.remove",
+  "args": [
+   {
+    "name": "track"
+   },
+   {
+    "name": "param"
+   }
+  ]
+ },
+ {
+  "command": "track process",
+  "sid": "track.process",
+  "args": [
+   {
+    "name": "track"
+   },
+   {
+    "name": "chain"
+   }
+  ]
+ },
+ {
+  "command": "clip process",
+  "sid": "clip.process",
+  "args": [
+   {
+    "name": "clip"
+   },
+   {
+    "name": "chain"
+   }
+  ]
+ },
+ {
+  "command": "event trim",
+  "sid": "event.trim",
+  "args": [
+   {
+    "name": "track"
+   },
+   {
+    "name": "timecode",
+    "type": "timecode"
+   },
+   {
+    "name": "gate",
+    "type": "number"
+   }
+  ]
+ },
+ {
+  "command": "clip warp",
+  "sid": "clip.warp",
+  "args": [
+   {
+    "name": "clip"
+   },
+   {
+    "name": "sec",
+    "type": "number"
+   },
+   {
+    "name": "beat",
+    "type": "number"
+   }
+  ]
+ },
+ {
+  "command": "clip warp remove",
+  "sid": "clip.warpRemove",
+  "args": [
+   {
+    "name": "clip"
+   },
+   {
+    "name": "sec",
+    "type": "number"
+   }
+  ]
+ },
+ {
+  "command": "clip onset add",
+  "sid": "clip.onset.add",
+  "args": [
+   {
+    "name": "clip"
+   },
+   {
+    "name": "sec",
+    "type": "number"
+   }
+  ]
+ },
+ {
+  "command": "clip onset remove",
+  "sid": "clip.onset.remove",
+  "args": [
+   {
+    "name": "clip"
+   },
+   {
+    "name": "sec",
+    "type": "number"
+   }
+  ]
+ },
+ {
+  "command": "clip onset move",
+  "sid": "clip.onset.move",
+  "args": [
+   {
+    "name": "clip"
+   },
+   {
+    "name": "from-sec",
+    "type": "number"
+   },
+   {
+    "name": "to-sec",
+    "type": "number"
+   }
+  ]
+ },
+ {
+  "command": "sequence list",
+  "sid": "sequence.list",
+  "args": []
+ },
+ {
+  "command": "sequence note new",
+  "sid": "sequence.addNote",
+  "args": [
+   {
+    "name": "sequence"
+   },
+   {
+    "name": "note",
+    "type": "note"
+   },
+   {
+    "name": "start",
+    "type": "number"
+   },
+   {
+    "name": "end",
+    "type": "number"
+   }
+  ]
+ },
+ {
+  "command": "sequence note velocity",
+  "sid": "sequence.noteVelocity",
+  "args": [
+   {
+    "name": "sequence"
+   },
+   {
+    "name": "note",
+    "type": "note"
+   },
+   {
+    "name": "start",
+    "type": "number"
+   },
+   {
+    "name": "velocity",
+    "type": "number"
+   }
+  ]
+ },
+ {
+  "command": "sequence note repeat",
+  "sid": "sequence.noteRepeat",
+  "args": [
+   {
+    "name": "sequence"
+   },
+   {
+    "name": "note",
+    "type": "note"
+   },
+   {
+    "name": "start",
+    "type": "number"
+   },
+   {
+    "name": "n"
+   }
+  ]
+ },
+ {
+  "command": "sequence note skip",
+  "sid": "sequence.noteSkip",
+  "args": [
+   {
+    "name": "sequence"
+   },
+   {
+    "name": "note",
+    "type": "note"
+   },
+   {
+    "name": "start",
+    "type": "number"
+   },
+   {
+    "name": "n"
+   }
+  ]
+ },
+ {
+  "command": "sequence note timerange",
+  "sid": "sequence.noteTimeRange",
+  "args": [
+   {
+    "name": "sequence"
+   },
+   {
+    "name": "note",
+    "type": "note"
+   },
+   {
+    "name": "start",
+    "type": "number"
+   },
+   {
+    "name": "newStart",
+    "type": "number"
+   },
+   {
+    "name": "newEnd",
+    "type": "number"
+   }
+  ]
+ },
+ {
+  "command": "sequence note move",
+  "sid": "sequence.moveNote",
+  "args": [
+   {
+    "name": "sequence"
+   },
+   {
+    "name": "note",
+    "type": "note"
+   },
+   {
+    "name": "start",
+    "type": "number"
+   },
+   {
+    "name": "newNote",
+    "type": "note"
+   },
+   {
+    "name": "newStart",
+    "type": "number"
+   }
+  ]
+ },
+ {
+  "command": "sequence note split",
+  "sid": "sequence.splitNote",
+  "args": [
+   {
+    "name": "sequence"
+   },
+   {
+    "name": "note",
+    "type": "note"
+   },
+   {
+    "name": "start",
+    "type": "number"
+   },
+   {
+    "name": "at",
+    "type": "number"
+   }
+  ]
+ },
+ {
+  "command": "sequence double",
+  "sid": "sequence.double",
+  "args": [
+   {
+    "name": "sequence"
+   }
+  ]
+ },
+ {
+  "command": "sequence note remove",
+  "sid": "sequence.removeNote",
+  "args": [
+   {
+    "name": "sequence"
+   },
+   {
+    "name": "note",
+    "type": "note"
+   },
+   {
+    "name": "start",
+    "type": "number"
+   }
+  ]
+ },
+ {
+  "command": "sequence note add",
+  "sid": "sequence.recordNotes",
+  "args": [
+   {
+    "name": "sequence"
+   },
+   {
+    "name": "notes"
+   }
+  ]
+ },
+ {
+  "command": "sequence record",
+  "sid": "sequence.record",
+  "args": [
+   {
+    "name": "track"
+   },
+   {
+    "name": "notes"
+   }
+  ]
+ },
+ {
+  "command": "sequence notes remove",
+  "sid": "sequence.notesRemove",
+  "args": [
+   {
+    "name": "sequence"
+   },
+   {
+    "name": "loNote",
+    "type": "note"
+   },
+   {
+    "name": "hiNote",
+    "type": "note"
+   },
+   {
+    "name": "from",
+    "type": "number"
+   },
+   {
+    "name": "to",
+    "type": "number"
+   }
+  ]
+ },
+ {
+  "command": "sequence notes transpose",
+  "sid": "sequence.notesTranspose",
+  "args": [
+   {
+    "name": "sequence"
+   },
+   {
+    "name": "loNote",
+    "type": "note"
+   },
+   {
+    "name": "hiNote",
+    "type": "note"
+   },
+   {
+    "name": "from",
+    "type": "number"
+   },
+   {
+    "name": "to",
+    "type": "number"
+   },
+   {
+    "name": "semitones",
+    "type": "number"
+   }
+  ]
+ },
+ {
+  "command": "sequence notes quantize",
+  "sid": "sequence.notesQuantize",
+  "args": [
+   {
+    "name": "sequence"
+   },
+   {
+    "name": "loNote",
+    "type": "note"
+   },
+   {
+    "name": "hiNote",
+    "type": "note"
+   },
+   {
+    "name": "from",
+    "type": "number"
+   },
+   {
+    "name": "to",
+    "type": "number"
+   },
+   {
+    "name": "grid",
+    "type": "number"
+   }
+  ]
+ },
+ {
+  "command": "sequence notes velocity",
+  "sid": "sequence.notesVelocity",
+  "args": [
+   {
+    "name": "sequence"
+   },
+   {
+    "name": "loNote",
+    "type": "note"
+   },
+   {
+    "name": "hiNote",
+    "type": "note"
+   },
+   {
+    "name": "from",
+    "type": "number"
+   },
+   {
+    "name": "to",
+    "type": "number"
+   },
+   {
+    "name": "velocity",
+    "type": "number"
+   }
+  ]
+ },
+ {
+  "command": "sequence notes move",
+  "sid": "sequence.notesMove",
+  "args": [
+   {
+    "name": "sequence"
+   },
+   {
+    "name": "moves"
+   }
+  ]
+ },
+ {
+  "command": "curve new",
+  "sid": "curve.create",
+  "args": [
+   {
+    "name": "name"
+   }
+  ]
+ },
+ {
+  "command": "curve set",
+  "sid": "curve.set",
+  "args": [
+   {
+    "name": "curve"
+   },
+   {
+    "name": "fields"
+   }
+  ]
+ },
+ {
+  "command": "project surface new",
+  "sid": "project.surface.create",
+  "args": [
+   {
+    "name": "type"
+   },
+   {
+    "name": "id"
+   }
+  ]
+ },
+ {
+  "command": "node automate",
+  "sid": "node.automate",
+  "args": [
+   {
+    "name": "module"
+   },
+   {
+    "name": "param"
+   },
+   {
+    "name": "curve"
+   },
+   {
+    "name": "trigger"
+   }
+  ]
+ },
+ {
+  "command": "project master",
+  "sid": "project.master",
+  "args": [
+   {
+    "name": "db",
+    "type": "number"
+   }
+  ]
+ },
+ {
+  "command": "project console",
+  "sid": "project.console",
+  "args": [
+   {
+    "name": "system"
+   }
+  ]
+ },
+ {
+  "command": "project tag",
+  "sid": "project.tag",
+  "args": [
+   {
+    "name": "tag"
+   }
+  ]
+ },
+ {
+  "command": "project untag",
+  "sid": "project.untag",
+  "args": [
+   {
+    "name": "tag"
+   }
+  ]
+ },
+ {
+  "command": "project marker new",
+  "sid": "project.marker.create",
+  "args": [
+   {
+    "name": "timecode",
+    "type": "timecode"
+   },
+   {
+    "name": "name"
+   }
+  ]
+ },
+ {
+  "command": "project marker delete",
+  "sid": "project.marker.delete",
+  "args": [
+   {
+    "name": "name"
+   }
+  ]
+ },
+ {
+  "command": "system plugins list",
+  "sid": "system.plugins.list",
+  "args": [
+   {
+    "name": "format"
+   }
+  ]
+ },
+ {
+  "command": "system plugins scan",
+  "sid": "system.plugins.scan",
+  "args": []
+ },
+ {
+  "command": "node external-ui",
+  "sid": "node.externalUi",
+  "args": [
+   {
+    "name": "module"
+   }
+  ]
+ },
+ {
+  "command": "system channel list",
+  "sid": "system.channel.list",
+  "args": []
+ },
+ {
+  "command": "system channel clear",
+  "sid": "system.channel.clear",
+  "args": [
+   {
+    "name": "dir"
+   },
+   {
+    "name": "chans"
+   }
+  ]
+ },
+ {
+  "command": "system channel set",
+  "sid": "system.channel.set",
+  "args": [
+   {
+    "name": "dir"
+   },
+   {
+    "name": "chans"
+   },
+   {
+    "name": "label"
+   }
+  ]
+ },
+ {
+  "command": "system channel type",
+  "sid": "system.channel.type",
+  "args": [
+   {
+    "name": "channel",
+    "type": "number"
+   },
+   {
+    "name": "mode"
+   }
+  ]
+ },
+ {
+  "command": "system stems",
+  "sid": "system.stems",
+  "args": [
+   {
+    "name": "chain"
+   }
+  ]
+ },
+ {
+  "command": "system instrumental",
+  "sid": "system.instrumental",
+  "args": [
+   {
+    "name": "chain"
+   }
+  ]
+ },
+ {
+  "command": "system onnx",
+  "sid": "system.onnx",
+  "args": [
+   {
+    "name": "providers"
+   }
+  ]
+ },
+ {
+  "command": "system cue",
+  "sid": "system.cue",
+  "args": [
+   {
+    "name": "channels"
+   }
+  ]
+ },
+ {
+  "command": "library versions",
+  "sid": "library.versions",
+  "args": []
+ },
+ {
+  "command": "library upgrade",
+  "sid": "library.upgrade",
+  "args": [
+   {
+    "name": "library"
+   },
+   {
+    "name": "version"
+   }
+  ]
+ },
+ {
+  "command": "playlist new",
+  "sid": "playlist.new",
+  "args": [
+   {
+    "name": "name"
+   }
+  ]
+ },
+ {
+  "command": "playlist stems",
+  "sid": "playlist.stems",
+  "args": [
+   {
+    "name": "playlist"
+   },
+   {
+    "name": "chain"
+   }
+  ]
+ },
+ {
+  "command": "playlist song add",
+  "sid": "playlist.song.add",
+  "args": [
+   {
+    "name": "playlist"
+   },
+   {
+    "name": "song"
+   },
+   {
+    "name": "variant"
+   }
+  ]
+ },
+ {
+  "command": "playlist song remove",
+  "sid": "playlist.song.remove",
+  "args": [
+   {
+    "name": "playlist"
+   },
+   {
+    "name": "position"
+   }
+  ]
+ },
+ {
+  "command": "playlist song move",
+  "sid": "playlist.song.move",
+  "args": [
+   {
+    "name": "playlist"
+   },
+   {
+    "name": "from"
+   },
+   {
+    "name": "to"
+   }
+  ]
+ },
+ {
+  "command": "picture lane new",
+  "sid": "picture.laneNew",
+  "args": [
+   {
+    "name": "name"
+   }
+  ]
+ },
+ {
+  "command": "picture lane order",
+  "sid": "picture.laneOrder",
+  "args": [
+   {
+    "name": "lane"
+   },
+   {
+    "name": "position"
+   }
+  ]
+ },
+ {
+  "command": "picture lane rename",
+  "sid": "picture.laneRename",
+  "args": [
+   {
+    "name": "lane"
+   },
+   {
+    "name": "name"
+   }
+  ]
+ },
+ {
+  "command": "picture lane delete",
+  "sid": "picture.laneDelete",
+  "args": [
+   {
+    "name": "lane"
+   }
+  ]
+ },
+ {
+  "command": "picture mute",
+  "sid": "picture.mute",
+  "args": [
+   {
+    "name": "lane"
+   }
+  ]
+ },
+ {
+  "command": "picture solo",
+  "sid": "picture.solo",
+  "args": [
+   {
+    "name": "lane"
+   }
+  ]
+ },
+ {
+  "command": "picture rect",
+  "sid": "picture.rect",
+  "args": [
+   {
+    "name": "lane"
+   },
+   {
+    "name": "x"
+   },
+   {
+    "name": "y"
+   },
+   {
+    "name": "w"
+   },
+   {
+    "name": "h"
+   }
+  ]
+ },
+ {
+  "command": "picture move",
+  "sid": "picture.move",
+  "args": [
+   {
+    "name": "lane"
+   },
+   {
+    "name": "at"
+   },
+   {
+    "name": "to"
+   }
+  ]
+ },
+ {
+  "command": "picture length",
+  "sid": "picture.length",
+  "args": [
+   {
+    "name": "lane"
+   },
+   {
+    "name": "at"
+   },
+   {
+    "name": "seconds"
+   }
+  ]
+ },
+ {
+  "command": "picture head",
+  "sid": "picture.head",
+  "args": [
+   {
+    "name": "lane"
+   },
+   {
+    "name": "at"
+   },
+   {
+    "name": "to"
+   }
+  ]
+ },
+ {
+  "command": "picture delete",
+  "sid": "picture.delete",
+  "args": [
+   {
+    "name": "lane"
+   },
+   {
+    "name": "at"
+   }
+  ]
+ },
+ {
+  "command": "picture split",
+  "sid": "picture.split",
+  "args": [
+   {
+    "name": "lane"
+   },
+   {
+    "name": "at"
+   },
+   {
+    "name": "where"
+   }
+  ]
+ },
+ {
+  "command": "picture add",
+  "sid": "picture.add",
+  "args": [
+   {
+    "name": "lane"
+   },
+   {
+    "name": "ref"
+   },
+   {
+    "name": "at"
+   },
+   {
+    "name": "length"
+   },
+   {
+    "name": "sourceFrom"
+   }
+  ]
+ },
+ {
+  "command": "picture key",
+  "sid": "picture.key",
+  "args": [
+   {
+    "name": "lane"
+   },
+   {
+    "name": "at"
+   },
+   {
+    "name": "prop"
+   },
+   {
+    "name": "when"
+   },
+   {
+    "name": "value"
+   },
+   {
+    "name": "ease"
+   }
+  ]
+ },
+ {
+  "command": "picture unkey",
+  "sid": "picture.unkey",
+  "args": [
+   {
+    "name": "lane"
+   },
+   {
+    "name": "at"
+   },
+   {
+    "name": "prop"
+   },
+   {
+    "name": "when"
+   }
+  ]
+ },
+ {
+  "command": "picture speed",
+  "sid": "picture.speed",
+  "args": [
+   {
+    "name": "lane"
+   },
+   {
+    "name": "at"
+   },
+   {
+    "name": "factor"
+   }
+  ]
+ },
+ {
+  "command": "picture prepare",
+  "sid": "picture.prepare",
+  "args": [
+   {
+    "name": "lane"
+   }
+  ]
+ },
+ {
+  "command": "picture interchange",
+  "sid": "picture.interchange",
+  "args": [
+   {
+    "name": "format"
+   },
+   {
+    "name": "lane"
+   }
+  ]
+ },
+ {
+  "command": "picture import",
+  "sid": "picture.import",
+  "args": [
+   {
+    "name": "file"
+   },
+   {
+    "name": "prefix"
+   }
+  ]
+ },
+ {
+  "command": "chain save",
+  "sid": "chain.save",
+  "args": [
+   {
+    "name": "name"
+   }
+  ]
+ },
+ {
+  "command": "picture render",
+  "sid": "picture.render",
+  "args": [
+   {
+    "name": "format"
+   },
+   {
+    "name": "sound"
+   },
+   {
+    "name": "settings"
+   }
+  ]
+ },
+ {
+  "command": "picture sound",
+  "sid": "picture.sound",
+  "args": [
+   {
+    "name": "lane"
+   },
+   {
+    "name": "track"
+   }
+  ]
+ },
+ {
+  "command": "picture silence",
+  "sid": "picture.silence",
+  "args": [
+   {
+    "name": "lane"
+   },
+   {
+    "name": "at"
+   }
+  ]
+ },
+ {
+  "command": "module new",
+  "sid": "module.create",
+  "args": [
+   {
+    "name": "category/name"
+   },
+   {
+    "name": "extends-ref"
+   }
+  ]
+ },
+ {
+  "command": "node new",
+  "sid": "node.new",
+  "args": [
+   {
+    "name": "category/name"
+   },
+   {
+    "name": "node-name"
+   },
+   {
+    "name": "extends-ref"
+   },
+   {
+    "name": "at"
+   }
+  ]
+ },
+ {
+  "command": "node delete",
+  "sid": "node.delete",
+  "args": [
+   {
+    "name": "node"
+   }
+  ]
+ },
+ {
+  "command": "track delete",
+  "sid": "track.delete",
+  "args": [
+   {
+    "name": "track"
+   }
+  ]
+ },
+ {
+  "command": "assembly new",
+  "sid": "assembly.new",
+  "args": [
+   {
+    "name": "ref"
+   },
+   {
+    "name": "name"
+   }
+  ]
+ },
+ {
+  "command": "assembly delete",
+  "sid": "assembly.delete",
+  "args": [
+   {
+    "name": "name"
+   }
+  ]
+ },
+ {
+  "command": "assembly dissolve",
+  "sid": "assembly.dissolve",
+  "args": [
+   {
+    "name": "name"
+   }
+  ]
+ },
+ {
+  "command": "graph unlink",
+  "sid": "graph.unlink",
+  "args": [
+   {
+    "name": "node"
+   }
+  ]
+ },
+ {
+  "command": "module fork",
+  "sid": "module.fork",
+  "args": [
+   {
+    "name": "ref"
+   }
+  ]
+ },
+ {
+  "command": "module own",
+  "sid": "module.own",
+  "args": [
+   {
+    "name": "ref"
+   }
+  ]
+ },
+ {
+  "command": "node replace",
+  "sid": "node.replace",
+  "args": [
+   {
+    "name": "node"
+   },
+   {
+    "name": "extends-ref"
+   }
+  ]
+ },
+ {
+  "command": "module clone",
+  "sid": "module.clone",
+  "args": [
+   {
+    "name": "category/name"
+   },
+   {
+    "name": "newName"
+   }
+  ]
+ },
+ {
+  "command": "project record save",
+  "sid": "project.record.save",
+  "args": [
+   {
+    "name": "take"
+   },
+   {
+    "name": "video"
+   }
+  ]
+ },
+ {
+  "command": "node bypass",
+  "sid": "node.bypass",
+  "args": [
+   {
+    "name": "node"
+   },
+   {
+    "name": "state"
+   }
+  ]
+ },
+ {
+  "command": "node alternative create",
+  "sid": "node.alt.create",
+  "args": [
+   {
+    "name": "node"
+   },
+   {
+    "name": "name"
+   }
+  ]
+ },
+ {
+  "command": "node alternative copy",
+  "sid": "node.alt.copy",
+  "args": [
+   {
+    "name": "node"
+   },
+   {
+    "name": "name"
+   }
+  ]
+ },
+ {
+  "command": "node alternative select",
+  "sid": "node.alt.select",
+  "args": [
+   {
+    "name": "node"
+   },
+   {
+    "name": "name"
+   }
+  ]
+ },
+ {
+  "command": "node engine",
+  "sid": "node.engine",
+  "args": [
+   {
+    "name": "node"
+   },
+   {
+    "name": "name"
+   }
+  ]
+ },
+ {
+  "command": "node preset apply",
+  "sid": "node.preset.apply",
+  "args": [
+   {
+    "name": "node"
+   },
+   {
+    "name": "scope"
+   },
+   {
+    "name": "name"
+   }
+  ]
+ },
+ {
+  "command": "node preset save",
+  "sid": "node.preset.save",
+  "args": [
+   {
+    "name": "node"
+   },
+   {
+    "name": "name"
+   },
+   {
+    "name": "scope"
+   }
+  ]
+ },
+ {
+  "command": "node preset update",
+  "sid": "node.preset.update",
+  "args": [
+   {
+    "name": "node"
+   },
+   {
+    "name": "scope"
+   },
+   {
+    "name": "name"
+   }
+  ]
+ },
+ {
+  "command": "node tap note",
+  "sid": "node.tap.note",
+  "args": [
+   {
+    "name": "node"
+   },
+   {
+    "name": "symbol"
+   },
+   {
+    "name": "note"
+   }
+  ]
+ },
+ {
+  "command": "node tap sample",
+  "sid": "node.tap.sample",
+  "args": [
+   {
+    "name": "node"
+   },
+   {
+    "name": "symbol"
+   },
+   {
+    "name": "sample"
+   }
+  ]
+ },
+ {
+  "command": "node tap add",
+  "sid": "node.tap.add",
+  "args": [
+   {
+    "name": "node"
+   },
+   {
+    "name": "symbol"
+   }
+  ]
+ },
+ {
+  "command": "node tap at",
+  "sid": "node.tap.at",
+  "args": [
+   {
+    "name": "node"
+   },
+   {
+    "name": "note",
+    "type": "number"
+   },
+   {
+    "name": "symbol"
+   }
+  ]
+ },
+ {
+  "command": "node tap insert",
+  "sid": "node.tap.insert",
+  "args": [
+   {
+    "name": "node"
+   },
+   {
+    "name": "side"
+   },
+   {
+    "name": "tap"
+   },
+   {
+    "name": "symbol"
+   }
+  ]
+ },
+ {
+  "command": "node tap rename",
+  "sid": "node.tap.rename",
+  "args": [
+   {
+    "name": "node"
+   },
+   {
+    "name": "symbol"
+   },
+   {
+    "name": "name"
+   }
+  ]
+ },
+ {
+  "command": "node tap mute",
+  "sid": "node.tap.mute",
+  "args": [
+   {
+    "name": "node"
+   },
+   {
+    "name": "symbol"
+   },
+   {
+    "name": "state"
+   }
+  ]
+ },
+ {
+  "command": "node tap out",
+  "sid": "node.tap.out",
+  "args": [
+   {
+    "name": "node"
+   },
+   {
+    "name": "symbol"
+   },
+   {
+    "name": "subchain"
+   }
+  ]
+ },
+ {
+  "command": "node tap chain add",
+  "sid": "node.tap.chain.add",
+  "args": [
+   {
+    "name": "node"
+   },
+   {
+    "name": "symbol"
+   },
+   {
+    "name": "module"
+   }
+  ]
+ },
+ {
+  "command": "node tap chain remove",
+  "sid": "node.tap.chain.remove",
+  "args": [
+   {
+    "name": "node"
+   },
+   {
+    "name": "symbol"
+   },
+   {
+    "name": "id"
+   }
+  ]
+ },
+ {
+  "command": "node tap chain move",
+  "sid": "node.tap.chain.move",
+  "args": [
+   {
+    "name": "node"
+   },
+   {
+    "name": "symbol"
+   },
+   {
+    "name": "id"
+   },
+   {
+    "name": "way"
+   }
+  ]
+ },
+ {
+  "command": "node tap remove",
+  "sid": "node.tap.remove",
+  "args": [
+   {
+    "name": "node"
+   },
+   {
+    "name": "symbol"
+   }
+  ]
+ },
+ {
+  "command": "node freeze",
+  "sid": "node.freeze",
+  "args": [
+   {
+    "name": "node"
+   }
+  ]
+ },
+ {
+  "command": "node param",
+  "sid": "node.param",
+  "args": [
+   {
+    "name": "node"
+   },
+   {
+    "name": "param"
+   },
+   {
+    "name": "value"
+   }
+  ]
+ },
+ {
+  "command": "module cc",
+  "sid": "module.cc",
+  "args": [
+   {
+    "name": "module"
+   },
+   {
+    "name": "param"
+   },
+   {
+    "name": "channel"
+   },
+   {
+    "name": "cc"
+   }
+  ]
+ },
+ {
+  "command": "event add",
+  "sid": "event.add",
+  "args": [
+   {
+    "name": "track"
+   },
+   {
+    "name": "clip"
+   },
+   {
+    "name": "timecode",
+    "type": "timecode"
+   }
+  ]
+ },
+ {
+  "command": "events add",
+  "sid": "events.add",
+  "args": [
+   {
+    "name": "events"
+   }
+  ]
+ },
+ {
+  "command": "events remove",
+  "sid": "events.remove",
+  "args": [
+   {
+    "name": "events"
+   }
+  ]
+ },
+ {
+  "command": "event move",
+  "sid": "event.move",
+  "args": [
+   {
+    "name": "track"
+   },
+   {
+    "name": "timecode",
+    "type": "timecode"
+   },
+   {
+    "name": "newTimecode",
+    "type": "timecode"
+   },
+   {
+    "name": "toTrack"
+   }
+  ]
+ },
+ {
+  "command": "events move",
+  "sid": "events.move",
+  "args": [
+   {
+    "name": "tracks"
+   },
+   {
+    "name": "from",
+    "type": "timecode"
+   },
+   {
+    "name": "to",
+    "type": "timecode"
+   },
+   {
+    "name": "by"
+   }
+  ]
+ },
+ {
+  "command": "event status mute",
+  "sid": "event.statusMute",
+  "args": [
+   {
+    "name": "track"
+   },
+   {
+    "name": "timecode",
+    "type": "timecode"
+   },
+   {
+    "name": "state"
+   }
+  ]
+ },
+ {
+  "command": "event status warp",
+  "sid": "event.statusWarp",
+  "args": [
+   {
+    "name": "track"
+   },
+   {
+    "name": "timecode",
+    "type": "timecode"
+   },
+   {
+    "name": "state"
+   }
+  ]
+ },
+ {
+  "command": "event comp",
+  "sid": "event.comp",
+  "args": [
+   {
+    "name": "track"
+   },
+   {
+    "name": "timecode",
+    "type": "timecode"
+   },
+   {
+    "name": "take"
+   },
+   {
+    "name": "from",
+    "type": "timecode"
+   },
+   {
+    "name": "to",
+    "type": "timecode"
+   }
+  ]
+ },
+ {
+  "command": "event comp fade",
+  "sid": "event.comp.fade",
+  "args": [
+   {
+    "name": "track"
+   },
+   {
+    "name": "timecode",
+    "type": "timecode"
+   },
+   {
+    "name": "seam",
+    "type": "timecode"
+   },
+   {
+    "name": "length",
+    "type": "timecode"
+   }
+  ]
+ },
+ {
+  "command": "event take remove",
+  "sid": "event.take.remove",
+  "args": [
+   {
+    "name": "track"
+   },
+   {
+    "name": "timecode",
+    "type": "timecode"
+   },
+   {
+    "name": "take"
+   }
+  ]
+ },
+ {
+  "command": "event take arm",
+  "sid": "event.take.arm",
+  "args": [
+   {
+    "name": "track"
+   },
+   {
+    "name": "timecode",
+    "type": "timecode"
+   },
+   {
+    "name": "from",
+    "type": "timecode"
+   },
+   {
+    "name": "to",
+    "type": "timecode"
+   }
+  ]
+ },
+ {
+  "command": "event take disarm",
+  "sid": "event.take.disarm",
+  "args": []
+ },
+ {
+  "command": "event take midi",
+  "sid": "event.take.midi",
+  "args": [
+   {
+    "name": "track"
+   },
+   {
+    "name": "timecode",
+    "type": "timecode"
+   },
+   {
+    "name": "pass"
+   }
+  ]
+ },
+ {
+  "command": "event crossfade",
+  "sid": "event.crossfade",
+  "args": [
+   {
+    "name": "track"
+   },
+   {
+    "name": "a",
+    "type": "timecode"
+   },
+   {
+    "name": "b",
+    "type": "timecode"
+   },
+   {
+    "name": "length",
+    "type": "timecode"
+   }
+  ]
+ },
+ {
+  "command": "event window",
+  "sid": "event.window",
+  "args": [
+   {
+    "name": "track"
+   },
+   {
+    "name": "timecode",
+    "type": "timecode"
+   },
+   {
+    "name": "from"
+   },
+   {
+    "name": "to"
+   }
+  ]
+ },
+ {
+  "command": "event gain",
+  "sid": "event.gain",
+  "args": [
+   {
+    "name": "track"
+   },
+   {
+    "name": "timecode",
+    "type": "timecode"
+   },
+   {
+    "name": "db"
+   }
+  ]
+ },
+ {
+  "command": "event loop",
+  "sid": "event.loop",
+  "args": [
+   {
+    "name": "track"
+   },
+   {
+    "name": "timecode",
+    "type": "timecode"
+   },
+   {
+    "name": "state"
+   }
+  ]
+ },
+ {
+  "command": "event loop points",
+  "sid": "event.loopPoints",
+  "args": [
+   {
+    "name": "track"
+   },
+   {
+    "name": "timecode",
+    "type": "timecode"
+   },
+   {
+    "name": "from"
+   },
+   {
+    "name": "to"
+   }
+  ]
+ },
+ {
+  "command": "event fadein",
+  "sid": "event.fadeIn",
+  "args": [
+   {
+    "name": "track"
+   },
+   {
+    "name": "timecode",
+    "type": "timecode"
+   },
+   {
+    "name": "length",
+    "type": "timecode"
+   }
+  ]
+ },
+ {
+  "command": "event fadeout",
+  "sid": "event.fadeOut",
+  "args": [
+   {
+    "name": "track"
+   },
+   {
+    "name": "timecode",
+    "type": "timecode"
+   },
+   {
+    "name": "length",
+    "type": "timecode"
+   }
+  ]
+ },
+ {
+  "command": "event resize",
+  "sid": "event.resize",
+  "args": [
+   {
+    "name": "track"
+   },
+   {
+    "name": "timecode",
+    "type": "timecode"
+   },
+   {
+    "name": "newStart",
+    "type": "timecode"
+   },
+   {
+    "name": "newEnd",
+    "type": "timecode"
+   }
+  ]
+ },
+ {
+  "command": "event split",
+  "sid": "event.split",
+  "args": [
+   {
+    "name": "track"
+   },
+   {
+    "name": "timecode",
+    "type": "timecode"
+   },
+   {
+    "name": "at",
+    "type": "timecode"
+   }
+  ]
+ },
+ {
+  "command": "selection consolidate",
+  "sid": "selection.consolidate",
+  "args": [
+   {
+    "name": "tracks"
+   },
+   {
+    "name": "from",
+    "type": "timecode"
+   },
+   {
+    "name": "to",
+    "type": "timecode"
+   }
+  ]
+ },
+ {
+  "command": "selection timeline",
+  "sid": "selection.timeline",
+  "args": [
+   {
+    "name": "tracks"
+   },
+   {
+    "name": "from",
+    "type": "timecode"
+   },
+   {
+    "name": "to",
+    "type": "timecode"
+   },
+   {
+    "name": "name"
+   }
+  ]
+ },
+ {
+  "command": "event process",
+  "sid": "event.process",
+  "args": [
+   {
+    "name": "track"
+   },
+   {
+    "name": "timecode",
+    "type": "timecode"
+   },
+   {
+    "name": "chain"
+   }
+  ]
+ },
+ {
+  "command": "event remove",
+  "sid": "event.remove",
+  "args": [
+   {
+    "name": "track"
+   },
+   {
+    "name": "timecode",
+    "type": "timecode"
+   }
+  ]
+ },
+ {
+  "command": "node stack",
+  "sid": "node.stack",
+  "args": [
+   {
+    "name": "node"
+   },
+   {
+    "name": "new"
+   }
+  ]
+ },
+ {
+  "command": "node insert",
+  "sid": "node.insert",
+  "args": [
+   {
+    "name": "before"
+   },
+   {
+    "name": "after"
+   },
+   {
+    "name": "node"
+   },
+   {
+    "name": "at"
+   }
+  ]
+ },
+ {
+  "command": "graph organize",
+  "sid": "graph.organize",
+  "args": []
+ },
+ {
+  "command": "graph pin",
+  "sid": "graph.pin",
+  "args": [
+   {
+    "name": "positions"
+   }
+  ]
+ },
+ {
+  "command": "graph move",
+  "sid": "graph.move",
+  "args": [
+   {
+    "name": "node"
+   },
+   {
+    "name": "x"
+   },
+   {
+    "name": "y",
+    "type": "number"
+   }
+  ]
+ },
+ {
+  "command": "graph chain connect",
+  "sid": "graph.chain.connect",
+  "args": [
+   {
+    "name": "from"
+   },
+   {
+    "name": "to"
+   }
+  ]
+ },
+ {
+  "command": "graph chain disconnect",
+  "sid": "graph.chain.disconnect",
+  "args": [
+   {
+    "name": "from"
+   },
+   {
+    "name": "to"
+   }
+  ]
+ },
+ {
+  "command": "graph chain replug",
+  "sid": "graph.chain.replug",
+  "args": [
+   {
+    "name": "from"
+   },
+   {
+    "name": "to"
+   },
+   {
+    "name": "newFrom"
+   },
+   {
+    "name": "newTo"
+   }
+  ]
+ },
+ {
+  "command": "transport play",
+  "sid": "transport.play",
+  "args": []
+ },
+ {
+  "command": "transport stop",
+  "sid": "transport.stop",
+  "args": []
+ },
+ {
+  "command": "transport toggle",
+  "sid": "transport.toggle",
+  "args": []
+ },
+ {
+  "command": "transport rewind",
+  "sid": "transport.rewind",
+  "args": []
+ },
+ {
+  "command": "transport panic",
+  "sid": "transport.panic",
+  "args": []
+ },
+ {
+  "command": "transport metronome",
+  "sid": "transport.metronome",
+  "args": []
+ },
+ {
+  "command": "transport metronome volume",
+  "sid": "transport.metronomeVolume",
+  "args": [
+   {
+    "name": "level",
+    "type": "number"
+   }
+  ]
+ },
+ {
+  "command": "transport arm",
+  "sid": "transport.arm",
+  "args": [
+   {
+    "name": "track"
+   },
+   {
+    "name": "state"
+   }
+  ]
+ }
+]

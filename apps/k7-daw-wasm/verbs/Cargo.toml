@@ -1,0 +1,28 @@
+[package]
+name = "verbs"
+version = "0.1.0"
+edition = "2024"
+description = "k7's editing commands in Rust: the command language and each verb as a function of a project's files, after ../../k7-daw-frontend/packages/commands (docs/verbs-port.md)"
+publish = false
+
+[lib]
+path = "src/lib.rs"
+crate-type = ["rlib"]
+
+[dependencies]
+k7x = { path = "../k7x" }
+song = { path = "../song", default-features = false }
+song-schema = { path = "../song-schema" }
+song-edit = { path = "../song-edit" }
+serde = { version = "1", features = ["derive"] }
+indexmap = "2"
+serde_json = { version = "1", features = ["preserve_order", "float_roundtrip"] }
+
+[dev-dependencies]
+
+# Every step of a vector compiles its project: unoptimized, the compile and the k7x editor are slow.
+[profile.dev.package.k7x]
+opt-level = 2
+
+[profile.dev.package.song]
+opt-level = 1

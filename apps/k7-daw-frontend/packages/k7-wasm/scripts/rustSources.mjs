@@ -15,6 +15,7 @@ export const CRATES = [
   "apps/k7-daw-wasm/song",
   "apps/k7-daw-wasm/song-edit",
   "apps/k7-daw-wasm/k7x",
+  "apps/k7-daw-wasm/verbs",
 ];
 
 function files(dir) {
@@ -46,6 +47,7 @@ const LOCKS = [
 /** The files outside a crate's src/ that a crate compiles in with `include_str!`, from the repo root. */
 export const INCLUDED = [
   "apps/k7-daw-frontend/packages/song-schema/src/builtinParams.generated.json",
+  "apps/k7-daw-wasm/verbs/commands.json",
 ];
 
 /** One hash over every crate's Cargo.toml and src/, what they compile in, and the two locks; `root` may be a copy of the repo's crates. */

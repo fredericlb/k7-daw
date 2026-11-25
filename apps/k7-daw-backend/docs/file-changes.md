@@ -58,3 +58,18 @@ the models cache are not in the bundle: a verb that reads them asks for them.
 ## Worker runtime
 
 A browser Worker runs the verbs over a virtual file system and sends this route's change sets: see `apps/k7-daw-frontend/packages/commands/docs/runtime.md`.
+
+## A verb run natively: `POST /verb`
+
+`{line}` in, the `verbs` crate's answer out (`{log, refuse, refused, effects, asks?, threw?}`) with `landed` and the step's
+`changed`: the route the native app calls for an editing gesture (`docs/verbs-port.md`). The code is the file service's
+`edits/verb.rs` and the front's `native/verb_run.rs`.
+
+| choice | why |
+|---|---|
+| the verb runs over a `StagedFs` inside the bracket, under the journal's gate and the account's write lock, and lands through the same commit as a change set | one landing path and one journal step per line; a verb that reads under the lock needs no `base` and is never stale |
+| a refusal or a throw lands nothing and makes no step, even when the verb wrote before it said no | a verb that says no writes nothing (3-D7), the rule the crate's tests hold it to |
+| the stage writes in the workspace and the studio's folder, and reads the meta modules, the libraries and the account's chains | a verb writes its project, the shared texts and the machine's preferences; nothing else is a verb's |
+| with no project open the line still runs, journaled as `skip` | the machine's verbs (`system …`) work with no project, as in the Worker |
+| the engine is pushed once after a landing whose verb asked `reload` or `applyProject` | the push is the host's half of both effects; the `asks` are the caller's, which the route does not perform |
+| one compile cache, for the last project run, kept from one line to the next | its entries are keyed by each file's stamp, so a file that moved is decoded again; one project bounds what it holds |

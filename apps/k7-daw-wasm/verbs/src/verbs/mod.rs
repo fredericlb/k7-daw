@@ -1,0 +1,232 @@
+// verbs/mod.rs — the SID table: each ported verb's handler, by the SID commands.yaml maps its words to.
+// A reader would get wrong that a SID missing here is a bug: it is a verb not ported yet (docs/verbs-port.md lists them).
+
+use crate::host::Host;
+use shared::Done;
+
+mod automation;
+mod clip;
+mod crossfade;
+mod curve;
+mod event;
+mod event_edit;
+mod event_render;
+mod event_strip;
+mod event_takes;
+mod events_add;
+pub mod graph_facts;
+mod graph_read;
+mod graph_wire;
+mod library;
+mod module_files;
+mod node_edit;
+mod node_intrinsic;
+mod node_make;
+mod node_param;
+mod node_preset;
+mod node_shared;
+mod node_state;
+mod node_tap;
+mod playlist;
+mod project;
+mod project_more;
+mod sequence;
+mod sequence_file;
+mod sequence_notes;
+mod sequence_record;
+pub mod shared;
+mod system;
+mod tasks;
+mod timeline;
+mod timeline_copy;
+mod track;
+mod track_chain_copy;
+mod track_dup;
+mod track_group;
+mod track_lane;
+mod transport;
+mod words;
+
+pub type Handler = fn(&str, &mut Host) -> Done;
+
+const TABLE: &[(&str, Handler)] = &[
+    ("event.move", event::event_move),
+    ("events.move", event::events_move),
+    ("event.add", event::event_add),
+    ("event.remove", event::event_remove),
+    ("events.remove", event::events_remove),
+    ("event.resize", event_edit::event_resize),
+    ("event.split", event_edit::event_split),
+    ("events.add", events_add::events_add),
+    ("curve.create", curve::curve_create),
+    ("curve.set", curve::curve_set),
+    ("curve.point.add", curve::point_add),
+    ("curve.point.move", curve::point_move),
+    ("curve.point.remove", curve::point_remove),
+    ("track.automation.add", automation::track_automation_add),
+    ("track.automation.remove", automation::track_automation_remove),
+    ("node.automate", automation::node_automate),
+    ("event.statusMute", event_strip::status_mute),
+    ("event.statusWarp", event_strip::status_warp),
+    ("event.fadeIn", event_strip::fade_in),
+    ("event.fadeOut", event_strip::fade_out),
+    ("event.window", event_strip::window),
+    ("event.gain", event_strip::gain),
+    ("event.loop", event_strip::event_loop),
+    ("event.loopPoints", event_strip::loop_points),
+    ("event.crossfade", crossfade::event_crossfade),
+    ("event.comp", event_takes::comp),
+    ("event.comp.fade", event_takes::comp_fade),
+    ("event.take.remove", event_takes::take_remove),
+    ("event.take.arm", event_takes::take_arm),
+    ("event.take.disarm", event_takes::take_disarm),
+    ("event.take.midi", event_takes::take_midi),
+    ("event.trim", event_render::event_trim),
+    ("event.process", event_render::event_process),
+    ("clip.process", event_render::clip_process),
+    ("track.process", event_render::track_process),
+    ("selection.consolidate", event_render::selection_consolidate),
+    ("clip.warp", clip::clip_warp),
+    ("clip.warpRemove", clip::clip_warp_remove),
+    ("clip.onset.add", clip::onset_add),
+    ("clip.onset.remove", clip::onset_remove),
+    ("clip.onset.move", clip::onset_move),
+    ("track.new", track_lane::track_new),
+    ("track.order", track_lane::track_order),
+    ("track.mute", track_lane::track_mute),
+    ("track.solo", track_lane::track_solo),
+    ("track.highlight", track_lane::track_highlight),
+    ("sequence.new", sequence::sequence_new),
+    ("sequence.list", sequence::sequence_list),
+    ("sequence.addNote", sequence::add_note),
+    ("sequence.noteTimeRange", sequence::note_time_range),
+    ("sequence.moveNote", sequence::move_one),
+    ("sequence.splitNote", sequence::split_one),
+    ("sequence.removeNote", sequence::remove_one),
+    ("sequence.double", sequence::sequence_double),
+    ("sequence.noteRepeat", sequence_notes::note_repeat),
+    ("sequence.noteSkip", sequence_notes::note_skip),
+    ("sequence.noteVelocity", sequence_notes::note_velocity),
+    ("sequence.notesRemove", sequence_notes::notes_remove),
+    ("sequence.notesTranspose", sequence_notes::notes_transpose),
+    ("sequence.notesQuantize", sequence_notes::notes_quantize),
+    ("sequence.notesVelocity", sequence_notes::notes_velocity),
+    ("sequence.notesMove", sequence_notes::notes_move),
+    ("sequence.recordNotes", sequence_notes::record_notes),
+    ("sequence.empty", sequence_record::sequence_empty),
+    ("sequence.record", sequence_record::sequence_record),
+    ("track.rename", track::track_rename),
+    ("track.delete", track::track_delete),
+    ("project.tempo", project::project_tempo),
+    ("project.meter", project::project_meter),
+    ("project.marker.create", project::marker_create),
+    ("project.marker.delete", project::marker_delete),
+    ("project.reload", project::project_reload),
+    ("system.plugins.list", system::plugins_list),
+    ("system.plugins.scan", system::plugins_scan),
+    ("system.channel.list", system::channel_list),
+    ("system.channel.clear", system::channel_clear),
+    ("system.channel.set", system::channel_set),
+    ("system.channel.type", system::channel_type),
+    ("system.stems", system::stems),
+    ("system.instrumental", system::instrumental),
+    ("system.onnx", system::onnx),
+    ("system.cue", system::cue),
+    ("transport.play", transport::play),
+    ("transport.stop", transport::stop),
+    ("transport.toggle", transport::toggle),
+    ("transport.rewind", transport::rewind),
+    ("transport.panic", transport::panic_all),
+    ("transport.arm", transport::arm),
+    ("transport.metronome", transport::metronome),
+    ("transport.metronomeVolume", transport::metronome_volume),
+    ("project.record.save", transport::record_save),
+    ("track.group", track_group::track_group),
+    ("track.hide", track_group::track_hide),
+    ("track.unhide", track_group::track_unhide),
+    ("track.input", track_group::track_input),
+    ("timeline.new", timeline::timeline_new),
+    ("timeline.play", timeline::timeline_play),
+    ("timeline.rename", timeline::timeline_rename),
+    ("timeline.length", timeline::timeline_length),
+    ("timeline.laneNew", timeline::timeline_lane_new),
+    ("timeline.laneRemove", timeline::timeline_lane_remove),
+    ("timeline.laneCopy", timeline_copy::timeline_lane_copy),
+    ("selection.timeline", timeline::selection_timeline),
+    ("project.time.add", project_more::time_add),
+    ("project.time.remove", project_more::time_remove),
+    ("project.aspect", project_more::project_aspect),
+    ("project.master", project_more::project_master),
+    ("project.console", project_more::project_console),
+    ("project.tag", project_more::project_tag),
+    ("project.untag", project_more::project_untag),
+    ("project.surface.create", project_more::surface_create),
+    ("task.add", tasks::task_add),
+    ("task.mark", tasks::task_mark),
+    ("task.done", tasks::task_done),
+    ("task.remove", tasks::task_remove),
+    ("library.versions", library::library_versions),
+    ("library.upgrade", library::library_upgrade),
+    ("playlist.new", playlist::playlist_new),
+    ("playlist.stems", playlist::playlist_stems),
+    ("playlist.song.add", playlist::song_add),
+    ("playlist.song.remove", playlist::song_remove),
+    ("playlist.song.move", playlist::song_move),
+    ("track.arrange", track_dup::track_arrange),
+    ("track.duplicate", track_dup::track_duplicate),
+    ("track.duplicate.empty", track_dup::track_duplicate_empty),
+    ("node.tap.note", node_tap::tap_note),
+    ("node.tap.sample", node_tap::tap_sample),
+    ("node.tap.add", node_tap::tap_add),
+    ("node.tap.at", node_tap::tap_at),
+    ("node.tap.insert", node_tap::tap_insert),
+    ("node.tap.rename", node_tap::tap_rename),
+    ("node.tap.mute", node_tap::tap_mute),
+    ("node.tap.out", node_tap::tap_out),
+    ("node.tap.chain.add", node_tap::tap_chain_add),
+    ("node.tap.chain.remove", node_tap::tap_chain_remove),
+    ("node.tap.chain.move", node_tap::tap_chain_move),
+    ("node.tap.remove", node_tap::tap_remove),
+    ("node.preset.apply", node_preset::preset_apply),
+    ("node.preset.save", node_preset::preset_save),
+    ("node.preset.update", node_preset::preset_update),
+    ("node.engine", node_preset::node_engine),
+    ("node.alt.create", node_state::alt_create),
+    ("node.alt.copy", node_state::alt_copy),
+    ("node.alt.select", node_state::alt_select),
+    ("node.bypass", node_state::node_bypass),
+    ("node.freeze", node_state::node_freeze),
+    ("node.externalUi", node_state::external_ui),
+    ("node.param", node_param::node_param),
+    ("module.cc", node_intrinsic::module_cc),
+    ("module.create", node_make::module_create),
+    ("node.new", node_make::node_new),
+    ("module.own", node_make::module_own),
+    ("module.fork", node_make::module_fork),
+    ("module.clone", node_make::module_clone),
+    ("node.insert", node_make::node_insert),
+    ("node.delete", node_edit::node_delete),
+    ("node.replace", node_edit::node_replace),
+    ("node.stack", node_edit::node_stack),
+    ("chain.save", node_edit::chain_save),
+    ("graph.pin", graph_wire::graph_pin),
+    ("assembly.new", graph_wire::assembly_new),
+    ("assembly.delete", graph_wire::assembly_delete),
+    ("assembly.dissolve", graph_wire::assembly_dissolve),
+    ("graph.unlink", graph_wire::graph_unlink),
+    ("graph.organize", graph_wire::graph_organize),
+    ("graph.move", graph_wire::graph_move),
+    ("graph.chain.connect", graph_wire::chain_connect),
+    ("graph.chain.disconnect", graph_wire::chain_disconnect),
+    ("graph.chain.replug", graph_wire::chain_replug),
+];
+
+/// The handler of `sid`, or None for a verb the crate does not carry.
+pub fn handler(sid: &str) -> Option<Handler> {
+    TABLE.iter().find(|(s, _)| *s == sid).map(|(_, f)| *f)
+}
+
+/// Every SID the crate answers.
+pub fn ported() -> impl Iterator<Item = &'static str> {
+    TABLE.iter().map(|(s, _)| *s)
+}

@@ -15,6 +15,8 @@ pub mod ops;
 pub mod song_ops;
 #[cfg(test)]
 mod tests;
+#[cfg(feature = "verbs")]
+pub mod verb_ops;
 
 pub use error::{ErrorCode, WasmError};
 pub use ops::{Request, Session};

@@ -12,6 +12,7 @@ pub mod project_create;
 pub mod staged;
 pub mod stamp;
 pub mod take;
+pub mod verb;
 
 pub use disk_fs::DiskFs;
 pub use staged::StagedFs;

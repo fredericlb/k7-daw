@@ -96,6 +96,7 @@ pub enum Tag {
     Export,
     ExportTracks,
     Changes,
+    Verb,
     VerbBundle,
     VerbLibrary,
     VerbHost(super::verb_host::Member),
@@ -150,6 +151,7 @@ impl Tag {
             H::History => Some(Tag::History),
             H::HistoryEntries => Some(Tag::HistoryEntries),
             H::Changes => Some(Tag::Changes),
+            H::Verb => Some(Tag::Verb),
             H::VerbBundle => Some(Tag::VerbBundle),
             H::VerbLibrary => Some(Tag::VerbLibrary),
             H::VerbHost(m) => Some(Tag::VerbHost(m)),
@@ -194,6 +196,7 @@ impl Tag {
             | Tag::History
             | Tag::HistoryEntries
             | Tag::Changes
+            | Tag::Verb
             | Tag::VerbBundle
             | Tag::VerbLibrary
             | Tag::VerbHost(_) => Piece::Journal,
@@ -305,6 +308,7 @@ impl Tag {
             Tag::Export => "GET /export",
             Tag::ExportTracks => "GET /export/tracks",
             Tag::Changes => "POST /changes",
+            Tag::Verb => "POST /verb",
             Tag::VerbBundle => "GET /verb-bundle",
             Tag::VerbLibrary => "GET /verb-bundle/library",
             Tag::VerbHost(m) => m.route(),

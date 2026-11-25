@@ -60,6 +60,7 @@ pub mod stats;
 mod tag;
 pub mod verb_bundle;
 pub mod verb_host;
+pub mod verb_run;
 pub mod workspaces;
 pub mod workspaces_hook;
 pub mod workspaces_memo;
@@ -172,6 +173,7 @@ impl Ctx {
                 || matches!(
                     tag,
                     Tag::Changes
+                        | Tag::Verb
                         | Tag::VerbBundle
                         | Tag::VerbLibrary
                         | Tag::VerbHost(_)
@@ -318,5 +320,7 @@ mod tests_refuse;
 mod tests_revision;
 #[cfg(test)]
 mod tests_roam;
+#[cfg(test)]
+mod tests_verb_run;
 #[cfg(test)]
 mod tests_workspaces;
