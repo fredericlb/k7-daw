@@ -248,11 +248,13 @@ fn rebuilt(
             let was = was?;
             let mut it = raw.get(&was.id).cloned().unwrap_or_else(|| was.value.clone());
             if let Some((_, to)) = opts.rename.as_ref().filter(|(_, to)| to == n) {
-                set_key(
-                    &mut it,
-                    if was.picture { "video_track" } else { "track" },
-                    Value::Str(to.clone()),
-                );
+                // Only an item written the old way names its lane by `video_track`; a current picture lane's is `track`.
+                let key = if it.get("video_track").is_some() {
+                    "video_track"
+                } else {
+                    "track"
+                };
+                set_key(&mut it, key, Value::Str(to.clone()));
             }
             Some(it)
         });

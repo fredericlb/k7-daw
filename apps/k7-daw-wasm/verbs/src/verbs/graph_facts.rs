@@ -15,6 +15,8 @@ pub struct GraphFacts {
     /// A sound lane's `video_source:`, the picture lane whose sound it plays.
     pub video_source: HashMap<String, String>,
     pub pictures: Vec<String>,
+    /// The picture lanes that are muted: bypassed in the graph or disabled in their own file.
+    pub muted_pictures: Vec<String>,
 }
 
 /// The graph as `loadGraph` reads it, or None when it does not load.
@@ -30,6 +32,12 @@ pub fn graph_facts(h: &Host) -> Option<GraphFacts> {
             .filter_map(|(k, t)| t.video_source.map(|v| ((*k).to_owned(), v.to_owned())))
             .collect(),
         pictures: g.video_tracks.keys().map(|k| (*k).to_owned()).collect(),
+        muted_pictures: g
+            .video_tracks
+            .iter()
+            .filter(|(_, v)| v.mute)
+            .map(|(k, _)| (*k).to_owned())
+            .collect(),
     })
 }
 

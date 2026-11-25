@@ -1,7 +1,8 @@
 // event.rs — placing events on lanes: one or several moved, added or removed, after verbs/event.ts and eventsRemove.ts.
-// A reader would get wrong a lane sounding a picture: removing its event silences a shot, which is M6's and refused here.
+// A reader would get wrong a lane sounding a picture: removing its event does not remove it but silences the shot under it.
 
 use super::graph_facts::{graph_facts, sounding_picture};
+use super::picture_sound::{SoundedShot, shot_sounding_at, silence_shots, silence_sound_at};
 use super::shared::{Done, event_at, join, label, makes_cycle, meter, no_track, position, split_words, track_of};
 use crate::host::Host;
 use k7x::edit::{Value, js_number};
@@ -14,13 +15,6 @@ use song_edit::track_mix::{
 };
 use song_edit::workspace_file::ws_exists;
 use song_schema::{TimeSig, parse_duration};
-
-/// What verbs of M6 do on a lane whose clips are a picture's shots.
-fn picture_refusal(h: &mut Host, track: &str, picture: &str) {
-    h.refuse([format!(
-        "'{track}' plays {picture}'s sound — silencing a shot is not in the native verbs yet"
-    )]);
-}
 
 /// `event move <track> <timecode> <newTimecode> [<toTrack>]`.
 pub fn event_move(a: &str, h: &mut Host) -> Done {
@@ -287,8 +281,7 @@ pub fn event_remove(a: &str, h: &mut Host) -> Done {
         return Ok(());
     };
     if let Some(picture) = sounding_picture(graph_facts(h).as_ref(), &track.id) {
-        picture_refusal(h, &track.id, &picture);
-        return Ok(());
+        return silence_sound_at(h, &track.id, &picture, p.tempo, Some((&hit.name, hit.start)));
     }
     let dir = h.song_path.clone();
     match remove_track_placement(h.fs, &dir, &track.id, at_beats, num, den) {
@@ -356,6 +349,7 @@ pub fn events_remove(a: &str, h: &mut Host) -> Done {
     let (num, den) = meter(&p);
     let facts = graph_facts(h);
     let mut hits: Vec<(String, f64)> = Vec::new();
+    let mut silenced: Vec<SoundedShot> = Vec::new();
     for (track, start) in &wanted {
         let Some(t) = p.tracks.iter().find(|x| x.id == *track || x.name == *track) else {
             h.refuse([format!("no track \"{track}\"")]);
@@ -377,8 +371,19 @@ pub fn events_remove(a: &str, h: &mut Host) -> Done {
             return Ok(());
         }
         if let Some(picture) = sounding_picture(facts.as_ref(), &t.id) {
-            picture_refusal(h, &t.id, &picture);
-            return Ok(());
+            let clip = t
+                .clips
+                .iter()
+                .find(|c| (c.start - at).abs() < 1e-6)
+                .map(|c| (c.name.as_str(), c.start));
+            match shot_sounding_at(h, &picture, p.tempo, clip)? {
+                Ok(shot) => silenced.push(shot),
+                Err(why) => {
+                    h.refuse([why]);
+                    return Ok(());
+                }
+            }
+            continue;
         }
         hits.push((t.id.clone(), at));
     }
@@ -394,17 +399,28 @@ pub fn events_remove(a: &str, h: &mut Host) -> Done {
             }
         }
     }
+    if !silenced.is_empty() && !silence_shots(h, &silenced) {
+        return Ok(());
+    }
     let mut lanes: Vec<&str> = Vec::new();
     for (t, _) in &hits {
         if !lanes.contains(&t.as_str()) {
             lanes.push(t);
         }
     }
-    h.log([format!(
-        "removed {removed} event{} from {}",
-        if removed == 1 { "" } else { "s" },
-        lanes.join(", ")
-    )]);
+    let mut said: Vec<String> = Vec::new();
+    if !hits.is_empty() {
+        said.push(format!(
+            "removed {removed} event{} from {}",
+            if removed == 1 { "" } else { "s" },
+            lanes.join(", ")
+        ));
+    }
+    if !silenced.is_empty() {
+        let refs: Vec<&str> = silenced.iter().map(|s| s.ref_.as_str()).collect();
+        said.push(format!("silenced {} — the shots stay in the picture", refs.join(", ")));
+    }
+    h.log(said);
     h.reload();
     Ok(())
 }

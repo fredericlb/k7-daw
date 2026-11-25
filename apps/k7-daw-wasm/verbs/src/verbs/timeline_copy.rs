@@ -1,9 +1,9 @@
 // timeline_copy.rs — `timeline lane copy`: a lane's events onto a new lane of another timeline or of the song, after timelineLaneCopy.ts.
-// A reader would get wrong what is copied: events, references to the same clips; a picture lane's copy is M6's and refused here.
+// A reader would get wrong what is copied: events, references to the same clips; a picture lane's shots go through timeline_picture_copy.rs.
 
-use super::graph_facts::graph_facts;
 use super::shared::{Done, free_name, join, makes_cycle, track_of};
 use super::timeline::SONG_TARGET;
+use super::timeline_picture_copy::{copy_picture_lane, is_picture_lane};
 use super::words::{is_name, split_args};
 use crate::host::Host;
 use k7x::edit::{Document, PathSeg, Value, WriteOptions};
@@ -18,23 +18,6 @@ use song_edit::workspace_file::ws_exists;
 
 const TRACK_REF: &str = "@meta/track";
 
-/// Whether `lane` names a picture lane, the song's or a timeline's.
-fn is_picture_lane(h: &Host, lane: &str) -> bool {
-    let Some((timeline, tl_lane)) = timeline_lane_of(lane) else {
-        return is_name(lane) && graph_facts(h).is_some_and(|f| f.pictures.iter().any(|p| p == lane));
-    };
-    let file = join(&h.song_path, &format!("timelines/{timeline}.k7x"));
-    if !is_name(timeline) || !ws_exists(&*h.fs, &file) {
-        return false;
-    }
-    match ws_data(&*h.fs, &file).ok().and_then(|d| d.get("pictures").cloned()) {
-        Some(Value::List(l)) => l
-            .iter()
-            .any(|p| matches!(p.get("lane"), Some(Value::Str(s)) if s == tl_lane)),
-        _ => false,
-    }
-}
-
 /// `timeline lane copy <lane> <timeline|main> [name]`.
 pub fn timeline_lane_copy(a: &str, h: &mut Host) -> Done {
     let w = split_args(a);
@@ -46,11 +29,8 @@ pub fn timeline_lane_copy(a: &str, h: &mut Host) -> Done {
         return Ok(());
     };
     let name = w.get(2);
-    if is_picture_lane(h, lane_arg) {
-        h.refuse([format!(
-            "'{lane_arg}' is a picture lane — copying its shots is a picture verb this build does not carry"
-        )]);
-        return Ok(());
+    if is_picture_lane(h, lane_arg)? {
+        return copy_picture_lane(h, lane_arg, to, name);
     }
     let p = h.project()?;
     let Some(track) = track_of(&p, lane_arg) else {

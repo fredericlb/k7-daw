@@ -53,11 +53,16 @@ whatever wrote it.
 | one entry, `{"op":"verb.run","args":{"line","project","env"}}` through the existing `k7_call`, answers `{log, refuse, refused, effects, asks?, threw?}` | the native plan's one seam per gesture (`docs/native-app-plan.md`); the change set is the `Fs`'s, which the caller lands |
 | `verb.run` sits behind k7-wasm's `verbs` feature, which no browser module is built with | the web keeps its TypeScript verbs until phase 4; the page gains nothing from a second copy of them |
 | a verb the crate has not ported answers the dispatcher's own refusal, `command '…' has no handler (sid)` | a native caller learns by the answer which verbs it may offer, with no table of its own to keep |
-| an event verb on a lane that sounds a picture refuses, where the TypeScript silences the shot | silencing a shot is M6's picture code; refusing writes nothing wrong |
+| `event remove` and `events remove` on a lane that sounds a picture silence the shot under the clip, as the TypeScript does, and every other `event…` verb on it refuses | a sounding lane's clip IS a shot's sound; the shot is found by the clip's name and start among the lane's shots as the compile cuts them |
+| a host member the media verbs need is ONE method of `Host` (`apps/k7-daw-wasm/verbs/src/host_media.rs`): `probe`, `prepare`, `extract_sound`, `render_picture`, `background` | the way a member is answered changes in that one place, and no verb names an ask or a refusal itself |
+| `probe` refuses with `no_ffmpeg`, which `picture prepare` carries on from (a browser-playable file needs nothing, the rest is said once) and `picture interchange` answers by leaving an open-ended last shot out, saying so | the crate reads no video, and a verb that can go on without the answer does |
+| `prepare`, `extract_sound` and `render_picture` are ASKS, and `picture sound` writes the clip's `sound:` before the caller has extracted the file | the verb has nothing left to decide once it asks; until the caller lands the extraction, the lane reports the missing file |
+| `picture render` checks its words and the project, then asks `renderPicture` with the folder, format, settings and sound, and the caller builds the scene | the scene is the compositor's, which the crate does not hold; `background` is always true for an ask, so a render already running is the caller's to say |
+| `picture interchange` and `picture import` read each picture lane's own `events:` and a cut's `.otio` or `.edl`, and an interchange leaves out the shots a placed timeline draws on a lane | the picture's compile (`loadVideoProject`) is TypeScript only; the lane files are what a cut hands over |
 | a host member whose answer only fills a log line is an ASK (`asks` in the answer): `timelinePlay`, `playlistStems`, `showNativePluginUI`, `saveBenchChain` | the verb has nothing left to decide once it is asked; the caller performs it and says the outcome |
 | `playlist stems` asks with the chain's REF, where the TypeScript hands resolved cold steps | the crate has no `resolveChain`; the caller that runs the stems resolves it |
 | `node freeze` on a live node refuses naming `render`; un-freezing a frozen one is ported | `frozen:` may only be written once the bounce has landed, and a verb cannot await it |
-| `timeline lane copy` of a picture lane refuses by name | copying shots is M6's picture code |
+| `timeline lane copy` of a picture lane copies its shots in seconds onto a timeline's `pictures:` or a new picture lane of the song | a timeline's picture lane has no frame and draws on the song's lane of its name, so only a copy within the song keeps `frame` and `color` |
 | tasks, playlists and library pins live in `workspace_dir_of(env, project)` | the native host has no `repoDir`; a project always stands in a workspace |
 
 ## Where it stands
@@ -71,6 +76,7 @@ whatever wrote it.
 | M4 | 36 of 36: lanes (group, arrange, duplicate, input, hide), timelines, time splice, aspect, master, console, tags, surfaces, tasks, libraries, playlists | `lanes_m4.rs`, `timelines.rs`, `project_m4.rs`, `playlists.rs`, `tracks.rs` |
 | M4 | `track highlight` | `tracks.rs` |
 | M5 | 44 of 44: nodes, modules, assemblies, the graph's wiring and layout, taps, presets, alternatives, engines, params, freeze | `graph_nodes.rs`, `taps.rs`, `node_state.rs`, `node_values.rs`, `chain_fixture.rs` |
+| M6 | 22 of 22: lanes (new, order, rename, delete, mute, solo, rect), shots (add, move, length, head, split, delete, key, unkey, speed, silence), sound, prepare, interchange, import, render; a timeline's copy of a picture lane and `event remove` on a sounding lane | `pictures.rs`, `pictures_lanes.rs`, `pictures_media.rs` |
 | M7 | 19 of 19; `system stems` and `system instrumental` store the chain unchecked, since `resolveChain` is TypeScript only | `system.rs`, `transport.rs` |
 | the compile cache | kept from line to line; on `clip-lane`, 1.1 ms a line fresh and 0.7 ms kept, in release | `cache.rs` |
 

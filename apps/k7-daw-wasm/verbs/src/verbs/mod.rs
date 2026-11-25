@@ -27,6 +27,19 @@ mod node_preset;
 mod node_shared;
 mod node_state;
 mod node_tap;
+mod picture;
+mod picture_animate;
+mod picture_cut;
+mod picture_doc;
+mod picture_file;
+mod picture_interchange;
+mod picture_keys;
+mod picture_lane;
+mod picture_media;
+mod picture_read_cut;
+mod picture_render;
+mod picture_shared;
+mod picture_sound;
 mod playlist;
 mod project;
 mod project_more;
@@ -39,6 +52,7 @@ mod system;
 mod tasks;
 mod timeline;
 mod timeline_copy;
+mod timeline_picture_copy;
 mod track;
 mod track_chain_copy;
 mod track_dup;
@@ -219,6 +233,28 @@ const TABLE: &[(&str, Handler)] = &[
     ("graph.chain.connect", graph_wire::chain_connect),
     ("graph.chain.disconnect", graph_wire::chain_disconnect),
     ("graph.chain.replug", graph_wire::chain_replug),
+    ("picture.laneNew", picture::lane_new),
+    ("picture.laneOrder", picture::lane_order),
+    ("picture.mute", picture::mute),
+    ("picture.solo", picture::solo),
+    ("picture.rect", picture::rect),
+    ("picture.move", picture::move_shot),
+    ("picture.length", picture::length),
+    ("picture.head", picture::head),
+    ("picture.delete", picture::delete),
+    ("picture.split", picture::split),
+    ("picture.add", picture::add),
+    ("picture.key", picture_keys::key),
+    ("picture.unkey", picture_keys::unkey),
+    ("picture.speed", picture_keys::speed),
+    ("picture.silence", picture_keys::silence),
+    ("picture.sound", picture_sound::picture_sound),
+    ("picture.prepare", picture_media::picture_prepare),
+    ("picture.interchange", picture_interchange::picture_interchange),
+    ("picture.import", picture_interchange::picture_import),
+    ("picture.render", picture_render::picture_render),
+    ("picture.laneRename", picture_lane::lane_rename),
+    ("picture.laneDelete", picture_lane::lane_delete),
 ];
 
 /// The handler of `sid`, or None for a verb the crate does not carry.

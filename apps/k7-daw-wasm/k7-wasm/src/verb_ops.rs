@@ -53,12 +53,12 @@ mod tests {
     }
 
     #[test]
-    fn an_unported_verb_is_refused_by_name() {
+    fn an_unknown_verb_is_refused_by_name() {
         let mut fs = MemFs::new();
         let req: VerbRequest =
-            serde_json::from_value(serde_json::json!({ "line": "picture mute v", "project": "" })).unwrap();
+            serde_json::from_value(serde_json::json!({ "line": "frobnicate v", "project": "" })).unwrap();
         let a = run_over(&mut fs, &mut || "id".to_owned(), &req);
         assert!(a.refused);
-        assert_eq!(a.refuse, ["command 'picture mute' has no handler (picture.mute)"]);
+        assert_eq!(a.refuse, ["unknown command: frobnicate v"]);
     }
 }
