@@ -11,6 +11,7 @@ use super::{StagedFs, env_for, env_of, posix};
 use crate::atomic::Real;
 use crate::changes::commit::{Landed, commit};
 use crate::changes::plan::Act;
+use crate::changes::target::{Target, confined};
 use crate::libraries::Home;
 
 /// What a line came to: the verb's answer, what landed (none for a refusal or no write), and the texts it wrote.
@@ -31,6 +32,8 @@ pub struct Line<'a> {
     pub line: &'a str,
     /// What the line's earlier runs fixed: the routes' answers and the stamp.
     pub replay: Replay,
+    /// The project is a library chain folder: the line may write only there and the shared texts.
+    pub chain: bool,
 }
 
 /// Where a verb may write: the workspace (its project and the shared texts) and the studio's own folder (the preferences).
@@ -81,6 +84,10 @@ pub fn run_verb(
         });
     }
     let set = fs.planned()?;
+    if at.chain {
+        let chain = Target::Chain(dir.clone());
+        confined(&chain, at.root, &set).map_err(|r| format!("{r:?}"))?;
+    }
     let landed = commit(&Real, &set, snapshot).map_err(|e| e.what)?;
     fs.drop_emptied_dirs();
     let written = set

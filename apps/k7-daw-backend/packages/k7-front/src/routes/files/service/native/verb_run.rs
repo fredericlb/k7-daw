@@ -5,6 +5,8 @@ use std::collections::HashMap;
 use std::sync::{Mutex, OnceLock};
 
 use axum::response::Response;
+use k7_file_service::changes::Refusal;
+use k7_file_service::changes::target::{Target, target};
 use k7_file_service::edits::verb::{Line, Ran, Replay, complete_verb, run_verb};
 use k7_file_service::journal::{Journals, Mode};
 use k7_file_service::revisions::Revisions;
@@ -85,11 +87,40 @@ pub async fn answer(c: &Call, ctx: &Ctx) -> Response {
         return error(503, "file service: no code root to read k7's modules from");
     };
     let code_root = docs.code_root.clone();
+    let journal = match c.body.get("journal") {
+        None | Some(Value::Null) => Mode::Step,
+        Some(Value::String(j)) if j == "join" => Mode::Join,
+        Some(Value::String(j)) if j == "skip" => Mode::Skip,
+        Some(_) => return error(400, "journal: expected 'join' or 'skip'"),
+    };
+    let at = c
+        .body
+        .get("at")
+        .and_then(Value::as_str)
+        .unwrap_or("")
+        .to_owned();
     let (home, root) = (ctx.home.clone(), ctx.root.clone());
-    let active = blocking(move || Space::open(&home, &root).active()).await;
-    let project = match active {
+    let place = blocking(move || {
+        let space = Space::open(&home, &root);
+        if at.is_empty() {
+            return space
+                .active()
+                .map(|p| (p, false))
+                .map_err(|d| (409, format!("declined: {}", d.as_str())));
+        }
+        match target(&space, &at) {
+            Ok(Target::Chain(d)) => Ok((Some(d), true)),
+            Ok(Target::Project(d)) => Ok((Some(d), false)),
+            Ok(Target::Workspace) => Ok((None, false)),
+            Err(Refusal::Forbidden(e)) => Err((403, e)),
+            Err(Refusal::Elsewhere { .. }) => Err((409, format!("'{at}' is not the open project"))),
+            Err(r) => Err((400, format!("{r:?}"))),
+        }
+    })
+    .await;
+    let (project, chain) = match place {
         Some(Ok(p)) => p,
-        Some(Err(d)) => return error(409, &format!("declined: {}", d.as_str())),
+        Some(Err((status, e))) => return error(status, &e),
         None => return error(500, "internal error"),
     };
     let virt: Option<Virtual> = match &project {
@@ -103,6 +134,7 @@ pub async fn answer(c: &Call, ctx: &Ctx) -> Response {
         }
         None => None,
     };
+    let shape = Shape { journal, chain };
     let asker = Asker {
         reenter: c.reenter.as_ref(),
         account: &ctx.account,
@@ -117,6 +149,7 @@ pub async fn answer(c: &Call, ctx: &Ctx) -> Response {
         stamp: Some(super::engine::filing::file_stamp()),
     };
     let mut minted = Vec::new();
+    let before = token(ctx, project.clone()).await;
     for _ in 0..=MAX_CALLS {
         let image = Journals::global().image_bytes(&gate_root(ctx));
         let Some(held) = ctx.gate.take(&ctx.account, put_weight(0, 0, image)).await else {
@@ -132,7 +165,10 @@ pub async fn answer(c: &Call, ctx: &Ctx) -> Response {
         let (replay2, minted2) = (replay.clone(), std::mem::take(&mut minted));
         // A line that has begun runs to its end in a task of its own: a client that left strands no step.
         let ran =
-            tokio::spawn(async move { run(&c2, &ctx2, l2, p2, r2, replay2, minted2).await }).await;
+            tokio::spawn(
+                async move { run(&c2, &ctx2, l2, (p2, shape), r2, replay2, minted2).await },
+            )
+            .await;
         drop(held);
         let done = match ran {
             Ok(Ok(d)) => d,
@@ -140,7 +176,12 @@ pub async fn answer(c: &Call, ctx: &Ctx) -> Response {
             Err(_) => return error(500, "internal error"),
         };
         let Some(pending) = done.ran.answer.pending.clone() else {
-            return finish(c, &asker, done, project.is_some()).await;
+            let end = End {
+                open: project.is_some() && !chain,
+                dir: project.clone(),
+                before,
+            };
+            return finish(c, ctx, &asker, done, end).await;
         };
         minted = done.minted;
         let route = pending
@@ -160,8 +201,27 @@ pub async fn answer(c: &Call, ctx: &Ctx) -> Response {
     )
 }
 
-/// The landed run's answer: the engine pushed, the asks asked and their lines said, the step's files.
-async fn finish(c: &Call, asker: &Asker<'_>, done: Done, open: bool) -> Response {
+/// The token of `dir` (the workspace alone with none), walked now.
+async fn token(ctx: &Ctx, dir: Option<String>) -> String {
+    let ctx2 = ctx.clone();
+    blocking(move || {
+        let space = Space::open(&ctx2.home, &ctx2.root);
+        Revisions::global().token(&ctx2.home, space.root(), dir.as_deref(), dir.is_some())
+    })
+    .await
+    .unwrap_or_default()
+}
+
+/// What the answer needs past the run: whether the open project is the one run, its folder and its token before the line.
+struct End {
+    open: bool,
+    dir: Option<String>,
+    before: String,
+}
+
+/// The landed run's answer: the engine pushed, the asks asked and their lines said, the step's files, the tokens and the graph.
+async fn finish(c: &Call, ctx: &Ctx, asker: &Asker<'_>, done: Done, end: End) -> Response {
+    let open = end.open;
     let mut ran = done.ran;
     let pushes = ran
         .answer
@@ -184,22 +244,43 @@ async fn finish(c: &Call, asker: &Asker<'_>, done: Done, open: bool) -> Response
     if let Some(o) = out.as_object_mut() {
         o.insert("changed".into(), done.files);
         o.insert("landed".into(), json!(ran.landed.is_some()));
+        o.insert("revBefore".into(), json!(end.before));
+        o.insert("rev".into(), json!(token(ctx, end.dir).await));
+    }
+    let want_graph = c
+        .body
+        .get("want")
+        .and_then(Value::as_array)
+        .is_some_and(|w| w.iter().any(|x| x == "graph"));
+    if want_graph
+        && open
+        && let Some(graph) = super::docs::graph_value(ctx).await
+        && let Some(o) = out.as_object_mut()
+    {
+        o.insert("graph".into(), graph);
     }
     json_answer(200, &out)
+}
+
+/// How the line's step is journaled, and whether its folder is a library chain, which only it and the shared texts may be written in.
+#[derive(Clone, Copy)]
+struct Shape {
+    journal: Mode,
+    chain: bool,
 }
 
 async fn run(
     c: &Call,
     ctx: &Ctx,
     line: String,
-    project: Option<String>,
+    (project, shape): (Option<String>, Shape),
     code_root: String,
     replay: Replay,
     minted: Vec<String>,
 ) -> Result<Done, Box<Response>> {
     // No project open: the workspace alone has nothing to image, and a project-less verb is never a step.
     let (mode, dir) = match &project {
-        Some(p) => (Mode::Step, p.clone()),
+        Some(p) => (shape.journal, p.clone()),
         None => (
             Mode::Skip,
             k7_file_service::paths::join(&[&ctx.root, ".no-project"]),
@@ -222,6 +303,7 @@ async fn run(
             project: p2.as_deref(),
             line: &l2,
             replay,
+            chain: shape.chain,
         };
         let journals = Journals::global();
         let mut queue = minted.into_iter();
@@ -310,6 +392,7 @@ pub async fn complete(c: &Call, ctx: &Ctx) -> Response {
             project: project.as_deref(),
             line: &line,
             replay: Replay::default(),
+            chain: false,
         };
         let out = complete_verb(&at, cursor, &mut cache);
         give_cache(key, cache);
