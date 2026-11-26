@@ -3452,9 +3452,9 @@ export default function App({
             {ws?.activeIsDemo && ws.activeProject && (
               <DemoBanner project={ws.activeProject} />
             )}
-            {/* The panes, with room kept for the floating bar and controls; panels push nothing. */}
+            {/* The panes reach the foot on a desk, the floating row over them (a phone keeps room for its bar); panels push nothing. */}
             <div
-              className={`${editorPopin || rackBuilder ? "z-(--k7-z-menu)" : "z-(--k7-z-pane)"} flex min-h-0 flex-1 flex-col ${isMobile ? "pb-[88px]" : "pb-16"}`}
+              className={`${editorPopin || rackBuilder ? "z-(--k7-z-menu)" : "z-(--k7-z-pane)"} flex min-h-0 flex-1 flex-col ${isMobile ? "pb-[88px]" : ""}`}
             >
               <div className="flex min-h-0 flex-1">
                 {/* The popin's backdrop: a click outside is the reliable way out, Escape belonging to the editor's vim. */}
