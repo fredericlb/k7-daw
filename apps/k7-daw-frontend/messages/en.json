@@ -1888,6 +1888,7 @@
   "shell.processes": "{n} background processes running: open Tasks and history",
   "shell.problems": "{n} problems reported: open Logs",
   "shell.pane": "Pane",
+  "shell.dock": "Editor dock",
   "shell.panels": "Panels",
   "shell.app": "App",
   "shell.overflow": "Views and panels",

@@ -229,6 +229,7 @@ import { useEngineLostToast, useProgressToast } from "./shell/engineToasts";
 import { FloatingBar } from "./shell/FloatingBar";
 import { HeaderGit } from "./shell/HeaderGit";
 import { type OverflowLaneView, OverflowMenu } from "./shell/OverflowMenu";
+import { PanelRail } from "./shell/PanelRail";
 import {
   type HeaderPane,
   type HeaderPanel,
@@ -2895,13 +2896,7 @@ export default function App({
       panes={switcherPanes}
       pane={full}
       onPane={(id) => void runCommand(`ui ${id}`)}
-      panels={headerPanels}
-      settingsPressed={shownId === "settings"}
-      onSettings={() =>
-        shownId === "settings"
-          ? closeAnyPanel()
-          : void runCommand("ui settings")
-      }
+      panels={headerPanels.filter((p) => p.id === "mixer")}
       lockBanner={merging ? lockedSay() : null}
       overflow={
         <OverflowMenu
@@ -3324,26 +3319,36 @@ export default function App({
   };
   // A right panel ends above the dock, and the toasts sit above it too (spec: bottom-editors.md).
   const dockUp = dock.open && !isMobile;
-  const shellVars: Record<string, string> | null =
-    !isMobile && (shownId || dockUp)
-      ? {
-          ...(shownId
-            ? { "--toast-right": "var(--k7-toast-right-panel-open)" }
-            : {}),
-          ...(dockUp
-            ? {
-                "--toast-bottom": dock.expanded
-                  ? "96px"
-                  : `calc(var(--k7-panel-bottom) + ${dock.height}px + var(--k7-dock-gap))`,
-                ...(dock.expanded
-                  ? {}
-                  : {
-                      "--k7-panel-bottom-open": `calc(var(--k7-panel-bottom) + ${dock.height}px + var(--k7-dock-gap))`,
-                    }),
-              }
-            : {}),
-        }
-      : null;
+  const shellVars: Record<string, string> | null = !isMobile
+    ? {
+        // The rail on the right edge: the right panel, the dock and the toasts keep clear of it (shell/PanelRail.tsx).
+        "--k7-panel-right": "var(--k7-rail-clear)",
+        "--k7-dock-right": "var(--k7-rail-clear)",
+        "--toast-right": "var(--k7-rail-clear)",
+        ...(shownId || dockUp
+          ? {
+              ...(shownId
+                ? {
+                    "--toast-right":
+                      "calc(var(--k7-toast-right-panel-open) + var(--k7-rail-w))",
+                  }
+                : {}),
+              ...(dockUp
+                ? {
+                    "--toast-bottom": dock.expanded
+                      ? "96px"
+                      : `calc(var(--k7-panel-bottom) + ${dock.height}px + var(--k7-dock-gap))`,
+                    ...(dock.expanded
+                      ? {}
+                      : {
+                          "--k7-panel-bottom-open": `calc(var(--k7-panel-bottom) + ${dock.height}px + var(--k7-dock-gap))`,
+                        }),
+                  }
+                : {}),
+            }
+          : {}),
+      }
+    : null;
   const panelHost = shownId ? (
     <PanelFrame id={shownId} phone={isMobile} onClose={closeAnyPanel}>
       {panelBody(shownId)}
@@ -3382,6 +3387,18 @@ export default function App({
           >
             <Backdrop />
             {header}
+            {/* The right panels' buttons, as a vertical toolbar on the right edge (shell/PanelRail.tsx); a phone has its menu. */}
+            {!isMobile && (
+              <PanelRail
+                panels={headerPanels.filter((p) => p.id !== "mixer")}
+                settingsPressed={shownId === "settings"}
+                onSettings={() =>
+                  shownId === "settings"
+                    ? closeAnyPanel()
+                    : void runCommand("ui settings")
+                }
+              />
+            )}
             {/* A demo is overwritten on the service's next start: said before an edit is lost (components/DemoBanner.tsx). */}
             {ws?.activeIsDemo && ws.activeProject && (
               <DemoBanner project={ws.activeProject} />

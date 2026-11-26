@@ -1888,6 +1888,7 @@
   "shell.processes": "{n} processus en arrière-plan : ouvrir Tâches et historique",
   "shell.problems": "{n} problèmes signalés : ouvrir les journaux",
   "shell.pane": "Volet",
+  "shell.dock": "Dock de l'éditeur",
   "shell.panels": "Panneaux",
   "shell.app": "Application",
   "shell.overflow": "Vues et panneaux",

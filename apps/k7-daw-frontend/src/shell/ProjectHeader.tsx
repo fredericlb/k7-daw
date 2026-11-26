@@ -1,15 +1,10 @@
 // ProjectHeader.tsx — the project's header: Back, name over status, spinner, warning chip, git, the pane
-// switcher (centred), the panel toolbar and the app buttons; a phone folds the right half into one menu.
+// switcher (centred) and the dock's buttons; a phone folds the right half into one menu. Right panels open from PanelRail.tsx.
 // The engine's state is only a data attribute here (e2e reads it): the person is told by toasts, never by a light.
 import { Badge } from "@studio/ui/badge";
 import { Button } from "@studio/ui/button";
 import { Capsule, CapsuleButton } from "@studio/ui/capsule";
-import {
-  ChevronLeft,
-  type LucideIcon,
-  Settings,
-  TriangleAlert,
-} from "@studio/ui/icons";
+import { ChevronLeft, type LucideIcon, TriangleAlert } from "@studio/ui/icons";
 import { Spinner } from "@studio/ui/spinner";
 import { type ReactNode, useSyncExternalStore } from "react";
 import { StatusText } from "../components/StatusText";
@@ -56,8 +51,6 @@ export function ProjectHeader({
   pane,
   onPane,
   panels,
-  settingsPressed,
-  onSettings,
   overflow,
   lockBanner,
 }: {
@@ -75,9 +68,8 @@ export function ProjectHeader({
   panes: HeaderPane[];
   pane: string;
   onPane: (id: string) => void;
+  /** The DOCK's buttons (the Mixer); the right panels' are the rail's. */
   panels: HeaderPanel[];
-  settingsPressed: boolean;
-  onSettings: () => void;
   /** The phone's menu, standing in for the capsules on the right. */
   overflow: ReactNode;
   /** The sentence under the header while a merge locks editing. */
@@ -175,7 +167,8 @@ export function ProjectHeader({
               ))}
             </Capsule>
             <div className="flex min-w-max flex-1 basis-0 items-center justify-end gap-2">
-              <Capsule role="group" aria-label={m["shell.panels"]()}>
+              {/* The dock's own buttons stay here; the right panels' are the rail's (PanelRail.tsx). */}
+              <Capsule role="group" aria-label={m["shell.dock"]()}>
                 {panels.map((p) => {
                   const def = PANEL_DEFS[p.id];
                   return (
@@ -194,16 +187,6 @@ export function ProjectHeader({
                     </CapsuleButton>
                   );
                 })}
-              </Capsule>
-              <Capsule role="group" aria-label={m["shell.app"]()}>
-                <CapsuleButton
-                  pressed={settingsPressed}
-                  aria-label={m["settings.menu"]()}
-                  title={m["settings.menu"]()}
-                  onClick={onSettings}
-                >
-                  <Settings />
-                </CapsuleButton>
               </Capsule>
             </div>
           </>
