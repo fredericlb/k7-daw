@@ -40,13 +40,21 @@ async function openCommandBar(page: Page): Promise<Locator> {
     .all())
     if (await close.isVisible())
       await close.click({ timeout: 2_000 }).catch(() => {});
-  if (!(await bar.isVisible()))
-    await page
+  if (!(await bar.isVisible())) {
+    const button = page
       .getByRole("button", {
         name: /^Command bar(: search workspaces and projects, run a command)?$/,
       })
-      .first()
-      .click();
+      .first();
+    // A phone's and a portrait tablet's button is in the rail, folded under its chevron.
+    const show = page.getByRole("button", {
+      name: "Show the toolbar",
+      exact: true,
+    });
+    if (!(await button.isVisible()) && (await show.isVisible()))
+      await show.click();
+    await button.click();
+  }
   return bar;
 }
 
