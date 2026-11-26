@@ -381,7 +381,12 @@ impl Shared {
             Err(t) => return self.unknown_frame("text", &t),
         };
         match m {
-            HubMessage::Open { ch, roots, jobs, synced } => self.open_channel(ch, &roots, jobs, synced),
+            HubMessage::Open {
+                ch,
+                roots,
+                jobs,
+                synced,
+            } => self.open_channel(ch, &roots, jobs, synced),
             HubMessage::Close { ch } => {
                 let gone = self.channels().remove(&ch);
                 if let Some(c) = gone {
@@ -390,7 +395,9 @@ impl Shared {
             }
             HubMessage::Data { ch, text } => self.to_engine(ch, Payload::Text(text)),
             HubMessage::StatReply { req, entries } => self.files.on_stat_reply(req, &entries),
-            HubMessage::PutReply { req, stat, error } => self.files.on_put_reply(req, &stat, &error),
+            HubMessage::PutReply { req, stat, error } => {
+                self.files.on_put_reply(req, &stat, &error)
+            }
             HubMessage::GetError { req, error } => self.files.on_get_error(req, &error),
         }
     }
