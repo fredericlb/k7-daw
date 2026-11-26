@@ -509,10 +509,10 @@ The `/settings` page (General, Devices, Services, Downloads, About), the engine 
 | 11.09 | Toggle the event's loop (also in the roll header) | click "loop: off" in the title bar, then the switch in its bubble (the roll header keeps its Loop button) | Tab, Enter opens the bubble; Space toggles the switch | tap loop, tap the switch | T M D |
 | 11.10 | Move the loop's start or end | drag a brace handle on the bars ruler (free) | — | drag | T M D |
 | 11.11 | Set the onset sensitivity (onsets view) | drag the threshold slider | arrows | drag | T M D |
-| 11.12 | Open the trim gate | click Trim in the title bar: the gate opens as a popover from it (the kept part is drawn over the wave) | Tab, Enter | tap | T M D |
+| 11.12 | Open the trim gate | click the lightning Operations button, then Trim: the gate opens as a popover from the button (the kept part is drawn over the wave) | Tab, Enter | tap the lightning button, tap Trim | T M D |
 | 11.13 | Set the trim gate threshold | drag the dB slider in the Trim popover | arrows | drag | T M D |
 | 11.14 | Trim the event to the gate | click Trim in the Trim popover | Tab, Enter | tap | T M D |
-| 11.15 | Run an operation chain on the clip | click Operations, search, click a chain | arrows, Enter | tap | T M D |
+| 11.15 | Run an operation chain on the clip | click the lightning Operations button, Transformations, search, click a chain | arrows, Enter | tap the lightning button, Transformations, tap a chain | T M D |
 | 11.16 | Discard the take | click the trash button | — | tap | T M D |
 | 11.17 | Finish editing | click Done (files the take as reviewed) | — | tap | T M D |
 | 11.18 | Close the editor | click Close editor in the dock header | Esc at the end of the ladder | tap | T M D |
