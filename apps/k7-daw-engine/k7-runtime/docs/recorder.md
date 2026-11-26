@@ -169,7 +169,7 @@ looked like it had started at the reload.
 
 So the node **keeps the whole take's envelope** rather than moving it out on each drain, and
 `from` says where the frame's points sit in it. When a socket subscribes to a session —
-`subscribers.emplace(...).second`, in `server/Serve.cpp` — every recorder in it is rewound, and the
+the subscription the server binds once per socket (`apps/k7-daw-backend/packages/k7-runtime-server/src/server/dispatch.rs`) — every recorder in it is rewound, and the
 next frame carries the picture from 0.
 
 That resend reaches **every** subscriber of the session, not just the new one, which is exactly

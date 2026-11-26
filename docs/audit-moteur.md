@@ -43,7 +43,7 @@ stays local to the surface that suffered** as long as no package carries it.
 reads the token, only once the musician has paired it; the machine and the server's relay need
 nothing. What follows is the situation pairing answered, kept for the reasoning.
 
-**The engine token leaked by design.** `server/ServeMachine.cpp`, the `whoami` handler: `whoami` returned the token to any
+**The engine token leaked by design.** the engine's `whoami` handler (`apps/k7-daw-backend/packages/k7-runtime-server/src/server/whoami.rs`): `whoami` returned the token to any
 socket that asked for it, with no prior authentication.
 
 Consequences: anyone reaching `ws://<engine>:8765` — loopback, or the whole LAN when the supervisor

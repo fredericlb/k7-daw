@@ -49,7 +49,7 @@ plugin's own `VST3 Presets` folders, which sit outside every root by design.
 The serving engine's `render` is held harder than a project: a path outside the roots refuses the
 whole render rather than dropping a clip, since a mix missing a source is a wrong file and nobody
 reads the warning; its `outDir` must be under the write roots, its `base` under the read ones, and a
-relative clip source is joined to `base` before the test (`server/ServeRender.cpp`).
+relative clip source is joined to `base` before the test (`apps/k7-daw-backend/packages/k7-runtime-server/src/server/render.rs`).
 
 The CLI's one-shot modes (`--render`, `--decode`, …) set no roots: their document comes from whoever
 runs the binary — a person, or the supervisor's render job on a document the tunnel already mapped.

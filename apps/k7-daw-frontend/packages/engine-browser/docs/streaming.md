@@ -22,7 +22,7 @@ second would each build another, with an audio thread apiece. The host is told o
 
 ## Why a binary frame on the existing socket
 
-The engine already serves an IXWebSocket server that every client is already connected to.
+The engine already serves a WebSocket that every client is already connected to.
 A second channel would mean a second port, a second entry in the engine's web-UI allowlist, a second
 thing to authenticate and a second thing to fail — for audio that is going to the same
 place as the JSON.

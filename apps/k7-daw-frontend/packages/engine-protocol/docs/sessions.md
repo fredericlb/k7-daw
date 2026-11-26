@@ -79,8 +79,8 @@ only frames that arrive unstamped are genuinely the machine's. Against an engine
 sessions nothing is stamped, and that is the case pass-on-absence exists for — requiring the
 field would make a new client silently deaf rather than merely unsorted.
 
-So the correctness of one line here lives in the engine's message handlers, `apps/k7-daw-engine/k7-runtime/server/Serve*.cpp`, in their choice
-between the `broadcast` and `broadcastTo` verbs. Stamp one reply too few and a media-library module
+So the correctness of one line here lives in the engine's message handlers, `apps/k7-daw-backend/packages/k7-runtime-server/src/server/`, in their choice
+between the `broadcast` and `broadcast_to` calls. Stamp one reply too few and a media-library module
 audition makes k7 flash `busy` and receive `applied`/`flushed`/`recorded` for a project it
 does not own.
 

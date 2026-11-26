@@ -34,7 +34,7 @@ write from two threads.
 
 "The ring outlives every edit" is true of the ring and does not extend to the **lookup that finds
 it**, now that the ring lives inside a map keyed by session. The case is reachable rather than
-theoretical: the `broadcast` handler (`server/ServeMachine.cpp`) records a new listener's session under `listenersMx` *before* the posted
+theoretical: the `broadcast` handler (`apps/k7-daw-backend/packages/k7-runtime-server/src/server/broadcast.rs`) records a new listener's session under its lock *before* the posted
 `enableBroadcast` runs, so the sender thread can be the first to touch a brand-new id.
 
 `tests/SessionRegistry_test.cpp` pins the invariants. Its concurrency case is a **stress test,
@@ -84,12 +84,12 @@ the supervisor's own client.
 ## Which replies carry a session
 
 `apps/k7-daw-frontend/packages/engine-protocol/sessions.ts` holds the two lists, `PER_SESSION_REPLIES` and
-`ENGINE_GLOBAL_REPLIES`, and `sessions.test.ts` pins them. In the server's handlers (`server/Serve*.cpp`) the choice is a **verb**:
+`ENGINE_GLOBAL_REPLIES`, and `sessions.test.ts` pins them. In the server's handlers (`apps/k7-daw-backend/packages/k7-runtime-server/src/server/`) the choice is a **verb**:
 
 | verb | for |
 |---|---|
-| `broadcast(j)` | the machine's answers — the device list, the installed catalogue, the session list, `whoami` |
-| `broadcastTo(sid, j)` | everything about one project |
+| `Ctx::broadcast(j)` | the machine's answers — the device list, the installed catalogue, the session list, `whoami` |
+| `Ctx::broadcast_to(sid, j)` | everything about one project |
 
 Two verbs rather than a hand-written `{"session", …}` per reply, because seventeen hand-stamped
 literals is precisely how the eighteenth gets forgotten. A new reply has to *choose*, and the
