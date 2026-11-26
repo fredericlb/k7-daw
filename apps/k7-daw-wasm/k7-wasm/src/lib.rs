@@ -10,6 +10,8 @@ pub mod ops;
 mod schema_tests;
 #[cfg(test)]
 mod tests;
+#[cfg(test)]
+mod tests_file;
 
 pub use error::{ErrorCode, WasmError};
 pub use ops::Session;

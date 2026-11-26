@@ -8,6 +8,8 @@
     "./curve": "./src/curve.ts",
     "./schema": "./src/schema.ts",
     "./timecode": "./src/timecode.ts",
+    "./validate": "./src/validate.ts",
+    "./fields": "./src/fields.ts",
     "./consts": "./src/consts.generated.ts",
     "./types": "./src/types/index.ts",
     "./boot": "./src/boot.ts",

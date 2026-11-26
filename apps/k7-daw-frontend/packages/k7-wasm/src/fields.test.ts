@@ -1,13 +1,23 @@
 import { describe, expect, it } from "vitest";
-import { fieldsAt, fileKindFor, valuesAt } from "./fields";
-import { ModuleSchema } from "./moduleSchema";
+import { fieldsAt, fileKindFor, valuesAt } from "./fields.ts";
 
-// These tests pin the completions the editor derives from the Zod schemas — see docs/fields.md.
+const PATHS = {
+  module: "modules/audio/cab/module.k7x",
+  chains: "chains.k7x",
+  chain: "song/chains/gtr.k7x",
+  curve: "curves/lfo.k7x",
+} as const;
+const fields = (kind: keyof typeof PATHS, at: string[]) =>
+  fieldsAt(PATHS[kind], at);
+const values = (kind: keyof typeof PATHS, at: string[], field: string) =>
+  valuesAt(PATHS[kind], at, field);
+
+// These tests pin the completions the editor derives from the Rust readers — see apps/k7-daw-frontend/packages/song-schema/docs/fields.md.
 
 describe("derived module fields", () => {
   it("matches the hand-kept table, plus the field the table was missing", () => {
     // Every module field, in the order the completions offer them (docs/fields.md).
-    expect(fieldsAt("module", [])).toEqual([
+    expect(fields("module", [])).toEqual([
       "extends",
       "plugin",
       "io",
@@ -73,13 +83,11 @@ describe("derived module fields", () => {
       // …and how the COMPLETIONS should treat this module, outside MODULE_FIELDS so an alternative cannot restate it.
       "status",
     ]);
-    // …and it cannot fall behind: the source is the schema.
-    expect(fieldsAt("module", [])).toEqual(Object.keys(ModuleSchema.shape));
   });
 
   it("answers for a nested struct, which the CUE version could not", () => {
     // A nested struct answers from its own shape, however deep it sits (docs/fields.md).
-    expect(fieldsAt("module", ["ui"])).toEqual([
+    expect(fields("module", ["ui"])).toEqual([
       "cols",
       "rows",
       "widgets",
@@ -87,19 +95,16 @@ describe("derived module fields", () => {
       "vertical",
     ]);
     // A tab is a name and its widgets, and a widget in it is a widget like any other.
-    expect(fieldsAt("module", ["ui", "tabs", "0"])).toEqual([
-      "name",
-      "widgets",
-    ]);
-    expect(fieldsAt("module", ["ui", "tabs", "0", "widgets", "w1"])).toContain(
+    expect(fields("module", ["ui", "tabs", "0"])).toEqual(["name", "widgets"]);
+    expect(fields("module", ["ui", "tabs", "0", "widgets", "w1"])).toContain(
       "bind",
     );
-    expect(fieldsAt("module", ["ui", "widgets", "w1"])).toContain("library");
-    expect(fieldsAt("module", ["ui", "widgets", "w1"])).toContain("bind");
-    expect(fieldsAt("module", ["rack"])).toEqual(
+    expect(fields("module", ["ui", "widgets", "w1"])).toContain("library");
+    expect(fields("module", ["ui", "widgets", "w1"])).toContain("bind");
+    expect(fields("module", ["rack"])).toEqual(
       expect.arrayContaining(["rack_type", "source", "symbols"]),
     );
-    expect(fieldsAt("module", ["rack", "symbols", "BD"])).toEqual([
+    expect(fields("module", ["rack", "symbols", "BD"])).toEqual([
       "note",
       "sample",
       "clip",
@@ -111,8 +116,8 @@ describe("derived module fields", () => {
 
   it("offers nothing inside an open map", () => {
     // `params` is a free map and `plugin` is deliberately open; offering names there would invent a vocabulary.
-    expect(fieldsAt("module", ["params"])).toEqual([]);
-    expect(fieldsAt("module", ["plugin"])).toEqual([]);
+    expect(fields("module", ["params"])).toEqual([]);
+    expect(fields("module", ["plugin"])).toEqual([]);
   });
 });
 
@@ -122,14 +127,14 @@ describe("derived lane fields", () => {
     expect(fileKindFor("nodes/melody.k7x")).toBe("module");
     // …and so does a chain project's `tracks/<lane>.k7x`, the lane's own file there.
     expect(fileKindFor("tracks/melody.k7x")).toBe("module");
-    expect(fieldsAt("module", [])).toEqual(
+    expect(fields("module", [])).toEqual(
       expect.arrayContaining(["events", "tracks", "strudel", "color"]),
     );
   });
 
   it("answers inside an ALTERNATIVE with the module's own fields", () => {
     // A set is a module partial plus a name — derived, so the two cannot drift.
-    const inside = fieldsAt("module", ["alternatives", "0"]);
+    const inside = fields("module", ["alternatives", "0"]);
     expect(inside).toContain("name");
     expect(inside).toContain("params");
     expect(inside).toContain("events");
@@ -137,11 +142,11 @@ describe("derived lane fields", () => {
     expect(inside).toContain("extends");
     expect(inside).not.toContain("alternatives");
     // The list itself has no field vocabulary — its entries are positions, not names.
-    expect(fieldsAt("module", ["alternatives"])).toEqual([]);
+    expect(fields("module", ["alternatives"])).toEqual([]);
   });
 
   it("answers inside a placement", () => {
-    expect(fieldsAt("module", ["events"])).toEqual([
+    expect(fields("module", ["events"])).toEqual([
       "ref",
       "start",
       // The event's own window — the placement-level half of the material's pair.
@@ -171,16 +176,16 @@ describe("derived lane fields", () => {
 
 describe("derived values", () => {
   it("offers a closed set where the schema has one", () => {
-    expect(valuesAt("module", [], "type")).toEqual([
+    expect(values("module", [], "type")).toEqual([
       "plugin",
       "rack",
       "video_effect",
       "video_transition",
     ]);
-    expect(valuesAt("module", [], "monitor")).toEqual(["off", "auto", "on"]);
+    expect(values("module", [], "monitor")).toEqual(["off", "auto", "on"]);
     // Both DERIVED from the schema's own constants — this table had already fallen two values
     // behind `io:` before they were, which is the drift the two `as const`s now prevent.
-    expect(valuesAt("module", [], "io")).toEqual([
+    expect(values("module", [], "io")).toEqual([
       "out",
       "in",
       "video_out",
@@ -189,26 +194,26 @@ describe("derived values", () => {
       "midi",
     ]);
     // …and the two live taps a waveform draws.
-    expect(valuesAt("module", ["ui", "widgets", "w1"], "source")).toEqual([
+    expect(values("module", ["ui", "widgets", "w1"], "source")).toEqual([
       "input",
       "output",
     ]);
-    expect(valuesAt("module", ["ui", "widgets", "w1"], "type")).toContain(
+    expect(values("module", ["ui", "widgets", "w1"], "type")).toContain(
       "dropdown",
     );
   });
 
   it("offers nothing where the value is free text", () => {
     // A param name, a module name, a docs string — a list there would read as the only allowed values.
-    expect(valuesAt("module", [], "extends")).toEqual([]);
-    expect(valuesAt("module", [], "docs")).toEqual([]);
+    expect(values("module", [], "extends")).toEqual([]);
+    expect(values("module", [], "docs")).toEqual([]);
   });
 });
 
 describe("chain fields", () => {
   it("offers the file's five sections, and nothing inside them", () => {
     // `bus_only:` is NOT a synonym of `bypassed:` — see apps/k7-daw-frontend/packages/song/docs/busOnly.md.
-    expect(fieldsAt("chains", [])).toEqual([
+    expect(fields("chains", [])).toEqual([
       "modules",
       "bypassed",
       "bus_only",
@@ -216,18 +221,84 @@ describe("chain fields", () => {
       "positions",
     ]);
     // Inside a section the keys are node NAMES, a project's own vocabulary the schema cannot know.
-    expect(fieldsAt("chains", ["modules"])).toEqual([]);
+    expect(fields("chains", ["modules"])).toEqual([]);
   });
 
   it("offers every curve type the file format takes", () => {
-    expect(valuesAt("curve", [], "type")).toEqual([
+    expect(values("curve", [], "type")).toEqual([
       "lfo",
       "custom",
       "adsr",
       "onoff",
     ]);
-    expect(fieldsAt("curve", [])).toEqual(
+    expect(fields("curve", [])).toEqual(
       expect.arrayContaining(["type", "points", "attack"]),
+    );
+  });
+});
+
+describe("the kind a path names", () => {
+  it("is the kind of file its folder and name say", () => {
+    expect(fileKindFor("song/nodes/pad.k7x")).toBe("module");
+    expect(fileKindFor("song/project.k7x")).toBe("project");
+    expect(fileKindFor("song/chains/main.k7x")).toBe("chain");
+    expect(fileKindFor("song/notes.txt")).toBeNull();
+    expect(fileKindFor(undefined)).toBeNull();
+  });
+});
+
+describe("chain project files", () => {
+  it("names a chain file, a lane file and the older segments files", () => {
+    expect(fileKindFor("chains/gtr.k7x")).toBe("chain");
+    expect(fileKindFor("tracks/gtr.k7x")).toBe("module");
+    // A picture lane is a lane node, its fields the module's.
+    expect(fileKindFor("nodes/cam.k7x")).toBe("module");
+    expect(fileKindFor("chains.k7x")).toBe("chains");
+    expect(fileKindFor("chains/verb/graph.k7x")).toBe("chains");
+    expect(fileKindFor("chains/gtr.yaml")).toBeNull();
+    expect(fileKindFor("project.yaml")).toBeNull();
+  });
+
+  it("offers a chain's keys, then a node's, a link's and a module's", () => {
+    expect(fields("chain", [])).toEqual([
+      "start",
+      "ports",
+      "bus_only",
+      "hidden",
+      "input",
+      "steps",
+      "subchains",
+    ]);
+    expect(fields("chain", ["subchains"])).toEqual(["id", "steps"]);
+    expect(fields("chain", ["subchains", "steps"])).toEqual(
+      fields("chain", ["steps"]).filter((f) => f !== "track" && f !== "sub"),
+    );
+    expect(fields("chain", ["subchains", "steps", "to"])).toEqual([
+      "chain",
+      "level",
+      "port",
+    ]);
+    expect(fields("chain", ["steps"])).toEqual(
+      expect.arrayContaining([
+        "id",
+        "track",
+        "to",
+        "bypass",
+        "extends",
+        "params",
+      ]),
+    );
+    expect(fields("chain", ["steps", "to"])).toEqual([
+      "chain",
+      "level",
+      "port",
+    ]);
+    expect(fields("chain", ["steps", "events"])).toEqual(
+      fields("module", ["events"]),
+    );
+    expect(values("chain", [], "start")).toEqual(["true", "MIX", "RENDER"]);
+    expect(values("chain", ["steps"], "io")).toEqual(
+      values("module", [], "io"),
     );
   });
 });

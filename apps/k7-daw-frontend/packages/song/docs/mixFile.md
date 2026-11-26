@@ -14,7 +14,7 @@ holds the desk's *bindings* — which module each fader moves — and a surface 
 `mapping:` instead, so a scaffolded set has none. This one is at the **root** of the project and
 holds where the needle drops.
 
-`validate.ts` tells them apart by folder, and the order of its two branches is what does it: the
+The editor's router (`apps/k7-daw-wasm/song/src/files/route.rs`) tells them apart by folder, and the order of its two branches is what does it: the
 `views/` test comes first, so a root `mix.k7x` falls through to this schema.
 
 ## It is not the set list either

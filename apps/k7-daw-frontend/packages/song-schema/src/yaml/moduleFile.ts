@@ -1,52 +1,10 @@
-// moduleFile.ts — reading and EDITING a module file, as k7x. Paired with moduleSchema.ts.
+// moduleFile.ts — EDITING a module file, as k7x. Reading it is the Rust reader's, asked through `file.validate`.
 // The writers edit a K7Scope in place, so a knob drag is a one-line diff and every comment stays (docs/moduleFile.md).
 
 import type { K7Scope } from "@studio/k7x/document";
 import { currentAlternative } from "../alternatives";
-import { parseK7xWith } from "./k7xIssues";
-import { type Module, ModuleSchema } from "./moduleSchema";
 
-/** A problem in a module file, with where it is — line/column when the file says so. */
-export interface ModuleIssue {
-  path: string; // "ui.widgets.w2.library" — dotted key path
-  message: string;
-  line?: number;
-  col?: number;
-}
-
-export interface ParsedModule {
-  /** The validated module, with defaults applied. Null when `issues` is non-empty. */
-  value: Module | null;
-  issues: ModuleIssue[];
-}
-
-/** Parse + validate one module file's k7x text; an empty file is an empty module. */
-export function parseModule(text: string): ParsedModule {
-  const { value, issues } = parseK7xWith(ModuleSchema, text);
-  return value ? moduleValue(value) : { value: null, issues };
-}
-
-/** parseModule's answer for data already read; undefined on an issue, which parseModule's text path locates. */
-export function parseModuleData(raw: unknown): ParsedModule | undefined {
-  const result = ModuleSchema.safeParse(raw ?? {});
-  return result.success ? moduleValue(result.data) : undefined;
-}
-
-function moduleValue(value: Module): ParsedModule {
-  // The default is applied on the way OUT and never over an INHERITED type (docs/moduleFile.md).
-  if (
-    value.type === undefined &&
-    value.io === undefined &&
-    value.extends === undefined
-  )
-    value.type = "plugin";
-  return { value, issues: [] };
-}
-
-/** Format an issue as `file:line:col: path: message`, the spelling a reader recognises. */
-export const formatIssue = (rel: string, i: ModuleIssue): string =>
-  `${rel}${i.line ? `:${i.line}${i.col ? `:${i.col}` : ""}` : ""}: ` +
-  `${i.path ? `${i.path}: ` : ""}${i.message}`;
+export type { ModuleIssue } from "@studio/k7-wasm/types";
 
 /** Set a list of numbers in the file, written on ONE line whatever its length (docs/moduleFile.md). */
 export function setModuleList(

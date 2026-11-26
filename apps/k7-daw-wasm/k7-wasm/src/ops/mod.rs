@@ -5,6 +5,8 @@
 pub mod curve;
 pub mod engine;
 pub mod schema;
+pub mod fields;
+pub mod file;
 pub mod song;
 pub mod timecode;
 #[cfg(feature = "verbs")]
@@ -69,6 +71,8 @@ impl Session {
             "engine" | "text" => engine::dispatch(decode(input)?, out),
             "schema" => schema::dispatch(decode(input)?, out),
             "timecode" => timecode::dispatch(decode(input)?, out),
+            "fields" => fields::dispatch(decode(input)?, out),
+            "file" => file::dispatch(decode(input)?, out),
             "song" => song::dispatch(&mut self.songs, decode(input)?, out),
             #[cfg(feature = "verbs")]
             "verb" => verb::dispatch(decode(input)?, out),

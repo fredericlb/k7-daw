@@ -2,7 +2,7 @@
 // A reader would get wrong that a syntax error throws: readK7x answers it as an issue, located, and no data.
 
 import { K7Document } from "@studio/k7x/document";
-import { K7SyntaxError, parseTree } from "@studio/k7x/parse";
+import type { K7SyntaxError } from "@studio/k7x/parse";
 import type { ZodType } from "zod";
 import { issueSegments, k7xPosition, k7xSchemaIssues } from "./k7xPosition";
 import type { ModuleIssue } from "./moduleFile";
@@ -16,10 +16,7 @@ export function locateK7x(
 }
 
 /** The same findings, their line and column taken from the k7x text by each one's dotted path. */
-export function relocateIssues(
-  text: string,
-  issues: ModuleIssue[],
-): ModuleIssue[] {
+function relocateIssues(text: string, issues: ModuleIssue[]): ModuleIssue[] {
   const doc = new K7Document(text);
   return issues.map((i) => {
     const { line, col } = locateK7x(doc, issueSegments(i.path ?? ""));
@@ -39,17 +36,6 @@ const syntaxFinding = (e: K7SyntaxError): ModuleIssue => ({
 /** A document's syntax error as its one finding, or no finding when it reads. */
 export const k7xSyntaxIssues = (doc: K7Document): ModuleIssue[] =>
   doc.errors.map(syntaxFinding);
-
-/** A k7x buffer's syntax error as a finding, or null when it reads. */
-export function k7xSyntaxIssue(text: string): ModuleIssue | null {
-  try {
-    parseTree(text);
-    return null;
-  } catch (e) {
-    if (!(e instanceof K7SyntaxError)) throw e;
-    return syntaxFinding(e);
-  }
-}
 
 /** A k7x buffer as a parser starts from: the document and its data, or the syntax error as the one issue. */
 export type K7Read =

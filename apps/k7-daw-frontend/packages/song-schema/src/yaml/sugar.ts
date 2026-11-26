@@ -1,8 +1,8 @@
 // sugar.ts — the short forms a .k7x file may write for one kind of data, expanded into that data before anything reads it.
 // A sequence's `notes("c4 d4 ~ e4")` and a graph's `runs([...])`; a write that changes what they expand to writes it in full (docs/sugar.md).
 
+import { fileKindFor } from "@studio/k7-wasm/fields";
 import { docPattern } from "../docExt";
-import { fileKindFor } from "./fields";
 
 // The one rule for writing expanded data back over a file's short forms.
 export { applySugared } from "@studio/k7x/sugared";

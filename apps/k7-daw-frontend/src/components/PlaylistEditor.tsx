@@ -3,6 +3,7 @@
 // it describes. See ../docs/playlists.md.
 
 import { parsePlaylist, stripDocExt } from "@studio/k7-wasm/schema";
+import type { Validity } from "@studio/k7-wasm/validate";
 import {
   appendPlaylistItem,
   movePlaylistItem,
@@ -11,7 +12,6 @@ import {
   removePlaylistItem,
 } from "@studio/song-schema/playlist";
 import { audioFilesOf } from "@studio/song-schema/records";
-import type { Validity } from "@studio/song-schema/yaml/validate";
 import { Button } from "@studio/ui/button";
 import { ArrowLeft, ListMusic, Loader2 } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";

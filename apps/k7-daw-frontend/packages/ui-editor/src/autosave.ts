@@ -8,7 +8,7 @@ import {
   type ModuleIssue,
   type Validity,
   validateFile,
-} from "@studio/song-schema/yaml/validate";
+} from "@studio/k7-wasm/validate";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   addFlusher,
