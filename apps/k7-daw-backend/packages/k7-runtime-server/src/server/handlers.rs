@@ -42,5 +42,8 @@ pub fn table() -> HandlerTable {
     super::transport::add(&mut t);
     state::add(&mut t);
     plugins::add(&mut t);
+    super::broadcast::add(&mut t);
+    super::machine::add(&mut t);
+    super::render::add(&mut t);
     t
 }

@@ -240,17 +240,23 @@ fn lists(sets: &[Vec<i32>]) -> Vec<K7IntList> {
 }
 
 impl Engine {
+    /// `f` with the host's pointer, the host kept alive for the call; `None` once it is gone.
+    fn with_host<R>(&self, f: impl FnOnce(*mut K7Host) -> R) -> Option<R> {
+        let guard = self.inner.host.read().ok()?;
+        let super::HostPtr(host) = (*guard)?;
+        Some(f(host))
+    }
+
     /// ANY THREAD. What the audio callback has cost since the last reset; `None` without the area or the host.
     pub fn callback_cost(&self) -> Option<CallbackCost> {
         let m = self.api().machine()?;
-        let host = self.raw_locked()?;
-        Some(unsafe { (m.callback_cost)(host) })
+        self.with_host(|host| unsafe { (m.callback_cost)(host) })
     }
 
     /// ANY THREAD. Clears the callback's cost window, to measure one gesture.
     pub fn reset_callback_cost(&self) {
-        if let (Some(m), Some(host)) = (self.api().machine(), self.raw_locked()) {
-            unsafe { (m.reset_callback_cost)(host) }
+        if let Some(m) = self.api().machine() {
+            self.with_host(|host| unsafe { (m.reset_callback_cost)(host) });
         }
     }
 
@@ -270,7 +276,7 @@ impl Engine {
         samples: &mut Vec<f32>,
     ) -> Drained {
         samples.clear();
-        let (Some(m), Some(host)) = (self.api().machine(), self.raw_locked()) else {
+        let Some(m) = self.api().machine() else {
             return Drained::default();
         };
         samples.resize(max_frames * 2, 0.0);
@@ -279,15 +285,14 @@ impl Engine {
             lost_frames: 0,
             sample_rate: 0.0,
         };
-        unsafe {
-            (m.drain_broadcast)(
-                host,
-                K7Str::of(session),
-                max_frames,
-                samples.as_mut_ptr(),
-                &mut info,
-            )
-        };
+        let ptr = samples.as_mut_ptr();
+        let ran = self.with_host(|host| unsafe {
+            (m.drain_broadcast)(host, K7Str::of(session), max_frames, ptr, &mut info)
+        });
+        if ran.is_none() {
+            samples.clear();
+            return Drained::default();
+        }
         let frames = info.frames.min(max_frames);
         samples.truncate(frames * 2);
         Drained {
@@ -299,8 +304,8 @@ impl Engine {
 
     /// THE BROADCAST SENDER'S THREAD ONLY. A listener who just arrived hears now, not the ring's backlog.
     pub fn skip_broadcast_to_live(&self, session: &str) {
-        if let (Some(m), Some(host)) = (self.api().machine(), self.raw_locked()) {
-            unsafe { (m.skip_broadcast_to_live)(host, K7Str::of(session)) }
+        if let Some(m) = self.api().machine() {
+            self.with_host(|host| unsafe { (m.skip_broadcast_to_live)(host, K7Str::of(session)) });
         }
     }
 }

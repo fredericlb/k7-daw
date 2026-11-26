@@ -4,7 +4,9 @@
 //! What a reader gets wrong: it keeps the real contract, not a convenient one: a job runs on the thread that
 //! runs the host, a quit ends the loop after the job running, and a job left queued is dropped at destroy.
 
+pub mod machine;
 pub mod project;
+pub mod render;
 pub mod transport;
 
 use super::Engine;
@@ -30,8 +32,8 @@ pub fn api() -> &'static K7EngineApi {
         transport: std::ptr::from_ref(&transport::TABLE).cast(),
         state: (&fake_state::STATE as *const super::state::K7StateApi).cast(),
         plugins: (&fake_plugins::PLUGINS as *const super::plugins::K7PluginsApi).cast(),
-        machine: std::ptr::null(),
-        render: std::ptr::null(),
+        machine: std::ptr::from_ref(&machine::TABLE).cast(),
+        render: std::ptr::from_ref(&render::TABLE).cast(),
         cli: std::ptr::null(),
     })
 }
@@ -47,6 +49,7 @@ pub struct FakeState {
     pub project: project::ProjectFake,
     pub transport: transport::TransportFake,
     pub state_area: fake_state::Area,
+    pub machine: machine::MachineFake,
 }
 
 struct Queued {

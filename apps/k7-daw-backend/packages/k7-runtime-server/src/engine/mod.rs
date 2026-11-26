@@ -8,8 +8,10 @@ pub mod fake;
 pub mod fake_plugins;
 pub mod fake_state;
 pub mod ffi;
+pub mod machine;
 pub mod plugins;
 pub mod project;
+pub mod render;
 pub mod state;
 pub mod transport;
 

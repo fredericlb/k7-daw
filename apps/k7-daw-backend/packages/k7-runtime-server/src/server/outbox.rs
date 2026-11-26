@@ -16,6 +16,7 @@ pub const MAX_QUEUED_REPLY_BYTES: usize = 32 * 1024 * 1024;
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Frame {
     Text(Arc<str>),
+    Binary(Arc<[u8]>),
     Ping,
     Close(u16, &'static str),
 }
@@ -74,6 +75,20 @@ impl Outbox {
             }
             s.bytes += payload.len();
             s.queue.push_back(Frame::Text(payload.clone()));
+        }
+        self.wake.notify_one();
+        true
+    }
+
+    /// ANY THREAD. A binary frame, refused while the socket has more than `max_backlog` bytes unsent.
+    pub fn post_binary(&self, payload: &Arc<[u8]>, max_backlog: usize) -> bool {
+        {
+            let mut s = self.lock();
+            if s.shut || s.bytes > max_backlog {
+                return false;
+            }
+            s.bytes += payload.len();
+            s.queue.push_back(Frame::Binary(payload.clone()));
         }
         self.wake.notify_one();
         true
@@ -138,8 +153,13 @@ impl Outbox {
                     return None;
                 }
                 if let Some(frame) = s.queue.pop_front() {
-                    if let Frame::Text(t) = &frame {
-                        s.bytes = s.bytes.saturating_sub(t.len());
+                    let sent = match &frame {
+                        Frame::Text(t) => t.len(),
+                        Frame::Binary(b) => b.len(),
+                        _ => 0,
+                    };
+                    if sent > 0 {
+                        s.bytes = s.bytes.saturating_sub(sent);
                         if s.bytes == 0 {
                             s.warned_full = false;
                         }

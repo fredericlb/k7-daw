@@ -83,6 +83,7 @@ pub async fn serve_socket(
             while let Some(frame) = client.outbox.next().await {
                 let (message, last) = match frame {
                     Frame::Text(t) => (Message::text(&*t), false),
+                    Frame::Binary(b) => (Message::Binary(b.to_vec().into()), false),
                     Frame::Ping => (Message::Ping(Default::default()), false),
                     Frame::Close(code, reason) => (
                         Message::Close(Some(CloseFrame {

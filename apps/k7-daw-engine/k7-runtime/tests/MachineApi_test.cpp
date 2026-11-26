@@ -76,11 +76,7 @@ void eachPitch(void* ctx, const K7ChannelPitch* p) {
 void eachDevice(void* ctx, const K7AudioDevice*) { ++*static_cast<int*>(ctx); }
 void eachInput(void* ctx, const K7InputDevice*) { ++*static_cast<int*>(ctx); }
 
-void sessionsAndMeters() {
-    core().init_settings_dir(K7Str{nullptr, 0});
-    K7Host* host = core().host_create();
-    CHECK(host != nullptr);
-    if (host == nullptr) return;
+void sessionsAndMeters(K7Host* host) {
     auto* engine = reinterpret_cast<studio::EngineHost*>(host);
     engine->applyFull("k7:a", song(), "");
 
@@ -139,7 +135,6 @@ void sessionsAndMeters() {
 
     CHECK(machine().instrument_installed(s("@instruments/nowhere/none.sfz")) == 0);
     CHECK(machine().instrument_installed(s("/no/such/file.sfz")) == 0);
-    core().host_destroy(host);
 }
 
 struct Done {
@@ -158,11 +153,7 @@ void onDone(void* ctx, const K7RenderOutcome* o) {
 }
 
 // A render waits on the message loop, so it runs on a worker while this thread runs the loop.
-void render() {
-    core().init_settings_dir(K7Str{nullptr, 0});
-    K7Host* host = core().host_create();
-    CHECK(host != nullptr);
-    if (host == nullptr) return;
+void render(K7Host* host) {
 
     Done notJson;
     renderArea().render(s("not json"), s("/tmp"), 0, &notJson, onDone);
@@ -191,14 +182,19 @@ void render() {
     CHECK(done.calls == 1);
     CHECK(done.code == 0 ? done.manifest.find("mix") != std::string::npos : !done.error.empty());
     renderArea().cancel();
-    core().host_destroy(host);
 }
 
 }  // namespace
 
 int main() {
     RUN(table);
-    RUN(sessionsAndMeters);
-    RUN(render);
+    // One host for the run: a second message loop in the process trips AppKit's periodic events.
+    core().init_settings_dir(K7Str{nullptr, 0});
+    K7Host* host = core().host_create();
+    CHECK(host != nullptr);
+    if (host == nullptr) return 1;
+    RUN([host] { sessionsAndMeters(host); });
+    RUN([host] { render(host); });
+    core().host_destroy(host);
     TEST_MAIN_END();
 }

@@ -37,11 +37,25 @@ fn answer(r: &Request) -> Result<(), Malformed> {
     }
     r.client.send(&reply);
     if r.msg.str("role")? == "driver" {
-        r.ctx
+        let new = r
+            .ctx
             .bindings()
             .drivers
-            .entry(r.client.id)
-            .or_insert_with(|| r.session.clone());
+            .insert(r.client.id, r.session.clone())
+            .is_none();
+        if new {
+            let session = r.session.clone();
+            r.ctx.engine.post(move |mt| mt.add_driver(&session));
+            // A driver arriving after the build is told what that build complained of, which was said only once.
+            for (subject, message) in r.ctx.engine.standing_warnings(&r.session) {
+                r.client.send(&json!({
+                    "type": "engine-warning",
+                    "subject": subject,
+                    "message": message,
+                    "session": r.session,
+                }));
+            }
+        }
     }
     Ok(())
 }

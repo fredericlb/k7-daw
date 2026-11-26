@@ -4,6 +4,7 @@
 //! frame can never reach the next connection that took the old one's place.
 
 use super::held_notes::HeldNotes;
+use super::machine::MachineState;
 use super::msg::Msg;
 use super::outbox::Outbox;
 use super::pending::PendingQueries;
@@ -13,7 +14,7 @@ use crate::engine::Engine;
 use crate::pairing::gate::{Gate, Out};
 use crate::wire::json;
 use serde_json::Value;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::{Arc, Mutex, MutexGuard};
 
@@ -56,6 +57,10 @@ pub struct Bindings {
     pub drivers: HashMap<u64, String>,
     /// WHICH project each socket is about, bound ONCE from its first real message, so a state frame reaches only those.
     pub subscribers: HashMap<u64, String>,
+    /// The codec each listener asked for; absent is float32.
+    pub codecs: HashMap<u64, u8>,
+    /// The listeners that hear the mix by microphone, which the interface must not play back into.
+    pub silent: HashSet<u64>,
 }
 
 /// What a socket was bound to when it left: the sessions the engine must be told it no longer serves.
@@ -89,6 +94,8 @@ pub struct Ctx {
     pub supersede: Supersede,
     /// The notes each socket's `midi-live` holds down, released when it closes.
     pub held_notes: HeldNotes,
+    /// The machine verbs' shared state: the device list last sent, the arrivals, the one render.
+    pub machine: MachineState,
     clients: Mutex<HashMap<u64, Arc<Client>>>,
     bindings: Mutex<Bindings>,
     next_id: AtomicU64,
@@ -106,6 +113,7 @@ impl Ctx {
             plugins: PluginState::default(),
             supersede: Supersede::default(),
             held_notes: HeldNotes::default(),
+            machine: MachineState::default(),
             clients: Mutex::default(),
             bindings: Mutex::default(),
             next_id: AtomicU64::new(1),
@@ -142,10 +150,7 @@ impl Ctx {
         let departed = {
             let mut b = self.bindings();
             b.subscribers.remove(&client.id);
-            Departed {
-                listener: b.listeners.remove(&client.id),
-                driver: b.drivers.remove(&client.id),
-            }
+            super::broadcast::leave(&self.engine, &mut b, client.id)
         };
         self.perform(client, self.gate.forget_socket(client.id));
         self.clients().remove(&client.id);

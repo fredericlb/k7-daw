@@ -3,11 +3,14 @@
 //! What a reader gets wrong: the port is bound before the host's loop runs and so before the audio device
 //! opens (a refused connection reads as an absent engine), and `whoami` is answered with the loop not yet running.
 
+pub mod audio;
+pub mod broadcast;
 pub mod conn;
 pub mod ctx;
 pub mod dispatch;
 pub mod handlers;
 pub mod held_notes;
+pub mod machine;
 pub mod msg;
 pub mod outbox;
 pub mod pending;
@@ -15,6 +18,7 @@ pub mod plugin_scan;
 pub mod plugin_state;
 mod plugins;
 mod project;
+mod render;
 pub mod scan_board;
 pub mod state;
 mod state_frame;
@@ -103,6 +107,7 @@ pub struct Running {
     ctx: Arc<Ctx>,
     addr: SocketAddr,
     stop: watch::Sender<bool>,
+    sender: audio::Sender,
 }
 
 impl Running {
@@ -119,13 +124,21 @@ impl Running {
     }
 
     /// Blocks on the message loop until a quit, then stops the server; returns the process's exit code.
-    pub fn run(self) -> i32 {
+    pub fn run(mut self) -> i32 {
         self.host.run();
+        // A render waiting on the loop that just stopped would hold the exit for good: told to stop, it abandons.
+        self.host.engine().api().cancel_renders();
         state::uninstall(&self.ctx);
+        self.sender.stop();
         let _ = self.stop.send(true);
         // Each socket is told it is going away and given its moment to say so.
         let waited = Instant::now();
         while self.ctx.client_count() > 0 && waited.elapsed() < SHUTDOWN_GRACE {
+            std::thread::sleep(Duration::from_millis(10));
+        }
+        while self.ctx.machine.rendering.load(std::sync::atomic::Ordering::SeqCst)
+            && waited.elapsed() < SHUTDOWN_GRACE
+        {
             std::thread::sleep(Duration::from_millis(10));
         }
         self.runtime.shutdown_timeout(SHUTDOWN_GRACE);
@@ -250,12 +263,14 @@ pub fn start(api: Api, cfg: ServeConfig) -> Result<Running, String> {
         "[startup] port bound at {}ms (audio device opens on the message loop; its timing is logged when it completes)",
         since()
     );
+    let sender = audio::spawn(ctx.clone(), boot);
     Ok(Running {
         host,
         runtime,
         ctx,
         addr,
         stop,
+        sender,
     })
 }
 
