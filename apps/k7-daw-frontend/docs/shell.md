@@ -265,7 +265,7 @@ bottom margin for the bar instead.
 |---|---|---|
 | header | `shell/ProjectHeader.tsx` | no device has a header row, so every control floats over the panes and their whole height is the song's; on a desk or a pad, at the bottom right the spinner, the view capsule, the command-bar button (in the rail, above Update and a divider, on a tablet in portrait or a phone, whose row is short of room), the dock's Mixer (an icon) and, last, the chevron that unfolds the rail upward, carrying the unsaved and problem counts while folded; Close, Settings, the right panels' buttons, the pane switcher and git's Update and Save, top to bottom so Save sits nearest the chevron, are the rail's (`shell/PanelRail.tsx`) |
 | git capsule | `shell/HeaderGit.tsx` | Save with its count, a menu (Pull, Saves); while a merge waits, one "Resolve N conflicts" button and a banner |
-| bar | `shell/FloatingBar.tsx`, `shell/ShellTransport.tsx` | the transport capsule, floating at the bottom left (a phone's bar ends with the rail's chevron, `shell/RailChevron.tsx`, and its rail stands above the measured bar); a desk or a pad draws its 56 px controls at 40 px (`--k7-float-h`, CSS `zoom`), so it reads as one family with the small view capsule (`shell/ViewCapsule.tsx`); the whole floating row sits 16 px from the foot over the panes, which reach the foot and keep no room for it, the backdrop's wave behind them, or right above the dock while it is open (`--k7-float-bottom`), and a right panel and the toasts end above it; the timeline's tool is its corner's, left of "+ lane" (`shell/ToolMenu.tsx`) |
+| bar | `shell/FloatingBar.tsx`, `shell/ShellTransport.tsx` | the transport capsule, floating at the bottom left (a phone's bar spans its width on one row, ends with the rail's chevron, `shell/RailChevron.tsx`, and drops the overview in portrait; its rail stands above the measured bar); a desk or a pad draws its 56 px controls at 40 px (`--k7-float-h`, CSS `zoom`), so it reads as one family with the small view capsule (`shell/ViewCapsule.tsx`); the whole floating row sits 16 px from the foot over the panes, which reach the foot and keep no room for it, the backdrop's wave behind them, or right above the dock while it is open (`--k7-float-bottom`), and a right panel and the toasts end above it; the timeline's tool is its corner's, left of "+ lane" (`shell/ToolMenu.tsx`) |
 | panels | `shell/panels.tsx` | the registry: an id, a glyph and a title each, in the kit's `SidePanel` (Pad, Desk) or `Sheet` (Phone) |
 | dock | `shell/panels.tsx` (`DockFrame`), `hooks/useEditorDock.ts` | the bottom dock, in the kit's `EditorDock` (Pad, Desk) or `EditorSheet` (Phone); it holds the editors, the Mixer or a track's chain |
 
@@ -346,8 +346,8 @@ The transport capsule holds Play, Stop, Loop and Record, the clock (`role="timer
 volume (`slider "Master volume"`), all in `group "Transport"`. The metronome opens a bubble, not a dialog
 (`shell/MetronomeTempo.tsx`): the tempo with Tap, the time signature and the click's switch and level sit
 together because they are one question, the song's pulse, and a bubble leaves the song in view while it
-is set. A phone draws the same metronome, the bpm beside its icon, in a strip above the capsule with the
-clock, overview and volume.
+is set. A phone draws the same capsule on one row across its width, small like a desk's, with the
+master as a knob, and drops the overview in portrait, where there is no width for it.
 
 **Record has two meanings, and the long press is the second.** A press arms and records the lanes; a
 long press, a right click or ArrowDown opens a one-item menu, "Record the output", for what the project
@@ -378,8 +378,7 @@ counting in two units make every position a conversion. There is no separate clo
 No device draws a header row: the song takes the whole height, and every control floats. A phone's
 floating bar ends with the rail's chevron, and its rail holds what a header and a menu held: Close,
 Settings, the panels with the Mixer, the pane's view options (Lane views or Graph views), the panes,
-the command bar's button, git's Update and Save. Its strip above the bar carries the metronome with the
-bpm, whose bubble holds the tempo, the time signature and the click. A Resolve button and the
+the command bar's button, git's Update and Save. Its bar is one row, the metronome with the bpm in it. A Resolve button and the
 background spinner float at its top right while there is one. A panel opens as a full-screen sheet.
 
 ### The Mixer is a dock occupant: strips left to right

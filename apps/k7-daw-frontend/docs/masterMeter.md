@@ -5,10 +5,10 @@ holding the meter, the output fader's handle and the mark at unity, then a clip 
 after a pass that clipped — a **fix** button that takes the whole mix down until that pass would
 have peaked at **-6 dB**.
 
-**A tablet in portrait draws it as a knob** (`knob`): the pointer is the level set, the arc is the level
+**A tablet in portrait and a phone draw it as a knob** (`knob`): the pointer is the level set, the arc is the level
 heard, in the same three zones, and the whole arc turns red while the pass is latched as clipped, the
 value under it. Its floating row is short of width, and one round control says both facts in its own
-footprint. A desk, a tablet in landscape and a phone keep the lane. On the knob: drag up or down,
+footprint. A desk and a tablet in landscape keep the lane. On the knob: drag up or down,
 arrows, release commits; a double click returns to 0 dB.
 
 `MasterMeter.tsx` is the component. It is a **leaf that subscribes to the engine store itself**,
