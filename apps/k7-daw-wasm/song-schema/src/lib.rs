@@ -28,8 +28,8 @@ pub use error::SchemaError;
 pub use keyframes::{Ease, Key, value_at};
 pub use preview::{BeatLine, CurvePreview, Span, XY, playhead, preview};
 pub use render_settings::{
-    EXPORT_FORMATS, EXPORT_QUALITIES, ExportFormat, ExportQuality, RenderScene, ResolvedVideo, VideoSettings, VideoSize,
-    parse_video_settings, resolve_video_settings,
+    EXPORT_FORMATS, EXPORT_QUALITIES, ExportFormat, ExportQuality, RenderScene, ResolvedVideo, VideoSettings,
+    VideoSize, parse_video_settings, resolve_video_settings,
 };
 pub use stems::{
     STEM_NEUTRAL, STEM_RANGE, STEMS, STEMS_DIR, Stem, deck_platter, stem_control, stem_file, stem_lane, stem_lane_of,

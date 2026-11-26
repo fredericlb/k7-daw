@@ -27,7 +27,10 @@ mod tests {
 
     #[test]
     fn it_reads_project_tags_and_tolerates_a_broken_file() {
-        assert_eq!(project_tags_of("project({ name: \"a\", tags: [\"live\", 3, \"\"] })\n"), ["live"]);
+        assert_eq!(
+            project_tags_of("project({ name: \"a\", tags: [\"live\", 3, \"\"] })\n"),
+            ["live"]
+        );
         assert!(project_tags_of("project({ name: \"a\" })\n").is_empty());
         assert!(project_tags_of("project([\n").is_empty());
         assert!(project_tags_of("project({ tags: \"live\" })\n").is_empty());

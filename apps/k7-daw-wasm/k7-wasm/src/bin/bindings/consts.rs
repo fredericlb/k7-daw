@@ -2,10 +2,10 @@
 // A reader would get wrong that ts-rs writes these: it emits types only, so each table is printed here from the Rust constant.
 
 use serde_json::{Value, json};
+use song::doc::{TRACK_CATEGORIES, TRACK_PREFIXES};
 use song::modules::MODULE_TYPES;
 use song::modules::names as n;
 use song::modules::types::{IO_MODULES, IO_SOURCES};
-use song::doc::{TRACK_CATEGORIES, TRACK_PREFIXES};
 use song::views::surfaces::SURFACE_TYPES;
 use song_schema::{
     ASPECTS, EXPORT_FORMATS, EXPORT_QUALITIES, STEM_NEUTRAL, STEM_RANGE, STEMS, STEMS_DIR, Stem, TICKS_PER_QUARTER,
@@ -356,7 +356,12 @@ fn plain() -> Vec<[String; 3]> {
         export(
             "The frame shapes on offer, and the pixels each means.",
             "ASPECTS",
-            &Value::Array(ASPECTS.iter().map(|a| json!({ "name": a.name, "w": a.w, "h": a.h })).collect()),
+            &Value::Array(
+                ASPECTS
+                    .iter()
+                    .map(|a| json!({ "name": a.name, "w": a.w, "h": a.h }))
+                    .collect(),
+            ),
         ),
         export(
             "The quality presets an export may ask for, lowest first.",
@@ -386,7 +391,12 @@ fn plain() -> Vec<[String; 3]> {
         export(
             "The instrument codes a track name may lead with: each one's family and the label a row shows.",
             "TRACK_PREFIXES",
-            &Value::Object(TRACK_PREFIXES.iter().map(|(p, f, l)| ((*p).to_owned(), json!([f.name(), l]))).collect()),
+            &Value::Object(
+                TRACK_PREFIXES
+                    .iter()
+                    .map(|(p, f, l)| ((*p).to_owned(), json!([f.name(), l])))
+                    .collect(),
+            ),
         ),
     ]
 }

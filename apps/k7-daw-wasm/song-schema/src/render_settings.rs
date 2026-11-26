@@ -126,10 +126,7 @@ fn setting(word: &str, into: &mut VideoSettings) -> bool {
     match key {
         "size" => {
             if let Some(h) = value.strip_suffix('p').and_then(number) {
-                into.size = Some(VideoSize {
-                    width: None,
-                    height: h,
-                });
+                into.size = Some(VideoSize { width: None, height: h });
             } else if let Some((w, h)) = value.split_once('x')
                 && let (Some(w), Some(h)) = (number(w), number(h))
             {
@@ -194,16 +191,37 @@ mod tests {
     fn a_line_leaves_out_what_it_does_not_say() {
         assert_eq!(read(&[]), Some(VideoSettings::default()));
         let s = read(&["size=720p", "QUALITY=Max", "from=1:30", "to=2:00.5"]).unwrap();
-        assert_eq!(s.size, Some(VideoSize { width: None, height: 720.0 }));
+        assert_eq!(
+            s.size,
+            Some(VideoSize {
+                width: None,
+                height: 720.0
+            })
+        );
         assert_eq!(s.quality, Some(ExportQuality::Max));
         assert_eq!((s.from, s.to), (Some(90.0), Some(120.5)));
         let wh = read(&["size=1280x720"]).unwrap();
-        assert_eq!(wh.size, Some(VideoSize { width: Some(1280.0), height: 720.0 }));
+        assert_eq!(
+            wh.size,
+            Some(VideoSize {
+                width: Some(1280.0),
+                height: 720.0
+            })
+        );
     }
 
     #[test]
     fn a_word_it_does_not_understand_refuses_the_line() {
-        for bad in ["size=big", "size=720", "size=720p=x", "quality=ultra", "from=a", "from=1:2:3", "fps=30", "size"] {
+        for bad in [
+            "size=big",
+            "size=720",
+            "size=720p=x",
+            "quality=ultra",
+            "from=a",
+            "from=1:2:3",
+            "fps=30",
+            "size",
+        ] {
             assert_eq!(read(&[bad]), None, "{bad}");
         }
     }
@@ -234,6 +252,9 @@ mod tests {
             duration_sec: 0.0,
             ..scene
         };
-        assert_eq!(resolve_video_settings(&VideoSettings::default(), &empty).frame_count, 1.0);
+        assert_eq!(
+            resolve_video_settings(&VideoSettings::default(), &empty).frame_count,
+            1.0
+        );
     }
 }

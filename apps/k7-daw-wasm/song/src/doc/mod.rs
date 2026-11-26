@@ -23,8 +23,8 @@ mod types;
 mod wire;
 
 pub use arrange::{
-    ParsedName, TRACK_PREFIXES, TrackFamily, order_tracks, parse_track_name, sort_tracks_by_kind, track_kind, track_kind_rank,
-    track_label,
+    ParsedName, TRACK_PREFIXES, TrackFamily, order_tracks, parse_track_name, sort_tracks_by_kind, track_kind,
+    track_kind_rank, track_label,
 };
 pub use category::{TRACK_CATEGORIES, TrackCategory, auto_colors, category_of_text, category_shade, track_category};
 pub use compile::{Compiled, Failure, Request, Spent, Vsts, compile, compile_keeping};

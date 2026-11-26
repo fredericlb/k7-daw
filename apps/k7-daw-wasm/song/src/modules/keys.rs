@@ -56,7 +56,10 @@ fn asset_exts_for(param: &str) -> Vec<String> {
 }
 
 fn family_exts(family: &str) -> Option<&'static [&'static str]> {
-    LIBRARY_FILE_FAMILIES.iter().find(|(f, _)| *f == family).map(|(_, e)| *e)
+    LIBRARY_FILE_FAMILIES
+        .iter()
+        .find(|(f, _)| *f == family)
+        .map(|(_, e)| *e)
 }
 
 /// Those of `files` a param of this name can take: a library pick only the `@<library>/…` sound files; a panel naming its `family` filters by that.
@@ -87,15 +90,27 @@ mod tests {
     fn a_path_names_the_module_it_points_into() {
         let key = module_key_from_path;
         assert_eq!(key("modules/audio/amp/nam/module.k7x").as_deref(), Some("amp/nam"));
-        assert_eq!(key("/home/a/ws/modules/instruments/bass/module.k7x").as_deref(), Some("bass"));
-        assert_eq!(key("C:\\ws\\modules\\audio\\reverb\\module.k7x").as_deref(), Some("reverb"));
+        assert_eq!(
+            key("/home/a/ws/modules/instruments/bass/module.k7x").as_deref(),
+            Some("bass")
+        );
+        assert_eq!(
+            key("C:\\ws\\modules\\audio\\reverb\\module.k7x").as_deref(),
+            Some("reverb")
+        );
         assert_eq!(key("modules//audio//reverb//module.k7x").as_deref(), Some("reverb"));
         assert_eq!(key("modules/modules/audio/x/y.k7x").as_deref(), Some("x"));
     }
 
     #[test]
     fn a_path_that_points_into_no_module_names_none() {
-        for p in ["", "audio/reverb/module.k7x", "modules/audio/module.k7x", "modules/nope/x/module.k7x", "modules"] {
+        for p in [
+            "",
+            "audio/reverb/module.k7x",
+            "modules/audio/module.k7x",
+            "modules/nope/x/module.k7x",
+            "modules",
+        ] {
             assert_eq!(module_key_from_path(p), None, "{p}");
         }
     }
@@ -107,9 +122,17 @@ mod tests {
     }
 
     fn files() -> Vec<String> {
-        ["a.nam", "B.JSON", "c.onnx", "@k7-core/irs/hall.wav", "@k7-core/samples/k.flac", "plain.wav", "@k7-core/models/x.nam"]
-            .map(str::to_owned)
-            .to_vec()
+        [
+            "a.nam",
+            "B.JSON",
+            "c.onnx",
+            "@k7-core/irs/hall.wav",
+            "@k7-core/samples/k.flac",
+            "plain.wav",
+            "@k7-core/models/x.nam",
+        ]
+        .map(str::to_owned)
+        .to_vec()
     }
 
     fn picks(param: &str, family: Option<&str>) -> Vec<String> {
@@ -131,7 +154,10 @@ mod tests {
 
     #[test]
     fn a_panels_family_wins_over_the_bound_params_name() {
-        assert_eq!(picks("whatever", Some("models")), ["a.nam", "B.JSON", "@k7-core/models/x.nam"]);
+        assert_eq!(
+            picks("whatever", Some("models")),
+            ["a.nam", "B.JSON", "@k7-core/models/x.nam"]
+        );
         assert_eq!(picks("onnx", Some("nope")), ["c.onnx"]);
     }
 }

@@ -8,7 +8,9 @@ use std::collections::HashSet;
 /// `path` split on `/`, or None when any segment is empty, `.` or `..`.
 fn plain_segments(path: &str) -> Option<Vec<&str>> {
     let segs: Vec<&str> = path.split('/').collect();
-    segs.iter().all(|s| !s.is_empty() && *s != "." && *s != "..").then_some(segs)
+    segs.iter()
+        .all(|s| !s.is_empty() && *s != "." && *s != "..")
+        .then_some(segs)
 }
 
 /// A line as the workspace path of its record, its slashes trimmed; None for one that leaves the workspace or names a library (`@`).
@@ -137,7 +139,10 @@ mod tests {
 
     #[test]
     fn a_workspace_path_keeps_its_form_with_its_slashes_trimmed() {
-        assert_eq!(record_path_of("/records/thunder.mp3/").as_deref(), Some("records/thunder.mp3"));
+        assert_eq!(
+            record_path_of("/records/thunder.mp3/").as_deref(),
+            Some("records/thunder.mp3")
+        );
         for bad in ["../x.wav", "a/./b.wav", "a\\b.wav", "  ", "@k7-core/songs/a", "a//b"] {
             assert_eq!(record_path_of(bad), None, "{bad}");
         }
@@ -161,8 +166,14 @@ mod tests {
             at("records/hells-bells/hells-bells.flac"),
             (Some("records/hells-bells/hells-bells.flac".to_owned()), true, true)
         );
-        assert_eq!(at("records/thunder.mp3"), (Some("records/thunder.mp3".to_owned()), true, false));
-        assert_eq!(at("records/gone.wav"), (Some("records/gone.wav".to_owned()), false, false));
+        assert_eq!(
+            at("records/thunder.mp3"),
+            (Some("records/thunder.mp3".to_owned()), true, false)
+        );
+        assert_eq!(
+            at("records/gone.wav"),
+            (Some("records/gone.wav".to_owned()), false, false)
+        );
         assert_eq!(at("../escape.wav"), (None, false, false));
     }
 
@@ -212,6 +223,9 @@ mod tests {
             ],
         }];
         assert_eq!(audio_files_of(&tree, false), ["records/a.flac"]);
-        assert_eq!(audio_files_of(&tree, true), ["records/a.flac", "records/stems/drums.wav"]);
+        assert_eq!(
+            audio_files_of(&tree, true),
+            ["records/a.flac", "records/stems/drums.wav"]
+        );
     }
 }

@@ -27,7 +27,9 @@ fn edge(data: &Value, field: &str, num: f64, den: f64) -> Option<f64> {
     if raw.is_empty() {
         return None;
     }
-    parse_position_on(raw, num, den).ok().filter(|b| b.is_finite() && *b >= 0.0)
+    parse_position_on(raw, num, den)
+        .ok()
+        .filter(|b| b.is_finite() && *b >= 0.0)
 }
 
 /// The window `text` states, or None when it states none or does not parse: a half-typed edge reads as absent, not as 0.
@@ -77,13 +79,7 @@ mod tests {
 
     #[test]
     fn a_lone_from_leaves_to_open_and_a_lone_to_starts_at_the_first_beat() {
-        assert_eq!(
-            window("from(\"2:1\")"),
-            Some(SeqWindow {
-                from: 4.0,
-                to: None
-            })
-        );
+        assert_eq!(window("from(\"2:1\")"), Some(SeqWindow { from: 4.0, to: None }));
         assert_eq!(
             window("to(\"3:1\")"),
             Some(SeqWindow {
