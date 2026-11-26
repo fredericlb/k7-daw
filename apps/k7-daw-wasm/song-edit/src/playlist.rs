@@ -89,9 +89,8 @@ mod tests {
 
     #[test]
     fn items_are_strings_or_maps_and_the_rest_is_skipped() {
-        let p =
-            parse_playlist("title(\"Set\")\nitems([\"One\", song(\"Two\").variant(\"live\"), 3, song(\"\")])\n")
-                .expect("reads");
+        let p = parse_playlist("title(\"Set\")\nitems([\"One\", song(\"Two\").variant(\"live\"), 3, song(\"\")])\n")
+            .expect("reads");
         assert_eq!(p.title.as_deref(), Some("Set"));
         let songs: Vec<_> = p
             .items
