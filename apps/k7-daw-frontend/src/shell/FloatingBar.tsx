@@ -134,7 +134,7 @@ export function FloatingBar({
     <div
       className={cn(
         "float pointer-events-auto flex h-14 min-w-0 items-center gap-1 rounded-full p-1.5",
-        phone && "flex-1",
+        phone && !noOverview && "flex-1",
       )}
     >
       {buttons}
@@ -164,11 +164,13 @@ export function FloatingBar({
         aria-label={m["transport.region"]()}
         className={cn(
           "pointer-events-none flex min-w-0 items-stretch",
-          phone && "flex-1",
+          phone && !noOverview && "flex-1",
         )}
       >
         {capsule}
       </div>
+      {/* The capsule stretches only for the overview to fill; without it the chevron is pushed to the edge instead. */}
+      {phone && <span className="flex-1" />}
       {phone && (railChevron ?? commandButton)}
     </>
   );
