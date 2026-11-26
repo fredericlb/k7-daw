@@ -6,8 +6,7 @@
 import { Dialog } from "radix-ui";
 import * as React from "react";
 import { createPortal } from "react-dom";
-import { Button } from "./button";
-import { Info, Maximize2, Minimize2 } from "./icons";
+import { Info } from "./icons";
 import { cn } from "./lib/utils";
 import {
   focusTitleOnKeyboardOpen,
@@ -19,36 +18,8 @@ import {
 interface DockProps extends PanelProps {
   expanded: boolean;
   onExpandedChange: (expanded: boolean) => void;
-  /** The Expand toggle's name, the same in both states: `aria-pressed` says which one it is in. */
+  /** The phone sheet's grabber's name; `aria-pressed` says whether the sheet is expanded. */
   expandLabel: string;
-  /** The toggle's tooltip while expanded; the name stays `expandLabel`. */
-  collapseLabel?: string;
-}
-
-/** The 44 round toggle between the actions and Close. */
-function ExpandButton({
-  expanded,
-  onExpandedChange,
-  expandLabel,
-  collapseLabel,
-}: Pick<
-  DockProps,
-  "expanded" | "onExpandedChange" | "expandLabel" | "collapseLabel"
->) {
-  const Glyph = expanded ? Minimize2 : Maximize2;
-  return (
-    <Button
-      variant="ghost"
-      size="round"
-      aria-label={expandLabel}
-      title={expanded ? (collapseLabel ?? expandLabel) : expandLabel}
-      aria-pressed={expanded}
-      onClick={() => onExpandedChange(!expanded)}
-      className="aria-pressed:bg-on-fill aria-pressed:text-lavender aria-pressed:shadow-(--k7-highlight)"
-    >
-      <Glyph className="size-[18px]" strokeWidth={2} />
-    </Button>
-  );
 }
 
 // undefined outside a dock (the row renders inline), null until the header's slot is mounted.
@@ -126,17 +97,7 @@ const headerOf = (
     onClose={p.onClose}
     closeLabel={p.closeLabel}
     sheet={sheet}
-    actions={
-      <>
-        {p.actions}
-        <ExpandButton
-          expanded={p.expanded}
-          onExpandedChange={p.onExpandedChange}
-          expandLabel={p.expandLabel}
-          collapseLabel={p.collapseLabel}
-        />
-      </>
-    }
+    actions={p.actions}
   />
 );
 
@@ -161,18 +122,87 @@ function tallest(dock: HTMLElement): number {
 
 const STEP = 16;
 
-/** The top-edge grabber: a drag, or the arrow keys, sets the dock's height. */
+/** How long a press holds before a vertical move expands or collapses instead of resizing, ms. */
+const HOLD_MS = 400;
+/** How far a press may wander and still count as held, px. */
+const HOLD_SLOP = 6;
+/** How far a held press travels before it expands or collapses, px. */
+const SWIPE = 24;
+
+/** A press on a grabber: held still, then moved up it expands and down it collapses; moved at once, `drag` takes it over. */
+function holdThenSwipe(
+  e: React.PointerEvent<HTMLElement>,
+  onExpandedChange: (expanded: boolean) => void,
+  setHeld: (held: boolean) => void,
+  drag?: (dy: number) => void,
+) {
+  e.preventDefault();
+  const handle = e.currentTarget;
+  handle.setPointerCapture(e.pointerId);
+  const startY = e.clientY;
+  let held = false;
+  let dragging = false;
+  let done = false;
+  const timer = setTimeout(() => {
+    held = true;
+    setHeld(true);
+  }, HOLD_MS);
+  const move = (ev: PointerEvent) => {
+    const dy = ev.clientY - startY;
+    if (held) {
+      if (done || Math.abs(dy) < SWIPE) return;
+      done = true;
+      onExpandedChange(dy < 0);
+      return;
+    }
+    if (!dragging && Math.abs(dy) > HOLD_SLOP) {
+      clearTimeout(timer);
+      dragging = true;
+    }
+    if (dragging) drag?.(dy);
+  };
+  const end = () => {
+    clearTimeout(timer);
+    setHeld(false);
+    handle.removeEventListener("pointermove", move);
+    handle.removeEventListener("pointerup", end);
+    handle.removeEventListener("pointercancel", end);
+  };
+  handle.addEventListener("pointermove", move);
+  handle.addEventListener("pointerup", end);
+  handle.addEventListener("pointercancel", end);
+}
+
+/** The pill a grabber draws; it widens and brightens once a press is held, so the person knows a move will expand or collapse. */
+function Pill({ held }: { held: boolean }) {
+  return (
+    <span
+      aria-hidden
+      className={cn(
+        "h-[5px] rounded-full transition-all duration-150",
+        held ? "w-14 bg-white/80" : "w-9 bg-white/35",
+      )}
+    />
+  );
+}
+
+/** The top-edge grabber: a drag, or the arrow keys, sets the dock's height; a held press moved up or down expands or collapses it. */
 function ResizeHandle({
   dock,
   height,
   onHeightChange,
   label,
+  expanded,
+  onExpandedChange,
 }: {
   dock: React.RefObject<HTMLElement | null>;
   height: number;
   onHeightChange: (h: number) => void;
   label: string;
+  expanded: boolean;
+  onExpandedChange: (expanded: boolean) => void;
 }) {
+  const [held, setHeld] = React.useState(false);
   const set = (h: number) => {
     const el = dock.current;
     if (!el) return;
@@ -182,20 +212,10 @@ function ResizeHandle({
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     const el = dock.current;
     if (!el) return;
-    e.preventDefault();
-    const handle = e.currentTarget;
-    handle.setPointerCapture(e.pointerId);
-    const startY = e.clientY;
     const startH = el.offsetHeight;
-    const move = (ev: PointerEvent) => set(startH + startY - ev.clientY);
-    const end = () => {
-      handle.removeEventListener("pointermove", move);
-      handle.removeEventListener("pointerup", end);
-      handle.removeEventListener("pointercancel", end);
-    };
-    handle.addEventListener("pointermove", move);
-    handle.addEventListener("pointerup", end);
-    handle.addEventListener("pointercancel", end);
+    holdThenSwipe(e, onExpandedChange, setHeld, (dy) => {
+      if (!expanded) set(startH - dy);
+    });
   };
   const onKeyDown = (e: React.KeyboardEvent) => {
     const to: Record<string, number> = {
@@ -204,6 +224,12 @@ function ResizeHandle({
       Home: Number.POSITIVE_INFINITY,
       End: 0,
     };
+    // Enter does what a held press and a move do: expand, or collapse when expanded.
+    if (e.key === "Enter") {
+      e.preventDefault();
+      onExpandedChange(!expanded);
+      return;
+    }
     if (!(e.key in to)) return;
     e.preventDefault();
     set(to[e.key] ?? height);
@@ -225,7 +251,7 @@ function ResizeHandle({
       onKeyDown={onKeyDown}
       className="absolute inset-x-0 -top-7 mx-auto flex h-11 w-24 cursor-row-resize touch-none items-start justify-center rounded-full pt-[33px] outline-none focus-visible:shadow-(--k7-focus-ring)"
     >
-      <span aria-hidden className="h-[5px] w-9 rounded-full bg-white/35" />
+      <Pill held={held} />
     </div>
   );
 }
@@ -279,6 +305,8 @@ export function EditorDock({
           height={height}
           onHeightChange={onHeightChange}
           label={resizeLabel}
+          expanded={head.expanded}
+          onExpandedChange={head.onExpandedChange}
         />
         {headerOf(head, setSlot)}
         <SlotCtx.Provider value={slot}>
@@ -286,6 +314,36 @@ export function EditorDock({
         </SlotCtx.Provider>
       </Dialog.Content>
     </Dialog.Root>
+  );
+}
+
+/** The sheet's grabber: a held press moved up expands the sheet, moved down folds it; Enter does the same. */
+function SheetGrabber({
+  label,
+  expanded,
+  onExpandedChange,
+}: {
+  label: string;
+  expanded: boolean;
+  onExpandedChange: (expanded: boolean) => void;
+}) {
+  const [held, setHeld] = React.useState(false);
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      aria-pressed={expanded}
+      title={label}
+      onPointerDown={(e) => holdThenSwipe(e, onExpandedChange, setHeld)}
+      onKeyDown={(e) => {
+        if (e.key !== "Enter" && e.key !== " ") return;
+        e.preventDefault();
+        onExpandedChange(!expanded);
+      }}
+      className="absolute inset-x-0 top-0 mx-auto flex h-11 w-24 touch-none items-start justify-center rounded-full pt-2 outline-none focus-visible:shadow-(--k7-focus-ring)"
+    >
+      <Pill held={held} />
+    </button>
   );
 }
 
@@ -322,6 +380,11 @@ export function EditorSheet({
           className,
         )}
       >
+        <SheetGrabber
+          label={head.expandLabel}
+          expanded={head.expanded}
+          onExpandedChange={head.onExpandedChange}
+        />
         {headerOf(head, setSlot, true)}
         <SlotCtx.Provider value={slot}>
           <SheetCtx.Provider value>

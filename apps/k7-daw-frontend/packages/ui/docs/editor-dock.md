@@ -33,7 +33,7 @@ time; the right panel (`side-panel`) is for the vertical lists.
 - **The dock holds one occupant and is named by it.** The host swaps the children, the title and
   the Dialog name together; the header row is the occupant's own (`DockHeaderRow`), so a Mixer
   shows its count and a chain its track where an editor shows its tools. Strips and cards scroll
-  sideways inside the body, and on a phone Expand takes the sheet full screen.
+  sideways inside the body, and on a phone an expanded sheet is full screen.
 - **Escape leaves the expanded state before it closes the dock.** The kit does it for its own Escape;
   a host registering the dock in an Escape ladder must do the same in its closer.
 - **The height is the host's.** `EditorDock` is controlled (`height`, `onHeightChange`) so the host can
@@ -42,8 +42,12 @@ time; the right panel (`side-panel`) is for the vertical lists.
   `separator` with `aria-valuenow`, so the arrow keys (Up and Down by 16 px, Home and End for the
   extremes) resize it as well. Its hit area is 44 px tall, reaching above the dock so the header's
   row stays clear; the pill is 5 px.
-- **A phone sheet has no grabber.** Nothing drags it, so nothing pretends to; Close is the way out.
-- **The Expand tooltip follows the state** (`collapseLabel` while expanded); the accessible name
-  stays `expandLabel`, `aria-pressed` carries the state.
+- **Expanding is a gesture on the grabber, not a button.** A press held still for 400 ms, then moved
+  24 px up, expands the dock; moved down, it folds it back. The pill widens and brightens once the
+  press is held, so the person knows the next move expands instead of resizing; a press that moves
+  at once is a resize. Enter on the focused grabber toggles it, the keyboard's way to the same thing.
+  The title bar keeps the editor's own options and Close only.
+- **The phone sheet has the same grabber**, expand and fold only (nothing resizes a sheet); its name
+  is `expandLabel`, `aria-pressed` says the state, and Enter or Space toggles it.
 - **The phone sheet is partial and non-modal** (`--k7-dock-sheet-top`) so the lanes stay in view;
   expanded it takes `--k7-sheet-top` and traps focus like any sheet.
