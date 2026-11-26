@@ -1,7 +1,7 @@
 // ServePairing.cpp — the gate every message passes first: a page from a site not allowed is closed at its
 // handshake, a loopback peer drives, a LAN peer drives unpaired while the LAN is open and once paired
 // otherwise, and approving a device is the machine's own business. The verbs and the flow are in docs/pairing.md.
-// The one thing a reader would get wrong: relayed traffic (tunnel, WebRTC) reaches us from loopback, and is trusted.
+// The one thing a reader would get wrong: relayed traffic (the tunnel) reaches us from loopback, and is trusted.
 
 #include "ServeContext.h"
 

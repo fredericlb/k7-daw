@@ -15,7 +15,7 @@ restated here.
 | any frame from the hub proves the tunnel alive, not only a pong | a busy tunnel need not answer a ping to be known alive; a quiet one that misses its next ping is dropped, which is what the redial is for |
 | the root cache folder, never the path, is what a root's `name` is | a name is checked against `[A-Za-z0-9][A-Za-z0-9._-]*` before anything is joined, and a refused one closes its channel with a reason |
 | one agent per registry, whether or not the engine is up | the engine's port is asked at each channel, so a relaunch that moves it is followed; a channel opened while the engine is down closes with the dial's own error |
-| no WebRTC | an `rtc-offer` is answered with an `rtc-answer` carrying an error and the browser stays on the tunnel: only a remote server's page would need it, and no page is hosted (`docs/rust-supervisor-plan.md`, decision 1); `rtc.test.ts` skips an agent with `rtc: false` |
+| no WebRTC | the browser reaches an engine on its own network or through the relay: a direct data channel would serve only a remote server's page, and no page is hosted (`docs/rust-supervisor-plan.md`, decision 1); an `rtc-offer` is a frame no agent reads |
 
 ## The jobs a jobs channel may ask
 

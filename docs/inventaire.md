@@ -82,12 +82,6 @@ without anyone seeing it.
 (`apps/k7-daw-frontend/user-docs/25-syntax-instruments.md`), and the C++ pastes its generated JSON
 (`apps/k7-daw-engine/k7-runtime/engine/GraphDspPlugin.cpp`).
 
-### `detectTransients` is called once per file, by the analysis
-
-`apps/k7-daw-frontend/packages/audio-probe/src/waveform.ts` exports it and only `@studio/audio-analysis`'s `buildEnvelope`
-calls it, while it builds a file's envelope; the result goes into the `{source}.cache` sidecar.
-Nothing calls it per clip region, and nothing should.
-
 ### A deep import bypasses the `exports` maps
 
 `apps/k7-daw-engine/k7-runtime/scripts/render-once.ts` → `apps/k7-daw-frontend/packages/take-render/src/renderProject.ts`. The file looks

@@ -70,34 +70,6 @@ describe("orderHits", () => {
   });
 });
 
-// Node has no location: `candidatesFor` reads the page's protocol and href, and nothing else.
-describe("candidatesFor and the WebRTC offer", () => {
-  beforeEach(() => {
-    vi.stubGlobal("location", {
-      protocol: "https:",
-      href: "https://app.k7.test/media",
-    });
-  });
-
-  afterEach(() => vi.unstubAllGlobals());
-
-  const dataChannels = (candidates: { url: string }[]) =>
-    candidates.filter((c) => c.url.startsWith("rtc:"));
-
-  it("offers no data channel before a claim, and one after it", () => {
-    const tunnelled = { ...target, rtc: true };
-    const listed = candidatesFor(tunnelled, "");
-    const driving = candidatesFor(tunnelled, "", { claim: true });
-    expect(dataChannels(listed)).toEqual([]);
-    expect(dataChannels(driving)).toHaveLength(1);
-  });
-
-  it("offers none for an engine whose supervisor holds no tunnel", () => {
-    const driving = candidatesFor(target, "", { claim: true });
-    expect(dataChannels(driving)).toEqual([]);
-  });
-});
-
 // The page's own machine is the one thing it can learn without the server: nothing answered there last time.
 describe("a loopback that just refused", () => {
   /** Enough of a socket for `probeOne`: it refuses on the first microtask, and never opens. */

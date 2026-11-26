@@ -1,12 +1,8 @@
 // pairing.ts — this browser's side of LAN pairing: the key an engine gave it, sent first on every socket it
-// opens, and the request that earns one. A page on the engine's own machine and the server's relay need
+// opens. A page on the engine's own machine and the server's relay need
 // none — the engine trusts both — so a key is only ever needed over the LAN. See docs/pairing.md.
 
-import { openSocket } from "./rtcSocket.ts";
-
 const PREFIX = "k7.engine-pair.";
-/** How long a request waits for the musician: the engine forgets it after two minutes too. */
-const REQUEST_TIMEOUT_MS = 2 * 60 * 1000;
 
 // Which engine answered at which address, learnt by the probe: a client opens a URL and must know whose key to show.
 const engineAt = new Map<string, string>();
@@ -75,57 +71,4 @@ export function deviceName(): string {
           ? "Safari"
           : "a browser";
   return `${device} · ${browser}`;
-}
-
-export type PairingOutcome = "paired" | "denied" | "expired" | "failed";
-
-/**
- * Ask the engine at `url` to pair this device: `onCode` is handed the code to show, which the musician
- * checks on the machine before approving. Resolves once answered; the key is stored on "paired".
- */
-export function requestPairing(
-  url: string,
-  engineId: string,
-  onCode: (code: string) => void,
-  name: string = deviceName(),
-): Promise<PairingOutcome> {
-  return new Promise((resolve) => {
-    let ws: WebSocket;
-    let done = false;
-    const finish = (outcome: PairingOutcome) => {
-      if (done) return;
-      done = true;
-      clearTimeout(timer);
-      try {
-        ws.close();
-      } catch {
-        /* not open */
-      }
-      resolve(outcome);
-    };
-    const timer = setTimeout(() => finish("expired"), REQUEST_TIMEOUT_MS);
-    try {
-      ws = openSocket(url);
-    } catch {
-      return finish("failed");
-    }
-    ws.onopen = () => ws.send(JSON.stringify({ type: "pair-request", name }));
-    ws.onmessage = (ev) => {
-      let m: { type?: string; code?: string; key?: string };
-      try {
-        m = JSON.parse(String(ev.data));
-      } catch {
-        return;
-      }
-      if (m.type === "pair-pending" && m.code) onCode(m.code);
-      else if (m.type === "paired" && m.key) {
-        rememberPairKey(engineId, m.key);
-        noteEngineAt(url, engineId);
-        finish("paired");
-      } else if (m.type === "pair-denied") finish("denied");
-      else if (m.type === "error") finish("failed");
-    };
-    ws.onerror = () => finish("failed");
-    ws.onclose = () => finish("failed");
-  });
 }

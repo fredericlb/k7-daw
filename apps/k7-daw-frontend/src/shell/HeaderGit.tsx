@@ -24,19 +24,10 @@ import { useEffect } from "react";
 import type { GitTransport } from "../git/gitApi";
 import { openConflict } from "../git/gitScreens";
 import { type BarView, barView } from "../git/gitState";
-import type { PullState } from "../git/gitTypes";
+import { pulledSentence } from "../git/pulledSentence";
 import { save, useSaving } from "../git/saveAct";
 import type { GitHandle } from "../git/useGitState";
 import { m } from "../paraglide/messages.js";
-
-const pulledSentence = (p: PullState | null): string | null =>
-  p === "up-to-date"
-    ? m["git.pulledNothing"]()
-    : p === "empty-remote"
-      ? m["git.emptyRemote"]()
-      : p === "merged"
-        ? m["git.pulledMerged"]()
-        : null;
 
 /** When the technical branch was last written, as the menu's second title line; null before the first auto-save. */
 const autosaveLine = (v: BarView): string | null => {

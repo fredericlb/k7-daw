@@ -100,8 +100,8 @@ are searching.
 `CommandParams` replaces the input with ONE row: the command's name, then a field per parameter,
 named by its placeholder, then what Enter does this press. The strip KEEPS ITS OWN OPAQUE FILL
 while it waits: the wait is an inset ring of the accent breathing once a second (`animate-pending`
-in `src/index.css`; a still ring under reduced motion). `barTint` gives that class list and the host
-applies it, through the bar's `onPending`, since only the host knows its own padding: a command
+in `src/index.css`; a still ring under reduced motion). the host
+draws it, from the bar's `onPending`, since only the host knows its own padding: a command
 half-given is the shell waiting on you, and a bar that looks the same asking or idle is one nobody
 looks at. A wash over the strip instead of a ring would thin the fill, and the page would then read
 through the fields being typed. **Every question is on screen at once**, and an answer given three

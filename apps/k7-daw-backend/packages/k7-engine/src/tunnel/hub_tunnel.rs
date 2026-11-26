@@ -1,6 +1,6 @@
 //! tunnel.rs — ONE supervisor's tunnel as the hub sees it: the channels it
 //! carries, each one's unsent bytes counted apart so a stalled reader's channel is closed alone, the file
-//! requests the agent makes, and its WebRTC offers. Uploads are `put.rs`'s.
+//! requests the agent makes. Uploads are `put.rs`'s.
 
 use std::collections::{HashMap, HashSet};
 use std::sync::atomic::{AtomicBool, Ordering};
@@ -8,7 +8,6 @@ use std::sync::{Arc, Mutex, MutexGuard};
 use std::time::Duration;
 
 use serde_json::{Value, json};
-use tokio::sync::oneshot;
 use tokio_tungstenite::tungstenite::Message;
 
 use super::backpressure::HARD_LIMIT_BYTES;
@@ -40,8 +39,6 @@ struct Carried {
 
 pub(crate) struct State {
     channels: HashMap<i64, Carried>,
-    offers: HashMap<i64, oneshot::Sender<Result<String, String>>>,
-    next_req: i64,
     next_ch: i64,
     ignored: HashSet<String>,
     pub(crate) uploads: Uploads,
@@ -72,8 +69,6 @@ impl Tunnel {
             alive: AtomicBool::new(true),
             state: Mutex::new(State {
                 channels: HashMap::new(),
-                offers: HashMap::new(),
-                next_req: 1,
                 next_ch: 1,
                 ignored: HashSet::new(),
                 uploads: Uploads::default(),
@@ -164,38 +159,13 @@ impl Tunnel {
         }
     }
 
-    /// A browser's WebRTC offer handed to the supervisor, and its answer.
-    pub async fn signal(&self, sdp: &str, timeout: Duration) -> Result<String, String> {
-        let (tx, rx) = oneshot::channel();
-        let req = {
-            let mut s = self.lock();
-            let req = s.next_req;
-            s.next_req += 1;
-            s.offers.insert(req, tx);
-            req
-        };
-        self.tell(&json!({ "t": "rtc-offer", "req": req, "sdp": sdp }));
-        match tokio::time::timeout(timeout, rx).await {
-            Ok(Ok(answer)) => answer,
-            Ok(Err(_)) => Err("tunnel dropped".into()),
-            Err(_) => {
-                self.lock().offers.remove(&req);
-                Err("the engine's machine did not answer the offer".into())
-            }
-        }
-    }
-
-    /// The socket went: every channel ends, every offer fails, every half-sent upload is dropped.
+    /// The socket went: every channel ends, every half-sent upload is dropped.
     pub fn shutdown(&self) {
-        let (offers, channels, uploads) = {
+        let (channels, uploads) = {
             let mut s = self.lock();
-            let offers: Vec<_> = s.offers.drain().map(|(_, o)| o).collect();
             let channels: Vec<_> = s.channels.drain().map(|(_, c)| c.shared).collect();
-            (offers, channels, s.uploads.drain())
+            (channels, s.uploads.drain())
         };
-        for o in offers {
-            let _ = o.send(Err("tunnel dropped".into()));
-        }
         for c in channels {
             c.ended();
         }
@@ -275,15 +245,6 @@ impl Tunnel {
             AgentMessage::Get { req, ch, path } => {
                 let (t, roots) = (self.clone(), self.roots_of(ch));
                 tokio::spawn(async move { t.serve_get(req, &roots, &path).await });
-            }
-            AgentMessage::RtcAnswer { req, sdp, error } => {
-                let Some(o) = self.lock().offers.remove(&req) else {
-                    return;
-                };
-                let _ = o.send(match sdp.filter(|s| !s.is_empty()) {
-                    Some(s) => Ok(s),
-                    None => Err(error.unwrap_or_else(|| "offer refused".into())),
-                });
             }
         }
     }

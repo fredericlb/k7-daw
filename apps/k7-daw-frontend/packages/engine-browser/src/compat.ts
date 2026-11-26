@@ -5,7 +5,7 @@
 
 import type { CataloguePlugin } from "@studio/web-protocol/compat";
 import { pairFrameFor } from "./pairing.ts";
-import { openSocket } from "./rtcSocket.ts";
+import { openSocket } from "./socket.ts";
 
 export {
   type CataloguePlugin,

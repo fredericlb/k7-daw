@@ -38,7 +38,7 @@ switch and fixed forward. The rules the program keeps are the C++ supervisor's p
   the hub's twin until now and the agent's from here; the path map, the file requests, the per-channel queues and
   the backpressure marks (256 KB drop, 1 MB high water) are ported. `engine-tunnel`'s suites stay the one judge:
   the crate builds a `tunnel_harness` binary and `testAgents.ts` finds it in the cargo target.
-- **The WebRTC fragments** (`rtcFrames.ts`), only if WebRTC is kept (below).
+- **The WebRTC fragments**: not ported, WebRTC is gone (below).
 
 ## What it takes from the backend, and what it needs beside
 
@@ -135,7 +135,7 @@ the crate's (`apps/k7-daw-backend/packages/k7-supervisor/docs/`, `schema/`).
   handler and the unhandled-exception filter, once, `crash-supervisor-<pid>.dmp` in the state folder.
 - **`findTool`** is `process::find_tool`: PATH, then the package managers' folders, absolute only.
 - **WebRTC** is gone with the C++: the notices for mbedTLS, miniz and libdatachannel too. The TypeScript reference
-  agent and the page's `rtcSocket.ts` still speak it; deleting them is a decision of its own.
+  agent and the page's `rtcSocket.ts` are deleted too.
 
 **M9's checklist, as M5 left it: what the C++ did that no milestone ported.** Each was a decision for the switch:
 

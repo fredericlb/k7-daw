@@ -1,36 +1,34 @@
 import { describe, expect, it } from "vitest";
-import { relayUrls } from "./probe.ts";
+import { relayWsUrl } from "./probe.ts";
 
-describe("relayUrls", () => {
+describe("relayWsUrl", () => {
   it("reaches a relay on ANOTHER origin at that origin, not the page's", () => {
-    const r = relayUrls(
+    const r = relayWsUrl(
       "https://app.priv.k7.rocks",
       "05ff",
       "t.k",
       "https://app.priv.k7.rocks/@local/ws/p.k7",
     );
-    expect(r.ws).toBe("wss://app.priv.k7.rocks/api/engine/05ff/ws?ticket=t.k");
-    expect(r.rtc).toBe("rtc:https://app.priv.k7.rocks/api/engine/05ff/rtc");
+    expect(r).toBe("wss://app.priv.k7.rocks/api/engine/05ff/ws?ticket=t.k");
   });
 
   it("reaches a relay given as a PATH on the page's own origin", () => {
-    const r = relayUrls(
+    const r = relayWsUrl(
       "/pl8",
       "e1",
       "x",
       "https://studio.frediver.se/songs/a.k7",
     );
-    expect(r.ws).toBe("wss://studio.frediver.se/pl8/api/engine/e1/ws?ticket=x");
-    expect(r.rtc).toBe("rtc:https://studio.frediver.se/pl8/api/engine/e1/rtc");
+    expect(r).toBe("wss://studio.frediver.se/pl8/api/engine/e1/ws?ticket=x");
   });
 
   it("dials a plain-HTTP relay over ws:", () => {
-    const r = relayUrls(
+    const r = relayWsUrl(
       "http://localhost:8789",
       "e1",
       "x",
       "http://localhost:5223/",
     );
-    expect(r.ws).toBe("ws://localhost:8789/api/engine/e1/ws?ticket=x");
+    expect(r).toBe("ws://localhost:8789/api/engine/e1/ws?ticket=x");
   });
 });

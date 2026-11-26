@@ -11,7 +11,6 @@
     "./projects": "./projects.ts",
     "./tree": "./tree.ts",
     "./quality": "./quality.ts",
-    "./rtc-frames": "./rtcFrames.ts",
     "./performance": "./performance.ts",
     "./compat": "./compat.ts",
     "./playlists": "./playlists.ts",
