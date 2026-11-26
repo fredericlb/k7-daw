@@ -90,5 +90,5 @@ the resolved curve.
 | `timecode.format` clamps a beat before the start to the start and refuses only a time beyond 9e15 ticks | the TypeScript answers `1:1` for a negative beat; a time no float counts exactly has no spelling |
 | a picture's beat lines are at most four per sample (counting at least 160), thinned to a whole number of bars past that | a span of millions of beats (a tiny frequency, a huge duration) would otherwise allocate past what a wasm32 memory holds and trap |
 | a non-positive frequency is drawn as a frequency of 1 | where the TypeScript drew infinity; the sweep below leaves it out |
-| the compiler keeps its curve sampling in TypeScript (`apps/k7-daw-frontend/packages/song/src/curveSample.ts`) | it samples point by point, which a call per sample would make slower |
+| the compiler samples its curves in Rust (`apps/k7-daw-wasm/song/src/curves/bake.rs`), the editor's preview through the wasm module | the compiler samples point by point, which a call per sample would make slower |
 | the curve vocabulary (`LFO_SHAPES`, `CURVE_CUTS`, `ADSR_DEFAULT_LEVEL`) is plain TS in `apps/k7-daw-frontend/packages/song-schema/src/curveVocab.ts` | ts-rs emits types, not values; the parity test holds each listed value accepted by the Rust |

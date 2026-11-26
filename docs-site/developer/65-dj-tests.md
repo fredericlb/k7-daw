@@ -46,8 +46,8 @@ From the root, `npm run test` runs `scripts/workspaces.mjs test`, which runs the
 | `apps/k7-daw-frontend/packages/song-schema/src/reference.test.ts` | Reference file rules and paths. |
 | `apps/k7-daw-frontend/packages/song-schema/src/stems.test.ts` | Stem names and node naming. |
 | `apps/k7-daw-frontend/packages/song-schema/src/yaml/mixMarkers.test.ts`, `mixYaml.test.ts` | The cue sheet: reading, and writing markers into the text. |
-| `apps/k7-daw-frontend/packages/song/src/scaffoldLive.test.ts` | The mix and live scaffolds compile and wire what they say. |
-| `apps/k7-daw-frontend/packages/song/src/turntableAssembly.test.ts`, `migrateSet*.test.ts` | The deck assembly; migrations giving old sets a new set's files. |
+| `apps/k7-daw-wasm/song-edit/tests/replay_lane/main.rs` | The mix and live scaffolds compile and wire what they say. |
+| `apps/k7-daw-wasm/song/tests/all/assemblies.rs` | The deck assembly; migrations giving old sets a new set's files. |
 | `apps/k7-daw-wasm/verbs/tests/playlists.rs`, `playlistStems.test.ts`, `systemOnnx.test.ts` | The verbs. |
 | `apps/k7-daw-wasm/verbs/tests/transcribe.rs` | `track transcribe`'s refusals and writes. |
 | The tests in `apps/k7-daw-frontend/packages/audio-analysis/src/` | Decode through a stand-in engine, envelope arithmetic on a synthetic click track, the sidecar. |

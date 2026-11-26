@@ -286,7 +286,7 @@ const ModuleBuilder = lazy(() =>
   })),
 );
 
-/** The shot a new video project is scaffolded with (apps/k7-daw-frontend/packages/song/src/scaffold.ts) — a picture holding only it is untouched. */
+/** The shot a new video project is scaffolded with (apps/k7-daw-wasm/song-edit/src/scaffold.rs) — a picture holding only it is untouched. */
 const SCAFFOLD_SAMPLE = /(^|\/)clips\/sample\.mp4$/;
 
 /** How long a second Ctrl+Z has, once the text pane's own history is spent, to reach the project journal. */
@@ -2167,7 +2167,7 @@ export default function App({
   /** Find the open project's node of the builder's module and watch its plugin — `watchPluginParams` is what makes the values LIVE. */
   useEffect(() => {
     if (!builder) return void setBuilderPlugin(null);
-    // The key a chain would write — `amps/neural-amp-modeler`, or `@k7-core/audio/amps/nam` for a library module (@studio/song/moduleTypes).
+    // The key a chain would write — `amps/neural-amp-modeler`, or `@k7-core/audio/amps/nam` for a library module (@studio/song-schema/moduleTypes).
     const module =
       libraryModuleRef(builder.path) ?? moduleKeyFromPath(builder.path);
     if (!module) return void setBuilderPlugin(null);

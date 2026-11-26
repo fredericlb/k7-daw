@@ -91,4 +91,4 @@ quarter of the previous).
 
 `npm test` in the package runs vitest over the `*.test.ts` beside each module. The k7x writers are
 tested on literal texts (an edit must keep comments and every other byte); `validate` behaviour is covered
-in `apps/k7-daw-frontend/packages/song/src/yaml/validate.test.ts` alongside the loader.
+in `apps/k7-daw-wasm/song/tests/all/` beside the loader.

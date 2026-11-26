@@ -1,7 +1,7 @@
 // VideoReadersStrip.tsx — the per-placement dock for an open picture lane's file: one
 // small <video> reader per `events:` entry, with Set From / Set To writing the reader's
 // current timecode into that placement's `from` / `length`. Both are surgical text
-// rewrites of the open file (@studio/song/yaml/videoTrackFile); autosave writes it.
+// rewrites of the open file (@studio/song-schema/yaml/videoTrackFile); autosave writes it.
 
 import { Button } from "@studio/ui/button";
 import { X } from "@studio/ui/icons";

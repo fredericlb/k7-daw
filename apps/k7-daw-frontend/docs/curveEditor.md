@@ -54,8 +54,8 @@ coming back to the sine loses nothing — only what is picked is written.
 
 **The preview is one call into Rust, and the graph's curve card draws the same picture** — `draftPreview`
 in `apps/k7-daw-frontend/src/curveDraft.ts` asks `@studio/k7-wasm` for the span, the lines and the grid at once.
-The module is `apps/k7-daw-wasm/song-schema`, a port of the arithmetic `@studio/song` still bakes the
-engine's breakpoints with in `apps/k7-daw-frontend/packages/song/src/curveSample.ts`; a sweep holds the two together
+The module is `apps/k7-daw-wasm/song-schema`, the arithmetic the compiler bakes the
+engine's breakpoints with, in `apps/k7-daw-wasm/song/src/curves/bake.rs`; a sweep holds the preview to it
 (`apps/k7-daw-frontend/packages/song-schema/docs/wasmBoundary.md`). A drawn curve is drawn over its bars (four, or past the last point), an oscillator over
 one cycle or its duration (below); an envelope has no song time, so it is drawn over its own length
 from the trigger.

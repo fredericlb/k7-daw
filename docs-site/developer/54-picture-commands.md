@@ -24,16 +24,16 @@ Rules every picture verb shares (`verbs/picture.ts`):
   seconds or `m:ss`, parsed by `parseWallClock`. A musical spelling would be a second dialect for
   the same number. Two shots within half a millisecond of one start are refused, not guessed between.
 - **Containment.** `laneFile` accepts one path segment and resolves it to a picture lane's own file
-  (`pictureLaneFile` in `apps/k7-daw-frontend/packages/song/src/pictureLanes.ts`): `nodes/`, or a chain project's `tracks/`.
+  (`picture_lane_file` in `apps/k7-daw-wasm/song-edit/src/lane_files.rs`): `nodes/`, or a chain project's `tracks/`.
 - **Undo.** `put` calls `h.snapshot(abs)` before writing, so every verb is one journal entry.
 - **Writers.** All edits go through `apps/k7-daw-frontend/packages/song-schema/src/yaml/videoTrackFile.ts` and
-  `apps/k7-daw-frontend/packages/song-schema/src/yaml/videoKeys.ts`: surgical, by placement **index** (a ref may be
+  `apps/k7-daw-wasm/song-edit/src/track_file.rs`: surgical, by placement **index** (a ref may be
   placed twice; an activation has no ref), millisecond rounding. `splitVideoPlacementAt` inserts
   the tail right after the head (file order decides covering), keeps `fadeIn` on the head and
   `fadeOut` on the tail, cuts `animate` exactly (`splitAnimate`), and advances the tail's
   `from` by `head × speed`. `project add` / `project remove` move shots in the ordinary lane pass,
   which keeps a seconds `start` in seconds.
-- **Two-file act.** `picture lane new` (`createPictureLaneFile` in `apps/k7-daw-frontend/packages/song/src/projectFiles.ts`)
+- **Two-file act.** `picture lane new` (`create_picture_lane_file` in `apps/k7-daw-wasm/song-edit/src/lane_files.rs`)
   writes the lane and states `trackOrder` with it above the other picture lanes, refusing a name an
   audio lane already has. `picture mute` writes the lane's bypass (`setLaneBypass`), and
   `picture lane order` rewrites `trackOrder`, counting the picture lanes bottom first.
@@ -71,7 +71,7 @@ clip's `sound`. In a node project nothing else is made: the picture lane's own `
 it, as the engine track `<lane>#audio` (the song crate's compile), straight to MIX unless
 `"<lane>#audio"` is wired in `graph.k7x`. A chain project spells no port, so there one audio lane is
 created with `video_source: <lane>` and no events of its own, plus its mixer strip. At compile,
-`apps/k7-daw-frontend/packages/song/src/videoSound.ts` derives the sound clips from the picture lane's shots: each shot
+`apps/k7-daw-wasm/song/src/pictures/sound.rs` derives the sound clips from the picture lane's shots: each shot
 heard over its visible span minus what later shots cover, at its speed (`varispeed`, or the engine's
 stretcher for a shot saying `pitch("keep")`), with fades as crossfades. Rerunning does only what is
 missing. The `event …` verbs refuse the sound row, except remove, which sets `silent: true` on the shot.

@@ -35,7 +35,7 @@ of a graph and a module file. Nothing routes to it yet; the TypeScript stays the
 `laneStrip`'s plan, its chain project branch, `createPictureLane` and `stripNewLane` are in `lane_strip_plan.rs` and
 `lane_files.rs` (`rustNodeSide.md`); the other song-schema file writers (`trackFile`, `sequenceFile`, `videoTrackFile`,
 `takeFile`, `curveFile`, `alternativeFile`, `mixFile`, `assemblyFile`, `playlist`) are each used by one module of the editor and
-are ported with it. `apps/k7-daw-frontend/packages/song/src/rawDoc.ts` does not exist; its vector file is empty.
+are ported with it.
 
 ## The proof
 

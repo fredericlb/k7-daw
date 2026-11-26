@@ -136,7 +136,7 @@ export const api = {
   // The shared half, spread rather than re-listed, so this app and @studio/project-shell cannot drift on a route name.
   ...projectApi,
 
-  // --- The workspace's playlists (`_playlists/`, see @studio/song/docs/playlists.md) ---
+  // --- The workspace's playlists (`_playlists/`, see apps/k7-daw-frontend/packages/song/docs/playlists.md) ---
 
   // Only the LISTING is its own route: `read`/`write` above already serve any workspace path, and `playlist new` is a command.
   playlists: () => fget<{ playlists: PlaylistInfo[] }>("/playlists"),
@@ -310,7 +310,7 @@ export const api = {
       ref,
     }),
 
-  // A node's presets, files under a presets tree; applying and saving are `node preset` verbs — @studio/song/docs/userPresets.md.
+  // A node's presets, files under a presets tree; applying and saving are `node preset` verbs — apps/k7-daw-frontend/packages/song/docs/userPresets.md.
   nodePresets: (node: string) =>
     fget<NodePresets>(`/presets?node=${encodeURIComponent(node)}`),
 };

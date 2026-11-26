@@ -18,7 +18,7 @@ that cross widgets live elsewhere:
 | No knob, slider, fader or number on an `@` parameter; EQ bands as faders; no lone group | `atControlIssues`, `eqBandIssues`, `loneGroupIssues` in `apps/k7-daw-frontend/packages/panel-rules/src/aiOrganize.ts` |
 
 Panels inherited through `extends` merge their top-level `widgets` per id
-(`apps/k7-daw-frontend/packages/song/src/moduleResolve.ts`); widgets marked `hidden` are dropped when the panel is
+(`apps/k7-daw-wasm/song/src/resolve/extends.rs`); widgets marked `hidden` are dropped when the panel is
 resolved.
 
 On the wire, a panel is `WebModuleUI` with `WebWidget`s (`apps/k7-daw-frontend/packages/graph-model/types.ts`). The
