@@ -1,6 +1,6 @@
 // dock-property.tsx — one of an editor's settings in its title bar, read as "name: value"; a tap opens a bubble above it
 // holding the control that changes it (a knob, a switch…). Every editor shows its settings this one way (docs/editor-dock.md).
-// What a reader gets wrong: the bubble's control is the caller's, so a value that commits on release still does.
+// What a reader gets wrong: the bubble holds the control alone; a knob already shows its value, and the bar shows it too.
 
 import { Popover as PopoverPrimitive } from "radix-ui";
 import type * as React from "react";
@@ -51,9 +51,6 @@ export function DockProperty({
           className="menu z-(--k7-z-menu) flex min-w-16 flex-col items-center gap-2 rounded-(--k7-r-menu) p-3 text-popover-foreground outline-hidden data-[state=open]:animate-[k7-menu-in_var(--k7-dur-menu)_var(--k7-ease-spring)]"
         >
           {children}
-          <span className="type-mono-value text-fg-2 tabular-nums">
-            {value}
-          </span>
         </PopoverPrimitive.Content>
       </PopoverPrimitive.Portal>
     </PopoverPrimitive.Root>
