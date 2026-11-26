@@ -204,8 +204,9 @@ const DROP_ROW = "outline outline-1 -outline-offset-1 outline-primary";
 // A header that can be dragged to another slot. `cursor-pointer` stays: the same press still selects the row.
 const GRAB_ROW = "cursor-grab active:cursor-grabbing";
 // The corner's new-lane button, named because it is spelled twice: bare, and as a dropdown's trigger.
+// 24 px in the 28 px ruler row: 2 px above and below.
 const NEW_TRACK_BTN =
-  "type-label flex h-7 items-center gap-1 rounded-full bg-(--k7-track-btn-off) px-3 text-[11px] text-foreground hover:bg-on-fill";
+  "type-label flex h-6 items-center gap-1 rounded-full bg-(--k7-track-btn-off) px-3 text-[11px] text-foreground hover:bg-on-fill";
 // How wide a pass must be before its loop mark also gets the glyph: the 8px icon needs its own width plus air.
 const MIN_LOOP_GLYPH_PX = 18;
 
