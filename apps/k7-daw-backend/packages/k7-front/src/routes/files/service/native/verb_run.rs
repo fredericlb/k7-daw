@@ -190,6 +190,12 @@ pub async fn answer(c: &Call, ctx: &Ctx) -> Response {
             .unwrap_or_default()
             .to_owned();
         let args = pending.get("args").cloned().unwrap_or(Value::Null);
+        // The answers past the call that moved are another run's: the line is asked again from there.
+        let at = pending
+            .get("at")
+            .and_then(Value::as_u64)
+            .map_or(usize::MAX, |n| n as usize);
+        replay.answers.truncate(at);
         let value = asker.call(&route, &args).await;
         replay
             .answers

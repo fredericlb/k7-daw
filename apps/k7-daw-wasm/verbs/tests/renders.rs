@@ -37,7 +37,7 @@ fn a_call_with_no_answer_is_pending_and_lands_nothing() {
     let file = format!("{}/clips/tone.wav", p.dir);
     assert_eq!(
         a.pending,
-        Some(json!({ "route": "POST /verb-host/peak", "args": { "file": file } }))
+        Some(json!({ "route": "POST /verb-host/peak", "args": { "file": file }, "at": 0 }))
     );
     assert!(a.log.is_empty() && !a.refused);
     assert_eq!(p.files(), before, "a pending run lands nothing");
@@ -274,4 +274,27 @@ fn a_live_node_is_bounced_then_frozen() {
     assert_eq!(failed.answer.refuse, ["freeze failed: render timed out"]);
     assert_eq!(failed.before, failed.after);
     p.refused("node freeze ghost", "freeze: no module \"ghost\" in the chains");
+}
+
+// A call whose args moved since the answer was given is asked again, and the answers after it are dropped with it.
+#[test]
+fn a_call_that_moved_drops_the_answers_after_it() {
+    let mut h_fs = song_edit::MemFs::from_tree("", Vec::new());
+    let mut ids = || "id".to_owned();
+    let mut h = verbs::Host::new(
+        &mut h_fs,
+        song_edit::confine::Env::at("/home", "/meta"),
+        "/w/p",
+        &mut ids,
+    );
+    h.answers = vec![
+        json!({ "route": "GET /a", "args": { "n": 1 }, "value": { "ok": 1 } }),
+        json!({ "route": "GET /b", "args": {}, "value": { "ok": 2 } }),
+    ];
+    assert_eq!(h.call("GET /a", json!({ "n": 1 })), Ok(Ok(json!({ "ok": 1 }))));
+    assert!(h.call("GET /b", json!({ "moved": true })).is_err());
+    assert_eq!(
+        h.pending,
+        Some(json!({ "route": "GET /b", "args": { "moved": true }, "at": 1 }))
+    );
 }

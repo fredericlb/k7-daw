@@ -18,12 +18,17 @@ export interface VerbAnswer {
   graph?: unknown;
   /** Whether the line's writes landed. */
   committed?: boolean;
+  /** The asks the page performs (`page renderPicture`). */
+  asks?: { route: string; args: Record<string, unknown> }[];
 }
 
 interface Runner {
   open(at: string): Promise<void>;
   videoDoc(token?: string): Promise<{ doc: unknown } | { error: string }>;
   videoErrors(token?: string): Promise<{ errors: string[]; diagnostics: [] }>;
+  pictureScene(
+    token?: string,
+  ): Promise<{ scene: unknown; mixes: boolean } | { error: string }>;
   close(): void;
 }
 
@@ -164,6 +169,7 @@ interface RouteAnswer {
   rev?: string;
   revBefore?: string;
   graph?: unknown;
+  asks?: { route: string; args: Record<string, unknown> }[];
 }
 
 /** Runs one line; `at` is the project as the workspace spells it, empty for the open one. */
@@ -199,6 +205,7 @@ export async function runVerb(
     changed: r.changed ?? [],
     committed: r.landed === true,
     ...(r.graph !== undefined ? { graph: r.graph } : {}),
+    ...(r.asks?.length ? { asks: r.asks } : {}),
   };
 }
 
@@ -232,6 +239,32 @@ export async function pictureOf(
   const doc = await r.videoDoc(token);
   if ("error" in doc) throw new Error(doc.error);
   return { doc: doc.doc, errors: await r.videoErrors(token) };
+}
+
+/** `picture render`'s ask as the page performs it: the scene from the Worker runtime, posted to the picture job; its job id. */
+export async function renderPictureVia(
+  svc: VerbService,
+  workspace: string,
+  at: string,
+  token: string,
+  args: Record<string, unknown>,
+): Promise<string> {
+  const s = await (await runnerFor(svc, workspace, at)).pictureScene(token);
+  if ("error" in s) throw new Error(s.error);
+  const { job } = await post<{ job: string }>(
+    svc,
+    workspace,
+    "/verb-host/picture",
+    {
+      at,
+      into: args.into,
+      scene: s.scene,
+      format: args.format,
+      settings: args.settings,
+      audio: args.audio === true && s.mixes,
+    },
+  );
+  return job;
 }
 
 /** Closes every runner (a spec file's afterAll). */

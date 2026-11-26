@@ -186,6 +186,7 @@ impl Project {
             };
             assert!(answers.len() < 64, "`{line}` keeps calling: {pending}");
             let value = answer(&pending);
+            answers.truncate(pending["at"].as_u64().map_or(usize::MAX, |n| n as usize));
             answers.push(serde_json::json!({ "route": pending["route"], "args": pending["args"], "value": value }));
             self.fs = start.clone();
         }

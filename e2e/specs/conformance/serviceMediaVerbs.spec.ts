@@ -90,10 +90,13 @@ test("the picture is rendered on the server into the folder named, in the backgr
   const r = await verb(
     `picture render webm none size=160x90 from=0 to=1 into="${films}"`,
   );
-  // The Worker waits for the render the server runs, and says where it landed.
+  // The verb checks its words and hands the render back to the page, which builds the scene and posts the job.
   expect(r.body.output).toEqual([
-    `picture rendered: ${join(films, "video-lane.webm")}`,
+    `rendering the picture in the background (webm, silent) — it lands in ${films}`,
   ]);
+  const ask = r.body.asks?.[0];
+  expect(ask?.route).toBe("page renderPicture");
+  await svc.renderPicture(ws, ask?.args ?? {});
   let bytes: Buffer | null = null;
   let seen = -1;
   // Done once two looks two seconds apart find the same non-empty file.

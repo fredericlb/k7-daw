@@ -38,7 +38,7 @@ pub struct Answer {
     /// The host members the verb asks for, in order (`Host::ask`).
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub asks: Vec<Json>,
-    /// The route the run stopped at, `{route, args}`: the caller asks it and runs the line again with its answer; nothing lands.
+    /// The route the run stopped at, `{route, args, at}`: the caller keeps its first `at` answers, asks it and runs the line again; nothing lands.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub pending: Option<Json>,
     /// A throw that escaped the verb: its message.
