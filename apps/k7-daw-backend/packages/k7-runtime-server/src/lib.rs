@@ -6,6 +6,7 @@
 
 pub mod doc;
 pub mod engine;
+pub mod entry;
 pub mod pairing;
 pub mod server;
 pub mod wire;

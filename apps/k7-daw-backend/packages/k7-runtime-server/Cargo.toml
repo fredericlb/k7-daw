@@ -6,6 +6,8 @@ edition.workspace = true
 publish.workspace = true
 
 [lib]
+# The staticlib is what the C++ engine targets link (docs/link.md); the rlib is what the tests and the rest of the server use.
+crate-type = ["rlib", "staticlib"]
 path = "src/lib.rs"
 
 [dependencies]
