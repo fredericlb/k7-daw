@@ -12,7 +12,7 @@ use crate::settings::{Settings, normalise_providers};
 use crate::tunnel::Jobs;
 
 /// Longest a job waits to see a change it asked of the core.
-const SEEN: Duration = Duration::from_secs(1);
+const SEEN: Duration = Duration::from_secs(5);
 
 /// The chains as a `chains` reply names them: a key only when this machine has one.
 fn chains_of(s: &Settings) -> Value {
