@@ -2301,8 +2301,8 @@ function TimelineTabView({
           // The tool's own icon AS the cursor, forced past the clip's `cursor-grab` so the hand says what a press will do.
           style={toolCursor ? { cursor: toolCursor } : undefined}
           className={cn(
-            // A stable gutter: the pane shrinking under a split must not refit the lanes and slide the clip from under the pointer.
-            "isolate min-h-0 flex-1 overflow-auto [scrollbar-gutter:stable]",
+            // No scrollbars, drawn or reserved: the wheel, the trackpad and the minimap move it, and the lanes never refit for a gutter.
+            "isolate min-h-0 flex-1 overflow-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
             toolCursor && "[&_*]:!cursor-[inherit]",
           )}
           /** OS files: preventDefault is what ACCEPTS the drop — without it the browser silently refuses and then opens the file (fileDrop.ts). */
