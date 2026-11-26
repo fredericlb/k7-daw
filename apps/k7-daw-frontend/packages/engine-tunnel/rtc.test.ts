@@ -56,7 +56,7 @@ const until = async (ok: () => boolean, ms = 8000): Promise<void> => {
   }
 };
 
-describe.skipIf(!available || !RUST_CORE).each(agentKinds)(
+describe.skipIf(!available || !RUST_CORE).each(agentKinds.filter((k) => k.rtc))(
   "the WebRTC path — $name agent",
   ({ make }) => {
     let hub: HubTarget;

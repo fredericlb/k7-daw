@@ -8,6 +8,8 @@ mod blob_server;
 mod engine;
 mod engine_client;
 mod files;
+#[path = "../support/hub.rs"]
+mod hub;
 mod instruments;
 mod instruments_part;
 mod onnx_model;
@@ -26,4 +28,9 @@ mod server;
 mod settings;
 mod supervisor;
 mod tls;
+mod tunnel_agent;
+mod tunnel_files;
+mod tunnel_paths;
+mod tunnel_queue;
+mod tunnel_tls;
 mod urls;

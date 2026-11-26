@@ -30,6 +30,8 @@ established stack for the encryption and SCTP a data channel needs, on native th
 The TypeScript reference agent answers with node-datachannel, which wraps the same library: an
 optional dependency, loaded on first use, so the server's tests run where its binary is missing
 and skip only the WebRTC case. The suite here runs against both (`testAgents.ts`).
+The Rust supervisor (`apps/k7-daw-backend/packages/k7-supervisor`) does not port this: it answers an offer with an
+`rtc-answer` carrying an error, and the browser stays on the tunnel, so `rtc.test.ts` skips an agent with `rtc: false`.
 
 ## The local network only, by default
 
