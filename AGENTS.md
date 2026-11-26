@@ -6,6 +6,10 @@
 - **A file header is at most 10 lines.** What the file does, and the one thing a reader would get wrong.
 - **A comment inside the body is exactly one line.** No exceptions, no wrapped sentences, no JSDoc paragraphs.
 - Long rationale goes to the zone's `docs/` page, and the code points at it.
+- **New logic is written in Rust; TypeScript draws.** A calculation, a rule, a format or a protocol goes in a
+  Rust crate (reached from the page through the WebAssembly module or a backend route), and a type that
+  mirrors a Rust struct is generated from it (ts-rs), never written by hand. TypeScript holds the React
+  components, the UI kit, the editor and the browser's own APIs — `docs/rust-first.md`.
 - **Icons come from `@studio/ui/icons`**, never an emoji or a direct `lucide-react` import — `apps/k7-daw-frontend/packages/ui/docs/icons.md`.
 - **Documentation is in English**, like the comments — including the pages in every `docs/`.
 - **A page carries CHOICES, not mechanism.** What was decided and what forced it. Not a
