@@ -63,6 +63,8 @@ url.workspace = true
 midly.workspace = true
 zip.workspace = true
 
+ts-rs = { workspace = true, optional = true }
+
 [dev-dependencies]
 git2.workspace = true
 sha2.workspace = true
@@ -70,6 +72,8 @@ sha2.workspace = true
 tokio = { workspace = true, features = ["test-util"] }
 
 [features]
+# The TypeScript types of the wire structs, written by the `bindings` binary (docs/ts-types.md).
+ts = ["dep:ts-rs", "song/ts"]
 # The engine testbed's clock and stubs, for the TypeScript suites run against Rust (docs/engine.md).
 test-hooks = ["k7-engine/test-hooks"]
 
@@ -82,3 +86,9 @@ path = "src/main.rs"
 name = "k7-engine-testbed"
 path = "src/testbed.rs"
 required-features = ["test-hooks"]
+
+# Writes the generated TypeScript types into the frontend's packages; built only with `ts`.
+[[bin]]
+name = "bindings"
+path = "src/bindings.rs"
+required-features = ["ts"]

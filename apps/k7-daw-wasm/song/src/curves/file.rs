@@ -10,8 +10,10 @@ use song_schema::{AdsrSpec, CurveSpec, Cut, LfoSpec, PointSpec, PointsSpec, Pola
 
 /// A curve file as `parseCurve` answers it: the pilot's spec, and the conditions when there are any.
 #[derive(Clone, Debug, PartialEq, Serialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(optional_fields))]
 pub struct CurveFile {
     #[serde(flatten)]
+    #[cfg_attr(feature = "ts", ts(flatten))]
     pub spec: CurveSpec,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub conditions: Option<Vec<CurveCondition>>,
@@ -21,6 +23,7 @@ impl Check for CurveFile {}
 
 /// WHEN a curve runs; timecodes as written, positions in the song.
 #[derive(Clone, Debug, PartialEq, Serialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(optional_fields))]
 #[serde(tag = "type", rename_all = "lowercase")]
 pub enum CurveCondition {
     Start {

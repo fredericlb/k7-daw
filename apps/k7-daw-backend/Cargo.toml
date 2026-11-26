@@ -54,6 +54,8 @@ rustls = { version = "0.23", default-features = false, features = ["ring", "std"
 # The git transports over SSH: ring, never aws-lc's C build (docs/git.md).
 russh = { version = "0.65", default-features = false, features = ["ring", "rsa"] }
 serde = { version = "1", features = ["derive"] }
+# The TypeScript types generated from the wire structs; behind each crate's `ts` feature, exported by k7-front's bindings binary (docs/ts-types.md).
+ts-rs = "11"
 # preserve_order: a minted session must serialize its keys in the order JSON.stringify does; float_roundtrip:
 # a number parsed as JSON.parse parses it, which a sidecar read back and answered again needs (docs/mediatek.md).
 serde_json = { version = "1", features = ["preserve_order", "float_roundtrip"] }
