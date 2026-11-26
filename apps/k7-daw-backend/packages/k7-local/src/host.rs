@@ -1,4 +1,4 @@
-//! host.rs — `apps/k7-daw-engine/k7-supervisor` as a child over NDJSON on stdio, kept running: relaunched on a 1 s→30 s backoff
+//! host.rs — `apps/k7-daw-backend/packages/k7-supervisor` as a child over NDJSON on stdio, kept running: relaunched on a 1 s→30 s backoff
 //! reset after a 20 s run (`apps/k7-daw-backend/docs/supervisorHost.md`).
 //! What a reader gets wrong: death is read from the PROCESS, never the pipe, since an engine may hold a copy of it.
 

@@ -62,7 +62,7 @@ An engine plays one project at a time for one person, and a project plays on one
 - If someone opens your project somewhere else, your tab stops driving it and shows **This project was opened elsewhere**. Nothing you saved is lost. Open it again from Projects to take it back.
 - If someone opens a different project on the same engine, your tab shows **Another project took this engine**. Open your project again, or pick a different engine so both keep running.
 
-The newcomer always wins. A tab that goes to sleep releases its engine, so an idle tab does not keep a machine busy.
+The newcomer always wins.
 
 ## Sampled instruments
 

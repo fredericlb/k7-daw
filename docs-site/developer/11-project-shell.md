@@ -11,7 +11,6 @@
 | `./files` | `apps/k7-daw-frontend/packages/project-shell/src/files.ts` | Routes that need no compiled view: open, bench, tree, read, write, fmt, folder, rename, move, delete, sync state, engine unload. |
 | `./project` | `apps/k7-daw-frontend/packages/project-shell/src/project.ts` | `projectApi`: the shared routes plus the compiled-project ones (commands, completion, undo/redo, preferences, vim). k7's `api.ts` spreads it. |
 | `./gate` | `apps/k7-daw-frontend/packages/project-shell/src/ProjectGate.tsx` | The gate component. |
-| `./idle` | `apps/k7-daw-frontend/packages/project-shell/src/idle.ts` | Idle detection and the sleep rule. |
 | `./undo` | `apps/k7-daw-frontend/packages/project-shell/src/undo.ts` | `runUndo` / `runRedo`. |
 | `./ask`, `./toast` | `src/ask.tsx`, `src/toast.tsx` | The app's own confirm/prompt (replacing the OS box, which ignored the Escape ladder) and toasts. |
 | `./profiling` | `src/profiling.ts` | `PROFILING`, on with `?profile=1` or `studio.profile` in localStorage. |
@@ -35,16 +34,9 @@
 | `missing` | the project is not in the workspace; no Retry |
 | `no-libraries` | the origin has no library; the host renders its own card (`renderNoLibraries`) |
 | `empty` | the workspace holds no project; the host renders its wizard (`renderEmpty`) |
-| `idle` | the session went to sleep |
 | `error` | with a fault classification (refused origin vs. dead service) |
 
 Only `@local/<workspace>/<project>` and `@banc` addresses resolve; an older two-segment address is refused rather than guessed. The gate takes all its wording through `strings`, since each app owns its language.
-
-## Idle
-
-`useIdleTimeout` stamps a module-level "last active" time on pointer, key, wheel and touch events (and `markActive()` for what no event reports, such as playback) and checks it every 15 s — a timestamp rather than a restarted timer, so a machine waking from sleep tells the truth. k7 passes `IDLE_TIMEOUT_MS` (20 minutes). Tabs of the same origin tell each other when they were last used over a `BroadcastChannel`, so a forgotten tab does not unload a session another tab is using.
-
-`sleepMove` is the shared rule: an open project goes to sleep when out of sight (a background browser tab) or idle; only a `hidden` sleep wakes by itself. Going to sleep unloads the engine; the host app is told through `onIdle` / `onResume` because k7's engine lease belongs to the gate above.
 
 ## Undo
 
@@ -52,4 +44,4 @@ Only `@local/<workspace>/<project>` and `@banc` addresses resolve; an older two-
 
 ## Tests
 
-`npm run test` in `apps/k7-daw-frontend/packages/project-shell`: launch parsing, the transport's retry and sharing, idle, command and completion routes.
+`npm run test` in `apps/k7-daw-frontend/packages/project-shell`: launch parsing, the transport's retry and sharing, command and completion routes.

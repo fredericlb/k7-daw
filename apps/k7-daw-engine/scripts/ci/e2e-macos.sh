@@ -118,7 +118,7 @@ echo "=== the engine and the supervisor (macos-clang) ==="
 until lock "$deps_lock"; do sleep 10; done
 export CMAKE_BUILD_PARALLEL_LEVEL=8 CARGO_BUILD_JOBS=8
 built=0
-STUDIO_ENGINE_PRESET=macos-clang STUDIO_SUPERVISOR_PRESET=macos-clang node apps/k7-daw-engine/scripts/build-engine.mjs > "$logs/build-engine.log" 2>&1 || built=1
+STUDIO_ENGINE_PRESET=macos-clang node apps/k7-daw-engine/scripts/build-engine.mjs > "$logs/build-engine.log" 2>&1 || built=1
 unlock "$deps_lock"
 [ "$built" = 0 ] || { tail -60 "$logs/build-engine.log"; exit 1; }
 lap "engine build"
@@ -193,7 +193,7 @@ bring_up() {
   bed_of "$n"
   rm -rf "$home"
   mkdir -p "$files" "$mediatek" "$home/.studio/k7"
-  # The command-line engine, listed at the bed's front alone, downloading no instrument (apps/k7-daw-engine/k7-supervisor/docs/supervisor.md).
+  # The command-line engine, listed at the bed's front alone, downloading no instrument (apps/k7-daw-backend/packages/k7-supervisor/docs/supervisor.md).
   cat > "$bed/engine.json" << EOF
 { "registryUrls": ["http://127.0.0.1:$front"], "port": $engine, "instruments": [], "machineName": "e2e-macos$([ "$n" = 1 ] || echo "-$n")" }
 EOF

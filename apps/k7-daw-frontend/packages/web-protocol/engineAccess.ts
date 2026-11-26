@@ -119,7 +119,7 @@ export interface PublicEngine {
   outdated?: boolean;
   /** The release stamp its machine was built from, `dev` for a local build. */
   build?: string;
-  /** It runs without external plugins after crashing again and again — apps/k7-daw-engine/k7-supervisor/docs/crashLoop.md. */
+  /** It runs without external plugins after crashing again and again — apps/k7-daw-backend/packages/k7-supervisor/docs/crashLoop.md. */
   safeMode?: boolean;
   assigned: boolean; // already selected by someone; hidden from the pick list
   /** Who holds it and what they opened — named only to that same account, anyone else sees `assigned` alone; docs/machine.md. */
@@ -136,7 +136,7 @@ export interface PublicEngine {
   /** Its supervisor holds a tunnel, so a WebRTC offer can reach it — apps/k7-daw-frontend/packages/engine-tunnel/docs/rtc.md. */
   rtc?: boolean;
   /** The chains THIS MACHINE separates with, by `want` (`stems`, `instrumental`) — its own settings, from its
-      `engine-host.json`; a cut of a library song with no chain named uses them (apps/k7-daw-engine/k7-supervisor/docs/stemSplit.md). */
+      `engine-host.json`; a cut of a library song with no chain named uses them (apps/k7-daw-backend/packages/k7-supervisor/docs/stemSplit.md). */
   chains?: { stems?: string; instrumental?: string };
   /** Whether this device's account may use it — apps/k7-daw-backend/docs/engine/ownership.md; absent from an older registry. */
   access?: EngineAccessRole;

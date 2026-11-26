@@ -6,8 +6,8 @@
 |---|---|---|
 | TypeScript (packages, apps) | [Vitest](https://vitest.dev) 4 | `*.test.ts` / `*.test.tsx` next to the code they test; `*.bench.ts` for benchmarks |
 | C++ engine | CTest over CMake targets named `studio_*` | `apps/k7-daw-engine/k7-runtime/tests` |
-| C++ supervisor | Its own test binary, `k7_supervisor_tests` | `apps/k7-daw-engine/k7-supervisor/tests` |
-| Supervisor tunnel wire | Vitest, run against both the TypeScript agent and the native `tunnel_harness` | `apps/k7-daw-frontend/packages/engine-tunnel` |
+| Rust supervisor | cargo nextest, in the backend's workspace | `apps/k7-daw-backend/packages/k7-supervisor/tests` |
+| Supervisor tunnel wire | Vitest, run against both the TypeScript agent and the Rust `tunnel_harness` | `apps/k7-daw-frontend/packages/engine-tunnel` |
 | Engine behaviour that needs a running engine | Node harness scripts, run by hand | `apps/k7-daw-engine/k7-runtime/scripts` |
 
 Every workspace that has tests declares `"test": "vitest run"`. A few packages also declare `"bench": "vitest bench --run"`
@@ -86,16 +86,13 @@ noticed when its target is built: run the tests after touching the engine's data
 
 ## Supervisor tests
 
-The supervisor is built with its `dev-gcc` preset in CI and its unit tests run as
-`apps/k7-daw-engine/k7-supervisor/build/dev-gcc/k7_supervisor_tests`. The same build produces `tunnel_harness`;
-`apps/k7-daw-frontend/packages/engine-tunnel/testAgents.ts` finds the newest one under `apps/k7-daw-engine/k7-supervisor/build` and
-runs every tunnel suite against it as well as against the TypeScript agent. Without a native build,
-the native cases are skipped.
+The supervisor's tests are the backend workspace's (`cargo nextest run -p k7-supervisor`, in the Mac's checks). Its
+`tunnel_harness` binary is what `apps/k7-daw-frontend/packages/engine-tunnel/testAgents.ts` finds under the backend's
+cargo target (or `$TUNNEL_HARNESS_BIN`), and every tunnel suite runs against it as well as against the TypeScript
+agent. Without that build, the Rust agent's cases are skipped.
 
 ```bash
-cd apps/k7-daw-engine/k7-supervisor
-cmake --preset dev-gcc && cmake --build --preset dev-gcc
-./build/dev-gcc/k7_supervisor_tests
+(cd apps/k7-daw-backend && cargo build -p k7-supervisor --bin tunnel_harness)
 cd apps/k7-daw-frontend/packages/engine-tunnel && npx vitest run
 ```
 

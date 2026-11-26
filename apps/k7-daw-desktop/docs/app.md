@@ -57,7 +57,7 @@ file hub and the page (`K7_LOCAL_ENGINE`, `K7_ENGINE_CORE` and `K7_FILES` set to
 
 | choice | why |
 |---|---|
-| the front hosts the supervisor, not the desktop app's own code | the supervisor listens on no port by design (a loopback port is one any page in the browser can `fetch()`, `apps/k7-daw-engine/k7-supervisor/docs/hostProtocol.md`); routes of the front inherit its loopback guard, CORS policy and session |
+| the front hosts the supervisor, not the desktop app's own code | the supervisor listens on no port by design (a loopback port is one any page in the browser can `fetch()`, `apps/k7-daw-backend/packages/k7-supervisor/docs/hostProtocol.md`); routes of the front inherit its loopback guard, CORS policy and session |
 | the front in the desktop app's process, not a second program | nothing more to stage, sign or kill; it ends with the desktop app whatever ends it |
 | no node anywhere: the bundle holds the page and the library the front seeds | the front holds the file hub and every account's file service itself |
 | the front's code root staged as `resources/code` (`apps/k7-daw-backend/scripts/stageCodeRoot.mjs`, some 700 KB) and named to it as `K7_CODE_ROOT` | the front's actor reads `@meta`, `commands.yaml`, the demos and the sample video at its root, and the desktop app runs from no checkout (`apps/k7-daw-backend/docs/service.md`) |
@@ -99,7 +99,7 @@ launch. SIGTERM and SIGINT quit the same way: a logout ends it with SIGTERM.
 
 The backstop kills only what the pidfile **proves** is the engine: the pid on its first line, then the
 `start=` and `exe=` the supervisor writes beside it, checked against what the OS says of that pid now — the
-verdict of `apps/k7-daw-engine/k7-supervisor/src/PidFile.cpp`, which the desktop app reads through `k7-local`'s copy
+verdict of `apps/k7-daw-backend/packages/k7-supervisor/src/pidfile.rs`, which the desktop app reads through `k7-local`'s copy
 (`apps/k7-daw-backend/packages/k7-local/src/pidfile.rs`, `apps/k7-daw-backend/docs/supervisorHost.md`). A pid is a
 number the OS reuses, and a kill of the wrong tree is worse than an orphan. A file it cannot prove (a bare pid,
 an OS that would not say) is left in place with its process, for the supervisor's next start to judge; a file

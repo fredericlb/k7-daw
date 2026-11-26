@@ -1,8 +1,8 @@
-// The app module. Neither native program is built by AGP's externalNativeBuild: that would configure
-// second CMake trees and fetch Tracktion into one. Each `android-arm64` preset builds where every other
-// preset does, against the SDK's NDK, and the results are staged here: the engine as the JNI library it
-// is, the supervisor as an EXECUTABLE named like one, since only lib*.so files reach the native library
-// directory — the one place Android lets an app run its own binary.
+// The app module. No native program is built by AGP's externalNativeBuild: that would configure a second
+// CMake tree and fetch Tracktion into it. The engine's `android-arm64` preset builds where every other preset
+// does, against the SDK's NDK; the front and the supervisor are cargo builds with that NDK's linker. The results
+// are staged here: the engine and the front as the JNI libraries they are, the supervisor as an EXECUTABLE named
+// like one, since only lib*.so files reach the native library directory — the one place Android lets an app run its own binary.
 
 plugins {
     id("com.android.application")
@@ -118,7 +118,6 @@ dependencies {
 }
 
 val engineDir = rootDir.resolve("../k7-daw-engine/k7-runtime")
-val supervisorDir = rootDir.resolve("../k7-daw-engine/k7-supervisor")
 
 // The preset, with this SDK's NDK, through the same script as build:mac and build:win.
 val buildEngine by tasks.registering(Exec::class) {
@@ -127,21 +126,9 @@ val buildEngine by tasks.registering(Exec::class) {
     commandLine("node", "scripts/build.mjs", "android-arm64")
 }
 
-// The supervisor through apps/k7-daw-engine/scripts/supervisorBuild.mjs, the desktop build's own entry, told which preset to use.
-val buildSupervisor by tasks.registering(Exec::class) {
-    workingDir = rootDir.resolve("../..")
-    environment("ANDROID_NDK_HOME", android.ndkDirectory.absolutePath)
-    environment("STUDIO_SUPERVISOR_PRESET", "android-arm64")
-    commandLine(
-        "node", "-e",
-        "import('./apps/k7-daw-engine/scripts/supervisorBuild.mjs').then((m) => m.buildSupervisor(process.cwd()))",
-    )
-}
-
 val stageEngine by tasks.registering(Copy::class) {
-    dependsOn(buildEngine, buildSupervisor)
+    dependsOn(buildEngine)
     from(engineDir.resolve("build/android-arm64/libk7runtime.so"))
-    from(supervisorDir.resolve("build/android-arm64/k7-supervisor")) { rename { "libk7supervisor.so" } }
     into(layout.buildDirectory.dir("engine-jni/arm64-v8a"))
 }
 
@@ -218,7 +205,8 @@ val frontJni = layout.buildDirectory.dir("front-jni")
 // The front's cargo target lives outside the tree, so an APK build leaves no apps/k7-daw-backend/target behind (docs/rust-builds.md).
 val frontTarget = File(System.getProperty("user.home"), ".cache/k7-android-front")
 
-val buildFront by tasks.registering(Exec::class) {
+// A cargo build for the phone: this SDK's NDK as linker, C compiler and archiver, rustc through sccache when the machine has it.
+fun Exec.cargoForThePhone(vararg args: String) {
     workingDir = frontDir
     val os = System.getProperty("os.name").lowercase()
     val host = when {
@@ -236,7 +224,20 @@ val buildFront by tasks.registering(Exec::class) {
     providers.exec { commandLine("node", repoDir.resolve("apps/k7-daw-engine/scripts/sccache.mjs").absolutePath, "dev") }
         .standardOutput.asText.get().lines().filter { it.contains('=') }
         .forEach { environment(it.substringBefore('='), it.substringAfter('=')) }
-    commandLine("cargo", "build", "--release", "--target-dir", frontTarget.absolutePath, "-p", "k7-embed", "--target", "aarch64-linux-android")
+    commandLine("cargo", "build", "--release", "--locked", "--target-dir", frontTarget.absolutePath, "--target", "aarch64-linux-android", *args)
+}
+
+val buildFront by tasks.registering(Exec::class) { cargoForThePhone("-p", "k7-embed") }
+
+// The supervisor, the backend workspace's crate; the phone cuts no stems, so it links no ONNX Runtime (docs/android.md).
+val buildSupervisor by tasks.registering(Exec::class) { cargoForThePhone("-p", "k7-supervisor", "--bin", "k7-supervisor") }
+
+val supervisorJni = layout.buildDirectory.dir("supervisor-jni")
+
+val stageSupervisor by tasks.registering(Copy::class) {
+    dependsOn(buildSupervisor)
+    from(frontTarget.resolve("aarch64-linux-android/release/k7-supervisor")) { rename { "libk7supervisor.so" } }
+    into(supervisorJni.get().dir("arm64-v8a"))
 }
 
 val stageFront by tasks.registering(Copy::class) {
@@ -246,4 +247,5 @@ val stageFront by tasks.registering(Copy::class) {
 }
 
 android.sourceSets["main"].jniLibs.srcDir(frontJni)
-tasks.named("preBuild") { dependsOn(stageFront) }
+android.sourceSets["main"].jniLibs.srcDir(supervisorJni)
+tasks.named("preBuild") { dependsOn(stageFront, stageSupervisor) }

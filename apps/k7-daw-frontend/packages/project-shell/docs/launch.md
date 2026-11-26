@@ -197,12 +197,11 @@ the prefix cannot change without a navigation that remounts the gate anyway.
 ### Strings that are optional, and why that is honest
 
 `ProjectGateStrings` is mostly required, and some groups are not: the **bench**'s wait
-(`benchWorkspace`, `benchFetching`), the **idle** screen (`idleTitle`, `idleBody`, `resume`), and the missing screen's two
+(`benchWorkspace`, `benchFetching`), and the missing screen's two
 address hints (`localUsage`, `retiredAddress`) and the `details` label over the raw message are optional
 too: they are the screens a build of the gate may be structurally unable to reach.
-Both are screens an app may be structurally unable to reach — the bench is a `.k7` project, which
-an app reading another suffix never opens, and an app that passes no `idleTimeoutMs` never leaves
-the running phase. Required, they would each be made to translate a card nobody can see. The gate
+The bench is a screen an app may be structurally unable to reach: it is a `.k7` project, which
+an app reading another suffix never opens. Required, its strings would be made to translate a card nobody can see. The gate
 falls back to plain English rather than to an empty one.
 
 ### "Somebody else opened this project"

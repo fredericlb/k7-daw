@@ -43,8 +43,7 @@ it, measured on macOS: 2.7 GB as clones, 0.85 GB as archives.
 
 Nothing that configures needs git either: sfizz runs `git submodule update` only in a tree that has a
 `.git`, and its build id is then empty. The shallow clones left — IXWebSocket, QuickJS, RTNeural and
-NeuralAmpModelerCore here, libdatachannel in `apps/k7-daw-engine/k7-supervisor` — keep theirs: under 200 MB
-together, most of it libdatachannel's.
+NeuralAmpModelerCore — keep theirs.
 
 A hash pins the bytes, not the URL: GitHub's and GitLab's generated archives are stable for a given
 commit, and a hash that stops matching fails the configure loudly rather than building something else.

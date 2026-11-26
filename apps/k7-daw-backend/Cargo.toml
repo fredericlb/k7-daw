@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["packages/k7-front", "packages/k7-embed", "packages/k7-local", "packages/k7-engine", "packages/k7-js", "packages/k7-mediatek", "packages/k7-hub", "packages/k7-sync", "packages/k7-picture", "packages/k7-file-service", "packages/k7-replica", "packages/k7-capture", "packages/k7-libraries", "packages/k7-git", "packages/k7-roam", "packages/k7-lan", "packages/k7-runtime-server"]
+members = ["packages/k7-front", "packages/k7-embed", "packages/k7-local", "packages/k7-engine", "packages/k7-js", "packages/k7-mediatek", "packages/k7-hub", "packages/k7-sync", "packages/k7-picture", "packages/k7-file-service", "packages/k7-replica", "packages/k7-capture", "packages/k7-libraries", "packages/k7-git", "packages/k7-roam", "packages/k7-lan", "packages/k7-runtime-server", "packages/k7-supervisor"]
 exclude = ["packages/waveform"]
 
 [workspace.package]
@@ -24,6 +24,7 @@ k7-libraries = { path = "packages/k7-libraries" }
 k7-git = { path = "packages/k7-git" }
 k7-roam = { path = "packages/k7-roam" }
 k7-lan = { path = "packages/k7-lan" }
+k7-supervisor = { path = "packages/k7-supervisor" }
 # libgit2 with no https and no ssh feature: those bring OpenSSL and libssh2, k7 has its own transports (docs/git.md).
 git2 = { version = "0.21", default-features = false }
 # The device's keychain, for a git token or key: Keychain, Credential Manager and the Secret Service over zbus, no C build (docs/git.md).
@@ -68,6 +69,8 @@ zip = { version = "4", default-features = false, features = ["deflate-flate2-zli
 # The waveform module's Wasmtime, with Pulley bytecode where a host may not make memory executable (iOS).
 wasmtime = { version = "50", default-features = false, features = ["cranelift", "pulley", "runtime", "std", "gc", "gc-drc"] }
 webpki-roots = "1"
+# The OS trust store read with its trust settings: macOS keychain, Windows ROOT stores, the Linux bundles (docs/rust-supervisor-plan.md).
+rustls-native-certs = "0.8"
 tokio-tungstenite = "0.29"
 # The dev session's watch of the file service's source, which the hub stops the services on (docs/files.md).
 notify = "8"

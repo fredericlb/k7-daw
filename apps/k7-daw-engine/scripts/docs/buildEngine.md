@@ -7,14 +7,15 @@ command-line engine IS those binaries, and the desktop app (`apps/k7-daw-desktop
 | script | what |
 |---|---|
 | `build-engine.mjs` (`npm run engine:build`) | the engine, then the supervisor, then the command-line engine staged in `dist/k7-runtime/` |
-| `supervisorBuild.mjs` | building and finding the supervisor — one answer for this script, the dev session and the Android app's Gradle build |
+| `supervisorBuild.mjs` | building and finding the supervisor (cargo in release, into `~/.cache/k7-supervisor-<checkout>` or `$K7_SUPERVISOR_TARGET_DIR`) — one answer for this script and the dev session |
+| `onnxRuntime.mjs` | ONNX Runtime from Microsoft's NuGet packages, hashes pinned and cached in `~/.cache/k7-onnxruntime`: the library a computer's supervisor loads, and the static xcframework iOS links |
 | `package-release.mjs --kind engine\|desktop app` | one release file per kind into `dist/release/`, named for a stamp |
 | `devEngine.mjs` | what the dev session stops before a relink: every running desktop app, supervisor and engine (`docs/dev.md`) |
 | `buildTools.mjs` | where output goes, and spawning with the Windows shell quirk |
 
 The engine builds through `apps/k7-daw-engine/k7-runtime/scripts/build.mjs`, so "how the engine builds" is
-defined once. Each program's preset comes from the host platform, or from `STUDIO_ENGINE_PRESET` and
-`STUDIO_SUPERVISOR_PRESET` when the build machine names its own — which CI does.
+defined once. The engine's preset comes from the host platform, or from `STUDIO_ENGINE_PRESET` when the build machine
+names its own — which CI does. The supervisor is a crate of the backend's workspace, built by cargo.
 
 ## The command-line engine is a folder, not an installer
 
@@ -27,7 +28,7 @@ stages its `bin/` with, so the two deliverables cannot carry different things:
 | `k7-supervisor` | what the user runs: `k7-supervisor --config engine.json` |
 | `k7-runtime` | the audio engine, which the supervisor finds beside itself |
 | ONNX Runtime | the library the supervisor loads for a stem cut |
-| `engine.json` | a copy of `apps/k7-daw-engine/k7-supervisor/engine.example.json`, to edit |
+| `engine.json` | a copy of `apps/k7-daw-backend/packages/k7-supervisor/engine.example.json`, to edit |
 
 One flat folder because each binary looks for the next beside itself. An archive of it is the
 release: unpacking it is the whole install, and the config is a file the user edits, so there is
@@ -38,9 +39,10 @@ desktop app job packages the desktop app around the binaries the engine job buil
 
 ### ONNX Runtime, beside the supervisor
 
-The supervisor LOADS ONNX Runtime rather than linking it (`apps/k7-daw-engine/k7-supervisor/docs/supervisor.md`),
-and looks for it beside itself first. Its build copies the library beside the supervisor binary, and
-the staging takes it from there. Missing is a warning, not a failure: the engine runs, and says it
+The supervisor LOADS ONNX Runtime rather than linking it (`apps/k7-daw-backend/packages/k7-supervisor/docs/supervisor.md`),
+and looks for it beside itself first. `supervisorBuild.mjs` copies the library beside the supervisor binary, and
+the staging takes it from there. The packages are pinned by hash and cached once per machine, never in a checkout,
+so every worktree's build takes the same files without a download. Missing is a warning, not a failure: the engine runs, and says it
 cannot cut stems.
 
 ## `dist/` is the repo's

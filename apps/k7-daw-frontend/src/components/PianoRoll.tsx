@@ -7,8 +7,10 @@
 // The gestures themselves are ../hooks/useRollGestures.ts; this file is the layout and the drawing.
 // Drawn by the Editor bottom panel and, when a clip is clicked, where the graph is (ClipView).
 
-import { DockHeaderRow, DockHint, useInSheet } from "@studio/ui/editor-dock";
+import { DockProperty } from "@studio/ui/dock-property";
+import { DockHeaderRow, useInSheet } from "@studio/ui/editor-dock";
 import { cn } from "@studio/ui/lib/utils";
+import { Switch } from "@studio/ui/switch";
 import { useHZoom, usePanScroll } from "@studio/ui-timeline/panZoom";
 import {
   type RefObject,
@@ -56,17 +58,17 @@ import { useShell } from "../state/shellStore";
 import type { WebClip, WebProject } from "../types";
 import { DockFitButton } from "./DockFitButton";
 import { KEYS, KeyGutter, N_NOTES } from "./KeyGutter";
-import { LoopBrace, LoopToggle } from "./LoopBrace";
+import { LoopBrace } from "./LoopBrace";
 import {
   RollHoverBands,
   RollNoteBox,
   type RollNoteCaps,
   type RollNoteHandlers,
 } from "./RollNoteBox";
+import { RollOpsMenu } from "./RollOpsMenu";
 import { RollPlayhead } from "./RollPlayhead";
-import { RollToolMenu } from "./RollToolMenu";
+import { RollToolBar } from "./RollToolBar";
 import { ArrangementRuler, Grid, RulerTicks, rulerScale } from "./Ruler";
-import { SeqDoubleButton } from "./SeqDoubleButton";
 import { type PanelTakes, TakesView } from "./TakesView";
 
 /** How loud a click on a row's NAME auditions it — half, a check of which sound this is rather than a performance. */
@@ -76,11 +78,6 @@ const PX_PER_BEAT = 24; // fallback beat width for the first, unmeasured frame o
 const GUTTER = 44; // note-name column, px
 const NAMED_GUTTER = 112; // …wide enough for a sample's name, when the lane's rack gives its keys one
 const RULER_H = 18; // bar/beat ruler height, px
-
-// A finger is the main pointer: the bar's hint then names touch gestures rather than keys.
-const fingerFirst = () =>
-  typeof window !== "undefined" &&
-  window.matchMedia?.("(hover: none)").matches === true;
 
 /** What the shell drives on the ROLL — the third of these, beside `TimelineHandle` and `AudioClipHandle`. */
 export interface RollHandle {
@@ -609,47 +606,42 @@ export function PianoRoll({
       {/* Pad and Desk draw the tools in the dock's header; the phone sheet keeps them as the body's first row. */}
       {/* The first control: Fit centres the timeline on this clip (`ui fit` says so when the roll shows a file nothing places). */}
       <DockFitButton command={onCommand} />
+      {/* The view's tools on the left, as the waveform's views are. */}
+      {onModeChange && (
+        <RollToolBar
+          modes={takes ? ROLL_MODES : ROLL_SOLO_MODES}
+          current={mode}
+          onPick={(next) => void onCommand?.(`ui roll ${next}`)}
+        />
+      )}
+      {/* Loop as "loop: off" and the operations behind one lightning button, pushed to the right. */}
       <DockHeaderRow bodyOnPhone>
         <div
           className={cn(
-            "flex flex-1 shrink-0 items-center gap-1 text-xs",
+            "ml-auto flex shrink-0 items-center gap-2 text-xs",
             inSheet && "px-3 py-1",
           )}
         >
-          {/* The view's tools on the left; Loop and ×2 pushed to the right. */}
-          {onModeChange && (
-            <RollToolMenu
-              modes={takes ? ROLL_MODES : ROLL_SOLO_MODES}
-              current={mode}
-              onPick={(next) => void onCommand?.(`ui roll ${next}`)}
-            />
+          {onLoop && (
+            <DockProperty
+              name={m["clip.loop"]().toLowerCase()}
+              value={looped ? m["dock.on"]() : m["dock.off"]()}
+            >
+              <Switch
+                checked={looped}
+                aria-label={m["clip.loop"]()}
+                title={looped ? m["clip.loopOff"]() : m["clip.loopOn"]()}
+                onCheckedChange={onLoop}
+              />
+            </DockProperty>
           )}
-          <span className="ml-auto flex items-center gap-1">
-            {/* Editable rolls only — `onCreateNote` is what says this one is (docs/clipEditors.md). */}
-            <LoopToggle on={looped} onToggle={onLoop} />
-            <SeqDoubleButton
-              seqId={seqId}
-              command={onCreateNote ? onCommand : undefined}
-            />
-          </span>
+          <RollOpsMenu
+            seqId={seqId}
+            command={onCreateNote ? onCommand : undefined}
+          />
         </div>
       </DockHeaderRow>
 
-      {/* The tool's hint and the gestures' are the title bar's one help glyph (docs/editors.md). */}
-      {(onModeChange || onCreateNote) && !showTakes && (
-        <DockHint
-          text={[
-            onModeChange ? m[`roll.toolHint.${mode}`]() : "",
-            onCreateNote
-              ? fingerFirst()
-                ? m["roll.hintTouch"]()
-                : m["roll.hintKeys"]()
-              : "",
-          ]
-            .filter(Boolean)
-            .join(" ")}
-        />
-      )}
       <div className="flex min-h-0 flex-1">
         {/* The TAKES mode draws in the lanes' place; the lanes stay mounted, hidden, so the caret and the scroll survive. */}
         {showTakes && takes && (

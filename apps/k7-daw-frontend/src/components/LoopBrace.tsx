@@ -1,39 +1,9 @@
-// LoopBrace.tsx — an event's LOOP in a clip panel's ruler: the switch that turns it on, and the brace whose two
-// ends drag to move its points. Unit-free: the roll hands it beats of the notes, the waveform seconds of the file,
+// LoopBrace.tsx — an event's LOOP in a clip panel's ruler: the brace whose two ends drag to move its points.
+// Unit-free: the roll hands it beats of the notes, the waveform seconds of the file,
 // each with its own mapping to pixels. The drag is local until release, then ONE command. See docs/clipEditors.md.
 
-import { Repeat } from "@studio/ui/icons";
-import { cn } from "@studio/ui/lib/utils";
 import { useRef, useState } from "react";
 import { m } from "../paraglide/messages.js";
-
-/** The header's switch; drawn only where there is an event to loop. */
-export function LoopToggle({
-  on,
-  onToggle,
-}: {
-  on: boolean;
-  onToggle?: (on: boolean) => void;
-}) {
-  if (!onToggle) return null;
-  return (
-    <button
-      type="button"
-      aria-pressed={on}
-      title={on ? m["clip.loopOff"]() : m["clip.loopOn"]()}
-      onClick={() => onToggle(!on)}
-      className={cn(
-        "flex items-center gap-1 rounded px-1.5 py-0.5",
-        on
-          ? "bg-violet-500/20 text-violet-300"
-          : "text-muted-foreground hover:bg-accent hover:text-foreground",
-      )}
-    >
-      <Repeat className="h-3.5 w-3.5" />
-      {m["clip.loop"]()}
-    </button>
-  );
-}
 
 /** The width a handle offers the pointer, px — the brace's edges themselves are drawn thinner. */
 const HANDLE_W = 8;

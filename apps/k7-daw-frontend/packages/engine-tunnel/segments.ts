@@ -1,5 +1,5 @@
 // segments.ts — whether one segment of a server path may become a file name on the engine's
-// machine. The twin of `safeSegment` in apps/k7-daw-engine/k7-supervisor/src/PathMap.cpp, case for case: a
+// machine. The twin of `safeSegment` in apps/k7-daw-backend/packages/k7-supervisor/src/tunnel/path_map.rs, case for case: a
 // server path is joined under a local root, and a segment either side refuses must not open here.
 
 import { isPlainSegment } from "@studio/web-protocol/paths";

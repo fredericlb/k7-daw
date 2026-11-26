@@ -100,7 +100,7 @@ jobs:
         uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: ~/k7-deps
-          key: e2e-deps-android-${{ hashFiles('apps/k7-daw-engine/k7-runtime/CMakeLists.txt', 'apps/k7-daw-engine/k7-supervisor/CMakeLists.txt', 'apps/k7-daw-engine/k7-runtime/engine/patches/**') }}
+          key: e2e-deps-android-${{ hashFiles('apps/k7-daw-engine/k7-runtime/CMakeLists.txt', 'apps/k7-daw-engine/k7-runtime/engine/patches/**') }}
           restore-keys: e2e-deps-android-
       - name: restore cargo's registry
         uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
@@ -133,7 +133,7 @@ jobs:
         uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: ~/k7-deps
-          key: e2e-deps-android-${{ hashFiles('apps/k7-daw-engine/k7-runtime/CMakeLists.txt', 'apps/k7-daw-engine/k7-supervisor/CMakeLists.txt', 'apps/k7-daw-engine/k7-runtime/engine/patches/**') }}
+          key: e2e-deps-android-${{ hashFiles('apps/k7-daw-engine/k7-runtime/CMakeLists.txt', 'apps/k7-daw-engine/k7-runtime/engine/patches/**') }}
 
       - name: KVM for the emulator
         run: |

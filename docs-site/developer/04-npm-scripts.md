@@ -18,7 +18,7 @@ Every script in the root `package.json`, grouped by purpose. Run them from the r
 | `build` | `npm run build --workspaces --if-present` | Every workspace's `build`. For most packages that is `tsc --noEmit`; for `k7-frontend` it is `vite build && tsc --noEmit`; for `@studio/dsp` it runs its emitter. `k7-runtime` has no `build`, so this never compiles C++. |
 | `typecheck` | `node scripts/workspaces.mjs typecheck` | Every workspace's `typecheck` script. Accepts `--jobs N` (`npm run typecheck -- --jobs 2`). |
 | `test` | `node scripts/workspaces.mjs test` | Every workspace's `test` script. Accepts `--jobs N`. See [Tests](./05-tests.md). |
-| `engine:build` | `node apps/k7-daw-engine/scripts/build-engine.mjs` | Builds the C++ engine and the supervisor in this platform's preset (`macos-clang`, `windows-msvc`, otherwise `release-gcc`; `STUDIO_ENGINE_PRESET` and `STUDIO_SUPERVISOR_PRESET` override it) and stages the command-line engine into `dist/k7-runtime/`. |
+| `engine:build` | `node apps/k7-daw-engine/scripts/build-engine.mjs` | Builds the C++ engine in this platform's preset (`macos-clang`, `windows-msvc`, otherwise `release-gcc`; `STUDIO_ENGINE_PRESET` overrides it) and the Rust supervisor in release, ONNX Runtime beside it, and stages the command-line engine into `dist/k7-runtime/`. |
 
 ## Lints
 

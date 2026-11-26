@@ -31,7 +31,7 @@ export interface Preferences {
   editor: EditorPref;
   /** The chain that SEPARATES a record into stems — one answer for the whole machine, asked once. */
   stemsChain?: string;
-  /** …and the one that gives the record WITHOUT ITS VOICE, asked the same way — see apps/k7-daw-engine/k7-supervisor/docs/stemSplit.md. */
+  /** …and the one that gives the record WITHOUT ITS VOICE, asked the same way — see apps/k7-daw-backend/packages/k7-supervisor/docs/stemSplit.md. */
   instrumentalChain?: string;
   /** Which output pair the `CUE` bus leaves by — a label from `channels.out`, or the numbers. See docs/cue.md. */
   cueOutput?: string | number[];

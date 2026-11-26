@@ -170,7 +170,7 @@ and asking about everyone — which is why `list-sessions` carries no session fi
 everything the supervisor polls BEFORE listing, because that is the regression it guards: should reading
 ever CREATE again, those queries conjure a `""` session which then appears in the supervisor's own
 session list, reported by the process that has just invented it. It asks through
-`EngineControl`, the way `apps/k7-daw-engine/k7-supervisor/src/EngineQueries.cpp` does: one question at a
+`EngineControl`, the way `apps/k7-daw-backend/packages/k7-supervisor/src/engine_client/mod.rs` does: one question at a
 time, each waiting for its typed reply.
 
 ## When a session goes away
@@ -257,7 +257,7 @@ does.
 ## The slot
 
 One session is the supervisor's: `slot` (`EngineHost::kSlotSession`), where the frozen chain the
-machine keeps compiled plays with nobody attached (`apps/k7-daw-engine/k7-supervisor/docs/slots.md`).
+machine keeps compiled plays with nobody attached (`apps/k7-daw-backend/packages/k7-supervisor/docs/slots.md`).
 
 - **It is never let go for having no driver.** `releaseAbandonedProjects` skips it: playing with no
   page is what it is for, and a page that drove it and left must not take it down.

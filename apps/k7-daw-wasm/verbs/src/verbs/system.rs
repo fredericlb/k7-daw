@@ -347,7 +347,7 @@ pub fn onnx(a: &str, h: &mut Host) -> Done {
     if eps.iter().any(|e| e == "dml") {
         lines.push(
             "note: `dml` HANGS on some rigs — un-interruptible, and only the job's hour ends it. \
-             Measure a song before trusting it (apps/k7-daw-engine/k7-supervisor/docs/stemSplit.md)."
+             Measure a song before trusting it (apps/k7-daw-backend/packages/k7-supervisor/docs/stemSplit.md)."
                 .to_owned(),
         );
     }

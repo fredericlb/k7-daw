@@ -549,7 +549,7 @@ The roll: mode strip (select, create, remove, takes), key gutter, note lanes wit
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
-| 12.04 | Pick a roll mode | click a mode strip button | `a` select, `n` create, `d` remove; Esc back to select; takes only via `ui roll takes` | tap a mode strip button | T M D |
+| 12.04 | Pick a roll mode | click a tool capsule in the title bar (the waveform's views drawn the same way) | `a` select, `n` create, `d` remove; Esc back to select; takes only via `ui roll takes` | tap a tool capsule | T M D |
 | 12.05 | Draw a note (create mode) | press at the pitch, drag right, release (a click is one cell; refused outside the event's window) | — | press and drag; tap for one cell | T M D |
 | 12.06 | Draw off the grid | hold ⌘/Ctrl while drawing | — | — | D |
 | 12.07 | Frame a rectangle of cells | drag on a bare lane (⇧-drag in create mode) | `v` toggles; arrows or `h j k l` grow it; Esc or `v` cancels | drag | T M D |
@@ -560,7 +560,7 @@ The roll: mode strip (select, create, remove, takes), key gutter, note lanes wit
 | 12.12 | Move the loop's start or end | drag a brace handle (snaps to the grid; Alt frees) | — | drag | T M D |
 | 12.13 | Audition a pitch | click a key in the gutter | — | tap | T M D |
 | 12.14 | Hear a note while editing | automatic on a press, a note, and each row of a transpose drag | — | same | T M D |
-| 12.15 | Double the sequence | click the double button | — | tap | T M D |
+| 12.15 | Multiply the sequence's length by 2 | click the lightning Operations button, then "Multiply the length by 2" | — | tap the lightning button, tap the entry | T M D |
 
 ### Piano roll · Notes
 

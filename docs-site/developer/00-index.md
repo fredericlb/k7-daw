@@ -96,7 +96,7 @@ edit path in [The edit path](./21-edit-path.md).
 
 - [Engine architecture](./80-engine-architecture.md)
 - [The C++ engine (`apps/k7-daw-engine/k7-runtime`)](./81-k7-runtime.md)
-- [The supervisor (`apps/k7-daw-engine/k7-supervisor`)](./82-k7-supervisor.md)
+- [The supervisor (`apps/k7-daw-backend/packages/k7-supervisor`)](./82-k7-supervisor.md)
 - [The engine protocol](./83-engine-protocol.md)
 - [Engine clients](./84-engine-clients.md)
 - [Registry and tunnel](./85-registry-and-tunnel.md)

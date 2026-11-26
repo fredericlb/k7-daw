@@ -12,7 +12,6 @@ import {
   EmptyWorkspaceScreen,
   ErrorScreen,
   GateSpinner,
-  IdleScreen,
   MissingScreen,
   NoLibrariesScreen,
 } from "./GateScreens.tsx";
@@ -38,10 +37,6 @@ export function ProjectGate({
   children,
   renderEmpty,
   renderNoLibraries,
-  idleTimeoutMs = 0,
-  asleep = false,
-  onIdle,
-  onResume,
   waits = "screens",
   onPhase,
 }: {
@@ -72,29 +67,17 @@ export function ProjectGate({
   }) => ReactNode;
   /** What to draw when the account has NO library — k7 puts the card that adds one here; `onAdded` re-runs the resolve. */
   renderNoLibraries?: (ctx: { onAdded: () => void }) => ReactNode;
-  /** Close the session after this long untouched; `0` — the default — is off. See docs/idle.md. */
-  idleTimeoutMs?: number;
-  /** The project is out of sight — a tab behind another. Same closing, and it reopens by itself. */
-  asleep?: boolean;
-  /** Whatever the APP holds and the gate cannot see — k7's engine lease. See docs/idle.md. */
-  onIdle?: () => void;
-  /** Taking it back. Called before the reopen starts, so the app can retake what it released. */
-  onResume?: () => void;
   /** `screens` draws each wait full-screen; `bar` draws it as a bar along the bottom and opens the project without waiting for the engine, which the app then reports — docs/launch.md. */
   waits?: "screens" | "bar";
   /** Told each phase the gate enters, so the host claims its engine only once `projectResolved` says so — docs/launch.md. */
   onPhase?: (k: GatePhase["k"]) => void;
 }) {
   const bar = waits === "bar";
-  const { phase, setPhase, email, quit, resume, retry } = useGatePhase({
+  const { phase, setPhase, email, quit, retry } = useGatePhase({
     engine,
     app,
     base,
     strings,
-    idleTimeoutMs,
-    asleep,
-    onIdle,
-    onResume,
     engineWait: !bar,
   });
   // By ref: an inline callback would re-announce the same phase every render.
@@ -157,7 +140,7 @@ export function ProjectGate({
       return (
         <NoLibrariesScreen
           strings={strings}
-          addOne={renderNoLibraries?.({ onAdded: resume })}
+          addOne={renderNoLibraries?.({ onAdded: retry })}
           onBack={quit}
         />
       );
@@ -166,14 +149,12 @@ export function ProjectGate({
       return renderEmpty ? (
         renderEmpty({
           workspace: phase.workspace,
-          onCreated: resume,
+          onCreated: retry,
           onBack: quit,
         })
       ) : (
         <EmptyWorkspaceScreen strings={strings} onBack={quit} />
       );
-    case "idle":
-      return <IdleScreen strings={strings} onResume={resume} onBack={quit} />;
     case "error":
       return (
         <ErrorScreen

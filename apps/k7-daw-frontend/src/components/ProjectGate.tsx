@@ -8,7 +8,6 @@ import {
   type GatePhase,
   ProjectGate as Shared,
 } from "@studio/project-shell/gate";
-import { IDLE_TIMEOUT_MS } from "@studio/project-shell/idle";
 import { GateWait } from "@studio/project-shell/progress";
 import type { AccountLibrary } from "@studio/web-protocol";
 import { lazy, Suspense, useCallback, useEffect, useState } from "react";
@@ -31,8 +30,6 @@ export function ProjectGate({
   engineUrl,
   engineSearching,
   external,
-  onIdle,
-  onResume,
   onPhase,
 }: {
   /** The engine playing the project, or null while there is none — the project opens either way. */
@@ -45,10 +42,6 @@ export function ProjectGate({
   engineSearching: boolean;
   /** A surface's name, when this tab was opened on ONE surface — the gates above are the same either way, only the rendering differs. */
   external?: string | null;
-  /** The session went to sleep — the lease belongs to the gate ABOVE, so this only forwards the news (@studio/project-shell/docs/idle.md). */
-  onIdle: () => void;
-  /** …and taking it back. */
-  onResume: () => void;
   /** Each phase the gate enters, for the claim that waits on the address (../../docs/shell.md). */
   onPhase: (k: GatePhase["k"]) => void;
 }) {
@@ -62,10 +55,6 @@ export function ProjectGate({
       app="k7"
       // The waits as a bar along the bottom, and the project open before the engine has it (docs/shell.md).
       waits="bar"
-      // Twenty minutes untouched and this tab stops being a client of that engine.
-      idleTimeoutMs={IDLE_TIMEOUT_MS}
-      onIdle={onIdle}
-      onResume={onResume}
       onPhase={onPhase}
       // The same two the router's basename is built from, read out of the address rather than handed over, so both sides agree.
       base={import.meta.env.BASE_URL}
@@ -86,12 +75,6 @@ export function ProjectGate({
         librariesBody: m["project.librariesBody"](),
         benchWorkspace: m["project.benchWorkspace"](),
         benchFetching: m["project.benchFetching"](),
-        idleTitle: m["project.idleTitle"](),
-        // The number comes from the constant rather than from the wording: two places saying 'twenty minutes' end up disagreeing.
-        idleBody: m["project.idleBody"]({
-          minutes: Math.round(IDLE_TIMEOUT_MS / 60000),
-        }),
-        resume: m["project.resume"](),
         loading: {
           scanningTitle: m["pluginScan.waitTitle"](),
           scanningBody: m["pluginScan.waitBody"](),

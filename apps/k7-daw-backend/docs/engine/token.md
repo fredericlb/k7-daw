@@ -1,7 +1,7 @@
 # The engine's credentials: the token, the tunnel secret, and what each one proves
 
 An engine's supervisor holds three things in `<state>/engine-id.json`
-(`apps/k7-daw-engine/k7-supervisor/src/Identity.cpp`): an **id**, a **token** and a **tunnel secret**. They
+(`apps/k7-daw-backend/packages/k7-supervisor/src/identity.rs`): an **id**, a **token** and a **tunnel secret**. They
 are not three spellings of one credential. The token is readable by whoever reaches the engine
 directly, and through the relay by the accounts that may use it; the tunnel secret is read by
 nothing but the supervisor and the registries it dials. The

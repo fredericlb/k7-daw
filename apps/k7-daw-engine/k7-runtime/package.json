@@ -12,7 +12,7 @@
     "gen:builtin-params": "node scripts/gen-builtin-params.mjs",
     "gen:strudel-bundle": "node scripts/gen-strudel-bundle.mjs",
     "gen:surge-panel": "node scripts/gen-surge-panel.mjs",
-    "test": "node scripts/run-tests.mjs && node scripts/run-supervisor-tests.mjs",
+    "test": "node scripts/run-tests.mjs",
     "test:settings-dir": "node scripts/settings-dir-proof.mjs",
     "test:all": "node scripts/run-tests.mjs --all"
   },

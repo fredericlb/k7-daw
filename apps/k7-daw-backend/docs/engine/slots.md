@@ -3,7 +3,7 @@
 The routes under `/api/engine-slots/:id` let the account of the engine's device list, save, enable, disable and remove
 the slots of a machine whose supervisor holds a tunnel to this server
 (`apps/k7-daw-backend/packages/k7-front/src/routes/engine_reach/engine_jobs.rs`). What a slot is, and the machine's rules for keeping one, are
-in `apps/k7-daw-engine/k7-supervisor/docs/slots.md`. The page that calls these routes is described in
+in `apps/k7-daw-backend/packages/k7-supervisor/docs/slots.md`. The page that calls these routes is described in
 `apps/k7-daw-frontend/docs/slots.md`.
 
 | choice | why |

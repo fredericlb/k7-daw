@@ -2,7 +2,7 @@
 
 On a device's own backend, the front answers the route a page uses to know its machine — `/api/local` —
 whatever runs the machine's engine. Where the host asks it to run that engine too (the desktop app), the `k7-local` crate hosts
-`apps/k7-daw-engine/k7-supervisor` over stdio and the front also answers `/api/local/engine*`. What these routes promise a
+`apps/k7-daw-backend/packages/k7-supervisor` over stdio and the front also answers `/api/local/engine*`. What these routes promise a
 page is `localEngine.md`; this page is how the
 front keeps those promises.
 

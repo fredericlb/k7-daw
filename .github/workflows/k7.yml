@@ -1,4 +1,4 @@
-# k7 CI — lint, typecheck and the tests of the frontend and its packages and the native supervisor.
+# k7 CI — lint, typecheck and the tests of the frontend and its packages, and the tunnel suites against the supervisor's agent.
 #
 # It runs on every push to main and every `vX.Y.Z` tag, with no path filter. Its JOBS stay narrow:
 # not the whole repo's 62 test tasks, and no C++ engine.
@@ -45,16 +45,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
-      - run: sudo apt-get update && sudo apt-get install -y ninja-build
+      - name: rust
+        run: rustup toolchain install stable --profile minimal && rustup default stable
 
-      - name: build
-        working-directory: apps/k7-daw-engine/k7-supervisor
-        run: |
-          cmake --preset dev-gcc
-          cmake --build --preset dev-gcc
-
-      - name: unit tests
-        run: apps/k7-daw-engine/k7-supervisor/build/dev-gcc/k7_supervisor_tests
+      # The Rust supervisor's tests run in the Mac's checks (docs/rust-builds.md); here, the agent the tunnel suites drive.
+      - name: build the tunnel harness
+        working-directory: apps/k7-daw-backend
+        run: cargo build --locked -p k7-supervisor --bin tunnel_harness
 
       - uses: ./.github/actions/node
 

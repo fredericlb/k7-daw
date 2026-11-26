@@ -50,7 +50,7 @@ An instrument's samples run to hundreds of megabytes, so they are in no library 
 `@instruments/<name>/<file>.sfz` names a folder under THIS machine's `<state>/instruments`, the same
 state directory the scan cache uses (`$STUDIO_HOME`, else `~/.k7`), and `SfzPlugin::resolve` is the
 one place that reads it. The supervisor fills that folder with the instruments this machine keeps,
-chosen in its config file or the app's Downloads list and pinned by hash (`apps/k7-daw-engine/k7-supervisor/docs/instruments.md`).
+chosen in its config file or the app's Downloads list and pinned by hash (`apps/k7-daw-backend/packages/k7-supervisor/docs/instruments.md`).
 So the files come from their origin straight onto the machine that plays them — never through a
 server, and never once per account through a tunnel. Any other `sfz:` is a path, played as written.
 

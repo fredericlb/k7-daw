@@ -16,7 +16,7 @@ gets a directory of its own.
 
 The per-platform location each OS prefers would be the tidier answer if one program owned this
 directory. Three do, in two languages: `apps/k7-daw-frontend/packages/song/src/studioHome.ts`,
-`apps/k7-daw-engine/k7-supervisor/src/Paths.cpp`, and `apps/k7-daw-engine/k7-runtime/engine/PluginScan.cpp`.
+`apps/k7-daw-backend/packages/k7-supervisor/src/paths.rs`, and `apps/k7-daw-engine/k7-runtime/engine/PluginScan.cpp`.
 
 Each language's idea of "where application data goes" is subtly its own, and they do not line up:
 JUCE's `userApplicationDataDirectory` is `~/Library` on macOS where node's equivalent is
@@ -51,7 +51,7 @@ misses `%APPDATA%` and `$XDG_CONFIG_HOME` entirely.
 ## The settings file has one name
 
 `<state>/engine-host.json`, pairing with `engine-host.pid`, written by the supervisor
-(`apps/k7-daw-engine/k7-supervisor/src/Settings.h`), which reads that name and no other: a
+(`apps/k7-daw-backend/packages/k7-supervisor/src/settings.rs`), which reads that name and no other: a
 second name carried for ever costs a branch in every reader plus a test that has to keep asserting
 it. A settings file under any other name is not read, so the machine starts from defaults — ports
 8765/8770, an empty audio priority, no paired server. That is a deliberate trade: the file is small,

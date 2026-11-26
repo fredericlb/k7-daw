@@ -14,9 +14,6 @@ export type GatePhase =
   | { k: "no-libraries" }
   // The workspace opened and holds no project at all — the host app's wizard, see docs/launch.md.
   | { k: "empty"; workspace: string }
-  // Nobody has touched this tab for a long time; the one button reopens it — see docs/idle.md.
-  /** `why` decides whether waking is automatic: a tab put behind another wakes itself. */
-  | { k: "idle"; why: "timeout" | "hidden" }
   // Opened, and on its way to the engine — copied, applied, dry-run; see EngineLoadScreen.tsx.
   | { k: "loading"; workspace: string; project: string }
   | { k: "open"; workspace: string; project: string };
@@ -50,10 +47,6 @@ export interface ProjectGateStrings {
   benchFetching?: string;
   /** A workspace holding no project at all — a state a NEW workspace can be left in, docs/launch.md. */
   emptyWorkspace?: string;
-  /** The idle screen. Optional like the bench's, and for the same reason — docs/launch.md. */
-  idleTitle?: string;
-  idleBody?: string;
-  resume?: string;
   /** The wait for the engine after the project opened; English when an app passes none. */
   loading?: EngineLoadStrings;
   /** `@local` with no project after it — what such an address looks like; English when absent. */

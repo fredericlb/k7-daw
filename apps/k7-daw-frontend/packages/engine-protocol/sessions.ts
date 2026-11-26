@@ -14,7 +14,7 @@ export const SESSIONS = {
   bench: "banc",
 } as const;
 
-/** The engine machine's SLOT, a frozen chain its supervisor keeps playing with nobody attached: one per engine, no person in it (apps/k7-daw-engine/k7-supervisor/docs/slots.md). */
+/** The engine machine's SLOT, a frozen chain its supervisor keeps playing with nobody attached: one per engine, no person in it (apps/k7-daw-backend/packages/k7-supervisor/docs/slots.md). */
 export const SLOT_SESSION = "slot";
 
 export type SessionId = string;

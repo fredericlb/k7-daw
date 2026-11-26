@@ -31,7 +31,7 @@ laptop or a phone the three are the same machine: k7 is the desktop app or the a
 | k7 frontend | `apps/k7-daw-frontend` | Browser | The editor and the home page. A React SPA built by Vite. |
 | k7 front | `apps/k7-daw-backend` | Device | One Rust process: the session, preferences and the static SPA, the engine registry and relay, the tunnel hub and the file hub (`apps/k7-daw-backend/docs/`). |
 | file service | `apps/k7-daw-backend/packages/k7-file-service` | Device (in the Rust front) | One runtime for the local account, made on demand by the front's file hub. Every file operation on the device's workspaces, the project compile, and the commands that drive an engine. |
-| k7-supervisor | `apps/k7-daw-engine/k7-supervisor` | Engine machine | Starts and watches the engine, lists it at the registry, holds the tunnel back to the backend, runs jobs the backend asks of the machine. |
+| k7-supervisor | `apps/k7-daw-backend/packages/k7-supervisor` | Engine machine | Starts and watches the engine, lists it at the registry, holds the tunnel back to the backend, runs jobs the backend asks of the machine. |
 | k7-runtime | `apps/k7-daw-engine/k7-runtime` | Engine machine | The C++ audio engine. Receives a compiled project document over WebSocket, plays it, reports transport and meter state. It never reads song files. |
 
 ### The k7 front
@@ -84,7 +84,7 @@ Where engine machines run:
 
 | Form | Code |
 |---|---|
-| Command-line engine (`k7-supervisor --config <file>`) | `apps/k7-daw-engine/k7-supervisor`, staged by `apps/k7-daw-engine/scripts/build-engine.mjs` |
+| Command-line engine (`k7-supervisor --config <file>`) | `apps/k7-daw-backend/packages/k7-supervisor`, staged by `apps/k7-daw-engine/scripts/build-engine.mjs` |
 | K7 DAW | `apps/k7-daw-desktop`: a Tauri app with one window that runs k7's backend on `127.0.0.1:18789`; its Rust front runs the supervisor (`k7-local`) and the file services, and the window (or the browser) shows k7 |
 | Android app | `apps/k7-daw-android`: the engine as a library, the supervisor as a program, and k7's backend bundled |
 

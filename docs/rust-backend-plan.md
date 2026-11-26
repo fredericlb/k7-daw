@@ -85,6 +85,6 @@ bundled seed), the AI settings and the built page; the embed carries it on a pho
 - **Iteration slows**: `tsx watch` becomes a compile, and the backend's 400 in-process tests are
   rewritten black box.
 - **The build grows**: a Rust target for Android, a staticlib on iOS, cross-compiling on the
-  Windows agent, and rustls beside the supervisor's mbedTLS, whose trust roots must agree.
+  Windows agent, and the supervisor's trust roots beside the front's, which must agree.
 
 Each library a phase needs is proposed with its strengths and weaknesses before it is added.
