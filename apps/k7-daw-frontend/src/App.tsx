@@ -2582,7 +2582,7 @@ export default function App({
       // The song's own level, off the compiled doc — what the FILE says, so the fader reads right before a note has played.
       master={projectDoc?.masterVolume}
       onMaster={setMaster}
-      knob={!isMobile}
+      knob={!isMobile && portrait}
     />
   );
 

@@ -1,6 +1,6 @@
 // MasterMeter — the mix as it leaves for the interface, in the project bar: ONE lane holding the
 // meter, the output fader's handle and the unity mark, plus a red light that stays on if
-// anything clipped during the last playback; a desk draws it as a knob whose arc is the meter.
+// anything clipped during the last playback; a tablet in portrait draws it as a knob whose arc is the meter.
 //
 // A LEAF that subscribes to the engine store itself, which is what the store exists for: the frame
 // arrives at 20 Hz, and a value read in App would re-render the whole tree twenty times a second
@@ -65,7 +65,7 @@ export function MasterMeter({
   ref,
 }: {
   className?: string;
-  /** Drawn as a knob (a desk's floating bar): the arc fills with the live level, red while it clips, the value under it. */
+  /** Drawn as a knob (a tablet in portrait): the arc fills with the live level, red while it clips, the value under it. */
   knob?: boolean;
   /** Bring the OUTPUT down until the last pass's peak would have sat at -6 dB — a CALLBACK, this component being a leaf (gainTrim.ts). */
   onFix?: () => void;
