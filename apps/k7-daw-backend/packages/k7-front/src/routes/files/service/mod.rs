@@ -435,10 +435,20 @@ async fn answer_scoped(
         .headers
         .get(CONTENT_TYPE)
         .and_then(|v| v.to_str().ok());
-    let body = match body::json(content_type, &bytes) {
-        Ok(b) => b,
-        Err(e) => return Ok(json_answer(400, &json!({ "error": e }))),
+    // A dropped file is the body itself, its name and the folder asked for riding in headers: no personal data in a URL.
+    let dropped = handler == routes::H::Import && !body::is_json(content_type);
+    if handler == routes::H::Import && !dropped && bytes.len() > native::import_run::JSON_LIMIT {
+        return Ok(too_large());
+    }
+    let body = if dropped {
+        native::import_run::dropped_meta(&parts.headers)
+    } else {
+        match body::json(content_type, &bytes) {
+            Ok(b) => b,
+            Err(e) => return Ok(json_answer(400, &json!({ "error": e }))),
+        }
     };
+    let raw = dropped.then(|| Arc::new(bytes));
     let (name, root) = match workspace(&who, &parts.headers) {
         Ok(w) => w,
         Err(r) => return Ok(*r),
@@ -492,6 +502,7 @@ async fn answer_scoped(
         media: held.media.clone(),
         engine: held.engine.clone(),
         reenter,
+        raw,
     };
     let mut answer = routes::dispatch(handler, &call).await;
     if routes::reports_compiler(handler) {

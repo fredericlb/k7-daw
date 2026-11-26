@@ -192,7 +192,6 @@ import {
 import { createStatusLine } from "./statusLine";
 import { stepSentence } from "./stepSentence";
 import { eventIdOf, takesEventOf } from "./takes";
-import { pageVerbs } from "./verbs/pageHost";
 // The shell's BROWSER composition point: k7's builtin plugins register their pane drawers here (apps/k7-daw-frontend/packages/k7-sdk/docs/sdk.md).
 import "./plugins";
 import { cfg } from "@studio/project-shell/fileApi";
@@ -517,10 +516,6 @@ export default function App({
   }, [recPlaying, recRecordEnabled]);
   // The project's change token, read here so the whole tree shares the ONE refcounted poll (docs/plugins.md).
   const rev = useRevision();
-  // A change the Worker did not make reopens its runtime once the changes settle (docs/verbs.md).
-  useEffect(() => {
-    pageVerbs.foreignChange(rev);
-  }, [rev]);
   const { logs, pushLog, clearLogs } = useLogs(panel);
   const logProblems = useMemo(() => logs.filter(isProblemLine).length, [logs]);
   // A pane that threw draws its own card (PaneBoundary); the log keeps what it said.
@@ -1188,7 +1183,6 @@ export default function App({
       // The gate OPENED this project before mounting us (useGatePhase.ts), so the load it began is already here: a second open re-pushed the whole project.
       setEngineLoad(w.engineLoad ?? null);
       lastActive.current = w.activeProject;
-      pageVerbs.setProject(w.activeProject ?? "");
       if (!w.activeProject) fullscreen("editor");
     });
     void api
@@ -1342,7 +1336,7 @@ export default function App({
   // …and the NOTES' half, since nothing meters MIDI either: when each lane's notes sound, and how hard (noteSpans.ts).
   const noteLanes = useMemo(() => noteSpans(projectDoc), [projectDoc]);
 
-  /** A PROJECT setting off a card — the RENDER node's frame shape, written to project.k7x (apps/k7-daw-frontend/packages/song-video/docs/picture.md). */
+  /** A PROJECT setting off a card — the RENDER node's frame shape, written to project.k7x (apps/k7-daw-wasm/verbs/docs/picture/picture.md). */
   const onProjectField = useCallback(
     (field: string, value: string) =>
       void runCommandRef.current(`project ${field} ${value}`),
@@ -1525,7 +1519,6 @@ export default function App({
         showWs(w);
         setEngineLoad(w.engineLoad ?? null);
         lastActive.current = w.activeProject;
-        pageVerbs.setProject(w.activeProject ?? "");
         pluginParamsStore.clear();
         void api
           .project()

@@ -17,7 +17,7 @@ bound to it would send `module gain …` and be answered *unknown command*. A vo
 a verb every time a field becomes settable is a vocabulary that will be one field behind.
 
 From the outside the two are one act: *set this control on this module*. So they share a verb,
-and the table of intrinsics (`INTRINSICS` in `@studio/commands`) is one line per field.
+and the table of intrinsics (`INTRINSICS` in the verbs crate (`apps/k7-daw-wasm/verbs`)) is one line per field.
 
 ## What the `@` actually decides
 

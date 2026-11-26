@@ -21,7 +21,7 @@ const q = (s: string) => JSON.stringify(s);
 export const LIVE_INPUT = AUDIO_IN_NODE;
 export const LIVE_FADER = "fader";
 
-/** The shared strip every mixer node names, this scaffold's and an import's alike (`apps/k7-daw-frontend/packages/translator/docs/import.md`). */
+/** The shared strip every mixer node names, this scaffold's and an import's alike (`apps/k7-daw-backend/docs/import.md`). */
 export const SHARED_STRIP = "@meta/audio/mixer";
 
 /** The lens, owned the way the input is: a built-in io name, so the graph can say it bare. */

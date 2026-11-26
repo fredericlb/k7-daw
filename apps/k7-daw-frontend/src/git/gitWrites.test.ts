@@ -1,4 +1,6 @@
-import { loadCommandSpecs } from "@studio/commands/commandSpec";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it, vi } from "vitest";
 import {
   mergeGate,
@@ -31,7 +33,17 @@ describe("the command gate", () => {
 });
 
 describe("the verb table follows the registry", () => {
-  const registry = loadCommandSpecs().map((c) => c.command);
+  const registry = (
+    JSON.parse(
+      readFileSync(
+        join(
+          dirname(fileURLToPath(import.meta.url)),
+          "../../../k7-daw-wasm/verbs/commands.json",
+        ),
+        "utf8",
+      ),
+    ) as { command: string }[]
+  ).map((c) => c.command);
   it("classes every verb of commands.yaml, and none that is not there", () => {
     expect(registry.filter((c) => !CLASSED_VERBS.includes(c))).toEqual([]);
     expect(CLASSED_VERBS.filter((c) => !registry.includes(c))).toEqual([]);

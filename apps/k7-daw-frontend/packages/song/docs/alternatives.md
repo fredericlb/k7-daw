@@ -92,7 +92,7 @@ plays. A set's taps are merged over the module's one whole entry at a time, so a
 name would replace that file with nothing, and the lane would receive its notes and sound no pad.
 
 Switching between two such sets is a different PLUGIN, so it is never the values-only fast path of
-`select` (`apps/k7-daw-frontend/packages/commands/docs/verbs.md`): the engine rebuilds that plugin.
+`select` (`apps/k7-daw-wasm/verbs/docs/verbs/verbs.md`): the engine rebuilds that plugin.
 
 ## Order against `extends`, and why it is applied ONCE
 
@@ -147,7 +147,7 @@ wishes.
 the timeline's menu all three. `create` and `copy` end in a project RELOAD: a set may change the
 plugin, the panel or a whole clip list, so there is nothing cheap to diff. `select` between two
 sets that differ in numbers alone is the exception, pushed to the engine as values without a
-recompile (`apps/k7-daw-frontend/packages/commands/docs/verbs.md`).
+recompile (`apps/k7-daw-wasm/verbs/docs/verbs/verbs.md`).
 
 `create` is EMPTY by default, and that is not the empty-looking thing it seems: a set states only
 what it changes, so an empty one is "the module as it is" and you then change the two knobs you

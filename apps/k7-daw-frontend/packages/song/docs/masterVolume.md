@@ -26,7 +26,7 @@ param lives instead.
 That is a storage detail, and everything above it treats the level as what it is: a param on a node
 in the graph. `node param "OUT" Volume` is the spelling, the same one a mixer strip's fader commits
 on its own node, and `project master <dB>` is that write under the name a person types. There is one
-implementation (`writeMasterVolume` in `@studio/commands`), so the two cannot drift apart about the
+implementation (`writeMasterVolume` in the verbs crate (`apps/k7-daw-wasm/verbs`)), so the two cannot drift apart about the
 range, the unity rule, or how the engine learns it.
 
 `MIX` carries no level and refuses one by name. The mixer's sum is a place the signal passes

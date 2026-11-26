@@ -1,0 +1,23 @@
+[package]
+name = "k7-import"
+description = "A foreign project (.als, .dawproject, a zipped Ableton folder) translated into the files of a k7 project, in memory (docs/import.md)."
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+quick-xml.workspace = true
+flate2.workspace = true
+zip.workspace = true
+# The emitter keys audio by content.
+sha1.workspace = true
+indexmap.workspace = true
+# The files are printed by k7x's own printer, and a clip's window is song-edit's `material_window`.
+k7x = { path = "../../../k7-daw-wasm/k7x" }
+song-edit = { path = "../../../k7-daw-wasm/song-edit" }
+song-schema = { path = "../../../k7-daw-wasm/song-schema" }
+
+[dev-dependencies]
+# The tests compile what an import wrote, with the song crate, as a page would.
+song = { path = "../../../k7-daw-wasm/song" }
+verbs = { path = "../../../k7-daw-wasm/verbs" }

@@ -47,7 +47,7 @@ sound lane, and the rows, the graph card and both compiles need its kind before 
 It is still a lane node, muted by its bypass, soloed, ordered and renamed with the others; that
 mute and solo are its picture's, and its `#audio` half has its own.
 `lanesOf` answers the sound lanes only, `pictureLanesOf` the picture ones
-(`apps/k7-daw-frontend/packages/song-video/docs/picture.md`).
+(`apps/k7-daw-wasm/verbs/docs/picture/picture.md`).
 
 ## Two outputs
 

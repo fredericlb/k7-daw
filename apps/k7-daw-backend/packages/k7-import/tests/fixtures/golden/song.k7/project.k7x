@@ -1,0 +1,1 @@
+project({ name: "golden", tempo: 98, sampleRate: 48000, timeSignature: "7/8" })

@@ -3,9 +3,11 @@
 
 pub mod disk_fs;
 pub mod edge;
+pub mod import;
 pub mod module_make;
 pub mod modules;
 pub mod open;
+pub mod picture;
 pub mod prepare;
 pub mod presets;
 pub mod project_create;

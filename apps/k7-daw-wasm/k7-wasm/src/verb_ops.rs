@@ -1,4 +1,5 @@
 // verb_ops.rs — the `verb.run` and `verb.complete` operations: a command line run, or completed, by the `verbs` crate over a file system.
+// `verb.catalogue` takes no files and is answered in `ops.rs` from the crate's `palette`.
 // A reader would get wrong that a refusal is an error here: it is an answer (`refused: true`); only an unknown file is `needs_files`.
 
 use crate::error::WasmError;
@@ -130,6 +131,21 @@ mod tests {
             serde_json::to_value(&answer).unwrap(),
             serde_json::json!({ "items": ["project tempo"] })
         );
+    }
+
+    #[test]
+    fn the_catalogue_is_asked_by_its_op_alone() {
+        let mut out = Vec::new();
+        let status = crate::ops::Session::new().handle(br#"{"op":"verb.catalogue"}"#, &mut out);
+        assert_eq!(status, crate::ops::OK);
+        let rows: serde_json::Value = serde_json::from_slice(&out).unwrap();
+        let rename = rows
+            .as_array()
+            .unwrap()
+            .iter()
+            .find(|r| r["command"] == "track rename")
+            .unwrap();
+        assert_eq!(rename["args"][0]["provider"], "tracks");
     }
 
     #[test]

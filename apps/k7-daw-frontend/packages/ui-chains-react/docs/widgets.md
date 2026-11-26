@@ -123,7 +123,7 @@ value until something else reloads. The native graph route's tests pin the
 half a test can reach: the graph the route hands back really does carry the new field.
 
 The line names the field the way the WIDGET does — `@channel`, the bind verbatim — so there is one
-vocabulary and no verb per field to keep in step; see the `INTRINSICS` table in `@studio/commands`.
+vocabulary and no verb per field to keep in step; see the `INTRINSICS` table in the verbs crate (`apps/k7-daw-wasm/verbs`).
 It writes `arg` where an entry SAYS one thing and SETS another (a socket reads "Input 1 + 2" and
 writes `1,2`); everywhere else the word on screen is the word in the file.
 

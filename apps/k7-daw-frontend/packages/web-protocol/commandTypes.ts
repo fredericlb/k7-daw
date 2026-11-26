@@ -1,7 +1,7 @@
-// commandTypes.ts — the palette's catalogue as GET /commands serves it, mirroring
-// apps/k7-daw-frontend/packages/commands/src/commandSpec.ts. Re-exported by types.ts.
+// commandTypes.ts — the palette's catalogue as GET /verb/catalogue serves it, mirroring
+// apps/k7-daw-wasm/verbs/src/palette.rs. Re-exported by types.ts.
 
-// GET /commands — the palette's catalogue; mirrors ARG_CLASSES in apps/k7-daw-frontend/packages/commands/src/commandSpec.ts.
+// GET /verb/catalogue — the palette's catalogue; mirrors ARG_CLASSES in apps/k7-daw-wasm/verbs/src/complete/provider_info.rs.
 export type ArgClass =
   | "track"
   | "module"
@@ -58,7 +58,7 @@ export interface CommandArg {
   // TRAILING args only: the line runs without it, so a form knows when it has collected enough.
   optional?: boolean;
 }
-// What a right-click can be ON, as commands.yaml `menu:` names it — mirrors MENU_ENTITIES in apps/k7-daw-frontend/packages/commands/src/commandSpec.ts.
+// What a right-click can be ON, as commands.yaml `menu:` names it — mirrors MENU_ENTITIES in apps/k7-daw-wasm/verbs/src/palette.rs.
 export const MENU_ENTITIES = [
   "track",
   "group",

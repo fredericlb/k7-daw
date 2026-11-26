@@ -191,3 +191,31 @@ async fn a_line_is_completed_under_the_caret() {
     let ans: Value = serde_json::from_str(&t).unwrap();
     assert!(ans["items"].to_string().contains("project tempo"), "{ans}");
 }
+
+// The catalogue is a read: it needs no open project and names each argument's class and clue.
+#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+async fn the_catalogue_is_served_as_command_info() {
+    use hyper::Method;
+    assert_eq!(
+        routes::route(&Method::GET, "/verb/catalogue"),
+        routes::Route::Handler(H::VerbCatalogue)
+    );
+    assert_eq!(
+        routes::route(&Method::POST, "/verb/catalogue"),
+        routes::Route::Hooked
+    );
+    assert_eq!(Tag::VerbCatalogue.piece(), super::Piece::Journal);
+    let b = clip_lane("verb-catalogue").await;
+    let ctx = super::tests::ctx(&b.dir, Tag::VerbCatalogue, "", &b.lines);
+    let c = call(&b.dir, "", json!({}), Some(ctx));
+    let (status, t) = text(routes::dispatch(H::VerbCatalogue, &c).await).await;
+    assert_eq!(status, 200, "{t}");
+    let rows: Value = serde_json::from_str(&t).unwrap();
+    let row = rows
+        .as_array()
+        .and_then(|r| r.iter().find(|c| c["command"] == "track rename"))
+        .unwrap();
+    assert_eq!(row["args"][0]["provider"], json!("tracks"));
+    assert_eq!(row["args"][0]["kind"], json!("track"));
+    assert_eq!(row["menu"], json!(["track"]));
+}

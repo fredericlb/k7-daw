@@ -112,7 +112,7 @@ export function RepoList({
   /** What stops a workspace being MADE, on top of `blocked` — the account's library, which everything in one resolves through. */
   blockedWorkspace: string;
   /** Files dropped ON a row: everything dropped, since which one is importable — and what to say
-   *  when none is — belongs with the state that can report it (apps/k7-daw-frontend/packages/translator/docs/import.md). */
+   *  when none is — belongs with the state that can report it (apps/k7-daw-backend/docs/import.md). */
   onDropProject: (ws: AccountWorkspace, files: File[]) => void;
   onCreate: (
     ws: AccountWorkspace,

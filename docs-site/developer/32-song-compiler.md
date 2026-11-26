@@ -103,4 +103,4 @@ not reproduce it (`apps/k7-daw-frontend/packages/song/src/yaml/yamlCache.ts`, `s
 - `apps/k7-daw-frontend/packages/song/src/testSupport.ts` holds the helpers that write a temporary project.
 - `scaffold.test.ts`, `scaffoldLive.test.ts` scaffold each archetype and read it back.
 - The compile's own tests are the song crate's (`apps/k7-daw-wasm/song/tests/all/`); the verbs' tests compile a project
-  through it with `apps/k7-daw-frontend/packages/commands/src/runtime/testing/compileDisk.ts`.
+  through it with the verbs crate's `tests/support` (`apps/k7-daw-wasm/verbs/tests/support/mod.rs`).

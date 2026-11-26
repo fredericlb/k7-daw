@@ -136,7 +136,7 @@ thing is steered by, and this decides which program is COMPILED. The four knobs 
 a folder the module carries, so a value with a separator in it is refused here rather than resolved
 into somebody else's module. Absent is a real state — a shader node with nothing picked passes its
 picture through untouched, which is what a node you have just added should do
-(`apps/k7-daw-frontend/packages/song-video/docs/shaders.md`).
+(`apps/k7-daw-wasm/verbs/docs/picture/shaders.md`).
 
 ## `params:`, and the few that are files
 

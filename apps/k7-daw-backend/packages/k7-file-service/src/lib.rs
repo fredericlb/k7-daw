@@ -36,7 +36,6 @@ pub mod stamp;
 pub mod strict;
 pub mod text_hash;
 pub mod tree;
-pub mod verb_bundle;
 pub mod verb_host;
 pub mod verb_paths;
 pub mod watch;

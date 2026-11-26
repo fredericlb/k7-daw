@@ -1,0 +1,2 @@
+plugin({ type: "vst3", name: "Diva" })
+params({ Cutoff: 0.3 })

@@ -22,7 +22,6 @@
     "@studio/ui": "*",
     "@replit/codemirror-vim": "^6.3.0",
     "@studio/audio-probe": "*",
-    "@studio/commands": "*",
     "@studio/engine-browser": "*",
     "@studio/engine-protocol": "*",
     "@studio/graph-model": "*",

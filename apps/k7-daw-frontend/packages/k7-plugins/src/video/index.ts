@@ -1,7 +1,7 @@
 // index.ts — the video plugin: the frame. It owns the viewport's drawing — the WebGL canvas
-// over @studio/ui-eyes, the scene compiler, the shader-audio levels, the lens transport and the
+// over @studio/ui-eyes, the scene the backend builds, the shader-audio levels, the lens transport and the
 // picture-mix arithmetic — and contributes the drawer that draws a `viewport` surface, in the
-// shell's floating window and on a device. `sceneOf` and `ViewportTab` are exported for the shell's
+// shell's floating window and on a device. `fetchScene` and `ViewportTab` are exported for the shell's
 // own panes (the export flow renders the scene too). Both drawers are LAZY, the compositor being
 // fetched only by a project that draws a picture (../lazyDrawer.tsx). See ../../docs/plugins.md.
 
@@ -32,5 +32,5 @@ export const videoPlugin: K7Plugin = definePlugin({
 });
 
 export { pushLayerRect, pushShaderParam } from "./pictureLive";
-export { sceneOf } from "./scene";
+export { fetchScene } from "./scene";
 export type { ViewportTabProps } from "./ViewportTab";

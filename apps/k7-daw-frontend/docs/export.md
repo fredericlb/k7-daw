@@ -48,7 +48,7 @@ render starts (`ui/commands/project.ts`). The folder is therefore a path the fro
 
 `picture interchange` writes nothing: the cut is its first output line, `useShare` saves that text, and what the
 writers left out follows as further lines. The media in an OTIO are named as if the cut sat in an `exports/`
-folder beside the project (`apps/k7-daw-frontend/packages/song-video/docs/interchange.md`); a cut saved elsewhere is relinked by the
+folder beside the project (`apps/k7-daw-wasm/verbs/docs/picture/interchange.md`); a cut saved elsewhere is relinked by the
 editor, which every editor offers.
 
 The front's side is `apps/k7-daw-backend/docs/export.md`.

@@ -38,6 +38,7 @@ mod git_roam;
 mod git_sync;
 mod git_task;
 pub mod history;
+pub mod import_run;
 pub mod jobs;
 pub mod journal;
 pub mod journal_undo;
@@ -49,6 +50,7 @@ pub mod modules;
 pub mod open_prepare;
 pub mod orphans;
 pub mod orphans_project;
+pub mod picture_run;
 pub mod prefs_routes;
 pub mod projects;
 pub mod projects_open;
@@ -61,7 +63,6 @@ pub mod stack;
 pub mod stats;
 mod tag;
 pub mod verb_ask;
-pub mod verb_bundle;
 pub mod verb_host;
 pub mod verb_run;
 pub mod workspaces;
@@ -176,10 +177,11 @@ impl Ctx {
                 || matches!(
                     tag,
                     Tag::Changes
+                        | Tag::Import
                         | Tag::Verb
                         | Tag::VerbComplete
-                        | Tag::VerbBundle
-                        | Tag::VerbLibrary
+                        | Tag::Picture
+                        | Tag::PictureScene
                         | Tag::VerbHost(_)
                         | Tag::ModuleCreate
                         | Tag::ModuleClone
@@ -297,6 +299,8 @@ mod tests_history;
 #[cfg(test)]
 mod tests_hub;
 #[cfg(test)]
+mod tests_import;
+#[cfg(test)]
 mod tests_journal;
 #[cfg(test)]
 mod tests_journal_more;
@@ -312,6 +316,8 @@ mod tests_modules;
 mod tests_open_repairs;
 #[cfg(test)]
 mod tests_orphans;
+#[cfg(test)]
+mod tests_picture_run;
 #[cfg(test)]
 mod tests_projects;
 #[cfg(test)]

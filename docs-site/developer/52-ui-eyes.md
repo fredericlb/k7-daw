@@ -21,7 +21,7 @@ Node packages, which is what lets it run in a browser.
 `exportSupport.ts` loads no muxer on purpose: the shell names the export's containers without pulling
 in the heaviest module the editor has. `export.ts` is imported dynamically, on the export itself. The
 export's words — containers, qualities, `size=`/`quality=`/`from=`/`to=` and how they resolve on a
-scene — live in `@studio/song-schema/renderSettings`, so `@studio/commands` and the server render
+scene — live in `@studio/song-schema/renderSettings`, so the verbs crate (`apps/k7-daw-wasm/verbs`) and the server render
 read them without depending on this package.
 
 ## The frame rule — `timeline.ts`

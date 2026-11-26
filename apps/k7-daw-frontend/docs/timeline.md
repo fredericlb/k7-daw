@@ -60,7 +60,7 @@ Each tool stands on **one verb**, so a press stays one command and one Ctrl+Z:
 
 **The tools are the same on both kinds of lane**, so the blade means the same thing wherever it
 lands. Both splits write two placements of one source and render nothing — audio by its window,
-picture by `from` (`apps/k7-daw-frontend/packages/commands/docs/picture.md`). The picture
+picture by `from` (`apps/k7-daw-wasm/verbs/docs/verbs/picture.md`). The picture
 column is `pictureToolLine`, beside `toolLine`, and a press on a shot goes through the same guard
 at the top of its own drag.
 
@@ -760,7 +760,7 @@ then sweep over any row, as the keyboard's head already could.
 ### The rectangle answers `events move`
 
 Acting on the rectangle is a COMMAND, not a gesture: `events move <tracks> <from> <to> <by>`
-(in `@studio/commands`) moves every event starting in the range by a signed duration, in one
+(in the verbs crate (`apps/k7-daw-wasm/verbs`)) moves every event starting in the range by a signed duration, in one
 line — so it is one undo step and one reload however many placements it touches, and the CLI
 can type the same range with no mouse anywhere near. While the bar is filling it, the
 selection feeds its region through `feedEventsMove`, the same road `feedMove` gives the
@@ -951,7 +951,7 @@ picture drag already uses.
 
 Making a picture lane is **two writes**: the lane file, and `trackOrder`, stated with the new lane
 above the other picture lanes so it draws in front, where you can see what you just made
-([apps/k7-daw-frontend/packages/song-video/docs/picture.md](../packages/song-video/docs/picture.md)).
+([apps/k7-daw-wasm/verbs/docs/picture/picture.md](../../k7-daw-wasm/verbs/docs/picture/picture.md)).
 
 ### The camcorder is the picture lane's mark
 

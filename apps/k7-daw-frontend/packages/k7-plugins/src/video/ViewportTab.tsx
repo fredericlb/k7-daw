@@ -14,7 +14,7 @@ import type { WebVideoProject } from "@studio/web-protocol";
 import { useEffect, useMemo, useState } from "react";
 import { CodeText } from "../CodeText";
 import { m } from "../paraglide/messages.js";
-import { sceneOf } from "./scene";
+import { useScene } from "./scene";
 import { audioSources } from "./shaderAudio";
 import { VideoCanvas } from "./VideoCanvas";
 import { ViewportOverlay } from "./ViewportOverlay";
@@ -63,11 +63,8 @@ export function ViewportTab({
     };
   }, [vw, vh]);
 
-  // Rebuilt only when the DOCUMENT changes: the scene owns a GL context and a <video> per layer, and both would be torn down per frame.
-  const scene = useMemo(
-    () => (doc ? sceneOf(doc, armed ?? null) : null),
-    [doc, armed],
-  );
+  // Asked again only when the DOCUMENT or the arm changes: the scene owns a GL context and a <video> per layer.
+  const { scene, settled } = useScene(doc, armed ?? null);
   // Which lane drives each shader pass, memoised beside the scene: the LEVELS move at 20 Hz, this map does not.
   const sources = useMemo(() => audioSources(doc), [doc]);
 
@@ -77,6 +74,8 @@ export function ViewportTab({
         {error}
       </div>
     );
+  // A scene on its way draws the black frame it will fill, rather than a word that would flash.
+  if (!scene && doc && !settled) return <div className="h-full w-full" />;
   // Declared and empty is a real state: the surface says this song draws picture, and saying which file to add beats a black rectangle.
   if (!scene)
     return (

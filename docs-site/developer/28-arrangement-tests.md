@@ -10,7 +10,7 @@ about a gesture's feel or a drawing. Exercise those in the running app.
 ```bash
 npm test                                   # every workspace, from the repo root
 cd apps/k7-daw-frontend && npx vitest run      # the frontend's pure modules
-cd apps/k7-daw-frontend/packages/commands && npx vitest run     # the verbs
+cargo test --manifest-path apps/k7-daw-wasm/verbs/Cargo.toml     # the verbs
 cd apps/k7-daw-frontend/packages/song-edit && npx vitest run    # the k7x writers
 npx vitest run src/snap.test.ts            # one file, from inside its package
 ```
@@ -39,14 +39,14 @@ source comment or a Markdown page naming a file that is not there.
 | `takes.test.ts`, `takeCounter.test.ts`, `midiTake.test.ts`, `midiIn.test.ts`, `webmidi.test.ts`, `laneInput.test.ts`, `transportPanic.test.ts` | Comp lines and spans, the take counter, MIDI take trimming, device matching, inputs, the double-stop panic. |
 | `exportArgs.test.ts`, `gainTrim.test.ts`, `mixerStrips.test.ts`, `apps/k7-daw-frontend/src/mastering/controls.test.ts` | Export syntax, the Fix trim, strip order, the mastering control list. |
 
-### Verbs (`apps/k7-daw-frontend/packages/commands/src/`)
+### Verbs (`apps/k7-daw-wasm/verbs/src/`)
 
 `eventsMove.test.ts`, `eventsRemove.test.ts`, `eventStatus.test.ts`, `eventLoop.test.ts`,
 `eventGain.test.ts`, `eventTakes.test.ts`, `eventProcess.test.ts`, `crossfade.test.ts`,
 `curvePoint.test.ts`, `curveSet.test.ts`, `trackAutomation.test.ts`, `notesRegion.test.ts`,
 `noteVelocity.test.ts`, `sequenceDouble.test.ts`, `sequenceRecord.test.ts`, `trackMuteSolo.test.ts`,
 `trackHighlight.test.ts`, `trackOrder.test.ts`, `trackGroup.test.ts`, `trackInput.test.ts`,
-`projectMaster.test.ts`, `projectConsole.test.ts`, `refusal.test.ts`, and `commandSpec.test.ts`, which
+`projectMaster.test.ts`, `projectConsole.test.ts`, `refusal.test.ts`, and the crate's `palette.rs`, which
 holds the catalogue itself to its rules (both languages present, readable sentences at most 60
 characters, known completion providers). `apps/k7-daw-wasm/verbs/tests/support/mod.rs` is the fake
 `CommandHost` they run against.
@@ -69,7 +69,7 @@ property the whole write path is built to keep.
 | `apps/k7-daw-frontend/packages/audio-probe/src/` | `trimGate.test.ts`, `waveform.test.ts`, `key.test.ts` |
 | `apps/k7-daw-frontend/packages/take-render/src/` | `recordTake.test.ts`, `materialRender.test.ts` |
 | `apps/k7-daw-frontend/packages/audio-passes/src/` | `processChain.test.ts`, `peakPass.test.ts`, `coldPass.test.ts` |
-| `apps/k7-daw-frontend/packages/translator/src/` | `dawproject.test.ts`, `ableton.test.ts`, `abletonZip.test.ts`, `emitNodes.test.ts` |
+| `apps/k7-daw-backend/packages/k7-import/tests/` | `import.rs`, `golden.rs` |
 | `apps/k7-daw-frontend/packages/engine-browser/src/` | `meter.test.ts` (meter fill, clip latch, peak hold) |
 | `apps/k7-daw-backend/packages/k7-file-service/` | the journal, the arm, the renders and the change set, as Rust tests beside their sources and in `tests/` |
 

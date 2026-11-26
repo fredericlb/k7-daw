@@ -92,7 +92,7 @@ it ends.
 
 ## Making the render
 
-`freezeUpstreamRender` (`@studio/commands`) cuts the compiled `ProjectDoc` down to exactly the plan —
+`freezeUpstreamRender` (the verbs crate (`apps/k7-daw-wasm/verbs`)) cuts the compiled `ProjectDoc` down to exactly the plan —
 those lanes, those plugins, the sends between them — and renders that whole, as a **mixdown**. Not a
 per-track bounce: a freeze point may be a bus several lanes meet at.
 

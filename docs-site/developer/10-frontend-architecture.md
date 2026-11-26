@@ -85,7 +85,7 @@ The browser talks to three servers, through `apps/k7-daw-frontend/src/api.ts`:
 | Destination | How | For |
 |---|---|---|
 | k7's backend, same origin | `/auth/*`, `/api/*`, cookie | sign-in, the account's preferences, the AI settings, the engine registry, sync history and events |
-| The account's file service | absolute URL from the engine probe, header-authenticated ticket (`@studio/project-shell/fileApi`) | every file and project operation: tree, files, `/changes`, `/verb-bundle`, compiled document, graph, `/revision`, undo, conflicts |
+| The account's file service | absolute URL from the engine probe, header-authenticated ticket (`@studio/project-shell/fileApi`) | every file and project operation: tree, files, `/verb`, `/picture`, `/import`, `/changes`, compiled document, graph, `/revision`, undo, conflicts |
 | The engine | WebSocket (`src/hooks/useEngineLink.ts`) | transport, meters, live params, pairing |
 
 See [Frontend and backend boundary](./19-frontend-backend-boundary.md).

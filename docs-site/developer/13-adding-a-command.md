@@ -6,13 +6,13 @@ First decide **where it runs**:
 
 | It… | Goes |
 |---|---|
-| changes project or workspace files, or asks the engine through the file service | the catalogue: `apps/k7-daw-frontend/packages/commands` |
+| changes project or workspace files, or asks the engine through the file service | the catalogue: `apps/k7-daw-wasm/verbs` |
 | only changes what the shell shows (a page, a panel, a tool, a zoom) | a `ui` command in the frontend |
 | needs something only the browser has (the clipboard, Web MIDI, a camera, a download) but writes through a file route | a bare-named web-local command |
 
 ## A catalogue verb
 
-1. **Declare it** in `apps/k7-daw-frontend/packages/commands/commands.yaml`:
+1. **Declare it** in `apps/k7-daw-wasm/verbs/commands.yaml`:
 
    ```yaml
    - command: "track colour"
@@ -63,7 +63,7 @@ provider, and the menu derives itself from the catalogue.
 
 ### A new completion provider
 
-Add it to the crate's providers in `apps/k7-daw-wasm/verbs/src/complete/mod.rs`, then give it a class in `PROVIDER_CLASS` and a hint in `PROVIDER_HINT` (`apps/k7-daw-frontend/packages/commands/src/providerInfo.ts`; `PROVIDER_HINT` is exhaustive, so the build tells you). The provider and class names are mirrored on the wire as the `ArgProvider` and `ArgClass` unions in `apps/k7-daw-frontend/packages/web-protocol/commandTypes.ts`; add the new name there too.
+Add it to the crate's providers in `apps/k7-daw-wasm/verbs/src/complete/mod.rs`, then give it a class and a hint in the table of `apps/k7-daw-wasm/verbs/src/complete/provider_info.rs` (a test fails when a name is in one and not the other). The provider and class names are mirrored on the wire as the `ArgProvider` and `ArgClass` unions in `apps/k7-daw-frontend/packages/web-protocol/commandTypes.ts`; add the new name there too.
 
 ## A `ui` command
 

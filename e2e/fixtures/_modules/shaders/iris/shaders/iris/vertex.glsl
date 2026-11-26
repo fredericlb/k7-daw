@@ -5,7 +5,7 @@
 //
 // It is a separate file, and duplicated per shader on purpose: a shader is the PAIR, and the day
 // one wants to move its geometry it needs this file to itself rather than a shared one it would
-// have to fork. See apps/k7-daw-frontend/packages/song-video/docs/shaders.md.
+// have to fork. See apps/k7-daw-wasm/verbs/docs/picture/shaders.md.
 in vec2 aUnit;
 out vec2 vUV;
 

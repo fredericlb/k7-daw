@@ -167,7 +167,7 @@ contract with the gate that reads it back, and one builder is one encoding.
 
 Everything an k7 project can BE is in the **surfaces** it declares inside the `.k7`, rather than
 in some kind of folder: a `viewport` and video lanes for picture
-(`apps/k7-daw-frontend/packages/song-video/docs/picture.md`), a `turntables` surface and the playlist it names for a set
+(`apps/k7-daw-wasm/verbs/docs/picture/picture.md`), a `turntables` surface and the playlist it names for a set
 (`apps/k7-daw-frontend/packages/song/docs/setProject.md`). That is why the three archetypes in the creation menu are
 named after their surface.
 
@@ -291,7 +291,7 @@ it beside the project it produced would put every sample in the workspace twice.
 
 What comes back is the **import log** — what was read, and every warning the mapper raised — shown
 in the popin before anything opens, because a translation is lossy and finding that out inside the
-song is finding it out too late (`apps/k7-daw-frontend/packages/translator/docs/import.md`). Then a button opens the
+song is finding it out too late (`apps/k7-daw-backend/docs/import.md`). Then a button opens the
 project, in this tab like every other project link here.
 
 Only `.dawproject` and a zipped Ableton project are taken, and the importer refuses anything else on its own side. A `.als`

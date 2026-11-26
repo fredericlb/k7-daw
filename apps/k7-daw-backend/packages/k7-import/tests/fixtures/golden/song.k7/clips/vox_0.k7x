@@ -1,0 +1,2 @@
+source("clips/vox.wav")
+to("1:5")

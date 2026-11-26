@@ -58,7 +58,7 @@ On stop the page waits for the engine to close its take, then **joins the two it
 them, the engine's wav read through the project's media route and encoded to Opus by WebCodecs,
 one WebM streamed to a scratch file on disk as it is made. It uploads that into the project's
 `clips/` — the record directory the engine writes its takes into — and runs
-`project record save <take.wav|none> [<picture.webm>]` (`apps/k7-daw-frontend/packages/commands/commands.yaml`). The
+`project record save <take.wav|none> [<picture.webm>]` (`apps/k7-daw-wasm/verbs/commands.yaml`). The
 file service, which runs on the engine's machine, keeps what it is handed in that directory and
 answers the take's file name (`apps/k7-daw-backend/packages/k7-file-service/src/media/mod.rs`):
 

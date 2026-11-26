@@ -1,5 +1,5 @@
 // host_media.rs — the host members the media verbs need, as the front's routes answer them: a probe, a clip's copies, a film's sound, a render.
-// A reader would get wrong `render_picture`: the scene is the page's to build, so it is an ask the backend hands back to the page (`page renderPicture`).
+// A reader would get wrong that a refusal of a route is a throw: each member answers `Refusal`, which the verb words.
 
 use crate::host::{Failed, Host};
 use serde_json::{Value as Json, json};
@@ -8,8 +8,6 @@ use serde_json::{Value as Json, json};
 const PROBE: &str = "POST /verb-host/probe";
 const PREPARE: &str = "POST /verb-host/prepare";
 const EXTRACT: &str = "POST /verb-host/extract";
-/// An ask the backend does not perform: the page builds the scene and posts `/verb-host/picture` itself.
-pub const PAGE_RENDER_PICTURE: &str = "page renderPicture";
 
 /// The refusal a pending call reads as: the run ends pending whatever the verb does with it, and lands nothing.
 fn waiting() -> Refusal {
@@ -151,19 +149,5 @@ impl Host<'_> {
             sample_rate: num("sampleRate"),
             channels: num("channels"),
         })
-    }
-
-    /// `renderPicture(ask)`: asked of the page, which builds the scene from the project as it landed and posts the render.
-    ///
-    /// # Errors
-    /// None: the page says what came of it.
-    pub fn render_picture(&mut self, ask: Json) -> Result<(), Refusal> {
-        self.ask(PAGE_RENDER_PICTURE, ask);
-        Ok(())
-    }
-
-    /// `background(tag, work)`: whether the work a tag names runs in the background; the front's picture job always does.
-    pub fn background(&mut self, _tag: &str) -> bool {
-        true
     }
 }
