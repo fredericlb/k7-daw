@@ -1,5 +1,5 @@
 // engines.spec.ts — the engine registry as an engine and a browser see it: the open hello, heartbeat and
-// deregister, the session's list, select, release and WebRTC offer, the relay's upgrade
+// deregister, the session's list, select and release, the relay's upgrade
 // and the internal seam's gate. An engine of its own per run, with no secret, so nothing stays.
 
 import { randomBytes } from "node:crypto";
@@ -145,19 +145,6 @@ test("tells a lapsed engine from a wrong token, and claims, renews and lets go",
   expect(
     await (await select({ id, token: "tok-a", project: null, secret })).json(),
   ).toEqual({ ok: true, secret });
-  const offer = await request.post(`/api/engine/${id}/rtc`, {
-    data: { sdp: "v=0" },
-    headers: signedIn(),
-  });
-  expect(offer.status()).toBe(503);
-  expect(
-    (
-      await request.post(`/api/engine/${id}/rtc`, {
-        data: { sdp: "" },
-        headers: signedIn(),
-      })
-    ).status(),
-  ).toBe(400);
   const release = await request.post("/api/engine/release", {
     data: { id, secret },
     headers: signedIn(),
@@ -169,14 +156,6 @@ test("tells a lapsed engine from a wrong token, and claims, renews and lets go",
     error: "project taken",
     heldBy: "",
     lost: "lapsed",
-  });
-  const refused = await request.post(`/api/engine/${id}/rtc`, {
-    data: { sdp: "v=0" },
-    headers: signedIn(),
-  });
-  expect(refused.status()).toBe(403);
-  expect(await refused.json()).toEqual({
-    error: "claim this engine before opening a direct link",
   });
 });
 

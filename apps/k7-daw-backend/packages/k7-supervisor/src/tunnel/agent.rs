@@ -392,8 +392,6 @@ impl Shared {
             HubMessage::StatReply { req, entries } => self.files.on_stat_reply(req, &entries),
             HubMessage::PutReply { req, stat, error } => self.files.on_put_reply(req, &stat, &error),
             HubMessage::GetError { req, error } => self.files.on_get_error(req, &error),
-            // WebRTC is not carried: the browser stays on the tunnel.
-            HubMessage::RtcOffer { req } => self.tell(&json!({"t": "rtc-answer", "req": req, "error": "WebRTC is not available on this machine"})),
         }
     }
 

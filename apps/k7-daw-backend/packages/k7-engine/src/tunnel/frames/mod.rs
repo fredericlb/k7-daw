@@ -82,11 +82,6 @@ pub enum AgentMessage {
         ch: i64,
         path: String,
     },
-    RtcAnswer {
-        req: i64,
-        sdp: Option<String>,
-        error: Option<String>,
-    },
 }
 
 /// `parseAgentMessage`: an agent's text frame, or None when it is not JSON or not one of the shapes.
@@ -122,11 +117,6 @@ pub fn parse_agent_message(text: &str) -> Option<AgentMessage> {
             req: int("req")?,
             ch: int("ch")?,
             path: s("path")?,
-        },
-        "rtc-answer" => AgentMessage::RtcAnswer {
-            req: int("req")?,
-            sdp: opt_str(m.get("sdp"))?,
-            error: opt_str(m.get("error"))?,
         },
         _ => return None,
     })

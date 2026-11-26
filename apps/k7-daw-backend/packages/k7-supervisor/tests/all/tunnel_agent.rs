@@ -201,11 +201,6 @@ async fn a_frame_the_agent_does_not_read_is_said_once_per_type() {
     }
     r.hub.send(json!([1, 2]));
     r.hub.send_binary(json!({"t": "wonder"}), &[0]);
-    r.hub
-        .send(json!({"t": "rtc-offer", "req": 7, "sdp": "v=0"}));
-    let answer = r.hub.next_of("rtc-answer").await;
-    assert_eq!(answer["req"], 7);
-    assert!(answer["error"].as_str().unwrap().contains("WebRTC"));
     assert_eq!(r.said("type 'mystery'"), 1);
     assert_eq!(r.said("type '(not a JSON object)'"), 1);
     assert_eq!(r.said("binary frame of type 'wonder'"), 1);
