@@ -14,6 +14,7 @@ import {
 } from "../processes";
 import type { createStatusLine } from "../statusLine";
 import type { ShellLayout } from "../useIsMobile";
+import { FLOAT_BUTTON, FLOAT_CAPSULE } from "./floatCapsule";
 import { summonChord } from "./modKey";
 import { PANEL_DEFS, type PanelId } from "./panels";
 import { RailChevron } from "./RailChevron";
@@ -105,8 +106,9 @@ export function ProjectHeader({
         {git}
         {!phone && views}
         {!phone && onCommandBar && (
-          <Capsule className="float">
+          <Capsule className={FLOAT_CAPSULE}>
             <CapsuleButton
+              className={FLOAT_BUTTON}
               aria-label={m["shell.commandBar"]()}
               title={m["shell.commandBar.tip"]({
                 name: m["commandBar.list"](),
@@ -123,12 +125,13 @@ export function ProjectHeader({
           <Capsule
             role="group"
             aria-label={m["shell.dock"]()}
-            className="float"
+            className={FLOAT_CAPSULE}
           >
             {panels.map((p) => {
               const def = PANEL_DEFS[p.id];
               return (
                 <CapsuleButton
+                  className={FLOAT_BUTTON}
                   key={p.id}
                   pressed={p.pressed}
                   disabled={p.disabled}

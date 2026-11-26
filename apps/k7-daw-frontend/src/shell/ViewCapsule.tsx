@@ -31,11 +31,11 @@ export interface BarGraphViews {
   stacked: boolean;
 }
 
-// A small capsule: 36 px tall, 28 px buttons, 16 px icons.
+// As tall as the floating row (40 px), 32 px buttons, 16 px icons.
 const CAPSULE =
-  "float pointer-events-auto flex h-9 items-center gap-0.5 rounded-full p-1";
+  "float pointer-events-auto flex h-(--k7-float-h) items-center gap-0.5 rounded-full p-1";
 const BTN =
-  "h-7 min-w-7 px-1.5 desk:h-7 desk:min-w-7 desk:rounded-full rounded-full [&_svg]:size-4 desk:[&_svg]:size-4";
+  "h-8 min-w-8 px-1.5 desk:h-8 desk:min-w-8 desk:rounded-full rounded-full [&_svg]:size-4 desk:[&_svg]:size-4";
 
 export function ViewCapsule({
   lanes,
