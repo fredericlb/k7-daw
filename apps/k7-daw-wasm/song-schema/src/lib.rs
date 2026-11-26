@@ -6,16 +6,19 @@
 
 mod curve;
 mod curve_spec;
+pub mod engine;
 mod error;
 mod preview;
 #[cfg(test)]
 mod tests;
+mod text_hash;
 mod timecode;
 
 pub use curve::{Adsr, Curve, Cut, Kind, Point, Points, Polarity, Shape, cut_output};
 pub use curve_spec::{AdsrSpec, CurveSpec, LfoSpec, PointSpec, PointsSpec};
 pub use error::SchemaError;
 pub use preview::{BeatLine, CurvePreview, Span, XY, playhead, preview};
+pub use text_hash::text_hash;
 pub use timecode::{
     TICKS_PER_QUARTER, TimeSig, beats_to_duration, beats_to_duration_on, beats_to_position, beats_to_position_on,
     is_timecode, parse_duration, parse_position, parse_position_on, round_beat,

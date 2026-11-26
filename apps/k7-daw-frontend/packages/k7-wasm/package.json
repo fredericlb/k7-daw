@@ -10,6 +10,7 @@
     "./boot": "./src/boot.ts",
     "./song": "./src/song.ts",
     "./edit": "./src/edit.ts",
+    "./engine": "./src/engine.ts",
     "./replayRun": "./src/replayRun.ts"
   },
   "scripts": {
