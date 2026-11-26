@@ -1,4 +1,4 @@
-// abi.ts — loads the WebAssembly module and speaks its C ABI: JSON in, JSON out, one hot call returning two numbers.
+// abi.ts — loads the WebAssembly module and speaks its C ABI: JSON in, JSON out, a hot call returning two numbers, and the typed gesture calls (gesture.ts).
 // A reader would get wrong that a view of the module's memory dies at the next call: any call may grow it.
 // There is no TypeScript fallback: without WebAssembly every call throws `unavailable`.
 
@@ -42,7 +42,14 @@ interface Abi {
   k7_curve_playhead(handle: number, beat: number): number;
   k7_scalars_ptr(): number;
   k7_fs_buf(len: number): number;
+  k7_f64_in(len: number): number;
+  k7_f64_out_ptr(): number;
+  /** The gestures' typed calls: numbers in, a number or a status back (docs/gesture.md). */
+  [typedCall: `k7_g_${string}`]: (...args: number[]) => number;
 }
+
+/** What gesture.ts calls: the instance, its memory and its typed exports. */
+export type TypedAbi = Abi;
 
 /** What the imports of a host reach the live instance through. */
 export interface HostMemory {
@@ -225,4 +232,15 @@ export function playhead(handle: number, beat: number): XY | null | undefined {
     if (isTrap(e)) recover(e);
     throw e;
   }
+}
+
+/** The live instance for a typed call; it throws `unavailable` like every call made before the module is ready. */
+export function typed(): TypedAbi {
+  return abi ?? instance();
+}
+
+/** Throws a trap away as `call` does, and rethrows anything else: a typed call's catch hands its error here. */
+export function trapped(e: unknown): never {
+  if (isTrap(e)) recover(e);
+  throw e;
 }

@@ -2,14 +2,12 @@
 // and never leaves the lane, and a fade, a length from one end inwards. Each is held, drawn while
 // written and released by the reload — the rule every drag of the timeline follows (docs/timeline.md).
 
+import { freeSnap, snapMode } from "@studio/k7-wasm/gesture";
+import { edgeResize, fadeLen } from "@studio/k7-wasm/gestureTimeline";
 import { beatsToDuration, beatsToPosition } from "@studio/song-schema/timecode";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { m } from "../paraglide/messages.js";
-import { freeSnap, snapMode, snapPosition, snapTo } from "../snap";
 import type { WebProject } from "../types";
-
-// The shortest an event may be left by a FREE resize — a 64th; the grid's own step is the floor while there is one.
-const MIN_FREE_BEATS = 1 / 16;
 
 /** An event's edge in hand, in beats. */
 export interface EdgeResize {
@@ -55,30 +53,16 @@ export function useEdgeResize(
     const r = resizeRef.current;
     if (r?.pending) return; // already written and only still drawn — a hover must not re-time it
     if (!r) return;
-    // The ruler's unit at the grab, measured from where the edge WAS: the grid, Ctrl the event's own offset, Shift free (snap.ts).
-    const mode = snapMode(e);
-    const delta = (e.clientX - r.x) / r.ppb;
-    // An edge may not cross the other; the floor is the grid's step while there is one, and a 64th once the gesture is free.
-    const min = mode === "free" ? MIN_FREE_BEATS : r.unit;
-    const next =
-      r.edge === "start"
-        ? {
-            start: Math.max(
-              0,
-              Math.min(
-                r.origEnd - min,
-                snapPosition(r.origStart, delta, r.unit, mode),
-              ),
-            ),
-            end: r.origEnd,
-          }
-        : {
-            start: r.origStart,
-            end: Math.max(
-              r.origStart + min,
-              snapPosition(r.origEnd, delta, r.unit, mode),
-            ),
-          };
+    // The ruler's unit at the grab, measured from where the edge WAS: the grid, Ctrl the event's own offset, Shift free; an edge never crosses the other (gesture's edge_drag.rs).
+    const next = edgeResize(
+      r.edge,
+      r.origStart,
+      r.origEnd,
+      e.clientX - r.x,
+      r.ppb,
+      r.unit,
+      snapMode(e),
+    );
     if (next.start !== r.start || next.end !== r.end)
       setResize({ ...r, ...next });
   }, []);
@@ -139,9 +123,7 @@ export function useFadeDrag(
     // A fade has no grid of its own to keep an offset from: Shift frees it, and so does Ctrl, as it always has.
     const free = freeSnap(e) || e.shiftKey;
     // A fade-in grows rightwards and a fade-out leftwards, so the pointer's delta counts against the one and for the other.
-    const dx = (e.clientX - f.x) / f.ppb;
-    const d = snapTo(f.which === "fadeIn" ? dx : -dx, free ? 0 : 1);
-    const len = Math.max(0, Math.min(f.span, f.orig + d));
+    const len = fadeLen(f.which, e.clientX - f.x, f.ppb, f.span, f.orig, free);
     if (len !== f.len) setFade({ ...f, len });
   }, []);
 

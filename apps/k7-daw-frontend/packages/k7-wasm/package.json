@@ -10,6 +10,9 @@
     "./boot": "./src/boot.ts",
     "./edit": "./src/edit.ts",
     "./engine": "./src/engine.ts",
+    "./gesture": "./src/gesture.ts",
+    "./gestureTicks": "./src/gestureTicks.ts",
+    "./gestureTimeline": "./src/gestureTimeline.ts",
     "./replayRun": "./src/replayRun.ts"
   },
   "scripts": {

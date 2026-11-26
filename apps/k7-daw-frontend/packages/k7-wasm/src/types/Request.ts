@@ -2,13 +2,19 @@
 import type { ChooseArgs } from "./ChooseArgs";
 import type { CloseArgs } from "./CloseArgs";
 import type { CompatArgs } from "./CompatArgs";
+import type { CrossfadeArgs } from "./CrossfadeArgs";
 import type { FormatArgs } from "./FormatArgs";
 import type { HashArgs } from "./HashArgs";
 import type { LatencyArgs } from "./LatencyArgs";
 import type { OpenArgs } from "./OpenArgs";
 import type { ParseArgs } from "./ParseArgs";
+import type { PictureToolArgs } from "./PictureToolArgs";
+import type { PlanArgs } from "./PlanArgs";
 import type { PreviewArgs } from "./PreviewArgs";
+import type { TickSpec } from "./TickSpec";
+import type { ToolArgs } from "./ToolArgs";
 import type { WarningArgs } from "./WarningArgs";
+import type { WarpArgs } from "./WarpArgs";
 
 /**
  * One operation and its arguments: `{"op": "curve.preview", "args": {…}}`.
@@ -19,6 +25,12 @@ export type Request =
   | { op: "curve.close"; args: CloseArgs }
   | { op: "timecode.parse"; args: ParseArgs }
   | { op: "timecode.format"; args: FormatArgs }
+  | { op: "gesture.plan_group_move"; args: PlanArgs }
+  | { op: "gesture.warp_line"; args: WarpArgs }
+  | { op: "gesture.tool_line"; args: ToolArgs }
+  | { op: "gesture.picture_tool_line"; args: PictureToolArgs }
+  | { op: "gesture.crossfade_pair"; args: CrossfadeArgs }
+  | { op: "gesture.ruler_ticks"; args: TickSpec }
   | { op: "text.hash"; args: HashArgs }
   | { op: "engine.compat"; args: CompatArgs }
   | { op: "engine.latency"; args: LatencyArgs }

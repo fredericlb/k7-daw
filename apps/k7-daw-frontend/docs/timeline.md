@@ -64,7 +64,7 @@ picture by `from` (`apps/k7-daw-wasm/verbs/docs/verbs/picture.md`). The picture
 column is `pictureToolLine`, beside `toolLine`, and a press on a shot goes through the same guard
 at the top of its own drag.
 
-**A cut lands on the grid, as a drag does**, and Shift frees it (`snap.ts`). A cut at the raw
+**A cut lands on the grid, as a drag does**, and Shift frees it (`apps/k7-daw-wasm/gesture/src/snap.rs`). A cut at the raw
 pointer would fall between the lines you can see, and on a picture between two frames.
 
 **There is no pencil**, and the reason is worth writing down: `event add` places a clip that
@@ -288,7 +288,7 @@ Three details, each of which could have gone the other way:
 
 **Nothing held, the grid; Ctrl, the event's own grid; Shift, none.** It applies to all three of this
 view's gestures that move or resize — an event, either of its edges, a picture placement and its
-edges — so there is one rule to hold rather than three exceptions to remember. `src/snap.ts` states
+edges — so there is one rule to hold rather than three exceptions to remember. `apps/k7-daw-wasm/gesture/src/snap.rs` states
 it once (`snapMode`, `snapPosition`, `moveOffset`) and is where its arithmetic is tested. A fade has
 no position of its own to keep: Shift or Ctrl frees it. The piano roll's note drags take the same keys; drawing a note there keeps
 Ctrl as its free key (`freeSnap`, `clipEditors.md`).

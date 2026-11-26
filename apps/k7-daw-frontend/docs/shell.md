@@ -457,7 +457,7 @@ measure every take after the first against the *first* one's start, while the po
 to is absolute in the song — a take punched in at bar 15 reads 56 beats the instant it begins.
 `useLiveEnvelope` clears its buffer on the same edge.
 
-`takeCounter.ts` counts the pre-roll down, then the take up in bar:beat. It is a pure function and not
+`apps/k7-daw-wasm/gesture/src/take_counter.rs` counts the pre-roll down, then the take up in bar:beat. It is a pure function and not
 arithmetic buried in a component that also draws a canvas, because a stale number in it is invisible.
 Both results are **clamped**: a pre-roll can never be longer than the pre-roll, and a take can never
 have run for less than nothing, so whatever the engine does with its playhead during a count-in the
@@ -531,7 +531,7 @@ trim preview and every callback mean the same thing zoomed or not. Only the pins
 The zoom is **anchored under the cursor** — the same promise the timeline and the roll make through
 `useHZoom` — and a pinch does the same, anchored at the centre of the touches. There is **no pan**
 gesture: it would be a second gesture on a surface whose drag already means "select", and zooming out
-then in elsewhere reaches every part of the take. `barWindow.ts` holds the maths and its edges,
+then in elsewhere reaches every part of the take. `apps/k7-daw-wasm/gesture/src/bar_window.rs` holds the maths and its edges,
 including a tempo that has not arrived yet — a bar of zero seconds would make every take infinitely
 many bars long.
 

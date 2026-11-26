@@ -172,7 +172,7 @@ sits on a page with the timeline's layer count.
 a window into it: its axis is file seconds. The transport speaks song seconds. What joins them is
 the pair the panel is opened with — `placedAt`, the beat the event's window opens at in the
 arrangement, and `act.from`, the second it opens at in the file — so beats elapsed since the one
-land as seconds after the other. The conversion is `src/clipPlayhead.ts`, on its own so it can be
+land as seconds after the other. The conversion is `apps/k7-daw-wasm/gesture/src/clip_playhead.rs`, on its own so it can be
 held to something without mounting anything.
 
 **Outside the event it draws nothing new**: the line falls back to `act.from`, the head of what

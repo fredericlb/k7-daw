@@ -4,6 +4,7 @@
 // wiring, not tables.
 
 import { useEngineState } from "@studio/engine-browser/store";
+import { formatAt } from "@studio/k7-wasm/gestureTicks";
 import {
   AudioWaveform,
   Disc3,
@@ -19,7 +20,6 @@ import {
   Workflow,
 } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
-import { formatAt } from "./formatAt";
 import { m } from "./paraglide/messages.js";
 import type { Pane, Panel } from "./routes";
 

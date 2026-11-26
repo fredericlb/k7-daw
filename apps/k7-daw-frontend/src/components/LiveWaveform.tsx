@@ -1,9 +1,9 @@
 // LiveWaveform.tsx — the clip panel's LEAVES: the parts that re-render at a frame or a take's rate,
 // split out so the panel around them does not. See ../../docs/playhead.md.
 
+import { clipPlayhead } from "@studio/k7-wasm/gesture";
 import { Waveform, type WaveformHandle } from "@studio/ui-waveform";
 import { type ComponentProps, useCallback, useMemo, useRef } from "react";
-import { clipPlayhead } from "../clipPlayhead";
 import { type LiveTake, useLiveSamples } from "../hooks/useLiveEnvelope";
 import { usePlayheadFrames } from "../hooks/usePlayheadFrames";
 
