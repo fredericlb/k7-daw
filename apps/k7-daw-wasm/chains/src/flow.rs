@@ -103,7 +103,11 @@ fn dominates(a: &NodeFlow, b: &NodeFlow) -> bool {
 }
 
 fn louder(a: &NodeFlow, b: &NodeFlow) -> NodeFlow {
-    NodeFlow { audio: a.audio.max(b.audio), midi: a.midi.max(b.midi), video: a.video.max(b.video) }
+    NodeFlow {
+        audio: a.audio.max(b.audio),
+        midi: a.midi.max(b.midi),
+        video: a.video.max(b.video),
+    }
 }
 
 /// How hard each cable ripples now: forward from the metered lanes and both sums, and backward from each metered card.
@@ -140,7 +144,11 @@ pub fn compute_flow(
         while changed {
             changed = false;
             for g in edges {
-                let (here, next) = if back { (&g.target, &g.source) } else { (&g.source, &g.target) };
+                let (here, next) = if back {
+                    (&g.target, &g.source)
+                } else {
+                    (&g.source, &g.target)
+                };
                 if back && next.starts_with(TRACK_NODE_PREFIX) {
                     continue;
                 }

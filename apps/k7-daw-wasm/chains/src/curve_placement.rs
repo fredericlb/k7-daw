@@ -73,7 +73,11 @@ pub fn curves_left_of_targets(nodes: &[Box2], targets: &IndexMap<String, String>
         .iter()
         .filter_map(|n| {
             let t = ids.get(targets.get(&n.id)?.as_str())?;
-            Some(Moved { id: n.id.clone(), x: t.x - n.w - CURVE_GAP, y: t.y })
+            Some(Moved {
+                id: n.id.clone(),
+                x: t.x - n.w - CURVE_GAP,
+                y: t.y,
+            })
         })
         .collect()
 }
@@ -87,7 +91,11 @@ pub fn curves_under_left(nodes: &[Box2], targets: &IndexMap<String, String>) -> 
         let Some(tid) = targets.get(&n.id) else { continue };
         let Some(t) = ids.get(tid.as_str()) else { continue };
         let y = below.get(tid.as_str()).copied().unwrap_or(t.y + CURVE_DROP);
-        placed.push(Moved { id: n.id.clone(), x: t.x - n.w - CURVE_GAP, y });
+        placed.push(Moved {
+            id: n.id.clone(),
+            x: t.x - n.w - CURVE_GAP,
+            y,
+        });
         below.insert(tid.as_str(), y + n.h + CURVE_GAP);
     }
     placed
@@ -95,11 +103,19 @@ pub fn curves_under_left(nodes: &[Box2], targets: &IndexMap<String, String>) -> 
 
 /// The indexes of the nodes and cables the zoomed-out view keeps: no curve card and no cable touching one.
 pub fn without_curves(kinds: &[(String, String)], edges: &[(String, String)]) -> Option<(Vec<usize>, Vec<usize>)> {
-    let curves: Vec<&str> = kinds.iter().filter(|(_, k)| k == "curve").map(|(id, _)| id.as_str()).collect();
+    let curves: Vec<&str> = kinds
+        .iter()
+        .filter(|(_, k)| k == "curve")
+        .map(|(id, _)| id.as_str())
+        .collect();
     if curves.is_empty() {
         return None;
     }
-    let nodes = kinds.iter().enumerate().filter(|(_, (id, _))| !curves.contains(&id.as_str())).map(|(i, _)| i);
+    let nodes = kinds
+        .iter()
+        .enumerate()
+        .filter(|(_, (id, _))| !curves.contains(&id.as_str()))
+        .map(|(i, _)| i);
     let kept = edges
         .iter()
         .enumerate()
@@ -113,7 +129,13 @@ mod tests {
     use super::*;
 
     fn card(id: &str, x: f64, y: f64) -> Box2 {
-        Box2 { id: id.into(), x, y, w: 200.0, h: 120.0 }
+        Box2 {
+            id: id.into(),
+            x,
+            y,
+            w: 200.0,
+            h: 120.0,
+        }
     }
 
     fn edge(source: &str, target: &str, automation: bool) -> PlaceEdge {
@@ -137,7 +159,14 @@ mod tests {
         let nodes = [card("c", 2000.0, 900.0), card("crv", 0.0, 0.0)];
         let targets = IndexMap::from([("crv".to_owned(), "c".to_owned())]);
         let moved = curves_left_of_targets(&nodes, &targets);
-        assert_eq!(moved, vec![Moved { id: "crv".into(), x: 2000.0 - 200.0 - 24.0, y: 900.0 }]);
+        assert_eq!(
+            moved,
+            vec![Moved {
+                id: "crv".into(),
+                x: 2000.0 - 200.0 - 24.0,
+                y: 900.0
+            }]
+        );
         assert_eq!(row_sort_keys(&nodes, &targets), vec![2000.0, 2000.0 - 1e-3]);
     }
 
@@ -146,15 +175,32 @@ mod tests {
         let nodes = [card("c", 2000.0, 900.0), card("one", 5.0, 5.0), card("two", 9.0, 9.0)];
         let targets = IndexMap::from([("one".to_owned(), "c".to_owned()), ("two".to_owned(), "c".to_owned())]);
         let moved = curves_under_left(&nodes, &targets);
-        assert_eq!(moved[0], Moved { id: "one".into(), x: 1776.0, y: 924.0 });
-        assert_eq!(moved[1], Moved { id: "two".into(), x: 1776.0, y: 924.0 + 120.0 + 24.0 });
+        assert_eq!(
+            moved[0],
+            Moved {
+                id: "one".into(),
+                x: 1776.0,
+                y: 924.0
+            }
+        );
+        assert_eq!(
+            moved[1],
+            Moved {
+                id: "two".into(),
+                x: 1776.0,
+                y: 924.0 + 120.0 + 24.0
+            }
+        );
     }
 
     #[test]
     fn the_zoomed_out_graph_drops_every_curve_and_every_cable_touching_one() {
-        let kinds: Vec<(String, String)> =
-            [("t", "track"), ("a", "module"), ("crv", "curve")].map(|(a, b)| (a.into(), b.into())).to_vec();
-        let edges: Vec<(String, String)> = [("t", "a"), ("crv", "a"), ("a", "crv")].map(|(a, b)| (a.into(), b.into())).to_vec();
+        let kinds: Vec<(String, String)> = [("t", "track"), ("a", "module"), ("crv", "curve")]
+            .map(|(a, b)| (a.into(), b.into()))
+            .to_vec();
+        let edges: Vec<(String, String)> = [("t", "a"), ("crv", "a"), ("a", "crv")]
+            .map(|(a, b)| (a.into(), b.into()))
+            .to_vec();
         assert_eq!(without_curves(&kinds, &edges), Some((vec![0, 1], vec![0])));
         assert_eq!(without_curves(&kinds[..2], &edges[..1]), None);
     }

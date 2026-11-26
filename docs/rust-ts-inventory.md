@@ -57,7 +57,7 @@ milestone ends with `bash scripts/agent/gate.sh --milestone`; the hours are agen
 | **M1a** quick deletes (done) | the DELETE rows below that need no branch: barTint, PairThisDevice (then `requestPairing`), RemoteSlotsSection, menuAccount, the EngineSyncProgress component, ModeStrip, the `aiOrganize` re-export, `audio-probe/src/waveform.ts`; WebRTC end to end: rtcSocket (keeping a 25-line socket wrapper), rtcFrames, `engine-tunnel/rtc.ts`, `node-datachannel`, the backend's `/rtc` route and `rtc` flag | 1,100 | none | nothing | 3 |
 | **M1b** first ts-rs | `graph-model/types.ts` from `song/src/graph/view/web.rs` (already derives); the `ts` feature and a bindings binary for the backend crates; the app's mirrors (AuthUser, K7Prefs, LocalApp, ServiceProcess, sync history, the desktop engine snapshot, LanPeer) | 700 | k7-wasm bindings, k7-front, k7-lan, k7-sync, k7-supervisor | nothing (exports only from the song crate) | 8 |
 | **M1c** (built) Rust twins | textHash, compat, quality and choose, engineWarnings and engineMissing (classified by Rust, decision 4), performance (the page's scoring deleted; the supervisor scores); paths, clipEnvelope, engineSession, engineTaken and the five rows with no Rust function (lcdSounds, libraryTree, historyMarks, surfaceRows, paneInUse) stay, see below | 310 | song-schema `engine/` and `text_hash`, k7-wasm ops, k7-file-service, k7-supervisor | nothing | 10 |
-| **M2a** chains build | `ui-chains` build and measure steps (buildGraph, buildChains, buildContext, assembly, subgraph, bindings, geometry, moduleRow, rowSeams, gridFit, stackLayout, nodeUIs, widgetValue, flow, the logic of cables, curvePlacement...), `chainsModel`, `moduleField`, `widgetTarget`; graphNode generated; dagre stays in TS until M5b | 3,700 | new crate `apps/k7-daw-wasm/chains`, op `chains_build` | M1b | 16 |
+| **M2a** chains build (first part built, see below) | `ui-chains` build and measure steps (buildGraph, buildChains, buildContext, assembly, subgraph, bindings, geometry, moduleRow, rowSeams, gridFit, stackLayout, nodeUIs, widgetValue, flow, the logic of cables, curvePlacement...), `chainsModel`, `moduleField`, `widgetTarget`; graphNode generated; dagre stays in TS until M5b | 3,700 | new crate `apps/k7-daw-wasm/chains`, op `chains_build` | M1b | 16 |
 | **M2b** gesture arithmetic | snap, rollDrag, rollFit, gridCaret, barWindow, clipPlayhead, clipWarp, videoDrag, takeCounter, timelineTools, formatAt; the arithmetic inside TimelineTab, useRollGestures, PianoRoll, useEdgeDrags, useVideoDrag, AudioClipPanel; the ruler's tick ladder and `ui-timeline` ticks and anchored zoom | 1,900 | new crate `apps/k7-daw-wasm/gesture`, typed exports | decision 1 | 13 |
 | **M2c** tunnel stand-in | the hub suites ported to Rust tests over the Rust supervisor; `e2e/src/standInEngine.ts` on the supervisor binary with a fake engine; `engine-tunnel` deleted with its 2,100 test lines | 2,500 | k7-supervisor, k7-hub tests | nothing | 10 |
 | **M3a** verbs catalogue | contextMenu, menuTabs, menuTitle, palette, argOptions, rankCommands, fuzzy, commandFill, commandPrefs, emptyBar, stepSentence, exportArgs, pendingEdits, nodeInsert, nodeMenu, clipOps, playlistVocabulary, reloadScope, verbWrites, homeCommands' catalogue and parse; `commandTypes.ts` generated | 2,500 | verbs crate | verbs branch merged; decisions 2, 6 | 14 |
@@ -85,6 +85,21 @@ reference agent, `/api/engine/<id>/rtc` in k7-front, `node-datachannel` and `doc
 verbs branch merges, M3c meanwhile (it waits on nothing but decision 5). Wave 4: M4a, M4b, M4c
 once the song twins merge. Wave 5: M5a, M5b, M5c. About 155 agent-hours of building, five waves,
 plus one review per milestone.
+
+**M2a, first part as built.** The crate `apps/k7-daw-wasm/chains` (no dependency but serde, serde_json and
+indexmap) and `@studio/k7-wasm/chains` carry `widgetValue`, `subgraph`, `bindings` (with `stepsByModule`,
+`widgetFor` and `resolveTarget`, now inside the Rust join), `flow` and `computeFlow` of `cables`, and `curvePlacement`:
+about 650 lines of TypeScript left (`widgetValue`, `subgraph`, `flow`, `bindings`, `curvePlacement` and the `computeFlow` block
+of `cables`) and 1,000 lines of their tests, replaced by 1,770 lines of Rust (half of them tests) with 44 Rust tests and a 150-line facade test. The old tests ran
+against the Rust ops first (56 cases through the facade), and 40,000 generated widgets and values over six
+functions showed no difference with the old widget maths but a NaN: a typed text that was NaN is now "no number". One
+behaviour differs on purpose: a track's module row puts its own chains first and keeps each group in reach order (the
+TypeScript comparator was not a total order). A call costs 1 microsecond for a widget, 40 for a 64-lane seed, 0.27 ms for the
+flow of 500 cables, 0.26 ms for a lane read and 1 ms for a 20-line binding join on a 1,200-step graph, the graph being sent slimmed
+(`k7-wasm/docs/chains.md`). **Still to build:** `buildGraph`, `buildChains`, `buildContext`, `assembly`, the measure
+steps (`geometry`, `moduleRow`, `rowSeams`, `gridFit`, `stackLayout`), `nodeUIs`, the cable rules `insertFor`,
+`jackRef` and `autoTarget`, `chainsModel`, `moduleField`, `widgetTarget` and the generated `graphNode`.
+`geometry`'s drawing half (`jackPoint`, `cablePath`) stays in TypeScript, read per frame. About 3,050 of the 3,700 lines remain.
 
 **M1c, as built.** Seven twins went (about 310 lines, 560 of tests): `textHash`, `compat`, `quality`,
 `choose`, the classification in `engineWarnings` and `engineMissing`, and `performance`'s scoring, with

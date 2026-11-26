@@ -29,7 +29,11 @@ pub struct SurfaceBinding {
 
 impl SurfaceBinding {
     fn target(&self) -> SurfaceTarget {
-        SurfaceTarget { module: self.module.clone(), param: self.param.clone(), invert: self.invert }
+        SurfaceTarget {
+            module: self.module.clone(),
+            param: self.param.clone(),
+            invert: self.invert,
+        }
     }
 }
 
@@ -90,9 +94,10 @@ fn steps_by_module(graph: &BindGraph) -> IndexMap<&str, Found<'_>> {
     let mut steps = IndexMap::new();
     for chain in graph.chains.values() {
         for step in &chain.steps {
-            steps
-                .entry(step.module.as_str())
-                .or_insert(Found { step, track: chain.from.as_deref().filter(|t| !t.is_empty()) });
+            steps.entry(step.module.as_str()).or_insert(Found {
+                step,
+                track: chain.from.as_deref().filter(|t| !t.is_empty()),
+            });
         }
     }
     steps
@@ -101,8 +106,13 @@ fn steps_by_module(graph: &BindGraph) -> IndexMap<&str, Found<'_>> {
 /// The widget that draws `param` on this step, on any tab: a control is the module's whichever page shows it.
 fn widget_for(step: &Step, param: &str) -> Option<Value> {
     let ui = step.ui.as_ref()?;
-    let all = ui.widgets.values().chain(ui.tabs.iter().flat_map(|t| t.widgets.values()));
-    all.into_iter().find(|w| w.get("bind").and_then(Value::as_str) == Some(param)).cloned()
+    let all = ui
+        .widgets
+        .values()
+        .chain(ui.tabs.iter().flat_map(|t| t.widgets.values()));
+    all.into_iter()
+        .find(|w| w.get("bind").and_then(Value::as_str) == Some(param))
+        .cloned()
 }
 
 /// What a resolved target addresses.
@@ -123,14 +133,21 @@ pub struct ResolvedTarget {
     pub invert: Option<bool>,
 }
 
-fn resolve_target(found: Option<&Found<'_>>, target: &SurfaceTarget, plugless: PluglessPolicy) -> Result<ResolvedTarget, String> {
+fn resolve_target(
+    found: Option<&Found<'_>>,
+    target: &SurfaceTarget,
+    plugless: PluglessPolicy,
+) -> Result<ResolvedTarget, String> {
     let Some(found) = found else {
         return Err(format!("no module “{}” in this project's chains", target.module));
     };
     let plugin = found.step.plugin_id.clone().filter(|p| !p.is_empty());
     if plugin.is_none() {
         if plugless == PluglessPolicy::Refuse {
-            return Err(format!("“{}” loads no plugin — nothing to set while the sound runs", target.module));
+            return Err(format!(
+                "“{}” loads no plugin — nothing to set while the sound runs",
+                target.module
+            ));
         }
         if found.track.is_none() {
             return Err(format!("“{}” has neither a plugin nor a track to move", target.module));
@@ -183,12 +200,18 @@ pub fn resolve_mapping(
     with_also: bool,
 ) -> ResolvedMapping {
     let steps = steps_by_module(graph);
-    let mut out = ResolvedMapping { rows: Vec::new(), problems: Vec::new() };
+    let mut out = ResolvedMapping {
+        rows: Vec::new(),
+        problems: Vec::new(),
+    };
     // The second targets' problems come after every line's own, as the desk always listed them.
     let mut late = Vec::new();
     for (id, binding) in mapping {
         if !controls.contains(id) {
-            out.problems.push(BindingProblem { control: id.clone(), message: format!("“{id}” is not a control {noun}") });
+            out.problems.push(BindingProblem {
+                control: id.clone(),
+                message: format!("“{id}” is not a control {noun}"),
+            });
             continue;
         }
         let Some(binding) = binding else { continue };
@@ -207,9 +230,17 @@ pub fn resolve_mapping(
                         }),
                     }
                 }
-                out.rows.push(ResolvedRow { control: id.clone(), target, also, binding: binding.clone() });
+                out.rows.push(ResolvedRow {
+                    control: id.clone(),
+                    target,
+                    also,
+                    binding: binding.clone(),
+                });
             }
-            Err(message) => out.problems.push(BindingProblem { control: id.clone(), message }),
+            Err(message) => out.problems.push(BindingProblem {
+                control: id.clone(),
+                message,
+            }),
         }
     }
     out.problems.extend(late);
@@ -217,14 +248,22 @@ pub fn resolve_mapping(
 }
 
 /// Resolve one target alone: what a test of the join asks, the sentence saying why it did not or what it addresses.
-pub fn resolve_one(graph: &BindGraph, target: &SurfaceTarget, plugless: PluglessPolicy) -> Result<ResolvedTarget, String> {
+pub fn resolve_one(
+    graph: &BindGraph,
+    target: &SurfaceTarget,
+    plugless: PluglessPolicy,
+) -> Result<ResolvedTarget, String> {
     let steps = steps_by_module(graph);
     resolve_target(steps.get(target.module.as_str()), target, plugless)
 }
 
 /// The controls a mapping does not name: the gate, reported once over the whole surface.
 pub fn unmapped_controls(controls: &[String], mapping: &IndexMap<String, Option<SurfaceBinding>>) -> Vec<String> {
-    controls.iter().filter(|c| !matches!(mapping.get(*c), Some(Some(_)))).cloned().collect()
+    controls
+        .iter()
+        .filter(|c| !matches!(mapping.get(*c), Some(Some(_))))
+        .cloned()
+        .collect()
 }
 
 #[cfg(test)]

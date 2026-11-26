@@ -222,3 +222,33 @@ fn picks_an_engine_by_index() {
     let (_, v) = run(&mut s, &json!({"op": "engine.choose", "args": args}));
     assert_eq!(v, json!({"index": null, "ambiguous": true}));
 }
+
+#[test]
+fn answers_the_chains_ops_through_the_same_bytes() {
+    let mut s = Session::new();
+    let w = json!({"min": 0, "max": 100, "step": 1});
+    let (status, v) = run(
+        &mut s,
+        &json!({"op": "widget.denorm", "args": {"widget": w, "value": 0.57}}),
+    );
+    assert_eq!((status, v), (OK, json!(57.0)));
+    let (_, v) = run(
+        &mut s,
+        &json!({"op": "widget.text", "args": {"widget": w, "value": null}}),
+    );
+    assert_eq!(v, json!("–"));
+    let flow = json!({"edges": [{"id": "a", "source": "trk:m", "target": "x"}], "seeds": [["m", {"audio": 0.5, "midi": 0, "video": 0}]]});
+    let (_, v) = run(&mut s, &json!({"op": "flow.compute", "args": flow}));
+    assert_eq!(v, json!([["a", 0.5]]));
+    let graph = json!({"chains": {"a": {"from": "vox", "use": [{"module": "comp"}], "out": []}}});
+    let (_, v) = run(
+        &mut s,
+        &json!({"op": "lane.modules", "args": {"graph": graph, "track": "vox"}}),
+    );
+    assert_eq!(v, json!(["comp"]));
+    let bind = json!({"mapping": {"k": {"module": "gone", "param": "p"}}, "graph": null, "controls": ["k"], "noun": "x", "plugless": "track", "withAlso": false});
+    let (_, v) = run(&mut s, &json!({"op": "bindings.resolve", "args": bind}));
+    assert!(v["problems"][0]["message"].as_str().unwrap().contains("no module"));
+    let (status, _) = run(&mut s, &json!({"op": "widget.norm", "args": {"widget": {}}}));
+    assert_eq!(status, ERROR);
+}

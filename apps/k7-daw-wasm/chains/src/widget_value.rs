@@ -34,13 +34,7 @@ fn js_max(a: f64, b: f64) -> f64 {
 }
 
 fn clamp01(t: f64) -> f64 {
-    if t < 0.0 {
-        0.0
-    } else if t > 1.0 {
-        1.0
-    } else {
-        t
-    }
+    t.clamp(0.0, 1.0)
 }
 
 /// A truthy `step`: JavaScript reads 0 and NaN as no step.
@@ -64,7 +58,11 @@ impl WidgetScale {
 
     fn frac(&self, value: f64) -> f64 {
         let (min, max) = self.range();
-        if max == min { 0.0 } else { clamp01((value - min) / (max - min)) }
+        if max == min {
+            0.0
+        } else {
+            clamp01((value - min) / (max - min))
+        }
     }
 
     /// A value to its 0..1 travel: linear, log, or the equal-power curve of a crossfade pair.
@@ -89,7 +87,11 @@ impl WidgetScale {
         if self.pair_on() {
             return min + (max - min) * (u * std::f64::consts::PI / 2.0).sin();
         }
-        let v = if self.is_log() { min * (max / min).powf(u) } else { min + (max - min) * u };
+        let v = if self.is_log() {
+            min * (max / min).powf(u)
+        } else {
+            min + (max - min) * u
+        };
         let Some(step) = step_of(self) else { return v };
         js_min(max, js_max(min, js_round(v / step) * step))
     }
@@ -112,10 +114,23 @@ impl WidgetScale {
         if step_of(self).is_some_and(|s| s.is_finite() && s.fract() == 0.0) {
             let n = js_round(v);
             let whole = if n == 0.0 { 0 } else { n as i64 };
-            return if self.min.unwrap_or(0.0) < 0.0 && n > 0.0 { format!("+{whole}") } else { whole.to_string() };
+            return if self.min.unwrap_or(0.0) < 0.0 && n > 0.0 {
+                format!("+{whole}")
+            } else {
+                whole.to_string()
+            };
         }
         let a = v.abs();
-        to_fixed(v, if a >= 100.0 { 0 } else if a >= 10.0 { 1 } else { 2 })
+        to_fixed(
+            v,
+            if a >= 100.0 {
+                0
+            } else if a >= 10.0 {
+                1
+            } else {
+                2
+            },
+        )
     }
 
     /// A value TYPED into a control: clamped to its range and quantised to its `step`, None when it is no number.
@@ -195,7 +210,11 @@ mod tests {
     use super::*;
 
     fn knob(min: Option<f64>, max: Option<f64>) -> WidgetScale {
-        WidgetScale { min, max, ..Default::default() }
+        WidgetScale {
+            min,
+            max,
+            ..Default::default()
+        }
     }
 
     fn close(a: f64, b: f64) {
@@ -205,7 +224,10 @@ mod tests {
     #[test]
     fn a_linear_and_a_log_control_round_trip() {
         let linear = knob(Some(0.0), Some(100.0));
-        let log = WidgetScale { curve: Some("log".into()), ..knob(Some(20.0), Some(20000.0)) };
+        let log = WidgetScale {
+            curve: Some("log".into()),
+            ..knob(Some(20.0), Some(20000.0))
+        };
         for t in [0.0, 0.25, 0.5, 0.75, 1.0] {
             close(linear.norm(linear.denorm(t)), t);
             close(log.norm(log.denorm(t)), t);
@@ -219,17 +241,26 @@ mod tests {
 
     #[test]
     fn a_step_quantises_what_the_user_can_reach() {
-        let stepped = WidgetScale { step: Some(1.0), ..knob(Some(0.0), Some(10.0)) };
+        let stepped = WidgetScale {
+            step: Some(1.0),
+            ..knob(Some(0.0), Some(10.0))
+        };
         assert_eq!(stepped.denorm(0.57), 6.0);
     }
 
     #[test]
     fn a_whole_number_step_reads_as_a_signed_integer_on_a_bipolar_range() {
-        let semis = WidgetScale { step: Some(1.0), ..knob(Some(-24.0), Some(24.0)) };
+        let semis = WidgetScale {
+            step: Some(1.0),
+            ..knob(Some(-24.0), Some(24.0))
+        };
         assert_eq!(semis.text(Some(7.0)), "+7");
         assert_eq!(semis.text(Some(-12.0)), "-12");
         assert_eq!(semis.text(Some(0.0)), "0");
-        let unipolar = WidgetScale { step: Some(1.0), ..knob(Some(1.0), Some(32.0)) };
+        let unipolar = WidgetScale {
+            step: Some(1.0),
+            ..knob(Some(1.0), Some(32.0))
+        };
         assert_eq!(unipolar.text(Some(16.0)), "16");
     }
 
@@ -247,7 +278,10 @@ mod tests {
     fn a_typed_value_takes_either_decimal_mark_clamps_and_rounds_to_the_step() {
         assert_eq!(knob(None, None).typed("0.25"), Some(0.25));
         assert_eq!(knob(None, None).typed(" 0,5 "), Some(0.5));
-        let w = WidgetScale { step: Some(1.0), ..knob(Some(-24.0), Some(24.0)) };
+        let w = WidgetScale {
+            step: Some(1.0),
+            ..knob(Some(-24.0), Some(24.0))
+        };
         assert_eq!(w.typed("99"), Some(24.0));
         assert_eq!(w.typed("-99"), Some(-24.0));
         assert_eq!(w.typed("7.4"), Some(7.0));
@@ -258,7 +292,11 @@ mod tests {
 
     #[test]
     fn a_crossfade_knob_keeps_the_power_constant() {
-        let xf = WidgetScale { pair: Some("Dry Level".into()), bind: Some("Wet Level".into()), ..Default::default() };
+        let xf = WidgetScale {
+            pair: Some("Dry Level".into()),
+            bind: Some("Wet Level".into()),
+            ..Default::default()
+        };
         for t in [0.0, 0.1, 0.25, 0.5, 0.75, 1.0] {
             let wet = xf.denorm(t);
             close(wet * wet + xf.pair_value(wet).powi(2), 1.0);
@@ -273,7 +311,10 @@ mod tests {
 
     #[test]
     fn the_engine_s_mix_param_is_a_mix_knob() {
-        let w = WidgetScale { bind: Some(MIX_PARAM.into()), ..Default::default() };
+        let w = WidgetScale {
+            bind: Some(MIX_PARAM.into()),
+            ..Default::default()
+        };
         assert!(w.is_mix_knob());
         assert!(!knob(None, None).is_mix_knob());
     }

@@ -128,7 +128,14 @@ pub struct BindingsArgs {
 pub fn bindings_resolve(a: BindingsArgs) -> ResolvedMapping {
     let controls: IndexSet<String> = a.controls.into_iter().collect();
     let mapping = a.mapping.unwrap_or_default();
-    bindings::resolve_mapping(&mapping, &a.graph.unwrap_or_default(), &controls, &a.noun, a.plugless, a.with_also)
+    bindings::resolve_mapping(
+        &mapping,
+        &a.graph.unwrap_or_default(),
+        &controls,
+        &a.noun,
+        a.plugless,
+        a.with_also,
+    )
 }
 
 #[derive(Clone, Debug, Deserialize)]

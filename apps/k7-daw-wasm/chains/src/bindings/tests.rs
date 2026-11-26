@@ -8,7 +8,11 @@ fn graph(v: Value) -> BindGraph {
 }
 
 fn target(module: &str, param: &str) -> SurfaceTarget {
-    SurfaceTarget { module: module.into(), param: param.into(), invert: None }
+    SurfaceTarget {
+        module: module.into(),
+        param: param.into(),
+        invert: None,
+    }
 }
 
 fn mapping(v: Value) -> IndexMap<String, Option<SurfaceBinding>> {
@@ -33,7 +37,10 @@ fn a_module_is_found_by_the_name_the_chains_file_uses_and_the_first_use_wins() {
         "two": {"from": "t2", "use": [{"module": "fade", "pluginId": "two:fade"}]},
     }}));
     let steps = steps_by_module(&g);
-    assert_eq!(steps.keys().copied().collect::<Vec<_>>(), vec!["eqA", "filterA", "fade"]);
+    assert_eq!(
+        steps.keys().copied().collect::<Vec<_>>(),
+        vec!["eqA", "filterA", "fade"]
+    );
     assert_eq!(steps["fade"].step.plugin_id.as_deref(), Some("one:fade"));
     assert_eq!(steps["fade"].track, Some("t1"));
     assert!(steps_by_module(&BindGraph::default()).is_empty());
@@ -47,8 +54,14 @@ fn a_widget_is_found_by_its_bind_on_any_tab_and_a_missing_panel_is_not_fatal() {
         {"module": "m"},
     ]}}}));
     let steps = steps_by_module(&g);
-    assert_eq!(widget_for(steps["eqA"].step, "Low-shelf gain").and_then(|w| w["min"].as_f64()), Some(-20.0));
-    assert_eq!(widget_for(steps["eqA"].step, "High").and_then(|w| w["max"].as_f64()), Some(3.0));
+    assert_eq!(
+        widget_for(steps["eqA"].step, "Low-shelf gain").and_then(|w| w["min"].as_f64()),
+        Some(-20.0)
+    );
+    assert_eq!(
+        widget_for(steps["eqA"].step, "High").and_then(|w| w["max"].as_f64()),
+        Some(3.0)
+    );
     assert!(widget_for(steps["eqA"].step, "Mid gain 1").is_none());
     assert!(widget_for(steps["m"].step, "anything").is_none());
 }
@@ -77,7 +90,10 @@ fn a_line_resolves_to_its_plugin_and_its_widget() {
     let r = resolve_mapping(&m, &eq_graph(), &controls(), "du pupitre", PluglessPolicy::Track, false);
     assert!(r.problems.is_empty());
     assert_eq!(r.rows[0].target.plugin_id.as_deref(), Some("bus:eqA"));
-    assert_eq!(r.rows[0].target.widget.as_ref().and_then(|w| w["min"].as_f64()), Some(-20.0));
+    assert_eq!(
+        r.rows[0].target.widget.as_ref().and_then(|w| w["min"].as_f64()),
+        Some(-20.0)
+    );
 }
 
 #[test]
@@ -85,19 +101,35 @@ fn an_unknown_control_is_reported_in_the_callers_own_words() {
     let m = mapping(json!({"nope": {"module": "eqA", "param": "Low"}}));
     let r = resolve_mapping(&m, &eq_graph(), &controls(), "du pupitre", PluglessPolicy::Track, false);
     assert!(r.problems[0].message.contains("pupitre"));
-    let r = resolve_mapping(&m, &eq_graph(), &controls(), "de cette surface", PluglessPolicy::Refuse, false);
+    let r = resolve_mapping(
+        &m,
+        &eq_graph(),
+        &controls(),
+        "de cette surface",
+        PluglessPolicy::Refuse,
+        false,
+    );
     assert!(r.problems[0].message.contains("cette surface"));
 }
 
 #[test]
 fn a_control_named_but_not_wired_is_skipped_without_a_word() {
-    let r = resolve_mapping(&mapping(json!({"a.one": null})), &eq_graph(), &controls(), "x", PluglessPolicy::Track, false);
+    let r = resolve_mapping(
+        &mapping(json!({"a.one": null})),
+        &eq_graph(),
+        &controls(),
+        "x",
+        PluglessPolicy::Track,
+        false,
+    );
     assert!(r.rows.is_empty() && r.problems.is_empty());
 }
 
 #[test]
 fn invert_is_carried_only_when_set_and_the_line_is_handed_back() {
-    let on = mapping(json!({"a.one": {"module": "eqA", "param": "Low", "invert": true, "also": {"module": "eqA", "param": "High"}}}));
+    let on = mapping(
+        json!({"a.one": {"module": "eqA", "param": "Low", "invert": true, "also": {"module": "eqA", "param": "High"}}}),
+    );
     let r = resolve_mapping(&on, &eq_graph(), &controls(), "x", PluglessPolicy::Track, false);
     assert_eq!(r.rows[0].target.invert, Some(true));
     assert_eq!(r.rows[0].binding.also.as_ref().map(|a| a.param.as_str()), Some("High"));

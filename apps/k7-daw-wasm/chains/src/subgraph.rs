@@ -79,7 +79,10 @@ pub fn subgraph_chains(graph: &GraphView, track: &str) -> Vec<KeptChain> {
         .map(|name| {
             let from = graph.chains[name].from.as_deref();
             let foreign = from.is_some_and(|f| !f.is_empty() && f != track && !graph.chains.contains_key(f));
-            KeptChain { name: name.to_owned(), drop_from: foreign }
+            KeptChain {
+                name: name.to_owned(),
+                drop_from: foreign,
+            }
         })
         .collect()
 }
@@ -102,16 +105,28 @@ pub fn track_modules(graph: &GraphView, track: &str) -> Vec<String> {
 
 /// Picture passes nothing feeds, landing on a picture lane: a fade's stretch, which carries no signal.
 fn is_stretch(graph: &GraphView, c: &ChainView, target: &str) -> bool {
-    let Some(head) = c.steps.first().and_then(|s| s.module.as_deref()).filter(|m| !m.is_empty()) else {
+    let Some(head) = c
+        .steps
+        .first()
+        .and_then(|s| s.module.as_deref())
+        .filter(|m| !m.is_empty())
+    else {
         return false;
     };
-    if !graph.video_tracks.as_ref().is_some_and(|v| v.iter().any(|t| t == target)) {
+    if !graph
+        .video_tracks
+        .as_ref()
+        .is_some_and(|v| v.iter().any(|t| t == target))
+    {
         return false;
     }
     if !c.steps.iter().all(|s| is_picture_pass(s.category.as_deref())) {
         return false;
     }
-    !graph.chains.values().any(|o| o.out.iter().any(|x| port_free(&x.to) == head))
+    !graph
+        .chains
+        .values()
+        .any(|o| o.out.iter().any(|x| port_free(&x.to) == head))
 }
 
 /// The modules feeding one track, its input and anything between that and the lane, farthest first.
@@ -128,7 +143,12 @@ pub fn track_inputs(graph: &GraphView, track: &str) -> Vec<String> {
             if is_stretch(graph, c, target) {
                 continue;
             }
-            let run: Vec<&str> = c.steps.iter().filter_map(|s| s.module.as_deref()).filter(|m| !m.is_empty()).collect();
+            let run: Vec<&str> = c
+                .steps
+                .iter()
+                .filter_map(|s| s.module.as_deref())
+                .filter(|m| !m.is_empty())
+                .collect();
             if let Some(first) = run.first() {
                 out.extend(upstream(graph, first, seen));
                 out.extend(run.iter().map(|m| (*m).to_owned()));
@@ -137,7 +157,11 @@ pub fn track_inputs(graph: &GraphView, track: &str) -> Vec<String> {
         out
     }
     let mut seen = IndexSet::new();
-    upstream(graph, track, &mut seen).into_iter().collect::<IndexSet<_>>().into_iter().collect()
+    upstream(graph, track, &mut seen)
+        .into_iter()
+        .collect::<IndexSet<_>>()
+        .into_iter()
+        .collect()
 }
 
 #[cfg(test)]
@@ -169,10 +193,19 @@ mod tests {
             "b": {"from": "mic", "use": [], "out": []},
         }}));
         let kept = subgraph_chains(&g, "vox");
-        assert_eq!(kept, vec![
-            KeptChain { name: "a".into(), drop_from: false },
-            KeptChain { name: "b".into(), drop_from: true },
-        ]);
+        assert_eq!(
+            kept,
+            vec![
+                KeptChain {
+                    name: "a".into(),
+                    drop_from: false
+                },
+                KeptChain {
+                    name: "b".into(),
+                    drop_from: true
+                },
+            ]
+        );
     }
 
     fn song() -> GraphView {
