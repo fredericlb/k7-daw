@@ -3032,6 +3032,7 @@ version = "0.1.0"
 dependencies = [
  "getrandom 0.3.4",
  "indexmap 2.14.2",
+ "k7-import",
  "k7-js",
  "k7x",
  "libc",
@@ -3066,6 +3067,7 @@ dependencies = [
  "k7-file-service",
  "k7-git",
  "k7-hub",
+ "k7-import",
  "k7-js",
  "k7-lan",
  "k7-libraries",
@@ -3130,6 +3132,20 @@ dependencies = [
  "subtle",
  "tokio",
  "tokio-tungstenite",
+]
+
+[[package]]
+name = "k7-import"
+version = "0.1.0"
+dependencies = [
+ "flate2",
+ "indexmap 2.14.2",
+ "k7x",
+ "quick-xml",
+ "sha1 0.10.7",
+ "song-edit",
+ "song-schema",
+ "zip",
 ]
 
 [[package]]
