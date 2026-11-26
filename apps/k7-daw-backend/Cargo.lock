@@ -2087,6 +2087,7 @@ dependencies = [
  "song",
  "song-edit",
  "song-schema",
+ "verbs",
  "zip",
 ]
 

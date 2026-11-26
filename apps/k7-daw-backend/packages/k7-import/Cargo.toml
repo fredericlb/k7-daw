@@ -20,3 +20,4 @@ song-schema = { path = "../../../k7-daw-wasm/song-schema" }
 [dev-dependencies]
 # The tests compile what an import wrote, with the song crate, as a page would.
 song = { path = "../../../k7-daw-wasm/song" }
+verbs = { path = "../../../k7-daw-wasm/verbs" }
