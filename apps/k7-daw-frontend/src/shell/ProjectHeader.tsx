@@ -118,7 +118,7 @@ export function ProjectHeader({
           {git}
           {views}
           {onCommandBar && (
-            <Capsule>
+            <Capsule className="float">
               <CapsuleButton
                 aria-label={m["shell.commandBar"]()}
                 title={m["shell.commandBar.tip"]({
@@ -132,7 +132,11 @@ export function ProjectHeader({
             </Capsule>
           )}
           {/* The dock's own buttons stay here; the right panels' are the rail's (PanelRail.tsx). */}
-          <Capsule role="group" aria-label={m["shell.dock"]()}>
+          <Capsule
+            role="group"
+            aria-label={m["shell.dock"]()}
+            className="float"
+          >
             {panels.map((p) => {
               const def = PANEL_DEFS[p.id];
               return (
@@ -151,7 +155,7 @@ export function ProjectHeader({
             })}
           </Capsule>
           {rail && (
-            <Capsule>
+            <Capsule className="float">
               <CapsuleButton
                 className="relative"
                 aria-expanded={rail.open}

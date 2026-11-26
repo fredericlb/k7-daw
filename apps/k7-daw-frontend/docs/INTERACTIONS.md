@@ -263,7 +263,7 @@ The timeline pane: tool strip, ruler with markers and task flags, timeline tabs,
 | 03.85 | Scroll (also the piano roll and the clip file's waveform strip) | wheel / trackpad slide, scrollbars | — | one-finger drag | T M D |
 | 03.86 | Zoom under the pointer (also the piano roll and the waveform strip) | ⌘/Ctrl+wheel (15% a notch); trackpad pinch | — | two-finger pinch | T M D |
 | 03.87 | Pan by dragging (also the piano roll, the strip, the clip editor) | middle-button drag | — | — | D |
-| 03.88 | Zoom to the rectangle / out / whole song | Zoom into the selection, Zoom out one level, Fit the whole song in Lane views | `z` / `⇧Z` / `0` | tap them in Lane views | T D |
+| 03.88 | Zoom to the rectangle / out / whole song | Fit the whole song in Lane views; zoom in and out from the keyboard | `z` / `⇧Z` / `0` | tap Fit in Lane views | T D |
 | 03.89 | Switch timeline tab | click Main or a timeline tab | — | tap | T M D |
 | 03.90 | New timeline | click "+ timeline" | — | tap | T M D |
 | 03.91 | Timeline tab menu | right-click a tab → Play it alone, Rename, Set length, Add a lane, other timeline verbs | — | long-press | T M D |

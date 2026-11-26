@@ -2913,8 +2913,6 @@ export default function App({
               onLanes: () => void runCommand("ui lanes"),
               onAutomation: () => void runCommand("ui automation"),
               onPicture: () => void runCommand("ui viewport"),
-              onZoomIn: () => void runCommand("ui zoom"),
-              onZoomOut: () => void runCommand("ui zoom out"),
               onZoomFit: () => void runCommand("ui zoom reset"),
             }
           : null

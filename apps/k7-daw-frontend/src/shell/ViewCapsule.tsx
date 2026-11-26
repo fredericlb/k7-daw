@@ -1,4 +1,4 @@
-// ViewCapsule.tsx — the current pane's view options (lanes, automation, zoom; the graph's fit, layout, stack) in a small
+// ViewCapsule.tsx — the current pane's view options (lanes, automation, fit; the graph's fit, layout, stack) in a small
 // capsule among the floating controls at the bottom right (ProjectHeader.tsx), icons only; none on the other panes, and a phone's menu holds them.
 import { CapsuleButton, CapsuleDivider } from "@studio/ui/capsule";
 import {
@@ -8,8 +8,6 @@ import {
   Network,
   Rows3,
   Spline,
-  ZoomIn,
-  ZoomOut,
 } from "@studio/ui/icons";
 import { m } from "../paraglide/messages.js";
 
@@ -21,9 +19,7 @@ export interface BarLaneViews {
   onLanes: () => void;
   onAutomation: () => void;
   onPicture: () => void;
-  /** The timeline's zoom, the keys z, Shift+Z and 0 as buttons. */
-  onZoomIn: () => void;
-  onZoomOut: () => void;
+  /** The timeline's fit, the key 0 as a button; z and Shift+Z zoom from the keyboard. */
   onZoomFit: () => void;
 }
 
@@ -71,22 +67,6 @@ export function ViewCapsule({
         <Spline />
       </CapsuleButton>
       <CapsuleDivider />
-      <CapsuleButton
-        className={BTN}
-        aria-label={m["shell.lane.zoomOut"]()}
-        title={m["shell.lane.zoomOut"]()}
-        onClick={lanes.onZoomOut}
-      >
-        <ZoomOut />
-      </CapsuleButton>
-      <CapsuleButton
-        className={BTN}
-        aria-label={m["shell.lane.zoomIn"]()}
-        title={m["shell.lane.zoomIn"]()}
-        onClick={lanes.onZoomIn}
-      >
-        <ZoomIn />
-      </CapsuleButton>
       <CapsuleButton
         className={BTN}
         aria-label={m["shell.lane.zoomFit"]()}

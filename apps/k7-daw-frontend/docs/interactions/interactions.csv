@@ -130,7 +130,7 @@ ID,Screen,Interaction,Mouse / trackpad,Keyboard,Touch,Devices,Not drawn,Area,Not
 03.85,03,Scroll (also the piano roll and the clip file's waveform strip),"wheel / trackpad slide, scrollbars",—,one-finger drag,T M D,FALSE,Arrange · Navigation and zoom,
 03.86,03,Zoom under the pointer (also the piano roll and the waveform strip),⌘/Ctrl+wheel (15% a notch); trackpad pinch,—,two-finger pinch,T M D,FALSE,Arrange · Navigation and zoom,
 03.87,03,"Pan by dragging (also the piano roll, the strip, the clip editor)",middle-button drag,—,—,D,FALSE,Arrange · Navigation and zoom,
-03.88,03,Zoom to the rectangle / out / whole song,"Zoom into the selection, Zoom out one level, Fit the whole song in Lane views",`z` / `⇧Z` / `0`,tap them in Lane views,T D,FALSE,Arrange · Navigation and zoom,
+03.88,03,Zoom to the rectangle / out / whole song,Fit the whole song in Lane views; zoom in and out from the keyboard,`z` / `⇧Z` / `0`,tap Fit in Lane views,T D,FALSE,Arrange · Navigation and zoom,
 03.89,03,Switch timeline tab,click Main or a timeline tab,—,tap,T M D,FALSE,Arrange · Navigation and zoom,
 03.90,03,New timeline,"click ""+ timeline""",—,tap,T M D,FALSE,Arrange · Navigation and zoom,
 03.91,03,Timeline tab menu,"right-click a tab → Play it alone, Rename, Set length, Add a lane, other timeline verbs",—,long-press,T M D,FALSE,Arrange · Navigation and zoom,

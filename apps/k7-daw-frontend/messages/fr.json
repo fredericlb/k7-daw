@@ -1942,8 +1942,6 @@
   "shell.lane.automation": "Automation",
   "shell.lane.picture": "Image",
   "shell.lane.pictureName": "Image : le viewport",
-  "shell.lane.zoomOut": "Dézoomer d'un niveau",
-  "shell.lane.zoomIn": "Zoomer sur la sélection",
   "shell.lane.zoomFit": "Cadrer tout le morceau",
   "shell.picture.size": "{w}×{h} · {fps} ips",
   "shell.picture.close": "Fermer l'image",
