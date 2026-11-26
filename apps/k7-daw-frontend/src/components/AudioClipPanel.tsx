@@ -8,7 +8,7 @@ import { arrayEq, useEngineState } from "@studio/engine-browser/store";
 import { projectApi } from "@studio/project-shell/project";
 import { Button } from "@studio/ui/button";
 import { DockHeaderRow, DockHint, DockStatus } from "@studio/ui/editor-dock";
-import { Play, Square } from "@studio/ui/icons";
+import { Square } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
 import { followPointer } from "@studio/ui-timeline/drag";
 import { wheelFactor } from "@studio/ui-timeline/panZoom";
@@ -147,37 +147,7 @@ export function AudioClipPanel({
   } = useVerbs();
   const [wf, setWf] = useState<WebWaveform | null>(null);
   const [error, setError] = useState<string | null>(null);
-  // True while a Listen sounds, as long as the service says it lasts.
   const touch = useFingerFirst();
-  const [listening, setListening] = useState(false);
-  const listenTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
-  // biome-ignore lint/correctness/useExhaustiveDependencies: unmount only
-  useEffect(() => () => clearTimeout(listenTimer.current), []);
-  const listen = useCallback(
-    (clipName: string) => {
-      clearTimeout(listenTimer.current);
-      setListening(true);
-      api
-        .preview({ kind: "clip", clip: clipName })
-        .then(({ length }) => {
-          // `length: 0` is "to the end of the file", which only the decoded audio knows: no timer then.
-          if (length > 0)
-            listenTimer.current = setTimeout(
-              () => setListening(false),
-              length * 1000,
-            );
-          else setListening(false);
-        })
-        .catch((e: Error) => {
-          setListening(false);
-          setStatus?.(
-            m["status.editor.previewFailed"]({ message: e.message }),
-            "error",
-          );
-        });
-    },
-    [setStatus],
-  );
   // undefined asks for whatever threshold the file was last built with; a number re-detects AND remembers it in the sidecar.
   const [sensitivity, setSensitivity] = useState<number | undefined>(undefined);
   /** The chains this clip can be run through, as `clip process` names them — fetched once when the panel opens. */
@@ -582,20 +552,6 @@ export function AudioClipPanel({
                   </span>
                 )}
               </div>
-              {/* Plays the file's from/to window at its own tempo, through the same request the source strip's play button sends. */}
-              {clip && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  title={m["wave.listenHint"]()}
-                  aria-busy={listening}
-                  disabled={listening}
-                  onClick={() => listen(clip)}
-                >
-                  <Play className="mr-1 h-3 w-3" />{" "}
-                  {listening ? m["clip.listening"]() : m["clip.listen"]()}
-                </Button>
-              )}
             </>
           )}
         </div>

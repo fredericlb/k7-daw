@@ -9,7 +9,7 @@ header carries no view switch.
 
 Both editors follow the dock's one rule ([editors.md](editors.md)): every option is in the title bar
 (`DockHeaderRow`, [editor-dock](../packages/ui/docs/editor-dock.md)) and the body is the clip alone.
-An audio clip's title bar holds its name over its file path, Listen, the gain, Loop / Trim / Operations
+An audio clip's title bar holds its name over its file path, the gain as a knob, Loop as a switch, Trim / Operations
 (and Discard with Done for a take just filed), the tools, the bars on screen with their two ways out,
 and the active tool's help glyph; Trim opens its gate as a popover from the bar. The piano roll's title
 bar holds its name, counts, tool menu, Loop, ×2 and the help glyph. On a phone the sheet's header is the

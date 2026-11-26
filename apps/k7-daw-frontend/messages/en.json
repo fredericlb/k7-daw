@@ -761,8 +761,6 @@
   "clip.takeHint": "The roll follows the playhead and widens to the notes you play. Stop the take to file it as a clip.",
   "clip.onTrack": "on {track}",
   "clip.offTrack": "off any track",
-  "clip.listen": "Listen",
-  "clip.listening": "Playing…",
   "comp.ownPart": "the event's own",
   "comp.partTitle": "{label} — click to show and edit this part",
   "comp.partLabel": "edit the part played by {label}",

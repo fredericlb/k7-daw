@@ -761,8 +761,6 @@
   "clip.takeHint": "Le roll suit la tête de lecture et s'élargit aux notes jouées. Arrêtez la prise pour la ranger en clip.",
   "clip.onTrack": "sur {track}",
   "clip.offTrack": "hors piste",
-  "clip.listen": "Écouter",
-  "clip.listening": "Lecture…",
   "comp.ownPart": "celle de l'événement",
   "comp.partTitle": "{label} — cliquer pour montrer et éditer cette partie",
   "comp.partLabel": "éditer la partie jouée par {label}",
