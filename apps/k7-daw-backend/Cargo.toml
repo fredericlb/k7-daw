@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["packages/k7-front", "packages/k7-embed", "packages/k7-local", "packages/k7-engine", "packages/k7-js", "packages/k7-mediatek", "packages/k7-hub", "packages/k7-sync", "packages/k7-picture", "packages/k7-file-service", "packages/k7-replica", "packages/k7-capture", "packages/k7-libraries", "packages/k7-git", "packages/k7-roam", "packages/k7-lan"]
+members = ["packages/k7-front", "packages/k7-embed", "packages/k7-local", "packages/k7-engine", "packages/k7-js", "packages/k7-mediatek", "packages/k7-hub", "packages/k7-sync", "packages/k7-picture", "packages/k7-file-service", "packages/k7-replica", "packages/k7-capture", "packages/k7-libraries", "packages/k7-git", "packages/k7-roam", "packages/k7-lan", "packages/k7-runtime-server"]
 exclude = ["packages/waveform"]
 
 [workspace.package]

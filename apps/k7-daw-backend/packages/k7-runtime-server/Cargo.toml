@@ -1,0 +1,21 @@
+[package]
+name = "k7-runtime-server"
+description = "The engine's WebSocket server in Rust, over the C++ Tracktion host's C ABI (docs/rust-engine-server-plan.md)."
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+serde_json.workspace = true
+# A reply from the message thread: `Engine::call`'s one-shot channel.
+tokio = { workspace = true, features = ["sync"] }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["sync", "rt", "macros"] }
+
+[[test]]
+name = "all"
+path = "tests/all/main.rs"
