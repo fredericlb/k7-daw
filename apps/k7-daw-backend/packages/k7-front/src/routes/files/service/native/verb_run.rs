@@ -37,14 +37,14 @@ fn caches() -> &'static Mutex<HashMap<String, Cache>> {
 }
 
 /// The project's cache, taken out for the run; the map holds one project, the last one run.
-fn take_cache(key: &str) -> Cache {
+pub(super) fn take_cache(key: &str) -> Cache {
     let mut all = caches().lock().unwrap_or_else(|e| e.into_inner());
     let held = all.remove(key);
     all.clear();
     held.unwrap_or_default()
 }
 
-fn give_cache(key: String, cache: Cache) {
+pub(super) fn give_cache(key: String, cache: Cache) {
     caches()
         .lock()
         .unwrap_or_else(|e| e.into_inner())

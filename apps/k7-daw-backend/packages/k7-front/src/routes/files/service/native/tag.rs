@@ -101,6 +101,9 @@ pub enum Tag {
     VerbComplete,
     /// The palette's catalogue, read from the `verbs` crate.
     VerbCatalogue,
+    /// The picture document and its scene, read by the `verbs` crate.
+    Picture,
+    PictureScene,
     VerbBundle,
     VerbLibrary,
     VerbHost(super::verb_host::Member),
@@ -159,6 +162,8 @@ impl Tag {
             H::Verb => Some(Tag::Verb),
             H::VerbComplete => Some(Tag::VerbComplete),
             H::VerbCatalogue => Some(Tag::VerbCatalogue),
+            H::Picture => Some(Tag::Picture),
+            H::PictureScene => Some(Tag::PictureScene),
             H::VerbBundle => Some(Tag::VerbBundle),
             H::VerbLibrary => Some(Tag::VerbLibrary),
             H::VerbHost(m) => Some(Tag::VerbHost(m)),
@@ -207,6 +212,8 @@ impl Tag {
             | Tag::Verb
             | Tag::VerbComplete
             | Tag::VerbCatalogue
+            | Tag::Picture
+            | Tag::PictureScene
             | Tag::VerbBundle
             | Tag::VerbLibrary
             | Tag::VerbHost(_) => Piece::Journal,
@@ -322,6 +329,8 @@ impl Tag {
             Tag::Verb => "POST /verb",
             Tag::VerbComplete => "POST /verb/complete",
             Tag::VerbCatalogue => "GET /verb/catalogue",
+            Tag::Picture => "POST /picture",
+            Tag::PictureScene => "POST /picture/scene",
             Tag::VerbBundle => "GET /verb-bundle",
             Tag::VerbLibrary => "GET /verb-bundle/library",
             Tag::VerbHost(m) => m.route(),

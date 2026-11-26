@@ -63,6 +63,10 @@ pub enum H {
     VerbComplete,
     /// The palette's catalogue, read from the `verbs` crate.
     VerbCatalogue,
+    /// The open project's picture document, by the `verbs` crate (`native/picture_run.rs`).
+    Picture,
+    /// …and the scene the page draws or exports of it.
+    PictureScene,
     VerbBundle,
     VerbLibrary,
     /// A host member's route (3f).
@@ -143,6 +147,8 @@ pub fn route(method: &Method, path: &str) -> Route {
         ("/verb", _, true) => H::Verb,
         ("/verb/complete", _, true) => H::VerbComplete,
         ("/verb/catalogue", true, _) => H::VerbCatalogue,
+        ("/picture", _, true) => H::Picture,
+        ("/picture/scene", _, true) => H::PictureScene,
         ("/verb-bundle", true, _) => H::VerbBundle,
         ("/verb-bundle/library", true, _) => H::VerbLibrary,
         _ => match native::verb_host::Member::of(method, path) {
