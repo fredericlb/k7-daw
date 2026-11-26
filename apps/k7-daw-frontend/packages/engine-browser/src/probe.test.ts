@@ -2,7 +2,7 @@
 // engine's own loopback must not win: the gate takes unasked only an engine reached directly.
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { mayAutoPick } from "./choose.ts";
+import { bestEngine } from "./choose.ts";
 import {
   candidatesFor,
   orderHits,
@@ -41,9 +41,13 @@ describe("orderHits", () => {
     // …which is what lets the gate take this machine's engine with nobody clicking.
     const ranked = { engine: target, wsUrl: best.c.url, token: "t" };
     expect(reachedDirectly(ranked)).toBe(true);
-    expect(
-      mayAutoPick({ ...ranked, latency: null, fileBase: null }, undefined),
-    ).toBe(true);
+    const latency = {
+      networkMs: 1,
+      audioMs: 0,
+      totalMs: 1,
+      quality: "Q1" as const,
+    };
+    expect(bestEngine([{ ...ranked, latency, fileBase: null }])).not.toBeNull();
   });
 
   it("still ranks by speed among sockets of the same kind", () => {

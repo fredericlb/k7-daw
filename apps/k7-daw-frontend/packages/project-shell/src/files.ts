@@ -3,13 +3,13 @@
 // repository, which is why they stand apart from project.ts: nothing here reaches the song
 // compiler's types. See ../docs/fileApi.md.
 
+import { textHash } from "@studio/k7-wasm/engine";
 import type {
   FileContent,
   FileNode,
   ForkedModule,
   WorkspaceInfo,
 } from "@studio/web-protocol";
-import { textHash } from "@studio/web-protocol/text-hash";
 import { fget, fsend, WRITE_MS } from "./fileApi.ts";
 
 /** A write refused because the file changed on disk since its base was read — the caller asks, rather than retrying. */

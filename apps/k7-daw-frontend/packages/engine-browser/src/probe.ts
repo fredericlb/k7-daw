@@ -8,11 +8,8 @@
 // latency, not by which cable they arrive over, so a gigabit LAN beats a laptop sitting at
 // 2048 frames. Unreachable is its own state, because it is not a slow link. See docs/access.md.
 
+import { type EngineLatency, engineLatency } from "@studio/k7-wasm/engine";
 import { ENGINE_PROXY_PATH } from "@studio/web-protocol";
-import {
-  type EngineLatency,
-  engineLatency,
-} from "@studio/web-protocol/quality";
 import { forgetPairKey, noteEngineAt, pairKeyFor } from "./pairing.ts";
 import { openSocket } from "./socket.ts";
 

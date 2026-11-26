@@ -1,7 +1,7 @@
 //! performance — measures this machine once, for the rating the heartbeat carries: one core's DSP throughput,
 //! the cores, a durable write and an fsync rate on the state dir's disk, the memory. Run before the engine
-//! starts, so the CPU loop does not measure a plugin scan. The SCORING is
-//! `apps/k7-daw-frontend/packages/web-protocol/performance.ts`'s, held to its numbers by the tests.
+//! starts, so the CPU loop does not measure a plugin scan. The SCORING is this file's alone: the page reads
+//! the score off the heartbeat and holds no formula (`tests/all/performance.rs` pins its numbers).
 //! What a reader gets wrong: compiled code runs the biquad faster than a JIT did, so `singleThread` is the one
 //! number a change of supervisor moves.
 

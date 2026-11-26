@@ -93,6 +93,4 @@ Several contracts have a C++ side and a TypeScript side kept equal by hand:
 | URL rules (registry, family, cache key) | `apps/k7-daw-backend/packages/k7-supervisor/src/urls.rs` | `apps/k7-daw-frontend/packages/web-protocol/services.ts` |
 | Tunnel agent | `apps/k7-daw-backend/packages/k7-supervisor/src/tunnel/agent.rs` | `apps/k7-daw-frontend/packages/engine-tunnel/agent.ts` |
 
-| Performance score | `apps/k7-daw-backend/packages/k7-supervisor/src/performance.rs` | `apps/k7-daw-frontend/packages/web-protocol/performance.ts` |
-
 TypeScript cannot check a wire change against C++. When you change one side, change the other in the same commit and verify by running the engine. The tunnel is the exception that has a shared test: `apps/k7-daw-frontend/packages/engine-tunnel` runs its suites against both agents (see [85](./85-registry-and-tunnel.md#tests)).

@@ -8,7 +8,9 @@
     "./curve": "./src/curve.ts",
     "./types": "./src/types/index.ts",
     "./boot": "./src/boot.ts",
-    "./edit": "./src/edit.ts"
+    "./edit": "./src/edit.ts",
+    "./engine": "./src/engine.ts",
+    "./replayRun": "./src/replayRun.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",
