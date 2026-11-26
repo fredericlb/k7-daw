@@ -302,9 +302,9 @@ export function TrackModulesPane({
   const marked = useMemo(() => nodePredicate(mark), [mark]);
   const trackName =
     project?.tracks.find((t) => t.id === trackId)?.name || trackId;
-  // The lane's panel reads as module cards; a popin's `nodes` keep the full row, and "Controls" shows it beside the cards.
+  // The lane's modules draw their own panels; "Controls" off swaps them for the summary cards (docs/chainsGraph.md).
   const cards = !nodes;
-  const [controls, setControls] = useState(false);
+  const [controls, setControls] = useState(true);
   const cardNodes = useMemo(
     () =>
       (glued?.graph.nodes ?? [])
@@ -418,9 +418,9 @@ export function TrackModulesPane({
           onToggleCurves={onToggleCurves}
         />
       )}
-      {cards && glued && (
+      {cards && glued && !controls && (
         <ModuleCards
-          className={controls ? "shrink-0" : "min-h-0 flex-1"}
+          className="min-h-0 flex-1"
           nodes={cardNodes}
           seams={cardSeams}
           presetNames={presetNames}

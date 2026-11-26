@@ -30,6 +30,7 @@ those lanes are checked for playing, not for sound.
 | `mute-solo.k7` | a bypassed lane, a soloed lane, a highlighted lane | the mute and solo buttons' pressed state |
 | `mixer-strip.k7` | an `@meta/audio/mixer` strip at the end of a lane | "Mix panel" is enabled |
 | `master-chain.k7` | a module between `MIX` and `OUT` | the lane, then play |
+| `lane-panel.k7` | a lane through the workspace's compressor, a module with a panel of its own (`ui.k7x`) | a double-click on the lane opens its chain in the dock on the module's panel, not on the cards' three knobs |
 | `mastering.k7` | the `mastering` surface over one quick-master node | the strip draws; `specs/app/surfaces.spec.ts`: Width written to `nodes/master.k7x` (`test.fail`: master-run modules are not found by `node param`) |
 | `surge-synth.k7` | a chord into Surge XT on the library's default patch, no `base` set | `specs/app/surge.spec.ts`: the engine document names `Pads/Bell Pad`, then the lane and play |
 | `eurorack.k7` | Mutable Instruments engines: mu-macro-osc on plaits (into mu-clouds) and on braids, and mu-rings, one lane each | `specs/app/engines.spec.ts`: the engine document names `mu-plaits`, `mu-clouds`, `mu-braids`, `mu-rings`, then the lanes and play |

@@ -1,6 +1,6 @@
 // ModuleCards.tsx — the chain dock's cards, left to right: the lane's own card, then each module (name, engine chip, warning,
 // native UI, bypass, preset with its arrows, three knobs), a "+" on each seam and a dashed "Add a module at the end".
-// Not a second editor: the controls stay on the full row (the panel's "Controls" chip), but a card's "⋯" opens the graph's own menu.
+// A summary, shown with "Controls" released: the panels are the full row's, the dock's default; a card's "⋯" opens the graph's own menu.
 
 import type { PluginParamsStore } from "@studio/engine-browser/params";
 import {
@@ -15,10 +15,11 @@ import {
 import { Knob } from "@studio/ui/knob";
 import { cn } from "@studio/ui/lib/utils";
 import { TrackToggle } from "@studio/ui/track-toggle";
-import type {
-  EdgeInsert,
-  GraphNode,
-  TrackControlValues,
+import {
+  type EdgeInsert,
+  type GraphNode,
+  moduleDisplayName,
+  type TrackControlValues,
 } from "@studio/ui-chains/graph";
 import { m } from "../paraglide/messages.js";
 import { ModuleKnobs } from "./ModuleKnobs";
@@ -138,6 +139,8 @@ export function ModuleCards({
         const off = !!n.bypassed || n.dim;
         const preset = presetNames?.[id];
         const warning = warningOf?.(n);
+        // The module the card runs, as the graph's header names it: an unnamed node's label is its uuid.
+        const name = n.uses ? moduleDisplayName(n.uses) : (n.place ?? n.label);
         return (
           <li key={n.id} className="flex shrink-0 items-stretch gap-1">
             <div
@@ -148,7 +151,7 @@ export function ModuleCards({
             >
               <div className="flex items-center gap-2">
                 <span className="min-w-0 flex-1 truncate font-bold text-[15px]">
-                  {n.label}
+                  {name}
                 </span>
                 {warning && (
                   <LaneWarning sentences={[warning]} onOpen={onProblems} />
@@ -178,8 +181,8 @@ export function ModuleCards({
                   <button
                     type="button"
                     aria-pressed={!!n.bypassed}
-                    aria-label={m["chain.bypass"]({ name: n.label })}
-                    title={m["chain.bypass"]({ name: n.label })}
+                    aria-label={m["chain.bypass"]({ name })}
+                    title={m["chain.bypass"]({ name })}
                     onClick={() => onBypass(id)}
                     className="grid size-11 shrink-0 cursor-pointer place-items-center rounded-full text-fg-2 hover:bg-on-fill aria-pressed:text-lavender focus-visible:shadow-(--k7-focus-ring) focus-visible:outline-none"
                   >
@@ -194,8 +197,8 @@ export function ModuleCards({
                   <button
                     type="button"
                     aria-haspopup="menu"
-                    aria-label={m["chain.moduleMenu"]({ name: n.label })}
-                    title={m["chain.moduleMenu"]({ name: n.label })}
+                    aria-label={m["chain.moduleMenu"]({ name })}
+                    title={m["chain.moduleMenu"]({ name })}
                     onClick={(e) => {
                       const r = e.currentTarget.getBoundingClientRect();
                       onMenu(n, r.left, r.bottom);
@@ -221,7 +224,7 @@ export function ModuleCards({
                     type="button"
                     aria-label={m["chain.presetOf"]({
                       preset: preset ?? m["chain.preset"](),
-                      name: n.label,
+                      name,
                     })}
                     onClick={(e) => {
                       const r = e.currentTarget.getBoundingClientRect();

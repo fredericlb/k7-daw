@@ -1,0 +1,2 @@
+// A module with a panel of its own (`ui.k7x`) on a lane, ahead of MIX.
+modules({ drums: ["comp"], comp: ["MIX"], MIX: ["OUT"] })

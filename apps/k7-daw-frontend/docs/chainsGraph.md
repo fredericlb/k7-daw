@@ -364,10 +364,13 @@ cancels the pan mid-gesture, and two fingers zoom the page instead of the graph.
 (`group "Graph views"`, docs/shell.md): the pane draws no buttons over its canvas, and no output meter,
 the master level already being the bar's. `ChainsTab` keeps the camera, so it hands the bar the fit
 through the shell store (`graphView`) for as long as a laid graph is on screen; the minimap is a card
-with no buttons of its own (`minimapBar={false}`). A lane's chain, in the bottom dock, lists its modules as cards (`ModuleCards.tsx`) left to right in
-signal order, opened by the lane's own card (status, M/S, volume and pan, "→ Master"; Arm is the header's alone): name, engine chip,
+with no buttons of its own (`minimapBar={false}`). A lane's chain, in the bottom dock, opens on the full row: each module's
+own panel (its `ui.k7x`: layout, labels, tabs, screens), the cards the Graph draws, with the **Controls** chip pressed. A module's panel
+is its designed face, and the chain is where a person plays with it, so it is what the dock shows first. Releasing the chip swaps the
+row for a summary that lists the modules as cards (`ModuleCards.tsx`) left to right in
+signal order, opened by the lane's own card (status, M/S, volume and pan, "→ Master"; Arm is the header's alone): the module's name, engine chip,
 the engine's warning as an amber icon that opens Logs on its problems, the native plugin window,
 bypass (pressed means bypassed, with a "Bypassed" tag), a "⋯" that opens the graph's own menu for the card (remove, move, open the file), the preset with its arrows, the panel's first three knobs, a "+" on each seam and a dashed
 "Add a module at the end", scrolling sideways when they overflow. The track's name over its status, Arm and
-its chain controls are the dock's header row (`ChainHeader.tsx`). The cards summarise the row; the **Controls** chip shows the full row beside them,
-because the knobs live there and a second editor of the same parameters would drift.
+its chain controls are the dock's header row (`ChainHeader.tsx`). The cards and the row are never drawn together: three knobs beside the panel
+that holds them would be a second editor of the same parameters, and the two would drift.

@@ -76,6 +76,21 @@ const FEATURES: Record<string, { check: Check; bug?: string }> = {
     check: async (page) => expect(await openPanel(page, "Mixer")).toBeVisible(),
   },
   "master-chain.k7": { check: lane("drums") },
+  "lane-panel.k7": {
+    check: async (page) => {
+      await lane("drums")(page);
+      // A double-click on the lane's name opens its chain in the dock (apps/k7-daw-frontend/docs/chainsGraph.md).
+      await page.getByTitle(/^drums( —|$)/).dblclick();
+      // The panel's sixth knob, which the cards' three-knob summary never draws.
+      await expect(
+        page.getByRole("slider", { name: "SC gain", exact: true }),
+      ).toBeVisible();
+      await expect(button(page, "Controls")).toHaveAttribute(
+        "aria-pressed",
+        "true",
+      );
+    },
+  },
   "mastering.k7": {
     check: async (page) => {
       await openPanel(page, "Mixer");
