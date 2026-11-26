@@ -1,10 +1,10 @@
-// HeaderGit.tsx — git in the header: a menu (Pull, Saves) titled by the branch and the last auto-save; on a desk its Save
-// with the count (it only pushes when only saves wait) is GitRailSave, the rail's first button; a phone's menu holds Save.
+// HeaderGit.tsx — git in the header: on a phone a menu (Save, Pull, Saves) titled by the branch and the last auto-save; on a
+// desk only the Resolve button while a merge waits, Save with its count being GitRailSave, the rail's first button.
 // While a merge waits it is one accent "Resolve N conflicts" button. It decides no rule: gitState.ts's barView does.
 import { showToast } from "@studio/project-shell/toast";
 import { Badge } from "@studio/ui/badge";
 import { Button } from "@studio/ui/button";
-import { Capsule, CapsuleButton } from "@studio/ui/capsule";
+import { CapsuleButton } from "@studio/ui/capsule";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +14,6 @@ import {
 } from "@studio/ui/dropdown-menu";
 import {
   ArrowDownToLine,
-  GitBranch,
   GitMerge,
   History,
   Loader2,
@@ -188,18 +187,8 @@ export function HeaderGit({
       </DropdownMenu>
     );
 
-  return (
-    <Capsule aria-label={m["git.bar"]()} className="shrink-0">
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <CapsuleButton aria-label={m["shell.git.more"]()} title={caption}>
-            <GitBranch />
-          </CapsuleButton>
-        </DropdownMenuTrigger>
-        {menu}
-      </DropdownMenu>
-    </Capsule>
-  );
+  // A desk's header holds no git button: Save is the rail's (GitRailSave), the Saves list is Tasks & history.
+  return null;
 }
 
 /** What is waiting to be saved, for the badges: the changed files' count. */
@@ -208,7 +197,7 @@ export function unsavedCount(g: GitHandle): number {
   return v.show && v.merge === null ? v.changed : 0;
 }
 
-// The rail's Save: the count of changed files on its corner; none while a merge waits (the header's Resolve stands).
+// The rail's Save: the count of changed files on its corner, the last auto-save in its tooltip; none while a merge waits (the header's Resolve stands).
 export function GitRailSave({
   git: g,
   transport,
@@ -230,10 +219,11 @@ export function GitRailSave({
       : v.push
         ? m["git.save.label"]()
         : m["git.save.nothing"]();
+  const autosaved = autosaveLine(v);
   return (
     <CapsuleButton
       aria-label={name}
-      title={name}
+      title={autosaved ? `${name}\n${autosaved}` : name}
       disabled={!(v.commit || v.push) || busy}
       onClick={() => {
         if (!transport || busy) return;

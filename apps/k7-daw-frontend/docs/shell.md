@@ -263,9 +263,9 @@ bottom margin for the bar instead.
 
 | piece | file | what it is |
 |---|---|---|
-| header | `shell/ProjectHeader.tsx` | the spinner, git's menu, the dock's Mixer and, last, the chevron that unfolds the rail; git's Save, the pane switcher, the right panels' buttons and Close are the rail's (`shell/PanelRail.tsx`), and the folded chevron carries the unsaved and problem counts; a phone, with no rail, keeps Back, the name and the warning chip; laid out in flow: a `flex-1` left cluster and a right cluster of the same basis, so nothing overlaps at any width |
+| header | `shell/ProjectHeader.tsx` | the spinner, the command-bar button, the dock's Mixer (an icon) and, last, the chevron that unfolds the rail; git's Save, the pane switcher, the right panels' buttons and Close are the rail's (`shell/PanelRail.tsx`), and the folded chevron carries the unsaved and problem counts; a phone, with no rail, keeps Back, the name and the warning chip; laid out in flow: a `flex-1` left cluster and a right cluster of the same basis, so nothing overlaps at any width |
 | git capsule | `shell/HeaderGit.tsx` | Save with its count, a menu (Pull, Saves); while a merge waits, one "Resolve N conflicts" button and a banner |
-| bar | `shell/FloatingBar.tsx`, `shell/ShellTransport.tsx` | the command bar button, the tool, the transport capsule, the pane's capsule (Lane views or Graph views) |
+| bar | `shell/FloatingBar.tsx`, `shell/ShellTransport.tsx` | the tool (a phone's command bar button too), the transport capsule, the pane's capsule (Lane views or Graph views) |
 | panels | `shell/panels.tsx` | the registry: an id, a glyph and a title each, in the kit's `SidePanel` (Pad, Desk) or `Sheet` (Phone) |
 | dock | `shell/panels.tsx` (`DockFrame`), `hooks/useEditorDock.ts` | the bottom dock, in the kit's `EditorDock` (Pad, Desk) or `EditorSheet` (Phone); it holds the editors, the Mixer or a track's chain |
 | phone menu | `shell/OverflowMenu.tsx` | pane, lane views and the panel tiles in one menu |

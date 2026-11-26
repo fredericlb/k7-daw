@@ -67,7 +67,7 @@ Applies on every screen: the keymap, the Esc ladder, the undo journal, app quest
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
-| 01.01 | Open the command bar | click the command-bar button (square terminal): the floating bar's left in a project, the bottom right of the sidebar on Home | ⌘/Ctrl+⇧P (works inside the text editor); double-tap Shift | double-tap the screen with two fingers, anywhere; a tablet also has the command-bar button (the floating bar's left in a project, the bottom right of the sidebar on Home); a phone has no button | T M D |
+| 01.01 | Open the command bar | click the command-bar button (square terminal): in a project's header, left of the Mixer (the floating bar's right end on a phone), the bottom right of the sidebar on Home | ⌘/Ctrl+⇧P (works inside the text editor); double-tap Shift | double-tap the screen with two fingers, anywhere; a tablet also has the command-bar button (the header in a project, the bottom right of the sidebar on Home) | T M D |
 | 01.02 | Run a bound command by key | — | single keys from the keymap, each one runs a command: `1`–`4` pages, `f` fullscreen the focused pane, `F6`/`⇧F6` next/previous page, `?` help, `Space` play/stop, `⇧Space` replay, `Enter` rewind, `t` locate, `,` `.` step the playhead, `⇧R` record enable; every key can be rebound | — | T D |
 | 01.03 | Step aside for typing or a focused control | — | a field owns every key; a focused button/link/select keeps all keys but Esc and the transport keys; `F6` walks out of both | — | T D |
 | 01.04 | Copy selected page text | — | ⌘/Ctrl+C with a text selection stays the browser's copy | — | T D |
@@ -117,7 +117,7 @@ The home pages behind a floating tab bar (Projects, Surfaces, Tasks, Library, Se
 
 ### Git screens
 
-The git bar (workspace tree, Home row; in a project, Save first on the right-edge toolbar with its count, and the header's git menu), Save in one press with its toasts, the Conflict screen, the Sync settings and Clone a repository pages (Back to Projects; tabs GitHub, Forgejo, Other host; one repository picker per signed-in forge account), the Saves list, the identity form; GitHub's sign-in is in Settings → Services, and a Forgejo server is added and signed in there or in the Forgejo tab.
+The git bar (workspace tree, Home row; in a project, Save first on the right-edge toolbar with its count, a phone's git menu), Save in one press with its toasts, the Conflict screen, the Sync settings and Clone a repository pages (Back to Projects; tabs GitHub, Forgejo, Other host; one repository picker per signed-in forge account), the Saves list, the identity form; GitHub's sign-in is in Settings → Services, and a Forgejo server is added and signed in there or in the Forgejo tab.
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
@@ -153,7 +153,7 @@ The git bar (workspace tree, Home row; in a project, Save first on the right-edg
 
 ### Project header and transport
 
-The header (spinner, git's menu, the Mixer, then the chevron that unfolds the right-edge toolbar, carrying the problem count and the unsaved count while folded; a phone keeps Back, the name, its status line under the header and the warning chip, and the rest folds into the Views and panels dialog), the vertical toolbar on the right edge (folded by default; git's Save with its count, the pane switcher, the right panels' buttons with the problem count on Logs, Settings, then Close), the floating bar (command bar, tool, transport with Record's chevron, position, overview, tempo, metronome, master volume, the view's capsule) and the editor dock.
+The header (spinner, the command-bar button, the Mixer icon, then the chevron that unfolds the right-edge toolbar, carrying the problem count and the unsaved count while folded; a phone keeps Back, the name, its git menu, its status line under the header and the warning chip, and the rest folds into the Views and panels dialog), the vertical toolbar on the right edge (folded by default; git's Save with its count, the pane switcher, the right panels' buttons with the problem count on Logs, Settings, then Close), the floating bar (tool, transport with Record's chevron, position, overview, tempo, metronome, master volume, the view's capsule; a phone's command-bar button) and the editor dock.
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
@@ -173,7 +173,7 @@ The header (spinner, git's menu, the Mixer, then the chevron that unfolds the ri
 | 03.23 | Set the song's output level | drag the master volume in the floating bar (written on release) | arrows on the focused fader (0.5 dB) | drag the master volume; on a phone, the one in the info strip above the bar | T M D |
 | 03.24 | Fix a clipped mix | click "fix" next to the clip light | — | — | D |
 | 03.25† | Show / hide the graph notes | click the notes button | — | tap | T M D |
-| 03.26 | Open the Mixer or the Events dock | click Mixer in the header; opening a clip, a take or a roll opens Events | the key bound to `ui mixer` | tap Mixer in Views and panels | T M D |
+| 03.26 | Open the Mixer or the Events dock | click the Mixer icon in the header; opening a clip, a take or a roll opens Events | the key bound to `ui mixer` | tap Mixer in Views and panels | T M D |
 | 03.27 | Close the editor dock | click Close editor in the dock header | Esc | tap Close editor | T M D |
 | 03.28 | Resize the editor dock | drag the separator over its top edge (44 px tall, 120 px min); hold it 400 ms, then move up to expand the editor to full height or down to fold it back | ↑ / ↓ on the focused separator; Enter expands or folds | drag the separator; on a phone, hold the sheet's grabber, then move up to expand or down to fold | T M D |
 | 03.29 | Open / close a panel (resources, playlists, logs, tasks and history, export, settings) | click the chevron at the header's right end to unfold the vertical toolbar on the right edge (folded by default), then its button under the panes; the same button or the panel's Close closes it | the key bound to `ui <panel>` | tap its tile in Views and panels (phone); tap Close | T M D |
@@ -906,7 +906,7 @@ The Mixer (one strip per lane's mixer module, Master as the row's last strip wit
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
-| 34.04 | Save from the project header | click Save in the header's git capsule ("Save N changes"; "Save: nothing to save", dimmed, when nothing waits; a spinner while it runs) | Tab, Enter | phone: tap the git button → Save | T M D |
+| 34.04 | Save from a project | click Save, the first button of the right-edge toolbar (its count of changes on its corner and on the folded chevron; dimmed when nothing waits; a spinner while it runs; its tooltip says the last auto-save) | Tab, Enter | phone: tap the git button → Save | T M D |
 | 34.05 | Pull after a save not sent | toast "Saved on this device, not sent" · "The remote has new changes: pull first, then save again.": click Pull | — | tap | T M D |
 | 34.06 | Retry a save | toast "Not saved", or "Saved on this device, not sent" for any failure but a remote ahead: click Retry | — | tap | T M D |
 | 34.07 | Set the author after a save refused | toast "Not saved: no author yet" · "Set your name and email in Settings, then save again.": click Settings → Settings, General (23.01) | — | tap | T M D |

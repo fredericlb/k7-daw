@@ -1,5 +1,5 @@
 // git-autosave.spec.ts — an open project's edit reaches the person's technical branch on its own after 20 quiet seconds,
-// the header's git menu says when, and Save squashes it onto main and restarts the branch from there.
+// the rail's Save says when, and Save squashes it onto main and restarts the branch from there.
 // The remote is a folder this spec makes with `git`, so only the web target reaches it.
 import { execFileSync } from "node:child_process";
 import { mkdtempSync, rmSync } from "node:fs";
@@ -74,20 +74,17 @@ test("an edit is auto-saved to the person's branch and a Save squashes it onto m
       );
     });
 
-    await test.step("the header's git menu says when the last auto-save was", async () => {
-      await page.getByRole("button", { name: "More git actions" }).click();
+    await test.step("Save, the right-edge rail's first button, says when the last auto-save was", async () => {
+      await page
+        .getByRole("button", { name: "Show the toolbar", exact: true })
+        .click();
       await expect(page.getByTestId("git-autosaved")).toHaveText(
         /^Auto-saved at \d{1,2}:\d\d/,
         SLOW,
       );
-      await page.keyboard.press("Escape");
     });
 
     await test.step("Save is one commit on main, and the branch restarts from it", async () => {
-      // Save is the right-edge rail's first button, folded under the header's chevron.
-      await page
-        .getByRole("button", { name: "Show the toolbar", exact: true })
-        .click();
       await page.getByRole("button", { name: /^Save \d+ changes?$/ }).click();
       await expect(page.getByText("Saved", { exact: true })).toBeVisible(SLOW);
       await expect

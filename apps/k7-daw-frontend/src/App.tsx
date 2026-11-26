@@ -2902,6 +2902,7 @@ export default function App({
         ) : null
       }
       panels={headerPanels.filter((p) => p.id === "mixer")}
+      onCommandBar={isMobile ? undefined : summonBar}
       rail={
         isMobile
           ? undefined

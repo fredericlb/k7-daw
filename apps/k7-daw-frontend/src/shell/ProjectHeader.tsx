@@ -1,4 +1,4 @@
-// ProjectHeader.tsx — the project's header: spinner, git's menu, the dock's buttons and the rail's chevron.
+// ProjectHeader.tsx — the project's header: spinner, the command bar button, the dock's Mixer and the rail's chevron.
 // A phone keeps Back, the name and the warning chip (it has no rail); the panes, panels and Close are PanelRail.tsx's.
 // The engine's state is only a data attribute here (e2e reads it): the person is told by toasts, never by a light.
 import { Badge } from "@studio/ui/badge";
@@ -9,6 +9,7 @@ import {
   ChevronLeft,
   ChevronUp,
   type LucideIcon,
+  SquareTerminal,
   TriangleAlert,
 } from "@studio/ui/icons";
 import { Spinner } from "@studio/ui/spinner";
@@ -22,6 +23,7 @@ import {
 } from "../processes";
 import type { createStatusLine } from "../statusLine";
 import type { ShellLayout } from "../useIsMobile";
+import { summonChord } from "./modKey";
 import { PANEL_DEFS, type PanelId } from "./panels";
 import { WarnBadge } from "./WarnBadge";
 
@@ -58,6 +60,7 @@ export function ProjectHeader({
   git,
   panels,
   rail,
+  onCommandBar,
   overflow,
   lockBanner,
 }: {
@@ -76,6 +79,8 @@ export function ProjectHeader({
   panels: HeaderPanel[];
   /** The chevron that unfolds the right-edge rail (PanelRail.tsx), last in the header; none on a phone. */
   rail?: { open: boolean; onToggle: () => void; unsaved: number };
+  /** Opens the command bar; a phone's is in its floating bar. */
+  onCommandBar?: () => void;
   /** The phone's menu, standing in for the capsules on the right. */
   overflow: ReactNode;
   /** The sentence under the header while a merge locks editing. */
@@ -162,6 +167,20 @@ export function ProjectHeader({
         ) : (
           <>
             <div className="flex min-w-max flex-1 basis-0 items-center justify-end gap-2">
+              {onCommandBar && (
+                <Capsule>
+                  <CapsuleButton
+                    aria-label={m["shell.commandBar"]()}
+                    title={m["shell.commandBar.tip"]({
+                      name: m["commandBar.list"](),
+                      keys: summonChord(),
+                    })}
+                    onClick={onCommandBar}
+                  >
+                    <SquareTerminal />
+                  </CapsuleButton>
+                </Capsule>
+              )}
               {/* The dock's own buttons stay here; the right panels' are the rail's (PanelRail.tsx). */}
               <Capsule role="group" aria-label={m["shell.dock"]()}>
                 {panels.map((p) => {
@@ -175,10 +194,8 @@ export function ProjectHeader({
                       aria-label={def.title()}
                       title={p.title ?? def.title()}
                       onClick={p.onPress}
-                      className={p.pressed ? "gap-1.5" : undefined}
                     >
                       <def.icon />
-                      {p.pressed && <span>{def.title()}</span>}
                     </CapsuleButton>
                   );
                 })}
