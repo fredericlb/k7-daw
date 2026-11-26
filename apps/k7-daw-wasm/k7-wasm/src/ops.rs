@@ -54,6 +54,18 @@ pub enum Request {
     #[cfg(feature = "verbs")]
     #[serde(rename = "verb.catalogue")]
     VerbCatalogue,
+    #[serde(rename = "gesture.plan_group_move")]
+    GesturePlanGroupMove(crate::gesture_ops::PlanArgs),
+    #[serde(rename = "gesture.warp_line")]
+    GestureWarpLine(crate::gesture_ops::WarpArgs),
+    #[serde(rename = "gesture.tool_line")]
+    GestureToolLine(crate::gesture_ops::ToolArgs),
+    #[serde(rename = "gesture.picture_tool_line")]
+    GesturePictureToolLine(crate::gesture_ops::PictureToolArgs),
+    #[serde(rename = "gesture.crossfade_pair")]
+    GestureCrossfadePair(crate::gesture_ops::CrossfadeArgs),
+    #[serde(rename = "gesture.ruler_ticks")]
+    GestureRulerTicks(gesture::ruler::TickSpec),
     #[serde(rename = "text.hash")]
     TextHash(crate::engine_ops::HashArgs),
     #[serde(rename = "engine.compat")]
@@ -129,6 +141,12 @@ impl Session {
             Request::VerbComplete(a) => write(out, &crate::verb_ops::complete(a)?),
             #[cfg(feature = "verbs")]
             Request::VerbCatalogue => write(out, verbs::palette::catalogue()),
+            Request::GesturePlanGroupMove(a) => write(out, &crate::gesture_ops::plan_move(a)),
+            Request::GestureWarpLine(a) => write(out, &crate::gesture_ops::warp(a)),
+            Request::GestureToolLine(a) => write(out, &crate::gesture_ops::clip_tool(a)),
+            Request::GesturePictureToolLine(a) => write(out, &crate::gesture_ops::shot_tool(a)),
+            Request::GestureCrossfadePair(a) => write(out, &crate::gesture_ops::crossfade(a)),
+            Request::GestureRulerTicks(a) => write(out, &crate::gesture_ops::ticks(a)),
             Request::TextHash(a) => write(out, &crate::engine_ops::text_hash(a)),
             Request::EngineCompat(a) => write(out, &crate::engine_ops::compat(a)),
             Request::EngineLatency(a) => write(out, &crate::engine_ops::latency(a)),

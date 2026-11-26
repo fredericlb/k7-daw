@@ -1,0 +1,21 @@
+[package]
+name = "gesture"
+version = "0.1.0"
+edition = "2024"
+description = "The arithmetic of the page's gestures in Rust: the grid snap, the piano roll's drags and fit, the clip panel's window, a picture drag, the tools' lines and the rulers' ticks."
+publish = false
+
+[lib]
+path = "src/lib.rs"
+crate-type = ["rlib"]
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+song-schema = { path = "../song-schema" }
+ts-rs = { version = "11", optional = true }
+
+[features]
+ts = ["dep:ts-rs", "song-schema/ts"]
+
+[dev-dependencies]
+serde_json = "1"

@@ -9,6 +9,7 @@ pub mod curve_ops;
 pub mod edit_ops;
 pub mod engine_ops;
 pub mod error;
+pub mod gesture_ops;
 #[cfg(feature = "song")]
 pub mod host_fs;
 pub mod ops;
@@ -16,6 +17,10 @@ pub mod ops;
 pub mod song_ops;
 #[cfg(test)]
 mod tests;
+pub mod typed;
+pub mod typed_editors;
+pub mod typed_ticks;
+pub mod typed_timeline;
 #[cfg(feature = "verbs")]
 pub mod verb_ops;
 

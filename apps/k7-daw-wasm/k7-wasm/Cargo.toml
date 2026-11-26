@@ -16,7 +16,7 @@ path = "src/bin/bindings.rs"
 required-features = ["ts"]
 
 [features]
-ts = ["dep:ts-rs", "song-schema/ts"]
+ts = ["dep:ts-rs", "song-schema/ts", "gesture/ts"]
 # The compile behind song.* ops and the edits behind edit.* ops: built into the verbs' module only, so the curves' module stays small.
 song = ["dep:song", "dep:song-edit"]
 # The verbs behind the verb.run op: the native app's, built into no browser module yet (docs/verbs-port.md).
@@ -24,6 +24,7 @@ verbs = ["song", "dep:verbs"]
 
 [dependencies]
 song-schema = { path = "../song-schema" }
+gesture = { path = "../gesture" }
 song = { path = "../song", default-features = false, optional = true }
 song-edit = { path = "../song-edit", optional = true }
 verbs = { path = "../verbs", optional = true }

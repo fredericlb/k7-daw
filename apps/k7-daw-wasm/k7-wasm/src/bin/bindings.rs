@@ -1,6 +1,9 @@
 // bindings.rs — writes the TypeScript type of everything that crosses the ABI into a folder, plus its index.ts.
 // A reader would get wrong that it deletes the folder first: a type that no longer exists must not linger there.
 
+use gesture::roll_drag::GroupMove;
+use gesture::ruler::RulerTick;
+use gesture::tools::{FadePair, ToolAct};
 use k7_wasm::curve_ops::{OpenAnswer, PreviewArgs};
 use k7_wasm::engine_ops::{BestAnswer, WarningAnswer};
 use k7_wasm::{Request, WasmError};
@@ -28,6 +31,10 @@ fn write_all(dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
     Compatibility::export_all_to(dir)?;
     EngineLatency::export_all_to(dir)?;
     WarningAnswer::export_all_to(dir)?;
+    GroupMove::export_all_to(dir)?;
+    ToolAct::export_all_to(dir)?;
+    FadePair::export_all_to(dir)?;
+    RulerTick::export_all_to(dir)?;
     let mut names = fs::read_dir(dir)?
         .map(|e| e.map(|e| e.file_name().to_string_lossy().into_owned()))
         .collect::<Result<Vec<_>, io::Error>>()?;
