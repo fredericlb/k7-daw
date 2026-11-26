@@ -263,12 +263,11 @@ bottom margin for the bar instead.
 
 | piece | file | what it is |
 |---|---|---|
-| header | `shell/ProjectHeader.tsx` | a phone's header row (Back, the name, the warning chip, git's menu, the overflow menu); a desk or a pad has no header row, so every control floats over the panes and their whole height is the song's: at the bottom right the spinner, the view capsule, the dock's Mixer (an icon) and, last, the chevron that unfolds the rail upward, carrying the unsaved and problem counts while folded; git's Save and Update, the pane switcher, the right panels' buttons and Close are the rail's (`shell/PanelRail.tsx`) |
+| header | `shell/ProjectHeader.tsx` | no device has a header row, so every control floats over the panes and their whole height is the song's; on a desk or a pad, at the bottom right the spinner, the view capsule, the command-bar button (in the rail, above Update and a divider, on a tablet in portrait or a phone, whose row is short of room), the dock's Mixer (an icon) and, last, the chevron that unfolds the rail upward, carrying the unsaved and problem counts while folded; Close, Settings, the right panels' buttons, the pane switcher and git's Update and Save, top to bottom so Save sits nearest the chevron, are the rail's (`shell/PanelRail.tsx`) |
 | git capsule | `shell/HeaderGit.tsx` | Save with its count, a menu (Pull, Saves); while a merge waits, one "Resolve N conflicts" button and a banner |
-| bar | `shell/FloatingBar.tsx`, `shell/ShellTransport.tsx` | the command bar button and the transport capsule, floating at the bottom left; a desk or a pad draws its 56 px controls at 40 px (`--k7-float-h`, CSS `zoom`), so it reads as one family with the small view capsule (`shell/ViewCapsule.tsx`); the whole floating row sits 16 px from the foot, or right above the dock while it is open (`--k7-float-bottom`), and a right panel and the toasts end above it; the timeline's tool is its corner's, left of "+ lane" (`shell/ToolMenu.tsx`) |
+| bar | `shell/FloatingBar.tsx`, `shell/ShellTransport.tsx` | the transport capsule, floating at the bottom left (a phone's bar spans its width on one row, ends with the rail's chevron, `shell/RailChevron.tsx`, and drops the overview in portrait; its rail stands above the measured bar); a desk or a pad draws its 56 px controls at 40 px (`--k7-float-h`, CSS `zoom`), so it reads as one family with the small view capsule (`shell/ViewCapsule.tsx`); the whole floating row sits 16 px from the foot over the panes, which reach the foot and keep no room for it, the backdrop's wave behind them, or right above the dock while it is open (`--k7-float-bottom`), and a right panel and the toasts end above it; the timeline's tool is its corner's, left of "+ lane" (`shell/ToolMenu.tsx`) |
 | panels | `shell/panels.tsx` | the registry: an id, a glyph and a title each, in the kit's `SidePanel` (Pad, Desk) or `Sheet` (Phone) |
 | dock | `shell/panels.tsx` (`DockFrame`), `hooks/useEditorDock.ts` | the bottom dock, in the kit's `EditorDock` (Pad, Desk) or `EditorSheet` (Phone); it holds the editors, the Mixer or a track's chain |
-| phone menu | `shell/OverflowMenu.tsx` | pane, lane views and the panel tiles in one menu |
 
 **The editors, the Mixer and the per-track chain are horizontal, at the bottom.** They live in the
 **dock**, along the bottom of Pad and Desk and a partial-height sheet on a phone: a clip, a piano roll
@@ -296,6 +295,8 @@ The kit's [editor dock](../packages/ui/docs/editor-dock.md) page has the dock's 
 
 Three layouts, said on the root as `data-layout`: `phone` (the folded shell), `pad` (a touch screen
 that is not folded) and `desk`. Pad and Desk draw the same chrome; the attribute is for the suites.
+The fold is a width of 700 px or less, or a height of 520 or less (`useIsMobile.ts`): a tablet in
+portrait (744 px and up) keeps the floating chrome, and a phone in landscape still folds by its height.
 
 **The header shows no engine state.** The engine says what it does in toasts — the project waiting for
 it, a lost link with Retry, the waveforms being cached (`shell/engineToasts.tsx`); the header only
@@ -312,8 +313,8 @@ opens the dock on it.
 
 **Command feedback is a toast** ("copied 1 event(s)"): what a command said is shown once, where the
 person looks. The status line (`StatusText`, `project-status-line`) carries only what a pane says while it is
-used — a drag's snapped cell, a menu's hint, the caret; a desk reads it out without drawing it, so the header
-holds no text, and a phone draws it under its header.
+used — a drag's snapped cell, a menu's hint, the caret; it is read out without being drawn, since no
+device has a header to hold text.
 
 ### One colour per meaning, across every view
 
@@ -341,9 +342,12 @@ something, between a header and its rows.
 #### The floating bar, and what a SET drops from it
 
 The transport capsule holds Play, Stop, Loop and Record, the clock (`role="timer"`), the song overview
-(`img "Song overview"`, the minimap), the tempo and the metre as buttons, the metronome and the master
-volume (`slider "Master volume"`), all in `group "Transport"`. A phone moves the clock, overview, tempo and
-volume to a strip above the capsule.
+(`img "Song overview"`, the minimap), the metronome wearing the bpm under its icon, and the master
+volume (`slider "Master volume"`), all in `group "Transport"`. The metronome opens a bubble, not a dialog
+(`shell/MetronomeTempo.tsx`): the tempo with Tap, the time signature and the click's switch and level sit
+together because they are one question, the song's pulse, and a bubble leaves the song in view while it
+is set. A phone draws the same capsule on one row across its width, small like a desk's, with the
+master as a knob, and drops the overview in portrait, where there is no width for it.
 
 **Record has two meanings, and the long press is the second.** A press arms and records the lanes; a
 long press, a right click or ArrowDown opens a one-item menu, "Record the output", for what the project
@@ -369,12 +373,13 @@ bar the fit through the store (`graphView`); Auto layout and Stack are the shell
 on a project with a picture; a press flips it, and the rulers follow, since a clock and a ruler
 counting in two units make every position a conversion. There is no separate clock button.
 
-### On a phone, one menu holds everywhere there is to go
+### No header anywhere: a phone's rail holds where there is to go
 
-`shell/OverflowMenu.tsx` (`dialog "Views and panels"`, plain toggle buttons with `aria-pressed`, not `role="menu"`;
-focus moves in on open and back to the trigger on close): the PANE segmented control, the
-current pane's pills (Lane views, or Graph views on the Graph; none on the editor), the tool, the metronome with its level slider, the PANELS tiles (pressed while open) and Settings; the command editor opens from the Settings panel's Commands button, not from the header. A panel
-opens as a full-screen sheet.
+No device draws a header row: the song takes the whole height, and every control floats. A phone's
+floating bar ends with the rail's chevron, and its rail holds what a header and a menu held: Close,
+Settings, the panels with the Mixer, the pane's view options (Lane views or Graph views), the panes,
+the command bar's button, git's Update and Save. Its bar is one row, the metronome with the bpm in it. A Resolve button and the
+background spinner float at its top right while there is one. A panel opens as a full-screen sheet.
 
 ### The Mixer is a dock occupant: strips left to right
 
@@ -1114,7 +1119,7 @@ screen (`shownSlot`).
 
 ## The command bar
 
-It is a modal card under the header, over a scrim, summoned by the bar's button, Ctrl/⌘+Shift+P or a
+It is a modal card at the top, over a scrim, summoned by the bar's button, Ctrl/⌘+Shift+P or a
 double tap of Shift; it is not always there. It runs the brain's shared commands — the same ones `k7 cmd`
 runs on the CLI — so the UI adds no command vocabulary of its own. The catalogue and the argument
 completers live in [`../src/palette.ts`](../src/palette.ts); why it is a card is in
@@ -1300,8 +1305,7 @@ leaf instead, the shape `TimelineTab` uses ([`timeline.md`](timeline.md)).
 **The status line is live state too.** It carries only what a pane says while it is used, such as a
 drag's snapped cell, restated on every cell, so it is not `App` state: it is the small store in
 `src/statusLine.ts`, read by one leaf, `components/StatusText.tsx`. What a command did is a toast, not
-this line. It takes the free width under the project's name, and a phone draws it under the header, since
-it is the shell's error channel. What
+this line. It is read out, never drawn. What
 the panes REPORT to `App` — the caret, the timeline's view, what the editor has open — goes through a
 setter that keeps the current object when the new one says the same thing (`src/shellEquality.ts`), and
 the editor reports an open sequence by PATH, never its text, so a keystroke is not a new shell state.
@@ -1805,7 +1809,7 @@ be revisited when the edge's path table moves is a manifest written wrong.
 | the palette catalogue and argument completion | `src/palette.ts` |
 | the shell's own commands — row and handler, one entry each | `src/ui/commands/` |
 | every popin, dialog and menu drawn over the panes | `src/shell/ShellOverlays.tsx` |
-| the header, its git capsule, the floating bar, the phone menu | `src/shell/ProjectHeader.tsx`, `HeaderGit.tsx`, `FloatingBar.tsx`, `OverflowMenu.tsx` |
+| the floating controls, git's Resolve, the floating bar, the rail | `src/shell/ProjectHeader.tsx`, `HeaderGit.tsx`, `FloatingBar.tsx`, `PanelRail.tsx` |
 | the panel registry and its frame | `src/shell/panels.tsx` |
 | the git screens' one entry | `src/git/gitScreens.tsx` |
 | what the graph's gestures run — the module picker, the asset browser, a tap's edit | `src/shell/useGraphActions.ts` |

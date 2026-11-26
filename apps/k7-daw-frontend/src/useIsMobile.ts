@@ -1,11 +1,11 @@
 // useIsMobile.ts — is the shell on a phone-sized surface? Width OR height, because a phone
 // in landscape passes a width-only test but is far too short for the desktop layout — which
 // also makes it testable by resizing a window. Deliberately NOT `pointer: coarse`: a
-// touchscreen laptop is not a phone.
+// touchscreen laptop is not a phone. 700 px keeps a tablet in portrait (744 px and up) out of it.
 
 import { useEffect, useState } from "react";
 
-const MOBILE_QUERY = "(max-width: 820px), (max-height: 520px)";
+const MOBILE_QUERY = "(max-width: 700px), (max-height: 520px)";
 
 export function useIsMobile(): boolean {
   // Read synchronously: correcting in an effect would build the desktop layout's stacked panes for one frame.
@@ -57,4 +57,20 @@ export function useFingerFirst(): boolean {
     return () => mq.removeEventListener("change", onChange);
   }, []);
   return finger;
+}
+
+/** Is the screen taller than wide? A tablet in portrait has room for less across its floating row. */
+export function usePortrait(): boolean {
+  const [portrait, setPortrait] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(orientation: portrait)").matches,
+  );
+  useEffect(() => {
+    const mq = window.matchMedia("(orientation: portrait)");
+    const onChange = () => setPortrait(mq.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+  return portrait;
 }

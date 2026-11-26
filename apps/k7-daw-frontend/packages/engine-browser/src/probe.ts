@@ -232,18 +232,20 @@ export function relayWsUrl(
   return `${ws.href}/ws?ticket=${encodeURIComponent(ticket)}`;
 }
 
-/** The answers best first: usable before paired-first or tokenless, then DIRECT before relayed, then the faster (docs/access.md). */
+/** The answers best first: usable before paired-first or tokenless, DIRECT before relayed, loopback before LAN, then the faster (docs/access.md). */
 export function orderHits<
   H extends {
-    c: { direct: boolean };
+    c: { direct: boolean; url: string };
     reply: { needsPairing: boolean; token: string; rttMs: number };
   },
 >(hits: H[]): H[] {
+  const far = (h: H) => Number(!onThisMachine({ wsUrl: h.c.url }));
   return [...hits].sort(
     (a, b) =>
       Number(a.reply.needsPairing) - Number(b.reply.needsPairing) ||
       Number(!a.reply.token) - Number(!b.reply.token) ||
       Number(!a.c.direct) - Number(!b.c.direct) ||
+      far(a) - far(b) ||
       a.reply.rttMs - b.reply.rttMs,
   );
 }

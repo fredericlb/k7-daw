@@ -116,8 +116,8 @@ has landed.
 
 ## The metronome
 
-`apps/k7-daw-frontend/src/components/MetronomeButton.tsx`: click runs `transport metronome`, right-click opens a level slider
-that commits `transport metronome volume <0.2..1>`. Both are `settings.k7x` fields read by the engine
+`apps/k7-daw-frontend/src/shell/MetronomeTempo.tsx`: the metronome's bubble holds a switch that runs `transport metronome` and a level slider
+that commits `transport metronome volume <0.2..1>`, beside the tempo and the time signature. Both are `settings.k7x` fields read by the engine
 off the compiled document. The floor of 0.2 is the engine library's own clamp; silence is the switch.
 
 ## The transport panic

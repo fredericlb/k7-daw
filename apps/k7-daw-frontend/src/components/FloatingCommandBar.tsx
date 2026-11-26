@@ -57,7 +57,7 @@ export const FloatingCommandBar = forwardRef<
         ref={card}
         role="dialog"
         aria-label={m["shell.commandBar"]()}
-        className="panel-dialog pointer-events-auto absolute top-[calc(var(--k7-header-h)+8px)] left-1/2 flex w-[min(560px,calc(100%-16px))] -translate-x-1/2 flex-col rounded-[22px] px-3.5 py-1.5 max-[820px]:top-[62px]"
+        className="panel-dialog pointer-events-auto absolute top-[calc(var(--k7-header-h)+8px)] left-1/2 flex w-[min(560px,calc(100%-16px))] -translate-x-1/2 flex-col rounded-[22px] px-3.5 py-1.5 max-[700px]:top-3"
       >
         <CommandBar
           ref={ref}

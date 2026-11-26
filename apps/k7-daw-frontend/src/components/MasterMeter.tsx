@@ -1,6 +1,6 @@
 // MasterMeter — the mix as it leaves for the interface, in the project bar: ONE lane holding the
 // meter, the output fader's handle and the unity mark, plus a red light that stays on if
-// anything clipped during the last playback.
+// anything clipped during the last playback; a tablet in portrait draws it as a knob whose arc is the meter.
 //
 // A LEAF that subscribes to the engine store itself, which is what the store exists for: the frame
 // arrives at 20 Hz, and a value read in App would re-render the whole tree twenty times a second
@@ -61,9 +61,12 @@ export function MasterMeter({
   onFix,
   master,
   onMaster,
+  knob = false,
   ref,
 }: {
   className?: string;
+  /** Drawn as a knob (a tablet in portrait): the arc fills with the live level, red while it clips, the value under it. */
+  knob?: boolean;
   /** Bring the OUTPUT down until the last pass's peak would have sat at -6 dB — a CALLBACK, this component being a leaf (gainTrim.ts). */
   onFix?: () => void;
   /** The song's output level in dB and how to write it: the PROJECT's value, so it survives a stop; absent draws no fader. */
@@ -135,6 +138,37 @@ export function MasterMeter({
       ? `, ${m["meter.peak"]({ value: `${markDb.toFixed(1)} dB` })}`
       : "") +
     (clipped ? m["meter.clipped"]() : "");
+
+  if (knob && fader)
+    return (
+      <div className={cn("flex items-center gap-1.5", className)}>
+        <MasterKnob
+          level={level}
+          fill={w}
+          zone={clipped ? "clip" : meterZone(db)}
+          title={m["meter.hint"]({
+            reading,
+            level: `${level > 0 ? "+" : ""}${level.toFixed(1)}`,
+            max: MASTER_MAX_DB,
+          })}
+          onDrag={setDragged}
+          onCommit={(v) => onMaster?.(v)}
+        />
+        {clipped && !fixed && onFix && (
+          <button
+            type="button"
+            onClick={() => {
+              setFixed(true);
+              onFix();
+            }}
+            title={m["meter.fixHint"]({ target: TARGET_DB })}
+            className="shrink-0 rounded border border-meter-clip/40 px-1 py-px font-medium text-[11px] text-meter-clip leading-none hover:bg-meter-clip/10"
+          >
+            fix
+          </button>
+        )}
+      </div>
+    );
 
   return (
     <div className={cn("flex items-center gap-1.5", className)}>
@@ -235,6 +269,134 @@ export function MasterMeter({
           {level.toFixed(1)}
         </span>
       )}
+    </div>
+  );
+}
+
+/** The arc's colour per zone; a clip latched for the pass paints it red until the next one starts. */
+const ZONE_STROKE: Record<MeterZone, string> = {
+  ok: "var(--color-meter-ok)",
+  hot: "var(--color-meter-hot)",
+  clip: "var(--color-meter-clip)",
+};
+
+const START = 135;
+const SWEEP = 270;
+const polar = (r: number, deg: number): [number, number] => {
+  const a = (deg * Math.PI) / 180;
+  return [20 + r * Math.cos(a), 20 + r * Math.sin(a)];
+};
+const arcPath = (from: number, to: number): string => {
+  const [x1, y1] = polar(15, START + from * SWEEP);
+  const [x2, y2] = polar(15, START + to * SWEEP);
+  return `M ${x1} ${y1} A 15 15 0 ${(to - from) * SWEEP > 180 ? 1 : 0} 1 ${x2} ${y2}`;
+};
+
+// The output as a knob: the pointer is the level set, the arc the level heard; drag up or down, arrows, release commits.
+function MasterKnob({
+  level,
+  fill,
+  zone,
+  title,
+  onDrag,
+  onCommit,
+}: {
+  level: number;
+  /** 0 … 1, the live meter. */
+  fill: number;
+  zone: MeterZone;
+  title: string;
+  onDrag: (db: number) => void;
+  onCommit: (db: number) => void;
+}) {
+  const drag = useRef<{ y: number; v: number; now: number } | null>(null);
+  const span = MASTER_MAX_DB - FADER_MIN_DB;
+  const clamp = (v: number) =>
+    Math.round(Math.min(MASTER_MAX_DB, Math.max(FADER_MIN_DB, v)) * 2) / 2;
+  const t = (level - FADER_MIN_DB) / span;
+  const [px, py] = polar(9, START + t * SWEEP);
+  const [qx, qy] = polar(15, START + t * SWEEP);
+  const key = useRef<number | null>(null);
+  return (
+    <div className="flex flex-col items-center gap-0.5">
+      <div
+        role="slider"
+        tabIndex={0}
+        aria-label={m["shell.masterVolume"]()}
+        aria-valuemin={FADER_MIN_DB}
+        aria-valuemax={MASTER_MAX_DB}
+        aria-valuenow={level}
+        title={title}
+        className="size-9 cursor-ns-resize touch-none rounded-full outline-none focus-visible:shadow-(--k7-focus-ring)"
+        onPointerDown={(e) => {
+          e.currentTarget.setPointerCapture(e.pointerId);
+          drag.current = { y: e.clientY, v: level, now: level };
+        }}
+        onPointerMove={(e) => {
+          const d = drag.current;
+          if (!d) return;
+          d.now = clamp(d.v + ((d.y - e.clientY) / 150) * span);
+          onDrag(d.now);
+        }}
+        onPointerUp={() => {
+          const d = drag.current;
+          drag.current = null;
+          if (d && d.now !== d.v) onCommit(d.now);
+        }}
+        onDoubleClick={() => onCommit(0)}
+        onKeyDown={(e) => {
+          const step =
+            e.key === "ArrowUp" || e.key === "ArrowRight"
+              ? 0.5
+              : e.key === "ArrowDown" || e.key === "ArrowLeft"
+                ? -0.5
+                : 0;
+          if (!step) return;
+          e.preventDefault();
+          key.current = clamp((key.current ?? level) + step);
+          onDrag(key.current);
+        }}
+        onKeyUp={() => {
+          if (key.current === null) return;
+          onCommit(key.current);
+          key.current = null;
+        }}
+      >
+        <svg viewBox="0 0 40 40" className="size-full" fill="none" aria-hidden>
+          <path
+            d={arcPath(0, 1)}
+            stroke="rgba(255,255,255,0.16)"
+            strokeWidth="4"
+            strokeLinecap="round"
+          />
+          {fill > 0.001 && (
+            <path
+              d={arcPath(0, Math.min(1, fill))}
+              stroke={ZONE_STROKE[zone]}
+              strokeWidth="4"
+              strokeLinecap="round"
+            />
+          )}
+          <line
+            x1={px}
+            y1={py}
+            x2={qx}
+            y2={qy}
+            stroke="var(--color-foreground)"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+          />
+        </svg>
+      </div>
+      <span
+        className={cn(
+          "font-mono text-[11px] leading-none tabular-nums",
+          zone === "clip" ? "text-meter-clip" : "text-muted-foreground",
+        )}
+      >
+        {level > 0 ? "+" : ""}
+        {level.toFixed(1)}
+      </span>
     </div>
   );
 }

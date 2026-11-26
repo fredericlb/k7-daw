@@ -1,24 +1,11 @@
-// HeaderGit.tsx — git in the header: on a phone a menu (Save, Pull, Saves) titled by the branch and the last auto-save; on a
-// desk only the Resolve button while a merge waits: Save and Pull with their counts are the rail's first buttons.
+// HeaderGit.tsx — git among the floating controls: only the Resolve button while a merge waits, and the toasts a pull or a
+// failure says; Save and Pull with their counts are the rail's (GitRailSave, GitRailPull).
 // While a merge waits it is one accent "Resolve N conflicts" button. It decides no rule: gitState.ts's barView does.
 import { showToast } from "@studio/project-shell/toast";
 import { Badge } from "@studio/ui/badge";
 import { Button } from "@studio/ui/button";
 import { CapsuleButton } from "@studio/ui/capsule";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@studio/ui/dropdown-menu";
-import {
-  ArrowDownToLine,
-  GitMerge,
-  History,
-  Loader2,
-  Save,
-} from "@studio/ui/icons";
+import { ArrowDownToLine, GitMerge, Loader2, Save } from "@studio/ui/icons";
 import { useEffect } from "react";
 import type { GitTransport } from "../git/gitApi";
 import { openConflict } from "../git/gitScreens";
@@ -50,25 +37,14 @@ const resolveLabel = (v: BarView): string | null =>
 
 export function HeaderGit({
   git: g,
-  transport,
   workspace,
   phone,
-  onCommits,
 }: {
   git: GitHandle;
-  transport: GitTransport | null;
   workspace: string;
   phone: boolean;
-  /** Open the Saves list (the History panel). */
-  onCommits: () => void;
 }) {
   const v = barView(g.state);
-  const saving = useSaving(workspace);
-  const busy = !!g.busy || saving;
-  const commit = () => {
-    if (!transport || busy) return;
-    void save(transport, workspace, { onPull: () => void g.act("pull") });
-  };
   // A pull that diverged opens the conflict screen at once: the person was waiting for it.
   useEffect(() => {
     if (g.pulled === "conflicts") openConflict(workspace);
@@ -84,58 +60,6 @@ export function HeaderGit({
   if (!v.show) return null;
 
   const resolve = resolveLabel(v);
-  const commitLabel = m["git.save.label"]();
-  const commitName =
-    v.changed > 0
-      ? m["git.save.n"]({ n: v.changed })
-      : v.push
-        ? commitLabel
-        : m["git.save.nothing"]();
-  const caption = v.remote
-    ? m["git.caption"]({ branch: v.branch, remote: "origin" })
-    : m["git.headlineLocal"]({ branch: v.branch });
-  const pullDisabled = busy || !v.pull;
-  const autosaved = autosaveLine(v);
-
-  const menu = (
-    <DropdownMenuContent align="end" className="w-[260px]">
-      <DropdownMenuLabel className="font-mono">{caption}</DropdownMenuLabel>
-      {autosaved && (
-        <DropdownMenuLabel
-          data-testid="git-autosaved"
-          className="pt-0 font-normal text-muted-foreground text-xs"
-        >
-          {autosaved}
-        </DropdownMenuLabel>
-      )}
-      {phone && (
-        <DropdownMenuItem
-          disabled={!(v.commit || v.push) || busy}
-          onSelect={commit}
-        >
-          <Save className="size-5 text-primary-text" />
-          {commitLabel}
-          {v.changed > 0 && <Badge variant="count">{v.changed}</Badge>}
-        </DropdownMenuItem>
-      )}
-      <DropdownMenuItem
-        disabled={pullDisabled}
-        disabledReason={
-          v.pullBlocked === "commitFirst" ? m["git.commitFirst"]() : undefined
-        }
-        onSelect={() => void g.act("pull")}
-      >
-        <ArrowDownToLine className="size-5 text-primary-text" />
-        {m["git.pull"]()}
-        {v.toPull > 0 && <Badge variant="count">{v.toPull}</Badge>}
-      </DropdownMenuItem>
-      <DropdownMenuItem onSelect={onCommits}>
-        <History className="size-5 text-primary-text" />
-        {m["shell.git.commits"]()}
-      </DropdownMenuItem>
-    </DropdownMenuContent>
-  );
-
   if (resolve !== null)
     return (
       <Button
@@ -149,36 +73,7 @@ export function HeaderGit({
       </Button>
     );
 
-  if (phone)
-    return (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="glass"
-            size="round"
-            className="relative shrink-0"
-            aria-label={m["shell.git.phoneName"]({
-              commit: commitName,
-              pull: v.toPull,
-            })}
-          >
-            <Save className="size-5" />
-            {v.changed + v.toPull > 0 && (
-              <Badge
-                variant="count-sm"
-                className="absolute -top-1 -right-1"
-                aria-hidden
-              >
-                {v.changed + v.toPull}
-              </Badge>
-            )}
-          </Button>
-        </DropdownMenuTrigger>
-        {menu}
-      </DropdownMenu>
-    );
-
-  // A desk's header holds no git button: Save and Pull are the rail's, the Saves list is Tasks & history.
+  // No git button floats otherwise: Save and Pull are the rail's, the Saves list is Tasks & history.
   return null;
 }
 

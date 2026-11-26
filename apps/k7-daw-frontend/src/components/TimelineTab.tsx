@@ -204,8 +204,9 @@ const DROP_ROW = "outline outline-1 -outline-offset-1 outline-primary";
 // A header that can be dragged to another slot. `cursor-pointer` stays: the same press still selects the row.
 const GRAB_ROW = "cursor-grab active:cursor-grabbing";
 // The corner's new-lane button, named because it is spelled twice: bare, and as a dropdown's trigger.
+// 24 px in the 28 px ruler row: 2 px above and below.
 const NEW_TRACK_BTN =
-  "type-label flex h-7 items-center gap-1 rounded-full bg-(--k7-track-btn-off) px-3 text-[11px] text-foreground hover:bg-on-fill";
+  "type-label flex h-6 items-center gap-1 rounded-full bg-(--k7-track-btn-off) px-3 text-[11px] text-foreground hover:bg-on-fill";
 // How wide a pass must be before its loop mark also gets the glyph: the 8px icon needs its own width plus air.
 const MIN_LOOP_GLYPH_PX = 18;
 
@@ -255,9 +256,13 @@ const laneEvents = (r: Extract<Row, { kind: "track" }>) => ({
 const LABEL_SELECTED =
   "bg-primary/25 outline outline-1 -outline-offset-1 outline-primary";
 
-/** What holds the NAME COLUMN still while the lanes pan under it: `sticky left-0` on every cell, over the screen's own ground so the header reads transparent yet hides what pans under it, at z-30 (docs/timeline.md). */
-const GUTTER_STICKY =
-  "sticky left-0 z-30 before:absolute before:inset-0 before:-z-10 before:bg-background before:content-['']";
+/** What holds the NAME COLUMN still while the lanes pan under it: `sticky left-0` on every cell, transparent, at z-30; the lanes clip themselves under it (docs/timeline.md). */
+const GUTTER_STICKY = "sticky left-0 z-30";
+/** A lane-space layer hides what has panned under the name column: --tl-clip is the scroller's scrollLeft. */
+const UNDER_NAMES = "[clip-path:inset(0_0_0_var(--tl-clip,0px))]";
+/** The same for a layer whose lines overflow its box vertically (the playhead's head, a marker's glow). */
+const UNDER_NAMES_TALL =
+  "[clip-path:inset(-64px_-8px_-64px_var(--tl-clip,0px))]";
 
 // `beat: LABEL` puts the caret on the row's label — the only position a group or generated lane can take.
 const LABEL = -1;
@@ -779,10 +784,13 @@ function TimelineTabView({
     const el = scrollRef.current;
     if (!el) return;
     const remember = () => {
+      // What has panned under the name column, which every lane-space layer clips away (UNDER_NAMES).
+      el.style.setProperty("--tl-clip", `${el.scrollLeft}px`);
       if (el.clientWidth)
         savedScroll.current = { left: el.scrollLeft, top: el.scrollTop };
     };
     el.addEventListener("scroll", remember, { passive: true });
+    el.style.setProperty("--tl-clip", `${el.scrollLeft}px`);
     const ro = new ResizeObserver(() => {
       const { left, top } = savedScroll.current;
       if (!el.clientWidth || (!left && !top)) return;
@@ -2257,6 +2265,8 @@ function TimelineTabView({
   const msaLine = isMobile && expanded;
   // The name on one line and M/S/A on the next, everywhere but a collapsed phone row (docs/timeline.md).
   const twoLine = !isMobile || msaLine;
+  // A desk's track header: the icon beside the two lines rather than on the first.
+  const iconAside = twoLine && !msaLine;
   const contentH =
     ROW_H +
     visRows.reduce(
@@ -2301,8 +2311,8 @@ function TimelineTabView({
           // The tool's own icon AS the cursor, forced past the clip's `cursor-grab` so the hand says what a press will do.
           style={toolCursor ? { cursor: toolCursor } : undefined}
           className={cn(
-            // A stable gutter: the pane shrinking under a split must not refit the lanes and slide the clip from under the pointer.
-            "isolate min-h-0 flex-1 overflow-auto [scrollbar-gutter:stable]",
+            // No scrollbars, drawn or reserved: the wheel, the trackpad and the minimap move it, and the lanes never refit for a gutter.
+            "isolate min-h-0 flex-1 overflow-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
             toolCursor && "[&_*]:!cursor-[inherit]",
           )}
           /** OS files: preventDefault is what ACCEPTS the drop — without it the browser silently refuses and then opens the file (fileDrop.ts). */
@@ -2403,18 +2413,27 @@ function TimelineTabView({
         >
           <div
             style={{ width: GUTTER + laneW }}
-            className="relative select-none font-mono text-xs"
+            // Room under the last lane: scrolled to the end, it stops above a desk's floating row (docs/shell.md).
+            className={cn(
+              "relative select-none font-mono text-xs",
+              "pb-[calc(var(--k7-float-h)+24px)]",
+            )}
           >
             {/* The GRID: the ruler's own ticks continued down the lanes, dashed and FIRST in the wrapper so everything paints over it. */}
-            <Grid
-              {...tickProps}
-              ppb={ppb}
-              laneW={laneW}
-              left0={GUTTER}
-              scroller={scrollRef}
-              top={ROW_H} // below the ruler, which draws its own solid tick
-              height={contentH - ROW_H}
-            />
+            <div
+              className={cn("pointer-events-none absolute top-0", UNDER_NAMES)}
+              style={{ left: GUTTER, width: laneW, height: contentH }}
+            >
+              <Grid
+                {...tickProps}
+                ppb={ppb}
+                laneW={laneW}
+                left0={0}
+                scroller={scrollRef}
+                top={ROW_H} // below the ruler, which draws its own solid tick
+                height={contentH - ROW_H}
+              />
+            </div>
             {/* ruler */}
             <div
               className="sticky top-0 z-40 flex bg-background"
@@ -2744,7 +2763,10 @@ function TimelineTabView({
                       </span>
                     </div>
                     <div
-                      className="relative overflow-hidden bg-muted/60"
+                      className={cn(
+                        "relative overflow-hidden bg-muted/60",
+                        UNDER_NAMES,
+                      )}
                       style={{ width: laneW }}
                     >
                       {inSel && selBox && selSlice(selBox)}
@@ -2884,6 +2906,7 @@ function TimelineTabView({
                         dropAt?.lane === vt.id && DROP_LANE,
                         // Armed red, the whole lane, exactly as an armed audio lane reads.
                         videoArmed === vt.id && "bg-arm/25",
+                        UNDER_NAMES,
                       )}
                       style={{ width: laneW }}
                     >
@@ -3122,7 +3145,12 @@ function TimelineTabView({
                     >
                       <span className="truncate">{lane.param}</span>
                     </div>
-                    <div className="relative flex-1 overflow-hidden">
+                    <div
+                      className={cn(
+                        "relative flex-1 overflow-hidden",
+                        UNDER_NAMES,
+                      )}
+                    >
                       <AutomationPoints
                         curve={lane.curve}
                         param={lane.param}
@@ -3211,7 +3239,7 @@ function TimelineTabView({
                       msaLine
                         ? "flex-col justify-center gap-2 px-1"
                         : twoLine
-                          ? "flex-col justify-center gap-px px-2"
+                          ? "items-center gap-1.5 px-2"
                           : "items-center gap-1 px-2",
                       GUTTER_STICKY,
                       onReorder && !t.generated && GRAB_ROW,
@@ -3224,90 +3252,112 @@ function TimelineTabView({
                     {/* Both live meters, subscribing for themselves — see LaneMeter. */}
                     {/* None on a timeline's lane: the engine plays none, only the song lane it is placed on. */}
                     {!shownTimeline && <LaneMeter index={ti} armed={armed} />}
-                    {/* The instrument the name's prefix asks for ("ge.lead" → a strat), in the track's colour; undeclared gets a question mark. */}
-                    <span
-                      // The row shows the label alone, so the full name — the track's id and filename — has to be reachable here.
-                      title={[
-                        t.name,
-                        trackIcon(t.name)?.label,
-                        armed && "record-armed; records on play",
-                      ]
-                        .filter(Boolean)
-                        .join(" — ")}
-                      className={cn(
-                        "relative flex min-w-0 items-center gap-1 truncate",
-                        twoLine ? "flex-none" : "flex-1",
-                        row.grouped && "pl-3",
-                        // Armed red, soloed yellow. A ternary, not two classes: both can be true, and armed is about to write to disk.
-                        armed ? "text-arm" : eff.solo && "text-solo",
-                      )}
-                    >
+                    {/* On a desk the icon stands beside both lines, the name's and the M S A's, two lines tall. */}
+                    {iconAside && (
                       <TrackIcon
                         name={t.name}
                         color={t.color || undefined}
-                        // A coloured icon is the track's identity and holds full strength; an uncoloured one is decoration and sits back.
-                        className={cn("shrink-0", !t.color && "opacity-70")}
+                        className={cn(
+                          "relative shrink-0 text-[28px]",
+                          !t.color && "opacity-70",
+                          row.grouped && "ml-3",
+                        )}
                       />
-                      {/* Which attribute set this lane plays, before the name; `shrink-0` means a narrow gutter eats the name, not this. */}
-                      {alt && onNodeMenu && !shownTimeline && (
-                        <LaneAlternative
-                          track={t.name}
-                          names={alt.alternatives}
-                          current={alt.alternative}
-                          onOpen={(at) =>
-                            onNodeMenu(
-                              {
-                                // A lane IS a module node, so it is addressable as one (apps/k7-daw-frontend/packages/song/docs/trackModules.md).
-                                module: t.id,
-                                alternatives: alt.alternatives,
-                                alternative: alt.alternative,
-                                frozen: laneNodes?.frozen?.[t.id],
-                              },
-                              at,
-                            )
-                          }
+                    )}
+                    <div
+                      className={
+                        iconAside
+                          ? "flex min-w-0 flex-1 flex-col justify-center gap-px"
+                          : "contents"
+                      }
+                    >
+                      {/* The instrument the name's prefix asks for ("ge.lead" → a strat), in the track's colour; undeclared gets a question mark. */}
+                      <span
+                        // The row shows the label alone, so the full name — the track's id and filename — has to be reachable here.
+                        title={[
+                          t.name,
+                          trackIcon(t.name)?.label,
+                          armed && "record-armed; records on play",
+                        ]
+                          .filter(Boolean)
+                          .join(" — ")}
+                        className={cn(
+                          "relative flex min-w-0 items-center gap-1 truncate",
+                          twoLine ? "flex-none" : "flex-1",
+                          row.grouped && !iconAside && "pl-3",
+                          // Armed red, soloed yellow. A ternary, not two classes: both can be true, and armed is about to write to disk.
+                          armed ? "text-arm" : eff.solo && "text-solo",
+                        )}
+                      >
+                        {!iconAside && (
+                          <TrackIcon
+                            name={t.name}
+                            color={t.color || undefined}
+                            // A coloured icon is the track's identity and holds full strength; an uncoloured one is decoration and sits back.
+                            className={cn("shrink-0", !t.color && "opacity-70")}
+                          />
+                        )}
+                        {/* Which attribute set this lane plays, before the name; `shrink-0` means a narrow gutter eats the name, not this. */}
+                        {alt && onNodeMenu && !shownTimeline && (
+                          <LaneAlternative
+                            track={t.name}
+                            names={alt.alternatives}
+                            current={alt.alternative}
+                            onOpen={(at) =>
+                              onNodeMenu(
+                                {
+                                  // A lane IS a module node, so it is addressable as one (apps/k7-daw-frontend/packages/song/docs/trackModules.md).
+                                  module: t.id,
+                                  alternatives: alt.alternatives,
+                                  alternative: alt.alternative,
+                                  frozen: laneNodes?.frozen?.[t.id],
+                                },
+                                at,
+                              )
+                            }
+                          />
+                        )}
+                        {/* The label alone: the row's position and the icon already say what "3.ge." would repeat at the gutter's expense. */}
+                        <span className="truncate">{trackLabel(t.name)}</span>
+                        {trackWarnings?.[t.id] && (
+                          <LaneWarning
+                            sentences={trackWarnings[t.id]}
+                            onOpen={onProblems}
+                          />
+                        )}
+                        <LaneVstFreeze
+                          rendered={laneNodes?.autoFrozen?.[t.id]}
+                          waiting={laneNodes?.autoFreezeWaiting?.[t.id]}
                         />
-                      )}
-                      {/* The label alone: the row's position and the icon already say what "3.ge." would repeat at the gutter's expense. */}
-                      <span className="truncate">{trackLabel(t.name)}</span>
-                      {trackWarnings?.[t.id] && (
-                        <LaneWarning
-                          sentences={trackWarnings[t.id]}
-                          onOpen={onProblems}
-                        />
-                      )}
-                      <LaneVstFreeze
-                        rendered={laneNodes?.autoFrozen?.[t.id]}
-                        waiting={laneNodes?.autoFreezeWaiting?.[t.id]}
-                      />
-                    </span>
-                    {/* [m]ute / [s]olo / [a]rm, the graph's track nodes' own controls; a collapsed phone row keeps the name, mute and solo staying in the lane menu. */}
-                    {onTrackToggle &&
-                      !shownTimeline &&
-                      (msaLine || !isMobile) && (
-                        <div
-                          className={cn(
-                            "relative flex items-center",
-                            msaLine
-                              ? "w-full gap-0.5"
-                              : twoLine
-                                ? "shrink-0 gap-0.5"
-                                : "shrink-0 gap-1",
-                          )}
-                        >
-                          {msa.map(([control, on]) => (
-                            <LaneToggle
-                              key={control}
-                              kind={control}
-                              on={on}
-                              title={controlLabel(control, t.name)}
-                              ariaLabel={controlLabel(control, t.name)}
-                              touch={msaLine}
-                              onToggle={() => onTrackToggle(t.id, control)}
-                            />
-                          ))}
-                        </div>
-                      )}
+                      </span>
+                      {/* [m]ute / [s]olo / [a]rm, the graph's track nodes' own controls; a collapsed phone row keeps the name, mute and solo staying in the lane menu. */}
+                      {onTrackToggle &&
+                        !shownTimeline &&
+                        (msaLine || !isMobile) && (
+                          <div
+                            className={cn(
+                              "relative flex items-center",
+                              msaLine
+                                ? "w-full gap-0.5"
+                                : twoLine
+                                  ? "shrink-0 gap-0.5"
+                                  : "shrink-0 gap-1",
+                            )}
+                          >
+                            {msa.map(([control, on]) => (
+                              <LaneToggle
+                                key={control}
+                                kind={control}
+                                on={on}
+                                title={controlLabel(control, t.name)}
+                                ariaLabel={controlLabel(control, t.name)}
+                                touch={msaLine}
+                                onToggle={() => onTrackToggle(t.id, control)}
+                              />
+                            ))}
+                          </div>
+                        )}
+                    </div>
                     {onTrackToggle &&
                       !shownTimeline &&
                       isMobile &&
@@ -3419,6 +3469,7 @@ function TimelineTabView({
                         DROP_LANE,
                       dropAt?.lane === t.id && DROP_LANE,
                       mark?.lanes.has(t.id) && "bg-amber-500/15",
+                      UNDER_NAMES,
                     )}
                     style={{ width: laneW }}
                   >
@@ -3965,33 +4016,45 @@ function TimelineTabView({
               );
             })}
 
-            {/* marker lines spanning the ruler and every lane, non-interactive: the ruler handle above owns hover and right-click. */}
-            {visMarkers.map((mk) => (
-              <div
-                key={mk.tc}
-                className={cn("pointer-events-none absolute top-0 z-20", GROW)}
-                style={{
-                  left: GUTTER + x(mk.beat),
-                  height: contentH,
-                  width: 1,
-                  background: MARKER_COLOR,
-                  boxShadow:
-                    hoverMarker === mk.name
-                      ? `0 0 6px ${MARKER_COLOR}`
-                      : "none",
-                }}
+            {/* The lines over every lane, clipped under the names as the lanes are. */}
+            <div
+              className={cn(
+                "pointer-events-none absolute top-0 z-20",
+                UNDER_NAMES_TALL,
+              )}
+              style={{ left: GUTTER, width: laneW, height: contentH }}
+            >
+              {/* marker lines spanning the ruler and every lane, non-interactive: the ruler handle above owns hover and right-click. */}
+              {visMarkers.map((mk) => (
+                <div
+                  key={mk.tc}
+                  className={cn(
+                    "pointer-events-none absolute top-0 z-20",
+                    GROW,
+                  )}
+                  style={{
+                    left: x(mk.beat),
+                    height: contentH,
+                    width: 1,
+                    background: MARKER_COLOR,
+                    boxShadow:
+                      hoverMarker === mk.name
+                        ? `0 0 6px ${MARKER_COLOR}`
+                        : "none",
+                  }}
+                />
+              ))}
+              {/* playhead — its own subscriber, so the transport moves one div and re-renders nothing else here (see Playhead). */}
+              {/* …the song's, or the open timeline's while it is auditioned from its start (timelineView.ts). */}
+              <Playhead
+                tempo={proj.tempo}
+                beatLo={beatLo}
+                beatHi={lastBeat}
+                ppb={ppb}
+                left0={0}
+                height={contentH}
               />
-            ))}
-            {/* playhead — its own subscriber, so the transport moves one div and re-renders nothing else here (see Playhead). */}
-            {/* …the song's, or the open timeline's while it is auditioned from its start (timelineView.ts). */}
-            <Playhead
-              tempo={proj.tempo}
-              beatLo={beatLo}
-              beatHi={lastBeat}
-              ppb={ppb}
-              left0={GUTTER}
-              height={contentH}
-            />
+            </div>
           </div>
         </div>
       </div>

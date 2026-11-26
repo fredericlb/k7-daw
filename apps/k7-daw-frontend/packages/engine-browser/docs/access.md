@@ -100,10 +100,12 @@ seconds later has the same answer. It is offered again once that window closes â
 a tray started meanwhile is found within the two minutes rather than immediately.
 
 Every candidate is raced, but the timings decide only among equals: a **direct** socket that
-answered with a token beats the relay however fast those measured (`orderHits`). The
+answered with a token beats the relay however fast those measured, and the loopback beats the
+machine's own LAN addresses (`orderHits`). The
 direct path is the shorter one for the audio, and it is the only one `reachedDirectly` trusts, so a
 relay that merely won the clock would turn the one engine on this machine into one the gate may not
-take unasked. The clock is not worth trusting there anyway: each round trip ends when the page's main
+take unasked; a LAN address of this machine is the same trap, since the gate knows this machine by its loopback
+(`onThisMachine`). The clock is not worth trusting there anyway: each round trip ends when the page's main
 thread reads the reply, and a page still mounting easily delays one answer more than the other.
 
 ## Hosted files are opt-in, per app

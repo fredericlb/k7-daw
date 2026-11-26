@@ -50,12 +50,20 @@ describe("orderHits", () => {
     expect(bestEngine([{ ...ranked, latency, fileBase: null }])).not.toBeNull();
   });
 
-  it("still ranks by speed among sockets of the same kind", () => {
+  it("puts the loopback before the machine's own LAN address even when the LAN measured faster", () => {
     const [best] = orderHits([
-      hit("ws://192.168.1.20:8765", true, 9),
+      hit("ws://192.168.1.20:8765", true, 1),
       hit(LOOPBACK, true, 2),
     ]);
     expect(best.c.url).toBe(LOOPBACK);
+  });
+
+  it("still ranks by speed among sockets of the same kind", () => {
+    const [best] = orderHits([
+      hit("ws://192.168.1.21:8765", true, 9),
+      hit("ws://192.168.1.20:8765", true, 2),
+    ]);
+    expect(best.c.url).toBe("ws://192.168.1.20:8765");
   });
 
   it("prefers a usable relay to a direct socket that withheld its token or needs pairing", () => {

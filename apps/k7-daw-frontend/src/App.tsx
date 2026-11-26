@@ -200,7 +200,6 @@ import { placeSubject, placeWarnings, warningSentence } from "./engineWarnings";
 import { type FloatState, loadFloat, saveFloat } from "./floatingRect";
 import { installGates, lockSentence } from "./git/gitLock";
 import { lockedBy as mergeLockedBy } from "./git/gitState";
-import { askSavesList } from "./git/savesList";
 import { projectTransport } from "./git/transports";
 import { useGitState } from "./git/useGitState";
 import { useLatest } from "./hooks/useLatest";
@@ -233,8 +232,7 @@ import {
   HeaderGit,
   unsavedCount,
 } from "./shell/HeaderGit";
-import { type OverflowLaneView, OverflowMenu } from "./shell/OverflowMenu";
-import { PanelRail } from "./shell/PanelRail";
+import { PanelRail, type RailView } from "./shell/PanelRail";
 import {
   type HeaderPane,
   type HeaderPanel,
@@ -251,6 +249,7 @@ import {
   shownPanel,
   TOOLBAR_PANELS,
 } from "./shell/panels";
+import { RailChevron } from "./shell/RailChevron";
 import { ShellOverlays } from "./shell/ShellOverlays";
 import { type PendingWire, useGraphActions } from "./shell/useGraphActions";
 import { ViewCapsule } from "./shell/ViewCapsule";
@@ -258,7 +257,7 @@ import { PANE_META, VIEWPORT_META } from "./shellMeta";
 import { ShellContexts } from "./state/ShellContexts";
 import { createShellStore, type ShellVerbs } from "./state/shellStore";
 import { modeCondition, type TimelineMode } from "./timelineMode";
-import { TOOLS, type Tool } from "./timelineTools";
+import type { Tool } from "./timelineTools";
 import type {
   CommandInfo,
   EngineLoadPhase,
@@ -273,7 +272,7 @@ import type {
 } from "./types";
 import type { GraphSlot, LocalCtx } from "./ui/commands/context";
 import { runLocal } from "./ui/commands/dispatch";
-import { useIsMobile, useShellLayout } from "./useIsMobile";
+import { useIsMobile, usePortrait, useShellLayout } from "./useIsMobile";
 import { useViewRoute } from "./useViewRoute";
 import { videoSpans } from "./videoSpans";
 import { type WaveMode, waveCondition } from "./waveMode";
@@ -334,6 +333,8 @@ export default function App({
   const lockedSay = lockSentence;
   // What the panes read for themselves — the reload signal, the verbs, the overlays (state/shellStore.ts, docs/state.md).
   const shellVerbs = useRef<ShellVerbs | null>(null);
+  // A tablet in portrait moves the command bar's button from the floating row into the rail.
+  const portrait = usePortrait();
   // The right-edge rail is folded until the header's chevron unfolds it.
   const [railOpen, setRailOpen] = useState(false);
   const [shell] = useState(() =>
@@ -388,7 +389,6 @@ export default function App({
   const stackView = useStore(shell, (s) => s.stackView);
   const lanesExpanded = useStore(shell, (s) => s.lanesExpanded);
   const automationShown = useStore(shell, (s) => s.automationShown);
-  const tool = useStore(shell, (s) => s.tool);
   // The PAGE asked for; null is the project's home page, resolved into `full` once the layout is known (docs/shell.md).
   const [chosen, setFull] = useState<Pane | null>(null);
   // A phone draws the pages from its hamburger rather than from the header's row. See docs/shell.md.
@@ -2582,6 +2582,7 @@ export default function App({
       // The song's own level, off the compiled doc — what the FILE says, so the fader reads right before a note has played.
       master={projectDoc?.masterVolume}
       onMaster={setMaster}
+      knob={isMobile || portrait}
     />
   );
 
@@ -2817,7 +2818,7 @@ export default function App({
     setOptMetronome((cur) => !(cur ?? metronomeOn));
     void runCommand("transport metronome");
   };
-  const laneViewsOf = (): OverflowLaneView[] => [
+  const laneViewsOf = (): RailView[] => [
     {
       id: "lanes",
       label: m["shell.lane.lanesShort"](),
@@ -2846,7 +2847,7 @@ export default function App({
   ];
   // The bar's capsule follows the pane: the lane views on the arrangement, the graph's on the Graph, none elsewhere.
   const graphCmds = shell.getState().commands;
-  const graphViewsOf = (): OverflowLaneView[] =>
+  const graphViewsOf = (): RailView[] =>
     !graphView
       ? []
       : [
@@ -2913,8 +2914,6 @@ export default function App({
               onLanes: () => void runCommand("ui lanes"),
               onAutomation: () => void runCommand("ui automation"),
               onPicture: () => void runCommand("ui viewport"),
-              onZoomIn: () => void runCommand("ui zoom"),
-              onZoomOut: () => void runCommand("ui zoom out"),
               onZoomFit: () => void runCommand("ui zoom reset"),
             }
           : null
@@ -2924,6 +2923,18 @@ export default function App({
   const bar = (
     <FloatingBar
       layout={layoutKind}
+      noOverview={isMobile && portrait}
+      railChevron={
+        isMobile ? (
+          <RailChevron
+            className="float pointer-events-auto h-14 items-center rounded-full p-1.5"
+            open={railOpen}
+            onToggle={() => setRailOpen((o) => !o)}
+            unsaved={gitWorkspace ? unsavedCount(gitHandle) : 0}
+            problems={problemCount}
+          />
+        ) : undefined
+      }
       runCommand={runCommand}
       onCommandBar={summonBar}
       recInfo={recInfo}
@@ -2977,30 +2988,23 @@ export default function App({
   const header = (
     <ProjectHeader
       layout={layoutKind}
-      name={project?.name ?? ""}
-      backHref={projectsUrl(window.location.href)}
       statusStore={statusStore}
       engine={engine ? (connected ? "up" : "down") : "none"}
       problems={problemCount}
-      onProblems={openProblems}
       onProcesses={() => setRightPanel("tasks")}
       extra={<BenchSaveButton size="icon" runCommand={runCommand} />}
       git={
         gitWorkspace ? (
           <HeaderGit
             git={gitHandle}
-            transport={gitTransport}
             workspace={gitWorkspace}
             phone={isMobile}
-            onCommits={() => {
-              askSavesList();
-              setRightPanel("history");
-            }}
           />
         ) : null
       }
       panels={headerPanels.filter((p) => p.id === "mixer")}
       views={viewCapsule}
+      onCommandBar={isMobile || portrait ? undefined : summonBar}
       rail={
         isMobile
           ? undefined
@@ -3011,43 +3015,6 @@ export default function App({
             }
       }
       lockBanner={merging ? lockedSay() : null}
-      overflow={
-        <OverflowMenu
-          panes={switcherPanes}
-          pane={full}
-          onPane={(id) => void runCommand(`ui ${id}`)}
-          lanes={
-            full === "timeline" && hasTimeline
-              ? laneViewsOf()
-              : full === "chains"
-                ? graphViewsOf()
-                : []
-          }
-          lanesHeading={
-            full === "chains"
-              ? m["shell.overflow.graph"]()
-              : m["shell.overflow.lanes"]()
-          }
-          panels={headerPanels}
-          onSettings={() => void runCommand("ui settings")}
-          onHelp={openHelp}
-          tool={
-            full === "timeline" && hasTimeline
-              ? {
-                  current: tool,
-                  tools: TOOLS,
-                  onPick: (t) => void runCommand(`ui tool ${t}`),
-                }
-              : undefined
-          }
-          metronome={{
-            on: metronomeIsOn,
-            onPress: toggleMetronome,
-            level: metronomeLevel,
-            onLevel: (v) => void runCommand(`transport metronome volume ${v}`),
-          }}
-        />
-      }
     />
   );
 
@@ -3343,7 +3310,7 @@ export default function App({
   };
   // A right panel ends above the dock, and the toasts sit above it too (spec: bottom-editors.md).
   const dockUp = dock.open && !isMobile;
-  const railShown = railOpen && !isMobile;
+  const railShown = railOpen;
   // The floating row (bar, controls) sits 16 px from the foot, or right above the dock when it is open (docs/shell.md).
   const floatBottom = !dockUp
     ? "16px"
@@ -3418,17 +3385,28 @@ export default function App({
             {/* The panes and the right panels' buttons, as a vertical toolbar on the right edge (shell/PanelRail.tsx); a phone has its menu. */}
             {railShown && (
               <PanelRail
+                views={
+                  !isMobile
+                    ? undefined
+                    : full === "timeline" && hasTimeline
+                      ? laneViewsOf()
+                      : full === "chains"
+                        ? graphViewsOf()
+                        : undefined
+                }
+                onCommandBar={isMobile || portrait ? summonBar : undefined}
+                bottom={isMobile ? 12 + stripH + 8 : undefined}
                 save={(className) =>
                   gitWorkspace ? (
                     <>
-                      <GitRailSave
+                      <GitRailPull
                         git={gitHandle}
-                        transport={gitTransport}
                         workspace={gitWorkspace}
                         className={className}
                       />
-                      <GitRailPull
+                      <GitRailSave
                         git={gitHandle}
+                        transport={gitTransport}
                         workspace={gitWorkspace}
                         className={className}
                       />
@@ -3439,7 +3417,11 @@ export default function App({
                 panes={switcherPanes}
                 pane={full}
                 onPane={(id) => void runCommand(`ui ${id}`)}
-                panels={headerPanels.filter((p) => p.id !== "mixer")}
+                panels={
+                  isMobile
+                    ? headerPanels
+                    : headerPanels.filter((p) => p.id !== "mixer")
+                }
                 settingsPressed={shownId === "settings"}
                 onSettings={() =>
                   shownId === "settings"
@@ -3452,9 +3434,9 @@ export default function App({
             {ws?.activeIsDemo && ws.activeProject && (
               <DemoBanner project={ws.activeProject} />
             )}
-            {/* The panes, with room kept for the floating bar and controls; panels push nothing. */}
+            {/* The panes reach the foot, the floating row over them; panels push nothing. */}
             <div
-              className={`${editorPopin || rackBuilder ? "z-(--k7-z-menu)" : "z-(--k7-z-pane)"} flex min-h-0 flex-1 flex-col ${isMobile ? "pb-[88px]" : "pb-16"}`}
+              className={`${editorPopin || rackBuilder ? "z-(--k7-z-menu)" : "z-(--k7-z-pane)"} flex min-h-0 flex-1 flex-col`}
             >
               <div className="flex min-h-0 flex-1">
                 {/* The popin's backdrop: a click outside is the reliable way out, Escape belonging to the editor's vim. */}
