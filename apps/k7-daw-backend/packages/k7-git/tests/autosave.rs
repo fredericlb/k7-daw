@@ -264,11 +264,7 @@ async fn a_save_is_one_squash_commit_on_main_and_the_branch_restarts_from_it() {
     );
     assert!(a.repo.autosave_reset(&branch()).unwrap());
     assert_eq!(a.tip(), Some(save.clone()));
-    a.repo.fetch_blocking(&n, &to).unwrap();
-    assert_eq!(
-        a.repo.autosave_push_blocking(&n, &to, &branch()).unwrap(),
-        Sent::Pushed
-    );
+    a.sync(&n, &to);
     assert_eq!(
         a.remote_tip(&to),
         Some(save.clone()),

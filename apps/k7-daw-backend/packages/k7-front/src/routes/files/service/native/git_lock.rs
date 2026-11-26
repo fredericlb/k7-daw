@@ -31,6 +31,64 @@ pub fn try_take_remote(root: &str) -> Option<Guard> {
     take_from(remote_table(), root)
 }
 
+fn autosaving() -> &'static Mutex<std::collections::HashSet<String>> {
+    static A: OnceLock<Mutex<std::collections::HashSet<String>>> = OnceLock::new();
+    A.get_or_init(Default::default)
+}
+
+/// The remote's lock held by an auto-save round, which a Save's push or a pull waits out instead of answering busy.
+pub struct AutosaveGuard {
+    root: String,
+    _held: Guard,
+}
+
+impl Drop for AutosaveGuard {
+    fn drop(&mut self) {
+        autosaving()
+            .lock()
+            .unwrap_or_else(|p| p.into_inner())
+            .remove(&self.root);
+    }
+}
+
+pub fn try_take_remote_as_autosave(root: &str) -> Option<AutosaveGuard> {
+    let held = try_take_remote(root)?;
+    autosaving()
+        .lock()
+        .unwrap_or_else(|p| p.into_inner())
+        .insert(root.to_string());
+    Some(AutosaveGuard {
+        root: root.to_string(),
+        _held: held,
+    })
+}
+
+/// How long a push or a pull waits for an auto-save round to let the remote go.
+pub const AUTOSAVE_WAIT: std::time::Duration = std::time::Duration::from_secs(30);
+
+/// The remote's lock, waiting out an auto-save round; `None` when another route holds it.
+pub async fn take_remote_for_route(root: &str) -> Option<Guard> {
+    if let Some(g) = try_take_remote(root) {
+        return Some(g);
+    }
+    let waits = autosaving()
+        .lock()
+        .unwrap_or_else(|p| p.into_inner())
+        .contains(root);
+    if !waits {
+        return None;
+    }
+    let lock = remote_table()
+        .lock()
+        .unwrap_or_else(|p| p.into_inner())
+        .entry(root.to_string())
+        .or_default()
+        .clone();
+    tokio::time::timeout(AUTOSAVE_WAIT, lock.lock_owned())
+        .await
+        .ok()
+}
+
 fn take_from(table: &'static Table, root: &str) -> Option<Guard> {
     let lock = table
         .lock()

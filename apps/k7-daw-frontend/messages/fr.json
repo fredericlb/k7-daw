@@ -2035,6 +2035,8 @@
   "git.toPushGroup": "{n} à envoyer",
   "git.commitsEmptyNote": "Sauvegarder note ce qui a changé et l'envoie : chaque sauvegarde s'affiche ici, avec son auteur et son appareil.",
   "git.caption": "{branch} · {remote}",
+  "git.autosaved": "Sauvegarde auto à {time}",
+  "git.autosaveUnsent": "Sauvegarde auto à {time} · pas encore envoyée",
   "home.surfaces": "Surfaces",
   "surfaces.summary": "{n} sur ce réseau",
   "surfaces.refresh": "Rafraîchir",

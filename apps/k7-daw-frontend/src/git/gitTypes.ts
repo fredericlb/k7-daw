@@ -12,6 +12,13 @@ export interface GitState {
   merge?: number | null;
   /** True when connected, a fetch worked, and the remote has no branch yet: nobody has pushed. */
   remoteEmpty?: boolean;
+  /** The person's technical branch: when it was last written here, and whether the remote still lacks it. */
+  autosave?: {
+    branch: string;
+    /** Milliseconds since the epoch. */
+    at: number;
+    unsent: boolean;
+  } | null;
   lastFetch?: {
     /** Milliseconds since the epoch, like Date.now(). */
     at: number;

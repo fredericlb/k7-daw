@@ -16,6 +16,8 @@ pub mod engine;
 pub mod entries;
 pub mod git;
 mod git_author;
+mod git_autosave;
+pub mod git_autosave_task;
 pub mod git_connect;
 pub mod git_fetch;
 mod git_forge;
@@ -269,6 +271,8 @@ mod tests_entries_end;
 mod tests_git;
 #[cfg(test)]
 mod tests_git_author;
+#[cfg(test)]
+mod tests_git_autosave;
 #[cfg(test)]
 mod tests_git_forge;
 #[cfg(test)]

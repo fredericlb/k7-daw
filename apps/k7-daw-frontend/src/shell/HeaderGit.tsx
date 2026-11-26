@@ -1,4 +1,5 @@
-// HeaderGit.tsx — the header's git capsule: Save with its count (it only pushes when only saves wait), and a menu (Pull, Saves).
+// HeaderGit.tsx — the header's git capsule: Save with its count (it only pushes when only saves wait), and a menu (Pull, Saves)
+// titled by the branch and the last auto-save.
 // While a merge waits it is one accent "Resolve N conflicts" button. It decides no rule: gitState.ts's barView does.
 import { showToast } from "@studio/project-shell/toast";
 import { Badge } from "@studio/ui/badge";
@@ -36,6 +37,18 @@ const pulledSentence = (p: PullState | null): string | null =>
       : p === "merged"
         ? m["git.pulledMerged"]()
         : null;
+
+/** When the technical branch was last written, as the menu's second title line; null before the first auto-save. */
+const autosaveLine = (v: BarView): string | null => {
+  if (!v.autosave) return null;
+  const time = new Date(v.autosave.at).toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  return (v.autosave.unsent ? m["git.autosaveUnsent"] : m["git.autosaved"])({
+    time,
+  });
+};
 
 /** The merge's label and its screen, or null when no merge waits. */
 const resolveLabel = (v: BarView): string | null =>
@@ -92,10 +105,19 @@ export function HeaderGit({
     ? m["git.caption"]({ branch: v.branch, remote: "origin" })
     : m["git.headlineLocal"]({ branch: v.branch });
   const pullDisabled = busy || !v.pull;
+  const autosaved = autosaveLine(v);
 
   const menu = (
     <DropdownMenuContent align="end" className="w-[260px]">
       <DropdownMenuLabel className="font-mono">{caption}</DropdownMenuLabel>
+      {autosaved && (
+        <DropdownMenuLabel
+          data-testid="git-autosaved"
+          className="pt-0 font-normal text-muted-foreground text-xs"
+        >
+          {autosaved}
+        </DropdownMenuLabel>
+      )}
       {phone && (
         <DropdownMenuItem
           disabled={!(v.commit || v.push) || busy}

@@ -7,7 +7,7 @@ over `apps/k7-daw-backend/packages/k7-git` (`../git.md`). The choices of the rep
 
 | route | body or query | answer |
 |---|---|---|
-| `GET /git/state?workspace=` | | `{ mode: "none" \| "local" \| "connected", branch, remote, user, ahead, behind, changed, merge, lastFetch, remoteEmpty? }`; `lastFetch.at` is in milliseconds since the epoch (the fetch cadence keeps seconds); `remoteEmpty: true` when connected, a fetch worked and `origin/<branch>` does not exist (nobody has pushed), absent otherwise; `merge` is the number of conflicts without a choice, absent when no merge waits; a remote with no branch yet makes `ahead` the number of commits on `HEAD` and `behind` 0 |
+| `GET /git/state?workspace=` | | `{ mode: "none" \| "local" \| "connected", branch, remote, user, ahead, behind, changed, merge, lastFetch, remoteEmpty?, autosave }`; `autosave` is `{ branch, at, unsent }` once the person's technical branch exists here (`at` in milliseconds, `unsent` while the remote lacks its tip), null before; `lastFetch.at` is in milliseconds since the epoch (the fetch cadence keeps seconds); `remoteEmpty: true` when connected, a fetch worked and `origin/<branch>` does not exist (nobody has pushed), absent otherwise; `merge` is the number of conflicts without a choice, absent when no merge waits; a remote with no branch yet makes `ahead` the number of commits on `HEAD` and `behind` 0 |
 | `GET /git/status?workspace=` | | `{ entries: [{ path, change, from?, size, binary, lfs, tooLarge }] }` |
 | `GET /git/log?workspace=&limit=&before=` | | `{ commits: [{ id, subject, author, time, device, files_changed }] }` |
 | `POST /git/connect` | `{ workspace, url, hostKey? }`; `url` is an ssh address, anything else is 400 `ssh-only` | `{ ok, remote, lfsWarning? }`; the repository is made when there is none, the device's key signs in and the sign-in is proved by a fetch through an anonymous remote before the workspace points at the address |
@@ -22,7 +22,7 @@ over `apps/k7-daw-backend/packages/k7-git` (`../git.md`). The choices of the rep
 | `GET /git/key` | | `{ publicKey, synced }`: the one ed25519 public key as an `authorized_keys` line, made on the first call, and whether its keychain item travels to the person's other Apple devices; on a Mac that kept its own key beside the shared one, `oldKey: { publicKey, hosts }`, `hosts` being the `host:port` that took the old key at their last sign-in since the front started; the private half is never answered |
 | `POST /git/forget-old-key` | | `{ ok, forgotten }`: deletes the Mac's old key and nothing else (`../git.md`, "Credentials") |
 | `POST /git/forget-host` | `{ host, port? }` | `{ ok, forgotten }` |
-| `POST /git/focus` | `{ workspace, front, opened? }` | `{ ok }`: the page says it is in front, which drives the fetch; the page repeats it with each state poll, and a page silent for 10 minutes (two fetch periods) is no longer in front |
+| `POST /git/focus` | `{ workspace, front, opened? }` | `{ ok }`: the page says it is in front, which drives the fetch; the page repeats it with each state poll, and a page silent for 10 minutes (two fetch periods) is no longer in front; `front: false` auto-saves the workspace at once |
 
 ### Forges: sign in with GitHub or a Forgejo server (`git_forge_routes.rs`)
 
@@ -112,3 +112,20 @@ A refusal is `{ error, code }` with the codes of `k7-git`'s errors (`ssh-only`, 
 | a commit names a checkpoint of the local history with its subject, and a pull's or a merge's landing is one history entry `pull <short id>` (best effort: a workspace the account does not capture has none) | undoing a pull is one step, not one per file |
 | pulled files land through the capture's landing when the account has one and the file is under 64 MiB | the ledger learns each file before the watcher sees it, so a pull is not a storm of edits; the landing takes bytes held in memory |
 | the fetch runs at open, every 5 minutes while the page reports it is in front, and when it comes back; after a failure no more than every 30 minutes, said once; the fetching task wakes at once when a fetch is wanted instead of waiting out its 20-s look | cheap, and a train journey must not fill the log; a user who opens a workspace sees what is behind within a state poll, not after the look |
+
+## Auto-save (`git_autosave.rs`, `git_autosave_task.rs`)
+
+What a round writes is `../git.md`, "Auto-save"; when it runs is decided here.
+
+| choice | why |
+|---|---|
+| a connected workspace auto-saves 20 s after its last change, at once when the page leaves it (`focus` with `front: false`: the editor closed, the home page, a hidden tab, an app sent to the background, a closed window), and for every workspace when the front stops (bounded to 10 s each) | the person stops typing, goes home or closes the app, and none of these must lose work; the page already says each of them through `focus`, so no shell has an extra signal to send |
+| "a change" is the capture's generation moving, else the status as a fingerprint; the 20 s count from the last one, and a snapshot is only tried: the crate refuses an unchanged tree | the capture already sees every write, cheaply; a write that changes nothing ends as no commit |
+| the timer is the front's, one task per workspace started by `focus`, ended when the workspace or its remote is gone | it runs whatever page is open and survives the page closing; a phone's backend runs it while the app is in front |
+| the other devices' snapshots are taken in after every fetch that worked: at open, at a return to the front, and every 5 minutes in front | the fetch cadence already exists and costs nothing more; a device picks up where another left off when the person opens or returns to the workspace |
+| a round holds the workspace's lock only for its local steps and the remote's for the network; a round that finds either taken skips and the task tries again | a Save's commit never waits on a slow push, and a round never blocks the page's own routes |
+| a push or a pull that finds the remote's lock held by an auto-save round waits for it, 30 s at most; any other holder is `busy` at once | a Save pressed during a round's push must not end on "not sent"; a double click still never queues |
+| a push that failed (offline, refused) is retried 30 s later, then doubling to 30 minutes; the state's `autosave.unsent` says it meanwhile; editing is never refused | a train journey must not fill the log, the snapshots wait as local commits, and the next round that reaches the remote sends them all |
+| a Save's commit resets the technical branch in the same lock, and its push starts a round that sends the reset | the branch on the remote follows the Save without waiting for the next edit |
+| a round needs the commit identity; without one it snapshots nothing and says why in the log | git needs an author, and Settings is where the person gives one |
+

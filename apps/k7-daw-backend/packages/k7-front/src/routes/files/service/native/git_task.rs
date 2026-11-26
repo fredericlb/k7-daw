@@ -24,7 +24,7 @@ pub fn ensure(ctx: &Ctx, root: &Path, cadence: Arc<Mutex<Cadence>>) {
     {
         return;
     }
-    let (net, root) = (ctx.net.clone(), root.to_path_buf());
+    let (net, root, ctx) = (ctx.net.clone(), root.to_path_buf(), ctx.clone());
     let wake = cadence
         .lock()
         .unwrap_or_else(|p| p.into_inner())
@@ -44,8 +44,20 @@ pub fn ensure(ctx: &Ctx, root: &Path, cadence: Arc<Mutex<Cadence>>) {
             if !due {
                 continue;
             }
-            if turn(&net, &root, &cadence).await == Turn::NoRemote {
+            let turned = turn(&net, &root, &cadence).await;
+            if turned == Turn::NoRemote {
                 break;
+            }
+            let fetched = turned == Turn::Fetched
+                && cadence
+                    .lock()
+                    .unwrap_or_else(|p| p.into_inner())
+                    .last
+                    .as_ref()
+                    .is_some_and(|o| o.error.is_none());
+            // A fetch at open, at a return to the front or on the cadence brings the other devices' auto-saves.
+            if fetched {
+                super::git_autosave_task::after_fetch(&ctx, &root).await;
             }
         }
         running()

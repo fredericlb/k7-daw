@@ -366,7 +366,7 @@ async fn dispatch(ctx: &Ctx, kind: Kind, b: Value, query: String) -> Response {
         None
     };
     let _remote = if moves_remote_refs(&kind) {
-        match git_lock::try_take_remote(&key) {
+        match git_lock::take_remote_for_route(&key).await {
             Some(g) => Some(g),
             None => return busy(),
         }
@@ -426,7 +426,9 @@ async fn state(ctx: &Ctx, root: &Path) -> Answer {
         .unwrap_or_else(|p| p.into_inner())
         .last
         .clone();
+    let ctx2 = ctx.clone();
     run(ctx, root, move |r| {
+        let branch = super::git_autosave::branch_for(&ctx2, r);
         let origin = r.origin_config();
         let tracked = r.ahead_behind()?;
         let fetched = last.as_ref().is_some_and(|o| o.error.is_none());
@@ -436,6 +438,9 @@ async fn state(ctx: &Ctx, root: &Path) -> Answer {
             None => (r.head_commits()?, 0),
         };
         let pending = r.merge_pending()?;
+        let autosave = branch
+            .as_deref()
+            .and_then(|b| r.autosave_info(b).map(|(at, unsent)| json!({ "branch": b, "at": at.saturating_mul(1000), "unsent": unsent })));
         let mut v = json!({
             "mode": if origin.is_some() { "connected" } else { "local" },
             "branch": r.branch(),
@@ -444,6 +449,7 @@ async fn state(ctx: &Ctx, root: &Path) -> Answer {
             "ahead": ahead, "behind": behind,
             "changed": r.status()?.iter().filter(|e| !e.too_large).count(),
             "merge": pending.as_ref().map(|p| p.conflicts.iter().filter(|c| c.choice.is_none()).count()),
+            "autosave": autosave,
             "lastFetch": last.map(|o| json!({ "at": o.at.saturating_mul(1000), "error": o.error.map(|(c, m)| json!({ "code": c, "error": m })) })),
         });
         if remote_empty {

@@ -31,6 +31,8 @@ export interface BarView {
   remoteEmpty: boolean;
   /** The editors refuse every write while a merge waits. */
   readOnly: boolean;
+  /** The last auto-save here (milliseconds) and whether it still waits to be sent; null before the first. */
+  autosave: { at: number; unsent: boolean } | null;
 }
 
 const HIDDEN: BarView = {
@@ -49,6 +51,7 @@ const HIDDEN: BarView = {
   fetchError: null,
   remoteEmpty: false,
   readOnly: false,
+  autosave: null,
 };
 
 export function barView(s: GitState | null): BarView {
@@ -74,6 +77,10 @@ export function barView(s: GitState | null): BarView {
     fetchError: s.lastFetch?.error?.error ?? null,
     remoteEmpty: connected && s.remoteEmpty === true,
     readOnly: merging,
+    autosave:
+      connected && s.autosave
+        ? { at: s.autosave.at, unsent: s.autosave.unsent }
+        : null,
   };
   // While a merge waits only its own screen is offered: a commit would be a second history.
   if (merging) return base;

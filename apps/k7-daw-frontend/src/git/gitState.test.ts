@@ -18,6 +18,22 @@ describe("the workspace bar", () => {
     expect(barView({ mode: "none" }).show).toBe(false);
   });
 
+  it("carries the last auto-save of a connected workspace only", () => {
+    const autosave = {
+      branch: "k7/autosave/ada",
+      at: 1_700_000_000_000,
+      unsent: true,
+    };
+    expect(barView(conn()).autosave).toBeNull();
+    expect(barView(conn({ autosave })).autosave).toEqual({
+      at: 1_700_000_000_000,
+      unsent: true,
+    });
+    expect(
+      barView({ mode: "local", branch: "main", autosave }).autosave,
+    ).toBeNull();
+  });
+
   it("offers Commit over changes only", () => {
     expect(barView(conn()).commit).toBe(false);
     expect(barView(conn({ changed: 2 })).commit).toBe(true);

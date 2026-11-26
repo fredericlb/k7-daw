@@ -56,6 +56,10 @@ impl Repo {
         }
         self.autosave_commit(branch, who, device)?;
         let (tip, remote) = self.autosave_tips(branch);
+        // A Save's reset is about to replace exactly this remote tip: it holds nothing to take in.
+        if self.lease_of(branch) == Some(remote) {
+            return Ok(Picked::Nothing);
+        }
         let Some(r) = remote else {
             return Ok(Picked::Nothing);
         };
