@@ -104,7 +104,7 @@ window's seconds. The YAML half is `apps/k7-daw-wasm/song-edit/src/take_file.rs`
 | `event take midi <t> <at> <json>` | A MIDI pass filed as a take (its own sequence). |
 | `event take arm <t> <at> <from> [to]` / `disarm` | Session state in the file service (`apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/engine/queue.rs`), never a file. While armed, the engine gets the lane with the punch cut out, so the take is heard only there. |
 
-The compile turns a comped event into pieces (`compPieces` in `apps/k7-daw-frontend/packages/song-schema/src/takes.ts`);
+The compile turns a comped event into pieces (`comp_pieces` in `apps/k7-daw-wasm/song/src/clips/takes.rs`);
 the timeline draws them as one block with the layers icon, and the waveform panel's `CompStrip.tsx`
 lets a piece's edges be dragged into `event comp` lines.
 

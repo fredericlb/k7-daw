@@ -11,7 +11,7 @@ replacement: no TypeScript stands behind a Rust call, and a minor bug is fixed f
 |---|---|---|
 | `@studio/song` | 0 | M1 deleted its code; `docs/`, `meta/` and `samples/` stay where the backend and the crates read them |
 | `@studio/song-edit` | 0 | M1 deleted its code; `docs/` stays |
-| `@studio/song-schema` | 7.0k + 4.9k lines | 212 names imported by the page and its packages (below) less the timecode's; its module-type tables come from Rust since M2 |
+| `@studio/song-schema` | 6.2k + 4.1k lines | 212 names imported by the page and its packages (below) less the timecode's and the 24 M3a moved; its module-type tables and name constants come from Rust since M2 and M3a |
 | `@studio/k7x` | 1.9k + 1.5k lines, 11 files | the editor's tree and value-by-value edits; generator of the k7x crate's vectors |
 
 M1 found that nothing in production reached `@studio/song` or `@studio/song-edit` once the verbs
@@ -35,6 +35,15 @@ dispatch is split per family (`apps/k7-daw-wasm/k7-wasm/src/ops/`); the page's t
 A user does not notice the mount delay, on the phone either, so the module stays whole (decision 1).
 The browser pane refused the measurement page on a loopback port, so no figure comes from a
 browser with its CPU throttled: the phone line is an estimate from V8's own figures.
+
+M3a moved 24 names (`moduleTypes` predicates but `splitPort`, `docExt`, `audioFiles`, `builtinParams`,
+`instanceName`, `keyframes`, `placementId`, `playlist` reads and path, `takes`, `tasks`, `timelineLane`,
+`warpPoints`) to the 23 `schema.*` ops of `apps/k7-daw-wasm/k7-wasm/src/ops/schema.rs`, reached as
+`@studio/k7-wasm/schema`, and generated the name constants of the module vocabulary (`consts.generated.ts`,
+from `song::modules::names`). The module is 3.55 MB raw, 1.09 MB gzip, 0.77 MB brotli. A call costs
+about a microsecond (`isDocFile` 0.8 µs, `valueAt` 1.2 µs, a thousand `beatsAtSources` over 40 markers 0.08 ms,
+desktop under load). Group (b) still holds `renderSettings`, `trackKind`, `fields` and `sugar`
+(M3b, M4b), and the `k7x` names (M3c).
 
 ## Inventory
 
@@ -106,6 +115,11 @@ They move into the page's own packages with M5, since no Rust side shares them.
 | a timecode op takes the meter as floats, as the page's project states it | the page read any meter before; a curve still refuses one that is not two integers of at least 1 |
 | the module imports nothing from its host | no TypeScript host answered `edit.call` since M1; a writer the module carries is text in, text out (decision 5) |
 | the module-type tables live in `apps/k7-daw-wasm/song/src/modules/type_table.rs`, and `moduleTypes.ts` reads them from `consts.generated.ts` | no TypeScript writes Rust; the tables' comments moved with them |
+| a rule asked per row or per frame is a JSON op, and a loop that asks it of many inputs has a batch op (`schema.beats_at_sources`) | a call is about a microsecond, as much as the arithmetic of a scalar export; a waveform's column edges cross as one list, not one call each |
+| a predicate argument crosses as the list it would read (`instanceName`'s `taken`) | a closure cannot cross, and each caller holds a Set already |
+| `splitPort` stays in `@studio/graph-model` | graph-model owns it and calls it itself, below `song-schema`; its Rust twin serves the compiler |
+| `song-edit` is linked into the module whole (`verbs` stays optional); a rule that lived in `verbs` (`parse_tasks`, `parse_playlist`) moved down into it | M3a's rules (document extension, instance name, comp span, tasks, playlists) are its functions, and `verbs` calls the same ones |
+| a TypeScript function only its own test imported left with its file (`renamedInstance`, `compPieces`, `seamCrossfades`, `setWarpPoint`, `transformAt`…) | each has a Rust twin in `verbs`, `song` or the compile; keeping the TypeScript would be a second copy nobody calls |
 | the PWA precaches `.wasm` with the scripts | the page mounts only once the module is compiled, so a module left to the network would put its download before every opening |
 
 ## Milestones
@@ -114,7 +128,7 @@ They move into the page's own packages with M5, since no Rust side shares them.
 |---|---|---|---|---|
 | M1 | the compiler's TypeScript leaves: `@studio/song`'s and `@studio/song-edit`'s code, take-render's dead half, engine-client's plugin cache, song-schema's dead writers; `lint:panels` moves to ui-module-builder | — | done | 3 |
 | M2 | the seam: dispatch split per family; the module built with `song` (decoders, views) and `k7x`, as a hashed asset; `consts.generated.ts`; `@studio/k7-wasm/timecode` replaces `song-schema/timecode` (group a, `roundBeat`, `TIMECODE`); `edit.call`, `host_fs` and the `song`-feature TS module removed (decision 4); size measured | M1 | built | 5 |
-| M3a | the schema rules of group (b): `moduleTypes` predicates, `docExt`, `playlist` reads, `tasks`, `warpPoints`, `keyframes`, `placementId`, `timelineLane`, `instanceName`, `audioFiles`, `builtinParams`, `takes`; `moduleTypes.ts`'s tables generated from Rust | M2 | A | 4 |
+| M3a | the schema rules of group (b): `moduleTypes` predicates, `docExt`, `playlist` reads, `tasks`, `warpPoints`, `keyframes`, `placementId`, `timelineLane`, `instanceName`, `audioFiles`, `builtinParams`, `takes`; `moduleTypes.ts`'s tables generated from Rust | M2 | built | 4 |
 | M3b | validation and completion: `file.validate`, `fields.at`, `fields.values`; the router ported to Rust over `song::files`; `validate.ts`, the zod schemas and `zod` leave song-schema | M2 | A | 6 |
 | M3c | k7x: `k7x.edit`, `k7x.data`, `k7x.print`, `k7x.outline`; ui-editor, ui-module-builder, panel-rules and the page move over; `@studio/k7x` deleted, its vectors frozen | M2 | A | 6 |
 | M4a | the text writers of group (c) in `song-edit` (video track, assembly, sequence, mix markers, playlist edits, library pins, chain reads), reached as `text.*` ops | M3a, M3c | B | 6 |
