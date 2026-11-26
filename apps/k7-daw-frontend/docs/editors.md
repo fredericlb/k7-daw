@@ -11,6 +11,9 @@ the live take, a sequence's grid, the takes.
 - **The content holds only what is edited**: the cards, the strips, the notes, the wave, the takes'
   rows, and the edited data's own names and values (a lane's name on its card, a key's name, a ruler's
   numbers). No caption, no section heading, no help line.
+- **A setting is "name: value".** An editor's settings read as text in its title bar through
+  `DockProperty` ("gain: 0.0 dB", "loop: off"); the knob or switch that changes one opens in a bubble
+  above it on a tap. The waveform editor is the first; the others follow it.
 - **Help is one glyph.** An editor's help is `DockHint`: an info glyph in the title bar
   whose tooltip and accessible name are the words. An editor has at most one, and it follows the tool.
 - **Nothing to edit is said in the title bar, the content left blank.** Loading, an error, an empty

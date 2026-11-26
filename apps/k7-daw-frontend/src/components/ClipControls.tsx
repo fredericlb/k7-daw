@@ -2,13 +2,14 @@
 // Done for a take just filed). They are the TITLE BAR's, like every editor's (docs/editors.md); a phone keeps them in the body.
 
 import { Button } from "@studio/ui/button";
+import { DockProperty } from "@studio/ui/dock-property";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@studio/ui/dropdown-menu";
 import { DockHeaderRow } from "@studio/ui/editor-dock";
-import { Check, Loader2, Repeat, Trash2 } from "@studio/ui/icons";
+import { Check, Loader2, Trash2 } from "@studio/ui/icons";
 import { Switch } from "@studio/ui/switch";
 import { m } from "../paraglide/messages.js";
 import { ChainOpsList } from "./ChainOpsList";
@@ -58,20 +59,19 @@ export function ClipControls(p: ClipControlsProps) {
           }
         />
         {p.loopAddr && (
-          <span
-            className="flex items-center gap-1.5"
-            title={p.looped ? m["clip.loopOff"]() : m["clip.loopOn"]()}
+          <DockProperty
+            name={m["clip.loop"]().toLowerCase()}
+            value={p.looped ? m["dock.on"]() : m["dock.off"]()}
           >
-            <Repeat className="size-4" aria-hidden />
             <Switch
-              size="sm"
               checked={p.looped}
               aria-label={m["clip.loop"]()}
+              title={p.looped ? m["clip.loopOff"]() : m["clip.loopOn"]()}
               onCheckedChange={(on) =>
                 void p.command(`event loop ${p.loopAddr} ${on ? "on" : "off"}`)
               }
             />
-          </span>
+          </DockProperty>
         )}
         {/* Trim OPENS a gate rather than applying one, drawing what would be KEPT over the wave (docs/shell.md). */}
         <TrimGate

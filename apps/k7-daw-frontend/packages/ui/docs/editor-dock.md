@@ -23,6 +23,10 @@ time; the right panel (`side-panel`) is for the vertical lists.
 - **Help and status are title-bar pieces too.** `DockHint` is one info glyph whose tooltip and name
   are the help; `DockStatus` is the status line an editor shows with nothing to edit (loading, empty,
   an error), the body left blank. Both go through `DockHeaderRow`, so outside a dock they render inline.
+- **A setting reads as "name: value".** `DockProperty` (`dock-property.tsx`) shows one of an editor's
+  settings as text in the title bar ("gain: 0.0 dB", "loop: off"); a tap opens a bubble above it
+  holding the control that changes it, a knob or a switch. Every editor shows its settings this one
+  way, so the title bars read alike whatever the control behind them.
 - **The header row wraps.** The slot is a wrapping flex row, so an editor with many options takes a
   second line instead of pushing them into its body (`apps/k7-daw-frontend/docs/editors.md`).
 - **A row may stay in the body on a phone.** `DockHeaderRow bodyOnPhone` draws its row in the header on Pad and Desk and in the sheet's body on a phone, where the header is a name over its counts (`useInSheet` tells an editor which frame it is in).

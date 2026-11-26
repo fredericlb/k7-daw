@@ -30,6 +30,7 @@
     "./row-group": "./src/row-group.tsx",
     "./side-panel": "./src/side-panel.tsx",
     "./editor-dock": "./src/editor-dock.tsx",
+    "./dock-property": "./src/dock-property.tsx",
     "./tab-bar": "./src/tab-bar.tsx",
     "./spinner": "./src/spinner.tsx",
     "./progress": "./src/progress.tsx",

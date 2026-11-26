@@ -848,6 +848,8 @@
   "tapChain.add": "Ajouter un module…",
   "tapChain.input": "entrée",
   "tapChain.inputSub": "le morceau arrive ici",
+  "dock.on": "on",
+  "dock.off": "off",
   "clip.gain": "Gain",
   "clip.gainHint": "Le gain propre à cet événement, de −6 à +6 dB, avant la chaîne de la piste. Double-clic : 0 dB.",
   "clip.loop": "Boucle",
