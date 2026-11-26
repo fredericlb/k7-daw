@@ -1,7 +1,7 @@
 // git-sync.spec.ts — a workspace connected to a bare repository from its Sync settings, saved, cloned into a second
-// workspace, edited on both sides and merged. The remote is a folder this spec makes with `git`, so only the web target reaches it.
+// workspace, edited by another person and merged. The remote is a folder this spec makes with `git`, so only the web target reaches it.
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, rmSync } from "node:fs";
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
@@ -42,10 +42,6 @@ async function saveFromCard(page: Page, ws: string): Promise<void> {
     .getByRole("button", { name: /^Save, \d+ changes?$/ })
     .click();
 }
-
-/** How many commits the bare repository's main holds. */
-const commits = (bare: string): number =>
-  Number(git(bare, "rev-list", "--count", "main").trim());
 
 test("a workspace is connected, pushed, cloned and merged through a bare repository", async ({
   k7,
@@ -103,15 +99,25 @@ test("a workspace is connected, pushed, cloned and merged through a bare reposit
       expect(await files.readText(B, "notes.txt")).toBe("one\ntwo\nthree\n");
     });
 
-    await test.step("both sides change the same line; the second to save is told to pull first", async () => {
-      await files.writeText(B, "notes.txt", "one\nB says\nthree\n");
-      // A card reads its git state once, so a write made outside the page shows on a fresh load.
-      await page.reload();
-      const before = commits(bare);
-      await saveFromCard(page, B);
-      await expect.poll(() => commits(bare), SHOWN).toBe(before + 1);
+    await test.step("another person changes the same line; the second to save is told to pull first", async () => {
+      // A second workspace of this person would hand its edit over through the person's auto-save branch, never as a conflict.
+      const other = join(dir, "other");
+      execFileSync("git", ["clone", "-q", bare, other]);
+      writeFileSync(join(other, "notes.txt"), "one\nB says\nthree\n");
+      git(
+        other,
+        "-c",
+        "user.name=Other",
+        "-c",
+        "user.email=other@example.org",
+        "commit",
+        "-qam",
+        "Other's save",
+      );
+      git(other, "push", "-q", "origin", "main");
 
       await files.writeText(A, "notes.txt", "one\nA says\nthree\n");
+      // A card reads its git state once, so a write made outside the page shows on a fresh load.
       await page.reload();
       await saveFromCard(page, A);
       // The save stays on this device; the toast offers the Pull, which the card offers too.

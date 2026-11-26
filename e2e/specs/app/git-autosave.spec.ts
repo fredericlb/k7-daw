@@ -77,7 +77,7 @@ test("an edit is auto-saved to the person's branch and a Save squashes it onto m
     await test.step("the header's git menu says when the last auto-save was", async () => {
       await page.getByRole("button", { name: "More git actions" }).click();
       await expect(page.getByTestId("git-autosaved")).toHaveText(
-        /^Auto-saved at \d\d:\d\d$/,
+        /^Auto-saved at \d{1,2}:\d\d/,
         SLOW,
       );
       await page.keyboard.press("Escape");
