@@ -312,6 +312,11 @@ async fn serve_seen(
     }
     let shutdown = async move {
         shutdown.await;
+        // The last edits reach the technical branch before anything stops (docs/files/git.md, "Auto-save").
+        routes::files::service::native::git_autosave_task::flush_all(
+            std::time::Duration::from_secs(10),
+        )
+        .await;
         // The supervisor first: it deregisters through this front, which must still answer.
         if let Some(local) = &state.local {
             local.stop().await;

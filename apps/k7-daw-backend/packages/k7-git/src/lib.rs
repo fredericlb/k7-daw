@@ -3,6 +3,7 @@
 //! LFS) and has no https or ssh of its own; k7 writes blobs and the index itself and brings its own transports.
 
 pub mod auth;
+pub mod autosave;
 mod changes;
 mod commit;
 mod error;

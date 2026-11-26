@@ -7,16 +7,17 @@ graph slot when a clip is clicked in the timeline (see [shell.md](shell.md)).
 A MIDI clip is edited in the piano roll alone: there is no second view of its notes, so the
 header carries no view switch.
 
-The editor's first row is drawn in the dock's own header, on the line of Expand and Close
-(`DockHeaderRow`, [editor-dock](../packages/ui/docs/editor-dock.md)). An audio clip's header holds only
-its name over its file path and Listen; its controls are body rows in the canvas order: gain, Loop /
-Trim / Operations (and Discard with Done for a take just filed), the trim gate, the tools, the active
-tool's hint, then a ZOOM row over the ruler and the wave. The piano roll's header holds its name,
-counts, tool menu, Loop and ×2 on Pad and Desk; on a phone the header is the name over the counts and
-the tool row is the body's first row. A long name ellipsizes before the dock's buttons are squeezed.
+Both editors follow the dock's one rule ([editors.md](editors.md)): every option is in the title bar
+(`DockHeaderRow`, [editor-dock](../packages/ui/docs/editor-dock.md)) and the body is the clip alone.
+An audio clip's title bar holds its name over its file path, the gain as a knob, Loop as a switch, Trim / Operations
+(and Discard with Done for a take just filed), the tools, the bars on screen with their two ways out,
+and the active tool's help glyph; Trim opens its gate as a popover from the bar. The piano roll's title
+bar holds its name, counts, tool menu, Loop, ×2 and the help glyph. On a phone the sheet's header is the
+name over the counts, and the tool row is the body's first row. The bar wraps to a second line before it
+squeezes a long name past an ellipsis.
 
 The zoom ruler over an audio clip follows the clock switch (bars or seconds), like the timeline's. The
-piano roll draws one ruler and a ZOOM range label under its tool hint. The List tool's values
+piano roll draws one ruler, which is its zoom range. The List tool's values
 (window edges, onsets, a stretch point's landing) tap into a field and commit through the same
 commands the drags use.
 
@@ -696,12 +697,13 @@ front, which is the rule its other verbs already follow (`clipGrid ?? timeline` 
 rung is conditional on `wave_marks` rather than on a waveform being open at all — in `standard`
 there is no mark to back out of, so the ladder should fall through to the pane behind.
 
-The panel says what a press would do on every change of view, and the footer's badge carries the
+The help glyph says what a press would do on every change of view, and the footer's badge carries the
 name while it is anything but `standard`. Same reason as the timeline's: the status line is a
 message and passes, a mode does not.
 
-The tools are a **40 px segmented radiogroup** above the wave (`ClipToolBar.tsx`), the only way to
-one that a finger has. It is drawn only once there is a file: while a take rolls there is no mark
+The tools are a **segmented radiogroup** in the title bar (`ClipToolBar.tsx`), glyphs named by their
+words, the only way to one that a finger has. It sits in the exact middle of the whole title bar, Expand and Close
+included, whatever the name and the controls beside it weigh. It is drawn only once there is a file: while a take rolls there is no mark
 to point at. Each segment dispatches the command. There is **no whole-clip overview**: in the bottom dock the
 zoom runs the panel's whole width, so a second strip of the same file only takes height from it.
 

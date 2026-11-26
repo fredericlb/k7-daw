@@ -1,8 +1,9 @@
-// EventGainSlider.tsx — an audio event's own trim, ±6 dB, in the clip panel's header beside the loop switch.
-// The thumb moves locally and the value COMMITS once, on release — one `event gain`, one write, one reload —
+// EventGainSlider.tsx — an audio event's own trim, ±6 dB, as a knob in the clip panel's title bar beside the loop switch.
+// The knob moves locally and the value COMMITS once, on release — one `event gain`, one write, one reload —
 // and a double-click puts it back to unity. See apps/k7-daw-frontend/packages/song-edit/docs/eventGain.md.
 
-import { useState } from "react";
+import { Knob } from "@studio/ui/knob";
+import { useRef, useState } from "react";
 import { m } from "../paraglide/messages.js";
 
 const MAX_DB = 6;
@@ -19,33 +20,36 @@ export function EventGainSlider({
   onCommit?: (db: number) => void;
 }) {
   const [draft, setDraft] = useState<number | null>(null);
+  const last = useRef<number | null>(null);
   if (!onCommit) return null;
   const shown = draft ?? db;
-  const commit = (v: number) => {
+  const commit = (v: number | null) => {
     setDraft(null);
-    if (Math.abs(v - db) > 1e-6) onCommit(v);
+    last.current = null;
+    if (v !== null && Math.abs(v - db) > 1e-6) onCommit(v);
   };
   return (
-    <label
-      className="flex items-center gap-1.5 whitespace-nowrap"
+    // The knob says nothing of its release: the gesture's end bubbles here, from a pointer or a key.
+    // biome-ignore lint/a11y/noStaticElementInteractions: the knob inside is the control; this only hears its release
+    <div
       title={m["clip.gainHint"]()}
+      onPointerUp={() => commit(last.current)}
+      onKeyUp={() => commit(last.current)}
+      onDoubleClick={() => commit(0)}
     >
-      {m["clip.gain"]()}
-      <input
-        type="range"
+      <Knob
+        value={shown}
         min={-MAX_DB}
         max={MAX_DB}
         step={0.1}
-        value={shown}
-        onChange={(e) => setDraft(Number(e.target.value))}
-        // Released by pointer or by key: either way the gesture is over, and the value is written once.
-        onPointerUp={(e) => commit(Number(e.currentTarget.value))}
-        onKeyUp={(e) => commit(Number(e.currentTarget.value))}
-        onDoubleClick={() => commit(0)}
-        className="w-24"
-        aria-label={m["clip.gain"]()}
+        size={36}
+        label={m["clip.gain"]()}
+        format={label}
+        onValueChange={(v) => {
+          last.current = v;
+          setDraft(v);
+        }}
       />
-      <span className="w-14 text-right tabular-nums">{label(shown)}</span>
-    </label>
+    </div>
   );
 }

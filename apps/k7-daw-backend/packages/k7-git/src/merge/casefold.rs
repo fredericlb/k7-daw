@@ -18,7 +18,7 @@ fn clash<'a>(tracked: &'a [String], p: &str, exists: impl Fn(&str) -> bool) -> O
 
 impl Repo {
     /// Fails when a path about to land is not tracked here, exists on disk, and folds equal to a tracked one.
-    pub(super) fn refuse_case_clash<'a>(
+    pub(crate) fn refuse_case_clash<'a>(
         &self,
         paths: impl IntoIterator<Item = &'a str>,
     ) -> Result<()> {

@@ -47,8 +47,11 @@ pub(super) async fn commit(ctx: &Ctx, root: &Path, b: &Value) -> Answer {
                 .collect()
         })
         .unwrap_or_default();
+    let ctx2 = ctx.clone();
     let done = run(ctx, root, move |r| {
-        Ok(json!({ "ok": true, "id": r.commit_excluding(&message, &id, &device, &exclude)? }))
+        let made = r.commit_excluding(&message, &id, &device, &exclude)?;
+        super::git_autosave::after_save(&ctx2, r);
+        Ok(json!({ "ok": true, "id": made }))
     })
     .await?;
     git_history::committed(ctx, &root.display().to_string(), &m, &by).await;
@@ -73,16 +76,29 @@ pub(super) async fn push(ctx: &Ctx, root: &Path) -> Answer {
             .await;
             Err(Error::Behind)
         }
-        r => r.map(|()| json_answer(200, &json!({ "ok": true }))),
+        r => r.map(|()| {
+            super::git_autosave_task::push_now(ctx, root);
+            json_answer(200, &json!({ "ok": true }))
+        }),
     }
 }
 
 /// Everything a pull needs from the capture: the files land through it, so its ledger learns each one first.
 #[derive(Clone)]
-struct Through {
+pub(super) struct Through {
     land: Option<Land>,
     root: PathBuf,
     handle: tokio::runtime::Handle,
+}
+
+impl Through {
+    pub(super) fn new(ctx: &Ctx, root: &Path) -> Through {
+        Through {
+            land: ctx.land.clone(),
+            root: root.to_path_buf(),
+            handle: tokio::runtime::Handle::current(),
+        }
+    }
 }
 
 /// A file this size or larger is written straight to the disk: the capture's landing takes bytes held in memory.
@@ -131,11 +147,7 @@ pub(super) async fn pull(ctx: &Ctx, root: &Path, b: &Value) -> Answer {
         ctx.device.clone(),
     );
     let message = field(b, "message").map(str::to_string);
-    let through = Through {
-        land: ctx.land.clone(),
-        root: root.to_path_buf(),
-        handle: tokio::runtime::Handle::current(),
-    };
+    let through = Through::new(ctx, root);
     let (net, rootp) = (ctx.net.clone(), root.to_path_buf());
     let committed = Arc::new(std::sync::atomic::AtomicBool::new(false));
     let (said, by) = (committed.clone(), id.as_ref().map(|i| i.name.clone()));
@@ -232,11 +244,7 @@ pub(super) async fn resolve_merge(ctx: &Ctx, root: &Path, b: &Value) -> Answer {
         picks.push((id.to_string(), ch));
     }
     let (me, device) = (who_am_i(ctx)?, ctx.device.clone());
-    let through = Through {
-        land: ctx.land.clone(),
-        root: root.to_path_buf(),
-        handle: tokio::runtime::Handle::current(),
-    };
+    let through = Through::new(ctx, root);
     let theirs = open(root)?.merge_pending()?.map(|p| p.theirs);
     let done = run(ctx, root, move |r| {
         let id = r.merge_resolve(&picks, &through, &me, &device)?;

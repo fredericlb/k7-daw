@@ -46,8 +46,7 @@ function run(cmd, args, cwd, what) {
 
 // ── what each target is, and how it is rebuilt ────────────────────────────────
 
-// `dirs` are watch roots and `match` filters by BASE name — see ../docs/dev.md. `linked` is compiled INTO a
-// target but not watched: a save there would stop it, so it only decides whether the binary is stale at start.
+// `dirs` are watch roots and `match` filters by BASE name — see ../docs/dev.md.
 
 const isCxx = (base) => /\.(cpp|h|hpp|mm)$/.test(base);
 const cmakeFiles = (base) =>
@@ -84,9 +83,7 @@ const TARGETS = {
         recursive: false,
         match: (b) => b === "Cargo.toml" || b === "tauri.conf.json",
       },
-    ],
-    // The front the desktop app links (Cargo.toml, `path = ../../k7-daw-backend/packages/…`): its own task builds it too.
-    linked: [
+      // The front the desktop app links (Cargo.toml, `path = ../../k7-daw-backend/packages/…`): a save there rebuilds it.
       {
         path: join(frontDir, "packages"),
         recursive: true,
@@ -190,7 +187,7 @@ const desktopBinary = () =>
     process.platform === "win32" ? "k7-desktop.exe" : "k7-desktop",
   );
 
-/** The newest mtime under a target's own roots and the ones it links — a binary older than its code is stale. */
+/** The newest mtime under a target's watched roots — a binary older than its code is stale. */
 function newestSource(target) {
   let newest = 0;
   const visit = (dir, recursive, match) => {
@@ -209,8 +206,7 @@ function newestSource(target) {
       }
     }
   };
-  const { dirs, linked = [] } = TARGETS[target];
-  for (const { path, recursive, match } of [...dirs, ...linked])
+  for (const { path, recursive, match } of TARGETS[target].dirs)
     visit(path, recursive, match);
   return newest;
 }
@@ -364,6 +360,6 @@ for (const [target, { dirs }] of Object.entries(TARGETS))
   }
 
 log(
-  "watching the engine, the supervisor and the desktop app — save to rebuild and restart",
+  "watching the engine, the supervisor, the desktop app and the backend — save to rebuild and restart",
 );
 setInterval(() => {}, 1 << 30); // the watchers are unref'd, so hold the process open ourselves

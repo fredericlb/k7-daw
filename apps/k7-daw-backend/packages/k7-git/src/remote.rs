@@ -169,13 +169,31 @@ impl Repo {
         let branch = self
             .branch()
             .ok_or_else(|| Error::Git("HEAD names no branch".into()))?;
+        self.push_branch(net, origin, &branch, false)?;
+        self.lfs_prune(&self.lfs_head()?);
+        Ok(())
+    }
+
+    /// Pushes `refs/heads/<branch>`; `force` replaces the remote's (the technical branch's reset alone asks it).
+    pub(crate) fn push_branch(
+        &self,
+        net: &Arc<Net>,
+        origin: &Origin,
+        branch: &str,
+        force: bool,
+    ) -> Result<()> {
         let local = self.git.refname_to_id(&format!("refs/heads/{branch}"))?;
         call(net, origin, || {
-            let tip = self
-                .git
-                .refname_to_id(&format!("refs/remotes/origin/{branch}"))
-                .ok();
-            let owed = self.lfs_owed(local, tip)?;
+            let tips: Vec<git2::Oid> = [Some(branch.to_string()), self.branch()]
+                .into_iter()
+                .flatten()
+                .filter_map(|b| {
+                    self.git
+                        .refname_to_id(&format!("refs/remotes/origin/{b}"))
+                        .ok()
+                })
+                .collect();
+            let owed = self.lfs_owed(local, &tips)?;
             self.lfs_send(net, origin, &owed)?;
             let mut remote = self.origin(origin)?;
             let rejected: std::cell::RefCell<Option<String>> = std::cell::RefCell::new(None);
@@ -188,7 +206,8 @@ impl Repo {
             });
             let mut opts = PushOptions::new();
             opts.remote_callbacks(cb);
-            let spec = format!("refs/heads/{branch}:refs/heads/{branch}");
+            let plus = if force { "+" } else { "" };
+            let spec = format!("{plus}refs/heads/{branch}:refs/heads/{branch}");
             match remote.push(&[spec.as_str()], Some(&mut opts)) {
                 Err(e) if e.code() == git2::ErrorCode::NotFastForward => return Err(Error::Behind),
                 other => other?,
@@ -208,7 +227,6 @@ impl Repo {
                 true,
                 "k7: push",
             )?;
-            self.lfs_prune(&self.lfs_head()?);
             Ok(())
         })
     }

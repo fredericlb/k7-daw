@@ -85,7 +85,11 @@ impl Repo {
     }
 
     /// Lands every file, each only while it is as the plan saw it: an edit made meanwhile stays and nothing else lands.
-    fn land_all(&self, landing: &dyn Landing, files: &[(String, Content)]) -> Result<Vec<Landed>> {
+    pub(crate) fn land_all(
+        &self,
+        landing: &dyn Landing,
+        files: &[(String, Content)],
+    ) -> Result<Vec<Landed>> {
         let seen: Vec<_> = files.iter().map(|(p, _)| self.stamp(p)).collect();
         let mut changed = Vec::new();
         for ((path, content), was) in files.iter().zip(seen) {
@@ -234,7 +238,7 @@ impl Repo {
     }
 
     /// The bytes of every large file about to land are in the store, or nothing lands.
-    fn require_objects(&self, files: &[(String, Content)]) -> Result<()> {
+    pub(crate) fn require_objects(&self, files: &[(String, Content)]) -> Result<()> {
         let store = self.lfs_store();
         for (rel, c) in files {
             if let Content::Blob { id, .. } = c

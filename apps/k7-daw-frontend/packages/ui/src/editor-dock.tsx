@@ -7,7 +7,7 @@ import { Dialog } from "radix-ui";
 import * as React from "react";
 import { createPortal } from "react-dom";
 import { Button } from "./button";
-import { Maximize2, Minimize2 } from "./icons";
+import { Info, Maximize2, Minimize2 } from "./icons";
 import { cn } from "./lib/utils";
 import {
   focusTitleOnKeyboardOpen,
@@ -72,6 +72,47 @@ export function DockHeaderRow({
   const sheet = React.useContext(SheetCtx);
   if (slot === undefined || (bodyOnPhone && sheet)) return <>{children}</>;
   return slot ? createPortal(children, slot) : null;
+}
+
+/** The editor's help, one glyph in the title bar: the words are its tooltip and its name, never a line in the content. */
+export function DockHint({ text }: { text: string }) {
+  return (
+    <DockHeaderRow>
+      <span
+        role="img"
+        aria-label={text}
+        title={text}
+        data-slot="dock-hint"
+        className="grid size-9 shrink-0 cursor-help place-items-center text-fg-2"
+      >
+        <Info className="size-4" />
+      </span>
+    </DockHeaderRow>
+  );
+}
+
+/** What an editor says when it has nothing to edit (loading, empty, an error): a status in the title bar, the content left blank. */
+export function DockStatus({
+  children,
+  tone = "muted",
+}: {
+  children: React.ReactNode;
+  tone?: "muted" | "error";
+}) {
+  return (
+    <DockHeaderRow>
+      <p
+        role="status"
+        data-slot="dock-status"
+        className={cn(
+          "type-secondary min-w-0 flex-1 truncate",
+          tone === "error" ? "text-(--k7-error)" : "text-fg-2",
+        )}
+      >
+        {children}
+      </p>
+    </DockHeaderRow>
+  );
 }
 
 const headerOf = (

@@ -1,8 +1,17 @@
 # Keep a workspace in git
 
 A workspace can be a git repository, so a second computer, a collaborator or a backup can have it: commit your work, push it to
-a git host (GitHub, GitLab, Gitea, your own server), pull what others pushed. You decide when each step happens; nothing is sent
-by itself.
+a git host (GitHub, GitLab, Gitea, your own server), pull what others pushed. You decide when a Save happens; what reaches the
+main branch is only what you saved.
+
+## Auto-save
+
+Once a workspace is connected, k7 also keeps your unsaved work on a branch of your own on the host, `k7/autosave/…` (named
+after your GitHub or Forgejo account, or after your commit email on another host). It writes there 20 seconds after you stop
+editing, when you go back to the projects, and when you close or leave the app. Your other devices pick it up when you open the
+workspace there, so you can go on where you left off, and nothing is lost if a computer dies. The header's git menu says when
+the last auto-save was. **Save** then puts everything into one commit on the main branch, with its message, and your auto-save
+branch starts again from it.
 
 ## What you need
 

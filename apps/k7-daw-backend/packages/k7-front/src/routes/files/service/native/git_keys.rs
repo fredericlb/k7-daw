@@ -21,7 +21,11 @@ pub(super) async fn focus(ctx: &Ctx, root: &Path, b: &Value) -> Answer {
         }
         let front = b.get("front").and_then(Value::as_bool).unwrap_or(true);
         c.focus(front, super::git_fetch::now());
+        if !front {
+            super::git_autosave_task::flush_now(ctx, root);
+        }
     }
+    super::git_autosave_task::ensure(ctx, root);
     super::git_task::ensure(ctx, root, cadence);
     Ok(json_answer(200, &json!({ "ok": true })))
 }

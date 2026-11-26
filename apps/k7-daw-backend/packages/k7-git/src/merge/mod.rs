@@ -2,11 +2,11 @@
 //! is chosen, then landed as one merge commit. What a reader gets wrong: nothing in the work tree moves before
 //! `resolve`, so aborting deletes one file and leaves `HEAD` and every file as they were.
 
-mod assemble;
+pub(crate) mod assemble;
 mod build;
 mod casefold;
 mod pending;
-mod plan;
+pub(crate) mod plan;
 mod resolve;
 mod text;
 
