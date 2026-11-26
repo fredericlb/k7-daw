@@ -2,7 +2,7 @@
 // fader's throw, a toggle, a button or pad, a number, a label, a file picker, a dropdown. Drawing
 // only: the gestures and the value are Widget.tsx's — docs/widgets.md.
 
-import type { WebWidget } from "@studio/graph-model";
+import type { PageWidget } from "@studio/graph-model";
 import { type GraphNode, isMixKnob, widgetText } from "@studio/ui-chains/graph";
 import { CTRL, RING } from "../chainsCss";
 import type { Channels } from "../chainsStores";
@@ -30,7 +30,7 @@ export function widgetBody({
   onPickAsset,
 }: {
   n: GraphNode;
-  w: WebWidget;
+  w: PageWidget;
   ch: Channels;
   r: { w: number; h: number };
   tgt: WidgetTarget | null;
@@ -43,7 +43,7 @@ export function widgetBody({
   padLit: boolean;
   midiLit: boolean;
   actuable: boolean;
-  onPick: (n: GraphNode, w: WebWidget, value: number) => void;
+  onPick: (n: GraphNode, w: PageWidget, value: number) => void;
   onPickAsset: (
     n: GraphNode,
     param: string,

@@ -9,7 +9,7 @@ macro_rules! codes {
     ($($variant:ident => $name:literal),+ $(,)?) => {
         /// What `validate` can say of a graph: `GraphWarningCode` of `@studio/graph-model`, spelled as there.
         #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Serialize)]
-        #[cfg_attr(feature = "ts", derive(ts_rs::TS))]
+        #[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(rename = "GraphWarningCode"))]
         pub enum WarningCode {
             $(#[serde(rename = $name)] #[cfg_attr(feature = "ts", ts(rename = $name))] $variant),+
         }

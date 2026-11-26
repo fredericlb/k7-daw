@@ -53,9 +53,6 @@ pub enum HubMessage {
         req: i64,
         error: String,
     },
-    RtcOffer {
-        req: i64,
-    },
 }
 
 /// A frame that is no frame this agent reads, by the type it says to log.
@@ -101,7 +98,6 @@ pub fn parse_hub_message(text: &str) -> Result<HubMessage, String> {
             req: int("req"),
             error: s("error"),
         },
-        "rtc-offer" => HubMessage::RtcOffer { req: int("req") },
         other => return Err(other.to_string()),
     })
 }

@@ -1,12 +1,12 @@
 // A row that ENDS on its lane's mixer hands that card over to be pinned right; any other row is left whole.
 
-import type { WebGraph, WebModuleUI } from "@studio/graph-model";
+import type { PageModuleUI, WebGraph } from "@studio/graph-model";
 import { describe, expect, it } from "vitest";
 import { splitTrailingMixer } from "./anchorRight";
 import { moduleRow, nodeSize } from "./graph";
 
 // The shipped strip's shape: one column of controls, and the engine's three stage sliders on its header.
-const STRIP_UI: WebModuleUI = {
+const STRIP_UI: PageModuleUI = {
   cols: 1,
   rows: 7,
   widgets: { v: { type: "fader", col: 0, row: 0, rowSpan: 3, bind: "Volume" } },

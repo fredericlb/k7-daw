@@ -28,8 +28,10 @@ import { CommandsSettings } from "../components/CommandsSettings";
 import { ContextMenu } from "../components/ContextMenu";
 import { CurveEditor } from "../components/CurveEditor";
 import { EngineMissingDialog } from "../components/EngineMissingDialog";
-import { EngineSyncFailedDialog } from "../components/EngineSyncFailedDialog";
-import { syncRunning } from "../components/EngineSyncProgress";
+import {
+  EngineSyncFailedDialog,
+  syncRunning,
+} from "../components/EngineSyncFailedDialog";
 import { HelpPage } from "../components/HelpPage";
 import { ImportDialog } from "../components/ImportDialog";
 import { ModulePicker } from "../components/ModulePicker";

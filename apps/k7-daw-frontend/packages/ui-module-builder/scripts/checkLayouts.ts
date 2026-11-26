@@ -7,17 +7,17 @@ import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import { parse } from "@studio/k7x/document";
+import {
+  atControlIssues,
+  eqBandIssues,
+  loneGroupIssues,
+} from "@studio/panel-rules/ai-organize";
 import { gridIssues, twinIssues } from "@studio/panel-rules/layout-twins";
 import {
   type ModuleUI,
   UiFileSchema,
   type Widget,
 } from "@studio/song-schema/yaml/moduleSchema";
-import {
-  atControlIssues,
-  eqBandIssues,
-  loneGroupIssues,
-} from "../src/aiOrganize";
 
 const LIBRARY = resolve(import.meta.dirname, "../../../../../k7-core");
 

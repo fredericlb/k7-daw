@@ -10,7 +10,7 @@ import { type DesktopEngineSnapshot, engineCommand } from "./desktopEngine";
 import { Action, Row, Section } from "./Section";
 
 /** A slot's line under its name: its chain, when it was saved, and its footswitch when it has one. */
-export function slotDetail(slot: {
+function slotDetail(slot: {
   chain: string;
   savedAt: string;
   footswitch?: number | null;

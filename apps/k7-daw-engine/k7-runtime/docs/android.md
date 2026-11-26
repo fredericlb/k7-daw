@@ -542,8 +542,8 @@ libgit2 and zlib are compiled into `libk7_embed.so` by the NDK's clang (`buildFr
   APK itself, and the view on the local studio are still to drive.
 - **No ffmpeg on the phone**: waveforms are decoded by WebAssembly instead, and an mp4 or a .mov is probed from its boxes
   (`apps/k7-daw-frontend/packages/audio-analysis/docs/analysis.md`); what else needs them — transcoding — answers as it does on a machine without them.
-- **The tunnel and WebRTC are untested on a phone.** They are the code a computer runs, built unchanged; no
-  studio has driven a phone through them yet.
+- **The tunnel is untested on a phone.** It is the code a computer runs, built unchanged; no
+  studio has driven a phone through it yet.
 - **No external plugins, no plugin scan.** An offline render or freeze is the engine's own, asked by the supervisor's `render` job over the engine's socket (`protocol.md`), and `Busy.kt` counts it as busy.
 - **The busy service and the microphone flow have not been driven on a phone yet**: a take with the screen off,
   the microphone type refused from behind on Android 14, the notification permission and the blocked-microphone

@@ -8,13 +8,10 @@
 // latency, not by which cable they arrive over, so a gigabit LAN beats a laptop sitting at
 // 2048 frames. Unreachable is its own state, because it is not a slow link. See docs/access.md.
 
+import { type EngineLatency, engineLatency } from "@studio/k7-wasm/engine";
 import { ENGINE_PROXY_PATH } from "@studio/web-protocol";
-import {
-  type EngineLatency,
-  engineLatency,
-} from "@studio/web-protocol/quality";
 import { forgetPairKey, noteEngineAt, pairKeyFor } from "./pairing.ts";
-import { openSocket, RTC_SCHEME } from "./rtcSocket.ts";
+import { openSocket } from "./socket.ts";
 
 /** The least an engine must tell us to be probed, structural rather than imported so no auth or git types come with it. */
 export interface ProbeTarget {
@@ -26,8 +23,6 @@ export interface ProbeTarget {
   };
   /** Minted per engine by `/engines`. Absent simply means no relay candidate is offered. */
   proxyTicket?: string;
-  /** Its supervisor holds a tunnel, so a WebRTC candidate is offered too — apps/k7-daw-frontend/packages/engine-tunnel/docs/rtc.md. */
-  rtc?: boolean;
 }
 
 export interface RankedEngine<E extends ProbeTarget = ProbeTarget> {
@@ -59,7 +54,7 @@ export const onThisMachine = (r: { wsUrl: string | null }): boolean =>
 const PRIVATE_HOST =
   /^(127\.|10\.|192\.168\.|169\.254\.|172\.(1[6-9]|2\d|3[01])\.|localhost$|\[(::1|f[cd][0-9a-f]*:.*|fe80:.*)\]$)/i;
 
-/** Answered on a DIRECT socket to one of the engine's own private addresses — never the relay nor WebRTC — see docs/access.md. */
+/** Answered on a DIRECT socket to one of the engine's own private addresses — never the relay — see docs/access.md. */
 export function reachedDirectly(r: {
   engine: ProbeTarget;
   wsUrl: string | null;
@@ -203,20 +198,11 @@ function probeOne(
 
 export interface Candidate {
   url: string; // the WebSocket to try
-  direct: boolean; // one of the engine's own addresses, not the relay nor WebRTC
-}
-
-/** Whether the caller HOLDS a claim: the one thing that decides if a WebRTC offer gets an answer. */
-export interface ProbeOptions {
-  claim?: boolean;
+  direct: boolean; // one of the engine's own addresses, not the relay
 }
 
 /** Every way this browser might reach one engine — the order is documentation only: `rank` races them all and `orderHits` decides. */
-export function candidatesFor(
-  e: ProbeTarget,
-  relayBase: string,
-  opts: ProbeOptions = {},
-): Candidate[] {
+export function candidatesFor(e: ProbeTarget, relayBase: string): Candidate[] {
   const { loopback, lanIps, port } = e.addresses;
   /** What this page may dial in the clear — an HTTPS page counts a LAN attempt as mixed content. */
   const dialable =
@@ -225,20 +211,17 @@ export function candidatesFor(
     .map((host): Candidate => ({ url: `ws://${host}:${port}`, direct: true }))
     .filter((c) => !loopbackResting(c.url));
   if (!e.proxyTicket) return direct;
-  const relay = relayUrls(relayBase, e.id, e.proxyTicket, location.href);
-  const relayed: Candidate[] = [{ url: relay.ws, direct: false }];
-  // Only a claimant gets a data channel, and it carries no files — they are the server's (apps/k7-daw-frontend/packages/engine-tunnel/docs/rtc.md).
-  if (e.rtc && opts.claim) relayed.push({ url: relay.rtc, direct: false });
-  return [...direct, ...relayed];
+  const relay = relayWsUrl(relayBase, e.id, e.proxyTicket, location.href);
+  return [...direct, { url: relay, direct: false }];
 }
 
-/** The relay's two doors for one engine; `relayBase` is a path on the page's origin or another origin's URL, both resolved against `pageHref`. */
-export function relayUrls(
+/** The relay's door for one engine; `relayBase` is a path on the page's origin or another origin's URL, both resolved against `pageHref`. */
+export function relayWsUrl(
   relayBase: string,
   id: string,
   ticket: string,
   pageHref: string,
-): { ws: string; rtc: string } {
+): string {
   const http = new URL(
     `${relayBase}${ENGINE_PROXY_PATH}/${encodeURIComponent(id)}`,
     pageHref,
@@ -246,10 +229,7 @@ export function relayUrls(
   // The relay's own scheme decides, not the page's: an HTTPS relay is reached over `wss:`.
   const ws = new URL(http.href);
   ws.protocol = http.protocol === "https:" ? "wss:" : "ws:";
-  return {
-    ws: `${ws.href}/ws?ticket=${encodeURIComponent(ticket)}`,
-    rtc: `${RTC_SCHEME}${http.href}/rtc`,
-  };
+  return `${ws.href}/ws?ticket=${encodeURIComponent(ticket)}`;
 }
 
 /** The answers best first: usable before paired-first or tokenless, then DIRECT before relayed, then the faster (docs/access.md). */
@@ -271,11 +251,10 @@ export function orderHits<
 async function rank<E extends ProbeTarget>(
   e: E,
   relayBase: string,
-  opts: ProbeOptions,
 ): Promise<RankedEngine<E>> {
   // Every address at once, paying no serial timeout for the misses, then the FASTEST that answered — which is the whole ranking now.
   const results = await Promise.all(
-    candidatesFor(e, relayBase, opts).map(async (c) => ({
+    candidatesFor(e, relayBase).map(async (c) => ({
       c,
       reply: await probeOne(c.url, e.id),
     })),
@@ -358,12 +337,8 @@ export async function probeEngines<E extends ProbeTarget>(
   engines: E[],
   /** The calling app's own origin prefix under which its relay answers, passed rather than derived, exactly as `registryClient` takes its `base`. */
   relayBase: string,
-  /** A listing is measured before any claim is taken, and `rtc` says otherwise — see docs/access.md. */
-  opts: ProbeOptions = {},
 ): Promise<RankedEngine<E>[]> {
-  const ranked = await Promise.all(
-    engines.map((e) => rank(e, relayBase, opts)),
-  );
+  const ranked = await Promise.all(engines.map((e) => rank(e, relayBase)));
   return ranked.sort(
     (a, b) =>
       (a.latency?.totalMs ?? Number.POSITIVE_INFINITY) -

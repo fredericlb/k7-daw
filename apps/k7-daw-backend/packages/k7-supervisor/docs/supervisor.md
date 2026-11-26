@@ -308,5 +308,5 @@ name, as UTF-8, since `gethostname` answers in the ANSI code page and `PC-FRÃ‰DÃ
 
 The single-core figure of the rating is a biquad over a fixed budget, compiled rather than
 JIT-compiled, so it reads several times higher than a JIT-measured one on the same machine. The
-reference in `apps/k7-daw-frontend/packages/web-protocol/performance.ts` was measured under a JIT; ratings are
+reference in `performance.rs` was measured under a JIT; ratings are
 comparable between machines running this supervisor, not with a figure measured another way.

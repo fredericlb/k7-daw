@@ -2,7 +2,12 @@
 // they are drawn from, and what a node carries over from its chain step. Types only, apart from
 // `carryStep`, which is the one place the step-to-node copy is spelled. See docs/graphBuild.md.
 
-import type { CurveSpec, WebChainStep, WebSignal } from "@studio/graph-model";
+import type {
+  CurveSpec,
+  PageModuleUI,
+  WebChainStep,
+  WebSignal,
+} from "@studio/graph-model";
 import type { AutomationDepth } from "./automationDepth";
 
 /** What a node carries from its step, declared once instead of copied — see docs/graphBuild.md. */
@@ -76,7 +81,10 @@ type Consumed =
   // …and the shader choices, consumed exactly the same way by the same function.
   | "shaders";
 
-type Carried = Pick<WebChainStep, (typeof CARRIED)[number]>;
+type Carried = Omit<
+  Partial<Pick<WebChainStep, (typeof CARRIED)[number]>>,
+  "ui"
+> & { ui?: PageModuleUI };
 type Flags = { [K in (typeof FLAGS)[number]]: boolean };
 
 // The guard. `never` here means every field of WebChainStep is accounted for above.

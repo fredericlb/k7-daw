@@ -2,7 +2,7 @@
 // plugin, bypass, switch a set, pick a preset or an asset, set or flip a control. Each one only
 // ASKS; the verb that writes it is the host's — docs/hosting.md, docs/widgets.md.
 
-import type { WebWidget } from "@studio/graph-model";
+import type { PageWidget } from "@studio/graph-model";
 import {
   type GraphNode,
   type LaidOutGraph,
@@ -118,7 +118,7 @@ export function useNodeActions({
   // Right-click on a CONTROL: the menu for the PLUGIN param it drives, and only that — docs/widgets.md.
   // biome-ignore lint/correctness/useExhaustiveDependencies: the inputs are refs and setters DomChains hands in, stable for its lifetime.
   const contextParam = useCallback(
-    (n: GraphNode, w: WebWidget, x: number, y: number): void => {
+    (n: GraphNode, w: PageWidget, x: number, y: number): void => {
       // A PAD's menu is its kit's — the node and the sound — rather than a param's (apps/k7-daw-frontend/packages/song/docs/racks.md).
       const symbol = rackBindSymbol(w.bind);
       if (symbol && n.module) {
@@ -208,7 +208,7 @@ export function useNodeActions({
   const setModuleField = useCallback(
     (
       // The whole target, not just its two names: a rehearsal keys its override by it.
-      w: WebWidget,
+      w: PageWidget,
       tgt: { kind: "module"; module: string; field: string },
       value: number,
     ) => {
@@ -230,7 +230,7 @@ export function useNodeActions({
   // A dropdown's chosen setting: the same commit path as a toggle, but the value is the option's, not a flip.
   // biome-ignore lint/correctness/useExhaustiveDependencies: the inputs are refs and setters DomChains hands in, stable for its lifetime.
   const pickOne = useCallback(
-    (n: GraphNode, w: WebWidget, value: number) => {
+    (n: GraphNode, w: PageWidget, value: number) => {
       const tgt = widgetTarget(n, w, chRef.current.offlineChannel);
       // A track intrinsic has no named settings, a pad no value: neither can be SET here.
       if (!tgt || tgt.kind === "track" || tgt.kind === "rack") return;
@@ -265,7 +265,7 @@ export function useNodeActions({
   );
   // …and on every LINKED node too, with the same value — multiSelect.ts.
   const pickWidget = useCallback(
-    (n: GraphNode, w: WebWidget, value: number) => {
+    (n: GraphNode, w: PageWidget, value: number) => {
       pickOne(n, w, value);
       for (const m of linked(n)) pickOne(m, w, value);
     },
@@ -281,7 +281,7 @@ export function useNodeActions({
   // A TYPED value: one step of what a drag does, committed at once — docs/widgets.md.
   // biome-ignore lint/correctness/useExhaustiveDependencies: the inputs are refs and setters DomChains hands in, stable for its lifetime.
   const typeWidget = useCallback(
-    (n: GraphNode, w: WebWidget, value: number) => {
+    (n: GraphNode, w: PageWidget, value: number) => {
       // The same two gates a drag has: a baked module has no plugin, an automatic freeze gives way.
       if (n.frozen && n.kind === "module") return;
       if (n.autoFrozen) cb.current.onThawAutoFreeze?.(n.autoFrozen);
@@ -297,7 +297,7 @@ export function useNodeActions({
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: the inputs are refs and setters DomChains hands in, stable for its lifetime.
   const tapWidget = useCallback(
-    (n: GraphNode, w: WebWidget) => {
+    (n: GraphNode, w: PageWidget) => {
       const ch = chRef.current;
       const tgt = widgetTarget(n, w, ch.offlineChannel);
       if (!tgt) return;

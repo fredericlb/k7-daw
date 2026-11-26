@@ -29,8 +29,8 @@ that only claims loopback in its body proves nothing; the socket does.
 ## What inherits it
 
 Every route that reaches an engine for the account asks for a claim (`claim.md`), and only an engine the
-account may use is claimed. So the file hub's binding, a stem cut, a song brought down for the player, a
-WebRTC offer and the relay's driving frames are all gated through `select`. The relay asks again on every
+account may use is claimed. So the file hub's binding, a stem cut, a song brought down for the player
+and the relay's driving frames are all gated through `select`. The relay asks again on every
 text frame that could carry the token, so an engine that stops being local stops it at once.
 
 A browser that is refused this way is told `ClaimLost` with reason `refused`

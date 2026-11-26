@@ -2,7 +2,7 @@
 // a module field, a pad or a project setting, and the value read off the
 // override, the engine or the file in that order. The rules are docs/widgets.md.
 
-import type { WebWidget } from "@studio/graph-model";
+import type { PageWidget } from "@studio/graph-model";
 import {
   type GraphNode,
   INPUT_VOLUME_PARAM,
@@ -29,7 +29,7 @@ export type WidgetTarget =
 
 /** The stage's knobs on a card's bottom bar, in signal order: what goes in, the blend, what comes out. */
 export const FOOT_KNOB_PX = 16;
-export const FOOT_KNOBS: WebWidget[] = [
+export const FOOT_KNOBS: PageWidget[] = [
   {
     type: "knob",
     col: 0,
@@ -75,7 +75,7 @@ function stageDefault(name: string): number | undefined {
 /** What a widget actuates: a pad, an `@` intrinsic, a plugin param, else offline — docs/widgets.md. */
 export function widgetTarget(
   n: GraphNode,
-  w: WebWidget,
+  w: PageWidget,
   /** Does the host offer a channel for modules with no plugin? See `offlineOf`. */
   offline = false,
 ): WidgetTarget | null {
@@ -127,7 +127,7 @@ export function widgetTarget(
 // The DRY half of a crossfade knob, resolved as its own bind would be — plugin or offline, else nothing.
 export function pairTarget(
   n: GraphNode,
-  w: WebWidget,
+  w: PageWidget,
   offline: boolean,
 ): WidgetTarget | null {
   if (!w.pair) return null;
@@ -155,7 +155,7 @@ export function targetKey(t: WidgetTarget): string {
 /** The value a widget shows: override, else engine, else authored, else declared default, else nothing — docs/widgets.md. */
 export function widgetValue(
   n: GraphNode,
-  w: WebWidget,
+  w: PageWidget,
   ch: Channels,
   live?: number,
 ): number | undefined {
@@ -189,12 +189,12 @@ export function widgetValue(
 }
 
 /** A tapped widget's accessible name: a pad's symbol, else its face or its bind. */
-export function tapName(w: WebWidget, padSymbol: string | null): string {
+export function tapName(w: PageWidget, padSymbol: string | null): string {
   if (padSymbol) return padSymbol;
   return w.label ?? (typeof w.bind === "string" ? w.bind : w.type);
 }
 
-export const draggable = (w: WebWidget) =>
+export const draggable = (w: PageWidget) =>
   w.type === "knob" ||
   w.type === "slider" ||
   w.type === "fader" ||

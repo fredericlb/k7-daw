@@ -17,6 +17,22 @@ macro_rules! web {
     )+};
 }
 
+/// The type folders a step's `category` names; the TypeScript type only, the wire carries the folder's name as a string.
+#[cfg(feature = "ts")]
+#[derive(ts_rs::TS)]
+#[ts(rename_all = "snake_case")]
+pub enum WebModuleCategory {
+    Io,
+    Instruments,
+    Audio,
+    Transformers,
+    Midi,
+    VideoEffects,
+    VideoTransitions,
+    Shaders,
+    Shapes,
+}
+
 pub type Params = IndexMap<String, ParamValue>;
 
 web! {
@@ -116,6 +132,7 @@ web! {
         pub node: String,
         #[serde(skip_serializing_if = "Option::is_none")]
         pub port: Option<String>,
+        #[cfg_attr(feature = "ts", ts(as = "Option<bool>"))]
         pub mandatory: bool,
     }
 
@@ -135,7 +152,7 @@ web! {
         #[serde(skip_serializing_if = "Option::is_none")]
         pub outputs: Option<Vec<WebPlug>>,
         #[serde(skip_serializing_if = "Option::is_none")]
-        #[cfg_attr(feature = "ts", ts(type = "Record<string, WebAssemblyParam>"))]
+        #[cfg_attr(feature = "ts", ts(as = "Option<crate::rec::Rec<WebAssemblyParam>>"))]
         pub params: Option<IndexMap<String, WebAssemblyParam>>,
         #[serde(skip_serializing_if = "Option::is_none")]
         pub missing: Option<bool>,
@@ -147,12 +164,12 @@ web! {
         #[cfg_attr(feature = "ts", ts(rename = "type", type = "\"lfo\" | \"custom\" | \"adsr\" | \"onoff\""))]
         pub kind: String,
         #[serde(skip_serializing_if = "Option::is_none")]
-        #[cfg_attr(feature = "ts", ts(type = "\"sine\" | \"triangle\" | \"saw\" | \"square\""))]
+        #[cfg_attr(feature = "ts", ts(optional, type = "\"sine\" | \"triangle\" | \"saw\" | \"square\""))]
         pub shape: Option<String>,
         #[serde(skip_serializing_if = "Option::is_none")]
-        #[cfg_attr(feature = "ts", ts(type = "{ time: string; value: number }[]"))]
+        #[cfg_attr(feature = "ts", ts(optional, type = "{ time: string; value: number }[]"))]
         pub points: Option<Vec<song_schema::PointSpec>>,
-        #[cfg_attr(feature = "ts", ts(type = "CurveSpec"))]
+        #[cfg_attr(feature = "ts", ts(as = "Option<crate::curves::CurveFile>"))]
         pub spec: crate::curves::CurveFile,
     }
 
@@ -166,7 +183,7 @@ web! {
         #[serde(skip_serializing_if = "Option::is_none")]
         pub stage: Option<Vec<String>>,
         #[serde(skip_serializing_if = "Option::is_none")]
-        #[cfg_attr(feature = "ts", ts(type = "WebModuleCategory"))]
+        #[cfg_attr(feature = "ts", ts(as = "Option<WebModuleCategory>"))]
         pub category: Option<String>,
         #[serde(skip_serializing_if = "Option::is_none")]
         pub emits: Option<PortType>,
@@ -181,7 +198,7 @@ web! {
         #[serde(skip_serializing_if = "Option::is_none")]
         pub events: Option<Vec<String>>,
         #[serde(skip_serializing_if = "Option::is_none")]
-        #[cfg_attr(feature = "ts", ts(type = "Record<string, string>"))]
+        #[cfg_attr(feature = "ts", ts(optional, type = "Record<string, string>"))]
         pub assets: Option<IndexMap<String, String>>,
         #[serde(rename = "assetChoices", skip_serializing_if = "Option::is_none")]
         pub asset_choices: Option<Vec<String>>,
@@ -193,12 +210,14 @@ web! {
         pub shader: Option<String>,
         #[serde(skip_serializing_if = "Option::is_none")]
         pub shaders: Option<Vec<String>>,
+        #[cfg_attr(feature = "ts", ts(as = "Option<bool>"))]
         pub stub: bool,
         #[serde(rename = "notSupported", skip_serializing_if = "Option::is_none")]
         pub not_supported: Option<bool>,
         #[serde(rename = "unknownPlugin", skip_serializing_if = "Option::is_none")]
         pub unknown_plugin: Option<bool>,
         #[serde(rename = "hasNativePluginUI")]
+        #[cfg_attr(feature = "ts", ts(as = "Option<bool>"))]
         pub has_native_plugin_ui: bool,
         #[serde(skip_serializing_if = "Option::is_none")]
         pub strip: Option<bool>,
@@ -207,15 +226,15 @@ web! {
         #[serde(rename = "ampModel", skip_serializing_if = "Option::is_none")]
         pub amp_model: Option<WebAmpModel>,
         #[serde(skip_serializing_if = "Option::is_none")]
-        #[cfg_attr(feature = "ts", ts(type = "WebModuleUI"))]
+        #[cfg_attr(feature = "ts", ts(as = "Option<crate::resolve::ResolvedUi>"))]
         pub ui: Option<Ui>,
         #[serde(skip_serializing_if = "Option::is_none")]
-        #[cfg_attr(feature = "ts", ts(type = "Record<string, WebCc>"))]
+        #[cfg_attr(feature = "ts", ts(as = "Option<crate::rec::Rec<crate::modules::panels::CcBinding>>"))]
         pub cc: Option<IndexMap<String, crate::modules::panels::CcBinding>>,
-        #[cfg_attr(feature = "ts", ts(type = "Record<string, number | string>"))]
+        #[cfg_attr(feature = "ts", ts(as = "Option<crate::rec::Rec<ParamValue>>"))]
         pub params: Params,
         #[serde(skip_serializing_if = "Option::is_none")]
-        #[cfg_attr(feature = "ts", ts(type = "Record<string, number>"))]
+        #[cfg_attr(feature = "ts", ts(optional, type = "Record<string, number>"))]
         pub defaults: Option<IndexMap<String, f64>>,
         #[serde(rename = "pluginId", skip_serializing_if = "Option::is_none")]
         pub plugin_id: Option<String>,
@@ -228,7 +247,7 @@ web! {
         #[serde(skip_serializing_if = "Option::is_none")]
         pub engine: Option<String>,
         #[serde(skip_serializing_if = "Option::is_none")]
-        #[cfg_attr(feature = "ts", ts(type = "\"off\" | \"auto\" | \"on\""))]
+        #[cfg_attr(feature = "ts", ts(optional, type = "\"off\" | \"auto\" | \"on\""))]
         pub monitor: Option<String>,
         #[serde(skip_serializing_if = "Option::is_none")]
         pub channel: Option<Vec<u32>>,
@@ -237,7 +256,7 @@ web! {
         #[serde(skip_serializing_if = "Option::is_none")]
         pub device: Option<String>,
         #[serde(skip_serializing_if = "Option::is_none")]
-        #[cfg_attr(feature = "ts", ts(type = "{ id: string; side: \"input\" | \"output\" }"))]
+        #[cfg_attr(feature = "ts", ts(optional, type = "{ id: string; side: \"input\" | \"output\" }"))]
         pub tap: Option<WebTap>,
         #[serde(skip_serializing_if = "Option::is_none")]
         pub automations: Option<Vec<WebAutomation>>,
@@ -259,50 +278,51 @@ web! {
     }
 
     pub struct WebGraph {
-        #[cfg_attr(feature = "ts", ts(type = "Record<string, WebChain>"))]
+        #[cfg_attr(feature = "ts", ts(as = "crate::rec::Rec<WebChain>"))]
         pub chains: IndexMap<String, WebChain>,
         pub tracks: Vec<String>,
         #[serde(skip_serializing_if = "Option::is_none")]
-        #[cfg_attr(feature = "ts", ts(type = "Record<string, { x: number; y: number }>"))]
+        #[cfg_attr(feature = "ts", ts(optional, type = "Record<string, { x: number; y: number }>"))]
         pub positions: Option<IndexMap<String, Position>>,
         #[serde(rename = "videoTracks")]
+        #[cfg_attr(feature = "ts", ts(as = "Option<Vec<String>>"))]
         pub video_tracks: Vec<String>,
         #[serde(rename = "trackSignals")]
-        #[cfg_attr(feature = "ts", ts(type = "Record<string, WebSignal>"))]
+        #[cfg_attr(feature = "ts", ts(as = "Option<crate::rec::Rec<PortType>>"))]
         pub track_signals: IndexMap<String, PortType>,
         #[serde(rename = "trackColors")]
-        #[cfg_attr(feature = "ts", ts(type = "Record<string, string>"))]
+        #[cfg_attr(feature = "ts", ts(as = "Option<crate::rec::Rec<String>>"))]
         pub track_colors: IndexMap<String, String>,
         #[serde(skip_serializing_if = "Option::is_none")]
         pub stacks: Option<Vec<Vec<String>>>,
         #[serde(rename = "trackMixers", skip_serializing_if = "Option::is_none")]
-        #[cfg_attr(feature = "ts", ts(type = "Record<string, string>"))]
+        #[cfg_attr(feature = "ts", ts(optional, type = "Record<string, string>"))]
         pub track_mixers: Option<IndexMap<String, String>>,
         #[serde(rename = "trackClips", skip_serializing_if = "Option::is_none")]
-        #[cfg_attr(feature = "ts", ts(type = "Record<string, WebTrackClip[]>"))]
+        #[cfg_attr(feature = "ts", ts(as = "Option<crate::rec::Rec<Vec<WebTrackClip>>>"))]
         pub track_clips: Option<IndexMap<String, Vec<WebTrackClip>>>,
         #[serde(rename = "trackAlternatives", skip_serializing_if = "Option::is_none")]
-        #[cfg_attr(feature = "ts", ts(type = "Record<string, WebAltChoice>"))]
+        #[cfg_attr(feature = "ts", ts(as = "Option<crate::rec::Rec<WebAltChoice>>"))]
         pub track_alternatives: Option<IndexMap<String, WebAltChoice>>,
         #[serde(rename = "tapFeeds", skip_serializing_if = "Option::is_none")]
-        #[cfg_attr(feature = "ts", ts(type = "{ node: string; tap: string; to: string }[]"))]
+        #[cfg_attr(feature = "ts", ts(optional, type = "{ node: string; tap: string; to: string }[]"))]
         pub tap_feeds: Option<Vec<TapFeed>>,
         #[serde(skip_serializing_if = "Option::is_none")]
-        #[cfg_attr(feature = "ts", ts(type = "Record<string, \"at\" | \"inside\">"))]
+        #[cfg_attr(feature = "ts", ts(optional, type = "Record<string, \"at\" | \"inside\">"))]
         pub frozen: Option<IndexMap<String, String>>,
         #[serde(rename = "autoFrozen", skip_serializing_if = "Option::is_none")]
-        #[cfg_attr(feature = "ts", ts(type = "Record<string, string>"))]
+        #[cfg_attr(feature = "ts", ts(optional, type = "Record<string, string>"))]
         pub auto_frozen: Option<IndexMap<String, String>>,
         #[serde(rename = "autoFreezeWaiting", skip_serializing_if = "Option::is_none")]
-        #[cfg_attr(feature = "ts", ts(type = "Record<string, string>"))]
+        #[cfg_attr(feature = "ts", ts(optional, type = "Record<string, string>"))]
         pub auto_freeze_waiting: Option<IndexMap<String, String>>,
-        #[cfg_attr(feature = "ts", ts(type = "Record<string, WebDocNote>"))]
+        #[cfg_attr(feature = "ts", ts(as = "Option<crate::rec::Rec<WebDocNote>>"))]
         pub modules: IndexMap<String, WebDocNote>,
         #[serde(skip_serializing_if = "Option::is_none")]
-        #[cfg_attr(feature = "ts", ts(type = "Record<string, WebCurve>"))]
+        #[cfg_attr(feature = "ts", ts(as = "Option<crate::rec::Rec<WebCurve>>"))]
         pub curves: Option<IndexMap<String, WebCurve>>,
         #[serde(skip_serializing_if = "Option::is_none")]
-        #[cfg_attr(feature = "ts", ts(type = "Record<string, WebNodeAssembly>"))]
+        #[cfg_attr(feature = "ts", ts(as = "Option<crate::rec::Rec<WebNodeAssembly>>"))]
         pub assemblies: Option<IndexMap<String, WebNodeAssembly>>,
         pub warnings: Vec<String>,
         #[serde(skip_serializing_if = "Option::is_none")]

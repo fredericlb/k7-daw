@@ -83,7 +83,7 @@ Replies listed in `ENGINE_GLOBAL_REPLIES` (`plugins`, `audio-devices`, `sessions
 Trust is decided per socket in `apps/k7-daw-engine/k7-runtime/server/ServePairing.cpp`:
 
 - At the handshake, a browser page whose `Origin` is not allowed (see [81](./81-k7-runtime.md#inside-serve)) is closed before any message is read.
-- A **loopback** peer is trusted and "local". Traffic relayed through the tunnel or WebRTC arrives from the supervisor on loopback, already authenticated by the server.
+- A **loopback** peer is trusted and "local". Traffic relayed through the tunnel arrives from the supervisor on loopback, already authenticated by the server.
 - Any other peer must first send `{type:"pair", key}`. The key is either a paired device's key or the engine's own token (what the server's relay holds when it dials over the LAN).
 - An untrusted peer may send at most 16 KiB per frame. To `whoami` it gets `{id, boot, needsPairing: true}` and never the token; everything else is refused with `code: "unpaired"`.
 - `pair-request {name}` from a LAN peer creates a request with a 6-digit code (replied as `pair-pending {requestId, code}`) and pushes `pair-requests` to local sockets. Requests expire after 2 minutes; at most 8 wait. `pair-approve` answers the requesting socket with `paired {deviceId, name, key}`; the key is stored in the browser's `localStorage` under `k7.engine-pair.<engineId>`.

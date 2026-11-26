@@ -138,12 +138,6 @@ impl Hub {
         }
     }
 
-    /// The engine's answer to a browser's WebRTC offer.
-    pub async fn signal(&self, id: &str, sdp: &str, timeout: Duration) -> Result<String, String> {
-        let t = self.tunnel(id).ok_or("this engine has no tunnel")?;
-        t.signal(sdp, timeout).await
-    }
-
     /// A loopback path reaching engine `engine_id` with `roots` shared.
     pub fn bind_local(
         &self,

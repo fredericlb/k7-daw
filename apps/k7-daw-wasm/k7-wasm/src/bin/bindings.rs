@@ -2,7 +2,9 @@
 // A reader would get wrong that it deletes the folder first: a type that no longer exists must not linger there.
 
 use k7_wasm::curve_ops::{OpenAnswer, PreviewArgs};
+use k7_wasm::engine_ops::{BestAnswer, WarningAnswer};
 use k7_wasm::{Request, WasmError};
+use song_schema::engine::{Choice, Compatibility, EngineLatency};
 use song_schema::{CurvePreview, CurveSpec};
 use std::path::Path;
 use std::process::ExitCode;
@@ -21,6 +23,11 @@ fn write_all(dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
     CurvePreview::export_all_to(dir)?;
     CurveSpec::export_all_to(dir)?;
     PreviewArgs::export_all_to(dir)?;
+    BestAnswer::export_all_to(dir)?;
+    Choice::export_all_to(dir)?;
+    Compatibility::export_all_to(dir)?;
+    EngineLatency::export_all_to(dir)?;
+    WarningAnswer::export_all_to(dir)?;
     let mut names = fs::read_dir(dir)?
         .map(|e| e.map(|e| e.file_name().to_string_lossy().into_owned()))
         .collect::<Result<Vec<_>, io::Error>>()?;

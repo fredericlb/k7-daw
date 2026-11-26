@@ -3,7 +3,7 @@
 // the graph's own multi-selection too, since a drag moves every linked node at once — docs/widgets.md.
 
 import type { PluginParamsStore } from "@studio/engine-browser/params";
-import type { WebWidget } from "@studio/graph-model";
+import type { PageWidget } from "@studio/graph-model";
 import { encodeDepth } from "@studio/ui-chains/automationDepth";
 import {
   type GraphNode,
@@ -85,7 +85,7 @@ export function useWidgetDrag({
   // --- reconcile optimistic overrides as fresh engine/track frames arrive ------------
   const drag = useRef<{
     node: GraphNode;
-    w: WebWidget;
+    w: PageWidget;
     tgt: WidgetTarget;
     key: string;
     /** A crossfade knob's DRY param, written beside the wet one on every send — docs/widgets.md. */
@@ -127,7 +127,7 @@ export function useWidgetDrag({
       t: WidgetTarget,
       value: number,
       pair: WidgetTarget | null,
-      w: WebWidget,
+      w: PageWidget,
     ) => {
       if (t.kind !== "plugin") return;
       const line = (name: string, v: number) =>
@@ -246,7 +246,7 @@ export function useWidgetDrag({
   // --- widget drag (knob/slider/number): live sends coalesced, commit on release ------
   // biome-ignore lint/correctness/useExhaustiveDependencies: the inputs are refs and setters DomChains hands in, stable for its lifetime.
   const beginDrag = useCallback(
-    (n: GraphNode, w: WebWidget, e: React.PointerEvent) => {
+    (n: GraphNode, w: PageWidget, e: React.PointerEvent) => {
       const ch = chRef.current;
       e.stopPropagation(); // don't select the node or start a pan
       // A frozen MODULE has no plugin in the engine; a frozen LANE carries its own controls.

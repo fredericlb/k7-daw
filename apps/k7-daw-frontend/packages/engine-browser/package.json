@@ -29,13 +29,11 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@studio/engine-tunnel": "*",
-    "node-datachannel": "^0.33.4",
-    "vitest": "^4.1.10",
-    "ws": "^8.18.0"
+    "vitest": "^4.1.10"
   },
   "dependencies": {
     "@studio/engine-protocol": "*",
+    "@studio/k7-wasm": "*",
     "@studio/web-protocol": "*"
   },
   "peerDependencies": {

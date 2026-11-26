@@ -4,7 +4,7 @@
 
 import type { WaveformEnvelope } from "@studio/engine-browser";
 import { useEngineStoreOrNull } from "@studio/engine-browser/store";
-import type { WebWidget } from "@studio/graph-model";
+import type { PageWidget } from "@studio/graph-model";
 import type { GraphNode } from "@studio/ui-chains/graph";
 import { useEffect, useRef } from "react";
 import { NOOP } from "../chainsStores";
@@ -20,7 +20,7 @@ export function WaveformWidget({
   onWatch,
 }: {
   n: GraphNode;
-  w: WebWidget;
+  w: PageWidget;
   style: React.CSSProperties;
   /** Ask the engine to tap this module (or stop). Without it nothing is ever captured. */
   onWatch?: (pluginId: string, side: "input" | "output", on: boolean) => void;

@@ -11,8 +11,7 @@
     "./store": "./src/store.ts",
     "./module-ui": "./src/moduleUi.ts",
     "./input-channels": "./src/InputChannelBar.tsx",
-    "./param-drag": "./src/paramDrag.ts",
-    "./ai-organize": "./src/aiOrganize.ts"
+    "./param-drag": "./src/paramDrag.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",

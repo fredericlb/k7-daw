@@ -1,7 +1,7 @@
 // buildLanes.test.ts — a lane's card in the built graph: orphans, video lanes, live inputs, sub
 // lines, and a rack's pads.
 
-import type { WebGraph, WebWidget } from "@studio/graph-model";
+import type { PageWidget, WebGraph } from "@studio/graph-model";
 import { describe, expect, it } from "vitest";
 import {
   buildGraph,
@@ -370,7 +370,7 @@ describe("a RACK node draws its sounds", () => {
       cols: 1,
       rows: 1,
       widgets: {
-        g: { type: "knob", col: 0, row: 0, bind: "Gain" } as WebWidget,
+        g: { type: "knob", col: 0, row: 0, bind: "Gain" } as PageWidget,
       },
     };
     const g = buildGraph(

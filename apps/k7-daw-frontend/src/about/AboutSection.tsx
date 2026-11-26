@@ -12,7 +12,7 @@ import { VERSION } from "../version";
 import { LicenseText } from "./LicenseText";
 
 /** Where the complete source is published: the address the AGPL's offer names. */
-export const SOURCE_URL = "https://github.com/fredericlb/k7-daw";
+const SOURCE_URL = "https://github.com/fredericlb/k7-daw";
 
 /** The notices and their texts, a chunk of their own that only this page fetches. */
 const NoticesSection = lazy(() =>

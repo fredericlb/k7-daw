@@ -13,19 +13,21 @@ import { DSP_FILE, JSDSP_FILE } from "@studio/engine-protocol/build";
 // The reader `@studio/engine-browser` wants: it owns the routes, this app owns the errors.
 import { readJson as json } from "@studio/http-client/call";
 import { upload } from "@studio/http-client/upload";
+import type {
+  AiOrganizeRequest,
+  AiOrganizeResult,
+  AiSettingsView,
+} from "@studio/panel-rules/ai-organize";
+import {
+  type AiTurnCall,
+  organizeLoop,
+} from "@studio/panel-rules/ai-organize-loop";
+import { readTurnStream } from "@studio/panel-rules/ai-turn-stream";
 import { cfg, fget, fileHeaders, fsend } from "@studio/project-shell/fileApi";
 import { projectApi } from "@studio/project-shell/project";
 import { WIDGETS_SCRIPT } from "@studio/song-schema/moduleFiles";
 import type { NodePresets } from "@studio/song-schema/presets";
 import type { ReferenceTrack } from "@studio/song-schema/reference";
-import {
-  type AiOrganizeRequest,
-  type AiOrganizeResult,
-  type AiSettingsView,
-  type AiTurnCall,
-  organizeLoop,
-  readTurnStream,
-} from "@studio/ui-module-builder/ai-organize";
 import type { ModuleStore } from "@studio/ui-module-builder/store";
 import { MAX_UPLOAD_BYTES, type ModelDownloadJob } from "@studio/web-protocol";
 import type { PlaylistInfo } from "@studio/web-protocol/playlists";
@@ -40,7 +42,7 @@ import type {
 } from "./types";
 
 // The app is mounted at the ORIGIN ROOT, so BASE is the empty string — kept as a derived constant, this app's mount being the one that can still change.
-export const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
 
 /** Where the front's routes answer: this origin. It holds the preferences AND the one engine registry. */
 const ORIGIN = serviceUrl(globalThis.location?.origin ?? "", "k7");

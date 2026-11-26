@@ -2,7 +2,7 @@
 // engine's own loopback must not win: the gate takes unasked only an engine reached directly.
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { mayAutoPick } from "./choose.ts";
+import { bestEngine } from "./choose.ts";
 import {
   candidatesFor,
   orderHits,
@@ -41,9 +41,13 @@ describe("orderHits", () => {
     // …which is what lets the gate take this machine's engine with nobody clicking.
     const ranked = { engine: target, wsUrl: best.c.url, token: "t" };
     expect(reachedDirectly(ranked)).toBe(true);
-    expect(
-      mayAutoPick({ ...ranked, latency: null, fileBase: null }, undefined),
-    ).toBe(true);
+    const latency = {
+      networkMs: 1,
+      audioMs: 0,
+      totalMs: 1,
+      quality: "Q1" as const,
+    };
+    expect(bestEngine([{ ...ranked, latency, fileBase: null }])).not.toBeNull();
   });
 
   it("still ranks by speed among sockets of the same kind", () => {
@@ -67,34 +71,6 @@ describe("orderHits", () => {
         hit(RELAY, false, 9),
       ])[0].c.url,
     ).toBe(RELAY);
-  });
-});
-
-// Node has no location: `candidatesFor` reads the page's protocol and href, and nothing else.
-describe("candidatesFor and the WebRTC offer", () => {
-  beforeEach(() => {
-    vi.stubGlobal("location", {
-      protocol: "https:",
-      href: "https://app.k7.test/media",
-    });
-  });
-
-  afterEach(() => vi.unstubAllGlobals());
-
-  const dataChannels = (candidates: { url: string }[]) =>
-    candidates.filter((c) => c.url.startsWith("rtc:"));
-
-  it("offers no data channel before a claim, and one after it", () => {
-    const tunnelled = { ...target, rtc: true };
-    const listed = candidatesFor(tunnelled, "");
-    const driving = candidatesFor(tunnelled, "", { claim: true });
-    expect(dataChannels(listed)).toEqual([]);
-    expect(dataChannels(driving)).toHaveLength(1);
-  });
-
-  it("offers none for an engine whose supervisor holds no tunnel", () => {
-    const driving = candidatesFor(target, "", { claim: true });
-    expect(dataChannels(driving)).toEqual([]);
   });
 });
 

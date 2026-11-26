@@ -19,9 +19,6 @@
     "@studio/web-protocol": "*",
     "ws": "^8.18.0"
   },
-  "optionalDependencies": {
-    "node-datachannel": "^0.33.4"
-  },
   "devDependencies": {
     "@types/node": "^22.10.0",
     "@types/ws": "^8.5.12",

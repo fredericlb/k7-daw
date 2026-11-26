@@ -1,6 +1,6 @@
 // Pairing.h — which LAN devices may drive this engine: the keys the paired ones hold, the requests waiting
 // for the musician, and which live sockets they speak for. A loopback peer needs none of it.
-// The one thing a reader would get wrong: relayed traffic (the tunnel, WebRTC) arrives from loopback too,
+// The one thing a reader would get wrong: relayed traffic (the tunnel) arrives from loopback too,
 // already authenticated by the server, so "local" is decided by the peer address alone. docs/pairing.md.
 
 #pragma once

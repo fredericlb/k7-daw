@@ -81,7 +81,7 @@ import type {
 } from "./components/CommandBar";
 import { DemoBanner } from "./components/DemoBanner";
 import { type EditorHandle, EditorTab } from "./components/EditorTab";
-import { syncRunning } from "./components/EngineSyncProgress";
+import { syncRunning } from "./components/EngineSyncFailedDialog";
 import {
   FloatingCommandBar,
   useSummonKey,

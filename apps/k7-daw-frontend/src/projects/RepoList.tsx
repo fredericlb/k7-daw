@@ -59,7 +59,7 @@ const workspacesCount = (n: number): string =>
 const FILTER_FROM = 6;
 
 /** The workspaces left once `query` has picked: a project by its path, a workspace by its name (then all its projects). */
-export function filterWorkspaces(
+function filterWorkspaces(
   all: AccountWorkspace[],
   query: string,
 ): AccountWorkspace[] {

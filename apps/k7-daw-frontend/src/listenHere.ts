@@ -16,16 +16,6 @@ const read = (): boolean => {
 
 const current = createLiveValue(read());
 
-export function setListenHere(on: boolean): void {
-  if (on === current.get()) return;
-  current.set(on);
-  try {
-    localStorage.setItem(KEY, on ? "1" : "0");
-  } catch {
-    // A browser refusing storage keeps the choice for this visit only.
-  }
-}
-
 /** Whether this browser listens here, live. */
 export function useListenHere(): boolean {
   return useLiveValue(current);

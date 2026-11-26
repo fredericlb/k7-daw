@@ -11,7 +11,7 @@ A route is the front's once the conformance suite (`e2e/docs/conformance.md`) pa
 | `GET /auth/me` | phase 3 | the same as the preferences |
 | `GET /api/local` | phase 4a; on every device since 6.1 (`local.md`) | off a device, where the backend answers 404 |
 | `GET /api/local/engine[/events]`, `POST /api/local/engine/{cmd,slots}`, `GET /api/internal/engine/local` | phase 4a, behind `K7_LOCAL_ENGINE=front` (`local.md`) | all of it unless a device's host turned the switch on |
-| `GET /api/registry/hello`, `POST …/heartbeat`, `POST …/deregister`, `GET /api/engines`, `POST /api/engine/{select,release}`, `POST /api/engine/<id>/rtc`, `WS /api/engine/<id>/ws`, `WS /api/engine-tunnel[/local/<key>]`, `GET /api/internal/engine/engines[/<id>]`, `GET …/hub`, `POST`, `DELETE …/bindings` | phase 4a, behind `K7_ENGINE_CORE=front` (`engine.md`) | all of it unless the switch is on; every other method there, a request to a socket's path that is no upgrade, the root domain's hosts, the seam's local half |
+| `GET /api/registry/hello`, `POST …/heartbeat`, `POST …/deregister`, `GET /api/engines`, `POST /api/engine/{select,release}`, `WS /api/engine/<id>/ws`, `WS /api/engine-tunnel[/local/<key>]`, `GET /api/internal/engine/engines[/<id>]`, `GET …/hub`, `POST`, `DELETE …/bindings` | phase 4a, behind `K7_ENGINE_CORE=front` (`engine.md`) | all of it unless the switch is on; every other method there, a request to a socket's path that is no upgrade, the root domain's hosts, the seam's local half |
 
 The front also answers `/api/engine-slots`, on every host (`engine/slots.md`). A path of that family no route
 answers is declined.
