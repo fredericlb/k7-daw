@@ -1,0 +1,11 @@
+project({
+  name: "picture-rig",
+  tempo: 120,
+  sampleRate: 48000,
+  timeSignature: "4/4",
+  viewport: [1280, 720, 25],
+})
+markers({ "0:02": "drop", "10": "end", "1:30:00": "not a clock" })
+trackOrder(["drums", "subs", "over", "main"])
+soloed(["main", "subs"])
+format(3)

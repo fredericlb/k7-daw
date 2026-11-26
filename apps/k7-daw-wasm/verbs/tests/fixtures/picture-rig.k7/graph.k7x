@@ -1,0 +1,11 @@
+modules({
+  drums: ["MIX"],
+  MIX: ["OUT", "RENDER#audio"],
+  main: ["glow"],
+  glow: ["RENDER"],
+  over: ["RENDER"],
+  subs: ["RENDER"],
+  box: ["over"],
+  cam: ["main"],
+  RENDER: ["VIDEO_OUT"],
+})
