@@ -8,6 +8,9 @@
 # calls serve() through android/EngineJni.cpp (docs/android.md). On iOS it is a FRAMEWORK,
 # k7runtime.framework, for the same reason and one more — no app may run a program of its own (docs/ios.md).
 
+# The Rust server, a static library cargo builds (docs/link.md in k7-runtime-server's crate).
+include(${CMAKE_CURRENT_LIST_DIR}/RustServer.cmake)
+
 set(STUDIO_SERVER_SOURCES
     Serve.cpp
     ServeProject.cpp
@@ -50,10 +53,14 @@ else()
         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 endif()
 
+# k7_runtime_server first: its archive needs k7_engine_api from studio::engine, and a linker reads archives in order.
 target_link_libraries(k7-runtime PRIVATE
+    k7_runtime_server
     studio::engine
     ixwebsocket
     nlohmann_json::nlohmann_json)
+
+k7_keep_rust_entry(k7-runtime)
 
 # The version `whoami` and the heartbeat report, the root's, which k7-runtime's package.json copies (docs/versioning.md).
 file(READ "${CMAKE_CURRENT_LIST_DIR}/../package.json" K7_PACKAGE_JSON)

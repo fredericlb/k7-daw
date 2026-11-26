@@ -316,3 +316,23 @@ target_compile_definitions(studio_capi_tests PRIVATE
     DONT_SET_USING_JUCE_NAMESPACE=1)
 add_test(NAME studio_capi_tests COMMAND studio_capi_tests)
 set_tests_properties(studio_capi_tests PROPERTIES LABELS slow)
+
+# --- Rust server link tests ---------------------------------------------------
+# Rust's `serve` on the real host, probed with `whoami` over its socket: slow like the C ABI's (engine/capi/k7_server.h).
+add_executable(studio_rustserve_tests RustServe_test.cpp)
+target_link_libraries(studio_rustserve_tests PRIVATE
+    k7_runtime_server
+    studio_engine
+    tracktion::tracktion_engine
+    ixwebsocket
+    nlohmann_json::nlohmann_json)
+k7_keep_rust_entry(studio_rustserve_tests)
+target_include_directories(studio_rustserve_tests PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/../engine)
+target_compile_definitions(studio_rustserve_tests PRIVATE
+    JUCE_MODAL_LOOPS_PERMITTED=1
+    JUCE_USE_CURL=0
+    JUCE_WEB_BROWSER=0
+    DONT_SET_USING_JUCE_NAMESPACE=1)
+add_test(NAME studio_rustserve_tests COMMAND studio_rustserve_tests)
+set_tests_properties(studio_rustserve_tests PROPERTIES LABELS slow)

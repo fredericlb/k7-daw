@@ -59,3 +59,9 @@ missing patch adds. So each patch command carries a checksum of its script and o
 `engine/eurorack/patches/studio_replace.cmake`, which they share (`studio_patch_command` in
 `CMakeLists.txt`): editing either changes the command and re-runs the patch. Re-running it is safe,
 since `studio_replace` leaves an edit already in place alone.
+
+## The Rust server is built by the same build
+
+`server/RustServer.cmake` adds a target that runs `cargo build --release --lib -p k7-runtime-server` into `build/<preset>/rust/`,
+for the preset's own triple, and the engine targets link its archive. `cargo` must be on `PATH` (or in `~/.cargo/bin`),
+and a phone's target installed with `rustup target add`. Why a static library: `apps/k7-daw-backend/packages/k7-runtime-server/docs/link.md`.

@@ -2170,7 +2170,9 @@ dependencies = [
 name = "k7-runtime-server"
 version = "0.1.0"
 dependencies = [
+ "base64 0.22.1",
  "serde_json",
+ "sha1 0.10.7",
  "tokio",
 ]
 

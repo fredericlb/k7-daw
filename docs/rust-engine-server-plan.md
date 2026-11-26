@@ -43,12 +43,19 @@ server side moves.
 | M1 the ABI and the wire's leaves (built) | the C ABI's top table and core area, its C++ implementation and test; `engine` (the safe wrapper, `Mt`, posted jobs, the fake engine); `wire` (the nlohmann-exact printer, the audio frame, the verb catalogue, the version) | 6 |
 | M2 the socket core | accept, the Origin and frame-size screens, nesting refusal, ping, send timeout, the per-client outbox, sessions, dispatch by verb against the fake engine | 10 |
 | M3 pairing | who counts as the machine, the paired-devices store, the pairing verbs | 6 |
-| M4 the link | the static library; `build.mjs` runs cargo with `--target-dir`; a slow CMake test runs `serve` on the real host and probes `whoami`; the Android and iOS cross builds | 6 |
+| M4 the link (built) | the static library, built by a CMake target that runs cargo with `--target-dir`; a slow CMake test runs `serve` on the real host and probes `whoami`; the Android and iOS cross builds | 6 |
 | M5 project and transport | the `DocJson` port with its bounds, supersede, held notes; the project and transport areas | 12 |
 | M6 the state frame | the state frame, `recorded`, `plugin-params`, `engine-warning` | 6 |
 | M7 plugins | the scan, the probe (4 at once), the pending queries, the plugin verbs | 10 |
 | M8 the machine | the `AudioSender` broadcast, sessions, drivers, devices, `io-levels`, `instrument-status`, `render` | 10 |
 | M9 the CLI and the switch | argv in Rust, C++ `main` cut to a few lines, the JNI and iOS doors calling `serve`; `Serve*`, `Pairing`, `Outbox`, `AudioSender`, `Supersede`, `HeldNotes`, `PendingQueries`, `WireVersion`, IXWebSocket and their tests deleted; their pages moved to this crate's `docs/` | 12 |
+
+M4's choices (`apps/k7-daw-backend/packages/k7-runtime-server/docs/link.md`):
+
+- **CMake runs cargo, not `build.mjs`**: Gradle and `stage.mjs` reach the same CMake tree, so one custom target
+  builds the archive for every platform, in the build folder's own `rust/`.
+- **Each target names `k7_server_serve` as undefined** so the link proves the archive until the switch calls it.
+- **`serve` is a stand-in socket** (`src/stub.rs`: handshake and `whoami`) that M2's socket core replaces whole.
 
 Each milestone owns one ABI area (`abi.md`), so its header, `.cpp` and Rust module touch no other
 milestone's files. The order:
