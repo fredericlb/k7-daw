@@ -7,6 +7,10 @@ import { m } from "../paraglide/messages.js";
 import type { HeaderPanel } from "./ProjectHeader";
 import { PANEL_DEFS } from "./panels";
 
+// A rail button is a round square, not the header's wide segment.
+const SQUARE =
+  "size-10 min-w-0 rounded-full px-0 desk:size-8 desk:min-w-0 desk:rounded-full";
+
 export function PanelRail({
   panels,
   settingsPressed,
@@ -20,13 +24,14 @@ export function PanelRail({
     <Capsule
       aria-label={m["shell.panels"]()}
       aria-orientation="vertical"
-      className="absolute top-[calc(var(--k7-header-h)+var(--k7-panel-gap-top))] right-3 z-(--k7-z-header) h-auto flex-col"
+      className="absolute top-[calc(var(--k7-header-h)+var(--k7-panel-gap-top))] right-3 z-(--k7-z-header) h-auto desk:h-auto flex-col gap-1.5 p-1"
     >
       {panels.map((p) => {
         const def = PANEL_DEFS[p.id];
         return (
           <CapsuleButton
             key={p.id}
+            className={SQUARE}
             pressed={p.pressed}
             disabled={p.disabled}
             disabledReason={p.title}
@@ -40,6 +45,7 @@ export function PanelRail({
       })}
       <CapsuleDivider className="mx-0 my-0.5 h-px w-5" />
       <CapsuleButton
+        className={SQUARE}
         pressed={settingsPressed}
         aria-label={m["settings.menu"]()}
         title={m["settings.menu"]()}

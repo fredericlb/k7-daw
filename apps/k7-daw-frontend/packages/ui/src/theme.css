@@ -220,7 +220,7 @@
   --k7-sidebar-w: 232px; /* home sidebar on a tablet or a desk, 16 from the window's edges */
   --k7-panel-w: 400px;
   --k7-panel-right: 12px;
-  --k7-rail-w: 58px; /* the right-edge toolbar and its gap; desk draws it narrower */
+  --k7-rail-w: 48px; /* the right-edge toolbar and its gap; desk draws it narrower */
   --k7-rail-clear: calc(12px + var(--k7-rail-w));
   --k7-panel-gap-top: 8px; /* under the header */
   --k7-panel-bottom: 84px; /* clear of the bar; also the toast's bottom */
