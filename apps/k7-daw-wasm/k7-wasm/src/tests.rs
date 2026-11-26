@@ -167,3 +167,58 @@ fn parses_and_formats_timecodes() {
     );
     assert_eq!((status, v), (OK, json!("0:1")));
 }
+
+#[test]
+fn hashes_a_text_as_the_file_service_does() {
+    let mut s = Session::new();
+    let (status, v) = run(&mut s, &json!({"op": "text.hash", "args": {"text": "tempo(120)\n"}}));
+    assert_eq!(status, OK);
+    assert_eq!(v.as_str().map(str::len), Some(14));
+    let (_, again) = run(&mut s, &json!({"op": "text.hash", "args": {"text": "tempo(120)\n"}}));
+    assert_eq!(v, again);
+}
+
+#[test]
+fn scores_a_project_against_a_catalogue() {
+    let mut s = Session::new();
+    let needs = json!([{"format": "vst3", "name": "Serum"}, {"format": "vst3", "name": "Diva"}]);
+    let catalogue = json!([{"format": "VST3", "name": "Serum"}]);
+    let (_, v) = run(
+        &mut s,
+        &json!({"op": "engine.compat", "args": {"needs": needs, "catalogue": catalogue}}),
+    );
+    assert_eq!(v, json!({"score": 50, "missing": [{"format": "vst3", "name": "Diva"}]}));
+}
+
+#[test]
+fn bands_a_link_and_reads_a_warning() {
+    let mut s = Session::new();
+    let (_, v) = run(
+        &mut s,
+        &json!({"op": "engine.latency", "args": {"networkMs": 2, "bufferFrames": 256, "sampleRate": 48000}}),
+    );
+    assert_eq!(v["quality"], "Q1");
+    let (_, v) = run(
+        &mut s,
+        &json!({"op": "engine.warning", "args": {"message": "clip source not found/invalid: /a/take.wav"}}),
+    );
+    assert_eq!(v["kind"], json!({"kind": "clipMissing", "file": "take.wav"}));
+    assert_eq!(
+        v["missing"],
+        json!({"what": "clip", "name": "take.wav", "why": "not-found"})
+    );
+}
+
+#[test]
+fn picks_an_engine_by_index() {
+    let mut s = Session::new();
+    let one = |id: &str, here: bool| {
+        json!({"id": id, "reachable": true, "direct": true, "here": here, "assigned": false,
+               "latency": {"quality": "Q1", "totalMs": 5}})
+    };
+    let args = json!({"candidates": [one("a", false), one("b", true)]});
+    let (_, v) = run(&mut s, &json!({"op": "engine.best", "args": args}));
+    assert_eq!(v, json!({"index": 1}));
+    let (_, v) = run(&mut s, &json!({"op": "engine.choose", "args": args}));
+    assert_eq!(v, json!({"index": null, "ambiguous": true}));
+}
