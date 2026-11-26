@@ -2079,6 +2079,8 @@ dependencies = [
  "k7-front",
  "k7-lan",
  "k7-roam",
+ "k7-supervisor",
+ "libc",
  "serde_json",
 ]
 

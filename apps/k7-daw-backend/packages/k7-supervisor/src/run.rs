@@ -30,6 +30,8 @@ pub fn log_panics() {
     let default = std::panic::take_hook();
     std::panic::set_hook(Box::new(move |info| {
         log::try_line("host", &format!("fatal: {info}"));
+        #[cfg(windows)]
+        crate::win::crash::dump_once();
         default(info);
     }));
 }
@@ -69,6 +71,10 @@ pub fn main(mode: Mode) -> i32 {
     // Before the engine is spawned, so it is born inside the host's job (`docs/windows.md`).
     #[cfg(windows)]
     {
+        // A crash may come while the log is held: its lines never wait for the lock.
+        crate::win::crash::install(Paths::from_env().studio_dir().to_path_buf(), |t| {
+            log::try_line("host", t)
+        });
         crate::win::job::keep_stdio_from_children();
         if let Err(why) = crate::win::job::join_host_job() {
             log::stderr_only(&format!("[host] no kill-on-close job: {why}"));

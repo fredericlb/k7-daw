@@ -87,3 +87,26 @@ fn a_loopback_only_listener_holds_its_port_and_answers() {
     });
     assert!(freed);
 }
+
+#[test]
+fn a_tool_is_found_on_the_path_then_in_the_extra_dirs_never_relative() {
+    let root = std::env::temp_dir().join(format!("k7-sup-tools-{}", std::process::id()));
+    let (on_path, extra) = (root.join("path"), root.join("extra"));
+    for d in [&on_path, &extra] {
+        std::fs::create_dir_all(d).unwrap();
+    }
+    let file = if cfg!(windows) { "tool.exe" } else { "tool" };
+    std::fs::write(extra.join(file), b"").unwrap();
+    let path =
+        std::env::join_paths([std::path::PathBuf::from("relative"), on_path.clone()]).unwrap();
+    let extras = [extra.to_str().unwrap()];
+    let find = |p: &std::ffi::OsStr| k7_supervisor::process::find_tool_in("tool", Some(p), &extras);
+    assert_eq!(find(&path), Some(extra.join(file)));
+    std::fs::write(on_path.join(file), b"").unwrap();
+    assert_eq!(find(&path), Some(on_path.join(file)));
+    assert_eq!(
+        k7_supervisor::process::find_tool_in("absent", Some(&path), &extras),
+        None
+    );
+    let _ = std::fs::remove_dir_all(&root);
+}

@@ -130,3 +130,12 @@ fn directml_refuses_a_machine_with_only_integrated_gpus() {
     assert_eq!(choose(&[]), Choice::Unknown);
     assert_eq!(choose(&[gpu(0, "Basic", true, 0)]), Choice::Unknown);
 }
+
+#[test]
+fn a_crash_dump_is_named_for_the_pid_in_the_state_folder() {
+    let dir = std::path::Path::new("state");
+    assert_eq!(
+        k7_supervisor::win::crash::dump_path(dir, 4242),
+        dir.join("crash-supervisor-4242.dmp")
+    );
+}

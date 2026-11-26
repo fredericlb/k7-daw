@@ -75,10 +75,7 @@ pub fn candidates(first: u16, fixed: bool) -> Vec<u16> {
 /// The pid listening on `port`, asked of `lsof`; None when none, or when there is no lsof to ask.
 #[cfg(unix)]
 pub fn listener_pid(port: u16) -> Option<u32> {
-    // macOS keeps it in /usr/sbin, which an app's PATH does not list.
-    let lsof = ["/usr/sbin/lsof", "/usr/bin/lsof", "lsof"]
-        .into_iter()
-        .find(|p| !p.starts_with('/') || std::path::Path::new(p).is_file())?;
+    let lsof = crate::process::find_tool("lsof")?;
     let out = std::process::Command::new(lsof)
         .args(["-t", "-nP", &format!("-iTCP:{port}"), "-sTCP:LISTEN"])
         .output()

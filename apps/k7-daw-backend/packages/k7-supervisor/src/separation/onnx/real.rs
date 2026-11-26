@@ -9,6 +9,7 @@ use ort::environment::Environment;
 use ort::session::{RunOptions, Session};
 use ort::value::TensorRef;
 
+#[cfg(feature = "dynamic-ort")]
 use super::locate;
 use crate::separation::audio::{CHANNELS, SEGMENT};
 use crate::separation::budget::thread_count;
@@ -51,6 +52,7 @@ fn init() -> Result<Environment, String> {
 fn init() -> Result<Environment, String> {
     ort::init()
         .with_name("k7-supervisor")
+        .with_telemetry(false)
         .build()
         .map_err(|e| e.to_string())
 }

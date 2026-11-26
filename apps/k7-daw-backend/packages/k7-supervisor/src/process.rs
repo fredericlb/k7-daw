@@ -80,3 +80,37 @@ pub fn app_pid() -> u32 {
         std::process::id()
     }
 }
+
+/// Where a package manager or the OS puts a tool that an app's PATH may not list (macOS keeps `lsof` in /usr/sbin).
+#[cfg(unix)]
+const TOOL_DIRS: &[&str] = &[
+    "/opt/homebrew/bin",
+    "/usr/local/bin",
+    "/usr/bin",
+    "/usr/sbin",
+];
+#[cfg(not(unix))]
+const TOOL_DIRS: &[&str] = &[];
+
+/// `name` in the directories of `path` (a PATH value), then in `extra`; absolute directories only, so the working directory never picks.
+pub fn find_tool_in(name: &str, path: Option<&std::ffi::OsStr>, extra: &[&str]) -> Option<PathBuf> {
+    let file = if cfg!(windows) {
+        format!("{name}.exe")
+    } else {
+        name.to_string()
+    };
+    let listed = path
+        .map(|p| std::env::split_paths(p).collect::<Vec<_>>())
+        .unwrap_or_default();
+    listed
+        .into_iter()
+        .chain(extra.iter().map(PathBuf::from))
+        .filter(|d| d.is_absolute())
+        .map(|d| d.join(&file))
+        .find(|f| f.is_file())
+}
+
+/// `name` on this process's PATH or where a package manager puts it; None rather than a bare name.
+pub fn find_tool(name: &str) -> Option<PathBuf> {
+    find_tool_in(name, std::env::var_os("PATH").as_deref(), TOOL_DIRS)
+}

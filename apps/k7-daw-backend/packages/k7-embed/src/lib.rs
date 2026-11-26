@@ -1,11 +1,14 @@
 //! k7-embed — the front as a C library for the phones: `k7_front_start(config JSON)`, `k7_front_stop()` and
 //! `k7_roam_install(list, put)` over `k7_front::embedded`, plus the JNI names Android looks up (`apps/k7-daw-backend/docs/embed.md`).
+//! On iOS it also carries the supervisor's three C calls (`supervisor.rs`).
 //! A Rust host (the tray) links `k7-front` itself and never builds this crate's C outputs.
 
 #[cfg(target_os = "android")]
 mod jni;
 #[cfg(target_os = "android")]
 mod logcat;
+#[cfg(target_os = "ios")]
+mod supervisor;
 
 use std::ffi::{CStr, c_char};
 

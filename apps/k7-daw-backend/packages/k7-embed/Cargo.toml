@@ -1,6 +1,6 @@
 [package]
 name = "k7-embed"
-description = "The front as a C library for the phones: Android (cdylib, with its JNI names) and iOS (staticlib)."
+description = "The front as a C library for the phones: Android (cdylib, with its JNI names) and iOS (staticlib, with the supervisor's C calls)."
 version.workspace = true
 edition.workspace = true
 publish.workspace = true
@@ -13,3 +13,9 @@ k7-front.workspace = true
 k7-roam.workspace = true
 k7-lan.workspace = true
 serde_json.workspace = true
+
+# On iOS the supervisor is a library of this one: two Rust static libraries in one app would carry two `std`.
+# ONNX Runtime is linked there, from the xcframework `ORT_IOS_XCFWK_PATH` names (apps/k7-daw-ios/scripts/stage.mjs).
+[target.'cfg(target_os = "ios")'.dependencies]
+k7-supervisor = { path = "../k7-supervisor", default-features = false }
+libc = "0.2"
