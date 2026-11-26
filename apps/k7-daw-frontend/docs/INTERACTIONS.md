@@ -516,7 +516,7 @@ The `/settings` page (General, Devices, Services, Downloads, About), the engine 
 | 11.16 | Discard the take | click the trash button | — | tap | T M D |
 | 11.17 | Finish editing | click Done (files the take as reviewed) | — | tap | T M D |
 | 11.18 | Close the editor | click Close editor in the dock header | Esc at the end of the ladder | tap | T M D |
-| 11.29† | Centre the timeline on the clip being edited | click Fit, the first button of the title bar (one zoom level, so ⇧Z backs out) | `ui fit` in the command bar | tap Fit | T M D |
+| 11.29† | Centre the timeline on the clip being edited | click Fit, the first button of the title bar: the clip centred, its lane on screen, the clip outlined 1.5 s; Fit again goes back to the view before (so does ⇧Z) | `ui fit` in the command bar | tap Fit | T M D |
 
 ### Clip editor / Waveform · Waveform
 
@@ -586,7 +586,7 @@ The roll: mode strip (select, create, remove, takes), key gutter, note lanes wit
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
-| 12.26† | Centre the timeline on the clip being edited | click Fit, the first button of the title bar (one zoom level, so ⇧Z backs out) | `ui fit` in the command bar | tap Fit | T M D |
+| 12.26† | Centre the timeline on the clip being edited | click Fit, the first button of the title bar: the clip centred, its lane on screen, the clip outlined 1.5 s; Fit again goes back to the view before (so does ⇧Z) | `ui fit` in the command bar | tap Fit | T M D |
 
 ## 13 Node chain editor
 
