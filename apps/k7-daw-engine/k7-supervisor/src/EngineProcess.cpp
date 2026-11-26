@@ -83,7 +83,7 @@ std::optional<fs::path> repoRoot()
     if (exe.empty()) return std::nullopt;
     for (fs::path dir = exe.parent_path(); !dir.empty(); dir = dir.parent_path()) {
         std::error_code ec;
-        if (fs::is_directory(dir / "engine" / "k7-runtime", ec)) return dir;
+        if (fs::is_directory(dir / "apps" / "k7-daw-engine" / "k7-runtime", ec)) return dir;
         if (dir == dir.parent_path()) break;
     }
     return std::nullopt;
@@ -102,7 +102,7 @@ std::optional<fs::path> findBinary()
 
     const auto root = repoRoot();
     if (!root) return std::nullopt;
-    const fs::path build = *root / "engine" / "k7-runtime" / "build";
+    const fs::path build = *root / "apps" / "k7-daw-engine" / "k7-runtime" / "build";
     if (!fs::is_directory(build, ec)) return std::nullopt;
     struct Found {
         fs::path path;
