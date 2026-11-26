@@ -3,10 +3,12 @@
 //! What a reader gets wrong: a client is named by a counter that is never reused, not by a pointer, so a late
 //! frame can never reach the next connection that took the old one's place.
 
+use super::held_notes::HeldNotes;
 use super::msg::Msg;
 use super::outbox::Outbox;
 use super::pending::PendingQueries;
 use super::plugin_state::PluginState;
+use super::supersede::Supersede;
 use crate::engine::Engine;
 use crate::pairing::gate::{Gate, Out};
 use crate::wire::json;
@@ -83,6 +85,10 @@ pub struct Ctx {
     pub pending: PendingQueries,
     /// The plugin verbs' shared state: the one scan, the probe slots, the live parameter tickets.
     pub plugins: PluginState,
+    /// Which queued project, tracks and parameter jobs a newer message made pointless.
+    pub supersede: Supersede,
+    /// The notes each socket's `midi-live` holds down, released when it closes.
+    pub held_notes: HeldNotes,
     clients: Mutex<HashMap<u64, Arc<Client>>>,
     bindings: Mutex<Bindings>,
     next_id: AtomicU64,
@@ -98,6 +104,8 @@ impl Ctx {
             gate,
             pending: PendingQueries::default(),
             plugins: PluginState::default(),
+            supersede: Supersede::default(),
+            held_notes: HeldNotes::default(),
             clients: Mutex::default(),
             bindings: Mutex::default(),
             next_id: AtomicU64::new(1),

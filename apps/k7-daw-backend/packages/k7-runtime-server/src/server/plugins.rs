@@ -7,7 +7,7 @@ use super::ctx::{Ctx, Request};
 use super::handlers::HandlerTable;
 use super::msg::Malformed;
 use super::plugin_scan::{When, detached, plugins_json, scan_in_background, status_json};
-use super::plugin_state::superseded;
+use super::supersede::superseded;
 use crate::engine::Mt;
 use crate::engine::state::ParamInfo;
 use serde_json::{Map, Value, json};
@@ -249,14 +249,12 @@ fn snapshot_base(r: &Request) -> Result<(), Malformed> {
 fn set_param(r: &Request) -> Result<(), Malformed> {
     let (id, name) = (r.msg.str("id")?, r.msg.str("name")?);
     let value = r.msg.f64_or("value", 0.0)?;
-    let ctx = r.ctx.clone();
     let session = r.session.clone();
     let (plugin, param) = (id.clone(), name.clone());
     r.ctx
-        .plugins
+        .supersede
         .post_param(&r.session, &plugin, &param, |ticket| {
             r.ctx.engine.post(move |mt: Mt<'_>| {
-                ctx.plugins.param_started(&session, &id, &name, &ticket);
                 if !superseded(&ticket) {
                     mt.set_plugin_param(&session, &id, &name, value);
                 }

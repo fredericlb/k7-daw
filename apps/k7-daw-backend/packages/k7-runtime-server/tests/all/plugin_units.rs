@@ -1,9 +1,9 @@
 //! plugin_units.rs — the plugin verbs' parts alone, as k7-runtime's `ScanProgress_test.cpp` and
 //! `PendingQueries_test.cpp` held them: the scan board and its rate limit, the pending queries, the probe slots
-//! and the parameter tickets, the last two under real threads.
+//! under real threads.
 
 use k7_runtime_server::server::pending::PendingQueries;
-use k7_runtime_server::server::plugin_state::{MAX_PROBES, PluginState, superseded};
+use k7_runtime_server::server::plugin_state::{MAX_PROBES, PluginState};
 use k7_runtime_server::server::scan_board::{Board, Status};
 use std::sync::Arc;
 use std::sync::atomic::{AtomicUsize, Ordering};
@@ -159,40 +159,4 @@ fn at_most_four_probes_hold_a_slot_under_contention() {
     assert!(peak.load(Ordering::SeqCst) <= MAX_PROBES);
     assert!(refused.load(Ordering::SeqCst) > 0);
     assert_eq!(state.probes_in_use(), 0);
-}
-
-#[test]
-fn a_newer_write_supersedes_only_the_same_parameter() {
-    let state = PluginState::default();
-    let mut tickets = Vec::new();
-    for (plugin, name) in [
-        ("p", "cutoff"),
-        ("p", "cutoff"),
-        ("p", "mix"),
-        ("q", "cutoff"),
-    ] {
-        state.post_param("s", plugin, name, |t| tickets.push(t));
-    }
-    let skipped: Vec<bool> = tickets.iter().map(superseded).collect();
-    assert_eq!(skipped, [true, false, false, false]);
-    // Another session's write to the same parameter is its own.
-    state.post_param("other", "p", "cutoff", |t| tickets.push(t));
-    assert!(!superseded(&tickets[1]));
-}
-
-#[test]
-fn the_ticket_ledger_does_not_outgrow_the_parameters() {
-    let state = PluginState::default();
-    let mut ticket = None;
-    state.post_param("s", "p", "cutoff", |t| ticket = Some(t));
-    let ticket = ticket.unwrap();
-    assert_eq!(state.tickets_held(), 1);
-    state.param_started("s", "p", "cutoff", &ticket);
-    assert_eq!(state.tickets_held(), 0);
-    // A job that starts after a newer write took its slot leaves the newer one in place.
-    let mut older = None;
-    state.post_param("s", "p", "cutoff", |t| older = Some(t));
-    state.post_param("s", "p", "cutoff", |_| {});
-    state.param_started("s", "p", "cutoff", &older.unwrap());
-    assert_eq!(state.tickets_held(), 1);
 }

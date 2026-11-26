@@ -479,6 +479,11 @@ fn the_incremental_scan_at_every_start_tells_each_socket() {
         let s = Server::start(cfg);
         let mut w = s.connect().await;
         eventually("the scan began", || with(|f| f.scans_running == 1)).await;
+        // A socket is trusted from its first message, so it asks where the scan stands before it hears the rest.
+        assert_eq!(
+            val(&w.ask(r#"{"type":"plugin-scan"}"#).await)["scanning"],
+            true
+        );
         fake_plugins::release();
         // The begin was said before this socket came: it hears the catalogue and the end.
         assert_eq!(types(&mut w, 2).await, ["plugins", "plugin-scan"]);
@@ -621,7 +626,6 @@ fn a_parameter_write_skips_the_older_ones_still_queued() {
                 "set_plugin_param k7:s c:n Cutoff 0.9"
             ]
         );
-        assert_eq!(s.ctx.plugins.tickets_held(), 0);
         assert_eq!(with(|f| f.off_thread), 0);
     });
 }

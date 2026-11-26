@@ -52,6 +52,19 @@ fn the_core_table_is_k7_engine_core_h() {
 }
 
 #[test]
+fn the_project_and_transport_tables_are_their_headers() {
+    use k7_runtime_server::engine::project::K7ProjectApi;
+    use k7_runtime_server::engine::transport::K7TransportApi;
+    let header = crate::repo_file(&format!("{CAPI}/k7_engine_project.h"));
+    assert_eq!(header_fields(&header, "K7ProjectApi"), K7ProjectApi::FIELDS);
+    let header = crate::repo_file(&format!("{CAPI}/k7_engine_transport.h"));
+    assert_eq!(
+        header_fields(&header, "K7TransportApi"),
+        K7TransportApi::FIELDS
+    );
+}
+
+#[test]
 fn every_area_slot_is_declared_by_the_header() {
     let header = crate::repo_file(&format!("{CAPI}/k7_engine.h"));
     for field in &K7EngineApi::FIELDS[2..] {
