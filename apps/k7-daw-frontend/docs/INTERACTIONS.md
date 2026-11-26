@@ -153,7 +153,7 @@ The git bar (workspace tree, Home row; in a project, Save and Update first on th
 
 ### Project header and transport
 
-The header (spinner, the command-bar button, the Mixer icon, then the chevron that unfolds the right-edge toolbar, carrying the problem count and the unsaved count while folded; a phone keeps Back, the name, its git menu, its status line under the header and the warning chip, and the rest folds into the Views and panels dialog), the vertical toolbar on the right edge (folded by default; git's Save and Update with their counts, the pane switcher, the right panels' buttons with the problem count on Logs, Settings, then Close), the floating bar (tool, transport with Record's chevron, position, overview, tempo, metronome, master volume, the view's capsule; a phone's command-bar button) and the editor dock.
+The header (spinner, the tool and transport bar — tool, transport with Record's chevron, position, overview, tempo, metronome, master volume, the view's capsule — then the command-bar button, the Mixer icon and the chevron that unfolds the right-edge toolbar, carrying the problem count and the unsaved count while folded; a phone keeps Back, the name, its git menu, its status line under the header and the warning chip, the rest folds into the Views and panels dialog, and its bar floats at the foot with the command-bar button), the vertical toolbar on the right edge (folded by default; git's Save and Update with their counts, the pane switcher, the right panels' buttons with the problem count on Logs, Settings, then Close) and the editor dock.
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
@@ -165,12 +165,12 @@ The header (spinner, the command-bar button, the Mixer icon, then the chevron th
 | 03.15 | Toggle record enable | click Record (arms a track first if none); where the project records its output, Record's chevron or a right-click opens Record the output… | ⇧R; ↓ on Record opens the output menu | tap; a long-press or the chevron opens Record the output… | T M D |
 | 03.16 | Record the output (no arrangement) | click the output record button (a set); with an arrangement, Record's chevron → Record the output | — | tap | T M D |
 | 03.17† | Move the playhead or scrub from the minimap | click the strip; press and drag to scrub | — | tap to seek; drag to scrub | T M D |
-| 03.18† | Peek the full map | hover the minimap: it unfolds to every lane | — | — (stays folded) | D |
+| 03.18† | Peek the full map | hover the minimap: it unfolds to every lane (downward, from the header) | — | — (stays folded) | D |
 | 03.19 | Edit the tempo | click "N bpm" → question with a Tap button | Space taps, Enter confirms, Esc cancels | tap the bpm, tap Tap repeatedly | T M D |
 | 03.20 | Edit the meter | click "N/M" → question | Enter / Esc | tap | T M D |
 | 03.21 | Toggle the metronome | click the metronome button | Enter/Space on it (repeat ignored) | tap; on a phone, Metronome in Views and panels | T M D |
 | 03.22 | Set the metronome volume | right-click the metronome button, drag the slider | ArrowDown opens it; arrows move it (written on key up) | long-press, drag the slider; on a phone, the slider under Metronome in Views and panels | T M D |
-| 03.23 | Set the song's output level | drag the master volume in the floating bar (written on release) | arrows on the focused fader (0.5 dB) | drag the master volume; on a phone, the one in the info strip above the bar | T M D |
+| 03.23 | Set the song's output level | drag the master volume in the header's bar (written on release) | arrows on the focused fader (0.5 dB) | drag the master volume; on a phone, the one in the info strip above the bar | T M D |
 | 03.24 | Fix a clipped mix | click "fix" next to the clip light | — | — | D |
 | 03.25† | Show / hide the graph notes | click the notes button | — | tap | T M D |
 | 03.26 | Open the Mixer or the Events dock | click the Mixer icon in the header; opening a clip, a take or a roll opens Events | the key bound to `ui mixer` | tap Mixer in Views and panels | T M D |
@@ -210,7 +210,7 @@ The timeline pane: tool strip, ruler with markers and task flags, timeline tabs,
 | 03.47 | Read a marker's name | hover its flag | — | — | D |
 | 03.48 | Delete a marker | right-click the flag → "Delete a marker" | — | long-press the flag | T M D |
 | 03.49 | Read a task's text | hover or focus the task flag (a click seeks) | Tab to the flag | tap (seeks) | T M D |
-| 03.50 | Switch the ruler between bars and seconds | click the position in the floating bar; the rulers follow | — | tap | T M D |
+| 03.50 | Switch the ruler between bars and seconds | click the position in the header's bar (a phone's floating bar); the rulers follow | — | tap | T M D |
 
 ### Arrange · Tracks
 
@@ -244,7 +244,7 @@ The timeline pane: tool strip, ruler with markers and task flags, timeline tabs,
 | 03.71 | Resize a clip by an edge | drag the strip at its start or end (wider on the selected clip, which shows a grip) | — | hold the edge, then drag | T M D |
 | 03.72 | Fade a clip in / out | drag the corner square (whole beats; ⌘/Ctrl or ⇧ frees) | — | hold the corner square, then drag | T M D |
 | 03.73 | Cancel a move, resize or fade | release where it started | Esc during a keyboard move | — | T D |
-| 03.74 | Pick the tool (arrow, blade, eraser, mute, crossfade) | click the tool button in the floating bar → its menu | `a`, `b`, `d`, `x` (mute has none); Esc back to arrow | tap the tool button | T M D |
+| 03.74 | Pick the tool (arrow, blade, eraser, mute, crossfade) | click the tool button in the header's bar → its menu | `a`, `b`, `d`, `x` (mute has none); Esc back to arrow | tap the tool button | T M D |
 | 03.75 | Cut a clip | click it with the blade (refused at head or tail) | ⌘/Ctrl+B at the playhead on the caret's lane | tap with the blade | T M D |
 | 03.76 | Erase a clip | click it with the eraser | Backspace / Delete on the caret's clip or the rectangle | tap with the eraser | T M D |
 | 03.77 | Mute / unmute a clip | click it with the mute tool | — | tap with the mute tool | T M D |

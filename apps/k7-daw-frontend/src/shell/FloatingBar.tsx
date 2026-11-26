@@ -1,6 +1,6 @@
-// FloatingBar.tsx — the bar floating over the panes: the tool, the transport capsule, a phone's command bar button
+// FloatingBar.tsx — the bar of the tool, the transport capsule, a phone's command bar button
 // (buttons, clock, song overview, tempo, metronome, master volume) and, at its right end, the current pane's views. On a phone the clock,
-// overview, tempo and volume move to a strip above the capsule, and the tool and metronome to the overflow menu. It holds no state of its own: App hands it all.
+// overview, tempo and volume move to a strip above the capsule; a desk or a pad docks it in the header's row, and the tool and metronome to the overflow menu. It holds no state of its own: App hands it all.
 import { CapsuleButton, CapsuleDivider } from "@studio/ui/capsule";
 import {
   DropdownMenu,
@@ -102,7 +102,10 @@ export function FloatingBar({
   surfaceOnly = false,
   runCommand,
   rootRef,
+  docked = false,
 }: {
+  /** Drawn in the header's row instead of floating over the panes' foot (a desk or a pad). */
+  docked?: boolean;
   /** The bar's root, so the editor popin can measure how tall it is. */
   rootRef?: Ref<HTMLDivElement>;
   layout: ShellLayout;
@@ -185,7 +188,11 @@ export function FloatingBar({
             {!phone && <ChevronUp />}
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent side="top" align="start" className="w-[260px]">
+        <DropdownMenuContent
+          side={docked ? "bottom" : "top"}
+          align="start"
+          className="w-[260px]"
+        >
           {TOOLS.map((t) => (
             <DropdownMenuItem key={t} onSelect={() => onTool(t)}>
               <span className="grid size-5 place-items-center text-primary-text">
@@ -213,7 +220,7 @@ export function FloatingBar({
       aria-label={m["shell.overview"]()}
       className={phone ? "min-w-0 flex-1" : "flex w-[260px] shrink-0"}
     >
-      <Minimap {...map} />
+      <Minimap {...map} unfoldDown={docked} />
     </div>
   ) : null;
   const tempo = <TempoMeter recInfo={recInfo} runCommand={runCommand} />;
@@ -340,7 +347,11 @@ export function FloatingBar({
   return (
     <div
       ref={rootRef}
-      className={`pointer-events-none absolute inset-x-4 z-(--k7-z-bar) flex items-end gap-3 ${phone ? "bottom-7" : "bottom-4"}`}
+      className={
+        docked
+          ? "pointer-events-none flex min-w-0 flex-1 items-center gap-3"
+          : `pointer-events-none absolute inset-x-4 z-(--k7-z-bar) flex items-end gap-3 ${phone ? "bottom-7" : "bottom-4"}`
+      }
     >
       {toolButton}
       <div

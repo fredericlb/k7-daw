@@ -265,7 +265,7 @@ bottom margin for the bar instead.
 |---|---|---|
 | header | `shell/ProjectHeader.tsx` | the spinner, the command-bar button, the dock's Mixer (an icon) and, last, the chevron that unfolds the rail; git's Save and Update, the pane switcher, the right panels' buttons and Close are the rail's (`shell/PanelRail.tsx`), and the folded chevron carries the unsaved and problem counts; a phone, with no rail, keeps Back, the name and the warning chip; laid out in flow: a `flex-1` left cluster and a right cluster of the same basis, so nothing overlaps at any width |
 | git capsule | `shell/HeaderGit.tsx` | Save with its count, a menu (Pull, Saves); while a merge waits, one "Resolve N conflicts" button and a banner |
-| bar | `shell/FloatingBar.tsx`, `shell/ShellTransport.tsx` | the tool (a phone's command bar button too), the transport capsule, the pane's capsule (Lane views or Graph views) |
+| bar | `shell/FloatingBar.tsx`, `shell/ShellTransport.tsx` | docked in the header's row on a desk or a pad (the header is 72 px to hold its 56 px controls; the panels and the dock then reach 16 px from the foot), floating at the foot on a phone: the tool (a phone's command bar button too), the transport capsule, the pane's capsule (Lane views or Graph views) |
 | panels | `shell/panels.tsx` | the registry: an id, a glyph and a title each, in the kit's `SidePanel` (Pad, Desk) or `Sheet` (Phone) |
 | dock | `shell/panels.tsx` (`DockFrame`), `hooks/useEditorDock.ts` | the bottom dock, in the kit's `EditorDock` (Pad, Desk) or `EditorSheet` (Phone); it holds the editors, the Mixer or a track's chain |
 | phone menu | `shell/OverflowMenu.tsx` | pane, lane views and the panel tiles in one menu |

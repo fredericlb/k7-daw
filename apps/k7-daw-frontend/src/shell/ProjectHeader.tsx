@@ -61,6 +61,7 @@ export function ProjectHeader({
   panels,
   rail,
   onCommandBar,
+  bar,
   overflow,
   lockBanner,
 }: {
@@ -81,6 +82,8 @@ export function ProjectHeader({
   rail?: { open: boolean; onToggle: () => void; unsaved: number };
   /** Opens the command bar; a phone's is in its floating bar. */
   onCommandBar?: () => void;
+  /** The tool and transport bar (FloatingBar.tsx), docked in this row on a desk or a pad. */
+  bar?: ReactNode;
   /** The phone's menu, standing in for the capsules on the right. */
   overflow: ReactNode;
   /** The sentence under the header while a merge locks editing. */
@@ -101,7 +104,13 @@ export function ProjectHeader({
             : "relative z-(--k7-z-header) flex h-(--k7-header-h) shrink-0 items-center gap-2 px-4 py-2"
         }
       >
-        <div className="flex min-w-0 flex-1 basis-0 items-center gap-2">
+        <div
+          className={
+            bar
+              ? "flex shrink-0 items-center gap-2"
+              : "flex min-w-0 flex-1 basis-0 items-center gap-2"
+          }
+        >
           {phone && (
             <Button asChild variant="glass" size="round" className="shrink-0">
               <a
@@ -166,7 +175,14 @@ export function ProjectHeader({
           overflow
         ) : (
           <>
-            <div className="flex min-w-max flex-1 basis-0 items-center justify-end gap-2">
+            {bar}
+            <div
+              className={
+                bar
+                  ? "flex shrink-0 items-center justify-end gap-2"
+                  : "flex min-w-max flex-1 basis-0 items-center justify-end gap-2"
+              }
+            >
               {onCommandBar && (
                 <Capsule>
                   <CapsuleButton
