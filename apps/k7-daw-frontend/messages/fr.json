@@ -1890,6 +1890,8 @@
   "shell.pane": "Volet",
   "shell.dock": "Dock de l'éditeur",
   "shell.panels": "Panneaux",
+  "shell.panelsShow": "Afficher les panneaux",
+  "shell.panelsHide": "Masquer les panneaux",
   "shell.app": "Application",
   "shell.overflow": "Vues et panneaux",
   "shell.overflow.close": "Fermer le menu",

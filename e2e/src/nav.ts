@@ -69,9 +69,19 @@ export async function pane(page: Page, name: string): Promise<Locator> {
     .first();
 }
 
+/** Unfolds the right-edge rail, folded by default under its chevron; a phone has none. */
+async function unfoldRail(page: Page): Promise<void> {
+  const show = page.getByRole("button", {
+    name: "Show the panels",
+    exact: true,
+  });
+  if (await show.isVisible()) await show.click();
+}
+
 /** A panel's button: the right-edge rail (`group "Panels"`), the header's dock group (the Mixer), or the phone's dialog. */
 export async function panel(page: Page, name: string): Promise<Locator> {
   await openNav(page);
+  await unfoldRail(page);
   const exact = { name, exact: true };
   return page
     .getByRole("group", { name: "Panels", exact: true })

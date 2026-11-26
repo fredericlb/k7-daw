@@ -153,7 +153,7 @@ The git bar (workspace tree, Home row, project header), Save in one press with i
 
 ### Project header and transport
 
-The header (Back, the name over its status line, spinner, warning chip, git capsule, the pane switcher, the Mixer; on a phone the status line sits under it and the rest folds into the Views and panels dialog), the vertical toolbar on the right edge (the right panels' buttons, Settings last), the floating bar (command bar, tool, transport with Record's chevron, position, overview, tempo, metronome, master volume, the view's capsule) and the editor dock.
+The header (Back, the name over its status line, spinner, warning chip, git capsule, the pane switcher, the Mixer; on a phone the status line sits under it and the rest folds into the Views and panels dialog), the vertical toolbar on the right edge (folded by default under its chevron; the right panels' buttons, Settings last), the floating bar (command bar, tool, transport with Record's chevron, position, overview, tempo, metronome, master volume, the view's capsule) and the editor dock.
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
@@ -176,7 +176,7 @@ The header (Back, the name over its status line, spinner, warning chip, git caps
 | 03.26 | Open the Mixer or the Events dock | click Mixer in the header's panel toolbar; opening a clip, a take or a roll opens Events | the key bound to `ui mixer` | tap Mixer in Views and panels | T M D |
 | 03.27 | Close the editor dock | click Close editor in the dock header | Esc | tap Close editor | T M D |
 | 03.28 | Resize the editor dock | drag the separator over its top edge (44 px tall, 120 px min); hold it 400 ms, then move up to expand the editor to full height or down to fold it back | ↑ / ↓ on the focused separator; Enter expands or folds | drag the separator; on a phone, hold the sheet's grabber, then move up to expand or down to fold | T M D |
-| 03.29 | Open / close a panel (resources, playlists, logs, tasks and history, export, settings) | click its button on the vertical toolbar at the screen's right edge; the same button or the panel's Close closes it | the key bound to `ui <panel>` | tap its tile in Views and panels (phone); tap Close | T M D |
+| 03.29 | Open / close a panel (resources, playlists, logs, tasks and history, export, settings) | click the chevron at the top right to unfold the vertical toolbar (folded by default), then its button; the same button or the panel's Close closes it | the key bound to `ui <panel>` | tap its tile in Views and panels (phone); tap Close | T M D |
 | 03.30 | Switch pane (Arrangement / Graph / Source / Turntables) | click the pane switcher (its tooltip names the key); a pane another device shows is dimmed and says why | `1` `2` `3` `4`; `F6` / `⇧F6` | tap the pane in Views and panels (phone) | T M D |
 | 03.31 | Show / hide the viewport window | click Picture: the viewport in Lane views (a project with a picture) | — | tap Picture in Views and panels (phone) | T M D |
 | 03.32 | Open Views and panels (phone) | — | Esc closes; Tab stays inside it | tap the ⋯ button; tap outside or Close menu | T M D |

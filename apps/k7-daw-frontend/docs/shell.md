@@ -643,7 +643,8 @@ is the whole point of that tab not being a dialog over the thing it meters.
 ## The right panels: one at a time
 
 The buttons that open a right panel — Resources, Playlists, Logs, Tasks & history, Export, then Settings
-— are one vertical toolbar on the screen's right edge, under the header (`shell/PanelRail.tsx`); the header
+— are one vertical toolbar on the screen's right edge, under the header (`shell/PanelRail.tsx`), folded by
+default under a chevron at its top: the panes keep the whole width until a person asks for the panels. The header
 keeps only the dock's Mixer (no Events button: the dock opens on the event a person opens, so a button
 would only repeat that). The right panel, the editor dock and the toasts keep clear of the rail
 (`--k7-rail-clear`). Each button toggles a panel floating over the right of the panes (a full-screen sheet
