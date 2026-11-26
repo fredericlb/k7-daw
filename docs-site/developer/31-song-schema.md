@@ -22,7 +22,6 @@ rest of the codebase shares (timecodes, module vocabulary, playlists, stems, tak
 | `apps/k7-daw-frontend/packages/song-schema/src/yaml/validate.ts` | The router: path → parser, used by the editor and the loader alike. |
 | `apps/k7-daw-frontend/packages/song-schema/src/yaml/fields.ts` | The editor's completion vocabulary, derived from the schemas. |
 | `apps/k7-daw-frontend/packages/song-schema/src/yaml/sugar.ts`, `k7xIssues.ts` | k7x short forms and k7x-located findings. |
-| `apps/k7-daw-frontend/packages/song-schema/src/timecode.ts` | Timecode ↔ beats. |
 | `apps/k7-daw-frontend/packages/song-schema/src/moduleTypes.ts` | The module vocabulary: type folders and their default ports, built-in ends, namespaces, refs. |
 | `apps/k7-daw-frontend/packages/song-schema/src/keyframes.ts` | Shot animation keys and their evaluation. |
 | other `src/*.ts` | `playlist`, `reference`, `songRef`, `presets`, `tasks`, `projectTags`, `libraryVersions`, `alternatives`, `engines`, `stems`, `takes`, `warpPoints`, `trackKind`, `trackColor`, `placementId`, `seqWindow`, `curveVocab`, `builtinParams` (generated). |
@@ -81,7 +80,7 @@ a schema makes the editor offer it; there is no second list to keep in step. The
 
 ## Timecodes
 
-`apps/k7-daw-frontend/packages/song-schema/src/timecode.ts`: `parsePosition` (1-based) and `parseDuration` (0-based) turn
+`@studio/k7-wasm/timecode`, over the Rust `apps/k7-daw-wasm/song-schema/src/timecode.rs`: `parsePosition` (1-based) and `parseDuration` (0-based) turn
 `bar:beat:half:quarter.ticks` into quarter-note beats for a given metre; `beatsToPosition` and
 `beatsToDuration` go back, rounding once in ticks (`TICKS_PER_QUARTER = 960`) and dropping trailing
 fields at their origin. Chains longer than four fields fall back to the deep rule (each level a
@@ -91,4 +90,4 @@ quarter of the previous).
 
 `npm test` in the package runs vitest over the `*.test.ts` beside each module. The k7x writers are
 tested on literal texts (an edit must keep comments and every other byte); `validate` behaviour is covered
-in `apps/k7-daw-frontend/packages/song/src/yaml/validate.test.ts` alongside the loader.
+in `apps/k7-daw-wasm/song/tests/all/` beside the loader.

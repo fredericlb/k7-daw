@@ -1,6 +1,6 @@
 // renderTypes.ts — the Renderer's shape: types only, so a browser bundle imports it for free.
 
-import type { ProjectDoc } from "@studio/song/project";
+import type { ProjectDoc } from "@studio/engine-protocol/project";
 
 /** The engine's render manifest: the mixdown plus, with `stems`, one wav per audible track, relative to the folder. */
 export interface RenderManifest {

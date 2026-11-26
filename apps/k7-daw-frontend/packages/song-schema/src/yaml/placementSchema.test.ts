@@ -42,3 +42,12 @@ describe("an event", () => {
     expect(ok({ ref: "a", source_from: 1 })).toBe(false);
   });
 });
+
+describe("an event start", () => {
+  it("is a timecode or a non-negative number", () => {
+    expect(ok({ ref: "a", start: 4.5 })).toBe(true);
+    expect(ok({ ref: "a", start: "3:1" })).toBe(true);
+    expect(ok({ ref: "a", start: -1 })).toBe(false);
+    expect(ok({ ref: "a", start: "4.5s" })).toBe(false);
+  });
+});

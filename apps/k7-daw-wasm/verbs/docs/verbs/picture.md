@@ -127,7 +127,7 @@ verb does the counting.
 Every other verb here rewrites one lane. This one writes the lane file — `nodes/<id>.k7x`, or
 `tracks/<id>.k7x` in a chain project, extending `@meta/picture-track` — **and** states
 `trackOrder` with the new lane above the picture lanes there are, so it draws in front, where you
-can see what you just made (`createPictureLaneFile`, `apps/k7-daw-frontend/packages/song/src/projectFiles.ts`). The
+can see what you just made (`createPictureLaneFile`, `apps/k7-daw-wasm/song-edit/src/lane_files.rs`). The
 other rows keep the order they drew in. A song with no `project.k7x` gets the lane alone: the file
 is what makes a lane exist, the order only places it. Named nothing, it picks `layer-N` off the
 lane folder.

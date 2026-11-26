@@ -85,8 +85,8 @@ worth what it protects — a 295 ms read — so the remedy is not to remove it b
 ### It cannot make fewer syscalls, so it makes them in parallel
 
 Measured on the reference song: **329 `readdir` = 11.7 ms, 419 `stat` = 11.9 ms**, half and half,
-when they are issued one at a time. `apps/k7-daw-frontend/packages/song/src/stampWalk.ts` issues them all at once on a
-worker thread the caller blocks on: **44 ms → 12 ms** over `k7-core/` on Windows. Why a worker and
+when they are issued one at a time. Issued all at once on a
+worker thread the caller blocks on, they take **44 ms → 12 ms** over `k7-core/` on Windows. Why a worker and
 not `async`, and what it costs an idle account: `apps/k7-daw-frontend/packages/song/docs/moduleCache.md`. None of the
 bullets below changes with it — they are why the COUNT of syscalls stays where it is.
 

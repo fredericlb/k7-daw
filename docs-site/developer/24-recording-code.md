@@ -75,7 +75,7 @@ from the `midiTake` prop, since nothing on disk names it yet.
 the learn's callback, which puts "MIDI learn cancelled" on the status line. `Esc` is the first rung
 of its ladder while a learn waits (`midi_learning` → `ui midi learn cancel`), so it cancels the
 learn and closes nothing behind it. The map is written to `controller.k7x` in the **module's**
-folder (`apps/k7-daw-frontend/packages/song/src/controllerBind.ts`), so every node of that module in every project plays by
+folder (`apps/k7-daw-wasm/song-edit/src/module_io.rs`), so every node of that module in every project plays by
 it. `apps/k7-daw-frontend/src/hooks/useMidiControl.ts` applies incoming CCs scaled into the widget's range and sends the value
 back to an output port of the same name when there is one.
 
@@ -93,8 +93,8 @@ when drawing the growing block (`apps/k7-daw-frontend/src/takeCounter.ts`, `reco
 
 An event's takes and comp are placement fields (`takes`, `comp`, `crossfades` in
 `apps/k7-daw-frontend/packages/song-schema/src/yaml/placementSchema.ts`); `comp` spans are **song positions**, unlike the
-window's seconds. The YAML half is `apps/k7-daw-frontend/packages/song-schema/src/yaml/takeFile.ts`, the disk half
-`apps/k7-daw-frontend/packages/song-edit/src/takeEdit.ts`, the verbs `apps/k7-daw-wasm/verbs/src/verbs/event_takes.rs`:
+window's seconds. The YAML half is `apps/k7-daw-wasm/song-edit/src/take_file.rs`, the disk half
+`apps/k7-daw-wasm/song-edit/src/take_edit.rs`, the verbs `apps/k7-daw-wasm/verbs/src/verbs/event_takes.rs`:
 
 | Verb | Writes |
 |---|---|

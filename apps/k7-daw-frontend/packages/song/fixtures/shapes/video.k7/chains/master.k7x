@@ -1,2 +1,0 @@
-start("MIX")
-steps([to([chain("OUT").level(1), chain("RENDER").port("audio").level(1)])])

@@ -24,5 +24,5 @@ nothing regenerates them: no generator is kept, so the set cannot drift to follo
 
 ## Who replays them
 
-`apps/k7-daw-wasm/song-edit/tests/replay` and `replay_lane` replay them natively. `npm run test:edit-replay -w @studio/k7-wasm` has those
-replays write the calls they screened, then runs each through `edit.call` over a temp folder; `scripts/check-vectors.sh` and `gate.sh` run it (`apps/k7-daw-frontend/packages/k7-wasm/docs/edit.md`).
+`apps/k7-daw-wasm/song-edit/tests/replay` and `replay_lane` replay them natively; `scripts/check-vectors.sh` runs them, and so do the crate's
+tests in `scripts/agent/mac-checks.sh`. No WebAssembly module carries `song-edit`'s file-system calls, so none replays them.

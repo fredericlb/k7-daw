@@ -698,7 +698,7 @@
 
 # --- a clip's onsets ---
 # Corrections to what the engine detected, in SECONDS into the source file. Kept as a difference, so
-# they survive re-detecting at another sensitivity — see apps/k7-daw-frontend/packages/song-edit/src/onsets.ts. A time within
+# they survive re-detecting at another sensitivity — see apps/k7-daw-wasm/song-edit/src/onsets.rs. A time within
 # 25 ms of an existing onset means that one, so an approximate second is enough.
 - command: "clip onset add"
   sid: clip.onset.add
@@ -2442,10 +2442,7 @@
       { name: channel, hint: "1-16, or `none` to unbind this param" },
       { name: cc, hint: "0-127 — the control number the knob sends" },
     ]
-# The routing as text is a READER rather than a palette row: `describeGraph` has its own CLI
-# entry, and nothing here offers it.
-#
-#   npx tsx apps/k7-daw-frontend/packages/song/scripts/graph.ts <project> [track]
+# The routing as text is a READER rather than a palette row: nothing here offers it.
 #
 # Moves one placement (a clip/sequence) on a track from its current timecode to a new one.
 # The event is found by its start position; only that placement's `start:` is rewritten.

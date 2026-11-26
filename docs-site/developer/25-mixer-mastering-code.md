@@ -16,7 +16,7 @@ song — each track's mixer node in track order, a shared bus strip once. The co
 drawn by `apps/k7-daw-frontend/packages/ui-chains-react/src/DomChains.tsx`, which is why a strip behaves exactly like any
 module card: vertical drag (Shift for fine), live sends to the engine coalesced per animation frame,
 and on release one `node param <strip> "Volume" <dB>` written by `setModuleParam`
-(`apps/k7-daw-frontend/packages/song-edit/src/projectEdit.ts`). Double-click opens a typed value.
+(`apps/k7-daw-wasm/song-edit/src/project_edit.rs`). Double-click opens a typed value.
 
 **Mute, solo, highlight** are not strip parameters but project or graph state, so they are their own
 verbs:
@@ -32,7 +32,7 @@ and the `m`/`s` keys share: an optimistic flip, the command, then a reload scope
 wrote. While a merge locks the workspace (`local`) the override **is** the value and no command is sent.
 
 **The console.** `project console <system|none>` (`apps/k7-daw-wasm/verbs/src/verbs/project_more.rs`) writes
-`project.console`; the compile (`apps/k7-daw-frontend/packages/song/src/console.ts`) places the system's channel after
+`project.console`; the compile (`apps/k7-daw-wasm/song/src/console.rs`) places the system's channel after
 every strip and its buss first on the master — one setting, because the halves only work as a pair.
 
 ## The song's output and the master meter

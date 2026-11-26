@@ -1,6 +1,6 @@
 // tests.rs — the dispatch and the handle table, through the same bytes the ABI carries.
 
-use crate::curve_ops::{CloseArgs, Head, OpenArgs};
+use crate::ops::curve::{CloseArgs, Head, OpenArgs};
 use crate::ops::{ERROR, OK};
 use crate::*;
 use serde_json::{Value, json};
@@ -122,6 +122,9 @@ fn refuses_what_a_caller_got_wrong() {
     assert_eq!(code(&mut s, at(json!({"num": 0}))), "bad_request");
     assert_eq!(code(&mut s, at(json!({"num": 4.5}))), "bad_request");
     assert_eq!(code(&mut s, json!({"op": "curve.nope", "args": {}})), "bad_request");
+    assert_eq!(code(&mut s, json!({"op": "nope.preview", "args": {}})), "bad_request");
+    assert_eq!(code(&mut s, json!({"op": "edit.call", "args": {}})), "bad_request");
+    assert_eq!(code(&mut s, json!({"args": {}})), "bad_request");
     assert_eq!(
         code(
             &mut s,
@@ -221,4 +224,45 @@ fn picks_an_engine_by_index() {
     assert_eq!(v, json!({"index": 1}));
     let (_, v) = run(&mut s, &json!({"op": "engine.choose", "args": args}));
     assert_eq!(v, json!({"index": null, "ambiguous": true}));
+}
+
+#[test]
+fn reads_and_writes_timecodes_on_a_float_meter() {
+    let mut s = Session::new();
+    let (status, v) = run(
+        &mut s,
+        &json!({"op": "timecode.parse", "args": {"tc": "1:0", "num": 7, "den": 8, "position": false}}),
+    );
+    assert_eq!((status, v), (OK, json!(3.5)));
+    let (status, v) = run(
+        &mut s,
+        &json!({"op": "timecode.format", "args": {"beats": 3.5, "num": 7.0, "den": 8.0, "position": true}}),
+    );
+    assert_eq!((status, v), (OK, json!("2:1")));
+    let (status, v) = run(
+        &mut s,
+        &json!({"op": "timecode.format", "args": {"beats": 1e300, "num": 4, "den": 4, "position": true}}),
+    );
+    assert_eq!((status, &v["code"]), (ERROR, &json!("bad_timecode")));
+}
+
+#[test]
+fn answers_the_version_it_was_built_from() {
+    let mut s = Session::new();
+    let (status, v) = run(&mut s, &json!({"op": "version"}));
+    assert_eq!(status, OK);
+    assert!(v["sources"].is_string());
+}
+
+#[test]
+fn rounds_a_beat_through_the_hot_call() {
+    assert_eq!(crate::abi::k7_round_beat(0.1 + 0.2), 0.3);
+    assert_eq!(crate::abi::k7_round_beat(-2.5), -2.5);
+}
+
+#[test]
+fn a_song_op_reaches_the_song_family() {
+    let mut s = Session::new();
+    let (status, v) = run(&mut s, &json!({"op": "song.close", "args": {"handle": 9}}));
+    assert_eq!((status, &v["code"]), (ERROR, &json!("unknown_handle")));
 }

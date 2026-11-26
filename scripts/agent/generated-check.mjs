@@ -1,7 +1,6 @@
 // generated-check.mjs — fails when a tracked generated file is not what its sources build, naming the file and the command.
-// It never writes: the WebAssembly modules are compared by their source hashes, the module-types file by its own `--check`.
+// It never writes: the WebAssembly modules are compared by their source hashes.
 // What a reader gets wrong: a hash match says the Rust sources are unchanged, not that the module was rebuilt on this machine.
-import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
@@ -36,7 +35,6 @@ async function wasm(file, pkg, withTypes, sources = "SOURCES") {
 }
 
 await wasm("k7Wasm.generated.ts", "k7-wasm", true);
-await wasm("k7WasmSong.generated.ts", "k7-wasm", false, "SONG_SOURCES");
 {
   const mod = await import(
     pathToFileURL(
@@ -64,16 +62,6 @@ await wasm("k7WasmSong.generated.ts", "k7-wasm", false, "SONG_SOURCES");
   ).trim();
   if (stamp !== mod.rustSourceHash())
     stale.push("apps/k7-daw-frontend/packages/audio-analysis/waveform.wasm");
-}
-{
-  const script =
-    "apps/k7-daw-frontend/packages/song-schema/scripts/genModuleTypes.mts";
-  const r = spawnSync("npx", ["tsx", script, "--check"], {
-    cwd: root,
-    encoding: "utf8",
-  });
-  if (r.status !== 0)
-    stale.push("apps/k7-daw-wasm/song/src/modules/types_generated.rs");
 }
 {
   const mod = await import(

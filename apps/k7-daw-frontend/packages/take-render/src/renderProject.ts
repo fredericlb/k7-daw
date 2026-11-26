@@ -5,7 +5,7 @@ import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { findEngineBinary } from "@studio/engine-client/engineBinary";
-import type { ProjectDoc } from "@studio/song/project";
+import type { ProjectDoc } from "@studio/engine-protocol/project";
 import { localRenderer } from "./renderer.ts";
 
 /** The bound on a WEDGED bounce; a three-minute song renders in seconds. */

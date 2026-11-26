@@ -3,24 +3,23 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "The browser's one WebAssembly module: Rust (song-schema: the timecode and the curves) behind a C ABI carrying JSON, its TypeScript loader and its generated types. Checked in as base64, so every host loads it as raw TypeScript. Consumed as source.",
+  "description": "The browser's one WebAssembly module: Rust (song-schema, the song crate's decoders and views, k7x) behind a C ABI carrying JSON, its TypeScript loader, and its generated types and constants. The module is the checked-in file src/k7Wasm.wasm: a page fetches it as a hashed asset, node reads it from disk. Consumed as source.",
   "exports": {
     "./curve": "./src/curve.ts",
+    "./timecode": "./src/timecode.ts",
+    "./consts": "./src/consts.generated.ts",
     "./types": "./src/types/index.ts",
     "./boot": "./src/boot.ts",
-    "./edit": "./src/edit.ts",
-    "./engine": "./src/engine.ts",
-    "./replayRun": "./src/replayRun.ts"
+    "./engine": "./src/engine.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:edit-replay": "node scripts/editReplay.mjs",
     "build:wasm": "node scripts/buildWasm.mjs"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=22.3"
   },
   "devDependencies": {
     "@studio/graph-model": "*",

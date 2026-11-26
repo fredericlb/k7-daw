@@ -169,7 +169,7 @@ describe("a curve handle", () => {
 });
 
 describe("what the module refuses", () => {
-  it("answers a bad timecode with the message timecode.ts throws", () => {
+  it("answers a bad timecode with the message the parser throws", () => {
     const bad: CurveSpec = {
       type: "custom",
       polarity: "unipolar",

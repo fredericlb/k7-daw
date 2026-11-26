@@ -285,7 +285,7 @@ to **the layer below**.
 | written | `fadeIn` / `fadeOut` on an event of a picture lane (`nodes/<lane>.k7x`, `tracks/` in a chain project), `modules/video_transitions/<name>/`, and a stretch's run in `graph.k7x` |
 | declared | `apps/k7-daw-frontend/packages/song-schema/src/moduleTypes.ts` — `TRANSITION_CATEGORY`, `DISSOLVE`, `OVER`, `isPicturePass` |
 | validated | `apps/k7-daw-frontend/packages/song-schema/src/yaml/placementSchema.ts` — `FadeSchema` and the widening; `src/videoTracks.ts` — the refusal of an endless `fadeOut` |
-| guarded | `apps/k7-daw-frontend/packages/song/src/entities.ts` — `loadVideoTracks` goes through the module schema; `apps/k7-daw-frontend/packages/song/src/graph.ts` — `isStretch`, and a stretch's head counted as fed in `checkChainInputs` |
+| guarded | `apps/k7-daw-wasm/song/src/graph/index.rs` — `is_stretch`, and a stretch's head counted as fed in `check_chain_inputs` (`apps/k7-daw-wasm/song/src/lanes/wiring.rs`) |
 | read | `src/videoTransitions.ts` — the ancestry from `src/shaders.ts`, and `resolveStretches`; `src/videoChains.ts` — the stretches |
 | compiled | `apps/k7-daw-wasm/verbs/src/picture/lanes.rs` -> a clip's `fadeIn`, and `apps/k7-daw-wasm/verbs/src/picture/compile.rs` -> the document's `transitions` and `stretches`, the GLSL **inline** |
 | on the wire | `apps/k7-daw-frontend/packages/web-protocol/timelineTypes.ts` — `WebVideoFade`, `WebVideoTransition`, `WebVideoProject.stretches` |

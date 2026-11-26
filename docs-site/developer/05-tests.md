@@ -42,15 +42,8 @@ Vitest's default excludes and adds `apps/k7-daw-engine/k7-runtime/build/**`, `ap
 (CMake vendors JUCE there, whose demo apps contain `App.test.js` files) and `.claude/worktrees/**`.
 It sets `testTimeout` and `hookTimeout` to 30 seconds.
 
-A package's own `vitest.config.ts` **replaces** the root one, so packages that need the timeouts
-repeat them. Several packages pin ambient state to folders that do not exist so that no test reads
-the developer's real data:
-
-| Package config | Pins | Also |
-|---|---|---|
-| `apps/k7-daw-frontend/packages/song/vitest.config.ts` | `STUDIO_MEDIATEK`, `STUDIO_HOME` | 30 s timeouts |
-
-Other packages with a config of their own: `audio-passes`, `song-edit`, `song-video`, `translator`.
+A package's own `vitest.config.ts` (`k7-wasm`, `k7x`) **replaces** the root one, so a package that needs the
+timeouts repeats them.
 
 `@studio/env` never reads `env.yaml` under a test runner, so tests do not see local secrets.
 

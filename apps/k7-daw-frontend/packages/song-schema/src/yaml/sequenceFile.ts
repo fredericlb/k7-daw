@@ -4,9 +4,9 @@
 // A reader would get wrong what a writer sees: EXPANDED notes. A file may write them `notes("c4 d4")`, so an edit runs
 // through wsEdit or `editSequence`, which put the short form back by sugar's rule (docs/sugar.md); readers expand it.
 
+import { beatsToPosition, parsePosition } from "@studio/k7-wasm/timecode";
 import { K7Document, type K7Scope } from "@studio/k7x/document";
 import { stringify } from "@studio/k7x/print";
-import { beatsToPosition, parsePosition } from "../timecode";
 import { applySugared, type Sugar, sugarFor } from "./sugar";
 
 export interface NoteIn {

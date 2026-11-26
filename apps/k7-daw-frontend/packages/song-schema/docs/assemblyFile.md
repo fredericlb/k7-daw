@@ -51,7 +51,7 @@ That indirection is the reason the whole feature works twice over. Instancing mi
 names they already have, so it renames nothing and touches no line of `graph.k7x`.
 
 A member is a template name and a project node name, so a node rename walks the instances' members
-by value: `renameNodeInAssemblies` in `apps/k7-daw-frontend/packages/song/src/assemblyEdit.ts`.
+by value: `renameNodeInAssemblies` in `apps/k7-daw-wasm/song-edit/src/assembly_edit.rs`.
 
 ## Why every write goes through the Document API
 
@@ -72,7 +72,7 @@ not the same sentence in both.
 
 No `node:fs`. The screen that DRAWS a box is the one that has to resolve it, and the builder edits
 the template through a store rather than through a path it built. The disk walk is
-`apps/k7-daw-frontend/packages/song/src/assemblies.ts`, on the other side of that line.
+`apps/k7-daw-wasm/song/src/assemblies/mod.rs`, on the other side of that line.
 
 ## What the schema does not check
 

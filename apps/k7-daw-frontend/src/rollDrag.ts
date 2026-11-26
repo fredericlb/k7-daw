@@ -5,7 +5,7 @@
 // default of a whole beat — on a 1/16 grid those two differ by sixteen cells.
 // See apps/k7-daw-frontend/docs/clipEditors.md.
 
-import { roundBeat } from "@studio/song-schema/timecode";
+import { roundBeat } from "@studio/k7-wasm/timecode";
 
 /** The shortest a stretch may leave a note: a 64th at any tempo — a real choice, and not a note vanishing from the roll. */
 export const MIN_NOTE_BEATS = 1 / 16;

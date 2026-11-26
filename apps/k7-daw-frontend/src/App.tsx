@@ -18,6 +18,7 @@ import {
   preloadOutputPicture,
   ViewportTab,
 } from "@studio/k7-plugins/video";
+import { beatsToPosition, parsePosition } from "@studio/k7-wasm/timecode";
 import { askConfirm } from "@studio/project-shell/ask";
 import { projectsUrl } from "@studio/project-shell/launch";
 import type { CommandJournal } from "@studio/project-shell/project";
@@ -26,7 +27,6 @@ import { type HistoryDeps, runRedo, runUndo } from "@studio/project-shell/undo";
 // The leaf with no `node:fs` in it — a browser may ask what a path names without dragging the loader in.
 import { moduleKeyFromPath } from "@studio/song-schema/moduleTypes";
 import type { ReferenceTrack } from "@studio/song-schema/reference";
-import { beatsToPosition, parsePosition } from "@studio/song-schema/timecode";
 import { Choice } from "@studio/ui/choice";
 import { DockHint, DockStatus } from "@studio/ui/editor-dock";
 import {
@@ -293,7 +293,7 @@ const ModuleBuilder = lazy(() =>
   })),
 );
 
-/** The shot a new video project is scaffolded with (apps/k7-daw-frontend/packages/song/src/scaffold.ts) — a picture holding only it is untouched. */
+/** The shot a new video project is scaffolded with (apps/k7-daw-wasm/song-edit/src/scaffold.rs) — a picture holding only it is untouched. */
 const SCAFFOLD_SAMPLE = /(^|\/)clips\/sample\.mp4$/;
 
 /** How long a second Ctrl+Z has, once the text pane's own history is spent, to reach the project journal. */
@@ -2176,7 +2176,7 @@ export default function App({
   /** Find the open project's node of the builder's module and watch its plugin — `watchPluginParams` is what makes the values LIVE. */
   useEffect(() => {
     if (!builder) return void setBuilderPlugin(null);
-    // The key a chain would write — `amps/neural-amp-modeler`, or `@k7-core/audio/amps/nam` for a library module (@studio/song/moduleTypes).
+    // The key a chain would write — `amps/neural-amp-modeler`, or `@k7-core/audio/amps/nam` for a library module (@studio/song-schema/moduleTypes).
     const module =
       libraryModuleRef(builder.path) ?? moduleKeyFromPath(builder.path);
     if (!module) return void setBuilderPlugin(null);

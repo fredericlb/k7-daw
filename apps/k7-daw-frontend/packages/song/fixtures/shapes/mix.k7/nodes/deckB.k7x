@@ -1,7 +1,0 @@
-// Deck B. A lane with no arrangement — it authors no `events` at all.
-//
-// That is the one thing a SET has that an arranged song does not. In a song a lane's
-// file IS its arrangement; on a deck the material is whichever song the browser put on
-// ten seconds ago, so what is committed is the deck's SETTINGS and its place in
-// the graph. Its run FLOWS on into its own fade, opposed to deck A's, and from there to the mixer.
-extends("@meta/track")

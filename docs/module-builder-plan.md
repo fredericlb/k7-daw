@@ -31,7 +31,7 @@ In the media library, clicking any of them opens the same builder as k7.
 3. The folder is the key, and the file carries no `ref:`: that would be a second source of truth.
    `uiPathFor` writes `<type>/<sub>/ui.k7x`, `loadUiLibrary` walks the **module** libraries and
    derives the ref from the folder, `writeUiFile` resolves the ref to its library
-   (`apps/k7-daw-frontend/packages/song/src/uiLibrary.ts`, rationale in `apps/k7-daw-frontend/packages/song/docs/uiLibrary.md`).
+   (rationale in `apps/k7-daw-frontend/packages/song/docs/uiLibrary.md`).
 
 The `io/` case is the remaining exception: a bare io ref (`desk`) has no type segment, so
 `uiPathFor` puts the `io/` back or the file lands at the root of the library. The test states it
@@ -41,7 +41,7 @@ explicitly.
 
 It appears at every storey, always the same way: counting as a **node** every `.k7x` in the folder
 that is not `module.k7x`. Unguarded, a panel comes back as a `reverb:ui` node.
-`nodeFiles` (`apps/k7-daw-frontend/packages/song/src/yaml/moduleIO.ts`) and `scanModules` therefore skip the module's own
+`nodeFiles` (`apps/k7-daw-wasm/song-edit/src/module_io.rs`) and `scanModules` therefore skip the module's own
 basenames, named in one place — `MODULE_OWN_BASES`, where `presets` stays reserved so a stale shelf
 file is never read as a node. On the media library side, a module's
 entry carries `files`: what the folder really contains.

@@ -1,4 +1,0 @@
-// A GENERATED lane: its clips are streamed from the pattern while the transport rolls,
-// which is why it says `strudel` where an authored lane says `events`.
-extends("@meta/strudel-track")
-strudel("algo/pattern.strudel")

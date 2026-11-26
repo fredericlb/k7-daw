@@ -2,7 +2,7 @@
 // over `[timelineBeat, sourceSecond]` pairs, so the rule that matters — the map stays monotonic —
 // is decided in one place and tested without a file. Full rationale: docs/warp.md.
 
-import { roundBeat } from "./timecode";
+import { roundBeat } from "@studio/k7-wasm/timecode";
 
 /** One point of the map: where a moment of the SOURCE lands on the timeline. */
 export type WarpMarker = [beat: number, sec: number];

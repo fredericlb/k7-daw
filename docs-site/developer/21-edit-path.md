@@ -9,8 +9,8 @@ pointer up on a clip                       TimelineTab.tsx  commitMove
   → the verbs Worker                       apps/k7-daw-frontend/src/verbs/pageVerbs.ts
       runCommand(line, host, "cli")        apps/k7-daw-wasm/verbs/src/verbs/mod.rs (dispatch, over a Vfs)
         "event.move" handler               resolves track + event in the compiled doc, refuses or…
-          moveTrackPlacement(…)            apps/k7-daw-frontend/packages/song-edit/src/trackMix.ts
-            setPlacementField / …          apps/k7-daw-frontend/packages/song-schema/src/yaml/trackFile.ts
+          moveTrackPlacement(…)            apps/k7-daw-wasm/song-edit/src/track_mix.rs
+            setPlacementField / …          apps/k7-daw-wasm/song-edit/src/track_file.rs
       the writes, staged in the Vfs        posted as ONE change set
   → POST /changes                          apps/k7-daw-backend/packages/k7-file-service/src/changes/ (the server lands it whole)
       one journal step, one capture batch    apps/k7-daw-backend/packages/k7-file-service/src/journal/
@@ -28,7 +28,7 @@ step further: `toolLine` in `apps/k7-daw-frontend/src/timelineTools.ts` returns 
 is what lets a test pin a blade press to `event split <track> <start> <at>` without a DOM.
 
 Positions are converted to timecodes at the edge, with `beatsToPosition` / `beatsToDuration` from
-`apps/k7-daw-frontend/packages/song-schema/src/timecode.ts`. The pane works in beats; the verbs speak
+`@studio/k7-wasm/timecode` (the Rust crate's `apps/k7-daw-wasm/song-schema/src/timecode.rs`). The pane works in beats; the verbs speak
 `bar:beat:eighth:sixteenth`, positions 1-based and durations 0-based. Getting the two kinds mixed up
 is the classic bug here, which is why every argument that is a length says so in its `hint:` in
 `apps/k7-daw-wasm/verbs/commands.yaml`.
@@ -81,7 +81,7 @@ browser shows it on its own channel.
 
 `@studio/song-edit` writes k7x surgically, through a `K7Document` scope: the comments, key order,
 layout and every other event stay byte for byte. A placement is addressed by its **start in beats**, since one clip can
-be placed several times. The test that pins this, from `apps/k7-daw-frontend/packages/song-edit/src/moveEvent.test.ts`:
+be placed several times. The test that pins this lives in `apps/k7-daw-wasm/song-edit/tests/replay/time_goldens.rs`:
 
 ```k7x
 // before

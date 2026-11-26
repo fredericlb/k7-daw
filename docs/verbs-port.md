@@ -19,7 +19,7 @@ in `apps/k7-daw-wasm/verbs/docs/verbs/`, the picture's in `apps/k7-daw-wasm/verb
 | the picture is `POST /picture` (the document and its warnings) and `POST /picture/scene` (what the compositor draws), read by the crate's `picture/` over the same files | one compile of the picture, in Rust, serves the timeline, the preview and a film; the page builds nothing |
 | the scene has ONE builder, `picture/scene.rs`: the preview asks it with the armed lane and the page's `/media` prefix, `picture render` builds it itself and asks `POST /verb-host/picture` with it | a preview and its film can never disagree about which lane shows, which copy is read or which passes run |
 | completion is `POST /verb/complete` over the same files, read-only, with the compile cache the runs keep | the command bar asks on every key, and a kept cache recompiles only what moved |
-| k7-wasm's `verb.run` and `verb.complete` stay behind its `verbs` feature, which no browser module is built with | a host that holds files and lands them itself (a native app over its own folder) calls the crate the same way, through the JSON C ABI |
+| k7-wasm's `verbs` feature, which no browser module is built with, gives a native host `run_over` and `complete_over` over its own file system, and the `verb.catalogue` op | the module imports no file system, so a line runs only where a host hands the crate one; a native app over its own folder calls the crate in Rust |
 
 ## How a verb reaches the machine
 
