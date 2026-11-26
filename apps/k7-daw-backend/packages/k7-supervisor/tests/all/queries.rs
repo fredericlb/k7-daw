@@ -372,11 +372,26 @@ async fn every_command_reaches_the_engine_and_answers() {
     assert_eq!(bed.ask("pair.deny", "nobody").await["ok"], true);
     // The scan cache goes first, the spinner shows at once, and the count comes back through the poll.
     std::fs::write(bed.paths.exts_cache(), "{}").unwrap();
-    assert_eq!(bed.ask("plugins.rescan", "").await["ok"], true);
+    // The spinner's frame and the command's result come in either order, so neither waits past the other.
+    let id = bed.send("plugins.rescan", "");
+    let (mut spun, mut answered) = (false, false);
+    while !(spun && answered) {
+        let f = bed
+            .until(30, |f| f["pluginCount"].is_null() || f["t"] == "result")
+            .await;
+        if f["t"] == "result" {
+            assert_eq!(
+                (f["id"].as_i64(), f["ok"].as_bool()),
+                (Some(id), Some(true))
+            );
+            answered = true;
+        } else {
+            spun = true;
+        }
+    }
     assert!(!bed.paths.exts_cache().exists());
     bed.engine_got(|f| *f == json!({"type": "rescan-plugins", "force": true}))
         .await;
-    bed.until(30, |f| f["pluginCount"].is_null()).await;
     bed.until(30, |f| f["pluginCount"] == 1).await;
     bed.finish().await;
 }
