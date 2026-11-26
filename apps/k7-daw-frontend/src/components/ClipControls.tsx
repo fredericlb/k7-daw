@@ -8,12 +8,12 @@ import {
   DropdownMenuTrigger,
 } from "@studio/ui/dropdown-menu";
 import { DockHeaderRow } from "@studio/ui/editor-dock";
-import { Check, Loader2, Trash2 } from "@studio/ui/icons";
+import { Check, Loader2, Repeat, Trash2 } from "@studio/ui/icons";
+import { Switch } from "@studio/ui/switch";
 import { m } from "../paraglide/messages.js";
 import { ChainOpsList } from "./ChainOpsList";
 import { OnsetThreshold, TrimGate } from "./ClipGateControls";
 import { EventGainSlider } from "./EventGainSlider";
-import { LoopToggle } from "./LoopBrace";
 
 export interface ClipControlsProps {
   gainDb: number;
@@ -57,17 +57,22 @@ export function ClipControls(p: ClipControlsProps) {
               : undefined
           }
         />
-        <LoopToggle
-          on={p.looped}
-          onToggle={
-            p.loopAddr
-              ? (on) =>
-                  void p.command(
-                    `event loop ${p.loopAddr} ${on ? "on" : "off"}`,
-                  )
-              : undefined
-          }
-        />
+        {p.loopAddr && (
+          <span
+            className="flex items-center gap-1.5"
+            title={p.looped ? m["clip.loopOff"]() : m["clip.loopOn"]()}
+          >
+            <Repeat className="size-4" aria-hidden />
+            <Switch
+              size="sm"
+              checked={p.looped}
+              aria-label={m["clip.loop"]()}
+              onCheckedChange={(on) =>
+                void p.command(`event loop ${p.loopAddr} ${on ? "on" : "off"}`)
+              }
+            />
+          </span>
+        )}
         {/* Trim OPENS a gate rather than applying one, drawing what would be KEPT over the wave (docs/shell.md). */}
         <TrimGate
           open={p.gateOpen}

@@ -1,7 +1,7 @@
 # An audio event's own gain
 
 `gain:` on a placement is that event's trim in dB, −6 to +6, absent at unity. `src/eventGain.ts`
-writes it; `event gain <track> <at> <dB>` is the verb, and the audio clip panel's header slider is
+writes it; `event gain <track> <at> <dB>` is the verb, and the audio clip panel's title-bar knob is
 the gesture that sends it.
 
 ## Why the event, and why so little range
@@ -29,4 +29,4 @@ than ignoring it.
 
 The engine diffs documents, and a clip's gain is set when the clip is built, like its fades: a new
 value re-inserts that one clip (`apps/k7-daw-engine/k7-runtime/engine/ProjectDiff.cpp`'s `clipMoved`). The
-slider therefore commits once, on release, rather than streaming every value it passes through.
+knob therefore commits once, on release, rather than streaming every value it passes through.
