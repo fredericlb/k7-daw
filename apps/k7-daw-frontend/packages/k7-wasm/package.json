@@ -7,6 +7,8 @@
   "exports": {
     "./curve": "./src/curve.ts",
     "./timecode": "./src/timecode.ts",
+    "./validate": "./src/validate.ts",
+    "./fields": "./src/fields.ts",
     "./consts": "./src/consts.generated.ts",
     "./types": "./src/types/index.ts",
     "./boot": "./src/boot.ts"
