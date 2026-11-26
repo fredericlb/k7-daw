@@ -35,17 +35,12 @@ order, so `k7_runtime_server` is listed before `studio::engine` on every target 
   `k7_server_request_quit()`. The entry points the three hosts keep (`main`, the JNI `nativeServe`, the iOS
   embed) call these once the C++ server is deleted.
 
-## The listener starts inside the message loop
+## The door runs the socket core
 
-`serve` creates the host on the calling thread, posts the job that binds the port, and runs the loop. The port
-is bound from that job, never before the loop, so a quit asked by a client that connected can never reach
-a loop that has not started.
-
-## The stand-in socket
-
-`src/stub.rs` binds the port, does the WebSocket handshake and answers `whoami` with the C++ server's
-fields. It is the minimum that lets the slow test (`tests/RustServe_test.cpp`, label `slow`) run Rust's
-`serve` on the real Tracktion host and probe it over a socket; the socket core replaces the file whole.
+`serve` is `server::start` followed by the loop: the server is up and bound before the loop runs, and the
+engine is held for `k7_server_request_quit`, which posts the quit as a job so it waits for a loop that has not
+started. The slow test (`tests/RustServe_test.cpp`, label `slow`) runs it on the real Tracktion host and
+probes `whoami` over the socket with a client.
 
 ## What the link does not prove
 
