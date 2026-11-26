@@ -103,7 +103,7 @@ can depend on. What stays, and what each needs:
 | `lcdSounds`' WAV decode | the waveform module is embedded by the Rust front, the page does not load it | a decode route in the file service |
 | `libraryTree`, `historyMarks`, `surfaceRows`, `paneInUse` | no Rust function answers them: ports, not replacements | M4a (doc reads), M3c (git), M5c |
 
-**M2c, as built.** `engine-tunnel` is gone (about 4,500 lines: 2,300 of source, 2,200 of tests); its four doc pages
+**M2c, as built.** `engine-tunnel` is gone (about 4,300 lines: 2,500 of tests and their harness, 1,800 of source); its four doc pages
 live in `apps/k7-daw-backend/docs/engine/` (`tunnel.md`, `tunnelJobs.md`, `backpressure.md`, `sockets.md`). The choices:
 
 | choice | why |
