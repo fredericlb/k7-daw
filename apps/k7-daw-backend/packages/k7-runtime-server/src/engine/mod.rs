@@ -7,7 +7,9 @@
 pub mod fake;
 pub mod fake_state;
 pub mod ffi;
+pub mod project;
 pub mod state;
+pub mod transport;
 
 use ffi::{K7CoreApi, K7EngineApi, K7Host, K7Str, K7Warning};
 use std::ffi::c_void;

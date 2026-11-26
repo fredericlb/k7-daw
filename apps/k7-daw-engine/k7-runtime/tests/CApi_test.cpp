@@ -4,6 +4,8 @@
 
 #include "capi/k7_engine.h"
 #include "capi/k7_engine_core.h"
+#include "capi/k7_engine_project.h"
+#include "capi/k7_engine_transport.h"
 #include "Warnings.h"
 #include "test_harness.h"
 
@@ -22,7 +24,7 @@ void table() {
     CHECK(api->abi == K7_ENGINE_ABI);
     CHECK(api->size == sizeof(K7EngineApi));
     CHECK(api->core != nullptr);
-    CHECK(api->project == nullptr && api->cli == nullptr);
+    CHECK(api->project != nullptr && api->transport != nullptr && api->cli == nullptr);
     CHECK(core().layout_consistent() == 1);
 }
 
@@ -88,11 +90,66 @@ void hostLife() {
     core().host_destroy(host);
 }
 
+// The project and transport areas on a host whose loop runs: what a fresh host answers, run on the message thread.
+struct Areas {
+    K7Host* host = nullptr;
+    bool ran = false;
+};
+
+K7Str of(const std::string& s) { return K7Str{s.data(), s.size()}; }
+
+void askAreas(void* ctx) {
+    auto* a = static_cast<Areas*>(ctx);
+    const K7ProjectApi& project = *k7_engine_api()->project;
+    const K7TransportApi& transport = *k7_engine_api()->transport;
+    const std::string session = "k7:areas";
+    std::vector<std::string> ids;
+    project.track_ids(a->host, of(session), &ids, collect);
+    CHECK(ids.empty());
+    CHECK(project.release_slot(a->host) == 0);
+    CHECK(transport.is_playing(a->host, of(session)) == 0);
+    int32_t armed = -1;
+    std::string reason;
+    CHECK(transport.set_armed(a->host, of(session), of("nobody"), 1, &armed, &reason,
+                              [](void* c, K7Str s) { static_cast<std::string*>(c)->assign(s.ptr, s.len); }) == 0);
+    CHECK(!reason.empty());
+    project.reset(a->host, of(session));
+    a->ran = true;
+    k7_engine_api()->core->quit(a->host);
+}
+
+void areasOnAHost() {
+    const K7ProjectApi& project = *k7_engine_api()->project;
+    // The roots are the process's: unset here, so a path passes and a share does not.
+    CHECK(project.path_allowed(of("/tmp/a.wav"), 0) == 1);
+    CHECK(project.path_allowed(of("//host/share/a.wav"), 0) == 0);
+    CHECK(project.path_allowed(of("\\\\host\\share\\a.wav"), 1) == 0);
+    Sink sink;
+    core().set_warning_sink(sinkOne, &sink);
+    project.warn(of("k7:areas"), of("tracks"), of("a message"));
+    core().set_warning_sink(nullptr, nullptr);
+    CHECK(sink.seen.size() == 1 && sink.seen[0] == "tracks|a message");
+    int standing = 0;
+    project.standing_warnings(of("k7:areas"), &standing, [](void* c, const K7Warning*) { ++*static_cast<int*>(c); });
+    CHECK(standing == 0);
+
+    core().init_settings_dir(K7Str{nullptr, 0});
+    Areas areas;
+    areas.host = core().host_create();
+    CHECK(areas.host != nullptr);
+    if (areas.host == nullptr) return;
+    core().post(areas.host, askAreas, dropped, &areas);
+    core().run(areas.host);
+    CHECK(areas.ran);
+    core().host_destroy(areas.host);
+}
+
 }  // namespace
 
 int main() {
     RUN(table);
     RUN(warnings);
     RUN(hostLife);
+    RUN(areasOnAHost);
     TEST_MAIN_END();
 }

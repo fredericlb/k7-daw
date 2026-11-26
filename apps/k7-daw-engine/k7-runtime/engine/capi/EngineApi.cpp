@@ -9,8 +9,8 @@ extern "C" const K7EngineApi* k7_engine_api(void) {
         K7_ENGINE_ABI,
         static_cast<uint32_t>(sizeof(K7EngineApi)),
         studio::capi::coreApi(),
-        nullptr,  // project
-        nullptr,  // transport
+        studio::capi::projectApi(),
+        studio::capi::transportApi(),
         studio::capi::stateApi(),
         nullptr,  // plugins
         nullptr,  // machine

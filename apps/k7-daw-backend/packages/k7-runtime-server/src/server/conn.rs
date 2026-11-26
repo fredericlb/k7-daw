@@ -164,6 +164,7 @@ pub async fn serve_socket(
 fn finish(ctx: &Ctx, client: &Client, announced: bool, closed_with: &(u16, String)) {
     // The engine's side of a leaving listener or driver is posted by the milestone that owns it.
     ctx.forget(client);
+    super::transport::release_held(ctx, client);
     if announced {
         let (code, reason) = closed_with;
         let reason = if reason.is_empty() {

@@ -3,8 +3,10 @@
 //! What a reader gets wrong: a client is named by a counter that is never reused, not by a pointer, so a late
 //! frame can never reach the next connection that took the old one's place.
 
+use super::held_notes::HeldNotes;
 use super::msg::Msg;
 use super::outbox::Outbox;
+use super::supersede::Supersede;
 use crate::engine::Engine;
 use crate::pairing::gate::{Gate, Out};
 use crate::wire::json;
@@ -77,6 +79,10 @@ pub struct Ctx {
     /// The quick crashes that made the supervisor start this engine in safe mode, 0 when it is not in it.
     pub safe_mode_crashes: u32,
     pub gate: Arc<Gate>,
+    /// Which queued project, tracks and parameter jobs a newer message made pointless.
+    pub supersede: Supersede,
+    /// The notes each socket's `midi-live` holds down, released when it closes.
+    pub held_notes: HeldNotes,
     clients: Mutex<HashMap<u64, Arc<Client>>>,
     bindings: Mutex<Bindings>,
     next_id: AtomicU64,
@@ -90,6 +96,8 @@ impl Ctx {
             audio_to_browser: false,
             safe_mode_crashes: 0,
             gate,
+            supersede: Supersede::default(),
+            held_notes: HeldNotes::default(),
             clients: Mutex::default(),
             bindings: Mutex::default(),
             next_id: AtomicU64::new(1),

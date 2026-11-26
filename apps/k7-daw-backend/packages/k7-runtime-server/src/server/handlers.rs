@@ -37,6 +37,8 @@ impl HandlerTable {
 pub fn table() -> HandlerTable {
     let mut t = HandlerTable::default();
     whoami::add(&mut t);
+    super::project::add(&mut t);
+    super::transport::add(&mut t);
     state::add(&mut t);
     t
 }

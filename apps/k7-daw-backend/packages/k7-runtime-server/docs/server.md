@@ -41,7 +41,7 @@ the line and who binds the socket's subscription (`wire::catalogue`).
 
 ## Not here yet
 
-The handler table has `whoami`, `hello` and `watch-plugin-params` (`state.md`): each later milestone adds one
-line to `handlers::table`. The engine's side of a driver or a listener leaving (`addDriver`, `removeDriver`,
-the broadcast tap), the supersede barrier, and the crash details of `safeMode` belong to the milestones that
-own those ABI areas.
+The handler table has `whoami`, `hello`, the project and transport verbs (`project.md`) and `watch-plugin-params`
+(`state.md`): each later milestone adds one line to `handlers::table`. The engine's side of a driver or a listener
+leaving (`addDriver`, `removeDriver`, the broadcast tap) and the crash details of `safeMode` belong to the
+milestones that own those ABI areas.

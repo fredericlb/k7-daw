@@ -337,6 +337,18 @@ target_compile_definitions(studio_rustserve_tests PRIVATE
 add_test(NAME studio_rustserve_tests COMMAND studio_rustserve_tests)
 set_tests_properties(studio_rustserve_tests PROPERTIES LABELS slow)
 
+# --- DocReader tests ----------------------------------------------------------
+# The plain reader of the document the Rust server validated, held to the golden file its test writes: nlohmann only, fast.
+add_executable(studio_docreader_tests
+    DocReader_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../engine/DocReader.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../engine/ProjectDoc.cpp)
+target_include_directories(studio_docreader_tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../engine)
+target_link_libraries(studio_docreader_tests PRIVATE nlohmann_json::nlohmann_json)
+target_compile_definitions(studio_docreader_tests PRIVATE
+    K7_GOLDEN_DOC="${CMAKE_CURRENT_SOURCE_DIR}/../../../k7-daw-backend/packages/k7-runtime-server/fixtures/project.validated.json")
+add_test(NAME studio_docreader_tests COMMAND studio_docreader_tests)
+
 # --- State area tests ---------------------------------------------------------
 # The state area of the C ABI on a whole EngineHost (a real timer's frame), slow like the C ABI's own suite.
 add_executable(studio_stateapi_tests StateApi_test.cpp)
