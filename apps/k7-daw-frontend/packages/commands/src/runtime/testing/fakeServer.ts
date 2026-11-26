@@ -14,7 +14,7 @@ import {
   writeFileSync,
 } from "node:fs";
 import { dirname, join } from "node:path";
-import { textHash } from "@studio/web-protocol/text-hash";
+import { textHash } from "@studio/k7-wasm/engine";
 import type {
   ChangeSet,
   ChangesAnswer,

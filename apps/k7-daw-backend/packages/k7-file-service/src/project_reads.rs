@@ -3,6 +3,7 @@
 
 use indexmap::IndexMap;
 use serde_json::{Value, json};
+use song_schema::engine::{CataloguePlugin, PluginNeed, compatibility};
 use song::graph::load_graph;
 use song::lanes::inputs::load_inputs;
 use song::lanes::rig::Rig;
@@ -90,38 +91,33 @@ pub fn project_dir_of(space: &Space<'_>, project: &str) -> Result<String, Failur
     }
 }
 
-fn key(format: &str, name: &str) -> String {
-    format!("{}|{}", format.to_lowercase(), name.to_lowercase())
-}
-
 /// The needs scored against a scan; none when an EMPTY scan cannot say.
 pub fn compat_of(needs: &[Need], scan: &[ScannedPlugin]) -> Option<Value> {
     if scan.is_empty() && !needs.is_empty() {
         return None;
     }
-    let mut have = std::collections::HashSet::new();
-    for p in scan {
-        have.insert(key(&p.format, &p.name));
-        if let Some(id) = p.id.as_deref().filter(|i| !i.is_empty())
-            && p.format.eq_ignore_ascii_case("internal")
-        {
-            have.insert(key(&p.format, id));
-        }
-    }
-    let mut wanted: IndexMap<String, &Need> = IndexMap::new();
-    for n in needs {
-        wanted.insert(key(&n.format, &n.name), n);
-    }
-    if wanted.is_empty() {
-        return Some(json!({ "score": 100, "missing": [] }));
-    }
-    let missing: Vec<Value> = wanted
+    let needs: Vec<PluginNeed> = needs
         .iter()
-        .filter(|(k, _)| !have.contains(*k))
-        .map(|(_, n)| n.json())
+        .map(|n| PluginNeed {
+            format: n.format.clone(),
+            name: n.name.clone(),
+        })
         .collect();
-    let score = (wanted.len() - missing.len()) * 100 / wanted.len();
-    Some(json!({ "score": score, "missing": missing }))
+    let catalogue: Vec<CataloguePlugin> = scan
+        .iter()
+        .map(|p| CataloguePlugin {
+            format: p.format.clone(),
+            name: p.name.clone(),
+            id: p.id.clone(),
+        })
+        .collect();
+    let c = compatibility(&needs, &catalogue);
+    let missing: Vec<Value> = c
+        .missing
+        .iter()
+        .map(|n| json!({ "format": n.format, "name": n.name }))
+        .collect();
+    Some(json!({ "score": c.score, "missing": missing }))
 }
 
 /// A take's id, `<track>_<bar.beat>_<YYMMDDTHHMMSS>`: recorded, never imported.

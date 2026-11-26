@@ -36,8 +36,8 @@ Registration is open — a machine registers with no account (`apps/k7-daw-backe
 The list holds the engines this account may use (those of this device) and the
 UNOWNED ones (`apps/k7-daw-backend/docs/engine/ownership.md`) — and an unowned engine is anybody's
 machine until somebody opens it directly, with any performance score it likes to claim. Taking one without a click would bind the account's workspaces to a stranger's
-tunnel. So `chooseEngine` and `bestEngine` only ever take an engine that passes `mayAutoPick`
-(`choose.ts`), and offer every other one in the picker:
+tunnel. So `chooseEngine` and `bestEngine` only ever take an engine that passes `may_auto_pick`
+(`song-schema`'s `engine/choose.rs`, read by `choose.ts`), and offer every other one in the picker:
 
 1. the engine the account **remembered** — an explicit pick, saved by the picker or the header's
    engine menu;

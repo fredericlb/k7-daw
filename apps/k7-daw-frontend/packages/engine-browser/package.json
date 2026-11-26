@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "@studio/engine-protocol": "*",
+    "@studio/k7-wasm": "*",
     "@studio/web-protocol": "*"
   },
   "peerDependencies": {

@@ -10,15 +10,12 @@
     "./services": "./services.ts",
     "./projects": "./projects.ts",
     "./tree": "./tree.ts",
-    "./quality": "./quality.ts",
     "./rtc-frames": "./rtcFrames.ts",
     "./performance": "./performance.ts",
-    "./compat": "./compat.ts",
     "./playlists": "./playlists.ts",
     "./resources": "./resources.ts",
     "./paths": "./paths.ts",
-    "./cameras": "./cameras.ts",
-    "./text-hash": "./textHash.ts"
+    "./cameras": "./cameras.ts"
   },
   "scripts": {
     "test": "vitest run",

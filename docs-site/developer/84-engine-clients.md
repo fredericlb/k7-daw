@@ -31,7 +31,7 @@ The main consumers are the account's engine link in the Rust front (`apps/k7-daw
 | `./store` | `engineStore.ts` | `EngineStore` + `useEngineState(selector)`: the 20 Hz state as an external store |
 | `./params` | `params.ts` | `PluginParamsStore`: live parameter values, same pattern |
 | `./meter` | `meter.ts` | Meter arithmetic: dB to fill, clip latch |
-| `./compat` | `compat.ts` | Fetch an engine's plugin catalogue and score a project against it |
+| `./compat` | `compat.ts` | Fetch an engine's plugin catalogue (the score is Rust's, `song-schema`'s `engine::compatibility`) |
 | `./pairing` | `pairing.ts` | LAN pairing keys and `requestPairing` |
 | `./relook` | `relook.ts` | `useRelook()`: when to measure again (every 15 s and on tab focus) |
 | `./stream`, `./stream-sink`, `./engine-output` | `streamPlayer.ts`, `streamSink.ts`, `engineOutput.ts` | Playing the engine's binary audio broadcast in the page |
@@ -62,7 +62,7 @@ A 20 Hz frame held in React state re-rendered the whole tree on every frame. `En
 | `wsUrlFor(id)`, `linkUrl(chosen)` | A fresh address for one engine |
 | `hostedFiles()`, `freshTicket()` | The server's file hub address and ticket (`FILE_HUB_HELLO`), cached six hours |
 
-**Probe** (`probe.ts`): for each engine, every candidate is tried at once (loopback; LAN IPs only on an `http:` page; the relay `wss://…/api/engine/<id>/ws?ticket=…`; `rtc:…/api/engine/<id>/rtc` when the registry says the engine has a tunnel), and the fastest `whoami` that **matches the expected id** wins, so a lookalike listener cannot pass. Timeout: 3 s. The latency is the round trip plus twice the reported buffer period (`engineLatency` in `apps/k7-daw-frontend/packages/web-protocol/quality.ts`), banded Q1 (< 20 ms), Q2 (< 50 ms), Q3. A reply with `needsPairing` marks the row as reachable but unusable until paired.
+**Probe** (`probe.ts`): for each engine, every candidate is tried at once (loopback; LAN IPs only on an `http:` page; the relay `wss://…/api/engine/<id>/ws?ticket=…`; `rtc:…/api/engine/<id>/rtc` when the registry says the engine has a tunnel), and the fastest `whoami` that **matches the expected id** wins, so a lookalike listener cannot pass. Timeout: 3 s. The latency is the round trip plus twice the reported buffer period (`engine_latency` in `apps/k7-daw-wasm/song-schema/src/engine/quality.rs`, reached through `@studio/k7-wasm/engine`), banded Q1 (< 20 ms), Q2 (< 50 ms), Q3. A reply with `needsPairing` marks the row as reachable but unusable until paired.
 
 **Policy** (`choose.ts`): anyone may register an engine, so only a **trusted** engine is ever taken without a click. `mayAutoPick(r, remembered)` is true for the account's remembered engine, and for one `reachedDirectly` (answered on a plain `ws:` socket to one of its own loopback or private LAN addresses, never the relay or WebRTC). `chooseEngine` takes the remembered engine if it answered, else the only reachable one if it may be auto-picked, else reports `ambiguous`. `bestEngine`, which k7's `EngineGate` uses, sorts candidates (reachable, with a token, not `assigned`, and `mayAutoPick`) by compatibility with the project, then the remembered id, then "on this machine" (answered over loopback), then quality band, then performance score, then milliseconds.
 

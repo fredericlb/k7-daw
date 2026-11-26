@@ -1,7 +1,7 @@
 // vfs.ts — the in-memory file system the verbs run over: the bundle's texts, binaries as a length, and the writes a run stages.
 // What a reader gets wrong: a path under a folder nobody listed is UNKNOWN (NeedsFiles), never absent — docs/runtime.md.
 
-import { textHash } from "@studio/web-protocol/text-hash";
+import { textHash } from "@studio/k7-wasm/engine";
 
 /** A read reached a place the bundle does not cover; the runtime fetches `files` and runs the verb again. */
 export class NeedsFiles extends Error {

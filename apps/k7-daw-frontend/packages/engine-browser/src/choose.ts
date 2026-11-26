@@ -1,10 +1,12 @@
-// choose.ts — which engine a service should drive, given what the account remembers. The
-// policy alone, with no React and no fetching: the account's choice first, an obvious
-// answer second, and the picker only when there IS a question.
-//
-// The one thing a reader would get wrong: anyone may register an engine, so only a TRUSTED
-// engine (`mayAutoPick`) is ever taken without a click — docs/access.md, "Who is taken unasked".
+// choose.ts — which engine a service should drive, given what the account remembers: the page's half of a Rust policy.
+// A reader would get wrong that only the address facts are worked out here (a URL parse); the order and the rule are song-schema's.
+// See docs/access.md, "Who is taken unasked".
 
+import {
+  bestEngineAt,
+  type Candidate,
+  chooseEngineAt,
+} from "@studio/k7-wasm/engine";
 import {
   onThisMachine,
   type ProbeTarget,
@@ -17,37 +19,6 @@ export interface Choice<E extends ProbeTarget> {
   engine: RankedEngine<E> | null;
   /** True when several were reachable and none was remembered — a single reachable engine is not a choice, it is the answer. */
   ambiguous: boolean;
-}
-
-/** Whether this engine may be taken with nobody clicking: the account's own pick, or one reached directly. */
-export function mayAutoPick<E extends ProbeTarget>(
-  r: RankedEngine<E>,
-  remembered: string | undefined,
-): boolean {
-  return (
-    (remembered !== undefined && r.engine.id === remembered) ||
-    reachedDirectly(r)
-  );
-}
-
-/** Pick from what the registry offered: UNREACHABLE engines are excluded, and a remembered one being away does NOT clear the preference. */
-export function chooseEngine<E extends ProbeTarget>(
-  ranked: RankedEngine<E>[],
-  rememberedId: string | undefined,
-): Choice<E> {
-  const reachable = ranked.filter((r) => r.wsUrl && r.token);
-
-  const remembered = rememberedId
-    ? reachable.find((r) => r.engine.id === rememberedId)
-    : undefined;
-  if (remembered) return { engine: remembered, ambiguous: false };
-
-  // One reachable engine is the answer only when it may be taken unasked; a stranger's engine is a question.
-  const only = reachable.length === 1 ? reachable[0] : undefined;
-  if (only && mayAutoPick(only, rememberedId))
-    return { engine: only, ambiguous: false };
-
-  return { engine: null, ambiguous: reachable.length > 1 };
 }
 
 /** What `bestEngine` reads beyond the probe: both optional, so an engine that reports neither still ranks on its latency. */
@@ -64,41 +35,46 @@ export interface BestEngineOptions {
   remembered?: string;
 }
 
-/**
- * The engine to take when nobody has to be asked: COMPATIBILITY with the project first — an engine
- * missing a plugin plays the song wrong — then the engine this account last CHOSE, then the one on
- * THIS machine (its sound comes out where you sit), then the latency class, the machine's
- * performance and the latency in ms. Only a TRUSTED engine (`mayAutoPick`) that is reachable, with
- * a token, and not in use is a candidate. Null when there is none. See docs/access.md.
- */
+function candidateOf<E extends RatedTarget>(
+  r: RankedEngine<E>,
+  compat: BestEngineOptions["compat"],
+): Candidate {
+  const c: Candidate = {
+    id: r.engine.id,
+    reachable: !!(r.wsUrl && r.token),
+    direct: reachedDirectly(r),
+    here: onThisMachine(r),
+    assigned: !!r.engine.assigned,
+  };
+  if (r.latency)
+    c.latency = { quality: r.latency.quality, totalMs: r.latency.totalMs };
+  const score = r.engine.performance?.score;
+  if (score !== undefined) c.performance = score;
+  const fit = compat?.(r.engine.id);
+  if (fit !== undefined && fit !== null) c.compat = fit;
+  return c;
+}
+
+/** Pick from what the registry offered: UNREACHABLE engines are excluded, and a remembered one being away does NOT clear the preference. */
+export function chooseEngine<E extends RatedTarget>(
+  ranked: RankedEngine<E>[],
+  rememberedId: string | undefined,
+): Choice<E> {
+  const { index, ambiguous } = chooseEngineAt(
+    ranked.map((r) => candidateOf(r, undefined)),
+    rememberedId,
+  );
+  return { engine: index === null ? null : ranked[index], ambiguous };
+}
+
+/** The engine to take when nobody has to be asked, or null when there is none; compatibility first, then the pick, this machine, the link and the machine's rating. */
 export function bestEngine<E extends RatedTarget>(
   ranked: RankedEngine<E>[],
   opts: BestEngineOptions = {},
 ): RankedEngine<E> | null {
-  const compat = (r: RankedEngine<E>): number =>
-    opts.compat?.(r.engine.id) ?? -1;
-  const candidates = ranked.flatMap((r) =>
-    r.latency &&
-    r.wsUrl &&
-    r.token &&
-    !r.engine.assigned &&
-    mayAutoPick(r, opts.remembered)
-      ? [{ r, latency: r.latency }]
-      : [],
+  const at = bestEngineAt(
+    ranked.map((r) => candidateOf(r, opts.compat)),
+    opts.remembered,
   );
-  // 1 for what should come first, so `b - a` sorts it there.
-  const isRemembered = (r: RankedEngine<E>): number =>
-    opts.remembered !== undefined && r.engine.id === opts.remembered ? 1 : 0;
-  const here = (r: RankedEngine<E>): number => (onThisMachine(r) ? 1 : 0);
-  candidates.sort(
-    (a, b) =>
-      compat(b.r) - compat(a.r) ||
-      isRemembered(b.r) - isRemembered(a.r) ||
-      here(b.r) - here(a.r) ||
-      a.latency.quality.localeCompare(b.latency.quality) ||
-      (b.r.engine.performance?.score ?? 0) -
-        (a.r.engine.performance?.score ?? 0) ||
-      a.latency.totalMs - b.latency.totalMs,
-  );
-  return candidates[0]?.r ?? null;
+  return at === null ? null : ranked[at];
 }
