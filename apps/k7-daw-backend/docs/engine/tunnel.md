@@ -6,9 +6,8 @@ heartbeats to, `<registry>/api/engine-tunnel`, and the server opens virtual chan
 through it. Every server-side process that needs an engine — the relay a browser uses, a hosted
 file service — reaches it that way, however far apart the two are.
 
-The server's end, the **hub**, is the Rust front's (`apps/k7-daw-backend/packages/k7-engine/src/tunnel/`).
-This package is the **agent**'s end in TypeScript: the reference agent the suites run beside the C++
-supervisor's (`apps/k7-daw-backend/packages/k7-supervisor/src/tunnel/agent.rs`), so both are held to one hub.
+The server's end, the **hub**, is the Rust front's (`apps/k7-daw-backend/packages/k7-engine/src/tunnel/`). The machine's end, the **agent**, is the
+supervisor's (`apps/k7-daw-backend/packages/k7-supervisor/src/tunnel/agent.rs`); both read the hub's own frame code, and `apps/k7-daw-backend/packages/k7-front/tests/tunnel/` runs the one against the other.
 
 ## Who may hold a tunnel
 
@@ -21,7 +20,7 @@ touched, so nobody holding the token alone can take an engine's channels over.
 
 The supervisor also states the engine wire's version in `x-studio-engine-protocol`, and a hub
 refuses one below its minimum with a `426` whose body says to update k7 on that machine
-(`../../engine-protocol/docs/version.md`).
+(`apps/k7-daw-frontend/packages/engine-protocol/docs/version.md`).
 
 Both ends ping every 20 s and drop a peer that missed one. A tunnel that died without a FIN would
 otherwise look alive for ever, and its channels with it.
@@ -33,13 +32,11 @@ whoever runs a supervisor can send the hub anything, and a hub that stopped on o
 take every engine's tunnel with it. So:
 
 - every agent text frame goes through `parse_agent_message` and every binary header through
-  `decode_binary` in the hub (`tunnel/frames/`), as through `parseAgentMessage` and `asBinaryHeader`
-  (`frames.ts`) in the agent — a non-null object, a known `t`, integer `ch`/`req`, `paths` an
-  array of strings — and a frame of any other shape is ignored, never read, and said once per
-  type, on the hub and on both agents, so a peer newer than its reader shows in a log;
-- on the hub and the relay nothing read off a socket reaches a panic; on the agent every upgrade
-  and message listener catches what is thrown, says it and drops that socket alone, and the async
-  handlers (`stat`, `get`, `put`) end in a `catch`;
+  `decode_binary` in the hub (`tunnel/frames/`), as the hub's frames do in the agent (`tunnel/wire.rs`) — a
+  non-null object, a known `t`, integer `ch`/`req`, `paths` an array of strings — and a frame of any other
+  shape is ignored, never read, and said once per type, on the hub and on the agent, so a peer newer than its
+  reader shows in a log;
+- nothing read off a socket reaches a panic, on the hub, the relay or the agent: a fault ends that socket alone;
 - the hub and the relay accept frames up to `MAX_FRAME_BYTES` (16 MiB). The largest legitimate
   frame is a file chunk, `CHUNK_BYTES` plus its header, or an engine frame passed through — a
   document or a plugin list — which stays well under it; the `ws` default would let one frame
@@ -48,10 +45,9 @@ take every engine's tunnel with it. So:
 ## A channel looks like a WebSocket
 
 The hub's channel (`tunnel/channel.rs`) is driven as the relay drives a socket, so the relay pipes
-one without knowing it is not a socket; the agent's `TunnelChannel` is shaped like the slice of a `ws`
-socket its callers use. A process outside the front, which only speaks `ws://` URLs, gets a **loopback
+one without knowing it is not a socket. A process outside the front, which only speaks `ws://` URLs, gets a **loopback
 address bound to an engine** (`Hub::bind_local`, asked through the internal seam's `POST /bindings`,
-`../../engine-registry/docs/internalSeam.md`): the key in the path is the only credential, and it is
+`apps/k7-daw-backend/packages/k7-front/src/routes/engine/internal.rs`): the key in the path is the only credential, and it is
 refused to anything that is not loopback.
 
 ## A close comes after the frames sent before it
@@ -67,16 +63,14 @@ direction:
   delivers what is queued for the engine and only then closes the engine's socket, and on the engine's
   close it delivers to the hub what the engine sent and only then says `close`.
 
-The wait is **bounded**: `CLOSE_DRAIN_MS` (`drain.ts`, `kCloseDrainMs` in
-`apps/k7-daw-backend/packages/k7-engine/src/tunnel/frames/mod.rs`, `CLOSE_DRAIN` in the hub's `tunnel/hub_tunnel.rs`), 3 s, after which the channel is
+The wait is **bounded**: `CLOSE_DRAIN` (`apps/k7-daw-backend/packages/k7-supervisor/src/tunnel/wire.rs`, and in the hub's `tunnel/hub_tunnel.rs`), 3 s, after which the channel is
 cut and what is left is dropped, never sent behind the close; and an agent's direction holding more than
 `HIGH_WATER_BYTES` when the close comes is cut at once. A stuck engine, or a download that never ends, must not hold a channel and
 its engine session for ever, and past a few seconds the person who closed it has moved on; the engine's
 own idle-session reaping is what cleans up after a cut. A jobs channel is not drained: a request whose
 caller left has nobody to answer.
 
-`closeDrain.test.ts` pins both directions, a client gone before its channel opened, and the bound,
-against both agents and the hub.
+`apps/k7-daw-backend/packages/k7-front/tests/tunnel/hub_drain.rs` pins both directions, a client gone before its channel opened, and the bound.
 
 ## Server-owned files, played from a local copy
 
@@ -96,8 +90,7 @@ after it, which is what keeps a `transport play` behind the document it plays.
 
 Every channel shares one socket, so file bytes — a download, an upload, a `sync` copy — are also
 what every OTHER channel's frames wait behind: a relayed probe, a transport command. The senders
-stop at **1 MB** unsent (`HIGH_WATER_BYTES` in `drain.ts`, `kHighWaterBytes` in
-`apps/k7-daw-backend/packages/k7-engine/src/tunnel/frames/mod.rs`) rather than several: on a home uplink a few megabytes
+stop at **1 MB** unsent (`HIGH_WATER_BYTES` in `apps/k7-daw-backend/packages/k7-supervisor/src/tunnel/wire.rs`) rather than several: on a home uplink a few megabytes
 ahead of a `whoami` is seconds, longer than a probe waits before calling the engine unreachable.
 The kernel's own socket buffer keeps the pipe full past that.
 
@@ -122,16 +115,16 @@ Only **whole strings** are rewritten, never substrings, and only under a shared 
 path, a device name, anything of the engine's machine is left alone because no root covers it.
 
 **A server path maps only when every segment can be a file name on any engine's machine**
-(`safeSegment`, `segments.ts`, the twin of `apps/k7-daw-backend/packages/k7-supervisor/src/tunnel/path_map.rs`): no empty, dot-
+(`safe_segment`, `apps/k7-daw-backend/packages/k7-supervisor/src/tunnel/segments.rs`, used by `apps/k7-daw-backend/packages/k7-supervisor/src/tunnel/path_map.rs`): no empty, dot-
 or space-only segment, no control character, `\` or `:`, no Windows device name, and on Windows no
-trailing dot or space. Both agents refuse the same table, because a path one of them would open is a
-path the server can aim at whichever machine runs the weaker one.
+trailing dot or space. The hub refuses the same table on its side, because a path an agent would open is a
+path the server could aim at the machine.
 It starts from the tree's own segment rule, `isPlainSegment` (`apps/k7-daw-frontend/packages/web-protocol/docs/paths.md`),
 and refuses more: the rest of the table is what an engine's machine would mis-open.
 
 **A path under a root is spelt `<root>/<segment>/…` by the SERVER, whatever its separator**, and the
 path maps do not read `\` as one: on a POSIX server `\` is a legal file-name character, so only the
-server knows which it meant. A Windows server respells a job's paths (`jobSpelling.ts`), and what a
+server knows which it meant. A Windows server respells a job's paths (`apps/k7-daw-backend/packages/k7-engine/src/tunnel/spelling.rs`), and what a
 browser hands an engine is built in that spelling to begin with — a deck's record
 (`playablePath`, `apps/k7-daw-frontend/packages/k7-plugins/src/turntables/service.ts`).
 
@@ -178,7 +171,7 @@ moment after the reply, never for good, so the test overruns an upload only once
 
 ## What the lifecycle tests pin
 
-`hubLifecycle.test.ts` runs the reference agent against the hub on real sockets, and pins:
+`apps/k7-daw-backend/packages/k7-front/tests/tunnel/hub_lifecycle.rs` runs the supervisor's agent against the hub on real sockets, and pins:
 
 - **A dropped tunnel ends every channel it carried**, the engine's sockets behind them included,
   and a local client on a bound path is closed with it. The agent's redial, under the same id and
@@ -193,8 +186,8 @@ moment after the reply, never for good, so the test overruns an upload only once
 
 The secret's trust on first use and the protocol's 426 are `k7-engine`'s tests'.
 
-`hubConfinement.test.ts` attacks the hub's files with a bare agent: what no agent would send (dot
-segments, foreign separators, a prefix of a root, links out, device names) and uploads that stop,
-collide or overrun. These suites run against the hub's testbed, which `ENGINE_CORE_BIN` names
-(`../testCore.ts`, `apps/k7-daw-backend/docs/engine.md`): without it they skip, and with
-`ENGINE_CORE_REQUIRED=1` they fail instead, as CI runs them.
+`hub_confinement.rs` attacks the hub's files with a bare agent: what no agent would send (dot
+segments, foreign separators, a prefix of a root, links out, device names) and uploads that stop or
+collide; `hub_uploads.rs` overruns the limits above. These suites run against the hub's testbed, which `cargo test`
+builds and spawns (`apps/k7-daw-backend/docs/engine.md`, "The testbed"); the links they need make
+`hub_confinement.rs` Unix only.

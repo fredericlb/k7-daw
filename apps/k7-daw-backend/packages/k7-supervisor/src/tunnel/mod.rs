@@ -1,4 +1,4 @@
-//! tunnel — the engine machine's end of the engine tunnel, the agent half of `engine-tunnel` in Rust. The hub
+//! tunnel — the engine machine's end of the engine tunnel, the agent half of the tunnel. The hub
 //! is the front's (`k7-engine`'s `tunnel/`), whose frames this reuses; the path map, the file requests, the
 //! per-channel queues and the backpressure marks are this crate's. The jobs a jobs channel may ask are a table
 //! (`jobs::Jobs`) the tunnel PART fills: the seam M5 plugs its jobs into (`docs/tunnel.md`, beside this crate).

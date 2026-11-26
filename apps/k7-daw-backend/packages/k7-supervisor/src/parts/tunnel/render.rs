@@ -1,5 +1,5 @@
 //! render.rs — the `render` job: bounce a ProjectDoc through THIS machine's engine, `out` taking the mix alone
-//! and `outDir` the whole manifest (`apps/k7-daw-frontend/packages/engine-tunnel/docs/jobs.md`). The work is
+//! and `outDir` the whole manifest (`apps/k7-daw-backend/docs/engine/tunnelJobs.md`). The work is
 //! `machine::render`; this checks the paths first and counts the renders in flight on the snapshot, which the
 //! app's Busy reads. What a reader gets wrong: the count rides a patch of this part, so ONE counter serves
 //! every agent.

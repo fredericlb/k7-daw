@@ -6,7 +6,7 @@ the editor lists its engines from it, and every installed supervisor heartbeats 
 
 ## What it asks of a machine: a slot
 
-A machine's slots are jobs sent through the tunnel (`apps/k7-daw-frontend/packages/engine-tunnel/docs/jobs.md`): there is no
+A machine's slots are jobs sent through the tunnel (`apps/k7-daw-backend/docs/engine/tunnelJobs.md`): there is no
 file service on that machine for a browser to call, and a page on HTTPS could not call one there anyway
 ([slots.md](slots.md)).
 

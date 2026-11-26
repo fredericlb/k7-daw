@@ -59,7 +59,7 @@ milestone ends with `bash scripts/agent/gate.sh --milestone`; the hours are agen
 | **M1c** (built) Rust twins | textHash, compat, quality and choose, engineWarnings and engineMissing (classified by Rust, decision 4), performance (the page's scoring deleted; the supervisor scores); paths, clipEnvelope, engineSession, engineTaken and the five rows with no Rust function (lcdSounds, libraryTree, historyMarks, surfaceRows, paneInUse) stay, see below | 310 | song-schema `engine/` and `text_hash`, k7-wasm ops, k7-file-service, k7-supervisor | nothing | 10 |
 | **M2a** chains build | `ui-chains` build and measure steps (buildGraph, buildChains, buildContext, assembly, subgraph, bindings, geometry, moduleRow, rowSeams, gridFit, stackLayout, nodeUIs, widgetValue, flow, the logic of cables, curvePlacement...), `chainsModel`, `moduleField`, `widgetTarget`; graphNode generated; dagre stays in TS until M5b | 3,700 | new crate `apps/k7-daw-wasm/chains`, op `chains_build` | M1b | 16 |
 | **M2b** gesture arithmetic | snap, rollDrag, rollFit, gridCaret, barWindow, clipPlayhead, clipWarp, videoDrag, takeCounter, timelineTools, formatAt; the arithmetic inside TimelineTab, useRollGestures, PianoRoll, useEdgeDrags, useVideoDrag, AudioClipPanel; the ruler's tick ladder and `ui-timeline` ticks and anchored zoom | 1,900 | new crate `apps/k7-daw-wasm/gesture`, typed exports | decision 1 | 13 |
-| **M2c** tunnel stand-in | the hub suites ported to Rust tests over the Rust supervisor; `e2e/src/standInEngine.ts` on the supervisor binary with a fake engine; `engine-tunnel` deleted with its 2,100 test lines | 2,500 | k7-supervisor, k7-hub tests | nothing | 10 |
+| **M2c** tunnel stand-in (done) | the hub suites ported to Rust tests over the Rust supervisor; `e2e/src/standInEngine.ts` on the supervisor binary with a fake engine; `engine-tunnel` deleted with its 2,100 test lines | 2,500 | k7-supervisor, k7-hub tests | nothing | 10 |
 | **M3a** verbs catalogue | contextMenu, menuTabs, menuTitle, palette, argOptions, rankCommands, fuzzy, commandFill, commandPrefs, emptyBar, stepSentence, exportArgs, pendingEdits, nodeInsert, nodeMenu, clipOps, playlistVocabulary, reloadScope, verbWrites, homeCommands' catalogue and parse; `commandTypes.ts` generated | 2,500 | verbs crate | verbs branch merged; decisions 2, 6 | 14 |
 | **M3b** pictures and render tooling | take-render's verbs-only files deleted; engine-client and the render scripts relocated to `k7-runtime/scripts`; ui-eyes scene generated; its clip schedule, transitions and `.cube` reader; viewportRect; the camera name rules | 1,000 | verbs picture code, k7-front cameras | verbs branch merged; decision 7 | 8 |
 | **M3c** git rules and media bytes | gitState, commitState, connectState, forgejoState, gitLock, gitPageTabs, mergeState, saveAct, githubState and roamState rules; serde structs for the git routes, then their types generated; webmDuration, trimGate, spectrumColour | 1,000 | k7-git, k7-front, waveform | decision 5 | 11 |
@@ -96,12 +96,23 @@ can depend on. What stays, and what each needs:
 
 | module | why it stays | what moves it |
 |---|---|---|
-| `web-protocol/paths.ts` | its callers are the song twins and the engine tunnel | their deletion (rust-song-twins, M2c); then it is unused |
+| `web-protocol/paths.ts` | its callers are the song twins | their deletion (rust-song-twins); then it is unused |
 | `clipEnvelope.ts` | not a twin of `wfSig`: it keys what the page holds, `wfSig` what the service holds | the service sending its signature with the waveform |
 | `engineSession.ts` | address parsing around a one-line slug; `session_of` takes a workspace root, not an address | M5c's project address grammar |
 | `engineTaken.ts` | a three-flag decision over React state, called on render | stays |
 | `lcdSounds`' WAV decode | the waveform module is embedded by the Rust front, the page does not load it | a decode route in the file service |
 | `libraryTree`, `historyMarks`, `surfaceRows`, `paneInUse` | no Rust function answers them: ports, not replacements | M4a (doc reads), M3c (git), M5c |
+
+**M2c, as built.** `engine-tunnel` is gone (about 4,500 lines: 2,300 of source, 2,200 of tests); its four doc pages
+live in `apps/k7-daw-backend/docs/engine/` (`tunnel.md`, `tunnelJobs.md`, `backpressure.md`, `sockets.md`). The choices:
+
+| choice | why |
+|---|---|
+| the hub's suites are Rust, in `k7-front/tests/tunnel`, over the real agent linked as a library and the testbed in a process of its own | the hub's routes and sockets are the front's; a process per test keeps its registry and its limits apart, and the agent as a library needs no binary beside it |
+| `k7-front` turns `test-hooks` on for its own tests through a dev-dependency on itself | `cargo test` then builds the testbed the suite spawns, so the gate runs the suite without a feature flag |
+| the TypeScript unit tests of code that is gone moved to the Rust unit that holds the rule (`k7-engine`'s backpressure, frames and spelling; `request_job`'s time limits in `k7-front`; the agent's drain mark in `k7-supervisor`) | the rule stays pinned where it lives; the agent's path map and segment cases were already `tunnel_paths.rs` |
+| the conformance stand-in keeps its TypeScript fake engine (the specs script its frames) and runs the supervisor's `tunnel_harness` for the tunnel | the specs need frames they choose and a heard-list; only the machine's end is the supervisor's. The real `k7-supervisor` would add its own probes to that list |
+| `e2e-macos.sh` builds `tunnel_harness` into the bed's target folder and names it in `TUNNEL_HARNESS_BIN`; a missing binary fails the stand-in's start | nothing is skipped without a word |
 
 **Tests.** A moved function's TS tests become Rust `#[test]`s with the same inputs and expected
 values; a large table becomes a JSON vector file the Rust test reads. During the milestone the TS

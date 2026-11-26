@@ -1,7 +1,7 @@
 //! local.rs — a loopback client on a bound path, piped to a channel of its engine's tunnel, as the hub's `pipe`
 //! does it: what the client sends before the engine answers is held (bounded), a `jobs` channel's text is
 //! respelt to the tunnel's spelling, a peer that stops reading is closed, and either end closing ends both,
-//! a client's close after the frames it held (apps/k7-daw-frontend/packages/engine-tunnel/docs/tunnel.md).
+//! a client's close after the frames it held (apps/k7-daw-backend/docs/engine/tunnel.md).
 
 use std::sync::Arc;
 

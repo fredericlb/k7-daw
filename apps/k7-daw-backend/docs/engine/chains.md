@@ -17,7 +17,7 @@ what the machine already holds, so a card saving one field cannot blank the othe
 is unsaid — the key then leaves the file rather than standing there empty.
 
 **The value is not kept here.** The route opens the engine's jobs channel and asks its supervisor
-(`apps/k7-daw-frontend/packages/engine-tunnel/docs/jobs.md`, the `chains` job), which writes its own settings and answers with
+(`apps/k7-daw-backend/docs/engine/tunnelJobs.md`, the `chains` job), which writes its own settings and answers with
 them; the front answers that. So an engine that is not connected has nothing to name — a 503 saying so —
 and a changed chain reads differently a few seconds later, on the heartbeat that follows.
 

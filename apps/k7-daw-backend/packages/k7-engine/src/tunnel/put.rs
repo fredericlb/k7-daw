@@ -1,6 +1,6 @@
 //! put.rs — the uploads of one tunnel, and their bounds: chunks chained per request id so
 //! they land in order; 16 open at once, 2 GiB each, 20 GiB an hour, 60 s without a chunk; a refused request's
-//! later chunks ignored until its last. Holding a tunnel needs no account (`apps/k7-daw-frontend/packages/engine-tunnel/docs/tunnel.md`).
+//! later chunks ignored until its last. Holding a tunnel needs no account (`apps/k7-daw-backend/docs/engine/tunnel.md`).
 
 use std::collections::HashMap;
 use std::sync::Arc;

@@ -151,4 +151,4 @@ cd apps/k7-daw-backend
 cargo nextest run -p k7-supervisor --target-dir <a folder outside the tree>
 ```
 
-The tests replay each module's behaviours with no device and no network beyond `127.0.0.1`: URLs, settings, the host protocol against its fixtures, audio policy, performance scoring, machine jobs, separation audio, the host lock, the registry, TLS and instruments, and the program end to end against stand-in engines. `tunnel_harness` is the agent alone, used by `apps/k7-daw-frontend/packages/engine-tunnel`'s suites to hold the Rust agent to the same tests as the TypeScript one.
+The tests replay each module's behaviours with no device and no network beyond `127.0.0.1`: URLs, settings, the host protocol against its fixtures, audio policy, performance scoring, machine jobs, separation audio, the host lock, the registry, TLS and instruments, and the program end to end against stand-in engines. `tunnel_harness` is the agent alone, which the conformance suite's stand-in engine (`e2e/src/standInEngine.ts`) runs beside its fake engine; the hub's tests (`apps/k7-daw-backend/packages/k7-front/tests/tunnel`) use the agent as a library.

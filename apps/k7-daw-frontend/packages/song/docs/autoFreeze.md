@@ -110,7 +110,7 @@ The render is made on the engine's MACHINE, which is the one with the VSTs:
 
 - when the server hosts the files, as a `render` job on the bound machine's jobs path
   (`apps/k7-daw-backend/packages/k7-supervisor/src/parts/tunnel/table.rs`). The doc travels in the request; the tunnel brings
-  its clips down and the render back up (`apps/k7-daw-frontend/packages/engine-tunnel/docs/jobs.md`);
+  its clips down and the render back up (`apps/k7-daw-backend/docs/engine/tunnelJobs.md`);
 - when the file service runs beside the engine, by the local engine binary, without blocking.
 
 Nothing is committed and nothing reloads: the render lands in the cache for the engines that will

@@ -1,20 +1,49 @@
 // standInEngine.ts — an engine the conformance suite plays itself: a WebSocket server speaking the engine's wire
 // (every frame kept, `list-sessions` answered for the sessions it holds), listed at the instance by a heartbeat and
-// reached through the reference tunnel agent (`@studio/engine-tunnel/agent`), as a machine's supervisor reaches it.
+// reached through the supervisor's own tunnel agent (its `tunnel_harness` binary), as a machine's supervisor reaches it.
 // What a reader gets wrong: it plays no sound and opens no audio device, so it runs beside a person's own engine.
 
+import { type ChildProcess, spawn } from "node:child_process";
 import { randomBytes } from "node:crypto";
-import { mkdtempSync, renameSync, rmSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdtempSync,
+  renameSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { createInterface } from "node:readline";
+import { fileURLToPath } from "node:url";
 import { expect, request as playwright } from "@playwright/test";
-import { TunnelAgent } from "@studio/engine-tunnel/agent";
 import { type WebSocket, WebSocketServer } from "ws";
 import { base, signedIn } from "./instance.ts";
 import type { SessionUser } from "./session.ts";
 
 // biome-ignore lint/suspicious/noExplicitAny: a frame is read as the engine reads it, by its fields.
 export type Frame = Record<string, any>;
+
+/** The agent binary `$TUNNEL_HARNESS_BIN` names, else one built under the bed's target folder or the backend's. */
+function harnessBin(): string {
+  const named = process.env.TUNNEL_HARNESS_BIN;
+  if (named) {
+    if (existsSync(named)) return named;
+    throw new Error(`TUNNEL_HARNESS_BIN names no file: ${named}`);
+  }
+  const backend = fileURLToPath(
+    new URL("../../apps/k7-daw-backend/target", import.meta.url),
+  );
+  for (const target of [process.env.K7_FRONT_TARGET_DIR, backend])
+    for (const profile of ["release", "debug"])
+      for (const name of ["tunnel_harness", "tunnel_harness.exe"]) {
+        const p = join(target ?? "", profile, name);
+        if (target && existsSync(p)) return p;
+      }
+  throw new Error(
+    "no tunnel_harness: build it (cargo build -p k7-supervisor --bin tunnel_harness, in apps/k7-daw-backend) or name it in TUNNEL_HARNESS_BIN",
+  );
+}
 
 /** One frame the engine heard: on which socket, when, and the frame. */
 export interface Heard {
@@ -34,7 +63,8 @@ export class StandInEngine {
   private readonly sockets = new Map<number, WebSocket>();
   private readonly sessionOf = new Map<number, string>();
   private server!: WebSocketServer;
-  private agent!: TunnelAgent;
+  private agent?: ChildProcess;
+  private up = false;
   private beat?: NodeJS.Timeout;
   private cache = "";
   /** When set, `plugin-scan` and `list-plugins` are answered with these frames, as a scanning engine does. */
@@ -51,25 +81,30 @@ export class StandInEngine {
     await e.heartbeat();
     e.beat = setInterval(() => void e.heartbeat().catch(() => {}), 5_000);
     e.cache = mkdtempSync(join(tmpdir(), "k7-stand-in-"));
-    e.agent = new TunnelAgent({
-      registryUrl: base,
-      id: e.id,
-      token: e.token,
-      enginePort: e.port,
-      cacheDir: e.cache,
-      log: () => {},
-      jobs: {
-        prefetch: (req, emit) => {
-          const files = Array.isArray(req.files) ? (req.files as string[]) : [];
-          e.prefetched.push(files);
-          emit({ type: "prefetched", count: files.length });
-        },
-      },
-    });
-    e.agent.start();
-    await expect.poll(() => e.agent.connected, { timeout: 20_000 }).toBe(true);
+    // The agent exits when its stdin closes; its log and the file lists it was asked to prefetch come on stderr.
+    e.agent = spawn(
+      harnessBin(),
+      [base, e.id, e.token, String(e.port), e.cache],
+      { stdio: ["pipe", "ignore", "pipe"] },
+    );
+    if (e.agent.stderr)
+      createInterface({ input: e.agent.stderr }).on("line", (l) => e.said(l));
+    await expect.poll(() => e.up, { timeout: 20_000 }).toBe(true);
     await e.claim(user);
     return e;
+  }
+
+  /** One line of the agent's stderr: the tunnel's state, or a prefetch it was asked for. */
+  private said(line: string): void {
+    if (line.includes("tunnel | up to ")) this.up = true;
+    else if (line.includes("tunnel | down from ")) this.up = false;
+    else if (line.startsWith("prefetch ")) {
+      try {
+        this.prefetched.push(JSON.parse(line.slice("prefetch ".length)));
+      } catch {
+        // A line that is no file list is the agent's own noise.
+      }
+    }
   }
 
   private listen(): Promise<void> {
@@ -243,7 +278,8 @@ export class StandInEngine {
       data: { id: this.id, token: this.token },
     });
     await ctx.dispose();
-    this.agent?.stop();
+    this.agent?.stdin?.end();
+    this.agent?.kill();
     for (const ws of this.sockets.values()) ws.terminate();
     await new Promise((ok) => this.server.close(() => ok(null)));
     rmSync(this.cache, { recursive: true, force: true });

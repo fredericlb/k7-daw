@@ -104,7 +104,7 @@ Every package is private to the tree.
 | Song files and compile | `song-schema`, `song`, `song-edit`, `k7x`, `song-video`, `song-strudel`, `translator` |
 | Commands | `commands` |
 | Audio processing | `audio-analysis`, `audio-probe`, `audio-passes`, `take-render`, `dsp` |
-| Engine connection | `engine-protocol`, `engine-client`, `engine-browser`, `engine-registry`, `engine-tunnel` |
+| Engine connection | `engine-protocol`, `engine-client`, `engine-browser`, `engine-registry` |
 | Disk | `user-prefs` (the file service and the hub are Rust crates under `apps/k7-daw-backend/packages/`) |
 | Media and recording | `ui-mini-player`, `recorder`, `http-client` (the media core is the Rust crate `k7-mediatek`) |
 | App shell and views | `project-shell`, `ui-chains`, `ui-chains-react`, `ui-editor`, `ui-eyes`, `ui-timeline`, `ui-waveform`, `ui-module-builder` |

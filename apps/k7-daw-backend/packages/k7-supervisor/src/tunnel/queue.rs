@@ -1,6 +1,6 @@
 //! queue.rs — tasks run one at a time, in order, on a task of their own: the Rust form of a promise chain. Closing
 //! it drops what is queued and the one running, since the closer may be what that one waits on. Draining runs what
-//! is queued first, within a bound (`apps/k7-daw-frontend/packages/engine-tunnel/docs/tunnel.md`).
+//! is queued first, within a bound (`apps/k7-daw-backend/docs/engine/tunnel.md`).
 
 use std::future::Future;
 use std::panic::AssertUnwindSafe;
