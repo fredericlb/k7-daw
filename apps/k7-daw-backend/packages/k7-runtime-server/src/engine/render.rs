@@ -3,8 +3,8 @@
 //! What a reader gets wrong: `render_in_process` is never called from the message thread or a socket's task, since
 //! the bounce needs the message loop running; an engine without the area answers a failed outcome, not a panic.
 
-use super::ffi::{K7Str, table};
 use super::Api;
+use super::ffi::{K7Str, table};
 use std::ffi::c_void;
 
 #[repr(C)]

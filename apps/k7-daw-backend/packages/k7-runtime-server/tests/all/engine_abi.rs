@@ -98,3 +98,13 @@ fn the_plugins_table_is_k7_engine_plugins_h() {
         K7PluginsApi::FIELDS.len() * std::mem::size_of::<usize>()
     );
 }
+
+#[test]
+fn the_machine_and_render_tables_are_their_headers() {
+    use k7_runtime_server::engine::machine::K7MachineApi;
+    use k7_runtime_server::engine::render::K7RenderApi;
+    let header = crate::repo_file(&format!("{CAPI}/k7_engine_machine.h"));
+    assert_eq!(header_fields(&header, "K7MachineApi"), K7MachineApi::FIELDS);
+    let header = crate::repo_file(&format!("{CAPI}/k7_engine_render.h"));
+    assert_eq!(header_fields(&header, "K7RenderApi"), K7RenderApi::FIELDS);
+}

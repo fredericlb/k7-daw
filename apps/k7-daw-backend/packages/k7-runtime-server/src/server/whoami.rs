@@ -8,6 +8,7 @@ use super::handlers::HandlerTable;
 use super::msg::Malformed;
 use crate::wire::version::{ENGINE_PROTOCOL, build};
 use serde_json::json;
+use std::collections::hash_map::Entry;
 
 pub fn add(t: &mut HandlerTable) {
     t.add(&["whoami", "hello"], answer);
@@ -37,12 +38,14 @@ fn answer(r: &Request) -> Result<(), Malformed> {
     }
     r.client.send(&reply);
     if r.msg.str("role")? == "driver" {
-        let new = r
-            .ctx
-            .bindings()
-            .drivers
-            .insert(r.client.id, r.session.clone())
-            .is_none();
+        // Once per socket: a later hello naming another session does not move it.
+        let new = match r.ctx.bindings().drivers.entry(r.client.id) {
+            Entry::Vacant(slot) => {
+                slot.insert(r.session.clone());
+                true
+            }
+            Entry::Occupied(_) => false,
+        };
         if new {
             let session = r.session.clone();
             r.ctx.engine.post(move |mt| mt.add_driver(&session));

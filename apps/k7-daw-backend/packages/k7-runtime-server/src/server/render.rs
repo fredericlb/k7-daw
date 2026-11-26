@@ -53,7 +53,10 @@ fn normalize(path: &Path) -> PathBuf {
         match part {
             std::path::Component::CurDir => {}
             std::path::Component::ParentDir
-                if matches!(out.components().next_back(), Some(std::path::Component::Normal(_))) =>
+                if matches!(
+                    out.components().next_back(),
+                    Some(std::path::Component::Normal(_))
+                ) =>
             {
                 out.pop();
             }
@@ -126,7 +129,14 @@ fn render(r: &Request) -> Result<(), Malformed> {
         return Ok(());
     }
     eprintln!("[render] started{}", if stems { " with stems" } else { "" });
-    spawn(r.ctx.clone(), r.client.id, id, json::dump(&parsed.doc), out_dir, stems);
+    spawn(
+        r.ctx.clone(),
+        r.client.id,
+        id,
+        json::dump(&parsed.doc),
+        out_dir,
+        stems,
+    );
     Ok(())
 }
 
@@ -155,7 +165,10 @@ fn spawn(ctx: Arc<Ctx>, asker: u64, id: Value, doc: String, out_dir: String, ste
             }
             eprintln!("[render] done");
             let manifest = serde_json::from_str::<Value>(&outcome.manifest).unwrap_or(Value::Null);
-            ctx.send_to(asker, &rendered(&id, json!({"ok": true, "manifest": manifest})));
+            ctx.send_to(
+                asker,
+                &rendered(&id, json!({"ok": true, "manifest": manifest})),
+            );
         }
     };
     if std::thread::Builder::new()

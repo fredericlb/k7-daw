@@ -47,7 +47,7 @@ server side moves.
 | M5 project and transport (built) | the `DocJson` port with its bounds, supersede, held notes; the project and transport areas | 12 |
 | M6 the state frame (built) | the state frame, `recorded`, `plugin-params`, `engine-warning` | 6 |
 | M7 plugins (built) | the scan, the probe (4 at once), the pending queries, the plugin verbs | 10 |
-| M8 the machine | the `AudioSender` broadcast, sessions, drivers, devices, `io-levels`, `instrument-status`, `render` | 10 |
+| M8 the machine (built) | the `AudioSender` broadcast, sessions, drivers, devices, `io-levels`, `instrument-status`, `render` | 10 |
 | M9 the CLI and the switch | argv in Rust, C++ `main` cut to a few lines, the JNI and iOS doors calling `serve`; `Serve*`, `Pairing`, `Outbox`, `AudioSender`, `Supersede`, `HeldNotes`, `PendingQueries`, `WireVersion`, IXWebSocket and their tests deleted; their pages moved to this crate's `docs/` | 12 |
 
 Each milestone owns one ABI area (`abi.md`), so its header, `.cpp` and Rust module touch no other
@@ -126,3 +126,10 @@ produced by the C++ (`tests/PluginReplies_test.cpp`); the area's real host is `t
 Deviations from the C++: the scan, the probes and the pending set are per server, not process statics; a detached
 job's failure is an `engine-warning` the server says itself and does not keep as a standing warning; a scan or probe
 still loading when the server stops is abandoned after the 3 s grace, as a blocking task cannot be joined.
+
+## M8's choices
+
+The machine and render areas are built (`apps/k7-daw-backend/packages/k7-runtime-server/docs/machine.md`): the broadcast
+sender on a thread of its own, sessions, drivers, devices, `io-levels`, `instrument-status`, `audio-cost`, `render`. Deviations
+from the C++: the outbox gained a binary frame; the sender does not prune departed sockets, since `Ctx::forget` releases them
+under the lock; a render's worker is a plain thread waited for at stop; `whoami`'s `safeMode` still carries `crashes` only.

@@ -182,8 +182,10 @@ unsafe extern "C" fn list_audio_devices(
     ctx: *mut c_void,
     each: K7AudioDeviceEach,
 ) {
-    let devices =
-        call(host, "list_audio_devices".into(), |s| s.machine.devices.clone()).unwrap_or_default();
+    let devices = call(host, "list_audio_devices".into(), |s| {
+        s.machine.devices.clone()
+    })
+    .unwrap_or_default();
     let Some(each) = each else { return };
     for d in &devices {
         let device = K7AudioDevice {
@@ -303,7 +305,9 @@ unsafe extern "C" fn set_input_stereo(host: *mut K7Host, channel: i32, stereo: i
 
 unsafe extern "C" fn master_level_db(host: *mut K7Host, session: K7Str) -> f32 {
     let session = text(session);
-    quiet(host, |s| s.machine.master_db.get(&session).copied()).flatten().unwrap_or(-100.0)
+    quiet(host, |s| s.machine.master_db.get(&session).copied())
+        .flatten()
+        .unwrap_or(-100.0)
 }
 
 pub static TABLE: K7MachineApi = K7MachineApi {

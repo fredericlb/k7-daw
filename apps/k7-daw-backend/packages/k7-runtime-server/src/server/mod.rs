@@ -136,7 +136,11 @@ impl Running {
         while self.ctx.client_count() > 0 && waited.elapsed() < SHUTDOWN_GRACE {
             std::thread::sleep(Duration::from_millis(10));
         }
-        while self.ctx.machine.rendering.load(std::sync::atomic::Ordering::SeqCst)
+        while self
+            .ctx
+            .machine
+            .rendering
+            .load(std::sync::atomic::Ordering::SeqCst)
             && waited.elapsed() < SHUTDOWN_GRACE
         {
             std::thread::sleep(Duration::from_millis(10));

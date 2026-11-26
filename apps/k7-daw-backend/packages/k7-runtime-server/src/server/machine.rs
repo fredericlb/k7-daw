@@ -135,7 +135,11 @@ fn list_audio_devices(r: &Request) -> Result<(), Malformed> {
         let msg = devices_msg(mt.list_audio_devices());
         let text = json::dump(&msg);
         {
-            let mut sent = ctx.machine.devices_sent.lock().unwrap_or_else(|e| e.into_inner());
+            let mut sent = ctx
+                .machine
+                .devices_sent
+                .lock()
+                .unwrap_or_else(|e| e.into_inner());
             if *sent == text && !joined {
                 asker.send(&msg);
                 return;
