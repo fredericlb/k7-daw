@@ -1,6 +1,6 @@
 [package]
 name = "k7-local"
-description = "The machine's own engine run by its own backend: apps/k7-daw-engine/k7-supervisor hosted over NDJSON stdio, kept running, stopped cleanly, and its engine killed only on pidfile proof."
+description = "The machine's own engine run by its own backend: apps/k7-daw-backend/packages/k7-supervisor hosted over NDJSON stdio, kept running, stopped cleanly, and its engine killed only on pidfile proof."
 version.workspace = true
 edition.workspace = true
 publish.workspace = true

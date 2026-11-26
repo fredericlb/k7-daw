@@ -1,7 +1,7 @@
 # Repository layout
 
 The `k7-daw` repository (K7 DAW) holds k7 and everything it is built from: the web app, its backend, the
-shared TypeScript packages, the C++ engine and its supervisor, the desktop app and the phone shells, and
+shared TypeScript packages, the C++ engine and its Rust supervisor, the desktop app and the phone shells, and
 the module library k7 ships with. It is one npm workspace tree driven from the root
 `package.json`.
 
@@ -55,7 +55,7 @@ The root `package.json` declares these workspace globs:
 | `apps/k7-daw-android/web` | `@studio/k7-android-shell` | The Capacitor page of the Android app. |
 | `apps/k7-daw-frontend/packages/*` | `@studio/*` | The shared tier, below. |
 
-`apps/k7-daw-engine/k7-supervisor` is a CMake project only and is not a workspace.
+The supervisor is a crate of the backend, `apps/k7-daw-backend/packages/k7-supervisor`.
 
 ## `apps/k7-daw-frontend/packages/`: raw TypeScript through `exports`
 
@@ -119,7 +119,7 @@ Each area has its own section in this guide; the package's own `package.json` de
 | Folder | Build system | Output |
 |---|---|---|
 | `apps/k7-daw-engine/k7-runtime` | CMake (`CMakePresets.json`: `macos-clang`, `windows-msvc`, `windows-msvc-ninja`, `dev-gcc`, `release-gcc`, `android-arm64` and others) | The `k7-runtime` executable (or `libk7runtime.so` on Android) |
-| `apps/k7-daw-engine/k7-supervisor` | CMake, its own presets | The `k7-supervisor` executable and its unit-test binary |
+| `apps/k7-daw-backend/packages/k7-supervisor` | Cargo, in the backend's workspace (`apps/k7-daw-engine/scripts/supervisorBuild.mjs`) | The `k7-supervisor` executable, `tunnel_harness` and, on iOS, the C calls in `k7-embed` |
 | `apps/k7-daw-android` | Gradle (`./gradlew assembleDebug`) | The Android APK, which builds its own arm64 engine and supervisor |
 | `apps/k7-daw-engine/scripts` | Node | `build-engine.mjs` (build and stage the command-line engine into `dist/k7-runtime/`), `package-release.mjs` (archive it, or rename the desktop app's installers), `devEngine.mjs` and `supervisorBuild.mjs` (used by the dev session) |
 

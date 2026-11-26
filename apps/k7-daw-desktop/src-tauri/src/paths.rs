@@ -109,7 +109,23 @@ pub fn supervisor(app: &AppHandle) -> Option<PathBuf> {
     if staged.is_file() {
         return Some(staged);
     }
-    newest_build("k7-supervisor", SUPERVISOR)
+    built_supervisor()
+}
+
+/// The checkout's own supervisor build, where `apps/k7-daw-engine/scripts/supervisorBuild.mjs` puts it.
+fn built_supervisor() -> Option<PathBuf> {
+    let repo = repo_root()?;
+    let target = match std::env::var_os("K7_SUPERVISOR_TARGET_DIR") {
+        Some(dir) if !dir.is_empty() => PathBuf::from(dir),
+        _ => {
+            let checkout = repo.file_name()?.to_string_lossy().into_owned();
+            dirs::home_dir()?
+                .join(".cache")
+                .join(format!("k7-supervisor-{checkout}"))
+        }
+    };
+    let p = target.join("release").join(SUPERVISOR);
+    p.is_file().then_some(p)
 }
 
 /// The engine binary beside the supervisor, for the backend's offline renders (`$STUDIO_ENGINE`).
@@ -118,7 +134,7 @@ pub fn engine_beside(supervisor: &Path) -> Option<PathBuf> {
     if beside.is_file() {
         return Some(beside);
     }
-    newest_build("k7-runtime", ENGINE)
+    newest_engine_build()
 }
 
 /// The monorepo root of a checkout run: `$STUDIO_REPO_ROOT`, else up from this crate to the dir holding `apps/k7-daw-engine/k7-runtime`.
@@ -140,9 +156,9 @@ fn repo_root() -> Option<PathBuf> {
     }
 }
 
-/// The freshest build of a CMake target under `engine/<project>/build/<preset>/[<config>/]`, Debug last; never a phone's.
-fn newest_build(project: &str, name: &str) -> Option<PathBuf> {
-    let build = repo_root()?.join("engine").join(project).join("build");
+/// The freshest engine build under `apps/k7-daw-engine/k7-runtime/build/<preset>/[<config>/]`, Debug last; never a phone's.
+fn newest_engine_build() -> Option<PathBuf> {
+    let build = repo_root()?.join("apps/k7-daw-engine/k7-runtime/build");
     let mut found: Vec<(bool, SystemTime, PathBuf)> = Vec::new();
     for preset in std::fs::read_dir(&build).ok()?.flatten() {
         let preset_name = preset.file_name().to_string_lossy().into_owned();
@@ -150,7 +166,7 @@ fn newest_build(project: &str, name: &str) -> Option<PathBuf> {
             continue;
         }
         for cfg in ["", "Release", "RelWithDebInfo", "Debug"] {
-            let p = preset.path().join(cfg).join(name);
+            let p = preset.path().join(cfg).join(ENGINE);
             if let Ok(meta) = std::fs::metadata(&p) {
                 if meta.is_file() {
                     let at = meta.modified().unwrap_or(SystemTime::UNIX_EPOCH);

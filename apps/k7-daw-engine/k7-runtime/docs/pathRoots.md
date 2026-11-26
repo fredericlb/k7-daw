@@ -56,4 +56,4 @@ runs the binary — a person, or the supervisor's render job on a document the t
 Only a UNC path is refused there.
 
 The supervisor holds its own jobs to the same copies, by its own test
-(`apps/k7-daw-engine/k7-supervisor/src/MachineJobs.cpp`): a job is answered by that process, not by this one.
+(`apps/k7-daw-backend/packages/k7-supervisor/src/parts/tunnel/table.rs`): a job is answered by that process, not by this one.

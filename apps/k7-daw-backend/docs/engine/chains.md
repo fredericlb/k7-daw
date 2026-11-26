@@ -3,7 +3,7 @@
 A cut runs a **chain**: which module separates a mix and which model it loads. That is a fact about the
 machine that runs it — its CPU, its GPU, the models it has downloaded — so the standing answer is the
 machine's own, in `stems` / `instrumental` in its `engine-host.json`
-(`apps/k7-daw-engine/k7-supervisor/docs/supervisor.md`), and it travels back on its heartbeat as `PublicEngine.chains`
+(`apps/k7-daw-backend/packages/k7-supervisor/docs/supervisor.md`), and it travels back on its heartbeat as `PublicEngine.chains`
 (`heartbeat.md`). One machine separating with Demucs and another with something smaller is a normal estate.
 
 ```

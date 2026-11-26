@@ -108,7 +108,7 @@ when it pins its own (`apps/k7-daw-backend/docs/localEngine.md`).
 
 | choice | why |
 |---|---|
-| the engine registers at the desktop app's front on 18789, not at the dev session's front on 8789 | the supervisor rewrites a loopback address to k7's one port (`apps/k7-daw-engine/k7-supervisor/src/Url.cpp`) and the desktop app drops any other loopback entry when it pins its own (`apps/k7-daw-backend/packages/k7-local/src/settings.rs`); a dev-only exception would be a second rule in both |
+| the engine registers at the desktop app's front on 18789, not at the dev session's front on 8789 | the supervisor rewrites a loopback address to k7's one port (`apps/k7-daw-backend/packages/k7-supervisor/src/urls.rs`) and the desktop app drops any other loopback entry when it pins its own (`apps/k7-daw-backend/packages/k7-local/src/settings.rs`); a dev-only exception would be a second rule in both |
 | no device token handed to the engine by the dev setup | a `weburi.pair` writes a credential into the machine's real `engine-host.json`, a person's choice and not a script's |
 | `K7_GIT_SECRETS=file` in this task and in `dev-front.mjs`: the git secrets in the account's private file, never the keychain | an unsigned dev build changes signature at each build, and the keychain would ask at every read (`apps/k7-daw-backend/docs/git.md`, "Credentials") |
 | `let go of engine … its claim moved on` read as a suite at work | the web and conformance suites claim engines under their own accounts, and a newcomer displaces the holder (`apps/k7-daw-backend/docs/engine/claim.md`): the displaced account's binding lets go |
@@ -124,7 +124,7 @@ a 502 naming it. `K7_DEV_FRONTEND=` (empty) before `npm run dev` brings back the
 
 **Its front is linked into the desktop app**, so a save in the front's crates rebuilds and restarts the desktop app (the table below): the desktop app's own
 binary holds the front, and a restart ends the engine with it, since the front holds the supervisor's job
-(`apps/k7-daw-engine/k7-supervisor/docs/hostProtocol.md`), which is what keeps a killed desktop app from leaving a ghost engine.
+(`apps/k7-daw-backend/packages/k7-supervisor/docs/hostProtocol.md`), which is what keeps a killed desktop app from leaving a ghost engine.
 
 The engine is C++, so it has no watch mode that means anything: there is nothing to hot-reload, only
 a binary to relink and a process to restart — and the desktop app has to be stopped for that relink, since
@@ -133,8 +133,8 @@ its tree holds the engine running. That is what the task does — watch the sour
 | target | watched | rebuilt with |
 |---|---|---|
 | `k7-runtime` | `engine/`, `server/`, `CMakeLists.txt`, `CMakePresets.json` | `npm run build:win` / `build:mac --workspace k7-runtime` |
-| `k7-supervisor` | `src/`, `CMakeLists.txt`, `CMakePresets.json` | `supervisorBuild.mjs` |
-| `k7-desktop` | `src-tauri/src/`, `Cargo.toml`, `tauri.conf.json`, and the front's crates it links: `apps/k7-daw-backend/packages/**`, its `Cargo.toml` and `Cargo.lock` | `cargo build` in `apps/k7-daw-desktop/src-tauri`, line tables only for debug info: `CARGO_PROFILE_DEV_DEBUG=2` before `npm run dev` for a debugger ([rust-builds.md](rust-builds.md)) |
+| `k7-supervisor` | the crates `k7-supervisor`, `k7-local`, `k7-engine` and `waveform` under `apps/k7-daw-backend/packages/`, the workspace's `Cargo.toml` and `Cargo.lock` | `supervisorBuild.mjs`: cargo in release, ONNX Runtime beside it |
+| `k7-desktop` | `src-tauri/src/`, `Cargo.toml`, `tauri.conf.json`, and the front's crates it links: `apps/k7-daw-backend/packages/**` but `k7-supervisor`, its `Cargo.toml` and `Cargo.lock` | `cargo build` in `apps/k7-daw-desktop/src-tauri`, line tables only for debug info: `CARGO_PROFILE_DEV_DEBUG=2` before `npm run dev` for a debugger ([rust-builds.md](rust-builds.md)) |
 
 | choice | why |
 |---|---|

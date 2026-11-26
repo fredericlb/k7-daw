@@ -1,5 +1,5 @@
 // stageEngine.mjs — copy the newest engine and supervisor builds into an app's staging `bin/`, with what they load beside them.
-// The supervisor finds the engine beside itself, and the supervisor its onnxruntime.
+// The supervisor finds the engine beside itself, and its onnxruntime (supervisorBuild.mjs lays it beside the build).
 
 import {
   copyFileSync,
@@ -10,13 +10,14 @@ import {
   statSync,
 } from "node:fs";
 import { dirname, join } from "node:path";
+import { findSupervisor, supervisorTargetDir } from "./supervisorBuild.mjs";
 
 const exe = (n) => (process.platform === "win32" ? `${n}.exe` : n);
 /** The presets that build for a phone, whose binaries this machine cannot run. */
 export const CROSS = /^(android|ios)-/;
 
 /** The newest build of a CMake target under engine/<project>/build/<preset>/[<config>/], Debug last, or null. */
-export function findBuild(repo, project, name) {
+function findBuild(repo, project, name) {
   const build = join(repo, "apps", "k7-daw-engine", project, "build");
   const found = [];
   if (existsSync(build))
@@ -55,7 +56,11 @@ export function stageEngine({ repo, bin }) {
     cpSync(prebuilt, bin, { recursive: true, verbatimSymlinks: true });
     return;
   }
-  const supervisor = newestBuild(repo, "k7-supervisor", "k7-supervisor");
+  const supervisor = findSupervisor(repo);
+  if (!supervisor)
+    throw new Error(
+      `no build of k7-supervisor under ${supervisorTargetDir(repo)} — build it first`,
+    );
   copyFileSync(
     newestBuild(repo, "k7-runtime", "k7-runtime"),
     join(bin, exe("k7-runtime")),

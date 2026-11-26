@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# android-check.sh — what a branch passes for Android on the Mac before it merges: the Rust front built for the phone, the bundled backend staged, the app's Kotlin compiled.
+# android-check.sh — what a branch passes for Android on the Mac before it merges: the Rust front and supervisor built for the phone, the bundled backend staged, the app's Kotlin compiled.
 # The C++ engine is not built (the port does not touch it): a change there needs the full APK (apps/k7-daw-engine/k7-runtime/docs/android.md).
 # What a reader gets wrong: CI does not build Android for a branch any more (docs/agent-playbook.md); this is the check.
 set -euo pipefail
@@ -22,6 +22,6 @@ fi
 })();' )
 cd "$root/apps/k7-daw-android"
 # The configuration cache skips Gradle's configuring phase when the build scripts did not change.
-./gradlew --no-daemon --configuration-cache :app:buildFront :app:stageBackend :app:compileE2eKotlin \
-  -x buildEngine -x buildSupervisor -x stageEngine
+./gradlew --no-daemon --configuration-cache :app:buildFront :app:stageSupervisor :app:stageBackend :app:compileE2eKotlin \
+  -x buildEngine -x stageEngine
 echo "android-check: passed"

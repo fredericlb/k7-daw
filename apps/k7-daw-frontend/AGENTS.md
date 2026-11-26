@@ -4,7 +4,7 @@ A **text-based DAW**. Your song is a folder of k7x files; the terminal or a web 
 is your studio.
 
 **This directory is the web editor, and its TypeScript.** The engine (`apps/k7-daw-engine/k7-runtime`) and its
-supervisor (`apps/k7-daw-engine/k7-supervisor`) sit beside it, because they serve every audio app in the repo — the
+supervisor (`apps/k7-daw-backend/packages/k7-supervisor`, a crate of the Rust backend) sit beside it, because they serve every audio app in the repo — the
 repo-root `AGENTS.md` holds the map of the whole audio side. The brain packages (`packages/*`, all `@studio/*`) are
 inside it, and one workspace and the Rust backend are around it:
 

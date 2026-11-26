@@ -2,7 +2,7 @@
 
 A frozen chain saved into a **slot** of this machine's engine plays with no page open once it is
 enabled. The supervisor keeps the slots and the engine's rules are its own
-(`apps/k7-daw-engine/k7-supervisor/docs/slots.md`); this page is what k7 offers.
+(`apps/k7-daw-backend/packages/k7-supervisor/docs/slots.md`); this page is what k7 offers.
 
 | choice | why |
 |---|---|

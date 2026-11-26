@@ -47,10 +47,9 @@ apps/k7-daw-engine/k7-runtime/               the C++ project (k7-runtime)       
   CMakeLists.txt · CMakePresets.json · docs/design.md
   engine/    library studio::engine  (ProjectDoc, ProjectDiff, EngineHost/Tracktion)
   server/    app k7-runtime          (WebSocket audio server, Serve.cpp)
-apps/k7-daw-engine/k7-supervisor/           the supervisor (C++): identity, registry, engine, tunnel, machine jobs
 apps/k7-daw-engine/scripts/                  the native build: engine + supervisor, staged and packaged
 apps/k7-daw-desktop/                   the desktop app (Tauri; runs k7's backend, which drives k7-supervisor)
-apps/k7-daw-backend/                   the Rust backend: `packages/` are its crates (k7-front, k7-file-service, ...)
+apps/k7-daw-backend/                   the Rust backend: `packages/` are its crates (k7-front, k7-file-service, k7-supervisor, ...)
 apps/k7-daw-wasm/                      the Rust crates built for the browser as WebAssembly (song, song-schema, song-edit, k7x, k7-wasm) and the verbs
 apps/k7-daw-frontend/                  the web editor (this folder)
   packages/                k7-daw's shared tier (consumed as raw TS source):

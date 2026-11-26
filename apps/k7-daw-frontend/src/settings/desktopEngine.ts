@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { useLocalApp } from "../localApp";
 import { m } from "../paraglide/messages.js";
 
-/** What this page draws of the supervisor's snapshot (apps/k7-daw-engine/k7-supervisor/schema/hostProtocol.schema.json). */
+/** What this page draws of the supervisor's snapshot (apps/k7-daw-backend/packages/k7-supervisor/schema/hostProtocol.schema.json). */
 export interface DesktopEngineSnapshot {
   status: "stopped" | "running" | "error";
   error?: string;
@@ -162,7 +162,7 @@ export function useDesktopEngine(): DesktopEngineState | null {
   return state;
 }
 
-/** U+001F joins the names `audio.priority` takes (apps/k7-daw-engine/k7-supervisor/docs/hostProtocol.md). */
+/** U+001F joins the names `audio.priority` takes (apps/k7-daw-backend/packages/k7-supervisor/docs/hostProtocol.md). */
 const SEP = "\u001f";
 
 export interface AudioChoice {

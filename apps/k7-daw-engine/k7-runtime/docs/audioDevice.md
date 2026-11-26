@@ -73,7 +73,7 @@ by `engineLink` on every connect.
 
 That second row is an ordered LIST, best first, and no longer a pick plus a fallback: the
 engine goes to the highest-ranked interface actually plugged in
-(`apps/k7-daw-engine/k7-supervisor/docs/supervisorPolicy.md`).
+(`apps/k7-daw-backend/packages/k7-supervisor/docs/supervisorPolicy.md`).
 
 It does not cover for the first: its setting is written on the
 engine's own machine, so a hosted browser cannot reach it.

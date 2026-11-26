@@ -25,11 +25,11 @@ request is rare and long, so a pooled socket would buy nothing and would have to
 machine's restarts.
 
 What a machine does is registered by type; the supervisor's list is
-`apps/k7-daw-engine/k7-supervisor/src/MachineJobs.cpp` (`TunnelAgentOptions.jobs` for the TypeScript reference
+`apps/k7-daw-backend/packages/k7-supervisor/src/parts/tunnel/table.rs` (`TunnelAgentOptions.jobs` for the TypeScript reference
 agent the server's tests run on). A type it does not know is refused by name.
 
 Some types are **settings, not work**: `onnx-providers` and `chains` answer in one frame
-and write the machine's own file on the way (`apps/k7-daw-engine/k7-supervisor/docs/supervisor.md`), so the studio's
+and write the machine's own file on the way (`apps/k7-daw-backend/packages/k7-supervisor/docs/supervisor.md`), so the studio's
 card changes what that machine separates with instead of keeping a copy of its answer
 (`apps/k7-daw-backend/docs/engine/chains.md`). They go through one accessor for the same reason every
 settings write does: the supervisor's loop is the file's single writer.

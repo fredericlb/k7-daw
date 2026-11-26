@@ -40,4 +40,4 @@ next ten looks are skipped while the other threads catch up.
 `whoami` carries `messageThreadMs`, the heartbeat's age, read from an atomic so the socket thread can
 answer it. The supervisor asks every 10 s and kills an engine it owns once that age passes 90 s —
 longer than the engine's own bound, so it acts only where the engine could not
-(`apps/k7-daw-engine/k7-supervisor/docs/crashLoop.md`).
+(`apps/k7-daw-backend/packages/k7-supervisor/docs/crashLoop.md`).

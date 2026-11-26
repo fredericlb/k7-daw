@@ -7,7 +7,7 @@ set while you look at the song they affect; these are not.
 
 It holds what a **browser** may change. Everything about a machine — which audio interface the
 engine opens, whether the engine is running — is set on that machine:
-in the command-line engine's config file (`apps/k7-daw-engine/k7-supervisor/engine.example.json`), or on the
+in the command-line engine's config file (`apps/k7-daw-backend/packages/k7-supervisor/engine.example.json`), or on the
 engine page of the backend that runs it (below). Not because moving it here would be hard: those settings need a process
 on that machine, and this page is served to any machine that asks.
 
@@ -23,7 +23,7 @@ config file to hand its user. So the Engine page (below) opens on **this phone's
 `settings/AndroidEngineSection.tsx`: the engine's state, Quit and full screen (Android only: an iOS app never
 ends itself, and full screen is a setting of the device rather than the account), the instruments it downloads, the private CA. The Downloads section is the
 computer's engine page's own (`settings/InstrumentsSection.tsx`), since what a phone keeps is chosen the same
-way (`apps/k7-daw-engine/k7-supervisor/docs/instruments.md`). The hint that sends a browser to the engine's machine is not drawn there, since
+way (`apps/k7-daw-backend/packages/k7-supervisor/docs/instruments.md`). The hint that sends a browser to the engine's machine is not drawn there, since
 that machine is this one.
 
 They are drawn only when `window.k7Android` is there (`settings/androidEngine.ts`), which the app
@@ -178,7 +178,7 @@ changed.
 `AudioInterfaceSection.tsx`, first in Devices, drawn only where this page's backend runs the engine. The engine
 opens the first interface of its ranking that is plugged in, and a person has two things to say about that:
 which one they want, and which one to take when it is away. So the section is a **Primary** and a **Fallback**
-select, each sending the pair as one `audio.priority` (`apps/k7-daw-engine/k7-supervisor/docs/hostProtocol.md`), over
+select, each sending the pair as one `audio.priority` (`apps/k7-daw-backend/packages/k7-supervisor/docs/hostProtocol.md`), over
 the devices the engine sees plus a ranked one that is unplugged, marked "not connected". A ranked list with arrows
 exposed an order of every device, which nobody sets past the second. The fallback offers None and never repeats
 the primary. The interface in use is named under the selects with the channels it opened, and on Windows the

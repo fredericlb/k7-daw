@@ -45,7 +45,7 @@ loading an SFZ instrument. Not covered: a plugin crashing later, in `prepareToPl
 thread — by then several plugins are live, and a crash cannot be pinned on one. That loop is the
 supervisor's to end: after three quick crashes it starts the engine in **safe mode**, which loads no
 external plugin, and the engine names the plugin it loaded last as the likeliest culprit
-(`apps/k7-daw-engine/k7-supervisor/docs/crashLoop.md`).
+(`apps/k7-daw-backend/packages/k7-supervisor/docs/crashLoop.md`).
 
 **Two strikes, not one.** A kill by the supervisor or a power cut in the middle of a load leaves the
 same marker as a crash, and refusing a good plugin for that would be worse than the loop. The first
@@ -76,4 +76,4 @@ delivery with nothing in it loses nothing.
 
 ## The supervisor's TLS seeding
 
-See `apps/k7-daw-engine/k7-supervisor/docs/supervisor.md`, "TLS from several threads".
+See `apps/k7-daw-backend/packages/k7-supervisor/docs/supervisor.md`, "TLS from several threads".

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// build-engine.mjs — `npm run engine:build`: builds the C++ engine and the native supervisor, then stages the
+// build-engine.mjs — `npm run engine:build`: builds the C++ engine and the Rust supervisor, then stages the
 // command-line engine into dist/k7-runtime/ — the two binaries side by side, what they load, an example config.
 // The desktop app is packaged from these builds by apps/k7-daw-desktop, not here. See docs/buildEngine.md.
 
@@ -22,7 +22,7 @@ const PRESET =
 console.log(`\n=== engine (${PRESET}) ===`);
 run("node", [join("scripts", "build.mjs"), PRESET], engineDir);
 console.log("\n=== supervisor ===");
-buildSupervisor(repo);
+await buildSupervisor(repo);
 
 console.log("\n=== command-line engine ===");
 const out = join(distDir(repo), "k7-runtime");
@@ -31,7 +31,8 @@ stageEngine({ repo, bin: out });
 const example = join(
   repo,
   "apps",
-  "k7-daw-engine",
+  "k7-daw-backend",
+  "packages",
   "k7-supervisor",
   "engine.example.json",
 );

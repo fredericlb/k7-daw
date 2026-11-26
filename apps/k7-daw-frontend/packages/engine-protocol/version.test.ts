@@ -1,5 +1,5 @@
-// The wire's version is one number written three times — here, and in the engine's and the
-// supervisor's WireVersion.h — so this keeps them equal without building either.
+// The wire's version is one number written three times — here, in the engine's WireVersion.h and in
+// the supervisor's wire.rs — so this keeps them equal without building either.
 
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -12,20 +12,21 @@ import {
   MIN_ENGINE_PROTOCOL,
 } from "./version.ts";
 
-const engine = join(
-  dirname(fileURLToPath(import.meta.url)),
-  "../../../k7-daw-engine",
-);
+const apps = join(dirname(fileURLToPath(import.meta.url)), "../../..");
 
 describe("ENGINE_PROTOCOL", () => {
-  for (const file of [
-    "k7-runtime/server/WireVersion.h",
-    "k7-supervisor/src/WireVersion.h",
-  ])
+  for (const [file, re] of [
+    [
+      "k7-daw-engine/k7-runtime/server/WireVersion.h",
+      /constexpr int kEngineProtocol = (\d+);/,
+    ],
+    [
+      "k7-daw-backend/packages/k7-supervisor/src/wire.rs",
+      /pub const ENGINE_PROTOCOL: i64 = (\d+);/,
+    ],
+  ] as const)
     it(`is the version ${file} states`, () => {
-      const m = /constexpr int kEngineProtocol = (\d+);/.exec(
-        readFileSync(join(engine, file), "utf8"),
-      );
+      const m = re.exec(readFileSync(join(apps, file), "utf8"));
       expect(Number(m?.[1])).toBe(ENGINE_PROTOCOL);
     });
 

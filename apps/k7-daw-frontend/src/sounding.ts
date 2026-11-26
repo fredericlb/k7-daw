@@ -1,6 +1,5 @@
-// sounding.ts — whether the engine is making sound right now, for the idle clock: a live rig
+// sounding.ts — whether the engine is making sound right now, for androidBusy.ts: a live rig
 // played with the transport stopped is a session in use, and only the meters can tell.
-// See apps/k7-daw-frontend/packages/project-shell/docs/idle.md.
 
 import type { EngineState } from "@studio/engine-protocol";
 

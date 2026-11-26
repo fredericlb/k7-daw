@@ -194,66 +194,23 @@
       "fetchContent": ["asiosdk"]
     },
     {
-      "name": "Mbed TLS",
-      "version": "3.6.5",
-      "source": "apps/k7-daw-engine/k7-supervisor/CMakeLists.txt",
-      "license": "Apache-2.0 OR GPL-2.0-or-later",
-      "url": "https://github.com/Mbed-TLS/mbedtls",
-      "where": ["engine"],
-      "note": "Taken under Apache-2.0.",
-      "fetchContent": ["mbedtls"]
-    },
-    {
-      "name": "miniz",
-      "version": "3.0.2",
-      "source": "apps/k7-daw-engine/k7-supervisor/CMakeLists.txt",
-      "license": "MIT",
-      "url": "https://github.com/richgel999/miniz",
-      "where": ["engine"],
-      "fetchContent": ["miniz"],
-      "text": "miniz.txt",
-      "vendor": ["supervisor:miniz-src/LICENSE"]
-    },
-    {
-      "name": "libdatachannel",
-      "version": "v0.24.5",
-      "source": "apps/k7-daw-engine/k7-supervisor/CMakeLists.txt",
-      "license": "MPL-2.0 AND MIT AND BSD-3-Clause",
-      "url": "https://github.com/paullouisageneau/libdatachannel",
-      "where": ["engine"],
-      "fetchContent": ["libdatachannel"],
-      "text": "libdatachannel.txt",
-      "vendor": [
-        "supervisor:libdatachannel-src/LICENSE",
-        "supervisor:libdatachannel-src/deps/libjuice/LICENSE",
-        "supervisor:libdatachannel-src/deps/plog/LICENSE",
-        "supervisor:libdatachannel-src/deps/usrsctp/LICENSE.md"
-      ]
-    },
-    {
       "name": "ONNX Runtime",
       "version": "1.30.0",
-      "source": "apps/k7-daw-engine/k7-supervisor/CMakeLists.txt",
+      "source": "apps/k7-daw-engine/scripts/onnxRuntime.mjs",
       "license": "MIT",
       "url": "https://github.com/microsoft/onnxruntime",
       "where": ["engine"],
       "note": "Windows builds take the DirectML package, 1.24.4.",
-      "fetchContent": ["onnxruntime"],
-      "text": "onnxruntime.txt",
-      "vendor": [
-        "supervisor:onnxruntime-src/LICENSE",
-        "supervisor:onnxruntime-src/ThirdPartyNotices.txt"
-      ]
+      "text": "onnxruntime.txt"
     },
     {
       "name": "Microsoft DirectML",
       "version": "1.15.4",
-      "source": "apps/k7-daw-engine/k7-supervisor/CMakeLists.txt",
+      "source": "apps/k7-daw-engine/scripts/onnxRuntime.mjs",
       "license": "LicenseRef-Microsoft-DirectML",
       "url": "https://www.nuget.org/packages/Microsoft.AI.DirectML",
       "where": ["engine"],
       "note": "Windows builds only.",
-      "fetchContent": ["directml"],
       "text": "directml.txt"
     },
     {

@@ -10,9 +10,8 @@
 		AA0000000000000000000101 /* Capacitor in Frameworks */ = {isa = PBXBuildFile; productRef = AA0000000000000000000501 /* Capacitor */; };
 		AA0000000000000000000102 /* Cordova in Frameworks */ = {isa = PBXBuildFile; productRef = AA0000000000000000000502 /* Cordova */; };
 		AA0000000000000000000104 /* k7runtime.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000202 /* k7runtime.xcframework */; };
-		AA0000000000000000000105 /* k7supervisor.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000203 /* k7supervisor.xcframework */; };
+		AA0000000000000000000105 /* onnxruntime.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000203 /* onnxruntime.xcframework */; };
 		AA0000000000000000000107 /* k7runtime.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000202 /* k7runtime.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		AA0000000000000000000108 /* k7supervisor.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000203 /* k7supervisor.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		AA0000000000000000000109 /* public in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000204 /* public */; };
 		AA0000000000000000000110 /* capacitor.config.json in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000205 /* capacitor.config.json */; };
 		AA0000000000000000000111 /* backend in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000206 /* backend */; };
@@ -28,7 +27,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				AA0000000000000000000107 /* k7runtime.xcframework in Embed Frameworks */,
-				AA0000000000000000000108 /* k7supervisor.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -38,7 +36,7 @@
 /* Begin PBXFileReference section */
 		AA0000000000000000000200 /* k7.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = k7.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA0000000000000000000202 /* k7runtime.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = frameworks/k7runtime.xcframework; sourceTree = "<group>"; };
-		AA0000000000000000000203 /* k7supervisor.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = frameworks/k7supervisor.xcframework; sourceTree = "<group>"; };
+		AA0000000000000000000203 /* onnxruntime.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = frameworks/onnxruntime.xcframework; sourceTree = "<group>"; };
 		AA0000000000000000000204 /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = resources/public; sourceTree = "<group>"; };
 		AA0000000000000000000205 /* capacitor.config.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = resources/capacitor.config.json; sourceTree = "<group>"; };
 		AA0000000000000000000206 /* backend */ = {isa = PBXFileReference; lastKnownFileType = folder; path = resources/backend; sourceTree = "<group>"; };
@@ -78,7 +76,7 @@
 				AA0000000000000000000101 /* Capacitor in Frameworks */,
 				AA0000000000000000000102 /* Cordova in Frameworks */,
 				AA0000000000000000000104 /* k7runtime.xcframework in Frameworks */,
-				AA0000000000000000000105 /* k7supervisor.xcframework in Frameworks */,
+				AA0000000000000000000105 /* onnxruntime.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,7 +96,7 @@
 			isa = PBXGroup;
 			children = (
 				AA0000000000000000000202 /* k7runtime.xcframework */,
-				AA0000000000000000000203 /* k7supervisor.xcframework */,
+				AA0000000000000000000203 /* onnxruntime.xcframework */,
 				AA0000000000000000000204 /* public */,
 				AA0000000000000000000205 /* capacitor.config.json */,
 				AA0000000000000000000206 /* backend */,
@@ -280,6 +278,9 @@
 					"-lresolv",
 					"-lz",
 					"-liconv",
+					"-lc++",
+					"-framework",
+					CoreML,
 				);
 				SWIFT_OBJC_BRIDGING_HEADER = "k7/k7-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -314,6 +315,9 @@
 					"-lresolv",
 					"-lz",
 					"-liconv",
+					"-lc++",
+					"-framework",
+					CoreML,
 				);
 				SWIFT_OBJC_BRIDGING_HEADER = "k7/k7-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

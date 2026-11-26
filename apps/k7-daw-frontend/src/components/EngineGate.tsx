@@ -47,8 +47,6 @@ export function EngineGate({
   const [resolved, setResolved] = useState(false);
   // Bumped when the engine's files differ from the hub's: the editor is remounted onto them.
   const [generation, setGeneration] = useState(0);
-  /** The session fell asleep, and this gate draws one consequence: DROP THE LEASE, since a tab with no socket would only squat the machine. */
-  const [asleep, setAsleep] = useState(false);
 
   // The engine as the editor's link reads it, and whoever is waiting for the first answer.
   const chosenRef = useRef<RankedEngine | null>(null);
@@ -98,15 +96,12 @@ export function EngineGate({
     return true;
   }, []);
 
-  // The claim is a LEASE this tab keeps alive ON THIS PROJECT (@studio/engine-browser/docs/lease.md); asleep, the cleanup releases it.
+  // The claim is a LEASE this tab keeps alive ON THIS PROJECT (@studio/engine-browser/docs/lease.md).
   const heldId = chosen?.engine.id ?? null;
   const isTaken = taken !== null;
   // biome-ignore lint/correctness/useExhaustiveDependencies: `chosen` is read only through `heldId`, which is what says it changed.
   useEffect(() => {
-    if (
-      !chosen ||
-      !holdsClaim({ engine: true, resolved, asleep, taken: isTaken })
-    )
+    if (!chosen || !holdsClaim({ engine: true, resolved, taken: isTaken }))
       return;
     return engines.hold(chosen, {
       project: claimProject,
@@ -116,7 +111,7 @@ export function EngineGate({
         setTaken(t);
       },
     });
-  }, [heldId, claimProject, asleep, resolved, isTaken]);
+  }, [heldId, claimProject, resolved, isTaken]);
 
   /** Taking it back IS opening the project again: the gate resolves anew, and the claim that follows displaces the other tab. */
   const takeBack = useCallback(() => {
@@ -268,13 +263,6 @@ export function EngineGate({
         engineUrl={engineUrl}
         engineSearching={searching && !chosen}
         external={external}
-        onIdle={() => setAsleep(true)}
-        // Resuming reopens the project, so it takes the claim back like the banner's button.
-        onResume={() => {
-          takenRef.current = null;
-          setTaken(null);
-          setAsleep(false);
-        }}
         onPhase={(k) => setResolved(projectResolved(k))}
       />
       {taken && <EngineTakenBanner taken={taken} onTakeBack={takeBack} />}

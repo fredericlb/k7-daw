@@ -81,7 +81,7 @@ against the testbed (above).
 | a slow peer loses only what a newer frame replaces, and is closed past 64 MiB | `tunnel/backpressure.rs` | `registry/tests.rs`, vectors |
 | nothing off a socket is trusted for shape, and nothing read can stop the process | `parse_agent_message`, `decode_binary`; no input reaches a panic | `frames/tests.rs` |
 
-A real C++ supervisor (the dev checkout's, in the desktop app's stdio mode, its `STUDIO_PORTS` naming a side
+A real supervisor (the dev checkout's, in the desktop app's stdio mode, its `STUDIO_PORTS` naming a side
 front with the core on) was listed, bound to its secret on disk, tunnelled, relayed — its `whoami`
 before the claim, its pushes after — read through the seam, and unlisted by its deregister when its
 stdin closed.

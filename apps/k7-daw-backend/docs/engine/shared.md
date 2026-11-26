@@ -25,7 +25,7 @@ k7's own and calls it same-origin, the relay included; a credentialed call from 
 
 `GET /api/registry/hello` answers `{ service: "k7-registry" }`, open like the heartbeat. It is how the
 supervisor tells a registry from any other website before it sends one the engine's token
-(`apps/k7-daw-engine/k7-supervisor/docs/supervisorPolicy.md`); it says nothing else.
+(`apps/k7-daw-backend/packages/k7-supervisor/docs/supervisorPolicy.md`); it says nothing else.
 
 ## What this costs
 

@@ -1,6 +1,6 @@
-//! A REAL `k7-supervisor` run by the front, in front of a real TypeScript backend: ignored unless asked for, since it
-//! needs the built supervisor and engine and a TypeScript backend behind the front (`docs/local.md`).
-//! Run: `K7_REAL_SUPERVISOR=… K7_REAL_HOME=… cargo test -p k7-local --test all -- --ignored real::`.
+//! A REAL `k7-supervisor` run by the front: ignored unless asked for, since it needs the built Rust supervisor
+//! (`apps/k7-daw-engine/scripts/supervisorBuild.mjs`, or `K7_REAL_SUPERVISOR`) and engine (`docs/local.md`).
+//! Run: `K7_REAL_HOME=… cargo test -p k7-local --test all -- --ignored real::`.
 
 use std::path::PathBuf;
 use std::time::{Duration, Instant};
@@ -64,12 +64,37 @@ async fn watch_until(addr: &str, cookie: &str, done: impl Fn(&Value) -> bool) ->
     }
 }
 
+/// `K7_REAL_SUPERVISOR`, else the checkout's release build where `supervisorBuild.mjs` puts it.
+fn supervisor() -> String {
+    if let Ok(bin) = std::env::var("K7_REAL_SUPERVISOR") {
+        return bin;
+    }
+    let repo = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../../..");
+    let checkout = repo.canonicalize().unwrap();
+    let name = checkout.file_name().unwrap().to_string_lossy();
+    let home = PathBuf::from(std::env::var("HOME").expect("HOME"));
+    let exe = if cfg!(windows) {
+        "k7-supervisor.exe"
+    } else {
+        "k7-supervisor"
+    };
+    let bin = home
+        .join(format!(".cache/k7-supervisor-{name}/release"))
+        .join(exe);
+    assert!(
+        bin.is_file(),
+        "no {} : build it with supervisorBuild.mjs",
+        bin.display()
+    );
+    bin.display().to_string()
+}
+
 fn cookie(token: &str) -> String {
     format!("k7.sid={token}")
 }
 
 #[tokio::test(flavor = "multi_thread")]
-#[ignore = "needs a built k7-supervisor and a TypeScript backend"]
+#[ignore = "needs a built k7-supervisor and k7-runtime"]
 async fn a_real_supervisor_is_run_snapshotted_commanded_and_stopped() {
     let home = PathBuf::from(var("K7_REAL_HOME"));
     let secret = var("K7_REAL_SESSION_TOKEN");
@@ -78,7 +103,7 @@ async fn a_real_supervisor_is_run_snapshotted_commanded_and_stopped() {
         ("K7_SESSION_TOKEN", secret.clone()),
         ("STUDIO_LOCAL_USER", "1".into()),
         ("K7_LOCAL_ENGINE", "front".into()),
-        ("K7_SUPERVISOR_BIN", var("K7_REAL_SUPERVISOR")),
+        ("K7_SUPERVISOR_BIN", supervisor()),
         ("K7_SUPERVISOR_HOME", home.display().to_string()),
         ("STUDIO_ENGINE", var("K7_REAL_ENGINE")),
         ("STUDIO_AUTH_DIR", var("K7_REAL_AUTH_DIR")),

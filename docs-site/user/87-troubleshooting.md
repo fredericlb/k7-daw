@@ -33,7 +33,7 @@ The picker shows *unreachable* or *not reachable from this browser*.
 - The engine stopped answering in the last few seconds: wait for the picker to measure again (every 15 seconds), or click **Refresh**.
 - Its machine is asleep, or lost its network.
 - The engine answers over your local network but this device is not paired: the picker offers **Pair this device**. See [Pairing](./85-connecting-machines.md#pairing-a-device-on-the-local-network).
-- A row marked **in use** is held by someone else, or by another project. It becomes free when they close it, or after their tab goes to sleep.
+- A row marked **in use** is held by someone else, or by another project. It becomes free when they close it.
 
 ## "engine gone" or "bad token" when choosing an engine
 

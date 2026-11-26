@@ -1,5 +1,5 @@
 // SupervisorHost.swift — the app's half of the supervisor's NDJSON channel: what k7-local's host.rs
-// is on desktop. No iOS app may run a program of its own, so the supervisor is k7supervisor.framework, run on a
+// is on desktop. No iOS app may run a program of its own, so the supervisor is a library of libk7_embed.a, run on a
 // thread of its own over two pipes; and the engine is a library here too, so the supervisor's `engine` requests
 // are this app's to carry out. See apps/k7-daw-engine/k7-runtime/docs/ios.md.
 

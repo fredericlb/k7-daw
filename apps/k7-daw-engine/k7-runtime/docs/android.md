@@ -1,7 +1,7 @@
 # The engine on Android
 
-The same engine and the same supervisor, built for arm64 Android by their `android-arm64` presets
-and run by the app in `apps/k7-daw-android`, which drives the supervisor as k7's backend does under the desktop app. The supervisor lists the
+The same engine and the same supervisor, built for arm64 Android (the engine by its `android-arm64` preset, the
+supervisor by cargo) and run by the app in `apps/k7-daw-android`, which drives the supervisor as k7's backend does under the desktop app. The supervisor lists the
 phone at the studios it is connected to, exactly as on a computer, and the engine serves the same
 WebSocket protocol on port 8765, bound to loopback unless the LAN is open.
 
@@ -410,7 +410,7 @@ app restarts; the engine keeps serving through the gap and the new supervisor ad
 gives up: unlike the backend, nothing on the phone would retry it.
 
 **No instrument is downloaded until the user asks**, in the Downloads section of k7's settings —
-the engine page's own section, through this app's bridge (`apps/k7-daw-engine/k7-supervisor/docs/instruments.md`).
+the engine page's own section, through this app's bridge (`apps/k7-daw-backend/packages/k7-supervisor/docs/instruments.md`).
 Every instrument together is close to 3 GB, the piano alone 750 MB, and a phone is often on a
 metered network: a first launch that fetched them all would spend a data plan on instruments
 nobody chose.
@@ -476,7 +476,7 @@ To check on a phone: `adb logcat -s k7-runtime` shows the buffer at open and eve
 
 | choice | why |
 |---|---|
-| The presets build, Gradle stages | AGP's `externalNativeBuild` would configure second CMake trees and fetch Tracktion into one. `app/build.gradle.kts` runs the engine's `scripts/build.mjs android-arm64` and `apps/k7-daw-engine/scripts/supervisorBuild.mjs` with `STUDIO_SUPERVISOR_PRESET=android-arm64`, against the SDK's NDK, and copies both in. |
+| The presets build, Gradle stages | AGP's `externalNativeBuild` would configure second CMake trees and fetch Tracktion into one. `app/build.gradle.kts` runs the engine's `scripts/build.mjs android-arm64`, and cargo for the front and the supervisor (`buildFront`, `buildSupervisor`), against the SDK's NDK, and copies them in. |
 | API 29 | JUCE's Android font code calls `AFontMatcher`, which is 29+. AAudio, which Oboe prefers, only needs 26. |
 | arm64-v8a only | every phone worth playing on; a second ABI doubles a 35 MB library for nothing. |
 | No VST3 / LADSPA | there is nothing to host and no window for an editor. `loadVstPreset` answers false, as it does for a built-in. |

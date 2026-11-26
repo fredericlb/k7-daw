@@ -33,7 +33,7 @@ reported.
 over interleaved float32 frames at the file's own rate, every channel. On wav and flac the three
 produce identical sidecars, measured. On mp3 they do not: ffmpeg trims the encoder delay and JUCE
 does not, so the engine's decode is longer by it — 1105 samples, 25 ms, on the file measured in
-`apps/k7-daw-engine/k7-supervisor/docs/stemSplit.md` — and its onsets sit that much later. The fingerprint
+`apps/k7-daw-backend/packages/k7-supervisor/docs/stemSplit.md` — and its onsets sit that much later. The fingerprint
 cannot tell the two apart, so a sidecar from either is read as fresh by the other.
 
 `--decode` prints one JSON line — `{"sampleRate":…,"channels":…,"frames":…}` — then the frames as

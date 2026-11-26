@@ -1,6 +1,6 @@
 # The supervisor host
 
-`apps/k7-daw-engine/k7-supervisor` as the child of the front: `apps/k7-daw-backend/packages/k7-local`, which the front runs on the desktop app
+`apps/k7-daw-backend/packages/k7-supervisor` as the child of the front: `apps/k7-daw-backend/packages/k7-local`, which the front runs on the desktop app
 to host the machine's supervisor and so its engine (`localEngine.md`, `local.md`). The Android and iOS
 apps drive the same supervisor the same way, from Kotlin and Swift (`SupervisorHost.kt`,
 `SupervisorHost.swift`, `apps/k7-daw-engine/k7-runtime/docs/android.md`, `apps/k7-daw-engine/k7-runtime/docs/ios.md`): the
@@ -12,8 +12,8 @@ newest engine and supervisor builds into an app's staging `bin/`: the desktop ap
 
 ## Not a server
 
-`apps/k7-daw-engine/k7-supervisor` is native and speaks NDJSON on stdio
-(`apps/k7-daw-engine/k7-supervisor/docs/hostProtocol.md`), so it listens on no port and the host spawns it
+`apps/k7-daw-backend/packages/k7-supervisor` is a program of its own and speaks NDJSON on stdio
+(`apps/k7-daw-backend/packages/k7-supervisor/docs/hostProtocol.md`), so it listens on no port and the host spawns it
 directly and keeps it running (`apps/k7-daw-backend/packages/k7-local/src/host.rs`). The choices:
 
 - **Death is read from the process, never the pipe.** The engine outlives a supervisor crash by
@@ -28,7 +28,7 @@ directly and keeps it running (`apps/k7-daw-backend/packages/k7-local/src/host.r
   teardown is killed from `engine.pid`, and a pid is reused by the OS: `apps/k7-daw-backend/packages/k7-local/src/pidfile.rs`
   reads the start time and executable the supervisor wrote there and kills only when the OS reports
   the same for an executable named `k7-runtime`, the verdict `PidFile.cpp` gives. A bare pid, or a
-  process the OS will not describe, is left running (`apps/k7-daw-engine/k7-supervisor/docs/supervisorPolicy.md`).
+  process the OS will not describe, is left running (`apps/k7-daw-backend/packages/k7-supervisor/docs/supervisorPolicy.md`).
   The desktop app's quit links the same proof for its own backstop (`apps/k7-daw-desktop/src-tauri/src/pidkill.rs`).
 - **A write to a dead supervisor is said, never an error.** The supervisor may die between a page's
   command and its delivery; the command is lost with it, and the relaunch is what answers.
@@ -39,8 +39,8 @@ directly and keeps it running (`apps/k7-daw-backend/packages/k7-local/src/host.r
 
 ## One schema for the wire
 
-`apps/k7-daw-engine/k7-supervisor/schema/hostProtocol.schema.json` is the host protocol's single definition
-(`apps/k7-daw-engine/k7-supervisor/docs/hostProtocol.md`), beside the supervisor that writes it, where the
+`apps/k7-daw-backend/packages/k7-supervisor/schema/hostProtocol.schema.json` is the host protocol's single definition
+(`apps/k7-daw-backend/packages/k7-supervisor/docs/hostProtocol.md`), beside the supervisor that writes it, where the
 engine's CMake points `HostProtocol_test.cpp` at `schema/fixtures/`. The choices:
 
 - **The writer is not generated.** nlohmann's `NLOHMANN_DEFINE_TYPE_*` cannot say what the wire

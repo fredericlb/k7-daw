@@ -22,17 +22,11 @@ const STANDARD_STARTS: [RegExp, string][] = [
   [/^\s*Apache License\s*$/m, "Apache-2.0"],
 ];
 
-/** `runtime:` and `supervisor:` read the first engine build that has `_deps`; `repo:` reads the tree. */
+/** `runtime:` reads the first engine build that has `_deps`; `repo:` reads the tree. */
 function locate(spec: string): string {
   const [kind, path] = spec.split(/:(.*)/s) as [string, string];
   if (kind === "repo") return join(root, path);
-  const engine = join(
-    builds,
-    "apps",
-    "k7-daw-engine",
-    kind === "runtime" ? "k7-runtime" : "k7-supervisor",
-    "build",
-  );
+  const engine = join(builds, "apps", "k7-daw-engine", "k7-runtime", "build");
   const presets = existsSync(engine) ? readdirSync(engine) : [];
   const build = presets.find((b) => existsSync(join(engine, b, "_deps", path)));
   if (!build) throw new Error(`no engine build holds ${spec}`);

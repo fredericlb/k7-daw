@@ -7,7 +7,7 @@
 | Node.js 24 (`engines` in `package.json`; CI uses the same version, `.nvmrc`) | Everything TypeScript. The backend relies on `node:sqlite`, which needs no flag on it. |
 | npm 10 | The workspace manager (`devEngines` in `package.json`). |
 | [Tilt](https://docs.tilt.dev/install.html) | Runs the dev session. `npm run dev` exits with a pointer to the install page if `tilt` is missing. |
-| CMake, Ninja and a C++ toolchain (AppleClang on macOS, MSVC on Windows) | Only for the `k7-desktop` resource, which builds and runs the engine (and Rust, for the desktop app itself and the supervisor's audio decoder). |
+| CMake, Ninja and a C++ toolchain (AppleClang on macOS, MSVC on Windows) | Only for the `k7-desktop` resource, which builds and runs the engine (and Rust, for the desktop app itself and the supervisor). |
 | `ffmpeg` on `PATH` | Optional: video and some audio processing in the backend. |
 
 ## First checkout
@@ -104,7 +104,7 @@ k7's backend bundle and the desktop app, runs the desktop app on those builds, t
   is the desktop app's: a loopback address such as `http://localhost:8789` would be the desktop app's own backend to
   the supervisor, and is dropped.
 - It watches `apps/k7-daw-engine/k7-runtime/engine`, `apps/k7-daw-engine/k7-runtime/server` (C++ sources), the
-  `CMakeLists.txt`/`CMakePresets.json` of both projects, `apps/k7-daw-engine/k7-supervisor/src`, and the desktop app's
+  `CMakeLists.txt`/`CMakePresets.json`, the supervisor's crates (`apps/k7-daw-backend/packages/k7-supervisor` and the crates it links), and the desktop app's
   `src-tauri/src`, `Cargo.toml` and `tauri.conf.json`. Tests are not watched, nor is the bundle's
   source: frontend and backend work belongs to their own resources, and Tilt's restart rebuilds the
   bundle.

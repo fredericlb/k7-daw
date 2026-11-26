@@ -3,8 +3,9 @@
 The hosts that cannot, or should not, run another program run the front inside their own process,
 on a thread of its own with a small tokio runtime (`k7_front::embedded`). The desktop app, being Rust, links
 `k7-front` and calls it directly. The phones go through `k7-embed`, a C library over the same calls:
-Android loads it as a `cdylib`, iOS links it as a `staticlib`. Its ABI is the supervisor's on iOS
-(`Embedded.cpp`): C calls, text in.
+Android loads it as a `cdylib`, iOS links it as a `staticlib`: C calls, text in. On iOS it also
+carries the supervisor's three calls (`apps/k7-daw-backend/packages/k7-embed/src/supervisor.rs`), since two Rust static
+libraries in one app would carry two `std`.
 
 `k7-embed` builds only those two C outputs, never an `rlib`: a crate a Rust host also linked would
 make that host's build produce the C library beside it, for nothing.

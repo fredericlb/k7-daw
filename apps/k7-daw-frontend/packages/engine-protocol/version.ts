@@ -1,7 +1,7 @@
 // version.ts — the engine wire's version, which the engine, its supervisor and the server all state:
 // the engine in `whoami`, the supervisor in its heartbeat and its tunnel's upgrade header. A machine
 // that states none speaks 1, since none was released before the field. What bumps it is
-// docs/version.md; the C++ twins are kEngineProtocol in two WireVersion.h, kept equal by version.test.ts.
+// docs/version.md; its twins are the engine's WireVersion.h and the supervisor's wire.rs, kept equal by version.test.ts.
 
 /** The version this tree speaks. */
 export const ENGINE_PROTOCOL = 1;

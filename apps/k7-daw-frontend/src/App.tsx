@@ -19,7 +19,6 @@ import {
   ViewportTab,
 } from "@studio/k7-plugins/video";
 import { askConfirm } from "@studio/project-shell/ask";
-import { markActive } from "@studio/project-shell/idle";
 import { projectsUrl } from "@studio/project-shell/launch";
 import type { CommandJournal } from "@studio/project-shell/project";
 import { onToast, showToast } from "@studio/project-shell/toast";
@@ -190,7 +189,6 @@ import {
   sameEditFocus,
   sameMinimapItem,
 } from "./shellEquality";
-import { soundingNow } from "./sounding";
 import { createStatusLine } from "./statusLine";
 import { stepSentence } from "./stepSentence";
 import { eventIdOf, takesEventOf } from "./takes";
@@ -815,18 +813,6 @@ export default function App({
 
   // The Android app holds its foreground service and the screen while this engine is busy (androidBusy.ts).
   useAndroidBusy(store);
-
-  /** A session making SOUND is active — a playing song, and a live rig played with the transport stopped — @studio/project-shell/docs/idle.md. */
-  useEffect(() => {
-    let last = 0;
-    return store.subscribe(() => {
-      const now = Date.now();
-      // Ten seconds between stamps: a 20 Hz frame has nothing to add to a twenty-minute clock.
-      if (now - last < 10_000 || !soundingNow(store.getSnapshot())) return;
-      last = now;
-      markActive();
-    });
-  }, [store]);
 
   // The special views this PROJECT declares (`surfaces/`), and the engine as a desk sees it — both cheap and unconditional.
   const { surfaces } = useSurfaces(surfacesKey);
@@ -1486,8 +1472,6 @@ export default function App({
         `event take midi ${t.track} ${t.at} ${JSON.stringify(pass)}`,
       ),
     onLiveMidi: (track, data) => {
-      // A keyboard played through the rig is a person at the instrument, whatever the mouse is doing.
-      markActive();
       engineRef.current?.liveMidi(track, data);
     },
     played: midiPlayed,

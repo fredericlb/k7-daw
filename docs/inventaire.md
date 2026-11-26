@@ -246,7 +246,7 @@ The front serves `/auth/me` and nothing of a provider. What stays, and why it is
 
 ## Left on the phones and the supervisor after the pairing left
 
-- **`weburi.add`, `weburi.pair` and `weburi.remove` in `apps/k7-daw-engine/k7-supervisor`** stay: the CLI engine and the Pi image ship the supervisor unchanged, and the phones no longer send them. They go with the CLI engine's rework (`registryUrls`, the registry URL in `Url.cpp`).
+- **`weburi.add`, `weburi.pair` and `weburi.remove` in `apps/k7-daw-backend/packages/k7-supervisor`** stay: the CLI engine and the Pi image ship the supervisor unchanged, and the phones no longer send them. They go with the CLI engine's rework (`registryUrls`, the registry URL in `Url.cpp`).
 - **`CameraMode.tsx` and the `camera mode` verb** stay behind `CAMERA_MODE_LISTED` in `homeCommands.ts`: cameras return as an app feature.
 
 ## 8. Deferred reworks, and the code that waits for them

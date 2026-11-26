@@ -46,7 +46,6 @@ jobs:
       E2E_RETRIES: ${{ inputs.retries }}
       SAVE: ${{ matrix.suite == 'web' && (github.ref == 'refs/heads/main' || inputs.save_cache) }}
       STUDIO_ENGINE_PRESET: release-gcc
-      STUDIO_SUPERVISOR_PRESET: release-gcc
       CMAKE_BUILD_PARALLEL_LEVEL: "4"
       CARGO_INCREMENTAL: "0"
       SCCACHE_CACHE_SIZE: 3G
@@ -92,7 +91,7 @@ jobs:
         uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: ~/k7-deps
-          key: e2e-deps-${{ runner.os }}-${{ hashFiles('apps/k7-daw-engine/k7-runtime/CMakeLists.txt', 'apps/k7-daw-engine/k7-supervisor/CMakeLists.txt', 'apps/k7-daw-engine/k7-runtime/engine/patches/**') }}
+          key: e2e-deps-${{ runner.os }}-${{ hashFiles('apps/k7-daw-engine/k7-runtime/CMakeLists.txt', 'apps/k7-daw-engine/k7-runtime/engine/patches/**') }}
           restore-keys: e2e-deps-${{ runner.os }}-
       - name: restore cargo's registry
         uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
@@ -155,7 +154,7 @@ jobs:
         uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: ~/k7-deps
-          key: e2e-deps-${{ runner.os }}-${{ hashFiles('apps/k7-daw-engine/k7-runtime/CMakeLists.txt', 'apps/k7-daw-engine/k7-supervisor/CMakeLists.txt', 'apps/k7-daw-engine/k7-runtime/engine/patches/**') }}
+          key: e2e-deps-${{ runner.os }}-${{ hashFiles('apps/k7-daw-engine/k7-runtime/CMakeLists.txt', 'apps/k7-daw-engine/k7-runtime/engine/patches/**') }}
       - if: always() && env.SAVE == 'true'
         uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:

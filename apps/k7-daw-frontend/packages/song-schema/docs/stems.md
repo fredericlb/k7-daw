@@ -1,7 +1,7 @@
 # The four stems, and what a set calls them
 
 The rationale behind `apps/k7-daw-frontend/packages/song-schema/src/stems.ts`. How a separation is RUN is
-`apps/k7-daw-engine/k7-supervisor/docs/stemSplit.md`; what the desk draws is
+`apps/k7-daw-backend/packages/k7-supervisor/docs/stemSplit.md`; what the desk draws is
 `apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/stems.md`.
 
 ## The order is the knowledge

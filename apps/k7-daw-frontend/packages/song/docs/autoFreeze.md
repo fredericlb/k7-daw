@@ -109,7 +109,7 @@ bake its stub, and then play everywhere as the song.
 The render is made on the engine's MACHINE, which is the one with the VSTs:
 
 - when the server hosts the files, as a `render` job on the bound machine's jobs path
-  (`apps/k7-daw-engine/k7-supervisor/src/MachineJobs.cpp`). The doc travels in the request; the tunnel brings
+  (`apps/k7-daw-backend/packages/k7-supervisor/src/parts/tunnel/table.rs`). The doc travels in the request; the tunnel brings
   its clips down and the render back up (`apps/k7-daw-frontend/packages/engine-tunnel/docs/jobs.md`);
 - when the file service runs beside the engine, by the local engine binary, without blocking.
 

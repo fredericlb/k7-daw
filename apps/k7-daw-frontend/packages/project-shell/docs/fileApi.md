@@ -226,7 +226,7 @@ list.
 ## Two things this client deliberately has no route for
 
 - **Cutting stems** is a verb: `clip process` and `playlist stems` run in the Worker with every other act,
-  and the file service sends the cut to the engine's machine (`apps/k7-daw-engine/k7-supervisor/docs/stemSplit.md`).
+  and the file service sends the cut to the engine's machine (`apps/k7-daw-backend/packages/k7-supervisor/docs/stemSplit.md`).
 - **Grouping two interface inputs into one stereo device** is a verb, not a route:
   `system channel type <channel> <mono|stereo>` writes the preference and tells the engine both,
   so it runs in the Worker with every other act

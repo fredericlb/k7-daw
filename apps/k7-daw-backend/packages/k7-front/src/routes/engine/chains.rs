@@ -1,5 +1,5 @@
 //! chains.rs — naming the chain an ENGINE separates with: its own settings, read for its card and written by its
-//! owner over that engine's jobs channel (`apps/k7-daw-engine/k7-supervisor/docs/stemSplit.md`). What a reader gets wrong:
+//! owner over that engine's jobs channel (`apps/k7-daw-backend/packages/k7-supervisor/docs/stemSplit.md`). What a reader gets wrong:
 //! the write lands in the machine's `engine-host.json` and is read back from there, never kept on this server.
 
 use std::sync::Arc;
