@@ -67,7 +67,7 @@ fn the_dispatcher_refuses_before_any_verb() {
         missing.is_empty(),
         "the catalogue names verbs with no handler: {missing:?}"
     );
-    assert_eq!(ported.len(), 191);
+    assert_eq!(ported.len(), 192);
     let ran = p.ok("project reload");
     assert_eq!(ran.answer.effects, ["reload"]);
 }

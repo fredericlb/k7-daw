@@ -63,8 +63,8 @@ A verb that needs the machine names a route of the front: `h.call("POST /verb-ho
 
 ## Where it stands
 
-The catalogue names 192 verbs, and the crate has a handler for 191 of them. A verb it has none for answers
-`command '…' has no handler (sid)`: today `track transcribe` alone.
+The catalogue names 192 verbs, and the crate has a handler for every one of them: `tests/project.rs` fails on a
+catalogue verb with none.
 
 
 | area | ported | tests (`apps/k7-daw-wasm/verbs/tests/`) |
@@ -78,6 +78,7 @@ The catalogue names 192 verbs, and the crate has a handler for 191 of them. A ve
 | M5 | 44 of 44: nodes, modules, assemblies, the graph's wiring and layout, taps, presets, alternatives, engines, params, freeze (the bounce through `render`, then `frozen:`), `chain save` through `POST /bench/save` | `graph_nodes.rs`, `taps.rs`, `node_state.rs`, `node_values.rs`, `chain_fixture.rs`, `renders.rs` |
 | M6 | 22 of 22: lanes (new, order, rename, delete, mute, solo, rect), shots (add, move, length, head, split, delete, key, unkey, speed, silence), sound, prepare, interchange, import, render; a timeline's copy of a picture lane and `event remove` on a sounding lane | `pictures.rs`, `pictures_lanes.rs`, `pictures_media.rs` |
 | M7 | 19 of 19; `system stems` and `system instrumental` check their chain against the open project, `system onnx` bare says the machine's list, `transport arm` words the engine's answer | `system.rs`, `transport.rs` |
+| `track transcribe` | the film the lane's first shot places, heard by whisper through `POST /verb-host/transcribe` (a job); the subtitles land as `clips/<out>.srt`, a caption clip and its placement on a picture lane of their own | `transcribe.rs` |
 | M8 | completion: the 25 providers, their labels and the command words | `complete.rs` |
 | the compile cache | kept from line to line; on `clip-lane`, 1.1 ms a line fresh and 0.7 ms kept, in release | `cache.rs` |
 

@@ -64,6 +64,7 @@ mod track_chain_copy;
 mod track_dup;
 mod track_group;
 mod track_lane;
+mod transcribe;
 mod transport;
 mod words;
 
@@ -261,6 +262,7 @@ const TABLE: &[(&str, Handler)] = &[
     ("picture.render", picture_render::picture_render),
     ("picture.laneRename", picture_lane::lane_rename),
     ("picture.laneDelete", picture_lane::lane_delete),
+    ("track.transcribe", transcribe::track_transcribe),
 ];
 
 /// The handler of `sid`, or None for a verb the crate does not carry.

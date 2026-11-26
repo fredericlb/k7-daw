@@ -16,6 +16,7 @@ pub const WAVEFORM: &str = "GET /waveform";
 pub const SEPARATE: &str = "POST /verb-host/separate";
 pub const RENDER: &str = "POST /verb-host/render";
 pub const PEAK: &str = "POST /verb-host/peak";
+pub const TRANSCRIBE: &str = "POST /verb-host/transcribe";
 
 /// A route's failure that the TypeScript lets escape the verb: its sentence is the throw.
 pub fn thrown(f: Failed) -> Thrown {
