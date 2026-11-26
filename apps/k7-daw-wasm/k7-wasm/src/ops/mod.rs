@@ -3,6 +3,8 @@
 // A second reader mistake: an answer is the operation's value itself; only an error has a wrapper, and the status says which.
 
 pub mod curve;
+pub mod k7x;
+pub mod k7x_edit;
 pub mod song;
 pub mod timecode;
 #[cfg(feature = "verbs")]
@@ -41,6 +43,8 @@ struct Op {
 pub struct Session {
     pub curves: curve::CurveTable,
     pub songs: song::SongTable,
+    /// The k7x reads' arena and the last outline's layout.
+    pub k7x: k7x::K7xState,
 }
 
 pub(crate) fn write<T: Serialize + ?Sized>(out: &mut Vec<u8>, value: &T) -> Result<(), WasmError> {
@@ -66,6 +70,7 @@ impl Session {
             "curve" => curve::dispatch(&mut self.curves, decode(input)?, out),
             "timecode" => timecode::dispatch(decode(input)?, out),
             "song" => song::dispatch(&mut self.songs, decode(input)?, out),
+            "k7x" => k7x::dispatch(&mut self.k7x, decode(input)?, out),
             #[cfg(feature = "verbs")]
             "verb" => verb::dispatch(decode(input)?, out),
             "version" => write(

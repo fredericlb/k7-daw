@@ -1,8 +1,7 @@
 // print.test.ts — stringify's options: a header on top, and the nodes a caller wants on one line kept there.
 
 import { describe, expect, it } from "vitest";
-import { parse } from "./edit.ts";
-import { stringify } from "./print.ts";
+import { parse, stringify } from "./index.ts";
 
 const WIDE = {
   steps: Array.from({ length: 12 }, (_, i) => ({ t: i, d: 1, k: 60 + i })),

@@ -1,7 +1,7 @@
 // scope.test.ts — a view under a base path edits the same text as the document does, whatever form the base is written in.
 
 import { describe, expect, it } from "vitest";
-import { parseDocument } from "./edit.ts";
+import { parseDocument } from "./index.ts";
 
 const TEXT = `graph({
   osc: { type: "saw", level: 1 }, // the source

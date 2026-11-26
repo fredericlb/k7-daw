@@ -1,7 +1,7 @@
 // document.test.ts — the document's header, where a path is written, and the change log an editor replays.
 
 import { describe, expect, it } from "vitest";
-import { type K7Change, parseDocument } from "./edit.ts";
+import { type K7Change, parseDocument } from "./index.ts";
 
 const NODE = `// synth-pad
 //

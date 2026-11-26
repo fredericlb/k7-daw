@@ -6,6 +6,8 @@ mod consts;
 use k7_wasm::WasmError;
 use k7_wasm::ops::VersionAnswer;
 use k7_wasm::ops::curve::{CurveRequest, OpenAnswer};
+use k7_wasm::ops::k7x::{K7xRequest, ReadAnswer};
+use k7_wasm::ops::k7x_edit::EditAnswer;
 use k7_wasm::ops::timecode::TimecodeRequest;
 use song_schema::{CurvePreview, CurveSpec};
 use std::path::Path;
@@ -21,6 +23,9 @@ fn write_types(dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
     // Each export walks the types its own type depends on, so these roots reach every file.
     CurveRequest::export_all_to(dir)?;
     TimecodeRequest::export_all_to(dir)?;
+    K7xRequest::export_all_to(dir)?;
+    ReadAnswer::export_all_to(dir)?;
+    EditAnswer::export_all_to(dir)?;
     VersionAnswer::export_all_to(dir)?;
     WasmError::export_all_to(dir)?;
     OpenAnswer::export_all_to(dir)?;

@@ -1,7 +1,7 @@
 // edit.test.ts — every edit changes the value it names and nothing else: the exact text after each one.
 
 import { describe, expect, it } from "vitest";
-import { parseDocument } from "./edit.ts";
+import { parseDocument } from "./index.ts";
 
 const edit = (
   text: string,

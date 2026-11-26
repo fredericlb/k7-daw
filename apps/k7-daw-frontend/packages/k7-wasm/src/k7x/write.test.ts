@@ -1,7 +1,7 @@
 // write.test.ts — source as written, moved items, renamed keys, inline layout, empty containers: the exact text after each edit.
 
 import { describe, expect, it } from "vitest";
-import { type K7Document, parseDocument } from "./edit.ts";
+import { type K7Document, parseDocument } from "./index.ts";
 
 const edit = (text: string, f: (d: K7Document) => void): string => {
   const d = parseDocument(text);

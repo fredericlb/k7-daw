@@ -1,9 +1,7 @@
 // parse.test.ts — the grammar: what each form reads as, and where a mistake is reported.
 
 import { describe, expect, it } from "vitest";
-import { parse } from "./edit.ts";
-import { K7SyntaxError } from "./parse.ts";
-import { stringify } from "./print.ts";
+import { K7SyntaxError, parse, stringify } from "./index.ts";
 
 describe("nesting", () => {
   it("refuses a file nested past MAX_DEPTH as a syntax error, not a stack overflow", () => {

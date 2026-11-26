@@ -1,8 +1,15 @@
 // ast.test.ts — the tree helpers: a key's span, the walk, numeric path segments, and offsets as line and column.
 
 import { describe, expect, it } from "vitest";
-import { type K7Entry, type K7Path, nodeAt, walk } from "./ast.ts";
-import { K7SyntaxError, lineCol, parseTree, parseValue } from "./parse.ts";
+import {
+  type K7Entry,
+  type K7Path,
+  type K7SyntaxError,
+  lineCol,
+  nodeAt,
+  parseTree,
+  walk,
+} from "./index.ts";
 
 const TEXT = `a(1).b([10, 20, { c: 3 }])
 "x y"({ 'z w': true })
@@ -74,14 +81,5 @@ describe("lineCol", () => {
       const err = e as K7SyntaxError;
       expect({ line: err.line, col: err.column }).toEqual(lineCol(text, at));
     }
-  });
-});
-
-describe("parseValue", () => {
-  it("reads one value with trivia around it and refuses anything more", () => {
-    expect(parseValue(" [1, 2] // two").kind).toBe("list");
-    expect(parseValue("a(1).b(2)").kind).toBe("map");
-    expect(() => parseValue("1, 2")).toThrow(K7SyntaxError);
-    expect(() => parseValue("")).toThrow(K7SyntaxError);
   });
 });

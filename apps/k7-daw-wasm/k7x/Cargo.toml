@@ -12,8 +12,8 @@ bumpalo = { version = "3.20", features = ["collections"] }
 
 [lib]
 path = "src/lib.rs"
-# rlib for the bench, cdylib for WebAssembly.
-crate-type = ["rlib", "cdylib"]
+# rlib for the bench and the crates that link it.
+crate-type = ["rlib"]
 
 [[bin]]
 name = "k7x-bench"

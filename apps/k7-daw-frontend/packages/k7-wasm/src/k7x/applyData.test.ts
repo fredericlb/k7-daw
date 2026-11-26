@@ -1,7 +1,7 @@
 // applyData.test.ts — applyIn makes the data at a path equal a value with the fewest edits, every untouched byte kept.
 
 import { describe, expect, it } from "vitest";
-import { parseDocument } from "./edit.ts";
+import { parseDocument } from "./index.ts";
 
 const NOTES = `// the melody
 notes([

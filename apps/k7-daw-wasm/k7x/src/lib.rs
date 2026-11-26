@@ -3,8 +3,8 @@
 
 pub mod ast;
 pub mod edit;
-pub mod ffi;
 pub mod json;
+pub mod outline;
 mod parse;
 
 pub use ast::{Entry, ListForm, MapForm, MapNode, Node, PathSeg, Scalar};

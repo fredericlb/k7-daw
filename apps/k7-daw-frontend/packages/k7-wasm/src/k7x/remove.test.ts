@@ -1,7 +1,7 @@
 // remove.test.ts — deleteIn: what prune takes with a deletion, and the separators and comments around what it removes.
 
 import { describe, expect, it } from "vitest";
-import { type K7Document, parseDocument } from "./edit.ts";
+import { type K7Document, parseDocument } from "./index.ts";
 
 const edit = (text: string, f: (d: K7Document) => void): string => {
   const d = parseDocument(text);
