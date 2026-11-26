@@ -1,4 +1,4 @@
-// PanelRail.tsx — git's Save and Pull, the pane switcher, the buttons that open a right panel, then Settings and Close: one vertical toolbar.
+// PanelRail.tsx — one vertical toolbar rising from the chevron: git's Save and Pull nearest it, the panes, the panels, Settings, Close on top.
 // It rises from the chevron at the bottom right once unfolded; a phone has no rail, its overflow menu holds the same buttons (docs/shell.md).
 
 import { Capsule, CapsuleButton, CapsuleDivider } from "@studio/ui/capsule";
@@ -26,7 +26,7 @@ export function PanelRail({
   onSettings,
   closeHref,
 }: {
-  /** Git's Save and Pull, first (HeaderGit.tsx's GitRailSave, GitRailPull), drawn with the rail's button class; null outside a git workspace. */
+  /** Git's Update and Save, last, nearest the chevron (HeaderGit.tsx's GitRailPull, GitRailSave), drawn with the rail's button class; null outside a git workspace. */
   save: (className: string) => ReactNode;
   panes: HeaderPane[];
   pane: string;
@@ -43,31 +43,26 @@ export function PanelRail({
       aria-orientation="vertical"
       className="absolute right-4 bottom-[calc(var(--k7-float-bottom)+var(--k7-float-h)+8px)] z-(--k7-z-bar) h-auto max-h-[calc(100%-var(--k7-float-bottom)-var(--k7-float-h)-24px)] flex-col gap-1.5 overflow-y-auto p-1 desk:h-auto"
     >
-      {save(SQUARE)}
-      <div
-        role="group"
-        aria-label={m["shell.pane"]()}
-        className="flex flex-col gap-1.5"
+      {/* Read from the chevron up: Save nearest it, Close at the top. */}
+      <a
+        href={closeHref}
+        aria-label={m["shell.close"]()}
+        title={m["shell.close"]()}
+        className={CLOSE}
       >
-        {panes.map((p) => (
-          <CapsuleButton
-            key={p.id}
-            className={SQUARE}
-            pressed={pane === p.id}
-            disabled={!!p.blocked}
-            disabledReason={p.blocked}
-            aria-label={p.label}
-            title={
-              p.blocked ?? (p.shortcut ? `${p.label} (${p.shortcut})` : p.label)
-            }
-            onClick={() => onPane(p.id)}
-          >
-            <p.icon />
-          </CapsuleButton>
-        ))}
-      </div>
+        <X />
+      </a>
+      <CapsuleButton
+        className={SQUARE}
+        pressed={settingsPressed}
+        aria-label={m["settings.menu"]()}
+        title={m["settings.menu"]()}
+        onClick={onSettings}
+      >
+        <Settings />
+      </CapsuleButton>
       <CapsuleDivider className="mx-0 my-0.5 h-px w-5" />
-      {panels.map((p) => {
+      {[...panels].reverse().map((p) => {
         const def = PANEL_DEFS[p.id];
         return (
           <CapsuleButton
@@ -86,23 +81,29 @@ export function PanelRail({
         );
       })}
       <CapsuleDivider className="mx-0 my-0.5 h-px w-5" />
-      <CapsuleButton
-        className={SQUARE}
-        pressed={settingsPressed}
-        aria-label={m["settings.menu"]()}
-        title={m["settings.menu"]()}
-        onClick={onSettings}
+      <div
+        role="group"
+        aria-label={m["shell.pane"]()}
+        className="flex flex-col gap-1.5"
       >
-        <Settings />
-      </CapsuleButton>
-      <a
-        href={closeHref}
-        aria-label={m["shell.close"]()}
-        title={m["shell.close"]()}
-        className={CLOSE}
-      >
-        <X />
-      </a>
+        {[...panes].reverse().map((p) => (
+          <CapsuleButton
+            key={p.id}
+            className={SQUARE}
+            pressed={pane === p.id}
+            disabled={!!p.blocked}
+            disabledReason={p.blocked}
+            aria-label={p.label}
+            title={
+              p.blocked ?? (p.shortcut ? `${p.label} (${p.shortcut})` : p.label)
+            }
+            onClick={() => onPane(p.id)}
+          >
+            <p.icon />
+          </CapsuleButton>
+        ))}
+      </div>
+      {save(SQUARE)}
     </Capsule>
   );
 }

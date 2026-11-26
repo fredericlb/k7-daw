@@ -3420,14 +3420,14 @@ export default function App({
                 save={(className) =>
                   gitWorkspace ? (
                     <>
-                      <GitRailSave
+                      <GitRailPull
                         git={gitHandle}
-                        transport={gitTransport}
                         workspace={gitWorkspace}
                         className={className}
                       />
-                      <GitRailPull
+                      <GitRailSave
                         git={gitHandle}
+                        transport={gitTransport}
                         workspace={gitWorkspace}
                         className={className}
                       />
