@@ -3,7 +3,7 @@
 import type { Locator, Page } from "@playwright/test";
 
 // The shell root says its layout in `data-layout` (phone, pad, desk); a page without one (home, settings) falls back to this query.
-const MOBILE_QUERY = "(max-width: 820px), (max-height: 520px)";
+const MOBILE_QUERY = "(max-width: 700px), (max-height: 520px)";
 
 /** True on a phone layout. */
 export async function folded(page: Page): Promise<boolean> {

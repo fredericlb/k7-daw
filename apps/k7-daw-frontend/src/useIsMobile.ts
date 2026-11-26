@@ -1,11 +1,11 @@
 // useIsMobile.ts — is the shell on a phone-sized surface? Width OR height, because a phone
 // in landscape passes a width-only test but is far too short for the desktop layout — which
 // also makes it testable by resizing a window. Deliberately NOT `pointer: coarse`: a
-// touchscreen laptop is not a phone.
+// touchscreen laptop is not a phone. 700 px keeps a tablet in portrait (744 px and up) out of it.
 
 import { useEffect, useState } from "react";
 
-const MOBILE_QUERY = "(max-width: 820px), (max-height: 520px)";
+const MOBILE_QUERY = "(max-width: 700px), (max-height: 520px)";
 
 export function useIsMobile(): boolean {
   // Read synchronously: correcting in an effect would build the desktop layout's stacked panes for one frame.

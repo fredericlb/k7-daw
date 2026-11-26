@@ -296,6 +296,8 @@ The kit's [editor dock](../packages/ui/docs/editor-dock.md) page has the dock's 
 
 Three layouts, said on the root as `data-layout`: `phone` (the folded shell), `pad` (a touch screen
 that is not folded) and `desk`. Pad and Desk draw the same chrome; the attribute is for the suites.
+The fold is a width of 700 px or less, or a height of 520 or less (`useIsMobile.ts`): a tablet in
+portrait (744 px and up) keeps the floating chrome, and a phone in landscape still folds by its height.
 
 **The header shows no engine state.** The engine says what it does in toasts — the project waiting for
 it, a lost link with Retry, the waveforms being cached (`shell/engineToasts.tsx`); the header only
