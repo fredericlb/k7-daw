@@ -5,6 +5,8 @@
 
 use super::msg::Msg;
 use super::outbox::Outbox;
+use super::pending::PendingQueries;
+use super::plugin_state::PluginState;
 use crate::engine::Engine;
 use crate::pairing::gate::{Gate, Out};
 use crate::wire::json;
@@ -77,6 +79,10 @@ pub struct Ctx {
     /// The quick crashes that made the supervisor start this engine in safe mode, 0 when it is not in it.
     pub safe_mode_crashes: u32,
     pub gate: Arc<Gate>,
+    /// The read-only queries waiting on the message thread, which an identical one joins.
+    pub pending: PendingQueries,
+    /// The plugin verbs' shared state: the one scan, the probe slots, the live parameter tickets.
+    pub plugins: PluginState,
     clients: Mutex<HashMap<u64, Arc<Client>>>,
     bindings: Mutex<Bindings>,
     next_id: AtomicU64,
@@ -90,6 +96,8 @@ impl Ctx {
             audio_to_browser: false,
             safe_mode_crashes: 0,
             gate,
+            pending: PendingQueries::default(),
+            plugins: PluginState::default(),
             clients: Mutex::default(),
             bindings: Mutex::default(),
             next_id: AtomicU64::new(1),

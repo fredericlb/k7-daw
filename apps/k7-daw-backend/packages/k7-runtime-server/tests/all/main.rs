@@ -6,6 +6,8 @@ mod engine_fake;
 mod harness;
 mod pairing_gate;
 mod pairing_store;
+mod plugin_units;
+mod server_plugins;
 mod server_socket;
 mod server_state;
 mod server_timers;
