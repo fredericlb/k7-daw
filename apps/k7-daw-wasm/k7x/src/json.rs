@@ -47,7 +47,7 @@ pub(crate) fn scalar_json(s: &Scalar, out: &mut String) {
             if *n < 0.0 {
                 out.push('-');
             }
-            usize_json(n.abs() as usize, out);
+            u64_json(n.abs() as u64, out);
         }
         Scalar::Num(n) => write!(out, "{n:e}").unwrap(),
         Scalar::Bool(b) => out.push_str(if *b { "true" } else { "false" }),
@@ -74,8 +74,8 @@ pub(crate) fn string_json(s: &str, out: &mut String) {
     out.push('"');
 }
 
-/// A count or an offset as JSON digits, without the formatting machinery a big outline would spend most of its time in.
-pub(crate) fn usize_json(mut n: usize, out: &mut String) {
+/// An integer as JSON digits, without the formatting machinery a big file's data would spend its time in; u64, as wasm32's usize is 32 bits.
+pub(crate) fn u64_json(mut n: u64, out: &mut String) {
     let mut buf = [0u8; 20];
     let mut i = buf.len();
     loop {

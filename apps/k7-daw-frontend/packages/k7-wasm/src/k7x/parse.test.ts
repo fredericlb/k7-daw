@@ -3,6 +3,14 @@
 import { describe, expect, it } from "vitest";
 import { K7SyntaxError, parse, stringify } from "./index.ts";
 
+describe("numbers through the module", () => {
+  it("keeps an integer past 32 bits, -0 and an overflow as JS reads them", () => {
+    const d = parse("a(5000000000)\nb(-123456789012)\nc(-0)\nd(1e999)\ne(0.1)");
+    expect(d).toEqual({ a: 5e9, b: -123456789012, c: -0, d: Infinity, e: 0.1 });
+    expect(Object.is(d.c, -0)).toBe(true);
+  });
+});
+
 describe("nesting", () => {
   it("refuses a file nested past MAX_DEPTH as a syntax error, not a stack overflow", () => {
     const deep = `a(${"[".repeat(100_000)}${"]".repeat(100_000)})`;

@@ -21,7 +21,7 @@ export function editK7xText(
   edit: (doc: K7Scope) => unknown,
 ): string | null {
   const doc = new K7Document(text);
-  if (!doc.contents) return null;
+  if (doc.errors.length) return null;
   try {
     if (edit(doc.at([])) === false) return null;
   } catch {

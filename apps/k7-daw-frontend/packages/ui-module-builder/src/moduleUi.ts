@@ -48,7 +48,7 @@ export function parseModuleDoc(fileText: string): ModuleDoc | null {
 
 function docOf(fileText: string): ModuleDoc | null {
   const doc = new K7Document(fileText);
-  return doc.contents ? doc : null;
+  return doc.errors.length ? null : doc;
 }
 
 /** Runs a writer on a buffer's document; a buffer that does not parse is handed back unchanged. */
