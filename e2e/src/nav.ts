@@ -33,11 +33,11 @@ async function openNav(page: Page): Promise<void> {
   if ((await menu.getAttribute("aria-expanded")) !== "true") await menu.click();
 }
 
-/** The tempo readout `<n> bpm`: a button of the transport group. */
+/** The tempo readout: a desk's metronome button "Metronome, <n> bpm — …", a phone's `<n> bpm`, in the transport group. */
 export async function tempoReadout(page: Page, n: number): Promise<Locator> {
   return page
     .getByRole("group", { name: "Transport", exact: true })
-    .getByRole("button", { name: `${n} bpm`, exact: true });
+    .getByRole("button", { name: new RegExp(`^(Metronome, )?${n} bpm\\b`) });
 }
 
 /** A header tool named `name`: a button of the header, or of the overflow card once it is open. */

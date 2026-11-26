@@ -341,9 +341,12 @@ something, between a header and its rows.
 #### The floating bar, and what a SET drops from it
 
 The transport capsule holds Play, Stop, Loop and Record, the clock (`role="timer"`), the song overview
-(`img "Song overview"`, the minimap), the tempo and the metre as buttons, the metronome and the master
-volume (`slider "Master volume"`), all in `group "Transport"`. A phone moves the clock, overview, tempo and
-volume to a strip above the capsule.
+(`img "Song overview"`, the minimap), the metronome wearing the bpm under its icon, and the master
+volume (`slider "Master volume"`), all in `group "Transport"`. The metronome opens a bubble, not a dialog
+(`shell/MetronomeTempo.tsx`): the tempo with Tap, the time signature and the click's switch and level sit
+together because they are one question, the song's pulse, and a bubble leaves the song in view while it
+is set. A phone keeps the tempo and metre buttons in a strip above the capsule, with the clock, overview
+and volume, and the metronome in its menu.
 
 **Record has two meanings, and the long press is the second.** A press arms and records the lanes; a
 long press, a right click or ArrowDown opens a one-item menu, "Record the output", for what the project

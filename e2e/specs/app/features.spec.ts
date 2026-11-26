@@ -106,17 +106,30 @@ const FEATURES: Record<string, { check: Check; bug?: string }> = {
   },
   "markers-settings.k7": {
     check: async (page) => {
-      // The meter button sits beside the tempo's, in the transport or in a phone's Info popover.
-      await expect(await tempoReadout(page, 96)).toBeVisible();
-      await expect(button(page, "3/4")).toBeVisible();
-      // A phone keeps the metronome in its "Views and panels" sheet, not in the transport.
       const phone = await folded(page);
-      if (phone) await button(page, "Views and panels").click();
-      await expect(button(page, "Metronome")).toHaveAttribute(
-        "aria-pressed",
-        "true",
-      );
-      if (phone) await page.keyboard.press("Escape");
+      if (phone) {
+        // A phone keeps the meter beside the tempo, and the metronome in its "Views and panels" sheet.
+        await expect(await tempoReadout(page, 96)).toBeVisible();
+        await expect(button(page, "3/4")).toBeVisible();
+        await button(page, "Views and panels").click();
+        await expect(button(page, "Metronome")).toHaveAttribute(
+          "aria-pressed",
+          "true",
+        );
+        await page.keyboard.press("Escape");
+        return;
+      }
+      // A desk's metronome wears the bpm, and its bubble holds the meter.
+      const metro = await tempoReadout(page, 96);
+      await expect(metro).toHaveAttribute("aria-pressed", "true");
+      await metro.click();
+      await expect(
+        page.getByRole("spinbutton", { name: "beats per bar" }),
+      ).toHaveValue("3");
+      await expect(
+        page.getByRole("combobox", { name: "note value" }),
+      ).toHaveValue("4");
+      await page.keyboard.press("Escape");
     },
   },
   "chains-only.k7": {

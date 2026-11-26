@@ -153,7 +153,7 @@ The git bar (workspace tree, Home row; in a project, Save and Update first on th
 
 ### Project header and transport
 
-No header row on a desk or a pad: every control floats over the panes. At the bottom left the transport bar (transport with Record's chevron, position, overview, tempo, metronome, master volume), drawn small; at the bottom right the spinner, the view's capsule (Lane views or Graph views, icons only), the command-bar button, the Mixer icon and the chevron that unfolds the right-edge toolbar upward, carrying the problem count and the unsaved count while folded. The floating row rises above the editor dock when it opens. The vertical toolbar holds git's Save and Update with their counts, the pane switcher, the right panels' buttons with the problem count on Logs, Settings, then Close. A phone keeps its header (Back, the name, its git menu, the warning chip, its status line under it, the Views and panels dialog) and its bar floats at the foot with the command-bar button. The timeline's tool is in its corner, left of + lane (a phone's menu).
+No header row on a desk or a pad: every control floats over the panes. At the bottom left the transport bar (transport with Record's chevron, position, overview, the metronome wearing the bpm and opening a bubble of tempo, time signature and click, master volume), drawn small; at the bottom right the spinner, the view's capsule (Lane views or Graph views, icons only), the command-bar button, the Mixer icon and the chevron that unfolds the right-edge toolbar upward, carrying the problem count and the unsaved count while folded. The floating row rises above the editor dock when it opens. The vertical toolbar holds git's Save and Update with their counts, the pane switcher, the right panels' buttons with the problem count on Logs, Settings, then Close. A phone keeps its header (Back, the name, its git menu, the warning chip, its status line under it, the Views and panels dialog) and its bar floats at the foot with the command-bar button. The timeline's tool is in its corner, left of + lane (a phone's menu).
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
@@ -166,10 +166,10 @@ No header row on a desk or a pad: every control floats over the panes. At the bo
 | 03.16 | Record the output (no arrangement) | click the output record button (a set); with an arrangement, Record's chevron → Record the output | — | tap | T M D |
 | 03.17† | Move the playhead or scrub from the minimap | click the strip; press and drag to scrub | — | tap to seek; drag to scrub | T M D |
 | 03.18† | Peek the full map | hover the minimap: it unfolds to every lane | — | — (stays folded) | D |
-| 03.19 | Edit the tempo | click "N bpm" → question with a Tap button | Space taps, Enter confirms, Esc cancels | tap the bpm, tap Tap repeatedly | T M D |
-| 03.20 | Edit the meter | click "N/M" → question | Enter / Esc | tap | T M D |
-| 03.21 | Toggle the metronome | click the metronome button | Enter/Space on it (repeat ignored) | tap; on a phone, Metronome in Views and panels | T M D |
-| 03.22 | Set the metronome volume | right-click the metronome button, drag the slider | ArrowDown opens it; arrows move it (written on key up) | long-press, drag the slider; on a phone, the slider under Metronome in Views and panels | T M D |
+| 03.19 | Edit the tempo | click the metronome (the bpm under its icon) → a bubble above it: type the tempo, or press Tap in rhythm | Enter confirms; closing the bubble keeps it | tap the bpm (a phone's strip) → question with Tap | T M D |
+| 03.20 | Edit the meter | click the metronome → in its bubble, the beats per bar and the note value | Enter on the beats; the note value applies at once | tap N/M in a phone's strip → question | T M D |
+| 03.21 | Toggle the metronome | the switch in the metronome's bubble | Enter/Space on the switch | on a phone, Metronome in Views and panels | T M D |
+| 03.22 | Set the metronome volume | the level slider in the metronome's bubble (written on release) | arrows on the focused slider (written on key up) | on a phone, the slider under Metronome in Views and panels | T M D |
 | 03.23 | Set the song's output level | drag the master volume in the floating bar (written on release) | arrows on the focused fader (0.5 dB) | drag the master volume; on a phone, the one in the info strip above the bar | T M D |
 | 03.24 | Fix a clipped mix | click "fix" next to the clip light | — | — | D |
 | 03.25† | Show / hide the graph notes | click the notes button | — | tap | T M D |

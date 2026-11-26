@@ -4,12 +4,12 @@
 import { CapsuleDivider } from "@studio/ui/capsule";
 import { SquareTerminal } from "@studio/ui/icons";
 import type { ComponentProps, ReactNode, Ref } from "react";
-import { MetronomeButton } from "../components/MetronomeButton";
 import { Minimap } from "../components/Minimap";
 import type { RecInfo } from "../hooks/useProjectDoc";
 import { m } from "../paraglide/messages.js";
 import { TransportClock } from "../shellMeta";
 import type { ShellLayout } from "../useIsMobile";
+import { MetronomeTempo } from "./MetronomeTempo";
 import { summonChord } from "./modKey";
 import { OutputRecordButton } from "./OutputRecordButton";
 import { ShellTransport } from "./ShellTransport";
@@ -48,7 +48,10 @@ export function FloatingBar({
   onClock: () => void;
   map: ComponentProps<typeof Minimap> | null;
   meter: ReactNode;
-  metronome: ComponentProps<typeof MetronomeButton> | null;
+  metronome: Pick<
+    ComponentProps<typeof MetronomeTempo>,
+    "on" | "level" | "onToggle" | "onLevel"
+  > | null;
   /** The bar steps aside (an editor popin over everything). */
   hidden?: boolean;
   /** A surface of another device: the transport capsule and its clock alone, no tool, no views, no command button. */
@@ -129,8 +132,15 @@ export function FloatingBar({
           {clock}
           {overview}
           {(transport || metronome) && <CapsuleDivider />}
-          {tempo}
-          {metronome && <MetronomeButton {...metronome} />}
+          {metronome ? (
+            <MetronomeTempo
+              {...metronome}
+              recInfo={recInfo}
+              runCommand={runCommand}
+            />
+          ) : (
+            tempo
+          )}
           {meter && <CapsuleDivider />}
           {meter}
         </>
