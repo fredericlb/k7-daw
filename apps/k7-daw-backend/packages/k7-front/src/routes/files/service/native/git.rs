@@ -428,7 +428,7 @@ async fn state(ctx: &Ctx, root: &Path) -> Answer {
         .clone();
     let ctx2 = ctx.clone();
     run(ctx, root, move |r| {
-        let branch = super::git_autosave::branch_for(&ctx2, r);
+        let branch = super::git_autosave::branch_named(&ctx2, r);
         let origin = r.origin_config();
         let tracked = r.ahead_behind()?;
         let fetched = last.as_ref().is_some_and(|o| o.error.is_none());

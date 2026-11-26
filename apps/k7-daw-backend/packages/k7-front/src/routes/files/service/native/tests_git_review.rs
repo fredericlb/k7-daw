@@ -30,6 +30,7 @@ async fn connected(
     let m = json!({ "workspace": "band", "message": "first" });
     post(&a, Kind::Commit, "/git/commit", m).await;
     post(&a, Kind::Push, "/git/push", json!({ "workspace": "band" })).await;
+    super::git_autosave_task::quiet().await;
     (a, root, remote)
 }
 

@@ -199,7 +199,10 @@ pub fn flush_now(ctx: &Ctx, root: &Path) {
 /// A Save's push went through: the reset branch follows it without waiting for an edit.
 pub fn push_now(ctx: &Ctx, root: &Path) {
     let (ctx, root) = (ctx.clone(), root.to_path_buf());
+    let flight = in_flight();
+    flight.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
     tokio::spawn(async move {
+        let _done = Flight(flight);
         // The route that called holds the remote until it answers: a skipped round tries again shortly.
         for _ in 0..25 {
             match round(&ctx, &root, false, false).await {
@@ -215,6 +218,28 @@ pub fn push_now(ctx: &Ctx, root: &Path) {
             }
         }
     });
+}
+
+fn in_flight() -> Arc<std::sync::atomic::AtomicUsize> {
+    static N: OnceLock<Arc<std::sync::atomic::AtomicUsize>> = OnceLock::new();
+    N.get_or_init(Default::default).clone()
+}
+
+/// Counts a `push_now` round down when it ends, however it ends.
+struct Flight(Arc<std::sync::atomic::AtomicUsize>);
+
+impl Drop for Flight {
+    fn drop(&mut self) {
+        self.0.fetch_sub(1, std::sync::atomic::Ordering::SeqCst);
+    }
+}
+
+/// Test seam: waits until no round a route started is running, so a test's own lock is not taken from under it.
+#[cfg(test)]
+pub async fn quiet() {
+    while in_flight().load(std::sync::atomic::Ordering::SeqCst) > 0 {
+        tokio::time::sleep(Duration::from_millis(20)).await;
+    }
 }
 
 /// The fetch task just fetched: take in what the other devices auto-saved.

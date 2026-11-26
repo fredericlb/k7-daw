@@ -24,6 +24,29 @@ pub(super) fn branch_for(ctx: &Ctx, repo: &Repo) -> Option<String> {
     Some(branch_name(Owner::Email(&id.email)))
 }
 
+/// How long the state's answer reuses a branch name: a state poll must not read the keychain each time.
+const NAME_FOR: std::time::Duration = std::time::Duration::from_secs(60);
+
+type Names = std::sync::Mutex<
+    std::collections::HashMap<std::path::PathBuf, (std::time::Instant, Option<String>)>,
+>;
+
+/// `branch_for`, remembered per workspace for `NAME_FOR`.
+pub(super) fn branch_named(ctx: &Ctx, repo: &Repo) -> Option<String> {
+    static NAMES: std::sync::OnceLock<Names> = std::sync::OnceLock::new();
+    let names = NAMES.get_or_init(Default::default);
+    let key = repo.workdir().to_path_buf();
+    let mut all = names.lock().unwrap_or_else(|p| p.into_inner());
+    if let Some((at, name)) = all.get(&key)
+        && at.elapsed() < NAME_FOR
+    {
+        return name.clone();
+    }
+    let name = branch_for(ctx, repo);
+    all.insert(key, (std::time::Instant::now(), name.clone()));
+    name
+}
+
 /// What a round came to; `unsent` when the branch is still not on the remote.
 #[derive(Debug, Default, PartialEq, Eq)]
 pub struct Round {
