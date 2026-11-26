@@ -116,7 +116,7 @@ ID,Screen,Interaction,Mouse / trackpad,Keyboard,Touch,Devices,Not drawn,Area,Not
 03.71,03,Resize a clip by an edge,"drag the strip at its start or end (wider on the selected clip, which shows a grip)",—,"hold the edge, then drag",T M D,FALSE,Arrange · Clips,
 03.72,03,Fade a clip in / out,drag the corner square (whole beats; ⌘/Ctrl or ⇧ frees),—,"hold the corner square, then drag",T M D,FALSE,Arrange · Clips,
 03.73,03,"Cancel a move, resize or fade",release where it started,Esc during a keyboard move,—,T D,FALSE,Arrange · Clips,
-03.74,03,"Pick the tool (arrow, blade, eraser, mute, crossfade)",click the tool button in the header's bar → its menu,"`a`, `b`, `d`, `x` (mute has none); Esc back to arrow",tap the tool button,T M D,FALSE,Arrange · Clips,
+03.74,03,"Pick the tool (arrow, blade, eraser, mute, crossfade)","click the tool button in the timeline's corner, left of + lane → its menu","`a`, `b`, `d`, `x` (mute has none); Esc back to arrow",tap the tool button,T M D,FALSE,Arrange · Clips,
 03.75,03,Cut a clip,click it with the blade (refused at head or tail),⌘/Ctrl+B at the playhead on the caret's lane,tap with the blade,T M D,FALSE,Arrange · Clips,
 03.76,03,Erase a clip,click it with the eraser,Backspace / Delete on the caret's clip or the rectangle,tap with the eraser,T M D,FALSE,Arrange · Clips,
 03.77,03,Mute / unmute a clip,click it with the mute tool,—,tap with the mute tool,T M D,FALSE,Arrange · Clips,

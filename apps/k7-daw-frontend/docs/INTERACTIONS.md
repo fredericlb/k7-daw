@@ -153,7 +153,7 @@ The git bar (workspace tree, Home row; in a project, Save and Update first on th
 
 ### Project header and transport
 
-The header (spinner, the tool and transport bar — tool, transport with Record's chevron, position, overview, tempo, metronome, master volume, the view's capsule — then the command-bar button, the Mixer icon and the chevron that unfolds the right-edge toolbar, carrying the problem count and the unsaved count while folded; a phone keeps Back, the name, its git menu, its status line under the header and the warning chip, the rest folds into the Views and panels dialog, and its bar floats at the foot with the command-bar button), the vertical toolbar on the right edge (folded by default; git's Save and Update with their counts, the pane switcher, the right panels' buttons with the problem count on Logs, Settings, then Close) and the editor dock.
+The header (spinner, the transport bar — transport with Record's chevron, position, overview, tempo, metronome, master volume, the view's capsule — then the command-bar button, the Mixer icon and the chevron that unfolds the right-edge toolbar, carrying the problem count and the unsaved count while folded; a phone keeps Back, the name, its git menu, its status line under the header and the warning chip, the rest folds into the Views and panels dialog, and its bar floats at the foot with the command-bar button), the vertical toolbar on the right edge (folded by default; git's Save and Update with their counts, the pane switcher, the right panels' buttons with the problem count on Logs, Settings, then Close) and the editor dock. The timeline's tool is in its corner, left of + lane (a phone's menu).
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
@@ -244,7 +244,7 @@ The timeline pane: tool strip, ruler with markers and task flags, timeline tabs,
 | 03.71 | Resize a clip by an edge | drag the strip at its start or end (wider on the selected clip, which shows a grip) | — | hold the edge, then drag | T M D |
 | 03.72 | Fade a clip in / out | drag the corner square (whole beats; ⌘/Ctrl or ⇧ frees) | — | hold the corner square, then drag | T M D |
 | 03.73 | Cancel a move, resize or fade | release where it started | Esc during a keyboard move | — | T D |
-| 03.74 | Pick the tool (arrow, blade, eraser, mute, crossfade) | click the tool button in the header's bar → its menu | `a`, `b`, `d`, `x` (mute has none); Esc back to arrow | tap the tool button | T M D |
+| 03.74 | Pick the tool (arrow, blade, eraser, mute, crossfade) | click the tool button in the timeline's corner, left of + lane → its menu | `a`, `b`, `d`, `x` (mute has none); Esc back to arrow | tap the tool button | T M D |
 | 03.75 | Cut a clip | click it with the blade (refused at head or tail) | ⌘/Ctrl+B at the playhead on the caret's lane | tap with the blade | T M D |
 | 03.76 | Erase a clip | click it with the eraser | Backspace / Delete on the caret's clip or the rectangle | tap with the eraser | T M D |
 | 03.77 | Mute / unmute a clip | click it with the mute tool | — | tap with the mute tool | T M D |

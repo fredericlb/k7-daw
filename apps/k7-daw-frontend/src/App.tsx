@@ -2896,8 +2896,6 @@ export default function App({
       docked={!isMobile}
       runCommand={runCommand}
       onCommandBar={summonBar}
-      tool={full === "timeline" && hasTimeline ? tool : null}
-      onTool={(t) => void runCommand(`ui tool ${t}`)}
       recInfo={recInfo}
       clockSeconds={rulerSeconds}
       onClock={() =>

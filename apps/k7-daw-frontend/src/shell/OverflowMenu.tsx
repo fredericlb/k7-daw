@@ -18,8 +18,8 @@ import { m } from "../paraglide/messages.js";
 import { usePopin } from "../popins";
 import { MetronomeIcon } from "../shellMeta";
 import type { Tool } from "../timelineTools";
-import { TOOL_NAME, ToolGlyph } from "./FloatingBar";
 import { PANEL_DEFS, type PanelId } from "./panels";
+import { TOOL_NAME, ToolGlyph } from "./ToolMenu";
 
 export interface OverflowPane {
   id: string;
