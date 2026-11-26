@@ -263,7 +263,7 @@ bottom margin for the bar instead.
 
 | piece | file | what it is |
 |---|---|---|
-| header | `shell/ProjectHeader.tsx` | Back, the name over its status, the spinner, the warning chip, the git capsule, the pane switcher (centred) and the dock's Mixer; the right panels' buttons are the rail's (`shell/PanelRail.tsx`); laid out in flow: a `flex-1` left cluster, the switcher, a right cluster of the same basis, so nothing overlaps at any width |
+| header | `shell/ProjectHeader.tsx` | Back, the name over its status, the spinner, the warning chip, the git capsule, the pane switcher (centred), the dock's Mixer and, last, the chevron that unfolds the rail; the right panels' buttons are the rail's (`shell/PanelRail.tsx`); laid out in flow: a `flex-1` left cluster, the switcher, a right cluster of the same basis, so nothing overlaps at any width |
 | git capsule | `shell/HeaderGit.tsx` | Save with its count, a menu (Pull, Saves); while a merge waits, one "Resolve N conflicts" button and a banner |
 | bar | `shell/FloatingBar.tsx`, `shell/ShellTransport.tsx` | the command bar button, the tool, the transport capsule, the pane's capsule (Lane views or Graph views) |
 | panels | `shell/panels.tsx` | the registry: an id, a glyph and a title each, in the kit's `SidePanel` (Pad, Desk) or `Sheet` (Phone) |
@@ -644,9 +644,9 @@ is the whole point of that tab not being a dialog over the thing it meters.
 
 The buttons that open a right panel — Resources, Playlists, Logs, Tasks & history, Export, then Settings
 — are one vertical toolbar on the screen's right edge, under the header (`shell/PanelRail.tsx`), folded by
-default under a chevron at its top: the panes keep the whole width until a person asks for the panels. The header
+default under the chevron at the header's right end: the panes keep the whole width until a person asks for the panels. The header
 keeps only the dock's Mixer (no Events button: the dock opens on the event a person opens, so a button
-would only repeat that). The right panel, the editor dock and the toasts keep clear of the rail
+would only repeat that). The right panel, the editor dock and the toasts keep clear of the unfolded rail
 (`--k7-rail-clear`). Each button toggles a panel floating over the right of the panes (a full-screen sheet
 on a phone, whose menu holds the same buttons); pressing the open one closes it. **One panel at a time**:
 `rightPanel` (the store) and the `?panel=` route state are two doors onto the same slot, and App keeps

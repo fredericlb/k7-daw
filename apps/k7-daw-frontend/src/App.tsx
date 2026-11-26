@@ -328,6 +328,8 @@ export default function App({
   const lockedSay = lockSentence;
   // What the panes read for themselves — the reload signal, the verbs, the overlays (state/shellStore.ts, docs/state.md).
   const shellVerbs = useRef<ShellVerbs | null>(null);
+  // The right-edge rail is folded until the header's chevron unfolds it.
+  const [railOpen, setRailOpen] = useState(false);
   const [shell] = useState(() =>
     createShellStore({
       scope: SHELL_SCOPE,
@@ -2897,6 +2899,11 @@ export default function App({
       pane={full}
       onPane={(id) => void runCommand(`ui ${id}`)}
       panels={headerPanels.filter((p) => p.id === "mixer")}
+      rail={
+        isMobile
+          ? undefined
+          : { open: railOpen, onToggle: () => setRailOpen((o) => !o) }
+      }
       lockBanner={merging ? lockedSay() : null}
       overflow={
         <OverflowMenu
@@ -3319,18 +3326,24 @@ export default function App({
   };
   // A right panel ends above the dock, and the toasts sit above it too (spec: bottom-editors.md).
   const dockUp = dock.open && !isMobile;
+  const railShown = railOpen && !isMobile;
   const shellVars: Record<string, string> | null = !isMobile
     ? {
-        // The rail on the right edge: the right panel, the dock and the toasts keep clear of it (shell/PanelRail.tsx).
-        "--k7-panel-right": "var(--k7-rail-clear)",
-        "--k7-dock-right": "var(--k7-rail-clear)",
-        "--toast-right": "var(--k7-rail-clear)",
+        // The unfolded rail: the right panel, the dock and the toasts keep clear of it (shell/PanelRail.tsx).
+        ...(railShown
+          ? {
+              "--k7-panel-right": "var(--k7-rail-clear)",
+              "--k7-dock-right": "var(--k7-rail-clear)",
+              "--toast-right": "var(--k7-rail-clear)",
+            }
+          : {}),
         ...(shownId || dockUp
           ? {
               ...(shownId
                 ? {
-                    "--toast-right":
-                      "calc(var(--k7-toast-right-panel-open) + var(--k7-rail-w))",
+                    "--toast-right": railShown
+                      ? "calc(var(--k7-toast-right-panel-open) + var(--k7-rail-w))"
+                      : "var(--k7-toast-right-panel-open)",
                   }
                 : {}),
               ...(dockUp
@@ -3388,7 +3401,7 @@ export default function App({
             <Backdrop />
             {header}
             {/* The right panels' buttons, as a vertical toolbar on the right edge (shell/PanelRail.tsx); a phone has its menu. */}
-            {!isMobile && (
+            {railShown && (
               <PanelRail
                 panels={headerPanels.filter((p) => p.id !== "mixer")}
                 settingsPressed={shownId === "settings"}

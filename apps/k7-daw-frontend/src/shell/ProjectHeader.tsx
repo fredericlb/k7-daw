@@ -4,7 +4,13 @@
 import { Badge } from "@studio/ui/badge";
 import { Button } from "@studio/ui/button";
 import { Capsule, CapsuleButton } from "@studio/ui/capsule";
-import { ChevronLeft, type LucideIcon, TriangleAlert } from "@studio/ui/icons";
+import {
+  ChevronDown,
+  ChevronLeft,
+  ChevronUp,
+  type LucideIcon,
+  TriangleAlert,
+} from "@studio/ui/icons";
 import { Spinner } from "@studio/ui/spinner";
 import { type ReactNode, useSyncExternalStore } from "react";
 import { StatusText } from "../components/StatusText";
@@ -51,6 +57,7 @@ export function ProjectHeader({
   pane,
   onPane,
   panels,
+  rail,
   overflow,
   lockBanner,
 }: {
@@ -70,6 +77,8 @@ export function ProjectHeader({
   onPane: (id: string) => void;
   /** The DOCK's buttons (the Mixer); the right panels' are the rail's. */
   panels: HeaderPanel[];
+  /** The chevron that unfolds the right-edge rail (PanelRail.tsx), last in the header; none on a phone. */
+  rail?: { open: boolean; onToggle: () => void };
   /** The phone's menu, standing in for the capsules on the right. */
   overflow: ReactNode;
   /** The sentence under the header while a merge locks editing. */
@@ -188,6 +197,26 @@ export function ProjectHeader({
                   );
                 })}
               </Capsule>
+              {rail && (
+                <Capsule>
+                  <CapsuleButton
+                    aria-expanded={rail.open}
+                    aria-label={
+                      rail.open
+                        ? m["shell.panelsHide"]()
+                        : m["shell.panelsShow"]()
+                    }
+                    title={
+                      rail.open
+                        ? m["shell.panelsHide"]()
+                        : m["shell.panelsShow"]()
+                    }
+                    onClick={rail.onToggle}
+                  >
+                    {rail.open ? <ChevronUp /> : <ChevronDown />}
+                  </CapsuleButton>
+                </Capsule>
+              )}
             </div>
           </>
         )}
