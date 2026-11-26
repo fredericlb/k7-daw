@@ -201,6 +201,8 @@ async fn a_frame_the_agent_does_not_read_is_said_once_per_type() {
     }
     r.hub.send(json!([1, 2]));
     r.hub.send_binary(json!({"t": "wonder"}), &[0]);
+    // Frames are read in order: the channel's answer says the ones before it were.
+    open(&r, 1, json!([]), false).await;
     assert_eq!(r.said("type 'mystery'"), 1);
     assert_eq!(r.said("type '(not a JSON object)'"), 1);
     assert_eq!(r.said("binary frame of type 'wonder'"), 1);
