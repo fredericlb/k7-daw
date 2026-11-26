@@ -2924,7 +2924,6 @@ export default function App({
   const bar = (
     <FloatingBar
       layout={layoutKind}
-      docked={!isMobile}
       runCommand={runCommand}
       onCommandBar={summonBar}
       recInfo={recInfo}
@@ -2934,7 +2933,7 @@ export default function App({
       }
       meter={masterMeter}
       hidden={false}
-      rootRef={isMobile ? stripRef : undefined}
+      rootRef={stripRef}
       transport={
         showTransport
           ? {
@@ -3001,8 +3000,7 @@ export default function App({
         ) : null
       }
       panels={headerPanels.filter((p) => p.id === "mixer")}
-      onCommandBar={isMobile ? undefined : summonBar}
-      bar={isMobile ? undefined : bar}
+      views={viewCapsule}
       rail={
         isMobile
           ? undefined
@@ -3346,8 +3344,17 @@ export default function App({
   // A right panel ends above the dock, and the toasts sit above it too (spec: bottom-editors.md).
   const dockUp = dock.open && !isMobile;
   const railShown = railOpen && !isMobile;
+  // The floating row (bar, controls) sits 16 px from the foot, or right above the dock when it is open (docs/shell.md).
+  const floatBottom = !dockUp
+    ? "16px"
+    : dock.expanded
+      ? "calc(100% - 16px - var(--k7-float-h))"
+      : `calc(16px + ${dock.height}px + var(--k7-dock-gap))`;
+  const aboveRow = "calc(var(--k7-float-bottom) + var(--k7-float-h) + 8px)";
   const shellVars: Record<string, string> | null = !isMobile
     ? {
+        "--k7-float-bottom": floatBottom,
+        "--k7-dock-top": "calc(16px + var(--k7-float-h))",
         // The unfolded rail: the right panel, the dock and the toasts keep clear of it (shell/PanelRail.tsx).
         ...(railShown
           ? {
@@ -3356,29 +3363,18 @@ export default function App({
               "--toast-right": "var(--k7-rail-clear)",
             }
           : {}),
-        ...(shownId || dockUp
+        ...(shownId
           ? {
-              ...(shownId
-                ? {
-                    "--toast-right": railShown
-                      ? "calc(var(--k7-toast-right-panel-open) + var(--k7-rail-w))"
-                      : "var(--k7-toast-right-panel-open)",
-                  }
-                : {}),
-              ...(dockUp
-                ? {
-                    "--toast-bottom": dock.expanded
-                      ? "96px"
-                      : `calc(var(--k7-panel-bottom) + ${dock.height}px + var(--k7-dock-gap))`,
-                    ...(dock.expanded
-                      ? {}
-                      : {
-                          "--k7-panel-bottom-open": `calc(var(--k7-panel-bottom) + ${dock.height}px + var(--k7-dock-gap))`,
-                        }),
-                  }
-                : {}),
+              "--toast-right": railShown
+                ? "calc(var(--k7-toast-right-panel-open) + var(--k7-rail-w))"
+                : "var(--k7-toast-right-panel-open)",
             }
           : {}),
+        // The toasts and a right panel end above the row; an expanded dock leaves the row its top.
+        "--toast-bottom": dock.expanded && dockUp ? "96px" : aboveRow,
+        ...(dock.expanded && dockUp
+          ? {}
+          : { "--k7-panel-bottom-open": aboveRow }),
       }
     : null;
   const panelHost = shownId ? (
@@ -3456,9 +3452,9 @@ export default function App({
             {ws?.activeIsDemo && ws.activeProject && (
               <DemoBanner project={ws.activeProject} />
             )}
-            {/* The panes, with room kept for a phone's floating bar (a desk docks it in the header); panels push nothing. */}
+            {/* The panes, with room kept for the floating bar and controls; panels push nothing. */}
             <div
-              className={`${editorPopin || rackBuilder ? "z-(--k7-z-menu)" : "z-(--k7-z-pane)"} flex min-h-0 flex-1 flex-col ${isMobile ? "pb-[88px]" : "pb-4"}`}
+              className={`${editorPopin || rackBuilder ? "z-(--k7-z-menu)" : "z-(--k7-z-pane)"} flex min-h-0 flex-1 flex-col ${isMobile ? "pb-[88px]" : "pb-16"}`}
             >
               <div className="flex min-h-0 flex-1">
                 {/* The popin's backdrop: a click outside is the reliable way out, Escape belonging to the editor's vim. */}
@@ -3775,8 +3771,7 @@ export default function App({
               </FloatingWindow>
             )}
 
-            {isMobile && bar}
-            {viewCapsule}
+            {bar}
 
             {panelHost}
             {dockHost}

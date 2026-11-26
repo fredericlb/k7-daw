@@ -208,7 +208,8 @@
 
   /* ---- Sizes ---- */
   --k7-touch: 44px; /* minimum target on a touch screen; a desk's controls are 32 */
-  --k7-header-h: 72px; /* desktop and iPad: the 56 px tool and transport bar docked in it; padding 8px 16px, gap 8 */
+  --k7-header-h: 8px; /* desktop and iPad: no header row, the panels start 16 from the top (8 + the gap) */
+  --k7-float-h: 40px; /* desktop and iPad: the floating row at the foot, bar and controls */
   --k7-header-phone-h: 48px;
   --k7-header-landscape-h: 52px;
   --k7-bar-h: 56px; /* floating transport bar, 16 from the edges (phone bottom 28) */
@@ -223,7 +224,7 @@
   --k7-rail-w: 48px; /* the right-edge toolbar and its gap; desk draws it narrower */
   --k7-rail-clear: calc(12px + var(--k7-rail-w));
   --k7-panel-gap-top: 8px; /* under the header */
-  --k7-panel-bottom: 60px; /* clear of the view capsule at the bottom right (36 + 16 + 8); also the toast's bottom */
+  --k7-panel-bottom: 16px; /* the dock's bottom; a right panel and the toasts end above the floating row (App's shell vars) */
   --k7-panel-padding: 6px 6px 14px 14px;
   --k7-panel-header-h: 44px;
   --k7-dock-h-pad: 380px; /* editor dock, normal height; 400 on Desk */

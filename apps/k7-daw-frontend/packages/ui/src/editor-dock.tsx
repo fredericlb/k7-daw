@@ -101,8 +101,9 @@ const headerOf = (
   />
 );
 
-/** Where the dock's top stops when expanded: under the header, as the right panel's does. */
-const TOP = "calc(var(--k7-header-h) + var(--k7-panel-gap-top))";
+/** Where the dock's top stops when expanded: under the header, or under the floating row the host names in --k7-dock-top. */
+const TOP =
+  "calc(var(--k7-dock-top, var(--k7-header-h)) + var(--k7-panel-gap-top))";
 const ROOM = `calc(100% - ${TOP} - var(--k7-panel-bottom))`;
 
 const px = (el: Element, name: string) =>
@@ -114,7 +115,7 @@ function tallest(dock: HTMLElement): number {
   if (!host) return window.innerHeight;
   return (
     host.clientHeight -
-    px(host, "--k7-header-h") -
+    (px(host, "--k7-dock-top") || px(host, "--k7-header-h")) -
     px(host, "--k7-panel-gap-top") -
     px(host, "--k7-panel-bottom")
   );

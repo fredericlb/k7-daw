@@ -1,5 +1,5 @@
 // PanelRail.tsx — git's Save and Pull, the pane switcher, the buttons that open a right panel, then Settings and Close: one vertical toolbar.
-// It shows only once the header's chevron unfolds it; a phone has no rail, its overflow menu holds the same buttons (docs/shell.md).
+// It rises from the chevron at the bottom right once unfolded; a phone has no rail, its overflow menu holds the same buttons (docs/shell.md).
 
 import { Capsule, CapsuleButton, CapsuleDivider } from "@studio/ui/capsule";
 import { Settings, X } from "@studio/ui/icons";
@@ -41,7 +41,7 @@ export function PanelRail({
     <Capsule
       aria-label={m["shell.panels"]()}
       aria-orientation="vertical"
-      className="absolute top-[calc(var(--k7-header-h)+var(--k7-panel-gap-top))] right-3 z-(--k7-z-header) h-auto desk:h-auto flex-col gap-1.5 p-1"
+      className="absolute right-4 bottom-[calc(var(--k7-float-bottom)+var(--k7-float-h)+8px)] z-(--k7-z-bar) h-auto max-h-[calc(100%-var(--k7-float-bottom)-var(--k7-float-h)-24px)] flex-col gap-1.5 overflow-y-auto p-1 desk:h-auto"
     >
       {save(SQUARE)}
       <div

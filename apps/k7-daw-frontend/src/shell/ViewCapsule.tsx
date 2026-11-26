@@ -1,5 +1,5 @@
 // ViewCapsule.tsx — the current pane's view options (lanes, automation, zoom; the graph's fit, layout, stack) in a small
-// capsule floating at the screen's bottom right, icons only; none on the other panes, and a phone's menu holds them.
+// capsule among the floating controls at the bottom right (ProjectHeader.tsx), icons only; none on the other panes, and a phone's menu holds them.
 import { CapsuleButton, CapsuleDivider } from "@studio/ui/capsule";
 import {
   Columns3,
@@ -37,7 +37,7 @@ export interface BarGraphViews {
 
 // A small capsule: 36 px tall, 28 px buttons, 16 px icons.
 const CAPSULE =
-  "float pointer-events-auto absolute right-4 bottom-4 z-(--k7-z-bar) flex h-9 items-center gap-0.5 rounded-full p-1";
+  "float pointer-events-auto flex h-9 items-center gap-0.5 rounded-full p-1";
 const BTN =
   "h-7 min-w-7 px-1.5 desk:h-7 desk:min-w-7 desk:rounded-full rounded-full [&_svg]:size-4 desk:[&_svg]:size-4";
 

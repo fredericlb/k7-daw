@@ -1,6 +1,6 @@
 // FloatingBar.tsx — the bar of the transport capsule, a phone's command bar button
 // (buttons, clock, song overview, tempo, metronome, master volume); the pane's views float apart (ViewCapsule.tsx). On a phone the clock,
-// overview, tempo and volume move to a strip above the capsule; a desk or a pad docks it in the header's row, and the metronome to the overflow menu; the tool is the timeline's corner (ToolMenu.tsx), a phone's menu. It holds no state of its own: App hands it all.
+// overview, tempo and volume move to a strip above the capsule; a desk or a pad draws it small at the bottom left, and the metronome to the overflow menu; the tool is the timeline's corner (ToolMenu.tsx), a phone's menu. It holds no state of its own: App hands it all.
 import { CapsuleDivider } from "@studio/ui/capsule";
 import { SquareTerminal } from "@studio/ui/icons";
 import type { ComponentProps, ReactNode, Ref } from "react";
@@ -14,6 +14,9 @@ import { summonChord } from "./modKey";
 import { OutputRecordButton } from "./OutputRecordButton";
 import { ShellTransport } from "./ShellTransport";
 import { TempoMeter } from "./TempoMeter";
+
+// 56 px controls drawn at 40 px: the bar is a small floating row on a desk or a pad, as the view capsule is.
+const BAR_ZOOM = 40 / 56;
 
 export function FloatingBar({
   layout,
@@ -30,10 +33,7 @@ export function FloatingBar({
   surfaceOnly = false,
   runCommand,
   rootRef,
-  docked = false,
 }: {
-  /** Drawn in the header's row instead of floating over the panes' foot (a desk or a pad). */
-  docked?: boolean;
   /** The bar's root, so the editor popin can measure how tall it is. */
   rootRef?: Ref<HTMLDivElement>;
   layout: ShellLayout;
@@ -109,7 +109,7 @@ export function FloatingBar({
       aria-label={m["shell.overview"]()}
       className={phone ? "min-w-0 flex-1" : "flex w-[260px] shrink-0"}
     >
-      <Minimap {...map} unfoldDown={docked} />
+      <Minimap {...map} />
     </div>
   ) : null;
   const tempo = <TempoMeter recInfo={recInfo} runCommand={runCommand} />;
@@ -138,15 +138,10 @@ export function FloatingBar({
     </div>
   );
 
-  return (
-    <div
-      ref={rootRef}
-      className={
-        docked
-          ? "pointer-events-none flex min-w-0 flex-1 items-center gap-3"
-          : `pointer-events-none absolute inset-x-4 z-(--k7-z-bar) flex items-end gap-3 ${phone ? "bottom-7" : "bottom-4"}`
-      }
-    >
+  // A desk or a pad draws the bar small (zoomed to 40 px) and lifts it above the dock with --k7-float-bottom.
+  const row = (
+    <>
+      {!phone && commandButton}
       <div
         role="group"
         aria-label={m["transport.region"]()}
@@ -164,6 +159,25 @@ export function FloatingBar({
       </div>
       <span className="flex-1" />
       {phone && commandButton}
+    </>
+  );
+  if (phone)
+    return (
+      <div
+        ref={rootRef}
+        className="pointer-events-none absolute inset-x-4 bottom-7 z-(--k7-z-bar) flex items-end gap-3"
+      >
+        {row}
+      </div>
+    );
+  return (
+    <div
+      ref={rootRef}
+      className="pointer-events-none absolute bottom-(--k7-float-bottom) left-4 z-(--k7-z-bar) transition-[bottom] duration-(--k7-dur-panel)"
+    >
+      <div className="flex items-end gap-3" style={{ zoom: BAR_ZOOM }}>
+        {row}
+      </div>
     </div>
   );
 }

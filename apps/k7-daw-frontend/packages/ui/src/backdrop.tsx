@@ -1,6 +1,6 @@
 import { cn } from "./lib/utils";
 
-// The screen's background decor: two blurred blobs at the foot and two wave strokes along the top, behind everything and off the pointer.
+// The screen's background decor: two blurred blobs and two wave strokes, behind everything and off the pointer.
 export function Backdrop({ className }: { className?: string }) {
   return (
     <div
@@ -28,7 +28,7 @@ export function Backdrop({ className }: { className?: string }) {
       />
       <svg
         aria-hidden
-        className="absolute inset-x-0 top-0 h-28 w-full -scale-y-100"
+        className="absolute inset-x-0 bottom-0 h-28 w-full"
         viewBox="0 0 1200 120"
         preserveAspectRatio="none"
         fill="none"

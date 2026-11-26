@@ -67,7 +67,7 @@ Applies on every screen: the keymap, the Esc ladder, the undo journal, app quest
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
-| 01.01 | Open the command bar | click the command-bar button (square terminal): in a project's header, left of the Mixer (the floating bar's right end on a phone), the bottom right of the sidebar on Home | ⌘/Ctrl+⇧P (works inside the text editor); double-tap Shift | double-tap the screen with two fingers, anywhere; a tablet also has the command-bar button (the header in a project, the bottom right of the sidebar on Home) | T M D |
+| 01.01 | Open the command bar | click the command-bar button (square terminal): the floating row's bottom left in a project (the floating bar's right end on a phone), the bottom right of the sidebar on Home | ⌘/Ctrl+⇧P (works inside the text editor); double-tap Shift | double-tap the screen with two fingers, anywhere; a tablet also has the command-bar button (the header in a project, the bottom right of the sidebar on Home) | T M D |
 | 01.02 | Run a bound command by key | — | single keys from the keymap, each one runs a command: `1`–`4` pages, `f` fullscreen the focused pane, `F6`/`⇧F6` next/previous page, `?` help, `Space` play/stop, `⇧Space` replay, `Enter` rewind, `t` locate, `,` `.` step the playhead, `⇧R` record enable; every key can be rebound | — | T D |
 | 01.03 | Step aside for typing or a focused control | — | a field owns every key; a focused button/link/select keeps all keys but Esc and the transport keys; `F6` walks out of both | — | T D |
 | 01.04 | Copy selected page text | — | ⌘/Ctrl+C with a text selection stays the browser's copy | — | T D |
@@ -153,7 +153,7 @@ The git bar (workspace tree, Home row; in a project, Save and Update first on th
 
 ### Project header and transport
 
-The header (spinner, the transport bar — transport with Record's chevron, position, overview, tempo, metronome, master volume — then the command-bar button, the Mixer icon and the chevron that unfolds the right-edge toolbar, carrying the problem count and the unsaved count while folded; a phone keeps Back, the name, its git menu, its status line under the header and the warning chip, the rest folds into the Views and panels dialog, and its bar floats at the foot with the command-bar button), the vertical toolbar on the right edge (folded by default; git's Save and Update with their counts, the pane switcher, the right panels' buttons with the problem count on Logs, Settings, then Close), the view's small capsule floating at the bottom right (Lane views or Graph views, icons only) and the editor dock. The timeline's tool is in its corner, left of + lane (a phone's menu).
+No header row on a desk or a pad: every control floats over the panes. At the bottom left the command-bar button and the transport bar (transport with Record's chevron, position, overview, tempo, metronome, master volume), drawn small; at the bottom right the spinner, the view's capsule (Lane views or Graph views, icons only), the Mixer icon and the chevron that unfolds the right-edge toolbar upward, carrying the problem count and the unsaved count while folded. The floating row rises above the editor dock when it opens. The vertical toolbar holds git's Save and Update with their counts, the pane switcher, the right panels' buttons with the problem count on Logs, Settings, then Close. A phone keeps its header (Back, the name, its git menu, the warning chip, its status line under it, the Views and panels dialog) and its bar floats at the foot with the command-bar button. The timeline's tool is in its corner, left of + lane (a phone's menu).
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
@@ -165,19 +165,19 @@ The header (spinner, the transport bar — transport with Record's chevron, posi
 | 03.15 | Toggle record enable | click Record (arms a track first if none); where the project records its output, Record's chevron or a right-click opens Record the output… | ⇧R; ↓ on Record opens the output menu | tap; a long-press or the chevron opens Record the output… | T M D |
 | 03.16 | Record the output (no arrangement) | click the output record button (a set); with an arrangement, Record's chevron → Record the output | — | tap | T M D |
 | 03.17† | Move the playhead or scrub from the minimap | click the strip; press and drag to scrub | — | tap to seek; drag to scrub | T M D |
-| 03.18† | Peek the full map | hover the minimap: it unfolds to every lane (downward, from the header) | — | — (stays folded) | D |
+| 03.18† | Peek the full map | hover the minimap: it unfolds to every lane | — | — (stays folded) | D |
 | 03.19 | Edit the tempo | click "N bpm" → question with a Tap button | Space taps, Enter confirms, Esc cancels | tap the bpm, tap Tap repeatedly | T M D |
 | 03.20 | Edit the meter | click "N/M" → question | Enter / Esc | tap | T M D |
 | 03.21 | Toggle the metronome | click the metronome button | Enter/Space on it (repeat ignored) | tap; on a phone, Metronome in Views and panels | T M D |
 | 03.22 | Set the metronome volume | right-click the metronome button, drag the slider | ArrowDown opens it; arrows move it (written on key up) | long-press, drag the slider; on a phone, the slider under Metronome in Views and panels | T M D |
-| 03.23 | Set the song's output level | drag the master volume in the header's bar (written on release) | arrows on the focused fader (0.5 dB) | drag the master volume; on a phone, the one in the info strip above the bar | T M D |
+| 03.23 | Set the song's output level | drag the master volume in the floating bar (written on release) | arrows on the focused fader (0.5 dB) | drag the master volume; on a phone, the one in the info strip above the bar | T M D |
 | 03.24 | Fix a clipped mix | click "fix" next to the clip light | — | — | D |
 | 03.25† | Show / hide the graph notes | click the notes button | — | tap | T M D |
-| 03.26 | Open the Mixer or the Events dock | click the Mixer icon in the header; opening a clip, a take or a roll opens Events | the key bound to `ui mixer` | tap Mixer in Views and panels | T M D |
+| 03.26 | Open the Mixer or the Events dock | click the Mixer icon among the floating controls at the bottom right; opening a clip, a take or a roll opens Events | the key bound to `ui mixer` | tap Mixer in Views and panels | T M D |
 | 03.27 | Close the editor dock | click Close editor in the dock header | Esc | tap Close editor | T M D |
 | 03.28 | Resize the editor dock | drag the separator over its top edge (44 px tall, 120 px min); hold it 400 ms, then move up to expand the editor to full height or down to fold it back | ↑ / ↓ on the focused separator; Enter expands or folds | drag the separator; on a phone, hold the sheet's grabber, then move up to expand or down to fold | T M D |
-| 03.29 | Open / close a panel (resources, playlists, logs, tasks and history, export, settings) | click the chevron at the header's right end to unfold the vertical toolbar on the right edge (folded by default), then its button under the panes; the same button or the panel's Close closes it | the key bound to `ui <panel>` | tap its tile in Views and panels (phone); tap Close | T M D |
-| 03.30 | Switch pane (Arrangement / Graph / Source / Turntables) | click the pane on the vertical toolbar at the right edge, unfolded by the header's chevron (its tooltip names the key); a pane another device shows is dimmed and says why | `1` `2` `3` `4`; `F6` / `⇧F6` | tap the pane in Views and panels (phone) | T M D |
+| 03.29 | Open / close a panel (resources, playlists, logs, tasks and history, export, settings) | click the chevron at the bottom right to unfold the vertical toolbar upward along the right edge (folded by default), then its button under the panes; the same button or the panel's Close closes it | the key bound to `ui <panel>` | tap its tile in Views and panels (phone); tap Close | T M D |
+| 03.30 | Switch pane (Arrangement / Graph / Source / Turntables) | click the pane on the vertical toolbar at the right edge, unfolded by the chevron at the bottom right (its tooltip names the key); a pane another device shows is dimmed and says why | `1` `2` `3` `4`; `F6` / `⇧F6` | tap the pane in Views and panels (phone) | T M D |
 | 03.31 | Show / hide the viewport window | click Picture: the viewport in Lane views (a project with a picture) | — | tap Picture in Views and panels (phone) | T M D |
 | 03.32 | Open Views and panels (phone) | — | Esc closes; Tab stays inside it | tap the ⋯ button; tap outside or Close menu | T M D |
 | 03.34 | Browse the file breadcrumb | click a segment → its menu; folder drills in, file opens, ▶ opens a project; click outside closes | — | tap | T M D |
@@ -210,7 +210,7 @@ The timeline pane: tool strip, ruler with markers and task flags, timeline tabs,
 | 03.47 | Read a marker's name | hover its flag | — | — | D |
 | 03.48 | Delete a marker | right-click the flag → "Delete a marker" | — | long-press the flag | T M D |
 | 03.49 | Read a task's text | hover or focus the task flag (a click seeks) | Tab to the flag | tap (seeks) | T M D |
-| 03.50 | Switch the ruler between bars and seconds | click the position in the header's bar (a phone's floating bar); the rulers follow | — | tap | T M D |
+| 03.50 | Switch the ruler between bars and seconds | click the position in the floating bar; the rulers follow | — | tap | T M D |
 
 ### Arrange · Tracks
 
