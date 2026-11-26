@@ -2,7 +2,7 @@
 // It rises from the chevron at the bottom right once unfolded; a phone has no rail, its overflow menu holds the same buttons (docs/shell.md).
 
 import { Capsule, CapsuleButton, CapsuleDivider } from "@studio/ui/capsule";
-import { Settings, X } from "@studio/ui/icons";
+import { LogOut, Settings } from "@studio/ui/icons";
 import type { ReactNode } from "react";
 import { m } from "../paraglide/messages.js";
 import type { HeaderPane, HeaderPanel } from "./ProjectHeader";
@@ -50,7 +50,7 @@ export function PanelRail({
         title={m["shell.close"]()}
         className={CLOSE}
       >
-        <X />
+        <LogOut />
       </a>
       <CapsuleButton
         className={SQUARE}
