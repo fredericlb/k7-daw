@@ -74,8 +74,6 @@ export function TrimGate({
         align="start"
         className="w-80"
         aria-label={m["clip.trim"]()}
-        // The wave under it shows what the gate keeps: a press there must not close the gate.
-        onInteractOutside={(e) => e.preventDefault()}
       >
         <div className="flex items-center gap-2 text-xs">
           {m["clip.threshold"]()}
