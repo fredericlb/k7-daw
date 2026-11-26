@@ -130,6 +130,8 @@ export interface DomChainsProps {
   fitMaxZoom?: number;
   /** How much of the pane the first frame fills, 0..1 — 0.9 leaves air round the graph, 1 fills it edge to edge. */
   fitPad?: number;
+  /** Pixels kept clear on every side of the first frame, so the cards' borders show inside the pane. */
+  fitMargin?: number;
   /** Every card drawn whole at any zoom: no far LOD, for a view whose cards ARE the subject (docs/camera.md). */
   alwaysDetailed?: boolean;
   command: (line: string) => void | Promise<void>;

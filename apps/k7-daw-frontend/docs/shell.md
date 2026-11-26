@@ -1035,8 +1035,8 @@ than no plug.
 
 **Every card takes the row's whole height** — the tallest card's, the lane's clip list included —
 so the row reads as one band and the side cables run straight, and the camera zooms so that height
-is the pane's whole height (`fitAxis="height"`, `fitPad={1}`, over a
-box `moduleRow` draws round the cards and nothing else). The row is a few cards you came to work on,
+is the pane's height less 4 px top and bottom, so the cards' borders show (`fitAxis="height"`,
+`fitPad={1}`, `fitMargin={4}`, over a box `moduleRow` draws round the cards and nothing else). The row is a few cards you came to work on,
 so it is drawn as large as the pane allows; the width runs off the right and the wheel walks along
 it.
 
