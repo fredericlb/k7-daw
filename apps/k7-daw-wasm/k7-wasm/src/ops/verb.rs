@@ -1,9 +1,9 @@
-// verb_ops.rs — the `verb.run` and `verb.complete` operations: a command line run, or completed, by the `verbs` crate over a file system.
-// `verb.catalogue` takes no files and is answered in `ops.rs` from the crate's `palette`.
-// A reader would get wrong that a refusal is an error here: it is an answer (`refused: true`); only an unknown file is `needs_files`.
+// ops/verb.rs — a command line run, or completed, by the `verbs` crate over a native host's file system, and the `verb.catalogue` op.
+// A reader would get wrong that a line runs through the ABI: the module has no file system, so only the catalogue is an op.
+// A refusal is an answer (`refused: true`), never an error.
 
 use crate::error::WasmError;
-use crate::host_fs::HostFs;
+use crate::ops::write;
 use serde::{Deserialize, Serialize};
 use song::Cache;
 use song_edit::Fs;
@@ -12,17 +12,6 @@ use verbs::{Answer, CompleteRequest, Item, VerbRequest, complete_request, run_re
 /// The line run over `fs`: what a native host calls with its own file system.
 pub fn run_over(fs: &mut dyn Fs, new_id: &mut dyn FnMut() -> String, req: &VerbRequest) -> Answer {
     run_request(fs, new_id, req)
-}
-
-/// The line run over the host's imports; a path it lacked is a `needs_files` answer, whatever the verb said.
-pub fn run(req: VerbRequest) -> Result<Answer, WasmError> {
-    let mut fs = HostFs::new();
-    let answer = run_over(&mut fs, &mut crate::abi::new_id, &req);
-    let missing = fs.take_missing();
-    if !missing.is_empty() {
-        return Err(WasmError::needs_files(missing));
-    }
-    Ok(answer)
 }
 
 /// `verb.complete`'s arguments: the request, and whether a label may come back as an object.
@@ -62,15 +51,18 @@ pub fn complete_over(fs: &dyn Fs, args: &CompleteArgs) -> CompleteAnswer {
     }
 }
 
-/// The line completed over the host's imports; a path it lacked is a `needs_files` answer, whatever the providers found.
-pub fn complete(args: CompleteArgs) -> Result<CompleteAnswer, WasmError> {
-    let fs = HostFs::new();
-    let answer = complete_over(&fs, &args);
-    let missing = fs.take_missing();
-    if !missing.is_empty() {
-        return Err(WasmError::needs_files(missing));
+/// The verb family's requests: only the catalogue, which reads no file.
+#[derive(Clone, Debug, Deserialize)]
+#[serde(tag = "op", content = "args")]
+pub enum VerbOp {
+    #[serde(rename = "verb.catalogue")]
+    Catalogue,
+}
+
+pub fn dispatch(request: VerbOp, out: &mut Vec<u8>) -> Result<(), WasmError> {
+    match request {
+        VerbOp::Catalogue => write(out, verbs::palette::catalogue()),
     }
-    Ok(answer)
 }
 
 #[cfg(test)]
@@ -117,15 +109,11 @@ mod tests {
     }
 
     #[test]
-    fn a_line_completes_as_json_through_the_request_enum() {
-        let call: crate::ops::Request = serde_json::from_value(serde_json::json!({
-            "op": "verb.complete",
-            "args": { "line": "project temp", "cursor": 12, "project": "/w/p", "env": { "studioHome": "/none", "metaRoot": "/meta" } },
+    fn a_line_completes_as_json() {
+        let args: CompleteArgs = serde_json::from_value(serde_json::json!({
+            "line": "project temp", "cursor": 12, "project": "/w/p", "env": { "studioHome": "/none", "metaRoot": "/meta" },
         }))
         .unwrap();
-        let crate::ops::Request::VerbComplete(args) = call else {
-            panic!("not a completion")
-        };
         let answer = complete_over(&project_fs(), &args);
         assert_eq!(
             serde_json::to_value(&answer).unwrap(),

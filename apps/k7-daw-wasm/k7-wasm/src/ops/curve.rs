@@ -1,12 +1,10 @@
-// curve_ops.rs — the curve.* and timecode.* operations, their argument checks and the table of open curves.
+// ops/curve.rs — the curve.* operations, their argument checks and the table of open curves.
 // A reader would get wrong that a handle is a hint: eviction and a trap both make it unknown, and the caller reopens.
 
 use crate::error::{ErrorCode, WasmError};
+use crate::ops::write;
 use serde::{Deserialize, Serialize};
-use song_schema::{
-    Curve, CurvePreview, CurveSpec, SchemaError, TimeSig, XY, beats_to_duration, beats_to_position, parse_duration,
-    parse_position, playhead, preview,
-};
+use song_schema::{Curve, CurvePreview, CurveSpec, TimeSig, XY, playhead, preview};
 
 /// Samples across a picture when the request does not say.
 const DEFAULT_SAMPLES: u32 = 160;
@@ -55,23 +53,17 @@ pub struct CloseArgs {
     pub handle: u32,
 }
 
+/// The curve family's requests: `{"op": "curve.preview", "args": {…}}`.
 #[derive(Clone, Debug, Deserialize)]
 #[cfg_attr(feature = "ts", derive(ts_rs::TS))]
-pub struct ParseArgs {
-    pub tc: String,
-    pub num: u32,
-    pub den: u32,
-    /// A 1-based position when true, a 0-based duration when false.
-    pub position: bool,
-}
-
-#[derive(Clone, Debug, Deserialize)]
-#[cfg_attr(feature = "ts", derive(ts_rs::TS))]
-pub struct FormatArgs {
-    pub beats: f64,
-    pub num: u32,
-    pub den: u32,
-    pub position: bool,
+#[serde(tag = "op", content = "args")]
+pub enum CurveRequest {
+    #[serde(rename = "curve.preview")]
+    Preview(PreviewArgs),
+    #[serde(rename = "curve.open")]
+    Open(OpenArgs),
+    #[serde(rename = "curve.close")]
+    Close(CloseArgs),
 }
 
 #[derive(Clone, Debug, Serialize)]
@@ -212,27 +204,10 @@ pub fn curve_preview(a: PreviewArgs) -> Result<CurvePreview, WasmError> {
     Ok(preview(&curve, n, a.playhead.filter(|b| b.is_finite())))
 }
 
-pub fn timecode_parse(a: ParseArgs) -> Result<f64, WasmError> {
-    let sig = time_sig(a.num, a.den)?;
-    let parsed = if a.position {
-        parse_position(&a.tc, sig)
-    } else {
-        parse_duration(&a.tc, sig)
-    };
-    let beats = parsed?;
-    if beats.is_finite() {
-        Ok(beats)
-    } else {
-        Err(SchemaError::BadTimecode(format!("timecode '{}' is too large", a.tc)).into())
+pub fn dispatch(curves: &mut CurveTable, request: CurveRequest, out: &mut Vec<u8>) -> Result<(), WasmError> {
+    match request {
+        CurveRequest::Preview(a) => write(out, &curve_preview(a)?),
+        CurveRequest::Open(a) => write(out, &curves.open(a)?),
+        CurveRequest::Close(a) => write(out, &curves.close(a)?),
     }
-}
-
-pub fn timecode_format(a: FormatArgs) -> Result<String, WasmError> {
-    let sig = time_sig(a.num, a.den)?;
-    let text = if a.position {
-        beats_to_position(a.beats, sig)
-    } else {
-        beats_to_duration(a.beats, sig)
-    };
-    Ok(text?)
 }

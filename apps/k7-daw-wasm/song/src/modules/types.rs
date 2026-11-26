@@ -56,7 +56,7 @@ pub struct TypeMeta {
 
 use PortType::{Audio, Midi, Video};
 
-pub use super::types_generated::{IO_MODULES, IO_SOURCES, MODULE_TYPES};
+pub use super::type_table::{IO_MODULES, IO_SOURCES, MODULE_TYPES};
 
 pub fn type_meta(name: &str) -> Option<&'static TypeMeta> {
     MODULE_TYPES.iter().find(|t| t.name == name)

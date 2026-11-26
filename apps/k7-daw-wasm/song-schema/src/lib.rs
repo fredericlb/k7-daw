@@ -17,6 +17,7 @@ pub use curve_spec::{AdsrSpec, CurveSpec, LfoSpec, PointSpec, PointsSpec};
 pub use error::SchemaError;
 pub use preview::{BeatLine, CurvePreview, Span, XY, playhead, preview};
 pub use timecode::{
-    TICKS_PER_QUARTER, TimeSig, beats_to_duration, beats_to_duration_on, beats_to_position, beats_to_position_on,
-    is_timecode, parse_duration, parse_position, parse_position_on, round_beat,
+    TICKS_PER_QUARTER, TIMECODE_PATTERN, TimeSig, beats_to_duration, beats_to_duration_on, beats_to_position,
+    beats_to_position_on, is_timecode, parse_duration, parse_duration_on, parse_position, parse_position_on,
+    round_beat,
 };

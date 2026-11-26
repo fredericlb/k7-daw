@@ -1,7 +1,8 @@
-// song_ops.rs — the song.* operations: a bundle opened into a handle, drafts laid over it, the views compiled from it.
+// ops/song.rs — the song.* operations: a bundle opened into a handle, drafts laid over it, the views compiled from it.
 // A reader would get wrong that a file the bundle lacks is an error naming it (`needs_files`), never an empty read.
 
 use crate::error::{ErrorCode, WasmError};
+use crate::ops::write;
 use serde::Deserialize;
 use serde_json::Value;
 use song::doc::Vsts;
@@ -52,6 +53,29 @@ pub struct CompileArgs {
 #[derive(Clone, Debug, Deserialize)]
 pub struct CloseArgs {
     pub handle: u32,
+}
+
+/// The song family's requests: `{"op": "song.open", "args": {…}}`.
+#[derive(Clone, Debug, Deserialize)]
+#[serde(tag = "op", content = "args")]
+pub enum SongRequest {
+    #[serde(rename = "song.open")]
+    Open(Box<OpenArgs>),
+    #[serde(rename = "song.update")]
+    Update(UpdateArgs),
+    #[serde(rename = "song.compile")]
+    Compile(CompileArgs),
+    #[serde(rename = "song.close")]
+    Close(CloseArgs),
+}
+
+pub fn dispatch(songs: &mut SongTable, request: SongRequest, out: &mut Vec<u8>) -> Result<(), WasmError> {
+    match request {
+        SongRequest::Open(a) => write(out, &songs.open(*a)?),
+        SongRequest::Update(a) => write(out, &songs.update(a)?),
+        SongRequest::Compile(a) => songs.compile(a, out),
+        SongRequest::Close(a) => write(out, &songs.close(a)?),
+    }
 }
 
 /// One open project: the bundle's memory, the compile's session and the request the bundle was made for.

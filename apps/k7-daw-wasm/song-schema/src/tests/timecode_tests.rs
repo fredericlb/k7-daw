@@ -1,4 +1,4 @@
-// timecode_tests.rs — timecode.test.ts' cases, plus the JS quirks the port reproduces on purpose.
+// timecode_tests.rs — the cases of the TypeScript oracle (k7-wasm's timecode.test.ts), plus the JS quirks the port reproduces on purpose.
 
 use crate::*;
 
@@ -164,4 +164,29 @@ fn a_float_meter_agrees_with_a_signature_and_reaches_past_u32() {
         parse_position_on("2:1", 99_999_999_999.0, 4.0).unwrap(),
         99_999_999_999.0
     );
+}
+
+#[test]
+fn reads_a_duration_on_a_float_meter_as_on_its_integer_one() {
+    assert_eq!(
+        parse_duration_on("1:2", 4.0, 4.0).unwrap(),
+        parse_duration("1:2", sig(4, 4)).unwrap()
+    );
+    assert_eq!(parse_duration_on("1:0", 7.0, 8.0).unwrap(), 3.5);
+    assert!(parse_duration_on("1:x", 4.0, 4.0).is_err());
+}
+
+#[test]
+fn states_the_pattern_its_matcher_follows() {
+    assert_eq!(TIMECODE_PATTERN, r"^[0-9]+(:[0-9]+)*(\.[0-9]+)?$");
+    for (s, ok) in [
+        ("1", true),
+        ("1:2:3:4:5", true),
+        ("0:0.120", true),
+        ("1.", false),
+        (":1", false),
+        ("1:", false),
+    ] {
+        assert_eq!(is_timecode(s), ok, "{s}");
+    }
 }
