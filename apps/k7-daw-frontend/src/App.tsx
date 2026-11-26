@@ -273,7 +273,7 @@ import type {
 } from "./types";
 import type { GraphSlot, LocalCtx } from "./ui/commands/context";
 import { runLocal } from "./ui/commands/dispatch";
-import { useIsMobile, useShellLayout } from "./useIsMobile";
+import { useIsMobile, usePortrait, useShellLayout } from "./useIsMobile";
 import { useViewRoute } from "./useViewRoute";
 import { videoSpans } from "./videoSpans";
 import { type WaveMode, waveCondition } from "./waveMode";
@@ -334,6 +334,8 @@ export default function App({
   const lockedSay = lockSentence;
   // What the panes read for themselves — the reload signal, the verbs, the overlays (state/shellStore.ts, docs/state.md).
   const shellVerbs = useRef<ShellVerbs | null>(null);
+  // A tablet in portrait moves the command bar's button from the floating row into the rail.
+  const portrait = usePortrait();
   // The right-edge rail is folded until the header's chevron unfolds it.
   const [railOpen, setRailOpen] = useState(false);
   const [shell] = useState(() =>
@@ -3000,7 +3002,7 @@ export default function App({
       }
       panels={headerPanels.filter((p) => p.id === "mixer")}
       views={viewCapsule}
-      onCommandBar={isMobile ? undefined : summonBar}
+      onCommandBar={isMobile || portrait ? undefined : summonBar}
       rail={
         isMobile
           ? undefined
@@ -3418,6 +3420,7 @@ export default function App({
             {/* The panes and the right panels' buttons, as a vertical toolbar on the right edge (shell/PanelRail.tsx); a phone has its menu. */}
             {railShown && (
               <PanelRail
+                onCommandBar={portrait ? summonBar : undefined}
                 save={(className) =>
                   gitWorkspace ? (
                     <>

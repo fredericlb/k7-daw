@@ -2,9 +2,10 @@
 // It rises from the chevron at the bottom right once unfolded; a phone has no rail, its overflow menu holds the same buttons (docs/shell.md).
 
 import { Capsule, CapsuleButton, CapsuleDivider } from "@studio/ui/capsule";
-import { LogOut, Settings } from "@studio/ui/icons";
+import { LogOut, Settings, SquareTerminal } from "@studio/ui/icons";
 import type { ReactNode } from "react";
 import { m } from "../paraglide/messages.js";
+import { summonChord } from "./modKey";
 import type { HeaderPane, HeaderPanel } from "./ProjectHeader";
 import { PANEL_DEFS } from "./panels";
 import { WarnBadge } from "./WarnBadge";
@@ -25,6 +26,7 @@ export function PanelRail({
   settingsPressed,
   onSettings,
   closeHref,
+  onCommandBar,
 }: {
   /** Git's Update and Save, last, nearest the chevron (HeaderGit.tsx's GitRailPull, GitRailSave), drawn with the rail's button class; null outside a git workspace. */
   save: (className: string) => ReactNode;
@@ -36,6 +38,8 @@ export function PanelRail({
   onSettings: () => void;
   /** Where Close goes: the projects list. */
   closeHref: string;
+  /** The command bar's button, above git's, where the floating row is short of room (a tablet in portrait). */
+  onCommandBar?: () => void;
 }) {
   return (
     <Capsule
@@ -103,6 +107,22 @@ export function PanelRail({
           </CapsuleButton>
         ))}
       </div>
+      {onCommandBar && (
+        <>
+          <CapsuleDivider className="mx-0 my-0.5 h-px w-5" />
+          <CapsuleButton
+            className={SQUARE}
+            aria-label={m["shell.commandBar"]()}
+            title={m["shell.commandBar.tip"]({
+              name: m["commandBar.list"](),
+              keys: summonChord(),
+            })}
+            onClick={onCommandBar}
+          >
+            <SquareTerminal />
+          </CapsuleButton>
+        </>
+      )}
       {save(SQUARE)}
     </Capsule>
   );

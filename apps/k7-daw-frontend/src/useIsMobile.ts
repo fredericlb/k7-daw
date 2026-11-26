@@ -58,3 +58,19 @@ export function useFingerFirst(): boolean {
   }, []);
   return finger;
 }
+
+/** Is the screen taller than wide? A tablet in portrait has room for less across its floating row. */
+export function usePortrait(): boolean {
+  const [portrait, setPortrait] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(orientation: portrait)").matches,
+  );
+  useEffect(() => {
+    const mq = window.matchMedia("(orientation: portrait)");
+    const onChange = () => setPortrait(mq.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+  return portrait;
+}
