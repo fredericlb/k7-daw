@@ -4,8 +4,8 @@
 // Both read the markdown under k7/docs/ itself. See ../../docs/docExamples.md.
 
 import { fieldsAt } from "@studio/k7-wasm/fields";
+import { parse } from "@studio/k7-wasm/k7x";
 import { validateFile } from "@studio/k7-wasm/validate";
-import { parse } from "@studio/k7x/document";
 import { GraphFileSchema } from "@studio/song-schema/yaml/graphSchema";
 import {
   ModuleSchema,
