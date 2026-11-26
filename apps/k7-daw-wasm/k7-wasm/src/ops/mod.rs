@@ -3,6 +3,7 @@
 // A second reader mistake: an answer is the operation's value itself; only an error has a wrapper, and the status says which.
 
 pub mod curve;
+pub mod schema;
 pub mod song;
 pub mod timecode;
 #[cfg(feature = "verbs")]
@@ -64,6 +65,7 @@ impl Session {
         let family = op.split_once('.').map_or(op.as_str(), |(f, _)| f);
         match family {
             "curve" => curve::dispatch(&mut self.curves, decode(input)?, out),
+            "schema" => schema::dispatch(decode(input)?, out),
             "timecode" => timecode::dispatch(decode(input)?, out),
             "song" => song::dispatch(&mut self.songs, decode(input)?, out),
             #[cfg(feature = "verbs")]

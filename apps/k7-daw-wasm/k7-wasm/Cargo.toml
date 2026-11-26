@@ -18,12 +18,12 @@ required-features = ["ts"]
 [features]
 ts = ["dep:ts-rs", "song-schema/ts"]
 # The verbs over a native host's file system, and the verb.catalogue op: built into no browser module (docs/verbs-port.md).
-verbs = ["dep:song-edit", "dep:verbs"]
+verbs = ["dep:verbs"]
 
 [dependencies]
 song-schema = { path = "../song-schema" }
 song = { path = "../song", default-features = false }
-song-edit = { path = "../song-edit", optional = true }
+song-edit = { path = "../song-edit" }
 verbs = { path = "../verbs", optional = true }
 serde = { version = "1", features = ["derive"] }
 serde_json = { version = "1", features = ["float_roundtrip"] }

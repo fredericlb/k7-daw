@@ -10,15 +10,14 @@ use serde_json::{Value as Json, json};
 use song_edit::confine::workspace_dir_of;
 use song_edit::js_text::{js_trim, str_to_number};
 use song_edit::paths::{is_within, resolve};
+use song_edit::playlist::{Item, PLAYLISTS_DIR, parse_playlist as read_playlist};
 use song_edit::preferences_file::load_preferences;
 use song_edit::workspace_doc::{EditOpts, ws_edit, ws_text, ws_write_text};
-use song_edit::workspace_file::{k7x_data, ws_exists};
+use song_edit::workspace_file::ws_exists;
 
-const PLAYLISTS_DIR: &str = "_playlists";
-
-struct Item {
-    song: String,
-    variant: Option<String>,
+/// `parsePlaylist`: its items, or None for a text that does not read as a map.
+fn parse_playlist(_path: &str, text: &str) -> Option<Vec<Item>> {
+    read_playlist(text).map(|p| p.items)
 }
 
 fn label(i: &Item) -> String {
@@ -26,36 +25,6 @@ fn label(i: &Item) -> String {
         Some(v) => format!("{} ({v})", i.song),
         None => i.song.clone(),
     }
-}
-
-fn str_of(v: Option<&Value>) -> Option<String> {
-    match v {
-        Some(Value::Str(s)) if !js_trim(s).is_empty() => Some(js_trim(s).to_owned()),
-        _ => None,
-    }
-}
-
-/// `parsePlaylist`: its items, or None for a text that does not read as a map.
-fn parse_playlist(path: &str, text: &str) -> Option<Vec<Item>> {
-    let d = k7x_data(path, text).ok()?;
-    if !matches!(d, Value::Map(_)) {
-        return None;
-    }
-    let Some(Value::List(lines)) = d.get("items") else {
-        return Some(Vec::new());
-    };
-    Some(
-        lines
-            .iter()
-            .filter_map(|l| match str_of(Some(l)) {
-                Some(song) => Some(Item { song, variant: None }),
-                None => str_of(l.get("song")).map(|song| Item {
-                    song,
-                    variant: str_of(l.get("variant")),
-                }),
-            })
-            .collect(),
-    )
 }
 
 /// `playlistFile`: where a playlist name lands in the workspace, or None with the refusal said.

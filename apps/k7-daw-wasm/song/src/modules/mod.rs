@@ -7,6 +7,7 @@ mod chain_nodes;
 pub mod decorate;
 pub mod files;
 mod merge;
+pub mod names;
 mod nodes;
 pub mod panels;
 pub mod preset;

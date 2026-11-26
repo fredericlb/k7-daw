@@ -4,20 +4,26 @@
 
 #![cfg_attr(not(test), deny(clippy::unwrap_used, clippy::expect_used, clippy::panic))]
 
+mod audio_files;
 mod curve;
 mod curve_spec;
 mod error;
+mod keyframes;
 mod preview;
 #[cfg(test)]
 mod tests;
 mod timecode;
+mod warp;
 
+pub use audio_files::{ext_of, is_audio};
 pub use curve::{Adsr, Curve, Cut, Kind, Point, Points, Polarity, Shape, cut_output};
 pub use curve_spec::{AdsrSpec, CurveSpec, LfoSpec, PointSpec, PointsSpec};
 pub use error::SchemaError;
+pub use keyframes::{Ease, Key, value_at};
 pub use preview::{BeatLine, CurvePreview, Span, XY, playhead, preview};
 pub use timecode::{
     TICKS_PER_QUARTER, TIMECODE_PATTERN, TimeSig, beats_to_duration, beats_to_duration_on, beats_to_position,
     beats_to_position_on, is_timecode, parse_duration, parse_duration_on, parse_position, parse_position_on,
     round_beat,
 };
+pub use warp::{Marker, beat_at_source, source_at_beat};
