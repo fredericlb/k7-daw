@@ -702,7 +702,8 @@ name while it is anything but `standard`. Same reason as the timeline's: the sta
 message and passes, a mode does not.
 
 The tools are a **segmented radiogroup** in the title bar (`ClipToolBar.tsx`), glyphs named by their
-words, the only way to one that a finger has. It is drawn only once there is a file: while a take rolls there is no mark
+words, the only way to one that a finger has. On a wide screen it sits in the middle of the title bar, whatever the
+name and the controls beside it weigh. It is drawn only once there is a file: while a take rolls there is no mark
 to point at. Each segment dispatches the command. There is **no whole-clip overview**: in the bottom dock the
 zoom runs the panel's whole width, so a second strip of the same file only takes height from it.
 

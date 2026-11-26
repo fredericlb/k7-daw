@@ -67,7 +67,7 @@ export function PanelHeading({
           </Dialog.Title>
           <div
             ref={row}
-            className="flex min-w-0 flex-1 flex-wrap items-center gap-x-2 gap-y-1"
+            className="relative flex min-w-0 flex-1 flex-wrap items-center gap-x-2 gap-y-1"
           />
         </>
       ) : null}
