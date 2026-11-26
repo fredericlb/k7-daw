@@ -25,8 +25,8 @@ An interaction is `<screen number>.<nn>` (`03.05`), one id shared by every devic
 | 08 Tasks & history panel | 08T (9) | 08M (9) | 08D (10) | LogPad, LogPhone, LogDesk |
 | 09 Export panel | 09T (6) | 09M (6) | 09D (6) | SharePad, SharePhone, ShareDesk |
 | 10 Settings panel | 10T (5) | 10M (5) | 10D (5) | SettingsPad, SettingsPhone, SettingsDesk |
-| 11 Clip editor | 11T (26) | 11M (26) | 11D (26) | ClipZoomPad, ClipPhone, ClipZoomDesk |
-| 12 Piano roll | 12T (21) | 12M (20) | 12D (25) | PianoSidePad, PianoPhone, PianoSideDesk |
+| 11 Clip editor | 11T (27) | 11M (27) | 11D (27) | ClipZoomPad, ClipPhone, ClipZoomDesk |
+| 12 Piano roll | 12T (22) | 12M (21) | 12D (26) | PianoSidePad, PianoPhone, PianoSideDesk |
 | 13 Node chain editor | 13T (10) | 13M (10) | 13D (10) | ChainSidePad, ChainPhone, ChainSideDesk |
 | 14 Export · folder picker | 14T (0) | 14M (0) | 14D (0) | ExportPickPad, ExportPickPhone, ExportPickDesk |
 | 15 Export · saved | 15T (0) | 15M (0) | 15D (0) | ExportDonePad, ExportDonePhone, ExportDoneDesk |
@@ -516,6 +516,7 @@ The `/settings` page (General, Devices, Services, Downloads, About), the engine 
 | 11.16 | Discard the take | click the trash button | — | tap | T M D |
 | 11.17 | Finish editing | click Done (files the take as reviewed) | — | tap | T M D |
 | 11.18 | Close the editor | click Close editor in the dock header | Esc at the end of the ladder | tap | T M D |
+| 11.29† | Centre the timeline on the clip being edited | click Fit, the first button of the title bar (one zoom level, so ⇧Z backs out) | `ui fit` in the command bar | tap Fit | T M D |
 
 ### Clip editor / Waveform · Waveform
 
@@ -580,6 +581,12 @@ The roll: mode strip (select, create, remove, takes), key gutter, note lanes wit
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
 | 12.25 | Add or remove a note | click an empty cell / a note (1/16 grid) | — | tap | T M D |
+
+### Piano roll
+
+| ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
+|---|---|---|---|---|---|
+| 12.26† | Centre the timeline on the clip being edited | click Fit, the first button of the title bar (one zoom level, so ⇧Z backs out) | `ui fit` in the command bar | tap Fit | T M D |
 
 ## 13 Node chain editor
 
