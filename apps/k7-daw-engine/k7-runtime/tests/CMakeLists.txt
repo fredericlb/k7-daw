@@ -39,6 +39,14 @@ target_include_directories(studio_docjson_tests PRIVATE ${CMAKE_CURRENT_SOURCE_D
 target_link_libraries(studio_docjson_tests PRIVATE nlohmann_json::nlohmann_json)
 add_test(NAME studio_docjson_tests COMMAND studio_docjson_tests)
 
+# --- Wire JSON tests ----------------------------------------------------------
+# nlohmann's printer held to the fixture the Rust server's printer is held to: nlohmann only, fast.
+add_executable(studio_wirejson_tests WireJson_test.cpp)
+target_link_libraries(studio_wirejson_tests PRIVATE nlohmann_json::nlohmann_json)
+target_compile_definitions(studio_wirejson_tests PRIVATE
+    K7_WIRE_FIXTURE="${CMAKE_CURRENT_SOURCE_DIR}/../../../k7-daw-backend/packages/k7-runtime-server/fixtures/nlohmann_dump.txt")
+add_test(NAME studio_wirejson_tests COMMAND studio_wirejson_tests)
+
 # --- Pairing tests ------------------------------------------------------------
 # Who counts as the machine, and the store of paired LAN devices: Pairing.cpp is JUCE-free and needs only nlohmann.
 add_executable(studio_pairing_tests
@@ -292,3 +300,19 @@ add_test(NAME studio_ampmodel_tests COMMAND studio_ampmodel_tests)
 add_executable(studio_slotfootswitch_tests SlotFootswitch_test.cpp)
 target_include_directories(studio_slotfootswitch_tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../engine)
 add_test(NAME studio_slotfootswitch_tests COMMAND studio_slotfootswitch_tests)
+
+# --- C ABI tests --------------------------------------------------------------
+# The Rust server's door into the host, a whole EngineHost behind it: slow like the teardown suite (engine/capi/k7_engine.h).
+add_executable(studio_capi_tests CApi_test.cpp)
+target_link_libraries(studio_capi_tests PRIVATE
+    studio_engine
+    tracktion::tracktion_engine)
+target_include_directories(studio_capi_tests PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/../engine)
+target_compile_definitions(studio_capi_tests PRIVATE
+    JUCE_MODAL_LOOPS_PERMITTED=1
+    JUCE_USE_CURL=0
+    JUCE_WEB_BROWSER=0
+    DONT_SET_USING_JUCE_NAMESPACE=1)
+add_test(NAME studio_capi_tests COMMAND studio_capi_tests)
+set_tests_properties(studio_capi_tests PROPERTIES LABELS slow)
