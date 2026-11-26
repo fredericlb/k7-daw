@@ -15,11 +15,11 @@ time; the right panel (`side-panel`) is for the vertical lists.
   `aria-pressed` says which one it is in; the glyph (`Maximize2` / `Minimize2`) and the lavender
   "on" look follow it. Expanded on Pad and Desk the top goes to just under the header and the bottom
   stays above the bar; on a phone the sheet goes full screen and becomes modal.
-- **The header carries the open editor's first row, not a title.** The row (clip name, counts, tools)
-  sits on one line with Expand and Close, so the chrome is one line and the dock's height goes to
+- **The header carries the open editor's first row, not a title.** The row (its tools and settings)
+  sits on one line with Close, so the chrome is one line and the dock's height goes to
   the editor. The editor keeps its state and fills the header through `DockHeaderRow` (a portal into
   the dock's slot); the title stays as a visually hidden name, so the dock is still found by it. The
-  empty dock has Expand and Close only.
+  empty dock has Close only.
 - **Help and status are title-bar pieces too.** `DockHint` is one info glyph whose tooltip and name
   are the help; `DockStatus` is the status line an editor shows with nothing to edit (loading, empty,
   an error), the body left blank. Both go through `DockHeaderRow`, so outside a dock they render inline.

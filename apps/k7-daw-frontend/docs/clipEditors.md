@@ -9,11 +9,10 @@ header carries no view switch.
 
 Both editors follow the dock's one rule ([editors.md](editors.md)): every option is in the title bar
 (`DockHeaderRow`, [editor-dock](../packages/ui/docs/editor-dock.md)) and the body is the clip alone.
-An audio clip's title bar holds its name over its file path, the gain and Loop as "name: value" settings (a knob and a switch in their bubble), Trim / Operations
-(and Discard with Done for a take just filed), the tools and the active tool's help glyph; Trim opens its gate as a popover from the bar. The piano roll's title
-bar holds its name, counts, tool menu, Loop, ×2 and the help glyph. On a phone the sheet's header is the
-name over the counts, and the tool row is the body's first row. The bar wraps to a second line before it
-squeezes a long name past an ellipsis.
+An audio clip's title bar starts with its view capsules, then the gain and Loop as "name: value" settings (a knob and a switch in their bubble), Trim / Operations
+(and Discard with Done for a take just filed) and the active tool's help glyph; Trim opens its gate as a popover from the bar. The piano roll's title
+bar holds its tool menu, Loop, ×2 and the help glyph. Neither names the clip: the dock's hidden title does, and the clip
+on the lanes is the one the person opened. On a phone the tool row is the body's first row.
 
 The zoom ruler over an audio clip follows the clock switch (bars or seconds), like the timeline's. The
 piano roll draws one ruler, which is its zoom range. The List tool's values
@@ -295,8 +294,7 @@ The roll mounts the notes inside the viewport plus one viewport of margin on eve
 re-renders the roll a few times per screen rather than per pixel. A note in hand is always
 mounted, whatever the window, since it holds the pointer capture. Each note is a memoised
 `RollNoteBox` keyed by its address, its handlers held stable by the roll, so a drag step
-re-renders the notes being dragged and no other. The header still counts every note of the
-canvas, culled or not.
+re-renders the notes being dragged and no other.
 
 ### The selection reaches the transport
 
@@ -701,8 +699,7 @@ name while it is anything but `standard`. Same reason as the timeline's: the sta
 message and passes, a mode does not.
 
 The tools are a **segmented radiogroup** in the title bar (`ClipToolBar.tsx`), glyphs named by their
-words, the only way to one that a finger has. It sits in the exact middle of the whole title bar, Expand and Close
-included, whatever the name and the controls beside it weigh. It is drawn only once there is a file: while a take rolls there is no mark
+words, the only way to one that a finger has. It is drawn only once there is a file: while a take rolls there is no mark
 to point at. Each segment dispatches the command. There is **no whole-clip overview**: in the bottom dock the
 zoom runs the panel's whole width, so a second strip of the same file only takes height from it.
 

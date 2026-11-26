@@ -3,11 +3,8 @@
 // The frame and its bar; the file behind it is `SeqGridFile`.
 // See docs/noteGrids.md.
 
-import { Piano } from "@studio/ui/icons";
 import { useEffect, useState } from "react";
 import { api } from "../api";
-import { m } from "../paraglide/messages.js";
-import { fileStem } from "../projectPaths";
 import type { Hints } from "../types";
 import { GraphSlotPane } from "./GraphSlotPane";
 import { SeqGridFile } from "./SeqGridFile";
@@ -36,20 +33,7 @@ export function SeqGridPane({
   }, []);
 
   return (
-    <GraphSlotPane
-      // Its title bar: a glyph and the stem, the path its tooltip.
-      bar={
-        <>
-          <Piano
-            className="h-4 w-4 text-muted-foreground"
-            aria-label={m["seq.pianoRoll"]()}
-          />
-          <span className="truncate font-medium text-foreground" title={path}>
-            {fileStem(path)}
-          </span>
-        </>
-      }
-    >
+    <GraphSlotPane>
       <div className="h-full min-h-0 overflow-auto">
         <SeqGridFile
           path={path}

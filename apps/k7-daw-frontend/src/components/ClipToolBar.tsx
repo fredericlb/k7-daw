@@ -34,11 +34,7 @@ export function ClipToolBar({
       <div
         role="radiogroup"
         aria-label={m["clip.viewLabel"]()}
-        className={cn(
-          "glass flex h-10 shrink-0 items-center gap-0.5 rounded-full p-[3px]",
-          // The view choice sits in the middle of the whole title bar, whatever the name and the controls around it weigh.
-          !words && "absolute left-1/2 z-1 -translate-x-1/2",
-        )}
+        className="glass flex h-10 shrink-0 items-center gap-0.5 rounded-full p-[3px]"
       >
         {modes.map((mode) => (
           <button

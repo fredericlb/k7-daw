@@ -51,18 +51,6 @@ export function ChainHeader({
   return (
     <DockHeaderRow>
       <div className="flex min-w-0 flex-1 items-center gap-2">
-        {cards && (
-          <div className="flex min-w-0 shrink flex-col" title={name}>
-            <span className="type-label truncate">{name}</span>
-            <span className="type-secondary truncate text-fg-2">
-              {(moduleCount === 1
-                ? m["chain.status.one"]
-                : m["chain.status.other"])({
-                n: moduleCount,
-              })}
-            </span>
-          </div>
-        )}
         <div className="flex shrink-0 items-center gap-2">
           {onArm && (
             <TrackToggle

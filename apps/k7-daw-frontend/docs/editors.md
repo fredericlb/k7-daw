@@ -8,6 +8,9 @@ the live take, a sequence's grid, the takes.
 - **Every option is in the title bar.** Tools, toggles, sliders, menus, Stop,
   Discard and Done are drawn through `DockHeaderRow` (`@studio/ui/editor-dock`) on the line of
   Close. An editor has no toolbar of its own in its content.
+- **No text on the left of the title bar.** No editor names what it shows there (no clip name, no
+  count, no path): the dock's visually hidden title names it for assistive technology, and the
+  waveform's view capsules take that place.
 - **The content holds only what is edited**: the cards, the strips, the notes, the wave, the takes'
   rows, and the edited data's own names and values (a lane's name on its card, a key's name, a ruler's
   numbers). No caption, no section heading, no help line.
