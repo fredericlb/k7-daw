@@ -117,7 +117,7 @@ The home pages behind a floating tab bar (Projects, Surfaces, Tasks, Library, Se
 
 ### Git screens
 
-The git bar (workspace tree, Home row; in a project, Save first on the right-edge toolbar with its count, a phone's git menu), Save in one press with its toasts, the Conflict screen, the Sync settings and Clone a repository pages (Back to Projects; tabs GitHub, Forgejo, Other host; one repository picker per signed-in forge account), the Saves list, the identity form; GitHub's sign-in is in Settings → Services, and a Forgejo server is added and signed in there or in the Forgejo tab.
+The git bar (workspace tree, Home row; in a project, Save and Update first on the right-edge toolbar with their counts, a phone's git menu), Save in one press with its toasts, the Conflict screen, the Sync settings and Clone a repository pages (Back to Projects; tabs GitHub, Forgejo, Other host; one repository picker per signed-in forge account), the Saves list, the identity form; GitHub's sign-in is in Settings → Services, and a Forgejo server is added and signed in there or in the Forgejo tab.
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
@@ -153,7 +153,7 @@ The git bar (workspace tree, Home row; in a project, Save first on the right-edg
 
 ### Project header and transport
 
-The header (spinner, the command-bar button, the Mixer icon, then the chevron that unfolds the right-edge toolbar, carrying the problem count and the unsaved count while folded; a phone keeps Back, the name, its git menu, its status line under the header and the warning chip, and the rest folds into the Views and panels dialog), the vertical toolbar on the right edge (folded by default; git's Save with its count, the pane switcher, the right panels' buttons with the problem count on Logs, Settings, then Close), the floating bar (tool, transport with Record's chevron, position, overview, tempo, metronome, master volume, the view's capsule; a phone's command-bar button) and the editor dock.
+The header (spinner, the command-bar button, the Mixer icon, then the chevron that unfolds the right-edge toolbar, carrying the problem count and the unsaved count while folded; a phone keeps Back, the name, its git menu, its status line under the header and the warning chip, and the rest folds into the Views and panels dialog), the vertical toolbar on the right edge (folded by default; git's Save and Update with their counts, the pane switcher, the right panels' buttons with the problem count on Logs, Settings, then Close), the floating bar (tool, transport with Record's chevron, position, overview, tempo, metronome, master volume, the view's capsule; a phone's command-bar button) and the editor dock.
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|

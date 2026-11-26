@@ -1,4 +1,4 @@
-// PanelRail.tsx — git's Save, the pane switcher, the buttons that open a right panel, then Settings and Close: one vertical toolbar.
+// PanelRail.tsx — git's Save and Pull, the pane switcher, the buttons that open a right panel, then Settings and Close: one vertical toolbar.
 // It shows only once the header's chevron unfolds it; a phone has no rail, its overflow menu holds the same buttons (docs/shell.md).
 
 import { Capsule, CapsuleButton, CapsuleDivider } from "@studio/ui/capsule";
@@ -26,7 +26,7 @@ export function PanelRail({
   onSettings,
   closeHref,
 }: {
-  /** Git's Save, first (HeaderGit.tsx's GitRailSave), drawn with the rail's button class; null outside a git workspace. */
+  /** Git's Save and Pull, first (HeaderGit.tsx's GitRailSave, GitRailPull), drawn with the rail's button class; null outside a git workspace. */
   save: (className: string) => ReactNode;
   panes: HeaderPane[];
   pane: string;

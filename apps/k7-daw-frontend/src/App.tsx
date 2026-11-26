@@ -227,7 +227,12 @@ import { pictureRowId, placementOf, type RowKey, type RowTarget } from "./rows";
 import { saveLabel } from "./saveLabel";
 import { useEngineLostToast, useProgressToast } from "./shell/engineToasts";
 import { FloatingBar } from "./shell/FloatingBar";
-import { GitRailSave, HeaderGit, unsavedCount } from "./shell/HeaderGit";
+import {
+  GitRailPull,
+  GitRailSave,
+  HeaderGit,
+  unsavedCount,
+} from "./shell/HeaderGit";
 import { type OverflowLaneView, OverflowMenu } from "./shell/OverflowMenu";
 import { PanelRail } from "./shell/PanelRail";
 import {
@@ -3413,12 +3418,19 @@ export default function App({
               <PanelRail
                 save={(className) =>
                   gitWorkspace ? (
-                    <GitRailSave
-                      git={gitHandle}
-                      transport={gitTransport}
-                      workspace={gitWorkspace}
-                      className={className}
-                    />
+                    <>
+                      <GitRailSave
+                        git={gitHandle}
+                        transport={gitTransport}
+                        workspace={gitWorkspace}
+                        className={className}
+                      />
+                      <GitRailPull
+                        git={gitHandle}
+                        workspace={gitWorkspace}
+                        className={className}
+                      />
+                    </>
                   ) : null
                 }
                 closeHref={projectsUrl(window.location.href)}
