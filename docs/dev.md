@@ -122,7 +122,7 @@ its storage, the desktop app's own "Open in Browser" — rather than on a stand-
 to the page, a page on 18789 would look for Vite on 18789. With `k7-frontend` down, 18789 answers
 a 502 naming it. `K7_DEV_FRONTEND=` (empty) before `npm run dev` brings back the built page.
 
-**Its front is linked into the desktop app**, so a change to the front's crates reaches the desktop app at its next start (the table below): the desktop app's own
+**Its front is linked into the desktop app**, so a save in the front's crates rebuilds and restarts the desktop app (the table below): the desktop app's own
 binary holds the front, and a restart ends the engine with it, since the front holds the supervisor's job
 (`apps/k7-daw-engine/k7-supervisor/docs/hostProtocol.md`), which is what keeps a killed desktop app from leaving a ghost engine.
 
@@ -134,14 +134,14 @@ its tree holds the engine running. That is what the task does — watch the sour
 |---|---|---|
 | `k7-runtime` | `engine/`, `server/`, `CMakeLists.txt`, `CMakePresets.json` | `npm run build:win` / `build:mac --workspace k7-runtime` |
 | `k7-supervisor` | `src/`, `CMakeLists.txt`, `CMakePresets.json` | `supervisorBuild.mjs` |
-| `k7-desktop` | `src-tauri/src/`, `Cargo.toml`, `tauri.conf.json` — and, at the task's START, the front's crates it links: `apps/k7-daw-backend/packages/**`, its `Cargo.toml` and `Cargo.lock` | `cargo build` in `apps/k7-daw-desktop/src-tauri`, line tables only for debug info: `CARGO_PROFILE_DEV_DEBUG=2` before `npm run dev` for a debugger ([rust-builds.md](rust-builds.md)) |
+| `k7-desktop` | `src-tauri/src/`, `Cargo.toml`, `tauri.conf.json`, and the front's crates it links: `apps/k7-daw-backend/packages/**`, its `Cargo.toml` and `Cargo.lock` | `cargo build` in `apps/k7-daw-desktop/src-tauri`, line tables only for debug info: `CARGO_PROFILE_DEV_DEBUG=2` before `npm run dev` for a debugger ([rust-builds.md](rust-builds.md)) |
 
 | choice | why |
 |---|---|
 | the bundle built at every start of the task, with no frontend in it | the page is Vite's (above); what is left in the bundle is the `k7-core` seed |
 | every desktop app stopped first, an installed one included | it holds port 18789 and `~/.k7`, and its single-instance guard would turn the dev desktop app's launch into a no-op |
 | a failed bundle ends the task | a desktop app without its library would only say so on its splash; a red resource says it where the session is watched |
-| an edit under `apps/k7-daw-backend` does not rebuild the desktop app mid-session, only at its start | the front's crates are in the desktop app's binary (`Cargo.toml` path deps), so they decide whether it is stale when the task starts — but watching them would stop and restart the desktop app, and the engine with it, on every front save. A route added to the front 404s on 18789 until `k7-desktop` is restarted |
+| a save under `apps/k7-daw-backend` rebuilds and restarts the desktop app, the engine with it | the front's crates are in the desktop app's binary (`Cargo.toml` path deps); a front edit seen at once is worth the engine's restart, as K7 REC's Mac loop relaunches its app on every save |
 
 A failed build of any target leaves the desktop app down, and says so — `✖ … the desktop app is stopped, fix and
 save again`. The cycle stops the desktop app, the supervisor and the engine BEFORE building, since a running
