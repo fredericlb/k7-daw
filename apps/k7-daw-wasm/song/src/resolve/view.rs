@@ -48,9 +48,11 @@ pub fn resolved_rack(m: Option<&Resolved>) -> ResolvedRack {
 
 /// The narrow twin of a shown panel.
 #[derive(Clone, Debug, PartialEq, Serialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(rename = "WebModuleLayout", optional_fields))]
 pub struct ResolvedLayout {
     pub cols: u32,
     pub rows: u32,
+    #[cfg_attr(feature = "ts", ts(as = "crate::rec::Rec<Widget>"))]
     pub widgets: IndexMap<String, Widget>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tabs: Option<Vec<Tab>>,
@@ -58,9 +60,11 @@ pub struct ResolvedLayout {
 
 /// The widget grid a module SHOWS, normalised, with `hidden` widgets dropped; the script rides on it.
 #[derive(Clone, Debug, PartialEq, Serialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(rename = "WebModuleUI", optional_fields))]
 pub struct ResolvedUi {
     pub cols: u32,
     pub rows: u32,
+    #[cfg_attr(feature = "ts", ts(as = "crate::rec::Rec<Widget>"))]
     pub widgets: IndexMap<String, Widget>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tabs: Option<Vec<Tab>>,

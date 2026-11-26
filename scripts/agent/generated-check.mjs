@@ -75,6 +75,18 @@ await wasm("k7WasmSong.generated.ts", "k7-wasm", false, "SONG_SOURCES");
   if (r.status !== 0)
     stale.push("apps/k7-daw-wasm/song/src/modules/types_generated.rs");
 }
+{
+  const mod = await import(
+    pathToFileURL(
+      join(root, "apps", "k7-daw-backend", "scripts", "bindingsSources.mjs"),
+    )
+  );
+  for (const target of mod.TARGETS)
+    if (mod.stampOf(target) !== mod.bindingsHash())
+      stale.push(
+        join("apps", "k7-daw-frontend", "packages", target, "generated"),
+      );
+}
 if (stale.length > 0) {
   console.error(`generated-check: stale:\n  ${stale.join("\n  ")}`);
   console.error(

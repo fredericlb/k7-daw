@@ -19,7 +19,7 @@ laptop or a phone the three are the same machine: k7 is the desktop app or the a
         ▲  HTTPS + WebSocket                             │ supervisor dials out
         │                                                │
  ┌──────┴────────┐                         ┌─────────────┴───────────────┐
- │ browser: k7   │ ── optional WebRTC ───> │ engine machine              │
+ │ browser: k7   │ ── ws / wss ────────> │ engine machine              │
  │ frontend SPA  │                         │  k7-supervisor ──> k7-runtime│
  └───────────────┘                         └─────────────────────────────┘
 ```
@@ -73,8 +73,6 @@ A browser reaches an engine in one of two ways:
 - **The relay**: a WebSocket to `/api/engine` on the origin, piped through the tunnel
   (`apps/k7-daw-backend/packages/k7-engine/src/relay/`). This exists because an HTTPS page may not open `ws://`
   to a LAN address.
-- **WebRTC**: the offer and answer travel over the tunnel and the supervisor answers with a data
-  channel piped to the local engine (`apps/k7-daw-frontend/packages/engine-tunnel/rtc.ts`).
 
 The engine registry (`apps/k7-daw-backend/packages/k7-engine/src/registry/`, answered by k7's Rust front) lists
 every engine that heartbeats to the origin.
@@ -96,7 +94,7 @@ Where engine machines run:
 3. The file service recompiles the project folder (`@studio/song`) to a `ProjectDoc` and `GraphDoc`.
 4. It sends the document to the bound engine over the tunnel, using the wire format in `@studio/engine-protocol`.
 5. The engine diffs it against what it is playing and applies the minimal change; transport and
-   meter frames come back to the browser through the relay or WebRTC.
+   meter frames come back to the browser through the relay.
 
 The song pipeline, the engine, and the backend each have their own section in this guide with the
 details of these steps.

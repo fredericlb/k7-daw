@@ -110,6 +110,7 @@ import {
   rowTarget,
   stepRow,
 } from "../rows";
+import { ToolMenu } from "../shell/ToolMenu";
 import type { EditFocus } from "../shellEquality";
 import { moveOffset, snapMode, snapTo } from "../snap";
 import {
@@ -2426,6 +2427,17 @@ function TimelineTabView({
               >
                 {/* NEW TRACK, in the corner: the one place above the lanes that scrolls with neither axis, and `track new` like everything else. */}
                 {/* One button, two shapes: a song with no frame has one kind of lane, so a menu of one would be a click for nothing. */}
+                {/* The tool, left of "+ lane"; a host with no tool line (a second device) draws the pointer alone. */}
+                {onToolLine && (
+                  <ToolMenu
+                    tool={tool}
+                    onTool={(t) => {
+                      setTool(t);
+                      if (t !== "pointer") setSel(null);
+                    }}
+                    className={`${NEW_TRACK_BTN} mr-1 px-2`}
+                  />
+                )}
                 {onNewLane &&
                   (onNewVideoTrack && !shownTimeline ? (
                     <DropdownMenu>

@@ -58,9 +58,6 @@
     "apps/k7-daw-frontend/packages/song": {
       "entry": ["scripts/*.ts"]
     },
-    "apps/k7-daw-frontend/packages/audio-probe": {
-      "entry": ["scripts/*.ts"]
-    },
     "apps/k7-daw-frontend/packages/k7-plugins": {
       "entry": ["scripts/turntables/*.ts"]
     },

@@ -1,6 +1,6 @@
 # The supervisor (`apps/k7-daw-backend/packages/k7-supervisor`)
 
-The supervisor is the engine machine's resident program, in Rust, a crate of the backend's workspace. It owns the state folder, starts or adopts the engine and relaunches it when it dies, keeps the engine listed at every studio by heartbeat, holds one tunnel per studio, answers the jobs a server sends through those tunnels (refusing WebRTC offers), and takes commands from the app that runs it. Its file formats and fingerprint match the TypeScript helpers in `apps/k7-daw-frontend/packages/engine-client`, so both sides read one state folder.
+The supervisor is the engine machine's resident program, in Rust, a crate of the backend's workspace. It owns the state folder, starts or adopts the engine and relaunches it when it dies, keeps the engine listed at every studio by heartbeat, holds one tunnel per studio, answers the jobs a server sends through those tunnels, and takes commands from the app that runs it. Its file formats and fingerprint match the TypeScript helpers in `apps/k7-daw-frontend/packages/engine-client`, so both sides read one state folder.
 
 ## Source layout
 
@@ -139,8 +139,6 @@ Jobs registered by `machineJobs()` in `apps/k7-daw-backend/packages/k7-superviso
 | `render` | `rendering`, then `rendered {file}` or `{mix, stems}` | Pipes the doc to `k7-runtime --render -`, reads the manifest, copies the results out |
 
 A job handler runs as a task of its own; an error, or a panic, comes back as an error reply. Every path a job reads must be inside this machine's copies of the server's folders (`<state>/remote/…`, checked by spelling and again after resolving links); anything else is refused before the job says whether the file exists. Render and separation scratch folders are created fresh, owner-only, under the temp directory. Paths in requests arrive already local, and paths in replies are mapped back to the server's, which is what makes the tunnel upload the named files before the server reads the reply.
-
-An `rtc-offer` is answered with an `rtc-answer` carrying an error: the browser stays on the tunnel.
 
 ## Android differences
 

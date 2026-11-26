@@ -46,7 +46,7 @@ binary, built separately.
 apps/k7-daw-engine/k7-runtime/               the C++ project (k7-runtime)             — native, not a workspace
   CMakeLists.txt · CMakePresets.json · docs/design.md
   engine/    library studio::engine  (ProjectDoc, ProjectDiff, EngineHost/Tracktion)
-  server/    app k7-runtime          (WebSocket audio server, Serve.cpp)
+  server/    app k7-runtime          (the entry points over the Rust server, k7-runtime-server)
 apps/k7-daw-engine/scripts/                  the native build: engine + supervisor, staged and packaged
 apps/k7-daw-desktop/                   the desktop app (Tauri; runs k7's backend, which drives k7-supervisor)
 apps/k7-daw-backend/                   the Rust backend: `packages/` are its crates (k7-front, k7-file-service, k7-supervisor, ...)

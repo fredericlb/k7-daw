@@ -3,10 +3,10 @@
 // so the DOM view and the layout cannot disagree about where a socket is.
 
 import type {
+  PageModuleUI,
+  PageWidget,
   WebGraph,
-  WebModuleUI,
   WebSignal,
-  WebWidget,
 } from "@studio/graph-model";
 import { hasTabs } from "@studio/graph-model/panel";
 import type { GraphEdge, GraphNode, Jack, Pt } from "./graphNode";
@@ -341,14 +341,14 @@ export const FOOTER_H = 20;
 
 // How big a node must be to hold `ui`, its tab column, and with `footer` the bottom bar under them.
 export function nodeSize(
-  ui?: WebModuleUI,
+  ui?: PageModuleUI,
   footer = false,
 ): { w: number; h: number } {
   const size = panelSize(ui);
   return footer ? { ...size, h: size.h + FOOTER_H } : size;
 }
 
-function panelSize(ui?: WebModuleUI): { w: number; h: number } {
+function panelSize(ui?: PageModuleUI): { w: number; h: number } {
   const colW = columnW(ui);
   // The tab column is as tall as its tabs, up to 4 rows; a tab MENU is one line above the grid instead.
   const tabsH = colW
@@ -370,11 +370,11 @@ function panelSize(ui?: WebModuleUI): { w: number; h: number } {
 }
 
 /** The tab column's width: TAB_COL_W when the card draws its tabs as a column, else nothing. */
-export const columnW = (ui: WebModuleUI | undefined): number =>
+export const columnW = (ui: PageModuleUI | undefined): number =>
   hasTabs(ui) && ui?.tabsAs !== "dropdown" ? TAB_COL_W : 0;
 
 /** …and the tab MENU's height, when a narrow card offers its tabs across its top instead. */
-export const menuH = (ui: WebModuleUI | undefined): number =>
+export const menuH = (ui: PageModuleUI | undefined): number =>
   hasTabs(ui) && ui?.tabsAs === "dropdown" ? TAB_MENU_H : 0;
 
 /** How many rows' height the tab column may stretch a card to; past it the column scrolls (docs/nodeCard.md). */
@@ -382,7 +382,7 @@ export const TAB_COL_MAX_ROWS = 4;
 
 // A widget's box in node-local coordinates (origin = the node's top-left), `left` being the tab column's width.
 export function widgetRect(
-  w: WebWidget,
+  w: PageWidget,
   left = 0,
   top = 0,
 ): {
@@ -401,8 +401,8 @@ export function widgetRect(
 
 /** `widgetRect` on a STRIP drawn taller than its grid: the fader takes the extra height and what sits under it moves down (docs/graphBuild.md). */
 export function stripWidgetRect(
-  n: { strip?: boolean; ui?: WebModuleUI; h: number },
-  w: WebWidget,
+  n: { strip?: boolean; ui?: PageModuleUI; h: number },
+  w: PageWidget,
   left = 0,
   top = 0,
 ): { x: number; y: number; w: number; h: number } {

@@ -7,7 +7,7 @@ is what k7 draws around it.
 
 ## Where the request is made
 
-On a device that dials an engine directly, with the card (`pairing/PairThisDevice.tsx`) drawn **only while no engine is usable**.
+A device that dials an engine directly is paired from the machine's own screen: the page draws no request card.
 The Surfaces tab does not draw it: a device on the network that has not trusted this one reads "Not trusted" there, since the
 LAN door is opened only by the switch that already lets a private peer drive unpaired (`apps/k7-daw-backend/docs/lan.md`). A device that already has
 an engine to play on is not interrupted by another one asking to be paired with it; a device with none

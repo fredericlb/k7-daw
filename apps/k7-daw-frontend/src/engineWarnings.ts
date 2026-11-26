@@ -1,57 +1,18 @@
 // engineWarnings.ts — an engine warning as a person reads it, in plain words, the engine's own text
 // kept for the log. One that names a track or a module of the open project is marked IN PLACE (a
 // warning icon on that header or card, counted next to the title); every other is a toast, said once
-// per project for the page's life. The engine sends prose and no code, so the known kinds are
-// recognised by the stable start of their text (the Rust server's doc parse, EditBuilder.cpp, EngineHost.cpp); an
-// unknown text still shows, generically, with the raw words after it. See ../docs/shell.md,
-// "Engine warnings".
+// per project for the page's life. The engine sends prose and no code: song-schema's `engine`
+// module recognises the known kinds, and an unknown text still shows, generically, with the raw
+// words after it. See ../docs/shell.md, "Engine warnings".
 
 import type { EngineWarning } from "@studio/engine-browser";
+import { readWarning } from "@studio/k7-wasm/engine";
 import { showToast } from "@studio/project-shell/toast";
 import { m } from "./paraglide/messages.js";
 
-type Duplicated = "clips" | "tracks" | "modules" | "entries";
-
-/** What a warning is about, read off its text; `unknown` keeps the raw words. */
-export type WarningKind =
-  | { kind: "duplicateId"; what: Duplicated }
-  | { kind: "timeSignature"; signature: string }
-  | { kind: "unreadable"; file: string }
-  | { kind: "clipMissing"; file: string }
-  | { kind: "recordFolder" }
-  | { kind: "pluginFailed"; name: string }
-  | { kind: "automationParam"; param: string }
-  | { kind: "hung" }
-  | { kind: "internal" }
-  | { kind: "unknown" };
-
-/** The last segment of a path, either slash: the full path stays in the log. */
-const fileName = (path: string) => path.split(/[\\/]/).pop() || path;
-
-export function warningKind(message: string): WarningKind {
-  let g = /^two (clips|tracks|modules|entries) share the id /.exec(message);
-  if (g) return { kind: "duplicateId", what: g[1] as Duplicated };
-  g = /^time signature (\S+) cannot be played/.exec(message);
-  if (g) return { kind: "timeSignature", signature: g[1] };
-  g = /^clip source not found\/invalid: (.+)$/.exec(message);
-  if (g) return { kind: "clipMissing", file: fileName(g[1]) };
-  g = /^record folder '.*' is outside the folders/.exec(message);
-  if (g) return { kind: "recordFolder" };
-  g = /^.+? '(.+)' is outside the folders this engine reads/.exec(message);
-  if (g) return { kind: "unreadable", file: fileName(g[1]) };
-  g = /^could not create plugin '(.+?)'/.exec(message);
-  if (g) return { kind: "pluginFailed", name: g[1] };
-  g = /^automation param not found: (.+)$/.exec(message);
-  if (g) return { kind: "automationParam", param: g[1] };
-  if (message.startsWith("the audio engine is hung")) return { kind: "hung" };
-  if (/^(background work|an engine job|the state tick) failed/.test(message))
-    return { kind: "internal" };
-  return { kind: "unknown" };
-}
-
 /** The sentence the toast says, in the page's language. */
 export function warningSentence(w: EngineWarning): string {
-  const k = warningKind(w.message);
+  const k = readWarning(w.message).kind;
   switch (k.kind) {
     case "duplicateId":
       return k.what === "clips"

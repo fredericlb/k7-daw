@@ -57,7 +57,7 @@ Route a `const` accessor through the inserting form and three things follow at o
 - the state timer re-touches every session it lists, forever.
 - there is no "unknown session" path at all, because there is no such thing as an unknown one.
 
-`Serve.cpp` still reads `session` with no allowlist, deliberately: naming a session is what
+The server still reads `session` with no allowlist, deliberately: naming a session is what
 creates it, and a whitelist would mean the engine had to be told about every app in advance.
 What it does have are two **ceilings**: an id longer than 256 bytes is refused, and so is a
 message naming a NEW session once the engine holds 64. The second is the one that bounds the map —
@@ -262,11 +262,11 @@ machine keeps compiled plays with nobody attached (`apps/k7-daw-backend/packages
 - **It is never let go for having no driver.** `releaseAbandonedProjects` skips it: playing with no
   page is what it is for, and a page that drove it and left must not take it down.
 - **A project opened on the engine takes the engine over.** A `project` message for any other
-  session drops the slot's session first (`releaseSlot`, in `ServeProject.cpp`): a chain left
+  session drops the slot's session first (`releaseSlot`, asked by `apps/k7-daw-backend/packages/k7-runtime-server/src/server/project.rs`): a chain left
   playing under a project would monitor the same inputs twice, and what is heard would no longer be
   the project. The supervisor sees the session gone at its next poll and forgets the slot is enabled.
 - **Its footswitch is the engine's to hear.** A slot's document may carry `footswitch: {cc, plugins}`,
-  which the supervisor adds and the engine reads in the `slot` session only (`ServeProject.cpp`). While
+  which the supervisor adds and the engine reads in the `slot` session only (`apps/k7-daw-backend/packages/k7-runtime-server/src/doc/project.rs`). While
   that chain plays, the engine opens every MIDI input itself (`engine/SlotMidi.cpp`); each press of
   the CC (its value rising to 64 or past it) re-applies the chain with `plugins` off, and the next press
   re-applies it as sent (`engine/SlotSession.cpp`). A press re-applies through the same diff as any

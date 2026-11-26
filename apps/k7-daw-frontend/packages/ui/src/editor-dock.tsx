@@ -296,7 +296,7 @@ export function EditorDock({
           head.expanded ? { top: TOP } : { height: `min(${height}px, ${ROOM})` }
         }
         className={cn(
-          "panel absolute inset-x-3 bottom-(--k7-panel-bottom) z-(--k7-z-panel) flex flex-col gap-2.5 rounded-(--k7-r-panel) p-(--k7-dock-padding) outline-none animate-[k7-dock-in_var(--k7-dur-panel)_var(--k7-ease-spring)]",
+          "panel absolute left-3 right-(--k7-dock-right,12px) bottom-(--k7-panel-bottom) z-(--k7-z-panel) flex flex-col gap-2.5 rounded-(--k7-r-panel) p-(--k7-dock-padding) outline-none animate-[k7-dock-in_var(--k7-dur-panel)_var(--k7-ease-spring)]",
           className,
         )}
       >

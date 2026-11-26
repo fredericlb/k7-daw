@@ -26,7 +26,7 @@ One core leads because the audio callback runs on one: a machine with many slow 
 before a machine with few fast ones. The two disk figures are taken where `<state>/workspace`
 lives, because that is where a take is written while it is being recorded.
 
-The constants are `PERFORMANCE_REFERENCE` and `PERFORMANCE_WEIGHTS` in `../performance.ts`;
+The constants are the reference machine and the weights in `k7-supervisor`'s `performance.rs`;
 retuning them moves every machine's score at once, which is the point of keeping them in one place.
 
 ## Unmeasured is not slow

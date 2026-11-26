@@ -22,6 +22,10 @@ const LISTED = 8;
 /** Two polls: by then the retry is either copying, and the dialog gone, or has failed again. */
 const RETRY_SETTLE_MS = 4000;
 
+/** Whether `s` is a copy still running, as opposed to the report of one that went wrong. */
+export const syncRunning = (s: EngineSyncState | null | undefined): boolean =>
+  !!s && s.error === undefined && s.failed === undefined;
+
 export function EngineSyncFailedDialog({
   sync,
   onReload,

@@ -24,18 +24,9 @@ import { openSyncSettings } from "./gitPages";
 import { openConflict } from "./gitScreens";
 import { type BarView, barView, remoteName } from "./gitState";
 import type { GitState, PullState } from "./gitTypes";
+import { pulledSentence } from "./pulledSentence";
 import { save, useSaving } from "./saveAct";
 import { type GitAct, type GitHandle, useGitState } from "./useGitState";
-
-/** The sentence of a pull's outcome, none for the ones that need no word. */
-const pulledSentence = (p: PullState | null): string | null =>
-  p === "up-to-date"
-    ? m["git.pulledNothing"]()
-    : p === "empty-remote"
-      ? m["git.emptyRemote"]()
-      : p === "merged"
-        ? m["git.pulledMerged"]()
-        : null;
 
 export function BarBody({
   state,
@@ -151,7 +142,7 @@ export function BarBody({
 }
 
 /** The bar over a handle its host already reads, so the host can lock its editors from the same state. */
-export function GitBarOf({
+function GitBarOf({
   git: g,
   workspace,
   row = false,

@@ -263,9 +263,9 @@ bottom margin for the bar instead.
 
 | piece | file | what it is |
 |---|---|---|
-| header | `shell/ProjectHeader.tsx` | Back, the name over its status, the spinner, the warning chip, the git capsule, the pane switcher (centred), the panel toolbar, the app buttons; laid out in flow: a `flex-1` left cluster, the switcher, a right cluster of the same basis, so nothing overlaps at any width |
+| header | `shell/ProjectHeader.tsx` | the spinner, the command-bar button, the dock's Mixer (an icon) and, last, the chevron that unfolds the rail; git's Save and Update, the pane switcher, the right panels' buttons and Close are the rail's (`shell/PanelRail.tsx`), and the folded chevron carries the unsaved and problem counts; a phone, with no rail, keeps Back, the name and the warning chip; laid out in flow: a `flex-1` left cluster and a right cluster of the same basis, so nothing overlaps at any width |
 | git capsule | `shell/HeaderGit.tsx` | Save with its count, a menu (Pull, Saves); while a merge waits, one "Resolve N conflicts" button and a banner |
-| bar | `shell/FloatingBar.tsx`, `shell/ShellTransport.tsx` | the command bar button, the tool, the transport capsule, the pane's capsule (Lane views or Graph views) |
+| bar | `shell/FloatingBar.tsx`, `shell/ShellTransport.tsx` | docked in the header's row on a desk or a pad (the header is 72 px to hold its 56 px controls; the panels and the dock then reach 16 px from the foot), floating at the foot on a phone with its command bar button: the transport capsule, the pane's capsule (Lane views or Graph views); the timeline's tool is its corner's, left of "+ lane" (`shell/ToolMenu.tsx`) |
 | panels | `shell/panels.tsx` | the registry: an id, a glyph and a title each, in the kit's `SidePanel` (Pad, Desk) or `Sheet` (Phone) |
 | dock | `shell/panels.tsx` (`DockFrame`), `hooks/useEditorDock.ts` | the bottom dock, in the kit's `EditorDock` (Pad, Desk) or `EditorSheet` (Phone); it holds the editors, the Mixer or a track's chain |
 | phone menu | `shell/OverflowMenu.tsx` | pane, lane views and the panel tiles in one menu |
@@ -303,16 +303,17 @@ carries `data-testid="engine-status"` with its `data-state`, which the suites re
 be a second voice for what the toast already says.
 
 **The spinner is the background processes.** It shows only while something runs and opens Tasks &
-history. The warning chip counts the project's problems (compile errors, the in-place warnings and the problem lines of Logs) and opens Logs on "problems"
+history. The problem count (on the rail's chevron while it is folded, on Logs, and the warning chip on a phone) counts the project's problems (compile errors, the in-place warnings and the problem lines of Logs) and opens Logs on "problems"
 (`logsFilter` in the shell store). A verb's refusal is a command's answer, so it is listed under Commands, not Problems.
 
-**The pane switcher is Arrangement, Graph, Source** (Turntables beside Arrangement on a project that
+**The pane switcher is Arrangement, Graph, Source**, at the top of the right-edge rail (Turntables beside Arrangement on a project that
 declares a desk). Mastering is not a pane: it is a section of the Mixer, and `ui mastering`
 opens the dock on it.
 
 **Command feedback is a toast** ("copied 1 event(s)"): what a command said is shown once, where the
-person looks. The line under the project's name (`StatusText`, `project-status-line`) carries only what
-a pane says while it is used — a drag's snapped cell, a menu's hint.
+person looks. The status line (`StatusText`, `project-status-line`) carries only what a pane says while it is
+used — a drag's snapped cell, a menu's hint, the caret; a desk reads it out without drawing it, so the header
+holds no text, and a phone draws it under its header.
 
 ### One colour per meaning, across every view
 
@@ -642,9 +643,13 @@ is the whole point of that tab not being a dialog over the thing it meters.
 
 ## The right panels: one at a time
 
-The header's toolbar holds six buttons — Resources, Playlists, Mixer, Logs, Tasks & history,
-Export (no Events button: the dock opens on the event a person opens, so a button would only repeat that) — and Settings sits with the app buttons. Each toggles a panel floating over the right of the
-panes (a full-screen sheet on a phone); pressing the open one closes it. **One panel at a time**:
+Under the pane switcher, the buttons that open a right panel — Resources, Playlists, Logs, Tasks & history, Export, then Settings
+— are one vertical toolbar on the screen's right edge, under the header (`shell/PanelRail.tsx`), folded by
+default under the chevron at the header's right end: the panes keep the whole width until a person asks for the panels. The header
+keeps only the dock's Mixer (no Events button: the dock opens on the event a person opens, so a button
+would only repeat that). The right panel, the editor dock and the toasts keep clear of the unfolded rail
+(`--k7-rail-clear`). Each button toggles a panel floating over the right of the panes (a full-screen sheet
+on a phone, whose menu holds the same buttons); pressing the open one closes it. **One panel at a time**:
 `rightPanel` (the store) and the `?panel=` route state are two doors onto the same slot, and App keeps
 them exclusive.
 

@@ -2,12 +2,24 @@
 // on screen, where a second lands in pixels, and where the beats are. No canvas, no React, so
 // the parts that decide what you SEE are testable. See docs/waveform.md.
 
-import type { FileEnvelope } from "@studio/audio-probe/waveform";
 import { formatClock } from "@studio/ui-timeline/ticks";
 import { BEATS_PER_BAR, beatPhase, firstBeatAfter } from "./beats";
 
-/** What the file service hands back for one cached song, less the cache's own fingerprint. */
-export type Envelope = Omit<FileEnvelope, "fingerprint">;
+/** What the file service hands back for one cached song: the whole-file envelope, in buckets. */
+export interface Envelope {
+  sampleRate: number;
+  channels: number;
+  frames: number; // total source frames (per channel)
+  seconds: number; // frames / sampleRate
+  peak: number[]; // per-bucket max |sample|, 0..1
+  rms: number[]; // per-bucket RMS, 0..1 (linear)
+  transients: number[]; // onsets in FILE seconds
+  sensitivity: number; // the threshold those onsets were found with
+  bpm: number; // the analysis's tempo estimate, or 0 for "none found"
+  low?: number[];
+  mid?: number[];
+  high?: number[];
+}
 
 /** How many seconds are visible at once — far enough to see the next phrase, tight enough to see a beat. */
 export const WINDOW_SECONDS = 8;

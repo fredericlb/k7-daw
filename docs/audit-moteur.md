@@ -79,7 +79,7 @@ The reply shapes both clients read, the decoders that fill a frame's absent fiel
 (`engine-browser/src/probe.ts`).
 
 What remains: the "latency or out of reach" formatting, a one-line function copied per picker
-whose place is `web-protocol/quality.ts`, next to `formatLatency`.
+whose place is the page's engine rules, `apps/k7-daw-wasm/song-schema/src/engine`.
 
 ### C5 — dead code
 

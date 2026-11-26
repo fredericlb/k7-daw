@@ -24,7 +24,6 @@ import {
   textFrameType,
 } from "./frames.ts";
 import { PathMap, SyncLedger } from "./pathMap.ts";
-import { answerOffer } from "./rtc.ts";
 
 export interface TunnelAgentOptions {
   /** The registry's base URL, http(s); the tunnel is TUNNEL_PATH under it. */
@@ -36,8 +35,6 @@ export interface TunnelAgentOptions {
   enginePort: number;
   /** Where this server's files are kept on this machine — one folder per server. */
   cacheDir: string;
-  /** STUN/TURN servers for the WebRTC path; none keeps it to the local network. */
-  iceServers?: string[];
   /** What this machine does when asked on a jobs channel, by request `type` — docs/jobs.md. */
   jobs?: Record<string, JobHandler>;
   /** The engine wire's version stated on the upgrade; ENGINE_PROTOCOL unless a test plays an older machine. */
@@ -222,23 +219,9 @@ export class TunnelAgent {
       case "get-error":
         this.files.onGetError(m.req, m.error);
         break;
-      case "rtc-offer":
-        this.answer(m.req, m.sdp);
-        break;
       default:
         this.ignore("text", textFrameType(text));
     }
-  }
-
-  private answer(req: number, offer: string): void {
-    answerOffer(offer, {
-      enginePort: this.opts.enginePort,
-      iceServers: this.opts.iceServers,
-      log: this.log,
-    }).then(
-      (sdp) => this.tell({ t: "rtc-answer", req, sdp }),
-      (e: Error) => this.tell({ t: "rtc-answer", req, error: e.message }),
-    );
   }
 
   private onBinary(frame: Buffer): void {

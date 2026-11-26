@@ -9,7 +9,7 @@
 // range; the master strip refuses to, so a number can be checked against a meter. That is a
 // property of a surface, and pushing it in here would make one of them wrong.
 
-import type { WebGraph, WebWidget } from "@studio/graph-model";
+import type { PageWidget, WebGraph } from "@studio/graph-model";
 import { panelWidgets } from "@studio/graph-model/panel";
 
 /** One step of a chain, as the graph model spells it. */
@@ -55,7 +55,7 @@ export interface ResolvedTarget {
   pluginId?: string;
   track?: string;
   /** The widget that draws the param, and therefore states its range. Undefined is not fatal. */
-  widget?: WebWidget;
+  widget?: PageWidget;
   invert?: boolean;
 }
 
@@ -79,7 +79,7 @@ export function stepsByModule(graph: WebGraph | null): Map<string, FoundStep> {
 }
 
 /** The widget that draws `param` on this step, when its module declares a panel at all. */
-export function widgetFor(step: Step, param: string): WebWidget | undefined {
+export function widgetFor(step: Step, param: string): PageWidget | undefined {
   // On any tab: a control is the module's whichever page shows it.
   return panelWidgets(step.ui).find(([, w]) => w.bind === param)?.[1];
 }

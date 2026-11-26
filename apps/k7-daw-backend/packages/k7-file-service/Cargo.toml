@@ -15,6 +15,8 @@ sha2.workspace = true
 tokio = { workspace = true, features = ["sync"] }
 # The crate's `Roots`, which `song_ask` builds (1117), the engine row of /module-libraries (1424), and a project's surfaces are song's own decoders; a demo's stamp is a SHA-1 (docs/file-workspaces.md).
 song = { path = "../../../k7-daw-wasm/song" }
+# `textHash` and the plugin compatibility score: one Rust source for the page (k7-wasm) and this service.
+song-schema = { path = "../../../k7-daw-wasm/song-schema" }
 sha1.workspace = true
 # `String(n)` for a stamp's mtime and `Math.round` for a row's editedAt.
 k7-js.workspace = true

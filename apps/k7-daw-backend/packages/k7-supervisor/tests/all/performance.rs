@@ -1,4 +1,4 @@
-//! performance.rs — the scoring cases of `apps/k7-daw-frontend/packages/web-protocol/performance.test.ts`: the
+//! performance.rs — the scoring cases: the
 //! reference machine is 1000, every metric moves it the right way, an unmeasured one is left out; and the real
 //! measure answers within a second with numbers a score can use.
 

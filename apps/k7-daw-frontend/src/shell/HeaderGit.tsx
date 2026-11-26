@@ -1,10 +1,10 @@
-// HeaderGit.tsx — the header's git capsule: Save with its count (it only pushes when only saves wait), and a menu (Pull, Saves)
-// titled by the branch and the last auto-save.
+// HeaderGit.tsx — git in the header: on a phone a menu (Save, Pull, Saves) titled by the branch and the last auto-save; on a
+// desk only the Resolve button while a merge waits: Save and Pull with their counts are the rail's first buttons.
 // While a merge waits it is one accent "Resolve N conflicts" button. It decides no rule: gitState.ts's barView does.
 import { showToast } from "@studio/project-shell/toast";
 import { Badge } from "@studio/ui/badge";
 import { Button } from "@studio/ui/button";
-import { Capsule, CapsuleButton, CapsuleDivider } from "@studio/ui/capsule";
+import { CapsuleButton } from "@studio/ui/capsule";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +14,6 @@ import {
 } from "@studio/ui/dropdown-menu";
 import {
   ArrowDownToLine,
-  ChevronDown,
   GitMerge,
   History,
   Loader2,
@@ -24,19 +23,10 @@ import { useEffect } from "react";
 import type { GitTransport } from "../git/gitApi";
 import { openConflict } from "../git/gitScreens";
 import { type BarView, barView } from "../git/gitState";
-import type { PullState } from "../git/gitTypes";
+import { pulledSentence } from "../git/pulledSentence";
 import { save, useSaving } from "../git/saveAct";
 import type { GitHandle } from "../git/useGitState";
 import { m } from "../paraglide/messages.js";
-
-const pulledSentence = (p: PullState | null): string | null =>
-  p === "up-to-date"
-    ? m["git.pulledNothing"]()
-    : p === "empty-remote"
-      ? m["git.emptyRemote"]()
-      : p === "merged"
-        ? m["git.pulledMerged"]()
-        : null;
 
 /** When the technical branch was last written, as the menu's second title line; null before the first auto-save. */
 const autosaveLine = (v: BarView): string | null => {
@@ -188,31 +178,99 @@ export function HeaderGit({
       </DropdownMenu>
     );
 
+  // A desk's header holds no git button: Save and Pull are the rail's, the Saves list is Tasks & history.
+  return null;
+}
+
+/** What is waiting to be saved, for the badges: the changed files' count. */
+export function unsavedCount(g: GitHandle): number {
+  const v = barView(g.state);
+  return v.show && v.merge === null ? v.changed : 0;
+}
+
+// The rail's Save: the count of changed files on its corner, the last auto-save in its tooltip; none while a merge waits (the header's Resolve stands).
+export function GitRailSave({
+  git: g,
+  transport,
+  workspace,
+  className,
+}: {
+  git: GitHandle;
+  transport: GitTransport | null;
+  workspace: string;
+  className: string;
+}) {
+  const v = barView(g.state);
+  const saving = useSaving(workspace);
+  const busy = !!g.busy || saving;
+  if (!v.show || resolveLabel(v) !== null) return null;
+  const name =
+    v.changed > 0
+      ? m["git.save.n"]({ n: v.changed })
+      : v.push
+        ? m["git.save.label"]()
+        : m["git.save.nothing"]();
+  const autosaved = autosaveLine(v);
   return (
-    <Capsule aria-label={m["git.bar"]()} className="shrink-0 desk:p-0">
-      <CapsuleButton
-        aria-label={commitName}
-        title={commitName}
-        disabled={!(v.commit || v.push) || busy}
-        onClick={commit}
-        className="px-3.5 desk:h-[30px] desk:rounded-[15px]"
-      >
-        {saving ? <Loader2 className="animate-spin" /> : <Save />}
-        <span className="max-[1279px]:hidden">{commitLabel}</span>
-        {v.changed > 0 && <Badge variant="count">{v.changed}</Badge>}
-      </CapsuleButton>
-      <CapsuleDivider />
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <CapsuleButton
-            aria-label={m["shell.git.more"]()}
-            className="desk:h-[30px] desk:rounded-[15px]"
-          >
-            <ChevronDown />
-          </CapsuleButton>
-        </DropdownMenuTrigger>
-        {menu}
-      </DropdownMenu>
-    </Capsule>
+    <CapsuleButton
+      aria-label={name}
+      title={autosaved ? `${name}\n${autosaved}` : name}
+      disabled={!(v.commit || v.push) || busy}
+      onClick={() => {
+        if (!transport || busy) return;
+        void save(transport, workspace, { onPull: () => void g.act("pull") });
+      }}
+      className={`relative ${className}`}
+    >
+      {saving ? <Loader2 className="animate-spin" /> : <Save />}
+      {v.changed > 0 && (
+        <Badge
+          variant="count-sm"
+          aria-hidden
+          className="pointer-events-none absolute -top-1.5 -right-1.5"
+        >
+          {v.changed}
+        </Badge>
+      )}
+    </CapsuleButton>
+  );
+}
+
+// The rail's Pull, under Save: the count of commits to fetch on its corner; dimmed with its reason while saves wait.
+export function GitRailPull({
+  git: g,
+  workspace,
+  className,
+}: {
+  git: GitHandle;
+  workspace: string;
+  className: string;
+}) {
+  const v = barView(g.state);
+  const saving = useSaving(workspace);
+  if (!v.show || resolveLabel(v) !== null) return null;
+  const label = m["git.pull"]();
+  return (
+    <CapsuleButton
+      aria-label={label}
+      title={label}
+      disabled={!!g.busy || saving || !v.pull}
+      disabledReason={
+        v.pullBlocked === "commitFirst" ? m["git.commitFirst"]() : undefined
+      }
+      onClick={() => void g.act("pull")}
+      className={`relative ${className}`}
+    >
+      <ArrowDownToLine />
+      {v.toPull > 0 && (
+        <Badge
+          variant="count-sm"
+          aria-hidden
+          className="pointer-events-none absolute -top-1.5 -right-1.5"
+        >
+          {v.toPull}
+        </Badge>
+      )}
+    </CapsuleButton>
   );
 }

@@ -36,7 +36,7 @@ export const ENGINE_ASSIGN_RENEW_MS = 5000;
 /** No renewal for this long ⇒ the assignment lapses — past a minute, since a background tab's timers fire only once a minute. */
 export const ENGINE_ASSIGN_TTL_MS = 90000;
 
-/** Where the origin's engine relay listens, under each service's `/api`: `<path>/<id>/ws`, and `<path>/<id>/rtc`. */
+/** Where the origin's engine relay listens, under each service's `/api`: `<path>/<id>/ws`. */
 export const ENGINE_PROXY_PATH = "/api/engine";
 
 // ── Reaching an engine, and staying reached ──────────────────────────────────
@@ -133,8 +133,6 @@ export interface PublicEngine {
   sameSourceIp: boolean;
   /** A short-lived pass for the relay, minted by `/engines` and not by the registry — apps/k7-daw-backend/docs/engine/proxy.md. */
   proxyTicket?: string;
-  /** Its supervisor holds a tunnel, so a WebRTC offer can reach it — apps/k7-daw-frontend/packages/engine-tunnel/docs/rtc.md. */
-  rtc?: boolean;
   /** The chains THIS MACHINE separates with, by `want` (`stems`, `instrumental`) — its own settings, from its
       `engine-host.json`; a cut of a library song with no chain named uses them (apps/k7-daw-backend/packages/k7-supervisor/docs/stemSplit.md). */
   chains?: { stems?: string; instrumental?: string };

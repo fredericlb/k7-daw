@@ -32,7 +32,7 @@ Two things follow, and only the first is obvious:
   buffering in both directions. It is several times an ASIO driver's, and that difference
   is the whole of the complaint.
 * **`bufferSize` reads the same either way.** The engine's quality band (`audioTiming` →
-  `apps/k7-daw-frontend/packages/web-protocol/quality.ts`) is computed from buffer and rate, and both are
+  `apps/k7-daw-wasm/song-schema/src/engine/quality.rs`) is computed from buffer and rate, and both are
   identical on the two devices, so the badge shows the block arithmetic while the truth is
   several times that. The buffer size is not the latency, and nothing on the wire carries what JUCE does
   know (`getInputLatencyInSamples`, `getOutputLatencyInSamples`) — a gap listed below.
@@ -391,7 +391,7 @@ The device's true input and output latency is not on the wire. Until it is, the 
 badge cannot tell a shared-mode endpoint from an ASIO driver, and the number it shows will
 keep agreeing with a device that is four times slower. The fix is a field on `whoami`
 (`audioTiming` already reads the open device) plus the two consumers in
-`apps/k7-daw-frontend/packages/web-protocol/quality.ts` — not done here.
+`apps/k7-daw-wasm/song-schema/src/engine/quality.rs` — not done here.
 
 ## A test bed plays to no speaker
 

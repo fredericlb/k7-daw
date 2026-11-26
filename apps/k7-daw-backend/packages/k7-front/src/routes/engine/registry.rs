@@ -1,13 +1,12 @@
 //! registry.rs — the registry's routes: the engines' open heartbeat, deregister and
-//! hello; the browser's list (each usable entry with a relay ticket), select, release and WebRTC offer, behind
+//! hello; the browser's list (each usable entry with a relay ticket), select and release, behind
 //! the session, with the statuses, bodies and log lines of `apps/k7-daw-backend/docs/engine/heartbeat.md`.
 
 use std::net::SocketAddr;
 use std::sync::Arc;
-use std::time::Duration;
 
 use axum::Json;
-use axum::extract::{ConnectInfo, Path, Request, State};
+use axum::extract::{ConnectInfo, Request, State};
 use axum::response::{IntoResponse, Response};
 use hyper::StatusCode;
 use k7_engine::js::{invalid_type, number_issues, string_issues};
@@ -207,9 +206,6 @@ pub(super) fn list_for(state: &AppState, ip: &str) -> Response {
                     "proxyTicket".into(),
                     json!(core.tickets.issue(&e.id, &viewer, now)),
                 );
-                if core.hub.has(&e.id) {
-                    o.insert("rtc".into(), json!(true));
-                }
             } else {
                 // An engine off this machine is listed for its LAN hint alone, to the network it is on.
                 if !e.same_source_ip
@@ -374,40 +370,5 @@ async fn release_inner(state: &AppState, req: Request) -> Response {
             Json(json!({ "ok": true })).into_response()
         }
         _ => invalid(issues),
-    }
-}
-
-/// An SDP offer is a few kilobytes; the bound keeps an open route from buffering more.
-const MAX_SDP: usize = 64 * 1024;
-
-pub async fn rtc(
-    State(state): State<Arc<AppState>>,
-    Path(id): Path<String>,
-    req: Request,
-) -> Response {
-    if !crate::session::holds(req.headers(), &state.settings) {
-        return error(StatusCode::UNAUTHORIZED, "unauthenticated");
-    }
-    let body = match read_json(req).await {
-        Ok((_, b)) => b,
-        Err(r) => return r,
-    };
-    let sdp = match string_issues(body.get("sdp"), 1, MAX_SDP, None) {
-        Ok(s) => s,
-        Err(issues) => return invalid(issues),
-    };
-    let core = &engine_of(&state).core;
-    // A data channel reaches the engine as its own machine would, so only a claim holder gets one.
-    if !core.registry.holds(&id, &holder()) {
-        error(
-            StatusCode::FORBIDDEN,
-            "claim this engine before opening a direct link",
-        )
-    } else {
-        match core.hub.signal(&id, &sdp, Duration::from_secs(10)).await {
-            Ok(sdp) => Json(json!({ "sdp": sdp })).into_response(),
-            // 503 and not 500: the engine is simply not reachable this way, and the relay still is.
-            Err(e) => error(StatusCode::SERVICE_UNAVAILABLE, &e),
-        }
     }
 }

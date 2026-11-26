@@ -57,7 +57,6 @@ pub fn owns(method: &Method, path: &str) -> bool {
         "/api/engine-tunnel" => get,
         _ if path.starts_with("/api/engine-tunnel/local/") => get,
         _ if id_then("/api/engine/", "/ws") => get,
-        _ if id_then("/api/engine/", "/rtc") => post,
         _ if id_then("/api/engines/", "/chains") => get || *method == Method::PUT,
         _ => internal::owns(method, path),
     }
@@ -129,7 +128,6 @@ pub fn routes() -> (Routes, (Routes, Routes)) {
         .route("/api/engines", p(get(registry::engines)))
         .route("/api/engine/select", p(post(registry::select)))
         .route("/api/engine/release", p(post(registry::release)))
-        .route("/api/engine/{id}/rtc", p(post(registry::rtc)))
         .route(
             "/api/engines/{id}/chains",
             p(get(chains::chains).put(chains::set)),

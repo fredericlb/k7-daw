@@ -1,5 +1,5 @@
 //! plugins.rs — the verbs about plugins: the installed catalogue and its scan, a plugin type's parameters, the live
-//! instances of a project, their windows, presets and waveform taps (k7-runtime's `ServePlugins.cpp`).
+//! instances of a project, their windows, presets and waveform taps.
 //! What a reader gets wrong: a probe loads a binary, so it runs on a blocking task behind one of four slots and its
 //! answer is a broadcast; a query read-only and identical to one still waiting joins it (`pending.rs`).
 

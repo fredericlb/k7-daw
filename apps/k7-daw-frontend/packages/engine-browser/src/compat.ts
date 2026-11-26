@@ -1,18 +1,17 @@
 // compat.ts — the browser's half of an engine's compatibility with a project: asking the engine
-// for its catalogue. The score itself is @studio/web-protocol/compat's, shared with the file
-// service, which scores the same way on the engine's machine (`/project-compat`) — see
-// docs/access.md.
+// for its catalogue. The score itself is Rust's (song-schema, through k7-wasm), the same one the
+// file service scores with on the engine's machine (`/project-compat`) — see docs/access.md.
 
-import type { CataloguePlugin } from "@studio/web-protocol/compat";
+import type { CataloguePlugin } from "@studio/k7-wasm/engine";
 import { pairFrameFor } from "./pairing.ts";
-import { openSocket } from "./rtcSocket.ts";
+import { openSocket } from "./socket.ts";
 
 export {
   type CataloguePlugin,
   type Compatibility,
   compatibility,
   type PluginNeed,
-} from "@studio/web-protocol/compat";
+} from "@studio/k7-wasm/engine";
 
 /** How long an engine has to list its plugins; a cold one scans first, and that is not worth waiting for. */
 const CATALOGUE_TIMEOUT_MS = 3000;

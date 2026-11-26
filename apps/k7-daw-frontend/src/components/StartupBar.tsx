@@ -11,7 +11,7 @@ import { m } from "../paraglide/messages.js";
 import { useProgressToast } from "../shell/engineToasts";
 
 /** The engine's plugin scan as one line and a fraction, the same on the home page and under a project. */
-export function scanStep(scan: { done: number; total: number } | null): {
+function scanStep(scan: { done: number; total: number } | null): {
   label: string;
   pct: number | null;
 } {

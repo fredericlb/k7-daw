@@ -9,7 +9,6 @@ A record's waveform, onsets and tempo come from the account's file service and a
 | Path | Role |
 |---|---|
 | `apps/k7-daw-backend/packages/k7-mediatek/src/` | The analysis: `decode.rs` (the engine's `--decode`, ffmpeg otherwise), `envelope.rs` (peak/RMS, three bands split at 200 Hz and 4 kHz, onsets and tempo), `sidecar.rs` and `fingerprint.rs` (the sidecar's JSON, and the content fingerprint, FNV-1a/64 over size, first and last 64 KB, checked on every read), `analyse.rs` (decode, measure, stamp, write). The only producer of a sidecar: a constant changed here needs a `CACHE_VERSION` bump. |
-| `apps/k7-daw-frontend/packages/audio-probe/src/waveform.ts` | Onset detection and the `FileEnvelope` shape; browser-safe. |
 | `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/media/envelopes.rs` | the envelope: memo, matching sidecar, else decode; concurrent asks for one file share one decode. |
 | `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/record.rs` | `GET /record/envelope?path=` for a workspace audio file: 404 when the file is absent, 503 without an engine binary. |
 

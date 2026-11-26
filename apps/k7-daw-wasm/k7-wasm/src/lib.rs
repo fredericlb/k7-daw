@@ -7,6 +7,7 @@ pub mod abi;
 pub mod curve_ops;
 #[cfg(feature = "song")]
 pub mod edit_ops;
+pub mod engine_ops;
 pub mod error;
 #[cfg(feature = "song")]
 pub mod host_fs;

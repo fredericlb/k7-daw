@@ -1,5 +1,5 @@
 //! plugin_scan.rs — the one plugin scan of the process, its progress broadcast as `plugin-scan`, the catalogue as
-//! `plugins`, and the detached work the scan and the probes run as (k7-runtime's `ServePlugins.cpp`).
+//! `plugins`, and the detached work the scan and the probes run as.
 //! What a reader gets wrong: the end is said AFTER the catalogue, a scan that throws included, since a gate waiting
 //! on the end would otherwise wait for nothing; and a scan runs on a blocking task, never a socket's own.
 

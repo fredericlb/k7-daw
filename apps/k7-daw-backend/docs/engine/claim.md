@@ -151,8 +151,7 @@ first, with the holder read from the session by `claimHolder` — the same name 
 - a job the account asks of an engine (`/api/engine-slots`) answers **403** for an engine the
   caller holds no claim on, since it reaches that machine;
 - the relay forwards a browser's driving frames only while the ticket's account holds a claim, the
-  probe alone passing before (`proxy.md`), and a WebRTC offer is answered only for a claim holder
-  (`apps/k7-daw-frontend/packages/engine-tunnel/docs/rtc.md`).
+  probe alone passing before (`proxy.md`).
 
 The browser takes a claim only on an engine it chose or was allowed to take unasked
 (`apps/k7-daw-frontend/packages/engine-browser/docs/access.md`, "Who is taken unasked"), so these checks are the second

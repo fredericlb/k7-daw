@@ -334,8 +334,6 @@ export function ExternalSurface({
             surfaceOnly
             layout={layout}
             onCommandBar={noop}
-            tool={null}
-            onTool={noop}
             transport={{
               playing,
               transportWaiting: !engineReady,

@@ -2,8 +2,7 @@
 
 Every relay forwards frames between two sockets: the engine relay and a loopback client with its
 tunnel channel, in the front's hub (`apps/k7-daw-backend/packages/k7-engine/src/relay/`,
-`apps/k7-daw-backend/packages/k7-engine/src/tunnel/local.rs`), and a WebRTC data channel with the engine,
-in the agent (`../rtc.ts`). A socket never refuses a send: when the far end stops reading, the bytes
+`apps/k7-daw-backend/packages/k7-engine/src/tunnel/local.rs`). A socket never refuses a send: when the far end stops reading, the bytes
 queue in the server's memory, without bound. A tab left in the background, a phone on a dying
 network, a stuck supervisor would each grow the server until it fell over.
 

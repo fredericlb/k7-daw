@@ -2,7 +2,7 @@
 // report. Every handler is bound once upstream, which is what lets the card's memo hold —
 // docs/nodeCard.md.
 
-import type { WebSignal, WebWidget } from "@studio/graph-model";
+import type { PageWidget, WebSignal } from "@studio/graph-model";
 import type { GraphNode, Jack } from "@studio/ui-chains/graph";
 import type { Channels } from "./chainsStores";
 import type { SinkPlay } from "./chainsTypes";
@@ -51,9 +51,9 @@ export interface NodeProps {
   warning?: string;
   /** Click on the warning badge: the host opens its problems list. */
   onWarning?: () => void;
-  onDragStart: (n: GraphNode, w: WebWidget, e: React.PointerEvent) => void;
-  onTapWidget: (n: GraphNode, w: WebWidget) => void;
-  onPickWidget: (n: GraphNode, w: WebWidget, value: number) => void;
+  onDragStart: (n: GraphNode, w: PageWidget, e: React.PointerEvent) => void;
+  onTapWidget: (n: GraphNode, w: PageWidget) => void;
+  onPickWidget: (n: GraphNode, w: PageWidget, value: number) => void;
   /** Open the library browser for this widget — a FILE for the module field the widget names. */
   onPickAsset: (
     n: GraphNode,
@@ -72,9 +72,9 @@ export interface NodeProps {
     on: boolean,
   ) => void;
   /** Right-click on one of this node's controls — the menu for the PARAM, not for the module. */
-  onContextParam?: (n: GraphNode, w: WebWidget, x: number, y: number) => void;
+  onContextParam?: (n: GraphNode, w: PageWidget, x: number, y: number) => void;
   /** A value TYPED into a control after a double-click — the host commits it as a drag's release would. */
-  onTypeValue?: (n: GraphNode, w: WebWidget, value: number) => void;
+  onTypeValue?: (n: GraphNode, w: PageWidget, value: number) => void;
   /** A rack TAP's edit — note, sample, add, remove — asked of the host, which writes the node's file. */
   onTapEdit?: (n: GraphNode, action: TapAction) => void;
   sinkPlay?: SinkPlay;
@@ -94,7 +94,7 @@ export interface NodeProps {
     kind: "signal" | "automation" | "event";
   } | null;
   /** A curve's cable landed on one of this node's widgets — bind it to that param. */
-  onLandAutomation?: (n: GraphNode, w: WebWidget) => void;
+  onLandAutomation?: (n: GraphNode, w: PageWidget) => void;
   /** Its other end: a press on this curve's output starts that cable. */
   onStartAutomation?: (n: GraphNode) => void;
   /** A press on one of this module's event sockets starts an event cable. */

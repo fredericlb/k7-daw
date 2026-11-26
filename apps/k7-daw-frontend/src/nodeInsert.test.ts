@@ -189,7 +189,7 @@ describe("what the picked module lands called", () => {
       { "vo.jo": { from: "vo.jo", use: [step("amp")], out: OUT } },
       {
         curves: { vo_jo_reverb_1: {} as never },
-        modules: { vo_jo_reverb_2: {} },
+        modules: { vo_jo_reverb_2: { content: "" } },
       },
     );
     expect(nodeNameFor(busy, "reverb", "amp")).toBe("vo_jo_reverb_3");

@@ -17,7 +17,7 @@ import {
   jitteredBackoffMs,
 } from "@studio/web-protocol";
 import { pairFrameFor } from "./pairing.ts";
-import { openSocket } from "./rtcSocket.ts";
+import { openSocket } from "./socket.ts";
 
 /** Marks a stretch of work for a host that watches for stalls, returning its end callback — see docs/reliability.md. */
 export type BeginActivity = (name: string) => () => void;

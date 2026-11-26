@@ -5,11 +5,12 @@
 // Full rationale: docs/graphBuild.md, and apps/k7-daw-frontend/packages/song/docs/assemblies.md.
 
 import type {
+  PageModuleUI,
+  PageWidget,
+  PortType,
   WebGraph,
-  WebModuleUI,
   WebNodeAssembly,
   WebSignal,
-  WebWidget,
 } from "@studio/graph-model";
 import {
   assemblyId,
@@ -24,10 +25,10 @@ import {
 /** The UI a CLOSED box carries: one knob per promoted param, bound by the name the template gave it. */
 function assemblyUI(
   params: NonNullable<WebNodeAssembly["params"]>,
-): WebModuleUI {
+): PageModuleUI {
   const names = Object.keys(params);
   const { cols, rows } = rackGrid(names.length);
-  const widgets: Record<string, WebWidget> = {};
+  const widgets: Record<string, PageWidget> = {};
   names.forEach((name, i) => {
     widgets[`asm:${name}`] = {
       type: "knob",
@@ -181,9 +182,9 @@ export function foldAssemblies(
 /** A plug as a PORT list entry — what `jacksFor` reads; the member it stands for stays on `plugs`. */
 const plugPort = (p: {
   name: string;
-  type: WebSignal;
+  type: PortType;
   mandatory?: boolean;
-}): { name: string; type: WebSignal; mandatory?: boolean } => ({
+}): { name: string; type: PortType; mandatory?: boolean } => ({
   name: p.name,
   type: p.type,
   ...(p.mandatory === false ? { mandatory: false } : {}),

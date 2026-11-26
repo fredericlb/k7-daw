@@ -45,7 +45,7 @@
   --border: var(--k7-hairline);
 }
 
-/* The bottom toasts sit clear of the floating bar and the right panel's bottom edge (project-shell toast.tsx). */
+/* The bottom toasts sit at the panels' foot, clear of the right panel's bottom edge (project-shell toast.tsx). */
 :root {
   --toast-bottom: var(--k7-panel-bottom);
 }

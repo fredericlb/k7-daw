@@ -18,7 +18,7 @@ The look reads the peak for a column's height and the three bands for its colour
 on the RMS `samples` for the height when there is no peak.
 
 - **Anything the engine analysed** — a clip, a record — has
-  both, from its `.cache` sidecar (`apps/k7-daw-frontend/packages/audio-probe/docs/waveform.md`), which the account's file
+  both, from its `.cache` sidecar (`apps/k7-daw-frontend/packages/audio-analysis/docs/analysis.md`), which the account's file
   service hands on.
 - **A take being recorded** has only the RMS the browser or the engine measures as it rolls, so it
   is drawn in grey (`PLAIN`, below) at its RMS height.
@@ -30,7 +30,7 @@ same linear axis, which on an analysed file sits under a peak-height picture.
 ## The colour is a blend, not a lookup table
 
 [spectrumColour.ts](../src/spectrumColour.ts) blends the three band peaks the engine writes into
-the sidecar (`apps/k7-daw-frontend/packages/audio-probe/docs/waveform.md`). The mix is **additive**: bass red, mid green
+the sidecar (`apps/k7-daw-frontend/packages/audio-analysis/docs/analysis.md`). The mix is **additive**: bass red, mid green
 and top blue blend like ordinary light, so bass with mid gives orange-yellow, bass with top gives
 violet, and all three give white. The palette comes out of arithmetic rather than a table of
 special cases.

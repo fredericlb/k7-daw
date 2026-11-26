@@ -2,7 +2,7 @@
 // fitted name, the input chip, the engine and preset dropdown, the stage's knobs, the state tags
 // and the attribute sets. Plain render functions, called inline by the card — docs/nodeCard.md.
 
-import type { WebWidget } from "@studio/graph-model";
+import type { PageWidget } from "@studio/graph-model";
 import { Snowflake } from "@studio/ui/icons";
 import {
   FOOTER_H,
@@ -276,8 +276,8 @@ export function nodeFoot({
   tags: ReactNode;
   load: { text: string; title: string } | null;
   altsW: number;
-  isAutomated: (w: WebWidget) => boolean;
-  depthFor: (w: WebWidget) => string | undefined;
+  isAutomated: (w: PageWidget) => boolean;
+  depthFor: (w: PageWidget) => string | undefined;
 }) {
   return (
     <div className="dgx-foot" style={{ height: FOOTER_H }}>

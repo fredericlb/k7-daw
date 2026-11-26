@@ -1,4 +1,4 @@
-//! gate.rs — the gate every message passes first (ServePairing.cpp): who is trusted, and what an unpaired
+//! gate.rs — the gate every message passes first: who is trusted, and what an unpaired
 //! LAN peer may say. Pure: it takes a socket's id, its peer address and the parsed message, and returns
 //! what to send and whom to close; it owns no socket. The seam for the socket core is in the plan.
 //! What a reader gets wrong: a loopback peer is the machine, relayed traffic included (`docs/pairing.md`).

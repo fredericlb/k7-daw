@@ -2,13 +2,13 @@
 // module params, being realised by the picture; any other plugin-less module stays opt-in.
 // What it shows: a param nobody set reads its plugin's declared default, never "–" (docs/widgets.md).
 
-import type { WebWidget } from "@studio/graph-model";
+import type { PageWidget } from "@studio/graph-model";
 import { type GraphNode, MIX_PARAM } from "@studio/ui-chains/graph";
 import { describe, expect, it } from "vitest";
 import type { Channels } from "./chainsStores";
 import { widgetTarget, widgetValue } from "./widgetTarget";
 
-const knob = { type: "knob", bind: "P4", min: 0, max: 1 } as WebWidget;
+const knob = { type: "knob", bind: "P4", min: 0, max: 1 } as PageWidget;
 const node = (extra: Partial<GraphNode>): GraphNode =>
   ({ id: "mod:x", kind: "module", module: "x", ...extra }) as GraphNode;
 
@@ -44,7 +44,7 @@ describe("widgetValue", () => {
     bind: "Volume",
     min: -60,
     max: 6,
-  } as WebWidget;
+  } as PageWidget;
   const ch = (live: Record<string, Record<string, number>> = {}) =>
     ({
       params: { getSnapshot: () => live },
@@ -75,7 +75,7 @@ describe("widgetValue", () => {
   });
 
   it("keeps the stage's own fallback for a module stating none", () => {
-    const mix = { type: "knob", bind: MIX_PARAM, min: 0, max: 1 } as WebWidget;
+    const mix = { type: "knob", bind: MIX_PARAM, min: 0, max: 1 } as PageWidget;
     expect(widgetValue(strip({ defaults: undefined }), mix, ch())).toBe(1);
   });
 

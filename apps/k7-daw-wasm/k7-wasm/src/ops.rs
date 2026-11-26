@@ -54,6 +54,18 @@ pub enum Request {
     #[cfg(feature = "verbs")]
     #[serde(rename = "verb.catalogue")]
     VerbCatalogue,
+    #[serde(rename = "text.hash")]
+    TextHash(crate::engine_ops::HashArgs),
+    #[serde(rename = "engine.compat")]
+    EngineCompat(crate::engine_ops::CompatArgs),
+    #[serde(rename = "engine.latency")]
+    EngineLatency(crate::engine_ops::LatencyArgs),
+    #[serde(rename = "engine.warning")]
+    EngineWarning(crate::engine_ops::WarningArgs),
+    #[serde(rename = "engine.choose")]
+    EngineChoose(crate::engine_ops::ChooseArgs),
+    #[serde(rename = "engine.best")]
+    EngineBest(crate::engine_ops::ChooseArgs),
     /// The hash of the Rust sources this module was built from (decision 756).
     #[serde(rename = "version")]
     Version,
@@ -117,6 +129,12 @@ impl Session {
             Request::VerbComplete(a) => write(out, &crate::verb_ops::complete(a)?),
             #[cfg(feature = "verbs")]
             Request::VerbCatalogue => write(out, verbs::palette::catalogue()),
+            Request::TextHash(a) => write(out, &crate::engine_ops::text_hash(a)),
+            Request::EngineCompat(a) => write(out, &crate::engine_ops::compat(a)),
+            Request::EngineLatency(a) => write(out, &crate::engine_ops::latency(a)),
+            Request::EngineWarning(a) => write(out, &crate::engine_ops::warning(a)),
+            Request::EngineChoose(a) => write(out, &crate::engine_ops::choose(a)),
+            Request::EngineBest(a) => write(out, &crate::engine_ops::best(a)),
             Request::Version => write(
                 out,
                 &VersionAnswer {

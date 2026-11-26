@@ -1,28 +1,15 @@
-// FloatingBar.tsx — the bar floating over the panes: the command bar button, the tool, the transport capsule
+// FloatingBar.tsx — the bar of the transport capsule, a phone's command bar button
 // (buttons, clock, song overview, tempo, metronome, master volume) and, at its right end, the current pane's views. On a phone the clock,
-// overview, tempo and volume move to a strip above the capsule, and the tool and metronome to the overflow menu. It holds no state of its own: App hands it all.
+// overview, tempo and volume move to a strip above the capsule; a desk or a pad docks it in the header's row, and the metronome to the overflow menu; the tool is the timeline's corner (ToolMenu.tsx), a phone's menu. It holds no state of its own: App hands it all.
 import { CapsuleButton, CapsuleDivider } from "@studio/ui/capsule";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@studio/ui/dropdown-menu";
-import {
-  Check,
-  ChevronUp,
   Columns3,
-  Eraser,
   Image,
-  type LucideIcon,
   Maximize,
-  MousePointer2,
   Network,
   Rows3,
-  Scissors,
   Spline,
   SquareTerminal,
-  VolumeX,
   ZoomIn,
   ZoomOut,
 } from "@studio/ui/icons";
@@ -30,36 +17,13 @@ import type { ComponentProps, ReactNode, Ref } from "react";
 import { MetronomeButton } from "../components/MetronomeButton";
 import { Minimap } from "../components/Minimap";
 import type { RecInfo } from "../hooks/useProjectDoc";
-import { ModeIcon } from "../modeIcons";
 import { m } from "../paraglide/messages.js";
 import { TransportClock } from "../shellMeta";
-import { TOOLS, type Tool } from "../timelineTools";
 import type { ShellLayout } from "../useIsMobile";
 import { summonChord } from "./modKey";
 import { OutputRecordButton } from "./OutputRecordButton";
 import { ShellTransport } from "./ShellTransport";
 import { TempoMeter } from "./TempoMeter";
-
-export const TOOL_NAME: Record<Tool, () => string> = {
-  pointer: () => m["shell.tool.pointer"](),
-  cut: () => m["shell.tool.cut"](),
-  erase: () => m["shell.tool.erase"](),
-  mute: () => m["shell.tool.mute"](),
-  crossfade: () => m["shell.tool.crossfade"](),
-};
-
-const TOOL_ICON: Record<Tool, LucideIcon | null> = {
-  pointer: MousePointer2,
-  cut: Scissors,
-  erase: Eraser,
-  mute: VolumeX,
-  crossfade: null,
-};
-
-export function ToolGlyph({ tool }: { tool: Tool }) {
-  const Icon = TOOL_ICON[tool];
-  return Icon ? <Icon /> : <ModeIcon mode="crossfade" className="size-5" />;
-}
 
 export interface BarLaneViews {
   expanded: boolean;
@@ -86,8 +50,6 @@ export interface BarGraphViews {
 export function FloatingBar({
   layout,
   onCommandBar,
-  tool,
-  onTool,
   transport,
   output,
   recInfo,
@@ -102,14 +64,14 @@ export function FloatingBar({
   surfaceOnly = false,
   runCommand,
   rootRef,
+  docked = false,
 }: {
+  /** Drawn in the header's row instead of floating over the panes' foot (a desk or a pad). */
+  docked?: boolean;
   /** The bar's root, so the editor popin can measure how tall it is. */
   rootRef?: Ref<HTMLDivElement>;
   layout: ShellLayout;
   onCommandBar: () => void;
-  /** The current tool, or null on a project with no arrangement to press on. */
-  tool: Tool | null;
-  onTool: (t: Tool) => void;
   /** The transport's buttons, or null where they would drive nothing on screen (the desk alone). */
   transport: ComponentProps<typeof ShellTransport> | null;
   /** The output recorder's props, for a project with no arrangement. */
@@ -170,34 +132,6 @@ export function FloatingBar({
       <SquareTerminal />
     </button>
   );
-  // The phone bar carries no tool: it lives in the overflow menu.
-  const toolButton =
-    tool && !phone ? (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <button
-            type="button"
-            aria-label={m["shell.tool"]({ name: TOOL_NAME[tool]() })}
-            title={m["shell.tool"]({ name: TOOL_NAME[tool]() })}
-            className={`float pointer-events-auto flex h-14 shrink-0 cursor-pointer items-center justify-center gap-1 rounded-full text-foreground outline-none focus-visible:shadow-(--k7-focus-ring) [&_svg]:size-5 ${phone ? "w-14" : "w-[68px]"}`}
-          >
-            <ToolGlyph tool={tool} />
-            {!phone && <ChevronUp />}
-          </button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent side="top" align="start" className="w-[260px]">
-          {TOOLS.map((t) => (
-            <DropdownMenuItem key={t} onSelect={() => onTool(t)}>
-              <span className="grid size-5 place-items-center text-primary-text">
-                <ToolGlyph tool={t} />
-              </span>
-              {TOOL_NAME[t]()}
-              {t === tool && <Check className="ml-auto size-5 text-lavender" />}
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
-    ) : null;
 
   const clock = map ? (
     <TransportClock
@@ -213,7 +147,7 @@ export function FloatingBar({
       aria-label={m["shell.overview"]()}
       className={phone ? "min-w-0 flex-1" : "flex w-[260px] shrink-0"}
     >
-      <Minimap {...map} />
+      <Minimap {...map} unfoldDown={docked} />
     </div>
   ) : null;
   const tempo = <TempoMeter recInfo={recInfo} runCommand={runCommand} />;
@@ -340,10 +274,12 @@ export function FloatingBar({
   return (
     <div
       ref={rootRef}
-      className={`pointer-events-none absolute inset-x-4 z-(--k7-z-bar) flex items-end gap-3 ${phone ? "bottom-7" : "bottom-4"}`}
+      className={
+        docked
+          ? "pointer-events-none flex min-w-0 flex-1 items-center gap-3"
+          : `pointer-events-none absolute inset-x-4 z-(--k7-z-bar) flex items-end gap-3 ${phone ? "bottom-7" : "bottom-4"}`
+      }
     >
-      {!phone && commandButton}
-      {toolButton}
       <div
         role="group"
         aria-label={m["transport.region"]()}

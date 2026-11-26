@@ -43,7 +43,6 @@ describe("parseAgentMessage", () => {
       { t: "data", ch: 1, text: "{}" },
       { t: "stat", req: 1, ch: 1, paths: ["a"] },
       { t: "get", req: 1, ch: 1, path: "a" },
-      { t: "rtc-answer", req: 1, sdp: "v=0" },
     ])
       expect(parseAgentMessage(JSON.stringify(m))).toEqual(m);
   });

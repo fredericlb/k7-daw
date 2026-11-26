@@ -12,6 +12,7 @@ use serde::{Deserialize, Serialize};
 pub const TAB_NAME_MAX: usize = 10;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS))]
 #[serde(rename_all = "lowercase")]
 pub enum WidgetType {
     Label,
@@ -31,6 +32,7 @@ pub enum WidgetType {
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(rename = "WidgetCurve"))]
 #[serde(rename_all = "lowercase")]
 pub enum Curve {
     Lin,
@@ -38,6 +40,7 @@ pub enum Curve {
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS))]
 #[serde(rename_all = "lowercase")]
 pub enum WaveSource {
     Input,
@@ -45,6 +48,7 @@ pub enum WaveSource {
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS))]
 pub struct WidgetOption {
     pub label: String,
     pub value: f64,
@@ -52,28 +56,37 @@ pub struct WidgetOption {
 
 /// One control. Its refinements (a field that belongs to another type) are `Widget::check`, placed on the key.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(rename = "WebWidget", optional_fields))]
 pub struct Widget {
     #[serde(rename = "type")]
+    #[cfg_attr(feature = "ts", ts(rename = "type"))]
     pub widget_type: WidgetType,
+    #[cfg_attr(feature = "ts", ts(type = "number"))]
     pub col: u64,
+    #[cfg_attr(feature = "ts", ts(type = "number"))]
     pub row: u64,
     #[serde(default, rename = "colSpan", skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "ts", ts(optional, type = "number"))]
     pub col_span: Option<PosInt>,
     #[serde(default, rename = "rowSpan", skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "ts", ts(optional, type = "number"))]
     pub row_span: Option<PosInt>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub label: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "ts", ts(skip))]
     pub hidden: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub text: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "ts", ts(optional, type = "string"))]
     pub bind: Option<NonEmpty>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub min: Option<f64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub max: Option<f64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "ts", ts(optional, type = "number"))]
     pub step: Option<Pos>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub curve: Option<Curve>,
@@ -84,10 +97,12 @@ pub struct Widget {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub library: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "ts", ts(optional, type = "string"))]
     pub color: Option<HexColor>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub invert: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "ts", ts(optional, type = "string"))]
     pub pair: Option<NonEmpty>,
 }
 
@@ -191,9 +206,12 @@ impl<'de> Deserialize<'de> for TabName {
 
 /// One page of a panel: a name and the widgets drawn while it is open.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(rename = "WebTab"))]
 #[serde(deny_unknown_fields)]
 pub struct Tab {
+    #[cfg_attr(feature = "ts", ts(type = "string"))]
     pub name: TabName,
+    #[cfg_attr(feature = "ts", ts(as = "crate::rec::Rec<Widget>"))]
     pub widgets: IndexMap<String, Widget>,
 }
 

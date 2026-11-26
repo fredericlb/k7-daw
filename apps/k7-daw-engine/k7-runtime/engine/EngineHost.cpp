@@ -1040,7 +1040,7 @@ public:
 
 private:
     void tick() {
-        // ONE FRAME PER SESSION, each carrying the id it describes, so Serve.cpp sends a session's state only to the connections driving it.
+        // ONE FRAME PER SESSION, each carrying the id it describes, so the server sends a session's state only to the connections driving it.
         const auto ids = host_.sessionIds();
         for (const auto& sid : ids) emit(sid);
         // Forget the counters of sessions that went, so the maps track what exists.

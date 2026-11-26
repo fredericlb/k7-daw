@@ -1,4 +1,4 @@
-//! pairing_gate.rs — what ServePairing.cpp lets through: the machine, the open LAN, a paired phone, and an
+//! pairing_gate.rs — what the gate lets through: the machine, the open LAN, a paired phone, and an
 //! unpaired one, driven through the gate's own interface with no socket.
 
 use super::pairing_store::temp_store;

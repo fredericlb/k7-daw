@@ -31,8 +31,8 @@ Open is a choice made for the room the product is for, and a café's Wi-Fi is wh
 ## Loopback needs nothing, and that includes the relay
 
 A peer whose address is loopback is the machine itself and is trusted outright — k7 open on the
-machine, the supervisor, the file service. Traffic the SERVER relays — the tunnel and the WebRTC
-path — also arrives from loopback, because the supervisor dials the engine on `127.0.0.1` to carry
+machine, the supervisor, the file service. Traffic the SERVER relays, the tunnel,
+also arrives from loopback, because the supervisor dials the engine on `127.0.0.1` to carry
 it. That is right: the server authenticated the browser before relaying it (a session, then an engine
 ticket), so pairing it again would be asking twice.
 
