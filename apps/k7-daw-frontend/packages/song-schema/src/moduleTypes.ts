@@ -1,6 +1,6 @@
 // moduleTypes.ts — the module vocabulary, with no filesystem: the type folders and what each
 // one means, plus how a module is NAMED. It re-exports its three parts — `metaRefs.ts`,
-// `fileParams.ts`, `moduleKeys.ts` — and imports nothing else but `@studio/graph-model`.
+// `fileParams.ts`, `moduleKeys.ts` — and its tables come from the Rust crate (`@studio/k7-wasm/consts`).
 //
 // A leaf on purpose. These tables are the one thing everything about a module derives
 // from — `kind`, `inputs`, `emits`, the ref a `ui.k7x` panel answers to — so knowing what
@@ -8,6 +8,11 @@
 // (which knows about plugins and nothing about folders) can reach them without a cycle.
 
 import { portRef, TRACK_OUT_AUDIO } from "@studio/graph-model";
+import {
+  IO_SOURCES,
+  IO_MODULES as IO_TABLE,
+  MODULE_TYPES as TYPE_TABLE,
+} from "@studio/k7-wasm/consts";
 import { META_NS } from "./metaRefs";
 import { slugifyPluginName } from "./moduleKeys";
 
@@ -16,7 +21,7 @@ export * from "./metaRefs";
 export * from "./moduleKeys";
 
 /** The io roles the signal comes FROM; everything else under `io/` is a sink by ELIMINATION — see docs/moduleTypes.md. */
-export const IO_SOURCES = ["in", "file", "camera", "midi"] as const;
+export { IO_SOURCES };
 export type IoSource = (typeof IO_SOURCES)[number];
 export const isIoSource = (io: unknown): io is IoSource =>
   (IO_SOURCES as readonly unknown[]).includes(io);
@@ -185,82 +190,7 @@ export const MODULE_TYPES: Record<
     inputs: PortDef[];
     outputs: PortDef[];
   }
-> = {
-  io: { kind: "io", inputs: [], outputs: [] },
-  // A note on the graph: ONE input, NO output, and its `audio` type is only the ordinary cable (docs/moduleTypes.md).
-  docs: {
-    kind: "doc",
-    inputs: [{ name: "in", type: "audio", mandatory: false }],
-    outputs: [],
-  },
-  instruments: {
-    kind: "plugin",
-    inputs: [{ name: "midi", type: "midi" }],
-    outputs: [{ name: "out", type: "audio" }],
-  },
-  audio: {
-    kind: "plugin",
-    inputs: [{ name: "in", type: "audio" }],
-    outputs: [{ name: "out", type: "audio" }],
-  },
-  transformers: {
-    kind: "plugin",
-    inputs: [{ name: "midi", type: "midi" }],
-    outputs: [{ name: "out", type: "midi" }],
-  },
-  video_effects: {
-    kind: "plugin",
-    inputs: [{ name: "in", type: "video" }],
-    outputs: [{ name: "out", type: "video" }],
-  },
-  // NAMED by a placement, never wired: ports stay declared (empty means UNCONSTRAINED) and `validate()` refuses the cable.
-  video_transitions: {
-    kind: "plugin",
-    inputs: [{ name: "in", type: "video" }],
-    outputs: [{ name: "out", type: "video" }],
-  },
-  // A SHADER: picture in, picture out, and an audio SIDE input allowed to be empty (apps/k7-daw-wasm/verbs/docs/picture/shaders.md).
-  shaders: {
-    kind: "plugin",
-    inputs: [
-      { name: "in", type: "video" },
-      { name: "audio", type: "audio", mandatory: false },
-    ],
-    outputs: [{ name: "out", type: "video" }],
-  },
-  // A SHAPE: a picture SOURCE on a lane like a lens; `inputs: []` is unconstrained, and validate() refuses a cable in.
-  shapes: {
-    kind: "plugin",
-    inputs: [],
-    outputs: [{ name: "out", type: "video" }],
-  },
-  midi: {
-    kind: "plugin",
-    inputs: [{ name: "midi", type: "midi" }],
-    outputs: [{ name: "out", type: "midi" }],
-  },
-  // A COLD module: audio in, audio out, run over a whole file before playback (apps/k7-daw-frontend/packages/song/docs/coldModules.md).
-  cold: {
-    kind: "plugin",
-    inputs: [{ name: "in", type: "audio" }],
-    outputs: [{ name: "out", type: "audio" }],
-  },
-  // One HALF of a summing console: placed by the compile from `project.console`, never wired by hand (apps/k7-daw-frontend/packages/song/docs/console.md).
-  console: {
-    kind: "plugin",
-    inputs: [{ name: "in", type: "audio" }],
-    outputs: [{ name: "out", type: "audio" }],
-  },
-  // A LANE: TWO outputs since it is not typed by what it carries, and NO input deliberately (docs/moduleTypes.md).
-  tracks: {
-    kind: "track",
-    inputs: [],
-    outputs: [
-      { name: "audio", type: "audio" },
-      { name: "midi", type: "midi" },
-    ],
-  },
-};
+> = TYPE_TABLE;
 
 /** The type folder a scanned plugin belongs in — the single answer, since it decides the PORTS: docs/moduleTypes.md. */
 export function categoryForRole(p: {
@@ -354,18 +284,7 @@ export const MIDI_IN_NODE = "MIDI";
 export const IO_MODULES: Record<
   string,
   { io: "in" | "out" | "file" | "camera" | "midi" }
-> = {
-  IN: { io: "in" },
-  OUT: { io: "out" },
-  // A live PICTURE, and the one io source that emits video — the browser opens it, not the engine.
-  [CAMERA_NODE]: { io: CAMERA_IO },
-  // The headphone bus. An `out` like the interface, because that is what it is — a second pair of it.
-  [CUE_NODE]: { io: "out" },
-  // The file source: audio off disk rather than off an interface, and a node carries WHICH file (docs/fileInput.md).
-  FILE: { io: "file" },
-  // A MIDI keyboard: the notes a lane records, from the device its node names (docs/midiIn.md).
-  [MIDI_IN_NODE]: { io: MIDI_IN_IO },
-};
+> = IO_TABLE;
 
 /** How a scanned plugin becomes a module, null when the name leaves no slug — ONE rule for two tiers, docs/moduleTypes.md. */
 export function engineModuleOf(p: {

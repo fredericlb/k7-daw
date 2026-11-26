@@ -1,4 +1,4 @@
-// rustSources.mjs — the hashes that tell a stale src/k7Wasm.generated.ts: every Rust source, and the generated types folder.
+// rustSources.mjs — the hashes that tell a stale src/k7Wasm.wasm: every Rust source, and the generated types and constants.
 // A reader would get wrong what SOURCES covers: each crate's manifest and src, what they include, and the two locks, line endings folded.
 
 import { createHash } from "node:crypto";
@@ -61,10 +61,13 @@ export function rustSourceHash(root = ROOT) {
   return hashOf(all, root);
 }
 
-/** One hash over src/types/, as the bindings binary and biome left it. */
+/** One hash over src/types/ and src/consts.generated.ts, as the bindings binary and biome left them. */
 export function typesHash() {
-  const dir = join(PKG, "src", "types");
-  return hashOf(files(dir), dir);
+  const src = join(PKG, "src");
+  return hashOf(
+    [...files(join(src, "types")), join(src, "consts.generated.ts")],
+    src,
+  );
 }
 
 /** The `path` dependencies of the facade's manifest, as crate folders from the repo root. */

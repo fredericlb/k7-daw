@@ -7,5 +7,4 @@ export type ErrorCode =
   | "unknown_handle"
   | "panic"
   | "unavailable"
-  | "needs_files"
-  | "edit_failed";
+  | "needs_files";

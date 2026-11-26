@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "A song's FILE FORMAT and the value vocabulary around it: one zod schema and one reader/writer per kind of workspace (k7x) file, the media library's own YAML front end, plus the small pure modules a surface reads (timecode, moduleTypes, playlist, stems…). Nothing here touches node:fs, which is the whole point — this is the half of @studio/song a browser may import. Consumed as source.",
+  "description": "A song's FILE FORMAT and the value vocabulary around it: one zod schema and one reader/writer per kind of workspace (k7x) file, the media library's own YAML front end, plus the small pure modules a surface reads (moduleTypes, playlist, stems…). Nothing here touches node:fs, which is the whole point — this is the half of @studio/song a browser may import. Consumed as source.",
   "exports": {
     "./alternatives": "./src/alternatives.ts",
     "./engines": "./src/engines.ts",
@@ -31,7 +31,6 @@
     "./stems": "./src/stems.ts",
     "./takes": "./src/takes.ts",
     "./textOrder": "./src/textOrder.ts",
-    "./timecode": "./src/timecode.ts",
     "./timelineLane": "./src/timelineLane.ts",
     "./trackKind": "./src/trackKind.ts",
     "./trackColor": "./src/trackColor.ts",
@@ -76,6 +75,7 @@
     "zod": "^4.4.3",
     "@studio/graph-model": "*",
     "@studio/engine-protocol": "*",
+    "@studio/k7-wasm": "*",
     "@studio/k7x": "*",
     "@studio/web-protocol": "*"
   },

@@ -6,10 +6,8 @@ rewriting **only the value that changes**. Every other byte stays: comments, key
 inline lists. A knob drag is therefore a one-line diff, the file stays readable in git, and the
 history can express the change as a key-path operation instead of a whole-file replace.
 
-The writes themselves are Rust: `apps/k7-daw-wasm/song-edit` is the one implementation, and each exported function under
-`apps/k7-daw-frontend/packages/song-edit/src` (and song's write subpaths) is a call into it — over WebAssembly in the verbs' Worker and in
-node, and called directly by the Rust file service (`apps/k7-daw-frontend/packages/k7-wasm/docs/edit.md`). The TypeScript that stays is the glue for the
-functions that take a document callback (`editTrackStruct`, `editModuleFile`).
+The writes themselves are Rust: `apps/k7-daw-wasm/song-edit` is the one implementation, called by the Rust file service and
+the verbs; no TypeScript and no WebAssembly module calls it.
 
 Its callers are the verbs of `apps/k7-daw-wasm/verbs` (for example `apps/k7-daw-wasm/verbs/src/verbs/track.rs`,
 `crossfade.ts`, `preset.ts`, `eventTakes.ts`, `engine.ts`), which every surface — the command bar,
