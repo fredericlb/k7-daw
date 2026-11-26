@@ -35,12 +35,12 @@ for target in aarch64-apple-ios aarch64-apple-ios-sim; do
   (cd apps/k7-daw-backend && IPHONEOS_DEPLOYMENT_TARGET=17.0 ORT_IOS_XCFWK_PATH="$staged/frameworks/onnxruntime.xcframework" cargo rustc -p k7-embed --target "$target" --crate-type staticlib --target-dir "$target_dir")
 done
 cp "$target_dir/aarch64-apple-ios-sim/debug/libk7_embed.a" "$lib_dir/libk7_embed.a"
-if nm "$lib_dir/libk7_embed.a" 2>/dev/null | grep -q JS_NewRuntime; then
+if { nm "$lib_dir/libk7_embed.a" 2>/dev/null || true; } | grep JS_NewRuntime > /dev/null; then
   echo "ios-check: libk7_embed.a holds QuickJS (JS_NewRuntime)" >&2
   exit 1
 fi
-# The supervisor's C calls are the app's: a library without them links nothing it can run.
-if ! nm -g "$lib_dir/libk7_embed.a" 2>/dev/null | grep -q ' T _k7_supervisor_run$'; then
+# The supervisor's C calls are the app's; nm's own exit is ignored, since it fails on a member it cannot read.
+if ! { nm -g "$lib_dir/libk7_embed.a" 2>/dev/null || true; } | grep ' T _k7_supervisor_run$' > /dev/null; then
   echo "ios-check: libk7_embed.a exports no k7_supervisor_run" >&2
   exit 1
 fi
