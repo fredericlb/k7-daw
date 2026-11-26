@@ -1,5 +1,5 @@
-// ProjectHeader.tsx — the project's header: Back, name over status, spinner, warning chip, git, the pane
-// switcher (centred) and the dock's buttons; a phone folds the right half into one menu. Right panels open from PanelRail.tsx.
+// ProjectHeader.tsx — the project's header: Back, name over status, spinner, warning chip, git, the dock's buttons and
+// the chevron of the rail; a phone folds the right half into one menu. The panes and right panels are PanelRail.tsx's.
 // The engine's state is only a data attribute here (e2e reads it): the person is told by toasts, never by a light.
 import { Badge } from "@studio/ui/badge";
 import { Button } from "@studio/ui/button";
@@ -53,9 +53,6 @@ export function ProjectHeader({
   onProcesses,
   extra,
   git,
-  panes,
-  pane,
-  onPane,
   panels,
   rail,
   overflow,
@@ -72,9 +69,6 @@ export function ProjectHeader({
   /** Small controls after the title, such as the bench's Save. */
   extra?: ReactNode;
   git: ReactNode;
-  panes: HeaderPane[];
-  pane: string;
-  onPane: (id: string) => void;
   /** The DOCK's buttons (the Mixer); the right panels' are the rail's. */
   panels: HeaderPanel[];
   /** The chevron that unfolds the right-edge rail (PanelRail.tsx), last in the header; none on a phone. */
@@ -156,25 +150,6 @@ export function ProjectHeader({
           overflow
         ) : (
           <>
-            <Capsule aria-label={m["shell.pane"]()} className="shrink-0">
-              {panes.map((p) => (
-                <CapsuleButton
-                  key={p.id}
-                  pressed={pane === p.id}
-                  disabled={!!p.blocked}
-                  disabledReason={p.blocked}
-                  aria-label={p.label}
-                  title={
-                    p.blocked ??
-                    (p.shortcut ? `${p.label} (${p.shortcut})` : p.label)
-                  }
-                  onClick={() => onPane(p.id)}
-                >
-                  <p.icon />
-                  {pane === p.id && <span>{p.label}</span>}
-                </CapsuleButton>
-              ))}
-            </Capsule>
             <div className="flex min-w-max flex-1 basis-0 items-center justify-end gap-2">
               {/* The dock's own buttons stay here; the right panels' are the rail's (PanelRail.tsx). */}
               <Capsule role="group" aria-label={m["shell.dock"]()}>

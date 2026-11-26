@@ -37,6 +37,10 @@ test("a second device lists, opens and holds the desk, and the main cannot open 
   const main = await k7.open(`/@local/${WORKSPACE}/${PROJECT}`);
   const watch = watchPage(main);
   await engineUp(main);
+  // The panes are on the right-edge rail, folded under the header's chevron.
+  await main
+    .getByRole("button", { name: "Show the toolbar", exact: true })
+    .click();
   await expect(paneButton(main, "Turntables")).toBeEnabled();
   await context.addCookies(sessionCookies(PEER as string));
   const remote = await context.newPage();

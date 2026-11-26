@@ -2895,9 +2895,6 @@ export default function App({
           />
         ) : null
       }
-      panes={switcherPanes}
-      pane={full}
-      onPane={(id) => void runCommand(`ui ${id}`)}
       panels={headerPanels.filter((p) => p.id === "mixer")}
       rail={
         isMobile
@@ -3400,9 +3397,12 @@ export default function App({
           >
             <Backdrop />
             {header}
-            {/* The right panels' buttons, as a vertical toolbar on the right edge (shell/PanelRail.tsx); a phone has its menu. */}
+            {/* The panes and the right panels' buttons, as a vertical toolbar on the right edge (shell/PanelRail.tsx); a phone has its menu. */}
             {railShown && (
               <PanelRail
+                panes={switcherPanes}
+                pane={full}
+                onPane={(id) => void runCommand(`ui ${id}`)}
                 panels={headerPanels.filter((p) => p.id !== "mixer")}
                 settingsPressed={shownId === "settings"}
                 onSettings={() =>

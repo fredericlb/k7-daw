@@ -263,7 +263,7 @@ bottom margin for the bar instead.
 
 | piece | file | what it is |
 |---|---|---|
-| header | `shell/ProjectHeader.tsx` | Back, the name over its status, the spinner, the warning chip, the git capsule, the pane switcher (centred), the dock's Mixer and, last, the chevron that unfolds the rail; the right panels' buttons are the rail's (`shell/PanelRail.tsx`); laid out in flow: a `flex-1` left cluster, the switcher, a right cluster of the same basis, so nothing overlaps at any width |
+| header | `shell/ProjectHeader.tsx` | Back, the name over its status, the spinner, the warning chip, the git capsule, the dock's Mixer and, last, the chevron that unfolds the rail; the pane switcher and the right panels' buttons are the rail's (`shell/PanelRail.tsx`); laid out in flow: a `flex-1` left cluster and a right cluster of the same basis, so nothing overlaps at any width |
 | git capsule | `shell/HeaderGit.tsx` | Save with its count, a menu (Pull, Saves); while a merge waits, one "Resolve N conflicts" button and a banner |
 | bar | `shell/FloatingBar.tsx`, `shell/ShellTransport.tsx` | the command bar button, the tool, the transport capsule, the pane's capsule (Lane views or Graph views) |
 | panels | `shell/panels.tsx` | the registry: an id, a glyph and a title each, in the kit's `SidePanel` (Pad, Desk) or `Sheet` (Phone) |
@@ -306,7 +306,7 @@ be a second voice for what the toast already says.
 history. The warning chip counts the project's problems (compile errors, the in-place warnings and the problem lines of Logs) and opens Logs on "problems"
 (`logsFilter` in the shell store). A verb's refusal is a command's answer, so it is listed under Commands, not Problems.
 
-**The pane switcher is Arrangement, Graph, Source** (Turntables beside Arrangement on a project that
+**The pane switcher is Arrangement, Graph, Source**, at the top of the right-edge rail (Turntables beside Arrangement on a project that
 declares a desk). Mastering is not a pane: it is a section of the Mixer, and `ui mastering`
 opens the dock on it.
 
@@ -642,7 +642,7 @@ is the whole point of that tab not being a dialog over the thing it meters.
 
 ## The right panels: one at a time
 
-The buttons that open a right panel — Resources, Playlists, Logs, Tasks & history, Export, then Settings
+Under the pane switcher, the buttons that open a right panel — Resources, Playlists, Logs, Tasks & history, Export, then Settings
 — are one vertical toolbar on the screen's right edge, under the header (`shell/PanelRail.tsx`), folded by
 default under the chevron at the header's right end: the panes keep the whole width until a person asks for the panels. The header
 keeps only the dock's Mixer (no Events button: the dock opens on the event a person opens, so a button
