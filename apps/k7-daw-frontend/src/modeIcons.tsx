@@ -4,9 +4,6 @@
 // every one of them paints with `fill="currentColor"` so the cursor's halo pass can recolour it.
 // See docs/timeline.md and docs/clipEditors.md.
 
-import type { ReactNode } from "react";
-import { m as msg } from "./paraglide/messages.js";
-
 export interface ModeGlyph {
   vb: string;
   body: string;
@@ -132,64 +129,4 @@ export function cursorOf(mode: string): string | undefined {
     `<g>${paint(g.body, "#fff")}</g></svg>`;
   // Percent-encoded whole: a raw `#` would end the URL and a raw `"` would end the attribute.
   return `url("data:image/svg+xml,${encodeURIComponent(svg)}") ${g.hot[0]} ${g.hot[1]}, auto`;
-}
-
-/** One button in the column, mode or not: exported so a host's own control is the same object rather than a copy of it. */
-export const stripButton = (active: boolean) =>
-  `flex h-8 w-8 shrink-0 items-center justify-center rounded text-base [@media(pointer:coarse)]:size-11 ${
-    active
-      ? "bg-primary/20 text-primary-text"
-      : "text-muted-foreground hover:bg-muted hover:text-foreground"
-  }`;
-
-/**
- * The 32px column of modes down a panel's left edge — what makes a mode reachable by MOUSE and by
- * finger, the keys and the bar being the other two ways. Every button DISPATCHES a command rather
- * than setting state, which is the rule that keeps a control and its verb from drifting apart.
- */
-export function ModeStrip<T extends string>({
-  modes,
-  current,
-  onPick,
-  title,
-  className,
-  footer,
-}: {
-  modes: readonly T[];
-  current: T;
-  onPick: (m: T) => void;
-  /** What each mode does, for the tooltip and the accessible name — the key that reaches it belongs here too. */
-  title: (m: T) => string;
-  className?: string;
-  /** Controls the host hangs at the BOTTOM of the column, under a rule — `stripButton` is the look they take. */
-  footer?: ReactNode;
-}) {
-  return (
-    <div
-      role="toolbar"
-      aria-orientation="vertical"
-      aria-label={msg["mode.label"]()}
-      className={`flex w-8 shrink-0 flex-col items-center gap-0.5 border-r [@media(pointer:coarse)]:w-11 border-border bg-background/60 py-1 ${className ?? ""}`}
-    >
-      {modes.map((m) => (
-        <button
-          key={m}
-          type="button"
-          onClick={() => onPick(m)}
-          aria-pressed={m === current}
-          title={title(m)}
-          aria-label={title(m)}
-          className={stripButton(m === current)}
-        >
-          <ModeIcon mode={m} />
-        </button>
-      ))}
-      {/* `mt-auto` is what makes it the BOTTOM of the column rather than the end of the modes. */}
-      {footer && (
-        <div className="mt-auto flex flex-col items-center gap-0.5 border-border border-t pt-1">
-          {footer}
-        </div>
-      )}
-    </div>
-  );
 }

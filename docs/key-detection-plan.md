@@ -10,7 +10,7 @@ missing button, it is a **measurement**, and it belongs to the analysis pass.
 
 `@studio/audio-analysis`, `analyseFile`: one pass over a decoded file that builds the envelopes,
 detects the transients, estimates the tempo, and writes `{file}.cache`. It is TypeScript, as the
-prototype detector below is (`@studio/audio-probe/key`), so the two meet without a port.
+prototype detector below was, so the two meet without a port.
 
 Three things to have read before proposing anything:
 
@@ -68,14 +68,13 @@ rests on.
 
 What remains available without them is SYNTHETIC material, whose key is known because it was
 written. That does not measure accuracy on real material, and
-`apps/k7-daw-frontend/packages/audio-probe/src/key.test.ts` says so in its header rather than letting anyone believe
+the prototype's own tests said so in their header rather than letting anyone believe
 otherwise. It measures what breaks silently: a mis-mapped pitch class, a profile turned the wrong
 way, a wheel whose neighbours are not neighbours.
 
 ## Measured on real material — and it fails
 
-Seventeen songs of known key, decoded to mono 22 k and put through the detector
-(`@studio/audio-probe/key`):
+Seventeen songs of known key, decoded to mono 22 k and put through the prototype detector:
 
 | | right |
 |---|---|
@@ -104,7 +103,7 @@ The low bound is C3 (7.8 Hz), the lowest semitone this frame separates.
 
 ### The leads have been tried. None works.
 
-`apps/k7-daw-frontend/packages/audio-probe/scripts/key-truth.ts` replays the seventeen songs against four variants:
+The prototype's sweep replayed the seventeen songs against four variants:
 
 | variant | exact (Temperley) | exact (Krumhansl) | Camelot |
 |---|---|---|---|

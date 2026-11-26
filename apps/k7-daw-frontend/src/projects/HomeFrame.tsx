@@ -97,7 +97,7 @@ function HomeTab({
 }
 
 /** The five tabs: a phone's floating bar with the command-bar button beside it, else a sidebar with the logo and that button at its foot. */
-export function HomeTabs() {
+function HomeTabs() {
   const phone = useIsMobile();
   const tabs = (
     <>

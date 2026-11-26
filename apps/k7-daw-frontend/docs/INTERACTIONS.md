@@ -1084,6 +1084,5 @@ The Surfaces tab lists, by device, the surfaces of the projects open on the netw
 - Binding a shortcut on the Commands page needs a hardware keyboard.
 - A chain or OUT card opens no menu on right-click, unlike every other card.
 - Removing a takes crossfade needs Alt, and sizing a timeline crossfade needs a drag: touch gets only the default.
-- `apps/k7-daw-frontend/src/settings/RemoteSlotsSection.tsx` is not referenced by any screen.
 - The App settings boards of the General, Devices, Downloads and About tabs still draw four tabs; only the Services boards (screens 23 and 41) draw the Services tab.
 - Clone a repository keeps a name field (29.02), which the CloneHost boards do not draw.

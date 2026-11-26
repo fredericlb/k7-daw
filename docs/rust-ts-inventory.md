@@ -54,7 +54,7 @@ milestone ends with `bash scripts/agent/gate.sh --milestone`; the hours are agen
 
 | milestone | content | lines out | target | depends on | hours |
 |---|---|---:|---|---|---:|
-| **M1a** quick deletes | the DELETE rows below that need no branch: barTint, PairThisDevice (then `requestPairing`), RemoteSlotsSection, menuAccount, the EngineSyncProgress component, ModeStrip, the `aiOrganize` re-export, `audio-probe/src/waveform.ts`; WebRTC end to end: rtcSocket (keeping a 25-line socket wrapper), rtcFrames, `engine-tunnel/rtc.ts`, `node-datachannel`, the backend's `/rtc` route and `rtc` flag | 1,100 | none | nothing | 3 |
+| **M1a** quick deletes (done) | the DELETE rows below that need no branch: barTint, PairThisDevice (then `requestPairing`), RemoteSlotsSection, menuAccount, the EngineSyncProgress component, ModeStrip, the `aiOrganize` re-export, `audio-probe/src/waveform.ts`; WebRTC end to end: rtcSocket (keeping a 25-line socket wrapper), rtcFrames, `engine-tunnel/rtc.ts`, `node-datachannel`, the backend's `/rtc` route and `rtc` flag | 1,100 | none | nothing | 3 |
 | **M1b** first ts-rs | `graph-model/types.ts` from `song/src/graph/view/web.rs` (already derives); the `ts` feature and a bindings binary for the backend crates; the app's mirrors (AuthUser, K7Prefs, LocalApp, ServiceProcess, sync history, the desktop engine snapshot, LanPeer) | 700 | k7-wasm bindings, k7-front, k7-lan, k7-sync, k7-supervisor | nothing (exports only from the song crate) | 8 |
 | **M1c** Rust twins already written | textHash, paths, compat, clipEnvelope (`wfSig`), engineSession (`sessionOf`), lcdSounds' WAV decode, libraryTree, historyMarks, surfaceRows and paneInUse, performance, quality and choose, engineWarnings, engineMissing, engineTaken | 1,200 | k7-file-service, k7-libraries, k7-sync, k7-lan, k7-supervisor, k7-engine, waveform | nothing | 10 |
 | **M2a** chains build | `ui-chains` build and measure steps (buildGraph, buildChains, buildContext, assembly, subgraph, bindings, geometry, moduleRow, rowSeams, gridFit, stackLayout, nodeUIs, widgetValue, flow, the logic of cables, curvePlacement...), `chainsModel`, `moduleField`, `widgetTarget`; graphNode generated; dagre stays in TS until M5b | 3,700 | new crate `apps/k7-daw-wasm/chains`, op `chains_build` | M1b | 16 |
@@ -69,6 +69,17 @@ milestone ends with `bash scripts/agent/gate.sh --milestone`; the hours are agen
 | **M5a** DJ desk | deck, metronome, beats, grid, loop, mapping, controls, mixBindings, mixView, setList, useDeckSet's arithmetic, put-on; deckVocabulary generated | 2,100 | new crate `apps/k7-daw-wasm/turntables` | M2a (bindings), M4a | 11 |
 | **M5b** graph layout | graphLayout (the only dagre importer), ChainsTab's and GraphPanel's shaping, pendingNode, trackPanelLayout | 600 | chains crate + the chosen layout crate | M2a; decision 2 | 5 |
 | **M5c** web-protocol's rest | workspace, machine, playlists, resources and cameras types generated; the project address grammar of `projects.ts` | 1,100 | k7-file-service, k7-front | M1b | 8 |
+
+**M1a is done.** It removed: `barTint`, `PairThisDevice` and `requestPairing`, `RemoteSlotsSection`,
+`menuAccount`, the `EngineSyncProgress` component (`syncRunning` now sits in `EngineSyncFailedDialog.tsx`),
+`ModeStrip` and `stripButton`, `ui-module-builder`'s `aiOrganize` re-export (`api.ts` imports `@studio/panel-rules`),
+`audio-probe`'s `waveform.ts` (the desk's `Envelope` type is written in `k7-plugins/src/turntables/waveform.ts`),
+the TS key detector and `scripts/key-truth.ts` (`key.ts` keeps `PITCH_CLASSES` and `camelot`), `pulledSentence`
+written once (`src/git/pulledSentence.ts`), the knip-flagged exports, and WebRTC end to end: the page's `rtc:`
+socket (`engine-browser/src/socket.ts` is the 5-line `openSocket` left), `rtcFrames`, `engine-tunnel/rtc.ts`, the
+`rtc` flag of an engine's listing and the `rtc-offer` and `rtc-answer` frames in the hub, the supervisor and the TS
+reference agent, `/api/engine/<id>/rtc` in k7-front, `node-datachannel` and `docs/rtc.md`. The generated
+`INTERACTIONS.md` and `gaps.csv` lost the gap line naming `RemoteSlotsSection`; the Sheet's Gaps row still holds it.
 
 **Parallel groups.** Wave 1: M1a, M1b, M1c. Wave 2: M2a, M2b, M2c. Wave 3: M3a and M3b once the
 verbs branch merges, M3c meanwhile (it waits on nothing but decision 5). Wave 4: M4a, M4b, M4c

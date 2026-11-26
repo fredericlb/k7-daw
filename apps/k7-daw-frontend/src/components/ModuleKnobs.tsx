@@ -12,7 +12,7 @@ import type { GraphNode } from "@studio/ui-chains/graph";
 const SHOWN = 3;
 
 /** The panel's knob and slider widgets that name a param and a range, in grid order — the card's candidates. */
-export function knobWidgets(n: GraphNode): WebWidget[] {
+function knobWidgets(n: GraphNode): WebWidget[] {
   const all = [...Object.values(n.ui?.widgets ?? {})];
   for (const t of n.ui?.tabs ?? []) all.push(...Object.values(t.widgets));
   return all
