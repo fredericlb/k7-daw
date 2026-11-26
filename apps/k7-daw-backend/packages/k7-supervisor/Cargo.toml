@@ -32,3 +32,25 @@ libc = "0.2"
 serde_json.workspace = true
 tokio = { workspace = true, features = ["rt-multi-thread", "time", "sync", "macros", "signal", "io-util", "io-std"] }
 url.workspace = true
+# The cut's job id: a hash of the work, as the C++ supervisor's mbedTLS SHA-256 gave it.
+sha2.workspace = true
+
+[features]
+# ONNX Runtime LOADED at the first cut, never linked (docs/rust-supervisor-plan.md, M7); off on iOS, where M9 links the xcframework.
+default = ["dynamic-ort"]
+dynamic-ort = ["ort/load-dynamic"]
+
+# Stem separation is where ONNX Runtime ships a binary: not Android.
+[target.'cfg(not(target_os = "android"))'.dependencies]
+# The media library's decoder and resampler, linked directly (the C++ supervisor reached them through a C ABI).
+waveform = { path = "../waveform", features = ["encode"] }
+# `api-24`: the oldest runtime we ship is DirectML's 1.24.4; the others are 1.30.
+ort = { version = "=2.0.0-rc.15", default-features = false, features = ["std", "api-24"] }
+
+[target.'cfg(windows)'.dependencies]
+# DirectML as the Windows provider; the library's own loader is used for DirectML.dll's folder.
+ort = { version = "=2.0.0-rc.15", default-features = false, features = ["std", "api-24", "directml"] }
+libloading = "0.9"
+
+[target.'cfg(target_vendor = "apple")'.dependencies]
+ort = { version = "=2.0.0-rc.15", default-features = false, features = ["std", "api-24", "coreml"] }

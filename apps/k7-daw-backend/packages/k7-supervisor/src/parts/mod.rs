@@ -4,7 +4,9 @@
 
 use crate::core::PartSpec;
 
+mod separation;
+
 /// Every part a run starts, in order.
 pub fn all() -> Vec<PartSpec> {
-    vec![]
+    vec![separation::spec()]
 }

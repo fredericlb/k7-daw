@@ -19,4 +19,5 @@ pub mod ports;
 pub mod process;
 pub mod protocol;
 pub mod run;
+pub mod separation;
 pub mod settings;

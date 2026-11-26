@@ -3,9 +3,12 @@
 
 mod engine;
 mod files;
+mod onnx_model;
 mod parts;
 mod protocol;
 mod rules;
 mod scratch;
+mod separation;
+mod separation_cut;
 mod settings;
 mod supervisor;
