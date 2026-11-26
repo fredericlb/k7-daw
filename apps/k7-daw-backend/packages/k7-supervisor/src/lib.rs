@@ -30,4 +30,5 @@ pub mod separation;
 pub mod settings;
 pub mod trust;
 pub mod urls;
+pub mod win;
 pub mod wire;

@@ -76,6 +76,19 @@ ort = { version = "=2.0.0-rc.15", default-features = false, features = ["std", "
 # DirectML as the Windows provider; the library's own loader is used for DirectML.dll's folder.
 ort = { version = "=2.0.0-rc.15", default-features = false, features = ["std", "api-24", "directml"] }
 libloading = "0.9"
+# The Windows-only calls of `src/win` (job object, TCP table, adapters, certificate stores, DXGI), typed by hand nowhere.
+windows = { version = "0.62", default-features = false, features = [
+    "Win32_Foundation",
+    "Win32_Graphics_Dxgi",
+    "Win32_NetworkManagement_IpHelper",
+    "Win32_NetworkManagement_Ndis",
+    "Win32_Networking_WinSock",
+    "Win32_Security_Cryptography",
+    "Win32_System_Console",
+    "Win32_System_JobObjects",
+    "Win32_System_SystemInformation",
+    "Win32_System_Threading",
+] }
 
 [target.'cfg(target_vendor = "apple")'.dependencies]
 ort = { version = "=2.0.0-rc.15", default-features = false, features = ["std", "api-24", "coreml"] }

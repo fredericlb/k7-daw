@@ -114,10 +114,9 @@ fn memory_gb() -> f64 {
     pages as f64 * size as f64 / (1024.0 * 1024.0 * 1024.0)
 }
 
-// Windows' `GlobalMemoryStatusEx` waits for M8; 0 is left out of the score, not read as slow.
-#[cfg(not(unix))]
+#[cfg(windows)]
 fn memory_gb() -> f64 {
-    0.0
+    crate::win::sys::memory_gb()
 }
 
 fn ms_since(t: Instant) -> f64 {

@@ -2,7 +2,7 @@
 //! browser on the LAN could dial; the shape is web-protocol's `EngineAddresses`. The fingerprint is a hint the
 //! registry never deduplicates on. It is sha256(`host|macs`), the MACs lowercase with colons, sorted and
 //! deduplicated, so an engine keeps its fingerprint across a change of supervisor.
-//! What a reader gets wrong: Windows lists no interface yet (M8 adds the adapters), so it advertises none.
+//! What a reader gets wrong: Windows lists its adapters through `win::net`, so an adapter that is down is skipped there, not here.
 
 use std::collections::BTreeSet;
 
@@ -136,19 +136,35 @@ fn link_mac(addr: *const libc::sockaddr, family: i32) -> Option<String> {
     (ll.sll_halen == 6).then(|| mac_string(&ll.sll_addr[..6]))
 }
 
-#[cfg(not(any(
-    target_os = "macos",
-    target_os = "ios",
-    target_os = "linux",
-    target_os = "android"
-)))]
+#[cfg(all(
+    unix,
+    not(any(
+        target_os = "macos",
+        target_os = "ios",
+        target_os = "linux",
+        target_os = "android"
+    ))
+))]
 fn link_mac(_addr: *const libc::sockaddr, _family: i32) -> Option<String> {
     None
 }
 
-#[cfg(not(unix))]
+#[cfg(windows)]
 fn interfaces() -> Vec<Iface> {
-    Vec::new()
+    crate::win::net::adapters()
+        .into_iter()
+        .map(|a| Iface {
+            name: a.name,
+            ipv4: a.ipv4.iter().map(ToString::to_string).collect(),
+            mac: if a.mac.is_empty() {
+                String::new()
+            } else {
+                mac_string(&a.mac)
+            },
+            internal: a.loopback,
+            addressed: a.addressed,
+        })
+        .collect()
 }
 
 /// This machine's name; `$STUDIO_MACHINE_NAME` first, since Android answers "localhost" for every phone.
@@ -158,6 +174,10 @@ pub fn host_name() -> String {
         .filter(|n| !n.is_empty())
     {
         return named;
+    }
+    #[cfg(windows)]
+    if let Some(wide) = crate::win::sys::host_name() {
+        return wide;
     }
     #[cfg(unix)]
     {
