@@ -3,7 +3,7 @@
 //! like, and must never read as "down"). Whether it is FREE is asked by binding, on the wildcard AND on
 //! 127.0.0.1, since on macOS a wildcard bind succeeds beside another program's loopback listener.
 
-use std::net::{Ipv4Addr, SocketAddr, TcpListener, TcpStream};
+use std::net::{Ipv4Addr, SocketAddr, TcpStream};
 use std::time::Duration;
 
 /// How many ports from the first one a start tries, unless the port is fixed.
@@ -22,7 +22,12 @@ fn out_of_sockets(e: &std::io::Error) -> bool {
     {
         matches!(e.raw_os_error(), Some(libc::EMFILE | libc::ENFILE))
     }
-    #[cfg(not(unix))]
+    #[cfg(windows)]
+    {
+        e.raw_os_error()
+            .is_some_and(|c| crate::win::sockets::OUT_OF_SOCKETS.contains(&c))
+    }
+    #[cfg(not(any(unix, windows)))]
     {
         let _ = e;
         false
@@ -45,8 +50,12 @@ pub fn is_serving(port: u16) -> bool {
 }
 
 fn binds_on(host: Ipv4Addr, port: u16) -> bool {
+    // Exclusively on Windows, where a plain bind succeeds beside a listener that let its port be shared.
+    #[cfg(windows)]
+    return crate::win::sockets::binds_exclusive(host, port);
+    #[cfg(not(windows))]
     // A socket we could not even open says nothing of the port, so it reads as free, as the C++ one did.
-    TcpListener::bind((host, port)).map_or_else(|e| out_of_sockets(&e), |_| true)
+    std::net::TcpListener::bind((host, port)).map_or_else(|e| out_of_sockets(&e), |_| true)
 }
 
 /// Could the engine bind `port` now, on the wildcard and on loopback alike.
@@ -81,8 +90,8 @@ pub fn listener_pid(port: u16) -> Option<u32> {
         .ok()
 }
 
-/// The TCP table's listener on Windows is the Windows milestone's; until then nobody is named.
-#[cfg(not(unix))]
-pub fn listener_pid(_port: u16) -> Option<u32> {
-    None
+/// The pid listening on `port`, asked of the TCP table.
+#[cfg(windows)]
+pub fn listener_pid(port: u16) -> Option<u32> {
+    crate::win::tcp::listener_pid(port)
 }

@@ -2,7 +2,7 @@
 //! Not a preference: a studio added from the app is routinely behind a local proxy with a private CA that
 //! exists in the OS store and nowhere else, and without it every heartbeat fails its handshake silently.
 //! What a reader gets wrong: iOS and Android never read the OS store here (the bundle the app ships, the
-//! conscrypt folders); the Windows "Disallowed" store and server-auth filter are M8's.
+//! conscrypt folders); Windows walks its stores itself, to apply "Disallowed" and the server-auth usage.
 
 use std::sync::{Arc, Mutex};
 
@@ -48,9 +48,18 @@ fn platform_roots() -> Vec<CertificateDer<'static>> {
     Vec::new()
 }
 
-#[cfg(not(any(target_os = "ios", target_os = "android")))]
+#[cfg(windows)]
 fn platform_roots() -> Vec<CertificateDer<'static>> {
-    // The keychain with its trust settings on macOS, the ROOT stores on Windows, the distribution's bundle on Linux.
+    // The ROOT stores of the user and the machine, less `Disallowed` and the roots that exclude server auth.
+    crate::win::certs::roots()
+        .into_iter()
+        .map(CertificateDer::from)
+        .collect()
+}
+
+#[cfg(not(any(target_os = "ios", target_os = "android", windows)))]
+fn platform_roots() -> Vec<CertificateDer<'static>> {
+    // The keychain with its trust settings on macOS, the distribution's bundle on Linux.
     let loaded = rustls_native_certs::load_native_certs();
     for e in &loaded.errors {
         crate::log::host(&format!("trust roots: {e}"));

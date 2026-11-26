@@ -33,4 +33,5 @@ pub mod settings;
 pub mod trust;
 pub mod tunnel;
 pub mod urls;
+pub mod win;
 pub mod wire;

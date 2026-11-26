@@ -66,6 +66,14 @@ pub fn read_config(file: &std::path::Path) -> Result<Value, String> {
 
 /// A run of the program; the process's exit code. Call it before any other thread exists.
 pub fn main(mode: Mode) -> i32 {
+    // Before the engine is spawned, so it is born inside the host's job (`docs/windows.md`).
+    #[cfg(windows)]
+    {
+        crate::win::job::keep_stdio_from_children();
+        if let Err(why) = crate::win::job::join_host_job() {
+            log::stderr_only(&format!("[host] no kill-on-close job: {why}"));
+        }
+    }
     let paths = Paths::from_env();
     let (store, frames, standalone) = match &mode {
         Mode::Stdio => (Store::new(paths.settings()), Frames::stdout(), false),

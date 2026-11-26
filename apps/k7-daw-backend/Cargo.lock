@@ -2325,6 +2325,7 @@ dependencies = [
  "url",
  "waveform",
  "webpki-roots",
+ "windows",
  "zip",
 ]
 

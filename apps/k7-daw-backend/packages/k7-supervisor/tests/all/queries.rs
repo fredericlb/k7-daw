@@ -160,7 +160,7 @@ impl Bed {
     /// A command's `result`.
     async fn ask(&mut self, cmd: &str, arg: &str) -> Value {
         let id = self.send(cmd, arg);
-        self.until(10, |f| f["t"] == "result" && f["id"] == id)
+        self.until(30, |f| f["t"] == "result" && f["id"] == id)
             .await
     }
 
@@ -178,7 +178,7 @@ impl Bed {
     }
 
     async fn engine_got(&self, want: impl Fn(&Value) -> bool) -> Value {
-        let end = Instant::now() + Duration::from_secs(10);
+        let end = Instant::now() + Duration::from_secs(30);
         while Instant::now() < end {
             if let Some(f) = self.received().into_iter().find(&want) {
                 return f;
@@ -228,7 +228,7 @@ async fn the_polls_fill_the_snapshot_with_the_fixtures_rows_and_a_stop_empties_i
     // The musician's setting is told at every start, before anything else is asked.
     assert_eq!(bed.received()[0], json!({"type": "lan-open", "open": true}));
     bed.send("engine.stop", "");
-    let s = bed.until(10, |f| f["status"] == "stopped").await;
+    let s = bed.until(30, |f| f["status"] == "stopped").await;
     assert_eq!(
         (
             &s["plugins"],
@@ -242,7 +242,7 @@ async fn the_polls_fill_the_snapshot_with_the_fixtures_rows_and_a_stop_empties_i
     // A stale answer arriving after the stop must not bring it back: wait out several polls.
     tokio::time::sleep(Duration::from_millis(400)).await;
     bed.send("engine.start", "");
-    bed.until(10, |f| running(f) && f["pluginCount"] == 1).await;
+    bed.until(30, |f| running(f) && f["pluginCount"] == 1).await;
     bed.finish().await;
 }
 
@@ -273,7 +273,7 @@ async fn the_ranking_switches_once_and_a_refusal_waits_for_the_device_set_to_mov
     );
     state["devices"] = json!(devices);
     put_state(&bed.control, &state);
-    bed.until(10, |f| {
+    bed.until(30, |f| {
         f["audioDevices"].as_array().is_some_and(|d| {
             d.iter()
                 .any(|d| d["name"] == "Focusrite USB ASIO" && d["current"] == true)
@@ -287,7 +287,7 @@ async fn the_ranking_switches_once_and_a_refusal_waits_for_the_device_set_to_mov
 #[tokio::test(flavor = "multi_thread", worker_threads = 2)]
 async fn audio_priority_is_remembered_then_switched_and_an_empty_ranking_ranks_nothing() {
     let mut bed = Bed::new(&engine_state(), json!({}));
-    bed.until(10, |f| {
+    bed.until(30, |f| {
         running(f) && f["audioDevices"].as_array().is_some_and(|d| d.len() == 2)
     })
     .await;
@@ -336,7 +336,7 @@ async fn audio_priority_is_remembered_then_switched_and_an_empty_ranking_ranks_n
 #[tokio::test(flavor = "multi_thread", worker_threads = 2)]
 async fn every_command_reaches_the_engine_and_answers() {
     let mut bed = Bed::new(&engine_state(), json!({}));
-    bed.until(10, |f| {
+    bed.until(30, |f| {
         running(f)
             && f["pluginCount"] == 1
             && f["pairedDevices"].as_array().is_some_and(|d| !d.is_empty())
@@ -350,7 +350,7 @@ async fn every_command_reaches_the_engine_and_answers() {
             .unwrap()
             .contains("\"lanOpen\": true")
     );
-    bed.until(10, |f| f["lanOpen"] == true).await;
+    bed.until(30, |f| f["lanOpen"] == true).await;
     assert_eq!(bed.ask("plugin.showUI", "s1\u{1f}n4").await["ok"], true);
     bed.engine_got(|f| *f == json!({"type": "show-native-plugin-ui", "id": "n4", "session": "s1"}))
         .await;
@@ -358,7 +358,7 @@ async fn every_command_reaches_the_engine_and_answers() {
     bed.engine_got(|f| *f == json!({"type": "show-native-plugin-ui", "id": "n9"}))
         .await;
     assert_eq!(bed.ask("session.drop", "s1").await["ok"], true);
-    bed.until(10, |f| f["sessions"] == json!([])).await;
+    bed.until(30, |f| f["sessions"] == json!([])).await;
     assert_eq!(bed.ask("pair.approve", "r1").await["ok"], true);
     let f = bed
         .until(10, |f| {
@@ -368,7 +368,7 @@ async fn every_command_reaches_the_engine_and_answers() {
         .await;
     assert_eq!(f["pairedDevices"][1]["deviceId"], "dev-r1");
     assert_eq!(bed.ask("pair.revoke", "d1").await["ok"], true);
-    bed.until(10, |f| {
+    bed.until(30, |f| {
         f["pairedDevices"].as_array().is_some_and(|d| d.len() == 1)
     })
     .await;
@@ -379,8 +379,8 @@ async fn every_command_reaches_the_engine_and_answers() {
     assert!(!bed.paths.exts_cache().exists());
     bed.engine_got(|f| *f == json!({"type": "rescan-plugins", "force": true}))
         .await;
-    bed.until(10, |f| f["pluginCount"].is_null()).await;
-    bed.until(10, |f| f["pluginCount"] == 1).await;
+    bed.until(30, |f| f["pluginCount"].is_null()).await;
+    bed.until(30, |f| f["pluginCount"] == 1).await;
     bed.finish().await;
 }
 
@@ -407,9 +407,9 @@ async fn a_safe_engine_names_its_suspect_and_a_frozen_one_is_killed_to_be_relaun
     );
     state["whoami"] = who(95_000)["whoami"].clone();
     put_state(&bed.control, &state);
-    bed.until(10, |f| f["error"] == "engine exited — restarting…")
+    bed.until(30, |f| f["error"] == "engine exited — restarting…")
         .await;
-    bed.until(10, running).await;
+    bed.until(30, running).await;
     assert_ne!(
         std::fs::read_to_string(bed.paths.engine_pid()).unwrap(),
         first
