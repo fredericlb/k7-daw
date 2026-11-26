@@ -57,7 +57,17 @@ fn the_dispatcher_refuses_before_any_verb() {
     let mut p = Project::open("clip-lane");
     p.refused("frobnicate", "unknown command: frobnicate");
     p.refused("event", "unknown command: event");
-    p.refused("picture mute v", "command 'picture mute' has no handler (picture.mute)");
+    let ported: Vec<&str> = verbs::ported().collect();
+    let missing: Vec<&str> = verbs::catalogue::specs()
+        .iter()
+        .map(|s| s.sid.as_str())
+        .filter(|s| !ported.contains(s))
+        .collect();
+    assert!(
+        missing.is_empty(),
+        "the catalogue names verbs with no handler: {missing:?}"
+    );
+    assert_eq!(ported.len(), 191);
     let ran = p.ok("project reload");
     assert_eq!(ran.answer.effects, ["reload"]);
 }

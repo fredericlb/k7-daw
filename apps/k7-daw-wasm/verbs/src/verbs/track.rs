@@ -24,7 +24,7 @@ use song_edit::yaml_edit::{delete_file_value, set_file_value};
 const GRAPH_FILE: &str = "graph.k7x";
 
 /// `surfacesNaming`: the surfaces whose mapping names `module`, which no rename or delete rewrites.
-fn surfaces_naming(h: &Host, module: &str) -> Result<Vec<String>, Thrown> {
+pub(super) fn surfaces_naming(h: &Host, module: &str) -> Result<Vec<String>, Thrown> {
     let s = project_surfaces(&*h.fs, &mut Cache::new(), &h.song_path).map_err(|e| Thrown(e.to_string()))?;
     Ok(s.surfaces
         .into_iter()
@@ -39,7 +39,7 @@ fn surfaces_naming(h: &Host, module: &str) -> Result<Vec<String>, Thrown> {
 }
 
 /// `ownLaneStrip`: the strip a lane's chain ends in, when it is the lane's own.
-fn own_lane_strip(h: &Host, lane: &str) -> Result<Option<String>, song_edit::Error> {
+pub(super) fn own_lane_strip(h: &Host, lane: &str) -> Result<Option<String>, song_edit::Error> {
     let g = LaneGraph::load(&*h.fs, &h.env, &h.song_path)?;
     let chained = is_chain_project(&*h.fs, &h.song_path);
     Ok(g.strip_of(lane)
@@ -48,13 +48,13 @@ fn own_lane_strip(h: &Host, lane: &str) -> Result<Option<String>, song_edit::Err
 }
 
 /// The names already used by a node: the graph's keys, a chain project's nodes, a lane file.
-struct Taken {
+pub(super) struct Taken {
     graph: Vec<String>,
     nodes: Vec<String>,
 }
 
 impl Taken {
-    fn read(fs: &dyn Fs, dir: &str) -> Result<Taken, song_edit::Error> {
+    pub(super) fn read(fs: &dyn Fs, dir: &str) -> Result<Taken, song_edit::Error> {
         let chained = is_chain_project(fs, dir);
         let graph_abs = join(dir, GRAPH_FILE);
         let graph = if !chained && ws_exists(fs, &graph_abs) {
@@ -109,7 +109,12 @@ fn relabel_strip(fs: &mut dyn Fs, abs: &str, lane: &str) -> Result<(), song_edit
 }
 
 /// The strip named after a lane follows its rename: `mix-<old>` becomes `mix-<new>`, its first line re-labelled.
-fn follow_strip_name(h: &mut Host, mixer: &str, to: &str, taken: &Taken) -> Result<Option<String>, song_edit::Error> {
+pub(super) fn follow_strip_name(
+    h: &mut Host,
+    mixer: &str,
+    to: &str,
+    taken: &Taken,
+) -> Result<Option<String>, song_edit::Error> {
     let dir = h.song_path.clone();
     let next = mixer_name_for(to, &|n| n != mixer && taken.has(&*h.fs, &dir, n));
     if next == mixer {
@@ -218,7 +223,7 @@ fn rename(h: &mut Host, lane: &str, to: &str) -> Result<(), song_edit::Error> {
 }
 
 /// The nodes a lane takes with it, the lane LAST: each delete rejoins around its node.
-fn lane_own_nodes(h: &Host, lane: &str) -> Result<Vec<String>, song_edit::Error> {
+pub(super) fn lane_own_nodes(h: &Host, lane: &str) -> Result<Vec<String>, song_edit::Error> {
     if is_chain_project(&*h.fs, &h.song_path) {
         let cp = read_chain_project(&*h.fs, &h.song_path)?;
         let Some(chain) = cp.nodes.get(lane).map(|n| n.chain.clone()) else {

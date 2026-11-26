@@ -53,7 +53,7 @@ pub fn track_new(a: &str, h: &mut Host) -> Done {
 }
 
 /// `orderPosition`: a 1-based slot, or the slot of the lane named.
-fn order_position(order: &[String], at: &str) -> Option<f64> {
+pub(super) fn order_position(order: &[String], at: &str) -> Option<f64> {
     let n = str_to_number(at);
     if at.trim().is_empty() || !n.is_finite() {
         return order.iter().position(|x| x == at).map(|i| (i + 1) as f64);
@@ -62,7 +62,7 @@ fn order_position(order: &[String], at: &str) -> Option<f64> {
 }
 
 /// `reorderTracks`: `id` moved to the 1-based `pos`, clamped, the whole list stated.
-fn reorder(order: &[String], id: &str, pos: f64) -> Vec<String> {
+pub(super) fn reorder(order: &[String], id: &str, pos: f64) -> Vec<String> {
     let mut rest: Vec<String> = order.iter().filter(|x| *x != id).cloned().collect();
     let at = (js_round(pos) - 1.0).max(0.0).min(rest.len() as f64) as usize;
     rest.insert(at, id.to_owned());

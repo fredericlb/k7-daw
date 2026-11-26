@@ -42,7 +42,9 @@ A verb that needs the machine names a route of the front: `h.call("POST /verb-ho
 | an effect (`reload`, `applyProject`) is the caller's: the backend pushes the engine once after a landing that asked one | the crate holds no engine and no clock |
 | one entry, `{"op":"verb.run","args":{"line","project","env","answers"?,"stamp"?}}`, answers `{log, refuse, refused, effects, asks?, pending?, threw?}` | the backend and a native host speak the same answer |
 | a verb the crate has no handler for answers the dispatcher's own refusal, `command '…' has no handler (sid)` | a caller learns by the answer which verbs it may offer, with no table of its own to keep |
-| an event verb on a lane that sounds a picture refuses, and `timeline lane copy` of a picture lane refuses by name | silencing and copying shots is the picture verbs' code |
+| `event remove` and `events remove` on a lane that sounds a picture silence the shot under the clip, and every other `event…` verb on it refuses | a sounding lane's clip IS a shot's sound; the shot is found by the clip's name and start among the lane's shots as the compile cuts them |
+| `picture interchange` and `picture import` read each picture lane's own `events:` and a cut's `.otio` or `.edl` | the picture's compile (`loadVideoProject`) is TypeScript only; the lane files are what a cut hands over |
+| `timeline lane copy` of a picture lane copies its shots in seconds onto a timeline's `pictures:` or a new picture lane of the song | a timeline's picture lane has no frame and draws on the song's lane of its name, so only a copy within the song keeps `frame` and `color` |
 | tasks, playlists and library pins live in `workspace_dir_of(env, project)` | a project always stands in a workspace |
 
 ## How a verb is tested
@@ -61,8 +63,8 @@ A verb that needs the machine names a route of the front: `h.call("POST /verb-ho
 
 ## Where it stands
 
-The catalogue names 192 verbs. A verb the crate has no handler for answers `command '…' has no handler (sid)`: today the
-22 picture-lane and shot verbs (`picture *`, `shot *`) and `track transcribe`, whose port is under way.
+The catalogue names 192 verbs, and the crate has a handler for 191 of them. A verb it has none for answers
+`command '…' has no handler (sid)`: today `track transcribe` alone.
 
 
 | area | ported | tests (`apps/k7-daw-wasm/verbs/tests/`) |
@@ -74,6 +76,7 @@ The catalogue names 192 verbs. A verb the crate has no handler for answers `comm
 | M4 | 36 of 36: lanes (group, arrange, duplicate, input, hide), timelines, time splice, aspect, master, console, tags, surfaces, tasks, libraries, playlists; `playlist stems` sends the chain's resolved cold steps | `lanes_m4.rs`, `timelines.rs`, `project_m4.rs`, `playlists.rs`, `tracks.rs` |
 | M4 | `track highlight` | `tracks.rs` |
 | M5 | 44 of 44: nodes, modules, assemblies, the graph's wiring and layout, taps, presets, alternatives, engines, params, freeze (the bounce through `render`, then `frozen:`), `chain save` through `POST /bench/save` | `graph_nodes.rs`, `taps.rs`, `node_state.rs`, `node_values.rs`, `chain_fixture.rs`, `renders.rs` |
+| M6 | 22 of 22: lanes (new, order, rename, delete, mute, solo, rect), shots (add, move, length, head, split, delete, key, unkey, speed, silence), sound, prepare, interchange, import, render; a timeline's copy of a picture lane and `event remove` on a sounding lane | `pictures.rs`, `pictures_lanes.rs`, `pictures_media.rs` |
 | M7 | 19 of 19; `system stems` and `system instrumental` check their chain against the open project, `system onnx` bare says the machine's list, `transport arm` words the engine's answer | `system.rs`, `transport.rs` |
 | M8 | completion: the 25 providers, their labels and the command words | `complete.rs` |
 | the compile cache | kept from line to line; on `clip-lane`, 1.1 ms a line fresh and 0.7 ms kept, in release | `cache.rs` |

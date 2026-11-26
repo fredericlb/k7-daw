@@ -118,7 +118,7 @@ mod tests {
         );
         assert_eq!(spec_of("event loop a 1").map(|s| s.sid.as_str()), Some("event.loop"));
         assert!(spec_of("eventx").is_none());
-        assert_eq!(specs().len(), 191);
+        assert_eq!(specs().len(), 192);
     }
 
     #[test]
