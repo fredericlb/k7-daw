@@ -63,9 +63,9 @@ gesture and could fail half-way.
 
 ## 4. The verb resolves, refuses or writes
 
-`@studio/commands` maps the line to a SID through `commands.yaml` (longest prefix wins) and runs the
+the verbs crate (`apps/k7-daw-wasm/verbs`) maps the line to a SID through `commands.yaml` (longest prefix wins) and runs the
 handler with a `CommandHost`. Handlers follow a shape you will see everywhere in
-`apps/k7-daw-frontend/packages/commands/src/verbs/`:
+`apps/k7-daw-wasm/verbs/src/verbs/`:
 
 1. Parse the arguments; on a bad shape, `h.refuse(["usage: …"])`.
 2. Resolve against the **compiled** project (`h.project()`): the track, the event at that start,

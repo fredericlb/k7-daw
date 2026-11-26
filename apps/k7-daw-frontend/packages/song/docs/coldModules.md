@@ -174,7 +174,7 @@ Two rules come with it, and both are about what a chain can SAY rather than what
 a chain separates or treats and never both (flattened for a render it is a list of names with no
 ports, so a step after a separator has four inputs and no way to name one), and the running is
 handed in through `CommandHost.runColdStep` — a host without one refuses by name. See
-`@studio/commands`' `docs/processChain.md` and `apps/k7-daw-engine/k7-supervisor/docs/stemSplit.md`.
+the verbs crate's `docs/processChain.md` and `apps/k7-daw-engine/k7-supervisor/docs/stemSplit.md`.
 
 ## What is NOT wired yet
 

@@ -11,7 +11,7 @@ The writes themselves are Rust: `apps/k7-daw-wasm/song-edit` is the one implemen
 node, and called directly by the Rust file service (`apps/k7-daw-frontend/packages/k7-wasm/docs/edit.md`). The TypeScript that stays is the glue for the
 functions that take a document callback (`editTrackStruct`, `editModuleFile`).
 
-Its callers are the verbs of `apps/k7-daw-frontend/packages/commands` (for example `apps/k7-daw-wasm/verbs/src/verbs/track.rs`,
+Its callers are the verbs of `apps/k7-daw-wasm/verbs` (for example `apps/k7-daw-wasm/verbs/src/verbs/track.rs`,
 `crossfade.ts`, `preset.ts`, `eventTakes.ts`, `engine.ts`), which every surface — the command bar,
 the timeline, the mixer, the chains view — goes through.
 

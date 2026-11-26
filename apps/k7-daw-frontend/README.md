@@ -51,16 +51,14 @@ apps/k7-daw-engine/k7-supervisor/           the supervisor (C++): identity, regi
 apps/k7-daw-engine/scripts/                  the native build: engine + supervisor, staged and packaged
 apps/k7-daw-desktop/                   the desktop app (Tauri; runs k7's backend, which drives k7-supervisor)
 apps/k7-daw-backend/                   the Rust backend: `packages/` are its crates (k7-front, k7-file-service, ...)
-apps/k7-daw-wasm/                      the Rust crates built for the browser as WebAssembly (song, song-schema, song-edit, k7x, k7-wasm)
+apps/k7-daw-wasm/                      the Rust crates built for the browser as WebAssembly (song, song-schema, song-edit, k7x, k7-wasm) and the verbs
 apps/k7-daw-frontend/                  the web editor (this folder)
   packages/                k7-daw's shared tier (consumed as raw TS source):
     song/                    @studio/song            — song model + compiler + Strudel patterns
-    commands/                @studio/commands        — shared command layer, file edits, timeline, mixing
     engine-client/           @studio/engine-client   — drives the engine over the WebSocket protocol
     engine-protocol/         @studio/engine-protocol — the JSON wire shapes shared with the C++ engine
     ui-chains/               @studio/ui-chains       — routing-graph engine: dagre layout (drawn by the web app as DOM nodes + SVG cables)
     ui-editor/               @studio/ui-editor       — CodeMirror k7x language + note-grid roll (web UI)
-    translator/              @studio/translator      — DAWproject (.dawproject) → song folder; `k7 import` is its caller
     web-protocol/            @studio/web-protocol    — the browser↔server wire types
 ```
 
@@ -106,7 +104,7 @@ nodes/<name>.k7x       one USE of a module, flat, named by its file — the LANE
   timeline, whose ruler reads either unit, and a `surfaces/viewport.k7x` composites the
   frame. It is a second COMPILE of the same folder, so the document the engine is handed
   carries no picture at all. See
-  [apps/k7-daw-wasm/verbs/docs/picture/picture.md](./packages/song-video/docs/picture.md).
+  [apps/k7-daw-wasm/verbs/docs/picture/picture.md](../k7-daw-wasm/verbs/docs/picture/picture.md).
 - **A strudel lane streams its material from a pattern.** `strudel` links one file
   under `algo/`, and the lane's **name** picks which part of it to receive — the
   pattern's `.label("…")`, matched ignoring case and punctuation.

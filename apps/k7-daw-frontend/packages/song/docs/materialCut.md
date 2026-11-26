@@ -72,7 +72,7 @@ The KIND of material decides which runs, and they do not live together:
 
 - **Sequences** are text this package already reads and writes, so `materialCut.ts` divides the
   notes and writes the files itself. No engine, no machine, pure and fully tested.
-- **Audio** has to be RENDERED. That lives in `@studio/commands`' `materialRender.ts`, beside the
+- **Audio** has to be RENDERED. That lives in the verbs crate's `materialRender.ts`, beside the
   bounce that already owns "write new material through the engine" — it builds a one-track
   `ProjectDoc` and bounces it through the host's `Renderer`, exactly as `clip process` does.
 

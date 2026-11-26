@@ -30,7 +30,7 @@ All in the route table `apps/k7-daw-backend/packages/k7-front/src/routes/files/s
 | `GET /workspace` | The workspace, the active project, the last take, engine sync and load progress (polled) |
 | `POST /open` | Hand a project to the engine (the ▶ in the tree) |
 | `GET /tree`, `GET/PUT /file`, `/folder`, `/rename`, `/move`, `/entry/delete` | The file tree and editor |
-| `POST /changes`, `GET /verb-bundle`, `/verb-host/*` | What the verbs Worker commits and reads ([the commands package](./12-commands-package.md)) |
+| `POST /verb`, `POST /picture`, `POST /import`, `POST /changes`, `/verb-host/*` | What a verb, the picture and an import run and land ([the commands package](./12-commands-package.md)) |
 | `GET /revision` | The change token every view keys its reloads on |
 | `GET /preferences`, `PUT /preferences/vim` | The **machine's** preferences |
 
@@ -49,7 +49,7 @@ The hub mints the file service's ticket from the session; it ages (twelve hours)
 
 ## Where to add something
 
-- A new **verb** on project files: `apps/k7-daw-frontend/packages/commands`, never a new route ([Adding a command](./13-adding-a-command.md)).
+- A new **verb** on project files: `apps/k7-daw-wasm/verbs`, never a new route ([Adding a command](./13-adding-a-command.md)).
 - A new **file-shaped** read the views need: a route in the Rust file service (`apps/k7-daw-backend/packages/k7-front/src/routes/files/service/`), a function in `@studio/project-shell` if an app outside this repository needs it too, else in `apps/k7-daw-frontend/src/api.ts`.
 - A new **account-level** setting: k7's front (`prefs_schema.rs`) and `K7Prefs` in `api.ts`, together.
 - Anything about **live audio**: the engine protocol (Engines section).

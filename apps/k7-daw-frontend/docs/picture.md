@@ -251,7 +251,7 @@ the lane file's own and the grid is in beats.
 ## The drag is not a command, but the edit is
 
 Every audio edit this shell makes is a **command** — `event move <track> <from> <to>`, dispatched
-through `@studio/commands`, which owns the verb. The picture DRAG is not one, for the reason
+through the verbs crate (`apps/k7-daw-wasm/verbs`), which owns the verb. The picture DRAG is not one, for the reason
 every continuous gesture is left out (`shell.md`): a pointer move is not a sentence.
 `App.applyVideoEdit` reads the lane's file, applies every field of the gesture to one buffer with
 `setVideoPlacementField`, and writes it once.

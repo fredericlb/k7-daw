@@ -1,9 +1,9 @@
-# The change set, the verb bundle and `POST /verb`
+# The change set, `POST /verb`, the picture and an import
 
-`POST /changes`, `GET /verb-bundle` and `GET /verb-bundle/library`: what the page's Worker commits an import to and reads a project from, native in
-the Rust file service. The code is `apps/k7-daw-backend/packages/k7-file-service/src/changes/`
-and `verb_bundle.rs`, and the front's `native/changes.rs` and `native/verb_bundle.rs`. The routes belong to the `journal` piece and
-have no fallback: a front that does not answer the journal says 503.
+`POST /changes`: a set of writes landed whole as one journal step, native in the Rust file service; a verb and an import
+land through it. The code is `apps/k7-daw-backend/packages/k7-file-service/src/changes/` and the front's
+`native/changes.rs`. The routes belong to the `journal` piece and have no fallback: a front that does not answer the
+journal says 503.
 
 ## Choices
 

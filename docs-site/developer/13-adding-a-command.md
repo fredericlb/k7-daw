@@ -6,7 +6,7 @@ First decide **where it runs**:
 
 | It… | Goes |
 |---|---|
-| changes project or workspace files, or asks the engine through the file service | the catalogue: `apps/k7-daw-frontend/packages/commands` |
+| changes project or workspace files, or asks the engine through the file service | the catalogue: `apps/k7-daw-wasm/verbs` |
 | only changes what the shell shows (a page, a panel, a tool, a zoom) | a `ui` command in the frontend |
 | needs something only the browser has (the clipboard, Web MIDI, a camera, a download) but writes through a file route | a bare-named web-local command |
 

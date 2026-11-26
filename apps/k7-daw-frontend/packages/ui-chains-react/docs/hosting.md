@@ -56,7 +56,7 @@ the English one. It travels by context like `icons`, for the same reason. Two pi
 prop instead (`Cables`, `PresetButton`): `a11y.test.tsx` calls them as plain functions, where no
 context can be read. k7's is `apps/k7-daw-frontend/src/chainsLabels.ts`.
 
-**`runCommand`** (the `command` prop) — a `@studio/commands` SID line. Every app that can
+**`runCommand`** (the `command` prop) — a the verbs crate (`apps/k7-daw-wasm/verbs`) SID line. Every app that can
 edit a graph has one.
 
 **Live engine state**, through `@studio/engine-browser`: `engineStore` for meters and the

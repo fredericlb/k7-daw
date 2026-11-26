@@ -17,7 +17,7 @@ Test it the house way, asserting the file differs by exactly the line you meant 
 `apps/k7-daw-frontend/packages/song-edit/src/moveEvent.test.ts`). If it is a new module, add it to the package's
 `exports`; packages are consumed as source through those subpaths, and a deep import fails on purpose.
 
-## 2. The verb, in `@studio/commands`
+## 2. The verb, in the verbs crate (`apps/k7-daw-wasm/verbs`)
 
 1. **Declare it** in `apps/k7-daw-wasm/verbs/commands.yaml`: the command string, a `sid`, `readable` in
    `en` and `fr` (imperative, no example, at most 60 characters — the crate's `palette.rs` tests enforce
@@ -29,7 +29,7 @@ Test it the house way, asserting the file differs by exactly the line you meant 
    `fromCatalogue`). An `event …` verb whose first two arguments are `track` and `timecode` appears
    on every event's menu by itself. Add `confirm: true` for a verb that destroys more than Ctrl+Z is
    trusted with.
-3. **Implement the handler** in `apps/k7-daw-frontend/packages/commands/src/verbs/<topic>.ts`, exported as a
+3. **Implement the handler** in `apps/k7-daw-wasm/verbs/src/verbs/<topic>.rs`, exported as a
    `Record<string, SidHandler>` and listed in `VERB_TABLES` in `apps/k7-daw-wasm/verbs/src/verbs/mod.rs`
    (as `CROSSFADE_VERBS` is). Parse, resolve against `h.project()`, `h.refuse([...])` with a sentence
    naming what is wrong before writing anything, call the writer, `h.log([...])`, `await h.reload()`.

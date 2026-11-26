@@ -264,7 +264,7 @@ cable dropped there simply ceases. Esc or right-click puts everything back, writ
 The gestures live in the renderer (`apps/k7-daw-frontend/packages/ui-chains-react/docs/hosting.md` — `onConnect`,
 `onReplug`, `onDisconnect`), armed here in `App.tsx` beside `onEdgeInsert`; the verbs and
 their refusals — unknown node, arrow already there or not there, the sink as a source — are
-`@studio/commands`', because the graph on screen can be a compile older than the file.
+the verbs crate's, because the graph on screen can be a compile older than the file.
 
 ## Adding a module: what the wait is, and what covers it
 

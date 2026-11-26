@@ -9,7 +9,7 @@ Each package runs vitest on its own:
 ```bash
 npm run test --workspace @studio/k7-plugins
 npm run test --workspace @studio/song-schema
-npm run test --workspace @studio/commands
+cargo test --manifest-path apps/k7-daw-wasm/verbs/Cargo.toml
 ```
 
 From the root, `npm run test` runs `scripts/workspaces.mjs test`, which runs the `test` script of every workspace that has one (`--jobs N` to run several at once). Remember the repo's lint rules for any `.ts`/`.tsx` you touch (`npm run lint`).

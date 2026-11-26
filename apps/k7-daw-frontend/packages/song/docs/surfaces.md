@@ -185,7 +185,7 @@ two answers differ only for a project somebody emptied out — which warns about
 delete rather than staying silent about one they need.
 
 `isVideoProject` lives in `@studio/song` rather than beside the compiler it guards
-(`@studio/song-video`) because it is a question about lanes and nothing more: asking it must not cost the
+(the verbs crate's `picture/`) because it is a question about lanes and nothing more: asking it must not cost the
 reader the video document model, and that is also what keeps this package from depending on the one
 that compiles a picture.
 

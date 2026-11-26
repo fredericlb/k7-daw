@@ -760,7 +760,7 @@ then sweep over any row, as the keyboard's head already could.
 ### The rectangle answers `events move`
 
 Acting on the rectangle is a COMMAND, not a gesture: `events move <tracks> <from> <to> <by>`
-(in `@studio/commands`) moves every event starting in the range by a signed duration, in one
+(in the verbs crate (`apps/k7-daw-wasm/verbs`)) moves every event starting in the range by a signed duration, in one
 line — so it is one undo step and one reload however many placements it touches, and the CLI
 can type the same range with no mouse anywhere near. While the bar is filling it, the
 selection feeds its region through `feedEventsMove`, the same road `feedMove` gives the
