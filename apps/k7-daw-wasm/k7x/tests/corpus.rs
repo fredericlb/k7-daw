@@ -1,5 +1,5 @@
 // corpus.rs — every .k7x file of demos/ and k7-core/ edited by the op list of `ops_for`, compared by hash to what the TypeScript editor did.
-// The vectors are frozen (their generator left with @studio/k7x): a corpus file edited since is skipped, the rest still replay (docs/rustEdit.md).
+// The vectors are frozen, as no generator writes them: a corpus file edited since is skipped, the rest still replay (docs/rustEdit.md).
 
 mod common;
 

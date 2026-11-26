@@ -6,7 +6,7 @@ edition.workspace = true
 publish.workspace = true
 
 [dependencies]
-# Pins are k7x files; the same parser the bundle reads through (apps/k7-daw-frontend/packages/k7x/docs/rust.md).
+# Pins are k7x files; the same parser the bundle reads through (apps/k7-daw-wasm/k7x/docs/rust.md).
 indexmap.workspace = true
 k7x = { path = "../../../k7-daw-wasm/k7x" }
 serde_json.workspace = true

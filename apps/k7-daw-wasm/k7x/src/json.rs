@@ -1,5 +1,5 @@
 // json.rs — a tree written out as JSON: its plain data, as toJS gives it, or the whole tree with its spans.
-// The tree form counts spans in UTF-16 units so it compares field for field with the TypeScript parser's (docs/rust.md).
+// The tree form counts spans in UTF-16 units, as the page's strings do (docs/rust.md).
 
 use crate::ast::{Entry, ListForm, MapForm, MapNode, Node, Scalar};
 use std::fmt::Write;
@@ -105,7 +105,7 @@ pub fn utf16_offsets(text: &str) -> Vec<usize> {
     map
 }
 
-/// The whole tree as JSON, shaped as ../src/ast.ts's nodes, spans in UTF-16 units.
+/// The whole tree as JSON, shaped as the page's K7Node objects, spans in UTF-16 units.
 pub fn tree_json(node: &Node, u: &[usize], out: &mut String) {
     match node {
         Node::Scalar { value, start, end } => {

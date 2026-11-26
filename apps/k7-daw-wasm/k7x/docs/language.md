@@ -2,8 +2,8 @@
 
 The text format of a workspace's files, `.k7x`. It reads like a Strudel pattern and holds exactly
 what a workspace file holds: maps with string keys, lists, strings, numbers, booleans and null. The grammar is
-`src/parse.ts`; this page is why it is shaped the way it is. The plan it belongs to is
-[k7x-plan.md](../../../../../docs/k7x-plan.md).
+`src/parse.rs`; this page is why it is shaped the way it is. The plan it belongs to is
+[k7x-plan.md](../../../../docs/k7x-plan.md).
 
 ```js
 // nodes/synth-pad.k7x
@@ -21,7 +21,7 @@ A k7x file looks like code and is data. Nothing runs it: no `eval`, no QuickJS, 
 things force that, and each would break the day a file could compute:
 
 - **The UI writes these files.** A knob drag sets one literal at one key path and leaves every other
-  byte alone (`src/edit.ts`). A value that comes out of an expression has no literal to set.
+  byte alone (`src/edit/document.rs`). A value that comes out of an expression has no literal to set.
 - **The history replays edits as values at key paths** (`apps/k7-daw-backend/packages/k7-sync/src/k7x/`). An
   expression has no path to replay into.
 - **The server reads files other accounts wrote** — libraries, shares. Reading data is safe;
@@ -77,7 +77,7 @@ column, and "quote a string, or call it as foo(…)" for a bare word).
 
 ## The canonical layout
 
-What `print.ts` writes when it writes a whole value (a new file, a new entry, a replaced value):
+What `src/edit/print.rs` writes when it writes a whole value (a new file, a new entry, a replaced value):
 
 - the root is one statement per entry, one per line;
 - a map that is a list item is a chain — `t(0).d(1).k(60)` — and a map that is an entry's value is

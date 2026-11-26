@@ -38,7 +38,7 @@ Take, as an example, a new optional number on a lane's event.
    document: comments and other values must stay byte for byte, or the history falls back to whole-text
    operations.
 9. **Tests.** A schema case beside the schema; a writer test that compares text; a compile change is a case in the song crate's tests
-   (`apps/k7-daw-wasm/song/tests/all/`). If a demo uses the field, `apps/k7-daw-frontend/packages/k7x/src/corpus.test.ts` checks that edits to it replay.
+   (`apps/k7-daw-wasm/song/tests/all/`). If a demo uses the field, `apps/k7-daw-wasm/k7x/tests/corpus.rs` checks that edits to it replay.
 10. **Docs.** Add the field to the user guide's song file reference with its type, default and an
     example.
 

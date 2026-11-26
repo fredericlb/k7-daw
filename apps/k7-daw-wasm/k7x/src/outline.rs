@@ -1,5 +1,5 @@
 // outline.rs — a tree as an editor reads it, preorder: its layout as numbers, its keys and scalars as one JSON array (docs/outline.md).
-// A reader would get wrong why the numbers are not JSON: parsing them back cost more than the TypeScript parse they replace.
+// A reader would get wrong why the numbers are not JSON: parsed back by JSON.parse they cost more than the whole JS parse did (docs/outline.md).
 
 use crate::ast::{Entry, ListForm, MapForm, MapNode, Node};
 use crate::json::{scalar_json, string_json, utf16_offsets};

@@ -5,7 +5,7 @@
 The links, the ▶ gutter and the slice colours all answer about a whole k7x buffer, and all of
 them need the same thing: every value with its span, every key with `keyStart`/`keyEnd`. The k7x
 language mode is a `StreamLanguage` with no syntax tree, so the tree is `parseTree(doc)` from
-`@studio/k7x/parse`, held in a CodeMirror `StateField` (`src/k7x/tree.ts`) and recomputed on each
+`@studio/k7-wasm/k7x`, built from the Rust reader's outline (`apps/k7-daw-wasm/k7x/docs/outline.md`), held in a CodeMirror `StateField` (`src/k7x/tree.ts`) and recomputed on each
 change. Every extension that reads it installs the field itself; CodeMirror keeps one instance.
 
 Outside a view — a test's bare `EditorState` — `treeOf` parses the text on the spot, so the
