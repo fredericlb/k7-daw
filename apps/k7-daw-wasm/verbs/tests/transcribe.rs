@@ -110,7 +110,7 @@ fn a_rerun_replaces_its_own_placement_and_keeps_the_lanes_others() {
 }
 
 #[test]
-fn no_speech_or_a_failing_whisper_is_refused_and_writes_nothing() {
+fn no_speech_is_refused_and_a_failing_whisper_thrown_writing_nothing() {
     let mut p = staged();
     for srt in [json!(null), json!(""), json!("1\nno timing here\n")] {
         let ran = p.answered("track transcribe main lyrics", whisper(srt));
@@ -123,8 +123,8 @@ fn no_speech_or_a_failing_whisper_is_refused_and_writes_nothing() {
         |_| json!({ "error": "whisper is not installed on this machine", "code": "off" }),
     );
     assert_eq!(
-        ran.answer.refuse,
-        ["track transcribe: whisper is not installed on this machine"]
+        ran.answer.threw.as_deref(),
+        Some("whisper is not installed on this machine")
     );
     assert_eq!(ran.before, ran.after);
 }

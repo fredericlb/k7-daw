@@ -4,7 +4,7 @@
 use super::picture_file::{Shot, add_shot, list_shots, remove_at};
 use super::picture_shared::picture_lane_ids;
 use super::picture_sound::is_video_source;
-use super::routes::TRANSCRIBE;
+use super::routes::{TRANSCRIBE, call_or_throw};
 use super::shared::{Done, join, split_words};
 use super::words::is_name;
 use crate::host::{Host, Thrown};
@@ -170,13 +170,8 @@ pub fn track_transcribe(a: &str, h: &mut Host) -> Done {
     h.log([format!(
         "whisper is listening to {source} — this can take a few minutes"
     )]);
-    let answer = match h.call(TRANSCRIBE, json!({ "video": video }))? {
-        Ok(v) => v,
-        Err(f) => {
-            h.refuse([format!("track transcribe: {}", f.error)]);
-            return Ok(());
-        }
-    };
+    // A whisper that failed escapes the verb, as its sentence: the line says `error: …`.
+    let answer = call_or_throw(h, TRANSCRIBE, json!({ "video": video }))?;
     let srt = answer.get("srt").and_then(Json::as_str).unwrap_or_default().to_owned();
     let cues = cue_count(&srt);
     if cues == 0 {
