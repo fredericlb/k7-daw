@@ -68,7 +68,7 @@ threading rules). Development conventions for future Claude Code sessions are in
 
 ## The song format — a k7x folder
 
-A song is a **folder of k7x files** (`apps/k7-daw-frontend/packages/k7x/docs/language.md`), read in-process and
+A song is a **folder of k7x files** (`apps/k7-daw-wasm/k7x/docs/language.md`), read in-process and
 validated with Zod — no external tooling to install. Any text editor works; the web editor adds
 schema-driven autocompletion derived from the same Zod schemas.
 

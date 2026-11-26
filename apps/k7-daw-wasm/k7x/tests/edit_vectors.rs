@@ -1,5 +1,5 @@
-// edit_vectors.rs — replays vectors/edit.json, which the TypeScript editor and printer wrote (scripts/makeEditVectors.mts).
-// A failure names its case and op; regenerate with `npx tsx apps/k7-daw-frontend/packages/k7x/scripts/makeEditVectors.mts` only when the TypeScript changed.
+// edit_vectors.rs — replays vectors/edit.json, which the TypeScript editor and printer wrote before they were deleted.
+// The file is frozen, as song-edit's are: a failure is a change of the Rust editor, never a vector to regenerate (docs/rustEdit.md).
 
 mod common;
 

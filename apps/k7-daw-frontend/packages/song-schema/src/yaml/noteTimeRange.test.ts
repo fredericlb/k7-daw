@@ -1,4 +1,4 @@
-import { parse } from "@studio/k7x/document";
+import { parse } from "@studio/k7-wasm/k7x";
 import { describe, expect, it } from "vitest";
 import { editSequence, setNoteTimeRange } from "./sequenceFile";
 

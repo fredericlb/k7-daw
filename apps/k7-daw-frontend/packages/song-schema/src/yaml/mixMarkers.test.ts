@@ -1,6 +1,6 @@
 // Cue points in mix.k7x: a sheet with none of them still reads, and a write keeps the comments (docs/deskFiles.md).
 
-import { K7Document } from "@studio/k7x/document";
+import { K7Document } from "@studio/k7-wasm/k7x";
 import { describe, expect, it } from "vitest";
 import { cueMarkers, cueRefs, parseMix, withMarkers } from "./mixFile";
 

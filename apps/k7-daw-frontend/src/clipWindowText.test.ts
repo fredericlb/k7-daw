@@ -2,7 +2,7 @@
 // edges in the waveform commits. The load-bearing rule is the SPELLING: a number is seconds and a
 // timecode is musical, and a drag must not convert one into the other behind your back.
 
-import { parse } from "@studio/k7x/document";
+import { parse } from "@studio/k7-wasm/k7x";
 import { describe, expect, it } from "vitest";
 import {
   clipWindowBand,

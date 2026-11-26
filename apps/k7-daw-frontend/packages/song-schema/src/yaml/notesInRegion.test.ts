@@ -2,7 +2,7 @@
 // on. Pinned as hard as the values: the notes outside the box are byte-identical, a pad keeps its
 // effects, and a region holding nothing reports 0 rather than rewriting the file for nothing.
 
-import { parse } from "@studio/k7x/document";
+import { parse } from "@studio/k7-wasm/k7x";
 import { describe, expect, it } from "vitest";
 import {
   editSequence,

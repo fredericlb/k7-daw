@@ -1,4 +1,4 @@
-// print.rs — a value (with the comments a conversion carries) → k7x text, in the one canonical layout, after ../src/print.ts.
+// print.rs — a value (with the comments a conversion carries) → k7x text, in the one canonical layout (docs/language.md).
 // Canonical only for text written whole: an edit prints just the value it changes. A width is UTF-16 units, as JS counts it.
 
 use super::layout::{Res, fail};

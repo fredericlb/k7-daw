@@ -1,5 +1,5 @@
 // json.rs — a tree written out as JSON: its plain data, as toJS gives it, or the whole tree with its spans.
-// The tree form counts spans in UTF-16 units so it compares field for field with the TypeScript parser's (docs/rust.md).
+// The tree form counts spans in UTF-16 units, as the page's strings do (docs/rust.md).
 
 use crate::ast::{Entry, ListForm, MapForm, MapNode, Node, Scalar};
 use std::fmt::Write;
@@ -35,7 +35,7 @@ pub fn map_value_json(m: &MapNode, out: &mut String) {
     out.push('}');
 }
 
-fn scalar_json(s: &Scalar, out: &mut String) {
+pub(crate) fn scalar_json(s: &Scalar, out: &mut String) {
     match s {
         Scalar::Str(v) => string_json(v, out),
         Scalar::Num(n) if n.is_nan() => out.push_str("null"),
@@ -44,7 +44,10 @@ fn scalar_json(s: &Scalar, out: &mut String) {
         }
         Scalar::Num(n) if *n == 0.0 && n.is_sign_negative() => out.push_str("-0"),
         Scalar::Num(n) if n.fract() == 0.0 && n.abs() < 1e15 => {
-            write!(out, "{}", *n as i64).unwrap()
+            if *n < 0.0 {
+                out.push('-');
+            }
+            u64_json(n.abs() as u64, out);
         }
         Scalar::Num(n) => write!(out, "{n:e}").unwrap(),
         Scalar::Bool(b) => out.push_str(if *b { "true" } else { "false" }),
@@ -54,15 +57,38 @@ fn scalar_json(s: &Scalar, out: &mut String) {
 
 pub(crate) fn string_json(s: &str, out: &mut String) {
     out.push('"');
-    for c in s.chars() {
-        match c {
-            '"' => out.push_str("\\\""),
-            '\\' => out.push_str("\\\\"),
-            c if (c as u32) < 0x20 => write!(out, "\\u{:04x}", c as u32).unwrap(),
-            c => out.push(c),
+    let mut from = 0;
+    for (i, b) in s.bytes().enumerate() {
+        if b != b'"' && b != b'\\' && b >= 0x20 {
+            continue;
+        }
+        out.push_str(&s[from..i]);
+        match b {
+            b'"' => out.push_str("\\\""),
+            b'\\' => out.push_str("\\\\"),
+            _ => write!(out, "\\u{b:04x}").unwrap(),
+        }
+        from = i + 1;
+    }
+    out.push_str(&s[from..]);
+    out.push('"');
+}
+
+/// An integer as JSON digits, without the formatting machinery a big file's data would spend its time in; u64, as wasm32's usize is 32 bits.
+pub(crate) fn u64_json(mut n: u64, out: &mut String) {
+    let mut buf = [0u8; 20];
+    let mut i = buf.len();
+    loop {
+        i -= 1;
+        buf[i] = b'0' + (n % 10) as u8;
+        n /= 10;
+        if n == 0 {
+            break;
         }
     }
-    out.push('"');
+    for &d in &buf[i..] {
+        out.push(char::from(d));
+    }
 }
 
 /// Byte offset → UTF-16 offset, for every byte of the text and its end.
@@ -79,7 +105,7 @@ pub fn utf16_offsets(text: &str) -> Vec<usize> {
     map
 }
 
-/// The whole tree as JSON, shaped as ../src/ast.ts's nodes, spans in UTF-16 units.
+/// The whole tree as JSON, shaped as the page's K7Node objects, spans in UTF-16 units.
 pub fn tree_json(node: &Node, u: &[usize], out: &mut String) {
     match node {
         Node::Scalar { value, start, end } => {

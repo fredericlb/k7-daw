@@ -1,4 +1,4 @@
-import { stringify } from "@studio/k7x/print";
+import { stringify } from "@studio/k7-wasm/k7x";
 import { describe, expect, it } from "vitest";
 import {
   browseSongs,

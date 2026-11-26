@@ -4,8 +4,8 @@
 // so a member rename must change one value and leave every comment where it was.
 // Full rationale: apps/k7-daw-frontend/packages/song/docs/assemblies.md.
 
-import type { K7Scope } from "@studio/k7x/document";
-import { stringify } from "@studio/k7x/print";
+import type { K7Scope } from "@studio/k7-wasm/k7x";
+import { stringify } from "@studio/k7-wasm/k7x";
 import type { Diagnostic } from "@studio/web-protocol";
 import {
   ASSEMBLIES_DIR,

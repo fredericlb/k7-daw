@@ -1,8 +1,7 @@
 // k7xIssues.ts — a .k7x buffer read for a parser, and its findings placed on the k7x text's own lines.
 // A reader would get wrong that a syntax error throws: readK7x answers it as an issue, located, and no data.
 
-import { K7Document } from "@studio/k7x/document";
-import type { K7SyntaxError } from "@studio/k7x/parse";
+import { K7Document, type K7SyntaxError } from "@studio/k7-wasm/k7x";
 import type { ZodType } from "zod";
 import { issueSegments, k7xPosition, k7xSchemaIssues } from "./k7xPosition";
 import type { ModuleIssue } from "./moduleFile";

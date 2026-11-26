@@ -2,7 +2,7 @@
 // silently is a tail appended at the end of the file (where it covers the wrong shots), a tail
 // that restarts its source, and a fade left on the wrong side of the cut.
 
-import { K7Document, type K7Scope, parse } from "@studio/k7x/document";
+import { K7Document, type K7Scope, parse } from "@studio/k7-wasm/k7x";
 import { describe, expect, it } from "vitest";
 import {
   addVideoPlacement,

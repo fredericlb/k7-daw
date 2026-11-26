@@ -12,6 +12,7 @@ mod schema_tests;
 mod tests;
 #[cfg(test)]
 mod tests_file;
+mod tests_k7x;
 
 pub use error::{ErrorCode, WasmError};
 pub use ops::Session;

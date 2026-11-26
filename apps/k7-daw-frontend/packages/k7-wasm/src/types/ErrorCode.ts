@@ -5,6 +5,7 @@ export type ErrorCode =
   | "bad_timecode"
   | "bad_curve"
   | "unknown_handle"
+  | "bad_k7x"
   | "panic"
   | "unavailable"
   | "needs_files";
