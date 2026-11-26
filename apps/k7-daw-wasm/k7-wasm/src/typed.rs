@@ -7,15 +7,13 @@ use gesture::bar_window::{BarSpan, FRAME_MARGIN_BARS, anchor_bars, bar_window, f
 use gesture::clip_playhead::{ActWindow, clip_playhead};
 use gesture::grid_caret::{Bounds, Cell, cell_box, clamp_cell, col_span, move_cell, sel_box, song_seconds_of_col};
 use gesture::roll_drag::{
-    GroupNote, MIN_NOTE_BEATS, RollDrag, RollMode, clamp_key, drag_moved, draw_span, group_offset, key_offset,
-    moves_pitch, t_span, vel_at,
+    GroupNote, RollDrag, RollMode, clamp_key, drag_moved, draw_span, group_offset, key_offset, moves_pitch, t_span,
+    vel_at,
 };
 use gesture::roll_fit::{Loop, Note, roll_fit};
 use gesture::snap::{SnapMode, drag_offset, free_snap, move_offset, snap_mode, snap_position, snap_to};
 use gesture::take_counter::{Phase, bar_beat, recording_from, take_counter};
-use gesture::video_drag::{
-    Shot, V_NATURAL, VideoMode, VideoSnap, video_drag_edits, video_drag_is_still, video_drag_move,
-};
+use gesture::video_drag::{Shot, VideoMode, VideoSnap, video_drag_edits, video_drag_is_still, video_drag_move};
 
 /// A number a caller may leave out is sent as NaN.
 pub(crate) fn opt(v: f64) -> Option<f64> {
@@ -187,11 +185,6 @@ pub extern "C" fn k7_g_roll_fit(
         f.origin,
     ]);
     OK
-}
-
-#[unsafe(no_mangle)]
-pub extern "C" fn k7_g_min_note_beats() -> f64 {
-    MIN_NOTE_BEATS
 }
 
 // the grid's caret and rectangle
@@ -431,11 +424,6 @@ pub extern "C" fn k7_g_video_is_still(mode: f64, orig_start: f64, orig_length: f
         start,
         length,
     )))
-}
-
-#[unsafe(no_mangle)]
-pub extern "C" fn k7_g_video_natural() -> f64 {
-    V_NATURAL
 }
 
 #[cfg(test)]
