@@ -5,8 +5,10 @@
 //! an answer is `None`, never a call into freed memory (`docs/abi.md` beside this crate).
 
 pub mod fake;
+pub mod fake_plugins;
 pub mod fake_state;
 pub mod ffi;
+pub mod plugins;
 pub mod project;
 pub mod state;
 pub mod transport;

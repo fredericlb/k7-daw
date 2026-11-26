@@ -50,5 +50,6 @@ const K7CoreApi* coreApi();
 const K7ProjectApi* projectApi();
 const K7TransportApi* transportApi();
 const K7StateApi* stateApi();
+const K7PluginsApi* pluginsApi();
 
 }  // namespace studio::capi

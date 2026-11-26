@@ -10,7 +10,12 @@ pub mod handlers;
 pub mod held_notes;
 pub mod msg;
 pub mod outbox;
+pub mod pending;
+pub mod plugin_scan;
+pub mod plugin_state;
+mod plugins;
 mod project;
+pub mod scan_board;
 pub mod state;
 mod state_frame;
 pub mod supersede;
@@ -48,6 +53,8 @@ pub struct ServeConfig {
     pub handle_signals: bool,
     /// The handlers beyond the core's own: a milestone's table lines come through `handlers::table`, a test's here.
     pub extra_handlers: Option<fn(&mut HandlerTable)>,
+    /// Whether the incremental plugin scan runs at start, as the engine's always does: off in a test, which scripts its scans.
+    pub startup_scan: bool,
 }
 
 impl ServeConfig {
@@ -65,6 +72,7 @@ impl ServeConfig {
             timers: Timers::default(),
             handle_signals: false,
             extra_handlers: None,
+            startup_scan: false,
         }
     }
 
@@ -83,6 +91,7 @@ impl ServeConfig {
             crate::pairing::net::parse_origins(&var("STUDIO_ENGINE_ALLOWED_ORIGINS"));
         c.audio_to_browser = var("STUDIO_AUDIO_TO_BROWSER") == "1";
         c.handle_signals = true;
+        c.startup_scan = true;
         c
     }
 }
@@ -204,6 +213,9 @@ pub fn start(api: Api, cfg: ServeConfig) -> Result<Running, String> {
     ctx.safe_mode_crashes = cfg.safe_mode_crashes;
     let ctx = Arc::new(ctx);
     state::install(&ctx);
+    if cfg.startup_scan {
+        plugin_scan::start(&ctx);
+    }
     let mut table = handlers::table();
     if let Some(extra) = cfg.extra_handlers {
         extra(&mut table);

@@ -365,6 +365,31 @@ target_compile_definitions(studio_stateapi_tests PRIVATE
 add_test(NAME studio_stateapi_tests COMMAND studio_stateapi_tests)
 set_tests_properties(studio_stateapi_tests PROPERTIES LABELS slow)
 
+# --- Plugins area tests -------------------------------------------------------
+# The plugins area of the C ABI on a whole EngineHost (the cache, a probe of an unlisted type), slow like the C ABI's own suite.
+add_executable(studio_pluginsapi_tests PluginsApi_test.cpp)
+target_link_libraries(studio_pluginsapi_tests PRIVATE
+    studio_engine
+    tracktion::tracktion_engine)
+target_include_directories(studio_pluginsapi_tests PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/../engine)
+target_compile_definitions(studio_pluginsapi_tests PRIVATE
+    JUCE_MODAL_LOOPS_PERMITTED=1
+    JUCE_USE_CURL=0
+    JUCE_WEB_BROWSER=0
+    DONT_SET_USING_JUCE_NAMESPACE=1)
+add_test(NAME studio_pluginsapi_tests COMMAND studio_pluginsapi_tests)
+set_tests_properties(studio_pluginsapi_tests PROPERTIES LABELS slow)
+
+# --- Plugin replies tests -----------------------------------------------------
+# The plugin replies as ServePlugins.cpp builds them, held to the fixture the Rust server's replies are held to too: nlohmann only, fast.
+add_executable(studio_pluginreplies_tests PluginReplies_test.cpp)
+target_include_directories(studio_pluginreplies_tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../engine)
+target_link_libraries(studio_pluginreplies_tests PRIVATE nlohmann_json::nlohmann_json)
+target_compile_definitions(studio_pluginreplies_tests PRIVATE
+    K7_PLUGIN_FIXTURE="${CMAKE_CURRENT_SOURCE_DIR}/../../../k7-daw-backend/packages/k7-runtime-server/fixtures/plugin_replies.txt")
+add_test(NAME studio_pluginreplies_tests COMMAND studio_pluginreplies_tests)
+
 # --- State frame tests --------------------------------------------------------
 # The state frame as Serve.cpp builds it, held to the fixture the Rust server's frame is held to: nlohmann only, fast.
 add_executable(studio_stateframe_tests StateFrame_test.cpp)

@@ -8,6 +8,7 @@ pub mod project;
 pub mod transport;
 
 use super::Engine;
+use super::fake_plugins;
 use super::fake_state;
 use super::ffi::{
     self, K7AudioTiming, K7CoreApi, K7EngineApi, K7Host, K7Str, K7StrEach, K7Task, K7Warning,
@@ -28,7 +29,7 @@ pub fn api() -> &'static K7EngineApi {
         project: std::ptr::from_ref(&project::TABLE).cast(),
         transport: std::ptr::from_ref(&transport::TABLE).cast(),
         state: (&fake_state::STATE as *const super::state::K7StateApi).cast(),
-        plugins: std::ptr::null(),
+        plugins: (&fake_plugins::PLUGINS as *const super::plugins::K7PluginsApi).cast(),
         machine: std::ptr::null(),
         render: std::ptr::null(),
         cli: std::ptr::null(),

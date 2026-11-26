@@ -374,7 +374,7 @@ unsafe extern "C" fn live_trampoline(
     }));
 }
 
-unsafe extern "C" fn info_collector(ctx: *mut c_void, info: *const K7ParamInfo) {
+pub(super) unsafe extern "C" fn info_collector(ctx: *mut c_void, info: *const K7ParamInfo) {
     let out = unsafe { &mut *ctx.cast::<Vec<ParamInfo>>() };
     let i = unsafe { &*info };
     out.push(ParamInfo {
