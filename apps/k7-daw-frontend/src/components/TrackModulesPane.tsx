@@ -203,8 +203,8 @@ export function TrackModulesPane({
             links: true,
             // …and the lane leads it: the signal starts on the lane, and its fader is the first thing in the path.
             ...(nodes ? {} : { track: trackId }),
-            // …glued: a lane's path is one strip, two cards sharing ONE border (two would draw it twice as thick).
-            gap: -1,
+            // …spaced: each card stands apart, 20 px from the next, the cable between them drawn.
+            gap: 20,
             // …and a STACK — a subchain run in place — one column, its cards one under another.
             stack: true,
             // …and, asked for, each card's curves in a column before it, the neighbours spaced to make room.
@@ -456,6 +456,7 @@ export function TrackModulesPane({
       >
         <DomChains
           {...shared}
+          bare
           graph={glued?.graph ?? split?.row ?? laidShown}
           onEdgeInsert={edgeInsert || undefined}
           seams={glued?.seams}

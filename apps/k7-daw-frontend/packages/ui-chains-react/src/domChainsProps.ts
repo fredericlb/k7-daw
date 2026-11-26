@@ -101,6 +101,8 @@ export interface DomChainsProps {
   row?: boolean;
   /** The camera is the FIT's alone: no wheel, drag or pinch moves it, and every resize re-frames (docs/camera.md). */
   fixed?: boolean;
+  /** No ground behind the nodes (no dot grid, no glow): the host's own background shows through, as in a lane's row. */
+  bare?: boolean;
   /** Draw the corner minimap, with its "Zoom fit" button — docs/minimap.md. Never on a ROW. */
   minimap?: boolean;
   /** Draw the minimap's own Fit / Organize / Stack buttons; false when the host draws them as labelled pills. */

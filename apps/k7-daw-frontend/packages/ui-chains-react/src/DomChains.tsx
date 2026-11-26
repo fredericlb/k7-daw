@@ -167,6 +167,7 @@ function DomChainsBody({
   onCamReady,
   row,
   fixed = false,
+  bare = false,
   minimap,
   minimapBar = true,
   onOrganize,
@@ -1036,7 +1037,7 @@ function DomChainsBody({
                 tabIndex={0}
                 role="application"
                 aria-label={labels.canvas}
-                className={`dgx${panning ? " panning" : ""}`}
+                className={`dgx${panning ? " panning" : ""}${bare ? " bare" : ""}`}
                 onPointerDown={onPointerDown}
                 onDoubleClick={canvasDoubleClick}
                 // Bound only while a cable is in hand — the graph pays nothing for the gesture at rest.
