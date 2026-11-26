@@ -27,7 +27,7 @@ the stretch first and then blends with the named program.
 
 The bare number is **not a union branch** but a widening (`z.preprocess`), and the reason is measurable: on a union a
 mistyped key surfaces as `Invalid input` with the real errors buried in the branches, so
-`validate.ts` cannot find the line. Widened, `{ ovr: 1 }` answers `unrecognized_keys` on
+a check cannot find the line. Widened, `{ ovr: 1 }` answers `unrecognized_keys` on
 `events.0.fadeIn`, and the editor underlines the right place.
 
 ## The ARRIVING shot carries the transition
@@ -294,7 +294,7 @@ to **the layer below**.
 | decided | `apps/k7-daw-frontend/packages/ui-eyes/src/timeline.ts` — `layerFrameAt`, the only rule |
 | decoded | `apps/k7-daw-frontend/packages/ui-eyes/src/realtime.ts` and `apps/k7-daw-frontend/packages/ui-eyes/src/export.ts` |
 | drawn | `apps/k7-daw-frontend/packages/ui-eyes/src/compositor.ts` + `apps/k7-daw-frontend/packages/ui-eyes/src/passes.ts` + `apps/k7-daw-frontend/packages/ui-eyes/src/stretches.ts`, the built-in `dissolve` and `over` in `apps/k7-daw-frontend/packages/ui-eyes/src/transitions.ts` |
-| completed | `apps/k7-daw-frontend/packages/song-schema/src/yaml/fields.ts` — the two words of a fade's map |
+| completed | `apps/k7-daw-wasm/song/src/views/fields.rs` — the two words of a fade's map |
 
 ## Checking it
 

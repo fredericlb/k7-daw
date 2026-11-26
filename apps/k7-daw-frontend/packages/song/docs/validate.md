@@ -1,68 +1,50 @@
 # Is this text a file the compiler can read?
 
-song-schema's `yaml/validate.ts` answers that about a **buffer**, in a browser, for any file a project is made
-of. It exists because the editors autosave now
+`file.validate` answers that about a **buffer**, for any file a project is made of. It exists
+because the editors autosave
 ([apps/k7-daw-frontend/packages/ui-editor/docs/autosave.md](../../ui-editor/docs/autosave.md)) and something has to
-decide whether the text in the pane is worth writing.
+decide whether the text in the pane is worth writing. The router is `apps/k7-daw-wasm/song/src/files/route.rs` and
+`apps/k7-daw-wasm/song/src/files/validate.rs`; the page reaches it as `validateFile` from `@studio/k7-wasm/validate`.
 
-It adds no schema of its own. Every file kind here already had a parser — `parseModule`,
-`parseUiFile`, `parseChain`, `parseGraph`, `parseMix`, `parseMixView` — all with the same
-shape, `{ value, issues }`, all returning located findings, all browser-safe. This is a
-**router** over them, plus a plain Zod check for the kinds that have no parser of their own
-(clips, sequences, curves, video tracks, `project.k7x`, a module folder's MIDI map, and a
-preset).
+## Choices
 
-Because it is the loader's own parsers, an editor and a compile cannot disagree about whether a
-file is readable. That is the whole reason it is not a second, simpler check written next to the
-editor.
+| choice | why |
+|---|---|
+| the judge is the decoder the compile reads the file with, one reader per kind | an editor and a compile cannot disagree about whether a file is readable; a second schema written beside the editor would |
+| a kind with no decoder of the compile's own gets a small one in the same crate (the cue sheet, the desk's bindings, a preset, a module folder's config) | the router must not fall back to a TypeScript schema for the three files the compile never reads |
+| the answer is the first finding only | the decoder stops where it cannot read; a list of every problem would need a second, recovering reader |
+| a path is read by FOLDER and basename, as the editor's completions read it (`fields.kind`) | one rule decides both what to offer and what to check, so a file is never completed as one kind and judged as another |
+| `views/` is tested before the root files | `views/mix.k7x` and the root `mix.k7x` share a base and have nothing to do with each other |
+| `_modules` matches as `modules` does | a shared library holds the same files, and editing one is what forks it |
+| a file this does not recognise is `ok` | silence is not a verdict, and an autosave that refused what it had no opinion about would refuse a library's own files |
+| `malformed` is separate from `ok` | "does not parse" and "parses but says something the reader refuses" are different answers to a caller deciding whether to write, and autosave treats them differently |
+| a project root above this build's format level is refused from its text before any parse | the message says "update k7" even when the rest of the file is a syntax this build cannot read |
 
 ## What a path is read as
 
-By folder and basename, the way `fileKindFor` reads one:
-
 | path | read as |
 |---|---|
-| `modules/**/ui.k7x` | the panel (`UiFileSchema`) |
-| `_presets/**/*.k7x`, `<library>/presets/**/*.k7x` | a preset (`PresetFileSchema`) — checked before `modules`, whatever the module path holds ([userPresets.md](userPresets.md)) |
-| `modules/**/presets.k7x` | nothing: a reserved name no code reads |
+| `modules/**/ui.k7x` | the panel |
+| `_presets/**/*.k7x`, `<library>/presets/**/*.k7x` | a preset, checked before `modules` whatever the module path holds ([userPresets.md](userPresets.md)) |
+| `modules/**/presets.k7x`, `modules/**/dsp.k7x` | nothing: a reserved name no editor reader judges |
 | `modules/**/controller.k7x` | the MIDI map |
-| `_modules/config.k7x` | a library's namespace |
-| `modules/**/*.k7x` — anything else | a module, generic or node (`ModuleSchema`) |
-| `nodes/*.k7x` | a module, again — the project's flat nodes folder, LANES included ([trackModules.md](trackModules.md)) |
-| `clips/`, `sequences/`, `curves/` | that kind's schema |
-| `graph.k7x`, `project.k7x`, `mix.k7x`, `views/mix.k7x` | the root files — the last two share a base and are told apart by FOLDER, `views/` first |
+| `modules/**/config.k7x` | a library's namespace |
+| `modules/**/*.k7x`, anything else | a module, generic or node |
+| `nodes/*.k7x`, `tracks/*.k7x` | a module: the project's flat nodes folder, LANES included ([trackModules.md](trackModules.md)) |
+| `chains/<name>.k7x`, `chains/**/graph.k7x`, `chains.k7x` | a chain file, a segments file, a segments file |
+| `clips/`, `sequences/`, `curves/`, `timelines/` | that kind's file |
+| `project.k7x`, `settings.k7x`, `mix.k7x`, `views/mix.k7x` | the root files |
 | any other `.k7x` | parsed, not judged |
-| anything not k7x | not this module's business |
+| anything not k7x | not this check's business |
 
-`_modules` is matched as well as `modules`: a shared library holds the same files, and editing
-one is what forks it.
+## Three depths
 
-The module folder's split — which basenames are the module ITSELF and which are a use of it —
-belongs to `yaml/moduleIO.ts`, which cannot be imported here because it reads the disk. So the
-two are **pinned by a test**: add a sibling file there without adding it here and
-`validate.test.ts` fails, rather than the file being silently read as a node.
-
-## Three depths, and why the caller cares
-
-`Validity` says how far the check could go:
-
-- `schema` — parsed and checked. `ok` means the loader would accept it.
-- `syntax` — parsed; no schema claims this path. `ok` means only that it is k7x.
-- `none` — not k7x at all. Nothing here can judge it, so it says nothing.
-
-**A file this doesn't recognise is `ok`.** Silence is not a verdict, and an autosave that
-refused everything it had no opinion about would refuse a library's own files.
-
-`malformed` is separate from `ok` for the same reason: "does not parse" and "parses but says
-something the schema refuses" are different answers to a caller deciding whether to write, and
-autosave treats them differently. Getting that distinction exact is why the text is parsed
-twice — once for syntax, once by the kind's parser — which costs nothing at these sizes.
+`Validity` says how far the check could go: `schema` (parsed and read by the kind's decoder: `ok` means
+the compile would accept it), `syntax` (parsed; no reader claims this path), `none` (not k7x at all).
 
 ## Where the line and column come from
 
-`apps/k7-daw-frontend/packages/song-schema/src/yaml/k7xPosition.ts`, which every parser uses: walk the k7x tree to the
-deepest node on the issue's path and read its line and column from its span. An unknown key is reported by Zod against its *containing* object, so the key is appended to the
-path before locating — otherwise every typo would point at the top of the file.
-
-That is what lets an editor underline the reason it is not saving, instead of only naming it in
-a toolbar.
+The decoder's error carries a byte offset; the check places it on the key it is about, at that
+key's line and its column in UTF-16 units, the way CodeMirror counts, and names the dotted key
+path. A key a decoder finds missing is named at the object that lacks it. That is what lets an
+editor underline the reason it is not saving, instead of only naming it in a toolbar.

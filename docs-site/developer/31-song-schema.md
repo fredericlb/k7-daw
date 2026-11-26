@@ -9,18 +9,18 @@ rest of the codebase shares (timecodes, module vocabulary, playlists, stems, tak
 
 | Path | Contents |
 |---|---|
-| `apps/k7-daw-frontend/packages/song-schema/src/yaml/projectSchema.ts` | `ProjectFileSchema` (two tiers, both `.strict()`), `SettingsSchema` (loose), `PROJECT_SHAPES` (the five archetypes), `MASTER_MIN_DB`/`MASTER_MAX_DB`. |
+| `apps/k7-daw-frontend/packages/song-schema/src/yaml/projectSchema.ts` | `PROJECT_SHAPES` (the five archetypes), `MASTER_MIN_DB`/`MASTER_MAX_DB`. The file's own shape is the Rust reader's. |
 | `apps/k7-daw-frontend/packages/song-schema/src/yaml/placementSchema.ts` | `PlacementSchema` (one event), `TIMECODE` (the regex), `TIMECODE_KEYS` (keys whose value must be written quoted). |
-| `apps/k7-daw-frontend/packages/song-schema/src/yaml/entitySchemas.ts` | Clips (audio/video union, told apart by extension), sequences and notes, the four curve types and their conditions, picture lanes and shots, transitions. `ENTITY_SCHEMAS` maps folder name → schema. |
-| `apps/k7-daw-frontend/packages/song-schema/src/yaml/moduleSchema.ts` | `ModuleSchema` — every field a module, node or lane may carry — plus `AlternativeSchema`, `UISchema`/`UiFileSchema`, `WidgetSchema`, `ControllerFileSchema`, `ModuleConfigSchema`, `RackSchema`. |
+| `apps/k7-daw-frontend/packages/song-schema/src/yaml/entitySchemas.ts` | The source extensions that tell a picture clip from an audio one, and `NoteSchema`. The clip, sequence and curve files are the Rust readers'. |
+| `apps/k7-daw-frontend/packages/song-schema/src/yaml/moduleSchema.ts` | `ModuleSchema` — every field a module, node or lane may carry — plus `AlternativeSchema`, `UISchema`/`UiFileSchema`, `WidgetSchema`, `RackSchema`. |
 | `apps/k7-daw-frontend/packages/song-schema/src/yaml/chainSchema.ts` | `ChainFileSchema` with its structural refinements (first step, last step, lanes only in `start: true` chains, subchain rules), and the step predicates (`isEndStep`, `isCallStep`, `isTrackItem`, `itemsOf`, `expandCalls`). |
 | `apps/k7-daw-frontend/packages/song-schema/src/yaml/graphSchema.ts` | `GraphFileSchema` (`modules`, `bypassed`, `bus_only`, `tap_feeds`, `positions`). |
 | `apps/k7-daw-frontend/packages/song-schema/src/yaml/surfaceSchema.ts`, `surfaceRegistry.ts` | `SurfaceSchema`, the type ↔ layout table, the mapping skeletons, and the open registry a plugin adds a surface type to. |
 | `apps/k7-daw-frontend/packages/song-schema/src/yaml/assemblySchema.ts` | `AssemblyTemplateSchema` (library) and `AssemblyFileSchema` (project). |
 | `apps/k7-daw-frontend/packages/song-schema/src/yaml/mixSchema.ts`, `mixViewSchema.ts` | A set's cue sheet and the control → param binding a surface's `mapping` reuses. |
-| the `*File.ts` modules of `apps/k7-daw-frontend/packages/song-schema/src/yaml/` | Readers and text editors per kind: `trackFile`, `sequenceFile`, `curveFile`, `videoTrackFile`, `takeFile`, `chainFile`, `graphFile`, `moduleFile`, `uiFile`, `surfaceFile`, `assemblyFile`, `mixFile`, `alternativeFile`. |
-| `apps/k7-daw-frontend/packages/song-schema/src/yaml/validate.ts` | The router: path → parser, used by the editor and the loader alike. |
-| `apps/k7-daw-frontend/packages/song-schema/src/yaml/fields.ts` | The editor's completion vocabulary, derived from the schemas. |
+| the `*File.ts` modules of `apps/k7-daw-frontend/packages/song-schema/src/yaml/` | Readers and text editors per kind: `trackFile`, `sequenceFile`, `curveFile`, `videoTrackFile`, `takeFile`, `chainFile`, `graphFile`, `moduleFile`, `surfaceFile`, `assemblyFile`, `mixFile`, `alternativeFile`. |
+| `apps/k7-daw-wasm/song/src/files/validate.rs`, `route.rs` | The editor's check: path → the compile's own reader, reached as `file.validate`. |
+| `apps/k7-daw-wasm/song/src/views/fields.rs` | The editor's completion vocabulary, derived from the readers' own decoders, reached as `fields.*`. |
 | `apps/k7-daw-frontend/packages/song-schema/src/yaml/sugar.ts`, `k7xIssues.ts` | k7x short forms and k7x-located findings. |
 | `apps/k7-daw-frontend/packages/song-schema/src/moduleTypes.ts` | The module vocabulary: type folders and their default ports, built-in ends, namespaces, refs. |
 | `apps/k7-daw-frontend/packages/song-schema/src/keyframes.ts` | Shot animation keys and their evaluation. |
@@ -48,35 +48,34 @@ need the rest of the project; they are checked by `@studio/song` at compile time
 strings with no rule of their own, and a finding is placed on the text's own lines by key path
 (`k7xPosition.ts`).
 
-**Defaults applied on the way out, never into the file.** `parseModule` sets `type: "plugin"` on the
-returned value only when the module says neither `type`, `io` nor `extends`, so an inherited type is
+**Defaults applied on the way out, never into the file.** The module reader sets `type: "plugin"` on the
+value it returns only when the module says neither `type`, `io` nor `extends`, so an inherited type is
 never overridden and the file stays as terse as written.
 
-## Validation: one router
+## Validation: one router, in Rust
 
-`validateFile(path, text)` in `apps/k7-daw-frontend/packages/song-schema/src/yaml/validate.ts` answers whether the
-compiler could read `text` at `path`:
+`validateFile(path, text)` from `@studio/k7-wasm/validate` calls the `file.validate` op, which runs
+`apps/k7-daw-wasm/song/src/files/validate.rs`. It answers whether the compiler could read `text` at `path`:
 
 1. A path that is not `.k7x` is not this router's business: `depth: "none"`.
-2. k7x syntax first (`k7xSyntaxIssue`); a syntax error makes the result `malformed`.
-3. `parserFor(path)` chooses the parser by folder and basename: presets, then `modules`/`_modules`
-   (`ui`, `controller`, `config`, else `parseModule`), `nodes/`, `tracks/`, `chains/` (a library
-   chain folder's `graph` is `parseGraph`), `clips/`, `sequences/`, `curves/`,
-   `views/mix`, root `chains`, `project`, `mix`. Unknown paths get `depth: "syntax"`.
+2. k7x syntax first; a syntax error makes the result `malformed`.
+3. `family_of(path)` (`apps/k7-daw-wasm/song/src/files/route.rs`) chooses the reader by folder and basename:
+   presets, then `modules`/`_modules` (`ui`, `controller`, `config`, else a module), `nodes/`, `tracks/`,
+   `chains/`, `clips/`, `sequences/`, `curves/`, `timelines/`, `views/mix`, then the root `chains`,
+   `project`, `settings`, `mix`. Unknown paths get `depth: "syntax"`.
 
-The result is `{ ok, issues, depth, malformed }`, each issue `{ path, message, line?, col? }`.
-`firstIssue` phrases one for a status line. The editor's autosave (`apps/k7-daw-frontend/packages/ui-editor/src/autosave.ts`)
-holds a malformed buffer, and holds a schema-failing one when the file on disk was valid.
-
-An unknown key is reported by zod against its containing object; every parser rebuilds the path with
-the offending key (`issue.keys[0]`) so `locate()` can put a line on it.
+The result is `{ ok, issues, depth, malformed }`, each issue `{ path, message, line?, col? }` with the
+columns in UTF-16 units; only the first finding is reported. `firstIssue` phrases one for a status line.
+The editor's autosave (`apps/k7-daw-frontend/packages/ui-editor/src/autosave.ts`) holds a malformed buffer,
+and holds a schema-failing one when the file on disk was valid.
 
 ## The field vocabulary is derived
 
-`apps/k7-daw-frontend/packages/song-schema/src/yaml/fields.ts` reads the keys of the zod objects (`Object.keys(schema.shape)`)
-to build the completion lists per file kind, and `fileKindFor(path)` names the kind. Adding a field to
-a schema makes the editor offer it; there is no second list to keep in step. The one exception is
-`WIDGET_FIELDS`, spelled out because the widget schema is a refinement over a base object.
+`apps/k7-daw-wasm/song/src/views/fields.rs` reads the keys the decoders' own derives name, per file kind;
+`fields.kind(path)` names the kind, `fields.at` and `fields.values` answer the keys and the closed value
+sets. Adding a field to a decoder makes the editor offer it; there is no second list to keep in step.
+The exceptions are the hand-dispatched decoders (the widget, a chain's items, the curves), whose keys are
+named in that file and held against the decoders by its tests.
 
 ## Timecodes
 

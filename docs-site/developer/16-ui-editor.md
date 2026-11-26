@@ -37,7 +37,7 @@ There is no Save button: the rule is that a buffer is written as soon as it is a
 - malformed (not parseable) → hold;
 - invalid but parseable → hold if the file on disk was valid, **write** if it was already invalid (holding protects nothing then).
 
-`useAutosave` runs it on a 1 s debounce (`AUTOSAVE_DELAY_MS`), validating with `validateFile` from `@studio/song-schema` unless the pane passes its own validator. Its status is `clean | pending | saving | held | error` with a reason; k7 words it in `apps/k7-daw-frontend/src/saveLabel.ts`. Details that matter:
+`useAutosave` runs it on a 1 s debounce (`AUTOSAVE_DELAY_MS`), validating with `validateFile` from `@studio/k7-wasm/validate` unless the pane passes its own validator. Its status is `clean | pending | saving | held | error` with a reason; k7 words it in `apps/k7-daw-frontend/src/saveLabel.ts`. Details that matter:
 
 - A held or unwritten text is kept in a module-level map (`keepBuffer` / `recallBuffer`), outside React, so it survives the pane unmounting or switching files.
 - The commit where the path changes pairs the new path with the old buffer; nothing is written from it.
