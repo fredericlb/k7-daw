@@ -97,6 +97,11 @@ impl Checked {
         read_path(&self.virt, shown).map_err(|e| Box::new(failure(&e)))
     }
 
+    /// The real path of a virtual one under a root, for a folder the person named; none outside every root.
+    pub fn real(&self, shown: &str) -> Option<String> {
+        self.virt.real(shown)
+    }
+
     /// A text field of the body, or the 400 answer.
     pub fn text(&self, key: &str) -> Result<&str, Box<Response>> {
         self.body

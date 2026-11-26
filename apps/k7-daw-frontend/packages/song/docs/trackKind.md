@@ -64,6 +64,6 @@ that clusters its rows — a group's members follow its header — cannot count 
 agree with, so it names the lane whose place is being taken and lets the verb do the counting.
 
 A picture lane is a row of the same `trackOrder`, and its row order is its draw order, the top
-picture row in front ([apps/k7-daw-frontend/packages/song-video/docs/picture.md](../../song-video/docs/picture.md)).
+picture row in front ([apps/k7-daw-wasm/verbs/docs/picture/picture.md](../../song-video/docs/picture.md)).
 `picture lane order` writes `trackOrder` too, counting the picture lanes as layers, bottom first;
 the timeline's drag names a lane and never a number.

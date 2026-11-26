@@ -90,13 +90,10 @@ test("the picture is rendered on the server into the folder named, in the backgr
   const r = await verb(
     `picture render webm none size=160x90 from=0 to=1 into="${films}"`,
   );
-  // The verb checks its words and hands the render back to the page, which builds the scene and posts the job.
+  // The verb builds the scene and the backend asks the picture job once the line has landed.
   expect(r.body.output).toEqual([
     `rendering the picture in the background (webm, silent) — it lands in ${films}`,
   ]);
-  const ask = r.body.asks?.[0];
-  expect(ask?.route).toBe("page renderPicture");
-  await svc.renderPicture(ws, ask?.args ?? {});
   let bytes: Buffer | null = null;
   let seen = -1;
   // Done once two looks two seconds apart find the same non-empty file.

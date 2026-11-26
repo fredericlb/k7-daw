@@ -81,7 +81,7 @@ describe("the catalogue the palette lists", () => {
   });
 
   it("keeps every shell description inside the palette's row — 60 chars", () => {
-    // The same cap `commandSpec.test.ts` holds commands.yaml to: the two halves are listed side by side, so a longer one truncates.
+    // The same cap the crate's `palette.rs` holds commands.yaml to: the two halves are listed side by side, so a longer one truncates.
     const long = Object.entries(LOCAL_READABLE).flatMap(([name, r]) =>
       (["en", "fr"] as const)
         .filter((lang) => r[lang].length > 60)

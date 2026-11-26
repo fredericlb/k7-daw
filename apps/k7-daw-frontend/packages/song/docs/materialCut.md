@@ -39,7 +39,7 @@ A PICTURE lane's split is virtual too, and for a stronger reason: a shot has no 
 to process, warp or replace. Its effects are the lane's, and its sound is another lane's
 (`videoSound.md`). Two placements of one clip lose nothing there, and re-encoding
 video to cut it would cost a render and a generation of quality for nothing
-(`apps/k7-daw-frontend/packages/commands/docs/picture.md`).
+(`apps/k7-daw-wasm/verbs/docs/verbs/picture.md`).
 
 ## The one contract
 
@@ -72,7 +72,7 @@ The KIND of material decides which runs, and they do not live together:
 
 - **Sequences** are text this package already reads and writes, so `materialCut.ts` divides the
   notes and writes the files itself. No engine, no machine, pure and fully tested.
-- **Audio** has to be RENDERED. That lives in `@studio/commands`' `materialRender.ts`, beside the
+- **Audio** has to be RENDERED. That lives in the verbs crate's `materialRender.ts`, beside the
   bounce that already owns "write new material through the engine" — it builds a one-track
   `ProjectDoc` and bounces it through the host's `Renderer`, exactly as `clip process` does.
 

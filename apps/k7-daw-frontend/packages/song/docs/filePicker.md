@@ -42,7 +42,7 @@ Looking at `<project>/modules/<category>/<file>/assets` and nowhere else is righ
 module this project both owns and stores the files in. For the guitar above it lists the local
 folder — empty — so the one module in the médiathèque built to be picked from would open with
 nothing in it. The graph (`assetChoicesFor`) and the verb that sets a file param (`setFileParam` in
-`@studio/commands`) go through `moduleAssetChoices` for that reason, rather than each carrying the walk.
+the verbs crate (`apps/k7-daw-wasm/verbs`)) go through `moduleAssetChoices` for that reason, rather than each carrying the walk.
 
 A nearer module's assets come first and a duplicate path is dropped, so a local file shadows an
 inherited one of the same name.

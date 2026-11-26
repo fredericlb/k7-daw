@@ -7,7 +7,7 @@ the map; the following pages go package by package.
 | page | covers |
 |---|---|
 | this page | the shape of the pipeline, the decisions behind it, where everything lives |
-| [song-video](./51-song-video.md) | the picture document, the lane and chain compile, shaders, captions, OTIO/EDL |
+| [the picture compile](./51-song-video.md) | the picture document, the lane and chain compile, shaders, captions, the scene |
 | [ui-eyes](./52-ui-eyes.md) | the WebGL compositor, realtime playback, frame-exact export |
 | [Viewport plugin and frontend](./53-viewport-and-frontend.md) | `k7-plugins/src/video`, the timeline's picture lanes, drops, camera recording |
 | [Picture commands and media preparation](./54-picture-commands.md) | the `picture …` verbs, the file writers, `video-prep`, a shot's sound |
@@ -18,13 +18,12 @@ the map; the following pages go package by package.
 
 ```text
 project folder (project, picture lanes in nodes/ or tracks/, clips/, graph or chains/, modules)
-   │  loadVideoProject()                 apps/k7-daw-frontend/packages/song-video/src/videoProject.ts
+   │  compile()                          apps/k7-daw-wasm/verbs/src/picture/compile.rs
    ▼
-VideoProjectDoc   (seconds, absolute paths, GLSL inlined, warnings)
-   │  webVideoProjectOf()                apps/k7-daw-frontend/packages/song-video/src/webVideo.ts (the Worker's `videoDoc`)
+Doc               (seconds, GLSL inlined, warnings; paths workspace-relative on POST /picture)
+   │                                     apps/k7-daw-frontend/packages/web-protocol/timelineTypes.ts (WebVideoProject)
    ▼
-WebVideoProject                          apps/k7-daw-frontend/packages/web-protocol/timelineTypes.ts
-   │  sceneFrom() / sceneOf()            apps/k7-daw-frontend/packages/song-video/src/sceneFrom.ts
+   │  scene_of()                         apps/k7-daw-wasm/verbs/src/picture/scene.rs (POST /picture/scene, and picture render)
    ▼
 VideoScene        (plain structural type, media URLs, mute/solo/lens already folded)
    │
@@ -82,7 +81,7 @@ bytes.
 | `apps/k7-daw-frontend/packages/song-schema/src/keyframes.ts` | the `animate` schema and its evaluation |
 | `apps/k7-daw-frontend/packages/song-schema/src/yaml/videoTrackFile.ts`, `apps/k7-daw-frontend/packages/song-schema/src/yaml/videoKeys.ts` | surgical writers for lane files |
 | `apps/k7-daw-frontend/packages/song-schema/src/aspect.ts` | the `16:9` / `9:16` shapes |
-| `apps/k7-daw-frontend/packages/song-video/` | the picture compile and OTIO/EDL |
+| `apps/k7-daw-wasm/verbs/src/picture/` | the picture compile and its scene |
 | `apps/k7-daw-frontend/packages/song/src/videoOutputs.ts` | writing the `RENDER → VIDEO_OUT` run into a project that lacks it |
 | `apps/k7-daw-frontend/packages/song/src/videoSound.ts` | a picture lane's sound clips derived from its shots — its own `#audio` half, or a chain project's `video_source:` lane |
 | `apps/k7-daw-frontend/packages/song/src/surfaces.ts` | `isVideoProject`, `hasPicture` |
@@ -90,7 +89,7 @@ bytes.
 | `apps/k7-daw-frontend/packages/ui-eyes/` | the WebGL compositor, realtime and export |
 | `apps/k7-daw-frontend/packages/video-prep/` | ffprobe / ffmpeg: optimized copies and proxies |
 | `apps/k7-daw-frontend/packages/k7-plugins/src/video/` | the viewport surface, the scene adapter, picture mute/solo/lens rules, the camera relay |
-| `apps/k7-daw-frontend/packages/commands/src/verbs/picture*.ts` | the `picture …` verbs |
+| `apps/k7-daw-wasm/verbs/src/verbs/picture*.rs` | the `picture …` verbs, OTIO/EDL among them |
 | `apps/k7-daw-backend/packages/k7-picture/src/lib.rs` | the server render |
 | `apps/k7-daw-frontend/src/` | the timeline's picture lanes, drops, camera recording, `project export video` |
 

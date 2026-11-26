@@ -18,13 +18,7 @@ import {
   parsePosition,
 } from "@studio/song-schema/timecode";
 import { afterEach, beforeAll, describe, expect, it } from "vitest";
-import {
-  compileDisk,
-  compileReady,
-} from "../../commands/src/runtime/testing/compileDisk.ts";
 import { setTrackPlacementFade } from "./trackMix";
-
-beforeAll(compileReady);
 
 const here = dirname(fileURLToPath(import.meta.url)); // apps/k7-daw-frontend/packages/song/src
 const SONG = join(here, "..", "..", "..", "..", "..", "demos", "node-demo.k7");
@@ -118,30 +112,5 @@ describe("setTrackPlacementFade", () => {
       setTrackPlacementFade(dir, "drums", at("9:1"), NUM, DEN, "fadeIn", 1),
     ).toBe(false);
     expect(laneText(dir)).toBe(before);
-  });
-});
-
-describe("a fade through the compiler", () => {
-  // Writer and reader are two halves of one agreement, and neither alone can see them disagree.
-  it("compiles back to the beats it was written with", () => {
-    const dir = mkdtempSync(join(tmpdir(), "td-fadec-"));
-    dirs.push(dir);
-    cpSync(SONG, dir, { recursive: true });
-    const kick = () =>
-      compileDisk(dir)
-        .tracks.flatMap((t) => t.clips)
-        .find((c) => c.name === "kick");
-
-    const at = parsePosition("1:1:1", NUM, DEN);
-    expect(kick()?.fadeIn).toBe(0);
-
-    setTrackPlacementFade(dir, "drums", at, NUM, DEN, "fadeIn", 1);
-    setTrackPlacementFade(dir, "drums", at, NUM, DEN, "fadeOut", 2.5);
-    expect(kick()?.fadeIn).toBeCloseTo(1, 6);
-    expect(kick()?.fadeOut).toBeCloseTo(2.5, 6);
-
-    // …and removing it returns the compiled clip to the default, not to some written zero.
-    setTrackPlacementFade(dir, "drums", at, NUM, DEN, "fadeIn", 0);
-    expect(kick()?.fadeIn).toBe(0);
   });
 });

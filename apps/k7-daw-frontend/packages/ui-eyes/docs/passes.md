@@ -3,7 +3,7 @@
 `compositor.ts` is the **placement**, which quad goes where, and has its own page
 ([compositor.md](compositor.md)). `passes.ts` is the part that runs somebody else's code. The
 vocabulary — the `shaders` module, the uniforms, where `uAudio` comes from — is
-`apps/k7-daw-frontend/packages/song-video/docs/shaders.md`; this page is what the renderer does with it.
+`apps/k7-daw-wasm/verbs/docs/picture/shaders.md`; this page is what the renderer does with it.
 
 A `ScenePass` is text and numbers. `@studio/ui-eyes` has no idea what a module, a folder or an
 audio engine is — the same boundary `scene.ts` draws, and what lets the thing be tested with no

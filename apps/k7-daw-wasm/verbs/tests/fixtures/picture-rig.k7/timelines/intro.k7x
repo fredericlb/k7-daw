@@ -1,0 +1,3 @@
+length("2:0")
+lanes([lane("drums").events([])])
+pictures([lane("main").events([ref("film").start(0).length(2)]), lane("nolane").events([])])

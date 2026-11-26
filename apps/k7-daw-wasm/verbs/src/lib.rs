@@ -8,6 +8,8 @@ pub mod catalogue;
 pub mod complete;
 pub mod host;
 pub mod host_media;
+pub mod palette;
+pub mod picture;
 pub mod run;
 mod verbs;
 

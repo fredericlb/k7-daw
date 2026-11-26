@@ -230,7 +230,7 @@ export interface WebVideoTransition {
   fragment: string;
   params: Record<string, number>;
 }
-/** A shape module (mirrors ShapeDoc), geometry in px; `id` is the NODE that draws it — apps/k7-daw-frontend/packages/song-video/docs/shapes.md. */
+/** A shape module (mirrors ShapeDoc), geometry in px; `id` is the NODE that draws it — apps/k7-daw-wasm/verbs/docs/picture/shapes.md. */
 export type WebShape =
   | {
       id: string;
@@ -284,7 +284,7 @@ export interface WebVideoTrack {
   name: string;
   color: string;
   mute: boolean;
-  /** Soloed, off `project.k7x`'s `soloed:` — the same list audio reads (apps/k7-daw-frontend/packages/song-video/docs/picture.md). */
+  /** Soloed, off `project.k7x`'s `soloed:` — the same list audio reads (apps/k7-daw-wasm/verbs/docs/picture/picture.md). */
   solo: boolean;
   x: number;
   y: number;

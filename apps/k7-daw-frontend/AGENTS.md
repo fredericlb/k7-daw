@@ -174,7 +174,7 @@ Expand is dead. A clip's CONTENTS are the `event` panel's, opened by a double-cl
 ### Commands are the CLI's, verbatim
 
 The command bar calls `/complete` and `/command` on the **file service**
-(`apps/k7-daw-backend/packages/k7-front/src/routes/files/service/routes.rs`), which dispatch through `@studio/commands`.
+(`apps/k7-daw-backend/packages/k7-front/src/routes/files/service/routes.rs`), which dispatch through the verbs crate (`apps/k7-daw-wasm/verbs`).
 That package owns the SID → handler mapping and is the only place a verb is defined. Add a
 feature there, not here. Web-local commands (`LOCAL_COMMANDS` in `palette.ts`) are what only
 a browser can do: the shell's view state under `ui`, plus the bare-named ones that write
@@ -340,7 +340,7 @@ the service.
 
 - **The engine never parses song files.** It only receives compiled JSON. Swap this
   frontend for another and the engine is unchanged — which is exactly what the decks do today, on the same binary, over the same protocol.
-- **Commands are the single source of truth.** `@studio/commands` owns the SID →
+- **Commands are the single source of truth.** the verbs crate (`apps/k7-daw-wasm/verbs`) owns the SID →
   handler mapping, and both the CLI and the web dispatch through it.
 - **Wire shapes live in `@studio/engine-protocol`.** A wire change must also update the
   C++ serialization — verified by running the engine, not by TypeScript.

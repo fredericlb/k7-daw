@@ -45,7 +45,7 @@ export interface TimelineDropEvent {
   /** The lane under the pointer — `lanes` is every lane from the top, so the drop can walk down. */
   lane: string;
   lanes: DropLane[];
-  /** A timecode for `event add`, seconds for `picture add`: the two verbs' dialects (apps/k7-daw-frontend/packages/commands/docs/picture.md). */
+  /** A timecode for `event add`, seconds for `picture add`: the two verbs' dialects (apps/k7-daw-wasm/verbs/docs/verbs/picture.md). */
   tc: string;
   seconds: number;
   files: File[];

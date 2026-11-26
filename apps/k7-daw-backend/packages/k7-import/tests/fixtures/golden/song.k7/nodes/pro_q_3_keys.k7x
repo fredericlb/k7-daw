@@ -1,0 +1,3 @@
+// pro_q_3_keys — inherits pro_q_3 (the plugin); only what this use sets differs.
+extends("@workspace/audio/pro_q_3")
+params({ Gain: 0.5 })

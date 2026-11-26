@@ -1,10 +1,9 @@
 // replayRun.ts — the calls the crate's native replays made, re-run through `edit.call`, answers and changes compared.
 // A reader would get wrong who decides what is replayed: the native screens do, so the tally equals theirs by construction.
-// It imports no node module, so the built Worker runs it too (apps/k7-daw-frontend/verbs/editReplay.test.ts).
 
 import { editCallEnv, setIdSource } from "./edit.ts";
 
-export interface Exec {
+interface Exec {
   name: string;
   args: unknown[];
   env: unknown;

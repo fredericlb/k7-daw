@@ -1,6 +1,6 @@
-// serviceChanges.spec.ts — `POST /changes` and `GET /verb-bundle` as a client sees them: a set lands whole as one undoable step,
+// serviceChanges.spec.ts — `POST /changes` as a client sees it: a set lands whole as one undoable step,
 // a stale base or `was` is a 409 that writes nothing, a bad path or an unparsable .k7x refuses the whole set, a library is the
-// admins', and the bundle names its libraries by hash. Judged by answers and by what GET /file reads back.
+// admins'. Judged by answers and by what GET /file reads back.
 import { expect, test } from "@playwright/test";
 import { Service } from "../../src/service.ts";
 import { freshWorkspace } from "../../src/sync.ts";
@@ -196,18 +196,9 @@ test("journal skip lands the set without a step, and the answer's rev is the nex
   expect(again.status).toBe(200);
 });
 
-test("an empty at is the workspace alone: its bundle holds no project, and a set may write only the shared texts", async () => {
-  const bundle = await svc.get("/verb-bundle?at=", ws);
-  expect(bundle.status).toBe(200);
-  expect(bundle.body.rev).toMatch(/^none:/);
-  const files = Object.keys(bundle.body.source.files);
-  expect(files.some((f) => f.startsWith("/w/live.k7/"))).toBe(false);
+test("an empty at is the workspace alone: a set may write only the shared texts, its freshness its own was", async () => {
   const alone = (ops: unknown[]) =>
-    svc.post(
-      "/changes",
-      { at: "", base: bundle.body.rev, label: "playlist new", ops },
-      ws,
-    );
+    svc.post("/changes", { at: "", base: "x", label: "playlist new", ops }, ws);
   expect((await alone([text("_playlists/z.txt", "z\n", null)])).status).toBe(
     200,
   );
@@ -232,6 +223,10 @@ test("a chain of a library is gated like any write there, and a name that is no 
     ws,
   );
   // A library is never written from here: it is refused before its folder is looked at.
-  const other = await svc.get("/verb-bundle?at=other.k7", ws);
+  const other = await svc.post(
+    "/changes",
+    { at: "other.k7", base: "x", label: "probe", ops: [] },
+    ws,
+  );
   expect(other.status).toBe(409);
 });

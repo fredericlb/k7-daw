@@ -123,7 +123,7 @@ A dissolve's `with:` and `chain:` change only the picture. The sound has one way
 ## Seconds in the file, beats on the wire
 
 The engine's clips are in beats, and the shots are in seconds against one `tempo:` with no tempo
-map (`apps/k7-daw-frontend/packages/song-video/docs/picture.md`). The conversion happens in the compile, every time, so
+map (`apps/k7-daw-wasm/verbs/docs/picture/picture.md`). The conversion happens in the compile, every time, so
 re-typing `tempo:` leaves the sound under its shot. A sounding clip of a shot at its own pace carries
 no warp map: the material answers to the clock, not to the tempo.
 

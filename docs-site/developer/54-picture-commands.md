@@ -2,8 +2,8 @@
 
 ## The `picture …` verbs
 
-Declared in `apps/k7-daw-frontend/packages/commands/commands.yaml` (the `# --- the song's PICTURE` section) and
-implemented in `apps/k7-daw-frontend/packages/commands/src/verbs/`, spread into the handler table of
+Declared in `apps/k7-daw-wasm/verbs/commands.yaml` (the `# --- the song's PICTURE` section) and
+implemented in `apps/k7-daw-wasm/verbs/src/verbs/`, spread into the handler table of
 `apps/k7-daw-wasm/verbs/src/verbs/mod.rs`:
 
 | file | verbs (SID) |
@@ -100,5 +100,5 @@ and runs the work in the background under the tag `picture prepare <absolute sou
 `optimized` / `proxy` into the clip file when each copy lands. The reload that follows the clip
 file write is how the lane picks the copy up.
 
-Who reads which copy is decided in `apps/k7-daw-frontend/packages/song-video/src/sceneFrom.ts`: preview reads the
+Who reads which copy is decided in `apps/k7-daw-wasm/verbs/src/picture/scene.rs`: preview reads the
 proxy first, export never does.

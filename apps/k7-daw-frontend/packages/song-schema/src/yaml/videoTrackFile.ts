@@ -76,7 +76,7 @@ export function listVideoPlacements(
   });
 }
 
-/** Set the LANE's own rect — `frame([x, y, w, h])`, in viewport px, the camera module's spelling (apps/k7-daw-frontend/packages/song-video/docs/picture.md). */
+/** Set the LANE's own rect — `frame([x, y, w, h])`, in viewport px, the camera module's spelling (apps/k7-daw-wasm/verbs/docs/picture/picture.md). */
 export function setVideoLaneRect(
   doc: K7Scope,
   rect: { x: number; y: number; w: number; h: number },

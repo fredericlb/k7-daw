@@ -31,7 +31,7 @@ Positions are converted to timecodes at the edge, with `beatsToPosition` / `beat
 `apps/k7-daw-frontend/packages/song-schema/src/timecode.ts`. The pane works in beats; the verbs speak
 `bar:beat:eighth:sixteenth`, positions 1-based and durations 0-based. Getting the two kinds mixed up
 is the classic bug here, which is why every argument that is a length says so in its `hint:` in
-`apps/k7-daw-frontend/packages/commands/commands.yaml`.
+`apps/k7-daw-wasm/verbs/commands.yaml`.
 
 Keys go the same way: `apps/k7-daw-frontend/src/keys.ts` maps a token to a command string (possibly
 conditional, possibly interpolating the caret's track), and `resolveToken` hands it to
@@ -52,7 +52,7 @@ These verbs exist only in the web shell; the CLI does not have them.
 
 ## 3. The verb runs in the browser and its writes land as one change set
 
-The verb runs in a Worker over a virtual file system, not on the server (`apps/k7-daw-frontend/packages/commands/docs/runtime.md`).
+The verb runs on the backend, over a staged copy of the workspace it lands whole (`docs/verbs-port.md`).
 Its writes are staged there and posted as one `POST /changes`; the server lands the set whole or not at all,
 as one entry in the project's undo journal (`apps/k7-daw-backend/docs/file-changes.md`): one command, one
 Ctrl+Z, whatever the verb touched.
@@ -63,9 +63,9 @@ gesture and could fail half-way.
 
 ## 4. The verb resolves, refuses or writes
 
-`@studio/commands` maps the line to a SID through `commands.yaml` (longest prefix wins) and runs the
+the verbs crate (`apps/k7-daw-wasm/verbs`) maps the line to a SID through `commands.yaml` (longest prefix wins) and runs the
 handler with a `CommandHost`. Handlers follow a shape you will see everywhere in
-`apps/k7-daw-frontend/packages/commands/src/verbs/`:
+`apps/k7-daw-wasm/verbs/src/verbs/`:
 
 1. Parse the arguments; on a bad shape, `h.refuse(["usage: …"])`.
 2. Resolve against the **compiled** project (`h.project()`): the track, the event at that start,

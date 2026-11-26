@@ -1,72 +1,26 @@
-// pageVerbs.test.ts — the page's host over a fake POST and a fake Worker handle: a line, a completion, the picture's project, a long run, a foreign change.
+// pageVerbs.test.ts — the page's host over fake POSTs: a line, a completion, the picture and its warnings, an import, a long run.
+// What a reader gets wrong: the reads go through `read`, never `send`, so the reads around them stay shared.
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createPageVerbs } from "./pageVerbs.ts";
-import { VERBS_RESET, type Verbs } from "./verbsWorker.ts";
 
-vi.mock("@studio/project-shell/fileApi", () => ({
-  fget: async () => ({ rev: "r1" }),
-}));
-
-function fakeVerbs() {
+function host(answers: Record<string, unknown> = {}) {
   const log: string[] = [];
   let slow = 0;
-  let answer: Record<string, unknown> = {
-    log: ["done"],
-    refuse: [],
-    refused: false,
-    landed: true,
-    changed: [{ path: "live.k7/project.k7x", kind: "text" }],
-    rev: "b",
-    revBefore: "a",
-  };
-  const verbs = {
-    ready: async () => {},
-    open: async (at: string) => {
-      log.push(`open ${at}`);
-    },
-    videoDoc: async (rev: string, at?: string) => {
-      log.push(`videoDoc ${rev} @${at}`);
-      return { doc: { videoTracks: [] } };
-    },
-    videoErrors: async () => ({ errors: [], diagnostics: [] }),
-    pictureScene: async (rev: string, at?: string) => {
-      log.push(`pictureScene ${rev} @${at}`);
-      return { scene: { layers: [] }, mixes: true };
-    },
-    refresh: async (files: string[], rev?: string, at?: string) => {
-      log.push(`refresh ${files.join(",")} ${rev} @${at}`);
-    },
-    close: async () => {},
-    reset: () => void log.push("reset"),
-  };
-  const send = async <T>(path: string, body: unknown): Promise<T> => {
-    log.push(`${path} ${JSON.stringify(body)}`);
-    if (slow) await new Promise((ok) => setTimeout(ok, slow));
-    if (path === "/verb/complete") return { items: ["node new"] } as T;
-    return answer as T;
-  };
-  return {
-    log,
-    verbs: verbs as unknown as Verbs,
-    send,
-    slowBy: (n: number) => (slow = n),
-    answer: (a: Record<string, unknown>) => (answer = a),
-  };
-}
-
-let key = "k1";
-let project = "live.k7";
-const tracked: { label: string; ended: string | undefined | null }[] = [];
-
-function make() {
-  const f = fakeVerbs();
-  const page = createPageVerbs({
-    verbs: f.verbs,
-    send: f.send,
+  const tracked: { label: string; ended: string | undefined | null }[] = [];
+  const post =
+    (kind: string) =>
+    async <T>(path: string, body: unknown): Promise<T> => {
+      log.push(`${kind} ${path} ${JSON.stringify(body)}`);
+      if (slow) await new Promise((ok) => setTimeout(ok, slow));
+      const a = answers[path];
+      if (a instanceof Error) throw a;
+      return a as T;
+    };
+  const verbs = createPageVerbs({
+    send: post("send"),
+    read: post("read"),
     catalogue: async () => [],
-    session: () => ({ key }),
-    activeProject: async () => project,
     track: (label) => {
       const t = { label, ended: null as string | undefined | null };
       tracked.push(t);
@@ -77,156 +31,92 @@ function make() {
       };
     },
   });
-  return { ...f, page };
+  const slowBy = (n: number): void => {
+    slow = n;
+  };
+  return { verbs, log, tracked, slowBy };
 }
 
-beforeEach(() => {
-  key = "k1";
-  project = "live.k7";
-  tracked.length = 0;
-});
-afterEach(() => vi.useRealTimers());
+const ran = {
+  log: ["done"],
+  refuse: [],
+  refused: false,
+  landed: true,
+  changed: [{ path: "live.k7/project.k7x", kind: "text" }],
+  rev: "b",
+  revBefore: "a",
+};
 
-describe("the page's verbs", () => {
+describe("the page's verbs host", () => {
+  beforeEach(() => vi.useFakeTimers({ shouldAdvanceTime: true }));
+  afterEach(() => vi.useRealTimers());
+
   it("runs a line through POST /verb, with its want, folder and journal, and words the answer", async () => {
-    const { page, log, answer } = make();
-    const r = await page.run("project tempo 96", {
+    const h = host({ "/verb": { ...ran, threw: "boom" } });
+    const r = await h.verbs.run("project tempo 96", {
       want: ["graph"],
-      at: "_libraries/k7-core/chains/c",
+      at: "live.k7",
       journal: "join",
     });
-    expect(log).toEqual([
-      '/verb {"line":"project tempo 96","want":["graph"],"at":"_libraries/k7-core/chains/c","journal":"join"}',
+    expect(h.log).toEqual([
+      'send /verb {"line":"project tempo 96","want":["graph"],"at":"live.k7","journal":"join"}',
     ]);
     expect(r).toEqual({
-      output: ["done"],
+      output: ["done", "error: boom"],
       refused: false,
       rev: "b",
       revBefore: "a",
-      changed: [{ path: "live.k7/project.k7x", kind: "text" }],
-    });
-    answer({ log: [], refuse: ['no track "x"'], refused: true, threw: "boom" });
-    const no = await page.run("track rename x y", { want: [] });
-    expect(no).toEqual({
-      output: ['no track "x"', "error: boom"],
-      refused: true,
+      changed: ran.changed,
     });
   });
 
-  it("opens no Worker for a verb, and hands the files a verb wrote to one that holds the project", async () => {
-    const { page, log } = make();
-    await page.run("a", { want: [] });
-    expect(log.some((l) => l.startsWith("open"))).toBe(false);
-    await page.videoDoc();
-    log.length = 0;
-    await page.run("b", { want: [] });
-    expect(log).toContain("refresh live.k7/project.k7x b @live.k7");
-  });
-
-  it("opens the project once for the picture views a page asks as it opens", async () => {
-    const { page, log } = make();
-    await Promise.all([page.videoDoc(), page.videoErrors(), page.videoDoc()]);
-    expect(log.filter((l) => l.startsWith("open"))).toEqual(["open live.k7"]);
-  });
-
-  it("posts the picture render the backend handed back, with the scene its Worker builds", async () => {
-    const { page, log, answer } = make();
-    answer({
-      log: [
-        "rendering the picture in the background (webm) — it lands in /out",
-      ],
-      refuse: [],
-      refused: false,
-      landed: false,
-      asks: [
-        {
-          route: "page renderPicture",
-          args: { into: "/out", format: "webm", settings: {}, audio: true },
-        },
-      ],
-    });
-    const r = await page.run("picture render into=/out", { want: [] });
-    expect(r.output).toEqual([
-      "rendering the picture in the background (webm) — it lands in /out",
+  it("completes through POST /verb/complete as a read, and a failure is no items", async () => {
+    const h = host({ "/verb/complete": { items: ["node new"] } });
+    expect(await h.verbs.complete("node n")).toEqual(["node new"]);
+    expect(h.log).toEqual([
+      'read /verb/complete {"line":"node n","labelled":true}',
     ]);
-    expect(log).toContain("pictureScene r1 @live.k7");
-    expect(log).toContain(
-      '/verb-host/picture {"at":"live.k7","into":"/out","scene":{"layers":[]},"format":"webm","settings":{},"audio":true}',
-    );
+    const broken = host({ "/verb/complete": new Error("down") });
+    expect(await broken.verbs.complete("x")).toEqual([]);
   });
 
-  it("completes through POST /verb/complete, labelled", async () => {
-    const { page, log } = make();
-    expect(await page.complete("node n")).toEqual(["node new"]);
-    expect(log).toEqual(['/verb/complete {"line":"node n","labelled":true}']);
-  });
-
-  it("closes the runtime of the project the page left", async () => {
-    const { page, log, verbs } = make();
-    const closed: string[] = [];
-    (verbs as unknown as { close: (at?: string) => Promise<void> }).close =
-      async (at) => {
-        closed.push(at ?? "");
-      };
-    page.setProject("a.k7");
-    await page.videoDoc();
-    page.setProject("b.k7");
-    expect(closed).toEqual(["a.k7"]);
-    await page.videoDoc();
-    expect(log.filter((l) => l.startsWith("open"))).toEqual([
-      "open a.k7",
-      "open b.k7",
-    ]);
-  });
-
-  it("starts the Worker over when the session changes, and opens the project again", async () => {
-    const { page, log } = make();
-    await page.videoDoc();
-    key = "k2";
-    await page.videoDoc();
-    expect(log.filter((l) => l === "reset")).toHaveLength(1);
-    expect(log.filter((l) => l.startsWith("open"))).toHaveLength(2);
-  });
-
-  it("asks the picture again when the session's change failed it in flight", async () => {
-    const { page, verbs } = make();
-    let asked = 0;
-    (verbs as unknown as { videoDoc: () => Promise<unknown> }).videoDoc =
-      async () => {
-        asked++;
-        if (asked === 1) throw new Error(VERBS_RESET);
-        return { doc: { videoTracks: [{ id: "main" }] } };
-      };
-    await expect(page.videoDoc()).resolves.toEqual({
-      doc: { videoTracks: [{ id: "main" }] },
+  it("reads the picture and its warnings from POST /picture, a refusal as an answer", async () => {
+    const doc = { name: "p", videoTracks: [] };
+    const h = host({ "/picture": { doc, warnings: ["w"] } });
+    expect(await h.verbs.videoDoc()).toEqual({ doc });
+    expect(await h.verbs.videoErrors()).toEqual({
+      errors: ["w"],
+      diagnostics: [],
     });
-    expect(asked).toBe(2);
+    const bad = host({ "/picture": { error: "no viewport" } });
+    expect(await bad.verbs.videoDoc()).toEqual({ error: "no viewport" });
+    expect((await bad.verbs.videoErrors()).errors).toEqual(["no viewport"]);
+    expect(h.log.every((l) => l.startsWith("read /picture"))).toBe(true);
+  });
+
+  it("imports a workspace file through POST /import and lists it while it runs", async () => {
+    const h = host({ "/import": { project: "song", log: ["wrote song"] } });
+    expect(await h.verbs.importPath("Live/Song.als", "song")).toEqual({
+      project: "song",
+      log: ["wrote song"],
+    });
+    expect(h.log).toEqual(['send /import {"rel":"Live/Song.als","as":"song"}']);
+    expect(h.tracked).toEqual([
+      { label: "import Live/Song.als", ended: undefined },
+    ]);
+    const refused = host({ "/import": new Error("taken") });
+    await expect(refused.verbs.importPath("a.als")).rejects.toThrow("taken");
+    expect(refused.tracked[0]?.ended).toBe("taken");
   });
 
   it("lists a run past a second in the process list and ends it", async () => {
-    vi.useFakeTimers();
-    const { page, slowBy } = make();
-    slowBy(1500);
-    const run = page.run("track process", { want: [] });
-    await vi.advanceTimersByTimeAsync(1200);
-    expect(tracked.map((t) => t.label)).toEqual(["track process"]);
-    await vi.advanceTimersByTimeAsync(600);
-    await run;
-    expect(tracked[0]?.ended).toBeUndefined();
-  });
-
-  it("reopens the project in the background after a change it did not make", async () => {
-    vi.useFakeTimers();
-    const { page, log } = make();
-    await page.videoDoc();
-    await page.run("a", { want: [] });
-    log.length = 0;
-    page.foreignChange("b");
-    await vi.advanceTimersByTimeAsync(1000);
-    expect(log).toEqual([]);
-    page.foreignChange("c");
-    page.foreignChange("c");
-    await vi.advanceTimersByTimeAsync(600);
-    expect(log).toEqual(["open live.k7"]);
+    const h = host({ "/verb": ran });
+    h.slowBy(1500);
+    const r = h.verbs.run("event trim drums", { want: [] });
+    await vi.advanceTimersByTimeAsync(1600);
+    await r;
+    expect(h.tracked).toEqual([
+      { label: "event trim drums", ended: undefined },
+    ]);
   });
 });

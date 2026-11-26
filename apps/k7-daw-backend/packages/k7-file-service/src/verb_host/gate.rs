@@ -7,9 +7,8 @@ use super::Error;
 use crate::changes::plan::{JOB_OUT, job_id, one_segment};
 use crate::confine::{Disk, spelled};
 use crate::libraries::Home;
-use crate::paths::join;
+use crate::paths::{join, resolve_all};
 use crate::song_ask::{Input, song_roots};
-use crate::verb_bundle::library_roots;
 use crate::verb_paths::Virtual;
 
 pub fn forbidden(shown: &str) -> Error {
@@ -17,7 +16,20 @@ pub fn forbidden(shown: &str) -> Error {
     Error::new(403, format!("'{shown}' is outside the folders you read"))
 }
 
-/// The virtual roots of the open project, as `/verb-bundle` shows them.
+/// The libraries a compile of the project reads, by name and folder: the account's, the published ones, k7's own modules as `@meta`.
+pub fn library_roots(roots: &song::roots::Roots) -> Vec<(String, String)> {
+    let mut out: Vec<(String, String)> = roots
+        .libraries
+        .iter()
+        .map(|l| (l.name.clone(), resolve_all(&[&l.root])))
+        .collect();
+    if let Some(m) = &roots.meta {
+        out.push(("@meta".to_string(), resolve_all(&[m])));
+    }
+    out
+}
+
+/// The virtual roots of the open project, which a verb's paths are mapped into for the routes it asks.
 pub fn virtual_for(
     home: &Home,
     root: &str,

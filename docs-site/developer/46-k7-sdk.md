@@ -40,7 +40,7 @@ export const definePlugin = <T extends K7Plugin>(p: T): T => p;
 | Field | Meaning |
 |---|---|
 | `id` | Stable and namespaced. It prefixes the plugin's own SIDs (`plugin.<id>.<verb>`), and is what attribution records. |
-| `commands` | Both halves of a verb: the catalogue row (`CommandSpec`, from `apps/k7-daw-frontend/packages/commands/src/commandSpec.ts`) and the handler. A spec alone would list a command that never runs, so the type takes both. |
+| `commands` | Both halves of a verb: the catalogue row (a row of `apps/k7-daw-wasm/verbs/commands.yaml`) and the handler. A spec alone would list a command that never runs, so the type takes both. |
 | `surfaceTypes` | A new kind of surface a project may declare in `surfaces/`: its type name, the layouts it accepts (`split`, `floating`...), and the mapping skeleton `project surface new` scaffolds. |
 | `panes` | The React drawer for a surface type, mounted in the shell's pane ring and on a second device. Its props are typed `never` on purpose: the shell, which mounts it, is where the props are known, and any real drawer is assignable to `never`. |
 | `modules` | Declared, but nothing reads it yet: neither installer serves module folders. Do not rely on it. |

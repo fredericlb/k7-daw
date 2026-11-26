@@ -65,7 +65,7 @@ the graph needs the folder itself to pick an icon.
 `base` and `shader` are FIELDS rather than params for the same reason: a preset is loaded when
 the plugin is BUILT and the params above are applied over it, and a shader field picks which
 program is compiled while its knobs steer it. See `userPresets.md` and
-`apps/k7-daw-frontend/packages/song-video/docs/shaders.md`.
+`apps/k7-daw-wasm/verbs/docs/picture/shaders.md`.
 
 `rack` is resolved here beside `ui` and `cc` because it is the same kind of fact — what the
 module IS, rather than how it is wired — and a surface drawing a pad per sound should not have to

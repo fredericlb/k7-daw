@@ -1,0 +1,3 @@
+// drums's instrument, a STAND-IN: the source project's could not be carried over, so the
+// import put a library one here — replace it with the instrument this part was written for.
+extends("@k7-core/instruments/k7-rack")

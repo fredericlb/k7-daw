@@ -1,11 +1,12 @@
-//! picture.rs — `picture`: the film of a scene the Worker made, rendered in the background into the folder the person named.
-//! What a reader gets wrong: the scene is the Worker's, its `media/` paths go through the person's read gate, and the job outlives the page.
+//! picture.rs — `picture`: the film of the scene `picture render` built, rendered in the background into the folder the person named.
+//! What a reader gets wrong: the scene names its files by path, made `media/` URLs here and judged by the person's read gate.
 
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
 use std::time::Duration;
 
 use axum::response::Response;
+use k7_file_service::edits::picture::encode_component;
 use k7_file_service::shares::picture::Quality;
 use k7_file_service::verb_host::Error;
 use k7_file_service::verb_host::jobs::Table;
@@ -90,6 +91,24 @@ fn options(body: &Value) -> Result<Value, String> {
     Ok(out)
 }
 
+/// The scene with each `src` and `lut` that names a path made the `media/` URL the render page fetches.
+fn media_urls(v: &Value) -> Value {
+    match v {
+        Value::Object(o) => Value::Object(
+            o.iter()
+                .map(|(k, x)| match x {
+                    Value::String(s) if (k == "src" || k == "lut") && s.starts_with('/') => {
+                        (k.clone(), json!(format!("media/{}", encode_component(s))))
+                    }
+                    _ => (k.clone(), media_urls(x)),
+                })
+                .collect(),
+        ),
+        Value::Array(a) => Value::Array(a.iter().map(media_urls).collect()),
+        _ => v.clone(),
+    }
+}
+
 /// `POST /verb-host/picture {at, scene, into, format?, audio?, settings?}`: a job whose value is `{path}`, the film's file.
 pub async fn picture(
     req: &Checked,
@@ -108,7 +127,8 @@ pub async fn picture(
     else {
         return bad("into must be the absolute path of a folder");
     };
-    let into = PathBuf::from(into);
+    // A folder inside a root reached the route as its virtual path: the film is written at its real one.
+    let into = PathBuf::from(req.real(into).unwrap_or_else(|| into.to_owned()));
     let opts = match options(&req.body) {
         Ok(o) => o,
         Err(m) => return bad(m),
@@ -135,6 +155,7 @@ pub async fn picture(
         return busy();
     }
     // The scene's media are the files the person reads, judged one by one here.
+    let scene = &media_urls(scene);
     let media = media_by(scene, &|rel| req.read(rel).ok().map(PathBuf::from));
     let tag = TAG.to_string();
     if runtime.as_ref().is_some_and(|r| !r.bg_start(&tag)) {
@@ -212,4 +233,23 @@ pub async fn picture(
         drop(run);
     });
     Checked::accepted(&id)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::media_urls;
+    use serde_json::json;
+
+    #[test]
+    fn a_scene_path_becomes_the_media_url_the_render_page_fetches() {
+        let scene = json!({ "layers": [{ "clips": [{ "src": "/w/a b.mp4" }, { "src": "" }], "passes": [{ "lut": "/w/l.cube", "fragment": "/* x */" }] }] });
+        let got = media_urls(&scene);
+        assert_eq!(
+            got["layers"][0]["clips"][0]["src"],
+            "media/%2Fw%2Fa%20b.mp4"
+        );
+        assert_eq!(got["layers"][0]["clips"][1]["src"], "");
+        assert_eq!(got["layers"][0]["passes"][0]["lut"], "media/%2Fw%2Fl.cube");
+        assert_eq!(got["layers"][0]["passes"][0]["fragment"], "/* x */");
+    }
 }

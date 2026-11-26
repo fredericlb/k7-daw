@@ -1,7 +1,7 @@
 # The commands package and the verbs
 
 Every action a person can take on a song — from the command bar, a key, a button, a right-click — is a command line.
-The catalogue of lines is `apps/k7-daw-frontend/packages/commands/commands.yaml`; the verbs that run them are the Rust
+The catalogue of lines is `apps/k7-daw-wasm/verbs/commands.yaml`; the verbs that run them are the Rust
 crate `apps/k7-daw-wasm/verbs`, which the page reaches through the backend's `POST /verb` (`docs/verbs-port.md`). The web
 editor has no file operations of its own: a line runs over the project's files under the account's lock and lands its
 writes as one journal step.
@@ -10,8 +10,8 @@ writes as one journal step.
 
 | File | Role |
 |---|---|
-| `apps/k7-daw-frontend/packages/commands/commands.yaml` | The **catalogue**: what you type, mapped to a feature SID, with its description, arguments and menus. Declarative. |
-| `apps/k7-daw-frontend/packages/commands/src/commandSpec.ts` | Reads the catalogue for the palette: each command and each argument's class, provider and hint. |
+| `apps/k7-daw-wasm/verbs/commands.yaml` | The **catalogue**: what you type, mapped to a feature SID, with its description, arguments and menus. Declarative. |
+| `apps/k7-daw-wasm/verbs/src/palette.rs` | Builds the catalogue for the palette, served as `GET /verb/catalogue`: each command and each argument's class, provider and hint. |
 | `apps/k7-daw-wasm/verbs/commands.json` | The crate's copy of the catalogue, written by `apps/k7-daw-wasm/verbs/scripts/catalogue.mjs`. |
 | `apps/k7-daw-wasm/verbs/src/verbs/mod.rs` | The SID table: SID → handler, one file per family beside it. |
 | `apps/k7-daw-wasm/verbs/src/complete/mod.rs` | The completion **providers** and their labels. |
@@ -56,9 +56,9 @@ The crate's providers answer `complete:` names from the project as its files say
 `markerNames`, `moduleAlternatives`, `moduleEngines`, `assemblies`, `assemblyTemplates`, `playlists`, `libraries`,
 `pictureLanes`, `surfaceTypes`. The page asks them through `POST /verb/complete`.
 
-Each provider also has a **display class** (`PROVIDER_CLASS` in `apps/k7-daw-frontend/packages/commands/src/providerInfo.ts`:
-track, module, file, marker, choice…) and a default hint (`PROVIDER_HINT`). The class colours the palette's field;
-`CLASS_HINT` supplies the hint of scalar classes (`timecode` → "bar:beat:sixteenth — 5, 5:1, 5:1:1"). An unknown provider
+Each provider also has a **display class** (the provider table in `apps/k7-daw-wasm/verbs/src/complete/provider_info.rs`:
+track, module, file, marker, choice…) and a default hint. The class colours the palette's field;
+`class_hint` supplies the hint of scalar classes (`timecode` → "bar:beat:sixteenth — 5, 5:1, 5:1:1"). An unknown provider
 in the YAML is reported at load rather than emptying the catalogue.
 
 ## Dispatch
@@ -104,4 +104,4 @@ Some lines are answered by the page itself, not the verbs Worker, because what t
 
 `cargo test` in `apps/k7-daw-wasm/verbs`: each family runs its verbs over a fixture project (`tests/support/mod.rs`), reads
 back the files, compiles the project and undoes the step; `tests/project.rs` fails on a catalogue verb with no handler.
-`commandSpec.test.ts`-style checks of the catalogue itself are the crate's `catalogue.rs` and `scripts/catalogue.mjs --check`.
+The checks of the catalogue itself are the crate's `palette.rs` tests and `scripts/catalogue.mjs --check`.

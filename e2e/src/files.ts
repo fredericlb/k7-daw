@@ -198,7 +198,7 @@ export class FileService {
     return body.activeProject ?? "";
   }
 
-  /** A host member as the browser's Worker calls it (`/verb-host/<member>`): the status and body, whatever the status. */
+  /** A host member as a verb asks it (`/verb-host/<member>`): the status and body, whatever the status. */
   async host(
     workspace: string,
     member: string,
@@ -211,7 +211,7 @@ export class FileService {
     });
   }
 
-  /** A host job polled to its end, as the Worker does each second. */
+  /** A host job polled to its end, as the backend does each second. */
   async hostJob(
     workspace: string,
     id: string,

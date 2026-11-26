@@ -3,7 +3,7 @@
 //
 // The geometry is `params:` rather than fields, and that is the whole point of a shape being a
 // module: a param is what a curve can drive, so this rectangle can be made to move.
-// See apps/k7-daw-frontend/packages/song-video/docs/shapes.md.
+// See apps/k7-daw-wasm/verbs/docs/picture/shapes.md.
 type("shape")
 shape("square")
 color("#e2b53acc")

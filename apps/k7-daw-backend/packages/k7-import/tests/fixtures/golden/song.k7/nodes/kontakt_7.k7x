@@ -1,0 +1,7 @@
+// MISSING PLUGIN: "Kontakt 7" (vst3) is not in the k7 plugin cache.
+// This node stands where it was: routing only, and bypassed. Install and scan it
+// ('k7 engine scan') and re-import, or point this node's `extends` at a real module.
+// The params below are the ones the export carried, kept so nothing is lost.
+extends("@meta/not-supported")
+plugin({ type: "not_supported", name: "Kontakt 7" })
+params({ Mix: 0.5 })

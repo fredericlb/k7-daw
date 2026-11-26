@@ -105,7 +105,7 @@ two halves contradict each other.
 ## Creating, and adding a line
 
 Two **commands**, `playlist new <name>` and `playlist song add <playlist> <record>`
-(`@studio/commands`) — the only ones in the catalogue acting on the repository (`repoDir`) rather
+(the verbs crate (`apps/k7-daw-wasm/verbs`)) — the only ones in the catalogue acting on the repository (`repoDir`) rather
 than on a project, which is exactly what a playlist is. They work with no project open.
 
 `playlist new` writes the **template**, not an empty file: the screen draws its right-hand pane

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "The song layer \u2014 reads a project folder and compiles its sound to a flat ProjectDoc/GraphDoc for k7; its picture is @studio/song-video's. A strudel lane compiles to the engine plugin that plays it (enginePattern.ts). Consumed as source.",
+  "description": "The song layer \u2014 reads a project folder and compiles its sound to a flat ProjectDoc/GraphDoc for k7; its picture is the verbs crate's (apps/k7-daw-wasm/verbs/src/picture). A strudel lane compiles to the engine plugin that plays it (enginePattern.ts). Consumed as source.",
   "exports": {
     "./loader": "./src/loader.ts",
     "./injectedRoots": "./src/injectedRoots.ts",

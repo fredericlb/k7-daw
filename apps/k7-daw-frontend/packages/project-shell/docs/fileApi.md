@@ -207,7 +207,7 @@ what lets a client stop re-asking what the reply already said.
 
 `refused` is the same shape of fact about the other half — the command was understood and declined,
 and the lines in `output` say why. Present only when true, so a surface that ignores it reads a
-refusal as an ordinary reply (see `apps/k7-daw-frontend/packages/commands/docs/refusal.md`).
+refusal as an ordinary reply (see `apps/k7-daw-wasm/verbs/docs/verbs/refusal.md`).
 
 `changed` names the FILES it wrote, project-relative, out of the journal's own diff. It is what
 lets a host reload only what depends on them; absent means the service could not say, which is

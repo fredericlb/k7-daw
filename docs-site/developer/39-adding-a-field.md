@@ -34,7 +34,7 @@ Take, as an example, a new optional number on a lane's event.
    service runs as the same OS user, so a `../` is another account's file.
 8. **Writer.** If k7 changes the field, write a text transform in the kind's `*File.ts`
    (`apps/k7-daw-frontend/packages/song-schema/src/yaml/`) or a writer in `apps/k7-daw-frontend/packages/song-edit/src/`, delete the key when it
-   returns to its default, and expose it as a verb in `apps/k7-daw-frontend/packages/commands`. Never re-serialise a whole
+   returns to its default, and expose it as a verb in `apps/k7-daw-wasm/verbs`. Never re-serialise a whole
    document: comments and other values must stay byte for byte, or the history falls back to whole-text
    operations.
 9. **Tests.** A schema case beside the schema; a writer test that compares text; a compile change is a case in the song crate's tests

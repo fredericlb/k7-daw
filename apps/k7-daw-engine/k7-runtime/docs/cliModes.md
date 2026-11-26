@@ -124,7 +124,7 @@ anything when no time is left, so a pump of 0 never fires the proxy timer and an
 Normalising is a TREATMENT, and a treatment in this system is a chain. `track process` /
 `clip process` bounce material through one, and the module library ships a `normalize` module —
 measured by `@studio/audio-analysis` off `--decode` above and rendered through `--render` like every other treatment. See
-`apps/k7-daw-frontend/packages/commands/docs/processChain.md`.
+`apps/k7-daw-wasm/verbs/docs/verbs/processChain.md`.
 
 What a dedicated mode could say and a chain cannot is **one gain across a SET of files**, so a
 track's clips keep their relative levels. A chain renders each source on its own, so a track

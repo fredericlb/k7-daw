@@ -318,35 +318,19 @@ async fn a_set_is_captured_as_one_batch_named_by_the_verb_line() {
     let _ = std::fs::remove_dir_all(&b.dir);
 }
 
-// The three routes are in the table, belong to the journal piece, and without the compiler the route says so rather than guess.
+// The route is in the table and belongs to the journal piece; a GET of it is no route.
 #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
-async fn the_routes_are_named_and_a_bundle_without_the_compiler_is_a_503() {
+async fn the_route_is_named_and_belongs_to_the_journal() {
     use hyper::Method;
     assert_eq!(
         routes::route(&Method::POST, "/changes"),
         routes::Route::Handler(H::Changes)
     );
     assert_eq!(
-        routes::route(&Method::GET, "/verb-bundle"),
-        routes::Route::Handler(H::VerbBundle)
-    );
-    assert_eq!(
-        routes::route(&Method::GET, "/verb-bundle/library"),
-        routes::Route::Handler(H::VerbLibrary)
-    );
-    assert_eq!(
         routes::route(&Method::GET, "/changes"),
         routes::Route::Hooked
     );
-    for t in [Tag::Changes, Tag::VerbBundle, Tag::VerbLibrary] {
-        assert_eq!(t.piece(), super::Piece::Journal);
-    }
-    let b = Bed::new("ch-table").await;
-    let lines = &b.lines;
-    let c = request(&b.dir, Tag::VerbBundle, json!({}), lines);
-    let (status, _) = text(routes::dispatch(H::VerbBundle, &c).await).await;
-    assert_eq!(status, 503);
-    let _ = std::fs::remove_dir_all(&b.dir);
+    assert_eq!(Tag::Changes.piece(), super::Piece::Journal);
 }
 
 // A 200's `rev` is the token the project has afterwards: an empty set at it is fresh, whatever the set wrote (the Worker's rerun).

@@ -128,7 +128,7 @@ test("a picture lane records the browser's camera onto itself", async ({
   await recordTake(page, "main");
   // The take is declared as a clip beside its bytes, and placed on the lane it was armed on.
   const clip = await newTake(files, before, /\/clips\/main_[^/]+\.webm$/);
-  // The picture is compiled again in the Worker once the take lands, some seconds on a tablet.
+  // The picture is read again once the take lands, some seconds on a tablet.
   await expect(page.getByText(clip, { exact: true })).toBeVisible({
     timeout: 30_000,
   });

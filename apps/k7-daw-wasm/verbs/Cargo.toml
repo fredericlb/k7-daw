@@ -2,7 +2,7 @@
 name = "verbs"
 version = "0.1.0"
 edition = "2024"
-description = "k7's editing commands in Rust: the command language and each verb as a function of a project's files, after ../../k7-daw-frontend/packages/commands (docs/verbs-port.md)"
+description = "k7's editing commands in Rust: the command language and each verb as a function of a project's files (docs/verbs-port.md)"
 publish = false
 
 [lib]

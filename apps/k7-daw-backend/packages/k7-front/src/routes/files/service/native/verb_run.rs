@@ -37,14 +37,14 @@ fn caches() -> &'static Mutex<HashMap<String, Cache>> {
 }
 
 /// The project's cache, taken out for the run; the map holds one project, the last one run.
-fn take_cache(key: &str) -> Cache {
+pub(super) fn take_cache(key: &str) -> Cache {
     let mut all = caches().lock().unwrap_or_else(|e| e.into_inner());
     let held = all.remove(key);
     all.clear();
     held.unwrap_or_default()
 }
 
-fn give_cache(key: String, cache: Cache) {
+pub(super) fn give_cache(key: String, cache: Cache) {
     caches()
         .lock()
         .unwrap_or_else(|e| e.into_inner())
@@ -237,21 +237,14 @@ async fn finish(c: &Call, ctx: &Ctx, asker: &Asker<'_>, done: Done, end: End) ->
     if ran.landed.is_some() && pushes && open {
         super::journal::pushed(c).await;
     }
-    let mut page = Vec::new();
     for a in std::mem::take(&mut ran.answer.asks) {
         let route = a.get("route").and_then(Value::as_str).unwrap_or_default();
-        // An ask the page performs (a picture render, whose scene it builds) goes back in the answer.
-        if route.starts_with("page ") {
-            page.push(a);
-        } else if !ran.answer.refused {
+        if !ran.answer.refused {
             let lines = asker
                 .ask(route, a.get("args").unwrap_or(&Value::Null))
                 .await;
             ran.answer.log.extend(lines);
         }
-    }
-    if !ran.answer.refused {
-        ran.answer.asks = page;
     }
     let mut out = serde_json::to_value(&ran.answer).unwrap_or_else(|_| json!({}));
     if let Some(o) = out.as_object_mut() {
@@ -425,4 +418,9 @@ pub async fn complete(c: &Call, ctx: &Ctx) -> Response {
         })
         .collect();
     json_answer(200, &json!({ "items": items }))
+}
+
+/// `GET /verb/catalogue`: every command with each argument's class, provider and clue, as `CommandInfo[]`.
+pub fn catalogue() -> Response {
+    json_answer(200, &k7_file_service::edits::verb::catalogue())
 }

@@ -349,15 +349,21 @@ fn a_render_is_asked_for_in_the_background_with_its_words_checked_here() {
         ran.answer.log,
         ["rendering the picture in the background (mp4, silent) — it lands in /out/film"]
     );
+    let ask = &ran.answer.asks[0];
+    assert_eq!(ask["route"], "POST /verb-host/picture");
+    let args = &ask["args"];
     assert_eq!(
-        ran.answer.asks,
-        [serde_json::json!({
-            "route": "page renderPicture",
-            "args": {
-                "into": "/out/film", "format": "mp4", "audio": false, "background": "picture render",
-                "settings": { "size": { "height": 720 }, "quality": "high", "from": 90.0 }
-            }
-        })]
+        (args["into"].clone(), args["format"].clone(), args["audio"].clone()),
+        (json!("/out/film"), json!("mp4"), json!(false))
+    );
+    assert_eq!(
+        args["settings"],
+        json!({ "size": { "height": 720 }, "quality": "high", "from": 90.0 })
+    );
+    assert_eq!(args["scene"]["viewport"], json!([1280.0, 720.0]));
+    assert_eq!(
+        args["scene"]["layers"][0]["clips"][0]["src"],
+        format!("{}/clips/sample.mp4", p.dir)
     );
     assert!(ran.before == ran.after);
     p.ok("picture render into=\"/out/my film\"");

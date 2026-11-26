@@ -45,7 +45,7 @@ store; `DomChains` subscribes per widget, so a parameter frame re-renders a knob
   `onMoveNode(module, x, y)`...). The host turns it into a line of the command catalogue
   (`graph chain connect`, `graph move`...) and sends it to the file service. The graph on screen
   is then re-read. There is no second write path, so the command bar, the context menu and a
-  gesture cannot disagree. The verbs live in `apps/k7-daw-frontend/packages/commands`; see the commands section of the
+  gesture cannot disagree. The verbs live in `apps/k7-daw-wasm/verbs`; see the commands section of the
   developer guide.
 - **The renderer is a library with several hosts.** In `apps/k7-daw-frontend/src/components`:
   `ChainsTab.tsx` (the full pane), `GraphPanel.tsx` (one lane's path in the bottom panel),
