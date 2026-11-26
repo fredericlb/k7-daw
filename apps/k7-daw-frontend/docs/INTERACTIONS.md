@@ -170,7 +170,7 @@ No header row on a desk or a pad: every control floats over the panes. At the bo
 | 03.20 | Edit the meter | click the metronome → in its bubble, the beats per bar and the note value | Enter on the beats; the note value applies at once | tap N/M in a phone's strip → question | T M D |
 | 03.21 | Toggle the metronome | the switch in the metronome's bubble | Enter/Space on the switch | on a phone, Metronome in Views and panels | T M D |
 | 03.22 | Set the metronome volume | the level slider in the metronome's bubble (written on release) | arrows on the focused slider (written on key up) | on a phone, the slider under Metronome in Views and panels | T M D |
-| 03.23 | Set the song's output level | drag the master volume in the floating bar (written on release) | arrows on the focused fader (0.5 dB) | drag the master volume; on a phone, the one in the info strip above the bar | T M D |
+| 03.23 | Set the song's output level | drag the master knob up or down in the floating bar (written on release; double-click: 0 dB); its arc is the level heard, red when it clipped | arrows on the focused knob (0.5 dB, written on key up) | drag the master volume; on a phone, the one in the info strip above the bar | T M D |
 | 03.24 | Fix a clipped mix | click "fix" next to the clip light | — | — | D |
 | 03.25† | Show / hide the graph notes | click the notes button | — | tap | T M D |
 | 03.26 | Open the Mixer or the Events dock | click the Mixer icon among the floating controls at the bottom right; opening a clip, a take or a roll opens Events | the key bound to `ui mixer` | tap Mixer in Views and panels | T M D |

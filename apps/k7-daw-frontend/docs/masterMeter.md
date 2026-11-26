@@ -5,6 +5,13 @@ holding the meter, the output fader's handle and the mark at unity, then a clip 
 after a pass that clipped — a **fix** button that takes the whole mix down until that pass would
 have peaked at **-6 dB**.
 
+**A desk or a pad draws it as a knob** (`knob`): the pointer is the level set, the arc is the level
+heard, in the same three zones, and the whole arc turns red while the pass is latched as clipped, the
+value under it. The knob replaces the lane and its light because the floating bar is drawn small, and a
+40 px row has no room for a lane long enough to read; one round control says both facts in its own
+footprint. A phone keeps the lane in its strip. Drag up or down, arrows, release commits; a double click
+returns to 0 dB.
+
 `MasterMeter.tsx` is the component. It is a **leaf that subscribes to the engine store itself**,
 which is what the store is for: the frame arrives at 20 Hz, and reading the level in `App` would
 re-render the whole tree twenty times a second to move a bar eight pixels.
