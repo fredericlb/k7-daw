@@ -5,9 +5,7 @@ import { Badge } from "@studio/ui/badge";
 import { Button } from "@studio/ui/button";
 import { Capsule, CapsuleButton } from "@studio/ui/capsule";
 import {
-  ChevronDown,
   ChevronLeft,
-  ChevronUp,
   type LucideIcon,
   SquareTerminal,
   TriangleAlert,
@@ -25,7 +23,7 @@ import type { createStatusLine } from "../statusLine";
 import type { ShellLayout } from "../useIsMobile";
 import { summonChord } from "./modKey";
 import { PANEL_DEFS, type PanelId } from "./panels";
-import { WarnBadge } from "./WarnBadge";
+import { RailChevron } from "./RailChevron";
 
 export interface HeaderPane {
   id: string;
@@ -155,31 +153,12 @@ export function ProjectHeader({
             })}
           </Capsule>
           {rail && (
-            <Capsule className="float">
-              <CapsuleButton
-                className="relative"
-                aria-expanded={rail.open}
-                aria-label={
-                  rail.open ? m["shell.panelsHide"]() : m["shell.panelsShow"]()
-                }
-                title={
-                  rail.open ? m["shell.panelsHide"]() : m["shell.panelsShow"]()
-                }
-                onClick={rail.onToggle}
-              >
-                {rail.open ? <ChevronDown /> : <ChevronUp />}
-                {!rail.open && <WarnBadge n={problems} />}
-                {!rail.open && rail.unsaved > 0 && (
-                  <Badge
-                    variant="count-sm"
-                    aria-hidden
-                    className="pointer-events-none absolute -top-1.5 -left-1.5"
-                  >
-                    {rail.unsaved}
-                  </Badge>
-                )}
-              </CapsuleButton>
-            </Capsule>
+            <RailChevron
+              open={rail.open}
+              onToggle={rail.onToggle}
+              unsaved={rail.unsaved}
+              problems={problems}
+            />
           )}
         </div>
         {/* A desk draws no status line: it is read out, not shown (docs/shell.md). */}

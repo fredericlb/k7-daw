@@ -251,6 +251,7 @@ import {
   shownPanel,
   TOOLBAR_PANELS,
 } from "./shell/panels";
+import { RailChevron } from "./shell/RailChevron";
 import { ShellOverlays } from "./shell/ShellOverlays";
 import { type PendingWire, useGraphActions } from "./shell/useGraphActions";
 import { ViewCapsule } from "./shell/ViewCapsule";
@@ -2925,6 +2926,17 @@ export default function App({
   const bar = (
     <FloatingBar
       layout={layoutKind}
+      railChevron={
+        isMobile ? (
+          <RailChevron
+            className="float pointer-events-auto h-14 items-center rounded-full p-1.5"
+            open={railOpen}
+            onToggle={() => setRailOpen((o) => !o)}
+            unsaved={gitWorkspace ? unsavedCount(gitHandle) : 0}
+            problems={problemCount}
+          />
+        ) : undefined
+      }
       runCommand={runCommand}
       onCommandBar={summonBar}
       recInfo={recInfo}
@@ -3345,7 +3357,7 @@ export default function App({
   };
   // A right panel ends above the dock, and the toasts sit above it too (spec: bottom-editors.md).
   const dockUp = dock.open && !isMobile;
-  const railShown = railOpen && !isMobile;
+  const railShown = railOpen;
   // The floating row (bar, controls) sits 16 px from the foot, or right above the dock when it is open (docs/shell.md).
   const floatBottom = !dockUp
     ? "16px"
@@ -3420,7 +3432,8 @@ export default function App({
             {/* The panes and the right panels' buttons, as a vertical toolbar on the right edge (shell/PanelRail.tsx); a phone has its menu. */}
             {railShown && (
               <PanelRail
-                onCommandBar={portrait ? summonBar : undefined}
+                onCommandBar={isMobile || portrait ? summonBar : undefined}
+                bottom={isMobile ? 28 + stripH + 8 : undefined}
                 save={(className) =>
                   gitWorkspace ? (
                     <>

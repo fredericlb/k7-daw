@@ -33,7 +33,10 @@ export function FloatingBar({
   surfaceOnly = false,
   runCommand,
   rootRef,
+  railChevron,
 }: {
+  /** A phone's rail chevron, at its bar's right end where the command bar's button stood (the button moves into the rail). */
+  railChevron?: ReactNode;
   /** The bar's root, so the editor popin can measure how tall it is. */
   rootRef?: Ref<HTMLDivElement>;
   layout: ShellLayout;
@@ -167,7 +170,7 @@ export function FloatingBar({
         {capsule}
       </div>
       <span className="flex-1" />
-      {phone && commandButton}
+      {phone && (railChevron ?? commandButton)}
     </>
   );
   if (phone)
