@@ -2,6 +2,8 @@
 // A reader would get wrong that the types are the whole module: each milestone adds the file it names in the work order.
 
 mod arrange;
+#[cfg(test)]
+mod arrange_tests;
 mod automation;
 mod build;
 mod category;
@@ -20,8 +22,11 @@ mod texts;
 mod types;
 mod wire;
 
-pub use arrange::{ParsedName, TrackFamily, order_tracks, parse_track_name, sort_tracks_by_kind, track_kind_rank};
-pub use category::{TrackCategory, auto_colors, category_of_text, category_shade, track_category};
+pub use arrange::{
+    ParsedName, TRACK_PREFIXES, TrackFamily, order_tracks, parse_track_name, sort_tracks_by_kind, track_kind, track_kind_rank,
+    track_label,
+};
+pub use category::{TRACK_CATEGORIES, TrackCategory, auto_colors, category_of_text, category_shade, track_category};
 pub use compile::{Compiled, Failure, Request, Spent, Vsts, compile, compile_keeping};
 pub use freeze_points::{FROZEN_CLIP_SUFFIX, frozen_clip};
 pub use highlight::highlighted;

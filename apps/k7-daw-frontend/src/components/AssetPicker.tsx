@@ -8,7 +8,7 @@
 // folder prefix: a module's assets carry no kind prefix, so such a filter matches nothing
 // (apps/k7-daw-frontend/packages/song/docs/moduleAssets.md).
 
-import { assetsForParam } from "@studio/song-schema/moduleTypes";
+import { assetsForParam } from "@studio/k7-wasm/module";
 import { fuzzyScore } from "../fuzzy";
 import { type TreeNode, TreePicker } from "./TreePicker";
 

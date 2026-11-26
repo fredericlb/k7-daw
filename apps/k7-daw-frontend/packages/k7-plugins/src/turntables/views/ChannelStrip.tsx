@@ -2,7 +2,7 @@
 // knobs and the filter under them. ROTARY, unlike the tempo fader on the other edge — a knob's
 // neutral is its middle, and a round one shows that at a glance. See ../../docs/eq.md.
 
-import { STEM_NEUTRAL, STEM_RANGE, type Stem } from "@studio/song-schema/stems";
+import { STEM_NEUTRAL, STEM_RANGE, type Stem } from "@studio/k7-wasm/stems";
 import {
   Activity,
   AudioLines,

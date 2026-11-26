@@ -6,7 +6,7 @@
 // `strips`, it is the MIXER instead: the strips side by side, Master the last, its controls below the row.
 
 import type { PluginParamsStore } from "@studio/engine-browser/params";
-import { ASPECTS, aspectOf } from "@studio/song-schema/aspect";
+import { ASPECTS, aspectOf } from "@studio/k7-wasm/picture";
 import { DockHeaderRow, DockHint, DockStatus } from "@studio/ui/editor-dock";
 import { Workflow } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
@@ -88,7 +88,7 @@ export function GraphPanel({
   videoSpans?: Readonly<Record<string, readonly LaneSpan[]>>;
   /** …and the notes', for a MIDI cable's ripple (../noteSpans.ts). */
   noteLanes?: Readonly<Record<string, LaneNotes>>;
-  /** The FRAME's size, so the RENDER card ticks the shape it is (@studio/song-schema/aspect). */
+  /** The FRAME's size, so the RENDER card ticks the shape it is (@studio/k7-wasm/picture). */
   viewport?: readonly [number, number];
   /** The compiled doc, for the rack pads' lit state — straight through to ChainsTab. */
   project?: WebProject | null;

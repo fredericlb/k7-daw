@@ -3,10 +3,7 @@
 // nothing of accounts or projects: the job server hands it a scene whose URLs are its own, and it
 // takes the finished file. See docs/serverRender.md.
 
-import type {
-  ExportFormat,
-  ExportQuality,
-} from "@studio/song-schema/renderSettings";
+import type { ExportFormat, ExportQuality } from "@studio/k7-wasm/picture";
 import { exportScene } from "./export";
 import type { VideoScene } from "./scene";
 

@@ -1,9 +1,14 @@
-// trackColor.ts — the colour a track's CATEGORY (trackKind.ts) says it with: vox pink, drums red,
+// trackColor.ts — the colour a track's CATEGORY (the Rust `track_category`) says it with: vox pink, drums red,
 // basses brown, guitars green, keys blue, synths purple, the rest grey — in that order on screen.
 // Several tracks of one category take shades of its colour, so they stay told apart.
 // Pure, no fs: the browser and the compile read the same answer. See docs/trackColor.md.
 
-import { categoryRank, type TrackCategory } from "./trackKind";
+import { TRACK_CATEGORIES } from "@studio/k7-wasm/consts";
+
+export type TrackCategory = (typeof TRACK_CATEGORIES)[number];
+
+/** Where a category's tracks sit: its index in TRACK_CATEGORIES. */
+const categoryRank = (c: TrackCategory): number => TRACK_CATEGORIES.indexOf(c);
 
 // Each category's hue and saturation, and the lightness span its shades are spread over: one track sits in the middle.
 const PALETTE: Record<

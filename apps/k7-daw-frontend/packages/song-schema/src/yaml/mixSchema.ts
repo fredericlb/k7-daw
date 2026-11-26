@@ -2,10 +2,10 @@
 // set drops the needle, keyed by each record's workspace path, as the set list names it.
 // Full rationale: docs/mixFile.md.
 
+import { isRecordRef } from "@studio/k7-wasm/records";
 import { z } from "zod";
-import { isRecordRef } from "../records";
 
-// The ref vocabulary itself is records.ts; this file is only what the FILE looks like.
+// The ref vocabulary itself is `@studio/k7-wasm/records`; this file is only what the FILE looks like.
 const RecordRef = z
   .string()
   .refine(

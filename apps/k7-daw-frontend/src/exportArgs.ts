@@ -15,7 +15,7 @@ import {
   VIDEO_FORMATS,
   type VideoFormat,
   type VideoSettings,
-} from "@studio/song-schema/renderSettings";
+} from "@studio/k7-wasm/picture";
 
 /** The mixdown formats the file service will render. */
 export const MIX_FORMATS = ["wav", "mp3"] as const;
@@ -135,4 +135,4 @@ export function parseExportAsk(rest: string): ExportAsk | null {
   };
 }
 
-export type { VideoSettings } from "@studio/song-schema/renderSettings";
+export type { VideoSettings } from "@studio/k7-wasm/picture";

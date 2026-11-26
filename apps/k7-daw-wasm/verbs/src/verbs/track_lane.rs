@@ -290,6 +290,16 @@ mod tests {
     }
 
     #[test]
+    fn a_picture_lane_dropped_on_the_top_row_ends_up_in_front() {
+        // Layers are stated bottom first, so the lane in front is the last one.
+        let layers: Vec<String> = ["main", "pip", "box"].iter().map(|s| (*s).to_owned()).collect();
+        let at = order_position(&layers, "box").unwrap_or(0.0);
+        assert_eq!(reorder(&layers, "main", at), ["pip", "box", "main"]);
+        assert_eq!(reorder(&layers, "d", 2.0), ["main", "d", "pip", "box"]);
+        assert_eq!(reorder(&layers, "b", 2.0), ["main", "b", "pip", "box"]);
+    }
+
+    #[test]
     fn a_free_name_is_the_first_unused_number() {
         assert_eq!(free_name("t", &|n| n == "t-1", false, 1), "t-2");
     }

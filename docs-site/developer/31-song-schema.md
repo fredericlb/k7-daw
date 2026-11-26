@@ -15,7 +15,7 @@ rest of the codebase shares (timecodes, module vocabulary, playlists, stems, tak
 | `apps/k7-daw-frontend/packages/song-schema/src/yaml/moduleSchema.ts` | `ModuleSchema` — every field a module, node or lane may carry — plus `AlternativeSchema`, `UISchema`/`UiFileSchema`, `WidgetSchema`, `RackSchema`. |
 | `apps/k7-daw-frontend/packages/song-schema/src/yaml/chainSchema.ts` | `ChainFileSchema` with its structural refinements (first step, last step, lanes only in `start: true` chains, subchain rules), and the step predicates (`isEndStep`, `isCallStep`, `isTrackItem`, `itemsOf`, `expandCalls`). |
 | `apps/k7-daw-frontend/packages/song-schema/src/yaml/graphSchema.ts` | `GraphFileSchema` (`modules`, `bypassed`, `bus_only`, `tap_feeds`, `positions`). |
-| `apps/k7-daw-frontend/packages/song-schema/src/yaml/surfaceSchema.ts`, `surfaceRegistry.ts` | `SurfaceSchema`, the type ↔ layout table, the mapping skeletons, and the open registry a plugin adds a surface type to. |
+| `apps/k7-daw-frontend/packages/song-schema/src/yaml/surfaceSchema.ts` | `SurfaceSchema`, the type ↔ layout table and the mapping skeletons; the surface types themselves are Rust's `SURFACE_TYPES`. |
 | `apps/k7-daw-frontend/packages/song-schema/src/yaml/assemblySchema.ts` | `AssemblyTemplateSchema` (library) and `AssemblyFileSchema` (project). |
 | `apps/k7-daw-frontend/packages/song-schema/src/yaml/mixSchema.ts`, `mixViewSchema.ts` | A set's cue sheet and the control → param binding a surface's `mapping` reuses. |
 | the `*File.ts` modules of `apps/k7-daw-frontend/packages/song-schema/src/yaml/` | Readers and text editors per kind: `trackFile`, `sequenceFile`, `curveFile`, `videoTrackFile`, `takeFile`, `chainFile`, `graphFile`, `moduleFile`, `surfaceFile`, `assemblyFile`, `mixFile`, `alternativeFile`. |
@@ -24,7 +24,7 @@ rest of the codebase shares (timecodes, module vocabulary, playlists, stems, tak
 | `apps/k7-daw-frontend/packages/song-schema/src/yaml/sugar.ts`, `k7xIssues.ts` | k7x short forms and k7x-located findings. |
 | `apps/k7-daw-frontend/packages/song-schema/src/moduleTypes.ts` | The module vocabulary: type folders and their default ports, built-in ends, namespaces, refs. |
 | `apps/k7-daw-frontend/packages/song-schema/src/keyframes.ts` | Shot animation keys and their evaluation. |
-| other `src/*.ts` | `playlist`, `reference`, `songRef`, `presets`, `tasks`, `projectTags`, `libraryVersions`, `alternatives`, `engines`, `stems`, `takes`, `warpPoints`, `trackKind`, `trackColor`, `placementId`, `seqWindow`, `curveVocab`, `builtinParams` (generated). |
+| other `src/*.ts` | `playlist`, `reference`, `songRef`, `presets`, `tasks`, `libraryVersions`, `alternatives`, `engines`, `takes`, `warpPoints`, `trackColor`, `placementId`, `curveVocab`, `builtinParams` (generated). |
 
 ## Choices
 
