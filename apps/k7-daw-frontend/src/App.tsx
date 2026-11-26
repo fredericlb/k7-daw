@@ -227,7 +227,7 @@ import { pictureRowId, placementOf, type RowKey, type RowTarget } from "./rows";
 import { saveLabel } from "./saveLabel";
 import { useEngineLostToast, useProgressToast } from "./shell/engineToasts";
 import { FloatingBar } from "./shell/FloatingBar";
-import { HeaderGit } from "./shell/HeaderGit";
+import { GitRailSave, HeaderGit, unsavedCount } from "./shell/HeaderGit";
 import { type OverflowLaneView, OverflowMenu } from "./shell/OverflowMenu";
 import { PanelRail } from "./shell/PanelRail";
 import {
@@ -2905,7 +2905,11 @@ export default function App({
       rail={
         isMobile
           ? undefined
-          : { open: railOpen, onToggle: () => setRailOpen((o) => !o) }
+          : {
+              open: railOpen,
+              onToggle: () => setRailOpen((o) => !o),
+              unsaved: gitWorkspace ? unsavedCount(gitHandle) : 0,
+            }
       }
       lockBanner={merging ? lockedSay() : null}
       overflow={
@@ -3406,6 +3410,16 @@ export default function App({
             {/* The panes and the right panels' buttons, as a vertical toolbar on the right edge (shell/PanelRail.tsx); a phone has its menu. */}
             {railShown && (
               <PanelRail
+                save={(className) =>
+                  gitWorkspace ? (
+                    <GitRailSave
+                      git={gitHandle}
+                      transport={gitTransport}
+                      workspace={gitWorkspace}
+                      className={className}
+                    />
+                  ) : null
+                }
                 closeHref={projectsUrl(window.location.href)}
                 panes={switcherPanes}
                 pane={full}

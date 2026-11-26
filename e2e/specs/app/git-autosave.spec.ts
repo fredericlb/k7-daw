@@ -84,6 +84,10 @@ test("an edit is auto-saved to the person's branch and a Save squashes it onto m
     });
 
     await test.step("Save is one commit on main, and the branch restarts from it", async () => {
+      // Save is the right-edge rail's first button, folded under the header's chevron.
+      await page
+        .getByRole("button", { name: "Show the toolbar", exact: true })
+        .click();
       await page.getByRole("button", { name: /^Save \d+ changes?$/ }).click();
       await expect(page.getByText("Saved", { exact: true })).toBeVisible(SLOW);
       await expect

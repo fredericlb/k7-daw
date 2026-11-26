@@ -1,4 +1,4 @@
-// ProjectHeader.tsx — the project's header: the status line, spinner, git, the dock's buttons and the rail's chevron.
+// ProjectHeader.tsx — the project's header: spinner, git's menu, the dock's buttons and the rail's chevron.
 // A phone keeps Back, the name and the warning chip (it has no rail); the panes, panels and Close are PanelRail.tsx's.
 // The engine's state is only a data attribute here (e2e reads it): the person is told by toasts, never by a light.
 import { Badge } from "@studio/ui/badge";
@@ -75,7 +75,7 @@ export function ProjectHeader({
   /** The DOCK's buttons (the Mixer); the right panels' are the rail's. */
   panels: HeaderPanel[];
   /** The chevron that unfolds the right-edge rail (PanelRail.tsx), last in the header; none on a phone. */
-  rail?: { open: boolean; onToggle: () => void };
+  rail?: { open: boolean; onToggle: () => void; unsaved: number };
   /** The phone's menu, standing in for the capsules on the right. */
   overflow: ReactNode;
   /** The sentence under the header while a merge locks editing. */
@@ -108,7 +108,7 @@ export function ProjectHeader({
               </a>
             </Button>
           )}
-          {/* A phone keeps the name (it has no rail and no Close); a desk shows only the status line. */}
+          {/* A phone keeps the name: it has no rail and no Close. */}
           <div className="min-w-0 shrink">
             {phone && (
               <h1
@@ -118,8 +118,9 @@ export function ProjectHeader({
                 {name || "…"}
               </h1>
             )}
+            {/* A desk draws no status line: it is read out, not shown (docs/shell.md). */}
             {!phone && (
-              <p className="type-status truncate text-fg-2">
+              <p className="sr-only">
                 <StatusText store={statusStore} />
               </p>
             )}
@@ -201,6 +202,15 @@ export function ProjectHeader({
                   >
                     {rail.open ? <ChevronUp /> : <ChevronDown />}
                     {!rail.open && <WarnBadge n={problems} />}
+                    {!rail.open && rail.unsaved > 0 && (
+                      <Badge
+                        variant="count-sm"
+                        aria-hidden
+                        className="pointer-events-none absolute -top-1.5 -left-1.5"
+                      >
+                        {rail.unsaved}
+                      </Badge>
+                    )}
                   </CapsuleButton>
                 </Capsule>
               )}

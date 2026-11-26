@@ -263,7 +263,7 @@ bottom margin for the bar instead.
 
 | piece | file | what it is |
 |---|---|---|
-| header | `shell/ProjectHeader.tsx` | the status line, the spinner, the git capsule, the dock's Mixer and, last, the chevron that unfolds the rail; the pane switcher, the right panels' buttons and Close are the rail's (`shell/PanelRail.tsx`); a phone, with no rail, keeps Back, the name and the warning chip; laid out in flow: a `flex-1` left cluster and a right cluster of the same basis, so nothing overlaps at any width |
+| header | `shell/ProjectHeader.tsx` | the spinner, git's menu, the dock's Mixer and, last, the chevron that unfolds the rail; git's Save, the pane switcher, the right panels' buttons and Close are the rail's (`shell/PanelRail.tsx`), and the folded chevron carries the unsaved and problem counts; a phone, with no rail, keeps Back, the name and the warning chip; laid out in flow: a `flex-1` left cluster and a right cluster of the same basis, so nothing overlaps at any width |
 | git capsule | `shell/HeaderGit.tsx` | Save with its count, a menu (Pull, Saves); while a merge waits, one "Resolve N conflicts" button and a banner |
 | bar | `shell/FloatingBar.tsx`, `shell/ShellTransport.tsx` | the command bar button, the tool, the transport capsule, the pane's capsule (Lane views or Graph views) |
 | panels | `shell/panels.tsx` | the registry: an id, a glyph and a title each, in the kit's `SidePanel` (Pad, Desk) or `Sheet` (Phone) |
@@ -311,8 +311,9 @@ declares a desk). Mastering is not a pane: it is a section of the Mixer, and `ui
 opens the dock on it.
 
 **Command feedback is a toast** ("copied 1 event(s)"): what a command said is shown once, where the
-person looks. The line under the project's name (`StatusText`, `project-status-line`) carries only what
-a pane says while it is used — a drag's snapped cell, a menu's hint.
+person looks. The status line (`StatusText`, `project-status-line`) carries only what a pane says while it is
+used — a drag's snapped cell, a menu's hint, the caret; a desk reads it out without drawing it, so the header
+holds no text, and a phone draws it under its header.
 
 ### One colour per meaning, across every view
 

@@ -117,7 +117,7 @@ The home pages behind a floating tab bar (Projects, Surfaces, Tasks, Library, Se
 
 ### Git screens
 
-The git bar (workspace tree, Home row, project header), Save in one press with its toasts, the Conflict screen, the Sync settings and Clone a repository pages (Back to Projects; tabs GitHub, Forgejo, Other host; one repository picker per signed-in forge account), the Saves list, the identity form; GitHub's sign-in is in Settings → Services, and a Forgejo server is added and signed in there or in the Forgejo tab.
+The git bar (workspace tree, Home row; in a project, Save first on the right-edge toolbar with its count, and the header's git menu), Save in one press with its toasts, the Conflict screen, the Sync settings and Clone a repository pages (Back to Projects; tabs GitHub, Forgejo, Other host; one repository picker per signed-in forge account), the Saves list, the identity form; GitHub's sign-in is in Settings → Services, and a Forgejo server is added and signed in there or in the Forgejo tab.
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
@@ -153,7 +153,7 @@ The git bar (workspace tree, Home row, project header), Save in one press with i
 
 ### Project header and transport
 
-The header (the status line, spinner, git capsule, the Mixer, then the chevron that unfolds the right-edge toolbar, carrying the problem count while folded; a phone keeps Back, the name and the warning chip, its status line sits under it and the rest folds into the Views and panels dialog), the vertical toolbar on the right edge (folded by default; the pane switcher, the right panels' buttons with the problem count on Logs, Settings, then Close), the floating bar (command bar, tool, transport with Record's chevron, position, overview, tempo, metronome, master volume, the view's capsule) and the editor dock.
+The header (spinner, git's menu, the Mixer, then the chevron that unfolds the right-edge toolbar, carrying the problem count and the unsaved count while folded; a phone keeps Back, the name, its status line under the header and the warning chip, and the rest folds into the Views and panels dialog), the vertical toolbar on the right edge (folded by default; git's Save with its count, the pane switcher, the right panels' buttons with the problem count on Logs, Settings, then Close), the floating bar (command bar, tool, transport with Record's chevron, position, overview, tempo, metronome, master volume, the view's capsule) and the editor dock.
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
@@ -173,7 +173,7 @@ The header (the status line, spinner, git capsule, the Mixer, then the chevron t
 | 03.23 | Set the song's output level | drag the master volume in the floating bar (written on release) | arrows on the focused fader (0.5 dB) | drag the master volume; on a phone, the one in the info strip above the bar | T M D |
 | 03.24 | Fix a clipped mix | click "fix" next to the clip light | — | — | D |
 | 03.25† | Show / hide the graph notes | click the notes button | — | tap | T M D |
-| 03.26 | Open the Mixer or the Events dock | click Mixer in the header's panel toolbar; opening a clip, a take or a roll opens Events | the key bound to `ui mixer` | tap Mixer in Views and panels | T M D |
+| 03.26 | Open the Mixer or the Events dock | click Mixer in the header; opening a clip, a take or a roll opens Events | the key bound to `ui mixer` | tap Mixer in Views and panels | T M D |
 | 03.27 | Close the editor dock | click Close editor in the dock header | Esc | tap Close editor | T M D |
 | 03.28 | Resize the editor dock | drag the separator over its top edge (44 px tall, 120 px min); hold it 400 ms, then move up to expand the editor to full height or down to fold it back | ↑ / ↓ on the focused separator; Enter expands or folds | drag the separator; on a phone, hold the sheet's grabber, then move up to expand or down to fold | T M D |
 | 03.29 | Open / close a panel (resources, playlists, logs, tasks and history, export, settings) | click the chevron at the header's right end to unfold the vertical toolbar on the right edge (folded by default), then its button under the panes; the same button or the panel's Close closes it | the key bound to `ui <panel>` | tap its tile in Views and panels (phone); tap Close | T M D |

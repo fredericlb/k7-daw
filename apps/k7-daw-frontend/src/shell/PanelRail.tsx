@@ -1,8 +1,9 @@
-// PanelRail.tsx — the pane switcher, the buttons that open a right panel, then Settings and Close: one vertical toolbar on the right edge.
+// PanelRail.tsx — git's Save, the pane switcher, the buttons that open a right panel, then Settings and Close: one vertical toolbar.
 // It shows only once the header's chevron unfolds it; a phone has no rail, its overflow menu holds the same buttons (docs/shell.md).
 
 import { Capsule, CapsuleButton, CapsuleDivider } from "@studio/ui/capsule";
 import { Settings, X } from "@studio/ui/icons";
+import type { ReactNode } from "react";
 import { m } from "../paraglide/messages.js";
 import type { HeaderPane, HeaderPanel } from "./ProjectHeader";
 import { PANEL_DEFS } from "./panels";
@@ -16,6 +17,7 @@ const SQUARE =
 const CLOSE = `inline-flex items-center justify-center text-foreground outline-none transition-colors hover:bg-on-fill focus-visible:shadow-(--k7-focus-ring) [&_svg]:size-5 desk:[&_svg]:size-[18px] ${SQUARE}`;
 
 export function PanelRail({
+  save,
   panes,
   pane,
   onPane,
@@ -24,6 +26,8 @@ export function PanelRail({
   onSettings,
   closeHref,
 }: {
+  /** Git's Save, first (HeaderGit.tsx's GitRailSave), drawn with the rail's button class; null outside a git workspace. */
+  save: (className: string) => ReactNode;
   panes: HeaderPane[];
   pane: string;
   onPane: (id: string) => void;
@@ -39,6 +43,7 @@ export function PanelRail({
       aria-orientation="vertical"
       className="absolute top-[calc(var(--k7-header-h)+var(--k7-panel-gap-top))] right-3 z-(--k7-z-header) h-auto desk:h-auto flex-col gap-1.5 p-1"
     >
+      {save(SQUARE)}
       <div
         role="group"
         aria-label={m["shell.pane"]()}
