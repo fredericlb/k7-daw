@@ -2,6 +2,7 @@
 // The half of `SeqGridPane` that is not its frame, held apart so the frame can change without a
 // second copy of "read, hand to the grid, write back". `SeqGrid` itself stays controlled and file-blind. See docs/noteGrids.md.
 
+import { DockStatus } from "@studio/ui/editor-dock";
 import { useEffect, useRef, useState } from "react";
 import { api } from "../api";
 import type { SetStatus } from "../hooks/useLogs";
@@ -96,9 +97,8 @@ export function SeqGridFile({
       });
   };
 
-  if (error) return <div className="p-4 text-destructive text-sm">{error}</div>;
-  if (content === null)
-    return <div className="p-4 text-muted-foreground text-sm">loading…</div>;
+  if (error) return <DockStatus tone="error">{error}</DockStatus>;
+  if (content === null) return <DockStatus>{m["common.loading"]()}</DockStatus>;
   return (
     <SeqGrid content={content} racks={racks} resetKey={path} onChange={write} />
   );

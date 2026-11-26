@@ -4,7 +4,7 @@
 // piano roll. Not PianoRoll itself, which fits its view ONCE per clip — a take outgrows that fit.
 
 import { Button } from "@studio/ui/button";
-import { DockHeaderRow } from "@studio/ui/editor-dock";
+import { DockHeaderRow, DockHint } from "@studio/ui/editor-dock";
 import { Square } from "@studio/ui/icons";
 import { useEffect, useRef, useState } from "react";
 import type { LiveMidiTake } from "../hooks/useMidiRecording";
@@ -140,7 +140,16 @@ export function MidiTakeRoll({
             </>
           )}
         </div>
+        <Button
+          size="sm"
+          variant="secondary"
+          onClick={onStop}
+          title={m["clip.stopTake"]()}
+        >
+          <Square className="mr-1 h-3 w-3" /> Stop
+        </Button>
       </DockHeaderRow>
+      <DockHint text={m["clip.takeHint"]()} />
       <div className="relative flex min-h-0 flex-1 overflow-hidden rounded border border-border bg-background">
         {/* The keys: a C is named, a black key shaded, so a pitch reads without counting rows. */}
         <div className="relative h-full shrink-0" style={{ width: KEYS_W }}>
@@ -193,17 +202,6 @@ export function MidiTakeRoll({
             </div>
           </div>
         </div>
-      </div>
-      <div className="flex shrink-0 items-center gap-3 text-xs text-muted-foreground">
-        <p className="min-w-0 flex-1">{m["clip.takeHint"]()}</p>
-        <Button
-          size="sm"
-          variant="secondary"
-          onClick={onStop}
-          title={m["clip.stopTake"]()}
-        >
-          <Square className="mr-1 h-3 w-3" /> Stop
-        </Button>
       </div>
     </section>
   );

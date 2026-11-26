@@ -29,6 +29,7 @@ import { moduleKeyFromPath } from "@studio/song-schema/moduleTypes";
 import type { ReferenceTrack } from "@studio/song-schema/reference";
 import { beatsToPosition, parsePosition } from "@studio/song-schema/timecode";
 import { Choice } from "@studio/ui/choice";
+import { DockHint, DockStatus } from "@studio/ui/editor-dock";
 import {
   AudioLines,
   Columns3,
@@ -3058,14 +3059,10 @@ export default function App({
   const eventsBody = (
     <div className="flex h-full min-h-0 min-w-0 flex-col">
       {(!dockSlot || dockSlot.kind === "trackModules") && (
-        <div className="flex h-full flex-col items-center justify-center gap-1 px-4 text-center">
-          <p className="font-semibold text-foreground text-sm">
-            {m["panel.eventEmptyTitle"]()}
-          </p>
-          <p className="max-w-md text-muted-foreground text-xs">
-            {m["panel.eventEmpty"]()}
-          </p>
-        </div>
+        <>
+          <DockStatus>{m["panel.eventEmptyTitle"]()}</DockStatus>
+          <DockHint text={m["panel.eventEmpty"]()} />
+        </>
       )}
       {dockSlot?.kind === "grid" && (
         <PaneBoundary

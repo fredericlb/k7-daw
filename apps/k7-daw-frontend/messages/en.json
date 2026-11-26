@@ -869,7 +869,6 @@
   "clip.noChain": "no chain",
   "clip.done": "Done",
   "clip.doneHint": "Done: file this take as reviewed",
-  "clip.countingIn": "counting in — the take starts after",
   "clip.noTake": "no take — start the transport with recording armed",
   "clip.readingTake": "reading the take…",
   "pl.noAudioRow": "no row of this playlist has any audio",

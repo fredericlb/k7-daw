@@ -7,6 +7,7 @@
 import { setCompSpan } from "@studio/song-schema/takes";
 import { beatsToPosition } from "@studio/song-schema/timecode";
 import { Button } from "@studio/ui/button";
+import { DockHeaderRow, DockHint } from "@studio/ui/editor-dock";
 import { Check, Circle, Square, Trash2, X } from "@studio/ui/icons";
 import { usePointerFollow } from "@studio/ui-timeline/drag";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -236,66 +237,73 @@ export function TakesView({
 
   return (
     <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-1">
-      <div className="flex items-center gap-2 text-xs text-muted-foreground">
-        <Button
-          size="icon"
-          variant={host.recording ? "default" : "glass"}
-          className="size-11 rounded-full"
-          onClick={() =>
-            host.recording
-              ? host.stop()
-              : // The span's start when one is drawn, else the event's own: a take re-records a PART, from its top.
-                host.record(ev, sel?.from ?? ev.start, sel?.to ?? null)
-          }
-          title={
-            host.recording
-              ? m["takes.stop"]()
-              : sel
-                ? m["takes.recordPunchHint"]({
-                    from: pos(sel.from),
-                    to: pos(sel.to),
-                  })
-                : m["takes.recordHint"]()
-          }
-          aria-label={host.recording ? m["takes.stop"]() : m["takes.record"]()}
-        >
-          {host.recording ? (
-            <Square className="h-3.5 w-3.5" />
-          ) : (
-            <Circle className="size-4 fill-record text-record" />
+      {/* The takes' tools are the title bar's, like every editor's options (docs/editors.md). */}
+      <DockHeaderRow>
+        <div className="flex shrink-0 items-center gap-2 text-xs text-muted-foreground">
+          <Button
+            size="icon"
+            variant={host.recording ? "default" : "glass"}
+            className="size-11 rounded-full"
+            onClick={() =>
+              host.recording
+                ? host.stop()
+                : // The span's start when one is drawn, else the event's own: a take re-records a PART, from its top.
+                  host.record(ev, sel?.from ?? ev.start, sel?.to ?? null)
+            }
+            title={
+              host.recording
+                ? m["takes.stop"]()
+                : sel
+                  ? m["takes.recordPunchHint"]({
+                      from: pos(sel.from),
+                      to: pos(sel.to),
+                    })
+                  : m["takes.recordHint"]()
+            }
+            aria-label={
+              host.recording ? m["takes.stop"]() : m["takes.record"]()
+            }
+          >
+            {host.recording ? (
+              <Square className="h-3.5 w-3.5" />
+            ) : (
+              <Circle className="size-4 fill-record text-record" />
+            )}
+          </Button>
+          <span className="rounded-full bg-(--k7-row) px-3 py-1 font-mono text-[12px] text-foreground">
+            {sel
+              ? `${pos(sel.from)} → ${pos(sel.to)}`
+              : m["takes.fromPosition"]({ position: pos(ev.start) })}
+          </span>
+          {sel && (
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => setSel(null)}
+              title={m["takes.clearSpanHint"]()}
+              aria-label={m["takes.clearSpan"]()}
+            >
+              <X className="h-3.5 w-3.5" />
+            </Button>
           )}
-        </Button>
-        <span className="rounded-full bg-(--k7-row) px-3 py-1 font-mono text-[12px] text-foreground">
-          {sel
-            ? `${pos(sel.from)} → ${pos(sel.to)}`
-            : m["takes.fromPosition"]({ position: pos(ev.start) })}
-        </span>
-        {sel && (
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={() => setSel(null)}
-            title={m["takes.clearSpanHint"]()}
-            aria-label={m["takes.clearSpan"]()}
-          >
-            <X className="h-3.5 w-3.5" />
-          </Button>
-        )}
-        {/* Notes do not fade, so a MIDI event's seams take no crossfade (song docs/takes.md). */}
-        {ev.kind === "audio" && (
-          <Button
-            size="sm"
-            variant={xfTool ? "default" : "chip"}
-            onClick={() => setXfTool((v) => !v)}
-            aria-pressed={xfTool}
-            title={m["takes.crossfadeHint"]()}
-            aria-label={m["takes.crossfadeTool"]()}
-          >
-            <ModeIcon mode="crossfade" />
-          </Button>
-        )}
-        <span className="ml-auto">
-          {xfTool
+          {/* Notes do not fade, so a MIDI event's seams take no crossfade (song docs/takes.md). */}
+          {ev.kind === "audio" && (
+            <Button
+              size="sm"
+              variant={xfTool ? "default" : "chip"}
+              onClick={() => setXfTool((v) => !v)}
+              aria-pressed={xfTool}
+              title={m["takes.crossfadeHint"]()}
+              aria-label={m["takes.crossfadeTool"]()}
+            >
+              <ModeIcon mode="crossfade" />
+            </Button>
+          )}
+        </div>
+      </DockHeaderRow>
+      <DockHint
+        text={
+          xfTool
             ? seams.length
               ? m["takes.hintSeam"]()
               : m["takes.hintNoSeam"]()
@@ -303,9 +311,9 @@ export function TakesView({
               ? m["takes.hintWhole"]()
               : sel
                 ? m["takes.hintSpan"]()
-                : m["takes.hintDrag"]()}
-        </span>
-      </div>
+                : m["takes.hintDrag"]()
+        }
+      />
       {/* The song's bars, which a click seeks to — the one ruler of this view. */}
       <div className="flex shrink-0">
         <div className="w-28 shrink-0" />

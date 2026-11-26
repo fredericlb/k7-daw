@@ -4,6 +4,7 @@
 // See docs/shell.md.
 
 import type { PluginParamsStore } from "@studio/engine-browser/params";
+import { DockHint, DockStatus } from "@studio/ui/editor-dock";
 import { cn } from "@studio/ui/lib/utils";
 import { splitTrailingMixer } from "@studio/ui-chains/anchorRight";
 import type { EdgeInsert, TrackControlValues } from "@studio/ui-chains/graph";
@@ -321,15 +322,11 @@ export function TrackModulesPane({
   // Every state keeps the frame, so the ✕ is reachable even with nothing to draw — a view you cannot close is worse than an empty one.
   const frame = (body: React.ReactNode, aside?: React.ReactNode) =>
     nodes ? body : <GraphSlotPane aside={aside}>{body}</GraphSlotPane>;
-  // What the pane says when there is no row to draw, where the row would be.
-  const say = (text: React.ReactNode) =>
-    frame(
-      <div className="flex h-full items-center justify-center p-4 text-xs text-muted-foreground">
-        {text}
-      </div>,
-    );
+  // With no row to draw, the title bar says why and the content stays blank (docs/editors.md).
+  const say = (text: string, tone?: "error") =>
+    frame(<DockStatus tone={tone}>{text}</DockStatus>);
 
-  if (error) return say(<span className="text-(--k7-error)">{error}</span>);
+  if (error) return say(error, "error");
   if (!laidShown) return say(m["common.loading"]());
   if (!laidShown.nodes.length)
     return say(nodes ? m["chain.noModules"]() : m["chain.laneReachesNone"]());
@@ -450,11 +447,7 @@ export function TrackModulesPane({
           }}
         />
       )}
-      {cards && glued && !controls && (
-        <p className="type-secondary shrink-0 px-1 text-fg-2">
-          {m["chain.saveHint"]()}
-        </p>
-      )}
+      {cards && glued && !controls && <DockHint text={m["chain.saveHint"]()} />}
       <div
         className={cn(
           "relative min-h-0 min-w-0 flex-1",

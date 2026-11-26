@@ -7,7 +7,8 @@
 
 import type { PluginParamsStore } from "@studio/engine-browser/params";
 import { ASPECTS, aspectOf } from "@studio/song-schema/aspect";
-import { DockHeaderRow } from "@studio/ui/editor-dock";
+import { DockHeaderRow, DockHint, DockStatus } from "@studio/ui/editor-dock";
+import { Workflow } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
 import type { LaneSpan } from "@studio/ui-chains/cables";
 import type { TrackControlValues } from "@studio/ui-chains/graph";
@@ -224,11 +225,11 @@ export function GraphPanel({
     // Only with nothing to draw: a failed RE-read keeps the last graph while useDocument retries.
     if (error && !graph)
       return (
-        <Note className="text-red-400">
+        <DockStatus tone="error">
           {m["graph.unavailable"]({ error })}
-        </Note>
+        </DockStatus>
       );
-    if (!graph) return <Note>{m["common.loading"]()}</Note>;
+    if (!graph) return <DockStatus>{m["common.loading"]()}</DockStatus>;
     if (strips)
       return (
         <>
@@ -250,12 +251,17 @@ export function GraphPanel({
             }}
           />
           {/* Master is drawn even with no lane to sum, so its fader and OUT stay in reach. */}
-          {!strips.length && <Note>{m["graph.noStrip"]()}</Note>}
+          {!strips.length && <DockStatus>{m["graph.noStrip"]()}</DockStatus>}
         </>
       );
-    if (!strips && !trackId) return <Note>{m["graph.selectTrack"]()}</Note>;
+    if (!strips && !trackId)
+      return <DockStatus>{m["graph.selectTrack"]()}</DockStatus>;
     if (!laidShown)
-      return <Note>{m["graph.noChainFrom"]({ track: trackId ?? "" })}</Note>;
+      return (
+        <DockStatus>
+          {m["graph.noChainFrom"]({ track: trackId ?? "" })}
+        </DockStatus>
+      );
     return (
       <DomChains
         labels={labels}
@@ -308,7 +314,6 @@ export function GraphPanel({
         aria-label={m["graph.master"]()}
         className="max-h-[55%] shrink-0 overflow-auto rounded-2xl bg-(--k7-row) p-3"
       >
-        <h3 className="type-caps pb-2 text-fg-2">{m["graph.master"]()}</h3>
         {master}
       </section>
     ) : null;
@@ -326,6 +331,18 @@ export function GraphPanel({
             </span>
           </p>
         </DockHeaderRow>
+        <DockHeaderRow>
+          <button
+            type="button"
+            onClick={() => void onModuleField("ui graph")}
+            aria-label={m["mixer.inGraph"]()}
+            title={m["mixer.inGraph"]()}
+            className="glass ml-auto grid size-9 shrink-0 cursor-pointer place-items-center rounded-full text-foreground focus-visible:shadow-(--k7-focus-ring) focus-visible:outline-none"
+          >
+            <Workflow className="size-4" />
+          </button>
+        </DockHeaderRow>
+        <DockHint text={m["mixer.footer"]()} />
         <div className={cn("flex min-h-0 flex-1", mobile && "overflow-x-auto")}>
           <div
             className={cn(
@@ -337,16 +354,6 @@ export function GraphPanel({
           </div>
         </div>
         {masterSection}
-        <p className="type-secondary flex shrink-0 flex-wrap items-center gap-x-3 px-1 text-fg-2">
-          <span>{m["mixer.footer"]()}</span>
-          <button
-            type="button"
-            onClick={() => void onModuleField("ui graph")}
-            className="cursor-pointer text-lavender underline"
-          >
-            {m["mixer.inGraph"]()}
-          </button>
-        </p>
       </div>
     );
   return (
@@ -357,14 +364,4 @@ export function GraphPanel({
       <div className="min-h-0 flex-1">{body()}</div>
     </div>
   );
-}
-
-function Note({
-  children,
-  className = "text-muted-foreground",
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return <div className={`p-4 text-sm ${className}`}>{children}</div>;
 }
