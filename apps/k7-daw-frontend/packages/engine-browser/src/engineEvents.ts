@@ -55,7 +55,7 @@ export interface PairRequest {
   code: string;
   since: number;
 }
-/** The engine runs without external plugins after quick crashes; the file it names is the likeliest culprit — apps/k7-daw-engine/k7-supervisor/docs/crashLoop.md. */
+/** The engine runs without external plugins after quick crashes; the file it names is the likeliest culprit — apps/k7-daw-backend/packages/k7-supervisor/docs/crashLoop.md. */
 export interface EngineSafeMode {
   crashes: number;
   /** The plugin it died loading, which is certain. */

@@ -15,7 +15,7 @@ export interface AgentHandle {
 
 export interface AgentKind {
   name: string;
-  /** Whether it answers a WebRTC offer: the native supervisor's refuses, the browser stays on the tunnel. */
+  /** Whether it answers a WebRTC offer: the Rust supervisor's refuses, the browser stays on the tunnel. */
   rtc: boolean;
   make(opts: TunnelAgentOptions): AgentHandle;
 }

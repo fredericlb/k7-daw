@@ -1,5 +1,5 @@
 //! build.rs — the build stamp `wire::build()` reports: `$K7_BUILD`, else the `version` of k7-runtime's
-//! package.json (the root's, copied), else "dev". The C++ supervisor took it from the same file.
+//! package.json (the root's, copied), else "dev". The engine takes its own from the same file.
 
 fn stamp(json: &str) -> Option<String> {
     let rest = json.split("\"version\"").nth(1)?;

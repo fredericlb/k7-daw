@@ -1,4 +1,4 @@
-//! protocol.rs — the NDJSON frames `k7-supervisor` speaks (`apps/k7-daw-engine/k7-supervisor/schema/hostProtocol.schema.json`),
+//! protocol.rs — the NDJSON frames `k7-supervisor` speaks (`apps/k7-daw-backend/packages/k7-supervisor/schema/hostProtocol.schema.json`),
 //! read into what a host keeps of them. A snapshot is serialized key for key as
 //! `JSON.stringify(snapshotOf(frame))`: the page and the conformance suite compare its bytes.
 

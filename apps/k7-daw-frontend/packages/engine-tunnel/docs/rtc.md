@@ -8,9 +8,9 @@ of it**: the probe races both and keeps the faster (`apps/k7-daw-frontend/packag
 
 ## Who answers the offer
 
-The engine's **supervisor**, over the tunnel it already holds: the browser POSTs its offer to
-`/api/engine/<id>/rtc` on the registry, the hub hands it to the supervisor, the supervisor answers
-and pipes the channel to the local engine exactly as the tunnel pipes a channel. The engine never
+The agent at the engine's machine, over the tunnel it already holds: the browser POSTs its offer to
+`/api/engine/<id>/rtc` on the registry, the hub hands it to the agent, and an agent that answers
+pipes the channel to the local engine exactly as the tunnel pipes a channel. The engine never
 learns WebRTC exists. An engine is offered this path only when its supervisor holds a tunnel
 (`PublicEngine.rtc`), since that is what carries the offer.
 
@@ -23,22 +23,19 @@ measures the relay alone; the probes after the claim race WebRTC too.
 Signalling is **one request and one answer**, candidates included — no trickle. It costs up to
 1.5 s of gathering on the first connect, and it spares the server a signalling session to keep.
 
-## libdatachannel
+## Who answers it today
 
-The supervisor answers with **libdatachannel** (`apps/k7-daw-engine/k7-supervisor/src/Rtc.cpp`), the
-established stack for the encryption and SCTP a data channel needs, on native threads of its own.
-The TypeScript reference agent answers with node-datachannel, which wraps the same library: an
-optional dependency, loaded on first use, so the server's tests run where its binary is missing
-and skip only the WebRTC case. The suite here runs against both (`testAgents.ts`).
-The Rust supervisor (`apps/k7-daw-backend/packages/k7-supervisor`) does not port this: it answers an offer with an
-`rtc-answer` carrying an error, and the browser stays on the tunnel, so `rtc.test.ts` skips an agent with `rtc: false`.
+The machine's supervisor (`apps/k7-daw-backend/packages/k7-supervisor`) answers an offer with an `rtc-answer`
+carrying an error, and the browser stays on the tunnel: only a remote server's page needs this path, and no
+page is hosted. The TypeScript reference agent answers with node-datachannel, an optional dependency loaded on
+first use, so the server's tests run where its binary is missing and skip only the WebRTC case; `rtc.test.ts`
+skips an agent that says `rtc: false` (`testAgents.ts`).
 
 ## The local network only, by default
 
 Neither end is given a STUN or TURN server, so the candidates are the machines' own addresses: the
 path works on the engine's network, which is where a second device usually is, and falls back to
-the relay elsewhere. `rtc::Options::iceServers` (`Rtc.h`) is where the supervisor's side would take one;
-the browser's would need the same, and neither is configured today.
+the relay elsewhere.
 
 ## Frames are fragmented
 

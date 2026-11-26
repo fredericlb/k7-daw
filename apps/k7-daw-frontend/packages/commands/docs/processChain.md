@@ -200,7 +200,7 @@ there is no serial insert that can be, so it declares `plugin: { type: offline }
 plugin at all (`@studio/song`'s [coldModules.md](../../song/docs/coldModules.md)).
 
 `mediatekChain` diverts those steps instead of resolving them to a plugin — the line
-`apps/k7-daw-engine/k7-supervisor/docs/stemSplit.md` points at. What follows from it:
+`apps/k7-daw-backend/packages/k7-supervisor/docs/stemSplit.md` points at. What follows from it:
 
 - **The chain either separates or treats, never both.** Flattened for a render (`chainSteps`) a
   chain is a list of module names with no ports on it, so a step *after* a separator would have

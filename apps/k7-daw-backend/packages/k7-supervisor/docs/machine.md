@@ -1,8 +1,7 @@
 # What a server asks of the machine
 
 The jobs of a jobs channel are a table (`tunnel.md`); this page is the choices of the ones that are not the cut
-(`separation.md`) and not the slots (`slots.md`). `local`, which `apps/k7-daw-engine/k7-supervisor/docs/supervisor.md`
-names among the jobs that read a path, is no job of the C++ list either: nothing asks it, so nothing answers it.
+(`separation.md`) and not the slots (`slots.md`). There is no `local` job: nothing asks it.
 
 | choice | why |
 |---|---|

@@ -9,13 +9,13 @@ restated here.
 | choice | why |
 |---|---|
 | frames are `k7-engine`'s (`tunnel/frames`), not a second copy | the hub's code is the one that already reads every agent's frames; an agent that spelled a header another way would be the drift `engine-tunnel`'s suites exist to catch. Only the shapes a hub SENDS are read here (`tunnel/wire.rs`), leniently, as the TypeScript agent reads them |
-| tasks and queues, not threads | the C++ agent kept a thread per queue and per job; a channel here is two `SerialQueue`s and a task for its engine socket, and the socket's reader never waits on a download |
-| closing a queue drops the task it is running too | the C++ queue let the running task finish on a thread nobody joined; a task that waits on a download for ever is cancelled with its channel, and its half file goes with it |
+| tasks and queues, not threads | a channel is two `SerialQueue`s and a task for its engine socket, and the socket's reader never waits on a download |
+| closing a queue drops the task it is running too | a task that waits on a download for ever is cancelled with its channel, and its half file goes with it |
 | `Link` counts the unsent bytes | tokio-tungstenite has no `bufferedAmount`; the writer task says when a frame is out, and the shedding of meters and the upload's high water (256 KB, 1 MB) read that count |
 | any frame from the hub proves the tunnel alive, not only a pong | a busy tunnel need not answer a ping to be known alive; a quiet one that misses its next ping is dropped, which is what the redial is for |
 | the root cache folder, never the path, is what a root's `name` is | a name is checked against `[A-Za-z0-9][A-Za-z0-9._-]*` before anything is joined, and a refused one closes its channel with a reason |
 | one agent per registry, whether or not the engine is up | the engine's port is asked at each channel, so a relaunch that moves it is followed; a channel opened while the engine is down closes with the dial's own error |
-| WebRTC is not ported | an `rtc-offer` is answered with an `rtc-answer` carrying an error and the browser stays on the tunnel (`docs/rust-supervisor-plan.md`, decision 1); `rtc.test.ts` skips an agent with `rtc: false` |
+| no WebRTC | an `rtc-offer` is answered with an `rtc-answer` carrying an error and the browser stays on the tunnel: only a remote server's page would need it, and no page is hosted (`docs/rust-supervisor-plan.md`, decision 1); `rtc.test.ts` skips an agent with `rtc: false` |
 
 ## The jobs a jobs channel may ask
 
@@ -35,8 +35,7 @@ handler with `Jobs::add`, taking the part's `Ctx` for what it needs (the paths, 
 ## What stays Windows's
 
 `segments.rs` refuses a segment ending in a dot or a space only on Windows, and a download that cannot be renamed over
-a file something holds open lands beside it (`clip~<mtime>.wav`) on every platform: both are the C++'s behaviour, kept
-where M8 will find it.
+a file something holds open lands beside it (`clip~<mtime>.wav`) on every platform.
 
 ## How it is tested
 

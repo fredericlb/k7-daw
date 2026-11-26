@@ -72,7 +72,7 @@ enum TrustedCas {
         return out
     }
 
-    // PEM, whatever came in: the supervisor appends this file's text to the roots it gives mbedTLS.
+    // PEM, whatever came in: the supervisor appends this file's text to its trust roots.
     private static func write(_ certs: [SecCertificate]) {
         let pem = certs.map { cert -> String in
             let b64 = (SecCertificateCopyData(cert) as Data).base64EncodedString(options: [.lineLength64Characters, .endLineWithLineFeed])

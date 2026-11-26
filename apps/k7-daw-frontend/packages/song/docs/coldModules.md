@@ -103,7 +103,7 @@ A stem separator is the other. It does not produce a number for a graph to use �
 **four audio files**, and it has to, because a chain step compiles to a serial insert on one
 Tracktion track and there is no fan-out in `ProjectDoc` at all. So it says
 `plugin: { type: offline }`: no engine plugin, and a pass writes its outputs before the render.
-See `apps/k7-daw-engine/k7-supervisor/docs/stemSplit.md`.
+See `apps/k7-daw-backend/packages/k7-supervisor/docs/stemSplit.md`.
 
 Both are cold for the same reason and obey the same rule — the input has to be knowable in
 full — which is why one word still covers them. What differs is what the pass hands back.
@@ -174,7 +174,7 @@ Two rules come with it, and both are about what a chain can SAY rather than what
 a chain separates or treats and never both (flattened for a render it is a list of names with no
 ports, so a step after a separator has four inputs and no way to name one), and the running is
 handed in through `CommandHost.runColdStep` — a host without one refuses by name. See
-`@studio/commands`' `docs/processChain.md` and `apps/k7-daw-engine/k7-supervisor/docs/stemSplit.md`.
+`@studio/commands`' `docs/processChain.md` and `apps/k7-daw-backend/packages/k7-supervisor/docs/stemSplit.md`.
 
 ## What is NOT wired yet
 

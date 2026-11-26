@@ -1,6 +1,6 @@
 //! protocol — the wire contract with the app that runs us: NDJSON, a whole SNAPSHOT per `state` frame and
 //! only when its bytes changed, a `result` per command, and commands back with one string argument. The
-//! wire's one definition is `apps/k7-daw-engine/k7-supervisor/schema/hostProtocol.schema.json`; the snapshot
+//! wire's one definition is `apps/k7-daw-backend/packages/k7-supervisor/schema/hostProtocol.schema.json`; the snapshot
 //! is held to its fixtures byte for byte (`tests/all/protocol.rs`).
 
 mod snapshot;

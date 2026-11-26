@@ -12,7 +12,7 @@ end of the page.
 ## Scope
 
 Two services really talk to the engine: **k7's editor** (the `pl8` session), by its two halves (browser +
-backend), plus the **supervisor** (`apps/k7-daw-engine/k7-supervisor`), which announces it to the registries.
+backend), plus the **supervisor** (`apps/k7-daw-backend/packages/k7-supervisor`), which announces it to the registries.
 
 Volume: ~4,300 lines of TypeScript, tests excluded, in three engine packages (`engine-protocol` 809,
 `engine-client` 470, `engine-browser` 3,047) beside the Rust core (`apps/k7-daw-backend/packages/k7-engine`), 183 C++ files under

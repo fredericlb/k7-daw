@@ -3,7 +3,7 @@
 //! before anything carrying the engine's token goes there. The hello's path and answer are
 //! `REGISTRY_HELLO_PATH` and `REGISTRY_SERVICE` in `web-protocol/services.ts`; the frames are
 //! `apps/k7-daw-backend/docs/engine/heartbeat.md`'s. What a reader gets wrong: a body's keys go out sorted,
-//! as the C++ supervisor's JSON library wrote them, since the wire is held byte for byte.
+//! since the wire is held byte for byte.
 
 use std::collections::BTreeMap;
 use std::sync::Mutex;
@@ -170,7 +170,7 @@ fn detail_of(res: &Response) -> String {
     format!("HTTP {}{tail}", res.status)
 }
 
-/// The same value with every object's keys sorted, which is how the C++ supervisor's JSON library wrote them.
+/// The same value with every object's keys sorted, which is the order the wire is held to.
 fn sorted(v: Value) -> Value {
     match v {
         Value::Object(m) => {

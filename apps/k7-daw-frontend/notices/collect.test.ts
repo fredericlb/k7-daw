@@ -201,14 +201,12 @@ describe("this repository's notices", () => {
     for (const e of notices.entries) expect(e.license, e.name).toBeTruthy();
   });
 
-  it("accounts for every library the engine and its supervisor fetch", () => {
-    const fetched = [
-      "apps/k7-daw-engine/k7-runtime/CMakeLists.txt",
-      "apps/k7-daw-engine/k7-supervisor/CMakeLists.txt",
-    ].flatMap((f) =>
-      [...read(f).matchAll(/FetchContent_Declare\((\w+)/g)].map(
-        (m) => m[1] ?? "",
-      ),
+  it("accounts for every library the engine fetches", () => {
+    const fetched = ["apps/k7-daw-engine/k7-runtime/CMakeLists.txt"].flatMap(
+      (f) =>
+        [...read(f).matchAll(/FetchContent_Declare\((\w+)/g)].map(
+          (m) => m[1] ?? "",
+        ),
     );
     const listed = new Set(
       file.components.flatMap((c) => c.fetchContent ?? []),

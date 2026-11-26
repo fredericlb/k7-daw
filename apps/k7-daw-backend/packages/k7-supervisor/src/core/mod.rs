@@ -2,7 +2,7 @@
 //! and everything else reaches it by message, so nothing needs a lock. It starts or adopts the engine, relaunches
 //! one that died through the crash loop, answers `engine.*` and `shutdown`, routes every other command to the
 //! part that named it, and emits a snapshot only when its bytes changed. Blocking work runs off this task.
-//! The paces and the order of a shutdown: `apps/k7-daw-engine/k7-supervisor/docs/supervisorPolicy.md`.
+//! The paces and the order of a shutdown: `apps/k7-daw-backend/packages/k7-supervisor/docs/supervisorPolicy.md`.
 
 mod ctx;
 

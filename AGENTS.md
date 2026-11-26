@@ -28,7 +28,7 @@ the zone's `docs/` directory is where the justification belongs:
 | the DJ desk | `apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/` |
 | the project shell | `apps/k7-daw-frontend/packages/project-shell/docs/` |
 | the C++ engine | `apps/k7-daw-engine/k7-runtime/docs/` |
-| the native supervisor | `apps/k7-daw-engine/k7-supervisor/docs/` |
+| the machine's supervisor | `apps/k7-daw-backend/packages/k7-supervisor/docs/` |
 | the Android app | `apps/k7-daw-engine/k7-runtime/docs/android.md` |
 | the iOS app | `apps/k7-daw-engine/k7-runtime/docs/ios.md` |
 | K7 DAW, the desktop app (Windows, Linux, macOS) | `apps/k7-daw-desktop/docs/` |
@@ -61,7 +61,7 @@ the production image, and the repo-wide pages in `docs/`. The short map:
 | dir | what it is |
 |---|---|
 | `apps/k7-daw-engine/k7-runtime` | C++ audio engine: receives a compiled `ProjectDoc` over WebSocket, plays it; never parses song files (its own `AGENTS.md`) |
-| `apps/k7-daw-engine/k7-supervisor` | C++ supervisor of the engine machine: starts and watches the engine, holds the tunnel, runs the jobs its backend asks (its own `AGENTS.md`) |
+| `apps/k7-daw-backend/packages/k7-supervisor` | the supervisor of the engine machine, in Rust, a crate of the backend: starts and watches the engine, holds the tunnel, runs the jobs its backend asks (its `docs/`) |
 | `apps/k7-daw-engine/scripts` | builds the engine and supervisor, packages the CLI archive and the desktop app's release files |
 | `apps/k7-daw-android`, `apps/k7-daw-ios` | the engine and supervisor on a phone, with k7's backend bundled (`apps/k7-daw-engine/k7-runtime/docs/android.md`, `ios.md`) |
 | `apps/k7-daw-frontend` | the text-first DAW's page — React/Vite, the one place k7's TypeScript lives: its own source, its `packages/` (`@studio/*`, consumed as raw TypeScript through `exports` subpaths: a bare deep import fails on purpose; most serve the page or the verbs' Worker, and `engine-client`, `engine-tunnel`, `env`, `song-strudel`, `tsconfig` and `vite-config` serve only scripts, tests and builds) and `user-docs/`, the documentation rendered at `/docs`; k7 runs on devices only, no hosted app (its own `AGENTS.md`) |

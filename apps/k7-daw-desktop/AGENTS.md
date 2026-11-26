@@ -1,7 +1,7 @@
 # AGENTS.md — the desktop app
 
 **K7 DAW, k7 on a computer** (Windows, Linux, macOS on Apple silicon). A Tauri app with one window.
-It runs k7's Rust front in its own process on `127.0.0.1:<standalone.json port>`, and starts nothing else. The front runs the machine's supervisor (`apps/k7-daw-engine/k7-supervisor`) and so its engine, and
+It runs k7's Rust front in its own process on `127.0.0.1:<standalone.json port>`, and starts nothing else. The front runs the machine's supervisor (`apps/k7-daw-backend/packages/k7-supervisor`) and so its engine, and
 holds the engine registry. The window shows k7 at that address, on the system's webview; the app menu's "Open in Browser"
 shows it in the person's browser.
 

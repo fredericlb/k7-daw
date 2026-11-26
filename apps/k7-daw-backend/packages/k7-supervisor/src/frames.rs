@@ -1,6 +1,6 @@
 //! frames.rs — where the host protocol's frames go: the real stdout, a pipe of their own inside an app (its
 //! stdout is shared), a channel for a host in this process, or nowhere under `--config`. The one writer of
-//! stdout: one stray line there and the app parses garbage (`apps/k7-daw-engine/k7-supervisor/docs/hostProtocol.md`).
+//! stdout: one stray line there and the app parses garbage (`apps/k7-daw-backend/packages/k7-supervisor/docs/hostProtocol.md`).
 
 use std::fs::File;
 use std::io::Write;

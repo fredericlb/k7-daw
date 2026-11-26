@@ -1,6 +1,6 @@
 # Building and shipping engines
 
-The engine and the supervisor are two CMake projects. Everything that builds them goes through a few Node scripts, so a developer, CI, the Android Gradle build and the server image all build the same way. **A cold engine build fetches and compiles Tracktion, JUCE, sfizz, Surge XT, QuickJS and NAM: expect tens of minutes and several GB.** On the Windows dev machine, never build by hand; Tilt's `native` resource owns it.
+The engine is a CMake project and the supervisor a crate of the Rust backend. Everything that builds them goes through a few Node scripts, so a developer, CI, the Android Gradle build and the server image all build the same way. **A cold engine build fetches and compiles Tracktion, JUCE, sfizz, Surge XT, QuickJS and NAM: expect tens of minutes and several GB.** On the Windows dev machine, never build by hand; Tilt's `native` resource owns it.
 
 ## CMake presets
 
@@ -27,7 +27,7 @@ Platform dependencies fetched at configure time: the Steinberg ASIO SDK on Windo
 |---|---|
 | `apps/k7-daw-engine/k7-runtime/scripts/build.mjs <preset>` | Configure only when there is no `CMakeCache.txt`, then build. Takes `apps/k7-daw-engine/k7-runtime/scripts/buildLock.mjs`'s lock on the build folder (a second build waits instead of corrupting Ninja's records) and caps compiler parallelism. Behind `npm run build:mac`, `build:win`, `build:android` in the `k7-runtime` workspace. |
 | `apps/k7-daw-engine/k7-runtime/scripts/run-tests.mjs` | Builds and runs the `studio_*` test targets in the platform's preset, under the same lock; skips an unconfigured tree |
-| `apps/k7-daw-engine/scripts/supervisorBuild.mjs` | `buildSupervisor(repo)` (preset from `$STUDIO_SUPERVISOR_PRESET` or the platform), `findSupervisor(repo)` (newest build, Debug last) |
+| `apps/k7-daw-engine/scripts/supervisorBuild.mjs` | `buildSupervisor(repo)` (cargo in release into `~/.cache/k7-supervisor-<checkout>`, ONNX Runtime from `onnxRuntime.mjs` beside it), `findSupervisor(repo)` |
 | `apps/k7-daw-engine/scripts/build-engine.mjs` | `npm run engine:build`: builds the engine (preset from `$STUDIO_ENGINE_PRESET` or the platform: `macos-clang`, `windows-msvc`, `release-gcc`) and the supervisor, then stages the command-line engine into `dist/k7-runtime/` with `stageEngine` and copies `engine.example.json` as `engine.json` |
 | `apps/k7-daw-engine/scripts/package-release.mjs --kind engine\|desktop` | Into `dist/release/`: `engine` archives `dist/k7-runtime/` as `k7-runtime_<version>_<platform>-<arch>.tar.gz` (`.zip` on Windows, made with System32's bsdtar); `desktop app` renames the installers `tauri build` left under `apps/k7-daw-desktop/src-tauri/target` (K7 DAW's) to `k7-daw_<version>_<platform>-<arch>.<ext>` (`apps/k7-daw-engine/scripts/desktopRelease.mjs`). The version is the root package.json's. |
 | `apps/k7-daw-engine/scripts/buildTools.mjs` | `distDir`, and `run` with the Windows shell quirk |

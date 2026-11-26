@@ -69,7 +69,7 @@ k7-front:
   K7_INSTANCE: "local"
   STUDIO_LIBRARY_SEED: "k7-core=$tree/k7-core"
 EOF
-# The command-line engine, listed at the bed's front alone, downloading no instrument (apps/k7-daw-engine/k7-supervisor/docs/supervisor.md).
+# The command-line engine, listed at the bed's front alone, downloading no instrument (apps/k7-daw-backend/packages/k7-supervisor/docs/supervisor.md).
 cat > "$bed/engine.json" << EOF
 { "registryUrls": ["http://127.0.0.1:$front"], "port": $engine, "instruments": [], "machineName": "e2e-$([ "$windows" = 1 ] && echo windows || echo linux)" }
 EOF

@@ -1,7 +1,7 @@
 //! inspect.rs — what the part asks the engine about ITSELF: at every start, its `whoami` (an adopted engine
 //! of another protocol or build, or one in safe mode, is replaced once; a safe one names its suspect), the
 //! LAN setting told again, and the hang watch that kills an engine up but frozen. The rules:
-//! `apps/k7-daw-engine/k7-supervisor/docs/crashLoop.md`.
+//! `apps/k7-daw-backend/packages/k7-supervisor/docs/crashLoop.md`.
 
 use std::sync::Arc;
 use std::sync::atomic::Ordering;

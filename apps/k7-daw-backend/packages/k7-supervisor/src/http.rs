@@ -1,7 +1,7 @@
 //! http — the one HTTP client of the supervisor: hyper over rustls with the trust roots, every call bounded,
 //! a redirect never followed (the answer must come from the address asked). A registry that connects and never
 //! answers is harmless on a heartbeat and fatal on the deregister that holds Quit open, hence the bounds.
-//! What a reader gets wrong: `timeout` bounds the connect AND the rest, each, as the C++ client did.
+//! What a reader gets wrong: `timeout` bounds the connect AND the rest, each.
 
 use std::collections::BTreeMap;
 use std::sync::Arc;

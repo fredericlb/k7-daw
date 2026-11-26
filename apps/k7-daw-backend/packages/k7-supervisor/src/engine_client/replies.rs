@@ -1,5 +1,5 @@
 //! replies.rs — the engine's reply frames as the supervisor's rows, read leniently: a missing or mistyped
-//! field is its empty value, as the C++ reader had it, since an engine of another build must not crash us.
+//! field is its empty value, since an engine of another build must not crash us.
 
 use serde_json::Value;
 

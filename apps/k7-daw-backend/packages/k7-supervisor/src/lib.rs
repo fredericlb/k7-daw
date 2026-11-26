@@ -1,8 +1,8 @@
 //! k7-supervisor — the engine machine's supervisor: starts, adopts and watches `k7-runtime`, and speaks the
 //! host protocol to the app that runs it (NDJSON on stdio, or two pipes inside an app). The core owns the
 //! engine's lifecycle and the snapshot; every other subsystem is a PART (`parts/`), added by one line.
-//! What a reader gets wrong: the wire and the files are the C++ supervisor's, byte for byte, since the
-//! hosts and the conformance suite read them (`docs/rust-supervisor-plan.md` at the repo root).
+//! What a reader gets wrong: the wire and the files are fixed byte for byte, since the hosts and the
+//! conformance suite read them (`docs/hostProtocol.md`, `docs/supervisor.md`).
 
 pub mod addresses;
 pub mod audio_policy;

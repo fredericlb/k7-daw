@@ -1,5 +1,5 @@
 //! snapshot.rs — the whole of what an app draws, and its `state` frame in a fixed key order: a frame is
-//! sent only when its bytes change. The writer is by hand, as the C++ one was, because the wire is not a
+//! sent only when its bytes change. The writer is by hand because the wire is not a
 //! derive's: `error` absent when empty, `downloads` and `rendering` absent at zero, `pluginCount` null.
 
 use serde_json::{Map, Value, json};

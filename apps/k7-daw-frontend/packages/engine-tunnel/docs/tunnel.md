@@ -8,7 +8,7 @@ file service — reaches it that way, however far apart the two are.
 
 The server's end, the **hub**, is the Rust front's (`apps/k7-daw-backend/packages/k7-engine/src/tunnel/`).
 This package is the **agent**'s end in TypeScript: the reference agent the suites run beside the C++
-supervisor's (`apps/k7-daw-engine/k7-supervisor/src/TunnelAgent.cpp`), so both are held to one hub.
+supervisor's (`apps/k7-daw-backend/packages/k7-supervisor/src/tunnel/agent.rs`), so both are held to one hub.
 
 ## Who may hold a tunnel
 
@@ -68,7 +68,7 @@ direction:
   close it delivers to the hub what the engine sent and only then says `close`.
 
 The wait is **bounded**: `CLOSE_DRAIN_MS` (`drain.ts`, `kCloseDrainMs` in
-`apps/k7-daw-engine/k7-supervisor/src/TunnelFrames.h`, `CLOSE_DRAIN` in the hub's `tunnel/hub_tunnel.rs`), 3 s, after which the channel is
+`apps/k7-daw-backend/packages/k7-engine/src/tunnel/frames/mod.rs`, `CLOSE_DRAIN` in the hub's `tunnel/hub_tunnel.rs`), 3 s, after which the channel is
 cut and what is left is dropped, never sent behind the close; and an agent's direction holding more than
 `HIGH_WATER_BYTES` when the close comes is cut at once. A stuck engine, or a download that never ends, must not hold a channel and
 its engine session for ever, and past a few seconds the person who closed it has moved on; the engine's
@@ -97,7 +97,7 @@ after it, which is what keeps a `transport play` behind the document it plays.
 Every channel shares one socket, so file bytes — a download, an upload, a `sync` copy — are also
 what every OTHER channel's frames wait behind: a relayed probe, a transport command. The senders
 stop at **1 MB** unsent (`HIGH_WATER_BYTES` in `drain.ts`, `kHighWaterBytes` in
-`apps/k7-daw-engine/k7-supervisor/src/TunnelFrames.h`) rather than several: on a home uplink a few megabytes
+`apps/k7-daw-backend/packages/k7-engine/src/tunnel/frames/mod.rs`) rather than several: on a home uplink a few megabytes
 ahead of a `whoami` is seconds, longer than a probe waits before calling the engine unreachable.
 The kernel's own socket buffer keeps the pipe full past that.
 
@@ -122,7 +122,7 @@ Only **whole strings** are rewritten, never substrings, and only under a shared 
 path, a device name, anything of the engine's machine is left alone because no root covers it.
 
 **A server path maps only when every segment can be a file name on any engine's machine**
-(`safeSegment`, `segments.ts`, the twin of `apps/k7-daw-engine/k7-supervisor/src/PathMap.cpp`): no empty, dot-
+(`safeSegment`, `segments.ts`, the twin of `apps/k7-daw-backend/packages/k7-supervisor/src/tunnel/path_map.rs`): no empty, dot-
 or space-only segment, no control character, `\` or `:`, no Windows device name, and on Windows no
 trailing dot or space. Both agents refuse the same table, because a path one of them would open is a
 path the server can aim at whichever machine runs the weaker one.

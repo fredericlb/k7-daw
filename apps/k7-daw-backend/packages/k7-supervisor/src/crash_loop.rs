@@ -2,7 +2,7 @@
 //! `QUICK` of its start is a QUICK crash; quick crashes in a row back off 0, 2, 4… up to 30 s, and from the
 //! `SAFE_MODE_AFTER`-th the engine starts in SAFE MODE, loading no external plugin. A longer run starts the
 //! count again. What a reader gets wrong: safe mode is never left on its own, only by a start the user asks
-//! for or a new supervisor (`apps/k7-daw-engine/k7-supervisor/docs/crashLoop.md`). Pure arithmetic over the times handed in.
+//! for or a new supervisor (`apps/k7-daw-backend/packages/k7-supervisor/docs/crashLoop.md`). Pure arithmetic over the times handed in.
 
 use std::time::{Duration, Instant};
 

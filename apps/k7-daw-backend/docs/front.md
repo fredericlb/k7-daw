@@ -26,7 +26,7 @@ no family takes ends in the last routes (`last.md`), never in another process. T
 |---|---|
 | every outbound TLS call (Claude, the git listings) is built from one root store, `k7_front::trust` | a self-hosted server under the person's own CA is reached by all of them, or by none |
 | Mozilla's roots (`webpki-roots`), plus the PEM file the host names in `K7_EXTRA_CA_CERTS` | a self-hosted server under the person's own CA is trusted by every outbound call; a file is a dependency nothing else is: `rustls-pki-types`' PEM reader is already rustls' |
-| no OS store | the OS store needs `rustls-native-certs`, a crate not taken. The supervisor reads the OS store on a desktop for the engine's own calls (`apps/k7-daw-engine/k7-supervisor`) |
+| no OS store | the OS store needs `rustls-native-certs`, a crate not taken. The supervisor reads the OS store on a desktop for the engine's own calls (`apps/k7-daw-backend/packages/k7-supervisor`) |
 | read once, at the front's start, before any client is built; an unreadable file is said and leaves Mozilla's roots | a trust store that moves under running clients would be two answers for one server |
 
 ## Every end leaves a line

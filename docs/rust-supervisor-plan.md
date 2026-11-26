@@ -75,7 +75,7 @@ behaviours, not their code, sized to what they prove and seconds in debug; a net
 | **M6** (built) instruments | the catalogue, the hash-pinned download, the unpack, one at a time with progress in the snapshot, `instruments.download`/`remove`, the first boot's choice | M3 | 6 | `Instruments_test`'s; an archive served on 127.0.0.1, a redirect, every answer a resume can meet, a wrong hash refused; the choices are `apps/k7-daw-backend/packages/k7-supervisor/docs/instruments.md` |
 | **M7** (built) stem separation | the windows and overlap-add, the 24-bit WAV, the decode through `waveform`, the budget and the phone's memory refusal, the ONNX session on the first provider that builds, the hour's end, `JobSlots`, the `separate` job, `--separate` | M1 (the job's line waits for M4) | 12 | `SeparationAudio_test`, `SeparationBudget_test`, `SeparationDecode_test`, `JobSlots_test` behaviours; a tiny ONNX model written by hand in the test, a cut that passes saying it skipped when the runtime is absent. `ort` 2.0.0-rc.15 with `load-dynamic` (feature `dynamic-ort`), `api-24`, `coreml` on Apple and `directml` on Windows; `waveform` linked as a path dependency with its `encode` feature, which brings symphonia, rubato, opus-rs, ebur128 and flacenc into the backend lock; the choices are `apps/k7-daw-backend/packages/k7-supervisor/docs/separation.md`; the Windows adapter choice stays M8's |
 | **M8** (built) Windows | the kill-on-close job the host holds, the TCP table's listener, the wide hostname, DirectML's discrete adapter, the `Disallowed` store and the server-auth usage | M1, M3, M7 | 6 | `win-clippy.sh`; the behaviours on a Windows machine when one is back |
-| **M9** the switch | the builds (`supervisorBuild.mjs`, `stageEngine.mjs`, `build-engine.mjs`, `dev-desktop.mjs`, the Android Gradle task, iOS's `stage.mjs` and the C ABI in `k7-embed`), `k7-local`'s `real.rs` against the Rust binary, the schema and pages moved, the C++ supervisor and its CMake deleted, the notices and the workflows | all | 12 | `bash scripts/agent/gate.sh` with `android-check.sh` and `ios-check.sh`, the conformance specs on the Mac's e2e bed, a signed desktop build run by hand |
+| **M9** (built) the switch | the builds (`supervisorBuild.mjs`, `stageEngine.mjs`, `build-engine.mjs`, `dev-desktop.mjs`, the Android Gradle task, iOS's `stage.mjs` and the C ABI in `k7-embed`), `k7-local`'s `real.rs` against the Rust binary, the schema and pages moved, the C++ supervisor and its CMake deleted, the notices and the workflows | all | 12 | `bash scripts/agent/gate.sh` with `android-check.sh` and `ios-check.sh`, the conformance specs on the Mac's e2e bed, a signed desktop build run by hand |
 
 **What M2 chose.** The queries are one part, `parts/queries`, over `engine_client` (one connection, one call in flight,
 a reader task that discards the engine's broadcasts and the news of any session). A result is kept only if the engine it
@@ -121,7 +121,23 @@ came from is still the one running, so a stop or a relaunch cannot be undone by 
 - **`k7-ws-engine` answers `project`** with a loaded session row, which is all the follow needs; no other part changed beyond `guard::mapped` made visible to the job modules.
 - **`local` is not ported because the C++ list has no such job** (`supervisor.md` names it, and nothing asks it).
 
-**M9's checklist: what the C++ does that no milestone ported.** Each is a decision for the switch, not a bug:
+**M9's choices** (built): the C++ supervisor and its CMake, `rust/` and tests are gone; the pages and the schema are
+the crate's (`apps/k7-daw-backend/packages/k7-supervisor/docs/`, `schema/`).
+
+- **The builds**: `supervisorBuild.mjs` is `cargo build --release -p k7-supervisor` into `~/.cache/k7-supervisor-<checkout>`
+  (or `$K7_SUPERVISOR_TARGET_DIR`), ONNX Runtime laid beside the binary from the pinned NuGet packages
+  (`apps/k7-daw-engine/scripts/onnxRuntime.mjs`, cached in `~/.cache/k7-onnxruntime`); `stageEngine.mjs`,
+  `build-engine.mjs`, the CLI archive and the desktop app's staging read it there; the dev loop watches the
+  supervisor's crates (`k7-supervisor`, `k7-local`, `k7-engine`, `waveform`). Android's Gradle builds the binary with
+  cargo beside the front (`buildSupervisor`, `stageSupervisor`); iOS links `libk7_embed.a`, which exports the three C
+  calls (`k7-embed/src/supervisor.rs`), with the static `onnxruntime.xcframework` (`ORT_IOS_XCFWK_PATH`).
+- **The minidump** is ported (`src/win/crash.rs`): DbgHelp over the `windows` crate, from the panic hook, a SIGABRT
+  handler and the unhandled-exception filter, once, `crash-supervisor-<pid>.dmp` in the state folder.
+- **`findTool`** is `process::find_tool`: PATH, then the package managers' folders, absolute only.
+- **WebRTC** is gone with the C++: the notices for mbedTLS, miniz and libdatachannel too. The TypeScript reference
+  agent and the page's `rtcSocket.ts` still speak it; deleting them is a decision of its own.
+
+**M9's checklist, as M5 left it: what the C++ did that no milestone ported.** Each was a decision for the switch:
 
 - **The crash minidump** (`Crash.cpp`, Windows only): a panic writes `fatal: ...` to the merged log, but no dump is left beside it.
 - **`findTool`** (`Processes.cpp`): a tool is looked for on PATH and where a package manager puts it; `ports.rs` tries `/usr/sbin/lsof`, `/usr/bin/lsof` and `lsof` only.

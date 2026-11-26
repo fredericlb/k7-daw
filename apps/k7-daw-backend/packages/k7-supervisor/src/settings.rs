@@ -136,7 +136,7 @@ impl Settings {
         s
     }
 
-    /// The document `from_json` reads back unchanged, in the C++ supervisor's key order.
+    /// The document `from_json` reads back unchanged, in the file's established key order.
     pub fn to_json(&self) -> Value {
         let mut j = json!({
             "registryUrls": self.registry_urls,

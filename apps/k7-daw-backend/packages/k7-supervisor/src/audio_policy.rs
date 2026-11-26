@@ -1,7 +1,7 @@
 //! audio_policy.rs — which interface the engine should be on: the user's list in THEIR order, best first,
 //! and the first entry actually plugged in wins. No default and no fallback: a fallback was only ever the
 //! second line of this list. Pure, so the rules are tested without an engine
-//! (`apps/k7-daw-engine/k7-supervisor/docs/supervisorPolicy.md`, "AudioPolicy").
+//! (`apps/k7-daw-backend/packages/k7-supervisor/docs/supervisorPolicy.md`, "AudioPolicy").
 
 use crate::protocol::AudioDevice;
 

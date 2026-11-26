@@ -1,7 +1,7 @@
 //! host_lock.rs — one supervisor per machine, held in `<state>/engine-host.pid`. Two would each ADOPT the one
 //! engine, and shutdown does not spare an adopted engine, so quitting the second would stop the first's. The
 //! holder rewrites the file every 2 s and one nobody refreshed for 15 s is stale, whatever its pid claims:
-//! a pid is not an identity (`apps/k7-daw-engine/k7-supervisor/docs/supervisorPolicy.md`, "HostLock").
+//! a pid is not an identity (`apps/k7-daw-backend/packages/k7-supervisor/docs/supervisorPolicy.md`, "HostLock").
 
 use std::fs::OpenOptions;
 use std::io::Write;

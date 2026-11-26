@@ -5,10 +5,7 @@ use k7_supervisor::protocol::*;
 use serde_json::Value;
 
 fn fixture(name: &str) -> String {
-    let dir = concat!(
-        env!("CARGO_MANIFEST_DIR"),
-        "/../../../k7-daw-engine/k7-supervisor/schema/fixtures"
-    );
+    let dir = concat!(env!("CARGO_MANIFEST_DIR"), "/schema/fixtures");
     let text = std::fs::read_to_string(format!("{dir}/{name}.json")).expect("a fixture");
     serde_json::from_str::<Value>(&text)
         .expect("JSON")

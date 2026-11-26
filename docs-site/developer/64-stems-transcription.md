@@ -16,7 +16,7 @@ Tested by `apps/k7-daw-frontend/packages/song-schema/src/stems.test.ts`.
 
 ## Stems: who runs the cut
 
-A separation runs an ONNX model on an **engine's machine**, inside the native supervisor (`apps/k7-daw-engine/k7-supervisor`); no Node process here runs the model. Servers only start, track and poll jobs.
+A separation runs an ONNX model on an **engine's machine**, inside the supervisor (`apps/k7-daw-backend/packages/k7-supervisor`); no Node process here runs the model. Servers only start, track and poll jobs.
 
 | Path | Role |
 |---|---|

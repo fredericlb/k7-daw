@@ -1,7 +1,7 @@
 //! process.rs — a child started in a process group of its own, its output drained line by line into the
 //! merged log, and its exit told by the thread that reaps it: the one liveness a reused pid cannot fake.
 //! Its stdin is null and every pipe Rust makes is close-on-exec, so no child holds the app's pipe and an
-//! app reading our stdout sees its EOF when we die (`apps/k7-daw-engine/k7-supervisor/docs/supervisor.md`).
+//! app reading our stdout sees its EOF when we die (`apps/k7-daw-backend/packages/k7-supervisor/docs/supervisor.md`).
 
 use std::io::{BufRead, BufReader, Read};
 use std::path::PathBuf;

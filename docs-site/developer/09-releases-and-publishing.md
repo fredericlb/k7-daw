@@ -32,11 +32,10 @@ front page sends people; the phone apps go through the stores.
 
 1. builds the engine with `apps/k7-daw-engine/k7-runtime/scripts/build.mjs <preset>` (preset from the platform, or
    `$STUDIO_ENGINE_PRESET`);
-2. builds the supervisor (`apps/k7-daw-engine/scripts/supervisorBuild.mjs`, preset overridable with
-   `$STUDIO_SUPERVISOR_PRESET`);
+2. builds the supervisor (`apps/k7-daw-engine/scripts/supervisorBuild.mjs`: cargo in release, ONNX Runtime laid beside it);
 3. stages both into `dist/k7-runtime/` with `stageEngine` (`apps/k7-daw-engine/scripts/stageEngine.mjs`), which copies
    the newest build of each together with what they load at run time;
-4. copies `apps/k7-daw-engine/k7-supervisor/engine.example.json` there as `engine.json`.
+4. copies `apps/k7-daw-backend/packages/k7-supervisor/engine.example.json` there as `engine.json`.
 
 It prints the command to run the result: `dist/k7-runtime/k7-supervisor --config dist/k7-runtime/engine.json`.
 `package-release.mjs --kind engine` then archives that folder into `dist/release/`, as `.tar.gz`
@@ -46,7 +45,8 @@ Environment variables the build reads:
 
 | Variable | Effect |
 |---|---|
-| `STUDIO_ENGINE_PRESET`, `STUDIO_SUPERVISOR_PRESET` | CMake preset names. |
+| `STUDIO_ENGINE_PRESET` | The engine's CMake preset. |
+| `K7_SUPERVISOR_TARGET_DIR` | The supervisor's cargo target, `~/.cache/k7-supervisor-<checkout>` otherwise. |
 | `STUDIO_FETCHCONTENT_DIR` | Where CMake keeps downloaded dependency sources (Tracktion, JUCE and others), so they are fetched once. |
 | `STUDIO_COMPILER_LAUNCHER` | Compiler launcher read by the presets (`sccache` or `ccache`). |
 | `CMAKE_BUILD_PARALLEL_LEVEL` | Compiler parallelism; the build scripts default to cores minus two. |

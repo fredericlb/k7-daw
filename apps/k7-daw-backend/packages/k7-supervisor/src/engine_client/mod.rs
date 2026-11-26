@@ -2,7 +2,7 @@
 //! not by request, so exactly one call is in flight: every call queues on the connection's lock, waits for
 //! its typed reply or its deadline, and a deadline forces a redial rather than trusting a half-dead socket.
 //! `close` makes the call in flight give up at once and the next one dial. The why:
-//! `apps/k7-daw-engine/k7-supervisor/docs/supervisorPolicy.md`, "EngineQueries".
+//! `apps/k7-daw-backend/packages/k7-supervisor/docs/supervisorPolicy.md`, "EngineQueries".
 
 mod conn;
 pub mod replies;

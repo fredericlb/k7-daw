@@ -9,7 +9,7 @@ a developer's machine may lack (the Cargo locks need cargo, the engine core's su
 ## On GitHub
 
 Six workflows exist. `.github/workflows/k7.yml` runs the TypeScript checks of `apps/k7-daw-frontend`, its shared
-packages and the native supervisor on every push to `main`, every `vX.Y.Z` tag and every pull request,
+packages and the tunnel suites against the supervisor's agent on every push to `main`, every `vX.Y.Z` tag and every pull request,
 with no path filter; it gates nothing and publishes nothing. `.github/workflows/caches.yml` prunes
 the repository's Actions caches after every `k7` run, and daily. `.github/workflows/pages.yml` builds the static site and deploys it to GitHub Pages ([site.md](site.md)): the only thing CI publishes, and no release. `.github/workflows/e2e-linux.yml`, `e2e-windows.yml` and `e2e-android.yml` run the e2e suites on GitHub's runners, dispatched by hand and gating nothing ([e2e-runners.md](e2e-runners.md)).
 

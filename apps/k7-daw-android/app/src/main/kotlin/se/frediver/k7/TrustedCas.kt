@@ -58,7 +58,7 @@ object TrustedCas {
         }
     }
 
-    // PEM, whatever came in: the supervisor appends this file's text to the roots it gives mbedTLS.
+    // PEM, whatever came in: the supervisor appends this file's text to its trust roots.
     private fun write(context: Context, certs: List<X509Certificate>) {
         val f = file(context)
         f.parentFile?.mkdirs()

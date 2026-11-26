@@ -22,10 +22,7 @@ use crate::scratch::Scratch;
 const ENGINE: &str = env!("CARGO_BIN_EXE_k7-ws-engine");
 
 fn fixture() -> Value {
-    let dir = concat!(
-        env!("CARGO_MANIFEST_DIR"),
-        "/../../../k7-daw-engine/k7-supervisor/schema/fixtures"
-    );
+    let dir = concat!(env!("CARGO_MANIFEST_DIR"), "/schema/fixtures");
     serde_json::from_str(&std::fs::read_to_string(format!("{dir}/state-full.json")).unwrap())
         .unwrap()
 }

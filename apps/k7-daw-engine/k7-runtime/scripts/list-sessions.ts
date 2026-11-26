@@ -1,5 +1,5 @@
 // list-sessions.ts — the supervisor's view of a running engine: a client on the DEFAULT session,
-// driving nothing, asking what the native supervisor asks (apps/k7-daw-engine/k7-supervisor/src/EngineQueries.cpp).
+// driving nothing, asking what the supervisor asks (apps/k7-daw-backend/packages/k7-supervisor/src/engine_client/mod.rs).
 // Creates two sessions, lists them, drops one, lists again.
 //   npx tsx apps/k7-daw-engine/k7-runtime/scripts/list-sessions.ts            (a throwaway engine on :8833)
 //   npx tsx apps/k7-daw-engine/k7-runtime/scripts/list-sessions.ts 8765 --peek  (LOOK at a live one, change nothing)

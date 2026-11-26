@@ -1,4 +1,4 @@
-// drain.test.ts — the unsent-bytes mark a tunnel sender waits at, and that the supervisor's C++
+// drain.test.ts — the unsent-bytes mark a tunnel sender waits at, and that the supervisor's Rust
 // sender stops at the same one. See docs/tunnel.md.
 
 import { readFileSync } from "node:fs";
@@ -25,19 +25,19 @@ describe("drained", () => {
     await drained({ bufferedAmount: HIGH_WATER_BYTES * 2, readyState: 3 });
   });
 
-  it("is the supervisor's kHighWaterBytes too, so both ends stop at one megabyte", () => {
-    const header = readFileSync(
+  it("is the supervisor's HIGH_WATER_BYTES too, so both ends stop at one megabyte", () => {
+    const source = readFileSync(
       new URL(
-        "../../../k7-daw-engine/k7-supervisor/src/TunnelFrames.h",
+        "../../../k7-daw-backend/packages/k7-supervisor/src/tunnel/wire.rs",
         import.meta.url,
       ),
       "utf8",
     );
-    const m = /kHighWaterBytes\s*=\s*([\d\s*]+);/.exec(header);
-    const cpp = (m?.[1] ?? "0")
+    const m = /HIGH_WATER_BYTES: usize\s*=\s*([\d\s*]+);/.exec(source);
+    const rust = (m?.[1] ?? "0")
       .split("*")
       .reduce((a, x) => a * Number(x.trim()), 1);
     expect(HIGH_WATER_BYTES).toBe(1024 * 1024);
-    expect(cpp).toBe(HIGH_WATER_BYTES);
+    expect(rust).toBe(HIGH_WATER_BYTES);
   });
 });

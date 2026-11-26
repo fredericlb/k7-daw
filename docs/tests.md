@@ -48,7 +48,7 @@ done
 
 ## The C++ suite: two tiers, and a skip that says so
 
-`apps/k7-daw-engine/k7-runtime` has `"test": "node scripts/run-tests.mjs && node scripts/run-supervisor-tests.mjs"` (the second runs `apps/k7-daw-engine/k7-supervisor`'s one test binary, under a second, and skips the same way when its `build/<preset>` is not configured), so
+`apps/k7-daw-engine/k7-runtime` has `"test": "node scripts/run-tests.mjs"` (the supervisor is Rust, and its tests are the backend workspace's), so
 `npm run test` compiles and runs it like any other workspace. Three
 things that script does, each because the obvious version is wrong:
 

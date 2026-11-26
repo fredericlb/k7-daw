@@ -13,12 +13,12 @@ The bundle is built by `apps/k7-daw-backend/scripts/stageBundle.mjs`, the page a
 
 ## The supervisor host (`k7-local`)
 
-`apps/k7-daw-backend/packages/k7-local` runs `apps/k7-daw-engine/k7-supervisor` as a child process of k7's Rust front under the desktop app (`apps/k7-daw-backend/docs/supervisorHost.md`). `apps/k7-daw-engine/scripts/stageEngine.mjs` stages the binaries the desktop app and the command-line engine carry.
+`apps/k7-daw-backend/packages/k7-local` runs `apps/k7-daw-backend/packages/k7-supervisor` as a child process of k7's Rust front under the desktop app (`apps/k7-daw-backend/docs/supervisorHost.md`). `apps/k7-daw-engine/scripts/stageEngine.mjs` stages the binaries the desktop app and the command-line engine carry.
 
 | File | What |
 |---|---|
 | `apps/k7-daw-backend/packages/k7-local/src/host.rs` | Spawns the supervisor with no arguments, keeps stdin open for the host's whole life (its closing is the supervisor's quit), parses NDJSON frames, and relaunches a dead supervisor on a 1 s → 30 s backoff, reset after 20 s of uptime. Its stop sends `shutdown`, closes stdin, waits, and kills an engine that outlived the teardown only on the pidfile's proof (`pidfile.rs`). |
-| `apps/k7-daw-backend/packages/k7-local/src/protocol.rs` | The frames of `apps/k7-daw-engine/k7-supervisor/schema/hostProtocol.schema.json`, partial on purpose: a field is added when a host first reads it. A snapshot has every list, since a frame may omit an empty one. |
+| `apps/k7-daw-backend/packages/k7-local/src/protocol.rs` | The frames of `apps/k7-daw-backend/packages/k7-supervisor/schema/hostProtocol.schema.json`, partial on purpose: a field is added when a host first reads it. A snapshot has every list, since a frame may omit an empty one. |
 | `apps/k7-daw-engine/scripts/stageEngine.mjs` | `stageEngine({repo, bin})`: copy the newest engine and supervisor builds (Debug last) into a staging `bin/`, with the ONNX Runtime libraries beside the supervisor. `$STUDIO_PREBUILT_BIN` copies an already staged `bin/` instead, which is how CI packages binaries built by another job. |
 
 `k7-local`'s `tests/all/host.rs` drives a fake supervisor (`k7-fake-supervisor`) speaking the same NDJSON.
@@ -58,7 +58,7 @@ Android only lets an app execute files from its native library directory, so bot
 | Shipped as | Built from | How it runs |
 |---|---|---|
 | `libk7runtime.so` | `apps/k7-daw-engine/k7-runtime`, preset `android-arm64`: a **shared library** with `apps/k7-daw-engine/k7-runtime/server/android/EngineJni.cpp` and no `main()` | Loaded in the app's process. `EngineBridge.kt` sets the environment, initialises JUCE, and calls `nativeServe(port)` on a thread that prepared a `Looper`, which becomes JUCE's message thread. Once per process: a stopped engine needs a new process. |
-| `libk7supervisor.so` | `apps/k7-daw-engine/k7-supervisor`, preset `android-arm64`, an executable renamed | Spawned by `SupervisorHost.kt` with `STUDIO_HOME`, `STUDIO_MACHINE_NAME` (the device name), `STUDIO_INSTRUMENTS=all`, `STUDIO_PORTS` and `STUDIO_EXTRA_CA_CERTS`. Its `engine` frames start and stop the in-process engine. |
+| `libk7supervisor.so` | `apps/k7-daw-backend/packages/k7-supervisor`, built by cargo for `aarch64-linux-android`, an executable renamed | Spawned by `SupervisorHost.kt` with `STUDIO_HOME`, `STUDIO_MACHINE_NAME` (the device name), `STUDIO_INSTRUMENTS=all`, `STUDIO_PORTS` and `STUDIO_EXTRA_CA_CERTS`. Its `engine` frames start and stop the in-process engine. |
 
 The engine's Android build has no VST3/LADSPA hosting and no Surge XT, and grows its buffer on underruns (up to 40 ms).
 
@@ -89,4 +89,4 @@ cd apps/k7-daw-android
 ./gradlew assembleDebug
 ```
 
-`apps/k7-daw-android/app/build.gradle.kts` wires `preBuild` to: `buildEngine` (`node scripts/build.mjs android-arm64` in `apps/k7-daw-engine/k7-runtime`, with the SDK's NDK), `buildSupervisor` (`apps/k7-daw-engine/scripts/supervisorBuild.mjs` with `STUDIO_SUPERVISOR_PRESET=android-arm64`), `stageEngine`, `stageShell` (the desktop app page), and `stageBackend` (`buildFrontend` then `stageBundle.mjs`, zipped with `standalone.json`, stored uncompressed). This compiles the whole C++ engine for Android; it is a long build.
+`apps/k7-daw-android/app/build.gradle.kts` wires `preBuild` to: `buildEngine` (`node scripts/build.mjs android-arm64` in `apps/k7-daw-engine/k7-runtime`, with the SDK's NDK), `stageEngine`, `stageShell` (the desktop app page), `stageBackend` (`buildFrontend` then `stageBundle.mjs`, zipped with `standalone.json`, stored uncompressed), and the cargo builds `stageFront` and `stageSupervisor` (the front's library and the supervisor's binary, with the NDK's linker). This compiles the whole C++ engine for Android; it is a long build.

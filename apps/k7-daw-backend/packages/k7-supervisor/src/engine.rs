@@ -2,7 +2,7 @@
 //! guard that lets a supervisor crash be survived: the engine outlives us and the next supervisor ADOPTS it,
 //! asking the PORT as well since a pid is not an identity. On a phone the engine is a library in the app,
 //! so a start and a stop are REQUESTS to the app (the `engine` frame). Blocking: called off the core's task.
-//! The rules: `apps/k7-daw-engine/k7-supervisor/docs/supervisorPolicy.md`, "EngineProcess".
+//! The rules: `apps/k7-daw-backend/packages/k7-supervisor/docs/supervisorPolicy.md`, "EngineProcess".
 
 use std::path::{Path, PathBuf};
 use std::sync::{Arc, Mutex};

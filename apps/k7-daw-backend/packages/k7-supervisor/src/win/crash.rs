@@ -5,7 +5,7 @@
 
 use std::path::{Path, PathBuf};
 
-/// The dump's file in the state folder `dir`, named as the C++ supervisor named it.
+/// The dump's file in the state folder `dir`, named as every build of the supervisor names it.
 pub fn dump_path(dir: &Path, pid: u32) -> PathBuf {
     dir.join(format!("crash-supervisor-{pid}.dmp"))
 }

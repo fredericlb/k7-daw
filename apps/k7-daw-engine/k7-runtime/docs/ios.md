@@ -7,7 +7,7 @@ protocol on port 8765, and the screen is k7, full screen, in a view of its own. 
 
 | Android | iOS | what forces it |
 |---|---|---|
-| the supervisor, a program the app runs (`libk7supervisor.so`) | `k7supervisor.framework`, run on a thread of the app (`apps/k7-daw-engine/k7-supervisor/src/Embedded.cpp`) | no iOS app may run a program of its own |
+| the supervisor, a program the app runs (`libk7supervisor.so`) | a library of `libk7_embed.a`, run on a thread of the app (`apps/k7-daw-backend/packages/k7-embed/src/supervisor.rs`) | no iOS app may run a program of its own, and two Rust static libraries in one app would carry two `std` |
 | the Rust front, `libk7_embed.so`, in front of node | the Rust front alone, `libk7_embed.a` linked into the app, no node (`apps/k7-daw-backend/docs/embed.md`) | no iOS app may run a program of its own, and a JIT-less node has no WebAssembly |
 | the file hub starts each account's file service on node | every account's files and the libraries are answered by the front itself (`K7_FILES` on `front`) | no iOS app may start a process |
 | the engine, `libk7runtime.so`, on a thread whose Looper is JUCE's | `k7runtime.framework`, on a thread whose run loop is JUCE's | the engine is a library on both phones |
@@ -22,8 +22,8 @@ iOS gives an app no child, so every part that is a program elsewhere is a librar
 interface it has as a program:
 
 - **The supervisor** speaks its NDJSON over two pipes the app holds, not over stdio (`k7_supervisor_run`,
-  `SupervisorHost.swift`). Its frames have a descriptor of their own (`sendFramesTo`), because the app's stdout
-  is shared with the front and the engine. It installs no signal or crash handler and never exits. Closing the command
+  `SupervisorHost.swift`). Its frames have a descriptor of their own, because the app's stdout
+  is shared with the front and the engine. It installs no signal handler and never exits. Closing the command
   pipe is its quit, as closing stdin is on a computer. Its `engine` requests are the app's to carry out, as on Android
   (`K7_ENGINE_IN_APP`, `src/Platform.h`). It is started again IN the process after a CA change. Each run's loop is
   left allocated, since a `work()` thread may still post to it, and the roots are read again (`forgetRoots`).
@@ -50,9 +50,10 @@ under `STUDIO_HOME`, so a `[host]` line written earlier (the test hooks') would 
 
 | choice | why |
 |---|---|
-| the front a static library, `libk7_embed.a`, the engine and the supervisor frameworks | a Rust `cdylib` for iOS needs Apple's own linker, and the front has no CMake dependency graph to fold; the C++ parts are the `.so` files Android loads |
-| frameworks, not static libraries, for the engine and the supervisor | the linker folds every archive each one links into it, with no list of dependency targets to keep in step; and they are the `.so` files Android loads |
-| the CA bundle pinned the same way | the supervisor's mbedTLS needs roots as PEM, and iOS gives none; a studio behind a private CA is the user's to add, as on Android |
+| the front and the supervisor one static library, `libk7_embed.a`, the engine a framework | a Rust `cdylib` for iOS needs Apple's own linker, and the front has no CMake dependency graph to fold; the engine is the `.so` file Android loads |
+| a framework, not a static library, for the engine | the linker folds every archive it links into it, with no list of dependency targets to keep in step |
+| ONNX Runtime's static `onnxruntime.xcframework` linked by the project, from the NuGet package the Mac takes (`apps/k7-daw-engine/scripts/onnxRuntime.mjs`) | a phone has no library to load; `k7-embed` builds the supervisor with `dynamic-ort` off, and ort-sys finds the xcframework through `ORT_IOS_XCFWK_PATH` |
+| the CA bundle pinned the same way | the supervisor's rustls needs roots as PEM, and iOS gives none; a studio behind a private CA is the user's to add, as on Android |
 | the bundle's files read where they lie, in the app bundle | an app bundle is a folder of real files, so nothing is unpacked: no `backend.zip`, no first-run percentage |
 | cleartext to loopback only (`NSAllowsLocalNetworking`) | the phone's own studio is plain http, as on desktop; every other host stays https |
 | iOS 17 | `AVAudioApplication`, which says the microphone's state in one call; every iPhone from 2018 on runs it |
@@ -123,8 +124,8 @@ node apps/k7-daw-ios/scripts/stage.mjs           # a device; --sim for the simul
 open apps/k7-daw-ios/k7.xcodeproj                 # pick a team under Signing, then Run
 ```
 
-`stage.mjs` builds the engine's `ios-arm64` preset and the supervisor's, each as an xcframework, builds the front
-(`k7-embed`, a static library) and fetches the CA bundle as pinned. It builds the
+`stage.mjs` builds the engine's `ios-arm64` preset as an xcframework, lays ONNX Runtime's static xcframework beside it,
+builds the front and the supervisor (`k7-embed`, a static library) and fetches the CA bundle as pinned. It builds the
 shell page and lays it out as `cap copy` would, and stages what the front reads: the built page, `k7-core`, its code
 root (`stageCodeRoot.mjs`). Every run writes `build/staged/version.xcconfig`, the build number the target reads.
 `--only=<part,…>` restages some parts.
@@ -246,7 +247,7 @@ and never runs a program the host happens to have. `e2e/specs/app/noPrograms.spe
 | transcribe | the job fails: "no whisper on this device: an iOS app cannot start a program" | whisper is a program |
 | the MP3 share and export | `GET /export?format=mp3` answers 400 "mp3 needs ffmpeg, and an iOS app cannot start a program: use Export WAV"; a share's release carries FLAC | the encoder is ffmpeg |
 | the engine's `--decode` | never started: the waveform module decodes, and a call that names the engine fails with the same sentence | the engine is a library here, with no binary to run |
-| stem cut | runs in the supervisor (`apps/k7-daw-engine/k7-supervisor/docs/supervisor.md`) | ONNX Runtime is linked in |
+| stem cut | runs in the supervisor (`apps/k7-daw-backend/packages/k7-supervisor/docs/supervisor.md`) | ONNX Runtime is linked in |
 
 ## Git on a phone
 
@@ -287,7 +288,7 @@ libgit2 is linked into `libk7_embed.a` with its own transports (`apps/k7-daw-bac
 - **TestFlight builds come from the script above, run by hand on the Mac.** No CI job builds the iPhone app, and the
   App Store itself is not submitted to.
 - **No in-app updates**: a tester installs a new build from TestFlight, and a build expires after 90 days.
-- **Stem separation is on the CPU**, ONNX Runtime linked statically (`apps/k7-daw-engine/k7-supervisor/docs/supervisor.md`, "A cut on a phone"); a cut's time and memory on a phone are not measured.
+- **Stem separation is on the CPU**, ONNX Runtime linked statically (`apps/k7-daw-backend/packages/k7-supervisor/docs/supervisor.md`, "A cut on a phone"); a cut's time and memory on a phone are not measured.
 - **No picture render, `ffmpeg`, whisper or `--decode`**: no app may start a process; each member that needs one says so (above).
 
 ## What was measured

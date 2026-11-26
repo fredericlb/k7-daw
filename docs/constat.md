@@ -1,6 +1,6 @@
 # Overall findings — the audio axis
 
-Scope: `apps/k7-daw-frontend`, `apps/k7-daw-backend`, `apps/k7-daw-engine/k7-runtime`, `apps/k7-daw-engine/k7-supervisor`, `apps/k7-daw-desktop` and the packages they drive.
+Scope: `apps/k7-daw-frontend`, `apps/k7-daw-backend`, `apps/k7-daw-engine/k7-runtime`, `apps/k7-daw-backend/packages/k7-supervisor`, `apps/k7-daw-desktop` and the packages they drive.
 
 This page is **self-contained** — it carries its evidence rather than pointing at it — which means
 it goes stale. The remedy is not to believe it but to replay it: the last section gives the exact
@@ -213,7 +213,7 @@ would cost.
 The callback does not suffer (max 0.278 ms during a burst against 0.356 without), so it is not a
 real-time problem; it is the only repeated solicitation imposed on a single-client driver while it is
 streaming. `DEVICES_POLL_MS` is at 10 s — 360 scans an hour instead of 1800; a near-zero-cost
-experiment, not a proven fix: `apps/k7-daw-engine/k7-supervisor/docs/supervisorPolicy.md`.
+experiment, not a proven fix: `apps/k7-daw-backend/packages/k7-supervisor/docs/supervisorPolicy.md`.
 
 **What this closes.** The engine never approaches its deadline: a factor of twenty of margin on the
 worst block observed, in every condition tried. The "we send the card too many instructions" theory

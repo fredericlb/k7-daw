@@ -85,7 +85,7 @@ account's own state: an engine's machine may be a shared studio box.
 
 A binding is two loopback paths to the same machine: the engine's, and its **jobs** — where every
 separation the account asks for runs, since cutting stems belongs to the engine's machine
-(`apps/k7-daw-engine/k7-supervisor/docs/stemSplit.md`). The account's `models/` is shared too, read-only,
+(`apps/k7-daw-backend/packages/k7-supervisor/docs/stemSplit.md`). The account's `models/` is shared too, read-only,
 so a model downloaded once here reaches that machine once. A cut also shares the folder of the model it resolved when no root holds it
 (`$STUDIO_MODELS` moves it off `models/`), read-only: the machine refuses a path outside its copies.
 

@@ -54,7 +54,7 @@ fn binds_on(host: Ipv4Addr, port: u16) -> bool {
     #[cfg(windows)]
     return crate::win::sockets::binds_exclusive(host, port);
     #[cfg(not(windows))]
-    // A socket we could not even open says nothing of the port, so it reads as free, as the C++ one did.
+    // A socket we could not even open says nothing of the port, so it reads as free.
     std::net::TcpListener::bind((host, port)).map_or_else(|e| out_of_sockets(&e), |_| true)
 }
 

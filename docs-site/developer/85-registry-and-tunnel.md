@@ -54,7 +54,7 @@ The server end is `apps/k7-daw-backend/packages/k7-engine/src/tunnel/` (`hub.rs`
 
 | File | Subpath | What |
 |---|---|---|
-| `agent.ts`, `agentFiles.ts`, `pathMap.ts` | `./agent` | The TypeScript reference agent (the supervisor's C++ agent is the one that ships) |
+| `agent.ts`, `agentFiles.ts`, `pathMap.ts` | `./agent` | The TypeScript reference agent (the supervisor's Rust agent is the one that ships) |
 | `channel.ts` | `./channel` | `TunnelChannel`: one virtual connection, shaped like a `ws` WebSocket |
 | `frames.ts` | `./frames` | The wire, with validators for every message |
 | `jobsClient.ts` | `./jobs-client` | `requestJob`: one request over a jobs channel |
@@ -105,9 +105,9 @@ A `synced` channel (the server copied every file already) is only rewritten. The
 | `log` | `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/runtime/logs.rs` |
 | `onnx-providers` | `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/verb_host/onnx.rs` |
 
-The machine side of each job is in [82](./82-k7-supervisor.md#tunnels-jobs-and-webrtc). The file service learns which jobs path belongs to its bound engine through `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/jobs/machine.rs`.
+The machine side of each job is in [82](./82-k7-supervisor.md#tunnels-and-jobs). The file service learns which jobs path belongs to its bound engine through `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/jobs/machine.rs`.
 
-To add a job: add a handler to `machineJobs()` in `apps/k7-daw-engine/k7-supervisor/src/MachineJobs.cpp` (and to the reference agent's tests if the TypeScript agent should answer it), confine any input path to the machine's copies of the server's folders, and call it with `requestJob` from the server side.
+To add a job: add a handler to `machineJobs()` in `apps/k7-daw-backend/packages/k7-supervisor/src/parts/tunnel/table.rs` (and to the reference agent's tests if the TypeScript agent should answer it), confine any input path to the machine's copies of the server's folders, and call it with `requestJob` from the server side.
 
 ## Tests
 
