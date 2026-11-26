@@ -1,13 +1,12 @@
 //! entry.rs — the C door of the Rust server: `k7_server_serve` and `k7_server_request_quit`, what the engine's
 //! executable, Android's JNI and iOS's embed call once the C++ server is gone (`engine/capi/k7_server.h`).
 //! What a reader gets wrong: `serve` runs on the thread that becomes the host's message thread and blocks there,
-//! so the listener starts from a job posted to that loop, never before it, and a quit can never precede the loop.
+//! the engine is held for the quit from the moment the server is up, so a quit is never lost.
 
 use crate::engine::{Api, Engine, ffi::K7EngineApi};
-use crate::stub;
+use crate::server::{self, ServeConfig};
 use std::panic::catch_unwind;
-use std::sync::atomic::{AtomicI32, Ordering};
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Mutex, MutexGuard};
 
 unsafe extern "C" {
     // Defined by the C++ engine (`engine/capi/EngineApi.cpp`): the symbol this crate's link depends on.
@@ -16,7 +15,7 @@ unsafe extern "C" {
 
 static RUNNING: Mutex<Option<Engine>> = Mutex::new(None);
 
-fn running() -> MutexGuard<'static, Option<Engine>> {
+fn held() -> MutexGuard<'static, Option<Engine>> {
     RUNNING.lock().unwrap_or_else(|p| p.into_inner())
 }
 
@@ -29,8 +28,10 @@ pub extern "C" fn k7_server_serve(port: i32) -> i32 {
 /// Asks a running `k7_server_serve` to return, from any thread; a no-op when none runs.
 #[unsafe(no_mangle)]
 pub extern "C" fn k7_server_request_quit() {
-    if let Some(engine) = running().as_ref() {
-        engine.quit();
+    if let Some(engine) = held().as_ref() {
+        // A job, not a direct quit: the loop may not have started, and a posted job waits for it.
+        let again = engine.clone();
+        engine.post(move |_| again.quit());
     }
 }
 
@@ -52,27 +53,12 @@ fn serve(port: i32) -> i32 {
         );
         return 4;
     }
-    let Some(host) = api.create_host() else {
-        return 1;
+    let running = match server::start(api, ServeConfig::from_env(port)) {
+        Ok(running) => running,
+        Err(_) => return 1,
     };
-    let engine = host.engine();
-    *running() = Some(engine.clone());
-    let code = Arc::new(AtomicI32::new(0));
-    let listener = Arc::new(Mutex::new(None));
-    let (job_code, job_listener, job_engine) = (code.clone(), listener.clone(), engine.clone());
-    engine.post(move |_mt| match stub::listen(port, job_engine.clone()) {
-        Ok(l) => *job_listener.lock().unwrap_or_else(|p| p.into_inner()) = Some(l),
-        Err(e) => {
-            eprintln!("[server] cannot listen on {port}: {e}");
-            job_code.store(1, Ordering::SeqCst);
-            job_engine.quit();
-        }
-    });
-    host.run();
-    if let Some(l) = listener.lock().unwrap_or_else(|p| p.into_inner()).take() {
-        l.stop();
-    }
-    *running() = None;
-    drop(host);
-    code.load(Ordering::SeqCst)
+    *held() = Some(running.engine());
+    let code = running.run();
+    *held() = None;
+    code
 }

@@ -6,20 +6,22 @@ edition.workspace = true
 publish.workspace = true
 
 [lib]
-path = "src/lib.rs"
 # The staticlib is what the C++ engine targets link (docs/link.md); the rlib is what the tests and the rest of the server use.
 crate-type = ["rlib", "staticlib"]
+path = "src/lib.rs"
 
 [dependencies]
 serde_json.workspace = true
-# The stub socket's handshake (src/stub.rs): M2's socket brings its own.
-base64.workspace = true
-sha1.workspace = true
-# A reply from the message thread: `Engine::call`'s one-shot channel.
-tokio = { workspace = true, features = ["sync"] }
+# The keys and codes of a pairing: the OS's generator, as the C++ store used `random_device`.
+getrandom.workspace = true
+# A reply from the message thread (`Engine::call`'s one-shot channel), and the socket's runtime.
+tokio = { workspace = true, features = ["sync", "rt-multi-thread", "net", "time", "signal", "macros"] }
+# The socket: tokio-tungstenite accepts, futures-util splits it into a reader and a writer.
+tokio-tungstenite.workspace = true
+futures-util.workspace = true
 
 [dev-dependencies]
-tokio = { workspace = true, features = ["sync", "rt", "macros"] }
+tokio = { workspace = true, features = ["sync", "rt-multi-thread", "net", "time", "macros"] }
 
 [[test]]
 name = "all"

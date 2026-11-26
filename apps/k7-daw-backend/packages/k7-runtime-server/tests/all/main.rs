@@ -3,6 +3,12 @@
 mod catalogue;
 mod engine_abi;
 mod engine_fake;
+mod harness;
+mod pairing_gate;
+mod pairing_store;
+mod server_socket;
+mod server_timers;
+mod server_units;
 mod stream;
 mod wire_json;
 

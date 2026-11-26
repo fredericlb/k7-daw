@@ -41,8 +41,8 @@ server side moves.
 | milestone | content | hours |
 |---|---|---|
 | M1 the ABI and the wire's leaves (built) | the C ABI's top table and core area, its C++ implementation and test; `engine` (the safe wrapper, `Mt`, posted jobs, the fake engine); `wire` (the nlohmann-exact printer, the audio frame, the verb catalogue, the version) | 6 |
-| M2 the socket core | accept, the Origin and frame-size screens, nesting refusal, ping, send timeout, the per-client outbox, sessions, dispatch by verb against the fake engine | 10 |
-| M3 pairing | who counts as the machine, the paired-devices store, the pairing verbs | 6 |
+| M2 the socket core (built) | accept, the Origin and frame-size screens, nesting refusal, ping, send timeout, the per-client outbox, sessions, dispatch by verb against the fake engine | 10 |
+| M3 pairing (built) | who counts as the machine, the paired-devices store, the pairing verbs | 6 |
 | M4 the link (built) | the static library, built by a CMake target that runs cargo with `--target-dir`; a slow CMake test runs `serve` on the real host and probes `whoami`; the Android and iOS cross builds | 6 |
 | M5 project and transport | the `DocJson` port with its bounds, supersede, held notes; the project and transport areas | 12 |
 | M6 the state frame | the state frame, `recorded`, `plugin-params`, `engine-warning` | 6 |
@@ -55,7 +55,7 @@ M4's choices (`apps/k7-daw-backend/packages/k7-runtime-server/docs/link.md`):
 - **CMake runs cargo, not `build.mjs`**: Gradle and `stage.mjs` reach the same CMake tree, so one custom target
   builds the archive for every platform, in the build folder's own `rust/`.
 - **Each target names `k7_server_serve` as undefined** so the link proves the archive until the switch calls it.
-- **`serve` is a stand-in socket** (`src/stub.rs`: handshake and `whoami`) that M2's socket core replaces whole.
+- **The C door calls M2's `server::start` and runs the loop itself**, so a quit can be asked from any thread.
 
 Each milestone owns one ABI area (`abi.md`), so its header, `.cpp` and Rust module touch no other
 milestone's files. The order:
@@ -72,3 +72,34 @@ milestone's files. The order:
   against the real engine served by Rust.
 - **At M9**: the conformance specs (`e2e/docs/conformance.md`) on the Mac bed, Android's
   `assembleE2e`, `scripts/agent/ios-check.sh`, and a signed desktop build checked by hand.
+
+## M3's seam for the socket core
+
+`src/pairing/` (choices in `apps/k7-daw-backend/packages/k7-runtime-server/docs/pairing.md`) is built
+and tested alone; the handler table of M2 calls one `Gate` (`pairing::gate`), owns no trust set of
+its own, and numbers its sockets with a `SocketId` (`u64`).
+
+- **At the handshake**: `refuse_origin(id, origin)` (the `Origin` header or `None`); true means close
+  with 1008 `origin not allowed`. Then `is_refused(id)` drops every message of that socket.
+- **Per frame, before parsing**: `screen_frame_size(id, peer_ip, bytes)` returns an `Out::Reply` to
+  send (the 16 KB cap for a socket not yet trusted), or `None`.
+- **Per message, once parsed and its `type` read**: `screen_message(id, peer_ip, &msg, ty)`. `None`
+  passes to the verb table; `Some(outs)` is the whole answer and the verb must not run. The core
+  performs each `Out` in order: `Reply` to the sender, `To(id, v)` to that socket if connected,
+  `ToLocals(v)` to every id of `gate.locals()`, `Close(id)` closes the socket (its trust is gone).
+- **At a close**: `forget_socket(id)`, whose `Out`s are performed the same way.
+- **At a broadcast**: a machine-wide frame goes only to sockets where `gate.is_trusted(id)`.
+- **At boot**: `Gate::new(Pairing::open("<state>/paired-devices.json"), GateConfig {..})`, the
+  origins from `pairing::net::parse_origins`; `lan-open` is answered by the gate itself.
+- **Sending**: every `Value` is printed with `wire::json::dump`.
+
+Its deviation from C++: a `name`, `key`, `requestId` or `deviceId` that is not a string is read as
+empty, where nlohmann's `value()` threw into the message handler's catch.
+
+## M2's choices
+
+The socket core is built (`apps/k7-daw-backend/packages/k7-runtime-server/docs/server.md`): a task pair per
+socket with its own outbox, the `Gate` of M3 called as its section says, the handler table in
+`server::handlers::table` (one line per module), startup order and signals. Deviations from the C++: the
+outbox caps are per socket; at most 32 connections, as IXWebSocket's default; no message size bound beyond
+256 MiB; a JSON parse error's text is serde's, not nlohmann's; `whoami`'s `safeMode` carries `crashes` only.
