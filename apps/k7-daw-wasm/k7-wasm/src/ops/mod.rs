@@ -6,9 +6,9 @@ pub mod curve;
 pub mod engine;
 pub mod fields;
 pub mod file;
-pub mod schema;
 pub mod k7x;
 pub mod k7x_edit;
+pub mod schema;
 pub mod song;
 pub mod timecode;
 #[cfg(feature = "verbs")]
