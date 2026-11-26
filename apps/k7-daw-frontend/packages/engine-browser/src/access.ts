@@ -107,13 +107,9 @@ export function engineAccess<
 ): EngineAccess<E, P> {
   const reg = registryClient<E, P>(base, json);
   const nearHub = hubHelloAt(base);
-  /** A listing measured before any claim: `claim` is what a caller DRIVING the engine passes, and it adds WebRTC. */
-  const probe = async (
-    engines: E[],
-    claim = false,
-  ): Promise<RankedEngine<E>[]> => {
+  const probe = async (engines: E[]): Promise<RankedEngine<E>[]> => {
     if (!engines.length) return [];
-    const ranked = await probeEngines(engines, base, { claim });
+    const ranked = await probeEngines(engines, base);
     const hello = opts.hostedFiles ? await nearHub.get() : null;
     if (!hello) return ranked;
     // Every reachable engine plays the SAME files, the hub's; which one drives them rides after the `~`.
@@ -177,8 +173,7 @@ export function engineAccess<
       const list = await reg.list().catch(() => [] as E[]);
       const engine = list.find((e) => e.id === id);
       if (!engine) return null;
-      // Asked for an engine this page DRIVES, so the claim is behind it and a data channel may answer.
-      const [ranked] = await probe([engine], true);
+      const [ranked] = await probe([engine]);
       return ranked?.wsUrl ?? null;
     },
   };

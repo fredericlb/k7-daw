@@ -54,8 +54,7 @@ export type HubMessage =
   | { t: "data"; ch: number; text: string }
   | { t: "stat-reply"; req: number; entries: RemoteStat[] }
   | { t: "get-error"; req: number; error: string }
-  | { t: "put-reply"; req: number; stat?: RemoteStat; error?: string }
-  | { t: "rtc-offer"; req: number; sdp: string };
+  | { t: "put-reply"; req: number; stat?: RemoteStat; error?: string };
 
 /** Agent → hub. */
 export type AgentMessage =
@@ -63,8 +62,7 @@ export type AgentMessage =
   | { t: "close"; ch: number; reason?: string }
   | { t: "data"; ch: number; text: string }
   | { t: "stat"; req: number; ch: number; paths: string[] }
-  | { t: "get"; req: number; ch: number; path: string }
-  | { t: "rtc-answer"; req: number; sdp?: string; error?: string };
+  | { t: "get"; req: number; ch: number; path: string };
 
 /** Headers of binary frames: engine bytes, a downloaded chunk, an uploaded chunk. */
 export type BinaryHeader =
@@ -158,8 +156,6 @@ export function parseAgentMessage(text: string): AgentMessage | null {
         );
       case "get":
         return isInt(m.req) && isInt(m.ch) && isStr(m.path);
-      case "rtc-answer":
-        return isInt(m.req) && optStr(m.sdp) && optStr(m.error);
       default:
         return false;
     }

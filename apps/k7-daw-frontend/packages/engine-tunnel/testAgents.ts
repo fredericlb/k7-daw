@@ -15,8 +15,6 @@ export interface AgentHandle {
 
 export interface AgentKind {
   name: string;
-  /** Whether it answers a WebRTC offer: the Rust supervisor's refuses, the browser stays on the tunnel. */
-  rtc: boolean;
   make(opts: TunnelAgentOptions): AgentHandle;
 }
 
@@ -44,7 +42,6 @@ function harness(): string | null {
 
 const node: AgentKind = {
   name: "node",
-  rtc: true,
   make: (opts) => new TunnelAgent(opts),
 };
 
@@ -52,7 +49,6 @@ const node: AgentKind = {
 function native(bin: string): AgentKind {
   return {
     name: "native",
-    rtc: false,
     make: (opts) => {
       let child: ChildProcess | null = null;
       return {

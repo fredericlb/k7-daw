@@ -7,7 +7,7 @@ import {
   type PluginScanStatus,
 } from "@studio/engine-protocol/decode";
 import { pairFrameFor } from "./pairing.ts";
-import { openSocket } from "./rtcSocket.ts";
+import { openSocket } from "./socket.ts";
 
 export type { PluginScanStatus } from "@studio/engine-protocol/decode";
 

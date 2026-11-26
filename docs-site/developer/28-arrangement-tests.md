@@ -66,7 +66,7 @@ property the whole write path is built to keep.
 |---|---|
 | `apps/k7-daw-frontend/packages/ui-timeline/src/` | `panZoom.test.ts` (which wheel zooms, the factor, the ceiling), `ticks.test.ts`, `drag.test.ts` |
 | `apps/k7-daw-frontend/packages/ui-waveform/src/` | `ticks.test.ts`, `spectrum.test.ts`, `spectrumColour.test.ts` |
-| `apps/k7-daw-frontend/packages/audio-probe/src/` | `trimGate.test.ts`, `waveform.test.ts`, `key.test.ts` |
+| `apps/k7-daw-frontend/packages/audio-probe/src/` | `trimGate.test.ts`, `key.test.ts` |
 | `apps/k7-daw-frontend/packages/take-render/src/` | `recordTake.test.ts`, `materialRender.test.ts` |
 | `apps/k7-daw-frontend/packages/audio-passes/src/` | `processChain.test.ts`, `peakPass.test.ts`, `coldPass.test.ts` |
 | `apps/k7-daw-frontend/packages/translator/src/` | `dawproject.test.ts`, `ableton.test.ts`, `abletonZip.test.ts`, `emitNodes.test.ts` |

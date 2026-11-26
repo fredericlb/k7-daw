@@ -32,7 +32,7 @@ The main consumers are the account's engine link in the Rust front (`apps/k7-daw
 | `./params` | `params.ts` | `PluginParamsStore`: live parameter values, same pattern |
 | `./meter` | `meter.ts` | Meter arithmetic: dB to fill, clip latch |
 | `./compat` | `compat.ts` | Fetch an engine's plugin catalogue and score a project against it |
-| `./pairing` | `pairing.ts` | LAN pairing keys and `requestPairing` |
+| `./pairing` | `pairing.ts` | LAN pairing keys |
 | `./relook` | `relook.ts` | `useRelook()`: when to measure again (every 15 s and on tab focus) |
 | `./stream`, `./stream-sink`, `./engine-output` | `streamPlayer.ts`, `streamSink.ts`, `engineOutput.ts` | Playing the engine's binary audio broadcast in the page |
 | `./playhead-clock` | `playheadClock.ts` | A playhead predicted from local time, corrected by state frames |
@@ -64,13 +64,9 @@ A 20 Hz frame held in React state re-rendered the whole tree on every frame. `En
 
 **Probe** (`probe.ts`): for each engine, every candidate is tried at once (loopback; LAN IPs only on an `http:` page; the relay `wss://…/api/engine/<id>/ws?ticket=…`; `rtc:…/api/engine/<id>/rtc` when the registry says the engine has a tunnel), and the fastest `whoami` that **matches the expected id** wins, so a lookalike listener cannot pass. Timeout: 3 s. The latency is the round trip plus twice the reported buffer period (`engineLatency` in `apps/k7-daw-frontend/packages/web-protocol/quality.ts`), banded Q1 (< 20 ms), Q2 (< 50 ms), Q3. A reply with `needsPairing` marks the row as reachable but unusable until paired.
 
-**Policy** (`choose.ts`): anyone may register an engine, so only a **trusted** engine is ever taken without a click. `mayAutoPick(r, remembered)` is true for the account's remembered engine, and for one `reachedDirectly` (answered on a plain `ws:` socket to one of its own loopback or private LAN addresses, never the relay or WebRTC). `chooseEngine` takes the remembered engine if it answered, else the only reachable one if it may be auto-picked, else reports `ambiguous`. `bestEngine`, which k7's `EngineGate` uses, sorts candidates (reachable, with a token, not `assigned`, and `mayAutoPick`) by compatibility with the project, then the remembered id, then "on this machine" (answered over loopback), then quality band, then performance score, then milliseconds.
+**Policy** (`choose.ts`): anyone may register an engine, so only a **trusted** engine is ever taken without a click. `mayAutoPick(r, remembered)` is true for the account's remembered engine, and for one `reachedDirectly` (answered on a plain `ws:` socket to one of its own loopback or private LAN addresses, never the relay). `chooseEngine` takes the remembered engine if it answered, else the only reachable one if it may be auto-picked, else reports `ambiguous`. `bestEngine`, which k7's `EngineGate` uses, sorts candidates (reachable, with a token, not `assigned`, and `mayAutoPick`) by compatibility with the project, then the remembered id, then "on this machine" (answered over loopback), then quality band, then performance score, then milliseconds.
 
 **Lease** (`lease.ts`): `select` without a secret opens a claim and always wins (the newcomer takes over); renewing every `ENGINE_ASSIGN_RENEW_MS` (5 s) with the secret can be refused. A refusal (`ClaimLost`) carries why: `project` (the project was opened elsewhere), `engine` (another project took the engine; `tookFor` names it) or `lapsed` (the claim aged out after `ENGINE_ASSIGN_TTL_MS`, 90 s), after which the loop simply reopens. On `project` or `engine`, `onLost` is called once and the caller must stop driving. `release` goes by `sendBeacon` from a closing page.
-
-### WebRTC socket
-
-`rtcSocket.ts` gives a WebSocket-shaped object over an `RTCPeerConnection` data channel (ordered, label `engine`), created with `iceServers: []`. It gathers candidates for up to 1.5 s, posts the offer to the registry's `/engine/<id>/rtc`, and applies the SDP answer the supervisor returns through its tunnel. Messages are cut into fragments (`apps/k7-daw-frontend/packages/web-protocol/rtcFrames.ts`) since data channel messages have a size limit. `openSocket(url)` returns this for `rtc:` URLs and a plain `WebSocket` otherwise, so the rest of the client does not know the difference.
 
 ### Hearing an engine through the page
 
@@ -84,4 +80,4 @@ npm test --workspace @studio/engine-client
 npm test --workspace @studio/engine-protocol
 ```
 
-They are vitest suites over pure logic: the store, the lease, choice, the probe's relay URLs, pairing, the playhead clock, the stream player, the WebRTC socket (against `@studio/engine-tunnel`'s answerer) and the stream frame codec.
+They are vitest suites over pure logic: the store, the lease, choice, the probe's relay URLs, pairing, the playhead clock, the stream player and the stream frame codec.

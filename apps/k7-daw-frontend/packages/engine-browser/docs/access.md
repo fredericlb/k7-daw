@@ -44,7 +44,7 @@ tunnel. So `chooseEngine` and `bestEngine` only ever take an engine that passes 
 2. an engine reached **directly** (`reachedDirectly`, `probe.ts`): the probe's winning socket is
    one of the engine's own loopback or private addresses, dialled from this browser, and its
    `whoami` answered there with the id and a token. That engine is on the user's machine or the
-   user's network. A public address, the relay or WebRTC do not count, since what answers there
+   user's network. A public address, the relay does not count, since what answers there
    is whatever the stranger registered.
 
 A first open from an HTTPS page on a machine with no local engine therefore lands on the picker
@@ -91,14 +91,8 @@ page non-installable. The surfaces menu could then not be added to a home screen
 device it exists for (`apps/k7-daw-frontend/docs/external.md`).
 
 `candidatesFor` therefore offers loopback — potentially trustworthy by definition, dialable from
-HTTPS — and the relay. LAN addresses stay listed over plain HTTP, where they work. An engine whose
-supervisor holds a tunnel can add a fourth, `rtc:`, a WebRTC data channel straight to its machine
-(`apps/k7-daw-frontend/packages/engine-tunnel/docs/rtc.md`); `openSocket` makes it a WebSocket to everything above it, and
-it is raced like the others rather than preferred. The server answers an offer only for an account
-holding a claim on the engine, so the candidate is offered to a claimant alone: a listing's probe
-offers none, and the probes a page makes for an engine it DRIVES — `wsUrlFor`, on every reconnect —
-race it (`probeEngines`' `claim`). Offering it earlier buys nothing and costs a 403 per engine per
-look, which is console noise in the way of the errors worth reading.
+HTTPS — and the relay. LAN addresses stay listed over plain HTTP, where they work. There is no WebRTC
+data channel: the browser reaches an engine on its own network or through the relay.
 
 One more is dropped instead of raced, because it cannot answer: a loopback address that refused is left alone for two minutes: the
 page's own machine is the one thing it can learn without asking the server, and the same question 15
@@ -106,7 +100,7 @@ seconds later has the same answer. It is offered again once that window closes �
 a tray started meanwhile is found within the two minutes rather than immediately.
 
 Every candidate is raced, but the timings decide only among equals: a **direct** socket that
-answered with a token beats the relay and WebRTC however fast those measured (`orderHits`). The
+answered with a token beats the relay however fast those measured (`orderHits`). The
 direct path is the shorter one for the audio, and it is the only one `reachedDirectly` trusts, so a
 relay that merely won the clock would turn the one engine on this machine into one the gate may not
 take unasked. The clock is not worth trusting there anyway: each round trip ends when the page's main

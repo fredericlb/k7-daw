@@ -58,7 +58,6 @@ The server end is `apps/k7-daw-backend/packages/k7-engine/src/tunnel/` (`hub.rs`
 | `channel.ts` | `./channel` | `TunnelChannel`: one virtual connection, shaped like a `ws` WebSocket |
 | `frames.ts` | `./frames` | The wire, with validators for every message |
 | `jobsClient.ts` | `./jobs-client` | `requestJob`: one request over a jobs channel |
-| `rtc.ts` | `./rtc` | The TypeScript WebRTC answerer (node-datachannel, optional and loaded lazily) |
 | `drain.ts` | | Backpressure: wait while more than 1 MiB is unsent |
 
 ### The wire
@@ -71,7 +70,6 @@ One WebSocket per supervisor and server. JSON control messages are text frames; 
 | `close {ch}` | `close {ch, reason?}` | `chunk {req, last}` (a download) |
 | `data {ch, text}` | `data {ch, text}` | `put {req, ch, path, last}` (an upload) |
 | `stat-reply`, `get-error`, `put-reply` | `stat {req, ch, paths}`, `get {req, ch, path}` | |
-| `rtc-offer {req, sdp}` | `rtc-answer {req, sdp?, error?}` | |
 
 The agent authenticates with headers, never the query (so no access log keeps them): `x-studio-engine-token`, `x-studio-tunnel-secret`. The hub asks the registry; a refused newcomer leaves a live tunnel in place, and a verified reconnect replaces the old socket.
 

@@ -7,7 +7,7 @@ This section covers everything that links a k7 page to sound: the C++ engine, it
 | [81 — The C++ engine](./81-k7-runtime.md) | `apps/k7-daw-engine/k7-runtime`: layout, CLI modes, the server, the diff, sessions, hosted plugins, the Strudel bundle, tests |
 | [82 — The supervisor](./82-k7-supervisor.md) | `apps/k7-daw-backend/packages/k7-supervisor`: run modes, the host protocol, settings, registry, tunnel agent, machine jobs |
 | [83 — The engine protocol](./83-engine-protocol.md) | `apps/k7-daw-frontend/packages/engine-protocol` and the C++ handlers: every message, the state frame, the ProjectDoc, sessions, the audio stream |
-| [84 — Engine clients](./84-engine-clients.md) | `apps/k7-daw-frontend/packages/engine-client` (Node) and `apps/k7-daw-frontend/packages/engine-browser` (browser): access, probe, choice, lease, store, pairing, WebRTC |
+| [84 — Engine clients](./84-engine-clients.md) | `apps/k7-daw-frontend/packages/engine-client` (Node) and `apps/k7-daw-frontend/packages/engine-browser` (browser): access, probe, choice, lease, store, pairing |
 | [85 — Registry and tunnel](./85-registry-and-tunnel.md) | `k7-engine` (the Rust registry, relay and hub) and `apps/k7-daw-frontend/packages/engine-tunnel`: heartbeats, claims, the relay, the hub and agent, jobs |
 | [86 — The desktop app and the phone apps](./86-desktop-and-android.md) | `k7-local`, `apps/k7-daw-desktop`, `apps/k7-daw-android` |
 | [87 — Building and shipping engines](./87-engine-build-and-shipping.md) | `apps/k7-daw-engine/scripts`, CMake presets, release archives |
@@ -21,7 +21,7 @@ This section covers everything that links a k7 page to sound: the C++ engine, it
  │      │                                ├─ tunnel hub       (/api/engine-tunnel)
  │      │                                └─ file hub → file service per account (@studio/engine-client)
  │      │                                          ▲
- │      │   ws / wss / WebRTC                       │ one outbound WebSocket per studio (the tunnel)
+ │      │   ws / wss                                │ one outbound WebSocket per studio (the tunnel)
  │      ▼                                          │
  engine machine ───────────────────────────────────────────────────────────── ├─ k7-supervisor   (Rust) — starts/adopts/watches the engine, heartbeats, tunnel agent, jobs
  └─ k7-runtime      (C++) — WebSocket server on :8765, Tracktion Edit per session, audio device
@@ -31,7 +31,7 @@ Two choices shape all of it.
 
 **The engine never parses song files.** The file service compiles a project folder into a `ProjectDoc` (JSON) and sends that. The engine diffs it against what it is playing and changes only what moved. Any app that can build a `ProjectDoc` can drive the engine: k7's editor, the DJ desk, a share player, a one-track module preview. This keeps YAML, schemas and the compiler in TypeScript and keeps the C++ side a player.
 
-**The machine dials out.** An engine machine is usually behind a home router. Rather than ask the musician to open a port, the supervisor holds one outbound WebSocket to every studio it is listed at, and the studio routes everything it needs through it: the relayed browser socket, the project files, machine jobs, and the WebRTC offer that lets a browser connect peer to peer.
+**The machine dials out.** An engine machine is usually behind a home router. Rather than ask the musician to open a port, the supervisor holds one outbound WebSocket to every studio it is listed at, and the studio routes everything it needs through it: the relayed browser socket, the project files, and machine jobs.
 
 ## How a browser reaches an engine
 
@@ -42,9 +42,8 @@ Two choices shape all of it.
 | Loopback | `ws://127.0.0.1:<port>` | always |
 | LAN | `ws://<lanIp>:<port>` | the page is `http:` (an `https:` page may not open `ws://` to a LAN host: mixed content) |
 | Relay | `wss://<studio>/api/engine/<id>/ws?ticket=…` | the registry minted a relay ticket (always, per listing) |
-| WebRTC | `rtc:<studio>/api/engine/<id>/rtc` | the engine has a tunnel up |
 
-The relay dials the engine through its tunnel first, then the address its heartbeat came **from** (never an address the heartbeat names, since the heartbeat route is open). A relay ticket is bound to one engine and one account; behind it a `RelayGate` lets an account with no claim on the engine send only the probe verbs (`whoami`, `pair`, `list-plugins`) and closes the socket if no claim arrives within ten seconds. WebRTC uses no STUN or TURN servers on either side (`iceServers: []`), so it connects only with host candidates, which in practice means the same network. It exists so an `https:` page can reach a LAN engine directly without the relay.
+The relay dials the engine through its tunnel first, then the address its heartbeat came **from** (never an address the heartbeat names, since the heartbeat route is open). A relay ticket is bound to one engine and one account; behind it a `RelayGate` lets an account with no claim on the engine send only the probe verbs (`whoami`, `pair`, `list-plugins`) and closes the socket if no claim arrives within ten seconds.
 
 Over a direct LAN connection, the engine requires pairing ([83](./83-engine-protocol.md#pairing)); loopback peers and relayed traffic (which arrives from the supervisor on loopback, already authenticated by the server) are trusted. Independently of the peer address, a **browser page** is only served when its `Origin` is allowed: loopback, `https://k7.rocks` and its subdomains, or a studio the supervisor is listed at.
 
@@ -75,10 +74,10 @@ The account's files live on the server. When a project opens on an engine, the f
 | `apps/k7-daw-engine/scripts/` | Build and packaging scripts for the engine and supervisor |
 | `apps/k7-daw-frontend/packages/engine-protocol/` | Wire types, ProjectDoc types, sessions, the binary audio frame |
 | `apps/k7-daw-frontend/packages/engine-client/` | The Node client and `~/.k7` path helpers |
-| `apps/k7-daw-frontend/packages/engine-browser/` | The browser client, React stores, access/probe/choose/lease, pairing, WebRTC socket, audio stream player |
+| `apps/k7-daw-frontend/packages/engine-browser/` | The browser client, React stores, access/probe/choose/lease, pairing, audio stream player |
 | `apps/k7-daw-backend/packages/k7-engine/` | The registry, the relay, the tunnel hub (routed by `k7-front`'s `routes/engine/`) |
 | `packages/engine-registry/` | The internal seam's paths and client, through which TypeScript reaches the registry and the hub |
-| `apps/k7-daw-frontend/packages/engine-tunnel/` | The tunnel's wire, the TypeScript reference agent, jobs client, WebRTC answerer |
+| `apps/k7-daw-frontend/packages/engine-tunnel/` | The tunnel's wire, the TypeScript reference agent, jobs client |
 | `apps/k7-daw-backend/packages/k7-local/` | Running the supervisor as a child of k7's Rust front under the desktop app |
 | `apps/k7-daw-desktop/` | The desktop app (Tauri), k7 on a computer |
 
