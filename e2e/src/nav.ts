@@ -69,13 +69,18 @@ export async function pane(page: Page, name: string): Promise<Locator> {
     .first();
 }
 
-/** A right panel's button: `group "Panels"` → `button`, or a tile of the phone's dialog. */
+/** A panel's button: the right-edge rail (`group "Panels"`), the header's dock group (the Mixer), or the phone's dialog. */
 export async function panel(page: Page, name: string): Promise<Locator> {
   await openNav(page);
   const exact = { name, exact: true };
   return page
     .getByRole("group", { name: "Panels", exact: true })
     .getByRole("button", exact)
+    .or(
+      page
+        .getByRole("group", { name: "Editor dock", exact: true })
+        .getByRole("button", exact),
+    )
     .or(
       page
         .getByRole("dialog", { name: "Views and panels" })
