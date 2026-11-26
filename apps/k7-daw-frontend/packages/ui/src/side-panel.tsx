@@ -110,7 +110,7 @@ export function PanelHeading({
   );
 }
 
-/** The 400 px floating panel: right 12, under the header, clear of the bar. A non-modal dialog: the panes stay usable. */
+/** The 400 px floating panel: right 12, under the header, 16 above the foot. A non-modal dialog: the panes stay usable. */
 export function SidePanel({
   children,
   className,

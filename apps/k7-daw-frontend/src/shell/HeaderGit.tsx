@@ -1,5 +1,5 @@
 // HeaderGit.tsx — git in the header: on a phone a menu (Save, Pull, Saves) titled by the branch and the last auto-save; on a
-// desk only the Resolve button while a merge waits, Save with its count being GitRailSave, the rail's first button.
+// desk only the Resolve button while a merge waits: Save and Pull with their counts are the rail's first buttons.
 // While a merge waits it is one accent "Resolve N conflicts" button. It decides no rule: gitState.ts's barView does.
 import { showToast } from "@studio/project-shell/toast";
 import { Badge } from "@studio/ui/badge";
@@ -178,7 +178,7 @@ export function HeaderGit({
       </DropdownMenu>
     );
 
-  // A desk's header holds no git button: Save is the rail's (GitRailSave), the Saves list is Tasks & history.
+  // A desk's header holds no git button: Save and Pull are the rail's, the Saves list is Tasks & history.
   return null;
 }
 
@@ -230,6 +230,45 @@ export function GitRailSave({
           className="pointer-events-none absolute -top-1.5 -right-1.5"
         >
           {v.changed}
+        </Badge>
+      )}
+    </CapsuleButton>
+  );
+}
+
+// The rail's Pull, under Save: the count of commits to fetch on its corner; dimmed with its reason while saves wait.
+export function GitRailPull({
+  git: g,
+  workspace,
+  className,
+}: {
+  git: GitHandle;
+  workspace: string;
+  className: string;
+}) {
+  const v = barView(g.state);
+  const saving = useSaving(workspace);
+  if (!v.show || resolveLabel(v) !== null) return null;
+  const label = m["git.pull"]();
+  return (
+    <CapsuleButton
+      aria-label={label}
+      title={label}
+      disabled={!!g.busy || saving || !v.pull}
+      disabledReason={
+        v.pullBlocked === "commitFirst" ? m["git.commitFirst"]() : undefined
+      }
+      onClick={() => void g.act("pull")}
+      className={`relative ${className}`}
+    >
+      <ArrowDownToLine />
+      {v.toPull > 0 && (
+        <Badge
+          variant="count-sm"
+          aria-hidden
+          className="pointer-events-none absolute -top-1.5 -right-1.5"
+        >
+          {v.toPull}
         </Badge>
       )}
     </CapsuleButton>

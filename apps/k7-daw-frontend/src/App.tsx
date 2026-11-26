@@ -227,7 +227,12 @@ import { pictureRowId, placementOf, type RowKey, type RowTarget } from "./rows";
 import { saveLabel } from "./saveLabel";
 import { useEngineLostToast, useProgressToast } from "./shell/engineToasts";
 import { FloatingBar } from "./shell/FloatingBar";
-import { GitRailSave, HeaderGit, unsavedCount } from "./shell/HeaderGit";
+import {
+  GitRailPull,
+  GitRailSave,
+  HeaderGit,
+  unsavedCount,
+} from "./shell/HeaderGit";
 import { type OverflowLaneView, OverflowMenu } from "./shell/OverflowMenu";
 import { PanelRail } from "./shell/PanelRail";
 import {
@@ -2876,82 +2881,6 @@ export default function App({
               ]
             : []),
         ];
-  const header = (
-    <ProjectHeader
-      layout={layoutKind}
-      name={project?.name ?? ""}
-      backHref={projectsUrl(window.location.href)}
-      statusStore={statusStore}
-      engine={engine ? (connected ? "up" : "down") : "none"}
-      problems={problemCount}
-      onProblems={openProblems}
-      onProcesses={() => setRightPanel("tasks")}
-      extra={<BenchSaveButton size="icon" runCommand={runCommand} />}
-      git={
-        gitWorkspace ? (
-          <HeaderGit
-            git={gitHandle}
-            transport={gitTransport}
-            workspace={gitWorkspace}
-            phone={isMobile}
-            onCommits={() => {
-              askSavesList();
-              setRightPanel("history");
-            }}
-          />
-        ) : null
-      }
-      panels={headerPanels.filter((p) => p.id === "mixer")}
-      onCommandBar={isMobile ? undefined : summonBar}
-      rail={
-        isMobile
-          ? undefined
-          : {
-              open: railOpen,
-              onToggle: () => setRailOpen((o) => !o),
-              unsaved: gitWorkspace ? unsavedCount(gitHandle) : 0,
-            }
-      }
-      lockBanner={merging ? lockedSay() : null}
-      overflow={
-        <OverflowMenu
-          panes={switcherPanes}
-          pane={full}
-          onPane={(id) => void runCommand(`ui ${id}`)}
-          lanes={
-            full === "timeline" && hasTimeline
-              ? laneViewsOf()
-              : full === "chains"
-                ? graphViewsOf()
-                : []
-          }
-          lanesHeading={
-            full === "chains"
-              ? m["shell.overflow.graph"]()
-              : m["shell.overflow.lanes"]()
-          }
-          panels={headerPanels}
-          onSettings={() => void runCommand("ui settings")}
-          onHelp={openHelp}
-          tool={
-            full === "timeline" && hasTimeline
-              ? {
-                  current: tool,
-                  tools: TOOLS,
-                  onPick: (t) => void runCommand(`ui tool ${t}`),
-                }
-              : undefined
-          }
-          metronome={{
-            on: metronomeIsOn,
-            onPress: toggleMetronome,
-            level: metronomeLevel,
-            onLevel: (v) => void runCommand(`transport metronome volume ${v}`),
-          }}
-        />
-      }
-    />
-  );
   const outputRecord = output.available
     ? {
         recording: output.recording,
@@ -2964,10 +2893,9 @@ export default function App({
   const bar = (
     <FloatingBar
       layout={layoutKind}
+      docked={!isMobile}
       runCommand={runCommand}
       onCommandBar={summonBar}
-      tool={full === "timeline" && hasTimeline ? tool : null}
-      onTool={(t) => void runCommand(`ui tool ${t}`)}
       recInfo={recInfo}
       clockSeconds={rulerSeconds}
       onClock={() =>
@@ -2975,7 +2903,7 @@ export default function App({
       }
       meter={masterMeter}
       hidden={false}
-      rootRef={stripRef}
+      rootRef={isMobile ? stripRef : undefined}
       transport={
         showTransport
           ? {
@@ -3038,6 +2966,83 @@ export default function App({
               onZoomFit: () => void runCommand("ui zoom reset"),
             }
           : null
+      }
+    />
+  );
+  const header = (
+    <ProjectHeader
+      layout={layoutKind}
+      name={project?.name ?? ""}
+      backHref={projectsUrl(window.location.href)}
+      statusStore={statusStore}
+      engine={engine ? (connected ? "up" : "down") : "none"}
+      problems={problemCount}
+      onProblems={openProblems}
+      onProcesses={() => setRightPanel("tasks")}
+      extra={<BenchSaveButton size="icon" runCommand={runCommand} />}
+      git={
+        gitWorkspace ? (
+          <HeaderGit
+            git={gitHandle}
+            transport={gitTransport}
+            workspace={gitWorkspace}
+            phone={isMobile}
+            onCommits={() => {
+              askSavesList();
+              setRightPanel("history");
+            }}
+          />
+        ) : null
+      }
+      panels={headerPanels.filter((p) => p.id === "mixer")}
+      onCommandBar={isMobile ? undefined : summonBar}
+      bar={isMobile ? undefined : bar}
+      rail={
+        isMobile
+          ? undefined
+          : {
+              open: railOpen,
+              onToggle: () => setRailOpen((o) => !o),
+              unsaved: gitWorkspace ? unsavedCount(gitHandle) : 0,
+            }
+      }
+      lockBanner={merging ? lockedSay() : null}
+      overflow={
+        <OverflowMenu
+          panes={switcherPanes}
+          pane={full}
+          onPane={(id) => void runCommand(`ui ${id}`)}
+          lanes={
+            full === "timeline" && hasTimeline
+              ? laneViewsOf()
+              : full === "chains"
+                ? graphViewsOf()
+                : []
+          }
+          lanesHeading={
+            full === "chains"
+              ? m["shell.overflow.graph"]()
+              : m["shell.overflow.lanes"]()
+          }
+          panels={headerPanels}
+          onSettings={() => void runCommand("ui settings")}
+          onHelp={openHelp}
+          tool={
+            full === "timeline" && hasTimeline
+              ? {
+                  current: tool,
+                  tools: TOOLS,
+                  onPick: (t) => void runCommand(`ui tool ${t}`),
+                }
+              : undefined
+          }
+          metronome={{
+            on: metronomeIsOn,
+            onPress: toggleMetronome,
+            level: metronomeLevel,
+            onLevel: (v) => void runCommand(`transport metronome volume ${v}`),
+          }}
+        />
       }
     />
   );
@@ -3413,12 +3418,19 @@ export default function App({
               <PanelRail
                 save={(className) =>
                   gitWorkspace ? (
-                    <GitRailSave
-                      git={gitHandle}
-                      transport={gitTransport}
-                      workspace={gitWorkspace}
-                      className={className}
-                    />
+                    <>
+                      <GitRailSave
+                        git={gitHandle}
+                        transport={gitTransport}
+                        workspace={gitWorkspace}
+                        className={className}
+                      />
+                      <GitRailPull
+                        git={gitHandle}
+                        workspace={gitWorkspace}
+                        className={className}
+                      />
+                    </>
                   ) : null
                 }
                 closeHref={projectsUrl(window.location.href)}
@@ -3438,9 +3450,9 @@ export default function App({
             {ws?.activeIsDemo && ws.activeProject && (
               <DemoBanner project={ws.activeProject} />
             )}
-            {/* The panes, with room kept for the floating bar; panels float over them and push nothing. */}
+            {/* The panes, with room kept for a phone's floating bar (a desk docks it in the header); panels push nothing. */}
             <div
-              className={`${editorPopin || rackBuilder ? "z-(--k7-z-menu)" : "z-(--k7-z-pane)"} flex min-h-0 flex-1 flex-col pb-[88px]`}
+              className={`${editorPopin || rackBuilder ? "z-(--k7-z-menu)" : "z-(--k7-z-pane)"} flex min-h-0 flex-1 flex-col ${isMobile ? "pb-[88px]" : "pb-4"}`}
             >
               <div className="flex min-h-0 flex-1">
                 {/* The popin's backdrop: a click outside is the reliable way out, Escape belonging to the editor's vim. */}
@@ -3757,7 +3769,7 @@ export default function App({
               </FloatingWindow>
             )}
 
-            {bar}
+            {isMobile && bar}
 
             {panelHost}
             {dockHost}

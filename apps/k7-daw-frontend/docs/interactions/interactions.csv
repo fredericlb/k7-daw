@@ -61,12 +61,12 @@ ID,Screen,Interaction,Mouse / trackpad,Keyboard,Touch,Devices,Not drawn,Area,Not
 03.15,03,Toggle record enable,"click Record (arms a track first if none); where the project records its output, Record's chevron or a right-click opens Record the output…",⇧R; ↓ on Record opens the output menu,tap; a long-press or the chevron opens Record the output…,T M D,FALSE,Project header and transport,
 03.16,03,Record the output (no arrangement),"click the output record button (a set); with an arrangement, Record's chevron → Record the output",—,tap,T M D,FALSE,Project header and transport,
 03.17,03,Move the playhead or scrub from the minimap,click the strip; press and drag to scrub,—,tap to seek; drag to scrub,T M D,TRUE,Project header and transport,
-03.18,03,Peek the full map,hover the minimap: it unfolds to every lane,—,— (stays folded),D,TRUE,Project header and transport,
+03.18,03,Peek the full map,"hover the minimap: it unfolds to every lane (downward, from the header)",—,— (stays folded),D,TRUE,Project header and transport,
 03.19,03,Edit the tempo,"click ""N bpm"" → question with a Tap button","Space taps, Enter confirms, Esc cancels","tap the bpm, tap Tap repeatedly",T M D,FALSE,Project header and transport,
 03.20,03,Edit the meter,"click ""N/M"" → question",Enter / Esc,tap,T M D,FALSE,Project header and transport,
 03.21,03,Toggle the metronome,click the metronome button,Enter/Space on it (repeat ignored),"tap; on a phone, Metronome in Views and panels",T M D,FALSE,Project header and transport,
 03.22,03,Set the metronome volume,"right-click the metronome button, drag the slider",ArrowDown opens it; arrows move it (written on key up),"long-press, drag the slider; on a phone, the slider under Metronome in Views and panels",T M D,FALSE,Project header and transport,
-03.23,03,Set the song's output level,drag the master volume in the floating bar (written on release),arrows on the focused fader (0.5 dB),"drag the master volume; on a phone, the one in the info strip above the bar",T M D,FALSE,Project header and transport,
+03.23,03,Set the song's output level,drag the master volume in the header's bar (written on release),arrows on the focused fader (0.5 dB),"drag the master volume; on a phone, the one in the info strip above the bar",T M D,FALSE,Project header and transport,
 03.24,03,Fix a clipped mix,"click ""fix"" next to the clip light",—,—,D,FALSE,Project header and transport,
 03.25,03,Show / hide the graph notes,click the notes button,—,tap,T M D,TRUE,Project header and transport,
 03.26,03,Open the Mixer or the Events dock,"click the Mixer icon in the header; opening a clip, a take or a roll opens Events",the key bound to `ui mixer`,tap Mixer in Views and panels,T M D,FALSE,Project header and transport,
@@ -92,7 +92,7 @@ ID,Screen,Interaction,Mouse / trackpad,Keyboard,Touch,Devices,Not drawn,Area,Not
 03.47,03,Read a marker's name,hover its flag,—,—,D,FALSE,Arrange · Ruler and loop,
 03.48,03,Delete a marker,"right-click the flag → ""Delete a marker""",—,long-press the flag,T M D,FALSE,Arrange · Ruler and loop,
 03.49,03,Read a task's text,hover or focus the task flag (a click seeks),Tab to the flag,tap (seeks),T M D,FALSE,Arrange · Ruler and loop,
-03.50,03,Switch the ruler between bars and seconds,click the position in the floating bar; the rulers follow,—,tap,T M D,FALSE,Arrange · Ruler and loop,
+03.50,03,Switch the ruler between bars and seconds,click the position in the header's bar (a phone's floating bar); the rulers follow,—,tap,T M D,FALSE,Arrange · Ruler and loop,
 03.51,03,Select a lane (audio or picture),click its header,`h`/← from beat 1 onto the label; `j k`/↑↓ walk rows,tap the header,T M D,FALSE,Arrange · Tracks,
 03.52,03,Pick several lanes,⇧-click the headers,—,—,D,FALSE,Arrange · Tracks,
 03.53,03,Group the picked lanes,"right-click a picked header → ""Group the N tracks""",—,long-press,T M D,FALSE,Arrange · Tracks,
@@ -116,7 +116,7 @@ ID,Screen,Interaction,Mouse / trackpad,Keyboard,Touch,Devices,Not drawn,Area,Not
 03.71,03,Resize a clip by an edge,"drag the strip at its start or end (wider on the selected clip, which shows a grip)",—,"hold the edge, then drag",T M D,FALSE,Arrange · Clips,
 03.72,03,Fade a clip in / out,drag the corner square (whole beats; ⌘/Ctrl or ⇧ frees),—,"hold the corner square, then drag",T M D,FALSE,Arrange · Clips,
 03.73,03,"Cancel a move, resize or fade",release where it started,Esc during a keyboard move,—,T D,FALSE,Arrange · Clips,
-03.74,03,"Pick the tool (arrow, blade, eraser, mute, crossfade)",click the tool button in the floating bar → its menu,"`a`, `b`, `d`, `x` (mute has none); Esc back to arrow",tap the tool button,T M D,FALSE,Arrange · Clips,
+03.74,03,"Pick the tool (arrow, blade, eraser, mute, crossfade)","click the tool button in the timeline's corner, left of + lane → its menu","`a`, `b`, `d`, `x` (mute has none); Esc back to arrow",tap the tool button,T M D,FALSE,Arrange · Clips,
 03.75,03,Cut a clip,click it with the blade (refused at head or tail),⌘/Ctrl+B at the playhead on the caret's lane,tap with the blade,T M D,FALSE,Arrange · Clips,
 03.76,03,Erase a clip,click it with the eraser,Backspace / Delete on the caret's clip or the rectangle,tap with the eraser,T M D,FALSE,Arrange · Clips,
 03.77,03,Mute / unmute a clip,click it with the mute tool,—,tap with the mute tool,T M D,FALSE,Arrange · Clips,
@@ -527,7 +527,7 @@ ID,Screen,Interaction,Mouse / trackpad,Keyboard,Touch,Devices,Not drawn,Area,Not
 29.02,43,Name the clone,"Clone's Other host tab: type in ""Name of the workspace"" (it follows the address, or the picked repository's name, until typed; a taken or bad name is said under it)",—,"tap, type",T M D,TRUE,Git screens,the canvas draws no name field
 29.06,29,Go to Settings → Services from the GitHub tab,"GitHub tab with no account that lists repositories: click ""Open Settings → Services"" and sign in there (41.01)","Tab, Enter",tap,T M D,TRUE,Git screens,"""This build of k7 has no GitHub sign-in."" where GitHub is off"
 33.02,33,Open the Saves list from the git menu,"the header's git capsule: ⌄ (""More git actions"") → ""Saves"" → the History panel on its Saves list","Enter, arrows in the menu",phone: tap the git button → Saves,T M D,FALSE,Git screens,
-34.04,34,Save from a project,"click Save, the first button of the right-edge toolbar (its count of changes on its corner and on the folded chevron; dimmed when nothing waits; a spinner while it runs; its tooltip says the last auto-save)","Tab, Enter",phone: tap the git button → Save,T M D,FALSE,Git screens,"a phone's git menu holds Save, Pull and Saves; on a desk the Saves list is Tasks & history"
+34.04,34,Save from a project,"click Save, the first button of the right-edge toolbar (its count of changes on its corner and on the folded chevron; dimmed when nothing waits; a spinner while it runs; its tooltip says the last auto-save)","Tab, Enter",phone: tap the git button → Save,T M D,FALSE,Git screens,"Update (pull) sits under Save on the toolbar, with the count to fetch, dimmed with its reason while changes wait; a phone's git menu holds Save, Update and Saves; on a desk the Saves list is Tasks & history"
 34.05,34,Pull after a save not sent,"toast ""Saved on this device, not sent"" · ""The remote has new changes: pull first, then save again."": click Pull",—,tap,T M D,FALSE,Git screens,the save stays on this device
 34.06,34,Retry a save,"toast ""Not saved"", or ""Saved on this device, not sent"" for any failure but a remote ahead: click Retry",—,tap,T M D,FALSE,Git screens,a Retry after the commit only sends: it never commits twice
 34.07,34,Set the author after a save refused,"toast ""Not saved: no author yet"" · ""Set your name and email in Settings, then save again."": click Settings → Settings, General (23.01)",—,tap,T M D,FALSE,Git screens,
