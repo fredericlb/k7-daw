@@ -4,9 +4,9 @@
 
 pub mod curve;
 pub mod engine;
-pub mod schema;
 pub mod fields;
 pub mod file;
+pub mod schema;
 pub mod song;
 pub mod timecode;
 #[cfg(feature = "verbs")]
