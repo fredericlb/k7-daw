@@ -14,6 +14,13 @@ path = "src/main.rs"
 test = false
 doc = false
 
+# An engine that speaks the engine wire from files, for the queries part's tests: `tests/all/queries.rs`.
+[[bin]]
+name = "k7-ws-engine"
+path = "src/bin/ws_engine.rs"
+test = false
+doc = false
+
 # An engine that only listens, for the tests alone: `tests/all/supervisor.rs` runs it through `CARGO_BIN_EXE_k7-fake-engine`.
 [[bin]]
 name = "k7-fake-engine"
@@ -34,6 +41,9 @@ tokio = { workspace = true, features = ["rt-multi-thread", "time", "sync", "macr
 url.workspace = true
 # The cut's job id: a hash of the work, as the C++ supervisor's mbedTLS SHA-256 gave it.
 sha2.workspace = true
+# The engine's WebSocket (`engine_client`): one connection, a reader task, the frames typed by hand.
+futures-util.workspace = true
+tokio-tungstenite.workspace = true
 
 [features]
 # ONNX Runtime LOADED at the first cut, never linked (docs/rust-supervisor-plan.md, M7); off on iOS, where M9 links the xcframework.
