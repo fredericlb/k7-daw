@@ -52,7 +52,8 @@ fn write_types(dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
     let mut names = fs::read_dir(dir)?
         .map(|e| e.map(|e| e.file_name().to_string_lossy().into_owned()))
         .collect::<Result<Vec<_>, io::Error>>()?;
-    names.sort();
+    // Biome's import order ignores case, so the index is sorted the same way.
+    names.sort_by_key(|n| (n.to_lowercase(), n.clone()));
     let index: String = names
         .iter()
         .filter_map(|n| n.strip_suffix(".ts"))
