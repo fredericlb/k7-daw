@@ -87,13 +87,6 @@ stay the browser's. The gate's own departures (Quit, an address naming no projec
 work that is not on disk (`hasUnsavedWork`), and a Back that would leave such work is put back if
 refused; a real reload keeps the browser's `beforeunload` prompt.
 
-**ProjectGate also closes the session again.** Twenty minutes untouched and it stops rendering the
-editor — which is what closes the engine socket — flushes the project out of the engine and draws
-a card offering to resume. EngineGate lets go of its lease at the same moment, since a tab with no
-socket that kept renewing a claim would be squatting the machine.
-[apps/k7-daw-frontend/packages/project-shell/docs/idle.md](../packages/project-shell/docs/idle.md) is the
-page, including why a playing transport does not count as idleness.
-
 ### When somebody else takes the engine
 
 **The claim waits for the address.** EngineGate holds its lease only once the gate reports a phase

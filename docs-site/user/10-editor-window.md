@@ -119,8 +119,3 @@ If one view fails, it draws an error card in its own place and the rest of the w
 
 If the page loads after k7 was updated on the server, the first piece of code that cannot be found makes the page reload once by itself.
 
-## The session goes to sleep
-
-After **twenty minutes** without any input (pointer, keyboard, wheel, touch) and with nothing playing, k7 unloads the project from the engine and shows a "Session asleep" screen. Your files are already saved. Click **Resume session** to reopen the project where you left it. Other tabs of your account that are still in use keep the engine session alive.
-
-A tab put behind another tab also stops driving the engine, and takes it back by itself when it comes to the front again.

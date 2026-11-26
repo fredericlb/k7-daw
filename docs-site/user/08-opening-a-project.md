@@ -84,19 +84,12 @@ project elsewhere takes it over:
 
 Nothing you saved is lost. Click **Back to Projects** and open the project again to take it back.
 
-## Sleep after twenty minutes
-
-If nothing happens in a project's tab for 20 minutes, the session goes to sleep: the project is
-unloaded from the engine, which becomes free for someone else, and the screen **Session asleep**
-appears. Your files are untouched, since everything was already saved. Click **Resume session** to
-reopen it where you left off.
-
 ## Leaving a project
 
 | Way out | What it does |
 |---|---|
 | Back arrow, top left | Goes to the home page. |
-| `ui workspace quit` | Unloads the project from the engine, unless another of your tabs is still using it, and goes to the home page. |
+| `ui workspace quit` | Unloads the project from the engine and goes to the home page. |
 | `ui engine` | Opens the engine's settings. |
 
 ## The bench
