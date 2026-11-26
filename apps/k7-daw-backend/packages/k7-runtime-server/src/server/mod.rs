@@ -9,6 +9,8 @@ pub mod dispatch;
 pub mod handlers;
 pub mod msg;
 pub mod outbox;
+pub mod state;
+mod state_frame;
 mod whoami;
 
 use crate::engine::{Api, Engine, Host};
@@ -106,6 +108,7 @@ impl Running {
     /// Blocks on the message loop until a quit, then stops the server; returns the process's exit code.
     pub fn run(self) -> i32 {
         self.host.run();
+        state::uninstall(&self.ctx);
         let _ = self.stop.send(true);
         // Each socket is told it is going away and given its moment to say so.
         let waited = Instant::now();
@@ -196,6 +199,7 @@ pub fn start(api: Api, cfg: ServeConfig) -> Result<Running, String> {
     ctx.audio_to_browser = cfg.audio_to_browser;
     ctx.safe_mode_crashes = cfg.safe_mode_crashes;
     let ctx = Arc::new(ctx);
+    state::install(&ctx);
     let mut table = handlers::table();
     if let Some(extra) = cfg.extra_handlers {
         extra(&mut table);

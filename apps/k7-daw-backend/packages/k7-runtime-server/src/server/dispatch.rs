@@ -8,6 +8,7 @@ use super::handlers::HandlerTable;
 use super::msg::{self, Malformed, Msg};
 use crate::wire::catalogue::{OVERRIDE_QUERIES, PROBE_QUERIES, is};
 use serde_json::json;
+use std::collections::hash_map::Entry;
 use std::panic::{AssertUnwindSafe, catch_unwind};
 use std::sync::Arc;
 
@@ -90,10 +91,16 @@ fn route(
             eprintln!("[client] connected ({})", client.ip);
         }
         if !is(OVERRIDE_QUERIES, &ty) {
-            ctx.bindings()
-                .subscribers
-                .entry(client.id)
-                .or_insert_with(|| session.clone());
+            let joined = match ctx.bindings().subscribers.entry(client.id) {
+                Entry::Vacant(slot) => {
+                    slot.insert(session.clone());
+                    true
+                }
+                Entry::Occupied(_) => false,
+            };
+            if joined {
+                super::state::joined(ctx, &session);
+            }
         }
     }
     match table.find(&ty) {
