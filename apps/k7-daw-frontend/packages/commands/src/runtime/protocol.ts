@@ -1,22 +1,13 @@
-// protocol.ts — the messages between a page and the verbs' Worker, and the one function that serves them.
+// protocol.ts — the messages between a page and the project's Worker (picture views, import), and the one function that serves them.
 // What a reader gets wrong: `serve` takes any port with postMessage and "message" events, so a test needs no Worker at all.
 
 import { LibraryCache } from "./bundle.ts";
 import type { Importer, ImportResult } from "./importer.ts";
-import type { RunOptions, Runtime } from "./runtime.ts";
+import type { Runtime } from "./runtime.ts";
 
 export type Message =
   | { id: number; type: "init"; base: string; headers?: Record<string, string> }
   | { id: number; type: "open"; at: string }
-  | { id: number; type: "run"; line: string; options?: RunOptions; at?: string }
-  | {
-      id: number;
-      type: "complete";
-      line: string;
-      labelled?: boolean;
-      at?: string;
-    }
-  | { id: number; type: "catalogue" }
   | { id: number; type: "videoDoc"; token?: string; at?: string }
   | { id: number; type: "videoErrors"; token?: string; at?: string }
   | { id: number; type: "refresh"; files: string[]; rev?: string; at?: string }
@@ -57,7 +48,6 @@ export function serve(
   const libraries = new LibraryCache();
   const runtimes = new Map<string, Runtime>();
   let init: Init | undefined;
-  let idle: Runtime | undefined;
   let current: string | undefined;
   let turn: Promise<unknown> = Promise.resolve();
   const pick = (at?: string): Runtime => {
@@ -73,7 +63,6 @@ export function serve(
         runtimes.clear();
         current = undefined;
         init = m;
-        idle = make(m, libraries);
         return null;
       case "open": {
         if (!init) throw new Error("the runtime has not been initialised");
@@ -82,13 +71,6 @@ export function serve(
         current = m.at;
         return rt.open(m.at);
       }
-      case "run":
-        return pick(m.at).run(m.line, m.options);
-      case "complete":
-        return pick(m.at).complete(m.line, m.labelled);
-      case "catalogue":
-        if (!idle) throw new Error("the runtime has not been initialised");
-        return idle.catalogue();
       case "videoDoc":
         return pick(m.at).videoDoc(m.token);
       case "videoErrors":
@@ -163,22 +145,6 @@ export function client(port: PortLike) {
     init: (base: string, headers?: Record<string, string>) =>
       send<null>({ type: "init", base, headers }),
     open: (at: string) => send<void>({ type: "open", at }),
-    run: (line: string, options?: RunOptions, at?: string) =>
-      send<Awaited<ReturnType<Runtime["run"]>>>({
-        type: "run",
-        line,
-        options,
-        at,
-      }),
-    complete: (line: string, labelled?: boolean, at?: string) =>
-      send<Awaited<ReturnType<Runtime["complete"]>>>({
-        type: "complete",
-        line,
-        labelled,
-        at,
-      }),
-    catalogue: () =>
-      send<ReturnType<Runtime["catalogue"]>>({ type: "catalogue" }),
     videoDoc: (token?: string, at?: string) =>
       send<Awaited<ReturnType<Runtime["videoDoc"]>>>({
         type: "videoDoc",

@@ -21,7 +21,7 @@ beforeAll(async () => {
 afterAll(() => rmSync(out, { recursive: true, force: true }));
 
 describe("the Worker's server-only modules", () => {
-  it("holds none of the modules the verbs reached the server through", () => {
+  it("holds none of the modules a browser cannot run", () => {
     expect(left).toEqual([]);
   });
 
@@ -34,7 +34,7 @@ describe("the Worker's server-only modules", () => {
     const metafile = {
       inputs: {
         "../engine-client/src/engineBinary.ts": {},
-        "../audio-passes/src/resolveChain.ts": {},
+        "../song/src/loader.ts": {},
         "../take-render/src/renderer.ts": {},
         "src/runtime/shims/childProcess.ts": {},
       },

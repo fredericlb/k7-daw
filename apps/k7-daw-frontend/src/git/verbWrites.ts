@@ -54,6 +54,7 @@ const WRITES = [
   "track input",
   "track hide",
   "track unhide",
+  "track transcribe",
   "sequence new",
   "sequence empty",
   "timeline new",

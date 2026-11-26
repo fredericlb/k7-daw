@@ -13,7 +13,7 @@ const portLike = (p: MessagePort) => ({
     p.on("message", (data) => f({ data })),
 });
 
-/** A Runtime that records what it was asked and answers `slow` ms late on `run`. */
+/** A Runtime that records what it was asked and answers `slow` ms late on `videoDoc`. */
 const gone = new Set<string>();
 
 function stubRuntime(log: string[], slow = 0): Runtime {
@@ -22,23 +22,8 @@ function stubRuntime(log: string[], slow = 0): Runtime {
       if (gone.has(at)) throw new Error(`'${at}' is not the open project`);
       log.push(`open ${at}`);
     },
-    run: async (line) => {
-      await new Promise((ok) => setTimeout(ok, slow));
-      log.push(`run ${line}`);
-      return {
-        output: [line],
-        before: "",
-        after: "",
-        changed: [],
-        runs: 1,
-        committed: false,
-        refused: line === "refuse",
-        ...(line === "needs" ? { unsupported: "transport" } : {}),
-      };
-    },
-    complete: async () => ["a"],
-    catalogue: () => [],
     videoDoc: async (token) => {
+      await new Promise((ok) => setTimeout(ok, slow));
       log.push(`videoDoc ${token}`);
       return { error: "stub" };
     },
@@ -88,7 +73,7 @@ function harness(slow = 0, importer?: Importer) {
   return { log, spawned, spawn };
 }
 
-describe("the verbs' Worker handle", () => {
+describe("the project's Worker handle", () => {
   it("hands a dropped file to the Worker's importer by its name and the folder asked for, and a path by its own", async () => {
     const seen: unknown[][] = [];
     const importer: Importer = {
@@ -130,8 +115,7 @@ describe("the verbs' Worker handle", () => {
     await v.open("q.k7");
     gone.add("p.k7");
     h.spawned[0]?.crash("out of memory");
-    const r = await v.run("next", undefined, "q.k7");
-    expect(r.output).toEqual(["next"]);
+    expect(await v.videoDoc("next", "q.k7")).toEqual({ error: "stub" });
     gone.clear();
   });
 
@@ -143,9 +127,9 @@ describe("the verbs' Worker handle", () => {
       headers: () => ({}),
     });
     expect(h.spawned).toHaveLength(0);
-    await v.catalogue();
+    await v.ready();
     await v.open("p.k7");
-    expect((await v.run("a")).output).toEqual(["a"]);
+    expect(await v.videoDoc("a")).toEqual({ error: "stub" });
     expect(h.spawned).toHaveLength(1);
   });
 
@@ -165,18 +149,6 @@ describe("the verbs' Worker handle", () => {
     expect(h.log).toEqual(["open p.k7", "videoDoc r1", "videoErrors r2"]);
   });
 
-  it("carries a refusal and an unsupported member", async () => {
-    const h = harness();
-    const v = createVerbs({
-      spawn: h.spawn,
-      base: "/api",
-      headers: () => ({}),
-    });
-    await v.open("p.k7");
-    expect((await v.run("refuse")).refused).toBe(true);
-    expect((await v.run("needs")).unsupported).toBe("transport");
-  });
-
   it("fails the calls in flight with one sentence when the Worker dies, then starts again and reopens", async () => {
     const h = harness(40);
     const v = createVerbs({
@@ -186,21 +158,20 @@ describe("the verbs' Worker handle", () => {
     });
     await v.open("p.k7");
     await v.open("q.k7");
-    const pending = v.run("slowline");
+    const pending = v.videoDoc("slowline");
     await vi.waitFor(() => expect(h.spawned).toHaveLength(1));
     await new Promise((ok) => setTimeout(ok, 5));
     h.spawned[0]?.crash("out of memory");
     await expect(pending).rejects.toThrow(WORKER_DIED);
     expect(h.spawned[0]?.ended).toBe(true);
     h.log.length = 0;
-    const again = await v.run("next");
-    expect(again.output).toEqual(["next"]);
+    expect(await v.videoDoc("next")).toEqual({ error: "stub" });
     expect(h.spawned).toHaveLength(2);
     // The old Worker's stub still finishes its slow line; only the new one's calls count.
-    expect(h.log.filter((x) => x !== "run slowline")).toEqual([
+    expect(h.log.filter((x) => x !== "videoDoc slowline")).toEqual([
       "open p.k7",
       "open q.k7",
-      "run next",
+      "videoDoc next",
     ]);
   });
 
@@ -215,7 +186,7 @@ describe("the verbs' Worker handle", () => {
       onLoading: (l) => seen.push(l),
     });
     await v.open("p.k7");
-    await v.run("slow");
+    await v.videoDoc("slow");
     expect(seen).toEqual([true, false]);
     const quick = harness(0);
     const w = createVerbs({
@@ -240,7 +211,7 @@ describe("the verbs' Worker handle", () => {
     v.reset();
     expect(h.spawned[0]?.ended).toBe(true);
     h.log.length = 0;
-    await v.catalogue();
+    await v.ready();
     expect(h.spawned).toHaveLength(2);
     expect(h.log).toEqual([]);
   });

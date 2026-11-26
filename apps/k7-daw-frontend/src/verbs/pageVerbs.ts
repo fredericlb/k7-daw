@@ -1,13 +1,15 @@
-// pageVerbs.ts — the page's VerbsHost: the Worker handle, one runtime per project, the session it was started for, a long run in the process list.
-// What a reader gets wrong: a change to the file API's session (workspace, ticket) ends the Worker, and a foreign revision reopens the project in the background.
+// pageVerbs.ts — the page's VerbsHost: a line run by the backend's `POST /verb`, its completion `POST /verb/complete`, the picture views in the Worker.
+// What a reader gets wrong: the Worker holds a project only for its picture views; after a verb wrote, it is handed the files that changed.
 
 import type { ImportResult } from "@studio/commands/runtime/importer";
 import { fget } from "@studio/project-shell/fileApi";
 import type {
+  VerbCompletion,
   VerbRun,
   VerbRunOptions,
   VerbsHost,
 } from "@studio/project-shell/verbsHost";
+import type { ChangedFile, CommandInfo } from "@studio/web-protocol";
 import { VERBS_RESET, type Verbs } from "./verbsWorker.ts";
 
 /** A run past this is a process of the page, listed beside the server's. */
@@ -15,8 +17,25 @@ const LONG_RUN_MS = 1000;
 /** A foreign change settles this long before the project is read again. */
 const REOPEN_MS = 500;
 
+/** What `POST /verb` answers: the crate's answer, what landed and the tokens either side (apps/k7-daw-backend/docs/file-changes.md). */
+interface VerbAnswer {
+  log: string[];
+  refuse: string[];
+  refused: boolean;
+  threw?: string;
+  landed?: boolean;
+  changed?: ChangedFile[];
+  rev?: string;
+  revBefore?: string;
+  graph?: unknown;
+}
+
 export interface PageVerbsDeps {
   verbs: Verbs;
+  /** A JSON POST to the file service: `fsend`, or a test's stand-in. */
+  send: <T>(path: string, body: unknown) => Promise<T>;
+  /** The palette's catalogue. */
+  catalogue: () => Promise<CommandInfo[]>;
   /** The file API's session as the Worker needs it: its key changes when the workspace or the ticket does. */
   session: () => { key: string };
   /** The open project, as `/changes` names it; empty when none is open. */
@@ -36,11 +55,16 @@ export interface PageVerbs extends VerbsHost {
   importPath(rel: string, as?: string): Promise<ImportResult>;
 }
 
+/** The lines a run shows: what it said, why it refused, and an escaped throw. */
+function outputOf(a: VerbAnswer): string[] {
+  return [...a.log, ...a.refuse, ...(a.threw ? [`error: ${a.threw}`] : [])];
+}
+
 export function createPageVerbs(d: PageVerbsDeps): PageVerbs {
   let key = "";
   const opened = new Set<string>();
   const opening = new Map<string, Promise<void>>();
-  // The token the Worker's last commit answered: a change to anything else is not ours.
+  // The token the last verb answered: a change to anything else is not ours.
   let known: string | null = null;
   let project: string | undefined;
   let running = 0;
@@ -55,11 +79,11 @@ export function createPageVerbs(d: PageVerbsDeps): PageVerbs {
     opening.clear();
   }
 
-  async function at(options?: { at?: string }): Promise<string> {
+  /** The project the Worker reads the picture of, opened once for the calls that ask at the same time. */
+  async function at(): Promise<string> {
     fresh();
-    const target = options?.at ?? project ?? (await d.activeProject());
+    const target = project ?? (await d.activeProject());
     if (opened.has(target)) return target;
-    // The calls a page makes as it opens share one open: each one fetches and compiles the project, a second on a phone.
     let p = opening.get(target);
     if (!p) {
       const session = key;
@@ -97,62 +121,70 @@ export function createPageVerbs(d: PageVerbsDeps): PageVerbs {
     }
   }
 
+  /** The files a verb wrote, handed to the Worker's runtimes so a picture read next is the project as it is now. */
+  async function refreshWorker(a: VerbAnswer): Promise<void> {
+    const files = (a.changed ?? []).map((c) => c.path);
+    if (!files.length) return;
+    for (const p of [...opened]) {
+      try {
+        await d.verbs.refresh(files, a.rev, p);
+      } catch {
+        opened.delete(p);
+      }
+    }
+  }
+
   return {
     catalogue() {
-      fresh();
-      return d.verbs.catalogue();
+      return d.catalogue();
     },
     async complete(line) {
       try {
-        const project = await at();
-        return await d.verbs.complete(line, true, project);
+        const r = await d.send<{ items: (string | VerbCompletion)[] }>(
+          "/verb/complete",
+          { line, labelled: true },
+        );
+        return r.items;
       } catch {
-        // The palette keeps asking: a Worker still loading answers after it is ready, never an error.
+        // The palette keeps asking: a completion that fails is no items, never an error.
         return [];
       }
     },
     videoDoc: () =>
       read(async () => {
-        const project = await at();
+        const target = await at();
         const { rev } = await fget<{ rev: string }>("/revision");
-        return d.verbs.videoDoc(rev, project);
+        return d.verbs.videoDoc(rev, target);
       }),
     videoErrors: () =>
       read(async () => {
-        const project = await at();
+        const target = await at();
         const { rev } = await fget<{ rev: string }>("/revision");
-        return d.verbs.videoErrors(rev, project);
+        return d.verbs.videoErrors(rev, target);
       }),
     async run(line: string, options: VerbRunOptions): Promise<VerbRun> {
-      const project = await at(options);
       running++;
+      let shown: { end: (error?: string) => void } | undefined;
       const long = setTimeout(() => {
         shown = d.track(line);
       }, LONG_RUN_MS);
-      let shown: { end: (error?: string) => void } | undefined;
       try {
-        const r = await d.verbs.run(
+        const r = await d.send<VerbAnswer>("/verb", {
           line,
-          {
-            want: options.want,
-            ...(options.journal ? { journal: options.journal } : {}),
-          },
-          project,
-        );
-        if (r.committed) known = r.after;
+          want: options.want,
+          ...(options.at ? { at: options.at } : {}),
+          ...(options.journal ? { journal: options.journal } : {}),
+        });
+        if (r.landed) known = r.rev ?? known;
+        if (r.landed) await refreshWorker(r);
         shown?.end();
         return {
-          output: r.output,
+          output: outputOf(r),
           refused: r.refused,
           ...(r.graph !== undefined ? { graph: r.graph } : {}),
-          ...(r.committed
-            ? {
-                rev: r.after,
-                revBefore: r.before,
-                changed: r.changed as never,
-              }
-            : { rev: r.after, revBefore: r.before }),
-          ...(r.unsupported ? { unsupported: r.unsupported } : {}),
+          ...(r.rev !== undefined ? { rev: r.rev } : {}),
+          ...(r.revBefore !== undefined ? { revBefore: r.revBefore } : {}),
+          ...(r.landed ? { changed: r.changed ?? [] } : {}),
         };
       } catch (e) {
         shown?.end((e as Error).message);

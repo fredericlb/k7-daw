@@ -1,7 +1,7 @@
 // pageHost.ts — the one page host, made on first use over the real Worker and the file API's session.
-// What a reader gets wrong: nothing here starts a Worker at import; the first catalogue or verb call does, through the spawner `installPageVerbs` was given.
+// What a reader gets wrong: nothing here starts a Worker at import; the first picture view does, through the spawner `installPageVerbs` was given.
 
-import { cfg, fileHeaders } from "@studio/project-shell/fileApi";
+import { cfg, fileHeaders, fsend } from "@studio/project-shell/fileApi";
 import { setVerbsHost } from "@studio/project-shell/verbsHost";
 import { trackProcess } from "../processes";
 import { createPageVerbs, fetchActiveProject } from "./pageVerbs.ts";
@@ -20,6 +20,10 @@ const verbs = createVerbs({
 
 export const pageVerbs = createPageVerbs({
   verbs,
+  send: (path, body) => fsend("POST", path, body),
+  // The catalogue parses commands.yaml, so it is loaded with the first palette, not at boot.
+  catalogue: () =>
+    import("@studio/commands/commandSpec").then((m) => m.catalogue()),
   session: () => {
     const c = cfg();
     return { key: `${c.base}|${c.workspace}|${c.engineToken}` };

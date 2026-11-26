@@ -9,8 +9,7 @@ import { ensureVideoRun } from "@studio/song/videoOutputs";
 import { loadVideoProject } from "@studio/song-video/videoProject";
 import { webVideoProjectOf } from "@studio/song-video/webVideo";
 import { afterEach, describe, expect, it } from "vitest";
-import { provideCommandsYaml } from "../commandSpec.ts";
-import { commandsYamlText, realFs } from "./realFs.ts";
+import { realFs } from "./realFs.ts";
 import { createRuntime, type Runtime } from "./runtime.ts";
 import { current, setVfs, withVfs } from "./shims/current.ts";
 import { type FakeServer, fakeServer } from "./testing/fakeServer.ts";
@@ -61,7 +60,6 @@ let server: FakeServer;
 let rt: Runtime | undefined;
 
 async function open(name: string, from?: string, repair = true): Promise<void> {
-  provideCommandsYaml(commandsYamlText());
   disk = new Vfs(true);
   setVfs(disk);
   if (from) {
@@ -122,34 +120,25 @@ describe("a project with no picture", () => {
 });
 
 describe("after an edit", () => {
-  it("answers the picture a verb just changed", async () => {
-    // Unrepaired: the verb's own compile reads no strip, which the Worker's embedded meta has no shader for.
-    await open("video-lane.k7", "e2e/fixtures", false);
-    const mute = async (): Promise<boolean | undefined> => {
-      const r = await (rt as Runtime).videoDoc();
-      return "doc" in r
-        ? r.doc.videoTracks.find((t) => t.id === "main")?.mute
-        : undefined;
+  it("answers the picture the files a verb wrote change, once they are refreshed", async () => {
+    await open("video-demo.k7", "demos");
+    const viewport = async (token?: string): Promise<unknown> => {
+      const r = await (rt as Runtime).videoDoc(token);
+      return "doc" in r ? r.doc.viewport : r.error;
     };
-    expect(await mute()).toBe(false);
-    const ran = await (rt as Runtime).run("picture mute main");
-    expect(ran.output.join("")).toContain("hidden");
-    expect(ran.committed).toBe(true);
-    expect(await mute()).toBe(true);
-  }, 60_000);
-
-  it("answers a page reading at a token from before its own edit without opening the project again", async () => {
-    await open("video-lane.k7", "e2e/fixtures", false);
+    expect(await viewport()).toEqual([1280, 720]);
     const before = server.token();
-    const ran = await (rt as Runtime).run("picture mute main");
-    expect(ran.committed).toBe(true);
+    edit("video-demo.k7/project.k7x", (t) =>
+      t.replace("[1280, 720, 30]", "[640, 360, 30]"),
+    );
+    await (rt as Runtime).refresh(
+      ["video-demo.k7/project.k7x"],
+      server.token(),
+    );
     const opens = server.calls.bundle;
-    // The page's token read raced the edit: an open costs a phone seconds, and the runtime already holds newer files.
-    const r = await (rt as Runtime).videoDoc(before);
+    // A page reading at a token from before the edit is late, not ahead: the runtime answers what it holds, with no open.
+    expect(await viewport(before)).toEqual([640, 360]);
     expect(server.calls.bundle).toBe(opens);
-    expect(
-      "doc" in r && r.doc.videoTracks.find((t) => t.id === "main")?.mute,
-    ).toBe(true);
   }, 60_000);
 
   it("answers the picture a peer wrote, once the page names the revision", async () => {

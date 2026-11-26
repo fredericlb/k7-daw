@@ -158,7 +158,7 @@ export class Service {
     };
   }
 
-  /** Runs one line through the runtime's node build, on the open project (`at` overrides), and answers as the route did. */
+  /** Runs one line through `POST /verb`, on the open project (`at` overrides). */
   async verb(
     ws: string,
     line: string,
@@ -199,18 +199,14 @@ export class Service {
     return pictureOf(this.verbService(), ws, at, rev);
   }
 
-  /** The command bar's list, from the runtime's node build. */
-  catalogue(ws: string) {
-    return catalogueOf(this.verbService(), ws);
+  /** The command bar's list, as the page builds it. */
+  catalogue(_ws: string) {
+    return catalogueOf();
   }
 
-  /** A completion on the open project, from the runtime's node build. */
-  async complete(ws: string, line: string) {
-    const at =
-      ((await this.get("/workspace", ws)).body.activeProject as
-        | string
-        | null) ?? "";
-    return completeOf(this.verbService(), ws, at, line);
+  /** A completion on the open project, through `POST /verb/complete`. */
+  complete(ws: string, line: string) {
+    return completeOf(this.verbService(), ws, line);
   }
 
   /** A file's text through GET /file, which must answer it. */

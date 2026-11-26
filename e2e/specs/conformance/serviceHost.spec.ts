@@ -7,11 +7,7 @@ import { execFileSync } from "node:child_process";
 import { mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { pathToFileURL } from "node:url";
 import { expect, test } from "@playwright/test";
-// @ts-expect-error the build script is plain JavaScript
-import { bundleRuntime } from "../../../apps/k7-daw-frontend/packages/commands/scripts/bundleRuntime.mjs";
-import { base } from "../../src/instance.ts";
 import { putTree, REPO } from "../../src/projectTree.ts";
 import { Service } from "../../src/service.ts";
 import type { SessionUser } from "../../src/session.ts";
@@ -551,37 +547,20 @@ test("a film is transcribed by whoever the machine has: its srt or null, and wit
   expect(JSON.stringify(end)).not.toContain("job-out");
 });
 
-// The end-to-end proof of the /changes token: a freeze commits in one run, and the second takes it back.
-test("node freeze runs through the built node runner: the render is adopted by one change set, and a second freeze takes it back", async () => {
-  const dist = mkdtempSync(join(tmpdir(), "host-runner-"));
-  try {
-    await bundleRuntime({ target: "node", outdir: dist });
-    const { createNodeRunner } = await import(
-      pathToFileURL(join(dist, "node.mjs")).href
-    );
-    const rt = createNodeRunner({
-      base: `${base}/api/files`,
-      headers: () => svc.headers(ws),
-    });
-    const there = async () =>
-      JSON.stringify((await svc.get("/tree", ws)).body).includes("norm.wav");
-    expect(await there()).toBe(false);
-    await rt.open(project);
-    const frozen = await rt.run("node freeze norm");
-    expect(
-      frozen.output.join("\n"),
-      JSON.stringify({ ...frozen, output: [...frozen.output] }),
-    ).toContain("norm: frozen to renders/norm.wav");
-    expect(frozen.committed).toBe(true);
-    expect(await there()).toBe(true);
-    const thawed = await rt.run("node freeze norm");
-    expect(
-      thawed.output.join("\n"),
-      JSON.stringify({ ...thawed, output: [...thawed.output] }),
-    ).toContain("norm: unfrozen");
-    expect(await there()).toBe(false);
-    rt.close();
-  } finally {
-    rmSync(dist, { recursive: true, force: true });
-  }
+// The end-to-end proof of a verb's host call: the freeze asks the render route, runs again with its answer and lands the file.
+test("node freeze runs through POST /verb: the render is asked of the front and landed in one step, and a second freeze takes it back", async () => {
+  const there = async () =>
+    JSON.stringify((await svc.get("/tree", ws)).body).includes("norm.wav");
+  expect(await there()).toBe(false);
+  const frozen = (await svc.verb(ws, "node freeze norm", { want: [] })).body;
+  expect(frozen.output.join("\n"), JSON.stringify(frozen)).toContain(
+    "norm: frozen to renders/norm.wav",
+  );
+  expect(frozen.committed).toBe(true);
+  expect(await there()).toBe(true);
+  const thawed = (await svc.verb(ws, "node freeze norm", { want: [] })).body;
+  expect(thawed.output.join("\n"), JSON.stringify(thawed)).toContain(
+    "norm: unfrozen",
+  );
+  expect(await there()).toBe(false);
 });

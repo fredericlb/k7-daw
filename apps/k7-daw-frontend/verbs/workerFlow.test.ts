@@ -1,4 +1,4 @@
-// workerFlow.test.ts — init, open, complete and run in the BUILT Worker inside a real Chromium, over HTTP to a fake server.
+// workerFlow.test.ts — init, open and the picture views in the BUILT Worker inside a real Chromium, over HTTP to a fake server.
 // What a reader gets wrong: the project is the cap32 capacity project; the fake server is the runtime's own test double, proxied behind the page's origin.
 
 import { existsSync, mkdtempSync, rmSync } from "node:fs";
@@ -56,7 +56,7 @@ beforeAll(async () => {
 afterAll(() => close());
 
 describe.skipIf(!installed)("the built Worker's flow in Chromium", () => {
-  it("completes track names and runs a verb as the node harness does", async () => {
+  it("opens a project and reads its picture views as the node harness does", async () => {
     const browser = await chromium.launch();
     try {
       const page = await browser.newPage();
@@ -75,23 +75,12 @@ describe.skipIf(!installed)("the built Worker's flow in Chromium", () => {
           );
         await ask({ type: "init", base: location.origin });
         const opened = await ask({ type: "open", at: "cap.k7" });
-        const tracks = await ask({
-          type: "complete",
-          line: "track rename ",
-          labelled: true,
-        });
-        const run = await ask({
-          type: "run",
-          line: "track rename l0 lane0",
-          options: { want: [] },
-        });
+        const errors = await ask({ type: "videoErrors" });
         w.terminate();
-        return { opened, tracks, run };
+        return { opened, errors };
       }, built.entry);
       expect(out.opened.ok, JSON.stringify(out.opened)).toBe(true);
-      expect((out.tracks.value as unknown[]).length).toBe(8);
-      const run = out.run.value as { committed: boolean; output: string[] };
-      expect(run.committed, JSON.stringify(out.run)).toBe(true);
+      expect(out.errors.ok, JSON.stringify(out.errors)).toBe(true);
     } finally {
       await browser.close();
     }

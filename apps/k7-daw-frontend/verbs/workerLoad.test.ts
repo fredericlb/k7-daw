@@ -33,7 +33,7 @@ beforeAll(async () => {
 afterAll(() => server?.close());
 
 describe.skipIf(!installed)("the built Worker in Chromium", () => {
-  it("loads with no node builtin left and answers the catalogue", async () => {
+  it("loads with no node builtin left and answers its first call", async () => {
     // Nothing in the files names a node: specifier the browser cannot resolve.
     for (const [name, bytes] of built.files)
       expect(new TextDecoder().decode(bytes), name).not.toMatch(/from"node:/);
@@ -56,14 +56,13 @@ describe.skipIf(!installed)("the built Worker in Chromium", () => {
               w.postMessage(m);
             },
           );
-        await ask({ id: 1, type: "init", base: "/api" });
-        const r = await ask({ id: 2, type: "catalogue" });
+        const init = await ask({ id: 1, type: "init", base: "/api" });
+        const r = await ask({ id: 2, type: "videoDoc" });
         w.terminate();
-        return (r.value as { command: string }[]).map((c) => c.command);
+        return { init: init.ok, view: r.error };
       }, built.entry);
-      expect(result.length).toBeGreaterThan(100);
-      expect(result).toContain("track rename");
-      expect(result).toContain("track transcribe");
+      expect(result.init).toBe(true);
+      expect(result.view).toMatch(/no project/);
     } finally {
       await browser.close();
     }

@@ -1,5 +1,5 @@
-// bundleRuntime.mjs — builds the verbs' Worker (browser) and the node runner with `node:fs` and friends aliased to the Vfs shims.
-// What a reader gets wrong: a Worker build leaves other `node:*` imports external and LISTS them — each is a server-only import 3f must move behind a host member.
+// bundleRuntime.mjs — builds the project's Worker (browser) and its node runner with `node:fs` and friends aliased to the Vfs shims.
+// What a reader gets wrong: a Worker build leaves other `node:*` imports external and LISTS them — each is an import no Worker module may hold.
 
 import { readFileSync, writeFileSync } from "node:fs";
 import { isAbsolute, join } from "node:path";
@@ -17,7 +17,7 @@ const ALIASED = {
   "node:child_process": "childProcess.ts",
 };
 
-// The modules a browser cannot run: the 25 server-only imports of the verbs and the transitive ones.
+// The modules a browser cannot run, which no Worker import may reach.
 const SERVER_ONLY = [
   "shims/childProcess.ts",
   "engine-client/src/engineBinary",

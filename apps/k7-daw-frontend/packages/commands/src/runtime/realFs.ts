@@ -13,10 +13,3 @@ export function realFs(): Fs {
     );
   return get("node:fs") as Fs;
 }
-
-/** commands.yaml's text, read from the package beside this file, for a runtime that has no bundle of it. */
-export function commandsYamlText(): string {
-  const fs = realFs();
-  const url = new URL("../../commands.yaml", import.meta.url);
-  return fs.readFileSync(url, "utf8");
-}

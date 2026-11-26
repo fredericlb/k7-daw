@@ -1,5 +1,5 @@
-// verbsHost.ts — where the command bar's verbs run: the page registers a host (a Worker), the file API's three verb calls go through it.
-// What a reader gets wrong: nothing here knows of a Worker; a host is three functions, so the seam is tested over a fake.
+// verbsHost.ts — where the command bar's verbs run: the page registers a host (the backend's `/verb` routes and its Worker), the file API's verb calls go through it.
+// What a reader gets wrong: nothing here knows of a route or a Worker; a host is five functions, so the seam is tested over a fake.
 
 import type {
   ChangedFile,
@@ -21,8 +21,6 @@ export interface VerbRun {
   rev?: string;
   revBefore?: string;
   changed?: ChangedFile[];
-  /** The host member a refusal is for, when the verb needs one that is not built yet. */
-  unsupported?: string;
 }
 
 export interface VerbRunOptions {

@@ -1,4 +1,4 @@
-// pageVerbs.test.ts — the page's host over a fake Worker handle: the project it opens, the session that ends the Worker, a long run, a foreign change.
+// pageVerbs.test.ts — the page's host over a fake POST and a fake Worker handle: a line, a completion, the picture's project, a long run, a foreign change.
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createPageVerbs } from "./pageVerbs.ts";
@@ -11,40 +11,43 @@ vi.mock("@studio/project-shell/fileApi", () => ({
 function fakeVerbs() {
   const log: string[] = [];
   let slow = 0;
+  let answer: Record<string, unknown> = {
+    log: ["done"],
+    refuse: [],
+    refused: false,
+    landed: true,
+    changed: [{ path: "live.k7/project.k7x", kind: "text" }],
+    rev: "b",
+    revBefore: "a",
+  };
   const verbs = {
     ready: async () => {},
-    catalogue: async () => {
-      log.push("catalogue");
-      return [];
-    },
     open: async (at: string) => {
       log.push(`open ${at}`);
     },
-    run: async (line: string, o: unknown, at?: string) => {
-      log.push(`run ${line} @${at} ${JSON.stringify(o)}`);
-      if (slow) await new Promise((ok) => setTimeout(ok, slow));
-      return {
-        output: [line],
-        before: "a",
-        after: "b",
-        changed: [],
-        runs: 1,
-        committed: true,
-        refused: false,
-      };
+    videoDoc: async (rev: string, at?: string) => {
+      log.push(`videoDoc ${rev} @${at}`);
+      return { doc: { videoTracks: [] } };
     },
-    complete: async (line: string, _l?: boolean, at?: string) => {
-      log.push(`complete ${line} @${at}`);
-      return [line];
+    videoErrors: async () => ({ errors: [], diagnostics: [] }),
+    refresh: async (files: string[], rev?: string, at?: string) => {
+      log.push(`refresh ${files.join(",")} ${rev} @${at}`);
     },
-    refresh: async () => {},
     close: async () => {},
     reset: () => void log.push("reset"),
+  };
+  const send = async <T>(path: string, body: unknown): Promise<T> => {
+    log.push(`${path} ${JSON.stringify(body)}`);
+    if (slow) await new Promise((ok) => setTimeout(ok, slow));
+    if (path === "/verb/complete") return { items: ["node new"] } as T;
+    return answer as T;
   };
   return {
     log,
     verbs: verbs as unknown as Verbs,
+    send,
     slowBy: (n: number) => (slow = n),
+    answer: (a: Record<string, unknown>) => (answer = a),
   };
 }
 
@@ -56,6 +59,8 @@ function make() {
   const f = fakeVerbs();
   const page = createPageVerbs({
     verbs: f.verbs,
+    send: f.send,
+    catalogue: async () => [],
     session: () => ({ key }),
     activeProject: async () => project,
     track: (label) => {
@@ -79,23 +84,51 @@ beforeEach(() => {
 afterEach(() => vi.useRealTimers());
 
 describe("the page's verbs", () => {
-  it("opens the active project once and runs on it, the graph being the caller's want", async () => {
-    const { page, log } = make();
-    await page.run("a", { want: ["graph"] });
-    await page.run("b", { want: [] });
-    expect(log.filter((l) => l.startsWith("open"))).toEqual(["open live.k7"]);
-    expect(log).toContain('run b @live.k7 {"want":[]}');
+  it("runs a line through POST /verb, with its want, folder and journal, and words the answer", async () => {
+    const { page, log, answer } = make();
+    const r = await page.run("project tempo 96", {
+      want: ["graph"],
+      at: "_libraries/k7-core/chains/c",
+      journal: "join",
+    });
+    expect(log).toEqual([
+      '/verb {"line":"project tempo 96","want":["graph"],"at":"_libraries/k7-core/chains/c","journal":"join"}',
+    ]);
+    expect(r).toEqual({
+      output: ["done"],
+      refused: false,
+      rev: "b",
+      revBefore: "a",
+      changed: [{ path: "live.k7/project.k7x", kind: "text" }],
+    });
+    answer({ log: [], refuse: ['no track "x"'], refused: true, threw: "boom" });
+    const no = await page.run("track rename x y", { want: [] });
+    expect(no).toEqual({
+      output: ['no track "x"', "error: boom"],
+      refused: true,
+    });
   });
 
-  it("opens the project once for the calls a page makes as it opens", async () => {
+  it("opens no Worker for a verb, and hands the files a verb wrote to one that holds the project", async () => {
     const { page, log } = make();
-    await Promise.all([
-      page.complete("node"),
-      page.run("graph pin", { want: [] }),
-      page.run("node param master Width 101", { want: [] }),
-      page.run("node param master Width 102", { want: [] }),
-    ]);
+    await page.run("a", { want: [] });
+    expect(log.some((l) => l.startsWith("open"))).toBe(false);
+    await page.videoDoc();
+    log.length = 0;
+    await page.run("b", { want: [] });
+    expect(log).toContain("refresh live.k7/project.k7x b @live.k7");
+  });
+
+  it("opens the project once for the picture views a page asks as it opens", async () => {
+    const { page, log } = make();
+    await Promise.all([page.videoDoc(), page.videoErrors(), page.videoDoc()]);
     expect(log.filter((l) => l.startsWith("open"))).toEqual(["open live.k7"]);
+  });
+
+  it("completes through POST /verb/complete, labelled", async () => {
+    const { page, log } = make();
+    expect(await page.complete("node n")).toEqual(["node new"]);
+    expect(log).toEqual(['/verb/complete {"line":"node n","labelled":true}']);
   });
 
   it("closes the runtime of the project the page left", async () => {
@@ -106,30 +139,21 @@ describe("the page's verbs", () => {
         closed.push(at ?? "");
       };
     page.setProject("a.k7");
-    await page.run("x", { want: [] });
+    await page.videoDoc();
     page.setProject("b.k7");
     expect(closed).toEqual(["a.k7"]);
-    await page.run("y", { want: [] });
+    await page.videoDoc();
     expect(log.filter((l) => l.startsWith("open"))).toEqual([
       "open a.k7",
       "open b.k7",
     ]);
   });
 
-  it("runs on the folder it is given, a runtime of its own", async () => {
-    const { page, log } = make();
-    await page.run("x", { want: [], at: "_libraries/k7-core/chains/c" });
-    expect(log).toContain("open _libraries/k7-core/chains/c");
-    expect(log.some((l) => l.includes("@_libraries/k7-core/chains/c"))).toBe(
-      true,
-    );
-  });
-
   it("starts the Worker over when the session changes, and opens the project again", async () => {
     const { page, log } = make();
-    await page.run("a", { want: [] });
+    await page.videoDoc();
     key = "k2";
-    await page.run("b", { want: [] });
+    await page.videoDoc();
     expect(log.filter((l) => l === "reset")).toHaveLength(1);
     expect(log.filter((l) => l.startsWith("open"))).toHaveLength(2);
   });
@@ -149,18 +173,9 @@ describe("the page's verbs", () => {
     expect(asked).toBe(2);
   });
 
-  it("answers a completion with no items when the Worker fails", async () => {
-    const { page, verbs } = make();
-    (verbs as unknown as { complete: () => Promise<never> }).complete =
-      async () => {
-        throw new Error("loading");
-      };
-    expect(await page.complete("x")).toEqual([]);
-  });
-
-  it("lists a run past a second in the process list and ends it with the error", async () => {
+  it("lists a run past a second in the process list and ends it", async () => {
     vi.useFakeTimers();
-    const { page, slowBy, verbs } = make();
+    const { page, slowBy } = make();
     slowBy(1500);
     const run = page.run("track process", { want: [] });
     await vi.advanceTimersByTimeAsync(1200);
@@ -168,16 +183,12 @@ describe("the page's verbs", () => {
     await vi.advanceTimersByTimeAsync(600);
     await run;
     expect(tracked[0]?.ended).toBeUndefined();
-    (verbs as unknown as { run: () => Promise<never> }).run = async () => {
-      throw new Error("boom");
-    };
-    vi.useRealTimers();
-    await expect(page.run("quick", { want: [] })).rejects.toThrow("boom");
   });
 
   it("reopens the project in the background after a change it did not make", async () => {
     vi.useFakeTimers();
     const { page, log } = make();
+    await page.videoDoc();
     await page.run("a", { want: [] });
     log.length = 0;
     page.foreignChange("b");

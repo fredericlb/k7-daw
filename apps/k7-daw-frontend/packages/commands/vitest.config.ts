@@ -12,12 +12,8 @@ export default defineConfig({
     env: {
       STUDIO_HOME: join(tmpdir(), "studio-cmd-no-home"),
     },
-    // The runtime's own tests and the verb tests under the shims run in vitest.vfs.config.ts.
-    exclude: [
-      "**/node_modules/**",
-      "**/*.vfs.test.ts",
-      "src/runtime/verbTests/**",
-    ],
+    // The runtime's own tests under the shims run in vitest.vfs.config.ts.
+    exclude: ["**/node_modules/**", "**/*.vfs.test.ts"],
     testTimeout: 30_000,
     hookTimeout: 30_000,
   },

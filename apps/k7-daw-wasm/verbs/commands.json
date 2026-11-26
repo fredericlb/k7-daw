@@ -105,6 +105,19 @@
   ]
  },
  {
+  "command": "track transcribe",
+  "sid": "track.transcribe",
+  "args": [
+   {
+    "name": "track_in",
+    "complete": "pictureLanes"
+   },
+   {
+    "name": "track_out"
+   }
+  ]
+ },
+ {
   "command": "sequence new",
   "sid": "sequence.new",
   "args": [

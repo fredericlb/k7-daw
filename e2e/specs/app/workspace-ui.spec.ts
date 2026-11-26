@@ -1,5 +1,6 @@
 // workspace-ui.spec.ts — a workspace and its projects made, renamed, copied and deleted through the home page's own dialogs.
 // Each act is checked twice: on the screen, and in the file service's listing the page itself reads.
+/// <reference lib="dom" />
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Locator, Page } from "@playwright/test";

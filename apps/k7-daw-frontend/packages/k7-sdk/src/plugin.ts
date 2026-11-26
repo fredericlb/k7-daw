@@ -1,28 +1,9 @@
 // plugin.ts — the K7Plugin contract: what a feature declares, and nothing it doesn't. A plugin
-// is a set of commands, a surface, a set of modules — each contribution here is data that lands
-// in a registry that ALREADY existed (commands, surface types, the shell's pane ring), which is
-// why the SDK has no runtime of its own. Full rationale: docs/sdk.md.
+// is a set of panes and modules — each contribution is data that lands in a registry that
+// ALREADY existed (the shell's pane ring, the module library). A verb is never a plugin's: it is
+// the Rust verbs crate's. Full rationale: docs/sdk.md.
 
-import type { CommandSpec } from "@studio/commands/commandSpec";
-import type { SidHandler } from "@studio/commands/commands";
-import type { SurfaceLayout } from "@studio/song-schema/yaml/surfaceSchema";
 import type { ReactNode } from "react";
-
-/** One verb, BOTH halves: the catalogue row a palette lists, and the behaviour a dispatch runs.
- *  The installer refuses a half verb — contributing the spec alone would read but never run. */
-export interface CommandContribution {
-  sid: string;
-  spec: CommandSpec;
-  handler: SidHandler;
-}
-
-/** One kind of surface a project may declare: where it can be drawn, and what each of its
- *  components wants — what `project surface new` scaffolds and the completion provider offers. */
-export interface SurfaceTypeContribution {
-  type: string;
-  layouts: readonly SurfaceLayout[];
-  mappingSkeleton: readonly (readonly [string, string])[];
-}
 
 /** One surface's drawer, for the shell's pane ring. The PROPS a drawer gets are the shell's to
  *  know — the SDK deliberately does not define them (a drawer is typed where it is MOUNTED, see
@@ -40,11 +21,8 @@ export interface ModuleContribution {
 }
 
 export interface K7Plugin {
-  /** Stable, namespaced: it prefixes the plugin's SIDs (`plugin.<id>.…`), surface types and
-   *  module namespaces, so two plugins cannot collide by accident. */
+  /** Stable, namespaced: it prefixes the plugin's module namespaces, so two plugins cannot collide by accident. */
   id: string;
-  commands?: readonly CommandContribution[];
-  surfaceTypes?: readonly SurfaceTypeContribution[];
   panes?: readonly PaneDrawerContribution[];
   modules?: readonly ModuleContribution[];
 }

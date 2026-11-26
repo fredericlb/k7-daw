@@ -1,22 +1,13 @@
 // runner.test.ts — the BUILT Worker bundle over HTTP (in a worker_threads thread), against a fake server.
 // A reader would get wrong that these run the bundles, not the source: the aliases, the wasm chunk and `?raw` are what is proven.
 
-import {
-  cpSync,
-  existsSync,
-  mkdirSync,
-  mkdtempSync,
-  rmSync,
-  writeFileSync,
-} from "node:fs";
+import { existsSync, mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
+import { join } from "node:path";
 import { writeDoc, writeLane } from "@studio/song/testSupport";
-import { wsWriteData } from "@studio/song/yaml/workspaceDoc";
 import { gzipSync, strToU8, zipSync } from "fflate";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { compileDisk, compileReady } from "./testing/compileDisk.ts";
+import { compileReady } from "./testing/compileDisk.ts";
 import { fakeServer } from "./testing/fakeServer.ts";
 import { fakeWorkspace } from "./testing/fakeWorkspace.ts";
 import { serveHttp } from "./testing/httpServer.ts";
@@ -68,19 +59,13 @@ afterAll(async () => {
 });
 
 describe("the built runtime", () => {
-  it("runs a verb in the Worker bundle, with the compile loaded as a chunk", async () => {
+  it("reads a project's picture views in the Worker bundle", async () => {
     const w = await startWorker(join(out, "worker"));
     const page = w.page;
     try {
       await page.init(http.base);
       await page.open("song.k7");
-      expect(
-        (await page.catalogue()).some((c) => c.command === "node new"),
-      ).toBe(true);
-      expect((await page.complete("track rename g")).length).toBeGreaterThan(0);
-      const r = await page.run("node new Audio/AMP pads");
-      expect(r.committed).toBe(true);
-      expect(existsSync(join(root, "song.k7", "nodes", "pads.k7x"))).toBe(true);
+      expect(await page.videoErrors()).toEqual({ errors: [], diagnostics: [] });
       expect(
         w.built.files.some((f: { path: string }) =>
           f.path.endsWith("worker.js"),
@@ -88,173 +73,6 @@ describe("the built runtime", () => {
       ).toBe(true);
     } finally {
       await w.stop();
-    }
-  }, 120_000);
-
-  it("consolidates a selection in the Worker through the host's render and adopts the file", async () => {
-    const demo = join(
-      dirname(fileURLToPath(import.meta.url)),
-      "..",
-      "..",
-      "..",
-      "..",
-      "..",
-      "..",
-      "demos",
-      "node-demo.k7",
-    );
-    const base = mkdtempSync(join(tmpdir(), "rt-cons-"));
-    cpSync(demo, join(base, "song.k7"), { recursive: true });
-    mkdirSync(join(base, "_modules", "transformers"), { recursive: true });
-    const track = compileDisk(join(base, "song.k7")).tracks.find((t) =>
-      t.clips.some((c) => c.type === "audio"),
-    );
-    const fake = fakeServer(new Vfs(true), base, "song.k7");
-    const job = fake.startJob([
-      {
-        state: "done",
-        value: {
-          manifest: { mix: "mix.wav", stems: [] },
-          files: [{ out: "mix.wav", len: 4, seconds: 3.5 }],
-        },
-      },
-    ]);
-    fake.stage(job, "mix.wav", "RIFF");
-    let asked = 0;
-    fake.serve("render", () => {
-      asked++;
-      return { status: 202, body: { job } };
-    });
-    const h = await serveHttp(fake);
-    const w = await startWorker(join(out, "worker-cons"));
-    try {
-      await w.page.init(h.base);
-      await w.page.open("song.k7");
-      const r = await w.page.run(`selection consolidate ${track?.id} 1:1 9:1`);
-      expect(r.output.join("\n")).toMatch(/3\.5\d*s rendered/);
-      expect(r.committed).toBe(true);
-      expect(asked).toBe(1);
-      expect(fake.sets[0]?.set.ops.some((o) => o.kind === "adopt")).toBe(true);
-    } finally {
-      await w.stop();
-      await h.close();
-      rmSync(base, { recursive: true, force: true });
-    }
-  }, 120_000);
-
-  it("processes a clip through a chain of the project in the Worker, renders it by the host and repoints the clip", async () => {
-    const base = mkdtempSync(join(tmpdir(), "rt-proc-"));
-    const dir = join(base, "song.k7");
-    const put = (root: string, rel: string, value: Record<string, unknown>) => {
-      mkdirSync(dirname(join(root, rel)), { recursive: true });
-      wsWriteData(join(root, rel), value);
-    };
-    put(dir, "project.k7x", {
-      project: { name: "t", tempo: 120, sampleRate: 48000 },
-    });
-    put(dir, "graph.k7x", {
-      modules: { gtr: ["amp"], amp: ["strip"], strip: ["OUT"] },
-    });
-    mkdirSync(join(dir, "clips"), { recursive: true });
-    writeFileSync(join(dir, "clips", "riff.wav"), silentWav(0.5));
-    put(dir, "clips/riff.k7x", { source: "clips/riff.wav" });
-    put(dir, "nodes/gtr.k7x", {
-      extends: "@meta/track",
-      events: [{ ref: "riff", start: "1:1" }],
-    });
-    put(base, "_modules/audio/amp/module.k7x", {
-      plugin: { type: "internal", name: "Chorus" },
-      params: { Depth: 3 },
-    });
-    put(dir, "nodes/amp.k7x", { extends: "@workspace/audio/amp" });
-    put(base, "_modules/audio/strip/module.k7x", {
-      plugin: { type: "internal", name: "Mixer" },
-      params: { Volume: -6 },
-    });
-    put(dir, "nodes/strip.k7x", { extends: "@workspace/audio/strip" });
-    const fake = fakeServer(new Vfs(true), base, "song.k7");
-    const job = fake.startJob([
-      {
-        state: "done",
-        value: {
-          manifest: { mix: "mix.wav", stems: [] },
-          files: [{ out: "mix.wav", len: 4, seconds: 0.5 }],
-        },
-      },
-    ]);
-    fake.stage(job, "mix.wav", "RIFF");
-    let asked = 0;
-    fake.serve("render", () => {
-      asked++;
-      return { status: 202, body: { job } };
-    });
-    const h = await serveHttp(fake);
-    const w = await startWorker(join(out, "worker-proc"));
-    try {
-      await w.page.init(h.base);
-      await w.page.open("song.k7");
-      const r = await w.page.run("clip process riff gtr");
-      expect(r.output.join("\n")).not.toMatch(
-        /could not|no chain|needs the server/,
-      );
-      expect(r.committed, r.output.join("\n")).toBe(true);
-      expect(asked).toBe(1);
-      const ops = fake.sets[0]?.set.ops ?? [];
-      expect(ops.some((o) => o.kind === "adopt")).toBe(true);
-      const clip = ops.find(
-        (o) => o.kind === "text" && o.file.endsWith("riff.k7x"),
-      );
-      expect(clip).toMatchObject({
-        text: expect.stringMatching(/riff_gtr_\d+T\d+\.wav/),
-      });
-    } finally {
-      await w.stop();
-      await h.close();
-      rmSync(base, { recursive: true, force: true });
-    }
-  }, 120_000);
-
-  it("saves the bench's chain from the Worker by the project's name, which is all the route resolves", async () => {
-    const base = mkdtempSync(join(tmpdir(), "rt-bench-"));
-    cpSync(
-      join(
-        dirname(fileURLToPath(import.meta.url)),
-        "..",
-        "..",
-        "..",
-        "..",
-        "..",
-        "..",
-        "demos",
-        "node-demo.k7",
-      ),
-      join(base, "song.k7"),
-      { recursive: true },
-    );
-    const fake = fakeServer(new Vfs(true), base, "song.k7");
-    const seen: unknown[] = [];
-    // The route's rule: a folder is never the bench; the project's name is.
-    fake.serve("/bench/save", (body) => {
-      seen.push(body);
-      return body?.dir !== undefined || body?.at !== "song.k7"
-        ? { status: 400, body: { error: "only the bench saves a chain" } }
-        : {
-            status: 200,
-            body: { ref: "@account/mine", steps: 1, outside: [] },
-          };
-    });
-    const h = await serveHttp(fake);
-    const w = await startWorker(join(out, "worker-bench"));
-    try {
-      await w.page.init(h.base);
-      await w.page.open("song.k7");
-      const r = await w.page.run("chain save mine");
-      expect(r.output.join("\n")).toContain("saved @account/mine");
-      expect(seen).toEqual([{ name: "mine", at: "song.k7" }]);
-    } finally {
-      await w.stop();
-      await h.close();
-      rmSync(base, { recursive: true, force: true });
     }
   }, 120_000);
 

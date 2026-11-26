@@ -1,4 +1,4 @@
-// verbs.ts — the verbs for the specs: the runtime's node build over the service's routes, one runner per workspace and folder.
+// verbs.ts — the verbs for the specs: a line through `POST /verb`, a completion through `POST /verb/complete`, the picture from the Worker runtime's node build.
 // What a reader gets wrong: the runner is built here on first use (esbuild, a third of a second), not by the bed, and it is asked to OPEN the project before every line, so a spec's own writes are never stale.
 
 import { mkdtempSync } from "node:fs";
@@ -12,34 +12,16 @@ import { bundleRuntime } from "../../apps/k7-daw-frontend/packages/commands/scri
 export interface VerbAnswer {
   output: string[];
   refused?: boolean;
-  unsupported?: string;
   rev?: string;
   revBefore?: string;
   changed?: { path: string; kind: string }[];
   graph?: unknown;
-  /** How many times the verb ran, and whether a set landed: for a spec that wants to know. */
-  runs?: number;
+  /** Whether the line's writes landed. */
   committed?: boolean;
 }
 
 interface Runner {
   open(at: string): Promise<void>;
-  run(
-    line: string,
-    o?: { want?: string[]; journal?: "join" | "skip" },
-  ): Promise<{
-    output: string[];
-    refused: boolean;
-    unsupported?: string;
-    before: string;
-    after: string;
-    changed: { path: string; kind: string }[];
-    graph?: unknown;
-    runs: number;
-    committed: boolean;
-  }>;
-  complete(line: string, labelled?: boolean): Promise<unknown[]>;
-  catalogue(): { command: string }[];
   videoDoc(token?: string): Promise<{ doc: unknown } | { error: string }>;
   videoErrors(token?: string): Promise<{ errors: string[]; diagnostics: [] }>;
   close(): void;
@@ -69,6 +51,7 @@ type MakeImporter = (o: {
 interface NodeRuntime {
   createNodeRunner: Make;
   createNodeImporter: MakeImporter;
+  catalogue(): { command: string }[];
 }
 
 let built: Promise<NodeRuntime> | undefined;
@@ -85,7 +68,7 @@ function nodeRuntime(): Promise<NodeRuntime> {
   return built;
 }
 
-/** The node runner. */
+/** The node runner, which answers the picture views. */
 async function runnerMaker(): Promise<Make> {
   return (await nodeRuntime()).createNodeRunner;
 }
@@ -148,7 +131,42 @@ async function runnerFor(
   return r;
 }
 
-/** Runs one line; `at` is the project as the workspace spells it, empty for no project. */
+/** One JSON POST to the service, as the page's `fsend` sends it. */
+async function post<T>(
+  svc: VerbService,
+  workspace: string,
+  path: string,
+  body: unknown,
+  extra: Record<string, string> = {},
+): Promise<T> {
+  const r = await fetch(`${svc.base}${path}`, {
+    method: "POST",
+    headers: {
+      ...svc.headers(workspace),
+      ...extra,
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+  const answer = (await r.json().catch(() => ({}))) as T & { error?: string };
+  if (!r.ok) throw new Error(answer.error ?? `${path} answered ${r.status}`);
+  return answer;
+}
+
+/** What `POST /verb` answers. */
+interface RouteAnswer {
+  log: string[];
+  refuse: string[];
+  refused: boolean;
+  threw?: string;
+  landed?: boolean;
+  changed?: { path: string; kind: string }[];
+  rev?: string;
+  revBefore?: string;
+  graph?: unknown;
+}
+
+/** Runs one line; `at` is the project as the workspace spells it, empty for the open one. */
 export async function runVerb(
   svc: VerbService,
   workspace: string,
@@ -161,38 +179,43 @@ export async function runVerb(
     headers?: Record<string, string>;
   } = {},
 ): Promise<VerbAnswer> {
-  const r = await (await runnerFor(svc, workspace, at, o.headers)).run(line, {
-    want: o.want ?? ["graph"],
-    ...(o.journal ? { journal: o.journal } : {}),
-  });
+  const r = await post<RouteAnswer>(
+    svc,
+    workspace,
+    "/verb",
+    {
+      line,
+      want: o.want ?? ["graph"],
+      ...(at ? { at } : {}),
+      ...(o.journal ? { journal: o.journal } : {}),
+    },
+    o.headers,
+  );
   return {
-    output: [...r.output],
+    output: [...r.log, ...r.refuse, ...(r.threw ? [`error: ${r.threw}`] : [])],
     ...(r.refused ? { refused: true } : {}),
-    ...(r.unsupported ? { unsupported: r.unsupported } : {}),
-    rev: r.after,
-    revBefore: r.before,
-    changed: r.changed,
-    runs: r.runs,
-    committed: r.committed,
+    rev: r.rev,
+    revBefore: r.revBefore,
+    changed: r.changed ?? [],
+    committed: r.landed === true,
     ...(r.graph !== undefined ? { graph: r.graph } : {}),
   };
 }
 
-/** The catalogue and a completion, which need a runner and a project only for the second. */
-export async function catalogueOf(
-  svc: VerbService,
-  workspace: string,
-): Promise<{ command: string }[]> {
-  return (await runnerFor(svc, workspace, "")).catalogue();
+/** The catalogue, as the page builds it from commands.yaml. */
+export async function catalogueOf(): Promise<{ command: string }[]> {
+  return (await nodeRuntime()).catalogue();
 }
 
+/** A completion on the open project, as the command bar asks it. */
 export async function completeOf(
   svc: VerbService,
   workspace: string,
-  at: string,
   line: string,
 ): Promise<unknown[]> {
-  return (await runnerFor(svc, workspace, at)).complete(line, false);
+  return (
+    await post<{ items: unknown[] }>(svc, workspace, "/verb/complete", { line })
+  ).items;
 }
 
 /** The open project's picture and its warnings, as the Worker answers them; `token` is the revision the spec just read. */

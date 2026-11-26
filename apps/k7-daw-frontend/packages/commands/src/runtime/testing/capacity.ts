@@ -8,7 +8,7 @@ const AMP = 'plugin({ type: "internal", name: "Chorus" })\n';
 const lane = (extra: string): string => `extends("@meta/track")\n${extra}`;
 
 /** The project's files by their path below the project folder; `lanes` is 128 for cap128, 32 for cap32. */
-export function capacityFiles(lanes = 128): [string, string][] {
+function capacityFiles(lanes = 128): [string, string][] {
   const files: [string, string][] = [["project.k7x", ""]];
   const range = (n: number): number[] => Array.from({ length: n }, (_, i) => i);
   const notes = range(16).map((k) => `t(${k}).d(1).k(${40 + k})`);

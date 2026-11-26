@@ -1,4 +1,4 @@
-// verbsWorker.ts — the page's side of the verbs' Worker: one Worker, started lazily, its calls waiting for it and surviving its death.
+// verbsWorker.ts — the page's side of the project's Worker (picture views, import): one Worker, started lazily, its calls surviving its death.
 // What a reader gets wrong: a crash fails the calls in flight with one sentence and the NEXT call starts a new Worker and reopens the projects.
 
 import { client, type PortLike } from "@studio/commands/runtime/protocol";
@@ -29,7 +29,7 @@ export interface VerbsOptions {
 type Calls = ReturnType<typeof client>;
 
 export const WORKER_DIED =
-  "the verbs stopped unexpectedly — run the line again";
+  "the project's Worker stopped unexpectedly — ask again";
 
 /** What a call in flight is failed with when the session changes under it. */
 export const VERBS_RESET = "the verbs were reset";
@@ -108,15 +108,10 @@ export function createVerbs(o: VerbsOptions) {
     ready: async (): Promise<void> => {
       await call(async () => undefined);
     },
-    catalogue: () => call((c) => c.catalogue()),
     async open(at: string): Promise<void> {
       await call((c) => c.open(at));
       opened.add(at);
     },
-    run: (line: string, options?: Parameters<Calls["run"]>[1], at?: string) =>
-      call((c) => c.run(line, options, at)),
-    complete: (line: string, labelled?: boolean, at?: string) =>
-      call((c) => c.complete(line, labelled, at)),
     videoDoc: (token?: string, at?: string) =>
       call((c) => c.videoDoc(token, at)),
     videoErrors: (token?: string, at?: string) =>

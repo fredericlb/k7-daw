@@ -1,32 +1,17 @@
-// commandSpec.ts — the declarative half of the command layer: commands.yaml maps what you
-// TYPE ("module new") to a feature SID, plus fixed args, an argument/completion spec, and
-// the surfaces it appears on. Drives both completions() and runCommand(), shared by the
-// web editor and the CLI; the behaviours live in verbs/, the completion providers in providers.ts.
+// commandSpec.ts — the catalogue: commands.yaml maps what you TYPE ("module new") to a SID, its arguments and its menus.
+// What a reader gets wrong: nothing here runs a verb; the verbs and their completion are the Rust crate's (docs/verbs.md).
 
-import { readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
-import { checkProjectFormat } from "@studio/song/loader";
-import { parsePosition } from "@studio/song-schema/timecode";
+import type { CommandInfo } from "@studio/web-protocol";
 import { parse as parseYaml } from "yaml";
-import {
-  type CommandHost,
-  parseMidiNote,
-  registerCommand,
-  SID_HANDLERS,
-  type SidHandler,
-} from "./commands";
+import commandsYaml from "../commands.yaml?raw";
 import {
   type ArgClass,
   CLASS_HINT,
   PROVIDER_CLASS,
   PROVIDER_HINT,
-  PROVIDER_LABELS,
   PROVIDER_NAMES,
-  PROVIDERS,
   type ProviderName,
-} from "./providers";
-import { soundingLaneRefusal } from "./verbs/pictureSound";
+} from "./providerInfo";
 
 // One surface — the web backend dispatches under "cli" too — but it stays a type.
 export type Surface = "cli";
@@ -81,26 +66,12 @@ function menuList(command: string, words: unknown[]): MenuEntity[] {
   return kept;
 }
 
-// commands.yaml ships beside the package root; this module is src/commandSpec.ts.
-function commandsPath(): string {
-  const here = dirname(fileURLToPath(import.meta.url));
-  return join(here, "..", "commands.yaml");
-}
-
 let cached: CommandSpec[] | null = null;
-let bundledYaml: string | undefined;
-
-/** Hands in commands.yaml's text, bundled at build time, where a runtime has no file to read it from (the browser's Worker). */
-export function provideCommandsYaml(text: string): void {
-  bundledYaml = text;
-  cached = null;
-}
 
 export function loadCommandSpecs(): CommandSpec[] {
-  // Both arms merge the registered specs, the cached one above all: it serves every dispatch and completion.
-  if (cached) return [...cached, ...registeredSpecs];
+  if (cached) return cached;
   try {
-    const raw = parseYaml(bundledYaml ?? readFileSync(commandsPath(), "utf8"));
+    const raw = parseYaml(commandsYaml);
     cached = (Array.isArray(raw) ? raw : [])
       .filter((c: any) => c?.command && c?.sid)
       .map((c: any) => ({
@@ -149,27 +120,7 @@ export function loadCommandSpecs(): CommandSpec[] {
   } catch {
     cached = [];
   }
-  // The yaml holds the builtins and a plugin registers in code; every reader of the catalogue sees both.
-  return [...cached, ...registeredSpecs];
-}
-
-/** The catalogue a plugin added, merged at every read — see registerCommandSpec. */
-const registeredSpecs: CommandSpec[] = [];
-
-/** Add a plugin's verb to the catalogue like a yaml row; a word already spoken for is refused, never renamed. */
-function registerCommandSpec(spec: CommandSpec): void {
-  if (loadCommandSpecs().some((c) => c.command === spec.command))
-    throw new Error(`command '${spec.command}' is already in the catalogue`);
-  registeredSpecs.push(spec);
-}
-
-/** The ONE installer a plugin calls: catalogue and behaviour in one move, so a half verb fails at install — docs/verbs.md. */
-export function registerVerb(spec: CommandSpec, handler: SidHandler): void {
-  // Both refusals run before either half is written, so a clash leaves no catalogue row behind.
-  if (SID_HANDLERS[spec.sid])
-    throw new Error(`command '${spec.sid}' already has a handler`);
-  registerCommandSpec(spec);
-  registerCommand({ sid: spec.sid, handler });
+  return cached;
 }
 
 // Where a right-click may offer a command, mirrored on the wire — apps/k7-daw-frontend/docs/contextMenu.md.
@@ -229,142 +180,23 @@ function argKind(
   return kind as ArgKind;
 }
 
-// Check one token against its shape; the timecode parses at 4/4 on purpose, docs/completions.md.
-function argError(kind: ArgKind, name: string, token: string): string | null {
-  switch (kind) {
-    case "timecode":
-      try {
-        parsePosition(token, 4, 4);
-        return null;
-      } catch {
-        return `<${name}> expects a bar:beat:sixteenth position (5, 5:1, 5:1:1) — got "${token}"`;
-      }
-    case "number":
-      return Number.isFinite(Number(token))
-        ? null
-        : `<${name}> expects a number — got "${token}"`;
-    case "note":
-      return parseMidiNote(token) === null
-        ? `<${name}> expects a note name (C4, F#3) or a MIDI number 0..127 — got "${token}"`
-        : null;
-    default:
-      return null; // unknown kind: already reported at load, don't block the command
-  }
-}
-
-// The first argument that doesn't fit, walking declared args POSITIONALLY — docs/completions.md.
-export function validateArgs(
-  spec: CommandSpec,
-  userArgs: string,
-): string | null {
-  if (!spec.args?.length || !userArgs) return null;
-  const tokens = userArgs.split(/\s+/);
-  for (let i = 0; i < spec.args.length && i < tokens.length; i++) {
-    const a = spec.args[i];
-    if (!a.type) continue;
-    const err = argError(a.type, a.name, tokens[i]);
-    if (err) return err;
-  }
-  return null;
-}
-
-const forSurface = (surface: Surface): CommandSpec[] =>
-  loadCommandSpecs().filter((c) => c.surfaces.includes(surface));
-
-/** One completion: the LINE it completes to, and what a list may show for its value instead. */
-export interface CompletionItem {
-  line: string;
-  label?: string;
-}
-
-// Autocomplete: the token under the cursor picks its ArgSpec BY POSITION, earlier ones echoed.
-export function completions(
-  line: string,
-  host: CommandHost,
-  surface: Surface,
-): string[] {
-  return completionItems(line, host, surface).map((c) => c.line);
-}
-
-/** …the same candidates, each with its label when its provider gives one (docs/completions.md). */
-export function completionItems(
-  line: string,
-  host: CommandHost,
-  surface: Surface,
-): CompletionItem[] {
-  const s = line.replace(/^\s+/, "");
-  // Case never decides a completion: `Node new io/m` offers what `node new io/m` does.
-  const sl = s.toLowerCase();
-  const specs = forSurface(surface);
-  // Pick the command the way runCommand does — LONGEST prefix — so completion offers args for what will run.
-  const spec = specs
-    .filter((c) => sl.startsWith(`${c.command} `))
-    .sort((a, b) => b.command.length - a.command.length)[0];
-  if (spec) {
-    // A trailing space starts a new empty token, which split keeps as a final "" and completes to every next value.
-    const tokens = s.slice(spec.command.length + 1).split(/\s+/);
-    const i = tokens.length - 1;
-    const partial = tokens[i];
-    const arg = spec.args?.[i];
-    // A literal set answers for itself; a provider is asked. Either way the shape is the same list of candidate values.
-    const values = arg?.values
-      ? () => arg.values as string[]
-      : arg?.complete
-        ? PROVIDERS[arg.complete]
-        : undefined;
-    if (!values) return [];
-    const prefix = [spec.command, ...tokens.slice(0, i)].join(" ");
-    const labels = arg?.complete ? PROVIDER_LABELS[arg.complete]?.(host) : {};
-    return values(host)
-      .filter((v) => v.toLowerCase().startsWith(partial.toLowerCase()))
-      .map((v) => ({
-        line: `${prefix} ${v}`,
-        ...(labels?.[v] ? { label: labels[v] } : {}),
-      }));
-  }
-  return specs
-    .filter((c) => c.command.startsWith(sl) && c.command !== sl)
-    .map((c) => ({ line: c.command }));
-}
-
-// Dispatch a line: longest-prefix match, prepend fixed args, run the handler. Nothing dispatched is a refusal.
-export async function runCommand(
-  line: string,
-  host: CommandHost,
-  surface: Surface,
-): Promise<void> {
-  const s = line.trim();
-  const spec = forSurface(surface)
-    .filter((c) => s === c.command || s.startsWith(`${c.command} `))
-    .sort((a, b) => b.command.length - a.command.length)[0];
-  if (!spec) {
-    host.refuse([`unknown command: ${s}`]);
-    return;
-  }
-  const handler = SID_HANDLERS[spec.sid];
-  if (!handler) {
-    host.refuse([`command '${spec.command}' has no handler (${spec.sid})`]);
-    return;
-  }
-  const userArgs = s.slice(spec.command.length).trim();
-  // Shape-check before the handler, so a mistyped timecode says what it should look like, not "no event at xyz".
-  const bad = validateArgs(spec, userArgs);
-  if (bad) {
-    host.refuse([`${spec.command}: ${bad}`]);
-    return;
-  }
-  // A project of a newer format is edited by no verb, since several write its root without reading it.
-  try {
-    if (host.songPath) checkProjectFormat(host.songPath);
-  } catch (e) {
-    host.refuse([(e as Error).message]);
-    return;
-  }
-  // Once here rather than in every event verb, each of which finds its clip its own way.
-  const sounding = soundingLaneRefusal(spec, userArgs, host.songPath);
-  if (sounding) {
-    host.refuse([sounding]);
-    return;
-  }
-  await handler(userArgs, host);
+/** The palette's catalogue: every command with each argument's display class, provider and clue. */
+export function catalogue(): CommandInfo[] {
+  return loadCommandSpecs()
+    .filter((c) => c.surfaces.includes("cli"))
+    .map((c) => ({
+      command: c.command,
+      help: c.help,
+      readable: c.readable,
+      menu: c.menu,
+      confirm: c.confirm,
+      args:
+        c.args?.map((a) => ({
+          name: a.name,
+          kind: argClass(a),
+          provider: a.complete,
+          hint: argHint(a),
+          optional: a.optional,
+        })) ?? [],
+    }));
 }
