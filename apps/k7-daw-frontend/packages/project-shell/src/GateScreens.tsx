@@ -1,5 +1,5 @@
 // GateScreens.tsx — the project gate's screens other than the app itself: the waits, the
-// refusals, sleep and the errors. Each draws one phase and decides nothing. See docs/launch.md.
+// refusals and the errors. Each draws one phase and decides nothing. See docs/launch.md.
 
 import { Button } from "@studio/ui/button";
 import {
@@ -7,7 +7,6 @@ import {
   FolderSearch,
   LibraryBig,
   Loader2,
-  Moon,
   ServerCrash,
   UserRoundX,
 } from "@studio/ui/icons";
@@ -159,35 +158,6 @@ export function EmptyWorkspaceScreen({
         {strings.emptyWorkspace ?? EMPTY_WORKSPACE}
       </p>
       <Back label={strings.back} onClick={onBack} />
-    </GateCard>
-  );
-}
-
-/** Resuming is the Retry road, and it takes a hand on a button — see docs/idle.md. */
-export function IdleScreen({
-  strings,
-  onResume,
-  onBack,
-}: {
-  strings: ProjectGateStrings;
-  onResume: () => void;
-  onBack: () => void;
-}) {
-  return (
-    <GateCard icon={<Moon className="h-10 w-10 text-fg-2" />}>
-      <h1 className="text-lg font-semibold">
-        {strings.idleTitle ?? "Session suspended"}
-      </h1>
-      <p className="text-sm text-fg-2">
-        {strings.idleBody ??
-          "Nothing happened here for a while, so the project was unloaded from the engine and this tab let go of it. Your files are untouched."}
-      </p>
-      <div className="flex items-center gap-2">
-        <Button onClick={onResume}>{strings.resume ?? "Resume"}</Button>
-        <Button variant="ghost" onClick={onBack}>
-          {strings.back}
-        </Button>
-      </div>
     </GateCard>
   );
 }

@@ -24,12 +24,11 @@ export function takenBanner(t: Taken): TakenBanner {
   return { says: t.heldBy ? "project" : "projectAnon", takeBack: "project" };
 }
 
-/** Hold the claim only with an engine, a project the address resolved to, a tab awake, and nobody else's claim standing. */
+/** Hold the claim only with an engine, a project the address resolved to, and nobody else's claim standing. */
 export function holdsClaim(s: {
   engine: boolean;
   resolved: boolean;
-  asleep: boolean;
   taken: boolean;
 }): boolean {
-  return s.engine && s.resolved && !s.asleep && !s.taken;
+  return s.engine && s.resolved && !s.taken;
 }

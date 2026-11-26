@@ -3,7 +3,7 @@
 import { describe, expect, it } from "vitest";
 import { holdsClaim, takenBanner } from "./engineTaken";
 
-const ready = { engine: true, resolved: true, asleep: false, taken: false };
+const ready = { engine: true, resolved: true, taken: false };
 
 describe("holdsClaim", () => {
   it("holds once there is an engine and a resolved project", () => {
@@ -14,8 +14,7 @@ describe("holdsClaim", () => {
     expect(holdsClaim({ ...ready, resolved: false })).toBe(false);
   });
 
-  it("lets go while asleep, with no engine, and once somebody else took it", () => {
-    expect(holdsClaim({ ...ready, asleep: true })).toBe(false);
+  it("lets go with no engine, and once somebody else took it", () => {
     expect(holdsClaim({ ...ready, engine: false })).toBe(false);
     expect(holdsClaim({ ...ready, taken: true })).toBe(false);
   });

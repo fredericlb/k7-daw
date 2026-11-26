@@ -11,7 +11,6 @@ const every: GatePhase["k"][] = [
   "missing",
   "no-libraries",
   "empty",
-  "idle",
   "loading",
   "open",
 ];

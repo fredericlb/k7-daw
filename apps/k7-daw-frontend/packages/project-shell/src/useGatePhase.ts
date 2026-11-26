@@ -1,6 +1,6 @@
 // useGatePhase.ts — the gate's state machine: resolve the launch address into a project, open
-// it, and move between the waits, the refusals, sleep and open. ProjectGate.tsx draws the phase.
-// See docs/launch.md and docs/idle.md.
+// it, and move between the waits, the refusals and open. ProjectGate.tsx draws the phase.
+// See docs/launch.md.
 
 import {
   isBench,
@@ -12,12 +12,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { configureFileApi, NoAnswer, PROBE_MS } from "./fileApi.ts";
 import { fileRoutes } from "./files.ts";
 import type { GateEngine, GatePhase, ProjectGateStrings } from "./gateTypes.ts";
-import {
-  anotherTabActive,
-  IDLE_TIMEOUT_MS,
-  sleepMove,
-  useIdleTimeout,
-} from "./idle.ts";
 import { goToAddress, parseLaunch, projectsUrl } from "./launch.ts";
 import { accountLibraries } from "./repoLookup.ts";
 
@@ -35,20 +29,12 @@ export function useGatePhase({
   app,
   base,
   strings,
-  idleTimeoutMs,
-  asleep,
-  onIdle,
-  onResume,
   engineWait = true,
 }: {
   engine: GateEngine;
   app: ProjectApp;
   base: string;
   strings: ProjectGateStrings;
-  idleTimeoutMs: number;
-  asleep: boolean;
-  onIdle?: () => void;
-  onResume?: () => void;
   /** Hold the project back until the engine has it (the `loading` phase); false opens it at once and leaves that wait to the app. */
   engineWait?: boolean;
 }) {
@@ -98,21 +84,18 @@ export function useGatePhase({
   /** Leave: go back to where projects live. Nothing to forget. */
   const quit = useCallback(() => {
     released.current = true;
-    // Not from under another tab of this account still using the session.
-    if (!anotherTabActive(IDLE_TIMEOUT_MS))
-      void fileRoutes.unloadEngine().catch(() => {
-        /* engine/file service gone — leaving is still right */
-      });
+    void fileRoutes.unloadEngine().catch(() => {
+      /* engine/file service gone — leaving is still right */
+    });
     goToAddress(projectsUrl(window.location.href));
   }, []);
 
-  /** Any other way out (the header's Back link, the browser's Back) unmounts the gate: it stops and unloads too — docs/idle.md. */
+  /** Any other way out (the header's Back link, the browser's Back) unmounts the gate: it stops and unloads too. */
   useEffect(
     () => () => {
       const held =
         phaseNow.current === "open" || phaseNow.current === "loading";
-      if (released.current || !held || anotherTabActive(IDLE_TIMEOUT_MS))
-        return;
+      if (released.current || !held) return;
       void fileRoutes.unloadEngine().catch(() => {
         /* engine or file service gone — leaving is still right */
       });
@@ -120,42 +103,9 @@ export function useGatePhase({
     [],
   );
 
-  /** Armed only while the project is OPEN — every other phase idles already. See docs/idle.md. */
-  useIdleTimeout(phase.k === "open" ? idleTimeoutMs : 0, () => {
-    setPhase({ k: "idle", why: "timeout" });
-  });
-
-  /** Taking the session back: the Retry road, from the button or from a tab coming forward. */
-  const resume = useCallback(() => {
-    onResume?.();
-    setPhase({ k: "resolving" });
-    setAttempt((n) => n + 1);
-  }, [onResume]);
-
-  /** A tab behind another sleeps, and only `hidden` wakes on its own — see docs/idle.md. */
-  useEffect(() => {
-    const move = sleepMove(asleep, phase);
-    if (move === "sleep") setPhase({ k: "idle", why: "hidden" });
-    if (move === "wake") resume();
-  }, [asleep, phase, resume]);
-
-  // By ref, and load-bearing: an inline `onIdle` would re-fire the effect below every render.
-  const idleCallback = useRef(onIdle);
-  idleCallback.current = onIdle;
   // The wording by ref too: a host's inline `strings` object would otherwise re-run the resolve every render.
   const wording = useRef(strings);
   wording.current = strings;
-  /** In an EFFECT so the flush lands after `children` has unmounted — see docs/idle.md. */
-  useEffect(() => {
-    if (phase.k !== "idle") return;
-    idleCallback.current?.();
-    // The session is shared by this account's tabs: another one in use keeps it, and only this tab sleeps.
-    if (anotherTabActive(IDLE_TIMEOUT_MS)) return;
-    void fileRoutes.unloadEngine().catch(() => {
-      /* engine or file service gone — the session is over here regardless */
-    });
-  }, [phase.k]);
-
   // No target at all: go to k7's home page rather than grow a second picker — docs/launch.md.
   useEffect(() => {
     if (!target) goToAddress(projectsUrl(window.location.href), true);
@@ -287,5 +237,5 @@ export function useGatePhase({
     setAttempt((n) => n + 1);
   }, []);
 
-  return { phase, setPhase, email, quit, resume, retry };
+  return { phase, setPhase, email, quit, retry };
 }
