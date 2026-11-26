@@ -60,7 +60,7 @@ which module parameter each of thirteen controls drives (schema:
 `apps/k7-daw-frontend/packages/song-schema/src/yaml/mixViewSchema.ts`, `surfaceSchema.ts`). `apps/k7-daw-frontend/src/components/MasteringTab.tsx`
 draws them as three appliances, with the control list in `apps/k7-daw-frontend/src/mastering/controls.ts`
 and the resolution in `apps/k7-daw-frontend/src/mastering/bindings.ts`, which reuses `resolveMapping` from
-`apps/k7-daw-frontend/packages/ui-chains/src/bindings.ts` (shared with the DJ desk). A required control left unmapped is
+`apps/k7-daw-wasm/chains/src/bindings.rs`, through `@studio/k7-wasm/chains` (shared with the DJ desk). A required control left unmapped is
 reported on the surface rather than refusing the project.
 
 A slider calls `setPluginParam` (a live send) on every step and writes `node param "<module>"

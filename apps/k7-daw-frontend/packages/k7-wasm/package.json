@@ -8,6 +8,7 @@
     "./curve": "./src/curve.ts",
     "./types": "./src/types/index.ts",
     "./boot": "./src/boot.ts",
+    "./chains": "./src/chains.ts",
     "./edit": "./src/edit.ts",
     "./engine": "./src/engine.ts",
     "./replayRun": "./src/replayRun.ts"

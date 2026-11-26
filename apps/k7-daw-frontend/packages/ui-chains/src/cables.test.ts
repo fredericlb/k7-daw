@@ -1,23 +1,18 @@
 // cables.test.ts — the cable geometry's contracts: the smoothed curve passes through
-// its endpoints, the resampling walks the whole arc, the insert midpoint sits on the
-// cable, and liveness flows forward (and only forward) through a feedback loop.
+// its endpoints, the resampling walks the whole arc and the insert midpoint sits on the cable.
 
 import { panelWidgets } from "@studio/graph-model/panel";
 import { describe, expect, it } from "vitest";
 import {
   autoTarget,
   buildCableGeom,
-  computeFlow,
   cubicAt,
   cubicSegments,
   insertFor,
   jackRef,
   liveVideoLanes,
-  MIX_NODE_ID,
   midByArc,
-  RENDER_NODE_ID,
   smoothPath,
-  TRACK_NODE_PREFIX,
 } from "./cables";
 import { columnW, type GraphNode, stripWidgetRect } from "./graph";
 
@@ -30,31 +25,6 @@ const bend = [
   { x: 100, y: 0 },
   { x: 100, y: 100 },
 ];
-
-/** The old boolean question, asked of the new measure: which cables move at all.
- *  Every seed is full audio unless a test says otherwise, which is what "active" used to mean. */
-const liveSet = (
-  edges: Parameters<typeof computeFlow>[0],
-  audioTracks: string[] = [],
-  videoTracks: string[] = [],
-  folded?: Map<string, string>,
-): Set<string> => {
-  const seeds = new Map(
-    [
-      ...audioTracks.map(
-        (id) => [id, { audio: 1, midi: 1, video: 0 }] as const,
-      ),
-      ...videoTracks.map(
-        (id) => [id, { audio: 0, midi: 0, video: 1 }] as const,
-      ),
-    ].map(([id, f]) => [id, f]),
-  );
-  return new Set(
-    [...computeFlow(edges, seeds, folded)]
-      .filter(([, v]) => v > 0)
-      .map(([id]) => id),
-  );
-};
 
 describe("cubicSegments", () => {
   it("is empty below two points, degenerate-straight at two", () => {
@@ -111,173 +81,6 @@ describe("midByArc", () => {
     const m = midByArc(buildCableGeom(line));
     expect(m.y).toBeCloseTo(0, 5);
     expect(Math.abs(m.x - 50)).toBeLessThanOrEqual(10); // within one sample step
-  });
-});
-
-describe("the live set, over a folded assembly", () => {
-  // A metered lane whose card has been swallowed by a CLOSED box: its signal leaves from the box.
-  const edges = [
-    { id: "a", source: "asm:turntableA", target: "snk:CUE" },
-    { id: "b", source: "snk:MIX", target: "snk:OUT" },
-  ];
-
-  it("reaches nothing without the map — the lane's own card is gone", () => {
-    expect([...liveSet(edges, ["deckA"])]).toEqual(["b"]);
-  });
-
-  it("ripples off the BOX once told where the lane went", () => {
-    const folded = new Map([["deckA", "asm:turntableA"]]);
-    expect([...liveSet(edges, ["deckA"], [], folded)].sort()).toEqual([
-      "a",
-      "b",
-    ]);
-  });
-
-  it("says nothing about a box holding no metered lane", () => {
-    const folded = new Map([["deckB", "asm:turntableB"]]);
-    expect([...liveSet(edges, ["deckA"], [], folded)]).toEqual(["b"]);
-  });
-});
-
-describe("the live set", () => {
-  const edge = (id: string, source: string, target: string) => ({
-    id,
-    source,
-    target,
-  });
-
-  it("flows forward from active tracks only", () => {
-    const t = `${TRACK_NODE_PREFIX}melody`;
-    const edges = [
-      edge("a", t, "m1"),
-      edge("b", "m1", "out"),
-      edge("c", "other", "out"),
-    ];
-    expect(liveSet(edges, ["melody"])).toEqual(new Set(["a", "b"]));
-    expect(liveSet(edges, [])).toEqual(new Set());
-  });
-
-  it("terminates on a feedback loop and lights the whole cycle", () => {
-    const t = `${TRACK_NODE_PREFIX}vox`;
-    const edges = [
-      edge("in", t, "m1"),
-      edge("fwd", "m1", "m2"),
-      edge("back", "m2", "m1"), // the feedback send
-    ];
-    expect(liveSet(edges, ["vox"])).toEqual(new Set(["in", "fwd", "back"]));
-  });
-
-  // Nothing arrives at MIX, so liveness has to be SEEDED there — see docs/graphBuild.md.
-  describe("the master run", () => {
-    const edges = [
-      edge("lane", `${TRACK_NODE_PREFIX}melody`, "mod:reverb"),
-      edge("master", MIX_NODE_ID, "mod:comp"),
-      edge("device", "mod:comp", "snk:OUT"),
-    ];
-
-    it("lights when any track is metered, with the master chain behind it", () => {
-      expect(liveSet(edges, ["melody"])).toEqual(
-        new Set(["lane", "master", "device"]),
-      );
-    });
-
-    it("lights for a track whose own cables are not drawn at all", () => {
-      // Every lane ends at the sum, so a lane with no chain still feeds it.
-      expect(liveSet(edges, ["pad"])).toEqual(new Set(["master", "device"]));
-    });
-
-    it("stays still when nothing is playing", () => {
-      expect(liveSet(edges, [])).toEqual(new Set());
-    });
-  });
-
-  // The picture's half: its lanes arrive on their own list, nothing metering a frame.
-  describe("the picture", () => {
-    // A picture cable SAYS it carries video (graph.ts links the lane with `signal: "video"`), and
-    // that is what decides which of the lane's three numbers it reads — see computeFlow.
-    const vid = (id: string, source: string, target: string) =>
-      ({ ...edge(id, source, target), signal: "video" }) as const;
-    const edges = [
-      vid("lane", `${TRACK_NODE_PREFIX}cam`, "mod:blur"),
-      vid("master", RENDER_NODE_ID, "snk:VIDEO_OUT"),
-      edge("sound", `${TRACK_NODE_PREFIX}melody`, "mod:reverb"),
-    ];
-
-    it("lights a video lane's cables and the run out of RENDER", () => {
-      expect(liveSet(edges, [], ["cam"])).toEqual(new Set(["lane", "master"]));
-    });
-
-    it("leaves the frame still while only sound is playing", () => {
-      expect(liveSet(edges, ["melody"])).toEqual(new Set(["sound"]));
-    });
-  });
-});
-
-// A meter sits on a LANE, and the input feeding it is upstream — so a forward-only walk left the
-// one cable a live rig has still. See docs/graphBuild.md.
-describe("the live set, upstream of the meter", () => {
-  const edge = (id: string, source: string, target: string) => ({
-    id,
-    source,
-    target,
-  });
-  const lane = `${TRACK_NODE_PREFIX}gtr`;
-
-  it("lights the cable from an INPUT into the lane it feeds", () => {
-    const edges = [edge("in", "mod:IN", lane), edge("out", lane, "mod:amp")];
-    expect(liveSet(edges, ["gtr"])).toEqual(new Set(["in", "out"]));
-  });
-
-  it("keeps going up a chain of modules ahead of the lane", () => {
-    const edges = [edge("a", "mod:IN", "mod:amp"), edge("b", "mod:amp", lane)];
-    expect(liveSet(edges, ["gtr"])).toEqual(new Set(["a", "b"]));
-  });
-
-  it("stops at another LANE, which speaks for itself", () => {
-    // `pad` is silent: its own cable must stay still even though what it feeds is sounding.
-    const edges = [
-      edge("pad", `${TRACK_NODE_PREFIX}pad`, lane),
-      edge("in", "mod:IN", lane),
-    ];
-    expect(liveSet(edges, ["gtr"])).toEqual(new Set(["in"]));
-  });
-
-  it("leaves a SILENT lane's input alone", () => {
-    const edges = [edge("in", "mod:IN", lane)];
-    expect(liveSet(edges, [])).toEqual(new Set());
-  });
-
-  it("does not light a sibling branch the input also feeds", () => {
-    // Upstream is seeded from the METER only, so reaching IN must not walk forward out of it.
-    const edges = [
-      edge("in", "mod:IN", lane),
-      edge("other", "mod:IN", `${TRACK_NODE_PREFIX}quiet`),
-    ];
-    expect(liveSet(edges, ["gtr"])).toEqual(new Set(["in"]));
-  });
-});
-
-// A `live` project authors no lane at all: the run materialises its own track, so there is no
-// `trk:` card to seed at and the track wears the chain's name — apps/k7-daw-frontend/packages/song/docs/liveProject.md.
-describe("the live set on a materialised track", () => {
-  const edge = (id: string, source: string, target: string) => ({
-    id,
-    source,
-    target,
-  });
-
-  it("seeds at the MODULE the track was named after", () => {
-    const edges = [
-      edge("a", "mod:IN", "mod:fader"),
-      edge("b", "mod:fader", MIX_NODE_ID),
-      edge("c", MIX_NODE_ID, "snk:OUT"),
-    ];
-    expect(liveSet(edges, ["IN"])).toEqual(new Set(["a", "b", "c"]));
-  });
-
-  it("stays still when that track is silent", () => {
-    const edges = [edge("a", "mod:IN", "mod:fader")];
-    expect(liveSet(edges, [])).toEqual(new Set());
   });
 });
 
@@ -345,7 +148,7 @@ describe("insertFor", () => {
       label: name,
     });
     expect(
-      insertFor(MIX_NODE_ID, "snk:OUT", byId(sink("MIX"), sink("OUT"))),
+      insertFor("snk:MIX", "snk:OUT", byId(sink("MIX"), sink("OUT"))),
     ).toEqual({ before: "MIX", after: "OUT" });
   });
 
@@ -378,55 +181,6 @@ describe("jackRef", () => {
     expect(jackRef(node("module", "m1", "split", "split"), "b")).toBe(
       "split#b",
     );
-  });
-});
-
-// The point of the whole measure: ONE lane, two wires, two different ripples. A sequences lane
-// feeds an instrument over MIDI and the instrument feeds the mix over audio, and those two cables
-// are not carrying the same thing — so they must not move the same amount.
-describe("how hard each cable ripples", () => {
-  const t = `${TRACK_NODE_PREFIX}melody`;
-  const edges = [
-    { id: "notes", source: t, target: "mod:piano", signal: "midi" as const },
-    {
-      id: "sound",
-      source: "mod:piano",
-      target: "snk:MIX",
-      signal: "audio" as const,
-    },
-  ];
-  const seeds = new Map([["melody", { audio: 0.25, midi: 1, video: 0 }]]);
-
-  it("reads each wire by what IT carries, off the one lane", () => {
-    const flow = computeFlow(edges, seeds);
-    expect(flow.get("notes")).toBe(1);
-    expect(flow.get("sound")).toBe(0.25);
-  });
-
-  it("leaves out a wire carrying nothing, so the ripple's loop can stop", () => {
-    // A lane showing a picture and making no sound: its audio cables are not merely quiet, they
-    // are absent from the map — `size === 0` is how the rAF knows there is nothing to animate.
-    const flow = computeFlow(
-      edges,
-      new Map([["melody", { audio: 0, midi: 0, video: 1 }]]),
-    );
-    expect(flow.size).toBe(0);
-  });
-
-  it("takes the LOUDER of two lanes meeting on one cable", () => {
-    const merged = [
-      { id: "a", source: `${TRACK_NODE_PREFIX}one`, target: "mod:bus" },
-      { id: "b", source: `${TRACK_NODE_PREFIX}two`, target: "mod:bus" },
-      { id: "out", source: "mod:bus", target: "snk:MIX" },
-    ];
-    const flow = computeFlow(
-      merged,
-      new Map([
-        ["one", { audio: 0.2, midi: 0, video: 0 }],
-        ["two", { audio: 0.9, midi: 0, video: 0 }],
-      ]),
-    );
-    expect(flow.get("out")).toBe(0.9);
   });
 });
 

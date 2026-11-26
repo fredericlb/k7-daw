@@ -7,8 +7,8 @@ import {
   curvesLeftOfTargets,
   curvesUnderLeft,
   curveTargets,
-  rowSortKey,
-} from "./curvePlacement";
+  rowSortKeys,
+} from "@studio/k7-wasm/chains";
 import { FRAME_HEAD, FRAME_PAD, MIX_OUT, NODE_H, NODE_W } from "./geometry";
 import type {
   GraphEdge,
@@ -106,12 +106,12 @@ function snapToRankRows(
   });
 
   const moved = new Map<string, number>();
-  const byId = new Map(snapped.map((n) => [n.id, n]));
-  const key = (n: GraphNode) => rowSortKey(n, curves, byId);
+  const keys = rowSortKeys(snapped, curves);
+  const key = new Map(snapped.map((n, i) => [n.id, keys[i]]));
   for (const r of ranks) {
     const row = snapped
       .filter((n) => rankOf.get(n.id) === r)
-      .sort((a, b) => key(a) - key(b));
+      .sort((a, b) => (key.get(a.id) ?? 0) - (key.get(b.id) ?? 0));
     let right = Number.NEGATIVE_INFINITY;
     for (const n of row) {
       const x = Math.max(n.x, right);

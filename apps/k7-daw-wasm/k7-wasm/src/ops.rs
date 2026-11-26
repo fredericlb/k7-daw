@@ -54,6 +54,42 @@ pub enum Request {
     #[cfg(feature = "verbs")]
     #[serde(rename = "verb.catalogue")]
     VerbCatalogue,
+    #[serde(rename = "widget.norm")]
+    WidgetNorm(crate::chains_ops::WidgetValueArgs),
+    #[serde(rename = "widget.denorm")]
+    WidgetDenorm(crate::chains_ops::WidgetValueArgs),
+    #[serde(rename = "widget.pair")]
+    WidgetPair(crate::chains_ops::WidgetValueArgs),
+    #[serde(rename = "widget.text")]
+    WidgetText(crate::chains_ops::WidgetTextArgs),
+    #[serde(rename = "widget.typed")]
+    WidgetTyped(crate::chains_ops::WidgetTypedArgs),
+    #[serde(rename = "widget.mix")]
+    WidgetMix(crate::chains_ops::WidgetOnlyArgs),
+    #[serde(rename = "flow.compute")]
+    FlowCompute(crate::chains_ops::FlowArgs),
+    #[serde(rename = "flow.seeds")]
+    FlowSeeds(crate::chains_ops::FlowSeedsArgs),
+    #[serde(rename = "lane.chains")]
+    LaneChains(crate::chains_ops::LaneArgs),
+    #[serde(rename = "lane.modules")]
+    LaneModules(crate::chains_ops::LaneArgs),
+    #[serde(rename = "lane.inputs")]
+    LaneInputs(crate::chains_ops::LaneArgs),
+    #[serde(rename = "bindings.resolve")]
+    BindingsResolve(crate::chains_ops::BindingsArgs),
+    #[serde(rename = "bindings.unmapped")]
+    BindingsUnmapped(crate::chains_ops::UnmappedArgs),
+    #[serde(rename = "place.targets")]
+    PlaceTargets(crate::chains_ops::PlaceTargetsArgs),
+    #[serde(rename = "place.rowKeys")]
+    PlaceRowKeys(crate::chains_ops::PlaceArgs),
+    #[serde(rename = "place.leftOf")]
+    PlaceLeftOf(crate::chains_ops::PlaceArgs),
+    #[serde(rename = "place.underLeft")]
+    PlaceUnderLeft(crate::chains_ops::PlaceArgs),
+    #[serde(rename = "place.withoutCurves")]
+    PlaceWithoutCurves(crate::chains_ops::WithoutCurvesArgs),
     #[serde(rename = "text.hash")]
     TextHash(crate::engine_ops::HashArgs),
     #[serde(rename = "engine.compat")]
@@ -129,6 +165,24 @@ impl Session {
             Request::VerbComplete(a) => write(out, &crate::verb_ops::complete(a)?),
             #[cfg(feature = "verbs")]
             Request::VerbCatalogue => write(out, verbs::palette::catalogue()),
+            Request::WidgetNorm(a) => write(out, &crate::chains_ops::widget_norm(a)),
+            Request::WidgetDenorm(a) => write(out, &crate::chains_ops::widget_denorm(a)),
+            Request::WidgetPair(a) => write(out, &crate::chains_ops::widget_pair(a)),
+            Request::WidgetText(a) => write(out, &crate::chains_ops::widget_text(a)),
+            Request::WidgetTyped(a) => write(out, &crate::chains_ops::widget_typed(a)),
+            Request::WidgetMix(a) => write(out, &crate::chains_ops::widget_is_mix(a)),
+            Request::FlowCompute(a) => write(out, &crate::chains_ops::flow_compute(a)),
+            Request::FlowSeeds(a) => write(out, &crate::chains_ops::flow_seeds(a)),
+            Request::LaneChains(a) => write(out, &crate::chains_ops::subgraph_chains(a)),
+            Request::LaneModules(a) => write(out, &crate::chains_ops::subgraph_modules(a)),
+            Request::LaneInputs(a) => write(out, &crate::chains_ops::subgraph_inputs(a)),
+            Request::BindingsResolve(a) => write(out, &crate::chains_ops::bindings_resolve(a)),
+            Request::BindingsUnmapped(a) => write(out, &crate::chains_ops::bindings_unmapped(a)),
+            Request::PlaceTargets(a) => write(out, &crate::chains_ops::place_targets(a)),
+            Request::PlaceRowKeys(a) => write(out, &crate::chains_ops::place_row_keys(a)),
+            Request::PlaceLeftOf(a) => write(out, &crate::chains_ops::place_left_of(a)),
+            Request::PlaceUnderLeft(a) => write(out, &crate::chains_ops::place_under_left(a)),
+            Request::PlaceWithoutCurves(a) => write(out, &crate::chains_ops::place_without_curves(a)),
             Request::TextHash(a) => write(out, &crate::engine_ops::text_hash(a)),
             Request::EngineCompat(a) => write(out, &crate::engine_ops::compat(a)),
             Request::EngineLatency(a) => write(out, &crate::engine_ops::latency(a)),

@@ -4,14 +4,11 @@
 // See ../../docs/mastering.md.
 
 import type { WebGraph, WebWidget } from "@studio/graph-model";
+import { type BindingProblem, resolveMapping } from "@studio/k7-wasm/chains";
 import type { MixView } from "@studio/song-schema/yaml/mixViewSchema";
-import {
-  type BindingProblem,
-  resolveMapping,
-} from "@studio/ui-chains/bindings";
-import { type MasterControl, masterControl } from "./controls";
+import { MASTER_CONTROLS, type MasterControl } from "./controls";
 
-// The graph half of the join is `@studio/ui-chains/bindings`, shared with the DJ desk. What stays
+// The graph half of the join is `@studio/k7-wasm/chains`, shared with the DJ desk, in Rust (@studio/k7-wasm/chains). What stays
 // here is what is the STRIP's: `pluginId` being mandatory, and the range that refuses to normalise.
 
 /** A binding that resolved to something that can be moved. */
@@ -39,7 +36,7 @@ export function resolveMasterBindings(
   // `refuse` and not `track`: this surface is a picture of ONE loaded plugin, so a step that loads
   // none is a knob that would do nothing. The desk answers the other way — docs/mastering.md.
   const { rows, problems } = resolveMapping(view, graph, {
-    control: masterControl,
+    controls: MASTER_CONTROLS,
     noun: "of this surface",
     plugless: "refuse",
   });

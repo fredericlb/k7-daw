@@ -4,6 +4,7 @@
 #![cfg_attr(not(test), deny(clippy::unwrap_used, clippy::expect_used, clippy::panic))]
 
 pub mod abi;
+pub mod chains_ops;
 pub mod curve_ops;
 #[cfg(feature = "song")]
 pub mod edit_ops;

@@ -3,6 +3,17 @@
 // buildGraph, moduleRow, graphLayout, subgraph). Renderer-agnostic: what comes out is plain
 // geometry any renderer can consume. Hosts import "./graph"; the split is internal.
 
+export {
+  isMixKnob,
+  pairValue,
+  subgraphForTrack,
+  trackInputs,
+  trackModules,
+  widgetDenorm,
+  widgetNorm,
+  widgetText,
+  widgetTyped,
+} from "@studio/k7-wasm/chains";
 export { buildGraph, withOpenTabs } from "./buildGraph";
 export {
   assemblyId,
@@ -98,13 +109,3 @@ export {
   TRACK_UI,
   VIDEO_TRACK_UI,
 } from "./nodeUIs";
-export { subgraphForTrack, trackInputs, trackModules } from "./subgraph";
-export {
-  isMixKnob,
-  pairValue,
-  widgetDenorm,
-  widgetNorm,
-  widgetRange,
-  widgetText,
-  widgetTyped,
-} from "./widgetValue";

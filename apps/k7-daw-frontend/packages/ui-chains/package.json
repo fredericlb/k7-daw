@@ -7,12 +7,9 @@
   "exports": {
     "./anchorRight": "./src/anchorRight.ts",
     "./assembly": "./src/assembly.ts",
-    "./bindings": "./src/bindings.ts",
     "./cableCanvas": "./src/cableCanvas.ts",
     "./cables": "./src/cables.ts",
     "./automationDepth": "./src/automationDepth.ts",
-    "./curvePlacement": "./src/curvePlacement.ts",
-    "./flow": "./src/flow.ts",
     "./graph": "./src/graph.ts",
     "./gridFit": "./src/gridFit.ts",
     "./groupEdge": "./src/groupEdge.ts",
@@ -40,6 +37,7 @@
   "dependencies": {
     "@dagrejs/dagre": "^1.1.8",
     "@studio/graph-model": "*",
+    "@studio/k7-wasm": "*",
     "@studio/song-schema": "*",
     "@studio/web-protocol": "*"
   },

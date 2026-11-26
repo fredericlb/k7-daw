@@ -1,29 +1,11 @@
 // cables.ts — the cable DRAWING geometry: smooth a routed polyline into cubic beziers,
 // resample it by arc-length for the live-signal wobble, find the insert `+` midpoint,
-// and propagate the SIGNAL'S STRENGTH along the edges. Pure math over the laid-out
-// graph (graph.ts owns the layout); no DOM, no React, so it is testable on its own.
+// and resolve what an arrow inserts or automates. Pure math over the laid-out graph (graph.ts
+// owns the layout); the signal's strength along the edges is `computeFlow` in `@studio/k7-wasm/chains`.
 
 import { panelWidgets } from "@studio/graph-model/panel";
-import { flowOf, type NodeFlow, STILL } from "./flow";
 import type { EdgeInsert, GraphEdge, GraphNode, Pt } from "./graph";
-import {
-  columnW,
-  curveOutPoint,
-  MIX_OUT,
-  menuH,
-  RENDER_OUT,
-  stripWidgetRect,
-} from "./graph";
-
-// graph.ts's trackId() prefix — liveness seeds from the track nodes.
-export const TRACK_NODE_PREFIX = "trk:";
-
-// …and its moduleId()'s, which liveness ALSO seeds from: a materialised track has no lane card.
-export const MODULE_NODE_PREFIX = "mod:";
-
-// …and its sinkId() for the two SUMS, the other nodes the walk starts at — see computeFlow.
-export const MIX_NODE_ID = `snk:${MIX_OUT}`;
-export const RENDER_NODE_ID = `snk:${RENDER_OUT}`;
+import { columnW, curveOutPoint, menuH, stripWidgetRect } from "./graph";
 
 // A cubic bezier segment (Catmull-Rom → Bezier — see cubicSegments).
 export interface Cubic {
@@ -168,88 +150,6 @@ export function midByArc(g: CableGeom): Pt {
   const half = g.len / 2;
   for (const p of g.samples) if (p.s >= half) return { x: p.x, y: p.y };
   return g.base[g.base.length - 1];
-}
-
-/**
- * HOW HARD each cable ripples now, walked FORWARD from the metered lanes and both SUMS, and
- * BACKWARD from each metered card. See docs/graphBuild.md and ui-chains-react/docs/liveCables.md.
- *
- * The seed a node carries travels with the signal, and each cable takes from it the number that
- * matches what IT carries (`flowOf`). That is what lets one lane drive two different ripples: the
- * MIDI cable into an instrument moves with the notes, and the audio cable out of it with the
- * meter — one seed, two readings, because the wires are not carrying the same thing.
- */
-export function computeFlow(
-  edges: {
-    id: string;
-    source: string;
-    target: string;
-    signal?: "audio" | "midi" | "video" | "event";
-  }[],
-  /** What each metered lane or sum is putting out, by node id. Absent = nothing at all. */
-  seeds: ReadonlyMap<string, NodeFlow>,
-  /** Where a metered lane's signal LEAVES from when its card has been folded into a closed
-   *  assembly, by track id. Without it a folded set reaches nothing and no cable ripples. */
-  foldedAt: ReadonlyMap<string, string> = new Map(),
-): Map<string, number> {
-  const reached = new Map<string, NodeFlow>();
-  const seed = (node: string, f: NodeFlow): void => {
-    const had = reached.get(node);
-    reached.set(node, had ? louder(had, f) : f);
-  };
-  for (const [id, f] of seeds) {
-    seed(`${TRACK_NODE_PREFIX}${id}`, f);
-    // A run that MATERIALISED its own track is drawn as its MODULES: there is no lane card to
-    // start at, and the track wears the chain's name — apps/k7-daw-frontend/packages/song/docs/graphModel.md.
-    seed(`${MODULE_NODE_PREFIX}${id}`, f);
-    const box = foldedAt.get(id);
-    if (box) seed(box, f);
-    // Both sums carry whatever reaches them; which one depends on what the lane puts out.
-    if (f.audio > STILL) seed(MIX_NODE_ID, f);
-    if (f.video > STILL) seed(RENDER_NODE_ID, f);
-  }
-  const flow = new Map<string, number>();
-  const walk = (back: boolean): void => {
-    const seen = new Map(reached);
-    let changed = true;
-    while (changed) {
-      changed = false;
-      for (const g of edges) {
-        const here = back ? g.target : g.source;
-        const next = back ? g.source : g.target;
-        // Upstream stops at another LANE: a metered card speaks for itself, and would be seeded.
-        if (back && next.startsWith(TRACK_NODE_PREFIX)) continue;
-        const f = seen.get(here);
-        if (!f) continue;
-        // Only what MOVES is recorded: a zero entry would keep the ripple's rAF running for a
-        // cable that hangs still, and `size === 0` is how that loop knows to stop.
-        const v = flowOf(f, g.signal);
-        const had = flow.get(g.id) ?? 0;
-        if (v > had) flow.set(g.id, v);
-        else if (seen.has(next)) continue;
-        const was = seen.get(next);
-        if (!was || louder(was, f) !== was) {
-          seen.set(next, was ? louder(was, f) : f);
-          changed = true;
-        }
-      }
-    }
-  };
-  walk(false);
-  // …and UPSTREAM of each metered card, which is where a live input sits: the signal it is
-  // metering came down that cable. Seeded separately, so a silent sibling branch stays still.
-  walk(true);
-  return flow;
-}
-
-/** The louder of two seeds, per kind — the SAME object when the first already wins on all three. */
-function louder(a: NodeFlow, b: NodeFlow): NodeFlow {
-  if (a.audio >= b.audio && a.midi >= b.midi && a.video >= b.video) return a;
-  return {
-    audio: Math.max(a.audio, b.audio),
-    midi: Math.max(a.midi, b.midi),
-    video: Math.max(a.video, b.video),
-  };
 }
 
 /** A stretch of time one video lane is on screen, in SECONDS; `to` may be `Infinity`. See @studio/ui-eyes. */

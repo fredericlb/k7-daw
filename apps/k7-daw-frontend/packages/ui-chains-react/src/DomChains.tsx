@@ -12,6 +12,14 @@ import {
   useEngineStoreOrNull,
 } from "@studio/engine-browser/store";
 import {
+  computeFlow,
+  type LaneSource,
+  type NodeFlow,
+  seedFlows,
+  seedsEq,
+  withoutCurves,
+} from "@studio/k7-wasm/chains";
+import {
   AUTO_ALPHA,
   AUTO_DASH,
   AUTO_SHADOW_W,
@@ -26,16 +34,8 @@ import {
 import {
   autoTarget,
   type CableGeom,
-  computeFlow,
   liveVideoLanes,
 } from "@studio/ui-chains/cables";
-import { withoutCurves } from "@studio/ui-chains/curvePlacement";
-import {
-  type LaneSource,
-  type NodeFlow,
-  seedFlows,
-  seedsEq,
-} from "@studio/ui-chains/flow";
 import { cablePath, type GraphNode } from "@studio/ui-chains/graph";
 import {
   type CableSway,

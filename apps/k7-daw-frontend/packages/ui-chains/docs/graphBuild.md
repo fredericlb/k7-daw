@@ -8,7 +8,7 @@ The code is deliberately **renderer-agnostic** — plain numbers, no Pixi, no DO
 dagre own layout and lets the same geometry serve the hit areas and the drawing by construction.
 
 `graph.ts` is the one import site; behind it each stage has a file. `graphNode.ts` holds the shapes,
-`geometry.ts` the measurements, `nodeUIs.ts` the built-in cards' panels and `widgetValue.ts` a
+`geometry.ts` the measurements, `nodeUIs.ts` the built-in cards' panels and `@studio/k7-wasm/chains` (Rust) a
 widget's value maths. `buildGraph.ts` runs the build: a `Build` (`buildContext.ts`) holds the run's
 maps and writers, the steps that add cards are `buildChains.ts`, and the socket and rank passes
 close it. `graphLayout.ts` and `moduleRow.ts` place the result. Hosts import `./graph` alone, so
@@ -852,7 +852,7 @@ from an instance — one free card per curve, one bound card per binding.
 
 ### Curve cards
 
-A bound card sits **at the left of the node it drives, under its top** (`src/curvePlacement.ts`),
+A bound card sits **at the left of the node it drives, under its top** (`curve_placement.rs` of the chains crate),
 on the side its events leave from. Several curves on one node stack downward. dagre sees an automation edge as one more edge and would put the card
 anywhere on its row, so its spot is dropped: the card goes just left of its target, and the row
 sweep sorts it immediately before that target, so the sweep parts them by making room rather than by

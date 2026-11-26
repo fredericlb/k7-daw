@@ -9,7 +9,7 @@ redrawn.
 
 A cable was live or it was not, and every live one moved the same amount. It says more than that
 now — the amplitude is the signal, between `WOBBLE_MIN_AMP` and `WOBBLE_MAX_AMP` — and the three
-kinds of wire are not the same quantity, so each is measured its own way ([flow.ts](../src/flow.ts)):
+kinds of wire are not the same quantity, so each is measured its own way (`flow.rs` of the chains crate):
 
 | wire | measure | why that one |
 |---|---|---|
