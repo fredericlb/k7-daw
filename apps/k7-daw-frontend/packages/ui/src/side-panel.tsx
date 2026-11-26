@@ -65,7 +65,10 @@ export function PanelHeading({
           >
             {title}
           </Dialog.Title>
-          <div ref={row} className="flex min-w-0 flex-1 items-center" />
+          <div
+            ref={row}
+            className="flex min-w-0 flex-1 flex-wrap items-center gap-x-2 gap-y-1"
+          />
         </>
       ) : null}
       {!row && icon ? (
