@@ -188,7 +188,7 @@ export interface Hints {
   media: Record<string, string[]>;
 }
 
-// One declared port, a module under an io/ folder (mirrors @studio/song/ioPorts); the LEVELS come from the engine socket, by position.
+// One declared port, a module under an io/ folder (mirrors apps/k7-daw-wasm/song/src/views/io_ports.rs); the LEVELS come from the engine socket, by position.
 export interface IoPort {
   ref: string; // how a chain names it ("OUT", "@engine/io/IN:in-1")
   name: string; // the part worth showing ("IN:in-1")
@@ -200,7 +200,7 @@ export interface IoPort {
   generic: boolean; // the folder's module.k7x rather than one of its nodes
 }
 
-// One entry of the shared `_modules` catalogue (mirrors @studio/song/moduleCatalogue) — what the module builder lists.
+// One entry of the shared `_modules` catalogue (mirrors apps/k7-daw-wasm/song/src/views/catalogue.rs) — what the module builder lists.
 export interface CatalogueModule {
   ref: string; // how a chain names it ("@engine/audio/delay/tape-delay")
   name: string; // the part worth showing, namespace dropped

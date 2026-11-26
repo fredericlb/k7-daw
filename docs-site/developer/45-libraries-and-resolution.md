@@ -10,7 +10,7 @@ shares it):
 
 | Namespace | Resolves to |
 |---|---|
-| `@engine/<slug>` | The engine's plugin scan, `<STUDIO_HOME>/exts.json`, read by `apps/k7-daw-frontend/packages/song/src/engineCatalogue.ts`. No folder; the slug is `slugifyPluginName(name)` and the type folder follows the plugin's role (`categoryForRole`). |
+| `@engine/<slug>` | The engine's plugin scan, `<STUDIO_HOME>/exts.json`, read by `apps/k7-daw-wasm/song/src/modules/scan.rs`. No folder; the slug is `slugifyPluginName(name)` and the type folder follows the plugin's role (`categoryForRole`). |
 | `@meta/...` | k7's built-ins: modules under `apps/k7-daw-frontend/packages/song/meta/` and synthesised ones (`@meta/track`, `@meta/doc`, inputs and outputs). |
 | `@workspace/...` | The workspace's `_modules/` folder (`SHARED_MODULES_PATH = "../_modules"` from a project). |
 | `@account/...` | The account's own library, never versioned, always writable by the account. |
@@ -21,25 +21,25 @@ what it emits. A new type folder starts there.
 
 ### Resolution
 
-`apps/k7-daw-frontend/packages/song/src/loader.ts` builds the ref map: the built-ins first (doc modules, lanes, io,
+`apps/k7-daw-wasm/song-edit/src/loader.rs` builds the ref map: the built-ins first (doc modules, lanes, io,
 the engine catalogue), then each module root in order: the project's `../_modules`, then
 `libraryFamilyRoots("modules", dir)` (the account library first, then every library by name),
 then `apps/k7-daw-frontend/packages/song/meta`. A root's namespace comes from where it is, never from anything the
 root declares.
 
-`extends` is folded by `apps/k7-daw-frontend/packages/song/src/moduleResolve.ts`, parent under child, deepest first,
+`extends` is folded by `apps/k7-daw-wasm/song/src/resolve/extends.rs`, parent under child, deepest first,
 with a cycle guard. `params` and `assets` merge per key, `engines` per engine and then per param,
 `rack.symbols` and `ui.widgets` per entry; the keys in `OWN_ONLY` are never inherited. Engine and
 alternative selection are applied after the merge.
 
-`module fork` (`apps/k7-daw-frontend/packages/song/src/accountFork.ts`) writes an `@account/...` module that extends
+`module fork` (`apps/k7-daw-wasm/song-edit/src/account_fork.rs`) writes an `@account/...` module that extends
 the library one and repoints the project at it.
 
 ## Storage and versions
 
 | Concern | Where |
 |---|---|
-| Library home, versions, pins, the root a name resolves to | `apps/k7-daw-frontend/packages/song/src/sharedFolders.ts` |
+| Library home, versions, pins, the root a name resolves to | `apps/k7-daw-wasm/song-edit/src/shared_folders.rs` |
 | Version manifest (`library.k7x`: `name`, `version`, `requires`, `notes`) and `LIBRARY_LEVEL` | `apps/k7-daw-frontend/packages/song-schema/src/libraryVersions.ts` |
 | The workspace's pins (`_library-pins.k7x`), written once | `apps/k7-daw-backend/packages/k7-file-service/src/pins.rs` |
 | `library versions`, `library upgrade` | `apps/k7-daw-wasm/verbs/src/verbs/library.rs` |
@@ -91,7 +91,7 @@ content raises it. A module and the engine code it relies on change in one commi
 
 Presets are files in a tree beside the modules: `_presets/` in the workspace, `presets/` in a
 library, at `<root>/<namespace>/<module path>/<name>.k7x`. Vocabulary and schema:
-`apps/k7-daw-frontend/packages/song-schema/src/presets.ts`; reading and writing: `apps/k7-daw-frontend/packages/song-edit/src/presets.ts`;
+`apps/k7-daw-frontend/packages/song-schema/src/presets.ts`; reading and writing: `apps/k7-daw-wasm/song-edit/src/presets.rs`;
 verbs: `apps/k7-daw-wasm/verbs/src/verbs/node_preset.rs`. Applying a preset writes into the node's file and
 reaches the engine as a values-only diff.
 
@@ -100,8 +100,8 @@ reaches the engine as a values-only diff.
 | Piece | Where |
 |---|---|
 | Template schema (`label`, `inputs`, `outputs`, `params`) and instance record (`uses`, `members`) | `apps/k7-daw-frontend/packages/song-schema/src/yaml/assemblySchema.ts`, `apps/k7-daw-frontend/packages/song-schema/src/yaml/assemblyFile.ts` |
-| Resolution to `GraphDoc.assemblies` | `apps/k7-daw-frontend/packages/song/src/assemblies.ts` |
-| `assembly new`, `delete`, `dissolve`, member renames | `apps/k7-daw-frontend/packages/song/src/assemblyEdit.ts` |
+| Resolution to `GraphDoc.assemblies` | `apps/k7-daw-wasm/song/src/assemblies/mod.rs` |
+| `assembly new`, `delete`, `dissolve`, member renames | `apps/k7-daw-wasm/song-edit/src/assembly_edit.rs` |
 | Drawing | `apps/k7-daw-frontend/packages/ui-chains/src/assembly.ts` (`foldAssemblies`) |
 | Template editor | `apps/k7-daw-frontend/packages/ui-module-builder/src/AssemblyBuilder.tsx` |
 
@@ -116,5 +116,5 @@ The reference template is `k7-core/assemblies/turntable/`.
 ## Tests
 
 `npm test -w @studio/song` covers the loader, `moduleResolve`, assemblies
-(`apps/k7-daw-frontend/packages/song/src/turntableAssembly.test.ts`) and the library folders;
+(`apps/k7-daw-wasm/song/tests/all/assemblies.rs`) and the library folders;
 `npm test -w @studio/song-schema` covers refs and schemas (`moduleTypes.test.ts`).

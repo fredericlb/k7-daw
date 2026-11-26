@@ -23,7 +23,6 @@
       "!**/*.json",
       "!**/*.jsonc",
       "!apps/k7-daw-engine/k7-runtime",
-      "!**/k7WasmSong.generated.ts",
       "!**/hostProtocol.generated.ts"
     ]
   },

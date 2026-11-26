@@ -4,11 +4,11 @@
 // What a reader gets wrong: which fields a SHOT takes is the compile's to check, since only it
 // knows each ref's material. A timecode ("25:1") is a STRING; a number is seconds (docs/moduleFile.md).
 
+import { TIMECODE } from "@studio/k7-wasm/consts";
 import { z } from "zod";
 import { AnimateSchema } from "../keyframes";
-import { TIMECODE } from "../timecode";
 
-export { TIMECODE } from "../timecode";
+export { TIMECODE } from "@studio/k7-wasm/consts";
 
 const Timecode = z
   .string()

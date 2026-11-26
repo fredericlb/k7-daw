@@ -4,7 +4,7 @@
 // it. Only BASE modules and never `@engine`, and nothing is run — it pre-writes. See
 // docs/commandBar.md.
 
-import { isEngineRef } from "@studio/song-schema/moduleTypes";
+import { isEngineRef } from "@studio/k7-wasm/schema";
 import { REMOTE_CAMERA_PREFIX } from "@studio/web-protocol/cameras";
 import { byPeople } from "@studio/web-protocol/tree";
 import { fuzzyScore } from "../fuzzy";

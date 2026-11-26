@@ -3,13 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Audio files a song PRODUCES: filing a recorded take onto its lane, rendering a mixdown or a stem, and reading back how long a wav is. Consumed as source.",
+  "description": "The engine's offline bounce for its bench scripts: a ProjectDoc rendered to audio by this machine's engine binary. Consumed as source.",
   "exports": {
     "./renderer": "./src/renderer.ts",
-    "./renderToWav": "./src/renderToWav.ts",
-    "./renderTypes": "./src/renderTypes.ts",
-    "./materialRender": "./src/materialRender.ts",
-    "./wavLength": "./src/wavLength.ts"
+    "./renderTypes": "./src/renderTypes.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",
@@ -22,11 +19,7 @@
   },
   "dependencies": {
     "@studio/engine-client": "*",
-    "@studio/engine-protocol": "*",
-    "@studio/k7x": "*",
-    "@studio/song": "*",
-    "@studio/song-edit": "*",
-    "@studio/song-schema": "*"
+    "@studio/engine-protocol": "*"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",

@@ -2,13 +2,17 @@
 // A reader would get wrong that a file reports ONE finding, the first: serde stops at the first thing it cannot read.
 
 mod de;
+pub mod desk;
 mod entity;
 mod finding;
 mod notes;
 mod placement;
+pub mod preset_file;
 mod project;
+pub mod route;
 pub(crate) mod scalar;
 mod timeline;
+pub mod validate;
 
 pub use de::{DeError, from_map};
 pub use entity::{Align, AudioClip, CaptionClip, CaptionPosition, Clip, Note, OnsetEdits, Sequence, VideoClip, Warp};
@@ -23,6 +27,7 @@ pub use project::{
 };
 pub use scalar::{WindowEdge, has_ext};
 pub use timeline::{Timeline, TimelineLane};
+pub use validate::{ModuleIssue, Validity, ValidityDepth, validate_file};
 
 use k7x::{Bump, MapNode, Node, PathSeg, Scalar, parse_tree};
 use serde::de::DeserializeOwned;

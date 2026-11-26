@@ -8,7 +8,6 @@ import { writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Renderer, RenderManifest } from "./renderTypes";
 
-export { freezeUpstreamRender, renderToWav } from "./renderToWav";
 export type { Renderer, RenderManifest, RenderOptions } from "./renderTypes";
 
 /** The last stdout line of `--render` is its manifest. */

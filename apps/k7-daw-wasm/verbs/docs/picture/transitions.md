@@ -27,7 +27,7 @@ the stretch first and then blends with the named program.
 
 The bare number is **not a union branch** but a widening (`z.preprocess`), and the reason is measurable: on a union a
 mistyped key surfaces as `Invalid input` with the real errors buried in the branches, so
-`validate.ts` cannot find the line. Widened, `{ ovr: 1 }` answers `unrecognized_keys` on
+a check cannot find the line. Widened, `{ ovr: 1 }` answers `unrecognized_keys` on
 `events.0.fadeIn`, and the editor underlines the right place.
 
 ## The ARRIVING shot carries the transition
@@ -285,7 +285,7 @@ to **the layer below**.
 | written | `fadeIn` / `fadeOut` on an event of a picture lane (`nodes/<lane>.k7x`, `tracks/` in a chain project), `modules/video_transitions/<name>/`, and a stretch's run in `graph.k7x` |
 | declared | `apps/k7-daw-frontend/packages/song-schema/src/moduleTypes.ts` — `TRANSITION_CATEGORY`, `DISSOLVE`, `OVER`, `isPicturePass` |
 | validated | `apps/k7-daw-frontend/packages/song-schema/src/yaml/placementSchema.ts` — `FadeSchema` and the widening; `src/videoTracks.ts` — the refusal of an endless `fadeOut` |
-| guarded | `apps/k7-daw-frontend/packages/song/src/entities.ts` — `loadVideoTracks` goes through the module schema; `apps/k7-daw-frontend/packages/song/src/graph.ts` — `isStretch`, and a stretch's head counted as fed in `checkChainInputs` |
+| guarded | `apps/k7-daw-wasm/song/src/graph/index.rs` — `is_stretch`, and a stretch's head counted as fed in `check_chain_inputs` (`apps/k7-daw-wasm/song/src/lanes/wiring.rs`) |
 | read | `src/videoTransitions.ts` — the ancestry from `src/shaders.ts`, and `resolveStretches`; `src/videoChains.ts` — the stretches |
 | compiled | `apps/k7-daw-wasm/verbs/src/picture/lanes.rs` -> a clip's `fadeIn`, and `apps/k7-daw-wasm/verbs/src/picture/compile.rs` -> the document's `transitions` and `stretches`, the GLSL **inline** |
 | on the wire | `apps/k7-daw-frontend/packages/web-protocol/timelineTypes.ts` — `WebVideoFade`, `WebVideoTransition`, `WebVideoProject.stretches` |
@@ -294,7 +294,7 @@ to **the layer below**.
 | decided | `apps/k7-daw-frontend/packages/ui-eyes/src/timeline.ts` — `layerFrameAt`, the only rule |
 | decoded | `apps/k7-daw-frontend/packages/ui-eyes/src/realtime.ts` and `apps/k7-daw-frontend/packages/ui-eyes/src/export.ts` |
 | drawn | `apps/k7-daw-frontend/packages/ui-eyes/src/compositor.ts` + `apps/k7-daw-frontend/packages/ui-eyes/src/passes.ts` + `apps/k7-daw-frontend/packages/ui-eyes/src/stretches.ts`, the built-in `dissolve` and `over` in `apps/k7-daw-frontend/packages/ui-eyes/src/transitions.ts` |
-| completed | `apps/k7-daw-frontend/packages/song-schema/src/yaml/fields.ts` — the two words of a fade's map |
+| completed | `apps/k7-daw-wasm/song/src/views/fields.rs` — the two words of a fade's map |
 
 ## Checking it
 

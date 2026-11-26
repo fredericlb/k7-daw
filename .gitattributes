@@ -21,13 +21,14 @@
 *.pdf binary
 *.woff binary
 *.woff2 binary
+*.wasm binary
 
 # cmd misreads a label or a long parenthesised block in an LF script.
 apps/k7-daw-engine/scripts/ci/*.cmd text eol=crlf
 
 # Built from sources, never merged by hand: a conflict keeps one side, then `npm run rebuild:generated` (docs/agents.md).
 apps/k7-daw-frontend/packages/k7-wasm/src/k7Wasm.generated.ts merge=rebuilt
-apps/k7-daw-frontend/packages/k7-wasm/src/k7WasmSong.generated.ts merge=rebuilt
+apps/k7-daw-frontend/packages/k7-wasm/src/k7Wasm.wasm merge=rebuilt
+apps/k7-daw-frontend/packages/k7-wasm/src/consts.generated.ts merge=rebuilt
 apps/k7-daw-frontend/packages/audio-analysis/waveform.wasm merge=rebuilt
 apps/k7-daw-frontend/packages/audio-analysis/waveform.wasm.sources merge=rebuilt
-apps/k7-daw-wasm/song/src/modules/types_generated.rs merge=rebuilt

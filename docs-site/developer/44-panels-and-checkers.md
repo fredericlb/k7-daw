@@ -18,7 +18,7 @@ that cross widgets live elsewhere:
 | No knob, slider, fader or number on an `@` parameter; EQ bands as faders; no lone group | `atControlIssues`, `eqBandIssues`, `loneGroupIssues` in `apps/k7-daw-frontend/packages/panel-rules/src/aiOrganize.ts` |
 
 Panels inherited through `extends` merge their top-level `widgets` per id
-(`apps/k7-daw-frontend/packages/song/src/moduleResolve.ts`); widgets marked `hidden` are dropped when the panel is
+(`apps/k7-daw-wasm/song/src/resolve/extends.rs`); widgets marked `hidden` are dropped when the panel is
 resolved.
 
 On the wire, a panel is `WebModuleUI` with `WebWidget`s (`apps/k7-daw-frontend/packages/graph-model/types.ts`). The
@@ -45,11 +45,11 @@ Where parameter names come from:
 
 ## `npm run lint:panels`
 
-Runs `apps/k7-daw-frontend/packages/song/scripts/checkPanelBinds.ts`.
+Runs `apps/k7-daw-frontend/packages/ui-module-builder/scripts/checkPanelBinds.ts`.
 
 ```bash
 npm run lint:panels
-npx tsx apps/k7-daw-frontend/packages/song/scripts/checkPanelBinds.ts [library root] [--only <name filter>] [--json]
+npx tsx apps/k7-daw-frontend/packages/ui-module-builder/scripts/checkPanelBinds.ts [library root] [--only <name filter>] [--json]
 ```
 
 For every module folder with a panel under the library root (default `k7-core`), it collects each

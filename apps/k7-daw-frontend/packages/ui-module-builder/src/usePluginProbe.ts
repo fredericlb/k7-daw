@@ -4,8 +4,8 @@
 // open and never persisted. See docs/builder.md.
 
 import type { ParamMeta } from "@studio/engine-protocol";
+import { builtinPluginForRef } from "@studio/k7-wasm/schema";
 import { askText } from "@studio/project-shell/ask";
-import { builtinPluginForRef } from "@studio/song-schema/builtinParams";
 import { useCallback, useEffect, useState } from "react";
 import { extendsRefOf } from "./moduleUi";
 import type { ModuleStore } from "./store";

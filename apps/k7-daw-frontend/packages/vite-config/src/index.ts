@@ -236,7 +236,7 @@ export function defineAppConfig(options: AppConfigOptions): UserConfig {
               injectRegister: null,
               workbox: {
                 globPatterns: [
-                  "**/*.{js,css,html,ico,png,svg,webmanifest,woff2}",
+                  "**/*.{js,css,html,ico,png,svg,webmanifest,woff2,wasm}",
                 ],
                 // A navigation asks the NETWORK for the shell, the precached one answering only offline
                 // or past the timeout: a shell from cache is the previous deploy's (docs/pwa.md).

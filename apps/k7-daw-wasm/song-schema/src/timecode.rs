@@ -1,6 +1,5 @@
-// timecode.rs — "bar:beat:eighth:sixteenth.ticks" timecodes <-> beats (quarter notes), after ../../../k7-daw-frontend/packages/song-schema/src/timecode.ts.
+// timecode.rs — "bar:beat:eighth:sixteenth.ticks" timecodes <-> beats (quarter notes): the page's too, through k7-wasm's timecode ops.
 // A reader would get wrong that the JS quirks are kept on purpose: trim strips U+FEFF, `\d` is ASCII, a field is an f64.
-// The event-start helpers (startBeats, startAs…) stay in TypeScript until the verbs move.
 
 use crate::error::SchemaError;
 
@@ -9,6 +8,9 @@ pub const TICKS_PER_QUARTER: f64 = 960.0;
 
 /// The most colon fields the current notation uses; a longer chain is the deep one, read by its own rule.
 const MAX_FIELDS: usize = 4;
+
+/// The shape a position or a duration is written in, as a validator's pattern: `is_timecode` is its matcher.
+pub const TIMECODE_PATTERN: &str = r"^[0-9]+(:[0-9]+)*(\.[0-9]+)?$";
 
 /// Beyond this many ticks a float no longer counts whole numbers.
 const MAX_TICKS: f64 = 9.0e15;
@@ -184,6 +186,11 @@ pub fn parse_position_on(tc: &str, num: f64, den: f64) -> Result<f64, SchemaErro
 /// A 0-based duration (length, offset, fade), in beats.
 pub fn parse_duration(tc: &str, sig: TimeSig) -> Result<f64, SchemaError> {
     to_beats(tc, f64::from(sig.num()), f64::from(sig.den()), false)
+}
+
+/// `parse_duration` on a meter whose parts are floats.
+pub fn parse_duration_on(tc: &str, num: f64, den: f64) -> Result<f64, SchemaError> {
+    to_beats(tc, num, den, false)
 }
 
 pub fn beats_to_position(beats: f64, sig: TimeSig) -> Result<String, SchemaError> {

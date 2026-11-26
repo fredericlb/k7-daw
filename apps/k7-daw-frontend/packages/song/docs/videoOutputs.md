@@ -147,7 +147,7 @@ must not lose its card in the meantime.
 ## Checking it
 
 ```bash
-npx vitest run apps/k7-daw-frontend/packages/song/src/videoOutputs.test.ts
+cargo test -p song-edit
 npx vitest run apps/k7-daw-frontend/packages/ui-chains/src/buildSums.test.ts
 ```
 

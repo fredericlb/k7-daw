@@ -86,7 +86,7 @@ engine registry, the relay or a gate, `docs/audit-moteur.md`. The repo's own che
 - `npm run lint:docs` — blocking: refuses a `.md` or source comment naming a file that is not there.
 - `npm run lint:bytes` — blocking: refuses a NUL byte in a tracked source file (ripgrep skips it whole).
 - `npm run lint:dead` — knip, non-blocking: dead and duplicated code; build-only entries go in `knip.json`.
-- `npm run lint:panels` — a panel's `bind:` against its plugin's real parameters; needs the plugins installed, not in `npm run lint` (`apps/k7-daw-frontend/packages/song/docs/panelBinds.md`).
+- `npm run lint:panels` — a panel's `bind:` against its plugin's real parameters; needs the plugins installed, not in `npm run lint` (`apps/k7-daw-frontend/packages/ui-module-builder/docs/panelBinds.md`).
 
 # Merging a branch
 

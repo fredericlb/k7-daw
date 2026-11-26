@@ -2,7 +2,7 @@
 // and the inputs that feed it. Pure reads of a WebGraph, nothing drawn.
 
 import type { WebGraph } from "@studio/graph-model";
-import { isPicturePass } from "@studio/song-schema/moduleTypes";
+import { isPicturePass } from "@studio/k7-wasm/schema";
 
 // Narrow the graph to one track's signal path — a WebGraph, so `buildGraph` takes it unchanged.
 export function subgraphForTrack(graph: WebGraph, track: string): WebGraph {

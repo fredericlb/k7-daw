@@ -19,6 +19,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@studio/k7-wasm": "*",
     "@studio/ui": "*",
     "@studio/engine-protocol": "*",
     "@studio/graph-model": "*",

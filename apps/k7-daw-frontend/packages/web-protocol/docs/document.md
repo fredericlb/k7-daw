@@ -86,7 +86,7 @@ applied — every surface reads that one and therefore agrees. `detected` and `o
 list before corrections and the corrections themselves, in FILE seconds as the clip stores them;
 only an onset editor needs them, to tell a detected onset from a hand-placed one and to name a
 removal by the time the DETECTOR gave it rather than by wherever the pointer was. See
-`apps/k7-daw-frontend/packages/song-edit/src/onsets.ts`.
+`apps/k7-daw-wasm/song-edit/src/onsets.rs`.
 
 ## `ChangedFile`: what a command touched
 

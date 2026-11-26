@@ -4,10 +4,8 @@
 // See docs/builder.md.
 
 import type { ParamMeta } from "@studio/engine-protocol";
-import {
-  builtinPluginFor,
-  builtinPluginForRef,
-} from "@studio/song-schema/builtinParams";
+import { builtinPluginForRef } from "@studio/k7-wasm/schema";
+import { builtinPluginFor } from "@studio/song-schema/builtinParams";
 import {
   INPUT_VOLUME_PARAM,
   OUTPUT_VOLUME_PARAM,

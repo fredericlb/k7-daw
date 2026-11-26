@@ -208,7 +208,7 @@ Written here so it stops being mistaken for laziness.
 | finding | where |
 |---|---|
 | With no test file at all: `graph-model`. | — |
-| Read in code and absent from **every** `.md`: `STUDIO_MODELS`, `STUDIO_SCRATCH`, `CHROME`. | `apps/k7-daw-frontend/packages/song/src/modelCache.ts`, `apps/k7-daw-engine/k7-runtime/scripts/` |
+| Read in code and absent from **every** `.md`: `STUDIO_MODELS`, `STUDIO_SCRATCH`, `CHROME`. | `apps/k7-daw-engine/k7-runtime/scripts/` |
 | Imported without being declared: `ui-chains-react`, `score` and `k7-plugins` (`@storybook/react-vite`, in their `*.stories.tsx`; the root declares it). | — |
 | `apps/k7-daw-frontend/packages/web-protocol` depends on `@studio/engine-protocol` alone, which has no dependency of its own, and that is RIGHT — what it takes from it is types. That absence of a runtime dependency is what lets `engine-client` take it to read `ENGINE_OUTBOX_MAX` without weighing down the supervisor's bundle. | `apps/k7-daw-frontend/packages/web-protocol` |
 | Read in code, absent from `env.example.yaml`: `STUDIO_REGISTRY_URL`, `STUDIO_DEMOS`, `STUDIO_MODELS`, `STUDIO_WEB_PORT`, `STRUDEL_SAMPLES`, `DIRT_SAMPLES`, `STUDIO_ENGINE_TOKEN`, `STUDIO_SCRATCH`, `CHROME`. | `env.example.yaml` |

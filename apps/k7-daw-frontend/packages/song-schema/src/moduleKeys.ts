@@ -2,10 +2,12 @@
 // path points into, and a plugin's slug. Re-exported by moduleTypes.ts; see docs/loader.md.
 // Its import of MODULE_TYPES is a cycle with moduleTypes.ts, safe as only function bodies read it.
 
+import { NODE_SEP } from "@studio/k7-wasm/consts";
 import { MODULE_TYPES } from "./moduleTypes";
 
+export { NODE_SEP };
+
 // --- module nodes (see docs/loader.md) --------------------------------------
-export const NODE_SEP = ":";
 
 // The map key / chain reference for a module, with or without a node.
 export const moduleKey = (module: string, node?: string): string =>

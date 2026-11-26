@@ -146,9 +146,9 @@ library and every workspace, and runs at the highest level, so latest, old and f
    only what its workspaces pin is a disk saving, not a correctness one.
 5. **Built.** `apps/k7-daw-backend/scripts/libraryArchive.mjs` bundles the published version; the hub
    seeds a published seed under its number and adds a newer one on an app update.
-6. **Built.** `@account` (`accountLibraryHome` in `../apps/k7-daw-frontend/packages/song/src/sharedFolders.ts`), its room
+6. **Built.** `@account` (`accountLibraryHome` in `apps/k7-daw-wasm/song-edit/src/shared_folders.rs`), its room
    (`attachAccountLibrary`, `apps/k7-daw-backend/packages/k7-file-service/src/workspaces`), `module fork`
-   (`../apps/k7-daw-frontend/packages/song/src/accountFork.ts`), its presets scope, and upgrade's list of the forks whose
+   (`apps/k7-daw-wasm/song-edit/src/account_fork.rs`), its presets scope, and upgrade's list of the forks whose
    base moved.
 7. **Built.** The supervisor's heartbeat carries `libraryLevel`, the registry hands it to the
    browser, and `LibraryUpgrades.tsx` warns.

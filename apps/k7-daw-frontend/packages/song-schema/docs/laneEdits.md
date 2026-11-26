@@ -1,6 +1,6 @@
 # Editing the placements on a lane
 
-The rationale behind `apps/k7-daw-frontend/packages/song-schema/src/yaml/trackFile.ts` — the app's most frequent edit,
+The rationale behind `apps/k7-daw-wasm/song-edit/src/track_file.rs` — the app's most frequent edit,
 since every clip drag writes a placement's `start`. Reading and validating the file is
 `moduleFile.ts`'s job, a lane being an ordinary module
 (`apps/k7-daw-frontend/packages/song/docs/trackModules.md`); what is here is the clip list, and WHICH list.

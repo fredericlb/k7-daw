@@ -6,7 +6,8 @@
 // It DRAWS the decks and owns nothing about them: the document is `useDeckSet`, held by Studio,
 // because this view is unmounted the moment somebody opens the graph and a set outlives that.
 
-import { PLAYLISTS_DIR, playlistPathOf } from "@studio/song-schema/playlist";
+import { PLAYLISTS_DIR } from "@studio/k7-wasm/consts";
+import { playlistPathOf } from "@studio/k7-wasm/schema";
 import type { RecordDrag } from "@studio/song-schema/records";
 import { Button } from "@studio/ui/button";
 import { Card } from "@studio/ui/card";

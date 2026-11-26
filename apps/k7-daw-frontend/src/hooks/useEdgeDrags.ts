@@ -2,7 +2,7 @@
 // and never leaves the lane, and a fade, a length from one end inwards. Each is held, drawn while
 // written and released by the reload — the rule every drag of the timeline follows (docs/timeline.md).
 
-import { beatsToDuration, beatsToPosition } from "@studio/song-schema/timecode";
+import { beatsToDuration, beatsToPosition } from "@studio/k7-wasm/timecode";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { m } from "../paraglide/messages.js";
 import { freeSnap, snapMode, snapPosition, snapTo } from "../snap";

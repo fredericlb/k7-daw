@@ -1,15 +1,15 @@
 // paths.ts — the single definition of the state directory's layout, which the C++ engine,
 // the file service, the supervisor and the desktop app all read or write by name. Where the
-// directory IS: @studio/song's studioHome.ts. USE THESE, never a hand-joined path: a wrong
+// directory IS: studioDir() below. USE THESE, never a hand-joined path: a wrong
 // path doesn't throw, it reads as an empty file, so a second spelling diverges silently.
 // See docs/paths.md.
 
-import { join } from "node:path";
-import { studioHome } from "@studio/song/studioHome";
+import { homedir } from "node:os";
+import { join, resolve } from "node:path";
 
-/** The state dir — `<library>/k7`, or `$STUDIO_HOME` when set. */
+/** The state dir — `~/.k7`, or `$STUDIO_HOME` when set; normalised, and the same on all three platforms. */
 export function studioDir(): string {
-  return studioHome();
+  return resolve(process.env.STUDIO_HOME || join(homedir(), ".k7"));
 }
 
 /** An email as `_`-separated; it names the SSH key dir and the SESSION, no longer a workspace root — docs/paths.md. */

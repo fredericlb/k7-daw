@@ -1,11 +1,9 @@
+import { parsePlaylist } from "@studio/k7-wasm/schema";
 import { K7Document, type K7Scope } from "@studio/k7x/document";
 import { describe, expect, it } from "vitest";
 import {
   appendPlaylistItem,
   movePlaylistItem,
-  parsePlaylist,
-  playlistFromData,
-  playlistPathOf,
   playlistStub,
   removePlaylistItem,
 } from "./playlist.ts";
@@ -16,61 +14,13 @@ const edit = (text: string, fn: (doc: K7Scope) => boolean): string | null => {
   return fn(doc.at([])) ? doc.toString() : null;
 };
 
-describe("parsePlaylist", () => {
-  it("reads a title and the items, in the file's own order", () => {
-    const p = parsePlaylist(
-      [
-        'title("Été 2026")',
-        "items([",
-        '  "AC-DC/Back in Black/Hells Bells",',
-        '  song("Nirvana/Nevermind/Lithium").variant("instrumental"),',
-        "])",
-      ].join("\n"),
-    );
-    expect(p?.title).toBe("Été 2026");
-    // The order IS the playlist — a set list played alphabetically is a different evening.
-    expect(p?.items).toEqual([
-      { song: "AC-DC/Back in Black/Hells Bells" },
-      { song: "Nirvana/Nevermind/Lithium", variant: "instrumental" },
-    ]);
-  });
-
-  it("drops a line that names no song rather than inventing a ref for it", () => {
-    // Coercing a malformed line would put a row on screen pointing at nothing (docs/playlistFile.md).
-    const p = parsePlaylist(
-      'items([["x"], { variant: "sans-voix" }, "Lithium"])\n',
-    );
-    expect(p?.items).toEqual([{ song: "Lithium" }]);
-  });
-
-  it("is null when the text does not read", () => {
-    // A file that does not parse is one to go and FIX; an empty `items` is one to go and fill.
-    expect(parsePlaylist("items([\n")).toBeNull();
-  });
-
-  it("is an empty playlist when there is no items key, not a failure", () => {
-    // A file someone has started. It parses, so it is a playlist; it just has nothing in it.
-    expect(parsePlaylist('title("Set")\n')).toEqual({
-      title: "Set",
-      items: [],
-    });
-    expect(parsePlaylist("")).toEqual({ items: [] });
-  });
-
+describe("playlistStub", () => {
   it("round-trips its own stub, so a file it creates opens on a playlist", () => {
     const stub = playlistStub("répèt du jeudi");
     expect(stub).toBe(
       '// répèt du jeudi\ntitle("répèt du jeudi")\nitems([])\n',
     );
     expect(parsePlaylist(stub)).toEqual({ title: "répèt du jeudi", items: [] });
-  });
-
-  it("reads data already parsed by the same rules", () => {
-    expect(playlistFromData({ items: ["a"] })).toEqual({
-      items: [{ song: "a" }],
-    });
-    expect(playlistFromData(["a"])).toBeNull();
-    expect(playlistFromData(null)).toBeNull();
   });
 });
 
@@ -162,33 +112,5 @@ describe("removing and moving a line", () => {
     ]);
     expect(out).toContain("// the second");
     expect(edit(SET, (d) => movePlaylistItem(d, 0, 5))).toBeNull();
-  });
-});
-
-describe("playlistPathOf", () => {
-  it("turns a name into the workspace path holding it", () => {
-    expect(playlistPathOf("ete-2026")).toBe("_playlists/ete-2026.k7x");
-  });
-
-  it("keeps subfolders — `_playlists/` nests", () => {
-    expect(playlistPathOf("live/repet")).toBe("_playlists/live/repet.k7x");
-  });
-
-  it("keeps an extension somebody wrote out", () => {
-    expect(playlistPathOf("set.k7x")).toBe("_playlists/set.k7x");
-  });
-
-  it("trims what a hand-edited value carries", () => {
-    expect(playlistPathOf("  ete-2026  ")).toBe("_playlists/ete-2026.k7x");
-    expect(playlistPathOf("/live/repet/")).toBe("_playlists/live/repet.k7x");
-  });
-
-  // Null and not a throw, since the value comes out of a file somebody typed (docs/playlistFile.md).
-  it("answers null for a name that would leave the folder", () => {
-    expect(playlistPathOf("../secrets")).toBeNull();
-    expect(playlistPathOf("live/../../out")).toBeNull();
-    expect(playlistPathOf("")).toBeNull();
-    expect(playlistPathOf("   ")).toBeNull();
-    expect(playlistPathOf("a//b")).toBeNull();
   });
 });

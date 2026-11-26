@@ -3,7 +3,6 @@
 import { K7Document } from "@studio/k7x/document";
 import { describe, expect, it } from "vitest";
 import { applySugared, expandNotes, sugarFor } from "./sugar";
-import { validateFile } from "./validate";
 
 const n = (t: number, d: number, k: number, v?: number) =>
   v === undefined ? { t, d, k } : { t, d, k, v };
@@ -82,18 +81,6 @@ describe("the runs short form", () => {
 });
 
 describe("a .k7x file written with a short form", () => {
-  it("passes its schema, and a note that does not read is placed on its line", () => {
-    expect(
-      validateFile("song/sequences/m.k7x", 'notes("c4 d4 e4")\nto("2:1")\n').ok,
-    ).toBe(true);
-    const v = validateFile(
-      "song/sequences/m.k7x",
-      '// a riff\nnotes("c4 x9")\n',
-    );
-    expect(v.ok).toBe(false);
-    expect(v.issues[0]).toMatchObject({ path: "notes", line: 2, col: 1 });
-  });
-
   const SEQ = '// the riff\nnotes("c4 d4 e4 f4")\nto("2:1")\n';
   const path = "song/sequences/riff.k7x";
   /** The expanded data of a file at `file`, as a writer reads it. */

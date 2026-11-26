@@ -1,62 +1,7 @@
 import { describe, expect, it } from "vitest";
-import {
-  completionOrder,
-  ENGINE_NS,
-  engineRef,
-  isEngineRef,
-  type ModuleStatus,
-  moduleStatusOf,
-} from "./moduleTypes";
+import { completionOrder, type ModuleStatus } from "./moduleTypes";
 
-// Which refs belong to the ENGINE, since one wrongly called so disappears from the palette (docs/moduleTypes.md).
-
-describe("isEngineRef", () => {
-  it("claims the namespace and everything under it", () => {
-    expect(isEngineRef(ENGINE_NS)).toBe(true);
-    expect(isEngineRef(engineRef("neural-amp-modeler"))).toBe(true);
-    expect(isEngineRef("@engine/audio/delay/adt")).toBe(true);
-  });
-
-  it("does NOT claim a namespace that merely starts with the same letters", () => {
-    // Why this is a function and not a `startsWith("@engine")`: `@engineering` is somebody's folder.
-    expect(isEngineRef("@engineering/audio/eq")).toBe(false);
-    expect(isEngineRef("@engines/x")).toBe(false);
-  });
-
-  it("leaves the other namespaces alone — those are folders, and they complete", () => {
-    expect(isEngineRef("@k7-core/audio/amp/nam")).toBe(false);
-    expect(isEngineRef("@workspace/io/desk")).toBe(false);
-    expect(isEngineRef("@project/instruments/bass")).toBe(false);
-  });
-
-  it("says nothing about a bare local name, which carries no namespace at all", () => {
-    expect(isEngineRef("instruments/bass")).toBe(false);
-    expect(isEngineRef("")).toBe(false);
-  });
-});
-
-// `status:` changes no sound, only how the completions treat a module — the ordering is what shows.
-
-describe("moduleStatusOf", () => {
-  it("defaults to listed, for everything that does not say", () => {
-    expect(moduleStatusOf({})).toBe("listed");
-    expect(moduleStatusOf({ status: "listed" })).toBe("listed");
-    expect(moduleStatusOf(undefined)).toBe("listed");
-    expect(moduleStatusOf(null)).toBe("listed");
-  });
-
-  it("reads the two that do", () => {
-    expect(moduleStatusOf({ status: "hidden" })).toBe("hidden");
-    expect(moduleStatusOf({ status: "favorite" })).toBe("favorite");
-  });
-
-  // Losing a module from the palette with nothing to say why is the one failure this must not have.
-  it("is forgiving: a word it does not know is listed", () => {
-    expect(moduleStatusOf({ status: "FAVORITE" })).toBe("listed");
-    expect(moduleStatusOf({ status: 3 })).toBe("listed");
-    expect(moduleStatusOf("not a module")).toBe("listed");
-  });
-});
+// The module rules (`isEngineRef`, `moduleStatusOf`…) are the Rust crate's, tested in k7-wasm's schema_tests.rs.
 
 describe("completionOrder", () => {
   const status = (m: string): ModuleStatus =>

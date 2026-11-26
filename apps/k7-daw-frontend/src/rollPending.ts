@@ -2,7 +2,7 @@
 // the service (it recompiles the project), so the gesture paints at once and the ghost is held
 // until the DOCUMENT agrees. A ghost's key is the ADDRESS every note verb takes, `${key}@${start}`. See docs/clipEditors.md.
 
-import { roundBeat } from "@studio/song-schema/timecode";
+import { roundBeat } from "@studio/k7-wasm/timecode";
 
 export interface RollNote {
   key: number;
