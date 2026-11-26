@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// dev-desktop.mjs — the native half of the dev session: builds the C++ engine, the native supervisor, the front's bundle
+// dev-desktop.mjs — the native half of the dev session: builds the C++ engine, the Rust supervisor, the front's bundle
 // (the page and the library) and the desktop app, runs the desktop app on the repo's own builds, then watches the engine, the supervisor and the desktop app's Rust
 // and rebuilds+restarts on save. One process owns every watch because every rebuild needs the SAME tree stopped
 // first — a running image cannot be relinked on Windows. See docs/dev.md.
@@ -18,11 +18,20 @@ import {
 
 const repo = join(dirname(fileURLToPath(import.meta.url)), "..");
 const engineDir = join(repo, "apps", "k7-daw-engine", "k7-runtime");
-const supervisorDir = join(repo, "apps", "k7-daw-engine", "k7-supervisor");
 const desktopDir = join(repo, "apps", "k7-daw-desktop");
 const tauriDir = join(desktopDir, "src-tauri");
 // The Rust front, which the desktop app links: its crates are in the desktop app's binary (apps/k7-daw-backend/docs/front.md).
 const frontDir = join(repo, "apps", "k7-daw-backend");
+const packagesDir = join(frontDir, "packages");
+// The supervisor's crate and the crates of ours it links, which the desktop app does not all link.
+const SUPERVISOR_CRATES = [
+  "k7-supervisor",
+  "k7-local",
+  "k7-engine",
+  "waveform",
+];
+const isRustSource = (b) =>
+  b.endsWith(".rs") || b === "Cargo.toml" || b === "build.rs";
 // The bundle the dev desktop app reads (the library it seeds), rebuilt at every start of the task; gitignored.
 const bundleDir = join(desktopDir, ".dev", "backend");
 
@@ -62,11 +71,19 @@ const TARGETS = {
     ],
     build: buildEngine,
   },
-  // The supervisor that runs the engine: a separate CMake project, so its build never touches the engine's.
+  // The supervisor that runs the engine: a release cargo build of its crate, beside the front's workspace build.
   "k7-supervisor": {
     dirs: [
-      { path: join(supervisorDir, "src"), recursive: true, match: isCxx },
-      { path: supervisorDir, recursive: false, match: cmakeFiles },
+      ...SUPERVISOR_CRATES.map((c) => ({
+        path: join(packagesDir, c),
+        recursive: true,
+        match: isRustSource,
+      })),
+      {
+        path: frontDir,
+        recursive: false,
+        match: (b) => b === "Cargo.toml" || b === "Cargo.lock",
+      },
     ],
     build: () => buildSupervisor(repo),
   },
@@ -85,8 +102,9 @@ const TARGETS = {
       },
       // The front the desktop app links (Cargo.toml, `path = ../../k7-daw-backend/packages/…`): a save there rebuilds it.
       {
-        path: join(frontDir, "packages"),
+        path: packagesDir,
         recursive: true,
+        skip: ["k7-supervisor"],
         match: (b) => b.endsWith(".rs") || b === "Cargo.toml",
       },
       {
@@ -190,7 +208,7 @@ const desktopBinary = () =>
 /** The newest mtime under a target's watched roots — a binary older than its code is stale. */
 function newestSource(target) {
   let newest = 0;
-  const visit = (dir, recursive, match) => {
+  const visit = (dir, recursive, match, skip = []) => {
     let entries;
     try {
       entries = readdirSync(dir, { withFileTypes: true });
@@ -199,6 +217,7 @@ function newestSource(target) {
     }
     for (const entry of entries) {
       const p = join(dir, entry.name);
+      if (skip.includes(entry.name)) continue;
       if (entry.isDirectory()) {
         if (recursive) visit(p, true, match);
       } else if (match(entry.name)) {
@@ -206,8 +225,8 @@ function newestSource(target) {
       }
     }
   };
-  for (const { path, recursive, match } of TARGETS[target].dirs)
-    visit(path, recursive, match);
+  for (const { path, recursive, match, skip } of TARGETS[target].dirs)
+    visit(path, recursive, match, skip);
   return newest;
 }
 
@@ -286,7 +305,7 @@ async function cycle() {
     for (const name of todo) {
       current = name;
       dirty.delete(name); // before the build, not after: a save made DURING it must still count
-      TARGETS[name].build();
+      await TARGETS[name].build();
     }
     current = null;
     launchDesktop();
@@ -346,10 +365,11 @@ try {
 await cycle();
 
 for (const [target, { dirs }] of Object.entries(TARGETS))
-  for (const { path, recursive, match } of dirs) {
+  for (const { path, recursive, match, skip = [] } of dirs) {
     if (!existsSync(path)) continue;
     try {
       watch(path, { recursive }, (_event, filename) => {
+        if (skip.includes(String(filename).split(/[\\/]/)[0])) return;
         if (filename && match(basename(filename)))
           touch(target, basename(filename));
       }).unref(); // the signal handlers hold the loop open, not the watchers

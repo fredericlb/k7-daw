@@ -17,3 +17,8 @@ typedef void (*k7_lan_advertise)(const char *record_json);
 void k7_lan_install(k7_lan_advertise advertise);
 int32_t k7_lan_peers(const char *peers_json);
 void k7_lan_set_open(int32_t open);
+
+// The supervisor, run on a thread of the app over two pipes: the NDJSON a desktop app exchanges with it over stdio (apps/k7-daw-backend/packages/k7-embed/src/supervisor.rs).
+int32_t k7_supervisor_run(int32_t commands_fd, int32_t frames_fd);
+int32_t k7_supervisor_cuts_in_flight(void);
+void k7_supervisor_log(const char *tag, const char *text);

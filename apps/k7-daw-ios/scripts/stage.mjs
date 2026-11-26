@@ -1,8 +1,8 @@
-// stage.mjs — everything the Xcode project takes from outside it, laid out under build/staged: the engine and the
-// supervisor as xcframeworks, the Rust front as a static library, the CA bundle as pinned in pins.json (checked by its
+// stage.mjs — everything the Xcode project takes from outside it, laid out under build/staged: the engine as an
+// xcframework, the Rust front and supervisor as one static library with ONNX Runtime's static xcframework beside it, the CA bundle as pinned in pins.json (checked by its
 // SHA-256), the shell page as `cap copy` would lay it out, and what the front reads. Run BEFORE
 // Xcode: it plans an xcframework's slices when the build starts, so one staged mid-build is not seen.
-// Usage: node apps/k7-daw-ios/scripts/stage.mjs [--sim] [--only=engine,supervisor,embed,cacert,shell,backend]
+// Usage: node apps/k7-daw-ios/scripts/stage.mjs [--sim] [--only=engine,embed,cacert,shell,backend]
 // See apps/k7-daw-engine/k7-runtime/docs/ios.md.
 
 import { execFileSync } from "node:child_process";
@@ -17,6 +17,7 @@ import {
 } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { ortIosXcframework } from "../../k7-daw-engine/scripts/onnxRuntime.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const app = join(here, "..");
@@ -93,31 +94,15 @@ if (wanted("engine")) {
   );
 }
 
-if (wanted("supervisor")) {
-  run(
-    "node",
-    [
-      "-e",
-      "import('./apps/k7-daw-engine/scripts/supervisorBuild.mjs').then((m) => m.buildSupervisor(process.cwd()))",
-    ],
-    repo,
-    {
-      STUDIO_SUPERVISOR_PRESET: preset,
-    },
-  );
-  xcframework(
-    join(
-      repo,
-      "apps/k7-daw-engine/k7-supervisor/build",
-      preset,
-      "k7supervisor.framework",
-    ),
-    join(frameworks, "k7supervisor.xcframework"),
-  );
-}
-
-// The Rust front, linked into the app: k7-embed as a static library, since a cdylib for iOS needs Apple's own linker.
+// The Rust front and the supervisor, linked into the app: k7-embed as a static library, since a cdylib for iOS needs Apple's own linker.
+// ONNX Runtime's static xcframework is linked by the project beside it, and named to ort-sys for the build.
 if (wanted("embed")) {
+  const ort = join(frameworks, "onnxruntime.xcframework");
+  rmSync(ort, { recursive: true, force: true });
+  cpSync(await ortIosXcframework(), ort, {
+    recursive: true,
+    verbatimSymlinks: true,
+  });
   const target = sim ? "aarch64-apple-ios-sim" : "aarch64-apple-ios";
   const targetDir = join(app, "build", "cargo");
   run(
@@ -135,7 +120,7 @@ if (wanted("embed")) {
       targetDir,
     ],
     join(repo, "apps/k7-daw-backend"),
-    { IPHONEOS_DEPLOYMENT_TARGET: "17.0" },
+    { IPHONEOS_DEPLOYMENT_TARGET: "17.0", ORT_IOS_XCFWK_PATH: ort },
   );
   mkdirSync(join(staged, "lib"), { recursive: true });
   cpSync(

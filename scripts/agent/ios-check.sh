@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# ios-check.sh — what a branch passes for iOS on the Mac before it merges: k7-embed built as a static library for both iOS targets, then the app built for the simulator against the staged frameworks.
-# The C++ engine and supervisor are not built: the staged frameworks of the last `stage.mjs --sim` are linked as they are (apps/k7-daw-engine/k7-runtime/docs/ios.md).
+# ios-check.sh — what a branch passes for iOS on the Mac before it merges: k7-embed (the front and the supervisor) built as a static library for both iOS targets, then the app built for the simulator against the staged frameworks.
+# The C++ engine is not built: the staged frameworks of the last `stage.mjs --sim` are linked as they are, ONNX Runtime's included (apps/k7-daw-engine/k7-runtime/docs/ios.md).
 # What a reader gets wrong: Xcode links the library built HERE (a folder of its own, never the staged release one), so a missing symbol shows, and the suite's app in ~/.cache/k7-ios-dd is left alone.
 set -euo pipefail
 # shellcheck source=throttle.sh
@@ -17,7 +17,7 @@ fi
 staged="$root/apps/k7-daw-ios/build/staged"
 # A slot without its own staged frameworks links another slot's (K7_IOS_STAGED): the project reads them at this path.
 if [ ! -e "$staged" ] && [ -n "${K7_IOS_STAGED:-}" ]; then mkdir -p "$(dirname "$staged")" && ln -s "$K7_IOS_STAGED" "$staged"; fi
-[ -d "$staged/frameworks/k7runtime.xcframework" ] && [ -d "$staged/frameworks/k7supervisor.xcframework" ] || { echo "ios-check: no staged frameworks: run node apps/k7-daw-ios/scripts/stage.mjs --sim first" >&2; exit 2; }
+[ -d "$staged/frameworks/k7runtime.xcframework" ] && [ -d "$staged/frameworks/onnxruntime.xcframework" ] || { echo "ios-check: no staged frameworks: run node apps/k7-daw-ios/scripts/stage.mjs --sim first" >&2; exit 2; }
 eval "$(node apps/k7-daw-engine/scripts/sccache.mjs agent --export)"
 # One target folder for every slot: cargo locks it, so two checks wait rather than build twice cold.
 target_dir="$HOME/.cache/k7-ios-check"
@@ -32,11 +32,16 @@ fi
 for target in aarch64-apple-ios aarch64-apple-ios-sim; do
   echo "ios-check: k7-embed for $target"
   # The same crate type and deployment target as stage.mjs, in the dev profile: no LTO, so the check costs minutes.
-  (cd apps/k7-daw-backend && IPHONEOS_DEPLOYMENT_TARGET=17.0 cargo rustc -p k7-embed --target "$target" --crate-type staticlib --target-dir "$target_dir")
+  (cd apps/k7-daw-backend && IPHONEOS_DEPLOYMENT_TARGET=17.0 ORT_IOS_XCFWK_PATH="$staged/frameworks/onnxruntime.xcframework" cargo rustc -p k7-embed --target "$target" --crate-type staticlib --target-dir "$target_dir")
 done
 cp "$target_dir/aarch64-apple-ios-sim/debug/libk7_embed.a" "$lib_dir/libk7_embed.a"
 if nm "$lib_dir/libk7_embed.a" 2>/dev/null | grep -q JS_NewRuntime; then
   echo "ios-check: libk7_embed.a holds QuickJS (JS_NewRuntime)" >&2
+  exit 1
+fi
+# The supervisor's C calls are the app's: a library without them links nothing it can run.
+if ! nm -g "$lib_dir/libk7_embed.a" 2>/dev/null | grep -q ' T _k7_supervisor_run$'; then
+  echo "ios-check: libk7_embed.a exports no k7_supervisor_run" >&2
   exit 1
 fi
 echo "ios-check: xcodebuild for the simulator"
