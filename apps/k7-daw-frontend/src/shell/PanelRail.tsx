@@ -41,7 +41,7 @@ export function PanelRail({
     <Capsule
       aria-label={m["shell.panels"]()}
       aria-orientation="vertical"
-      className="absolute right-4 bottom-[calc(var(--k7-float-bottom)+var(--k7-float-h)+8px)] z-(--k7-z-bar) h-auto max-h-[calc(100%-var(--k7-float-bottom)-var(--k7-float-h)-24px)] flex-col gap-1.5 overflow-y-auto p-1 desk:h-auto"
+      className="absolute right-4 bottom-[calc(var(--k7-float-bottom)+var(--k7-float-h)+8px)] z-(--k7-z-bar) h-auto max-h-[calc(100%-var(--k7-float-bottom)-var(--k7-float-h)-24px)] flex-col gap-1.5 overflow-x-hidden overflow-y-auto p-1 [scrollbar-width:none] desk:h-auto [&::-webkit-scrollbar]:hidden"
     >
       {/* Read from the chevron up: Save nearest it, Close at the top. */}
       <a
