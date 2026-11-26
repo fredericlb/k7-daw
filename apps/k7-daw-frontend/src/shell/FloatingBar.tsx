@@ -1,4 +1,4 @@
-// FloatingBar.tsx — the bar floating over the panes: the command bar button, the tool, the transport capsule
+// FloatingBar.tsx — the bar floating over the panes: the tool, the transport capsule, a phone's command bar button
 // (buttons, clock, song overview, tempo, metronome, master volume) and, at its right end, the current pane's views. On a phone the clock,
 // overview, tempo and volume move to a strip above the capsule, and the tool and metronome to the overflow menu. It holds no state of its own: App hands it all.
 import { CapsuleButton, CapsuleDivider } from "@studio/ui/capsule";
@@ -342,7 +342,6 @@ export function FloatingBar({
       ref={rootRef}
       className={`pointer-events-none absolute inset-x-4 z-(--k7-z-bar) flex items-end gap-3 ${phone ? "bottom-7" : "bottom-4"}`}
     >
-      {!phone && commandButton}
       {toolButton}
       <div
         role="group"

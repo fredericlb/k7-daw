@@ -43,7 +43,7 @@ export type DockPanel = "events" | "mixer" | "chain";
 /** The panels drawn in the right column. */
 export type RightPanel = Exclude<PanelId, DockPanel>;
 
-/** The panels with a button in the header's toolbar, in its order. */
+/** The panels with a button, in order: the Mixer in the header, the rest on the right-edge rail (PanelRail.tsx). */
 export const TOOLBAR_PANELS = [
   "resources",
   "playlists",

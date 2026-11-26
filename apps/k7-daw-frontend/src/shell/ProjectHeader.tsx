@@ -1,13 +1,15 @@
-// ProjectHeader.tsx — the project's header: Back, name over status, spinner, warning chip, git, the pane
-// switcher (centred), the panel toolbar and the app buttons; a phone folds the right half into one menu.
+// ProjectHeader.tsx — the project's header: spinner, the command bar button, the dock's Mixer and the rail's chevron.
+// A phone keeps Back, the name and the warning chip (it has no rail); the panes, panels and Close are PanelRail.tsx's.
 // The engine's state is only a data attribute here (e2e reads it): the person is told by toasts, never by a light.
 import { Badge } from "@studio/ui/badge";
 import { Button } from "@studio/ui/button";
 import { Capsule, CapsuleButton } from "@studio/ui/capsule";
 import {
+  ChevronDown,
   ChevronLeft,
+  ChevronUp,
   type LucideIcon,
-  Settings,
+  SquareTerminal,
   TriangleAlert,
 } from "@studio/ui/icons";
 import { Spinner } from "@studio/ui/spinner";
@@ -21,7 +23,9 @@ import {
 } from "../processes";
 import type { createStatusLine } from "../statusLine";
 import type { ShellLayout } from "../useIsMobile";
+import { summonChord } from "./modKey";
 import { PANEL_DEFS, type PanelId } from "./panels";
+import { WarnBadge } from "./WarnBadge";
 
 export interface HeaderPane {
   id: string;
@@ -38,6 +42,8 @@ export interface HeaderPanel {
   pressed: boolean;
   disabled?: boolean;
   title?: string;
+  /** A warning count on its corner (Logs: the project's problems). */
+  badge?: number;
   onPress: () => void;
 }
 
@@ -52,12 +58,9 @@ export function ProjectHeader({
   onProcesses,
   extra,
   git,
-  panes,
-  pane,
-  onPane,
   panels,
-  settingsPressed,
-  onSettings,
+  rail,
+  onCommandBar,
   overflow,
   lockBanner,
 }: {
@@ -72,12 +75,12 @@ export function ProjectHeader({
   /** Small controls after the title, such as the bench's Save. */
   extra?: ReactNode;
   git: ReactNode;
-  panes: HeaderPane[];
-  pane: string;
-  onPane: (id: string) => void;
+  /** The DOCK's buttons (the Mixer); the right panels' are the rail's. */
   panels: HeaderPanel[];
-  settingsPressed: boolean;
-  onSettings: () => void;
+  /** The chevron that unfolds the right-edge rail (PanelRail.tsx), last in the header; none on a phone. */
+  rail?: { open: boolean; onToggle: () => void; unsaved: number };
+  /** Opens the command bar; a phone's is in its floating bar. */
+  onCommandBar?: () => void;
   /** The phone's menu, standing in for the capsules on the right. */
   overflow: ReactNode;
   /** The sentence under the header while a merge locks editing. */
@@ -99,22 +102,30 @@ export function ProjectHeader({
         }
       >
         <div className="flex min-w-0 flex-1 basis-0 items-center gap-2">
-          <Button asChild variant="glass" size="round" className="shrink-0">
-            <a
-              href={backHref}
-              aria-label={m["shell.back"]()}
-              title={m["shell.back"]()}
-            >
-              <ChevronLeft className="size-5" strokeWidth={2.2} />
-            </a>
-          </Button>
-          {/* The name takes the free width, and the status line under it (a phone draws it under the header). */}
+          {phone && (
+            <Button asChild variant="glass" size="round" className="shrink-0">
+              <a
+                href={backHref}
+                aria-label={m["shell.back"]()}
+                title={m["shell.back"]()}
+              >
+                <ChevronLeft className="size-5" strokeWidth={2.2} />
+              </a>
+            </Button>
+          )}
+          {/* A phone keeps the name: it has no rail and no Close. */}
           <div className="min-w-0 shrink">
-            <h1 className="type-headline truncate text-foreground" title={name}>
-              {name || "…"}
-            </h1>
+            {phone && (
+              <h1
+                className="type-headline truncate text-foreground"
+                title={name}
+              >
+                {name || "…"}
+              </h1>
+            )}
+            {/* A desk draws no status line: it is read out, not shown (docs/shell.md). */}
             {!phone && (
-              <p className="type-status truncate text-fg-2">
+              <p className="sr-only">
                 <StatusText store={statusStore} />
               </p>
             )}
@@ -130,7 +141,7 @@ export function ProjectHeader({
               <Spinner />
             </button>
           )}
-          {problems > 0 && (
+          {phone && problems > 0 && (
             <Badge asChild variant="warn">
               <button
                 type="button"
@@ -155,27 +166,23 @@ export function ProjectHeader({
           overflow
         ) : (
           <>
-            <Capsule aria-label={m["shell.pane"]()} className="shrink-0">
-              {panes.map((p) => (
-                <CapsuleButton
-                  key={p.id}
-                  pressed={pane === p.id}
-                  disabled={!!p.blocked}
-                  disabledReason={p.blocked}
-                  aria-label={p.label}
-                  title={
-                    p.blocked ??
-                    (p.shortcut ? `${p.label} (${p.shortcut})` : p.label)
-                  }
-                  onClick={() => onPane(p.id)}
-                >
-                  <p.icon />
-                  {pane === p.id && <span>{p.label}</span>}
-                </CapsuleButton>
-              ))}
-            </Capsule>
             <div className="flex min-w-max flex-1 basis-0 items-center justify-end gap-2">
-              <Capsule role="group" aria-label={m["shell.panels"]()}>
+              {onCommandBar && (
+                <Capsule>
+                  <CapsuleButton
+                    aria-label={m["shell.commandBar"]()}
+                    title={m["shell.commandBar.tip"]({
+                      name: m["commandBar.list"](),
+                      keys: summonChord(),
+                    })}
+                    onClick={onCommandBar}
+                  >
+                    <SquareTerminal />
+                  </CapsuleButton>
+                </Capsule>
+              )}
+              {/* The dock's own buttons stay here; the right panels' are the rail's (PanelRail.tsx). */}
+              <Capsule role="group" aria-label={m["shell.dock"]()}>
                 {panels.map((p) => {
                   const def = PANEL_DEFS[p.id];
                   return (
@@ -187,24 +194,43 @@ export function ProjectHeader({
                       aria-label={def.title()}
                       title={p.title ?? def.title()}
                       onClick={p.onPress}
-                      className={p.pressed ? "gap-1.5" : undefined}
                     >
                       <def.icon />
-                      {p.pressed && <span>{def.title()}</span>}
                     </CapsuleButton>
                   );
                 })}
               </Capsule>
-              <Capsule role="group" aria-label={m["shell.app"]()}>
-                <CapsuleButton
-                  pressed={settingsPressed}
-                  aria-label={m["settings.menu"]()}
-                  title={m["settings.menu"]()}
-                  onClick={onSettings}
-                >
-                  <Settings />
-                </CapsuleButton>
-              </Capsule>
+              {rail && (
+                <Capsule>
+                  <CapsuleButton
+                    className="relative"
+                    aria-expanded={rail.open}
+                    aria-label={
+                      rail.open
+                        ? m["shell.panelsHide"]()
+                        : m["shell.panelsShow"]()
+                    }
+                    title={
+                      rail.open
+                        ? m["shell.panelsHide"]()
+                        : m["shell.panelsShow"]()
+                    }
+                    onClick={rail.onToggle}
+                  >
+                    {rail.open ? <ChevronUp /> : <ChevronDown />}
+                    {!rail.open && <WarnBadge n={problems} />}
+                    {!rail.open && rail.unsaved > 0 && (
+                      <Badge
+                        variant="count-sm"
+                        aria-hidden
+                        className="pointer-events-none absolute -top-1.5 -left-1.5"
+                      >
+                        {rail.unsaved}
+                      </Badge>
+                    )}
+                  </CapsuleButton>
+                </Capsule>
+              )}
             </div>
           </>
         )}

@@ -1,5 +1,5 @@
 // nav.ts — a header control by its name, wherever the width put it: in the header, or in the phone's overflow menu.
-// The panes are `group "Pane"` buttons and the panels `group "Panels"` buttons; a phone holds both as buttons of `dialog "Views and panels"`.
+// The panes are `group "Pane"` buttons inside the rail, `group "Panels"`, folded under the header's chevron; a phone holds both as buttons of `dialog "Views and panels"`.
 import type { Locator, Page } from "@playwright/test";
 
 // The shell root says its layout in `data-layout` (phone, pad, desk); a page without one (home, settings) falls back to this query.
@@ -54,9 +54,10 @@ export async function navControl(page: Page, name: string): Promise<Locator> {
     .first();
 }
 
-/** A pane of the switcher: `group "Pane"` → `button`, in the header, or a `radio` of the phone's dialog. */
+/** A pane of the switcher: `group "Pane"` → `button`, on the right-edge rail, or a `radio` of the phone's dialog. */
 export async function pane(page: Page, name: string): Promise<Locator> {
   await openNav(page);
+  await unfoldRail(page);
   const exact = { name, exact: true };
   return page
     .getByRole("group", { name: "Pane", exact: true })
@@ -69,13 +70,28 @@ export async function pane(page: Page, name: string): Promise<Locator> {
     .first();
 }
 
-/** A right panel's button: `group "Panels"` → `button`, or a tile of the phone's dialog. */
+/** Unfolds the right-edge rail, folded by default under its chevron; a phone has none. */
+async function unfoldRail(page: Page): Promise<void> {
+  const show = page.getByRole("button", {
+    name: "Show the toolbar",
+    exact: true,
+  });
+  if (await show.isVisible()) await show.click();
+}
+
+/** A panel's button: the right-edge rail (`group "Panels"`), the header's dock group (the Mixer), or the phone's dialog. */
 export async function panel(page: Page, name: string): Promise<Locator> {
   await openNav(page);
+  await unfoldRail(page);
   const exact = { name, exact: true };
   return page
     .getByRole("group", { name: "Panels", exact: true })
     .getByRole("button", exact)
+    .or(
+      page
+        .getByRole("group", { name: "Editor dock", exact: true })
+        .getByRole("button", exact),
+    )
     .or(
       page
         .getByRole("dialog", { name: "Views and panels" })
