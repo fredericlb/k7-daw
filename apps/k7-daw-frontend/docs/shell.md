@@ -263,7 +263,7 @@ bottom margin for the bar instead.
 
 | piece | file | what it is |
 |---|---|---|
-| header | `shell/ProjectHeader.tsx` | Back, the name over its status, the spinner, the warning chip, the git capsule, the dock's Mixer and, last, the chevron that unfolds the rail; the pane switcher and the right panels' buttons are the rail's (`shell/PanelRail.tsx`); laid out in flow: a `flex-1` left cluster and a right cluster of the same basis, so nothing overlaps at any width |
+| header | `shell/ProjectHeader.tsx` | the status line, the spinner, the git capsule, the dock's Mixer and, last, the chevron that unfolds the rail; the pane switcher, the right panels' buttons and Close are the rail's (`shell/PanelRail.tsx`); a phone, with no rail, keeps Back, the name and the warning chip; laid out in flow: a `flex-1` left cluster and a right cluster of the same basis, so nothing overlaps at any width |
 | git capsule | `shell/HeaderGit.tsx` | Save with its count, a menu (Pull, Saves); while a merge waits, one "Resolve N conflicts" button and a banner |
 | bar | `shell/FloatingBar.tsx`, `shell/ShellTransport.tsx` | the command bar button, the tool, the transport capsule, the pane's capsule (Lane views or Graph views) |
 | panels | `shell/panels.tsx` | the registry: an id, a glyph and a title each, in the kit's `SidePanel` (Pad, Desk) or `Sheet` (Phone) |
@@ -303,7 +303,7 @@ carries `data-testid="engine-status"` with its `data-state`, which the suites re
 be a second voice for what the toast already says.
 
 **The spinner is the background processes.** It shows only while something runs and opens Tasks &
-history. The warning chip counts the project's problems (compile errors, the in-place warnings and the problem lines of Logs) and opens Logs on "problems"
+history. The problem count (on the rail's chevron while it is folded, on Logs, and the warning chip on a phone) counts the project's problems (compile errors, the in-place warnings and the problem lines of Logs) and opens Logs on "problems"
 (`logsFilter` in the shell store). A verb's refusal is a command's answer, so it is listed under Commands, not Problems.
 
 **The pane switcher is Arrangement, Graph, Source**, at the top of the right-edge rail (Turntables beside Arrangement on a project that

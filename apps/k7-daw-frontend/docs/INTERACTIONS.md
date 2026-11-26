@@ -146,18 +146,18 @@ The git bar (workspace tree, Home row, project header), Save in one press with i
 | 03.02 | Undo / redo the project journal | — | ⌘/Ctrl+Z undo; ⌘/Ctrl+Y or ⌘/Ctrl+⇧Z redo (the text editor spends its own history first) | — | T D |
 | 03.03 | Save (shows the "saved automatically" notice) | — | ⌘/Ctrl+S outside the text editor | — | T D |
 | 03.04 | Focus a pane (keys follow it) | click anywhere in a pane | `F6` / `⇧F6` | tap in a pane | T M D |
-| 03.05 | Leave a project with unsaved work | click Back, then answer (the question names the act, and a recording still running) | Enter / Esc | tap | T M D |
+| 03.05 | Leave a project with unsaved work | click Close on the right-edge toolbar (Back on a phone), then answer (the question names the act, and a recording still running) | Enter / Esc | tap | T M D |
 | 03.06† | Reload after a failed engine sync | click Reload (Esc and outside clicks are ignored) | — | tap | T M D |
 | 03.07† | Dismiss the missing samples/plugins dialog | click Dismiss or the backdrop | Esc | tap Dismiss | T M D |
 | 03.08† | Confirm undoing a process step | click Confirm / Cancel | Esc cancels | tap | T M D |
 
 ### Project header and transport
 
-The header (Back, the name over its status line, spinner, warning chip, git capsule, the Mixer, then the chevron that unfolds the right-edge toolbar; on a phone the status line sits under it and the rest folds into the Views and panels dialog), the vertical toolbar on the right edge (folded by default; the pane switcher, the right panels' buttons, Settings last), the floating bar (command bar, tool, transport with Record's chevron, position, overview, tempo, metronome, master volume, the view's capsule) and the editor dock.
+The header (the status line, spinner, git capsule, the Mixer, then the chevron that unfolds the right-edge toolbar, carrying the problem count while folded; a phone keeps Back, the name and the warning chip, its status line sits under it and the rest folds into the Views and panels dialog), the vertical toolbar on the right edge (folded by default; the pane switcher, the right panels' buttons with the problem count on Logs, Settings, then Close), the floating bar (command bar, tool, transport with Record's chevron, position, overview, tempo, metronome, master volume, the view's capsule) and the editor dock.
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
-| 03.10 | Go back to the projects page | click Back (middle-click: new tab); leaving stops and unloads the project in the engine | Enter on Back | tap Back | T M D |
+| 03.10 | Go back to the projects page | click Close, next to Settings on the right-edge toolbar (middle-click: new tab); leaving stops and unloads the project in the engine | Enter on Close | tap Back (a phone keeps Back and the name in its header) | T M D |
 | 03.11 | Play / pause | click Play/Pause | Space | tap | T M D |
 | 03.12 | Stop and rewind | click Stop | Enter | tap | T M D |
 | 03.13 | Replay from the last start | — | ⇧Space | — | T D |

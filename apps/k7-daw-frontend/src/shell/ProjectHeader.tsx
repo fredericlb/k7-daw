@@ -1,5 +1,5 @@
-// ProjectHeader.tsx — the project's header: Back, name over status, spinner, warning chip, git, the dock's buttons and
-// the chevron of the rail; a phone folds the right half into one menu. The panes and right panels are PanelRail.tsx's.
+// ProjectHeader.tsx — the project's header: the status line, spinner, git, the dock's buttons and the rail's chevron.
+// A phone keeps Back, the name and the warning chip (it has no rail); the panes, panels and Close are PanelRail.tsx's.
 // The engine's state is only a data attribute here (e2e reads it): the person is told by toasts, never by a light.
 import { Badge } from "@studio/ui/badge";
 import { Button } from "@studio/ui/button";
@@ -23,6 +23,7 @@ import {
 import type { createStatusLine } from "../statusLine";
 import type { ShellLayout } from "../useIsMobile";
 import { PANEL_DEFS, type PanelId } from "./panels";
+import { WarnBadge } from "./WarnBadge";
 
 export interface HeaderPane {
   id: string;
@@ -39,6 +40,8 @@ export interface HeaderPanel {
   pressed: boolean;
   disabled?: boolean;
   title?: string;
+  /** A warning count on its corner (Logs: the project's problems). */
+  badge?: number;
   onPress: () => void;
 }
 
@@ -94,20 +97,27 @@ export function ProjectHeader({
         }
       >
         <div className="flex min-w-0 flex-1 basis-0 items-center gap-2">
-          <Button asChild variant="glass" size="round" className="shrink-0">
-            <a
-              href={backHref}
-              aria-label={m["shell.back"]()}
-              title={m["shell.back"]()}
-            >
-              <ChevronLeft className="size-5" strokeWidth={2.2} />
-            </a>
-          </Button>
-          {/* The name takes the free width, and the status line under it (a phone draws it under the header). */}
+          {phone && (
+            <Button asChild variant="glass" size="round" className="shrink-0">
+              <a
+                href={backHref}
+                aria-label={m["shell.back"]()}
+                title={m["shell.back"]()}
+              >
+                <ChevronLeft className="size-5" strokeWidth={2.2} />
+              </a>
+            </Button>
+          )}
+          {/* A phone keeps the name (it has no rail and no Close); a desk shows only the status line. */}
           <div className="min-w-0 shrink">
-            <h1 className="type-headline truncate text-foreground" title={name}>
-              {name || "…"}
-            </h1>
+            {phone && (
+              <h1
+                className="type-headline truncate text-foreground"
+                title={name}
+              >
+                {name || "…"}
+              </h1>
+            )}
             {!phone && (
               <p className="type-status truncate text-fg-2">
                 <StatusText store={statusStore} />
@@ -125,7 +135,7 @@ export function ProjectHeader({
               <Spinner />
             </button>
           )}
-          {problems > 0 && (
+          {phone && problems > 0 && (
             <Badge asChild variant="warn">
               <button
                 type="button"
@@ -175,6 +185,7 @@ export function ProjectHeader({
               {rail && (
                 <Capsule>
                   <CapsuleButton
+                    className="relative"
                     aria-expanded={rail.open}
                     aria-label={
                       rail.open
@@ -189,6 +200,7 @@ export function ProjectHeader({
                     onClick={rail.onToggle}
                   >
                     {rail.open ? <ChevronUp /> : <ChevronDown />}
+                    {!rail.open && <WarnBadge n={problems} />}
                   </CapsuleButton>
                 </Capsule>
               )}

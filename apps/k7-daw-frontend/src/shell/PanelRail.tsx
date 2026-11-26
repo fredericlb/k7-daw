@@ -1,15 +1,19 @@
-// PanelRail.tsx — the pane switcher, then the buttons that open a right panel, Settings last: one vertical toolbar on the right edge.
+// PanelRail.tsx — the pane switcher, the buttons that open a right panel, then Settings and Close: one vertical toolbar on the right edge.
 // It shows only once the header's chevron unfolds it; a phone has no rail, its overflow menu holds the same buttons (docs/shell.md).
 
 import { Capsule, CapsuleButton, CapsuleDivider } from "@studio/ui/capsule";
-import { Settings } from "@studio/ui/icons";
+import { Settings, X } from "@studio/ui/icons";
 import { m } from "../paraglide/messages.js";
 import type { HeaderPane, HeaderPanel } from "./ProjectHeader";
 import { PANEL_DEFS } from "./panels";
+import { WarnBadge } from "./WarnBadge";
 
 // A rail button is a round square, not the header's wide segment.
 const SQUARE =
   "size-10 min-w-0 rounded-full px-0 desk:size-8 desk:min-w-0 desk:rounded-full";
+
+// Close is a link (the projects list is another page) drawn as the rail's buttons.
+const CLOSE = `inline-flex items-center justify-center text-foreground outline-none transition-colors hover:bg-on-fill focus-visible:shadow-(--k7-focus-ring) [&_svg]:size-5 desk:[&_svg]:size-[18px] ${SQUARE}`;
 
 export function PanelRail({
   panes,
@@ -18,6 +22,7 @@ export function PanelRail({
   panels,
   settingsPressed,
   onSettings,
+  closeHref,
 }: {
   panes: HeaderPane[];
   pane: string;
@@ -25,6 +30,8 @@ export function PanelRail({
   panels: HeaderPanel[];
   settingsPressed: boolean;
   onSettings: () => void;
+  /** Where Close goes: the projects list. */
+  closeHref: string;
 }) {
   return (
     <Capsule
@@ -60,7 +67,7 @@ export function PanelRail({
         return (
           <CapsuleButton
             key={p.id}
-            className={SQUARE}
+            className={`relative ${SQUARE}`}
             pressed={p.pressed}
             disabled={p.disabled}
             disabledReason={p.title}
@@ -69,6 +76,7 @@ export function PanelRail({
             onClick={p.onPress}
           >
             <def.icon />
+            <WarnBadge n={p.badge ?? 0} />
           </CapsuleButton>
         );
       })}
@@ -82,6 +90,14 @@ export function PanelRail({
       >
         <Settings />
       </CapsuleButton>
+      <a
+        href={closeHref}
+        aria-label={m["shell.close"]()}
+        title={m["shell.close"]()}
+        className={CLOSE}
+      >
+        <X />
+      </a>
     </Capsule>
   );
 }

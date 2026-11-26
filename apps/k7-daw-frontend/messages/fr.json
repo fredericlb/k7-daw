@@ -1884,6 +1884,7 @@
   "pls.files": "fichiers",
   "shell.header": "Projet",
   "shell.back": "Retour aux projets",
+  "shell.close": "Fermer le projet",
   "shell.exportBusy": "Un export est déjà en cours",
   "shell.processes": "{n} processus en arrière-plan : ouvrir Tâches et historique",
   "shell.problems": "{n} problèmes signalés : ouvrir les journaux",

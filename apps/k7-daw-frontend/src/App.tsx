@@ -2749,8 +2749,10 @@ export default function App({
     const line = PANEL_LINE[id];
     if (line) void runCommand(line);
   };
+  const problemCount = projectErrors + placed.count + logProblems;
   const headerPanels: HeaderPanel[] = TOOLBAR_PANELS.map((id) => ({
     id,
+    badge: id === "logs" ? problemCount : undefined,
     pressed:
       id === "mixer"
         ? dock.open && dock.occupant === "mixer"
@@ -2762,7 +2764,11 @@ export default function App({
         : id === "export" && share.busy
           ? m["shell.exportBusy"]()
           : undefined,
-    onPress: () => pressPanel(id),
+    // With problems reported, Logs opens on them.
+    onPress: () =>
+      id === "logs" && problemCount > 0 && pressedButton !== "logs"
+        ? openProblems()
+        : pressPanel(id),
   }));
   const switcherPanes: HeaderPane[] = [
     ...(hasTimeline
@@ -2877,7 +2883,7 @@ export default function App({
       backHref={projectsUrl(window.location.href)}
       statusStore={statusStore}
       engine={engine ? (connected ? "up" : "down") : "none"}
-      problems={projectErrors + placed.count + logProblems}
+      problems={problemCount}
       onProblems={openProblems}
       onProcesses={() => setRightPanel("tasks")}
       extra={<BenchSaveButton size="icon" runCommand={runCommand} />}
@@ -3400,6 +3406,7 @@ export default function App({
             {/* The panes and the right panels' buttons, as a vertical toolbar on the right edge (shell/PanelRail.tsx); a phone has its menu. */}
             {railShown && (
               <PanelRail
+                closeHref={projectsUrl(window.location.href)}
                 panes={switcherPanes}
                 pane={full}
                 onPane={(id) => void runCommand(`ui ${id}`)}
