@@ -29,5 +29,6 @@ pub mod run;
 pub mod separation;
 pub mod settings;
 pub mod trust;
+pub mod tunnel;
 pub mod urls;
 pub mod wire;

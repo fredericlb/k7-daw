@@ -2310,6 +2310,7 @@ dependencies = [
  "hyper",
  "hyper-rustls",
  "hyper-util",
+ "k7-engine",
  "k7-local",
  "libc",
  "libloading",

@@ -6,6 +6,8 @@ mod audio_policy;
 mod engine;
 mod engine_client;
 mod files;
+#[path = "../support/hub.rs"]
+mod hub;
 mod onnx_model;
 mod parts;
 mod performance;
@@ -22,4 +24,8 @@ mod server;
 mod settings;
 mod supervisor;
 mod tls;
+mod tunnel_agent;
+mod tunnel_files;
+mod tunnel_paths;
+mod tunnel_queue;
 mod urls;

@@ -7,8 +7,14 @@ use crate::core::PartSpec;
 pub mod queries;
 mod registry;
 mod separation;
+mod tunnel;
 
 /// Every part a run starts, in order.
 pub fn all() -> Vec<PartSpec> {
-    vec![registry::spec(), queries::spec(), separation::spec()]
+    vec![
+        registry::spec(),
+        queries::spec(),
+        separation::spec(),
+        tunnel::spec(),
+    ]
 }

@@ -21,6 +21,13 @@ path = "src/bin/ws_engine.rs"
 test = false
 doc = false
 
+# The tunnel agent alone, which `engine-tunnel`'s suites drive against the real hub (`testAgents.ts`).
+[[bin]]
+name = "tunnel_harness"
+path = "src/bin/tunnel_harness.rs"
+test = false
+doc = false
+
 # An engine that only listens, for the tests alone: `tests/all/supervisor.rs` runs it through `CARGO_BIN_EXE_k7-fake-engine`.
 [[bin]]
 name = "k7-fake-engine"
@@ -32,6 +39,8 @@ doc = false
 # Local wall-clock for the merged log's `HH:MM:SS`, UTC for the identity's `createdAt`.
 chrono.workspace = true
 getrandom.workspace = true
+# The tunnel's frames, the hub's own code, reused so the two ends cannot drift.
+k7-engine.workspace = true
 # The pidfile's OS half (inspect, alive, kill_tree): one verdict with k7-local's host.
 k7-local.workspace = true
 # EMFILE and ENFILE, the probe's third answer; getppid on Android.
@@ -50,6 +59,8 @@ hyper.workspace = true
 hyper-rustls.workspace = true
 hyper-util.workspace = true
 rustls.workspace = true
+# The tunnel's TLS: the socket is dialled by hand so one configuration (`trust`) serves every connection.
+tokio-rustls = { version = "0.26", default-features = false, features = ["ring"] }
 webpki-roots.workspace = true
 
 # Phones keep the bundle the app ships; every computer reads its OS store.
