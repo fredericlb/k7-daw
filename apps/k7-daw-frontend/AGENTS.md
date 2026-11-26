@@ -70,6 +70,7 @@ matches before changing it:
 | `timeline.md` | the keyboard-driven arrangement view |
 | `playhead.md` | why the playhead is steered by the engine's frames rather than drawn from them |
 | `picture.md` | video lanes on that same timeline, the ruler's two units, the viewport surface |
+| `editors.md` | the dock editors' one rule: every option in the title bar, the content only what is edited |
 | `clipEditors.md` | the piano roll and the waveform over one event — and the loop marks they share |
 | `masterMeter.md` | the project bar's meter, what it holds across a pass, and the Fix button's trim |
 | `mastering.md` | the `mastering` surface — one quick-master node as three appliances, and why nothing on it normalises |
