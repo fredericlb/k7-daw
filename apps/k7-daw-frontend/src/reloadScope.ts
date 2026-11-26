@@ -4,7 +4,8 @@
 // questions rather than one counter meaning "everything is stale".
 // The rationale, the measurements and the one named limit are in docs/shell.md.
 
-import { docPattern, isDocFile } from "@studio/song-schema/docExt";
+import { isDocFile } from "@studio/k7-wasm/schema";
+import { docPattern } from "@studio/song-schema/docExt";
 import type { ChangedFile } from "@studio/web-protocol";
 import { useRef } from "react";
 

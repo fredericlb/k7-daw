@@ -9,7 +9,7 @@
 // See apps/k7-daw-engine/k7-runtime/docs/builtinParams.md.
 
 import table from "./builtinParams.generated.json" with { type: "json" };
-import { ENGINE_NS, slugifyPluginName } from "./moduleTypes";
+import { slugifyPluginName } from "./moduleTypes";
 
 /** A parameter's span. Structurally the engine protocol's ParamMeta, without the dependency for one type. */
 export interface ParamRange {
@@ -62,19 +62,6 @@ export function builtinPluginFor(
   const p = plugin as { type?: unknown; name?: unknown } | undefined;
   if (p?.type !== "internal" || typeof p.name !== "string") return undefined;
   return BY_SPELLING.get(p.name.trim().toLowerCase());
-}
-
-/** The built-in behind an `extends:` ref, the ENGINE namespace only — see docs/moduleTypes.md. */
-export function builtinPluginForRef(
-  ref: string | null | undefined,
-): BuiltinPluginInfo | undefined {
-  if (!ref?.startsWith(`${ENGINE_NS}/`)) return undefined;
-  return BY_SPELLING.get(
-    ref
-      .slice(ENGINE_NS.length + 1)
-      .trim()
-      .toLowerCase(),
-  );
 }
 
 /** A module's plugin's parameters; undefined and empty DIFFER — the second is a plugin whose state is not params. */

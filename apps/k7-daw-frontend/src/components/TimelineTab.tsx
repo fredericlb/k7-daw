@@ -10,7 +10,7 @@ import {
   beatsToPosition,
   parsePosition,
 } from "@studio/k7-wasm/timecode";
-import type { Task } from "@studio/song-schema/tasks";
+import type { Task } from "@studio/k7-wasm/types";
 import { trackLabel } from "@studio/song-schema/trackKind";
 import {
   DropdownMenu,

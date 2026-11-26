@@ -4,7 +4,7 @@
 // writes a placement-independent `{source}.cache` sidecar; this only reads it.
 
 import type { ClipDoc, ProjectDoc } from "@studio/engine-protocol/project";
-import { beatAtSource, sourceAtBeat } from "@studio/song-schema/warpPoints";
+import { beatsAtSources, sourcesAtBeats } from "@studio/k7-wasm/schema";
 
 // The whole-file envelope @studio/audio-analysis computes and caches — placement-independent, docs/waveform.md.
 export interface FileEnvelope {
@@ -126,16 +126,16 @@ export function regionWaveform(
   const warped = Array.isArray(markers) && markers.length >= 2;
   const beatToDisp = 60 / tempo;
   // Where the clip's in-point lands, so display 0 stays the clip's start whatever the map says.
-  const zeroBeat = warped ? beatAtSource(markers, inPointSec) : 0;
+  const zeroBeat = warped ? beatsAtSources(markers, [inPointSec])[0] : 0;
   /** A source position, as a position on the drawn region. The one mapping everything below uses. */
   const toDisplay = (srcSec: number): number =>
     warped
-      ? (beatAtSource(markers, srcSec) - zeroBeat) * beatToDisp
+      ? (beatsAtSources(markers, [srcSec])[0] - zeroBeat) * beatToDisp
       : (srcSec - inPointSec) * stretch;
   /** …and back, which is what resamples the envelope: a display bucket asks which audio it shows. */
   const toSource = (dispSec: number): number =>
     warped
-      ? sourceAtBeat(markers, zeroBeat + dispSec / beatToDisp)
+      ? sourcesAtBeats(markers, [zeroBeat + dispSec / beatToDisp])[0]
       : dispSec / (stretch || 1) + inPointSec;
 
   const envN = env.peak.length;
@@ -155,13 +155,24 @@ export function regionWaveform(
   const hasBands = src.every((b) => b?.length === envN);
   const bands = hasBands ? src.map(() => new Array<number>(n).fill(0)) : null;
   const dispPer = n > 0 ? seconds / n : 0;
+  // A warped map answers every column edge in ONE call; a plain one is arithmetic.
+  const edges = warped
+    ? sourcesAtBeats(
+        markers,
+        Array.from(
+          { length: n + 1 },
+          (_, b) => zeroBeat + (b * dispPer) / beatToDisp,
+        ),
+      )
+    : null;
+  const sourceAt = (b: number): number => edges?.[b] ?? toSource(b * dispPer);
   const framesPerEnv = envN > 0 ? totalFrames / envN : 1;
   // The last source frame this region may show — its own `to`, or the end of the file.
   const endFrame = Math.min(totalFrames, Math.floor(endSec * sr));
   for (let b = 0; b < n; b++) {
     // Which audio this column shows — ASKED of the mapping rather than stepped through.
-    const f0 = Math.max(startFrame, Math.floor(toSource(b * dispPer) * sr));
-    const f1 = Math.min(endFrame, Math.floor(toSource((b + 1) * dispPer) * sr));
+    const f0 = Math.max(startFrame, Math.floor(sourceAt(b) * sr));
+    const f1 = Math.min(endFrame, Math.floor(sourceAt(b + 1) * sr));
     if (f1 <= f0 || envN === 0) continue; // past the audio: the column stays silent
     const e0 = Math.floor(f0 / framesPerEnv);
     const e1 = Math.max(e0 + 1, Math.min(envN, Math.ceil(f1 / framesPerEnv)));
@@ -199,9 +210,13 @@ export function regionWaveform(
     );
 
   // Transients are detected once per FILE by the analysis; this only maps them on — docs/waveform.md.
-  const transients = env.transients
-    .map(toDisplay)
-    .filter((t) => t >= -1e-6 && t <= seconds + 1e-6);
+  const transients = (
+    warped
+      ? beatsAtSources(markers, env.transients).map(
+          (b) => (b - zeroBeat) * beatToDisp,
+        )
+      : env.transients.map(toDisplay)
+  ).filter((t) => t >= -1e-6 && t <= seconds + 1e-6);
 
   return {
     peak,

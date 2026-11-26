@@ -2,7 +2,8 @@
 // parsed with the rules the `task` commands write it with. A workspace with no file has no tasks;
 // that is an empty list, not an error. See ../../docs/tasks.md.
 
-import { parseTasks, TASKS_FILE, type Task } from "@studio/song-schema/tasks";
+import { TASKS_FILE } from "@studio/k7-wasm/consts";
+import { parseTasks, type Task } from "@studio/k7-wasm/schema";
 import type { AccountWorkspace, RepoProject } from "@studio/web-protocol";
 import { norm } from "../projectPaths";
 import type { AccountFiles } from "./api";

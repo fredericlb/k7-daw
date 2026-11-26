@@ -40,6 +40,7 @@
   "dependencies": {
     "@dagrejs/dagre": "^1.1.8",
     "@studio/graph-model": "*",
+    "@studio/k7-wasm": "*",
     "@studio/song-schema": "*",
     "@studio/web-protocol": "*"
   },

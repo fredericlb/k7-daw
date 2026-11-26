@@ -2,8 +2,8 @@
 // kind, and @studio/song-schema answers that kind's fields and values, derived so they cannot fall behind the schema.
 // Shared by k7's EditorPane, YamlPane and the module builder; the k7x and YAML modes both read it (docs/completion.md).
 
+import { isEngineRef } from "@studio/k7-wasm/schema";
 import { docPattern } from "@studio/song-schema/docExt";
-import { isEngineRef } from "@studio/song-schema/moduleTypes";
 import type { FileKind } from "@studio/song-schema/yaml/fields";
 import {
   fieldsAt,

@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@studio/engine-protocol": "*",
+    "@studio/k7-wasm": "*",
     "@studio/song-schema": "*"
   },
   "devDependencies": {

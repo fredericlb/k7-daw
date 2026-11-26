@@ -8,7 +8,7 @@
 // the whole reason for the argument order.
 
 import type { WebGraph } from "@studio/graph-model";
-import { instanceName } from "@studio/song-schema/instanceName";
+import { instanceName } from "@studio/k7-wasm/schema";
 
 /** The pending half of a `+` click: the arrow the module is being dropped onto. */
 export interface PendingInsert {
@@ -52,7 +52,7 @@ export function nodeNameFor(
   before: string | null,
 ): string {
   const taken = namesIn(graph);
-  return instanceName(module, laneOfArrow(graph, before), (n) => taken.has(n));
+  return instanceName(module, laneOfArrow(graph, before), taken);
 }
 
 /** What a chain should NAME, given the creating command that just ran — a node is named by its FILE alone. */

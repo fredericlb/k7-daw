@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@studio/engine-protocol": "*",
+    "@studio/k7-wasm": "*",
     "@studio/k7x": "*",
     "@studio/song-schema": "*",
     "zod": "^4.4.3"

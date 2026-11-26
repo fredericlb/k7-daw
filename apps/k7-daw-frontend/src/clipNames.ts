@@ -2,7 +2,7 @@
 // sequence's (`keys-seq-1`) are generated, so they read as their lane plus a take bar or a number;
 // a clip someone named is shown as named. The id stays the tooltip's — docs/timeline.md.
 
-import { materialRefOf } from "@studio/song-schema/placementId";
+import { materialRefOf } from "@studio/k7-wasm/schema";
 import { trackLabel } from "@studio/song-schema/trackKind";
 
 /** A clip ref read as what a person recognises; `copy` is the `-n` a processed copy of a take carries. */
