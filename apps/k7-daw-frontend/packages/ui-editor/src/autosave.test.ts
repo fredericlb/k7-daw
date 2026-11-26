@@ -1,4 +1,4 @@
-import { validateFile } from "@studio/song-schema/yaml/validate";
+import { validateFile } from "@studio/k7-wasm/validate";
 import { describe, expect, it } from "vitest";
 import {
   baselineMemo,

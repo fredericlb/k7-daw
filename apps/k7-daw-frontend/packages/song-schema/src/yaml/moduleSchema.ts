@@ -288,24 +288,6 @@ export const UiFileSchema = UISchema.strict();
 
 export type UiFile = z.infer<typeof UiFileSchema>;
 
-// One `controller.k7x`: which MIDI control moves which param, one control per param — see docs/controller.md.
-export const CcBindingSchema = z
-  .object({
-    // 1..16 as a musician counts them, not 0..15 as the wire does — this file is read by people.
-    ch: z.number().int().min(1).max(16),
-    cc: z.number().int().min(0).max(127),
-  })
-  .strict();
-
-export type CcBinding = z.infer<typeof CcBindingSchema>;
-
-export const ControllerFileSchema = z.record(
-  z.string().min(1),
-  CcBindingSchema,
-);
-
-export type ControllerFile = z.infer<typeof ControllerFileSchema>;
-
 /** The widget kinds, for a picker that must offer exactly what the schema accepts. */
 export type WidgetType = Widget["type"];
 
@@ -501,8 +483,3 @@ export const ModuleSchema = z
   .strict(); // an unknown key is a typo — silently ignoring `paramz:` is worse than saying so
 
 export type Module = z.infer<typeof ModuleSchema>;
-
-/** A module FOLDER's config (config.k7x at the root of a `_modules`) — just the namespace every module in it is addressed by. */
-export const ModuleConfigSchema = z
-  .object({ namespace: z.string().min(1) })
-  .strict();

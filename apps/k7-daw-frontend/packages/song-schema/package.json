@@ -41,7 +41,6 @@
     "./yaml/chainSchema": "./src/yaml/chainSchema.ts",
     "./yaml/assemblySchema": "./src/yaml/assemblySchema.ts",
     "./yaml/entitySchemas": "./src/yaml/entitySchemas.ts",
-    "./yaml/fields": "./src/yaml/fields.ts",
     "./yaml/graphFile": "./src/yaml/graphFile.ts",
     "./yaml/graphSchema": "./src/yaml/graphSchema.ts",
     "./yaml/mixFile": "./src/yaml/mixFile.ts",
@@ -50,14 +49,11 @@
     "./yaml/moduleFile": "./src/yaml/moduleFile.ts",
     "./yaml/moduleSchema": "./src/yaml/moduleSchema.ts",
     "./yaml/placementSchema": "./src/yaml/placementSchema.ts",
-    "./yaml/timelineSchema": "./src/yaml/timelineSchema.ts",
     "./yaml/projectSchema": "./src/yaml/projectSchema.ts",
     "./yaml/sequenceFile": "./src/yaml/sequenceFile.ts",
     "./yaml/surfaceFile": "./src/yaml/surfaceFile.ts",
     "./yaml/surfaceSchema": "./src/yaml/surfaceSchema.ts",
     "./yaml/surfaceRegistry": "./src/yaml/surfaceRegistry.ts",
-    "./yaml/uiFile": "./src/yaml/uiFile.ts",
-    "./yaml/validate": "./src/yaml/validate.ts",
     "./yaml/sugar": "./src/yaml/sugar.ts",
     "./yaml/videoTrackFile": "./src/yaml/videoTrackFile.ts",
     "./keyframes": "./src/keyframes.ts"
@@ -74,7 +70,6 @@
   "dependencies": {
     "zod": "^4.4.3",
     "@studio/graph-model": "*",
-    "@studio/engine-protocol": "*",
     "@studio/k7-wasm": "*",
     "@studio/k7x": "*",
     "@studio/web-protocol": "*"
