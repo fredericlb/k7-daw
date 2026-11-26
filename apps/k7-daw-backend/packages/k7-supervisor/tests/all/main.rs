@@ -28,4 +28,5 @@ mod tunnel_agent;
 mod tunnel_files;
 mod tunnel_paths;
 mod tunnel_queue;
+mod tunnel_tls;
 mod urls;
