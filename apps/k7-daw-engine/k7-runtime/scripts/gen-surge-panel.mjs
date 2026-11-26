@@ -8,7 +8,7 @@ import { existsSync, mkdirSync, mkdtempSync, readdirSync, rmSync, writeFileSync 
 import { tmpdir } from "node:os";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
-import { stringify } from "@studio/k7x/print";
+import { stringify } from "@studio/k7-wasm/k7x";
 import { widgetsJs } from "./gen-surge-widgets.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));

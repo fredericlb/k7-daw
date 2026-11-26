@@ -3,7 +3,7 @@
 // note per line, the other notes untouched, no `v(1)` written where the schema's default already
 // says it, and a short form kept or written in full by sugar's rule.
 
-import { K7Document, type K7Scope, parse } from "@studio/k7x/document";
+import { K7Document, type K7Scope, parse } from "@studio/k7-wasm/k7x";
 import { describe, expect, it } from "vitest";
 import { SequenceSchema } from "./entitySchemas";
 import {

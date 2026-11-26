@@ -3,7 +3,7 @@
 // A reader would get wrong where the splices travel: beside the text, kept for the next sync of that exact pair (docs/k7xTree.md).
 
 import { ChangeSet } from "@codemirror/state";
-import { type K7Change, K7Document, type K7Scope } from "@studio/k7x/document";
+import { type K7Change, K7Document, type K7Scope } from "@studio/k7-wasm/k7x";
 
 interface Made {
   before: string;

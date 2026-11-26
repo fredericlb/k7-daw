@@ -58,10 +58,12 @@ const NO_DOT = 0xffffffff;
 class Reader {
   at = 0;
   v = 0;
-  constructor(
-    readonly c: Uint32Array,
-    readonly values: Value[],
-  ) {}
+  readonly c: Uint32Array;
+  readonly values: Value[];
+  constructor(c: Uint32Array, values: Value[]) {
+    this.c = c;
+    this.values = values;
+  }
 
   node(): K7Node {
     const c = this.c;

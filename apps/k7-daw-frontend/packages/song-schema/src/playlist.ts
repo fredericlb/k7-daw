@@ -3,9 +3,8 @@
 // from its data or its k7x text, and adding, dropping or reordering a line as a k7x edit. No
 // `node:fs`, so the file service and the browser go by the same rules. See docs/playlists.md.
 
-import type { K7Scope } from "@studio/k7x/document";
-import { parse } from "@studio/k7x/document";
-import { stringify } from "@studio/k7x/print";
+import type { K7Scope } from "@studio/k7-wasm/k7x";
+import { parse, stringify } from "@studio/k7-wasm/k7x";
 import { plainSegments } from "@studio/web-protocol/paths";
 import { isDocFile } from "./docExt";
 

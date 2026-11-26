@@ -1,7 +1,7 @@
 // scalarField.ts — one string field read out of a project file's text by a scan, half-typed files included.
-// Apart from projectPaths.ts, which the home page imports, so the k7x parser it unquotes with loads only in the editor.
+// Apart from projectPaths.ts, which the home page imports, so the k7x reader it unquotes with is reached only in the editor.
 
-import { parseValue } from "@studio/k7x/parse";
+import { parse } from "@studio/k7-wasm/k7x";
 
 /** A string field's value, a call's `key("v")` or an object's `key: "v"`, found by a scan so a half-typed file still answers. */
 export function readScalarField(text: string, key: string): string | null {
@@ -10,10 +10,8 @@ export function readScalarField(text: string, key: string): string | null {
   ).exec(text);
   if (!m) return null;
   try {
-    const node = parseValue(m[1]);
-    return node.kind === "scalar" && typeof node.value === "string"
-      ? node.value || null
-      : null;
+    const value = parse(`v(${m[1]})`).v;
+    return typeof value === "string" ? value || null : null;
   } catch {
     return null;
   }

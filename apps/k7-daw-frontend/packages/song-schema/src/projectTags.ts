@@ -2,7 +2,7 @@
 // under, shown beside it on the home page. A tag is compared without case, so `Live` and `live` are one tag;
 // the spelling kept is the first one written. No `node:`: the browser and the file service both read it.
 
-import { parse } from "@studio/k7x/document";
+import { parse } from "@studio/k7-wasm/k7x";
 
 /** A tag as it is stored: trimmed, inner runs of space made one, at most this long. */
 const TAG_MAX = 32;

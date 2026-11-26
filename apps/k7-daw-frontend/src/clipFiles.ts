@@ -4,7 +4,7 @@
 // A name already taken by DIFFERENT bytes is not reused: the clip gets the next free id. See
 // apps/k7-daw-frontend/docs/timeline.md, "Same name, different file".
 
-import { parse } from "@studio/k7x/document";
+import { parse } from "@studio/k7-wasm/k7x";
 import { mediaUrl } from "@studio/project-shell/fileApi";
 import { api } from "./api";
 import { projectDir } from "./projectPaths";

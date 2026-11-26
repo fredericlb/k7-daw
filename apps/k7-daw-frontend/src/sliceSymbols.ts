@@ -10,8 +10,8 @@ import {
   StateField,
 } from "@codemirror/state";
 import { Decoration, type DecorationSet, EditorView } from "@codemirror/view";
-import type { K7MapNode } from "@studio/k7x/ast";
-import { parseTree } from "@studio/k7x/parse";
+import type { K7MapNode } from "@studio/k7-wasm/k7x";
+import { parseTree } from "@studio/k7-wasm/k7x";
 import { SERIES_COLORS, seriesColor } from "@studio/song-schema/seriesColors";
 import { editK7xText } from "@studio/ui-editor/k7x/bufferEdit";
 import { k7xTree, mapSpan, treeOf } from "@studio/ui-editor/k7x/tree";

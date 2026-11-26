@@ -281,10 +281,12 @@ export class K7Document {
 
 /** A view of a document under one base path: it holds a path, resolved again on every call, so it survives every edit. */
 export class K7Scope {
-  constructor(
-    readonly doc: K7Document,
-    readonly base: K7Path,
-  ) {}
+  readonly doc: K7Document;
+  readonly base: K7Path;
+  constructor(doc: K7Document, base: K7Path) {
+    this.doc = doc;
+    this.base = base;
+  }
 
   private at(path: K7Path): K7Path {
     return [...this.base, ...path];

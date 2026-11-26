@@ -6,7 +6,7 @@
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
-import { parse } from "@studio/k7x/document";
+import { parse } from "@studio/k7-wasm/k7x";
 import { gridIssues, twinIssues } from "@studio/panel-rules/layout-twins";
 import {
   type ModuleUI,

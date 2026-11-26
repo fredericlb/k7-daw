@@ -76,7 +76,6 @@
     "@studio/graph-model": "*",
     "@studio/engine-protocol": "*",
     "@studio/k7-wasm": "*",
-    "@studio/k7x": "*",
     "@studio/web-protocol": "*"
   },
   "devDependencies": {

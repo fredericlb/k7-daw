@@ -3,15 +3,15 @@
 // here is an edge rewire, made on the EXPANDED data and written back through the runs short form's rule.
 // Full rationale: docs/graphFile.md.
 
-import type { K7Document, K7Scope } from "@studio/k7x/document";
-import { stringify } from "@studio/k7x/print";
-import { applySugared } from "@studio/k7x/sugared";
+import type { K7Document, K7Scope } from "@studio/k7-wasm/k7x";
+import { stringify } from "@studio/k7-wasm/k7x";
 import { portRef, splitPort } from "../moduleTypes";
 import { GRAPH_FILE, type GraphFile, GraphFileSchema } from "./graphSchema";
 import { readK7x } from "./k7xIssues";
 import { k7xPosition, k7xSchemaIssues } from "./k7xPosition";
 import type { ModuleIssue } from "./moduleFile";
 import { sugarFor } from "./sugar";
+import { applySugared } from "./sugared";
 
 export interface ParsedChains {
   value: GraphFile | null;

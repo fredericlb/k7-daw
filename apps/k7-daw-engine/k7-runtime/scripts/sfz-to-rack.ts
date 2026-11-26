@@ -8,7 +8,7 @@
 
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { basename, join } from "node:path";
-import { stringify } from "@studio/k7x/print";
+import { stringify } from "@studio/k7-wasm/k7x";
 import { renderProject } from "../../../k7-daw-frontend/packages/take-render/src/renderProject.ts";
 import { readWav, wavFile } from "./wav.ts";
 

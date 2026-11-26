@@ -3,7 +3,7 @@
 // where it is KEPT (the workspace or a library); the path is which module it is FOR. No node:fs here,
 // so the browser shares the vocabulary. See apps/k7-daw-frontend/packages/song/docs/userPresets.md.
 
-import { stringify } from "@studio/k7x/print";
+import { stringify } from "@studio/k7-wasm/k7x";
 import { z } from "zod";
 
 /** The workspace's preset tree, beside `_modules/` — the `@workspace` level's spelling. */

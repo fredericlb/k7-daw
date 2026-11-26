@@ -1,6 +1,6 @@
 // sugar.test.ts — a short form reads as the data it stands for, and a write keeps it until what it expands to changes.
 
-import { K7Document } from "@studio/k7x/document";
+import { K7Document } from "@studio/k7-wasm/k7x";
 import { describe, expect, it } from "vitest";
 import { applySugared, expandNotes, sugarFor } from "./sugar";
 import { validateFile } from "./validate";

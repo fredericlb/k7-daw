@@ -3,7 +3,7 @@
 // written down (caught by walking each schema's keys and asking whether any example mentions them).
 // Both read the markdown under k7/docs/ itself. See ../../docs/docExamples.md.
 
-import { parse } from "@studio/k7x/document";
+import { parse } from "@studio/k7-wasm/k7x";
 import { PresetFileSchema } from "@studio/song-schema/presets";
 import {
   ClipSchema,

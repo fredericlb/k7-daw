@@ -7,13 +7,14 @@ import type { K7xSyntax, ReadAnswer, Seg } from "../types/index.ts";
 export type K7Path = readonly (string | number)[];
 
 export class K7SyntaxError extends Error {
-  constructor(
-    message: string,
-    readonly offset: number,
-    readonly line: number,
-    readonly column: number,
-  ) {
+  readonly offset: number;
+  readonly line: number;
+  readonly column: number;
+  constructor(message: string, offset: number, line: number, column: number) {
     super(`${message} (${line}:${column})`);
+    this.offset = offset;
+    this.line = line;
+    this.column = column;
     this.name = "K7SyntaxError";
   }
 }

@@ -1,7 +1,7 @@
 // moduleFile.ts — reading and EDITING a module file, as k7x. Paired with moduleSchema.ts.
 // The writers edit a K7Scope in place, so a knob drag is a one-line diff and every comment stays (docs/moduleFile.md).
 
-import type { K7Scope } from "@studio/k7x/document";
+import type { K7Scope } from "@studio/k7-wasm/k7x";
 import { currentAlternative } from "../alternatives";
 import { parseK7xWith } from "./k7xIssues";
 import { type Module, ModuleSchema } from "./moduleSchema";

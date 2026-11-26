@@ -5,7 +5,7 @@
 // apps/k7-daw-frontend/packages/ui-module-builder/docs/aiOrganize.md.
 
 import type { ParamMeta } from "@studio/engine-protocol";
-import { parse } from "@studio/k7x/document";
+import { parse } from "@studio/k7-wasm/k7x";
 import {
   INPUT_VOLUME_PARAM,
   MIX_PARAM,
