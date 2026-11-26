@@ -157,6 +157,9 @@ where
 }
 
 fn start(cx: Ctx, mut events: mpsc::UnboundedReceiver<Event>) {
+    // The wire's version and the stamp ride every heartbeat: what the hub and the picker compare.
+    crate::registry::set_presence_extra("protocol", Some(crate::wire::ENGINE_PROTOCOL.into()));
+    crate::registry::set_presence_extra("build", Some(crate::wire::build().into()));
     let paces = PACES.get().copied().unwrap_or_default();
     let port = cx.engine.borrow().port;
     let shared = Arc::new(Shared {

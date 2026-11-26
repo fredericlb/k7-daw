@@ -10,11 +10,18 @@ pub struct Diagnostic {
 }
 
 /// Every diagnostic, by flag.
-pub const ALL: &[Diagnostic] = &[Diagnostic {
-    flag: "--separate",
-    usage: "--separate <mix> <model> <outDir> [providers]",
-    run: crate::separation::cli::main,
-}];
+pub const ALL: &[Diagnostic] = &[
+    Diagnostic {
+        flag: "--separate",
+        usage: "--separate <mix> <model> <outDir> [providers]",
+        run: crate::separation::cli::main,
+    },
+    Diagnostic {
+        flag: "--probe",
+        usage: "--probe <address>",
+        run: crate::probe::run,
+    },
+];
 
 /// The usage text, the app's mode and `--config` first.
 pub fn usage() -> String {

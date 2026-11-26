@@ -69,6 +69,8 @@ zip = { version = "4", default-features = false, features = ["deflate-flate2-zli
 # The waveform module's Wasmtime, with Pulley bytecode where a host may not make memory executable (iOS).
 wasmtime = { version = "50", default-features = false, features = ["cranelift", "pulley", "runtime", "std", "gc", "gc-drc"] }
 webpki-roots = "1"
+# The OS trust store read with its trust settings: macOS keychain, Windows ROOT stores, the Linux bundles (docs/rust-supervisor-plan.md).
+rustls-native-certs = "0.8"
 tokio-tungstenite = "0.29"
 # The dev session's watch of the file service's source, which the hub stops the services on (docs/files.md).
 notify = "8"
