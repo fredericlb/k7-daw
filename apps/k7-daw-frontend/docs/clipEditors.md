@@ -10,8 +10,7 @@ header carries no view switch.
 Both editors follow the dock's one rule ([editors.md](editors.md)): every option is in the title bar
 (`DockHeaderRow`, [editor-dock](../packages/ui/docs/editor-dock.md)) and the body is the clip alone.
 An audio clip's title bar holds its name over its file path, the gain and Loop as "name: value" settings (a knob and a switch in their bubble), Trim / Operations
-(and Discard with Done for a take just filed), the tools, the bars on screen with their two ways out,
-and the active tool's help glyph; Trim opens its gate as a popover from the bar. The piano roll's title
+(and Discard with Done for a take just filed), the tools and the active tool's help glyph; Trim opens its gate as a popover from the bar. The piano roll's title
 bar holds its name, counts, tool menu, Loop, ×2 and the help glyph. On a phone the sheet's header is the
 name over the counts, and the tool row is the body's first row. The bar wraps to a second line before it
 squeezes a long name past an ellipsis.
@@ -715,7 +714,8 @@ system's arrow, having no mark to place and so nothing to promise.
 
 Double-clicking an audio event opens `AudioClipPanel` on the whole file, framed on the window **that
 event** plays: its span plus a bar of context either side (`frameWindow`). The wheel still reaches
-everything, and the header offers both ways out — *tout* for the file, *l'événement* to come back.
+everything, which is how the person leaves the event's frame; the title bar names no window, since the
+ruler over the wave already shows which bars are on screen.
 
 Two spans, and keeping them apart is the whole design:
 

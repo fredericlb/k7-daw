@@ -5,7 +5,7 @@ the live take, a sequence's grid, the takes.
 
 ## Choices
 
-- **Every option is in the title bar.** Tools, toggles, sliders, menus, the bars on screen, Stop,
+- **Every option is in the title bar.** Tools, toggles, sliders, menus, Stop,
   Discard and Done are drawn through `DockHeaderRow` (`@studio/ui/editor-dock`) on the line of Expand
   and Close. An editor has no toolbar of its own in its content.
 - **The content holds only what is edited**: the cards, the strips, the notes, the wave, the takes'

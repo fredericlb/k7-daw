@@ -736,38 +736,6 @@ export function AudioClipPanel({
               }
             />
           )}
-          {/* What is on screen and the two ways out, in the title bar: a window showing only some bars without saying so reads as a clip that was cut. */}
-          {!rolling && wf && !showList && win.allBars > 1 && (
-            <DockHeaderRow>
-              <span className="flex shrink-0 items-center gap-1 whitespace-nowrap text-muted-foreground text-xs tabular-nums">
-                <span title={m["clip.zoom"]()}>
-                  {Math.round(win.shown)}/{win.allBars} {m["clip.bars"]()}
-                </span>
-                {win.shown < win.allBars && (
-                  <button
-                    type="button"
-                    className="underline hover:text-foreground"
-                    onClick={() => setAsked({ bars: win.allBars, start: 0 })}
-                  >
-                    {m["clip.allBars"]()}
-                  </button>
-                )}
-                {framed && (
-                  <button
-                    type="button"
-                    className="underline hover:text-foreground"
-                    onClick={frameOnEvent}
-                    title={m["clip.backToEvent"]({
-                      from: act.from.toFixed(2),
-                      to: act.to.toFixed(2),
-                    })}
-                  >
-                    {m["clip.theEvent"]()}
-                  </button>
-                )}
-              </span>
-            </DockHeaderRow>
-          )}
           {/* The SONG's ruler over the wave (Ruler.tsx), the placement's grid rather than the warp — see docs/clipEditors.md. */}
           {!rolling &&
             wf &&
