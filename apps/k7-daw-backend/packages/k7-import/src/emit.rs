@@ -8,7 +8,9 @@ use k7x::edit::Value;
 use crate::emit_audio::{emit_arrangement, track_value};
 use crate::emit_ctx::{DocLayout, EmitCtx, OutDef, Written, number, obj, text};
 use crate::emit_graph::{MIX_NODE, OUT_NODE, add_chain, dedupe_outs, drop_dead_buses, write_graph};
-use crate::emit_modules::{collapse_sole_inserts, drop_orphan_inserts, order_plugins, write_modules};
+use crate::emit_modules::{
+    collapse_sole_inserts, drop_orphan_inserts, order_plugins, write_modules,
+};
 use crate::model::{Bytes, ClipKind, Song};
 
 /// What an emit counted.
@@ -41,9 +43,17 @@ project that comes out of one draws them. Delete this file and the song still co
 and still plays; you simply have no lanes on screen.";
 
 /// The files of `song` as a project named `project`, below the workspace's root.
-pub fn emit(project: &str, song: &Song, assets: &[(String, Bytes)], world: &World) -> (Written, EmitStats) {
+pub fn emit(
+    project: &str,
+    song: &Song,
+    assets: &[(String, Bytes)],
+    world: &World,
+) -> (Written, EmitStats) {
     let mut ctx = EmitCtx::new(project, song, assets, &world.taken_modules);
-    let master = song.tracks.iter().find(|t| t.role.as_deref() == Some("master"));
+    let master = song
+        .tracks
+        .iter()
+        .find(|t| t.role.as_deref() == Some("master"));
     let master_plugins = order_plugins(master.map(|m| m.plugins.as_slice()).unwrap_or_default());
     // Where a lane ends: the mixer's SUM, like every k7 project.
     let master_chain = master
@@ -58,11 +68,21 @@ pub fn emit(project: &str, song: &Song, assets: &[(String, Bytes)], world: &Worl
         let slug = ctx.slug_of.get(&t.id).cloned().unwrap_or_default();
         let is_bus = t.role.as_deref() == Some("effect");
         // Dry output goes to the master at full gain; each enabled send fans out to its bus at the send's level.
-        let mut terminal = vec![OutDef { to: MIX_NODE.to_owned(), gain: None }];
+        let mut terminal = vec![OutDef {
+            to: MIX_NODE.to_owned(),
+            gain: None,
+        }];
         for s in t.sends.iter().filter(|s| s.enabled) {
-            let to = ctx.slug_of.get(&s.to).cloned().unwrap_or_else(|| s.to.clone());
+            let to = ctx
+                .slug_of
+                .get(&s.to)
+                .cloned()
+                .unwrap_or_else(|| s.to.clone());
             if !to.is_empty() {
-                terminal.push(OutDef { to, gain: Some(s.level) });
+                terminal.push(OutDef {
+                    to,
+                    gain: Some(s.level),
+                });
             }
         }
         let terminal = dedupe_outs(terminal);
@@ -79,8 +99,11 @@ pub fn emit(project: &str, song: &Song, assets: &[(String, Bytes)], world: &Worl
             t.plugins.clone()
         };
         // Notes and nothing to play them: the instrument stayed behind in the source DAW.
-        let needs_instrument =
-            !is_bus && has_midi && !plugins.iter().any(|p| p.role.as_deref() == Some("instrument"));
+        let needs_instrument = !is_bus
+            && has_midi
+            && !plugins
+                .iter()
+                .any(|p| p.role.as_deref() == Some("instrument"));
         add_chain(
             &mut ctx,
             &slug,
@@ -94,8 +117,15 @@ pub fn emit(project: &str, song: &Song, assets: &[(String, Bytes)], world: &Worl
         }
         if !is_bus {
             let placements = emit_arrangement(&mut ctx, t, &slug);
-            let layout = DocLayout { items_one_line: vec![vec!["events".into()]], ..DocLayout::default() };
-            ctx.write_doc(&format!("nodes/{slug}.k7x"), &track_value(t, placements), &layout);
+            let layout = DocLayout {
+                items_one_line: vec![vec!["events".into()]],
+                ..DocLayout::default()
+            };
+            ctx.write_doc(
+                &format!("nodes/{slug}.k7x"),
+                &track_value(t, placements),
+                &layout,
+            );
             track_files += 1;
         }
     }
@@ -103,7 +133,17 @@ pub fn emit(project: &str, song: &Song, assets: &[(String, Bytes)], world: &Worl
     // The master chain, only when it has plugins: else MIX and OUT are a single wire.
     if let Some(m) = master.filter(|_| !master_plugins.is_empty()) {
         let slug = ctx.slug_of.get(&m.id).cloned().unwrap_or_default();
-        add_chain(&mut ctx, &slug, None, &master_plugins, vec![OutDef { to: OUT_NODE.to_owned(), gain: None }], None);
+        add_chain(
+            &mut ctx,
+            &slug,
+            None,
+            &master_plugins,
+            vec![OutDef {
+                to: OUT_NODE.to_owned(),
+                gain: None,
+            }],
+            None,
+        );
     }
 
     drop_dead_buses(&mut ctx);
@@ -127,7 +167,10 @@ pub fn emit(project: &str, song: &Song, assets: &[(String, Bytes)], world: &Worl
     ctx.write_doc(
         "surfaces/timeline.k7x",
         &surface,
-        &DocLayout { note: Some(SURFACE_NOTE), ..DocLayout::default() },
+        &DocLayout {
+            note: Some(SURFACE_NOTE),
+            ..DocLayout::default()
+        },
     );
 
     let stats = EmitStats {

@@ -10,7 +10,8 @@ use crate::model::{Bytes, Translation};
 /// Entries no project is made of: Live's backups, and the resource forks a Mac zip carries.
 fn noise(path: &str) -> bool {
     let lower = path.to_ascii_lowercase();
-    let folder = |name: &str| lower.starts_with(&format!("{name}/")) || lower.contains(&format!("/{name}/"));
+    let folder =
+        |name: &str| lower.starts_with(&format!("{name}/")) || lower.contains(&format!("/{name}/"));
     folder("backup") || folder("__macosx") || lower.starts_with("._") || lower.contains("/._")
 }
 
@@ -81,7 +82,11 @@ pub fn parse_als_zip(
     // Where the set says, relative to itself; else the one file of that name — an absolute path names another machine.
     let read = |r: &SampleRef| -> Option<Bytes> {
         if let Some(rel) = &r.relative {
-            let joined = if base.is_empty() { rel.clone() } else { format!("{base}/{rel}") };
+            let joined = if base.is_empty() {
+                rel.clone()
+            } else {
+                format!("{base}/{rel}")
+            };
             if let Some(b) = by_path.get(normalise(&joined).as_str()) {
                 return Some((*b).clone());
             }
@@ -107,10 +112,19 @@ mod tests {
 
     #[test]
     fn backups_and_mac_forks_are_never_the_set() {
-        let paths = ["p/Backup/p [2025].als", "__MACOSX/p/._p.als", "p/p.als", "p/Samples/a.wav"];
+        let paths = [
+            "p/Backup/p [2025].als",
+            "__MACOSX/p/._p.als",
+            "p/p.als",
+            "p/Samples/a.wav",
+        ];
         assert_eq!(pick_set(&paths).unwrap(), "p/p.als");
         assert!(pick_set(&["Backup/x.als"]).is_err());
-        assert!(pick_set(&["a.als", "b.als"]).unwrap_err().contains("2 Ableton sets"));
+        assert!(
+            pick_set(&["a.als", "b.als"])
+                .unwrap_err()
+                .contains("2 Ableton sets")
+        );
         assert_eq!(normalise("p/Samples/../x/./a.wav"), "p/x/a.wav");
     }
 }

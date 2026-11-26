@@ -5,7 +5,9 @@ use std::collections::HashSet;
 
 use k7x::edit::Value;
 
-use crate::emit_ctx::{DocLayout, EmitCtx, InsertDef, ModuleDef, obj, number, slugify, text, uniquify};
+use crate::emit_ctx::{
+    DocLayout, EmitCtx, InsertDef, ModuleDef, number, obj, slugify, text, uniquify,
+};
 use crate::model::PluginOut;
 
 const NOT_SUPPORTED_REF: &str = "@meta/not-supported";
@@ -38,7 +40,12 @@ fn type_folder(role: Option<&str>) -> &'static str {
 
 fn params_value(params: &[(String, f64)]) -> Option<Value> {
     (!params.is_empty()).then(|| {
-        Value::object(params.iter().map(|(k, v)| (k.clone(), number(*v))).collect())
+        Value::object(
+            params
+                .iter()
+                .map(|(k, v)| (k.clone(), number(*v)))
+                .collect(),
+        )
     })
 }
 
@@ -47,8 +54,16 @@ pub fn module_ref_for(ctx: &mut EmitCtx<'_>, p: &PluginOut, owner: &str) -> Stri
     let folder = type_folder(p.role.as_deref());
     // Text params capture state when complete or when there is no preset; else the .vstpreset is kept.
     let use_params = !p.params.is_empty() && (p.params_complete || p.path.is_none());
-    let params = if use_params { p.params.clone() } else { Vec::new() };
-    let preset = if use_params { None } else { p.path.clone().filter(|s| !s.is_empty()) };
+    let params = if use_params {
+        p.params.clone()
+    } else {
+        Vec::new()
+    };
+    let preset = if use_params {
+        None
+    } else {
+        p.path.clone().filter(|s| !s.is_empty())
+    };
     let key = format!("{folder}/{}/{}", p.kind, p.name);
     let at = match ctx.module_of.get(&key) {
         Some(i) => *i,
@@ -137,7 +152,10 @@ fn write_missing(ctx: &mut EmitCtx<'_>, at: usize) -> usize {
             ("extends", text(NOT_SUPPORTED_REF)),
             (
                 "plugin",
-                obj(vec![("type", text(NOT_SUPPORTED_TYPE)), ("name", text(&plugin_name))]),
+                obj(vec![
+                    ("type", text(NOT_SUPPORTED_TYPE)),
+                    ("name", text(&plugin_name)),
+                ]),
             ),
         ];
         entries.extend(params.map(|p| ("params", p)));
@@ -151,7 +169,10 @@ fn write_missing(ctx: &mut EmitCtx<'_>, at: usize) -> usize {
         ctx.write_doc(
             &format!("nodes/{file}.k7x"),
             &obj(entries),
-            &DocLayout { note: Some(&note), ..DocLayout::default() },
+            &DocLayout {
+                note: Some(&note),
+                ..DocLayout::default()
+            },
         );
     }
     count
@@ -165,7 +186,8 @@ pub fn write_modules(ctx: &mut EmitCtx<'_>, scan: Option<&HashSet<String>>) -> M
         if ctx.modules[at].inserts.is_empty() {
             continue;
         }
-        let known = !verify || scan.is_some_and(|s| s.contains(&ctx.modules[at].plugin_name.to_lowercase()));
+        let known = !verify
+            || scan.is_some_and(|s| s.contains(&ctx.modules[at].plugin_name.to_lowercase()));
         if !known {
             let name = ctx.modules[at].plugin_name.clone();
             if !stats.missing_plugins.contains(&name) {
@@ -182,13 +204,22 @@ pub fn write_modules(ctx: &mut EmitCtx<'_>, scan: Option<&HashSet<String>>) -> M
 fn write_module(ctx: &mut EmitCtx<'_>, at: usize, stats: &mut ModuleStats) {
     let (name, folder, plugin_type, plugin_name, count) = {
         let b = &ctx.modules[at];
-        (b.name.clone(), b.folder, b.plugin_type.clone(), b.plugin_name.clone(), b.inserts.len())
+        (
+            b.name.clone(),
+            b.folder,
+            b.plugin_type.clone(),
+            b.plugin_name.clone(),
+            b.inserts.len(),
+        )
     };
     let dir = format!("{folder}/{name}");
     let sole = count == 1 && ctx.modules[at].inserts[0].node.is_empty();
     let mut entries = vec![(
         "plugin",
-        obj(vec![("type", text(&plugin_type)), ("name", text(&plugin_name))]),
+        obj(vec![
+            ("type", text(&plugin_type)),
+            ("name", text(&plugin_name)),
+        ]),
     )];
     if sole {
         entries.extend(params_value(&ctx.modules[at].inserts[0].params).map(|p| ("params", p)));
@@ -203,22 +234,33 @@ fn write_module(ctx: &mut EmitCtx<'_>, at: usize, stats: &mut ModuleStats) {
     ctx.write_shared_doc(
         &format!("{dir}/module.k7x"),
         &obj(entries),
-        &DocLayout { note: note.as_deref(), ..DocLayout::default() },
+        &DocLayout {
+            note: note.as_deref(),
+            ..DocLayout::default()
+        },
     );
     stats.module_nodes += 1;
     for i in 0..count {
         let (node, params, preset) = {
             let ins = &ctx.modules[at].inserts[i];
-            (ins.node.clone(), params_value(&ins.params), ins.preset.clone())
+            (
+                ins.node.clone(),
+                params_value(&ins.params),
+                ins.preset.clone(),
+            )
         };
         if !node.is_empty() {
             let mut e = vec![("extends", text(&format!("@workspace/{folder}/{name}")))];
             e.extend(params.map(|p| ("params", p)));
-            let note = format!("{node} — inherits {name} (the plugin); only what this use sets differs.");
+            let note =
+                format!("{node} — inherits {name} (the plugin); only what this use sets differs.");
             ctx.write_doc(
                 &format!("nodes/{node}.k7x"),
                 &obj(e),
-                &DocLayout { note: Some(&note), ..DocLayout::default() },
+                &DocLayout {
+                    note: Some(&note),
+                    ..DocLayout::default()
+                },
             );
             stats.node_files += 1;
         }

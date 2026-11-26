@@ -86,7 +86,11 @@ mod tests {
     fn a_gzip_past_the_ceiling_is_refused_and_one_within_it_inflates() {
         let packed = gz(&vec![7u8; 4096]);
         assert_eq!(bounded_gunzip(&packed, 4096).unwrap().len(), 4096);
-        assert!(bounded_gunzip(&packed, 4095).unwrap_err().contains("inflates past"));
+        assert!(
+            bounded_gunzip(&packed, 4095)
+                .unwrap_err()
+                .contains("inflates past")
+        );
     }
 
     #[test]
@@ -103,6 +107,10 @@ mod tests {
         }
         let bytes = buf.into_inner();
         assert_eq!(bounded_unzip(&bytes, 1200).unwrap().len(), 2);
-        assert!(bounded_unzip(&bytes, 1199).unwrap_err().contains("inflates past"));
+        assert!(
+            bounded_unzip(&bytes, 1199)
+                .unwrap_err()
+                .contains("inflates past")
+        );
     }
 }

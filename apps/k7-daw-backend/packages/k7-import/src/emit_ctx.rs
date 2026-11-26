@@ -22,7 +22,12 @@ pub struct DocLayout<'a> {
 /// A map value, ordered as a JS object holds its keys.
 #[must_use]
 pub fn obj(entries: Vec<(&str, Value)>) -> Value {
-    Value::object(entries.into_iter().map(|(k, v)| (k.to_owned(), v)).collect())
+    Value::object(
+        entries
+            .into_iter()
+            .map(|(k, v)| (k.to_owned(), v))
+            .collect(),
+    )
 }
 
 #[must_use]
@@ -49,7 +54,7 @@ fn note_lines(note: &str) -> Vec<String> {
                 lines.push(std::mem::take(&mut cur));
             }
             '\n' | '\u{85}' | '\u{2028}' | '\u{2029}' => lines.push(std::mem::take(&mut cur)),
-            c if matches!(c, '\u{0}'..='\u{8}' | '\u{b}'..='\u{1f}' | '\u{7f}') => {}
+            '\u{0}'..='\u{8}' | '\u{b}'..='\u{1f}' | '\u{7f}' => {}
             c => cur.push(c),
         }
     }
@@ -71,7 +76,10 @@ pub fn print_doc(value: &Value, layout: &DocLayout<'_>) -> String {
     let inline = |p: &[PathSeg], _v: &Value| {
         layout.one_line.iter().any(|o| same_path(p, o))
             || (matches!(p.last(), Some(PathSeg::Index(_)))
-                && layout.items_one_line.iter().any(|o| same_path(&p[..p.len() - 1], o)))
+                && layout
+                    .items_one_line
+                    .iter()
+                    .any(|o| same_path(&p[..p.len() - 1], o)))
     };
     stringify(
         value,
@@ -119,7 +127,7 @@ fn meter(song: &Song) -> (f64, f64) {
     let mut read = |d: f64| {
         parts
             .next()
-            .and_then(|p| crate::xml::parse_float(p))
+            .and_then(crate::xml::parse_float)
             .filter(|n| *n != 0.0)
             .map_or(d, f64::trunc)
     };

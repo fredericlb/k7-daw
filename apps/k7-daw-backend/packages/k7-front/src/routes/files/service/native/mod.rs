@@ -63,6 +63,7 @@ mod tag;
 pub mod verb_ask;
 pub mod verb_bundle;
 pub mod verb_host;
+pub mod import_run;
 pub mod verb_run;
 pub mod workspaces;
 pub mod workspaces_hook;
@@ -176,6 +177,7 @@ impl Ctx {
                 || matches!(
                     tag,
                     Tag::Changes
+                        | Tag::Import
                         | Tag::Verb
                         | Tag::VerbComplete
                         | Tag::VerbBundle
@@ -259,6 +261,8 @@ mod tests_capture;
 mod tests_changes;
 #[cfg(test)]
 mod tests_changes_fix;
+#[cfg(test)]
+mod tests_import;
 #[cfg(test)]
 mod tests_device;
 #[cfg(test)]

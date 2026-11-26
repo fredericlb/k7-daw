@@ -52,6 +52,7 @@ pub async fn answer(c: &Call, ctx: &Ctx) -> Option<Response> {
         Tag::Undo | Tag::Redo => Some(super::journal_undo::step(c, ctx).await),
         Tag::History | Tag::HistoryEntries => Some(read(c, ctx).await),
         Tag::Changes => Some(super::changes::answer(c, ctx).await),
+        Tag::Import => Some(super::import_run::answer(c, ctx).await),
         Tag::Verb => Some(super::verb_run::answer(c, ctx).await),
         Tag::VerbComplete => Some(super::verb_run::complete(c, ctx).await),
         Tag::VerbBundle | Tag::VerbLibrary => Some(super::verb_bundle::answer(c, ctx).await),

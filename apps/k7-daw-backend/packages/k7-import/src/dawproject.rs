@@ -42,8 +42,8 @@ pub fn parse_dawproject(
 ) -> Result<Translation, String> {
     let entries = bounded_unzip(zip_bytes, inflate_limit.unwrap_or(MAX_INFLATED_BYTES))?;
     let entry = |name: &str| entries.iter().find(|(n, _)| n == name).map(|(_, b)| b);
-    let project_xml = entry("project.xml")
-        .ok_or("not a dawproject: project.xml missing from the archive")?;
+    let project_xml =
+        entry("project.xml").ok_or("not a dawproject: project.xml missing from the archive")?;
     let text = String::from_utf8_lossy(project_xml).into_owned();
     refuse_declarations(&text)?;
     let project = parse(&text)?;
@@ -54,7 +54,9 @@ pub fn parse_dawproject(
 
     let transport = project.child("Transport");
     let tempo = num(
-        transport.and_then(|t| t.child("Tempo")).and_then(|t| t.attr("value")),
+        transport
+            .and_then(|t| t.child("Tempo"))
+            .and_then(|t| t.attr("value")),
         120.0,
     );
     let signature = transport.and_then(|t| t.child("TimeSignature"));
@@ -90,7 +92,9 @@ pub fn parse_dawproject(
     for arrangement in project.kids("Arrangement") {
         for outer in arrangement.kids("Lanes") {
             for group in outer.kids("Lanes") {
-                let Some(track) = group.attr("track") else { continue };
+                let Some(track) = group.attr("track") else {
+                    continue;
+                };
                 let mut ctx = Collect {
                     track,
                     sample_rate: None,
@@ -132,7 +136,11 @@ pub fn parse_dawproject(
             let channel = t.child("Channel");
             let id = t.attr("id").unwrap_or_default();
             let sends = channel
-                .map(|c| c.at(&["Sends"]).map(|s| s.kids("Send").collect::<Vec<_>>()).unwrap_or_default())
+                .map(|c| {
+                    c.at(&["Sends"])
+                        .map(|s| s.kids("Send").collect::<Vec<_>>())
+                        .unwrap_or_default()
+                })
                 .unwrap_or_default()
                 .into_iter()
                 .map(|s| {
@@ -149,12 +157,17 @@ pub fn parse_dawproject(
                 name: t.attr("name").unwrap_or(id).to_owned(),
                 role: channel.and_then(|c| c.attr("role")).map(str::to_owned),
                 color: t.attr("color").map(str::to_owned),
-                plugins: channel.map(|c| map_devices(c.child("Devices"))).unwrap_or_default(),
+                plugins: channel
+                    .map(|c| map_devices(c.child("Devices")))
+                    .unwrap_or_default(),
                 sends,
                 clips: by_track.remove(id).unwrap_or_default(),
                 ..TrackOut::default()
             };
-            if let Some(mute) = channel.and_then(|c| c.child("Mute")).filter(|m| m.present()) {
+            if let Some(mute) = channel
+                .and_then(|c| c.child("Mute"))
+                .filter(|m| m.present())
+            {
                 track.mute = boolean(mute.attr("value"));
             }
             track
@@ -177,7 +190,11 @@ pub fn parse_dawproject(
         song: Song {
             name,
             tempo,
-            sample_rate: if sample_rate == 0.0 { 48000.0 } else { sample_rate },
+            sample_rate: if sample_rate == 0.0 {
+                48000.0
+            } else {
+                sample_rate
+            },
             time_signature: format!("{numerator}/{denominator}"),
             tracks,
         },
@@ -189,7 +206,9 @@ pub fn parse_dawproject(
 
 /// A Channel's Devices as plugin refs, grouped by device tag: the order across tags is not kept.
 fn map_devices(devices: Option<&Node>) -> Vec<PluginOut> {
-    let Some(devices) = devices else { return Vec::new() };
+    let Some(devices) = devices else {
+        return Vec::new();
+    };
     let mut out = Vec::new();
     for (tag, kind) in DEVICE_TAGS {
         for d in devices.kids(tag) {
@@ -202,7 +221,10 @@ fn map_devices(devices: Option<&Node>) -> Vec<PluginOut> {
                     .to_owned(),
                 role: d.attr("deviceRole").map(str::to_owned),
                 enabled: boolean(d.child("Enabled").and_then(|e| e.attr("value"))),
-                path: d.child("State").and_then(|s| s.attr("path")).map(str::to_owned),
+                path: d
+                    .child("State")
+                    .and_then(|s| s.attr("path"))
+                    .map(str::to_owned),
                 params: Vec::new(),
                 params_complete: false,
             });

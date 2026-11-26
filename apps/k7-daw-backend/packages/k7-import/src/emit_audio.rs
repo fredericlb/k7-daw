@@ -73,6 +73,33 @@ fn extname(name: &str) -> &str {
     }
 }
 
+/// A name's runs of characters a file name should not hold made one `_`, and cut to `keep` characters.
+fn clean(s: &str, keep: usize) -> String {
+    let mut out = String::new();
+    let mut run = false;
+    for c in s.chars() {
+        if c.is_ascii_alphanumeric() || matches!(c, '_' | '.' | '-') {
+            if run {
+                out.push('_');
+                run = false;
+            }
+            out.push(c);
+        } else {
+            run = true;
+        }
+    }
+    if run {
+        out.push('_');
+    }
+    out.chars().take(keep).collect()
+}
+
+/// The extension a file lands under: the archive's own, cleaned, since a name from a stranger's zip never reaches a path as it is.
+fn safe_ext(source: &str) -> String {
+    let ext = clean(extname(source), 16);
+    if ext.len() < 2 { ".wav".into() } else { ext }
+}
+
 fn hex(bytes: &[u8]) -> String {
     use std::fmt::Write;
     let mut s = String::new();
@@ -88,28 +115,10 @@ fn audio_for(ctx: &mut EmitCtx<'_>, source: &str, bytes: &[u8]) -> String {
     if let Some(held) = ctx.audio_rel.get(&key) {
         return held.clone();
     }
-    let ext = match extname(source) {
-        "" => ".wav",
-        e => e,
-    };
+    let ext = safe_ext(source);
     let file = source.rsplit('/').next().unwrap_or(source);
     let bare = &file[..file.len() - extname(source).len()];
-    let mut stem: String = String::new();
-    let mut run = false;
-    for c in bare.chars() {
-        if c.is_ascii_alphanumeric() || matches!(c, '_' | '.' | '-') {
-            if run {
-                stem.push('_');
-                run = false;
-            }
-            stem.push(c);
-        } else {
-            run = true;
-        }
-    }
-    if run {
-        stem.push('_');
-    }
+    let mut stem = clean(bare, 100);
     if stem.is_empty() {
         stem = "audio".into();
     }
@@ -132,7 +141,11 @@ fn emit_sequence(ctx: &mut EmitCtx<'_>, c: &ClipOut, id: &str) -> Value {
         .notes
         .iter()
         .map(|n| {
-            let mut e = vec![("t", number(n.time)), ("d", number(n.duration)), ("k", number(n.key))];
+            let mut e = vec![
+                ("t", number(n.time)),
+                ("d", number(n.duration)),
+                ("k", number(n.key)),
+            ];
             if n.vel != 1.0 {
                 e.push(("v", number(n.vel)));
             }
@@ -142,12 +155,22 @@ fn emit_sequence(ctx: &mut EmitCtx<'_>, c: &ClipOut, id: &str) -> Value {
     let w = window_of(c);
     let mut fields = window_fields(ctx, &w);
     fields.push(("notes", Value::List(notes)));
-    let layout = DocLayout { items_one_line: vec![vec!["notes".into()]], ..DocLayout::default() };
+    let layout = DocLayout {
+        items_one_line: vec![vec!["notes".into()]],
+        ..DocLayout::default()
+    };
     ctx.write_doc(&format!("sequences/{id}.k7x"), &obj(fields), &layout);
     ctx.sequence_files += 1;
     placement_of(
         ctx,
-        &Placement { id, start: c.start, loops: w.loops, fade_in: None, fade_out: None, disabled: c.disabled },
+        &Placement {
+            id,
+            start: c.start,
+            loops: w.loops,
+            fade_in: None,
+            fade_out: None,
+            disabled: c.disabled,
+        },
     )
 }
 
@@ -157,7 +180,7 @@ fn emit_clip(ctx: &mut EmitCtx<'_>, c: &ClipOut, id: &str) -> Value {
     let bytes = source.and_then(|s| ctx.assets.get(s)).map(|b| (*b).clone());
     let wav_rel = match (&bytes, source) {
         (Some(b), Some(s)) => audio_for(ctx, s, b),
-        _ => format!("clips/{id}{}", match extname(source.unwrap_or("")) { "" => ".wav", e => e }),
+        _ => format!("clips/{id}{}", safe_ext(source.unwrap_or(""))),
     };
     match bytes {
         Some(b) => {
@@ -181,7 +204,10 @@ fn emit_clip(ctx: &mut EmitCtx<'_>, c: &ClipOut, id: &str) -> Value {
         fields.push((
             "warp",
             obj(vec![
-                ("algorithm", text(warp.algorithm.as_deref().unwrap_or("elastique"))),
+                (
+                    "algorithm",
+                    text(warp.algorithm.as_deref().unwrap_or("elastique")),
+                ),
                 ("markers", Value::List(markers)),
             ]),
         ));
@@ -231,4 +257,19 @@ pub fn emit_arrangement(ctx: &mut EmitCtx<'_>, t: &TrackOut, slug: &str) -> Vec<
             }
         })
         .collect()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn a_name_from_a_zip_never_reaches_a_path_with_a_separator() {
+        assert_eq!(safe_ext("audio/x.wav"), ".wav");
+        assert_eq!(safe_ext("audio/a.\\..\\evil"), "._evil");
+        assert_eq!(safe_ext("audio/noext"), ".wav");
+        assert_eq!(safe_ext("a/b."), ".wav");
+        assert_eq!(clean("bass copy (1)", 100), "bass_copy_1_");
+        assert_eq!(clean(&"a".repeat(300), 100).len(), 100);
+    }
 }

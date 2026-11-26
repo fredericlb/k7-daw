@@ -22,7 +22,9 @@ const STAND_IN_SYNTH: &str = "@k7-core/instruments/synth/surge-xt";
 #[must_use]
 pub fn dedupe_outs(outs: Vec<OutDef>) -> Vec<OutDef> {
     let mut seen = HashSet::new();
-    outs.into_iter().filter(|o| seen.insert(o.to.clone())).collect()
+    outs.into_iter()
+        .filter(|o| seen.insert(o.to.clone()))
+        .collect()
 }
 
 type Segments = IndexMap<String, Vec<String>>;
@@ -34,8 +36,14 @@ fn chain_segments(chains: &IndexMap<String, ChainDef>) -> (Segments, Segments, V
     let mut bypassed = Vec::new();
 
     // A sink (OUT) or a module is its own entry; a chain's is where it starts.
-    fn entry_of(chains: &IndexMap<String, ChainDef>, name: &str, seen: &mut HashSet<String>) -> Option<String> {
-        let Some(d) = chains.get(name) else { return Some(name.to_owned()) };
+    fn entry_of(
+        chains: &IndexMap<String, ChainDef>,
+        name: &str,
+        seen: &mut HashSet<String>,
+    ) -> Option<String> {
+        let Some(d) = chains.get(name) else {
+            return Some(name.to_owned());
+        };
         if !seen.insert(name.to_owned()) {
             return Some(name.to_owned());
         }
@@ -84,7 +92,8 @@ fn chain_segments(chains: &IndexMap<String, ChainDef>) -> (Segments, Segments, V
 }
 
 fn taken(ctx: &EmitCtx<'_>, name: &str) -> bool {
-    ctx.used_chain_names.contains(&name.to_lowercase()) || ctx.used_node_names.contains(&name.to_lowercase())
+    ctx.used_chain_names.contains(&name.to_lowercase())
+        || ctx.used_node_names.contains(&name.to_lowercase())
 }
 
 /// A lane's strip, last in its run: a node on the LIBRARY's mixer.
@@ -105,7 +114,10 @@ fn add_track_mixer(ctx: &mut EmitCtx<'_>, entry: &str) -> String {
     ctx.write_doc(
         &format!("nodes/{name}.k7x"),
         &obj(vec![("extends", text(SHARED_STRIP))]),
-        &DocLayout { note: Some(&note), ..DocLayout::default() },
+        &DocLayout {
+            note: Some(&note),
+            ..DocLayout::default()
+        },
     );
     name
 }
@@ -125,8 +137,14 @@ fn add_stand_in(ctx: &mut EmitCtx<'_>, entry: &str, drums: bool) -> String {
     );
     ctx.write_doc(
         &format!("nodes/{name}.k7x"),
-        &obj(vec![("extends", text(if drums { STAND_IN_KIT } else { STAND_IN_SYNTH }))]),
-        &DocLayout { note: Some(&note), ..DocLayout::default() },
+        &obj(vec![(
+            "extends",
+            text(if drums { STAND_IN_KIT } else { STAND_IN_SYNTH }),
+        )]),
+        &DocLayout {
+            note: Some(&note),
+            ..DocLayout::default()
+        },
     );
     ctx.stand_ins += 1;
     name
@@ -151,11 +169,20 @@ pub fn add_chain(
     }
     // The stand-in leads, where the instrument the source had would have stood.
     if let Some(drums) = stand_in {
-        uses.insert(0, Step { module: add_stand_in(ctx, entry, drums), enabled: None });
+        uses.insert(
+            0,
+            Step {
+                module: add_stand_in(ctx, entry, drums),
+                enabled: None,
+            },
+        );
     }
     // A LANE gets its strip, last; a return bus and the master chain are not lanes and get none.
     if from_track.is_some() {
-        uses.push(Step { module: add_track_mixer(ctx, entry), enabled: None });
+        uses.push(Step {
+            module: add_track_mixer(ctx, entry),
+            enabled: None,
+        });
     }
     ctx.chains.insert(
         entry.to_owned(),
@@ -176,7 +203,12 @@ pub fn drop_dead_buses(ctx: &mut EmitCtx<'_>) {
             .values()
             .flat_map(|d| d.out.iter().map(|o| o.to.clone()))
             .collect();
-        let dead: Vec<String> = ctx.bus_chains.iter().filter(|b| !routed.contains(*b)).cloned().collect();
+        let dead: Vec<String> = ctx
+            .bus_chains
+            .iter()
+            .filter(|b| !routed.contains(*b))
+            .cloned()
+            .collect();
         if dead.is_empty() {
             return;
         }
@@ -197,7 +229,12 @@ pub fn write_graph(ctx: &mut EmitCtx<'_>, master_chain: Option<&str>) {
     let weighted: usize = ctx
         .chains
         .values()
-        .map(|d| d.out.iter().filter(|o| o.gain.is_some_and(|g| g != 1.0)).count())
+        .map(|d| {
+            d.out
+                .iter()
+                .filter(|o| o.gain.is_some_and(|g| g != 1.0))
+                .count()
+        })
         .sum();
     // What the sum runs into: the master run's first module, or OUT when nothing treats the whole.
     let mix_sink = master_chain
@@ -235,11 +272,18 @@ pub fn write_graph(ctx: &mut EmitCtx<'_>, master_chain: Option<&str>) {
              WHERE the signal goes, not how much of it. Trim them on the bus's own module."
         )
     });
-    let mut one_line: Vec<Vec<String>> = node_keys.into_iter().map(|k| vec!["modules".to_owned(), k]).collect();
+    let mut one_line: Vec<Vec<String>> = node_keys
+        .into_iter()
+        .map(|k| vec!["modules".to_owned(), k])
+        .collect();
     one_line.push(vec!["bypassed".to_owned()]);
     ctx.write_doc(
         "graph.k7x",
         &obj(seg),
-        &DocLayout { note: note.as_deref(), one_line, items_one_line: Vec::new() },
+        &DocLayout {
+            note: note.as_deref(),
+            one_line,
+            items_one_line: Vec::new(),
+        },
     );
 }

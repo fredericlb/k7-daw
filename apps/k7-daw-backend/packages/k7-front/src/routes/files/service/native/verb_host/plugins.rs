@@ -53,6 +53,20 @@ async fn listed(link: &EngineLink, account: &str, session: &Session, filter: &st
     plugins_of(waiting.answer().await)
 }
 
+/// The engine's plugin names, lowercase; none when no engine answers, which reads as "unknown" and skips the check of names.
+pub async fn names(link: &EngineLink, root: &str, account: &str) -> Option<HashSet<String>> {
+    let session = ready(link, root, QUERY_WAIT).await?;
+    let list = listed(link, account, &session, "").await;
+    let names: HashSet<String> = list
+        .as_array()?
+        .iter()
+        .filter_map(|p| p.get("name").and_then(Value::as_str))
+        .filter(|n| !n.is_empty())
+        .map(str::to_lowercase)
+        .collect();
+    (!names.is_empty()).then_some(names)
+}
+
 /// `GET /verb-host/plugins?filter=`: the engine's cached list, `[]` with no engine.
 pub async fn list(req: &Checked, link: &EngineLink) -> Response {
     let filter = body::query(&req.query, "filter");

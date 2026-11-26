@@ -67,7 +67,14 @@ fn decode_hex(text: &str) -> Option<Vec<u8>> {
         return None;
     }
     let digit = |c: u8| (c as char).to_digit(16).unwrap_or(0) as u8;
-    Some(clean.chunks_exact(2).map(|p| digit(p[0]) << 4 | digit(p[1])).collect())
+    Some(
+        clean
+            .as_chunks::<2>()
+            .0
+            .iter()
+            .map(|[hi, lo]| digit(*hi) << 4 | digit(*lo))
+            .collect(),
+    )
 }
 
 fn slug(s: &str) -> String {
@@ -94,7 +101,11 @@ fn walk<'a>(node: &'a Node, found: &mut Vec<(&'a str, &'a Node)>, acc: &mut Devi
             continue;
         }
         if !not_a_device(tag) && is_native(tag) {
-            let into = if tag.ends_with("GroupDevice") { &mut acc.racks } else { &mut acc.native };
+            let into = if tag.ends_with("GroupDevice") {
+                &mut acc.racks
+            } else {
+                &mut acc.native
+            };
             into.insert(tag.to_owned());
         }
         for k in kids {
@@ -105,7 +116,9 @@ fn walk<'a>(node: &'a Node, found: &mut Vec<(&'a str, &'a Node)>, acc: &mut Devi
 
 /// A track's Devices as plugin refs; `notes` is true for a MIDI track, whose first plugin is its instrument.
 pub fn map_devices(devices: Option<&Node>, notes: bool, acc: &mut Devices) -> Vec<PluginOut> {
-    let Some(devices) = devices else { return Vec::new() };
+    let Some(devices) = devices else {
+        return Vec::new();
+    };
     let mut found = Vec::new();
     walk(devices, &mut found, acc);
     let mut out: Vec<PluginOut> = Vec::new();
@@ -157,11 +170,20 @@ pub fn map_devices(devices: Option<&Node>, notes: bool, acc: &mut Devices) -> Ve
                 let pname = val(Some(p), &["ParameterName"]).filter(|s| !s.is_empty());
                 let pval = val(Some(p), &["ParameterValue", "Manual"]);
                 if let (Some(n), Some(v)) = (pname, pval) {
-                    plugin.params.push((n.to_owned(), round6(num(Some(v), 0.0))));
+                    plugin
+                        .params
+                        .push((n.to_owned(), round6(num(Some(v), 0.0))));
                 }
             }
         }
-        plugin.role = Some(if notes && out.is_empty() { "instrument" } else { "audioFX" }.into());
+        plugin.role = Some(
+            if notes && out.is_empty() {
+                "instrument"
+            } else {
+                "audioFX"
+            }
+            .into(),
+        );
         out.push(plugin);
     }
     out

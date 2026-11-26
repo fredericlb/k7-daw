@@ -71,9 +71,7 @@ impl Node {
     /// Whether `tag` names an element anywhere below this one.
     #[must_use]
     pub fn holds(&self, tag: &str) -> bool {
-        self.children
-            .iter()
-            .any(|c| c.tag == tag || c.holds(tag))
+        self.children.iter().any(|c| c.tag == tag || c.holds(tag))
     }
 }
 
@@ -92,11 +90,12 @@ pub fn parse_float(s: &str) -> Option<f64> {
     if i < b.len() && (b[i] == b'+' || b[i] == b'-') {
         i += 1;
     }
-    for word in ["Infinity"] {
-        if t[i..].starts_with(word) {
-            let v = f64::INFINITY;
-            return Some(if b[0] == b'-' { -v } else { v });
-        }
+    if t[i..].starts_with("Infinity") {
+        return Some(if b[0] == b'-' {
+            f64::NEG_INFINITY
+        } else {
+            f64::INFINITY
+        });
     }
     let digits = |from: usize| b[from..].iter().take_while(|c| c.is_ascii_digit()).count();
     let int = digits(i);
@@ -127,7 +126,9 @@ pub fn parse_float(s: &str) -> Option<f64> {
 /// A number from an optional attribute, `dflt` when it is absent or not finite.
 #[must_use]
 pub fn num(v: Option<&str>, dflt: f64) -> f64 {
-    v.and_then(parse_float).filter(|n| n.is_finite()).unwrap_or(dflt)
+    v.and_then(parse_float)
+        .filter(|n| n.is_finite())
+        .unwrap_or(dflt)
 }
 
 #[must_use]
@@ -224,14 +225,18 @@ pub fn parse(xml: &str) -> Result<Node, String> {
             Event::Start(e) => {
                 count += 1;
                 if stack.len() >= MAX_DEPTH || count > MAX_NODES {
-                    return Err("this file nests or grows past what an import reads — refused".into());
+                    return Err(
+                        "this file nests or grows past what an import reads — refused".into(),
+                    );
                 }
                 stack.push(open(&e)?);
             }
             Event::Empty(e) => {
                 count += 1;
                 if count > MAX_NODES {
-                    return Err("this file nests or grows past what an import reads — refused".into());
+                    return Err(
+                        "this file nests or grows past what an import reads — refused".into(),
+                    );
                 }
                 let node = open(&e)?;
                 match stack.last_mut() {
@@ -240,7 +245,9 @@ pub fn parse(xml: &str) -> Result<Node, String> {
                 }
             }
             Event::End(_) => {
-                let Some(mut node) = stack.pop() else { continue };
+                let Some(mut node) = stack.pop() else {
+                    continue;
+                };
                 node.text = k7x::edit::js_trim(&node.text).to_owned();
                 match stack.last_mut() {
                     Some(parent) => parent.children.push(node),

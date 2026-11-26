@@ -106,9 +106,15 @@ pub fn translate(input: &Input<'_>) -> Result<Translation, String> {
 }
 
 /// The new project's folder: the name somebody TYPED, refused when taken, or the file's own stem, made free with a suffix.
-pub fn folder_name(file: &str, typed: Option<&str>, taken: &dyn Fn(&str) -> bool) -> Result<String, String> {
+pub fn folder_name(
+    file: &str,
+    typed: Option<&str>,
+    taken: &dyn Fn(&str) -> bool,
+) -> Result<String, String> {
     let typed = typed.filter(|t| !t.is_empty());
-    let flat = typed.map_or_else(|| stem_of(file), str::to_owned).replace(['/', '\\'], "_");
+    let flat = typed
+        .map_or_else(|| stem_of(file), str::to_owned)
+        .replace(['/', '\\'], "_");
     // A leading `_` is a shared folder's (`_modules`), so a project never starts with one.
     let flat = flat.trim_start_matches(['.', '_']);
     let base = if flat.is_empty() { "imported" } else { flat };
@@ -186,7 +192,11 @@ pub fn emit_translation(
 ) -> Imported {
     let (written, stats) = emit(project, &t.song, &t.files, world);
     let log = import_log(source, project, t, stats.stand_ins, outside);
-    Imported { written, stats, log }
+    Imported {
+        written,
+        stats,
+        log,
+    }
 }
 
 #[cfg(test)]
@@ -196,12 +206,18 @@ mod tests {
     #[test]
     fn a_typed_name_is_refused_when_taken_and_a_derived_one_is_suffixed() {
         let taken = |n: &str| n == "song" || n == "song-2";
-        assert_eq!(folder_name("a/song.dawproject", None, &taken).unwrap(), "song-3");
+        assert_eq!(
+            folder_name("a/song.dawproject", None, &taken).unwrap(),
+            "song-3"
+        );
         assert_eq!(
             folder_name("a/song.dawproject", Some("song"), &taken).unwrap_err(),
             "\"song\" already exists"
         );
-        assert_eq!(folder_name("x.als", Some("__x/y"), &|_| false).unwrap(), "x_y");
+        assert_eq!(
+            folder_name("x.als", Some("__x/y"), &|_| false).unwrap(),
+            "x_y"
+        );
         assert_eq!(folder_name("...als", None, &|_| false).unwrap(), "imported");
     }
 
@@ -209,12 +225,20 @@ mod tests {
     fn a_lone_als_is_not_droppable_and_the_refusal_says_where_it_goes() {
         assert!(check_droppable("a.dawproject").is_ok());
         assert!(check_droppable("A.ZIP").is_ok());
-        assert!(check_droppable("a.als").unwrap_err().contains("import it from the tree"));
+        assert!(
+            check_droppable("a.als")
+                .unwrap_err()
+                .contains("import it from the tree")
+        );
     }
 
     #[test]
     fn a_file_past_the_ceiling_is_refused() {
         assert!(check_size("x.zip", MAX_IMPORT_BYTES).is_ok());
-        assert!(check_size("x.zip", MAX_IMPORT_BYTES + 1).unwrap_err().contains("512 MB"));
+        assert!(
+            check_size("x.zip", MAX_IMPORT_BYTES + 1)
+                .unwrap_err()
+                .contains("512 MB")
+        );
     }
 }

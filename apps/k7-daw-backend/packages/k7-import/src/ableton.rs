@@ -74,7 +74,10 @@ pub fn map_live_set(
         return Err("not an Ableton Live set: no <Ableton> root element".into());
     }
     let creator = root.attr("Creator").unwrap_or("unknown");
-    let major = num(root.attr("MinorVersion").and_then(|m| m.split('.').next()), 0.0);
+    let major = num(
+        root.attr("MinorVersion").and_then(|m| m.split('.').next()),
+        0.0,
+    );
     if major != 11.0 && major != 12.0 {
         return Err(format!(
             "unsupported Ableton version: \"{creator}\" — this importer handles Live 11 and 12"
@@ -82,10 +85,13 @@ pub fn map_live_set(
     }
     let empty = Node::default();
     let live = root.child("LiveSet").unwrap_or(&empty);
-    let main = live.child("MainTrack").or_else(|| live.child("MasterTrack"));
+    let main = live
+        .child("MainTrack")
+        .or_else(|| live.child("MasterTrack"));
     let mixer = main.and_then(|m| m.at(&["DeviceChain", "Mixer"]));
     let tempo = round6(num(val(mixer, &["Tempo", "Manual"]), 120.0));
-    let time_signature = decode_time_signature(num(val(mixer, &["TimeSignature", "Manual"]), 201.0));
+    let time_signature =
+        decode_time_signature(num(val(mixer, &["TimeSignature", "Manual"]), 201.0));
 
     let mut ctx = Ctx {
         read,
@@ -113,11 +119,15 @@ pub fn map_live_set(
     let mut warnings = Vec::new();
     let returns = src.kids("ReturnTrack").count();
     if returns > 0 {
-        warnings.push(format!("{returns} return track(s) ignored — sends are not imported yet"));
+        warnings.push(format!(
+            "{returns} return track(s) ignored — sends are not imported yet"
+        ));
     }
     let groups = src.kids("GroupTrack").count();
     if groups > 0 {
-        warnings.push(format!("{groups} group track(s) flattened — grouping is not imported yet"));
+        warnings.push(format!(
+            "{groups} group track(s) flattened — grouping is not imported yet"
+        ));
     }
     if ctx.take_lane_clips > 0 {
         warnings.push(format!(
@@ -132,13 +142,19 @@ pub fn map_live_set(
         ));
     }
     for d in &ctx.devices.native {
-        warnings.push(format!("Ableton device \"{d}\" skipped — it has no portable form outside Live"));
+        warnings.push(format!(
+            "Ableton device \"{d}\" skipped — it has no portable form outside Live"
+        ));
     }
     for r in &ctx.devices.racks {
-        warnings.push(format!("rack \"{r}\" flattened — the plugins inside are carried, its structure is not"));
+        warnings.push(format!(
+            "rack \"{r}\" flattened — the plugins inside are carried, its structure is not"
+        ));
     }
     for s in &ctx.ordered_missing {
-        warnings.push(format!("sample not imported: {s} — the clips playing it are left out"));
+        warnings.push(format!(
+            "sample not imported: {s} — the clips playing it are left out"
+        ));
     }
 
     let mut files = std::mem::take(&mut ctx.files);
@@ -154,7 +170,11 @@ pub fn map_live_set(
         song: Song {
             name: fallback.to_owned(),
             tempo,
-            sample_rate: if ctx.sample_rate > 0.0 { ctx.sample_rate } else { 48000.0 },
+            sample_rate: if ctx.sample_rate > 0.0 {
+                ctx.sample_rate
+            } else {
+                48000.0
+            },
             time_signature,
             tracks,
         },
@@ -236,7 +256,10 @@ fn walk_clips(node: &Node, place: Where, out: &mut Vec<ClipOut>, ctx: &mut Ctx<'
 
 /// The arrangement placement both clip kinds share: CurrentStart and CurrentEnd are absolute beats.
 fn clip_window(clip: &Node) -> (f64, f64) {
-    let start = num(val(Some(clip), &["CurrentStart"]), num(clip.attr("Time"), 0.0));
+    let start = num(
+        val(Some(clip), &["CurrentStart"]),
+        num(clip.attr("Time"), 0.0),
+    );
     let end = num(val(Some(clip), &["CurrentEnd"]), start);
     (round6(start), round6((end - start).max(0.0)))
 }
@@ -257,7 +280,11 @@ pub fn source_second_at(markers: &[(f64, f64)], beat: f64) -> f64 {
     let seg = |i: usize| {
         let (b0, s0) = markers[i];
         let (b1, s1) = markers[i + 1];
-        if b1 > b0 { s0 + (beat - b0) * (s1 - s0) / (b1 - b0) } else { s0 }
+        if b1 > b0 {
+            s0 + (beat - b0) * (s1 - s0) / (b1 - b0)
+        } else {
+            s0
+        }
     };
     for i in 0..markers.len() - 1 {
         if beat <= markers[i + 1].0 {
@@ -303,13 +330,20 @@ fn map_audio_clip(clip: &Node, ctx: &mut Ctx<'_>) -> Option<ClipOut> {
         let bytes = ctx.read.and_then(|f| f(&r));
         match bytes {
             Some(bytes) => {
-                let key = format!("audio/{}", unique_name(&r.name, &mut ctx.devices.used_names));
+                let key = format!(
+                    "audio/{}",
+                    unique_name(&r.name, &mut ctx.devices.used_names)
+                );
                 ctx.files.push((key.clone(), bytes));
                 out.source = Some(key);
             }
             None => {
                 // Left out rather than placed on a file that is not there: one such clip would refuse the whole song.
-                let shown = r.relative.clone().or(r.absolute.clone()).unwrap_or(r.name.clone());
+                let shown = r
+                    .relative
+                    .clone()
+                    .or(r.absolute.clone())
+                    .unwrap_or(r.name.clone());
                 if ctx.missing.insert(shown.clone()) {
                     ctx.ordered_missing.push(shown);
                 }
@@ -335,7 +369,10 @@ fn map_audio_clip(clip: &Node, ctx: &mut Ctx<'_>) -> Option<ClipOut> {
     if markers.len() >= 2 {
         out.warp = Some(WarpOut {
             algorithm: None,
-            markers: markers.iter().map(|(b, s)| (round6(*b), round6(*s))).collect(),
+            markers: markers
+                .iter()
+                .map(|(b, s)| (round6(*b), round6(*s)))
+                .collect(),
         });
     }
     let at = material_start(clip);
@@ -374,7 +411,11 @@ fn map_midi_clip(clip: &Node, ctx: &mut Ctx<'_>) -> ClipOut {
         if key < 0.0 {
             continue;
         }
-        for ev in kt.child("Notes").into_iter().flat_map(|n| n.kids("MidiNoteEvent")) {
+        for ev in kt
+            .child("Notes")
+            .into_iter()
+            .flat_map(|n| n.kids("MidiNoteEvent"))
+        {
             notes.push(NoteOut {
                 time: round6(num(ev.attr("Time"), 0.0)),
                 duration: round6(num(ev.attr("Duration"), 0.0)),

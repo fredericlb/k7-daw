@@ -21,7 +21,12 @@ fn plug(name: &str, role: &str) -> PluginOut {
 }
 
 fn note(time: f64, duration: f64, key: f64, vel: f64) -> NoteOut {
-    NoteOut { time, duration, key, vel }
+    NoteOut {
+        time,
+        duration,
+        key,
+        vel,
+    }
 }
 
 fn track(id: &str, name: &str, role: &str) -> TrackOut {
@@ -51,7 +56,11 @@ fn song() -> Song {
     let mut arp = plug("Arp", "noteFX");
     arp.enabled = false;
     keys.plugins = vec![eq, diva, arp];
-    keys.sends = vec![SendOut { to: "t5".into(), level: 0.5, enabled: true }];
+    keys.sends = vec![SendOut {
+        to: "t5".into(),
+        level: 0.5,
+        enabled: true,
+    }];
     let mut c = ClipOut::new(ClipKind::Midi, 8.0, 8.0);
     c.loop_start = Some(0.0);
     c.loop_end = Some(4.0);
@@ -87,8 +96,16 @@ fn song() -> Song {
     kontakt.params_complete = true;
     vox.plugins = vec![kontakt];
     vox.sends = vec![
-        SendOut { to: "t5".into(), level: 1.0, enabled: true },
-        SendOut { to: "t6".into(), level: 0.3, enabled: false },
+        SendOut {
+            to: "t5".into(),
+            level: 1.0,
+            enabled: true,
+        },
+        SendOut {
+            to: "t6".into(),
+            level: 0.3,
+            enabled: false,
+        },
     ];
     vox.clips = vec![audio("audio/vox.wav", 2.0, 2.0)];
 
@@ -115,7 +132,11 @@ fn expected() -> BTreeMap<String, Vec<u8>> {
             if p.is_dir() {
                 walk(root, &p, out);
             } else {
-                let rel = p.strip_prefix(root).unwrap().to_string_lossy().replace('\\', "/");
+                let rel = p
+                    .strip_prefix(root)
+                    .unwrap()
+                    .to_string_lossy()
+                    .replace('\\', "/");
                 out.insert(rel, std::fs::read(&p).unwrap());
             }
         }
@@ -133,7 +154,10 @@ fn a_song_taking_every_branch_writes_the_files_it_always_wrote() {
         ("audio/bass.wav".to_owned(), bass.clone()),
         ("audio/bass copy.wav".to_owned(), bass),
         ("audio/vox.wav".to_owned(), Arc::new(b"RIFFvox".to_vec())),
-        ("plugins/bassq.vstpreset".to_owned(), Arc::new(b"VST3preset".to_vec())),
+        (
+            "plugins/bassq.vstpreset".to_owned(),
+            Arc::new(b"VST3preset".to_vec()),
+        ),
     ];
     let names = ["Pro-Q 3", "Diva", "Arp", "ValhallaRoom", "Pro-L 2"];
     let world = World {
@@ -144,13 +168,22 @@ fn a_song_taking_every_branch_writes_the_files_it_always_wrote() {
 
     let mut got: BTreeMap<String, Vec<u8>> = BTreeMap::new();
     for (p, t) in &written.texts {
-        assert!(got.insert(p.clone(), t.clone().into_bytes()).is_none(), "{p} written twice");
+        assert!(
+            got.insert(p.clone(), t.clone().into_bytes()).is_none(),
+            "{p} written twice"
+        );
     }
     for (p, b) in &written.binaries {
-        assert!(got.insert(p.clone(), b.to_vec()).is_none(), "{p} written twice");
+        assert!(
+            got.insert(p.clone(), b.to_vec()).is_none(),
+            "{p} written twice"
+        );
     }
     let want = expected();
-    assert_eq!(got.keys().collect::<Vec<_>>(), want.keys().collect::<Vec<_>>());
+    assert_eq!(
+        got.keys().collect::<Vec<_>>(),
+        want.keys().collect::<Vec<_>>()
+    );
     for (path, bytes) in &want {
         assert_eq!(
             String::from_utf8_lossy(&got[path]),

@@ -82,3 +82,7 @@ through (`docs/verbs-port.md`). `POST /verb/complete {line, cursor?, labelled?}`
 | `rev` is the project's token read after the push | the page adopts a token as its own only when it is the one after its line |
 | one compile cache, for the last project run, kept from one line to the next and shared with completion | its entries are keyed by each file's stamp, so a file that moved is decoded again; one project bounds what it holds |
 | the route is a write for the merge gate | a line may write anything a verb writes; a verb that writes nothing is refused while a merge waits, a minor cost |
+
+## A foreign project: `POST /import`
+
+The route builds a set with `create` from the translated files and lands it through the same path, after writing the samples into the folder it claims: `docs/import.md`.

@@ -21,10 +21,16 @@ fn repo() -> PathBuf {
 }
 
 fn walk(root: &Path, rel: &str, out: &mut Vec<(String, Vec<u8>)>) {
-    let Ok(entries) = std::fs::read_dir(root.join(rel)) else { return };
+    let Ok(entries) = std::fs::read_dir(root.join(rel)) else {
+        return;
+    };
     for e in entries.flatten() {
         let name = e.file_name().to_string_lossy().into_owned();
-        let sub = if rel.is_empty() { name } else { format!("{rel}/{name}") };
+        let sub = if rel.is_empty() {
+            name
+        } else {
+            format!("{rel}/{name}")
+        };
         if e.path().is_dir() {
             walk(root, &sub, out);
         } else if let Ok(bytes) = std::fs::read(e.path()) {
@@ -49,16 +55,28 @@ pub fn land(project: &str, written: &Written) -> Landed {
     };
     add(r.join("apps/k7-daw-frontend/packages/song/meta"), META);
     let lib = format!("{HOME}/libraries/k7-core");
-    add(r.join("k7-core/modules/instruments/k7-rack"), &format!("{lib}/modules/instruments/k7-rack"));
-    add(r.join("k7-core/modules/instruments/synth/surge-xt"), &format!("{lib}/modules/instruments/synth/surge-xt"));
-    files.push((format!("{lib}/library.k7x"), std::fs::read(r.join("k7-core/library.k7x")).unwrap_or_default()));
+    add(
+        r.join("k7-core/modules/instruments/k7-rack"),
+        &format!("{lib}/modules/instruments/k7-rack"),
+    );
+    add(
+        r.join("k7-core/modules/instruments/synth/surge-xt"),
+        &format!("{lib}/modules/instruments/synth/surge-xt"),
+    );
+    files.push((
+        format!("{lib}/library.k7x"),
+        std::fs::read(r.join("k7-core/library.k7x")).unwrap_or_default(),
+    ));
     for (p, t) in &written.texts {
         files.push((format!("{WS}/{p}"), t.clone().into_bytes()));
     }
     for (p, b) in &written.binaries {
         files.push((format!("{WS}/{p}"), b.to_vec()));
     }
-    Landed { fs: MemFs::from_tree("", files), project: format!("{WS}/{project}") }
+    Landed {
+        fs: MemFs::from_tree("", files),
+        project: format!("{WS}/{project}"),
+    }
 }
 
 impl Landed {
@@ -87,7 +105,8 @@ impl Landed {
 
     /// A k7x file of the project read back as data.
     pub fn data(&self, rel: &str) -> Value {
-        song_edit::workspace_doc::ws_data(&self.fs, &format!("{}/{rel}", self.project)).expect("a k7x file that reads")
+        song_edit::workspace_doc::ws_data(&self.fs, &format!("{}/{rel}", self.project))
+            .expect("a k7x file that reads")
     }
 }
 
