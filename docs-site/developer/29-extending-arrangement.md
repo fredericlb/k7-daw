@@ -19,8 +19,8 @@ Test it the house way, asserting the file differs by exactly the line you meant 
 
 ## 2. The verb, in `@studio/commands`
 
-1. **Declare it** in `apps/k7-daw-frontend/packages/commands/commands.yaml`: the command string, a `sid`, `readable` in
-   `en` and `fr` (imperative, no example, at most 60 characters — `commandSpec.test.ts` enforces
+1. **Declare it** in `apps/k7-daw-wasm/verbs/commands.yaml`: the command string, a `sid`, `readable` in
+   `en` and `fr` (imperative, no example, at most 60 characters — the crate's `palette.rs` tests enforce
    it), a `help` line with an example, `surfaces: [cli]`, and `args` with `complete:` providers or
    `values:`, `type: timecode|number|note` for single-token arguments, and a `hint:` wherever a
    value's unit is ambiguous — say whether a timecode is a **position** or a **length**.

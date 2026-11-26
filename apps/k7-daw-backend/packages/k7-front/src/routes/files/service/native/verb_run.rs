@@ -426,3 +426,8 @@ pub async fn complete(c: &Call, ctx: &Ctx) -> Response {
         .collect();
     json_answer(200, &json!({ "items": items }))
 }
+
+/// `GET /verb/catalogue`: every command with each argument's class, provider and clue, as `CommandInfo[]`.
+pub fn catalogue() -> Response {
+    json_answer(200, &k7_file_service::edits::verb::catalogue())
+}

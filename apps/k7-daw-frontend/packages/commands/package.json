@@ -3,9 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "k7's command catalogue (commands.yaml, read by the palette) and the Worker that holds the open project for its picture views and runs an import. The verbs themselves are the Rust crate apps/k7-daw-wasm/verbs, run by the backend's POST /verb. Consumed as source.",
+  "description": "The Worker that holds the open project for its picture views and runs an import. The verbs themselves are the Rust crate apps/k7-daw-wasm/verbs, run by the backend's POST /verb. Consumed as source.",
   "exports": {
-    "./commandSpec": "./src/commandSpec.ts",
     "./runtime": "./src/runtime/runtime.ts",
     "./runtime/protocol": "./src/runtime/protocol.ts",
     "./runtime/importer": "./src/runtime/importer.ts"

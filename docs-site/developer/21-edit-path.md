@@ -31,7 +31,7 @@ Positions are converted to timecodes at the edge, with `beatsToPosition` / `beat
 `apps/k7-daw-frontend/packages/song-schema/src/timecode.ts`. The pane works in beats; the verbs speak
 `bar:beat:eighth:sixteenth`, positions 1-based and durations 0-based. Getting the two kinds mixed up
 is the classic bug here, which is why every argument that is a length says so in its `hint:` in
-`apps/k7-daw-frontend/packages/commands/commands.yaml`.
+`apps/k7-daw-wasm/verbs/commands.yaml`.
 
 Keys go the same way: `apps/k7-daw-frontend/src/keys.ts` maps a token to a command string (possibly
 conditional, possibly interpolating the caret's track), and `resolveToken` hands it to

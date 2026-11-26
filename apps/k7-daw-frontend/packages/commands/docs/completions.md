@@ -1,14 +1,14 @@
 # What a command line offers — the providers, the classes, the clues
 
 `commands.yaml` says what you TYPE and what each argument may hold. Three vocabularies answer three different
-questions; the values are the Rust crate's (`apps/k7-daw-wasm/verbs/src/complete/`, asked through `POST /verb/complete`),
-the class and the clue the palette's (`src/providerInfo.ts`):
+questions; all three are the Rust crate's (`apps/k7-daw-wasm/verbs/src/complete/`): the values asked through `POST /verb/complete`,
+the class and the clue (`provider_info.rs`) served as `GET /verb/catalogue`:
 
 | | question | where |
 |---|---|---|
-| `PROVIDERS` | what are the candidate VALUES, right now, in this project | `complete:` in `commands.yaml` |
-| `PROVIDER_CLASS` / `ARG_CLASSES` | what KIND of thing is it, in one word, so a line reads as a coloured sentence | derived |
-| `PROVIDER_HINT` / `CLASS_HINT` | what does this field accept, as a clue beside it | derived, overridable by `hint:` |
+| the providers | what are the candidate VALUES, right now, in this project | `complete:` in `commands.yaml` |
+| provider class / `ARG_CLASSES` | what KIND of thing is it, in one word, so a line reads as a coloured sentence | derived |
+| provider hint / class hint | what does this field accept, as a clue beside it | derived, overridable by `hint:` |
 
 A provider reads the project as its files say now. `PROVIDER_CLASS` is written `as const satisfies`, and that is
 load-bearing: an annotation widens the keys to `string`, which makes `ProviderName` `string` too — so the wire could
@@ -155,7 +155,7 @@ and types nothing at all.
 the values of ONE argument, so it slices the shared prefix back off — and the two ends have to
 agree about where that prefix ends.
 
-Two ways that slicing goes wrong, both pinned by `commandSpec.test.ts`:
+Two ways that slicing goes wrong, both pinned by the crate's tests:
 
 - **The line must keep its trailing space.** That space is what tells `completions()` the command
   is settled and its arguments are being filled. Drop it and what is left is the bare command name,
@@ -171,8 +171,8 @@ another today, so the rule is guarded rather than exercised.
 ## The wire carries the same two lists
 
 `apps/k7-daw-frontend/packages/web-protocol/commandTypes.ts` writes `ArgClass` and `ArgProvider` out for the browser, which
-cannot import this module — it reads `commands.yaml` off disk. A test compares both unions to the
-sources here, because the two failures are silent:
+cannot import the crate. A test of the crate (`palette.rs`) compares both unions to the
+sources there, because the two failures are silent:
 
 - a **class** added here and not there ships a kind the palette has no colour for;
 - a **provider** added here and not there is one k7's right-click menu can never see. A class says

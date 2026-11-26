@@ -19,7 +19,7 @@ is about the lane. The click had answered one argument of a command that was not
 under it.
 
 So a command may say where it belongs: `menu:` in `commands.yaml`, a list of the entities in
-`MENU_ENTITIES` (`apps/k7-daw-frontend/packages/commands/src/commandSpec.ts`, mirrored on the wire). It names **what
+`MENU_ENTITIES` (`apps/k7-daw-wasm/verbs/src/palette.rs`, mirrored on the wire). It names **what
 is under the pointer, not what the verb acts on** — `event add` takes a track and belongs on a
 TRACK's menu, `event remove` takes the same track and belongs on the event's.
 
@@ -112,8 +112,8 @@ Matching on the class does not work, and the failures are not subtle:
 
 A menu built on `kind` would offer `module new <category>/<name>` on every module in the
 graph, and `sequence note new` on an audio clip. `provider` separates them, so the wire carries
-it — `ArgProvider` in `@studio/web-protocol`, mirrored from the `PROVIDERS` keys in
-`apps/k7-daw-frontend/packages/commands/src/commandSpec.ts`, with a test that fails if the two drift.
+it — `ArgProvider` in `@studio/web-protocol`, mirrored from the provider table in
+`apps/k7-daw-wasm/verbs/src/complete/provider_info.rs`, with a test that fails if the two drift.
 
 ### The one case where even that is not enough
 

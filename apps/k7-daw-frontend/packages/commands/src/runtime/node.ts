@@ -1,8 +1,6 @@
 // node.ts — the Worker's runtime and importer for the conformance specs, over the server's routes, in node.
 // What a reader gets wrong: it works only as a BUNDLE (scripts/bundleRuntime.mjs), where `node:fs` is the shim; as raw source the reads go to the disk.
 
-export { catalogue } from "../commandSpec.ts";
-
 import { createImporter, type Importer } from "./importer.ts";
 import { type HttpOptions, httpRemote } from "./remote.ts";
 import { createRuntime, type Runtime } from "./runtime.ts";

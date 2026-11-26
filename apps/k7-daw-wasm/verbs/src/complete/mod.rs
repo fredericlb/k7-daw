@@ -3,6 +3,7 @@
 
 mod ctx;
 mod files;
+pub mod provider_info;
 mod providers;
 
 use crate::catalogue::{ArgSpec, Spec, specs};

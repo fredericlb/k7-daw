@@ -98,6 +98,8 @@ pub enum Tag {
     Changes,
     Verb,
     VerbComplete,
+    /// The palette's catalogue, read from the `verbs` crate.
+    VerbCatalogue,
     VerbBundle,
     VerbLibrary,
     VerbHost(super::verb_host::Member),
@@ -154,6 +156,7 @@ impl Tag {
             H::Changes => Some(Tag::Changes),
             H::Verb => Some(Tag::Verb),
             H::VerbComplete => Some(Tag::VerbComplete),
+            H::VerbCatalogue => Some(Tag::VerbCatalogue),
             H::VerbBundle => Some(Tag::VerbBundle),
             H::VerbLibrary => Some(Tag::VerbLibrary),
             H::VerbHost(m) => Some(Tag::VerbHost(m)),
@@ -200,6 +203,7 @@ impl Tag {
             | Tag::Changes
             | Tag::Verb
             | Tag::VerbComplete
+            | Tag::VerbCatalogue
             | Tag::VerbBundle
             | Tag::VerbLibrary
             | Tag::VerbHost(_) => Piece::Journal,
@@ -313,6 +317,7 @@ impl Tag {
             Tag::Changes => "POST /changes",
             Tag::Verb => "POST /verb",
             Tag::VerbComplete => "POST /verb/complete",
+            Tag::VerbCatalogue => "GET /verb/catalogue",
             Tag::VerbBundle => "GET /verb-bundle",
             Tag::VerbLibrary => "GET /verb-bundle/library",
             Tag::VerbHost(m) => m.route(),

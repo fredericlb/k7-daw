@@ -46,7 +46,7 @@ source comment or a Markdown page naming a file that is not there.
 `curvePoint.test.ts`, `curveSet.test.ts`, `trackAutomation.test.ts`, `notesRegion.test.ts`,
 `noteVelocity.test.ts`, `sequenceDouble.test.ts`, `sequenceRecord.test.ts`, `trackMuteSolo.test.ts`,
 `trackHighlight.test.ts`, `trackOrder.test.ts`, `trackGroup.test.ts`, `trackInput.test.ts`,
-`projectMaster.test.ts`, `projectConsole.test.ts`, `refusal.test.ts`, and `commandSpec.test.ts`, which
+`projectMaster.test.ts`, `projectConsole.test.ts`, `refusal.test.ts`, and the crate's `palette.rs`, which
 holds the catalogue itself to its rules (both languages present, readable sentences at most 60
 characters, known completion providers). `apps/k7-daw-wasm/verbs/tests/support/mod.rs` is the fake
 `CommandHost` they run against.

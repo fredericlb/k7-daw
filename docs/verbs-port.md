@@ -3,8 +3,8 @@
 k7's editing commands are the crate `apps/k7-daw-wasm/verbs`: every line typed in the command bar and every gesture that
 edits a project is a command line the crate runs over the project's files. The web page runs a line through the backend's
 `POST /verb` (`apps/k7-daw-backend/docs/file-changes.md`, "A verb run by the backend"); the page holds no verb of its own.
-The catalogue stays `apps/k7-daw-frontend/packages/commands/commands.yaml`, which the palette reads and the crate takes as
-`commands.json`. This page holds how a verb runs, how it reaches the machine, how it is tested, and what is ported.
+The catalogue stays `apps/k7-daw-wasm/verbs/commands.yaml`, which the crate takes as
+`commands.json` and serves to the palette as `GET /verb/catalogue`. This page holds how a verb runs, how it reaches the machine, how it is tested, and what is ported.
 
 ## Where a line runs
 
@@ -92,7 +92,7 @@ being typed, then the values of the argument under the caret, each as a whole `l
 | the entry reads `&dyn Fs`, never `&mut`, and `{"op":"verb.complete","args":{line, cursor?, project, env?, labelled?}}` answers `{items}` | completion writes nothing, and a command bar asks on every key; a caller keeps one `song::Cache` (`complete_in_env`) so the compile is read again only for what changed |
 | an item is `{line, label?}`, and with `labelled: false` (the default) a bare string | the command bar shows a label where there is one and the line otherwise |
 | `cursor` counts UTF-16 units and cuts the line; what follows it is not read | a browser's `selectionStart` is in UTF-16 |
-| `commands.json` carries each argument's `complete:` and `values:` | the dispatch needs no YAML at run time; the provider names are the palette's (`providerInfo.ts`), which colours each class |
+| `commands.json` carries each argument's `complete:` and `values:` | the dispatch needs no YAML at run time; the provider names are the crate's (`complete/provider_info.rs`), which colours each class |
 | a provider whose read fails answers an empty list | a broken curve file or an unloadable project costs its completion, never the command bar |
 | `surfaceTypes` is the four built-in types | the plugin registry of surface types is the page's, and a native caller has none |
 | `curves` lists `curves/*.k7x` by file id, without parsing each curve | a curve the compile would refuse still has a file to name |

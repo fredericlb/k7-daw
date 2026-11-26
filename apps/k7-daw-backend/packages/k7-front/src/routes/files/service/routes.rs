@@ -59,6 +59,8 @@ pub enum H {
     Verb,
     /// The completions of a line under the caret, by the `verbs` crate.
     VerbComplete,
+    /// The palette's catalogue, read from the `verbs` crate.
+    VerbCatalogue,
     VerbBundle,
     VerbLibrary,
     /// A host member's route (3f).
@@ -137,6 +139,7 @@ pub fn route(method: &Method, path: &str) -> Route {
         ("/changes", _, true) => H::Changes,
         ("/verb", _, true) => H::Verb,
         ("/verb/complete", _, true) => H::VerbComplete,
+        ("/verb/catalogue", true, _) => H::VerbCatalogue,
         ("/verb-bundle", true, _) => H::VerbBundle,
         ("/verb-bundle/library", true, _) => H::VerbLibrary,
         _ => match native::verb_host::Member::of(method, path) {

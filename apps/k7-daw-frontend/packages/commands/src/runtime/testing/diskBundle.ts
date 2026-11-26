@@ -11,7 +11,7 @@ import type { BundleFile, Entry, LibraryFiles, VerbBundle } from "../remote.ts";
 const BINARY =
   /\.(wav|mp3|flac|ogg|aif|aiff|png|jpg|jpeg|mp4|mov|webm|bin|onnx)$/i;
 const SHARED = ["_modules", "_playlists", "_library-pins.k7x"];
-// The checkout holding apps/k7-daw-frontend/packages/commands/commands.yaml: this file is five folders below it.
+// The checkout holding apps/k7-daw-wasm/verbs/commands.yaml: this file is five folders below it.
 const CODE_ROOT = resolve(import.meta.dirname, "../../../../../../..");
 
 interface Walk {

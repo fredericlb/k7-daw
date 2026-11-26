@@ -144,8 +144,8 @@ is the one that can look one up. See `apps/k7-daw-frontend/packages/song-video/d
 
 ## The command catalogue
 
-`ArgClass` mirrors `ARG_CLASSES` and `ArgProvider` the `PROVIDERS` keys, both in
-`apps/k7-daw-frontend/packages/commands/src/commandSpec.ts`, where a test fails if they drift.
+`ArgClass` mirrors `ARG_CLASSES` and `ArgProvider` the provider table, both in
+`apps/k7-daw-wasm/verbs/src/complete/provider_info.rs`, where a test fails if they drift.
 
 `kind` is only the colour an argument is drawn in; `provider` is the PRECISE type of thing it
 names — `file` is a clip AND a sequence AND a module asset, and `module` is also a category. Three

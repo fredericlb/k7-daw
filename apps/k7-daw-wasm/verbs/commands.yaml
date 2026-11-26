@@ -1,4 +1,4 @@
-# commands.yaml — declarative command definitions (see commandSpec.ts).
+# commands.yaml — declarative command definitions (see src/palette.rs).
 #
 # Each entry maps a command STRING (what you type in the web editor's command bar) to a
 # feature SID (implemented in commands.ts), plus:
@@ -7,17 +7,17 @@
 #             what they want done, not what it is called. Kept apart from `help` rather than
 #             replacing it: `help` is the CLI's fuller line and carries examples and caveats,
 #             which are noise in a list you are scanning. Imperative, no example, no full
-#             stop. Both languages are required — `commandSpec.test.ts` fails without them.
+#             stop. Both languages are required — `palette.rs`'s tests fail without them.
 #             It states the ACTION and stops there — not its consequence, not its caveat,
 #             not what it is good for. Those belong to `help`. **60 characters at most**, in
 #             each language, and the test enforces it: the palette draws the sentence beside
 #             the command's name on one row, so a line that runs past the row is either
 #             truncated or wraps the list into a wall — and the extra words are the ones
 #             saying what `help` already says.
-#   surfaces  where the command appears (see commandSpec.ts). Only `cli` exists —
+#   surfaces  where the command appears (see src/palette.rs). Only `cli` exists —
 #             the web backend dispatches under it too, so every command runs on both;
 #             the field is there for when a surface needs its own subset.
-#   menu      which right-click menus may offer it, as MENU_ENTITIES in commandSpec.ts names
+#   menu      which right-click menus may offer it, as MENU_ENTITIES in src/palette.rs names
 #             them. This is the entity under the POINTER, not the one the command acts on:
 #             `event add` names a track and belongs on a TRACK's menu, while `event remove`
 #             belongs on the event's. Absent = every menu whose click answers the command's
@@ -25,7 +25,7 @@
 #             write one only to NARROW it. An unknown word is reported at load and dropped.
 #             See apps/k7-daw-frontend/docs/contextMenu.md.
 #   args      trailing user args. Each may carry EITHER `complete:` — a named provider
-#             in commandSpec.ts PROVIDERS, whose values come from the live project —
+#             in src/complete/provider_info.rs, whose values come from the live project —
 #             OR `values: [...]`, a closed set fixed by the command itself. An unknown
 #             provider name is reported at load and fails the test suite.
 #             `type:` (timecode | number | note) shape-checks a SINGLE-TOKEN argument
@@ -1080,7 +1080,7 @@
   sid: project.surface.create
   readable:
     # Kept under 60 characters in both languages: the palette draws this beside the command's
-    # name on one row (commandSpec.test.ts). A fourth type is what dropped the articles.
+    # name on one row (palette.rs's tests). A fourth type is what dropped the articles.
     en: "Add a surface — arrangement, frame, desk or master"
     fr: "Ajouter une surface — arrangement, image, platines, master"
   help: "declare a special view (e.g. project surface new timeline, or project surface new turntables desk)"

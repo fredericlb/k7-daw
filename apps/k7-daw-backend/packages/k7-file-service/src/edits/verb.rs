@@ -153,9 +153,27 @@ pub fn complete_verb(
     ))
 }
 
+/// The palette's catalogue, `GET /verb/catalogue`'s answer: built from the crate's `commands.json`, it reads no file.
+#[must_use]
+pub fn catalogue() -> serde_json::Value {
+    serde_json::to_value(verbs::palette::catalogue()).unwrap_or_default()
+}
+
 #[cfg(test)]
 mod tests {
-    use super::head_of;
+    use super::{catalogue, head_of};
+
+    #[test]
+    fn the_catalogue_is_a_list_of_commands() {
+        let rows = catalogue();
+        let rename = rows
+            .as_array()
+            .and_then(|r| r.iter().find(|c| c["command"] == "track rename"));
+        assert_eq!(
+            rename.map(|c| c["args"][0]["kind"].clone()),
+            Some("track".into())
+        );
+    }
 
     #[test]
     fn the_caret_counts_utf16_units() {

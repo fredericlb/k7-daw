@@ -2,7 +2,7 @@
 
 ## The `picture …` verbs
 
-Declared in `apps/k7-daw-frontend/packages/commands/commands.yaml` (the `# --- the song's PICTURE` section) and
+Declared in `apps/k7-daw-wasm/verbs/commands.yaml` (the `# --- the song's PICTURE` section) and
 implemented in `apps/k7-daw-frontend/packages/commands/src/verbs/`, spread into the handler table of
 `apps/k7-daw-wasm/verbs/src/verbs/mod.rs`:
 

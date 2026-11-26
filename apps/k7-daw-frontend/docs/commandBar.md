@@ -15,8 +15,8 @@ SENTENCES, and the parameters that command needs are asked afterwards, on the ba
 ### It lists what a command DOES, not what it is called
 
 Every command carries a `readable` description — one sentence, in English and in French. The
-backend's are in [`commands.yaml`](../packages/commands/commands.yaml) and the shell's
-own are in `LOCAL_READABLE` (`palette.ts`); `commandSpec.test.ts` fails if a command ships
+backend's are in [`commands.yaml`](../../k7-daw-wasm/verbs/commands.yaml) and the shell's
+own are in `LOCAL_READABLE` (`palette.ts`); the crate's `palette.rs` tests fail if a command ships
 without one, in either language, and `palette.test.ts` fails if a shell command does.
 
 **Sixty characters at most**, in each language, and both test files enforce it. The row is the

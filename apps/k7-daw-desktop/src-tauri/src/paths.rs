@@ -82,7 +82,7 @@ pub fn backend_bundle(app: &AppHandle) -> Option<PathBuf> {
 /// The Rust front's code root (scripts/stage.mjs's `code`): the staged one; in a checkout the front finds the checkout.
 pub fn code_root(app: &AppHandle) -> Option<PathBuf> {
     let dir = resources(app).join("code");
-    dir.join("apps/k7-daw-frontend/packages/commands/commands.yaml")
+    dir.join("apps/k7-daw-wasm/verbs/commands.yaml")
         .is_file()
         .then_some(dir)
 }

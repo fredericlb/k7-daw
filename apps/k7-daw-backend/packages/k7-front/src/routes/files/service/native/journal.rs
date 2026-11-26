@@ -54,6 +54,7 @@ pub async fn answer(c: &Call, ctx: &Ctx) -> Option<Response> {
         Tag::Changes => Some(super::changes::answer(c, ctx).await),
         Tag::Verb => Some(super::verb_run::answer(c, ctx).await),
         Tag::VerbComplete => Some(super::verb_run::complete(c, ctx).await),
+        Tag::VerbCatalogue => Some(super::verb_run::catalogue()),
         Tag::VerbBundle | Tag::VerbLibrary => Some(super::verb_bundle::answer(c, ctx).await),
         Tag::VerbHost(m) => Some(super::verb_host::answer(c, ctx, m).await),
         _ => None,

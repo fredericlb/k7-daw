@@ -32,7 +32,7 @@ is the one after.
 | Bouncing through a chain | `apps/k7-daw-wasm/verbs/src/verbs/bounce.rs`, `peakPass.ts`, `coldPass.ts` |
 | Import | `apps/k7-daw-frontend/packages/translator/src/` (`dawproject.ts`, `ableton.ts`, `abletonZip.ts`, `emit.ts`, `params.ts`), run in the verbs Worker (`apps/k7-daw-frontend/packages/commands/src/runtime/importer.ts`) |
 | Undo journal | `apps/k7-daw-backend/packages/k7-file-service/src/journal/` (server), `apps/k7-daw-frontend/packages/project-shell/src/undo.ts` (client), `apps/k7-daw-frontend/src/components/HistoryPanel.tsx` |
-| The verbs | `apps/k7-daw-frontend/packages/commands/commands.yaml` (names, args, menus), `apps/k7-daw-wasm/verbs/src/verbs/mod.rs` and `apps/k7-daw-frontend/packages/commands/src/verbs/` (handlers) |
+| The verbs | `apps/k7-daw-wasm/verbs/commands.yaml` (names, args, menus), `apps/k7-daw-wasm/verbs/src/verbs/mod.rs` and `apps/k7-daw-frontend/packages/commands/src/verbs/` (handlers) |
 | The writes | `apps/k7-daw-frontend/packages/song-edit/src/` — `trackMix.ts` (placements), `materialCut.ts`, `insertTime.ts`, `crossfade.ts`, `eventLoop.ts`, `eventGain.ts`, `onsets.ts`, `takeEdit.ts`, `projectEdit.ts` (module params, warp, bindings) |
 | Key bindings | `apps/k7-daw-frontend/src/keys.ts` |
 | Shell-local verbs | `apps/k7-daw-frontend/src/palette.ts` (`LOCAL_COMMANDS`), `localCommands.ts`, and `runLocalCommand` in `apps/k7-daw-frontend/src/App.tsx` |

@@ -12,7 +12,7 @@ const repo = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 export const CODE_ROOT = [
   "apps/k7-daw-frontend/packages/song/meta",
   "apps/k7-daw-frontend/packages/song/samples/video/sample.mp4",
-  "apps/k7-daw-frontend/packages/commands/commands.yaml",
+  "apps/k7-daw-wasm/verbs/commands.yaml",
   "demos",
 ];
 

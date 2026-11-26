@@ -56,7 +56,6 @@ type MakeImporter = (o: {
 interface NodeRuntime {
   createNodeRunner: Make;
   createNodeImporter: MakeImporter;
-  catalogue(): { command: string }[];
 }
 
 let built: Promise<NodeRuntime> | undefined;
@@ -207,11 +206,6 @@ export async function runVerb(
     ...(r.graph !== undefined ? { graph: r.graph } : {}),
     ...(r.asks?.length ? { asks: r.asks } : {}),
   };
-}
-
-/** The catalogue, as the page builds it from commands.yaml. */
-export async function catalogueOf(): Promise<{ command: string }[]> {
-  return (await nodeRuntime()).catalogue();
 }
 
 /** A completion on the open project, as the command bar asks it. */

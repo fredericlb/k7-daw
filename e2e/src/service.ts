@@ -15,7 +15,6 @@ import type { SessionUser } from "./session.ts";
 import { accountDir, filesRoot } from "./sync.ts";
 import { until } from "./until.ts";
 import {
-  catalogueOf,
   completeOf,
   importFileVia,
   importPathVia,
@@ -210,9 +209,9 @@ export class Service {
     return pictureOf(this.verbService(), ws, at, rev);
   }
 
-  /** The command bar's list, as the page builds it. */
-  catalogue(_ws: string) {
-    return catalogueOf();
+  /** The command bar's list, through `GET /verb/catalogue`. */
+  async catalogue(ws: string): Promise<{ command: string }[]> {
+    return (await this.get("/verb/catalogue", ws)).body;
   }
 
   /** A completion on the open project, through `POST /verb/complete`. */

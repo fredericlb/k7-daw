@@ -22,7 +22,7 @@
 
 ### A new `picture …` verb
 
-Declare it in `apps/k7-daw-frontend/packages/commands/commands.yaml` in the picture section: `command`, `sid`,
+Declare it in `apps/k7-daw-wasm/verbs/commands.yaml` in the picture section: `command`, `sid`,
 `readable` in `en` and `fr` (60 characters at most each; the spec test enforces it), `help`,
 `surfaces: [cli, timeline]`, `args` with `complete: pictureLanes` for a lane, and `menu: [shot]`
 if a shot's right-click should offer it. Implement the handler in `apps/k7-daw-frontend/packages/commands/src/verbs/`,
