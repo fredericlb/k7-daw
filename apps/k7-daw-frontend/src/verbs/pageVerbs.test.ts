@@ -30,6 +30,10 @@ function fakeVerbs() {
       return { doc: { videoTracks: [] } };
     },
     videoErrors: async () => ({ errors: [], diagnostics: [] }),
+    pictureScene: async (rev: string, at?: string) => {
+      log.push(`pictureScene ${rev} @${at}`);
+      return { scene: { layers: [] }, mixes: true };
+    },
     refresh: async (files: string[], rev?: string, at?: string) => {
       log.push(`refresh ${files.join(",")} ${rev} @${at}`);
     },
@@ -123,6 +127,32 @@ describe("the page's verbs", () => {
     const { page, log } = make();
     await Promise.all([page.videoDoc(), page.videoErrors(), page.videoDoc()]);
     expect(log.filter((l) => l.startsWith("open"))).toEqual(["open live.k7"]);
+  });
+
+  it("posts the picture render the backend handed back, with the scene its Worker builds", async () => {
+    const { page, log, answer } = make();
+    answer({
+      log: [
+        "rendering the picture in the background (webm) — it lands in /out",
+      ],
+      refuse: [],
+      refused: false,
+      landed: false,
+      asks: [
+        {
+          route: "page renderPicture",
+          args: { into: "/out", format: "webm", settings: {}, audio: true },
+        },
+      ],
+    });
+    const r = await page.run("picture render into=/out", { want: [] });
+    expect(r.output).toEqual([
+      "rendering the picture in the background (webm) — it lands in /out",
+    ]);
+    expect(log).toContain("pictureScene r1 @live.k7");
+    expect(log).toContain(
+      '/verb-host/picture {"at":"live.k7","into":"/out","scene":{"layers":[]},"format":"webm","settings":{},"audio":true}',
+    );
   });
 
   it("completes through POST /verb/complete, labelled", async () => {

@@ -31,6 +31,7 @@ function stubRuntime(log: string[], slow = 0): Runtime {
       log.push(`videoErrors ${token}`);
       return { errors: [], diagnostics: [] };
     },
+    pictureScene: async () => ({ error: "stub" }),
     refresh: async () => {},
     close: () => {},
     revision: undefined,

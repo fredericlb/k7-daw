@@ -11,6 +11,8 @@ import {
 } from "./bundle.ts";
 import { installGlobals } from "./globals.ts";
 import {
+  pictureSceneOf,
+  type SceneAnswer,
   type VideoDocAnswer,
   type VideoErrorsAnswer,
   videoDocOf,
@@ -32,6 +34,8 @@ export interface Runtime {
   /** The picture the open project draws; `token` is the server's revision now, and a Vfs on another one is read again first. */
   videoDoc(token?: string): Promise<VideoDocAnswer>;
   videoErrors(token?: string): Promise<VideoErrorsAnswer>;
+  /** The scene `picture render` posts, built as the browser's export builds it. */
+  pictureScene(token?: string): Promise<SceneAnswer>;
   /** Files a peer or the server changed, by workspace-relative name: fetched and held; with `rev` the project's new token. */
   refresh(files: string[], rev?: string): Promise<void>;
   close(): void;
@@ -197,6 +201,9 @@ export function createRuntime(o: RuntimeOptions): Runtime {
     ),
     videoErrors: serial((token?: string) =>
       view((l) => videoErrorsOf(l.project), token),
+    ),
+    pictureScene: serial((token?: string) =>
+      view((l) => pictureSceneOf(l.project), token),
     ),
     refresh: serial(refresh),
     close() {

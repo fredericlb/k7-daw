@@ -10,6 +10,7 @@ export type Message =
   | { id: number; type: "open"; at: string }
   | { id: number; type: "videoDoc"; token?: string; at?: string }
   | { id: number; type: "videoErrors"; token?: string; at?: string }
+  | { id: number; type: "pictureScene"; token?: string; at?: string }
   | { id: number; type: "refresh"; files: string[]; rev?: string; at?: string }
   | { id: number; type: "close"; at?: string }
   | {
@@ -75,6 +76,8 @@ export function serve(
         return pick(m.at).videoDoc(m.token);
       case "videoErrors":
         return pick(m.at).videoErrors(m.token);
+      case "pictureScene":
+        return pick(m.at).pictureScene(m.token);
       case "refresh":
         return pick(m.at).refresh(m.files, m.rev);
       case "importFile":
@@ -154,6 +157,12 @@ export function client(port: PortLike) {
     videoErrors: (token?: string, at?: string) =>
       send<Awaited<ReturnType<Runtime["videoErrors"]>>>({
         type: "videoErrors",
+        token,
+        at,
+      }),
+    pictureScene: (token?: string, at?: string) =>
+      send<Awaited<ReturnType<Runtime["pictureScene"]>>>({
+        type: "pictureScene",
         token,
         at,
       }),

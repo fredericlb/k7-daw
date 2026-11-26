@@ -116,6 +116,8 @@ export function createVerbs(o: VerbsOptions) {
       call((c) => c.videoDoc(token, at)),
     videoErrors: (token?: string, at?: string) =>
       call((c) => c.videoErrors(token, at)),
+    pictureScene: (token?: string, at?: string) =>
+      call((c) => c.pictureScene(token, at)),
     refresh: (files: string[], rev?: string, at?: string) =>
       call((c) => c.refresh(files, rev, at)),
     /** A project file the page holds, into a new folder: the Worker reads, uploads and lands it. */

@@ -28,6 +28,8 @@ interface VerbAnswer {
   rev?: string;
   revBefore?: string;
   graph?: unknown;
+  /** The asks the page performs: `page renderPicture`, whose scene only the page's Worker builds. */
+  asks?: { route: string; args: Record<string, unknown> }[];
 }
 
 export interface PageVerbsDeps {
@@ -134,6 +136,38 @@ export function createPageVerbs(d: PageVerbsDeps): PageVerbs {
     }
   }
 
+  /** `picture render`'s ask: the scene the Worker builds of the project as it landed, posted to the front's picture job. */
+  async function renderPicture(
+    args: Record<string, unknown>,
+  ): Promise<string[]> {
+    try {
+      const target = await at();
+      const { rev } = await fget<{ rev: string }>("/revision");
+      const s = await d.verbs.pictureScene(rev, target);
+      if ("error" in s) return [s.error];
+      await d.send("/verb-host/picture", {
+        at: target,
+        into: args.into,
+        scene: s.scene,
+        format: args.format,
+        settings: args.settings,
+        audio: args.audio === true && s.mixes,
+      });
+      return [];
+    } catch (e) {
+      return [`picture render: ${(e as Error).message}`];
+    }
+  }
+
+  /** The lines of the asks the backend handed back. */
+  async function performAsks(a: VerbAnswer): Promise<string[]> {
+    const lines: string[] = [];
+    for (const ask of a.asks ?? [])
+      if (ask.route === "page renderPicture")
+        lines.push(...(await renderPicture(ask.args)));
+    return lines;
+  }
+
   return {
     catalogue() {
       return d.catalogue();
@@ -177,9 +211,10 @@ export function createPageVerbs(d: PageVerbsDeps): PageVerbs {
         });
         if (r.landed) known = r.rev ?? known;
         if (r.landed) await refreshWorker(r);
+        const asked = await performAsks(r);
         shown?.end();
         return {
-          output: outputOf(r),
+          output: [...outputOf(r), ...asked],
           refused: r.refused,
           ...(r.graph !== undefined ? { graph: r.graph } : {}),
           ...(r.rev !== undefined ? { rev: r.rev } : {}),

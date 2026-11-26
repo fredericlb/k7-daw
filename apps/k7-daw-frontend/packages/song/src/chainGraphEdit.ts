@@ -230,12 +230,15 @@ export function editChainGraph(
   const raw = rawItems(cp);
   const itemOf = (n: string): Item => {
     const was = cp.nodes[n];
+    const base = was && (raw.get(was.id) ?? was.value);
+    // Only an item written the old way names its lane by `video_track`; a current picture lane's is `track`.
+    const old = !!base && typeof base === "object" && "video_track" in base;
     const it =
       add[n] ??
       (was && {
-        ...(raw.get(was.id) ?? was.value),
+        ...base,
         ...(r && n === r.to
-          ? was.picture
+          ? old
             ? { video_track: r.to }
             : { track: r.to }
           : {}),
