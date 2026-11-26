@@ -46,7 +46,7 @@ server side moves.
 | M4 the link | the static library; `build.mjs` runs cargo with `--target-dir`; a slow CMake test runs `serve` on the real host and probes `whoami`; the Android and iOS cross builds | 6 |
 | M5 project and transport (built) | the `DocJson` port with its bounds, supersede, held notes; the project and transport areas | 12 |
 | M6 the state frame (built) | the state frame, `recorded`, `plugin-params`, `engine-warning` | 6 |
-| M7 plugins | the scan, the probe (4 at once), the pending queries, the plugin verbs | 10 |
+| M7 plugins (built) | the scan, the probe (4 at once), the pending queries, the plugin verbs | 10 |
 | M8 the machine | the `AudioSender` broadcast, sessions, drivers, devices, `io-levels`, `instrument-status`, `render` | 10 |
 | M9 the CLI and the switch | argv in Rust, C++ `main` cut to a few lines, the JNI and iOS doors calling `serve`; `Serve*`, `Pairing`, `Outbox`, `AudioSender`, `Supersede`, `HeldNotes`, `PendingQueries`, `WireVersion`, IXWebSocket and their tests deleted; their pages moved to this crate's `docs/` | 12 |
 
@@ -116,3 +116,13 @@ project, stamped with its session. The frame is held to `fixtures/state_frame.tx
 (`tests/StateFrame_test.cpp`). `watch-plugin-params` is M6's verb; `get-plugin-params` stays with M7, whose pending
 queries it needs, and its engine call (`plugin_param_infos`) is already in the area. A new subscriber's recorder
 rewind is posted from the dispatcher.
+
+## M7's choices
+
+The plugins area is built (`apps/k7-daw-backend/packages/k7-runtime-server/docs/plugins.md`): the catalogue, the scan,
+the probes, the instances' windows, presets and waveform taps are one ABI area, and every verb of `ServePlugins.cpp`
+but M6's `watch-plugin-params` is in `server/plugins.rs`. The replies are held to `fixtures/plugin_replies.txt`,
+produced by the C++ (`tests/PluginReplies_test.cpp`); the area's real host is `tests/PluginsApi_test.cpp` (slow).
+Deviations from the C++: the scan, the probes and the pending set are per server, not process statics; a detached
+job's failure is an `engine-warning` the server says itself and does not keep as a standing warning; a scan or probe
+still loading when the server stops is abandoned after the 3 s grace, as a blocking task cannot be joined.

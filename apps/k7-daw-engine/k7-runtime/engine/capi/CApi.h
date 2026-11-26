@@ -50,6 +50,7 @@ const K7CoreApi* coreApi();
 const K7ProjectApi* projectApi();
 const K7TransportApi* transportApi();
 const K7StateApi* stateApi();
+const K7PluginsApi* pluginsApi();
 const K7MachineApi* machineApi();
 const K7RenderApi* renderApi();
 

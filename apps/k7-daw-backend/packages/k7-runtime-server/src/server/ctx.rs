@@ -6,6 +6,8 @@
 use super::held_notes::HeldNotes;
 use super::msg::Msg;
 use super::outbox::Outbox;
+use super::pending::PendingQueries;
+use super::plugin_state::PluginState;
 use super::supersede::Supersede;
 use crate::engine::Engine;
 use crate::pairing::gate::{Gate, Out};
@@ -79,6 +81,10 @@ pub struct Ctx {
     /// The quick crashes that made the supervisor start this engine in safe mode, 0 when it is not in it.
     pub safe_mode_crashes: u32,
     pub gate: Arc<Gate>,
+    /// The read-only queries waiting on the message thread, which an identical one joins.
+    pub pending: PendingQueries,
+    /// The plugin verbs' shared state: the one scan, the probe slots, the live parameter tickets.
+    pub plugins: PluginState,
     /// Which queued project, tracks and parameter jobs a newer message made pointless.
     pub supersede: Supersede,
     /// The notes each socket's `midi-live` holds down, released when it closes.
@@ -96,6 +102,8 @@ impl Ctx {
             audio_to_browser: false,
             safe_mode_crashes: 0,
             gate,
+            pending: PendingQueries::default(),
+            plugins: PluginState::default(),
             supersede: Supersede::default(),
             held_notes: HeldNotes::default(),
             clients: Mutex::default(),
