@@ -55,7 +55,7 @@ export function PanelHeading({
   row?: React.Ref<HTMLDivElement>;
 }) {
   return (
-    <div className="flex min-h-11 shrink-0 items-center gap-2.5">
+    <div className="relative flex min-h-11 shrink-0 items-center gap-2.5">
       {row ? (
         <>
           <Dialog.Title
@@ -67,7 +67,7 @@ export function PanelHeading({
           </Dialog.Title>
           <div
             ref={row}
-            className="relative flex min-w-0 flex-1 flex-wrap items-center gap-x-2 gap-y-1"
+            className="flex min-w-0 flex-1 flex-wrap items-center gap-x-2 gap-y-1"
           />
         </>
       ) : null}
