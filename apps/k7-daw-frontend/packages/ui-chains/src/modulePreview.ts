@@ -4,10 +4,10 @@
 // ModulePreview.
 
 import type {
+  PageModuleUI,
+  PageWidget,
   WebGraph,
   WebModuleCategory,
-  WebModuleUI,
-  WebWidget,
 } from "@studio/graph-model";
 import { MODULE_CATEGORIES } from "@studio/graph-model";
 import {
@@ -54,14 +54,14 @@ export function moduleCategoryOf(path: string): WebModuleCategory {
 export function visibleGrid(ui: {
   cols: number;
   rows: number;
-  widgets: Record<string, WebWidget & { hidden?: boolean }>;
+  widgets: Record<string, PageWidget & { hidden?: boolean }>;
   tabs?: {
     name: string;
-    widgets: Record<string, WebWidget & { hidden?: boolean }>;
+    widgets: Record<string, PageWidget & { hidden?: boolean }>;
   }[];
   script?: string;
-}): WebModuleUI {
-  const shown = (ws: Record<string, WebWidget & { hidden?: boolean }>) =>
+}): PageModuleUI {
+  const shown = (ws: Record<string, PageWidget & { hidden?: boolean }>) =>
     Object.fromEntries(Object.entries(ws).filter(([, w]) => !w.hidden));
   return {
     cols: ui.cols,

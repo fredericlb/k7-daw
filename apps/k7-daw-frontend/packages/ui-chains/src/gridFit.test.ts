@@ -1,7 +1,7 @@
 // gridFit.test.ts — a grid held to N rows folds its overflow into columns beside it (and N columns into rows
 // below), never through a widget, and a grid that already fits comes back untouched.
 
-import type { WebGraph, WebModuleUI, WebWidget } from "@studio/graph-model";
+import type { PageModuleUI, PageWidget, WebGraph } from "@studio/graph-model";
 import { describe, expect, it } from "vitest";
 import { buildGraph, FOOTER_H, moduleRow, nodeSize } from "./graph";
 import { fitPanel, foldBands } from "./gridFit";
@@ -9,8 +9,8 @@ import { fitPanel, foldBands } from "./gridFit";
 const knob = (
   col: number,
   row: number,
-  extra: Partial<WebWidget> = {},
-): WebWidget => ({
+  extra: Partial<PageWidget> = {},
+): PageWidget => ({
   type: "knob",
   col,
   row,
@@ -18,8 +18,8 @@ const knob = (
 });
 
 /** A 2-wide grid, one knob per cell, `rows` tall. */
-function column(rows: number): WebModuleUI {
-  const widgets: Record<string, WebWidget> = {};
+function column(rows: number): PageModuleUI {
+  const widgets: Record<string, PageWidget> = {};
   for (let r = 0; r < rows; r++)
     for (let c = 0; c < 2; c++) widgets[`k${r}${c}`] = knob(c, r);
   return { cols: 2, rows, widgets };
@@ -49,7 +49,7 @@ describe("fitPanel, rows held", () => {
   });
 
   it("never cuts through a widget: it moves whole, the band ending before it", () => {
-    const ui: WebModuleUI = {
+    const ui: PageModuleUI = {
       cols: 1,
       rows: 8,
       widgets: {
@@ -63,7 +63,7 @@ describe("fitPanel, rows held", () => {
   });
 
   it("folds the common widgets and every tab's with the same bands", () => {
-    const ui: WebModuleUI = {
+    const ui: PageModuleUI = {
       cols: 1,
       rows: 8,
       widgets: { common: knob(0, 7) },
@@ -81,7 +81,7 @@ describe("fitPanel, rows held", () => {
 
 describe("fitPanel, columns held", () => {
   it("folds columns past the cap into rows below", () => {
-    const ui: WebModuleUI = {
+    const ui: PageModuleUI = {
       cols: 5,
       rows: 1,
       widgets: Object.fromEntries(
@@ -106,7 +106,7 @@ describe("foldBands", () => {
 });
 
 describe("buildGraph with a fit", () => {
-  const g = (ui: WebModuleUI): WebGraph => ({
+  const g = (ui: PageModuleUI): WebGraph => ({
     chains: {
       lead: {
         from: "keys",
@@ -139,7 +139,7 @@ describe("fitPanel, a tabbed panel", () => {
   const tab = (
     name: string,
     cut: number,
-  ): NonNullable<WebModuleUI["tabs"]>[number] => ({
+  ): NonNullable<PageModuleUI["tabs"]>[number] => ({
     name,
     widgets: {
       // A knob two rows tall sitting across `cut - 1 / cut` in no other tab: each tab cuts where IT can.
@@ -149,7 +149,7 @@ describe("fitPanel, a tabbed panel", () => {
   });
 
   it("folds each tab on its own, so one tab's tall widget does not hold every other back", () => {
-    const ui: WebModuleUI = {
+    const ui: PageModuleUI = {
       cols: 2,
       rows: 11,
       widgets: header,
@@ -161,7 +161,7 @@ describe("fitPanel, a tabbed panel", () => {
   });
 
   it("cuts a frame into one piece per band, the label on the first", () => {
-    const ui: WebModuleUI = {
+    const ui: PageModuleUI = {
       cols: 2,
       rows: 10,
       widgets: {
@@ -193,7 +193,7 @@ describe("fitPanel, a tabbed panel", () => {
   });
 
   it("shortens a screen to its band rather than letting it hold the cut", () => {
-    const ui: WebModuleUI = {
+    const ui: PageModuleUI = {
       cols: 3,
       rows: 9,
       widgets: {
@@ -212,7 +212,7 @@ describe("fitPanel, a tabbed panel", () => {
 
   // The overflow is as wide as what it holds: two rows using two columns of a six-wide grid are a two-wide band.
   it("sizes each band to the columns its widgets use", () => {
-    const widgets: Record<string, WebWidget> = {};
+    const widgets: Record<string, PageWidget> = {};
     for (let r = 0; r < 5; r++)
       for (let c = 0; c < 6; c++) widgets[`k${r}${c}`] = knob(c, r);
     widgets.x0 = knob(0, 5);
@@ -233,7 +233,7 @@ describe("a tab's own width", () => {
   const wide = (
     name: string,
     cols: number,
-  ): NonNullable<WebModuleUI["tabs"]>[number] => ({
+  ): NonNullable<PageModuleUI["tabs"]>[number] => ({
     name,
     widgets: Object.fromEntries(
       Array.from({ length: 8 }, (_, r) =>
@@ -241,7 +241,7 @@ describe("a tab's own width", () => {
       ).flat(),
     ),
   });
-  const ui: WebModuleUI = {
+  const ui: PageModuleUI = {
     cols: 6,
     rows: 8,
     widgets: {},

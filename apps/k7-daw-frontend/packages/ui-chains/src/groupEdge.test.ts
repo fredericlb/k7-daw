@@ -1,4 +1,4 @@
-import type { WebWidget } from "@studio/graph-model";
+import type { PageWidget } from "@studio/graph-model";
 import { describe, expect, it } from "vitest";
 import {
   GROUP_EDGE_INSET,
@@ -6,8 +6,9 @@ import {
   groupEdgeInsets,
 } from "./groupEdge";
 
-const ws = (m: Record<string, Partial<WebWidget>>): Record<string, WebWidget> =>
-  m as Record<string, WebWidget>;
+const ws = (
+  m: Record<string, Partial<PageWidget>>,
+): Record<string, PageWidget> => m as Record<string, PageWidget>;
 
 describe("groupEdgeInsets", () => {
   const panel = ws({

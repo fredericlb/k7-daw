@@ -3,10 +3,10 @@
 // from a module's ui.k7x, because no module file stands behind them. See docs/bindings.md.
 
 import type {
+  PageModuleUI,
+  PageWidget,
   WebChainStep,
-  WebModuleUI,
   WebRackSound,
-  WebWidget,
 } from "@studio/graph-model";
 import { panelWidgets } from "@studio/graph-model/panel";
 import {
@@ -25,7 +25,7 @@ import {
 import { sortForPeople } from "@studio/web-protocol/tree";
 
 // The built-in UI every TRACK node carries — five mixer controls on `@` binds. See docs/graphBuild.md.
-export const TRACK_UI: WebModuleUI = {
+export const TRACK_UI: PageModuleUI = {
   cols: 3,
   rows: 2,
   widgets: {
@@ -67,7 +67,7 @@ export const projectBindField = (bind: string | undefined): string | null => {
 };
 
 /** What the RENDER card carries: the FRAME's shape, song-schema's `ASPECTS` spelled again (apps/k7-daw-frontend/docs/picture.md). */
-export const RENDER_UI: WebModuleUI = {
+export const RENDER_UI: PageModuleUI = {
   cols: 2,
   rows: 1,
   widgets: {
@@ -86,7 +86,7 @@ export const RENDER_UI: WebModuleUI = {
   },
 };
 
-export const MAIN_OUT_UI: WebModuleUI = {
+export const MAIN_OUT_UI: PageModuleUI = {
   cols: 1,
   rows: 2,
   widgets: {
@@ -151,7 +151,7 @@ export const octaveName = (octave: number): string => `C${octave - 1}`;
 export function rackUI(
   rack: readonly WebRackSound[],
   fixed = false,
-): WebModuleUI {
+): PageModuleUI {
   // A kit's pad has a row more, under it: its gain, the one thing about a kit's pad that is the node's to set.
   const padRows = fixed ? TAP_ROWS + 1 : TAP_ROWS;
   const byNote = new Map<number, WebRackSound>();
@@ -174,7 +174,7 @@ export function rackUI(
     };
   };
   const tabs = octaves.map((o) => {
-    const widgets: Record<string, WebWidget> = {};
+    const widgets: Record<string, PageWidget> = {};
     for (let note = o * 12; note < o * 12 + 12 && note <= 127; note++) {
       const at = cell(note);
       const s = byNote.get(note);
@@ -211,7 +211,7 @@ export function rackUI(
   });
   const gridCols = PADS_ACROSS * TAP_COLS;
   // A kit's level is drawn on every tab, in a column of its own right of the pads.
-  const widgets: Record<string, WebWidget> = fixed
+  const widgets: Record<string, PageWidget> = fixed
     ? {
         "kit:volume": {
           type: "knob",
@@ -236,14 +236,14 @@ export function rackUI(
 export function inputUI(
   devices: readonly { name: string; channels: number[] }[],
   channel: readonly number[] | undefined,
-): WebModuleUI {
+): PageModuleUI {
   const stereo = channel?.length === 2;
   const first = channel?.[0] ?? 1;
   // The socket list offers the CURRENT width; the other width is the question the control beside it asks.
   const sets = devices.filter((d) => d.channels.length === (stereo ? 2 : 1));
   // Width writes `channel:` too, and a pair is even/odd — the interface groups no other way.
   const odd = first % 2 === 1 ? first : first - 1;
-  const widgets: Record<string, WebWidget> = {
+  const widgets: Record<string, PageWidget> = {
     // `value` is a position in the list and nothing more: the channels travel in `arg`.
     channel: {
       type: "dropdown",
@@ -287,10 +287,10 @@ export function inputUI(
 
 /** Fill in a folder-backed dropdown's options — `none` first, then the names. See docs/graphBuild.md. */
 function withFolderOptions(
-  ui: WebModuleUI,
+  ui: PageModuleUI,
   bind: string,
   names: readonly string[] | undefined,
-): WebModuleUI {
+): PageModuleUI {
   const binds = panelWidgets(ui).some(([, w]) => w.bind === bind);
   if (!binds) return ui;
   // A value is the name's place in the folder's list, as the engine reads it; only the rows are sorted for people.
@@ -302,7 +302,7 @@ function withFolderOptions(
     ),
   ];
   // On every tab, since a dropdown on a closed one is still the module's.
-  const fill = (ws: Record<string, WebWidget>): Record<string, WebWidget> =>
+  const fill = (ws: Record<string, PageWidget>): Record<string, PageWidget> =>
     Object.fromEntries(
       Object.entries(ws).map(([id, w]) => [
         id,
@@ -330,7 +330,7 @@ export const CAMERA_BIND = "@camera";
 export function cameraUI(
   cameras: readonly string[],
   current: string | undefined,
-): WebModuleUI {
+): PageModuleUI {
   // "default" first and always, so a chosen lens can be un-chosen — `@base`'s `none` again.
   const options = [
     { label: "default", value: 0, arg: "default" },
@@ -373,7 +373,7 @@ export function cameraUI(
 export const DEVICE_BIND = "@device";
 
 /** The UI a MIDI-IN node carries, synthesised like `cameraUI`'s: the browser's MIDI inputs — @studio/song's docs/midiIn.md. */
-export function midiInUI(devices: readonly string[]): WebModuleUI {
+export function midiInUI(devices: readonly string[]): PageModuleUI {
   // "any" first and always, so a chosen device can be un-chosen without editing the file.
   const options = [
     { label: "any", value: 0, arg: "any" },
@@ -402,7 +402,7 @@ export function stepUI(
   devices: readonly { name: string; channels: number[] }[] | undefined,
   cameras: readonly string[] | undefined,
   midiDevices: readonly string[] | undefined,
-): WebModuleUI | undefined {
+): PageModuleUI | undefined {
   // The folder lists fold into whichever panel is drawn, authored or synthesised, and in one place.
   if (s.ui)
     return withFolderOptions(
@@ -422,7 +422,7 @@ export function stepUI(
 }
 
 // A VIDEO lane's strip: mute (hidden) and solo, the two words picture HAS — no gain, no pan, no arm.
-export const VIDEO_TRACK_UI: WebModuleUI = {
+export const VIDEO_TRACK_UI: PageModuleUI = {
   cols: 2,
   rows: 1,
   widgets: {

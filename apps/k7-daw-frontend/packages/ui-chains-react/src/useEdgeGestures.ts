@@ -2,7 +2,7 @@
 // landing as a connect, a replug, a curve binding or a trigger, and dropped on the bare canvas as a
 // disconnect. The `+` on a cable answers here too — docs/hosting.md.
 
-import type { WebSignal, WebWidget } from "@studio/graph-model";
+import type { PageWidget, WebSignal } from "@studio/graph-model";
 import { jackRef, smoothPath } from "@studio/ui-chains/cables";
 import {
   curveOutPoint,
@@ -127,7 +127,7 @@ export function useEdgeGestures({
   }, []);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: the inputs are refs and setters DomChains hands in, stable for its lifetime.
-  const landAutomation = useCallback((n: GraphNode, w: WebWidget) => {
+  const landAutomation = useCallback((n: GraphNode, w: PageWidget) => {
     const cur = patchRef.current;
     if (!cur?.curve || !n.module || !w.bind) return;
     cb.current.onAutomate?.(n.module, w.bind, cur.curve.curve);

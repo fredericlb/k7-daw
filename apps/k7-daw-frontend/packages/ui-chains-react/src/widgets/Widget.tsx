@@ -3,7 +3,7 @@
 // moves and nothing else — docs/widgets.md.
 
 import { usePluginParamValue } from "@studio/engine-browser/params";
-import type { WebWidget } from "@studio/graph-model";
+import type { PageWidget } from "@studio/graph-model";
 import { decodeDepth, depthSpan } from "@studio/ui-chains/automationDepth";
 import {
   columnW,
@@ -77,12 +77,12 @@ function WidgetInner({
   n: GraphNode;
   /** The widget's key in its map — what a panel's `widgets.js` names an lcdscreen by. */
   wid: string;
-  w: WebWidget;
+  w: PageWidget;
   ch: Channels;
-  onDragStart: (n: GraphNode, w: WebWidget, e: React.PointerEvent) => void;
-  onTap: (n: GraphNode, w: WebWidget) => void;
+  onDragStart: (n: GraphNode, w: PageWidget, e: React.PointerEvent) => void;
+  onTap: (n: GraphNode, w: PageWidget) => void;
   // A dropdown picks an exact value rather than flipping one, so it can't go through onTap.
-  onPick: (n: GraphNode, w: WebWidget, value: number) => void;
+  onPick: (n: GraphNode, w: PageWidget, value: number) => void;
   /** Open the library browser for this widget, at the click's viewport coords — it picks a FILE. */
   onPickAsset: (
     n: GraphNode,
@@ -98,13 +98,13 @@ function WidgetInner({
     on: boolean,
   ) => void;
   /** Right-click on this control — the host's menu for the PARAM it drives (see GraphMenuCtx). */
-  onContextParam?: (n: GraphNode, w: WebWidget, x: number, y: number) => void;
+  onContextParam?: (n: GraphNode, w: PageWidget, x: number, y: number) => void;
   /** A value TYPED into a control after a double-click — the host commits it as a drag's release would. */
-  onTypeValue?: (n: GraphNode, w: WebWidget, value: number) => void;
+  onTypeValue?: (n: GraphNode, w: PageWidget, value: number) => void;
   /** A rack TAP's edit — note, sample, add, remove — asked of the host, which writes the node's file. */
   onTapEdit?: (n: GraphNode, action: TapAction) => void;
   /** A curve's cable is in hand and this widget is a LANDING TARGET — passed only while one is out. */
-  onLandAutomation?: (n: GraphNode, w: WebWidget) => void;
+  onLandAutomation?: (n: GraphNode, w: PageWidget) => void;
   styleOverride?: React.CSSProperties;
   /** A knob drawn at this size whatever its rect — the bottom bar's. */
   knobPx?: number;

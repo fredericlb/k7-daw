@@ -2,7 +2,7 @@
 // ports, memoised so a frame that moves nothing on it re-renders nothing — docs/nodeCard.md.
 
 import { useEngineStoreOrNull } from "@studio/engine-browser/store";
-import type { WebWidget } from "@studio/graph-model";
+import type { PageWidget } from "@studio/graph-model";
 import { hasTabs } from "@studio/graph-model/panel";
 import { Play, Square } from "@studio/ui/icons";
 import { columnW, moduleDisplayName } from "@studio/ui-chains/graph";
@@ -97,8 +97,9 @@ function NodeInner({
       ),
     [automated],
   );
-  const isAutomated = (w: WebWidget) => !!w.bind && automatedParams.has(w.bind);
-  const depthFor = (w: WebWidget) =>
+  const isAutomated = (w: PageWidget) =>
+    !!w.bind && automatedParams.has(w.bind);
+  const depthFor = (w: PageWidget) =>
     (w.bind && automatedParams.get(w.bind)) || undefined;
   // A lane's row (moduleRow's cables, read across) is ABOUT that lane: its colour band would only repeat it.
   const inLaneRow = n.flow === "across";

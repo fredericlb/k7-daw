@@ -1,9 +1,10 @@
 # The routing graph on the wire
 
-`types.ts` is the chains graph as the browser receives it, mirroring the essentials of the song
-compiler's `GraphDoc`. Almost all types, plus the handful of values both sides must agree on BY
-VALUE. This page is the reasoning behind the fields that are not obvious from their names; the
-type file keeps one line each.
+`generated/` holds the chains graph as the browser receives it, written by ts-rs from the song
+crate's Rust structs (`apps/k7-daw-backend/docs/ts-types.md`); `types.ts` re-exports it and adds
+what a generated file cannot hold: the handful of values both sides must agree on BY VALUE, the
+page's additions to a panel, and two small helpers. This page is the reasoning behind the fields
+that are not obvious from their names.
 
 ## Why this package exists at all
 

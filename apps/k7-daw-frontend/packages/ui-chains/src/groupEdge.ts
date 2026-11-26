@@ -3,7 +3,7 @@
 // cells. The one thing a reader would get wrong: a group holds nothing — membership is geometry.
 // Rationale: ui-chains-react's docs/widgets.md, "The group".
 
-import type { WebWidget } from "@studio/graph-model";
+import type { PageWidget } from "@studio/graph-model";
 
 /** How far a control on a group's named edge is drawn in: clear of the 6px name and the 8px dot. */
 export const GROUP_EDGE_INSET = 12;
@@ -16,7 +16,7 @@ const FIELDS = new Set(["dropdown", "filepicker", "number"]);
 
 const span = (n?: number) => Math.max(1, n ?? 1);
 
-const inside = (a: WebWidget, g: WebWidget): boolean =>
+const inside = (a: PageWidget, g: PageWidget): boolean =>
   a.col >= g.col &&
   a.row >= g.row &&
   a.col + span(a.colSpan) <= g.col + span(g.colSpan) &&
@@ -24,7 +24,7 @@ const inside = (a: WebWidget, g: WebWidget): boolean =>
 
 /** Each widget drawn inset, by id: framed by a group that draws a name or a switch, on its left edge. */
 export function groupEdgeInsets(
-  widgets: Record<string, WebWidget>,
+  widgets: Record<string, PageWidget>,
 ): Map<string, number> {
   const edges = Object.values(widgets).filter(
     (g) => g.type === "group" && (g.label || g.bind),
