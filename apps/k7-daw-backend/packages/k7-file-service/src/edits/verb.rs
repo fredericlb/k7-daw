@@ -36,6 +36,14 @@ pub struct Line<'a> {
     pub chain: bool,
 }
 
+/// The folder the line runs on; with no project, a folder of the workspace that is never there, so the workspace's own files are found beside it.
+fn project_dir(at: &Line<'_>) -> String {
+    at.project.map_or_else(
+        || posix(&crate::paths::join(&[at.root, ".no-project"])),
+        posix,
+    )
+}
+
 /// Where a verb may write: the workspace (its project and the shared texts) and the studio's own folder (the preferences).
 fn mounts(home: &Home, root: &str, env: &Env) -> (Vec<String>, Vec<String>) {
     let writes = vec![posix(root), posix(&home.studio)];
@@ -67,7 +75,7 @@ pub fn run_verb(
     );
     let (writes, reads) = mounts(at.home, at.root, &env);
     let mut fs = StagedFs::reading(&writes, &reads).map_err(|e| e.to_string())?;
-    let dir = at.project.map(posix).unwrap_or_default();
+    let dir = project_dir(at);
     let answer = run_replayed(
         &mut fs,
         cache,
@@ -135,7 +143,7 @@ pub fn complete_verb(
     );
     let (writes, reads) = mounts(at.home, at.root, &env);
     let fs = StagedFs::reading(&writes, &reads).map_err(|e| e.to_string())?;
-    let dir = at.project.map(posix).unwrap_or_default();
+    let dir = project_dir(at);
     Ok(complete_in_env(
         &fs,
         cache,
