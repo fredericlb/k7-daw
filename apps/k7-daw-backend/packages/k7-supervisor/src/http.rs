@@ -130,3 +130,21 @@ fn describe(e: &hyper_util::client::legacy::Error) -> String {
     }
     text
 }
+
+/// The connector every call builds: no pool, the connect bounded by `connect`; the download builds its own per hop.
+pub fn client(
+    tls: Arc<rustls::ClientConfig>,
+    connect: Duration,
+) -> Client<hyper_rustls::HttpsConnector<HttpConnector>, Full<Bytes>> {
+    let mut http = HttpConnector::new();
+    http.enforce_http(false);
+    http.set_connect_timeout(Some(connect));
+    let connector = hyper_rustls::HttpsConnectorBuilder::new()
+        .with_tls_config((*tls).clone())
+        .https_or_http()
+        .enable_http1()
+        .wrap_connector(http);
+    Client::builder(TokioExecutor::new())
+        .pool_max_idle_per_host(0)
+        .build(connector)
+}

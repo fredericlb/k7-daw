@@ -3,9 +3,13 @@
 
 mod addresses;
 mod audio_policy;
+#[path = "../support/blob_server.rs"]
+mod blob_server;
 mod engine;
 mod engine_client;
 mod files;
+mod instruments;
+mod instruments_part;
 mod onnx_model;
 mod parts;
 mod performance;
