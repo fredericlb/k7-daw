@@ -4,10 +4,10 @@
 // The layout places the result afterwards (graphLayout.ts). See docs/graphBuild.md.
 
 import type {
+  PageModuleUI,
+  PageWidget,
   WebGraph,
-  WebModuleUI,
   WebSignal,
-  WebWidget,
 } from "@studio/graph-model";
 import {
   addChainModules,
@@ -202,7 +202,7 @@ function assignRanks(b: Build): void {
 function narrowNode(n: RawNode): void {
   if (!n.ui || n.strip) return;
   const { vertical, ...own } = n.ui;
-  const narrow: WebModuleUI = vertical
+  const narrow: PageModuleUI = vertical
     ? { ...vertical, script: own.script, tabsAs: "dropdown" }
     : { ...own, tabsAs: "dropdown" };
   const before = nodeSize(n.ui);
@@ -216,7 +216,7 @@ function narrowNode(n: RawNode): void {
 function tabHeights(n: RawNode): void {
   const ui = n.ui;
   if (!ui?.tabs?.length || n.strip) return;
-  const reach = (ws: Record<string, WebWidget>) =>
+  const reach = (ws: Record<string, PageWidget>) =>
     Math.max(
       0,
       ...Object.values(ws).map((w) => w.row + Math.max(1, w.rowSpan ?? 1)),

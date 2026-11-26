@@ -10,6 +10,7 @@ use std::marker::PhantomData;
 
 /// A param: a number, or the string of a file-valued one.
 #[derive(Clone, Debug, PartialEq)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(untagged))]
 pub enum ParamValue {
     Number(f64),
     Text(String),

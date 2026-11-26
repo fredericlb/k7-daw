@@ -1,6 +1,6 @@
 // widgetValue.test.ts — a widget's value maths: the 0..1 travel, the text, the crossfade pair.
 
-import type { WebWidget } from "@studio/graph-model";
+import type { PageWidget } from "@studio/graph-model";
 import { describe, expect, it } from "vitest";
 import {
   pairValue,
@@ -12,8 +12,8 @@ import {
 } from "./graph";
 
 describe("widgetNorm / widgetDenorm round-trip", () => {
-  const linear: WebWidget = { type: "knob", col: 0, row: 0, min: 0, max: 100 };
-  const log: WebWidget = {
+  const linear: PageWidget = { type: "knob", col: 0, row: 0, min: 0, max: 100 };
+  const log: PageWidget = {
     type: "knob",
     col: 0,
     row: 0,
@@ -37,7 +37,7 @@ describe("widgetNorm / widgetDenorm round-trip", () => {
   });
 
   it("quantises to `step` when set", () => {
-    const stepped: WebWidget = {
+    const stepped: PageWidget = {
       type: "knob",
       col: 0,
       row: 0,
@@ -50,7 +50,7 @@ describe("widgetNorm / widgetDenorm round-trip", () => {
 });
 
 describe("widgetText", () => {
-  const semitones: WebWidget = {
+  const semitones: PageWidget = {
     type: "knob",
     col: 0,
     row: 0,
@@ -76,7 +76,7 @@ describe("widgetText", () => {
 });
 
 describe("widgetTyped", () => {
-  const w: WebWidget = {
+  const w: PageWidget = {
     type: "knob",
     col: 0,
     row: 0,
@@ -103,7 +103,7 @@ describe("widgetTyped", () => {
 });
 
 describe("a crossfade knob", () => {
-  const xf: WebWidget = {
+  const xf: PageWidget = {
     type: "knob",
     col: 0,
     row: 0,

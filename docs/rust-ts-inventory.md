@@ -114,7 +114,12 @@ specs passing on the Rust supervisor.
 
 - **M1a** deletes about 1,100 lines with nothing to port (add 466 with decision 9), and removes a
   dead WebRTC route from the backend.
-- **M1b** generates `graph-model/types.ts` (430 lines) from structs that already derive ts-rs.
+- **M1b** (done) generates `graph-model/types.ts` (430 lines) from structs that already derive ts-rs: the types are
+  `graph-model/generated/`, written by k7-front's `bindings` binary (`--features ts`) from `song`'s `web.rs` and its panel
+  and curve types, run by `npm run rebuild:generated` and stamped for `lint:generated` (`apps/k7-daw-backend/docs/ts-types.md`).
+  Choices: the folder lands in `graph-model`, not `web-protocol`, so drawing a graph drags nothing in, and the next
+  package takes one line in the binary; the page's additions to a panel (`arg`, a tab's `cols`, `tabsAs`) are `Page*`
+  types in `types.ts`; the app's mirrors (AuthUser, K7Prefs and the rest of the row) are not done and follow with M5c.
 - **M1c** replaces fifteen TS twins of Rust functions that already exist by calls to them.
 - `pulledSentence` is written twice (`src/git/GitBar.tsx`, `src/shell/HeaderGit.tsx`): one copy.
 - knip's unused exports in the zone (`setListenHere`, `knobWidgets`, `filterWorkspaces`,

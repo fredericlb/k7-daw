@@ -2,7 +2,7 @@
 // control that looks broken and is not: the command lands, the file changes, the select does not
 // move. That is exactly what a missing arm in `moduleFieldValue` produces.
 
-import type { WebWidget } from "@studio/graph-model";
+import type { PageWidget } from "@studio/graph-model";
 import type { GraphNode } from "@studio/ui-chains/graph";
 import { cameraUI, inputUI, midiInUI } from "@studio/ui-chains/graph";
 import { describe, expect, it } from "vitest";
@@ -13,11 +13,11 @@ const node = (fields: Partial<GraphNode>): GraphNode =>
   ({ id: "n", label: "n", ...fields }) as GraphNode;
 
 const CAMS = ["Logitech BRIO", "FaceTime HD"];
-const camWidget = (): WebWidget =>
-  cameraUI(CAMS, undefined).widgets.camera as WebWidget;
+const camWidget = (): PageWidget =>
+  cameraUI(CAMS, undefined).widgets.camera as PageWidget;
 
 /** What the select would show: the option whose value came back, or "—" for nothing. */
-const shown = (n: GraphNode, w: WebWidget, field: string): string => {
+const shown = (n: GraphNode, w: PageWidget, field: string): string => {
   const v = moduleFieldValue(n, w, field);
   return v === undefined
     ? "—"
@@ -69,33 +69,33 @@ describe("the input node's own three", () => {
   );
 
   it("shows which socket the file is on, matched on the CHANNELS", () => {
-    const w = ui.widgets.channel as WebWidget;
+    const w = ui.widgets.channel as PageWidget;
     expect(shown(node({ channel: [2] }), w, "channel")).toBe("Mic 2");
     expect(shown(node({}), w, "channel")).toBe("—");
   });
 
   it("shows the width the channel list implies", () => {
-    const w = ui.widgets.width as WebWidget;
+    const w = ui.widgets.width as PageWidget;
     expect(shown(node({ channel: [2] }), w, "width")).toBe("—"); // not this widget's field
     expect(shown(node({ channel: [2] }), w, "channel")).toBe("mono");
     expect(shown(node({ channel: [1, 2] }), w, "channel")).toBe("stereo");
   });
 
   it("shows the monitoring the file names", () => {
-    const w = ui.widgets.monitor as WebWidget;
+    const w = ui.widgets.monitor as PageWidget;
     expect(shown(node({ monitor: "on" }), w, "monitor")).toBe("on");
     expect(shown(node({ monitor: "off" }), w, "monitor")).toBe("off");
   });
 });
 
 describe("the folder-backed two", () => {
-  const w = (labels: string[]): WebWidget =>
+  const w = (labels: string[]): PageWidget =>
     ({
       type: "dropdown",
       col: 0,
       row: 0,
       options: labels.map((label, i) => ({ label, value: i })),
-    }) as WebWidget;
+    }) as PageWidget;
 
   it("reads a base back, and an unset one as `none`", () => {
     expect(shown(node({ base: "warm" }), w(["none", "warm"]), "base")).toBe(
@@ -112,8 +112,8 @@ describe("the folder-backed two", () => {
 });
 
 describe("the MIDI device dropdown", () => {
-  const devWidget = (): WebWidget =>
-    midiInUI(["Arturia KeyStep 37", "MiniLab"]).widgets.device as WebWidget;
+  const devWidget = (): PageWidget =>
+    midiInUI(["Arturia KeyStep 37", "MiniLab"]).widgets.device as PageWidget;
 
   it("shows the device the file names", () => {
     expect(shown(node({ device: "MiniLab" }), devWidget(), "device")).toBe(

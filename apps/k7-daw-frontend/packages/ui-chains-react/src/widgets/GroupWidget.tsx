@@ -2,7 +2,7 @@
 // them, its label on a spine of its own colour, and — bound to an on/off param — a switch that greys
 // its section while off (song-schema's docs/moduleFile.md, docs/widgets.md).
 
-import type { WebWidget } from "@studio/graph-model";
+import type { PageWidget } from "@studio/graph-model";
 import type { GraphNode } from "@studio/ui-chains/graph";
 
 // A group's colour as its label's spine: the same hue, made opaque enough to read as the section's tab.
@@ -27,13 +27,13 @@ export function groupWidget({
   onContextParam,
 }: {
   n: GraphNode;
-  w: WebWidget;
+  w: PageWidget;
   style: React.CSSProperties;
   known: boolean;
   t: number;
   actuable: boolean;
-  onTap: (n: GraphNode, w: WebWidget) => void;
-  onContextParam?: (n: GraphNode, w: WebWidget, x: number, y: number) => void;
+  onTap: (n: GraphNode, w: PageWidget) => void;
+  onContextParam?: (n: GraphNode, w: PageWidget, x: number, y: number) => void;
 }) {
   // Bound to an on/off param, it carries that param's switch and greys its section out while off.
   const switched = !!w.bind;

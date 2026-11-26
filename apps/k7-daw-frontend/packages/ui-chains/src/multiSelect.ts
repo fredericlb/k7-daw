@@ -4,7 +4,7 @@
 // A Shift+drag over empty space selects every module card its rectangle touches (`nodesInBox`).
 // The one thing a reader would get wrong: a mixed selection links NOTHING — no partial fan-out.
 
-import type { WebWidget } from "@studio/graph-model";
+import type { PageWidget } from "@studio/graph-model";
 import { type GraphNode, widgetDenorm } from "./graph";
 
 /** Shift+click on `name`: the selection with it toggled, the single selection it grew from counted in. */
@@ -39,7 +39,7 @@ export function linkedNodes(
 
 /** A linked control's value: its own start moved by the TRAVEL of the one in hand (`t0` → `t`, 0..1 of the throw), clamped. */
 export function linkedValue(
-  w: WebWidget,
+  w: PageWidget,
   ownStartT: number,
   t0: number,
   t: number,

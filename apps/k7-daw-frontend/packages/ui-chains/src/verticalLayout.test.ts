@@ -1,7 +1,7 @@
 // The VERTICAL layout: a panel's narrow twin drawn in its place, its tabs a menu across the top
 // rather than a column — and a panel with no twin still drawn as a menu, folded by the view.
 
-import type { WebGraph, WebModuleUI } from "@studio/graph-model";
+import type { PageModuleUI, WebGraph } from "@studio/graph-model";
 import { describe, expect, it } from "vitest";
 import {
   buildGraph,
@@ -24,7 +24,7 @@ const knob = (col: number, row: number, bind: string) => ({
   rowSpan: 2,
   bind,
 });
-const ui: WebModuleUI = {
+const ui: PageModuleUI = {
   cols: 8,
   rows: 2,
   widgets: {},
@@ -89,7 +89,7 @@ describe("the vertical layout", () => {
   });
 
   it("keeps a horizontal card's tabs a column, however many, and the card no taller than 4 rows", () => {
-    const many: WebModuleUI = {
+    const many: PageModuleUI = {
       cols: 8,
       rows: 4,
       widgets: {},
@@ -102,7 +102,7 @@ describe("the vertical layout", () => {
     expect(menuH(many)).toBe(0);
     expect(nodeSize(many).h).toBe(nodeSize({ ...many, tabs: undefined }).h);
     // A short panel still grows to list a few tabs, up to 4 rows' height.
-    const short: WebModuleUI = {
+    const short: PageModuleUI = {
       ...many,
       rows: 1,
       tabs: many.tabs?.slice(0, 5),
@@ -113,7 +113,7 @@ describe("the vertical layout", () => {
   });
 
   it("draws a narrow card as tall as its OPEN page, its top edge where it was", () => {
-    const tall: WebModuleUI = {
+    const tall: PageModuleUI = {
       ...ui,
       vertical: {
         cols: 4,

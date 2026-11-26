@@ -25,6 +25,8 @@ pub mod modules;
 pub mod pictures;
 pub mod read;
 pub mod readset;
+#[cfg(feature = "ts")]
+pub mod rec;
 pub mod record;
 pub mod resolve;
 pub mod roots;

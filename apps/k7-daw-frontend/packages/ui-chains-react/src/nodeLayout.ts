@@ -1,14 +1,14 @@
 // nodeLayout.ts — the arithmetic of a card's header: how wide its name may run, which corner
 // buttons and lead column it carries, how big a glyph it draws — docs/nodeCard.md.
 
-import type { WebWidget } from "@studio/graph-model";
+import type { PageWidget } from "@studio/graph-model";
 import type { GraphNode } from "@studio/ui-chains/graph";
 import { BYPASS_GAP, BYPASS_W } from "./chainsCss";
 
 // A group is painted UNDER what it frames, so it comes first; the sort is stable for everything else.
 export const groupsFirst = (
-  ws: Record<string, WebWidget>,
-): [string, WebWidget][] =>
+  ws: Record<string, PageWidget>,
+): [string, PageWidget][] =>
   Object.entries(ws).sort(
     ([, a], [, b]) => +(b.type === "group") - +(a.type === "group"),
   );

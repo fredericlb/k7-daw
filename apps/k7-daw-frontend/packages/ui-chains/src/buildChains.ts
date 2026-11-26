@@ -4,12 +4,12 @@
 // the run's `Build`. See docs/graphBuild.md.
 
 import {
+  type PageModuleUI,
   splitPort,
   TRACK_OUTPUTS,
   type WebChain,
   type WebChainStep,
   type WebCurve,
-  type WebModuleUI,
 } from "@studio/graph-model";
 import { panelWidgets } from "@studio/graph-model/panel";
 import { RENDER_INPUTS } from "@studio/song-schema/moduleTypes";
@@ -32,7 +32,7 @@ import { stepUI, TRACK_UI, VIDEO_TRACK_UI } from "./nodeUIs";
 
 // The node-local centre of the widget bound to `param` — where an automation arrow lands.
 function widgetCenter(
-  ui: WebModuleUI | undefined,
+  ui: PageModuleUI | undefined,
   param: string,
 ): Pt | undefined {
   for (const [, w] of panelWidgets(ui)) {
@@ -60,7 +60,6 @@ function curveSubLabel(curve: WebCurve): string {
 /** A chain's modules, in series, each with its bound curves. */
 export function addChainModules(b: Build, name: string, c: WebChain): void {
   const { graph, opts, nodes, edges, moduleId } = b;
-  const chainOn = c.enabled !== false;
   c.use.forEach((s, i) => {
     const mid = moduleId(s.module);
     const existing = nodes.get(mid);
@@ -77,7 +76,7 @@ export function addChainModules(b: Build, name: string, c: WebChain): void {
       kind: "module",
       chain: chains[0],
       chains,
-      dim: !chainOn || s.enabled === false,
+      dim: s.enabled === false,
       // Distinct from `dim`, which also covers a whole chain: this is THIS step's bypass.
       bypassed: s.enabled === false,
       module: s.module,
@@ -199,7 +198,7 @@ export function addChainSource(b: Build, name: string, c: WebChain): void {
       kind: "chain",
       chain: name,
       ...PLAIN_FLAGS,
-      dim: c.enabled === false,
+      dim: false,
     });
 
   // A `from` is chain-feeds-chain only when it names a DIFFERENT chain and not a track. See docs/graphBuild.md.

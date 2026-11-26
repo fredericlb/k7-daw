@@ -3,7 +3,7 @@
 // cut through a control (a knob two rows tall moves whole), but a frame is cut and a screen shortened, and
 // each tab folds on its own. See docs/graphBuild.md.
 
-import type { WebModuleUI, WebWidget } from "@studio/graph-model";
+import type { PageModuleUI, PageWidget } from "@studio/graph-model";
 
 /** The one side a grid is held to; the other grows to take what overflows. */
 export interface GridFit {
@@ -13,7 +13,7 @@ export interface GridFit {
 
 type Span = { at: number; len: number };
 
-const along = (w: WebWidget, axis: GridFit["axis"]): Span =>
+const along = (w: PageWidget, axis: GridFit["axis"]): Span =>
   axis === "rows"
     ? { at: w.row, len: Math.max(1, w.rowSpan ?? 1) }
     : { at: w.col, len: Math.max(1, w.colSpan ?? 1) };
@@ -44,13 +44,13 @@ export function foldBands(
 }
 
 /** A FRAME is drawing, not a control: it never holds a cut back, and is redrawn once per band it crosses. */
-const isFrame = (w: WebWidget): boolean => w.type === "group";
+const isFrame = (w: PageWidget): boolean => w.type === "group";
 
 /** A SCREEN draws a picture scaled to its box: it never holds a cut back either, and is shortened to end at its band's edge. */
-const isElastic = (w: WebWidget): boolean =>
+const isElastic = (w: PageWidget): boolean =>
   w.type === "lcdscreen" || w.type === "waveform";
 
-type Widgets = Record<string, WebWidget>;
+type Widgets = Record<string, PageWidget>;
 type Bands = [number, number][];
 
 /** A fold: the bands, how wide each is across, and where each starts — a band is as wide as what it HOLDS, not as the grid. */
@@ -61,7 +61,7 @@ interface Fold {
 }
 
 /** The other axis' span — the columns, when rows are held. */
-const crossOf = (w: WebWidget, axis: GridFit["axis"]): Span =>
+const crossOf = (w: PageWidget, axis: GridFit["axis"]): Span =>
   along(w, axis === "rows" ? "cols" : "rows");
 
 const bandOf = (bands: Bands, at: number): number =>
@@ -73,7 +73,7 @@ const bandOf = (bands: Bands, at: number): number =>
 /** `bands` sized to `widgets`: each band as wide as the furthest control or screen in it, a frame's width not counting. */
 function sized(
   bands: Bands,
-  widgets: WebWidget[],
+  widgets: PageWidget[],
   axis: GridFit["axis"],
 ): Fold {
   const widths = bands.map(() => 1);
@@ -92,10 +92,10 @@ function sized(
 /** Where a fold puts a widget: one piece per band it covers — a frame may cover several, anything else one. */
 function placeIn(
   key: string,
-  w: WebWidget,
+  w: PageWidget,
   fold: Fold,
   axis: GridFit["axis"],
-): [string, WebWidget][] {
+): [string, PageWidget][] {
   const { bands, widths, offsets } = fold;
   const { at, len } = along(w, axis);
   const cross = crossOf(w, axis);
@@ -104,7 +104,7 @@ function placeIn(
     from: number,
     size: number,
     crossLen: number,
-  ): WebWidget =>
+  ): PageWidget =>
     axis === "rows"
       ? {
           ...w,
@@ -127,7 +127,7 @@ function placeIn(
     return [[key, shift(b, at, fits, cross.len)]];
   }
   // A frame cut at a band's edge — and at its width: one piece per band, the label on the first only.
-  const out: [string, WebWidget][] = [];
+  const out: [string, PageWidget][] = [];
   bands.forEach(([s, e], b) => {
     const from = Math.max(at, s);
     const to = Math.min(at + len, e);
@@ -144,11 +144,11 @@ function placeIn(
 }
 
 /** `ui` folded to `fit`, or `ui` itself when it already fits or there is nowhere legal to fold it. */
-export function fitPanel(ui: WebModuleUI, fit: GridFit): WebModuleUI {
+export function fitPanel(ui: PageModuleUI, fit: GridFit): PageModuleUI {
   const { axis, max } = fit;
   const size = axis === "rows" ? ui.rows : ui.cols;
   if (!(max >= 1) || size <= max) return ui;
-  const spansOf = (ws: WebWidget[]) =>
+  const spansOf = (ws: PageWidget[]) =>
     ws.filter((w) => !isFrame(w) && !isElastic(w)).map((w) => along(w, axis));
   const common = Object.values(ui.widgets);
   const tabs = (ui.tabs ?? []).map((t) => Object.values(t.widgets));
