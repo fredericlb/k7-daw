@@ -308,6 +308,8 @@ export interface TimelineHandle {
   zoomIn: () => void;
   zoomOut: () => void;
   zoomReset: () => void;
+  /** `ui fit` — the view centred on one placement, `length` beats long from `start`, with room either side. */
+  frameClip: (start: number, length: number) => void;
   seekToCaret: () => void;
   /** `transport step` — the drawn tick after (`1`) or before (`-1`) `sec`, in seconds; null past either end (docs/timeline.md). */
   stepTarget: (sec: number, dir: 1 | -1) => number | null;
@@ -1572,6 +1574,22 @@ function TimelineTabView({
       zoomReset: () => {
         setSel(null);
         setZoom([]);
+      },
+      // The edited clip, centred, a quarter of its length clear either side; one zoom level, so shift+z backs out of it.
+      frameClip: (start, length) => {
+        const len = length > 0 ? length : NATURAL;
+        const pad = Math.max(len / 4, 1);
+        if (!visRows.length) return;
+        setSel(null);
+        setZoom((z) => [
+          ...z,
+          {
+            beatStart: Math.max(0, start - pad),
+            beatEnd: start + len + pad,
+            rowFrom: rowKey(visRows[0]),
+            rowTo: rowKey(visRows[visRows.length - 1]),
+          },
+        ]);
       },
       // t: seek the transport to the caret's beat. On a label there is nowhere to send it, so the key goes quiet.
       seekToCaret: () => {

@@ -836,6 +836,8 @@
   "tapChain.add": "Add module…",
   "tapChain.input": "input",
   "tapChain.inputSub": "the song comes in here",
+  "status.noClipToFit": "No clip is open in the editor to fit",
+  "dock.fit": "Fit",
   "dock.on": "on",
   "dock.off": "off",
   "clip.gain": "Gain",

@@ -836,6 +836,8 @@
   "tapChain.add": "Ajouter un module…",
   "tapChain.input": "entrée",
   "tapChain.inputSub": "le morceau arrive ici",
+  "status.noClipToFit": "Aucun clip ouvert dans l'éditeur à centrer",
+  "dock.fit": "Cadrer",
   "dock.on": "on",
   "dock.off": "off",
   "clip.gain": "Gain",

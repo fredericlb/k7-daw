@@ -46,6 +46,7 @@ import { ClipControls } from "./ClipControls";
 import { ClipMarksList, type MarkRow } from "./ClipMarksList";
 import { ClipToolBar } from "./ClipToolBar";
 import { CompStrip } from "./CompStrip";
+import { DockFitButton } from "./DockFitButton";
 import { LiveSeconds, LiveTakeWave, LiveWaveform } from "./LiveWaveform";
 import { LoopBrace } from "./LoopBrace";
 import { ArrangementRuler } from "./Ruler";
@@ -518,6 +519,8 @@ export function AudioClipPanel({
         </DockHeaderRow>
       )}
 
+      {/* The first control: Fit centres the timeline on this clip. */}
+      {!rolling && clip && <DockFitButton command={command} />}
       {/* The tool axis, absent while a take rolls (no mark yet): it DISPATCHES `ui wave`, the only way to a tool a finger has. */}
       {!rolling && clip && (
         <ClipToolBar

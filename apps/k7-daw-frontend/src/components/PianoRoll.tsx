@@ -54,6 +54,7 @@ import {
 } from "../rollPending";
 import { useShell } from "../state/shellStore";
 import type { WebClip, WebProject } from "../types";
+import { DockFitButton } from "./DockFitButton";
 import { KEYS, KeyGutter, N_NOTES } from "./KeyGutter";
 import { LoopBrace, LoopToggle } from "./LoopBrace";
 import {
@@ -606,21 +607,24 @@ export function PianoRoll({
     // min-w-0, as in the timeline: the fixed-width grid must not become this flex child's minimum.
     <div className="flex h-full min-h-0 min-w-0 flex-col border-t-2 border-border">
       {/* Pad and Desk draw the tools in the dock's header; the phone sheet keeps them as the body's first row. */}
+      {/* The first control: Fit centres the timeline on this clip (`ui fit` says so when the roll shows a file nothing places). */}
+      <DockFitButton command={onCommand} />
       <DockHeaderRow bodyOnPhone>
         <div
           className={cn(
-            "flex shrink-0 items-center gap-1 text-xs",
-            inSheet ? "px-3 py-1" : "ml-auto",
+            "flex flex-1 shrink-0 items-center gap-1 text-xs",
+            inSheet && "px-3 py-1",
           )}
         >
-          <span className="flex items-center gap-1">
-            {onModeChange && (
-              <RollToolMenu
-                modes={takes ? ROLL_MODES : ROLL_SOLO_MODES}
-                current={mode}
-                onPick={(next) => void onCommand?.(`ui roll ${next}`)}
-              />
-            )}
+          {/* The view's tools on the left; Loop and ×2 pushed to the right. */}
+          {onModeChange && (
+            <RollToolMenu
+              modes={takes ? ROLL_MODES : ROLL_SOLO_MODES}
+              current={mode}
+              onPick={(next) => void onCommand?.(`ui roll ${next}`)}
+            />
+          )}
+          <span className="ml-auto flex items-center gap-1">
             {/* Editable rolls only — `onCreateNote` is what says this one is (docs/clipEditors.md). */}
             <LoopToggle on={looped} onToggle={onLoop} />
             <SeqDoubleButton

@@ -8,9 +8,13 @@ the live take, a sequence's grid, the takes.
 - **Every option is in the title bar.** Tools, toggles, sliders, menus, Stop,
   Discard and Done are drawn through `DockHeaderRow` (`@studio/ui/editor-dock`) on the line of
   Close. An editor has no toolbar of its own in its content.
-- **No text on the left of the title bar.** No editor names what it shows there (no clip name, no
-  count, no path): the dock's visually hidden title names it for assistive technology, and the
-  waveform's view capsules take that place.
+- **The view switch on the left, everything else on the right.** No editor names what it shows (no clip
+  name, no count, no path): the dock's visually hidden title names it. The title bar starts with the
+  view switch (the waveform's capsules, the roll's tool menu, the chain's Controls) and pushes the
+  settings and actions to the right.
+- **A clip editor starts with Fit.** The first control of the audio clip and the piano roll is Fit
+  (`DockFitButton`, `ui fit`): one zoom level of the timeline centred on the edited placement, a quarter
+  of its length clear either side, so shift+z backs out of it. It moves the timeline, never the editor.
 - **The content holds only what is edited**: the cards, the strips, the notes, the wave, the takes'
   rows, and the edited data's own names and values (a lane's name on its card, a key's name, a ruler's
   numbers). No caption, no section heading, no help line.
