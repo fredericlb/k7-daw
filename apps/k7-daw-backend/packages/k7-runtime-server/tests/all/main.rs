@@ -1,15 +1,18 @@
 //! The crate's tests in one binary: one module per part, one line each.
 
 mod catalogue;
+mod doc_bounds;
 mod engine_abi;
 mod engine_fake;
 mod harness;
 mod pairing_gate;
 mod pairing_store;
+mod project_socket;
 mod server_socket;
 mod server_timers;
 mod server_units;
 mod stream;
+mod supersede;
 mod wire_json;
 
 /// A file of the repo, by its path from the root.

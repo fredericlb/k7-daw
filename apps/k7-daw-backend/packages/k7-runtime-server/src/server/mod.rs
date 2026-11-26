@@ -7,8 +7,12 @@ pub mod conn;
 pub mod ctx;
 pub mod dispatch;
 pub mod handlers;
+pub mod held_notes;
 pub mod msg;
 pub mod outbox;
+mod project;
+pub mod supersede;
+mod transport;
 mod whoami;
 
 use crate::engine::{Api, Engine, Host};

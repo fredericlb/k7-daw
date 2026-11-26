@@ -4,6 +4,7 @@
 //! What a reader gets wrong: the wire is the C++ server's byte for byte, nlohmann's sorted keys and number
 //! format included, since every client and the conformance suite read it (`docs/rust-engine-server-plan.md`).
 
+pub mod doc;
 pub mod engine;
 pub mod pairing;
 pub mod server;

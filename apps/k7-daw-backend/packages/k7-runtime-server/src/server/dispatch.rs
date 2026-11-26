@@ -6,7 +6,7 @@
 use super::ctx::{Client, Ctx, MAX_SESSION_ID_BYTES, MAX_SESSIONS, Request};
 use super::handlers::HandlerTable;
 use super::msg::{self, Malformed, Msg};
-use crate::wire::catalogue::{OVERRIDE_QUERIES, PROBE_QUERIES, is};
+use crate::wire::catalogue::{OVERRIDE_QUERIES, PROBE_QUERIES, SUPERSEDABLE, is};
 use serde_json::json;
 use std::panic::{AssertUnwindSafe, catch_unwind};
 use std::sync::Arc;
@@ -95,6 +95,10 @@ fn route(
                 .entry(client.id)
                 .or_insert_with(|| session.clone());
         }
+    }
+    // Every verb but the three that can be superseded, and the read-only probes, fences what was queued before it.
+    if !is(SUPERSEDABLE, &ty) && !probe {
+        ctx.supersede.barrier(&session);
     }
     match table.find(&ty) {
         Some(handle) => handle(&Request {

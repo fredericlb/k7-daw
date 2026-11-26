@@ -316,3 +316,15 @@ target_compile_definitions(studio_capi_tests PRIVATE
     DONT_SET_USING_JUCE_NAMESPACE=1)
 add_test(NAME studio_capi_tests COMMAND studio_capi_tests)
 set_tests_properties(studio_capi_tests PROPERTIES LABELS slow)
+
+# --- DocReader tests ----------------------------------------------------------
+# The plain reader of the document the Rust server validated, held to the golden file its test writes: nlohmann only, fast.
+add_executable(studio_docreader_tests
+    DocReader_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../engine/DocReader.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../engine/ProjectDoc.cpp)
+target_include_directories(studio_docreader_tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../engine)
+target_link_libraries(studio_docreader_tests PRIVATE nlohmann_json::nlohmann_json)
+target_compile_definitions(studio_docreader_tests PRIVATE
+    K7_GOLDEN_DOC="${CMAKE_CURRENT_SOURCE_DIR}/../../../k7-daw-backend/packages/k7-runtime-server/fixtures/project.validated.json")
+add_test(NAME studio_docreader_tests COMMAND studio_docreader_tests)

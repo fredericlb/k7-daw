@@ -4,6 +4,9 @@
 //! What a reader gets wrong: it keeps the real contract, not a convenient one: a job runs on the thread that
 //! runs the host, a quit ends the loop after the job running, and a job left queued is dropped at destroy.
 
+pub mod project;
+pub mod transport;
+
 use super::Engine;
 use super::ffi::{
     self, K7AudioTiming, K7CoreApi, K7EngineApi, K7Host, K7Str, K7StrEach, K7Task, K7Warning,
@@ -21,8 +24,8 @@ pub fn api() -> &'static K7EngineApi {
         abi: ffi::K7_ENGINE_ABI,
         size: std::mem::size_of::<K7EngineApi>() as u32,
         core: &CORE,
-        project: std::ptr::null(),
-        transport: std::ptr::null(),
+        project: std::ptr::from_ref(&project::TABLE).cast(),
+        transport: std::ptr::from_ref(&transport::TABLE).cast(),
         state: std::ptr::null(),
         plugins: std::ptr::null(),
         machine: std::ptr::null(),
@@ -39,6 +42,8 @@ pub struct FakeState {
     pub timing: K7AudioTiming,
     pub output_device: String,
     pub run_thread: Option<ThreadId>,
+    pub project: project::ProjectFake,
+    pub transport: transport::TransportFake,
 }
 
 struct Queued {

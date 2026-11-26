@@ -63,7 +63,11 @@ add_library(studio_engine STATIC
     eurorack/DrumVoicesPlugin.cpp
     # The C ABI the Rust server calls the host through, one file per area (capi/k7_engine.h).
     capi/EngineApi.cpp
-    capi/CoreApi.cpp)
+    capi/CoreApi.cpp
+    capi/ProjectApi.cpp
+    capi/TransportApi.cpp
+    # A validated ProjectDoc read from JSON, no checks of its own (the Rust server validates).
+    DocReader.cpp)
 
 add_library(studio::engine ALIAS studio_engine)
 

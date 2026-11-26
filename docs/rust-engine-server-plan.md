@@ -44,7 +44,7 @@ server side moves.
 | M2 the socket core (built) | accept, the Origin and frame-size screens, nesting refusal, ping, send timeout, the per-client outbox, sessions, dispatch by verb against the fake engine | 10 |
 | M3 pairing (built) | who counts as the machine, the paired-devices store, the pairing verbs | 6 |
 | M4 the link | the static library; `build.mjs` runs cargo with `--target-dir`; a slow CMake test runs `serve` on the real host and probes `whoami`; the Android and iOS cross builds | 6 |
-| M5 project and transport | the `DocJson` port with its bounds, supersede, held notes; the project and transport areas | 12 |
+| M5 project and transport (built) | the `DocJson` port with its bounds, supersede, held notes; the project and transport areas | 12 |
 | M6 the state frame | the state frame, `recorded`, `plugin-params`, `engine-warning` | 6 |
 | M7 plugins | the scan, the probe (4 at once), the pending queries, the plugin verbs | 10 |
 | M8 the machine | the `AudioSender` broadcast, sessions, drivers, devices, `io-levels`, `instrument-status`, `render` | 10 |
@@ -88,6 +88,16 @@ its own, and numbers its sockets with a `SocketId` (`u64`).
 
 Its deviation from C++: a `name`, `key`, `requestId` or `deviceId` that is not a string is read as
 empty, where nlohmann's `value()` threw into the message handler's catch.
+
+## M5's choices
+
+Built (`apps/k7-daw-backend/packages/k7-runtime-server/docs/project.md`): the project area (`path_allowed`, `warn`,
+`standing_warnings`, `release_slot`, `apply`, `track_ids`, `apply_tracks`, `reset`) and the transport area (every verb of
+`ServeProject.cpp` but `project`, `tracks` and `flush`: the auditions, `midi-live`, `arm`, `recorder`, `record-enable`).
+Deviations from the C++: `DocJson.cpp`, `Supersede.h` and `HeldNotes.h` stay until M9 (the CLI's offline modes still use
+`DocJson`); the plain reader is the new `engine/DocReader.cpp`; the path roots stay C++'s, reached by `path_allowed`; the
+parse's warnings are said under no session, as before; a list field of the wrong shape is refused; an integer past `int`
+saturates where C++ wrapped; the supersede barrier now runs in `dispatch.rs`.
 
 ## M2's choices
 

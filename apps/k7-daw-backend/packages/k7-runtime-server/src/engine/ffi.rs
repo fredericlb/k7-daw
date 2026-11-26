@@ -64,6 +64,9 @@ macro_rules! table {
     };
 }
 
+// An area module declares its own table with the same macro.
+pub(crate) use table;
+
 table! {
     /// What `k7_engine_api()` returns; the area tables other than `core` are NULL until built.
     K7EngineApi {
