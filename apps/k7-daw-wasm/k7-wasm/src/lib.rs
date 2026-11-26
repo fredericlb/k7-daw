@@ -8,6 +8,8 @@ pub mod error;
 pub mod ops;
 #[cfg(test)]
 mod tests;
+#[cfg(test)]
+mod tests_file;
 
 pub use error::{ErrorCode, WasmError};
 pub use ops::Session;

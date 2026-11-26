@@ -3,13 +3,14 @@
 
 use crate::files::{AudioClip, FadeMap, Note, Placement, ProjectFile, ProjectSettings, Sequence, VideoClip, Warp};
 use crate::modules::{Alternative, Module, RackSound, Tab, Ui};
-use serde::Deserialize;
 use serde::de::{self, Deserializer, Visitor};
+use serde::{Deserialize, Serialize};
 use std::cell::Cell;
 use std::fmt;
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[cfg_attr(feature = "ts", derive(ts_rs::TS))]
+#[serde(rename_all = "lowercase")]
 pub enum FileKind {
     Module,
     Chains,
@@ -200,9 +201,20 @@ const WIDGET_TYPES: Names = &[
     "group",
 ];
 
+/// A module's fields, the pair that is ABOUT the fields (`alternatives`, `alternative`) and `status` last, as the completions list them.
+fn module_names() -> Vec<&'static str> {
+    const LAST: [&str; 3] = ["alternatives", "alternative", "status"];
+    let all = names_of::<Module>();
+    all.iter()
+        .filter(|n| !LAST.contains(n))
+        .chain(LAST.iter().filter(|n| all.contains(n)))
+        .copied()
+        .collect()
+}
+
 fn module_fields(path: &[&str]) -> Vec<&'static str> {
     let Some((head, rest)) = path.split_first() else {
-        return names_of::<Module>().to_vec();
+        return module_names();
     };
     match *head {
         "events" => match rest.first() {
@@ -238,7 +250,7 @@ fn step_fields(rest: &[&str], lanes: bool) -> Vec<&'static str> {
                 own.push("track");
             }
             own.extend(NODE_ITEM_FIELDS);
-            own.extend(names_of::<Module>());
+            own.extend(module_names());
             let mut seen: Vec<&'static str> = Vec::new();
             for n in own {
                 if !seen.contains(&n) {
