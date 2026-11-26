@@ -2,7 +2,12 @@
 // It rises from the chevron at the bottom right once unfolded; a phone has no rail, its overflow menu holds the same buttons (docs/shell.md).
 
 import { Capsule, CapsuleButton, CapsuleDivider } from "@studio/ui/capsule";
-import { LogOut, Settings, SquareTerminal } from "@studio/ui/icons";
+import {
+  LogOut,
+  type LucideIcon,
+  Settings,
+  SquareTerminal,
+} from "@studio/ui/icons";
 import type { ReactNode } from "react";
 import { m } from "../paraglide/messages.js";
 import { summonChord } from "./modKey";
@@ -17,7 +22,19 @@ const SQUARE =
 // Close is a link (the projects list is another page) drawn as the rail's buttons.
 const CLOSE = `inline-flex items-center justify-center text-foreground outline-none transition-colors hover:bg-on-fill focus-visible:shadow-(--k7-focus-ring) [&_svg]:size-5 desk:[&_svg]:size-[18px] ${SQUARE}`;
 
+/** A view option of the pane, on a phone's rail (its lane views, its graph's fit): a switch, or an action. */
+export interface RailView {
+  id: string;
+  label: string;
+  icon: LucideIcon;
+  on: boolean;
+  /** A plain action (Zoom fit) rather than a switch: no pressed state. */
+  action?: boolean;
+  onPress: () => void;
+}
+
 export function PanelRail({
+  views,
   save,
   panes,
   pane,
@@ -29,6 +46,8 @@ export function PanelRail({
   onCommandBar,
   bottom,
 }: {
+  /** The pane's view options on a phone, which has no view capsule; above the panes. */
+  views?: RailView[];
   /** Where it stands on a phone, whose bar is measured; a desk's sits on --k7-float-bottom. */
   bottom?: number;
   /** Git's Update and Save, last, nearest the chevron (HeaderGit.tsx's GitRailPull, GitRailSave), drawn with the rail's button class; null outside a git workspace. */
@@ -89,6 +108,29 @@ export function PanelRail({
         );
       })}
       <CapsuleDivider className="mx-0 my-0.5 h-px w-5" />
+      {views && views.length > 0 && (
+        <>
+          <div
+            role="group"
+            aria-label={m["shell.laneViews"]()}
+            className="flex flex-col gap-1.5"
+          >
+            {views.map((v) => (
+              <CapsuleButton
+                key={v.id}
+                className={SQUARE}
+                pressed={v.action ? undefined : v.on}
+                aria-label={v.label}
+                title={v.label}
+                onClick={v.onPress}
+              >
+                <v.icon />
+              </CapsuleButton>
+            ))}
+          </div>
+          <CapsuleDivider className="mx-0 my-0.5 h-px w-5" />
+        </>
+      )}
       <div
         role="group"
         aria-label={m["shell.pane"]()}

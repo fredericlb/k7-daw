@@ -1,6 +1,6 @@
 // FloatingBar.tsx — the bar of the transport capsule and a phone's command bar button (a desk's is beside the Mixer)
 // (buttons, clock, song overview, tempo, metronome, master volume); the pane's views float apart (ViewCapsule.tsx). On a phone the clock,
-// overview, tempo and volume move to a strip above the capsule; a desk or a pad draws it small at the bottom left, and the metronome to the overflow menu; the tool is the timeline's corner (ToolMenu.tsx), a phone's menu. It holds no state of its own: App hands it all.
+// overview, metronome and volume move to a strip above the capsule; a desk or a pad draws it small at the bottom left; the tool is the timeline's corner (ToolMenu.tsx). It holds no state of its own: App hands it all.
 import { CapsuleDivider } from "@studio/ui/capsule";
 import { SquareTerminal } from "@studio/ui/icons";
 import type { ComponentProps, ReactNode, Ref } from "react";
@@ -163,7 +163,16 @@ export function FloatingBar({
           <div className="float pointer-events-auto flex h-[38px] items-center gap-2 rounded-full px-3.5">
             {clock}
             {overview}
-            {tempo}
+            {metronome ? (
+              <MetronomeTempo
+                {...metronome}
+                inline
+                recInfo={recInfo}
+                runCommand={runCommand}
+              />
+            ) : (
+              tempo
+            )}
             {meter}
           </div>
         )}

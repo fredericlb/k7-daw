@@ -67,7 +67,7 @@ Applies on every screen: the keymap, the Esc ladder, the undo journal, app quest
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
-| 01.01 | Open the command bar | click the command-bar button (square terminal): beside the Mixer at the bottom right in a project (on a tablet in portrait or a phone, in the right-edge toolbar above Update), the bottom right of the sidebar on Home | ⌘/Ctrl+⇧P (works inside the text editor); double-tap Shift | double-tap the screen with two fingers, anywhere; a tablet also has the command-bar button (the header in a project, the bottom right of the sidebar on Home) | T M D |
+| 01.01 | Open the command bar | click the command-bar button (square terminal): beside the Mixer at the bottom right in a project (on a tablet in portrait or a phone, in the right-edge toolbar above Update), the bottom right of the sidebar on Home | ⌘/Ctrl+⇧P (works inside the text editor); double-tap Shift | double-tap the screen with two fingers, anywhere; in a project the command-bar button is in the rail (the bottom right of the sidebar on Home) | T M D |
 | 01.02 | Run a bound command by key | — | single keys from the keymap, each one runs a command: `1`–`4` pages, `f` fullscreen the focused pane, `F6`/`⇧F6` next/previous page, `?` help, `Space` play/stop, `⇧Space` replay, `Enter` rewind, `t` locate, `,` `.` step the playhead, `⇧R` record enable; every key can be rebound | — | T D |
 | 01.03 | Step aside for typing or a focused control | — | a field owns every key; a focused button/link/select keeps all keys but Esc and the transport keys; `F6` walks out of both | — | T D |
 | 01.04 | Copy selected page text | — | ⌘/Ctrl+C with a text selection stays the browser's copy | — | T D |
@@ -117,7 +117,7 @@ The home pages behind a floating tab bar (Projects, Surfaces, Tasks, Library, Se
 
 ### Git screens
 
-The git bar (workspace tree, Home row; in a project, Save and Update first on the right-edge toolbar with their counts, a phone's git menu), Save in one press with its toasts, the Conflict screen, the Sync settings and Clone a repository pages (Back to Projects; tabs GitHub, Forgejo, Other host; one repository picker per signed-in forge account), the Saves list, the identity form; GitHub's sign-in is in Settings → Services, and a Forgejo server is added and signed in there or in the Forgejo tab.
+The git bar (workspace tree, Home row; in a project, Save and Update on the right-edge toolbar with their counts), Save in one press with its toasts, the Conflict screen, the Sync settings and Clone a repository pages (Back to Projects; tabs GitHub, Forgejo, Other host; one repository picker per signed-in forge account), the Saves list, the identity form; GitHub's sign-in is in Settings → Services, and a Forgejo server is added and signed in there or in the Forgejo tab.
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
@@ -153,11 +153,11 @@ The git bar (workspace tree, Home row; in a project, Save and Update first on th
 
 ### Project header and transport
 
-No header row on a desk or a pad: every control floats over the panes. At the bottom left the transport bar (transport with Record's chevron, position, overview, the metronome wearing the bpm and opening a bubble of tempo, time signature and click, master volume), drawn small; at the bottom right the spinner, the view's capsule (Lane views or Graph views, icons only), the command-bar button, the Mixer icon and the chevron that unfolds the right-edge toolbar upward, carrying the problem count and the unsaved count while folded. The floating row rises above the editor dock when it opens. The vertical toolbar holds, from the top, Close, Settings, the right panels' buttons with the problem count on Logs, the pane switcher, then git's Update and Save with their counts, nearest the chevron. A phone keeps its header (Back, the name, its git menu, the warning chip, its status line under it, the Views and panels dialog) and its bar floats at the foot, ending with the rail's chevron; a phone's rail (and a tablet's in portrait) holds the command-bar button above Update. The timeline's tool is in its corner, left of + lane (a phone's menu).
+No header row on any device: every control floats over the panes. At the bottom left the transport bar (transport with Record's chevron, position, overview, the metronome wearing the bpm and opening a bubble of tempo, time signature and click, master volume), drawn small; at the bottom right the spinner, the view's capsule (Lane views or Graph views, icons only), the command-bar button, the Mixer icon and the chevron that unfolds the right-edge toolbar upward, carrying the problem count and the unsaved count while folded. The floating row rises above the editor dock when it opens. The vertical toolbar holds, from the top, Close, Settings, the right panels' buttons with the problem count on Logs, the pane switcher, then git's Update and Save with their counts, nearest the chevron. A phone's bar floats at the foot, its strip above it (clock, overview, the metronome with the bpm, volume), and ends with the rail's chevron; its rail adds the Mixer, the pane's view options and the command-bar button (a tablet's in portrait the command-bar button too); its spinner and Resolve float at the top right. The timeline's tool is in its corner, left of + lane.
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
-| 03.10 | Go back to the projects page | click Close, next to Settings on the right-edge toolbar (middle-click: new tab); leaving stops and unloads the project in the engine | Enter on Close | tap Back (a phone keeps Back and the name in its header) | T M D |
+| 03.10 | Go back to the projects page | click Close, next to Settings on the right-edge toolbar (middle-click: new tab); leaving stops and unloads the project in the engine | Enter on Close | tap Close on the rail | T M D |
 | 03.11 | Play / pause | click Play/Pause | Space | tap | T M D |
 | 03.12 | Stop and rewind | click Stop | Enter | tap | T M D |
 | 03.13 | Replay from the last start | — | ⇧Space | — | T D |
@@ -166,19 +166,19 @@ No header row on a desk or a pad: every control floats over the panes. At the bo
 | 03.16 | Record the output (no arrangement) | click the output record button (a set); with an arrangement, Record's chevron → Record the output | — | tap | T M D |
 | 03.17† | Move the playhead or scrub from the minimap | click the strip; press and drag to scrub | — | tap to seek; drag to scrub | T M D |
 | 03.18† | Peek the full map | hover the minimap: it unfolds to every lane | — | — (stays folded) | D |
-| 03.19 | Edit the tempo | click the metronome (the bpm under its icon) → a bubble above it: type the tempo, or press Tap in rhythm | Enter confirms; closing the bubble keeps it | tap the bpm (a phone's strip) → question with Tap | T M D |
-| 03.20 | Edit the meter | click the metronome → in its bubble, the beats per bar and the note value | Enter on the beats; the note value applies at once | tap N/M in a phone's strip → question | T M D |
-| 03.21 | Toggle the metronome | the switch in the metronome's bubble | Enter/Space on the switch | on a phone, Metronome in Views and panels | T M D |
-| 03.22 | Set the metronome volume | the level slider in the metronome's bubble (written on release) | arrows on the focused slider (written on key up) | on a phone, the slider under Metronome in Views and panels | T M D |
-| 03.23 | Set the song's output level | drag the master knob up or down in the floating bar (written on release; double-click: 0 dB); its arc is the level heard, red when it clipped | arrows on the focused knob (0.5 dB, written on key up) | drag the master volume; on a phone, the one in the info strip above the bar | T M D |
+| 03.19 | Edit the tempo | click the metronome (the bpm under its icon) → a bubble above it: type the tempo, or press Tap in rhythm | Enter confirms; closing the bubble keeps it | tap the metronome in the strip above the bar → the same bubble | T M D |
+| 03.20 | Edit the meter | click the metronome → in its bubble, the beats per bar and the note value | Enter on the beats; the note value applies at once | tap the metronome → the same bubble | T M D |
+| 03.21 | Toggle the metronome | the switch in the metronome's bubble | Enter/Space on the switch | the switch in the metronome's bubble | T M D |
+| 03.22 | Set the metronome volume | the level slider in the metronome's bubble (written on release) | arrows on the focused slider (written on key up) | the level slider in the metronome's bubble | T M D |
+| 03.23 | Set the song's output level | drag the master knob up or down in the floating bar (written on release; double-click: 0 dB); its arc is the level heard, red when it clipped | arrows on the focused knob (0.5 dB, written on key up) | drag the master volume; on a phone, the one in the strip above the bar | T M D |
 | 03.24 | Fix a clipped mix | click "fix" next to the clip light | — | — | D |
 | 03.25† | Show / hide the graph notes | click the notes button | — | tap | T M D |
-| 03.26 | Open the Mixer or the Events dock | click the Mixer icon among the floating controls at the bottom right; opening a clip, a take or a roll opens Events | the key bound to `ui mixer` | tap Mixer in Views and panels | T M D |
+| 03.26 | Open the Mixer or the Events dock | click the Mixer icon among the floating controls at the bottom right; opening a clip, a take or a roll opens Events | the key bound to `ui mixer` | tap Mixer on the rail | T M D |
 | 03.27 | Close the editor dock | click Close editor in the dock header | Esc | tap Close editor | T M D |
 | 03.28 | Resize the editor dock | drag the separator over its top edge (44 px tall, 120 px min); hold it 400 ms, then move up to expand the editor to full height or down to fold it back | ↑ / ↓ on the focused separator; Enter expands or folds | drag the separator; on a phone, hold the sheet's grabber, then move up to expand or down to fold | T M D |
-| 03.29 | Open / close a panel (resources, playlists, logs, tasks and history, export, settings) | click the chevron at the bottom right to unfold the vertical toolbar upward along the right edge (folded by default), then its button above the panes; the same button or the panel's Close closes it | the key bound to `ui <panel>` | tap its tile in Views and panels (phone); tap Close | T M D |
-| 03.30 | Switch pane (Arrangement / Graph / Source / Turntables) | click the pane on the vertical toolbar at the right edge, unfolded by the chevron at the bottom right (its tooltip names the key); a pane another device shows is dimmed and says why | `1` `2` `3` `4`; `F6` / `⇧F6` | tap the pane in Views and panels (phone) | T M D |
-| 03.31 | Show / hide the viewport window | click Picture: the viewport in Lane views (a project with a picture) | — | tap Picture in Views and panels (phone) | T M D |
+| 03.29 | Open / close a panel (resources, playlists, logs, tasks and history, export, settings) | click the chevron at the bottom right to unfold the vertical toolbar upward along the right edge (folded by default), then its button above the panes; the same button or the panel's Close closes it | the key bound to `ui <panel>` | tap its button on the rail, unfolded by the chevron at the bar's right end; tap Close | T M D |
+| 03.30 | Switch pane (Arrangement / Graph / Source / Turntables) | click the pane on the vertical toolbar at the right edge, unfolded by the chevron at the bottom right (its tooltip names the key); a pane another device shows is dimmed and says why | `1` `2` `3` `4`; `F6` / `⇧F6` | tap the pane on the rail | T M D |
+| 03.31 | Show / hide the viewport window | click Picture: the viewport in Lane views (a project with a picture) | — | tap Picture on the rail (phone) | T M D |
 | 03.32 | Open Views and panels (phone) | — | Esc closes; Tab stays inside it | tap the ⋯ button; tap outside or Close menu | T M D |
 | 03.34 | Browse the file breadcrumb | click a segment → its menu; folder drills in, file opens, ▶ opens a project; click outside closes | — | tap | T M D |
 
@@ -341,7 +341,7 @@ The graph canvas (Chains page, Graph and Mix panels, a lane's module row, the bu
 | 05.36 | Pick a track's input device | click the input name in the track card | — | tap | T M D |
 | 05.37 | Audition the chain at OUT | click Play on OUT | — | tap | T M D |
 | 05.38 | Work a rack tap (add, trigger, note, sample, mute, remove) | click `+`, the pad, the chips, mute, ✕ | — | tap | T M D |
-| 05.39 | Zoom fit, Auto layout, Stack | click Zoom fit, Auto layout or Stack in the Graph views capsule | — | tap them; on a phone, in Views and panels | T M D |
+| 05.39 | Zoom fit, Auto layout, Stack | click Zoom fit, Auto layout or Stack in the Graph views capsule | — | tap them; on a phone, on the rail | T M D |
 | 05.40 | Recentre from the minimap | press or drag on the minimap | — | drag | T M D |
 | 05.41 | Toggle a lane's curve cards | click the spline button in the row's strip | — | tap | T M D |
 | 05.42 | Add a lane input | click an icon in the row's strip | — | tap | T M D |
@@ -898,7 +898,7 @@ The Mixer (one strip per lane's mixer module, Master as the row's last strip wit
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
 | 33.01 | Load older saves | click "Older saves" at the foot of the Saves list | — | tap | T M D |
-| 33.02 | Open the Saves list from the git menu | the header's git capsule: ⌄ ("More git actions") → "Saves" → the History panel on its Saves list | Enter, arrows in the menu | phone: tap the git button → Saves | T M D |
+| 33.02 | Open the Saves list from the git menu | Tasks & history on the rail → its Saves list | Enter, arrows in the menu | tap Tasks & history on the rail → Saves | T M D |
 
 ## 34 Save
 
@@ -948,7 +948,7 @@ The documentation popin: a table of contents on the left (a Contents button on n
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
-| 37.01 | Open Help | Home: page ⋮ → Help; a phone: the Help tile in Views and panels; anywhere: `ui help` in the command bar | `?` | tap Help in the projects ⋮ menu or in Views and panels | T M D |
+| 37.01 | Open Help | Home: page ⋮ → Help; anywhere: `ui help` in the command bar | `?` | tap Help in the projects ⋮ menu, or `ui help` | T M D |
 | 37.02 | Jump to a documentation section | click an entry in the table of contents | Tab, Enter; ⌘/Ctrl+F searches the page | tap Contents (narrow screens), then an entry | T M D |
 | 37.03 | Close Help | click Back | Esc | tap Back | T M D |
 

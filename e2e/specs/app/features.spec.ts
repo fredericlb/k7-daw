@@ -106,20 +106,7 @@ const FEATURES: Record<string, { check: Check; bug?: string }> = {
   },
   "markers-settings.k7": {
     check: async (page) => {
-      const phone = await folded(page);
-      if (phone) {
-        // A phone keeps the meter beside the tempo, and the metronome in its "Views and panels" sheet.
-        await expect(await tempoReadout(page, 96)).toBeVisible();
-        await expect(button(page, "3/4")).toBeVisible();
-        await button(page, "Views and panels").click();
-        await expect(button(page, "Metronome")).toHaveAttribute(
-          "aria-pressed",
-          "true",
-        );
-        await page.keyboard.press("Escape");
-        return;
-      }
-      // A desk's metronome wears the bpm, and its bubble holds the meter.
+      // The metronome wears the bpm, and its bubble holds the meter.
       const metro = await tempoReadout(page, 96);
       await expect(metro).toHaveAttribute("aria-pressed", "true");
       await metro.click();

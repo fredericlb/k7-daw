@@ -1,4 +1,4 @@
-// ToolMenu.tsx — the timeline's tool picker, in its corner left of "+ lane", and the tool names and glyphs a phone's menu shares.
+// ToolMenu.tsx — the timeline's tool picker, in its corner left of "+ lane", with the tools' names and glyphs.
 import {
   DropdownMenu,
   DropdownMenuContent,

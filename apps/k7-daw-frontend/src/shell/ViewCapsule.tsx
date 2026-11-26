@@ -1,5 +1,5 @@
 // ViewCapsule.tsx — the current pane's view options (lanes, automation, fit; the graph's fit, layout, stack) in a small
-// capsule among the floating controls at the bottom right (ProjectHeader.tsx), icons only; none on the other panes, and a phone's menu holds them.
+// capsule among the floating controls at the bottom right (ProjectHeader.tsx), icons only; none on the other panes; a phone's rail holds them.
 import { CapsuleButton, CapsuleDivider } from "@studio/ui/capsule";
 import {
   Columns3,

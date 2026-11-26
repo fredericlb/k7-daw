@@ -200,7 +200,6 @@ import { placeSubject, placeWarnings, warningSentence } from "./engineWarnings";
 import { type FloatState, loadFloat, saveFloat } from "./floatingRect";
 import { installGates, lockSentence } from "./git/gitLock";
 import { lockedBy as mergeLockedBy } from "./git/gitState";
-import { askSavesList } from "./git/savesList";
 import { projectTransport } from "./git/transports";
 import { useGitState } from "./git/useGitState";
 import { useLatest } from "./hooks/useLatest";
@@ -233,8 +232,7 @@ import {
   HeaderGit,
   unsavedCount,
 } from "./shell/HeaderGit";
-import { type OverflowLaneView, OverflowMenu } from "./shell/OverflowMenu";
-import { PanelRail } from "./shell/PanelRail";
+import { PanelRail, type RailView } from "./shell/PanelRail";
 import {
   type HeaderPane,
   type HeaderPanel,
@@ -259,7 +257,7 @@ import { PANE_META, VIEWPORT_META } from "./shellMeta";
 import { ShellContexts } from "./state/ShellContexts";
 import { createShellStore, type ShellVerbs } from "./state/shellStore";
 import { modeCondition, type TimelineMode } from "./timelineMode";
-import { TOOLS, type Tool } from "./timelineTools";
+import type { Tool } from "./timelineTools";
 import type {
   CommandInfo,
   EngineLoadPhase,
@@ -391,7 +389,6 @@ export default function App({
   const stackView = useStore(shell, (s) => s.stackView);
   const lanesExpanded = useStore(shell, (s) => s.lanesExpanded);
   const automationShown = useStore(shell, (s) => s.automationShown);
-  const tool = useStore(shell, (s) => s.tool);
   // The PAGE asked for; null is the project's home page, resolved into `full` once the layout is known (docs/shell.md).
   const [chosen, setFull] = useState<Pane | null>(null);
   // A phone draws the pages from its hamburger rather than from the header's row. See docs/shell.md.
@@ -2821,7 +2818,7 @@ export default function App({
     setOptMetronome((cur) => !(cur ?? metronomeOn));
     void runCommand("transport metronome");
   };
-  const laneViewsOf = (): OverflowLaneView[] => [
+  const laneViewsOf = (): RailView[] => [
     {
       id: "lanes",
       label: m["shell.lane.lanesShort"](),
@@ -2850,7 +2847,7 @@ export default function App({
   ];
   // The bar's capsule follows the pane: the lane views on the arrangement, the graph's on the Graph, none elsewhere.
   const graphCmds = shell.getState().commands;
-  const graphViewsOf = (): OverflowLaneView[] =>
+  const graphViewsOf = (): RailView[] =>
     !graphView
       ? []
       : [
@@ -2990,25 +2987,17 @@ export default function App({
   const header = (
     <ProjectHeader
       layout={layoutKind}
-      name={project?.name ?? ""}
-      backHref={projectsUrl(window.location.href)}
       statusStore={statusStore}
       engine={engine ? (connected ? "up" : "down") : "none"}
       problems={problemCount}
-      onProblems={openProblems}
       onProcesses={() => setRightPanel("tasks")}
       extra={<BenchSaveButton size="icon" runCommand={runCommand} />}
       git={
         gitWorkspace ? (
           <HeaderGit
             git={gitHandle}
-            transport={gitTransport}
             workspace={gitWorkspace}
             phone={isMobile}
-            onCommits={() => {
-              askSavesList();
-              setRightPanel("history");
-            }}
           />
         ) : null
       }
@@ -3025,43 +3014,6 @@ export default function App({
             }
       }
       lockBanner={merging ? lockedSay() : null}
-      overflow={
-        <OverflowMenu
-          panes={switcherPanes}
-          pane={full}
-          onPane={(id) => void runCommand(`ui ${id}`)}
-          lanes={
-            full === "timeline" && hasTimeline
-              ? laneViewsOf()
-              : full === "chains"
-                ? graphViewsOf()
-                : []
-          }
-          lanesHeading={
-            full === "chains"
-              ? m["shell.overflow.graph"]()
-              : m["shell.overflow.lanes"]()
-          }
-          panels={headerPanels}
-          onSettings={() => void runCommand("ui settings")}
-          onHelp={openHelp}
-          tool={
-            full === "timeline" && hasTimeline
-              ? {
-                  current: tool,
-                  tools: TOOLS,
-                  onPick: (t) => void runCommand(`ui tool ${t}`),
-                }
-              : undefined
-          }
-          metronome={{
-            on: metronomeIsOn,
-            onPress: toggleMetronome,
-            level: metronomeLevel,
-            onLevel: (v) => void runCommand(`transport metronome volume ${v}`),
-          }}
-        />
-      }
     />
   );
 
@@ -3432,6 +3384,15 @@ export default function App({
             {/* The panes and the right panels' buttons, as a vertical toolbar on the right edge (shell/PanelRail.tsx); a phone has its menu. */}
             {railShown && (
               <PanelRail
+                views={
+                  !isMobile
+                    ? undefined
+                    : full === "timeline" && hasTimeline
+                      ? laneViewsOf()
+                      : full === "chains"
+                        ? graphViewsOf()
+                        : undefined
+                }
                 onCommandBar={isMobile || portrait ? summonBar : undefined}
                 bottom={isMobile ? 28 + stripH + 8 : undefined}
                 save={(className) =>
@@ -3455,7 +3416,11 @@ export default function App({
                 panes={switcherPanes}
                 pane={full}
                 onPane={(id) => void runCommand(`ui ${id}`)}
-                panels={headerPanels.filter((p) => p.id !== "mixer")}
+                panels={
+                  isMobile
+                    ? headerPanels
+                    : headerPanels.filter((p) => p.id !== "mixer")
+                }
                 settingsPressed={shownId === "settings"}
                 onSettings={() =>
                   shownId === "settings"
