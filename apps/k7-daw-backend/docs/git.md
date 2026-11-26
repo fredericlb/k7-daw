@@ -71,6 +71,7 @@ commits as are in `docs/project-sync-plan.md`; this page holds the choices the c
 | the access group is the app's default one, `<prefix>.rocks.k7.daw`, named first in both apps' `keychain-access-groups` | the iOS app and the Mac app share one bundle identifier and team, so they read each other's items with no group in the code |
 | two devices that make the key before the keychain syncs each keep their own until the later write wins (a Mac then falls back on the key it kept); `GET /git/key` answers `synced` (the item is the synchronizable one), and the page says "shared" or "stays on this device" | a first-need race is rare and heals by itself, and the page cannot know whether iCloud Keychain is on, only which kind of item it holds |
 | a locked keychain is an error, and the private file takes over only where no keychain answers | a file must not quietly stand in for a store the person has locked |
+| `K7_GIT_SECRETS=file` keeps a desktop's secrets in the private file alone; the dev session and the desktop app task set it (`docs/dev.md`) | an unsigned dev build changes signature at each build, so the keychain would ask at every read; a dev run signs in again once and never reads the installed app's tokens |
 | the tests' SSH server and keys are public in the repository | they protect nothing and are used nowhere else |
 
 ## Large files (LFS)

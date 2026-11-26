@@ -197,6 +197,10 @@ impl<S: Secrets> Secrets for WithFile<S> {
 pub fn device_store(folder: PathBuf, account: &str) -> std::sync::Arc<dyn Secrets> {
     #[cfg(not(any(target_os = "android", target_os = "ios")))]
     {
+        // A dev run's binary changes signature at each build, so the keychain would ask at every read (docs/git.md).
+        if std::env::var("K7_GIT_SECRETS").as_deref() == Ok("file") {
+            return std::sync::Arc::new(FileSecrets(folder));
+        }
         let here = WithFile {
             keychain: Keychain {
                 account: account.to_string(),

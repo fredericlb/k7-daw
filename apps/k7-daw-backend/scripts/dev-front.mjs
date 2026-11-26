@@ -23,6 +23,8 @@ const env = {
   K7_ENGINE_CORE: "front",
   // The file hub, its relay and pairing answered here (docs/dev.md).
   K7_FILES: "front",
+  // The secrets in a private file: an unsigned dev build would make the keychain ask at every read (docs/dev.md).
+  K7_GIT_SECRETS: "file",
   // rustc through sccache when the machine has it: a new worktree's first build then reuses the dependencies (docs/rust-builds.md).
   ...sccacheEnv("dev"),
 };

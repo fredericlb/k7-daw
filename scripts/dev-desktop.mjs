@@ -234,6 +234,8 @@ function launchDesktop() {
       K7_BACKEND_BUNDLE: bundleDir,
       STUDIO_ENGINE_HOST_CMD: supervisor,
       K7_DEV_FRONTEND: devFrontend,
+      // The secrets in a private file: an unsigned dev build would make the keychain ask at every read (docs/dev.md).
+      K7_GIT_SECRETS: "file",
     },
   });
   desktopProc.on("exit", (code) => {

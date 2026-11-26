@@ -110,6 +110,7 @@ when it pins its own (`apps/k7-daw-backend/docs/localEngine.md`).
 |---|---|
 | the engine registers at the desktop app's front on 18789, not at the dev session's front on 8789 | the supervisor rewrites a loopback address to k7's one port (`apps/k7-daw-engine/k7-supervisor/src/Url.cpp`) and the desktop app drops any other loopback entry when it pins its own (`apps/k7-daw-backend/packages/k7-local/src/settings.rs`); a dev-only exception would be a second rule in both |
 | no device token handed to the engine by the dev setup | a `weburi.pair` writes a credential into the machine's real `engine-host.json`, a person's choice and not a script's |
+| `K7_GIT_SECRETS=file` in this task and in `dev-front.mjs`: the git secrets in the account's private file, never the keychain | an unsigned dev build changes signature at each build, and the keychain would ask at every read (`apps/k7-daw-backend/docs/git.md`, "Credentials") |
 | `let go of engine … its claim moved on` read as a suite at work | the web and conformance suites claim engines under their own accounts, and a newcomer displaces the holder (`apps/k7-daw-backend/docs/engine/claim.md`): the displaced account's binding lets go |
 
 **The page on 18789 is `k7-frontend`'s Vite, with HMR.** The task hands the desktop app
