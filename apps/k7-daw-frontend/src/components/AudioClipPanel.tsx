@@ -7,7 +7,7 @@ import { DEFAULT_TRIM_DB, trimWindow } from "@studio/audio-probe/trim-gate";
 import { arrayEq, useEngineState } from "@studio/engine-browser/store";
 import { projectApi } from "@studio/project-shell/project";
 import { Button } from "@studio/ui/button";
-import { DockHeaderRow } from "@studio/ui/editor-dock";
+import { DockHeaderRow, DockHint, DockStatus } from "@studio/ui/editor-dock";
 import { Play, Square } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
 import { followPointer } from "@studio/ui-timeline/drag";
@@ -45,7 +45,6 @@ import {
   type WaveMode,
 } from "../waveMode";
 import { ClipControls } from "./ClipControls";
-import { TrimGateCard } from "./ClipGateControls";
 import { ClipMarksList, type MarkRow } from "./ClipMarksList";
 import { ClipToolBar } from "./ClipToolBar";
 import { CompStrip } from "./CompStrip";
@@ -611,7 +610,17 @@ export function AudioClipPanel({
           clip={clip}
           busy={busy}
           gateOpen={gateOpen}
-          onGateToggle={() => setGateOpen(!gateOpen && !!clip)}
+          onGateOpen={(open) => setGateOpen(open && !!clip)}
+          gate={gate}
+          onGate={setGate}
+          keep={keep}
+          canTrim={!!keep && !busy && !!eventAt && !!track}
+          onTrim={() => {
+            setGateOpen(false);
+            // The EVENT is the bound, and naming it is all the command needs — the same pair the preview above was drawn against.
+            if (eventAt && track)
+              void run(`event trim ${track} ${eventAt} ${gate}`, "trim");
+          }}
           editingOnsets={editingOnsets}
           sensitivity={sensitivity}
           onSensitivity={setSensitivity}
@@ -624,20 +633,6 @@ export function AudioClipPanel({
           onDone={onDiscard ? onClose : undefined}
         />
       )}
-      {!rolling && gateOpen && clip && (
-        <TrimGateCard
-          gate={gate}
-          onGate={setGate}
-          keep={keep}
-          canTrim={!!keep && !busy && !!eventAt && !!track}
-          onTrim={() => {
-            setGateOpen(false);
-            // The EVENT is the bound, and naming it is all the command needs — the same pair the preview above was drawn against.
-            if (eventAt && track)
-              void run(`event trim ${track} ${eventAt} ${gate}`, "trim");
-          }}
-        />
-      )}
       {/* The tool axis, absent while a take rolls (no mark yet): it DISPATCHES `ui wave`, the only way to a tool a finger has. */}
       {!rolling && clip && (
         <ClipToolBar
@@ -647,11 +642,13 @@ export function AudioClipPanel({
         />
       )}
       {!rolling && (editingOnsets || editingWarp) && (
-        <p className="shrink-0 text-faint text-xs">
-          {editingOnsets
-            ? m[touch ? "clip.onsetHintTouch" : "clip.onsetHint"]()
-            : m[touch ? "clip.warpHintTouch" : "clip.warpHint"]()}
-        </p>
+        <DockHint
+          text={
+            editingOnsets
+              ? m[touch ? "clip.onsetHintTouch" : "clip.onsetHint"]()
+              : m[touch ? "clip.warpHintTouch" : "clip.warpHint"]()
+          }
+        />
       )}
       {/* The take list beside the wave: one row when there is nothing to choose between, two columns after several passes. */}
       <div className="flex min-h-0 flex-1 gap-2">
@@ -783,18 +780,17 @@ export function AudioClipPanel({
               }
             />
           )}
-          {/* What is on screen and the two ways out: a window showing only some bars without saying so reads as a clip that was cut. */}
+          {/* What is on screen and the two ways out, in the title bar: a window showing only some bars without saying so reads as a clip that was cut. */}
           {!rolling && wf && !showList && win.allBars > 1 && (
-            <div className="flex shrink-0 items-center gap-2 text-muted-foreground text-xs">
-              <span className="font-bold tracking-wider">
-                {m["clip.zoom"]().toUpperCase()}
-              </span>
-              <span className="whitespace-nowrap tabular-nums">
-                {Math.round(win.shown)}/{win.allBars} {m["clip.bars"]()}
+            <DockHeaderRow>
+              <span className="flex shrink-0 items-center gap-1 whitespace-nowrap text-muted-foreground text-xs tabular-nums">
+                <span title={m["clip.zoom"]()}>
+                  {Math.round(win.shown)}/{win.allBars} {m["clip.bars"]()}
+                </span>
                 {win.shown < win.allBars && (
                   <button
                     type="button"
-                    className="ml-1 underline hover:text-foreground"
+                    className="underline hover:text-foreground"
                     onClick={() => setAsked({ bars: win.allBars, start: 0 })}
                   >
                     {m["clip.allBars"]()}
@@ -803,7 +799,7 @@ export function AudioClipPanel({
                 {framed && (
                   <button
                     type="button"
-                    className="ml-1 underline hover:text-foreground"
+                    className="underline hover:text-foreground"
                     onClick={frameOnEvent}
                     title={m["clip.backToEvent"]({
                       from: act.from.toFixed(2),
@@ -814,7 +810,7 @@ export function AudioClipPanel({
                   </button>
                 )}
               </span>
-            </div>
+            </DockHeaderRow>
           )}
           {/* The SONG's ruler over the wave (Ruler.tsx), the placement's grid rather than the warp — see docs/clipEditors.md. */}
           {!rolling &&
@@ -885,23 +881,15 @@ export function AudioClipPanel({
               );
             }}
           >
-            {counting ? (
-              // Nothing is being recorded yet, so there is nothing to draw — the header is already counting the pre-roll down.
-              <p className="py-6 text-center text-sm text-muted-foreground">
-                {m["clip.countingIn"]()}
-              </p>
-            ) : rolling || (bridge && !error) ? (
+            {/* Nothing is drawn while the pre-roll counts: the title bar is already counting it down. */}
+            {counting ? null : rolling || (bridge && !error) ? (
               <LiveTakeWave live={live} height={waveH} />
             ) : error ? (
-              <p className="py-6 text-center text-sm text-red-500">{error}</p>
+              <DockStatus tone="error">{error}</DockStatus>
             ) : !clip ? (
-              <p className="py-6 text-center text-sm text-muted-foreground">
-                {m["clip.noTake"]()}
-              </p>
+              <DockStatus>{m["clip.noTake"]()}</DockStatus>
             ) : !wf ? (
-              <p className="py-6 text-center text-sm text-muted-foreground">
-                {m["clip.readingTake"]()}
-              </p>
+              <DockStatus>{m["clip.readingTake"]()}</DockStatus>
             ) : (
               <LiveWaveform
                 // Where this event sits in the song, and which slice of the file it plays — what turns the transport into a second of THIS picture.

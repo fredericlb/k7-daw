@@ -7,7 +7,7 @@
 // The gestures themselves are ../hooks/useRollGestures.ts; this file is the layout and the drawing.
 // Drawn by the Editor bottom panel and, when a clip is clicked, where the graph is (ClipView).
 
-import { DockHeaderRow, useInSheet } from "@studio/ui/editor-dock";
+import { DockHeaderRow, DockHint, useInSheet } from "@studio/ui/editor-dock";
 import { cn } from "@studio/ui/lib/utils";
 import { useHZoom, usePanScroll } from "@studio/ui-timeline/panZoom";
 import {
@@ -55,7 +55,6 @@ import {
   settledNotes,
 } from "../rollPending";
 import { useShell } from "../state/shellStore";
-import { barBeat } from "../takeCounter";
 import type { WebClip, WebProject } from "../types";
 import { KEYS, KeyGutter, N_NOTES } from "./KeyGutter";
 import { LoopBrace, LoopToggle } from "./LoopBrace";
@@ -330,10 +329,6 @@ export function PianoRoll({
   const gridEnd = origin + canvasBeats;
   // The ruler's left edge in beats: the song's position when placed, else the file's own.
   const rulerStart = placed ? clip.start + origin - (loop?.from ?? 0) : origin;
-  const barBeatAt = (b: number) => {
-    const t = barBeat(b, barBeats);
-    return `${t.bar}.${t.beat}`;
-  };
   const bps = Math.max(1e-6, project.tempo / 60);
   const {
     unit: gridUnit,
@@ -681,17 +676,20 @@ export function PianoRoll({
         </div>
       </DockHeaderRow>
 
-      {/* The tool's one-line hint opens the body; the gestures' hint closes it, under the roll. */}
-      {onModeChange && (
-        <p className="shrink-0 px-3 py-1 text-xs text-muted-foreground">
-          {m[`roll.toolHint.${mode}`]()}
-        </p>
-      )}
-      {!showTakes && (
-        <p className="shrink-0 px-3 pb-1 font-bold text-[11px] text-muted-foreground tracking-wider tabular-nums">
-          {m["clip.zoom"]().toUpperCase()} {barBeatAt(rulerStart)} –{" "}
-          {barBeatAt(rulerStart + canvasBeats)}
-        </p>
+      {/* The tool's hint and the gestures' are the title bar's one help glyph (docs/editors.md). */}
+      {(onModeChange || onCreateNote) && !showTakes && (
+        <DockHint
+          text={[
+            onModeChange ? m[`roll.toolHint.${mode}`]() : "",
+            onCreateNote
+              ? fingerFirst()
+                ? m["roll.hintTouch"]()
+                : m["roll.hintKeys"]()
+              : "",
+          ]
+            .filter(Boolean)
+            .join(" ")}
+        />
       )}
       <div className="flex min-h-0 flex-1">
         {/* The TAKES mode draws in the lanes' place; the lanes stay mounted, hidden, so the caret and the scroll survive. */}
@@ -943,11 +941,6 @@ export function PianoRoll({
           </div>
         </div>
       </div>
-      {onCreateNote && (
-        <p className="shrink-0 px-3 py-1 text-xs text-faint">
-          {fingerFirst() ? m["roll.hintTouch"]() : m["roll.hintKeys"]()}
-        </p>
-      )}
     </div>
   );
 }

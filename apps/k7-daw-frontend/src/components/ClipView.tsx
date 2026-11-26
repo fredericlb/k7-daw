@@ -7,6 +7,7 @@
 import { DEFAULT_METRONOME_LEVEL } from "@studio/engine-protocol/build";
 import { seqWindowFromText, windowSpan } from "@studio/song-schema/seqWindow";
 import { beatsToPosition } from "@studio/song-schema/timecode";
+import { DockStatus } from "@studio/ui/editor-dock";
 import { readSequence } from "@studio/ui-editor/note-grid/notes";
 import { type ComponentProps, type RefObject, useMemo } from "react";
 import type { MenuCtx } from "../contextMenu";
@@ -351,9 +352,7 @@ export function ClipView({
         />
       ) : clip?.type === "midi" ? (
         graph === undefined ? (
-          <div className="p-3 text-sm text-muted-foreground">
-            {m["clipv.readingGraph"]()}
-          </div>
+          <DockStatus>{m["clipv.readingGraph"]()}</DockStatus>
         ) : (
           <div className="h-full min-h-0 min-w-0">
             <PianoRoll

@@ -37,13 +37,16 @@ export function SeqGridPane({
 
   return (
     <GraphSlotPane
-      // Its own strip: a glyph, the stem, and the path in full .
+      // Its title bar: a glyph and the stem, the path its tooltip.
       bar={
         <>
-          <Piano className="h-4 w-4 text-muted-foreground" />
-          <span className="font-medium text-foreground">{fileStem(path)}</span>
-          <span>{m["seq.pianoRoll"]()}</span>
-          <span className="truncate">{path}</span>
+          <Piano
+            className="h-4 w-4 text-muted-foreground"
+            aria-label={m["seq.pianoRoll"]()}
+          />
+          <span className="truncate font-medium text-foreground" title={path}>
+            {fileStem(path)}
+          </span>
         </>
       }
     >
