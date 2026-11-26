@@ -8,7 +8,7 @@ plan this belongs to is `docs/rust-engine-server-plan.md`.
 
 The engine exports one function, `k7_engine_api()`, which returns a table whose fields are the
 area tables: core, project, transport, state, plugins, machine, render, cli. Each area is the
-functions one milestone of the plan needs, and an area not built yet is `NULL`.
+functions one milestone of the plan needed, and an area an engine lacks is `NULL`.
 
 - **One symbol, not one per function.** A static library linked into three hosts (the desktop
   CLI, Android's `.so`, iOS's framework) is the place where a missing or renamed symbol is found

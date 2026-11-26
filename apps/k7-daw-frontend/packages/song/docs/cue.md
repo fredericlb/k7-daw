@@ -97,7 +97,7 @@ and both `fadeA` and `cueA` become separate buses. Which forces the **dry** path
 | the machine | `cueOutput` in `preferences.k7x`, written by `system cue`, read by `resolveCueOutput` |
 | compiled | `nodeProject.ts`: the bus track carries `outputChannels`, or `mute` if there is no pair |
 | the wire | `TrackDoc.outputChannels`, an exact mirror of `inputChannels` |
-| decoded | `docFromJson` in `server/DocJson.cpp` |
+| decoded | `parse_project` in `apps/k7-daw-backend/packages/k7-runtime-server/src/doc/project.rs` |
 | applied | `routeTrackOutput` — from `populateEdit` AND from the live diff |
 | diffed | `ChangeKind::TrackOutputChanged` — applied in place, no rebuild |
 | excluded | `tracksOnTheMix()` in `OfflineRender.cpp` |

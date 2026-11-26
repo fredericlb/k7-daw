@@ -1,4 +1,4 @@
-// EngineApi.cpp — k7_engine_api(): the table of area tables, one line per area, NULL until that area is built.
+// EngineApi.cpp — k7_engine_api(): the table of area tables, one line per area.
 
 #include "k7_engine.h"
 
@@ -15,7 +15,7 @@ extern "C" const K7EngineApi* k7_engine_api(void) {
         studio::capi::pluginsApi(),
         studio::capi::machineApi(),
         studio::capi::renderApi(),
-        nullptr,  // cli
+        studio::capi::cliApi(),
     };
     return &table;
 }

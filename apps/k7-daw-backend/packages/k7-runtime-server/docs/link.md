@@ -28,19 +28,19 @@ script, Gradle's `buildEngine`, `stage.mjs` for iOS) builds the archive with no 
 Rust's `entry` module calls `k7_engine_api`, which `studio_engine` defines. A linker reads archives in
 order, so `k7_runtime_server` is listed before `studio::engine` on every target that links it.
 
-- **Nothing in C++ calls `k7_server_serve` until the switch**, so the linker would drop the archive. Each target
-  names the entry as undefined (`k7_keep_rust_entry`), which makes the link itself the test: a missing
-  or renamed symbol fails on the platform that lacks it, not later on a device.
-- **The C door is two functions** (`engine/capi/k7_server.h`): `k7_server_serve(port)` and
-  `k7_server_request_quit()`. The entry points the three hosts keep (`main`, the JNI `nativeServe`, the iOS
-  embed) call these once the C++ server is deleted.
+- **The entry points stay C++ and call the archive** (`engine/capi/k7_server.h`): `main` hands argv to
+  `k7_server_main`, the JNI `nativeServe` and the iOS `k7_engine_serve` call `k7_server_serve`, and their quit
+  and suspend calls `k7_server_request_quit` and `k7_server_suspend_audio`. The hosts that start an engine (the
+  supervisor, the desktop app, the phone apps) see the same names they always started, so none of them changed.
+- **The link is the test**: each target calls its door, so a missing or renamed symbol fails the link on the
+  platform that lacks it, not later on a device.
 
 ## The door runs the socket core
 
 `serve` is `server::start` followed by the loop: the server is up and bound before the loop runs, and the
 engine is held for `k7_server_request_quit`, which posts the quit as a job so it waits for a loop that has not
-started. The slow test (`tests/RustServe_test.cpp`, label `slow`) runs it on the real Tracktion host and
-probes `whoami` over the socket with a client.
+started. The real host is served this way by every engine run: the render harnesses
+(`apps/k7-daw-engine/k7-runtime/docs/renderHarnesses.md`) and the e2e beds drive it over its socket.
 
 ## What the link does not prove
 

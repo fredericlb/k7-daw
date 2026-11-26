@@ -1,5 +1,5 @@
 # studio_replace.cmake — the one edit the fetch-time patch scripts make, shared by eurorack.cmake, stmlib.cmake
-# and engine/patches/{tracktion,surge,sfizz,ixwebsocket}.cmake. It fails LOUDLY when its text is not found: a bump that moved the code must be looked at.
+# and engine/patches/{tracktion,surge,sfizz}.cmake. It fails LOUDLY when its text is not found: a bump that moved the code must be looked at.
 #
 # And it is a no-op when the edit is already there. The patch step runs AGAIN on a source it has
 # already patched whenever its command changes, and the command names this script by an absolute

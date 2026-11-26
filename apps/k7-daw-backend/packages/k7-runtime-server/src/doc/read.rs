@@ -42,7 +42,7 @@ pub fn missing_key(key: &str) -> Malformed {
     ))
 }
 
-/// A JSON number as an `int`, cast as C++ did (saturating here, where the cast overflowed).
+/// A JSON number as an `int`, saturating past its range.
 pub fn as_int(v: &Value) -> Read<i32> {
     match v {
         Value::Number(n) => Ok(n.as_f64().unwrap_or(0.0) as i32),

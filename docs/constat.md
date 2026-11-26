@@ -247,7 +247,7 @@ supervisor re-adopts the engine by its pidfile. It recovers, so it passes unseen
 one `try` (`EngineHost::post`), the socket dispatch inside another, the pattern worker inside a
 third, and the detached threads a message starts are counted and waited for at shutdown
 (`apps/k7-daw-engine/k7-runtime/docs/audit-stabilite.md`). A throw from a thread nothing wraps — JUCE's own, or a plugin's —
-still ends the process, but no longer without a word: `serve()` installs a `set_terminate` that
+still ends the process, but no longer without a word: the serve installs a `set_terminate` that
 logs what was thrown before it aborts.
 
 ### The engine token goes out on any socket

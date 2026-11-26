@@ -6,6 +6,7 @@
 use super::ctx::{Client, Ctx, Request};
 use super::handlers::HandlerTable;
 use super::msg::Malformed;
+use crate::log::say;
 use serde_json::{Value, json};
 
 pub fn add(t: &mut HandlerTable) {
@@ -44,7 +45,7 @@ fn transport(r: &Request) -> Result<(), Malformed> {
             }
             _ => {}
         }
-        eprintln!("{line}");
+        say!("{line}");
         match action.as_str() {
             "play" => mt.play(&session),
             "stop" => mt.stop(&session),
@@ -65,13 +66,13 @@ fn preview(r: &Request) -> Result<(), Malformed> {
     let (start, length) = (r.msg.f64_or("start", 0.0)?, r.msg.f64_or("length", 0.0)?);
     // A file named outside any document is held to the same read roots as one inside.
     if !file.is_empty() && !r.ctx.engine.path_allowed(&file, false) {
-        eprintln!("[preview] refused {file}: outside the folders this engine reads");
+        say!("[preview] refused {file}: outside the folders this engine reads");
         return Ok(());
     }
     if !file.is_empty() {
         let session = r.session.clone();
         r.ctx.engine.post(move |mt| {
-            eprintln!("[preview] {file} [{start}, {length}]");
+            say!("[preview] {file} [{start}, {length}]");
             mt.preview_sample(&session, &file, start, length);
         });
     }
@@ -135,7 +136,7 @@ fn arm(r: &Request) -> Result<(), Malformed> {
 
 /// A recording verb the engine refused, said in the log and to the project's sockets.
 fn refused(ctx: &Ctx, session: &str, why: &str) {
-    eprintln!("[rec] refused: {why}");
+    say!("[rec] refused: {why}");
     ctx.broadcast_to(session, json!({"type": "error", "message": why}));
 }
 

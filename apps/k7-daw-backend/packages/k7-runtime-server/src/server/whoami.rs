@@ -7,11 +7,31 @@ use super::ctx::Request;
 use super::handlers::HandlerTable;
 use super::msg::Malformed;
 use crate::wire::version::{ENGINE_PROTOCOL, build};
-use serde_json::json;
+use serde_json::{Value, json};
 use std::collections::hash_map::Entry;
 
 pub fn add(t: &mut HandlerTable) {
     t.add(&["whoami", "hello"], answer);
+}
+
+/// A path's last component, either separator: a reply names a plugin's file, never the user's folders.
+fn file_name_of(path: &str) -> &str {
+    path.rsplit(['/', '\\']).next().unwrap_or(path)
+}
+
+/// The crashes, and the file the last engine died loading or the plugin it loaded last, each only when known.
+fn safe_mode(r: &Request) -> Value {
+    let api = r.ctx.engine.api();
+    let mut out = json!({"crashes": r.ctx.safe_mode_crashes});
+    for (key, path) in [
+        ("diedLoading", api.previous_load_death()),
+        ("lastPlugin", api.previous_last_plugin()),
+    ] {
+        if !path.is_empty() {
+            out[key] = file_name_of(&path).into();
+        }
+    }
+    out
 }
 
 fn answer(r: &Request) -> Result<(), Malformed> {
@@ -34,7 +54,7 @@ fn answer(r: &Request) -> Result<(), Malformed> {
         "messageThreadMs": r.ctx.engine.message_thread_age_ms().unwrap_or(0.0),
     });
     if r.ctx.safe_mode_crashes > 0 {
-        reply["safeMode"] = json!({"crashes": r.ctx.safe_mode_crashes});
+        reply["safeMode"] = safe_mode(r);
     }
     r.client.send(&reply);
     if r.msg.str("role")? == "driver" {

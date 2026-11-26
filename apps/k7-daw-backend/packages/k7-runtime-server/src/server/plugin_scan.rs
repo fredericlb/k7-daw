@@ -6,8 +6,10 @@
 use super::ctx::Ctx;
 use super::scan_board::Status;
 use crate::engine::plugins::PluginInfo;
+use crate::log::say;
 use serde_json::{Value, json};
 use std::panic::{AssertUnwindSafe, catch_unwind};
+use std::sync::atomic::Ordering;
 use std::sync::{Arc, PoisonError};
 use std::time::Instant;
 
@@ -41,15 +43,18 @@ pub fn plugins_json(ctx: &Ctx, plugins: &[PluginInfo], filter: &str) -> Value {
 
 /// A problem that has to reach a human and not just stderr, as the engine's `warn()` does for no project.
 pub fn warn(ctx: &Ctx, message: &str) {
-    eprintln!("warning: {message}");
+    say!("warning: {message}");
     ctx.broadcast(&json!({"type": "engine-warning", "subject": "", "message": message}));
 }
 
 /// Runs `work` on a blocking task that the server may abandon at exit; a panic is said as a warning, not lost.
 pub fn detached(ctx: &Arc<Ctx>, work: impl FnOnce() + Send + 'static) {
     let ctx = ctx.clone();
+    ctx.plugins.detached.fetch_add(1, Ordering::SeqCst);
     tokio::task::spawn_blocking(move || {
-        if let Err(p) = catch_unwind(AssertUnwindSafe(work)) {
+        let outcome = catch_unwind(AssertUnwindSafe(work));
+        ctx.plugins.detached.fetch_sub(1, Ordering::SeqCst);
+        if let Err(p) = outcome {
             let why = p
                 .downcast_ref::<String>()
                 .map(String::as_str)
@@ -104,7 +109,7 @@ pub fn ensure_scanned(
     }
 }
 
-/// `ensure_scanned` as detached work: a scan that threw is warned, as the C++ server's detached work did.
+/// `ensure_scanned` as detached work: a scan that threw is warned.
 pub fn scan_in_background(
     ctx: &Arc<Ctx>,
     when: When,
@@ -124,7 +129,7 @@ pub fn start(ctx: &Arc<Ctx>) {
     let c = ctx.clone();
     detached(ctx, move || {
         let warm = c.engine.api().plugin_cache_warm();
-        eprintln!(
+        say!(
             "{}",
             if warm {
                 "[plugins] startup scan — only new or changed files are loaded"
@@ -135,7 +140,7 @@ pub fn start(ctx: &Arc<Ctx>) {
         let said = c.clone();
         let announce = move |found: &[PluginInfo]| said.broadcast(&plugins_json(&said, found, ""));
         match ensure_scanned(&c, When::Always, &announce) {
-            Ok(_) => eprintln!("[plugins] startup scan complete"),
+            Ok(_) => say!("[plugins] startup scan complete"),
             Err(why) => warn(&c, &format!("background work failed: {why}")),
         }
     });

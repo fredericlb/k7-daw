@@ -1,10 +1,11 @@
 //! store.rs — the pairing store: `<state>/paired-devices.json` written whole on every change, the requests
 //! waiting for the musician, and which live sockets each device speaks through. Port of Pairing.cpp's class.
 //! What a reader gets wrong: the file is nlohmann's `dump(2)` byte for byte, because the C++ engine and this
-//! one read each other's file (`fixtures/paired-devices.*.json` were written by the C++ store).
+//! one read each other's file (`fixtures/paired-devices.*.json` hold that format).
 
 use super::SocketId;
 use super::net::same_key;
+use crate::log::say;
 use serde_json::{Map, Value};
 use std::collections::{BTreeMap, HashMap};
 use std::path::{Path, PathBuf};
@@ -81,7 +82,7 @@ fn random_code() -> String {
     format!("{:06}", u32::from_le_bytes(buf) % 1_000_000)
 }
 
-/// The first 64 bytes of `name`, as C++'s `substr(0, 64)` cut them and the store's `replace` printer wrote them.
+/// The first 64 bytes of `name`, a character cut in two printed as U+FFFD, as stored names already read.
 fn clip_name(name: &str) -> String {
     if name.len() <= 64 {
         return name.to_string();
@@ -246,7 +247,7 @@ impl Pairing {
             return;
         }
         if let Err(e) = std::fs::rename(&tmp, &self.file) {
-            eprintln!("[pairing] cannot save {}: {e}", self.file.display());
+            say!("[pairing] cannot save {}: {e}", self.file.display());
         }
     }
 }
@@ -269,7 +270,7 @@ fn write_private(path: &Path, bytes: &[u8]) -> std::io::Result<()> {
     f.write_all(bytes)
 }
 
-/// The store's devices from its text; None when it is not what the C++ store writes.
+/// The store's devices from its text; None when it is not the store's format.
 fn parse_store(text: &str) -> Option<Vec<Stored>> {
     let root: Value = serde_json::from_str(text).ok()?;
     let mut out = Vec::new();

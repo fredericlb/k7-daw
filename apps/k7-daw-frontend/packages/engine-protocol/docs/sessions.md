@@ -2,7 +2,7 @@
 
 One engine process hosts several projects at once (`apps/k7-daw-engine/k7-runtime/docs/multiEdit.md`). A
 **session** is the name of one of them. The wire rule lives in
-`apps/k7-daw-engine/k7-runtime/docs/protocol.md`; this page is about the client side: who picks the name, and
+`apps/k7-daw-backend/packages/k7-runtime-server/docs/protocol.md`; this page is about the client side: who picks the name, and
 the two ways it goes wrong.
 
 ## Why there is a name at all

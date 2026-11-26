@@ -1,5 +1,5 @@
 // supersede-probe.ts — a burst of parameter writes and of documents still ends on the LAST one sent,
-// and a fence between documents keeps its place. Point it at a running engine (docs/supersede.md).
+// and a fence between documents keeps its place. Point it at a running engine (apps/k7-daw-backend/packages/k7-runtime-server/docs/supersede.md).
 //
 //   npx tsx apps/k7-daw-engine/k7-runtime/scripts/supersede-probe.ts [ws://127.0.0.1:8765]
 //

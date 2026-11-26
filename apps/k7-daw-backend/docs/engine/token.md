@@ -11,11 +11,11 @@ file is the owner's alone — 0600, in a 0700 folder when the supervisor creates
 
 The engine answers `whoami` with its id, its token and its audio timing — to the machine's own
 sockets, to the server's relay, and to a LAN device once it is PAIRED. An unpaired LAN peer gets the
-id and `needsPairing` and never the token (`apps/k7-daw-engine/k7-runtime/docs/pairing.md`):
+id and `needsPairing` and never the token (`apps/k7-daw-backend/packages/k7-runtime-server/docs/pairing.md`):
 
 ```
-// apps/k7-daw-engine/k7-runtime/server/Serve.cpp, the `whoami` / `hello` branch
-ws.send(json{{"type", "whoami"}, {"id", engineId}, {"token", engineToken}, …}.dump());
+// apps/k7-daw-backend/packages/k7-runtime-server/src/server/whoami.rs, the `whoami` / `hello` answer
+json!({"type": "whoami", "id": r.ctx.identity.id, "token": r.ctx.identity.token, …})
 ```
 
 The relay forwards a `whoami` for any account holding a ticket, before it holds a claim

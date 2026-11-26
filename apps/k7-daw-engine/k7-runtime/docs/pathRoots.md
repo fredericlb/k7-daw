@@ -3,7 +3,7 @@
 A document names files by absolute path — a clip, a model, a record, a preset to load, a preset to
 SAVE, the folder takes are recorded into — and whoever sends a document chooses those paths. Through
 the tunnel that is a server; on the LAN, a paired device. So every path is held to a set of
-**roots** where it arrives (`server/DocJson.cpp`, with `engine/PathRoots.cpp` as the test), and a
+**roots** where it arrives (`apps/k7-daw-backend/packages/k7-runtime-server/src/doc/mod.rs`, with `engine/PathRoots.cpp` as the test), and a
 path outside them is dropped with a warning: the clip is silent, the module loads without its
 preset, the project cannot record.
 

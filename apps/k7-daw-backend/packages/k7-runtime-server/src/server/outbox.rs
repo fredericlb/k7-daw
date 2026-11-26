@@ -1,8 +1,9 @@
 //! outbox.rs — what the engine pushes at one socket: a queue its writer task drains, so no caller ever waits
 //! on a peer. A reply is kept up to a large cap; a state frame is droppable, skipped while the socket is behind.
-//! What a reader gets wrong: the C++ server shared one queue and one writer across all sockets; here each
-//! socket owns both, so a stuck peer delays only itself (`docs/server.md` beside this crate).
+//! What a reader gets wrong: each socket owns its queue and its writer, so a stuck peer delays only itself
+//! (`docs/server.md` beside this crate).
 
+use crate::log::say;
 use std::collections::VecDeque;
 use std::sync::{Arc, Mutex};
 use tokio::sync::{Notify, watch};
@@ -67,9 +68,7 @@ impl Outbox {
             if over {
                 if !droppable && !s.warned_full {
                     s.warned_full = true;
-                    eprintln!(
-                        "[outbox] full — replies are being dropped until the writer catches up"
-                    );
+                    say!("[outbox] full — replies are being dropped until the writer catches up");
                 }
                 return false;
             }

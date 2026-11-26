@@ -98,7 +98,7 @@ rule is in AGENTS.md ("A CLI must drain the message queue before it returns").
 ## Rendered inside the engine: the `render` command
 
 A phone may start no program, so the supervisor's `render` job has no `k7-runtime --render` to run
-there. The serving engine answers the same bounce over its socket instead (`render`, `protocol.md`),
+there. The serving engine answers the same bounce over its socket instead (`render`, `apps/k7-daw-backend/packages/k7-runtime-server/docs/protocol.md`),
 and the desktop engine answers it too, so the Mac proves it with no simulator.
 
 | choice | what forced it |

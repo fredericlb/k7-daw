@@ -86,8 +86,8 @@ of it so a first dead address cannot spend the lot. See `apps/k7-daw-backend/doc
 and `apps/k7-daw-frontend/packages/engine-browser/docs/access.md`.
 
 **A half-open socket never fires `close`.** A wedged relay, a lapsed NAT, a laptop back from sleep
-— nothing reconnects and sends go nowhere. The engine has no server-side ping (IXWebSocket ships
-`kPingIntervalSeconds(-1)`), so the client is what has to ask: nothing inbound for
+— nothing reconnects and sends go nowhere. The engine's own ping never reaches the page through a
+relay, so the client is what has to ask: nothing inbound for
 `ENGINE_IDLE_PING_MS` triggers a `whoami`, the one verb the engine always answers, and no reply
 within `ENGINE_PONG_TIMEOUT_MS` means the socket is dead however open it claims to be. Reconnect
 backoff doubles from `ENGINE_RECONNECT_MIN_MS`, jittered, resets on a connection that opened, and

@@ -1,4 +1,4 @@
-// The wire's version is one number written three times — here, in the engine's WireVersion.h and in
+// The wire's version is one number written three times — here, in the engine server's version.rs and in
 // the supervisor's wire.rs — so this keeps them equal without building either.
 
 import { readFileSync } from "node:fs";
@@ -17,8 +17,8 @@ const apps = join(dirname(fileURLToPath(import.meta.url)), "../../..");
 describe("ENGINE_PROTOCOL", () => {
   for (const [file, re] of [
     [
-      "k7-daw-engine/k7-runtime/server/WireVersion.h",
-      /constexpr int kEngineProtocol = (\d+);/,
+      "k7-daw-backend/packages/k7-runtime-server/src/wire/version.rs",
+      /pub const ENGINE_PROTOCOL: u32 = (\d+);/,
     ],
     [
       "k7-daw-backend/packages/k7-supervisor/src/wire.rs",

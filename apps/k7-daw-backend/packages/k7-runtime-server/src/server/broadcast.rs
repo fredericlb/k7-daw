@@ -7,6 +7,7 @@ use super::ctx::{Bindings, Departed, Request};
 use super::handlers::HandlerTable;
 use super::msg::Malformed;
 use crate::engine::{Engine, Mt};
+use crate::log::say;
 use crate::wire::stream::{CODEC_PCM_F32, CODEC_PCM_S16};
 
 pub fn add(t: &mut HandlerTable) {
@@ -90,7 +91,7 @@ fn broadcast(r: &Request) -> Result<(), Malformed> {
             .engine
             .post(move |mt: Mt<'_>| mt.silence_output(&sid, quiet));
     }
-    eprintln!(
+    say!(
         "[broadcast] listener {} '{target}' ({remaining} listening to it)",
         if on { "added to" } else { "removed from" }
     );
@@ -106,7 +107,7 @@ pub fn leave(engine: &Engine, b: &mut Bindings, id: u64) -> Departed {
         // A closed recorder tab sends no goodbye either: the interface plays again once no silent ear is left.
         let (s, quiet) = (sid.clone(), any_silent(b, sid));
         engine.post(move |mt: Mt<'_>| mt.silence_output(&s, quiet));
-        eprintln!(
+        say!(
             "[broadcast] listener gone from '{sid}' ({} listening)",
             b.listeners.len()
         );

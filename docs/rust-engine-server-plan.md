@@ -48,7 +48,7 @@ server side moves.
 | M6 the state frame (built) | the state frame, `recorded`, `plugin-params`, `engine-warning` | 6 |
 | M7 plugins (built) | the scan, the probe (4 at once), the pending queries, the plugin verbs | 10 |
 | M8 the machine (built) | the `AudioSender` broadcast, sessions, drivers, devices, `io-levels`, `instrument-status`, `render` | 10 |
-| M9 the CLI and the switch | argv in Rust, C++ `main` cut to a few lines, the JNI and iOS doors calling `serve`; `Serve*`, `Pairing`, `Outbox`, `AudioSender`, `Supersede`, `HeldNotes`, `PendingQueries`, `WireVersion`, IXWebSocket and their tests deleted; their pages moved to this crate's `docs/` | 12 |
+| M9 the CLI and the switch (built) | argv in Rust, C++ `main` cut to a few lines, the JNI and iOS doors calling `serve`; `Serve*`, `Pairing`, `Outbox`, `AudioSender`, `Supersede`, `HeldNotes`, `PendingQueries`, `WireVersion`, IXWebSocket and their tests deleted; their pages moved to this crate's `docs/` | 12 |
 
 M4's choices (`apps/k7-daw-backend/packages/k7-runtime-server/docs/link.md`):
 
@@ -140,3 +140,27 @@ The machine and render areas are built (`apps/k7-daw-backend/packages/k7-runtime
 sender on a thread of its own, sessions, drivers, devices, `io-levels`, `instrument-status`, `audio-cost`, `render`. Deviations
 from the C++: the outbox gained a binary frame; the sender does not prune departed sockets, since `Ctx::forget` releases them
 under the lock; a render's worker is a plain thread waited for at stop; `whoami`'s `safeMode` still carries `crashes` only.
+
+## M9's choices
+
+Built: every engine target serves through the Rust server, and the C++ server is gone (`Serve*`, `Pairing`, `Outbox`,
+`AudioSender`, `Supersede`, `HeldNotes`, `PendingQueries`, `WireVersion`, `DocJson`, the IXWebSocket fetch and patch and
+their tests). The wire's pages are the crate's (`docs/protocol.md`, `pairing.md`, `supersede.md`, `cli.md`).
+
+- **argv is Rust's** (`src/cli.rs`): `main` is one line calling `k7_server_main`, which installs the crash handler, takes
+  `--settings-dir` out, checks the layout and runs a mode through the new `cli` area (`engine/capi/k7_engine_cli.h`) or
+  serves. The modes' arguments read as before, a mode short of them falling through to `atoi`'s port.
+- **The CLI's documents go through the socket's parse**: `--render` and `--multi-edit-test` are checked by `crate::doc`
+  and read in C++ by `DocReader`, so `DocJson.cpp` went with the server; no C++ parser of the wire is left.
+- **The doors call Rust**: the JNI `nativeServe`/`nativeQuit` and iOS's `k7_engine_serve`/`_quit`/`_suspend_audio` call
+  `k7_server_serve`, `k7_server_request_quit` and `k7_server_suspend_audio`; iOS also calls `k7_server_tag_log`, so
+  Rust's own lines carry `[engine]` (`src/log.rs`, every `eprintln!` of the crate is `say!`).
+- **The core area gained three calls** (appended, the ABI's version kept): the terminate handler the C++ serve installed,
+  and the previous engine's load death and last plugin, which fill `whoami`'s `safeMode.diedLoading` and `lastPlugin`.
+- **An executable leaving with detached work still running `_exit`s**, as the C++ serve did; a client message is capped
+  at 64 MiB again.
+- **Tests**: the C++ tests of the deleted files went with them, `StateFrame_test` and `PluginReplies_test` too (their
+  fixtures stay, the Rust replies held to them) and `RustServe_test`, since every harness and bed serves the real host
+  through Rust now; the catalogue test holds the verbs to the handler table and the gate; `version.test.ts` and
+  `sessions.test.ts` read the crate.
+

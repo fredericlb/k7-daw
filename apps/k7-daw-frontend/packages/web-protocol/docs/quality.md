@@ -57,8 +57,8 @@ unknown" instead of a band.
 
 ## The engine's half of it
 
-`whoami` carries `bufferSize` and `sampleRate` (`apps/k7-daw-engine/k7-runtime/server/Serve.cpp`), read off the
-open device through `EngineHost::audioTiming()`. It is answered on the connection thread, not
+`whoami` carries `bufferSize` and `sampleRate` (`apps/k7-daw-backend/packages/k7-runtime-server/src/server/whoami.rs`), read off the
+open device through `EngineHost::audioTiming()`. It is answered on the connection's task, not
 posted to the message thread: posting would put the probe behind whatever the engine is doing
 and turn the ping into a measure of its queue.
 

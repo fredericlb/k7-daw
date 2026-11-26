@@ -1,5 +1,5 @@
 //! server_plugins.rs — the plugin verbs over a real socket and the fake engine: every reply byte for byte against
-//! the C++'s fixture, the one scan and its progress, the probe cap of four, pending queries and superseded
+//! the fixture, the one scan and its progress, the probe cap of four, pending queries and superseded
 //! parameter writes under concurrency, and the message-thread calls each verb makes.
 
 use crate::harness::{Server, Wire, eventually};
@@ -89,7 +89,7 @@ fn f_of(v: &Value) -> f64 {
     v.as_f64().unwrap()
 }
 
-/// Each fixture line of one kind: its spec and the reply the C++ printed.
+/// Each fixture line of one kind: its spec and the reply's bytes.
 fn cases(kind: &str) -> Vec<(Value, String)> {
     crate::repo_file("apps/k7-daw-backend/packages/k7-runtime-server/fixtures/plugin_replies.txt")
         .lines()

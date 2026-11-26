@@ -1,5 +1,5 @@
 // doc_support/walk.rs — the emitted-document walker: no `null` anywhere and an integer at every integer pointer (decisions 302, 354).
-// A reader would get wrong that a JSON number written `1.0` is not an integer here: the engine reads these as `int`, and `DocJson` drops a float.
+// A reader would get wrong that a JSON number written `1.0` is not an integer here: the engine reads these as `int`, and the engine server's parse drops a float.
 
 use serde_json::Value;
 

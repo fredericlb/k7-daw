@@ -1,4 +1,4 @@
-//! pairing_store.rs — Pairing_test.cpp's behaviours, and the file against what the C++ store wrote.
+//! pairing_store.rs — the store's behaviours, and the file against the format every installed engine wrote.
 
 use k7_runtime_server::pairing::net::{is_loopback, is_private, origin_allowed, parse_origins};
 use k7_runtime_server::pairing::store::Pairing;
@@ -244,7 +244,7 @@ fn the_file_is_the_c_plus_plus_stores_byte_for_byte() {
         let file = temp_store("fixture");
         std::fs::write(&file, fixture(name)).unwrap();
         let p = Pairing::open(&file);
-        // A change rewrites the whole file: approving and revoking one more leaves what C++ wrote.
+        // A change rewrites the whole file: approving and revoking one more leaves the fixture's bytes.
         let before = p.devices();
         let a = p
             .approve(&p.request("tmp", "10.0.0.2", None).unwrap().id)

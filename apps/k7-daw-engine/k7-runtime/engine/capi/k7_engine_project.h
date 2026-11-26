@@ -15,7 +15,7 @@ extern "C" {
 
 struct K7ProjectApi {
     /* Any thread. */
-    /* Whether a document may name `path` for reading (write 0) or writing (write 1): the roots serve() set. */
+    /* Whether a document may name `path` for reading (write 0) or writing (write 1): the roots the server set. */
     int32_t (*path_allowed)(K7Str path, int32_t write);
     /* Says a warning as the engine's warn(): on stderr, and to the sink under `session` (empty for none). */
     void (*warn)(K7Str session, K7Str subject, K7Str message);

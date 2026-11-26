@@ -24,7 +24,7 @@ void table() {
     CHECK(api->abi == K7_ENGINE_ABI);
     CHECK(api->size == sizeof(K7EngineApi));
     CHECK(api->core != nullptr);
-    CHECK(api->project != nullptr && api->transport != nullptr && api->cli == nullptr);
+    CHECK(api->project != nullptr && api->transport != nullptr && api->cli != nullptr);
     CHECK(core().layout_consistent() == 1);
 }
 

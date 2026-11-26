@@ -1,7 +1,6 @@
 //! project.rs — a whole document off the wire: its settings bounded, its ids made unique, its tracks and master
 //! chain read, and the slot's footswitch carried along. The result is the JSON `apply` hands the C++ reader.
-//! What a reader gets wrong: the warnings of the parse belong to no session (it runs on a socket's task, as the
-//! C++ parse did), so none is kept as a standing warning; only the engine's own build keeps those.
+//! What a reader gets wrong: the warnings of the parse belong to no session (it runs on a socket's task), so none is kept as a standing warning; only the engine's own build keeps those.
 
 use super::Checks;
 use super::bounds::{

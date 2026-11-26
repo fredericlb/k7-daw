@@ -2,8 +2,8 @@
 
 The installed catalogue and its scan, a plugin type's parameters, the live instances of a project, their native
 windows, presets and waveform taps. They live in `src/server/plugins.rs` over the ABI's plugins area
-(`engine/capi/k7_engine_plugins.h`, `src/engine/plugins.rs`). The wire is the C++ server's, byte for byte
-(`docs/rust-engine-server-plan.md`).
+(`engine/capi/k7_engine_plugins.h`, `src/engine/plugins.rs`). The wire is every installed client's, byte
+for byte (`protocol.md`).
 
 ## Blocking calls and the message thread are separate kinds of function
 
@@ -35,9 +35,9 @@ A read-only query whose answer is a broadcast joins an identical one still waiti
 leaves when its job starts, not when it ends, so a query asked while one runs is queued again. A ticket whose job
 never ran frees its key on drop. The set is the context's, for the machine's queries to share.
 
-## Held to the C++
+## Held to a fixture
 
-`fixtures/plugin_replies.txt` is the C++'s own output for each reply (`tests/PluginReplies_test.cpp`, whose builders
-are copies of `ServePlugins.cpp`'s, so it proves the fixture, not the file). `tests/PluginsApi_test.cpp` calls the
+`fixtures/plugin_replies.txt` is each reply's bytes as the clients already read them, frozen; `tests/all/server_plugins.rs`
+holds the replies to it through the fake engine. `apps/k7-daw-engine/k7-runtime/tests/PluginsApi_test.cpp` calls the
 area on a real host: the cache, a type the catalogue does not list, and the message-thread calls with nothing
 loaded. A real scan is not run there: it spawns the binary's own children for every plugin of the machine.

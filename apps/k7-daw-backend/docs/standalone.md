@@ -46,7 +46,7 @@ person at the machine — a venue's Wi-Fi is full of strangers. Two locks, each 
 | the loopback lock (`src/web.rs`) on every route: the peer address AND the `Host` header must be loopback | DNS rebinding: a page whose name resolves to `127.0.0.1` reaches the port from the user's own browser, and only its `Host` gives it away |
 
 Nothing on another device needs this front. A device on the network drives the **engine**, on
-the engine's own port and once paired (`apps/k7-daw-engine/k7-runtime/docs/pairing.md`). The QR codes the page
+the engine's own port and once paired (`apps/k7-daw-backend/packages/k7-runtime-server/docs/pairing.md`). The QR codes the page
 draws rebase onto `lanUrls`, which a machine's own front leaves empty (`apps/k7-daw-frontend/src/App.tsx`), so they show no code rather than
 a link into this port (`apps/k7-daw-frontend/docs/shell.md`); serving k7's pages to a tablet from here
 would mean lifting both locks, and a login of its own for the tablet. The supervisor, the file

@@ -8,6 +8,7 @@ use super::ctx::{Ctx, Request};
 use super::handlers::HandlerTable;
 use super::msg::Malformed;
 use crate::doc::{Checks, parse_project};
+use crate::log::say;
 use crate::wire::json;
 use serde_json::{Value, json};
 use std::path::{Path, PathBuf};
@@ -128,7 +129,7 @@ fn render(r: &Request) -> Result<(), Malformed> {
         ));
         return Ok(());
     }
-    eprintln!("[render] started{}", if stems { " with stems" } else { "" });
+    say!("[render] started{}", if stems { " with stems" } else { "" });
     spawn(
         r.ctx.clone(),
         r.client.id,
@@ -156,14 +157,14 @@ fn spawn(ctx: Arc<Ctx>, asker: u64, id: Value, doc: String, out_dir: String, ste
             let _slot = Slot(ctx.clone());
             let outcome = ctx.engine.api().render_in_process(&doc, &out_dir, stems);
             if outcome.code != 0 {
-                eprintln!("[render] {}", outcome.error);
+                say!("[render] {}", outcome.error);
                 ctx.send_to(
                     asker,
                     &rendered(&id, json!({"ok": false, "error": outcome.error})),
                 );
                 return;
             }
-            eprintln!("[render] done");
+            say!("[render] done");
             let manifest = serde_json::from_str::<Value>(&outcome.manifest).unwrap_or(Value::Null);
             ctx.send_to(
                 asker,

@@ -1,15 +1,15 @@
-# The engine's WebSocket protocol (`server/Serve.cpp`)
+# The engine's WebSocket protocol
 
-`k7-runtime` is a headless audio server: a thin WebSocket bridge over
-`studio::engine`, speaking JSON. The engine does not parse files — the Node brain
-interprets the song, resolves clip paths to absolute, and sends the project as JSON.
+`k7-runtime` is a headless audio server: this crate's WebSocket server over the C++ Tracktion
+host, speaking JSON. The engine does not parse files — the Node brain interprets the song,
+resolves clip paths to absolute, and sends the project as JSON.
 
-`Serve.cpp` includes **no** JUCE or Tracktion headers: all engine threading sits behind
-`EngineHost`'s `post()` / `onState()` / `run()` API.
+The server reaches the host through the C ABI alone (`abi.md`): what calls JUCE or Tracktion is
+C++, everything between a socket and that ABI is here (`server.md`).
 
 ## A LAN peer is paired before anything else
 
-Every message passes one gate first (`server/ServePairing.cpp`): a loopback peer — the machine, or the
+Every message passes one gate first (`src/pairing/gate.rs`): a loopback peer — the machine, or the
 server's relay — goes through; a LAN peer is answered there until it is paired, and only `whoami`,
 `pair-request` and `pair` get anything but an `unpaired` error. Machine-wide replies skip untrusted
 sockets. The flow and its choices are [pairing.md](pairing.md).
@@ -17,7 +17,7 @@ sockets. The flow and its choices are [pairing.md](pairing.md).
 ## Every message carries a session
 
 `{ "session": "k7:fred", … }` on any message names **which project on this engine** it is
-about. One process hosts several (`docs/multiEdit.md`), so without it the module builder's
+about. One process hosts several (`apps/k7-daw-engine/k7-runtime/docs/multiEdit.md`), so without it the module builder's
 preview and a DJ deck would each replace whatever k7 has loaded.
 
 The field is optional and absent means `""`, the default session — so a client that has
@@ -29,8 +29,8 @@ the machine's rather than a project's: `plugins`, `plugin-scan`, `audio-devices`
 `apps/k7-daw-frontend/packages/engine-protocol/sessions.ts`, with `PER_SESSION_REPLIES` beside it, and
 `sessions.test.ts` pins both. It matters that the set is closed: the client's filter passes a
 frame with **no** session at all (so an older engine does not strike it deaf), which is safe
-only for as long as this engine stamps everything else. In `Serve.cpp` the choice is a verb —
-`broadcast` or `broadcastTo`.
+only for as long as this engine stamps everything else. In the server the choice is a call —
+`Ctx::broadcast` or `Ctx::broadcast_to`.
 
 A session is created by a client **driving** one — sending a project, subscribing to its audio,
 enabling record — and never by asking about one: reads go through the non-inserting accessor, so
@@ -40,24 +40,19 @@ own edit, plugins, meters, watch set, record enable and **broadcast tap**: an au
 hears the session it subscribed for, not the machine's master.
 
 The engine's own half of this — the registry's threading model and the lifecycle rule — is
-`docs/sessions.md`. Client rules, who picks the name, and why k7's two halves must agree on it
+`apps/k7-daw-engine/k7-runtime/docs/sessions.md`. Client rules, who picks the name, and why k7's two halves must agree on it
 are in `apps/k7-daw-frontend/packages/engine-protocol/docs/sessions.md`.
 
 ## A malformed message is ANSWERED, never thrown
 
-The whole dispatch in `server/Serve.cpp` sits inside one `try`, and that is load-bearing rather than
-tidy: **IXWebSocket contains no `catch` at all**, so an exception leaving the handler unwinds the
-connection thread and leaves that socket alive-looking and permanently deaf — no reply, no close
-frame, so nothing on the client ever triggers a reconnect. The measurement, and what it costs the
-listener and driver maps, is in `docs/audit-stabilite.md`.
+A socket whose handler failed without a word would stay alive-looking and permanently deaf — no
+reply, no close frame, so nothing on the client ever triggers a reconnect.
 
-Two throws are reachable from any client, both out of `nlohmann`'s `value(key, default)`:
+Two failures are reachable from any client, worded as nlohmann's `value(key, default)` words them:
 `type_error.306` when the message is not a JSON **object** (`[]`, `null`, `"hi"` all parse), and
-`type_error.302` when a field carries the wrong type (`{"type":"transport","action":5}`). Neither is
-worth hunting field by field, which is why the guard is one catch rather than a hundred checks. A
-client gets `{"type":"error","message":"malformed message: …"}` and keeps its socket.
-
-The handler is a **named** lambda, `onMessage`, for that reason alone: the registration wraps it.
+`type_error.302` when a field carries the wrong type (`{"type":"transport","action":5}`). A handler's
+`Malformed` and a panic are answered alike (`server.md`): a client gets
+`{"type":"error","message":"malformed message: …"}` and keeps its socket.
 
 ## client → server
 
@@ -73,9 +68,9 @@ same session makes them pointless; every other verb fences them, so order betwee
 | `{ type: "transport", action: "play" \| "stop" \| "toggle" \| "rewind" }` | bare transport verbs |
 | `{ type: "transport", action: "seek", position: 12.5 }` | seconds |
 | `{ type: "transport", action: "loop", start: 4, end: 8, enabled: true }` | loop region, in seconds |
-| `{ type: "preview", file: "/abs/kick.wav", start: 0, length: 0 }` | audition a sample; a `length` of 0 plays to the end of the file, at most 30 s ([engineHost.md](engineHost.md)) |
+| `{ type: "preview", file: "/abs/kick.wav", start: 0, length: 0 }` | audition a sample; a `length` of 0 plays to the end of the file, at most 30 s (`apps/k7-daw-engine/k7-runtime/docs/engineHost.md`) |
 | `{ type: "note-preview", track: "melody", key: 60, vel: 1 }` | audition ONE note through that track's own chain — the piano roll's click. Transport-independent like `preview`, but not the same thing: `preview` loads a FILE into a hidden sampler and bypasses every chain, while this plays a note into the track the loaded song already names, so what you hear is the instrument you are writing for. The engine releases it after 100 ms, which is why there is no note-off on the wire: a release that has to arrive is a hanging voice whenever it does not |
-| `{ type: "midi-live", track: "keys", data: [144, 60, 100] }` | a keyboard PLAYED into that track's own chain: one channel message (note on/off, pedal, bend, CC) injected as it arrives, on channel 1 whatever the keyboard sent on. Unlike `note-preview` the release DOES travel the wire, since a played note lasts as long as the key is held; the browser sends all-notes-off and sustain-up when the lane loses its arm, which is what keeps a lost note-off from hanging a voice for good. A socket that CLOSES with notes or the pedal down — a tablet off the Wi-Fi sends nothing more — has them released by the engine, which follows each socket's held notes per track (`server/HeldNotes.h`). Sysex and system bytes are dropped |
+| `{ type: "midi-live", track: "keys", data: [144, 60, 100] }` | a keyboard PLAYED into that track's own chain: one channel message (note on/off, pedal, bend, CC) injected as it arrives, on channel 1 whatever the keyboard sent on. Unlike `note-preview` the release DOES travel the wire, since a played note lasts as long as the key is held; the browser sends all-notes-off and sustain-up when the lane loses its arm, which is what keeps a lost note-off from hanging a voice for good. A socket that CLOSES with notes or the pedal down — a tablet off the Wi-Fi sends nothing more — has them released by the engine, which follows each socket's held notes per track (`src/server/held_notes.rs`). Sysex and system bytes are dropped |
 | `{ type: "watch-plugin-params", id: "chain:module", on: true }` | follow a plugin's values live |
 | `{ type: "subscribe-waveform", id, side: "input"\|"output", trackIndex }` | tap a module's audio |
 | `{ type: "unsubscribe-waveform", id, side }` | drop that tap |
@@ -86,23 +81,23 @@ same session makes them pointless; every other verb fences them, so order betwee
 | `{ type: "record-enable", enabled: true }` | whether rolling this session records; the state frame's `recordEnabled` carries it |
 | `{ type: "get-plugin-params", id }` / `{ type: "set-plugin-param", id, name, value }` | read / move one plugin's values |
 | `{ type: "io-levels", channels: [[1,2]] }` | input meters + tuner, plus THIS session's master level |
-| `{ type: "list-audio-devices" }` / `{ type: "set-audio-device", name, deviceType }` | the machine's interface. Engine-global — one device per process; a list that has not changed answers the asker alone (`audioDevice.md`) |
+| `{ type: "list-audio-devices" }` / `{ type: "set-audio-device", name, deviceType }` | the machine's interface. Engine-global — one device per process; a list that has not changed answers the asker alone (`apps/k7-daw-engine/k7-runtime/docs/audioDevice.md`) |
 | `{ type: "rescan-plugins" }` | re-scan the installed catalogue: incrementally, or from nothing with `force: true` |
-| `{ type: "plugin-scan" }` | where the plugin scan stands → a `plugin-scan` reply, to the asking socket alone ([plugins.md](plugins.md)) |
-| `{ type: "whoami" }` | identity probe, answered to the asking socket alone; to an unpaired LAN peer, without the token and with `needsPairing`. `audioToBrowser: true` says nobody hears this machine's device, so a client plays the broadcast ([broadcast.md](broadcast.md)); `messageThreadMs` is how long the message thread has been silent, what the supervisor restarts a wedged engine on ([hangWatch.md](hangWatch.md)) |
+| `{ type: "plugin-scan" }` | where the plugin scan stands → a `plugin-scan` reply, to the asking socket alone (`apps/k7-daw-engine/k7-runtime/docs/plugins.md`) |
+| `{ type: "whoami" }` | identity probe, answered to the asking socket alone; to an unpaired LAN peer, without the token and with `needsPairing`. `audioToBrowser: true` says nobody hears this machine's device, so a client plays the broadcast (`apps/k7-daw-engine/k7-runtime/docs/broadcast.md`); `messageThreadMs` is how long the message thread has been silent, what the supervisor restarts a wedged engine on (`apps/k7-daw-engine/k7-runtime/docs/hangWatch.md`) |
 | `{ type: "pair-request", name }` | a LAN device asks to be paired → `pair-pending` with the code it shows; later `paired` with its key, or `pair-denied`. See [pairing.md](pairing.md) |
 | `{ type: "pair", key }` | first on a LAN socket: this device's key → `paired`, or an `unpaired` error |
 | `{ type: "list-pair-requests" }` / `{ type: "list-paired-devices" }` | the machine's own clients only → `pair-requests` / `paired-devices`, both also pushed to them on every change |
 | `{ type: "pair-approve", requestId }` / `{ type: "pair-deny", requestId }` / `{ type: "unpair-device", deviceId }` | the machine's own clients only; refused over the LAN with code `local-only` |
-| `{ type: "instrument-status", refs: ["@instruments/nbo-wurt/wurly.sfz"] }` | → `{ type: "instrument-status", status: { ref: true/false } }`, to the asking socket alone: whether each sampled instrument a project names is on THIS machine. k7 draws the missing ones as errors on their nodes; the supervisor is what fetches them ([sfzPlugin.md](sfzPlugin.md)) |
-| `{ type: "hello", role: "driver" }` | the same probe, **and** "a person is looking at this session" — the engine frees a project 45 s after its last driver goes. Omit `role` and nothing is counted, which is how the file service and every prober stay out of it. See [sessions.md](sessions.md). |
+| `{ type: "instrument-status", refs: ["@instruments/nbo-wurt/wurly.sfz"] }` | → `{ type: "instrument-status", status: { ref: true/false } }`, to the asking socket alone: whether each sampled instrument a project names is on THIS machine. k7 draws the missing ones as errors on their nodes; the supervisor is what fetches them (`apps/k7-daw-engine/k7-runtime/docs/sfzPlugin.md`) |
+| `{ type: "hello", role: "driver" }` | the same probe, **and** "a person is looking at this session" — the engine frees a project 45 s after its last driver goes. Omit `role` and nothing is counted, which is how the file service and every prober stay out of it. See `apps/k7-daw-engine/k7-runtime/docs/sessions.md`. |
 | `{ type: "list-sessions" }` | → a `sessions` reply. Engine-global: it is the one question whose answer is about the OTHER sessions |
 | `{ type: "drop-session", session: "k7:fred" }` | forget a session outright — edit, plugins, meters and tap |
 | `{ type: "show-native-plugin-ui", id: "chain:module" }` | open the plugin's own window |
 | `{ type: "show-native-plugin-ui-of", format, id }` | the same window for a plugin in NO project — an ORPHAN instance on the offline engine, saved nowhere. `format`+`id` name a binary, as `list-plugin-params` does |
 | `{ type: "snapshot-plugin-base", format, id, path }` | keep what that orphan is holding: its state written to `path` as a `.vstpreset`. Refuses when no window was opened — see `plugin-base-saved` |
-| `{ type: "render", id?, doc, outDir, base?, stems? }` | bounce `doc` to wav INSIDE this engine, as `--render` does → `rendered`, to the asking socket alone. The machine's own clients only; one at a time; refused whole when a path it names is outside the roots ([cliModes.md](cliModes.md)) |
-| `{ type: "broadcast", on: true, codec?, silent? }` | send me the master audio (this connection only); `codec: "pcm16"` asks for int16 samples, anything else float32; `silent: true` keeps that mix off the interface while this connection listens (`broadcast.md`) |
+| `{ type: "render", id?, doc, outDir, base?, stems? }` | bounce `doc` to wav INSIDE this engine, as `--render` does → `rendered`, to the asking socket alone. The machine's own clients only; one at a time; refused whole when a path it names is outside the roots (`apps/k7-daw-engine/k7-runtime/docs/cliModes.md`) |
+| `{ type: "broadcast", on: true, codec?, silent? }` | send me the master audio (this connection only); `codec: "pcm16"` asks for int16 samples, anything else float32; `silent: true` keeps that mix off the interface while this connection listens (`apps/k7-daw-engine/k7-runtime/docs/broadcast.md`) |
 
 ### Two `ProjectDoc` fields that are not self-evident
 
@@ -145,7 +140,7 @@ It **replaces by id**, and can neither add nor remove a track. Three consequence
   engine.
 
 It carries a visitor's mute and solo on their own session, whole tracks at the pace of a click. Pattern lanes
-do not need it — the engine plays them itself (`patternPlugin.md`). The merge copies the held
+do not need it — the engine plays them itself (`apps/k7-daw-engine/k7-runtime/docs/patternPlugin.md`). The merge copies the held
 document once and moves it into the baseline; the diff still walks the whole song.
 
 No `busy` and no `applied` come back. This path is incremental by construction, and announcing a
@@ -154,7 +149,7 @@ announces its own. `apps/k7-daw-engine/k7-runtime/scripts/track-delta.ts` exerci
 
 ### The numbers are bounded where they arrive
 
-`docFromJson` is a trust boundary, not a formality: with the LAN open the engine binds `0.0.0.0`,
+The document's parse (`src/doc/`) is a trust boundary, not a formality: with the LAN open the engine binds `0.0.0.0`,
 so a document can come from anything on the LAN. What Tracktion divides by or the builder loops over
 is bounded there, with a `warn()` when a value is replaced:
 
@@ -168,7 +163,7 @@ is bounded there, with a `warn()` when a value is replaced:
 | a tap output's `pair`, a track's `inputFrom.pair` | 0..31, the sampler's own range | a rack grown to that many outputs |
 
 Every PATH a document names is held to the engine's roots in the same place — dropped, with a
-warning, when it falls outside them (`docs/pathRoots.md`).
+warning, when it falls outside them (`apps/k7-daw-engine/k7-runtime/docs/pathRoots.md`).
 
 A repeated id is renamed rather than trusted: the second track, module or clip carrying one becomes
 `id#2`, then `#3`, in document order, with a warning. Every map downstream — the diff, the lanes, the
@@ -177,26 +172,25 @@ the first. Modules share one namespace per session, the master chain's included;
 per track. The renaming is deterministic, so a re-sent document diffs as the same one.
 
 `EditBuilder` bounds the one count that is DERIVED rather than sent: a clip's unrolled passes, at
-4096. `tests/DocJson_test.cpp` pins the table.
+4096. `tests/all/doc_bounds.rs` pins the table.
 
-Before any of that, EVERY message is held to 64 levels of nesting (`parseMessage` in `DocJson.cpp`),
-refused while it is parsed. The parser itself is iterative, but copying or walking a JSON value
-recurses, and a few kilobytes of brackets is enough to overflow a connection thread's stack — an
-overflow no `catch` sees, which a client re-sending the message turns into a crash loop. A project
-document nests about ten deep.
+Before any of that, EVERY message is held to 64 levels of nesting (`src/server/msg.rs`), counted on
+the text before it is parsed: walking or dropping a JSON value recurses, and a few kilobytes of
+brackets is enough to overflow a task's stack — an overflow nothing catches, which a client
+re-sending the message turns into a crash loop. A project document nests about ten deep.
 
 ## server → client
 
-Every JSON push to a client goes through `Outbox.h`'s single writer thread, never out of the thread
-that produced it: a server-side send blocks until the peer drains, and the message thread must never
-be the one waiting (`docs/audit-stabilite.md`). The order of one client's messages is kept; a state
-frame is skipped for a socket already behind, a reply never is.
+Every JSON push to a client goes through that socket's own outbox and writer, never out of the
+thread that produced it: a send waits until the peer drains, and the message thread must never be
+the one waiting (`server.md`). The order of one client's messages is kept; a state frame is skipped
+for a socket already behind, a reply never is.
 
 | message | meaning |
 |---|---|
-| `{ type: "applied", changes: ["tempo -> 124 bpm", …], warnings: [{ subject, message }] }` | the diff that ran, and the STANDING warnings the session's project was built with (`sessions.md`) |
+| `{ type: "applied", changes: ["tempo -> 124 bpm", …], warnings: [{ subject, message }] }` | the diff that ran, and the STANDING warnings the session's project was built with (`apps/k7-daw-engine/k7-runtime/docs/sessions.md`) |
 | `{ type: "flushed" }` | flush completed |
-| `{ type: "sessions", sessions: [{ id, project, loaded, playing, tracks, listeners }] }` | every session held. `listeners` is counted in `server/ServeMachine.cpp` — who is subscribed to audio is a property of the SOCKETS, which the engine layer never sees |
+| `{ type: "sessions", sessions: [{ id, project, loaded, playing, tracks, listeners }] }` | every session held. `listeners` is counted in `src/server/machine.rs` — who is subscribed to audio is a property of the SOCKETS, which the engine layer never sees |
 | `{ type: "state", playing, playhead, loop, levels, inputLevels, waveform }` | the ~20 Hz state frame; `loop` is `{ on, start, end }` in seconds, the transport's own, so a client that reconnects draws the loop that is playing rather than none |
 | `{ type: "plugin-params-live", id, params }` | the watch feed, while a value moves |
 | `{ type: "plugin-params", id, params, meta }` | the state to persist; `meta` only on the get- reply |
@@ -261,17 +255,17 @@ drained or pumped on a skipped tick, which is safe precisely because a tap or a 
 makes a session non-idle.
 
 A client must not read the cadence as a signal: it is not a heartbeat, and
-`apps/k7-daw-frontend/packages/engine-browser`'s store drops an identical frame anyway (`docs/meters.md`).
+`apps/k7-daw-frontend/packages/engine-browser`'s store drops an identical frame anyway.
 
 ### …and it goes only to the sockets that asked about that project
 
 The state frame is the one reply nobody requested, so it is the only one addressed by SOCKET
-rather than by verb. `Serve.cpp` remembers which session each connection named in its first real
+rather than by verb. The server remembers which session each connection named in its first real
 message — the same test that earns it a `[client] connected` line — and sends each frame to those
 sockets alone. A plain `broadcast` here makes every socket on the port decode every session's
 meters and waveform envelopes before its own `forSession` drops them; and since the idle divider
 above is *per session*, one session playing keeps every other session's tabs awake at 20 Hz. On a
-machine holding three sessions (`scripts/two-sessions.ts`, which counts frames on a raw socket)
+machine holding three sessions (`apps/k7-daw-engine/k7-runtime/scripts/two-sessions.ts`, which counts frames on a raw socket)
 that is 200 frames received per socket in nine seconds, 34 of them wanted.
 
 The test is deliberately not `role: "driver"` — the file service declares nothing (its link would
@@ -284,14 +278,12 @@ what it wants.
 Misrouting is deliberately not a correctness hazard: every client still runs `forSession`
 (`@studio/engine-protocol/sessions`) over what arrives. The `subscribers` map decides what to
 **send**, never what is legal to read — so a socket that has not spoken yet costs a frame, never a
-wrong meter. The same holds for its raw-pointer keys: an entry outliving its socket could be
-matched by a later one the allocator put at the same address, and the cost is one frame that
-socket's own filter drops.
+wrong meter.
 
 ## server -> client, BINARY
 
 One message type, and the only binary this socket carries: a frame of master audio, sent
 only to connections that asked with `broadcast`. A 32-byte header then interleaved
 float32, or little-endian int16 for a connection that asked for `pcm16` (codec byte 2) — the format lives in `apps/k7-daw-frontend/packages/engine-protocol/stream.ts` and is mirrored in
-`server/AudioSender.cpp`'s `encodeStreamFrame`. The two must agree byte for byte, and nothing
-checks that they do but a listener. See docs/broadcast.md.
+`src/wire/stream.rs`. The two must agree byte for byte (`tests/all/stream.rs`). See
+`apps/k7-daw-engine/k7-runtime/docs/broadcast.md`.

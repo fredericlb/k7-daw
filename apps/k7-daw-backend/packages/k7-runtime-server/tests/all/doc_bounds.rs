@@ -1,4 +1,4 @@
-//! doc_bounds.rs — the document read off the wire: the C++ `DocJson` tests' behaviours, the bounds table, nlohmann's
+//! doc_bounds.rs — the document read off the wire: the bounds table and its behaviours, nlohmann's
 //! refusals and the golden file `DocReader_test.cpp` reads on the other side of the ABI.
 
 use k7_runtime_server::doc::{Checks, parse_project, parse_tracks};
@@ -8,13 +8,13 @@ use std::cell::RefCell;
 
 type Warned = RefCell<Vec<String>>;
 
-/// Every path but a UNC one passes: the engine with no roots set, as the C++ tests ran it.
+/// Every path but a UNC one passes: the engine with no roots set.
 fn open(warned: &Warned) -> Checks<'_> {
     let ok = |p: &str| !p.starts_with("\\\\");
     Checks::new(ok, ok, |m, s| warned.borrow_mut().push(format!("{s}|{m}")))
 }
 
-/// Reads under `/music/`, writes under `/music/rec/`: serve()'s roots.
+/// Reads under `/music/`, writes under `/music/rec/`: the server's roots.
 fn rooted(warned: &Warned) -> Checks<'_> {
     Checks::new(
         |p| p.starts_with("/music/"),

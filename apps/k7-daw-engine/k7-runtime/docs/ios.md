@@ -41,7 +41,8 @@ interface it has as a program:
 
 **stdout and stderr go to the system log** (`StdioLog.swift`), subsystem `rocks.k7.daw`, with each line keeping
 its own tag (`[host]`, `[engine]`, `files |`). An app's own streams reach no Console a device shows. The engine's
-iostreams are tagged `[engine]` at their source (`EngineEmbed.cpp`), since the process's stderr is shared with the front
+iostreams are tagged `[engine]` at their source (`EngineEmbed.cpp`), and the Rust server's own lines by `k7_server_tag_log`
+(`apps/k7-daw-backend/packages/k7-runtime-server/src/log.rs`), since the process's stderr is shared with the front
 and carries no other mark. `StdioLog.swift` also appends each `[engine]` line to the machine log through
 `k7_supervisor_log`, as a child's line is appended on a computer, so the Logs panel and the specs that read the
 engine's warnings see them. Android's engine lines still go to logcat only. `STUDIO_HOME` is set before anything
@@ -281,7 +282,7 @@ libgit2 is linked into `libk7_embed.a` with its own transports (`apps/k7-daw-bac
   `K7_NO_ENGINE=1` in the launch environment runs the app without the engine
   (`SIMCTL_CHILD_K7_NO_ENGINE=1 xcrun simctl launch`), for a simulator whose audio server does not answer.
 - **An offline render (export, freeze, stems) is the engine's own**: the supervisor's `render` job asks the running
-  engine (`render` command, `protocol.md`) instead of starting `k7-runtime --render`, and `Busy.swift` counts it as busy,
+  engine (`render` command, `apps/k7-daw-backend/packages/k7-runtime-server/docs/protocol.md`) instead of starting `k7-runtime --render`, and `Busy.swift` counts it as busy,
   so a render continues with the app behind.
 - **Not run on a phone**, only on the simulator (below); the kit and its checklist are "On a phone". The
   local-network prompt is compiled, not driven; the flows under "Proven on the simulator" are.

@@ -1,8 +1,8 @@
 # The machine: sessions, interface, broadcast, render
 
 `src/server/machine.rs`, `broadcast.rs`, `audio.rs` and `render.rs` answer the verbs about the machine rather than
-one project, over the `machine` and `render` areas of the ABI (`abi.md`). The wire is the C++ server's, byte for
-byte (`docs/rust-engine-server-plan.md`).
+one project, over the `machine` and `render` areas of the ABI (`abi.md`). The wire is every installed client's, byte
+for byte (`protocol.md`).
 
 ## The broadcast has one consumer thread
 

@@ -58,7 +58,7 @@ This page holds the choices and what forced them; the numbered rows (2200 to 229
 
 ## On disk and on the wire
 
-The engine's wire is unchanged (`apps/k7-daw-engine/k7-runtime/docs/protocol.md`, `apps/k7-daw-frontend/packages/engine-protocol`): the same frames,
+The engine's wire is unchanged (`apps/k7-daw-backend/packages/k7-runtime-server/docs/protocol.md`, `apps/k7-daw-frontend/packages/engine-protocol`): the same frames,
 the same session ids, the same stamps. The catalogue copy a finished scan writes is the TypeScript's own shape and
 bytes, left alone when it says the same, since its mtime is in every project's revision token.
 

@@ -8,16 +8,10 @@ Read [Engine architecture](./80-engine-architecture.md) first for where it sits.
 
 | Path | What lives there |
 |---|---|
-| `apps/k7-daw-engine/k7-runtime/server/main.cpp` | The executable: one-shot CLI modes, else `serve()`. Includes no JUCE header. |
-| `apps/k7-daw-engine/k7-runtime/server/Serve.cpp` | The WebSocket server: socket lifecycle, trust screening, dispatch to the handler table. No JUCE header. |
-| `apps/k7-daw-engine/k7-runtime/server/ServeProject.cpp` | Handlers acting on one project: `project`, `tracks`, `flush`, `transport`, `preview`, `note-preview`, `midi-live`, `arm`, `recorder`, `record-enable` |
-| `apps/k7-daw-engine/k7-runtime/server/ServePlugins.cpp` | Plugin handlers: catalogue, params, presets, native UI, waveform taps |
-| `apps/k7-daw-engine/k7-runtime/server/ServeMachine.cpp` | Machine handlers: `whoami`, sessions, audio devices, input levels, broadcast, instrument status |
-| `apps/k7-daw-engine/k7-runtime/server/ServePairing.cpp`, `apps/k7-daw-engine/k7-runtime/server/Pairing.cpp` | LAN pairing: who is trusted, pending requests, `paired-devices.json` |
-| `apps/k7-daw-engine/k7-runtime/server/DocJson.cpp` | JSON ↔ `ProjectDoc`, with the wire's bounds |
-| `apps/k7-daw-engine/k7-runtime/server/Outbox.h` | One writer thread for every JSON push |
-| `apps/k7-daw-engine/k7-runtime/server/AudioSender.cpp` | The audio broadcast's sender thread |
-| `apps/k7-daw-engine/k7-runtime/server/android/EngineJni.cpp` | The Android library's two JNI entry points |
+| `apps/k7-daw-engine/k7-runtime/server/main.cpp` | The executable: hands argv to the Rust server's `k7_server_main`. Includes no JUCE header. |
+| `apps/k7-daw-backend/packages/k7-runtime-server/` | The WebSocket server, in Rust, linked into every target as a static library: argv and the CLI modes (`src/cli.rs`), the socket core and its handlers (`src/server/`), pairing (`src/pairing/`), the `ProjectDoc` off the wire with its bounds (`src/doc/`) |
+| `apps/k7-daw-engine/k7-runtime/engine/capi/` | The C ABI the Rust server reaches the host through: one table of area tables (`k7_engine.h`) |
+| `apps/k7-daw-engine/k7-runtime/server/android/EngineJni.cpp` | The Android library's JNI entry points, which call the Rust server |
 | `apps/k7-daw-engine/k7-runtime/engine/` | The `studio_engine` static library: everything that touches Tracktion/JUCE |
 | `apps/k7-daw-engine/k7-runtime/engine/eurorack/` | Ports of Mutable Instruments modules as built-in plugins, in a JUCE-free library |
 | `apps/k7-daw-engine/k7-runtime/engine/surge/` | Surge XT as a built-in synth (desktop only) |
@@ -26,11 +20,11 @@ Read [Engine architecture](./80-engine-architecture.md) first for where it sits.
 | `apps/k7-daw-engine/k7-runtime/tests/` | Fast, JUCE-free unit tests |
 | `apps/k7-daw-engine/k7-runtime/scripts/` | The build and test runners, code generators, and TypeScript probes that drive a running engine |
 
-The boundary that matters: **public headers of `studio_engine` include no JUCE.** `EngineHost.h` forward-declares Tracktion types and exposes plain structs (`PluginInfo`, `AudioDeviceInfo`). The server compiles against that API only, and all JUCE threading sits behind `EngineHost::post()`. Tracktion is linked `PRIVATE`.
+The boundary that matters: **public headers of `studio_engine` include no JUCE.** `EngineHost.h` forward-declares Tracktion types and exposes plain structs (`PluginInfo`, `AudioDeviceInfo`). The C ABI compiles against that API only, the Rust server sees the ABI alone, and all JUCE threading sits behind `EngineHost::post()`. Tracktion is linked `PRIVATE`.
 
 ## Run modes
 
-`main.cpp` checks its arguments in order and falls through to the server:
+The Rust server's `src/cli.rs` checks the arguments in order and falls through to the server:
 
 | Invocation | What it does |
 |---|---|
@@ -62,19 +56,21 @@ Before any of these, `main()` compares the `ProjectDoc` layout as seen by three 
 
 ### Path roots
 
-A document off the wire names files: samples, models, IRs, presets, take destinations. `apps/k7-daw-engine/k7-runtime/engine/PathRoots.h` confines them. `serve()` calls `setPathRoots(defaultPathRoots(stateDir))` before the first document is read: writes are allowed under the state folder and `$STUDIO_ENGINE_ROOTS`; reads under those plus the temp directory. Paths are checked after resolving symlinks, and UNC paths (`\\host\share`, `//host/share`, `\\?\…`) are always refused so a document cannot make the engine dial a network share. Pattern sound names must be plain child names (`safeSoundName`). With no roots set, as in the one-shot CLI modes, everything but UNC passes. Code that opens a document-named file calls `readAllowed()` or `writeAllowed()`; `apps/k7-daw-engine/k7-runtime/tests/PathRoots_test.cpp` covers the rules. DocJson also bounds the wire's numbers before they reach the model.
+A document off the wire names files: samples, models, IRs, presets, take destinations. `apps/k7-daw-engine/k7-runtime/engine/PathRoots.h` confines them. The server calls `use_default_path_roots` (the C ABI's `setPathRoots(defaultPathRoots(stateDir))`) before the first document is read: writes are allowed under the state folder and `$STUDIO_ENGINE_ROOTS`; reads under those plus the temp directory. Paths are checked after resolving symlinks, and UNC paths (`\\host\share`, `//host/share`, `\\?\…`) are always refused so a document cannot make the engine dial a network share. Pattern sound names must be plain child names (`safeSoundName`). With no roots set, as in the one-shot CLI modes, everything but UNC passes. Code that opens a document-named file calls `readAllowed()` or `writeAllowed()`; `apps/k7-daw-engine/k7-runtime/tests/PathRoots_test.cpp` covers the rules. The Rust server's document parse (`apps/k7-daw-backend/packages/k7-runtime-server/src/doc/`) also bounds the wire's numbers before they reach the model.
 
-## Inside `serve()`
+## Inside `serve`
+
+The server is the Rust crate `apps/k7-daw-backend/packages/k7-runtime-server` (its pages are its `docs/`), which reaches the host through the C ABI in `apps/k7-daw-engine/k7-runtime/engine/capi/`.
 
 1. Load guards are enabled first: anything the previous engine died loading is struck now.
-2. `EngineHost` is constructed. This builds the Tracktion engine but opens **no** audio device; opening one is posted as the first message-thread task so the port binds first (a refused connection would read as an absent engine).
-3. The IXWebSocket server binds with a 10 s ping interval and a 5 s send timeout. A peer that stops reading is closed rather than allowed to block a send.
-4. The handler table is assembled from the three `add*Handlers` functions.
-5. `EngineHost::run()` blocks on the message loop. On Android, the JNI entry calls `serve()` on a thread whose `Looper` becomes JUCE's message loop, which is why `serve()` blocks rather than returning a handle.
+2. The host is created. This builds the Tracktion engine but opens **no** audio device; opening one is posted as the first message-thread task so the port binds first (a refused connection would read as an absent engine).
+3. The socket binds, a ping every 10 s and a 5 s send timeout. A peer that stops reading is closed rather than allowed to block a send.
+4. The handler table is assembled, one line per module (`src/server/handlers.rs`).
+5. The host's loop blocks the thread that called `serve`. On Android, the JNI entry calls `k7_server_serve` on a thread whose `Looper` becomes JUCE's message loop, which is why it blocks rather than returning a handle.
 
-Threads: IXWebSocket runs a callback thread per connection; every engine mutation is posted to the message thread with `host.post`; every JSON push goes through `Outbox`'s single writer thread so the message thread never waits on a peer; binary audio goes through `AudioSender`'s thread, the only one allowed to move a broadcast ring's read cursor.
+Threads: each socket is a task pair with its own outbox and writer, so the message thread never waits on a peer; every engine mutation is posted to the message thread; binary audio goes through the broadcast sender's own thread, the only one allowed to move a broadcast ring's read cursor.
 
-A socket's handshake first passes `screenOrigin`: a browser `Origin` that is not loopback, `https://k7.rocks` or a subdomain, or listed in `STUDIO_ENGINE_ALLOWED_ORIGINS` is closed with 1008 and logged; a handshake with no `Origin` (a native client) passes. Every incoming message then passes `screenFrameSize` (a socket that is neither loopback nor paired may send at most 16 KiB per frame) and `screenMessage` (pairing, see [83](./83-engine-protocol.md#pairing)). Read-only probe queries (`whoami`, `list-audio-devices`, `list-plugins`, `list-edit-plugins`, `list-sessions`, `io-levels`, `instrument-status`) do not produce a `[client] connected` log line, so polling does not bury the log.
+A socket's handshake first passes the origin check: a browser `Origin` that is not loopback, `https://k7.rocks` or a subdomain, or listed in `STUDIO_ENGINE_ALLOWED_ORIGINS` is closed with 1008 and logged; a handshake with no `Origin` (a native client) passes. Every incoming message then passes the frame-size screen (a socket that is neither loopback nor paired may send at most 16 KiB per frame) and the pairing gate ( see [83](./83-engine-protocol.md#pairing)). Read-only probe queries (`whoami`, `list-audio-devices`, `list-plugins`, `list-edit-plugins`, `list-sessions`, `io-levels`, `instrument-status`) do not produce a `[client] connected` log line, so polling does not bury the log.
 
 ## Sessions
 
@@ -96,7 +92,7 @@ The diff depends on **stable identity**: tracks, clips and plugins match by `id`
 
 Applying in place is what keeps a reverb tail ringing and a held note held while you edit. `needsFullRebuild()` decides; a full rebuild goes through `EditBuilder` (`apps/k7-daw-engine/k7-runtime/engine/EditBuilder.cpp`), which also builds the offline render's edit. Sends are planned once for the whole song in `SendPlan.h`, shared by the builder and the diff.
 
-To add a field to `ProjectDoc`: add it to `apps/k7-daw-engine/k7-runtime/engine/ProjectDoc.h`, parse it in `apps/k7-daw-engine/k7-runtime/server/DocJson.cpp`, compare it in `apps/k7-daw-engine/k7-runtime/engine/ProjectDiff.cpp` (choosing in place or rebuild), apply it in `EngineHost`/`EditBuilder`, mirror it in `apps/k7-daw-frontend/packages/engine-protocol/project.ts`, and produce it in the compiler (`apps/k7-daw-frontend/packages/song`). Add a case to `apps/k7-daw-engine/k7-runtime/tests/ProjectDiff_test.cpp`.
+To add a field to `ProjectDoc`: add it to `apps/k7-daw-engine/k7-runtime/engine/ProjectDoc.h`, parse and bound it in `apps/k7-daw-backend/packages/k7-runtime-server/src/doc/`, read it in `apps/k7-daw-engine/k7-runtime/engine/DocReader.cpp`, compare it in `apps/k7-daw-engine/k7-runtime/engine/ProjectDiff.cpp` (choosing in place or rebuild), apply it in `EngineHost`/`EditBuilder`, mirror it in `apps/k7-daw-frontend/packages/engine-protocol/project.ts`, and produce it in the compiler (`apps/k7-daw-frontend/packages/song`). Add a case to `apps/k7-daw-engine/k7-runtime/tests/ProjectDiff_test.cpp`.
 
 ## Hosted plugins
 

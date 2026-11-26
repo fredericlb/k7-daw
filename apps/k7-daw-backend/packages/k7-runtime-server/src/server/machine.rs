@@ -8,6 +8,7 @@ use super::handlers::HandlerTable;
 use super::msg::Malformed;
 use crate::engine::Mt;
 use crate::engine::machine::AudioDevice;
+use crate::log::say;
 use crate::wire::json;
 use serde_json::{Map, Value, json};
 use std::collections::{HashMap, HashSet};
@@ -80,7 +81,7 @@ fn list_sessions(r: &Request) -> Result<(), Malformed> {
 fn drop_session(r: &Request) -> Result<(), Malformed> {
     let session = r.session.clone();
     r.ctx.engine.post(move |mt: Mt<'_>| {
-        eprintln!("[session] dropped '{session}'");
+        say!("[session] dropped '{session}'");
         mt.drop_session(&session);
     });
     Ok(())
@@ -237,7 +238,7 @@ fn set_audio_device(r: &Request) -> Result<(), Malformed> {
         } else {
             format!(" [{ty}]")
         };
-        eprintln!("[device] opening '{name}'{kind}");
+        say!("[device] opening '{name}'{kind}");
         // The new list goes to everyone, one interface per process; the refusal only to whoever asked.
         if mt.set_audio_device(&name, &ty) {
             sent_list(&ctx, devices_msg(mt.list_audio_devices()));

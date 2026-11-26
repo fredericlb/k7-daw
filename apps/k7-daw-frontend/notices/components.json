@@ -162,17 +162,6 @@
       "vendor": ["repo:apps/k7-daw-engine/k7-runtime/LICENSE#L12-L38"]
     },
     {
-      "name": "IXWebSocket",
-      "version": "v12.0.1",
-      "source": "apps/k7-daw-engine/k7-runtime/CMakeLists.txt",
-      "license": "BSD-3-Clause",
-      "url": "https://github.com/machinezone/IXWebSocket",
-      "where": ["engine"],
-      "fetchContent": ["ixwebsocket"],
-      "text": "ixwebsocket.txt",
-      "vendor": ["runtime:ixwebsocket-src/LICENSE.txt"]
-    },
-    {
       "name": "JSON for Modern C++",
       "version": "3.11.3",
       "source": "apps/k7-daw-engine/k7-runtime/CMakeLists.txt",

@@ -2,7 +2,7 @@
 // kept for the log. One that names a track or a module of the open project is marked IN PLACE (a
 // warning icon on that header or card, counted next to the title); every other is a toast, said once
 // per project for the page's life. The engine sends prose and no code, so the known kinds are
-// recognised by the stable start of their text (DocJson.cpp, EditBuilder.cpp, EngineHost.cpp); an
+// recognised by the stable start of their text (the Rust server's doc parse, EditBuilder.cpp, EngineHost.cpp); an
 // unknown text still shows, generically, with the raw words after it. See ../docs/shell.md,
 // "Engine warnings".
 

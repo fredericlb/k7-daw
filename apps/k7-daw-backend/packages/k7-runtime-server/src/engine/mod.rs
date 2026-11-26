@@ -4,6 +4,8 @@
 //! What a reader gets wrong: an `Engine` may outlive its host; once the host is destroyed a post is dropped and
 //! an answer is `None`, never a call into freed memory (`docs/abi.md` beside this crate).
 
+use crate::log::say;
+pub mod cli;
 pub mod fake;
 pub mod fake_plugins;
 pub mod fake_state;
@@ -95,6 +97,20 @@ impl Api {
 
     pub fn state_path(&self) -> String {
         ffi::collect_one(|ctx, out| unsafe { (self.core().state_path)(ctx, out) })
+    }
+
+    pub fn install_terminate_handler(&self) {
+        unsafe { (self.core().install_terminate_handler)() }
+    }
+
+    /// After `enable_load_guards`: the file the last engine died loading, empty when it died elsewhere.
+    pub fn previous_load_death(&self) -> String {
+        ffi::collect_one(|ctx, out| unsafe { (self.core().previous_load_death)(ctx, out) })
+    }
+
+    /// After `enable_load_guards`: the external plugin the last engine started loading last, empty for none.
+    pub fn previous_last_plugin(&self) -> String {
+        ffi::collect_one(|ctx, out| unsafe { (self.core().previous_last_plugin)(ctx, out) })
     }
 
     pub fn enable_load_guards(&self) {
@@ -221,7 +237,7 @@ unsafe extern "C" fn run_job(ctx: *mut c_void) {
         _on_thread: PhantomData,
     };
     if catch_unwind(AssertUnwindSafe(|| run(mt))).is_err() {
-        eprintln!("[server] a job on the message thread panicked");
+        say!("[server] a job on the message thread panicked");
     }
 }
 

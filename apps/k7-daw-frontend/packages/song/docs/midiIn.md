@@ -27,7 +27,7 @@ one; the DEVICE it listens to is the one named by the midi-in node wired to that
 cables, and a choice made once in the graph does not have to be made again at the transport.
 
 **An armed lane is PLAYED as well as recorded.** Each channel message from its keyboard goes to the
-engine as it arrives (`midi-live`, apps/k7-daw-engine/k7-runtime/docs/protocol.md), so the lane's instrument
+engine as it arrives (`midi-live`, apps/k7-daw-backend/packages/k7-runtime-server/docs/protocol.md), so the lane's instrument
 sounds under the fingers whether or not a take is rolling. Only the armed lane hears it: a rig of
 two keyboards on two lanes does not play both instruments from either. The card's LED, by contrast,
 lights for ANY channel message from its device, armed or not, since what it answers is "is this

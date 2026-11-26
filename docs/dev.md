@@ -132,9 +132,9 @@ its tree holds the engine running. That is what the task does — watch the sour
 
 | target | watched | rebuilt with |
 |---|---|---|
-| `k7-runtime` | `engine/`, `server/`, `CMakeLists.txt`, `CMakePresets.json` | `npm run build:win` / `build:mac --workspace k7-runtime` |
+| `k7-runtime` | `engine/`, `server/`, `CMakeLists.txt`, `CMakePresets.json`, and the Rust server it links, `apps/k7-daw-backend/packages/k7-runtime-server` | `npm run build:win` / `build:mac --workspace k7-runtime` |
 | `k7-supervisor` | the crates `k7-supervisor`, `k7-local`, `k7-engine` and `waveform` under `apps/k7-daw-backend/packages/`, the workspace's `Cargo.toml` and `Cargo.lock` | `supervisorBuild.mjs`: cargo in release, ONNX Runtime beside it |
-| `k7-desktop` | `src-tauri/src/`, `Cargo.toml`, `tauri.conf.json`, and the front's crates it links: `apps/k7-daw-backend/packages/**` but `k7-supervisor`, its `Cargo.toml` and `Cargo.lock` | `cargo build` in `apps/k7-daw-desktop/src-tauri`, line tables only for debug info: `CARGO_PROFILE_DEV_DEBUG=2` before `npm run dev` for a debugger ([rust-builds.md](rust-builds.md)) |
+| `k7-desktop` | `src-tauri/src/`, `Cargo.toml`, `tauri.conf.json`, and the front's crates it links: `apps/k7-daw-backend/packages/**` but `k7-supervisor` and `k7-runtime-server`, its `Cargo.toml` and `Cargo.lock` | `cargo build` in `apps/k7-daw-desktop/src-tauri`, line tables only for debug info: `CARGO_PROFILE_DEV_DEBUG=2` before `npm run dev` for a debugger ([rust-builds.md](rust-builds.md)) |
 
 | choice | why |
 |---|---|

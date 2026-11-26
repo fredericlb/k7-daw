@@ -479,7 +479,7 @@ playback context — the input instances live on it — so it runs **after**
 
 ## The command-line entry points
 
-These are static and wire up from `main()`:
+These are static, reached from the Rust server's argv through the C ABI's cli area (`engine/capi/k7_engine_cli.h`):
 
 | entry | mode |
 |---|---|

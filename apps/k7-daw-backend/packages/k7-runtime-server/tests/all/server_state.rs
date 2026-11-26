@@ -1,5 +1,5 @@
 //! server_state.rs — what the engine says unasked, over a real socket and the fake engine: the state frame
-//! byte for byte against the C++'s fixture, to the sockets of its session only and droppable, a take, a
+//! byte for byte against the fixture, to the sockets of its session only and droppable, a take, a
 //! plugin's parameters (persisted and live), an engine warning, and the verb that watches a plugin.
 
 use crate::harness::{Server, Wire, eventually};
@@ -253,7 +253,7 @@ async fn plugin_params_persist_as_text_and_live_ones_are_their_own_type() {
         w.text().await,
         r#"{"id":"p1","params":{"a":[1,2.5],"b":2},"session":"s","type":"plugin-params"}"#
     );
-    // Text that is not JSON is an empty object, as the C++ swallowed the parse error.
+    // Text that is not JSON is an empty object, the parse error swallowed.
     fake_state::plugin_params(&s.engine, "s", "p1", "not json");
     assert_eq!(
         w.text().await,

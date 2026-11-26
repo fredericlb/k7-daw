@@ -4,6 +4,7 @@
 //! What a reader gets wrong: it keeps the real contract, not a convenient one: a job runs on the thread that
 //! runs the host, a quit ends the loop after the job running, and a job left queued is dropped at destroy.
 
+pub mod cli;
 pub mod machine;
 pub mod project;
 pub mod render;
@@ -34,7 +35,7 @@ pub fn api() -> &'static K7EngineApi {
         plugins: (&fake_plugins::PLUGINS as *const super::plugins::K7PluginsApi).cast(),
         machine: std::ptr::from_ref(&machine::TABLE).cast(),
         render: std::ptr::from_ref(&render::TABLE).cast(),
-        cli: std::ptr::null(),
+        cli: std::ptr::from_ref(&cli::TABLE).cast(),
     })
 }
 
@@ -163,6 +164,19 @@ unsafe extern "C" fn state_path(ctx: *mut c_void, out: K7StrEach) {
 }
 
 unsafe extern "C" fn enable_load_guards() {}
+
+unsafe extern "C" fn install_terminate_handler() {}
+
+unsafe extern "C" fn previous_load_death(ctx: *mut c_void, out: K7StrEach) {
+    give(out, ctx, "");
+}
+
+/// The plugin the fake's previous engine loaded last: what `whoami`'s safe mode names.
+pub const PREVIOUS_LAST_PLUGIN: &str = "/plugins/Crashy.vst3";
+
+unsafe extern "C" fn previous_last_plugin(ctx: *mut c_void, out: K7StrEach) {
+    give(out, ctx, PREVIOUS_LAST_PLUGIN);
+}
 
 unsafe extern "C" fn set_safe_mode(on: i32) {
     if let Ok(mut p) = PROCESS.lock() {
@@ -313,4 +327,7 @@ static CORE: K7CoreApi = K7CoreApi {
     message_thread_age_ms,
     session_ids,
     has_session,
+    install_terminate_handler,
+    previous_load_death,
+    previous_last_plugin,
 };

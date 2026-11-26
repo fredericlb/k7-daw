@@ -47,7 +47,7 @@ frame. `instruments.download <name>` and `instruments.remove <name>` are the two
 on it; the second is refused, with a reason, for the instrument being fetched right now.
 
 `pairRequests` and `pairedDevices` are the engine's LAN pairing lists, relayed verbatim
-(`apps/k7-daw-engine/k7-runtime/docs/pairing.md`). They are POLLED every second rather than taken from the
+(`apps/k7-daw-backend/packages/k7-runtime-server/docs/pairing.md`). They are POLLED every second rather than taken from the
 engine's own pushes: the musician must see a request within the two minutes it lives, and the
 engine drops an expired one without saying so, so only asking again shows it gone. The two lists are
 a handful of rows that move only when a device asks, is answered or reconnects, so the second-long

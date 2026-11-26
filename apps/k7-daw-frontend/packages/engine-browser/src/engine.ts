@@ -98,7 +98,7 @@ export class EngineClient extends EngineQueries {
       vel: Math.max(0, Math.min(1, vel)),
     });
   }
-  /** A keyboard PLAYED into a track's chain: one channel message, held until its own note-off — apps/k7-daw-engine/k7-runtime/docs/protocol.md. */
+  /** A keyboard PLAYED into a track's chain: one channel message, held until its own note-off — apps/k7-daw-backend/packages/k7-runtime-server/docs/protocol.md. */
   liveMidi(track: string, data: readonly number[]): void {
     const msg = { type: "midi-live", track, data: [...data] };
     // Played notes are for now and are dropped while the link is down; what ENDS a note is kept, or it would hang.

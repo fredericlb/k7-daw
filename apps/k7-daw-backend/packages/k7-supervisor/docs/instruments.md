@@ -32,7 +32,7 @@ beside it, so a removal that stops halfway reads as not installed, never as a wh
 An engine still playing it keeps what it already loaded until its next load.
 
 **k7 asks the ENGINE, not the supervisor**, whether an instrument is here
-(`apps/k7-daw-engine/k7-runtime/docs/protocol.md`, `instrument-status`): the engine is the one a browser
+(`apps/k7-daw-backend/packages/k7-runtime-server/docs/protocol.md`, `instrument-status`): the engine is the one a browser
 already talks to, and the files are where the engine reads them.
 
 **The supervisor, not a server.** The files come from their origin straight onto the machine that

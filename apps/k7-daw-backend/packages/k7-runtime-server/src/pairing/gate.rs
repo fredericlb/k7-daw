@@ -6,6 +6,7 @@
 use super::SocketId;
 use super::net::{is_loopback, is_private, origin_allowed, same_key};
 use super::store::{Approved, Pairing};
+use crate::log::say;
 use serde_json::{Value, json};
 use std::collections::HashSet;
 use std::sync::Mutex;
@@ -97,7 +98,7 @@ impl Gate {
             return false;
         }
         self.trust().refused.insert(id);
-        eprintln!("[client] refused a page from '{origin}' (docs/pairing.md)");
+        say!("[client] refused a page from '{origin}' (docs/pairing.md)");
         true
     }
 
@@ -215,9 +216,10 @@ impl Gate {
                 "too many devices are waiting to be paired — try again in a couple of minutes",
             )];
         };
-        eprintln!(
+        say!(
             "[pairing] '{}' ({ip}) asks to pair, code {}",
-            r.name, r.code
+            r.name,
+            r.code
         );
         vec![
             Out::Reply(json!({"type": "pair-pending", "requestId": r.id, "code": r.code})),
@@ -266,7 +268,7 @@ impl Gate {
                     let paired = json!({"type": "paired", "deviceId": device.id, "name": device.name, "key": key});
                     out.push(Out::To(from, paired));
                 }
-                eprintln!("[pairing] '{}' paired", device.name);
+                say!("[pairing] '{}' paired", device.name);
                 out.push(Out::ToLocals(self.requests_json()));
                 out.push(Out::ToLocals(self.devices_json()));
                 out
@@ -317,7 +319,7 @@ impl Gate {
         } else {
             "closed: a device on this network pairs first"
         };
-        eprintln!("[pairing] the LAN is {state}");
+        say!("[pairing] the LAN is {state}");
         out
     }
 

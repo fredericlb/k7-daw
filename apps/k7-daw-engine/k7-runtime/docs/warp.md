@@ -2,7 +2,7 @@
 
 A clip carries a **warp map**: a list of `[timeline beat, source second]` markers saying where
 each moment of the file should land. `@studio/song` compiles it into `ClipDoc::warp`
-(`apps/k7-daw-frontend/packages/song/docs/warp.md` is the authoring half), `server/DocJson.cpp` parses it, and
+(`apps/k7-daw-frontend/packages/song/docs/warp.md` is the authoring half), the Rust server's `apps/k7-daw-backend/packages/k7-runtime-server/src/doc/track.rs` parses it, and
 `EditBuilder::applyClipWarp` is what turns it into Tracktion state.
 
 The map does **two** things at once, and Tracktion realises them through two different

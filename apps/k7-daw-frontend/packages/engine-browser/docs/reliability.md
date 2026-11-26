@@ -25,10 +25,10 @@ counting that as a connection failure.
 
 ## An open socket carrying nothing
 
-There is no ping anywhere in this protocol, nor underneath it: the engine's server embeds
-IXWebSocket with `kPingIntervalSeconds(-1)` — heartbeat disabled. A frozen relay, an expired NAT,
-a laptop coming out of sleep therefore leave a socket that declares itself `OPEN` and carries
-nothing: `close` never fires, the reconnection never triggers, and `send()` writes into the void.
+The engine pings each socket every 10 s and closes a peer that answers none, but a browser cannot
+see a ping, and the hop between it and the engine may be a relay: a frozen relay, an expired NAT,
+a laptop coming out of sleep leave a socket that declares itself `OPEN` and carries nothing:
+`close` never fires, the reconnection never triggers, and `send()` writes into the void.
 Hence a watchdog on the browser side.
 
 It is asymmetric on purpose:

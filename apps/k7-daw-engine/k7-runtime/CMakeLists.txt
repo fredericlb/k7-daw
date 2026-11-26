@@ -30,7 +30,7 @@ endif()
 # Shared dependencies (fetched once here, consumed by the packages below)
 #
 # The apps that drive the engine are Node apps (apps/k7-daw-frontend), so there's no C++ UI or YAML
-# dependency here — just the audio engine and the WebSocket transport.
+# dependency here — just the audio engine; the WebSocket server is the Rust crate server/ links.
 # Tracktion is HEAVY (bundles JUCE, hundreds of MB, long first build).
 # -----------------------------------------------------------------------------
 include(FetchContent)
@@ -61,7 +61,7 @@ function(studio_patch_command out script)
     set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${script}"
         "${CMAKE_CURRENT_SOURCE_DIR}/engine/eurorack/patches/studio_replace.cmake")
 endfunction()
-foreach(_patch sfizz surge ixwebsocket)
+foreach(_patch sfizz surge)
     studio_patch_command(STUDIO_PATCH_${_patch} "${CMAKE_CURRENT_SOURCE_DIR}/engine/patches/${_patch}.cmake")
 endforeach()
 studio_patch_command(STUDIO_PATCH_tracktion "${CMAKE_CURRENT_SOURCE_DIR}/engine/patches/tracktion.cmake")
@@ -69,7 +69,7 @@ foreach(_patch eurorack stmlib)
     studio_patch_command(STUDIO_PATCH_${_patch} "${CMAKE_CURRENT_SOURCE_DIR}/engine/eurorack/patches/${_patch}.cmake")
 endforeach()
 
-# --- nlohmann/json : parse the JSON project the frontend sends (server) --------
+# --- nlohmann/json : read the validated JSON project the Rust server hands over (engine) --
 # Upstream's release archive for FetchContent: the headers and the CMake files, 0.1 MB against a clone's 186.
 FetchContent_Declare(nlohmann_json
     URL      https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz
@@ -212,17 +212,6 @@ FetchContent_Declare(stmlib
     PATCH_COMMAND ${STUDIO_PATCH_stmlib}
     SOURCE_SUBDIR studio-does-not-build-this)
 
-# --- IXWebSocket : the WebSocket server transport (server) --------------------
-FetchContent_Declare(ixwebsocket
-    GIT_REPOSITORY https://github.com/machinezone/IXWebSocket.git
-    GIT_PROGRESS   ON
-    GIT_TAG        v12.0.1
-    GIT_SHALLOW    ON
-    # A client message is buffered whole before anything reads it, and IXWebSocket caps none; explained in the script.
-    PATCH_COMMAND ${STUDIO_PATCH_ixwebsocket})
-set(USE_TLS OFF CACHE BOOL "" FORCE)          # localhost IPC — no TLS needed
-set(USE_ZLIB OFF CACHE BOOL "" FORCE)         # no permessage-deflate; avoids a zlib dep (Windows has no system zlib)
-
 # --- Tracktion Engine : the audio engine (+ JUCE via submodules) (engine) -----
 # Pinned to v3.2.0 (latest release, JUCE 8). engine/EngineHost.cpp targets this
 # exact tag; bump deliberately and re-test it. JUCE, its one submodule, is fetched as an
@@ -343,7 +332,7 @@ if(WIN32)
     add_compile_definitions(JUCE_ASIO=1)
 endif()
 
-FetchContent_MakeAvailable(nlohmann_json ixwebsocket tracktion_engine nam_core eigen rtneural quickjs
+FetchContent_MakeAvailable(nlohmann_json tracktion_engine nam_core eigen rtneural quickjs
                            eurorack stmlib)
 # sfizz is C++14/17 code (its own pick on MSVC is 17), and ours is 20, under which std::result_of is gone and abseil
 # changes types: built at 17 everywhere, its public header — the only one we include — being plain std.
@@ -408,7 +397,7 @@ endif()
 # The C++ packages (monorepo-style)
 #
 #   engine/  -> studio::engine  (library: model, diff, Tracktion host)
-#   server/  -> k7-runtime  (app: WebSocket audio server)
+#   server/  -> k7-runtime  (app: the entry points over the Rust server)
 #
 # The apps that drive the engine are Node apps elsewhere in the repo and are NOT built here.
 #

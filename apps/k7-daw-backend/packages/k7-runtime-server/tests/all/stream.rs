@@ -1,5 +1,5 @@
 //! stream.rs — the LSTR frame: float32 bytes against engine-protocol's own `encodeStreamFrame` (the hex below
-//! is its output), int16 against the C++ sender's rounding.
+//! is its output), int16 against the wire's rounding.
 
 use k7_runtime_server::wire::stream::{CODEC_PCM_F32, CODEC_PCM_S16, Chunk, HEADER_BYTES, encode};
 

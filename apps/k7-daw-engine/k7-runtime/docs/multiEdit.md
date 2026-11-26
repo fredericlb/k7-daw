@@ -64,7 +64,7 @@ The isolation wanted here is at the level of the *project*, not the *process*. S
 * `EngineHost` holds a map of `sessionId → Edit` rather than one `Edit`; `applyFull`/`apply`
   are per-session.
 * Every message that addresses a project carries a session id (`project`, `transport`,
-  `set-plugin-param`, …). The clients and the C++ agree on it — `docs/protocol.md`.
+  `set-plugin-param`, …). The clients and the C++ agree on it — `apps/k7-daw-backend/packages/k7-runtime-server/docs/protocol.md`.
 * The broadcast tap is per-session, or every listener hears everyone's mix.
 * The supervisor runs **one** engine and reports N sessions — simpler than N engines, and it
   deletes the whole per-engine device problem, the N pidfiles and the N ports.

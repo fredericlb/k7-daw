@@ -14,7 +14,7 @@ peer's unsent bytes (`bufferedAmount`) and decides:
 - below **8 MiB**, it is sent;
 - past it, a frame a newer one **replaces** is dropped: an audio broadcast frame (the `LSTR`
   binary of `apps/k7-daw-frontend/packages/engine-protocol/stream.ts`), and the text pushes `state`, `io-levels` and
-  `plugin-params-live` (`apps/k7-daw-engine/k7-runtime/docs/protocol.md`). The engine already skips a state
+  `plugin-params-live` (`apps/k7-daw-backend/packages/k7-runtime-server/docs/protocol.md`). The engine already skips a state
   frame for a socket behind; this is the same rule one hop further. The frame is classified only
   then, so a healthy socket pays no parse;
 - anything else — a reply, a document, a command — is still queued, since dropping it would

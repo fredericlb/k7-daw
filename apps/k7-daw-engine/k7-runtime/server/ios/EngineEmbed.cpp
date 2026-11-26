@@ -1,9 +1,9 @@
-// EngineEmbed.cpp — see EngineEmbed.h. The engine's iostreams are tagged `[engine]` here, since the process's stderr
-// is shared with the front and carries no other mark; the app files each tagged line in the machine log (docs/ios.md).
+// EngineEmbed.cpp — see EngineEmbed.h. The engine's iostreams are tagged `[engine]` here and the Rust server's own lines
+// by k7_server_tag_log, since the process's stderr is shared with the front; the app files each tagged line (docs/ios.md).
 
 #include "EngineEmbed.h"
 
-#include "../Serve.h"
+#include "../../engine/capi/k7_server.h"
 
 #include <unistd.h>
 
@@ -67,13 +67,14 @@ void tagStreams() {
 
 extern "C" int k7_engine_serve(int port) {
     tagStreams();
-    return studio::serve(port);
+    k7_server_tag_log();
+    return k7_server_serve(port);
 }
 
 extern "C" void k7_engine_quit(void) {
-    studio::requestQuit();
+    k7_server_request_quit();
 }
 
 extern "C" void k7_engine_suspend_audio(int suspended) {
-    studio::suspendAudio(suspended != 0);
+    k7_server_suspend_audio(suspended);
 }

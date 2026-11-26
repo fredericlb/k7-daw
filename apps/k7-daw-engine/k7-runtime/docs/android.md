@@ -321,9 +321,9 @@ means back to the local user.
 JUCE's Oboe backend asks Android's `AudioManager` for the device's rate and buffer through JNI, and
 JUCE as a whole wants `Java.initialiseJUCE(context)` before anything else. A bare executable has no
 JavaVM to give it. So on Android the `k7-runtime` target is a **shared library**, `libk7runtime.so`,
-built from the same `STUDIO_SERVER_SOURCES` as the desktop binary (`server/CMakeLists.txt`) plus `server/android/EngineJni.cpp`, and
-`server/main.cpp` — the CLI — is not built at all. `serve()` is the whole server on every platform;
-the desktop `main()` calls it once its CLI modes have declined.
+built from the same `STUDIO_SERVER_SOURCES` and Rust server archive as the desktop binary (`server/CMakeLists.txt`) plus `server/android/EngineJni.cpp`, and
+`server/main.cpp` — the CLI — is not built at all. The Rust server's `k7_server_serve` is the whole server on every platform;
+the desktop `main()` reaches it through `k7_server_main` once argv names no one-shot mode.
 
 `com.rmsl.juce.Java` in the app is JUCE's bootstrap class under JUCE's own name, because the
 engine's `JNI_OnLoad` (JUCE's) registers `initialiseJUCE` on exactly that class. JUCE's copy loads a
@@ -347,8 +347,8 @@ whole shape:
   Not a `HandlerThread`: a runnable posted to one already runs inside its `loop()`, and the engine
   looping it again would nest two loops that one quit then tears down together.
 - `EngineHost::run()` calls `Looper.loop()`, which blocks and dispatches exactly as the desktop's
-  `runDispatchLoopUntil` loop does. The rest of `serve()` is unchanged: its locals live on that
-  stack for as long as the engine runs.
+  `runDispatchLoopUntil` loop does. The rest of the serve is unchanged: the server it started lives
+  for as long as that loop runs.
 - `EngineHost::quit()` posts `quitSafely()` to that Looper, from its own thread. JUCE's
   `stopDispatchLoop()` would instead finish the app's Activity.
 - **Once per process.** After the quit, JUCE is still bound to a Looper that cannot loop again, so an
@@ -544,7 +544,7 @@ libgit2 and zlib are compiled into `libk7_embed.so` by the NDK's clang (`buildFr
   (`apps/k7-daw-frontend/packages/audio-analysis/docs/analysis.md`); what else needs them — transcoding — answers as it does on a machine without them.
 - **The tunnel and WebRTC are untested on a phone.** They are the code a computer runs, built unchanged; no
   studio has driven a phone through them yet.
-- **No external plugins, no plugin scan.** An offline render or freeze is the engine's own, asked by the supervisor's `render` job over the engine's socket (`protocol.md`), and `Busy.kt` counts it as busy.
+- **No external plugins, no plugin scan.** An offline render or freeze is the engine's own, asked by the supervisor's `render` job over the engine's socket (`apps/k7-daw-backend/packages/k7-runtime-server/docs/protocol.md`), and `Busy.kt` counts it as busy.
 - **The busy service and the microphone flow have not been driven on a phone yet**: a take with the screen off,
   the microphone type refused from behind on Android 14, the notification permission and the blocked-microphone
   dialog are each still to check.

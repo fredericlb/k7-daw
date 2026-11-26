@@ -161,7 +161,7 @@ changing which one survives would change what plays — but it raises a warning 
 Pinned by `diff_duplicate_id_is_reported`.
 
 Its relatives are closed at the source: a document's repeated ids are renamed `id#2`… as it is read
-(`docs/protocol.md`), so `trackById`, the send buses and `pluginsById` never meet two; and input
+(`apps/k7-daw-backend/packages/k7-runtime-server/docs/protocol.md`), so `trackById`, the send buses and `pluginsById` never meet two; and input
 meters are keyed by device name AND physical channels, so an interface exposing one label twice
 meters both (`docs/meterClients.md`).
 
@@ -292,63 +292,30 @@ refresh. With a rack now RELOADED in place rather than replaced, remapping one o
 stalls the message thread 1 ms instead of 181, and the audio stream's longest gap is its idle 12 ms
 instead of 30 (`docs/projectDiff.md`).
 
-## An exception on the socket costs that client its connection, silently
+## A failure on the socket is answered, never silent
 
-The other invariant, and the one that was measured rather than reasoned about.
-
-IXWebSocket has **no `catch` anywhere in it** — grep the checkout. `nlohmann`'s `value(key, default)`
-throws `type_error.302` on a field of the wrong type and `type_error.306` on a message that is not a
-JSON object at all, and both are reachable from any client: `[]`, `null`, `"hi"`, or
-`{"type":"transport","action":5}`. The handler had a `try` around `json::parse` and around
-`docFromJson` only, so everything else threw straight into the library.
-
-What that costs is not a crash, which is what makes it bad. Measured against the pre-fix binary, on
-two ports side by side:
-
-| | pre-fix | with the catch |
-|---|---|---|
-| reply to the malformed message | none | `{"type":"error","message":"malformed message: …302…"}` |
-| `whoami` afterwards **on the same socket** | none, ever | answered |
-| close frame | none | none — the socket stays up |
-| engine process | alive | alive |
-
-The connection thread unwinds and that socket is **dead while still looking open**: no error, no
-close, so nothing on the client side triggers a reconnect. The tab keeps a live WebSocket that will
-never answer again. Worse, the `Close` handler never runs either, so the socket's entries in
-`listeners`, `drivers` and `subscribers` are never retired, and it stays in `server.getClients()` —
-which is exactly what the sender thread prunes against, so a dead socket can go on being handed
-3 Mbit/s of audio.
-
-Hence the one `try/catch` wrapping the whole dispatch, and why `onMessage` is a named lambda rather
-than an inline one: the wrapper needs something to wrap.
+A handler that fails without a word leaves its socket **dead while still looking open**: no error,
+no close, so nothing on the client side triggers a reconnect, and a socket nobody retires can go on
+being handed 3 Mbit/s of audio. Two failures are reachable from any client: a message that is not a
+JSON object (`[]`, `null`, `"hi"`) and a field of the wrong type (`{"type":"transport","action":5}`).
+Both, and a panic in a handler, are answered `malformed message: …` and the socket stays
+(`apps/k7-daw-backend/packages/k7-runtime-server/docs/server.md`).
 
 ## No thread the engine depends on waits on a peer
 
-IXWebSocket's server sockets send **blocking**: `send()` spins until the peer has drained what it
-was given, and gives up only on a socket error or a timeout — and both of its timeouts, the send
-one and the ping, default to *never*. A peer that stops reading without closing — a laptop lid, a
-stalled tunnel — is therefore a thread parked for as long as the peer stays. If that thread is the
-message thread, every apply, transport command, recorder report and watchdog stops for every session
-while the audio plays on, which looks exactly like a hang.
+A peer that stops reading without closing — a laptop lid, a stalled tunnel — must never park a
+thread the engine needs. If it parked the message thread, every apply, transport command, recorder
+report and watchdog would stop for every session while the audio plays on, which looks exactly like
+a hang.
 
-Two things hold it off. `Serve.cpp` builds the server with a ping (`kPingIntervalSecs`) and a send
-timeout (`kSendTimeoutSecs`), so a stuck peer is closed and the Close handler retires it. And no JSON
-is sent from the thread that produced it: `Outbox.h` queues it for one writer thread, which skips a
-state frame for a socket already behind (it is superseded twenty times a second) and never skips a
-reply. The audio stream has had its own sender thread all along. What remains is that a stuck peer
-delays the OTHER clients' JSON by up to the send timeout, since the writer serves them in order.
-Measured with a client that pauses its socket while a second one floods `list-audio-devices`, whose
-replies are broadcast:
+So each socket has its own outbox and writer, a ping every 10 s and a send that times out after 5 s:
+a stuck peer is closed and costs only itself, a state frame is skipped for a socket already behind
+(it is superseded twenty times a second) and a reply never is. The audio stream has its own sender
+thread (`apps/k7-daw-backend/packages/k7-runtime-server/docs/server.md`, `docs/broadcast.md`).
 
-| | no deadline, sends on the message thread | deadline only | deadline and outbox |
-|---|---|---|---|
-| `list-sessions` from the second client | never answered in 34 s | answered from 10 s on | answered from 6 s on |
-| the stuck peer | stays connected | closed, `Send timeout` | closed, `Send timeout` |
-
-**Nothing is deflated.** IXWebSocket offers permessage-deflate, but this build never agrees to it:
-the handshake answers a browser's offer without the extension header, and wire bytes equal payload
-bytes (measured at 1.004 with the header overhead). The audio stream costs its raw 350 KB/s per
-listener and no compression CPU — so that is not where to look for the sender thread's time.
+**Nothing is deflated.** The server never agrees to permessage-deflate: wire bytes equal payload
+bytes, and the audio stream costs its raw 350 KB/s per listener and no compression CPU — so that is
+not where to look for the sender thread's time.
 
 ## The message thread never waits on the parameter-query lock
 
@@ -443,7 +410,7 @@ disk that stalls (`docs/recorder.md`).
   every 5 ms tick.
 - **A queued `project`, `tracks` or `set-plugin-param` a newer one overtook is skipped**, so the
   documents and knob writes that pile up behind a slow apply are not each run after it; every other
-  verb fences them, so order between verbs holds (`docs/supersede.md`).
+  verb fences them, so order between verbs holds (`apps/k7-daw-backend/packages/k7-runtime-server/docs/supersede.md`).
 - **An audition with no length decodes at most 30 s**, since the sampler decodes its excerpt whole on
   the message thread before the note fires (`docs/engineHost.md`).
 
@@ -463,9 +430,8 @@ disk that stalls (`docs/recorder.md`).
   cache file is sized from them.
 - **`--decode` refuses a header it cannot trust** — no channel or more than 32, a rate past
   768 kHz, longer than twelve hours — before a byte of audio is written.
-- **A client message is capped at 64 MiB** by a fetch-time patch (`engine/patches/ixwebsocket.cmake`):
-  IXWebSocket buffers a whole frame before anything reads it and its own limit is 2^63 bytes, so one
-  message could exhaust memory. A frame past the cap closes that connection.
+- **A client message is capped at 64 MiB** (`apps/k7-daw-backend/packages/k7-runtime-server/src/server/conn.rs`): a frame is buffered whole
+  before anything reads it, so one message could exhaust memory. A frame past the cap closes that connection.
 - **A plugin, model or instrument that crashes the engine as it loads is refused at its second
   crash**, by a marker written for the length of each load (`docs/crashes.md`). AIDA-X and Proteus
   files are checked first, every tensor against the shape the header declares, since RTNeural's

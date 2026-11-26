@@ -18,7 +18,7 @@ use std::collections::{HashMap, HashSet};
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::{Arc, Mutex, MutexGuard};
 
-/// Connections past this are dropped at accept (IXWebSocket's default).
+/// Connections past this are dropped at accept.
 pub const MAX_CONNECTIONS: usize = 32;
 /// The most sessions an engine holds (`EngineHost::kMaxSessions`).
 pub const MAX_SESSIONS: usize = 64;
@@ -33,7 +33,7 @@ pub struct Client {
 }
 
 impl Client {
-    /// ANY THREAD. A reply to this socket, as the C++ server printed it.
+    /// ANY THREAD. A reply to this socket, printed as nlohmann prints it.
     pub fn send(&self, j: &Value) -> bool {
         self.outbox.post(&Arc::from(json::dump(j)), false)
     }
@@ -48,7 +48,7 @@ impl Client {
     }
 }
 
-/// Who listens to, drives and is told about what, by client id; one lock, as the C++ server's `listenersMx`.
+/// Who listens to, drives and is told about what, by client id, under one lock.
 #[derive(Default)]
 pub struct Bindings {
     /// Who asked for audio, and for which session.

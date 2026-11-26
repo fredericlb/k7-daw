@@ -1,7 +1,7 @@
 // PathRoots.h — which files a document off the wire may make the engine READ or WRITE: under one of the
 // allowed roots once symlinks are resolved, and never a UNC path. JUCE-free so tests/ has it in a FAST binary.
 // The one thing a reader would get wrong: with no roots set — the CLI's one-shot modes — every path but a
-// UNC one passes; serve() sets them before the first document is read (docs/pathRoots.md).
+// UNC one passes; the server sets them before the first document is read (docs/pathRoots.md).
 
 #pragma once
 
@@ -30,10 +30,10 @@ struct PathRootSet {
     std::vector<std::string> write;
 };
 
-/** The process's roots; serve() calls it once, before anything is read. */
+/** The process's roots; the server sets them once, before anything is read. */
 void setPathRoots(PathRootSet roots);
 
-/** The roots serve() would set: the state directory, `$STUDIO_ENGINE_ROOTS`, and the temp directory for reads. */
+/** The roots the server sets: the state directory, `$STUDIO_ENGINE_ROOTS`, and the temp directory for reads. */
 PathRootSet defaultPathRoots(const std::string& stateDir);
 
 /** A file a document names for reading: refused when UNC, or outside the read roots once those are set. */

@@ -433,7 +433,7 @@ re-plays on every row it crosses, which is what makes a transposition judgeable 
 128-lane grid.
 
 It is `{ type: "note-preview", track, key, vel }`, straight down the engine's socket rather than
-through the file service (`apps/k7-daw-engine/k7-runtime/docs/protocol.md`). Two things follow from the choice:
+through the file service (`apps/k7-daw-backend/packages/k7-runtime-server/docs/protocol.md`). Two things follow from the choice:
 
 - **It goes through the TRACK's own chain**, so what you hear is the instrument you are writing
   for — unlike `preview`, which loads a file into a hidden sampler and bypasses everything.

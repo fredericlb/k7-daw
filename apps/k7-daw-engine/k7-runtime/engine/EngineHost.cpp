@@ -806,7 +806,7 @@ void EngineHost::previewNote(const std::string& session, const std::string& trac
     if (track == nullptr) return;
     // Never 0: a note-on with velocity 0 IS a note-off, so the quietest audition would be silence.
     const int vel = juce::jlimit(1, 127, (int) std::lround(velocity * 127.0f));
-    // playGuideNote owns the note-off on a 100 ms timer, and forceNote skips a preference about a HOST's keyboard (docs/protocol.md).
+    // playGuideNote owns the note-off on a 100 ms timer, and forceNote skips a preference about a HOST's keyboard (apps/k7-daw-backend/packages/k7-runtime-server/docs/protocol.md).
     track->playGuideNote(juce::jlimit(0, 127, key), te::MidiChannel(1), vel, true, true, true);
 }
 
@@ -1072,7 +1072,7 @@ private:
     // Every five seconds at the 50 ms tick — a hundredth of the grace, so what a person sees is the grace and not the sweep.
     static constexpr int kTicksPerRelease = 100;
     static constexpr int kReleasesPerReap = 12;   // …and the empty-session sweep once a minute
-    /** How many ticks an IDLE session skips before sending one anyway: five is 4 Hz, slow enough to leave a profile and quick enough to feel live. docs/protocol.md. */
+    /** How many ticks an IDLE session skips before sending one anyway: five is 4 Hz, slow enough to leave a profile and quick enough to feel live. apps/k7-daw-backend/packages/k7-runtime-server/docs/protocol.md. */
     static constexpr int kIdleDivisor = 5;
     // Twenty ticks is one second: the callback watchdog's cadence (docs/audioDevice.md).
     static constexpr int kTicksPerPulse = 20;

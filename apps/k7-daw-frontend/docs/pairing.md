@@ -2,7 +2,7 @@
 
 An engine answers its own machine — and the server's relay, which reaches it as the machine — without
 asking anything. A phone, a tablet or another computer reaching it over the local network has to be
-paired first, once. What the engine decides and why is `apps/k7-daw-engine/k7-runtime/docs/pairing.md`; this page
+paired first, once. What the engine decides and why is `apps/k7-daw-backend/packages/k7-runtime-server/docs/pairing.md`; this page
 is what k7 draws around it.
 
 ## Where the request is made

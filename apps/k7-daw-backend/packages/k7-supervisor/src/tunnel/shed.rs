@@ -6,7 +6,7 @@
 pub const DROP_ABOVE_BYTES: usize = 256 * 1024;
 /// Reported at least this often under a backlog that never clears: a minute of `state` frames.
 pub const SHED_REPORT_EVERY: u64 = 1200;
-/// The audio stream's magic, "LSTR" as a little-endian u32 (`AudioSender.cpp`).
+/// The audio stream's magic, "LSTR" as a little-endian u32 (k7-runtime-server's `wire/stream.rs`).
 const STREAM_MAGIC: [u8; 4] = *b"RTSL";
 
 /// A frame the next one makes worthless: the engine's `state`, or a frame of its audio stream.

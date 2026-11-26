@@ -375,7 +375,7 @@ void PluginEditorController::persist(const std::string& id) {
     if (pl == sess_->pluginsById.end() || pl->second == nullptr || sp == sess_->presetSaveById.end())
         return;
     auto& plugin = *pl->second;
-    // DocJson already dropped a bad one; this is the one place the file is touched, so it checks again.
+    // The Rust server's parse already dropped a bad one; this is the one place the file is touched, so it checks again.
     const bool target = hasExtensionCi(sp->second, ".vstpreset") && writeAllowed(sp->second);
 
     // Skip when nothing changed since the last save (autosave idle no-op).

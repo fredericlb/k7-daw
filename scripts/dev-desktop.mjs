@@ -68,6 +68,12 @@ const TARGETS = {
       { path: join(engineDir, "engine"), recursive: true, match: isCxx },
       { path: join(engineDir, "server"), recursive: true, match: isCxx },
       { path: engineDir, recursive: false, match: cmakeFiles },
+      // The Rust server the engine links as a static library (apps/k7-daw-backend/packages/k7-runtime-server/docs/link.md).
+      {
+        path: join(packagesDir, "k7-runtime-server"),
+        recursive: true,
+        match: isRustSource,
+      },
     ],
     build: buildEngine,
   },
@@ -104,7 +110,7 @@ const TARGETS = {
       {
         path: packagesDir,
         recursive: true,
-        skip: ["k7-supervisor"],
+        skip: ["k7-supervisor", "k7-runtime-server"],
         match: (b) => b.endsWith(".rs") || b === "Cargo.toml",
       },
       {

@@ -1,4 +1,4 @@
-//! state_frame.rs — the ~20 Hz `state` frame as JSON, the C++ server's tree field for field and its rounding
+//! state_frame.rs — the ~20 Hz `state` frame as JSON, the wire's tree field for field and its rounding
 //! (a peak to four decimals, a level to a hundredth of a dB; the playhead, needles and master keep full precision).
 //! What a reader gets wrong: `master` is a float in the engine, widened to a double and printed whole, as
 //! nlohmann did, so a frame holds a 17-digit master level beside its rounded `levels`.

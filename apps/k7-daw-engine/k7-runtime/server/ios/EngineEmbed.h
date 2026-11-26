@@ -8,7 +8,7 @@
 extern "C" {
 #endif
 
-/** Serve on `port` until k7_engine_quit(); returns serve()'s exit code. Once per process. */
+/** Serve on `port` until k7_engine_quit(); returns the serve's exit code. Once per process. */
 int k7_engine_serve(int port);
 
 /** Ask a running k7_engine_serve to return; safe from any thread. */

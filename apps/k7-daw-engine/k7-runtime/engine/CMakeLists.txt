@@ -70,6 +70,7 @@ add_library(studio_engine STATIC
     capi/PluginsApi.cpp
     capi/MachineApi.cpp
     capi/RenderApi.cpp
+    capi/CliApi.cpp
     # A validated ProjectDoc read from JSON, no checks of its own (the Rust server validates).
     DocReader.cpp)
 

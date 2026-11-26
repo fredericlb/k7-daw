@@ -56,8 +56,8 @@ Anyone may run an engine and heartbeat it to an open registry, so trust is layer
 |---|---|---|
 | Identity | `engine-id.json` holds an id, a token (handed to the engine, echoed on `whoami`, readable by browsers) and a **tunnel secret** the supervisor alone sends. The registry binds an id to the first secret it sees, on disk; the token alone never takes a bound id back. | `apps/k7-daw-backend/packages/k7-supervisor/src/identity.rs`, `apps/k7-daw-backend/packages/k7-engine/src/registry/bindings.rs` |
 | Registry admission | At most 1000 engines listed, 30 new ids per source address per minute | `apps/k7-daw-backend/packages/k7-engine/src/registry/mod.rs` |
-| Browser page | Origin allow-list | `apps/k7-daw-engine/k7-runtime/server/Pairing.cpp` (`originAllowed`) |
-| LAN device | Pairing | `apps/k7-daw-engine/k7-runtime/server/ServePairing.cpp` |
+| Browser page | Origin allow-list | `apps/k7-daw-backend/packages/k7-runtime-server/src/pairing/net.rs` (`origin_allowed`) |
+| LAN device | Pairing | `apps/k7-daw-backend/packages/k7-runtime-server/src/pairing/gate.rs` |
 | Relay | Ticket bound to account; claim required beyond probing | `apps/k7-daw-backend/packages/k7-engine/src/registry/ticket.rs`, `apps/k7-daw-backend/packages/k7-engine/src/relay/gate/` |
 | Auto-pick | Only the account's remembered engine, one reached directly, or the server's own engine is taken without a click | `apps/k7-daw-frontend/packages/engine-browser/src/choose.ts` (`mayAutoPick`) |
 
@@ -69,7 +69,7 @@ The account's files live on the server. When a project opens on an engine, the f
 
 | Path | What |
 |---|---|
-| `apps/k7-daw-engine/k7-runtime/` | The engine (C++20, JUCE via Tracktion Engine, IXWebSocket) |
+| `apps/k7-daw-engine/k7-runtime/` | The engine (C++20, JUCE via Tracktion Engine), served by the Rust crate `apps/k7-daw-backend/packages/k7-runtime-server` it links |
 | `apps/k7-daw-backend/packages/k7-supervisor/` | The supervisor (Rust: tokio, rustls, tokio-tungstenite, hyper, `ort` over ONNX Runtime) |
 | `apps/k7-daw-android/` | The Android app (Kotlin, Capacitor) |
 | `apps/k7-daw-engine/scripts/` | Build and packaging scripts for the engine and supervisor |
@@ -88,7 +88,7 @@ Several contracts have a C++ side and a TypeScript side kept equal by hand:
 
 | Contract | C++ | TypeScript |
 |---|---|---|
-| ProjectDoc | `apps/k7-daw-engine/k7-runtime/engine/ProjectDoc.h`, `apps/k7-daw-engine/k7-runtime/server/DocJson.cpp` | `apps/k7-daw-frontend/packages/engine-protocol/project.ts` |
+| ProjectDoc | `apps/k7-daw-engine/k7-runtime/engine/ProjectDoc.h`, `apps/k7-daw-backend/packages/k7-runtime-server/src/doc/` | `apps/k7-daw-frontend/packages/engine-protocol/project.ts` |
 | Host protocol (supervisor ↔ app) | `apps/k7-daw-backend/packages/k7-supervisor/src/protocol/mod.rs` | the Rust `apps/k7-daw-backend/packages/k7-local/src/protocol.rs`, the Kotlin in `apps/k7-daw-android` |
 | `~/.k7` layout | `apps/k7-daw-backend/packages/k7-supervisor/src/paths.rs` | `apps/k7-daw-frontend/packages/engine-client/src/paths.ts` |
 | URL rules (registry, family, cache key) | `apps/k7-daw-backend/packages/k7-supervisor/src/urls.rs` | `apps/k7-daw-frontend/packages/web-protocol/services.ts` |

@@ -215,7 +215,7 @@ command's reply would sit behind seconds of meters nobody will see.
 
 So past 256 KB unsent toward the peer (`DROP_ABOVE_BYTES` in `src/tunnel/shed.rs`), those two kinds are
 **dropped**, and nothing else is. They are the two the engine itself skips for a socket that is
-behind (`apps/k7-daw-engine/k7-runtime/server/Outbox.h`, `AudioSender.cpp`): the next `state` carries the whole
+behind (`apps/k7-daw-backend/packages/k7-runtime-server/src/server/outbox.rs`, `audio.rs`): the next `state` carries the whole
 transport again, and the audio listener reads a gap in the sequence and re-cushions. A reply, a
 `plugin-params-live` value, a recorder's `takes`, a job's answer and every file chunk are always sent
 — none of them is superseded by the next. A jobs channel is never shed at all.

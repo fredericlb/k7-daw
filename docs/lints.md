@@ -53,7 +53,7 @@ tracks and what it merely knows about, never what is ignored and never a build o
 **What counts as "a path into this repo"** is anchored on `apps/` from the repo root, and on `packages/` or a sibling app (`../k7-daw-…`)
 written from a page, and deliberately NOT on `docs/` or `scripts/`. Those two are written
 relative to the zone a page is talking about: `architecture.md` says `docs/picture.md` meaning
-k7's, and moteur's `protocol.md` says `scripts/two-sessions.ts` meaning its own. A check anchored
+k7's, and moteur's `cliModes.md` says `scripts/served-render.ts` meaning its own. A check anchored
 on them would report a hundred sentences that are perfectly clear to a reader.
 
 The pattern's lookbehind is what keeps `[stems.md](../apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/stems.md)` from being

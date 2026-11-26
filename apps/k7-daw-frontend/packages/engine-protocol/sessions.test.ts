@@ -87,36 +87,40 @@ describe("the stamped/unstamped sets", () => {
   });
 });
 
-// The engine's handlers are where a reply is stamped or not; this reads them, so a new verb cannot ship unclassified.
+// The engine server's handlers are where a reply is stamped or not; this reads them, so a new verb cannot ship unclassified.
 describe("the engine's own send sites", () => {
   const dir = join(
     import.meta.dirname,
-    "../../../k7-daw-engine/k7-runtime/server",
+    "../../../k7-daw-backend/packages/k7-runtime-server/src/server",
   );
   const source = readdirSync(dir)
-    .filter((f) => /\.(cpp|h)$/.test(f))
+    .filter((f) => f.endsWith(".rs"))
     .map((f) => readFileSync(join(dir, f), "utf8"))
     .join("\n");
   const sites = (verb: RegExp): string[] =>
     [...source.matchAll(verb)].map((m) => m[1]);
   const unstamped = [
     ...sites(
-      /\b(?:broadcast|broadcastLocal)\(\s*(?:json)?\{\{"type",\s*"([a-z-]+)"/g,
+      /\b(?:broadcast|broadcast_local)\(\s*&json!\(\{\s*"type":\s*"([a-z-]+)"/g,
     ),
-    ...sites(/\bsendTo\([^,]+,\s*(?:json)?\{\{"type",\s*"([a-z-]+)"/g),
+    ...sites(/\bsend_to\([^,]+,\s*&json!\(\{\s*"type":\s*"([a-z-]+)"/g),
   ];
   const stamped = sites(
-    /\bbroadcastTo\(\s*\w+,\s*(?:json)?\{\{"type",\s*"([a-z-]+)"/g,
+    /\bbroadcast_to\(\s*[^,]+,\s*json!\(\{\s*"type":\s*"([a-z-]+)"/g,
   );
 
   // A scan that finds nothing passes everything, so it must keep finding what it finds today.
   it("finds the send sites", () => {
-    expect(unstamped.length).toBeGreaterThanOrEqual(8);
+    expect(unstamped.length).toBeGreaterThanOrEqual(5);
     expect(stamped.length).toBeGreaterThanOrEqual(8);
   });
 
+  // A warning that belongs to no project is said unstamped, as the wire's page says of `engine-warning`.
   it("classifies every unstamped reply as engine-global", () => {
-    const global = new Set<string>(ENGINE_GLOBAL_REPLIES);
+    const global = new Set<string>([
+      ...ENGINE_GLOBAL_REPLIES,
+      "engine-warning",
+    ]);
     expect(unstamped.filter((t) => !global.has(t))).toEqual([]);
   });
 

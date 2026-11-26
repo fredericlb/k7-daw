@@ -42,7 +42,7 @@ it, measured on macOS: 2.7 GB as clones, 0.85 GB as archives.
 | a sparse git fetch, history dropped after | Surge | `resources/data` is 480 MB the engine never reads, and an archive cannot leave it out; `surge-fetch.cmake` writes `VERSION_GIT_INFO`, which Surge's version script reads before asking git |
 
 Nothing that configures needs git either: sfizz runs `git submodule update` only in a tree that has a
-`.git`, and its build id is then empty. The shallow clones left — IXWebSocket, QuickJS, RTNeural and
+`.git`, and its build id is then empty. The shallow clones left — QuickJS, RTNeural and
 NeuralAmpModelerCore — keep theirs.
 
 A hash pins the bytes, not the URL: GitHub's and GitLab's generated archives are stable for a given

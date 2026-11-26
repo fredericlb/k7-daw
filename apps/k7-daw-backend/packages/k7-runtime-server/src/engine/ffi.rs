@@ -1,7 +1,7 @@
 //! ffi.rs — k7-runtime's `engine/capi/k7_engine*.h`, field for field: the table of area tables and each area's
 //! functions, `#[repr(C)]`. `tests/all/engine_abi.rs` holds every table's field names to its header, in order.
-//! What a reader gets wrong: an area not built yet is a `*const c_void` slot here and NULL in C++; its milestone
-//! turns the slot into its own table type, defined in a module of its own beside this one.
+//! What a reader gets wrong: an area is a `*const c_void` slot here, NULL when the engine lacks it; its own
+//! module beside this one defines its table type and casts the slot.
 
 // Each unsafe function states its condition in its one-line doc, which the comment rule keeps to one line.
 #![allow(clippy::missing_safety_doc)]
@@ -68,7 +68,7 @@ macro_rules! table {
 pub(crate) use table;
 
 table! {
-    /// What `k7_engine_api()` returns; the area tables other than `core` are NULL until built.
+    /// What `k7_engine_api()` returns; an area an engine lacks is NULL.
     K7EngineApi {
         abi: u32,
         size: u32,
@@ -127,6 +127,9 @@ table! {
         message_thread_age_ms: unsafe extern "C" fn(host: *const K7Host) -> f64,
         session_ids: unsafe extern "C" fn(host: *const K7Host, ctx: *mut c_void, each: K7StrEach),
         has_session: unsafe extern "C" fn(host: *const K7Host, id: K7Str) -> i32,
+        install_terminate_handler: unsafe extern "C" fn(),
+        previous_load_death: unsafe extern "C" fn(ctx: *mut c_void, out: K7StrEach),
+        previous_last_plugin: unsafe extern "C" fn(ctx: *mut c_void, out: K7StrEach),
     }
 }
 

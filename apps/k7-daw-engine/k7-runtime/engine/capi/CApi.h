@@ -53,5 +53,6 @@ const K7StateApi* stateApi();
 const K7PluginsApi* pluginsApi();
 const K7MachineApi* machineApi();
 const K7RenderApi* renderApi();
+const K7CliApi* cliApi();
 
 }  // namespace studio::capi

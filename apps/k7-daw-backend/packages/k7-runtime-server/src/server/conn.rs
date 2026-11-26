@@ -7,6 +7,7 @@ use super::ctx::{Client, Ctx};
 use super::dispatch;
 use super::handlers::HandlerTable;
 use super::outbox::Frame;
+use crate::log::say;
 use futures_util::{SinkExt, StreamExt};
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
@@ -19,10 +20,10 @@ use tokio_tungstenite::tungstenite::protocol::WebSocketConfig;
 use tokio_tungstenite::tungstenite::protocol::frame::CloseFrame;
 use tokio_tungstenite::tungstenite::protocol::frame::coding::CloseCode;
 
-/// The handshake must finish within this (IXWebSocket's default).
+/// The handshake must finish within this.
 const HANDSHAKE_TIMEOUT: Duration = Duration::from_secs(3);
-/// A message larger than this is refused by the library; the C++ server had no bound, a project is megabytes.
-const MAX_MESSAGE_BYTES: usize = 256 * 1024 * 1024;
+/// A message larger than this closes the socket: a frame is buffered whole before it is read, a project is megabytes.
+const MAX_MESSAGE_BYTES: usize = 64 * 1024 * 1024;
 
 /// The timers of a socket: a peer silent for a whole ping interval is closed, and one send may wait this long.
 #[derive(Clone, Copy)]
@@ -173,6 +174,6 @@ fn finish(ctx: &Ctx, client: &Client, announced: bool, closed_with: &(u16, Strin
         } else {
             format!(", {reason}")
         };
-        eprintln!("[client] disconnected (code {code}{reason})");
+        say!("[client] disconnected (code {code}{reason})");
     }
 }

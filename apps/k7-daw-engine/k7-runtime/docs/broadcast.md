@@ -58,19 +58,12 @@ declaration order is load-bearing — this is one more entry on that list.
 
 ## The sender is its own thread, and that is not a preference
 
-A `juce::Timer` on the message thread is the obvious spelling and it is not available here.
-The IXWebSocket v12.0.1 sources say why:
-
-* `WebSocketServer` leaves `kSendTimeoutSeconds` at **-1**, and `connectToSocket` sets
-  `_blockingSend = true` for every server-side socket.
-* So `flushSendBuffer` loops on `isReadyToWrite(10)` with `timeoutSecs == 0` — that is,
-  **forever**, until the socket errors or is closed.
-
-Meaning: `sendBinary` does not return until the listener's TCP window drains, without any
-bound. On the message thread, one suspended laptop parks the entire engine — no meters, no
-transport, no project applies — and it reads as a hang with no visible cause. So the sender
-is a thread of its own, `server/AudioSender.cpp`, where the worst a stalled listener costs is that the ring
-overruns and everyone gets a gap.
+A `juce::Timer` on the message thread is the obvious spelling and it is not available here:
+draining the rings and handing frames to sockets is work the message thread must never wait on,
+since one suspended laptop would then park the entire engine — no meters, no transport, no
+project applies — and it reads as a hang with no visible cause. So the sender is a thread of its
+own (`apps/k7-daw-backend/packages/k7-runtime-server/src/server/audio.rs`), and each socket has its own writer, where the worst a
+stalled listener costs is that the ring overruns and everyone gets a gap.
 
 It wakes every 5 ms and drains **everything waiting**, not one frame per pass. One 480-frame
 frame per 10 ms tick is *exactly* the production rate at 48 kHz — zero headroom, so any late
@@ -78,11 +71,9 @@ wake-up adds backlog no later pass can work off, the ring fills within a second 
 full, and what comes out is a permanent 340 ms latency with a third of the audio dropped for
 ever. A ceiling equal to the production rate is not a ceiling, it is a leak.
 
-**What this does not fix, and you should know before trusting it:** the JSON `broadcast()`
-sends from the message thread, and IXWebSocket holds a per-socket write mutex for the whole
-of a send. A listener wedged in the audio path therefore stalls the 20 Hz state frame behind
-that same mutex. Any client can do it, but a 3 Mbit/s subscriber turns it from theoretical
-into likely. Fixing it means giving the JSON path a bounded send too. Measure first.
+A listener wedged in the audio path stalls only its own socket: its JSON and its audio share that
+socket's writer, which is closed after 5 s without progress, and every other socket keeps its
+20 Hz state frame (`apps/k7-daw-backend/packages/k7-runtime-server/docs/server.md`).
 
 ## Nobody listening means nobody pays
 

@@ -16,6 +16,8 @@ pub struct PluginState {
     /// One scan at a time for the whole engine: a second waits its turn here.
     pub scan_lock: Mutex<()>,
     probes: Arc<AtomicUsize>,
+    /// Detached jobs not yet ended: what the executable will not unwind under at exit.
+    pub detached: AtomicUsize,
 }
 
 /// A probe's place among the four; returned when it drops, however the load ended.

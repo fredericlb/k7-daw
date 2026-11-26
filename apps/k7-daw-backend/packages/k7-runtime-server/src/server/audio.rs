@@ -5,6 +5,7 @@
 
 use super::broadcast::codec_of;
 use super::ctx::Ctx;
+use crate::log::say;
 use crate::wire::stream::{self, Chunk};
 use std::collections::{BTreeMap, HashMap, HashSet};
 use std::sync::Arc;
@@ -123,7 +124,7 @@ fn pump(
         // A rate of 0 means this session's tap has never been prepared, and the reader rejects it.
         if got.sample_rate < 8000.0 {
             if counters.warned_no_rate.insert(sid.to_string()) {
-                eprintln!(
+                say!(
                     "[broadcast] the tap on '{sid}' has no sample rate yet — frames withheld until the graph has prepared it"
                 );
             }

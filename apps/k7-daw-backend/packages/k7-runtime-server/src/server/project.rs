@@ -8,6 +8,7 @@ use super::handlers::HandlerTable;
 use super::msg::Malformed;
 use super::supersede::superseded;
 use crate::doc::{Checks, Parsed, parse_project, parse_tracks};
+use crate::log::say;
 use crate::wire::json;
 use serde_json::{Value, json};
 use std::time::Instant;
@@ -49,10 +50,10 @@ fn project(r: &Request) -> Result<(), Malformed> {
     r.ctx.supersede.post_project(&r.session, |ticket| {
         r.ctx.engine.post(move |mt| {
             if superseded(&ticket) {
-                eprintln!("[project] '{name}' superseded before it ran — skipped");
+                say!("[project] '{name}' superseded before it ran — skipped");
                 return;
             }
-            eprintln!(
+            say!(
                 "[project] '{name}' {tempo}bpm {tracks} track(s) {clips} clip(s) {plugins} plugin(s)"
             );
             // A project opened on this engine takes it over: the slot's chain stops, and the supervisor sees it gone.
@@ -64,7 +65,7 @@ fn project(r: &Request) -> Result<(), Malformed> {
             let changes = match mt.apply_project(&session, &doc) {
                 Ok(changes) => changes,
                 Err(why) => {
-                    eprintln!("[project] apply failed: {why}");
+                    say!("[project] apply failed: {why}");
                     ctx.broadcast_to(
                         &session,
                         json!({"type": "error", "message": format!("apply failed: {why}")}),
@@ -93,15 +94,15 @@ fn project(r: &Request) -> Result<(), Malformed> {
 /// The diff the engine ran, in the log as well as at whichever client is listening.
 fn log_changes(changes: &[String], ms: f64) {
     if changes.is_empty() {
-        eprintln!("[applied] no changes (project already current)");
+        say!("[applied] no changes (project already current)");
         return;
     }
-    eprintln!("[applied] {} change(s) in {ms}ms", changes.len());
+    say!("[applied] {} change(s) in {ms}ms", changes.len());
     for c in changes.iter().take(MAX_LOGGED_CHANGES) {
-        eprintln!("    {c}");
+        say!("    {c}");
     }
     if changes.len() > MAX_LOGGED_CHANGES {
-        eprintln!("    … and {} more", changes.len() - MAX_LOGGED_CHANGES);
+        say!("    … and {} more", changes.len() - MAX_LOGGED_CHANGES);
     }
 }
 
@@ -142,7 +143,7 @@ fn tracks(r: &Request) -> Result<(), Malformed> {
             }
             // No `busy` and no `applied`: this path is incremental, and six announcements a second would drown the changeset.
             if let Err(why) = mt.apply_tracks(&session, &json::dump(&plan)) {
-                eprintln!("[tracks] apply failed: {why}");
+                say!("[tracks] apply failed: {why}");
             }
         });
     });

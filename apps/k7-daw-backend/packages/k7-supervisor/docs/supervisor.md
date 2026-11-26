@@ -19,7 +19,7 @@ are in [supervisorPolicy.md](supervisorPolicy.md).
 
 The config file has the settings' schema (`registryUrls`, `port`, `audioPriority`, `onnxProviders`,
 `instruments`, `deviceTokens`, `lanOpen` — whether a device on this network drives the engine unpaired,
-`apps/k7-daw-engine/k7-runtime/docs/pairing.md`), **`stems` and `instrumental`** — the chain THIS machine separates
+`apps/k7-daw-backend/packages/k7-runtime-server/docs/pairing.md`), **`stems` and `instrumental`** — the chain THIS machine separates
 with, by what the cut wants, since which module and model it runs is that machine's CPU, GPU and
 downloaded models, not an account's ([stemSplit.md](stemSplit.md)); its owner names them
 from the studio's Engines card as well as by hand, through the `chains` job
@@ -165,7 +165,7 @@ the same checks as above. The count of renders in flight rides the snapshot as `
 The engine opens its socket to web pages only from the studios it should serve: the supervisor
 starts it with `STUDIO_ENGINE_ALLOWED_ORIGINS` set to the origins of the studios this machine is
 listed at (`engine::allowed_origins`), the rest of that rule being the engine's
-(`apps/k7-daw-engine/k7-runtime/docs/pairing.md`).
+(`apps/k7-daw-backend/packages/k7-runtime-server/docs/pairing.md`).
 
 ## The crates, and why each
 

@@ -1,4 +1,4 @@
-//! dispatch.rs — what happens to one text frame, in the C++ server's order: the size screen, the parse, the
+//! dispatch.rs — what happens to one text frame, in the wire's order: the size screen, the parse, the
 //! gate, the session's length and ceiling, the first real message's line and subscription, then the handler.
 //! What a reader gets wrong: the one `catch_unwind` and the `Malformed` answer are load-bearing — a handler's
 //! failure is answered and logged and the socket stays, where no answer would leave a client deaf for good.
@@ -6,6 +6,7 @@
 use super::ctx::{Client, Ctx, MAX_SESSION_ID_BYTES, MAX_SESSIONS, Request};
 use super::handlers::HandlerTable;
 use super::msg::{self, Malformed, Msg};
+use crate::log::say;
 use crate::wire::catalogue::{OVERRIDE_QUERIES, PROBE_QUERIES, SUPERSEDABLE, is};
 use serde_json::json;
 use std::collections::hash_map::Entry;
@@ -45,11 +46,11 @@ pub fn handle(
     match outcome {
         Ok(Ok(())) => {}
         Ok(Err(Malformed(what))) => {
-            eprintln!("[client] refused a message: {what}");
+            say!("[client] refused a message: {what}");
             error(client, &format!("malformed message: {what}"));
         }
         Err(_) => {
-            eprintln!("[client] refused a message (unknown exception)");
+            say!("[client] refused a message (unknown exception)");
             error(client, "malformed message");
         }
     }
@@ -88,7 +89,7 @@ fn route(
     if !probe {
         if !*announced {
             *announced = true;
-            eprintln!("[client] connected ({})", client.ip);
+            say!("[client] connected ({})", client.ip);
         }
         if !is(OVERRIDE_QUERIES, &ty) {
             let joined = match ctx.bindings().subscribers.entry(client.id) {
@@ -117,7 +118,7 @@ fn route(
         }),
         None => {
             // A message we don't understand is version skew: logged here too, or the only trace is an error the client may ignore.
-            eprintln!("[client] unknown message type: '{ty}'");
+            say!("[client] unknown message type: '{ty}'");
             error(client, &format!("unknown message type: {ty}"));
             Ok(())
         }

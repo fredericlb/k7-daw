@@ -3,9 +3,9 @@
 //! What a reader gets wrong: `ENGINE_GLOBAL_REPLIES` and `PER_SESSION_REPLIES` are engine-protocol's `sessions.ts`,
 //! held to it by `tests/all/catalogue.rs`, and a client's filter is safe only while every other reply is stamped.
 
-/// Every verb a client sends, the pairing ones included; each later milestone answers its share.
+/// Every verb a client sends, the pairing ones included.
 pub const CLIENT_VERBS: &[&str] = &[
-    // a project: ServeProject.cpp
+    // a project: server/project.rs and transport.rs
     "project",
     "tracks",
     "flush",
@@ -16,7 +16,7 @@ pub const CLIENT_VERBS: &[&str] = &[
     "arm",
     "recorder",
     "record-enable",
-    // plugins: ServePlugins.cpp
+    // plugins: server/plugins.rs and state.rs
     "plugin-scan",
     "list-plugins",
     "rescan-plugins",
@@ -32,7 +32,7 @@ pub const CLIENT_VERBS: &[&str] = &[
     "watch-plugin-params",
     "subscribe-waveform",
     "unsubscribe-waveform",
-    // the machine: ServeMachine.cpp
+    // the machine: server/machine.rs, broadcast.rs and whoami.rs
     "broadcast",
     "list-sessions",
     "drop-session",
@@ -44,9 +44,9 @@ pub const CLIENT_VERBS: &[&str] = &[
     "instrument-status",
     "whoami",
     "hello",
-    // a bounce: ServeRender.cpp
+    // a bounce: server/render.rs
     "render",
-    // pairing: ServePairing.cpp
+    // pairing: the gate, pairing/gate.rs
     "pair-request",
     "pair",
     "list-pair-requests",
@@ -76,7 +76,7 @@ pub const OVERRIDE_QUERIES: &[&str] = &[
     "render",
 ];
 
-/// The verbs a newer one of the same session may skip while still queued (k7-runtime's docs/supersede.md).
+/// The verbs a newer one of the same session may skip while still queued (`docs/supersede.md`).
 pub const SUPERSEDABLE: &[&str] = &["project", "tracks", "set-plugin-param"];
 
 /// The pairing verbs only the machine's own clients may send; a LAN peer is refused with `local-only`.

@@ -1,7 +1,7 @@
 //! pending.rs — which read-only queries already wait on the message thread, so an identical one is not queued behind
-//! them: their answer is broadcast, so the waiting one answers the asker too (k7-runtime's `PendingQueries.h`).
+//! them: their answer is broadcast, so the waiting one answers the asker too (`docs/supersede.md`).
 //! What a reader gets wrong: a key leaves as its job STARTS, so a query asked while one runs is queued again; a
-//! ticket whose job never ran (the host went first) frees its key when dropped, which C++ never needed.
+//! ticket whose job never ran (the host went first) frees its key when dropped.
 
 use std::collections::HashSet;
 use std::sync::{Arc, Mutex, MutexGuard};

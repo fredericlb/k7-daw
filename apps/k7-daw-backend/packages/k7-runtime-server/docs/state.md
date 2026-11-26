@@ -2,8 +2,8 @@
 
 The state frame, a finished take, a plugin's parameters and an engine warning are pushed by the engine
 without a request. They live in `src/server/state.rs` and `state_frame.rs`, over the ABI's state area
-(`engine/capi/k7_engine_state.h`, `src/engine/state.rs`). The wire is the C++ server's, byte for byte
-(`docs/rust-engine-server-plan.md`).
+(`engine/capi/k7_engine_state.h`, `src/engine/state.rs`). The wire is every installed client's, byte
+for byte (`protocol.md`).
 
 ## The timer stays in the engine
 
@@ -31,16 +31,15 @@ without a request. They live in `src/server/state.rs` and `state_frame.rs`, over
   rewrites the project at 20 Hz by forgetting a check; `watch-plugin-params` turns the live stream on and off,
   and the watch set is the engine's, so a second watcher is a no-op.
 
-## Held to the C++
+## Held to a fixture
 
 - **The frame's bytes are `fixtures/state_frame.txt`**: each line is an engine snapshot as JSON and the exact
-  frame the C++ printed for it. `tests/StateFrame_test.cpp` holds the C++ to the fixture (its `frame()` is a
-  copy of `Serve.cpp`'s builder, so it proves the fixture, not `Serve.cpp`) and `tests/all/server_state.rs`
-  holds the Rust frame to it through the fake engine. The cases include `-0.0` from a rounded level, a float
+  frame the clients already read for it, frozen; `tests/all/server_state.rs` holds the frame to it through the
+  fake engine. The cases include `-0.0` from a rounded level, a float
   master level printed whole, a 64-bit `from`, and escaped and non-ASCII names.
-- **The rounding is the C++'s**: a peak to four decimals, a level to a hundredth of a dB, computed on the
+- **The rounding is the wire's**: a peak to four decimals, a level to a hundredth of a dB, computed on the
   float widened to a double; the playhead, needles and the master level keep their full precision.
-- **The real timer is checked once on the real host** (`tests/StateApi_test.cpp`, slow): a frame arrives on
+- **The real timer is checked once on the real host** (`apps/k7-daw-engine/k7-runtime/tests/StateApi_test.cpp`, slow): a frame arrives on
   the message thread with a project's tracks. The take and parameter sinks are installed there but fired only
   in the fake, since a real recording or a plugin editor is not something a test of the door can make.
 

@@ -20,6 +20,10 @@ tokio = { workspace = true, features = ["sync", "rt-multi-thread", "net", "time"
 tokio-tungstenite.workspace = true
 futures-util.workspace = true
 
+[target.'cfg(unix)'.dependencies]
+# `_exit`, for an executable leaving with detached work still running (`entry.rs`).
+libc = "0.2"
+
 [dev-dependencies]
 tokio = { workspace = true, features = ["sync", "rt-multi-thread", "net", "time", "macros"] }
 

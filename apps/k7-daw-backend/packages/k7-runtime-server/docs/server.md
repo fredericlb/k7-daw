@@ -1,21 +1,20 @@
 # The socket core
 
 `src/server/` is the engine's WebSocket server: what stands between a client's socket and the
-engine's C ABI. The wire it speaks is the C++ server's, byte for byte (`docs/rust-engine-server-plan.md`);
+engine's C ABI. The wire it speaks is every installed client's, byte for byte (`protocol.md`);
 who may drive is `pairing` (`pairing.md`); the engine behind it is `abi.md`.
 
 ## One task pair per socket
 
-- **A socket owns its queue and its writer.** The C++ server shared one outbox and one writer thread, so a
-  stuck peer delayed every other socket's JSON by the send timeout. Here the writer is per socket: a peer
-  that stops reading costs only itself, and is closed after 5 s.
+- **A socket owns its queue and its writer.** One writer shared by every socket would let a stuck peer delay
+  every other socket's JSON by the send timeout; per socket, a peer that stops reading costs only itself,
+  and is closed after 5 s.
 - **A reply is kept, a state frame is droppable.** A droppable frame is refused while the socket has more than
-  64 KiB unsent; a reply is refused only past 32 MiB, which means the writer is stuck. The caps are per socket
-  where C++ had them across all of them.
+  64 KiB unsent; a reply is refused only past 32 MiB, which means the writer is stuck. The caps are per socket.
 - **A ping every 10 s, and a peer that answers none for a whole interval is closed.** tungstenite does not
   ping by itself; any frame received counts as an answer.
 - **The reader runs the handler inline.** A handler must not block: work for the message thread is posted,
-  anything that waits is spawned. This is the C++ thread-per-connection rule without the thread.
+  anything that waits is spawned.
 
 ## Order of a frame
 
@@ -39,8 +38,8 @@ the line and who binds the socket's subscription (`wire::catalogue`).
 - **SIGINT and SIGTERM post a quit from a task**, never from the handler; on stop every socket is told
   `1001 going away` and given a moment to hear it.
 
-## Not here yet
+## The executable's exit
 
-The handler table has `whoami`, `hello`, the project and transport verbs (`project.md`) and `watch-plugin-params`
-(`state.md`): each later milestone adds one line to `handlers::table`. The machine verbs and a driver's or listener's
-departure are `machine.md`; the crash details of `safeMode` are not built.
+An executable whose detached work (a plugin scan, a probe) still runs when the server lets go of it leaves with
+`_exit`, without unwinding: that work holds what the process's static destructors free. Inside an app, where
+exiting would take the app with it, the server only returns.

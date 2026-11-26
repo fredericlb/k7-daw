@@ -3,6 +3,7 @@
 //! What a reader gets wrong: the port is bound before the host's loop runs and so before the audio device
 //! opens (a refused connection reads as an absent engine), and `whoami` is answered with the loop not yet running.
 
+use crate::log::say;
 pub mod audio;
 pub mod broadcast;
 pub mod conn;
@@ -165,7 +166,7 @@ pub fn start(api: Api, cfg: ServeConfig) -> Result<Running, String> {
     api.enable_load_guards();
     api.set_safe_mode(cfg.safe_mode_crashes > 0);
     if cfg.safe_mode_crashes > 0 {
-        eprintln!(
+        say!(
             "[safe-mode] started after {} quick crashes: no external plugin will load",
             cfg.safe_mode_crashes
         );
@@ -181,12 +182,12 @@ pub fn start(api: Api, cfg: ServeConfig) -> Result<Running, String> {
         let t0 = since();
         mt.open_audio_device();
         let t1 = since();
-        eprintln!(
+        say!(
             "[startup] tracktion={ctor_ms}ms audioDevice={}ms (device ready at {t1}ms)",
             t1 - t0
         );
         if mt.output_device_name().is_empty() {
-            eprintln!(
+            say!(
                 "warning: no audio OUTPUT device is open — the transport will run but the playhead won't advance and nothing will sound. Pick an output with 'k7 config --set interface'."
             );
         }
@@ -196,7 +197,7 @@ pub fn start(api: Api, cfg: ServeConfig) -> Result<Running, String> {
         .and_then(|l| l.set_nonblocking(true).map(|()| l))
         .map_err(|e| {
             let why = format!("k7-runtime: listen failed: {e}");
-            eprintln!("{why}");
+            say!("{why}");
             why
         })?;
     let addr = listener.local_addr().map_err(|e| e.to_string())?;
@@ -253,7 +254,7 @@ pub fn start(api: Api, cfg: ServeConfig) -> Result<Running, String> {
     }
     drop(entered);
 
-    eprintln!(
+    say!(
         "k7-runtime listening on ws://{}:{}{}",
         cfg.bind_host,
         addr.port(),
@@ -263,7 +264,7 @@ pub fn start(api: Api, cfg: ServeConfig) -> Result<Running, String> {
             format!(" (id {})", cfg.engine_id)
         }
     );
-    eprintln!(
+    say!(
         "[startup] port bound at {}ms (audio device opens on the message loop; its timing is logged when it completes)",
         since()
     );

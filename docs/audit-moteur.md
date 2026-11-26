@@ -39,7 +39,7 @@ stays local to the surface that suffered** as long as no package carries it.
 
 ## B. Security — to be decided, not mechanically corrected
 
-**Settled for the LAN by pairing** (`apps/k7-daw-engine/k7-runtime/docs/pairing.md`): a LAN peer drives, and
+**Settled for the LAN by pairing** (`apps/k7-daw-backend/packages/k7-runtime-server/docs/pairing.md`): a LAN peer drives, and
 reads the token, only once the musician has paired it; the machine and the server's relay need
 nothing. What follows is the situation pairing answered, kept for the reasoning.
 

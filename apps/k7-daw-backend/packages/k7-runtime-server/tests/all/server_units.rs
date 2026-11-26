@@ -1,5 +1,5 @@
 //! server_units.rs — the socket core's pure parts: the screens' rules, the parse bound, the field reads and
-//! the outbox, held to what the C++ tests (Pairing_test, WireJson_test) and the server's docs say.
+//! the outbox, held to what the server's docs say.
 
 use k7_runtime_server::server::msg::{self, Msg};
 use k7_runtime_server::server::outbox::{

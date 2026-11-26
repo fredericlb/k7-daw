@@ -1,7 +1,7 @@
 //! net.rs — what an address or an origin says about a peer: the machine itself, its own network, a page
 //! the engine may serve. Pure functions, ported from Pairing.cpp's free functions with its tests.
 //! What a reader gets wrong: relayed traffic reaches the engine from loopback, so "local" is the peer
-//! address alone (`docs/pairing.md` in k7-runtime).
+//! address alone (`docs/pairing.md`).
 
 /// A peer address the machine itself owns: 127.0.0.0/8, ::1, and the v4-mapped form of either.
 pub fn is_loopback(ip: &str) -> bool {

@@ -1,14 +1,15 @@
 # AGENTS.md — moteur
 
-A **headless audio server** in C++. Receives a compiled `ProjectDoc` JSON, diffs it
+A **headless audio server**: a C++ Tracktion host, served over WebSocket by the Rust server it links
+(`apps/k7-daw-backend/packages/k7-runtime-server`). Receives a compiled `ProjectDoc` JSON, diffs it
 against the current state, applies the minimal change to a Tracktion Engine edit, plays
-audio, and pushes transport/meter state back over WebSocket. **Never parses song files.**
+audio, and pushes transport/meter state back. **Never parses song files.**
 
 It is deliberately its own app rather than part of k7: it serves every audio app in
 the repo. Three drive it — k7, the médiathèque's module previews and the DJ desk —
 over the same protocol, on the same binary, and it cannot tell them apart: it only ever sees
 a compiled `ProjectDoc`. They stay out of each other's way by naming a **session**; see
-`docs/protocol.md` and `apps/k7-daw-frontend/packages/engine-protocol/docs/sessions.md`.
+`apps/k7-daw-backend/packages/k7-runtime-server/docs/protocol.md` and `apps/k7-daw-frontend/packages/engine-protocol/docs/sessions.md`.
 
 This workspace declares **no `build` script**, so `npm run build --workspaces --if-present`
 can never try to compile C++. Use the `build:*` / `test:*` scripts below.
@@ -134,26 +135,15 @@ engine/                 library — the audio host (JUCE/Tracktion state lives h
   InputTuner.{h,cpp}                            pitch detection on inputs (docs/inputTuner.md)
 
 server/
-  main.cpp               the executable: the CLI's one-shot modes, else serve()
-  Serve.{h,cpp}          WebSocket server (IXWebSocket): the socket's lifecycle, the state frame, shutdown
-  ServeContext.h         what every handler shares — the host, the two broadcast verbs, who listens and drives
-  ServeProject.cpp       the messages about ONE project: document, transport, auditions, recording
-  ServePlugins.cpp       …about plugins: the catalogue and its scan, instances, windows, presets, watches
-  ServeMachine.cpp       …about the machine: the audio stream, sessions, the interface, identity
-  ServeRender.cpp        …`render`: a bounce inside this engine, one at a time, every path held to the roots
-  AudioSender.{h,cpp}    the audio broadcast's own thread and wire frame (docs/broadcast.md)
-  Supersede.h            which queued project, tracks and parameter jobs a newer message skips (docs/supersede.md)
-  HeldNotes.h            the notes each socket's `midi-live` holds down, released when the socket drops
-  PendingQueries.h       which polled queries already wait on the message thread, so an identical one joins them (docs/supersede.md)
-  Outbox.h               every JSON push, sent from ONE writer thread so the message thread never waits on a peer
-  DocJson.{h,cpp}        the ProjectDoc off the wire, shared by the server and the CLI
-  android/EngineJni.cpp  the Android app's entry into serve() (docs/android.md)
-  ios/EngineEmbed.cpp    the iOS app's: serve(), quit, and the device closed while the app is idle behind another (docs/ios.md)
+  main.cpp               the executable: argv handed to the Rust server's k7_server_main, which runs a mode or serves
+  RustServer.cmake       the Rust server (apps/k7-daw-backend/packages/k7-runtime-server) built by cargo as the static library every target links
+  android/EngineJni.cpp  the Android app's entry into k7_server_serve (docs/android.md)
+  ios/EngineEmbed.cpp    the iOS app's: serve, quit, the log tag, and the device closed while the app is idle behind another (docs/ios.md)
 
 scripts/               Node harnesses that drive a running engine, not build steps
   two-sessions.ts        two sessions on one engine stay separate
   track-delta.ts         `tracks` amends the document a session holds, and refuses the rest
-  supersede-probe.ts     a burst of knob writes or of documents ends on the LAST one, and a fence keeps its place (docs/supersede.md)
+  supersede-probe.ts     a burst of knob writes or of documents ends on the LAST one, and a fence keeps its place (apps/k7-daw-backend/packages/k7-runtime-server/docs/supersede.md)
   recorder-probe.ts      a recorder node's take stays WHOLE while documents rebuild the graph around it — undamaged,
                          and its wav as long as the clock said (docs/recorder.md)
   list-sessions.ts       an engine's sessions, and drop-session, over the control socket
@@ -228,10 +218,10 @@ scripts/               Node harnesses that drive a running engine, not build ste
 ```
 
 Long-form rationale is in `docs/`: `design.md` (pipeline + threading), `engineHost.md`,
-`protocol.md` (the wire), `sessions.md` (this side: who may create one, what the registry's
+the wire, the pairing and the supersede rule beside the Rust server (`apps/k7-daw-backend/packages/k7-runtime-server/docs/`),
+`sessions.md` (this side: who may create one, what the registry's
 lock protects, when a session is reaped) with its TypeScript half in
 `apps/k7-daw-frontend/packages/engine-protocol/docs/sessions.md`, `multiEdit.md`, `broadcast.md`, `cliModes.md`,
-`supersede.md` (which queued jobs a newer message skips, and what fences them),
 `audit-stabilite.md` (the standing audit of this engine's own stability and speed — read it
 before touching the audio callback, `applyFull`, or the build flags),
 `builtinParams.md`, `namPlugin.md`,
@@ -278,7 +268,7 @@ changes. Getting identity wrong means a changed plugin/param silently keeps the 
 ### EngineHost
 
 `EngineHost.h` is the **only public header** and is JUCE-free (forward-decls only), so
-`server/` compiles against it without seeing JUCE. `EngineHost.cpp` is the
+the C ABI (`engine/capi/`) the Rust server calls compiles against it without seeing JUCE. `EngineHost.cpp` is the
 lifecycle spine: ctor/dtor, project apply/reset, transport, metering, and the
 server-support loop (post/onState/run/quit). All JUCE state stays in `struct
 EngineHost::Impl` (`EngineHostImpl.h`).
@@ -408,8 +398,7 @@ object answers with the layout it was built against**. Disagreement means half a
 engine says so and exits 4 instead of dying later in `keyOf`:
 
 ```
-[fatal] this engine is HALF REBUILT: ProjectDoc has a different layout in different objects
-        (server=… diff=… builder=…).
+[fatal] this engine is HALF REBUILT: ProjectDoc has a different layout in different objects.
 ```
 
 Two readers rather than one, because the seam is not only lib-versus-server: `ProjectDiff.obj`

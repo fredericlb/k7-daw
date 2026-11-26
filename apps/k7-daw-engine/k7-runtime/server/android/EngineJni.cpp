@@ -1,10 +1,10 @@
 // EngineJni.cpp — the Android app's doors into the engine: its environment, serve on a port, and stop serving.
 // nativeServe BLOCKS, and must be called on a thread that has PREPARED a Looper and loops nothing yet —
 // not a HandlerThread, which already is inside loop() — because the first JUCE call on it makes it JUCE's
-// message thread, and EngineHost::run loops that Looper. Java.initialiseJUCE must have run first.
+// message thread, and the host's run loops that Looper. Java.initialiseJUCE must have run first.
 // See docs/android.md.
 
-#include "../Serve.h"
+#include "../../engine/capi/k7_server.h"
 
 #include <android/log.h>
 #include <jni.h>
@@ -55,10 +55,10 @@ Java_se_frediver_k7_EngineBridge_nativeSetenv(JNIEnv* env, jclass, jstring key, 
 extern "C" JNIEXPORT jint JNICALL
 Java_se_frediver_k7_EngineBridge_nativeServe(JNIEnv*, jclass, jint port) {
     stderrToLogcat();
-    return studio::serve(static_cast<int>(port));
+    return k7_server_serve(static_cast<int>(port));
 }
 
 extern "C" JNIEXPORT void JNICALL
 Java_se_frediver_k7_EngineBridge_nativeQuit(JNIEnv*, jclass) {
-    studio::requestQuit();
+    k7_server_request_quit();
 }

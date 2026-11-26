@@ -32,6 +32,11 @@ impl HandlerTable {
     pub fn find(&self, ty: &str) -> Option<&Handler> {
         self.0.get(ty)
     }
+
+    /// Every verb the table answers, in no order.
+    pub fn verbs(&self) -> impl Iterator<Item = &str> {
+        self.0.keys().map(String::as_str)
+    }
 }
 
 /// Every handler the server has: each milestone's module adds one line.

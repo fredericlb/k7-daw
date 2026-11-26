@@ -114,7 +114,7 @@ the engine sends the loser stops within `CLAIM_REUSE_MS`.
 
 What this gate does not cover: a browser that reaches the engine DIRECTLY — loopback on its own
 machine, or a LAN address once paired — talks to the engine with nobody in between; the engine's
-own origin check and pairing are what guard that path (`apps/k7-daw-engine/k7-runtime/docs/pairing.md`).
+own origin check and pairing are what guard that path (`apps/k7-daw-backend/packages/k7-runtime-server/docs/pairing.md`).
 
 ## What the probe does with it
 

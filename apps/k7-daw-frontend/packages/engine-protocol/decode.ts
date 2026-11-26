@@ -127,7 +127,7 @@ export interface PluginScanStatus {
   version: number;
 }
 
-/** A `plugin-scan` frame read defensively, or null when it is not one — apps/k7-daw-engine/k7-runtime/docs/protocol.md. */
+/** A `plugin-scan` frame read defensively, or null when it is not one — apps/k7-daw-backend/packages/k7-runtime-server/docs/protocol.md. */
 export function decodePluginScan(m: unknown): PluginScanStatus | null {
   const f = m as Partial<Record<keyof PluginScanStatus | "type", unknown>>;
   if (!f || typeof f !== "object" || f.type !== "plugin-scan") return null;

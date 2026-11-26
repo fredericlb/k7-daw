@@ -1,4 +1,4 @@
-//! msg.rs — a client's message as the C++ server read it: the text parsed with its nesting bounded, and
+//! msg.rs — a client's message as the wire reads it: the text parsed with its nesting bounded, and
 //! `value(key, default)` with nlohmann's refusals, so a handler's wrong-typed field is a `Malformed` answer.
 //! What a reader gets wrong: the bound is counted on the text before the parse, since a copy or a walk of
 //! thousands of levels overflows a connection's stack; 64 levels are allowed, the 65th is refused.

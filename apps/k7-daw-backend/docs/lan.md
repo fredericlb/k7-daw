@@ -3,7 +3,7 @@
 What lets one device open the surface of a project another device has open: the door the main device opens,
 the relay on the device that wants the surface, the discovery between them and the presence of a remote screen.
 The page that draws it is `apps/k7-daw-frontend/docs/external.md`; the engine's own trust is
-`apps/k7-daw-engine/k7-runtime/docs/pairing.md`. The crates are `k7-lan` (discovery) and `k7-front`'s `routes/lan`.
+`apps/k7-daw-backend/packages/k7-runtime-server/docs/pairing.md`. The crates are `k7-lan` (discovery) and `k7-front`'s `routes/lan`.
 
 ## Choices
 

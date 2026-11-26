@@ -64,6 +64,12 @@ struct K7CoreApi {
     double (*message_thread_age_ms)(const K7Host* host);
     void (*session_ids)(const K7Host* host, void* ctx, K7StrEach each);
     int32_t (*has_session)(const K7Host* host, K7Str id);
+
+    /* The process, before any host: a throw nothing caught is said on stderr before the abort. */
+    void (*install_terminate_handler)(void);
+    /* Any thread, after enable_load_guards: the file the last engine died loading, and the plugin it loaded last. */
+    void (*previous_load_death)(void* ctx, K7StrEach out);
+    void (*previous_last_plugin)(void* ctx, K7StrEach out);
 };
 
 #ifdef __cplusplus

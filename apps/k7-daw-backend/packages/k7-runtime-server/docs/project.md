@@ -18,7 +18,7 @@ JSON that `engine/DocReader.cpp` reads with no check of its own. The diff and th
 - **A value past a bound is replaced, never refused.** A project with one wild number still plays; only a value of
   the wrong type is refused, with nlohmann's own words, since a client may show them.
 - **A path is checked by the engine's roots, not a copy of them.** `path_allowed` is an ABI call, so the roots
-  `serve()` sets stay one table; a path outside is dropped with a warning and remembered for a `render` to refuse whole.
+  the server sets stay one table; a path outside is dropped with a warning and remembered for a `render` to refuse whole.
 
 ## The bounds
 

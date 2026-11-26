@@ -1,4 +1,4 @@
-# A queued job a newer message made pointless is skipped (`server/Supersede.h`)
+# A queued job a newer message made pointless is skipped (`src/server/supersede.rs`)
 
 Every message about a project becomes a job on the message thread, run in the order it arrived. A
 first `applyFull` is seconds long, and a client keeps talking meanwhile: the file service re-sends
@@ -22,7 +22,7 @@ pointless, and no **fence** arrived between the two.
 | `set-plugin-param` | a later `set-plugin-param` on the same plugin id and parameter name |
 
 A **fence** is any other message naming that session — `transport`, `flush`, `preview`, `arm`,
-`set-preset`, `get-plugin-params`, everything — except the read-only probes Serve.cpp already lists
+`set-preset`, `get-plugin-params`, everything — except the read-only probes `wire::catalogue` lists
 (`io-levels`, `instrument-status`, …), which change nothing and are polled. Sessions never fence
 each other: each has its own edit.
 
@@ -52,9 +52,9 @@ superseded, so it sees no difference.
 
 ## The one lock
 
-The ledger takes the ticket and posts the job under one mutex. IXWebSocket runs each socket on its
-own thread, and a session is often driven from two sockets (the file service sends documents, the
-browser sends knobs and transport): if the ticket were taken outside the post, two threads could
+The ledger takes the ticket and posts the job under one mutex. Each socket runs on a task of its
+own, and a session is often driven from two sockets (the file service sends documents, the
+browser sends knobs and transport): if the ticket were taken outside the post, two tasks could
 queue their jobs in the opposite order from the one the ledger saw, and skip the wrong one. A fence
 is marked before its handler posts, so the race can only make it fence one job too many — less
 coalescing, never a wrong skip.
@@ -69,9 +69,9 @@ first apply of several seconds holds that thread. A client that reconnects in a 
 meanwhile would queue every one of them, in order, ahead of the play the musician presses next.
 
 Their answers are broadcast, to every client or to the session. `list-audio-devices` answers the
-asker alone when the list has not moved (docs/audioDevice.md), unless another asker joined its job,
+asker alone when the list has not moved (`apps/k7-daw-engine/k7-runtime/docs/audioDevice.md`), unless another asker joined its job,
 in which case it broadcasts. So an identical query — same verb, same session, same arguments — already waiting is enough:
-`PendingQueries.h` refuses to queue a second, and the first one's reply answers both. The key leaves
+`src/server/pending.rs` refuses to queue a second, and the first one's reply answers both. The key leaves
 as its job STARTS, so a query asked while one runs is queued again: it may want what that one read
 before a change.
 

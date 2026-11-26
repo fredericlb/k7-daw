@@ -99,7 +99,7 @@ public:
     // This session's record enable: play() records its armed tracks only while this is on. Message-thread only.
     void setRecordEnabled(const std::string& session, bool on);
     bool recordEnabled(const std::string& session) const;
-    // Whether anything is WATCHING this session — a waveform tap or a followed plugin; the state timer's test for a full-rate frame. See docs/protocol.md.
+    // Whether anything is WATCHING this session — a waveform tap or a followed plugin; the state timer's test for a full-rate frame. See apps/k7-daw-backend/packages/k7-runtime-server/docs/protocol.md.
     bool sessionWatched(const std::string& session) const;
     void seek(const std::string& session, double seconds); // move the playhead to an absolute position (clamped at 0)
     // Set the transport loop [start, end) in seconds and turn looping on or off; playback wraps engine-side, and play() starts from the top. Message-thread only.
@@ -120,7 +120,7 @@ public:
     // Audition one note on a TRACK'S OWN chain — what the piano roll's click plays; velocity 0..1, released after 100 ms. Message-thread only.
     void previewNote(const std::string& session, const std::string& trackId, int key, float velocity);
 
-    // A keyboard PLAYED into a track's own chain: one channel message, held until its own note-off arrives (docs/protocol.md). Message-thread only.
+    // A keyboard PLAYED into a track's own chain: one channel message, held until its own note-off arrives (apps/k7-daw-backend/packages/k7-runtime-server/docs/protocol.md). Message-thread only.
     void liveMidi(const std::string& session, const std::string& trackId, const std::vector<uint8_t>& bytes);
 
     // Per-track output level in dB, for meters (-100 == silent).

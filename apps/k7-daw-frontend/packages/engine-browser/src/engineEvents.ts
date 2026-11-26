@@ -63,7 +63,7 @@ export interface EngineSafeMode {
   /** Else the plugin it loaded last, which is only the likeliest. */
   lastPlugin?: string;
 }
-/** One of the engine's sessions as `list-sessions` answers — apps/k7-daw-engine/k7-runtime/docs/protocol.md. */
+/** One of the engine's sessions as `list-sessions` answers — apps/k7-daw-backend/packages/k7-runtime-server/docs/protocol.md. */
 export interface EngineSessionInfo {
   id: string;
   /** The loaded project's name, "" until one is. */

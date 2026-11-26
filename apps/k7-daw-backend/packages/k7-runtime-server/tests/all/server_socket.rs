@@ -14,7 +14,7 @@ fn cfg() -> ServeConfig {
     c
 }
 
-/// The `error` reply as the C++ server printed it: sorted keys, compact.
+/// The `error` reply as the wire prints it: sorted keys, compact.
 fn err(message: &str) -> String {
     format!(
         "{{\"message\":{},\"type\":\"error\"}}",
@@ -93,7 +93,10 @@ async fn safe_mode_is_said_on_whoami() {
     let s = Server::start(c);
     let mut w = s.connect().await;
     let j = w.ask(WHOAMI).await;
-    assert!(j.contains("\"safeMode\":{\"crashes\":3}"), "{j}");
+    assert!(
+        j.contains("\"safeMode\":{\"crashes\":3,\"lastPlugin\":\"Crashy.vst3\"}"),
+        "{j}"
+    );
 }
 
 #[tokio::test]

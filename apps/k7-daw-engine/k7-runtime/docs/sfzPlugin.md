@@ -57,7 +57,7 @@ server, and never once per account through a tunnel. Any other `sfz:` is a path,
 **One not downloaded is waited for, not refused.** A song can be opened before its instrument is
 here; the plugin says so once, checks every two seconds on the message thread, and loads the
 instrument the moment its `.sfz` is there. Until then the node is silent, and k7 says which
-instrument it needs: it asks with `instrument-status` (`docs/protocol.md`), which answers from the
+instrument it needs: it asks with `instrument-status` (`apps/k7-daw-backend/packages/k7-runtime-server/docs/protocol.md`), which answers from the
 same files, an install's marker included, since a folder without one is still being unpacked.
 An offline render cannot wait — it runs no message loop — so it renders the silence.
 

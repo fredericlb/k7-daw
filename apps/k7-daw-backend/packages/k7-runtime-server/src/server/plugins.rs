@@ -10,6 +10,7 @@ use super::plugin_scan::{When, detached, plugins_json, scan_in_background, statu
 use super::supersede::superseded;
 use crate::engine::Mt;
 use crate::engine::state::ParamInfo;
+use crate::log::say;
 use serde_json::{Map, Value, json};
 
 pub fn add(t: &mut HandlerTable) {
@@ -54,7 +55,7 @@ fn list_or_rescan(r: &Request) -> Result<(), Malformed> {
     };
     // It is by far the slowest thing the engine does, so a cold cache turning a list into a minute of work must say why.
     if rescan {
-        eprintln!(
+        say!(
             "[plugins] rescan requested{} — scanning, this can take a while",
             if force { " (force)" } else { "" }
         );
@@ -67,7 +68,7 @@ fn list_or_rescan(r: &Request) -> Result<(), Malformed> {
     // Count the EXTERNALS, not the entries: built-ins are code, so a truncated cache still lists ~212 of them.
     let externals = cached.iter().filter(|p| p.format != "internal").count();
     if !api.plugin_cache_warm() {
-        eprintln!(
+        say!(
             "[plugins] exts.json cold ({} listed, {externals} external) — scanning once to fill it, this can take a while",
             cached.len()
         );
@@ -78,7 +79,7 @@ fn list_or_rescan(r: &Request) -> Result<(), Malformed> {
         } else {
             format!(" (filter '{filter}')")
         };
-        eprintln!(
+        say!(
             "[plugins] {} from cache ({externals} external){narrowed}",
             cached.len()
         );
@@ -139,7 +140,7 @@ fn list_plugin_params(r: &Request) -> Result<(), Malformed> {
             Some(_) => format!("{} parameters", params.len()),
             None => "could not be loaded".to_string(),
         };
-        eprintln!("[plugin-param-list] {id}: {what}");
+        say!("[plugin-param-list] {id}: {what}");
         // `found` carries what an empty array cannot: could not load, versus loaded and publishes nothing.
         ctx.broadcast(
             &json!({"type": "plugin-param-list", "format": format, "id": id,
@@ -174,7 +175,7 @@ fn show_native_ui(r: &Request) -> Result<(), Malformed> {
     let id = r.msg.str("id")?;
     let session = r.session.clone();
     r.ctx.engine.post(move |mt: Mt<'_>| {
-        eprintln!("[native-plugin-ui] open '{id}'");
+        say!("[native-plugin-ui] open '{id}'");
         mt.show_native_ui(&session, &id);
     });
     Ok(())
@@ -195,17 +196,17 @@ fn show_native_ui_of(r: &Request) -> Result<(), Malformed> {
     let ctx = r.ctx.clone();
     detached(&r.ctx, move || {
         let _slot = slot;
-        eprintln!("[native-plugin-ui] loading '{id}'");
+        say!("[native-plugin-ui] loading '{id}'");
         // ANSWERED either way: a load can hang outright, and a caller told nothing cannot tell slow from dead.
         if !ctx.engine.api().prepare_native_ui(&format, &id) {
-            eprintln!("[native-plugin-ui] '{id}' did not load");
+            say!("[native-plugin-ui] '{id}' did not load");
             opened(&ctx, &format, &id, false);
             return;
         }
         let c = ctx.clone();
         ctx.engine.post(move |mt: Mt<'_>| {
             let ok = mt.show_native_ui_of(&format, &id);
-            eprintln!(
+            say!(
                 "[native-plugin-ui] {} '{id}'",
                 if ok { "open" } else { "could not open" }
             );
@@ -231,7 +232,7 @@ fn snapshot_base(r: &Request) -> Result<(), Malformed> {
     let ctx = r.ctx.clone();
     r.ctx.engine.post(move |mt: Mt<'_>| {
         let ok = mt.snapshot_orphan_to(&format, &id, &path);
-        eprintln!(
+        say!(
             "[plugin-base] {} {path}",
             if ok { "wrote" } else { "could not write" }
         );
@@ -323,7 +324,7 @@ fn set_preset(r: &Request) -> Result<(), Malformed> {
         } else {
             path.clone()
         };
-        eprintln!("[preset] {module} <- {what}");
+        say!("[preset] {module} <- {what}");
         mt.set_preset(&session, &module, index, &path);
     });
     Ok(())

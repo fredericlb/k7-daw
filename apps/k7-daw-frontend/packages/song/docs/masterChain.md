@@ -122,7 +122,7 @@ one line that is always right.
 | derived | `chainsGraph.ts`: `MIX` starts a run, like `@in` and like a track |
 | compiled | `nodeProject.ts`: that run's owner is `@master`, and its steps become `masterPlugins` |
 | the wire | `@studio/engine-protocol`'s `ProjectDoc.masterPlugins` — always sent, empty by default |
-| decoded | `docFromJson` in `apps/k7-daw-engine/k7-runtime/server/DocJson.cpp` (via `pluginFromJson`, shared with tracks) |
+| decoded | `parse_project` in `apps/k7-daw-backend/packages/k7-runtime-server/src/doc/project.rs` (via `plugin`, shared with tracks), read by `engine/DocReader.cpp` |
 | placed | `populateMasterChain` in `EditBuilder.cpp`, at the head of the master list — followed by the output gain |
 | drawn | the graph's `MIX` and `OUT` cards (`MAIN_OUT_UI` in `@studio/ui-chains`), the second with its fader |
 | diffed | `ChangeKind::MasterChainChanged` — full rebuild; a knob or a bypass is `PluginParamChanged` / `PluginEnabledChanged`, in place |

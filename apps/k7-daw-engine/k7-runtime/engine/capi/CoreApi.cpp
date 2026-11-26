@@ -12,6 +12,9 @@
 #include "../SettingsDir.h"
 #include "../Warnings.h"
 
+#include <cstdlib>
+#include <exception>
+#include <iostream>
 #include <memory>
 #include <string>
 #include <vector>
@@ -129,6 +132,31 @@ int32_t hasSession(const K7Host* h, K7Str id) {
     return guard<int32_t>("has_session", 0, [h, id] { return host(h)->hasSession(str(id)) ? 1 : 0; });
 }
 
+void terminateHandler() {
+    std::set_terminate([] {
+        std::cerr << "[fatal] terminate";
+        if (const auto e = std::current_exception()) {
+            try {
+                std::rethrow_exception(e);
+            } catch (const std::exception& x) {
+                std::cerr << ": " << x.what();
+            } catch (...) {
+                std::cerr << ": unknown exception";
+            }
+        }
+        std::cerr << std::endl;
+        std::abort();
+    });
+}
+
+void loadDeath(void* ctx, K7StrEach out) {
+    guardVoid("previous_load_death", [ctx, out] { give(out, ctx, previousLoadDeath()); });
+}
+
+void lastPlugin(void* ctx, K7StrEach out) {
+    guardVoid("previous_last_plugin", [ctx, out] { give(out, ctx, previousLastPlugin()); });
+}
+
 const K7CoreApi kCore{
     layoutConsistent,
     installCrash,
@@ -151,6 +179,9 @@ const K7CoreApi kCore{
     messageAge,
     sessions,
     hasSession,
+    terminateHandler,
+    loadDeath,
+    lastPlugin,
 };
 
 }  // namespace

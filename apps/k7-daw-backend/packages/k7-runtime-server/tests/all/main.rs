@@ -1,6 +1,7 @@
 //! The crate's tests in one binary: one module per part, one line each.
 
 mod catalogue;
+mod cli;
 mod doc_bounds;
 mod engine_abi;
 mod engine_fake;

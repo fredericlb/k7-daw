@@ -1,4 +1,4 @@
-//! json.rs — JSON as nlohmann's `dump()` printed it in the C++ server: compact, an object's keys sorted by
+//! json.rs — JSON as nlohmann's `dump()` prints it, what every client reads: compact, an object's keys sorted by
 //! their bytes, a float in nlohmann's own format (`1.0`, `0.0001`, `1e-05`, `1e+15`), non-ASCII raw.
 //! What a reader gets wrong: serde_json's own printer differs on the last two points and on key order
 //! (`preserve_order`), so every frame the server sends goes through `dump`; `fixtures/nlohmann_dump.txt` is

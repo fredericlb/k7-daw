@@ -141,7 +141,7 @@ master put back to unity would never come back down.
 | authored | `project.k7x`'s `project.masterVolume` — `ProjectSettingsSchema` |
 | compiled | `ProjectDoc.masterVolume` — `nodeProject.ts`, `project.ts`, defaulted to 0 |
 | the wire | `@studio/engine-protocol`'s `ProjectDoc` |
-| decoded | `docFromJson` in `apps/k7-daw-engine/k7-runtime/server/DocJson.cpp` |
+| decoded | `parse_project` in `apps/k7-daw-backend/packages/k7-runtime-server/src/doc/project.rs`, read by `engine/DocReader.cpp` |
 | applied | `MasterGainPlugin`, put on the master list by `populateMasterChain` after the song's chain and before the meter — so playback and an offline render both get it — and re-set in `EngineHost.cpp` on diff |
 | drawn | the fader under the project bar's meter, the Fix button beside it (`apps/k7-daw-frontend/docs/masterMeter.md`), and the OUT card's own fader in the chains graph (`MAIN_OUT_UI`) |
 | written | `node param "OUT" Volume <dB>`, or `project master <dB>` — one implementation, `writeMasterVolume` |

@@ -273,7 +273,7 @@ What a Rust type that is serialized (a `ProjectDoc` from 2h on, a view's answer)
 
 | rule | why |
 |---|---|
-| a field the TypeScript holds as an integer is an integer type, never `f64` | the engine's `DocJson.cpp` drops a channel written as a float |
+| a field the TypeScript holds as an integer is an integer type, never `f64` | the engine server's document parse (`apps/k7-daw-backend/packages/k7-runtime-server/src/doc/`) drops a channel written as a float |
 | no `null` in a `ProjectDoc`: every `Option` is `skip_serializing_if = "Option::is_none"`, and a non-finite number is a compile error, not a value | serde_json writes a non-finite `f64` as `null`, which the engine and TypeScript then read as something else |
 | no `HashMap` in a serialized type: an `IndexMap` or a `Vec` of pairs | the order of a file's keys is what a diff and a test see |
 | a 64-bit integer carries `#[ts(type = "number")]` and a skipped `Option` carries `#[ts(optional)]` under `ts` | ts-rs writes a bigint for `u64` and a required key for an `Option` |
