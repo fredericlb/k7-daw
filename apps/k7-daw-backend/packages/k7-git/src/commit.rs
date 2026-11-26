@@ -157,6 +157,25 @@ impl Repo {
         Ok(id.to_string())
     }
 
+    /// The work tree as a tree object, built in an index of its own: `HEAD`, the real index and the branch stay put.
+    pub(crate) fn work_tree(&self) -> Result<git2::Oid> {
+        self.prepare_attributes()?;
+        let cleaner = LfsCleaner {
+            attrs: Attributes::read(&self.workdir),
+            store: self.lfs_store(),
+            cache: std::cell::RefCell::new(StatCache::load(&self.gitdir)),
+        };
+        let mut index = git2::Index::new()?;
+        if let Some(t) = self.head_tree() {
+            index.read_tree(&t)?;
+        }
+        for c in self.deltas()?.iter().filter(|c| !self.over_limit(c)) {
+            self.apply(&mut index, &cleaner, c)?;
+        }
+        cleaner.cache.borrow_mut().save();
+        Ok(index.write_tree_to(&self.git)?)
+    }
+
     fn over_limit(&self, c: &Raw) -> bool {
         c.change != Change::Removed
             && std::fs::metadata(self.workdir.join(&c.new_path))

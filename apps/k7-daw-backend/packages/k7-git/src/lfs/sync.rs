@@ -148,15 +148,11 @@ impl Repo {
     }
 
     /// The objects the commits `local` has beyond `remote` name: what a push owes the host.
-    pub(crate) fn lfs_owed(
-        &self,
-        local: Oid,
-        remote: Option<Oid>,
-    ) -> Result<Vec<(String, Pointer)>> {
+    pub(crate) fn lfs_owed(&self, local: Oid, remote: &[Oid]) -> Result<Vec<(String, Pointer)>> {
         let mut walk = self.git.revwalk()?;
         walk.push(local)?;
-        if let Some(r) = remote {
-            let _ = walk.hide(r);
+        for r in remote {
+            let _ = walk.hide(*r);
         }
         let mut out: Vec<(String, Pointer)> = Vec::new();
         for id in walk {
