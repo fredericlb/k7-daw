@@ -1,7 +1,8 @@
 # What a command line offers — the providers, the classes, the clues
 
-`commands.yaml` says what you TYPE; `commandSpec.ts` says what each argument may hold. Three
-vocabularies sit side by side there and they answer three different questions:
+`commands.yaml` says what you TYPE and what each argument may hold. Three vocabularies answer three different
+questions; the values are the Rust crate's (`apps/k7-daw-wasm/verbs/src/complete/`, asked through `POST /verb/complete`),
+the class and the clue the palette's (`src/providerInfo.ts`):
 
 | | question | where |
 |---|---|---|
@@ -9,9 +10,9 @@ vocabularies sit side by side there and they answer three different questions:
 | `PROVIDER_CLASS` / `ARG_CLASSES` | what KIND of thing is it, in one word, so a line reads as a coloured sentence | derived |
 | `PROVIDER_HINT` / `CLASS_HINT` | what does this field accept, as a clue beside it | derived, overridable by `hint:` |
 
-A provider reads live state off the `CommandHost`. `satisfies` rather than an annotation, and that
-is load-bearing: an annotation widens the keys to `string`, which makes `ProviderName` `string`
-too — so `PROVIDER_CLASS` checks nothing and the wire cannot name a provider at all.
+A provider reads the project as its files say now. `PROVIDER_CLASS` is written `as const satisfies`, and that is
+load-bearing: an annotation widens the keys to `string`, which makes `ProviderName` `string` too — so the wire could
+not name a provider at all.
 
 **A failed read costs the completion, never the command.** Every provider that touches the disk
 swallows its own error and answers with an empty list or an unranked one: a broken curve file, an
@@ -89,7 +90,7 @@ the uuid, and names the label beside it.
   because it reaches into `PROVIDERS` for `audioFiles`: inferring it would need the map's own
   type, which is what is being inferred.
 - **`chains`** puts the project's own and the library's `@k7-core/` ones in one list, because the
-  command takes either (`apps/k7-daw-frontend/packages/audio-passes/docs/processChain.md`).
+  command takes either (`apps/k7-daw-frontend/packages/commands/docs/processChain.md`).
 - **`curves`** reads off disk rather than off the compiled project: a curve nothing binds yet is
   exactly the one you are about to bind, and the document only carries the bound ones' baked
   points.

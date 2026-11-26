@@ -8,7 +8,7 @@ proxy("clips/interview.proxy.mp4") // 720p — the preview alone
 sound("clips/interview.sound.wav") // the shot's sound, the engine's (../../song/docs/videoSound.md)
 ```
 
-`picture prepare <lane>` makes the copies (`apps/k7-daw-frontend/packages/commands/src/verbs/pictureMedia.ts`), and
+`picture prepare <lane>` makes the copies (`apps/k7-daw-wasm/verbs/src/verbs/picture_media.rs`), and
 `@studio/video-prep` decides which ones a file needs ([../../video-prep/docs/videoPrep.md](../../video-prep/docs/videoPrep.md)).
 
 ## Two copies for two different problems

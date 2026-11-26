@@ -19,7 +19,7 @@ modules({ "main#audio": ["dialog-eq"], "dialog-eq": ["MIX"] })
 A picture lane offers two outputs: `video`, what it draws, and `audio`, what its shots sound.
 `src/videoSound.ts` turns the shots into the engine clips of that second half at compile time, and
 `nodeProject.ts` plays them as the engine track `main#audio`. `picture sound`
-(`apps/k7-daw-frontend/packages/commands/src/verbs/pictureSound.ts`) extracts what the shots need and makes nothing else.
+(`apps/k7-daw-wasm/verbs/src/verbs/picture_sound.rs`) extracts what the shots need and makes nothing else.
 
 ## One lane, two halves
 

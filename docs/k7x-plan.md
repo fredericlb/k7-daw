@@ -37,7 +37,7 @@ each for its own reason:
 3. **Reading `.k7x` only** — wherever a kind is looked up by name, the name is `.k7x`; a folder
    listing, the revision token and the browser's path rules know no other. The file service refuses
    to save a YAML name into a workspace. Every demo
-   compiles and takes a run of commands (`apps/k7-daw-frontend/packages/commands/src/k7xFiles.test.ts`). Done.
+   compiles and takes a run of commands (`apps/k7-daw-wasm/verbs/tests/project.rs`). Done.
 4. **history over k7x** — a change is a `k7x` op: the same key paths and natural list keys
    (`apps/k7-daw-backend/packages/k7-sync/src/k7x/locate.rs`), diffed on the k7x tree, replayed byte for byte, checked
    and set aside by the room when it does not replay. A replica

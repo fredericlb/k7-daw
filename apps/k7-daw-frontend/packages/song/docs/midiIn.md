@@ -36,7 +36,7 @@ keyboard reaching the browser at all" (`apps/k7-daw-frontend/src/midiActivity.ts
 **The cable is also what makes a lane armable for MIDI.** A lane a midi-in node feeds arms in the
 browser even while it holds no sequence, since an empty lane is exactly where a first take goes.
 Every take then becomes a new sequence — on an empty lane and a full one alike, as every audio take
-is a new clip — sized to whole bars around the notes and placed where they were played (`sequence record`, `apps/k7-daw-frontend/packages/commands/src/verbs/sequenceRecord.ts`): one command, so
+is a new clip — sized to whole bars around the notes and placed where they were played (`sequence record`, `apps/k7-daw-wasm/verbs/src/verbs/sequence_record.rs`): one command, so
 the take is one undo. Arming it in the engine instead would be refused, because the engine arms
 only a lane with an audio input.
 

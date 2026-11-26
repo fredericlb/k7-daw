@@ -32,7 +32,7 @@ not code: `params({…})`, `wires(…)` and `graph([…])`.
    `dsp_literal::decode` in every Rust host, and the same function in the WebAssembly song module. A file that does not decode plays a pass-through graph and is one error on the module, `line N: …`.
 3. The graph travels inline on the plugin document. `dsp` maps to the engine plugin "DSP Graph",
    or "MIDI Graph" when the module emits MIDI.
-4. Offline passes (`apps/k7-daw-frontend/packages/audio-passes/src/processChain.ts`) read the same graph through the compile.
+4. Offline passes (`apps/k7-daw-wasm/verbs/src/verbs/bounce.rs`) read the same graph through the compile.
 
 Nothing evaluates the file, so nothing needs a sandbox.
 

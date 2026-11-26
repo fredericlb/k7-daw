@@ -31,7 +31,7 @@ the engine to open: a page coming back to the front re-dials it.
 
 ## Inputs
 
-`track input <track> audio|midi` (`apps/k7-daw-frontend/packages/commands/src/verbs/trackInput.ts`) inserts an input
+`track input <track> audio|midi` (`apps/k7-daw-wasm/verbs/src/verbs/track_group.rs`) inserts an input
 node ahead of the lane — an `@meta/IN` with `monitor: "auto"`, or an `@meta/MIDI`. Its settings are
 **intrinsics**, a module's own fields rather than plugin parameters, written with `node param`:
 `@channel`, `@monitor`, `@gain`, and `@device` for MIDI. `apps/k7-daw-frontend/src/laneInput.ts` decides
@@ -58,7 +58,7 @@ closes held keys at the stop, and the take is committed as **one** command:
 sequence record <lane> [{"t":16.02,"d":0.48,"k":60,"v":0.79}, …]     # song beats
 ```
 
-`apps/k7-daw-frontend/packages/commands/src/verbs/sequenceRecord.ts` writes a new `sequences/<lane>-rec-<n>.k7x` whose
+`apps/k7-daw-wasm/verbs/src/verbs/sequence_record.rs` writes a new `sequences/<lane>-rec-<n>.k7x` whose
 window runs from the bar of the first note to the bar after the last, places it on the lane at that
 bar in the same run (one undo), and removes the file if the placement fails. Every take is a new
 sequence; `sequence note add` (append to an existing one) is used by paste, not by recording.
@@ -94,7 +94,7 @@ when drawing the growing block (`apps/k7-daw-frontend/src/takeCounter.ts`, `reco
 An event's takes and comp are placement fields (`takes`, `comp`, `crossfades` in
 `apps/k7-daw-frontend/packages/song-schema/src/yaml/placementSchema.ts`); `comp` spans are **song positions**, unlike the
 window's seconds. The YAML half is `apps/k7-daw-frontend/packages/song-schema/src/yaml/takeFile.ts`, the disk half
-`apps/k7-daw-frontend/packages/song-edit/src/takeEdit.ts`, the verbs `apps/k7-daw-frontend/packages/commands/src/verbs/eventTakes.ts`:
+`apps/k7-daw-frontend/packages/song-edit/src/takeEdit.ts`, the verbs `apps/k7-daw-wasm/verbs/src/verbs/event_takes.rs`:
 
 | Verb | Writes |
 |---|---|

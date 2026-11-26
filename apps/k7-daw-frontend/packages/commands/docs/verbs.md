@@ -1,37 +1,25 @@
 # The verbs — why each one is shaped the way it is
 
-`commands.ts` is the feature registry: one stable SID per capability, mapped to a handler that
-acts through a `CommandHost`. The file states *what* each handler does; this page states *why*,
-for the cases where the answer is longer than a line.
+The verbs are the Rust crate `apps/k7-daw-wasm/verbs` (`docs/verbs-port.md` at the root): one stable SID per
+capability, mapped to a handler that acts through a `Host`. The code states *what* each handler does; this page states
+*why*, for the cases where the answer is longer than a line.
 
 Read [refusal.md](refusal.md) for the `log` / `refuse` split, and
 [optionalArgs.md](optionalArgs.md) for what `optional: true` means in `commands.yaml`.
 
-## `CommandHost` — the four optional members
+## What a verb asks of the machine
 
-Four members of the interface are optional, and all four are optional for the same family of
-reason: they need something the CLI does not have, and a host without them refuses the verb **by
-name** rather than guessing.
+A verb that needs the machine calls one of the front's routes (`h.call`), and a front that cannot answer it says so with
+a code the verb words, rather than the verb guessing.
 
-| member | what it needs | what a host without it does |
+| route | what it needs | what the verb does when it cannot be answered |
 |---|---|---|
-| `getAudioDevices` | a live engine link, to enumerate the interface | `module populate` files the plugin modules and says the inputs were skipped |
-| `setInputStereo` | an engine that will hear the grouping now | records the PREFERENCE and says the rig will hear it on the next connect — `engineLink` replays it on every one, so the act is already half done |
-| `clipEnvelope` | the engine, which decodes and downsamples into the `.cache` sidecar | `event trim` refuses by name rather than guessing at a window |
-| `runColdStep` | the stem separator — a 166 MB model | `clip process` refuses a chain that separates rather than bouncing it unseparated |
+| `POST /verb-host/devices/stereo` | an engine that will hear the grouping now | records the PREFERENCE and says the rig will hear it on the next connect — `engineLink` replays it on every one, so the act is already half done |
+| `GET /waveform` (a clip's whole envelope) | the decoded file, in the `.cache` sidecar | `event trim` refuses by name rather than guessing at a window |
+| `POST /verb-host/separate` | the stem separator — a 166 MB model | `clip process` refuses a chain that separates rather than bouncing it unseparated |
 
-`runColdStep` is **handed in rather than imported** because the inference lives in
-the native file service (`apps/k7-daw-backend/packages/k7-file-service`), which this package cannot import. `coldPass.ts` in `@studio/audio-passes`
-declares the type; nothing here reaches for the implementation.
-
-`stemsChain` — and `instrumentalChain` beside it, the same answer for the record without its voice
-— are handed in for a different reason. The file is one import away and other `system`
-verbs do read `<state>/preferences.k7x` directly — but a suite exercising "no chain named"
-would otherwise pass or fail by whether whoever runs it has set one. The verbs that WRITE them
-still write directly: that is their whole job.
-
-`snapshot` backs up a file about to be overwritten, so undo can restore it. The web host wires it
-to its edit journal; the CLI leaves it undefined and simply overwrites.
+`stemsChain` and `instrumentalChain` are read from the machine's preferences, the record's chain without its voice beside
+the stems' one. The verbs that WRITE them write `<state>/preferences.k7x` directly: that is their whole job.
 
 `EVENT_FIELDS` lists everything a placement may say beyond WHERE it goes — what `events add`
 forwards to `PlacementSchema`, and so what a paste can reproduce. `ref` and `start` are handled
@@ -933,21 +921,11 @@ so a smaller number would be accepted here, written to the file, and then played
 stating a level nobody hears. Refused by name instead, and the message says where silence actually
 lives.
 
-## Every verb lives in `verbs/`, and `commands.ts` only gathers them
+## Every verb lives in the crate's `src/verbs/`, and `mod.rs` only gathers them
 
-- Each group is one table, `XXX_VERBS`, in a file of `verbs/` named after its namespace (`node.ts`,
-  `nodeTap.ts`, `event.ts`, `eventStrip.ts`, `sequence.ts`, `project.ts`, …). `commands.ts` holds
-  the `CommandHost` and `SidHandler` types, lists the tables in `VERB_TABLES`, and builds
-  `SID_HANDLERS` from them. A SID sits in exactly one table: `registry.test.ts` fails on a second,
-  since a later table would otherwise override an earlier one without a word.
-- A verb file imports TYPES from `commands.ts`, which are erased at compile time, and VALUES only
-  from other verb files, since `commands.ts` imports every one of them and a value import back into
-  it would be a real cycle at runtime.
-- What several groups need and none owns sits in `verbs/shared.ts` (`splitWords`, `splitArgs`,
-  `firstArg`, `resolveEvent`, `playlistFile`). The writers behind `node param`'s
-  non-plugin names sit in `verbs/intrinsics.ts`.
-- A plugin's verb goes in through `registerVerb` alone, which installs the catalogue row and the
-  handler together: either half without the other is a verb that reads and never runs, or runs and
-  never reads. Both halves refuse a word or SID already taken, so a clash fails at install, not at use.
-- `commands.ts` re-exports `splitWords`, `collectSequences`, `parseMidiNote` and
-  `collectPluginModules`, which the completions and the tests import from there.
+- Each group is one file of `apps/k7-daw-wasm/verbs/src/verbs/` named after its namespace (`event.rs`, `node_tap.rs`,
+  `picture_media.rs`, …); `mod.rs` holds the one SID table, and a SID sits in it once.
+- What several groups need and none owns sits in `shared.rs` (`split_words`, `resolve_event`, …), and the routes a verb
+  calls are named in `routes.rs` and `host_media.rs`.
+- A verb is never a plugin's: a new one is a handler in the crate and a row in `commands.yaml`, whose `commands.json`
+  copy the crate reads (`apps/k7-daw-wasm/verbs/scripts/catalogue.mjs`).

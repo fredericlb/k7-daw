@@ -284,7 +284,7 @@ opens a popin that asks **what to call it** before anything is uploaded. It defa
 own name, shows the folder that will be created under it (the same `projectFolderName` rule
 `Nouveau projet` uses, suffix included), and refuses the names that dialog refuses.
 
-The page's verbs Worker translates the file (`ProjectsPane`'s drop starts one for the row's workspace, since this
+The page's project Worker translates the file (`ProjectsPane`'s drop starts one for the row's workspace, since this
 page has no open project and so no file API session to share), uploads its samples into the new folder and lands the
 texts with one change set. **The dropped file is not kept**: a `.dawproject` is a zip carrying its own audio, and keeping
 it beside the project it produced would put every sample in the workspace twice.

@@ -117,7 +117,7 @@ instrumental, and a song that plays with its voice still in it.
 
 `system stems` is resolved against the **open project's** module vocabulary, like every other cold step: that is
 where a `@k7-core/…` ref becomes a module and a model becomes a path on this machine
-(`apps/k7-daw-frontend/packages/audio-passes/docs/processChain.md`). This is the one playlist verb that needs a project,
+(`apps/k7-daw-frontend/packages/commands/docs/processChain.md`). This is the one playlist verb that needs a project,
 and it says so rather than throwing.
 
 The records are the workspace's files, because a deck opens file paths and what matters is what is

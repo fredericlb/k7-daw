@@ -31,14 +31,14 @@ verbs:
 and the `m`/`s` keys share: an optimistic flip, the command, then a reload scoped to the files it
 wrote. While a merge locks the workspace (`local`) the override **is** the value and no command is sent.
 
-**The console.** `project console <system|none>` (`apps/k7-daw-frontend/packages/commands/src/verbs/console.ts`) writes
+**The console.** `project console <system|none>` (`apps/k7-daw-wasm/verbs/src/verbs/project_more.rs`) writes
 `project.console`; the compile (`apps/k7-daw-frontend/packages/song/src/console.ts`) places the system's channel after
 every strip and its buss first on the master — one setting, because the halves only work as a pair.
 
 ## The song's output and the master meter
 
 The song's output level is `project.masterVolume`, −100..+12 dB, written by `project master` and by
-`node param "OUT" Volume` (the same writer, `writeMasterVolume` in `apps/k7-daw-frontend/packages/commands/src/verbs/intrinsics.ts`).
+`node param "OUT" Volume` (the same writer, `writeMasterVolume` in `apps/k7-daw-wasm/verbs/src/verbs/node_intrinsic.rs`).
 Values outside the range are refused, not clamped. The engine applies it with a gain of its own rather
 than the host library's master fader, whose curve saturates at +6.
 

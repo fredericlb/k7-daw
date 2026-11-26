@@ -105,7 +105,7 @@ rectangle exactly as drawn.
 A curve is a file (`curves/<id>.k7x`, read by `apps/k7-daw-frontend/packages/song/src/curves.ts`); a binding is a
 module's `automations: [{param, curve}]`, keyed by param. Verbs:
 
-- `curve set <name> <json>` — the whole curve, from the editor (`apps/k7-daw-frontend/packages/commands/src/verbs/curve.ts`).
+- `curve set <name> <json>` — the whole curve, from the editor (`apps/k7-daw-wasm/verbs/src/verbs/curve.rs`).
 - `curve point add|move|remove` — one point of a `custom` curve, addressed by its time. The last
   point cannot be removed: a custom curve with none does not load, and a curve file the loader
   refuses takes the whole project with it.

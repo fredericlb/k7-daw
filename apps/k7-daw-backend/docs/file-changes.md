@@ -1,6 +1,6 @@
-# The change set and the verb bundle (step 3d)
+# The change set, the verb bundle and `POST /verb`
 
-`POST /changes`, `GET /verb-bundle` and `GET /verb-bundle/library`: what the browser's verbs commit to and read from, native in
+`POST /changes`, `GET /verb-bundle` and `GET /verb-bundle/library`: what the page's Worker commits an import to and reads a project from, native in
 the Rust file service. The code is `apps/k7-daw-backend/packages/k7-file-service/src/changes/`
 and `verb_bundle.rs`, and the front's `native/changes.rs` and `native/verb_bundle.rs`. The routes belong to the `journal` piece and
 have no fallback: a front that does not answer the journal says 503.
@@ -55,21 +55,30 @@ have no fallback: a front that does not answer the journal says 503.
 The settle's k7x half is native (`k7_sync::k7x`); the relay batch is made by the capture. The directories `also_readable`, sample banks and
 the models cache are not in the bundle: a verb that reads them asks for them.
 
-## Worker runtime
+## The Worker
 
-A browser Worker runs the verbs over a virtual file system and sends this route's change sets: see `apps/k7-daw-frontend/packages/commands/docs/runtime.md`.
+A browser Worker holds the open project for its picture views and sends the import's change set: see `apps/k7-daw-frontend/packages/commands/docs/runtime.md`.
 
-## A verb run natively: `POST /verb`
+## A verb run by the backend: `POST /verb`
 
-`{line}` in, the `verbs` crate's answer out (`{log, refuse, refused, effects, asks?, threw?}`) with `landed` and the step's
-`changed`: the route the native app calls for an editing gesture (`docs/verbs-port.md`). The code is the file service's
-`edits/verb.rs` and the front's `native/verb_run.rs`.
+`{line, at?, journal?, want?}` in, the `verbs` crate's answer out (`{log, refuse, refused, effects, asks?, threw?}`) with `landed`,
+the step's `changed`, `revBefore` and `rev`, and `graph` when asked: the route the page runs every command line and editing gesture
+through (`docs/verbs-port.md`). `POST /verb/complete {line, cursor?, labelled?}` answers `{items}`. The code is the file service's
+`edits/verb.rs` and the front's `native/verb_run.rs` and `native/verb_ask.rs`.
 
 | choice | why |
 |---|---|
 | the verb runs over a `StagedFs` inside the bracket, under the journal's gate and the account's write lock, and lands through the same commit as a change set | one landing path and one journal step per line; a verb that reads under the lock needs no `base` and is never stale |
-| a refusal or a throw lands nothing and makes no step, even when the verb wrote before it said no | a verb that says no writes nothing (3-D7), the rule the crate's tests hold it to |
+| a refusal, a throw or a pending call lands nothing and makes no step, even when the verb wrote before it | a verb that says no writes nothing (3-D7), the rule the crate's tests hold it to |
+| a pending call is asked outside the lock, of the front's own routes with the caller's headers, a job polled each second to its end; the line then runs again from its start with every answer so far | a render or a separation takes seconds to minutes, which neither the lock nor the account's weight may be held through; each route keeps its own gates |
+| the ids the runs of one line draw are replayed in order, and its render stamp is read once | a call's args must be the same on every run for its answer to match |
+| the args' real paths are mapped to the bundle's virtual roots and the answer's back; a job's answer gains its `job` and its `dir` | the routes judge virtual paths, and a verb copies a job's file from its folder in the step it lands |
+| `at` is the open project or a `_libraries/…` chain folder the person may write, judged as `/changes` judges it; a chain's line writes only there and the shared texts | the chain builder runs its gestures on the chain it shows |
+| `journal` is `join` or `skip`, as for a change set | a knob's drag joins one step, and `graph pin` is no step |
 | the stage writes in the workspace and the studio's folder, and reads the meta modules, the libraries and the account's chains | a verb writes its project, the shared texts and the machine's preferences; nothing else is a verb's |
-| with no project open the line still runs, journaled as `skip` | the machine's verbs (`system …`) work with no project, as in the Worker |
-| the engine is pushed once after a landing whose verb asked `reload` or `applyProject` | the push is the host's half of both effects; the `asks` are the caller's, which the route does not perform |
-| one compile cache, for the last project run, kept from one line to the next | its entries are keyed by each file's stamp, so a file that moved is decoded again; one project bounds what it holds |
+| with no project open the line still runs, journaled as `skip` | the machine's verbs (`system …`) work with no project |
+| the engine is pushed once after a landing whose verb asked `reload` or `applyProject`, then the asks are asked and the lines they answer said | the push is the host's half of both effects, and an ask such as `transport play` needs the pushed song |
+| an ask named `page …` goes back in the answer's `asks` | a picture render's scene is the page's to build (`apps/k7-daw-frontend/packages/commands/docs/runtime.md`) |
+| `rev` is the project's token read after the push | the page adopts a token as its own only when it is the one after its line |
+| one compile cache, for the last project run, kept from one line to the next and shared with completion | its entries are keyed by each file's stamp, so a file that moved is decoded again; one project bounds what it holds |
+| the route is a write for the merge gate | a line may write anything a verb writes; a verb that writes nothing is refused while a merge waits, a minor cost |

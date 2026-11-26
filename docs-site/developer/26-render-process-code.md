@@ -48,7 +48,7 @@ as many answers as there are passes.
 ## Bouncing through a chain
 
 `track process`, `clip process` and `event process` all end in `processWithChain`
-(`apps/k7-daw-frontend/packages/audio-passes/src/processChain.ts`):
+(`apps/k7-daw-wasm/verbs/src/verbs/bounce.rs`):
 
 1. `resolveChain` finds the chain — a project chain, or `@library/path` — and refuses one that has
    no treatment (only the lane's strip), steps the machine cannot load, or both separates and
@@ -69,7 +69,7 @@ The verb host measures the source's peak first when a step declares a
 cannot run in real time, such as stem separation — which write into `stems/` beside the source
 instead of replacing it.
 
-`event process` (`apps/k7-daw-frontend/packages/commands/src/verbs/eventProcess.ts`) is `clip process` for one event: when
+`event process` (`apps/k7-daw-wasm/verbs/src/verbs/event_process.rs`) is `clip process` for one event: when
 anything else plays the same material, it first gives the event its own copy of the clip
 (`clips/<ref>-N.k7x`) and rewrites only that placement, so a right-click on one event never changes
 the others; a bounce that writes nothing undoes the copy.

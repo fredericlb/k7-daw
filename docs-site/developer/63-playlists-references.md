@@ -18,7 +18,7 @@ Resolving a line against the workspace's audio files is `apps/k7-daw-frontend/pa
 
 ## Commands
 
-`apps/k7-daw-frontend/packages/commands/commands.yaml` declares `playlist new`, `playlist stems`, `playlist song add|remove|move`; the handlers are `apps/k7-daw-frontend/packages/commands/src/verbs/playlist.ts` (`PLAYLIST_VERBS`), with `playlistFile` in `verbs/shared.ts`. They act on the workspace root (`repoDir`), not `songPath`. Every write snapshots first (`h.snapshot`) so the undo journal has the previous text. Positions are 1-based and by position, never by song, since a list may name a song twice. The runtime treats `playlist …` as a global command (`GLOBAL_COMMAND`) that needs no open project. Tests: `apps/k7-daw-frontend/packages/commands/src/playlist.test.ts`, `playlistStems.test.ts`.
+`apps/k7-daw-frontend/packages/commands/commands.yaml` declares `playlist new`, `playlist stems`, `playlist song add|remove|move`; the handlers are `apps/k7-daw-wasm/verbs/src/verbs/playlist.rs` (`PLAYLIST_VERBS`), with `playlistFile` in `verbs/shared.ts`. They act on the workspace root (`repoDir`), not `songPath`. Every write snapshots first (`h.snapshot`) so the undo journal has the previous text. Positions are 1-based and by position, never by song, since a list may name a song twice. The runtime treats `playlist …` as a global command (`GLOBAL_COMMAND`) that needs no open project. Tests: `apps/k7-daw-wasm/verbs/tests/playlists.rs`, `playlistStems.test.ts`.
 
 ## File-service routes
 

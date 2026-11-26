@@ -7,7 +7,7 @@ pointer up on a clip                       TimelineTab.tsx  commitMove
   → "event move drums 2:1:1 3:1:1"         App.tsx          onMoveEvent → runCommand(line)
   → runLocalCommand(line)? no              App.tsx          (shell-local verbs stop here)
   → the verbs Worker                       apps/k7-daw-frontend/src/verbs/pageVerbs.ts
-      runCommand(line, host, "cli")        apps/k7-daw-frontend/packages/commands/src/commands.ts (dispatch, over a Vfs)
+      runCommand(line, host, "cli")        apps/k7-daw-wasm/verbs/src/verbs/mod.rs (dispatch, over a Vfs)
         "event.move" handler               resolves track + event in the compiled doc, refuses or…
           moveTrackPlacement(…)            apps/k7-daw-frontend/packages/song-edit/src/trackMix.ts
             setPlacementField / …          apps/k7-daw-frontend/packages/song-schema/src/yaml/trackFile.ts

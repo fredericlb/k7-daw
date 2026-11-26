@@ -9,7 +9,6 @@ First decide **where it runs**:
 | changes project or workspace files, or asks the engine through the file service | the catalogue: `apps/k7-daw-frontend/packages/commands` |
 | only changes what the shell shows (a page, a panel, a tool, a zoom) | a `ui` command in the frontend |
 | needs something only the browser has (the clipboard, Web MIDI, a camera, a download) but writes through a file route | a bare-named web-local command |
-| belongs to a plugin | the plugin's `commands` list |
 
 ## A catalogue verb
 
@@ -32,30 +31,39 @@ First decide **where it runs**:
 
    Pick the first word for the entity the command acts on: the settings page groups by it, and the right-click menu matches on the **leading arguments** (here a `tracks` value, so it appears on a track's menu). Use `menu:` only to narrow that. Add `confirm: true` if the menu should ask first. Give every free-text argument a `hint`.
 
-2. **Write the handler**, in a family file under `apps/k7-daw-frontend/packages/commands/src/verbs/` (or a new one exported as `XXX_VERBS` and listed in `VERB_TABLES` in `apps/k7-daw-frontend/packages/commands/src/commands.ts`):
+2. **Write the handler** in a family file under `apps/k7-daw-wasm/verbs/src/verbs/` and add its row to the SID table in
+   `apps/k7-daw-wasm/verbs/src/verbs/mod.rs`, then write `commands.json` again with
+   `node apps/k7-daw-wasm/verbs/scripts/catalogue.mjs`:
 
-   ```ts
-   "track.colour": async (args, h) => {
-     const [track, colour] = splitWords(args);
-     if (!h.project().tracks.some((t) => t.id === track))
-       return h.refuse([`no track "${track}"`]);
-     // …write through @studio/song-edit, which changes the value and nothing else
-     h.log([`${track} is ${colour}`]);
-     await h.reload();
-   },
+   ```rust
+   pub fn track_colour(a: &str, h: &mut Host) -> Done {
+       let w = split_words(a);
+       if !h.project()?.tracks.iter().any(|t| t.id == w[0]) {
+           h.refuse([format!("no track \"{}\"", w[0])]);
+           return Ok(());
+       }
+       // …write through song-edit, which changes the value and nothing else
+       h.log([format!("{} is {}", w[0], w[1])]);
+       h.reload();
+       Ok(())
+   }
    ```
 
-   Refuse with a sentence that says what to do instead. Write files through the song-edit writers so an edit stays a one-line diff. The change set lands as one undo step on its own.
+   Refuse with a sentence that says what to do instead. Write files through the song-edit writers so an edit stays a
+   one-line diff. A verb that needs the machine calls a route of the front (`h.call`), never a program of its own. The
+   writes land as one undo step on their own.
 
-3. **Test it** with a family test over `apps/k7-daw-frontend/packages/commands/src/testHost.ts`, and run `npm run test` in `apps/k7-daw-frontend/packages/commands`: `commandSpec.test.ts` fails on a missing language, a description over 60 characters, an unknown provider or an argument without a hint.
+3. **Test it** in the family's test file over `apps/k7-daw-wasm/verbs/tests/support/mod.rs` (`cargo test` in the crate).
 
-4. **Use it** from the UI by dispatching the line: `void runCommand(\`track colour ${id} ${hex}\`)`. A knob-like edit that must not reload the shell uses `quietCommand`.
+4. **Use it** from the UI by dispatching the line: `void runCommand(\`track colour ${id} ${hex}\`)`. A knob-like edit that
+   must not reload the shell uses `quietCommand`.
 
-Nothing else is needed: the verbs runtime serves it to the palette and the help page, completes its arguments from the provider, and the menu derives itself from the catalogue.
+Nothing else is needed: the palette and the help page read the catalogue, the crate completes its arguments from the
+provider, and the menu derives itself from the catalogue.
 
 ### A new completion provider
 
-Add it to `PROVIDERS` in `apps/k7-daw-frontend/packages/commands/src/providers.ts`, then give it a class in `PROVIDER_CLASS` and a hint in `PROVIDER_HINT` (both are exhaustive records, so the build tells you). The provider and class names are mirrored on the wire as the `ArgProvider` and `ArgClass` unions in `apps/k7-daw-frontend/packages/web-protocol/commandTypes.ts`, which `commandSpec.test.ts` holds against the package; add the new name there too.
+Add it to the crate's providers in `apps/k7-daw-wasm/verbs/src/complete/mod.rs`, then give it a class in `PROVIDER_CLASS` and a hint in `PROVIDER_HINT` (`apps/k7-daw-frontend/packages/commands/src/providerInfo.ts`; `PROVIDER_HINT` is exhaustive, so the build tells you). The provider and class names are mirrored on the wire as the `ArgProvider` and `ArgClass` unions in `apps/k7-daw-frontend/packages/web-protocol/commandTypes.ts`; add the new name there too.
 
 ## A `ui` command
 
@@ -68,7 +76,3 @@ Add it to `PROVIDERS` in `apps/k7-daw-frontend/packages/commands/src/providers.t
 ## A key for it
 
 Add a binding to `KEYS` in `apps/k7-daw-frontend/src/keys.ts`. A plain string is a default a person can move; a conditional binding (`{ if: "caret_track", command: "…{caret_track}" }`, or a list tried in order) stays the app's. Conditions are computed in `App.tsx`'s `conditions` memo. Add a case to `keys.test.ts`. See [Keys, palette and menus](./14-keys-palette-menus.md).
-
-## A plugin's verb
-
-A plugin declares `commands: [{ sid, spec, handler }]` in its `definePlugin` (see `apps/k7-daw-frontend/packages/k7-plugins/src/transcription/index.ts`). The SID may live in a core family (`track.transcribe`) or under `plugin.<id>.*`. It is installed at file-service boot by `installBuiltinPlugins`; a word or SID already taken throws at install, never at use. The Chains and plugins section covers the plugin contract.

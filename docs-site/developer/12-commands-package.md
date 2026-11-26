@@ -1,19 +1,24 @@
-# The commands package
+# The commands package and the verbs
 
-`apps/k7-daw-frontend/packages/commands` (`@studio/commands`) is k7's one verb list. Every action a person can take on a song — from the command bar, a key, a button, a right-click — is a line dispatched through it. The web editor has no file operations of its own: the verbs run in a browser Worker over a virtual file system and land their writes as one change set on the file service (`apps/k7-daw-frontend/packages/commands/docs/runtime.md`).
+Every action a person can take on a song — from the command bar, a key, a button, a right-click — is a command line.
+The catalogue of lines is `apps/k7-daw-frontend/packages/commands/commands.yaml`; the verbs that run them are the Rust
+crate `apps/k7-daw-wasm/verbs`, which the page reaches through the backend's `POST /verb` (`docs/verbs-port.md`). The web
+editor has no file operations of its own: a line runs over the project's files under the account's lock and lands its
+writes as one journal step.
 
 ## Pieces
 
 | File | Role |
 |---|---|
 | `apps/k7-daw-frontend/packages/commands/commands.yaml` | The **catalogue**: what you type, mapped to a feature SID, with its description, arguments and menus. Declarative. |
-| `apps/k7-daw-frontend/packages/commands/src/commandSpec.ts` | Loads the catalogue, validates argument shapes, completes, dispatches (`runCommand`), and registers plugin verbs. |
-| `apps/k7-daw-frontend/packages/commands/src/providers.ts` | The completion **providers**, and each one's label, display class and hint. |
-| `apps/k7-daw-frontend/packages/commands/src/commands.ts` | `SID_HANDLERS`: SID → handler, built from the `verbs/` tables, and the `CommandHost` interface. |
-| `apps/k7-daw-frontend/packages/commands/src/verbs/` | Handler families (`TRACK_VERBS`, `PICTURE_VERBS`, `SYSTEM_VERBS`…), spread into `SID_HANDLERS`. |
-| `apps/k7-daw-frontend/packages/commands/src/testHost.ts` | A host for tests. |
+| `apps/k7-daw-frontend/packages/commands/src/commandSpec.ts` | Reads the catalogue for the palette: each command and each argument's class, provider and hint. |
+| `apps/k7-daw-wasm/verbs/commands.json` | The crate's copy of the catalogue, written by `apps/k7-daw-wasm/verbs/scripts/catalogue.mjs`. |
+| `apps/k7-daw-wasm/verbs/src/verbs/mod.rs` | The SID table: SID → handler, one file per family beside it. |
+| `apps/k7-daw-wasm/verbs/src/complete/mod.rs` | The completion **providers** and their labels. |
+| `apps/k7-daw-wasm/verbs/tests/support/mod.rs` | A fixture project in memory, a line run on it, and what it changed, compiled and undid. |
 
-The work a verb does lives in other packages: `@studio/song-edit` changes project files, `@studio/take-render` writes audio, `@studio/audio-passes` runs offline chains. A handler parses its arguments, calls them, and reports.
+The work a verb writes lives in `apps/k7-daw-wasm/song-edit`; a render, a separation or a probe is a route of the front
+the verb calls. A handler parses its arguments, calls them, and reports.
 
 ## A catalogue entry
 
@@ -46,33 +51,43 @@ The work a verb does lives in other packages: `@studio/song-edit` changes projec
 
 ## Providers
 
-`PROVIDERS` in `providers.ts` answer `complete:` names from the `CommandHost`: `tracks`, `nodes`, `modules`, `baseModules`, `engineModules`, `categories`, `curves`, `sequenceFiles`, `audioFiles`, `clipTargets`, `chains`, `samples`, `markerNames`, `moduleAlternatives`, `moduleEngines`, `assemblies`, `assemblyTemplates`, `playlists`, `libraries`, `pictureLanes`, `surfaceTypes`. The map is typed `satisfies Record<string, …>`, so `ProviderName` follows it and a stale reference stops compiling; an unknown name in the YAML is reported at load and fails the test suite rather than emptying the catalogue.
+The crate's providers answer `complete:` names from the project as its files say now: `tracks`, `nodes`, `modules`,
+`baseModules`, `engineModules`, `categories`, `curves`, `sequenceFiles`, `audioFiles`, `clipTargets`, `chains`, `samples`,
+`markerNames`, `moduleAlternatives`, `moduleEngines`, `assemblies`, `assemblyTemplates`, `playlists`, `libraries`,
+`pictureLanes`, `surfaceTypes`. The page asks them through `POST /verb/complete`.
 
-Each provider also declares a **display class** (`PROVIDER_CLASS`: track, module, file, marker, choice…) and a default hint (`PROVIDER_HINT`). The class colours the palette's field; `CLASS_HINT` supplies the hint of scalar classes (`timecode` → "bar:beat:sixteenth — 5, 5:1, 5:1:1"). `PROVIDER_LABELS` lets a provider show a readable label for a value that is not readable (a chain project's node uuid shown as its module and place).
+Each provider also has a **display class** (`PROVIDER_CLASS` in `apps/k7-daw-frontend/packages/commands/src/providerInfo.ts`:
+track, module, file, marker, choice…) and a default hint (`PROVIDER_HINT`). The class colours the palette's field;
+`CLASS_HINT` supplies the hint of scalar classes (`timecode` → "bar:beat:sixteenth — 5, 5:1, 5:1:1"). An unknown provider
+in the YAML is reported at load rather than emptying the catalogue.
 
 ## Dispatch
 
-`runCommand(line, host, surface)`:
+The crate's `run_line`:
 
 1. picks the spec by longest prefix; none is a refusal `unknown command`;
-2. finds the handler in `SID_HANDLERS`;
-3. validates typed arguments positionally (`validateArgs`) — a malformed timecode is refused with what it should look like;
-4. refuses an event verb aimed at a picture lane's sound — its `#audio` row, or a chain project's `video_source:` lane — except remove (`soundingLaneRefusal`);
-5. calls the handler with the raw argument string and the host.
+2. finds the handler in the SID table;
+3. validates typed arguments positionally — a malformed timecode is refused with what it should look like;
+4. refuses an event verb aimed at a picture lane's sound, except remove;
+5. calls the handler with the raw argument string and the `Host`.
 
-A handler **refuses** through `host.refuse(lines)` and returns: a refusal is not an error, nothing is written, and the web shows it in amber. It reports through `host.log(lines)`.
+A handler **refuses** through `h.refuse(lines)` and returns: a refusal is not an error, nothing is written, and the web
+shows it in amber. It reports through `h.log(lines)`.
 
 ## The host
 
-`CommandHost` (in `commands.ts`) is everything a verb may touch: the song path and compiled `ProjectDoc`, `log` / `refuse`, `reload`, the transport, `arm`, applying the project to the engine, plugin listing and scanning, and optional capabilities (`getAudioDevices`, `clipEnvelope`, `runColdStep`, `onnxProviders`, `saveTake`, `render`, `peak`, `seconds`, `probe`, `extractSound`, `prepare`, `playlistStems`, `transcribe`, `snapshot` for undo backups, `repoDir` for workspace-wide files…). Optional members are absent on hosts that cannot provide them, and the verb refuses with the reason.
+`Host` (`apps/k7-daw-wasm/verbs/src/host.rs`) is everything a verb may touch: the files, the compiled `ProjectDoc`, `log` /
+`refuse`, the effects `reload` and `applyProject`, and the front's routes. `h.call(route, args)` asks a route whose answer the
+verb reads (a render, a peak, the plugin list, a probe…): with no answer yet the run ends pending, the backend asks the route
+outside the lock and runs the line again with the answer. `h.ask(route, args)` asks one once the writes have landed (the
+transport, a take arm, a plugin's window). The backend's half is
+`apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/verb_ask.rs`
+(`apps/k7-daw-backend/docs/file-changes.md`).
 
-The production host is the Worker's (`apps/k7-daw-frontend/packages/commands/src/runtime/host.ts`); members that need the machine are requests to the server's `/verb-host/*` routes. The run's writes land as one change set, so it is one undo step, and the answer carries the revision and the files written. Verbs that need no active project (`system channel`, `playlist`, `library`) are listed in `GLOBAL_COMMAND`; every other one is refused without an open project.
+## A verb is never a plugin's
 
-The file service exposes what a run reads and commits: `GET /verb-bundle`, `GET /verb-bundle/library`, `POST /changes` and the `/verb-host/*` members (`apps/k7-daw-backend/docs/file-changes.md`, `verb-host.md`). The palette's catalogue (command, help, readable, menu, confirm, each argument's class, provider and hint) and `completionItems` are the runtime's, not routes.
-
-## Plugins add verbs
-
-A plugin (`apps/k7-daw-frontend/packages/k7-sdk`) contributes a command as a spec **and** a handler together: `registerVerb` in `commandSpec.ts` calls `registerCommandSpec` and `registerCommand`, and both refuse a word or SID already taken. `installServerSide` in `apps/k7-daw-frontend/packages/k7-sdk/src/install.ts` records which plugin owns which SID. The file service installs the builtin plugins at boot (`installBuiltinPlugins` from `apps/k7-daw-frontend/packages/k7-plugins/src/server.ts`); today that is the transcription plugin's `track transcribe` (`apps/k7-daw-frontend/packages/k7-plugins/src/transcription/index.ts`). Registered specs are merged into every read of the catalogue, so palette, menus and dispatch see them like YAML rows.
+A feature that needs a verb adds a handler to the crate and a row to `commands.yaml`, as transcription's `track transcribe`
+does (`apps/k7-daw-wasm/verbs/src/verbs/transcribe.rs`). A plugin brings what the page draws.
 
 ## Web-local commands
 
@@ -87,4 +102,6 @@ Some lines are answered by the page itself, not the verbs Worker, because what t
 
 ## Tests
 
-`npm run test` in `apps/k7-daw-frontend/packages/commands`. `commandSpec.test.ts` checks the catalogue itself: every provider exists, every typed argument is a known single-token shape, every class and menu word is mirrored on the wire, every argument has a hint, and `readable` exists in both languages, is a sentence rather than the name, fits 60 characters, has no full stop, and is unique. Each verb family has its own test file over `testHost.ts`.
+`cargo test` in `apps/k7-daw-wasm/verbs`: each family runs its verbs over a fixture project (`tests/support/mod.rs`), reads
+back the files, compiles the project and undoes the step; `tests/project.rs` fails on a catalogue verb with no handler.
+`commandSpec.test.ts`-style checks of the catalogue itself are the crate's `catalogue.rs` and `scripts/catalogue.mjs --check`.

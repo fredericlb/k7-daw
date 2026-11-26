@@ -42,7 +42,7 @@ the library one and repoints the project at it.
 | Library home, versions, pins, the root a name resolves to | `apps/k7-daw-frontend/packages/song/src/sharedFolders.ts` |
 | Version manifest (`library.k7x`: `name`, `version`, `requires`, `notes`) and `LIBRARY_LEVEL` | `apps/k7-daw-frontend/packages/song-schema/src/libraryVersions.ts` |
 | The workspace's pins (`_library-pins.k7x`), written once | `apps/k7-daw-backend/packages/k7-file-service/src/pins.rs` |
-| `library versions`, `library upgrade` | `apps/k7-daw-frontend/packages/commands/src/verbs/library.ts` |
+| `library versions`, `library upgrade` | `apps/k7-daw-wasm/verbs/src/verbs/library.rs` |
 | The device's list, seeding, versions | `apps/k7-daw-backend/packages/k7-libraries/src/store.rs` |
 | Routes for the list | `apps/k7-daw-backend/packages/k7-libraries/src/routes.rs` |
 
@@ -92,7 +92,7 @@ content raises it. A module and the engine code it relies on change in one commi
 Presets are files in a tree beside the modules: `_presets/` in the workspace, `presets/` in a
 library, at `<root>/<namespace>/<module path>/<name>.k7x`. Vocabulary and schema:
 `apps/k7-daw-frontend/packages/song-schema/src/presets.ts`; reading and writing: `apps/k7-daw-frontend/packages/song-edit/src/presets.ts`;
-verbs: `apps/k7-daw-frontend/packages/commands/src/verbs/preset.ts`. Applying a preset writes into the node's file and
+verbs: `apps/k7-daw-wasm/verbs/src/verbs/node_preset.rs`. Applying a preset writes into the node's file and
 reaches the engine as a values-only diff.
 
 ## Assemblies

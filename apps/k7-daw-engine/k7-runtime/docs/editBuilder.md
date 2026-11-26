@@ -112,7 +112,7 @@ Track faders were never involved.
 Set in `populateEdit`, so playback, `--render` and a freeze move together: a bounce that came back
 at one level and played at another would be audible the moment you froze a track. It matters most
 where a render is written BACK onto the material — `clip process` treated the same audio 3 dB
-quieter every pass (`apps/k7-daw-frontend/packages/audio-passes/docs/peakPass.md`).
+quieter every pass (`apps/k7-daw-frontend/packages/commands/docs/peakPass.md`).
 
 It stays a hard 0. The song's own output level does **not** go here: this fader stops at +6 dB and
 a master trim is exactly where that ceiling bites, so `masterVolume` is applied by a gain the

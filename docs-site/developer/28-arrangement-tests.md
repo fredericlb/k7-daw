@@ -48,7 +48,7 @@ source comment or a Markdown page naming a file that is not there.
 `trackHighlight.test.ts`, `trackOrder.test.ts`, `trackGroup.test.ts`, `trackInput.test.ts`,
 `projectMaster.test.ts`, `projectConsole.test.ts`, `refusal.test.ts`, and `commandSpec.test.ts`, which
 holds the catalogue itself to its rules (both languages present, readable sentences at most 60
-characters, known completion providers). `apps/k7-daw-frontend/packages/commands/src/testHost.ts` is the fake
+characters, known completion providers). `apps/k7-daw-wasm/verbs/tests/support/mod.rs` is the fake
 `CommandHost` they run against.
 
 ### Writers (`apps/k7-daw-frontend/packages/song-edit/src/`)

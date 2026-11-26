@@ -139,7 +139,7 @@ library and every workspace, and runs at the highest level, so latest, old and f
    `LibraryUpgrades.tsx` says so with a button that moves the pin.
 3. **Built:** Publish on the Libraries page, `POST /account/libraries/<name>/publish`, and each
    library's versions in `GET /account/libraries`.
-4. **Built:** `library versions` and `library upgrade` (`../apps/k7-daw-frontend/packages/commands/src/verbs/library.ts`),
+4. **Built:** `library versions` and `library upgrade` (`../apps/k7-daw-wasm/verbs/src/verbs/library.rs`),
    the strip above the file tree, the public listing and per-file download
    (`k7-libraries`). **Remains:** a paired machine still
    follows each library whole through the relay, every version and the draft included; fetching

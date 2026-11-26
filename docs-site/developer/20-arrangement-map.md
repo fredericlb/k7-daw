@@ -29,10 +29,10 @@ is the one after.
 | Mastering surface | `apps/k7-daw-frontend/src/components/MasteringTab.tsx`, `apps/k7-daw-frontend/src/mastering/controls.ts`, `apps/k7-daw-frontend/src/mastering/bindings.ts` |
 | Export | `apps/k7-daw-frontend/src/exportArgs.ts`, `apps/k7-daw-frontend/src/hooks/useShare.ts`, `apps/k7-daw-frontend/src/components/SharePanel.tsx`; `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/shares/export.rs` |
 | Offline renders | `apps/k7-daw-frontend/packages/take-render/src/` (renderer, material split/consolidate, recorded takes) |
-| Bouncing through a chain | `apps/k7-daw-frontend/packages/audio-passes/src/processChain.ts`, `peakPass.ts`, `coldPass.ts` |
+| Bouncing through a chain | `apps/k7-daw-wasm/verbs/src/verbs/bounce.rs`, `peakPass.ts`, `coldPass.ts` |
 | Import | `apps/k7-daw-frontend/packages/translator/src/` (`dawproject.ts`, `ableton.ts`, `abletonZip.ts`, `emit.ts`, `params.ts`), run in the verbs Worker (`apps/k7-daw-frontend/packages/commands/src/runtime/importer.ts`) |
 | Undo journal | `apps/k7-daw-backend/packages/k7-file-service/src/journal/` (server), `apps/k7-daw-frontend/packages/project-shell/src/undo.ts` (client), `apps/k7-daw-frontend/src/components/HistoryPanel.tsx` |
-| The verbs | `apps/k7-daw-frontend/packages/commands/commands.yaml` (names, args, menus), `apps/k7-daw-frontend/packages/commands/src/commands.ts` and `apps/k7-daw-frontend/packages/commands/src/verbs/` (handlers) |
+| The verbs | `apps/k7-daw-frontend/packages/commands/commands.yaml` (names, args, menus), `apps/k7-daw-wasm/verbs/src/verbs/mod.rs` and `apps/k7-daw-frontend/packages/commands/src/verbs/` (handlers) |
 | The writes | `apps/k7-daw-frontend/packages/song-edit/src/` — `trackMix.ts` (placements), `materialCut.ts`, `insertTime.ts`, `crossfade.ts`, `eventLoop.ts`, `eventGain.ts`, `onsets.ts`, `takeEdit.ts`, `projectEdit.ts` (module params, warp, bindings) |
 | Key bindings | `apps/k7-daw-frontend/src/keys.ts` |
 | Shell-local verbs | `apps/k7-daw-frontend/src/palette.ts` (`LOCAL_COMMANDS`), `localCommands.ts`, and `runLocalCommand` in `apps/k7-daw-frontend/src/App.tsx` |

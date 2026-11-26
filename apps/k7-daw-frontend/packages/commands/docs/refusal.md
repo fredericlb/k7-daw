@@ -4,12 +4,12 @@ One output channel is not enough. `selection consolidate` on a two-lane rectangl
 so does `selection consolidate` on a good one; with nothing in the wire to tell them apart both
 arrive as the same grey text under the command bar, and the app goes on as if the edit had landed.
 
-So `CommandHost` has two verbs:
+So a verb's `Host` has two channels:
 
 | verb | what it means |
 |---|---|
-| `log(lines)` | this is what I DID |
-| `refuse(lines)` | this is why I did NOTHING |
+| `h.log(lines)` | this is what I DID |
+| `h.refuse(lines)` | this is why I did NOTHING |
 
 Same lines, same order, one flag. `refuse` does not throw and does not return: a handler that
 refuses says so and then `return`s, exactly as it did before.

@@ -30,11 +30,11 @@ Test it the house way, asserting the file differs by exactly the line you meant 
    on every event's menu by itself. Add `confirm: true` for a verb that destroys more than Ctrl+Z is
    trusted with.
 3. **Implement the handler** in `apps/k7-daw-frontend/packages/commands/src/verbs/<topic>.ts`, exported as a
-   `Record<string, SidHandler>` and listed in `VERB_TABLES` in `apps/k7-daw-frontend/packages/commands/src/commands.ts`
+   `Record<string, SidHandler>` and listed in `VERB_TABLES` in `apps/k7-daw-wasm/verbs/src/verbs/mod.rs`
    (as `CROSSFADE_VERBS` is). Parse, resolve against `h.project()`, `h.refuse([...])` with a sentence
    naming what is wrong before writing anything, call the writer, `h.log([...])`, `await h.reload()`.
    A verb that renders audio reads `h.render` and refuses when it is absent.
-4. **Test it** against `apps/k7-daw-frontend/packages/commands/src/testHost.ts`.
+4. **Test it** against `apps/k7-daw-wasm/verbs/tests/support/mod.rs`.
 
 If a gesture would need the verb N times, write the bulk verb instead (`events add`,
 `sequence notes move`): one line, one journal entry, one reload, and no half-applied state.

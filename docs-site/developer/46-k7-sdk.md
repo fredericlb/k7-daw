@@ -8,8 +8,8 @@ is three small files:
 | File | Contents |
 |---|---|
 | `apps/k7-daw-frontend/packages/k7-sdk/src/plugin.ts` | The contract: `K7Plugin` and its contribution types, `definePlugin`. |
-| `apps/k7-daw-frontend/packages/k7-sdk/src/install.ts` | The server-side installer and the SID attribution. |
-| `apps/k7-daw-frontend/packages/k7-sdk/src/install.test.ts` | The installer against the real registries. |
+| `apps/k7-daw-frontend/packages/k7-sdk/src/plugin.ts` | The server-side installer and the SID attribution. |
+| `apps/k7-daw-frontend/packages/k7-plugins/src/composition.test.ts` | The installer against the real registries. |
 
 Plugins are compiled in. There is no dynamic or third-party loading: a plugin exists because a
 composition list in `apps/k7-daw-frontend/packages/k7-plugins` names it.
@@ -105,7 +105,7 @@ surface types in the verbs runtime only, so in practice a pane's type is a schem
 
    The spec's `sid` must equal the contribution's. The handler is a `SidHandler`,
    `(args, host) => ...`, using the host for `songPath`, `log`, `refuse`, `reload`.
-2. Add it to `BUILTIN_PLUGINS` in `apps/k7-daw-frontend/packages/k7-plugins/src/server.ts` if it has commands or
+2. Add it to `BUILTIN_PLUGINS` in `apps/k7-daw-frontend/packages/k7-plugins/src/browser.ts` if it has commands or
    surface types, and to `BROWSER_PLUGINS` in `apps/k7-daw-frontend/packages/k7-plugins/src/browser.ts` if it has panes.
 3. Run `npm test -w @studio/k7-plugins` (`composition.test.ts` installs the server list and checks
    each browser plugin has a pane) and `npm test -w @studio/k7-sdk`.

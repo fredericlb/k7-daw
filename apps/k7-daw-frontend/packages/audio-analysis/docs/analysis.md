@@ -204,7 +204,7 @@ with itself at two zoom levels.
 ## The true peak is its own measurement
 
 `measureFilePeak` answers the loudest sample on ANY channel, which is what a COLD module's `Peak` is
-set from (`apps/k7-daw-frontend/packages/audio-passes/docs/peakPass.md`). The sidecar cannot answer it: its envelope is
+set from (`apps/k7-daw-frontend/packages/commands/docs/peakPass.md`). The sidecar cannot answer it: its envelope is
 the mono sum, so a peak living on one channel of a pair reads 6 dB low there, and two channels in
 anti-phase read as **silence**. It is also stored at four decimals. Right for drawing, useless for
 setting a gain.

@@ -28,7 +28,7 @@ Declare it in `apps/k7-daw-frontend/packages/commands/commands.yaml` in the pict
 if a shot's right-click should offer it. Implement the handler in `apps/k7-daw-frontend/packages/commands/src/verbs/`,
 reusing `target`, `laneFile`, `seconds` and `put` from `verbs/picture.ts` (they give addressing,
 containment, refusals and the undo snapshot), and list its table in `VERB_TABLES` in
-`apps/k7-daw-frontend/packages/commands/src/commands.ts`. Long-running work goes through `h.background(tag, work)`.
+`apps/k7-daw-wasm/verbs/src/verbs/mod.rs`. Long-running work goes through `h.background(tag, work)`.
 
 ### A new uniform for shaders
 
@@ -72,8 +72,8 @@ are split out precisely so they can be tested.
 | song side | `apps/k7-daw-frontend/packages/song/src/videoOutputs.test.ts`, `videoSound.test.ts`, `chainPicture.test.ts` |
 | renderer | `apps/k7-daw-frontend/packages/ui-eyes/src/timeline.test.ts`, `compositor.test.ts`, `passes.test.ts`, `motion.test.ts`, `text.test.ts`, `cube.test.ts`, `camera.test.ts`, `exportSupport.test.ts` |
 | plugin | `apps/k7-daw-frontend/packages/song-video/src/pictureMix.test.ts`, `viewportRect.test.ts`, `shaderAudio.test.ts` |
-| verbs | `apps/k7-daw-frontend/packages/commands/src/picture.test.ts`, `pictureSpeed.test.ts`, `pictureSound.test.ts`, `pictureMedia.test.ts`, `pictureInterchange.test.ts`, `pictureImport.test.ts`, `pictureRender.test.ts`, `projectAspect.test.ts` |
-| media preparation | `apps/k7-daw-frontend/packages/video-prep/src/plan.test.ts`, `transcode.test.ts` (the ffmpeg arguments, not a run) |
+| verbs | `apps/k7-daw-wasm/verbs/tests/pictures.rs`, `pictureSpeed.test.ts`, `pictureSound.test.ts`, `pictureMedia.test.ts`, `pictureInterchange.test.ts`, `pictureImport.test.ts`, `pictureRender.test.ts`, `projectAspect.test.ts` |
+| media preparation | `apps/k7-daw-wasm/verbs/src/verbs/picture_media.rs`, `transcode.test.ts` (the ffmpeg arguments, not a run) |
 | frontend | `apps/k7-daw-frontend/src/exportArgs.test.ts`, `videoDrag.test.ts`, `videoSpans.test.ts`, `videoTake.test.ts`, `timelineDrop.test.ts` |
 
 Two tests pin rules that live in two places: `apps/k7-daw-frontend/src/videoSpans.test.ts` holds the

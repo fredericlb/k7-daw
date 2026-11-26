@@ -108,7 +108,7 @@ unaffected; typing the line by hand does not offer the filenames.
 
 | what | where |
 |---|---|
-| the table and its validation | `INTRINSICS` / `setIntrinsic` in `apps/k7-daw-frontend/packages/commands/src/verbs/intrinsics.ts` |
+| the table and its validation | `INTRINSICS` / `setIntrinsic` in `apps/k7-daw-wasm/verbs/src/verbs/node_intrinsic.rs` |
 | the writers | `setModuleChannel`, `setModuleMonitor`, `setModuleInputGain` in `projectEdit.ts` |
 | what a widget binds | `widgetTarget` in `@studio/ui-chains-react` — an `@` bind on a module node |
 | the line a pick sends | `setModuleField`, same file |

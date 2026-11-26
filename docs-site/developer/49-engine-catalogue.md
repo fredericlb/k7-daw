@@ -47,7 +47,7 @@ file at a fixed path, written by the engine and read by everyone, is the cheapes
 | `dsp` (and the older `jsdsp`) | DSP Graph, or MIDI Graph when the module emits MIDI, with the compiled graph inline |
 | `internal` | The built-in processor named by `plugin.name` |
 | an external format | The scanned plugin, addressed by its identifier |
-| `offline` (`OFFLINE_TYPE`) | No engine plugin: a cold pass (`apps/k7-daw-frontend/packages/audio-passes/src/coldPass.ts`) produces its outputs onto disk first |
+| `offline` (`OFFLINE_TYPE`) | No engine plugin: a cold pass (`apps/k7-daw-wasm/verbs/src/verbs/event_process.rs`) produces its outputs onto disk first |
 | `not_supported` | A deliberate marker: the plugin is known and cannot load; the node is bypassed |
 | anything else (for example `builtin`) | Passed through unchanged; `EditBuilder.cpp` normalises a built-in's spelling to the type name the engine creates it by |
 

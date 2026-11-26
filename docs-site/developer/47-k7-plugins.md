@@ -9,7 +9,7 @@ A plugin has up to two halves, installed in two processes:
 
 | List | File | Installed by | When |
 |---|---|---|---|
-| `BUILTIN_PLUGINS` | `apps/k7-daw-frontend/packages/k7-plugins/src/server.ts` | `installBuiltinPlugins()`, called by the verbs runtime (`apps/k7-daw-frontend/packages/commands/src/runtime/plugins.ts`) | When the runtime starts, so it knows the plugin's verbs and surface types before it runs a line. |
+| `BUILTIN_PLUGINS` | `apps/k7-daw-frontend/packages/k7-plugins/src/browser.ts` | `installBuiltinPlugins()`, called by the verbs runtime (`apps/k7-daw-frontend/packages/k7-plugins/src/browser.ts`) | When the runtime starts, so it knows the plugin's verbs and surface types before it runs a line. |
 | `BROWSER_PLUGINS` | `apps/k7-daw-frontend/packages/k7-plugins/src/browser.ts` | `apps/k7-daw-frontend/src/plugins.ts`, through `builtinBrowserPlugins()` | When the shell loads, registering each plugin's panes in the pane ring. |
 
 Why two lists rather than one: commands run in the verbs runtime (a Worker, or Node for the CLI), panes in the page.

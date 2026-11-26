@@ -247,7 +247,7 @@ other lanes too — `clip process` in that menu reads as "process this event" wh
 every placement of the file. The event menu offers the `event …` family plus `ui file`; the
 material's own verbs stay reachable from the bar and from the clip's editor, where the clip
 itself is what you are looking at. Processing is still in that menu, as `event process`, which
-treats the clicked placement alone (`apps/k7-daw-frontend/packages/audio-passes/docs/processChain.md`). (It is also why the menu has no MIDI/audio split:
+treats the clicked placement alone (`apps/k7-daw-frontend/packages/commands/docs/processChain.md`). (It is also why the menu has no MIDI/audio split:
 `clipTargets` lists no MIDI, and without that family the ctx has no need to say which kind
 the clip is.)
 
