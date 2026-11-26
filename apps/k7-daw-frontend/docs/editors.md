@@ -14,7 +14,9 @@ the live take, a sequence's grid, the takes.
   settings and actions to the right.
 - **A clip editor starts with Fit.** The first control of the audio clip and the piano roll is Fit
   (`DockFitButton`, `ui fit`): one zoom level of the timeline centred on the edited placement, a quarter
-  of its length clear either side, so shift+z backs out of it. It moves the timeline, never the editor.
+  of its length clear either side, its lane scrolled on screen and the clip outlined for 1.5 s so the
+  eye finds it. Fit again takes that level back, to the view before; so does shift+z. It moves the
+  timeline, never the editor.
 - **The content holds only what is edited**: the cards, the strips, the notes, the wave, the takes'
   rows, and the edited data's own names and values (a lane's name on its card, a key's name, a ruler's
   numbers). No caption, no section heading, no help line.

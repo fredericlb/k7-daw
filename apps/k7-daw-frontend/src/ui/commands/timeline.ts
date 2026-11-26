@@ -167,8 +167,18 @@ export const TIMELINE_COMMANDS: LocalCommand[] = [
         ctx.setStatus(m["status.noClipToFit"]());
         return true;
       }
-      const { clip } = slot.target;
-      ctx.timelineRef.current?.frameClip(clip.start, clip.length);
+      const { clip, track } = slot.target;
+      const lane =
+        track ??
+        ctx.projectDoc?.tracks.find((t) =>
+          t.clips.some((c) => c.id === clip.id),
+        )?.id;
+      ctx.timelineRef.current?.frameClip({
+        track: lane,
+        id: clip.id,
+        start: clip.start,
+        length: clip.length,
+      });
       return true;
     },
   },

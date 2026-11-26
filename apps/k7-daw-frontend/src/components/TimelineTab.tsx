@@ -180,6 +180,8 @@ const EXPAND_EXTRA = 40;
 const SHOT_LABEL_H = 14;
 // Expand's movement, shared by the lanes and every line spanning them, so they travel as one.
 const NATURAL = 4;
+/** How long Fit's flash lasts, ms. */
+const FLASH_MS = 1500;
 /** Sources a browser does not decode as they are, shown as converting until an `optimized:` copy lands (song-video/docs/media.md). */
 const NEEDS_COPY = /\.(mov|mkv)$/i;
 
@@ -308,8 +310,13 @@ export interface TimelineHandle {
   zoomIn: () => void;
   zoomOut: () => void;
   zoomReset: () => void;
-  /** `ui fit` — the view centred on one placement, `length` beats long from `start`, with room either side. */
-  frameClip: (start: number, length: number) => void;
+  /** `ui fit` — the view centred on one placement and its lane brought on screen, the clip flashed; again, back to the view before. */
+  frameClip: (clip: {
+    track?: string;
+    id: string;
+    start: number;
+    length: number;
+  }) => void;
   seekToCaret: () => void;
   /** `transport step` — the drawn tick after (`1`) or before (`-1`) `sec`, in seconds; null past either end (docs/timeline.md). */
   stepTarget: (sec: number, dir: 1 | -1) => number | null;
@@ -586,6 +593,12 @@ function TimelineTabView({
   } | null>(null);
   // The zoom stack: [] is the song at rest, the last entry is what's drawn.
   const [zoom, setZoom] = useState<Viewport[]>([]);
+  const zoomRef = useLatest(zoom);
+  // The zoom level Fit pushed, so a second Fit pops that one level and nothing a person zoomed after it.
+  const fitRef = useRef<{ depth: number } | null>(null);
+  // The clip Fit just framed, outlined a moment so the eye finds it.
+  const [flash, setFlash] = useState<string | null>(null);
+  const flashTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
   // The transport loop as an inclusive beat range, or null. The engine enforces the wrap; this only draws the band.
   const [loop, setLoop] = useState<{ lo: number; hi: number } | null>(null);
   // …and the loop the ENGINE holds, as one string so a frame that repeats it re-renders nothing.
@@ -1567,20 +1580,30 @@ function TimelineTabView({
       },
       // shift+z: back out one level. A selection belongs to the view it was drawn in, so leaving that view drops it.
       zoomOut: () => {
+        fitRef.current = null;
         setSel(null);
         setZoom((z) => z.slice(0, -1));
       },
       // 0: all the way back to the song.
       zoomReset: () => {
+        fitRef.current = null;
         setSel(null);
         setZoom([]);
       },
-      // The edited clip, centred, a quarter of its length clear either side; one zoom level, so shift+z backs out of it.
-      frameClip: (start, length) => {
+      // The edited clip, centred, a quarter of its length clear either side, flashed; a second Fit takes that zoom back.
+      frameClip: ({ track, id, start, length }) => {
+        const fit = fitRef.current;
+        if (fit && fit.depth === zoomRef.current.length) {
+          fitRef.current = null;
+          setSel(null);
+          setZoom((z) => z.slice(0, -1));
+          return;
+        }
         const len = length > 0 ? length : NATURAL;
         const pad = Math.max(len / 4, 1);
         if (!visRows.length) return;
         setSel(null);
+        fitRef.current = { depth: zoomRef.current.length + 1 };
         setZoom((z) => [
           ...z,
           {
@@ -1590,118 +1613,138 @@ function TimelineTabView({
             rowTo: rowKey(visRows[visRows.length - 1]),
           },
         ]);
+        setFlash(`${track ?? ""}/${id}`);
+        clearTimeout(flashTimer.current);
+        flashTimer.current = setTimeout(() => setFlash(null), FLASH_MS);
+        // The lane comes on screen once the zoomed rows are drawn.
+        requestAnimationFrame(() => {
+          const lane = track
+            ? scrollRef.current?.querySelector(`[data-lane-track="${CSS.escape(track)}"]`)
+            : null;
+          lane?.scrollIntoView({ block: "nearest", inline: "nearest" });
+        });
       },
+  ])
+}
+,
       // t: seek the transport to the caret's beat. On a label there is nowhere to send it, so the key goes quiet.
-      seekToCaret: () => {
-        if (!proj || caret.beat === LABEL) return;
-        onSeek?.((caret.beat * 60) / proj.tempo);
-      },
-      stepTarget: (sec, dir) => {
-        const bps = bpsRef.current;
-        const to = adjacentTick(ticksRef.current, sec * bps, dir);
-        return to === null ? null : to / bps;
-      },
+      seekToCaret: () =>
+{
+  if (!proj || caret.beat === LABEL) return;
+  onSeek?.((caret.beat * 60) / proj.tempo);
+}
+,
+      stepTarget: (sec, dir) =>
+{
+  const bps = bpsRef.current;
+  const to = adjacentTick(ticksRef.current, sec * bps, dir);
+  return to === null ? null : to / bps;
+}
+,
       /** `selection copy` — the events inside the rectangle, relative to its corner; TRACK rows only, skipped rather than counted. */
-      copy: () => {
-        const s = selRef.current;
-        /** NO RECTANGLE: the PLACEMENT under the caret is what gets copied — a lane's unit is a clip rather than a grid step. */
-        if (!s) {
-          const c = clipUnderCaret;
-          // A generated lane's clips are the scheduler's look-ahead, backed by no file — there is no placement to put down.
-          if (!c || caretRow?.kind !== "track" || caretRow.track.generated)
-            return null;
-          const len = c.length > 0 ? c.length : NATURAL;
-          return copyEvents([laneEvents(caretRow)], c.start, c.start + len);
-        }
-        // A CLICKED clip: that placement alone, the rectangle around it only drawn.
-        if (s.clip) {
-          const { trackId, start } = s.clip;
-          const r = visRows.find(
-            (x) => x.kind === "track" && x.track.id === trackId,
-          );
-          if (r?.kind !== "track" || r.track.generated) return null;
-          const lane = laneEvents(r);
-          const one = {
-            ...lane,
-            events: lane.events.filter((e) => Math.abs(e.start - start) < 1e-6),
-          };
-          return copyEvents([one], start, start + s.clip.length);
-        }
-        const a = rowIndexOf(visRows, s.anchor.row);
-        const b = rowIndexOf(visRows, s.head.row);
-        if (a < 0 || b < 0) return null;
-        const lo = Math.min(s.anchor.beat, s.head.beat);
-        const hi = Math.max(s.anchor.beat, s.head.beat);
-        const lanes = visRows
-          .slice(Math.min(a, b), Math.max(a, b) + 1)
-          .flatMap((r) =>
-            r.kind === "track" && !r.track.generated ? [laneEvents(r)] : [],
-          );
-        return lanes.length ? copyEvents(lanes, lo, hi + 1) : null;
-      },
+      copy: () =>
+{
+  const s = selRef.current;
+  /** NO RECTANGLE: the PLACEMENT under the caret is what gets copied — a lane's unit is a clip rather than a grid step. */
+  if (!s) {
+    const c = clipUnderCaret;
+    // A generated lane's clips are the scheduler's look-ahead, backed by no file — there is no placement to put down.
+    if (!c || caretRow?.kind !== "track" || caretRow.track.generated)
+      return null;
+    const len = c.length > 0 ? c.length : NATURAL;
+    return copyEvents([laneEvents(caretRow)], c.start, c.start + len);
+  }
+  // A CLICKED clip: that placement alone, the rectangle around it only drawn.
+  if (s.clip) {
+    const { trackId, start } = s.clip;
+    const r = visRows.find((x) => x.kind === "track" && x.track.id === trackId);
+    if (r?.kind !== "track" || r.track.generated) return null;
+    const lane = laneEvents(r);
+    const one = {
+      ...lane,
+      events: lane.events.filter((e) => Math.abs(e.start - start) < 1e-6),
+    };
+    return copyEvents([one], start, start + s.clip.length);
+  }
+  const a = rowIndexOf(visRows, s.anchor.row);
+  const b = rowIndexOf(visRows, s.head.row);
+  if (a < 0 || b < 0) return null;
+  const lo = Math.min(s.anchor.beat, s.head.beat);
+  const hi = Math.max(s.anchor.beat, s.head.beat);
+  const lanes = visRows
+    .slice(Math.min(a, b), Math.max(a, b) + 1)
+    .flatMap((r) =>
+      r.kind === "track" && !r.track.generated ? [laneEvents(r)] : [],
+    );
+  return lanes.length ? copyEvents(lanes, lo, hi + 1) : null;
+}
+,
       /** `selection paste` — one `events add`, so twelve placements are one journal entry; the lanes are the track rows from the CARET down. */
-      pasteLine: (c) => {
-        if (c.kind !== "events") return { note: m["tl.sel.clipboardNotes"]() };
-        if (!proj || caret.beat === LABEL)
-          return {
+      pasteLine: (c) =>
+{
+  if (c.kind !== "events") return { note: m["tl.sel.clipboardNotes"]() };
+  if (!proj || caret.beat === LABEL)
+    return {
             note: m["tl.sel.caretOnLabel"](),
           };
-        const at = rowIndexOf(visRows, caret.row);
-        if (at < 0) return { note: m["tl.sel.caretNoRow"]() };
-        const lanes = visRows
-          .slice(at)
-          .flatMap((r) =>
-            r.kind === "track" && !r.track.generated ? [r.track.id] : [],
-          );
-        const out = pasteEvents(c, lanes, caret.beat);
-        if (!out.length)
-          return {
+  const at = rowIndexOf(visRows, caret.row);
+  if (at < 0) return { note: m["tl.sel.caretNoRow"]() };
+  const lanes = visRows
+    .slice(at)
+    .flatMap((r) =>
+      r.kind === "track" && !r.track.generated ? [r.track.id] : [],
+    );
+  const out = pasteEvents(c, lanes, caret.beat);
+  if (!out.length)
+    return {
             note: m["tl.sel.nothingToPaste"](),
           };
-        const num = proj.timeSigNumerator;
-        const den = proj.timeSigDenominator;
-        // `start` is the only field re-spelled: it is a position in the ARRANGEMENT and the paste moved it.
-        const payload = out.map((e) => ({
-          track: e.track,
-          ref: e.ref,
-          start: beatsToPosition(e.start, num, den),
-          ...(e.from !== undefined ? { from: e.from } : {}),
-          ...(e.to !== undefined ? { to: e.to } : {}),
-          ...(e.fadeIn ? { fadeIn: e.fadeIn } : {}),
-          ...(e.fadeOut ? { fadeOut: e.fadeOut } : {}),
-          ...(e.loop ? { loop: e.loop } : {}),
-          ...(e.disabled ? { disabled: true } : {}),
-          ...(e.warp === false ? { warp: false } : {}),
-        }));
-        const dropped = droppedCount(out.length, c);
-        return {
+  const num = proj.timeSigNumerator;
+  const den = proj.timeSigDenominator;
+  // `start` is the only field re-spelled: it is a position in the ARRANGEMENT and the paste moved it.
+  const payload = out.map((e) => ({
+    track: e.track,
+    ref: e.ref,
+    start: beatsToPosition(e.start, num, den),
+    ...(e.from !== undefined ? { from: e.from } : {}),
+    ...(e.to !== undefined ? { to: e.to } : {}),
+    ...(e.fadeIn ? { fadeIn: e.fadeIn } : {}),
+    ...(e.fadeOut ? { fadeOut: e.fadeOut } : {}),
+    ...(e.loop ? { loop: e.loop } : {}),
+    ...(e.disabled ? { disabled: true } : {}),
+    ...(e.warp === false ? { warp: false } : {}),
+  }));
+  const dropped = droppedCount(out.length, c);
+  return {
           line: `events add ${JSON.stringify(payload)}`,
           note:
             `${out.length} event${out.length > 1 ? "s" : ""} pasted` +
             (dropped ? ` — ${dropped} had no lane and were left` : ""),
         };
-      },
+}
+,
       /** `selection delete` — one `events remove` naming each event the rectangle holds, so the lot is one Ctrl+Z. */
-      splitLine: (sec) => {
-        if (!proj) return { note: m["tl.sel.noProject"]() };
-        const bps = proj.tempo / 60;
-        const nothing = {
-          note: m["tl.sel.nothingToSplit"](),
-        };
-        if (caretRow?.kind === "video") {
-          const clips = caretRow.track.clips;
-          // The shot on TOP at the playhead: the last in file order whose span holds it, the picture's own rule.
-          for (let i = clips.length - 1; i >= 0; i--) {
-            const c = clips[i];
-            const next = clips[i + 1];
-            const end =
-              c.length > 0
-                ? c.start + c.length
-                : next
-                  ? next.start
-                  : Number.POSITIVE_INFINITY;
-            if (sec >= c.start && sec < end)
-              return (
+      splitLine: (sec) =>
+{
+  if (!proj) return { note: m["tl.sel.noProject"]() };
+  const bps = proj.tempo / 60;
+  const nothing = {
+    note: m["tl.sel.nothingToSplit"](),
+  };
+  if (caretRow?.kind === "video") {
+    const clips = caretRow.track.clips;
+    // The shot on TOP at the playhead: the last in file order whose span holds it, the picture's own rule.
+    for (let i = clips.length - 1; i >= 0; i--) {
+      const c = clips[i];
+      const next = clips[i + 1];
+      const end =
+        c.length > 0
+          ? c.start + c.length
+          : next
+            ? next.start
+            : Number.POSITIVE_INFINITY;
+      if (sec >= c.start && sec < end)
+        return (
                 pictureToolLine("cut", {
                   lane: caretRow.track.id,
                   name: c.name || c.id || "on",
@@ -1710,19 +1753,18 @@ function TimelineTabView({
                   at: sec,
                 }) ?? nothing
               );
-          }
-          return nothing;
-        }
-        if (caretRow?.kind !== "track" || caretRow.track.generated)
-          return nothing;
-        const at = sec * bps;
-        const c = caretRow.track.clips.find(
-          (x) => at > x.start && (x.length <= 0 || at < x.start + x.length),
-        );
-        if (!c) return nothing;
-        const tc = (b: number) =>
-          beatsToPosition(b, proj.timeSigNumerator, proj.timeSigDenominator);
-        return (
+    }
+    return nothing;
+  }
+  if (caretRow?.kind !== "track" || caretRow.track.generated) return nothing;
+  const at = sec * bps;
+  const c = caretRow.track.clips.find(
+    (x) => at > x.start && (x.length <= 0 || at < x.start + x.length),
+  );
+  if (!c) return nothing;
+  const tc = (b: number) =>
+    beatsToPosition(b, proj.timeSigNumerator, proj.timeSigDenominator);
+  return (
           toolLine("cut", {
             track: caretRow.track.id,
             name: c.name || c.id,
@@ -1733,148 +1775,150 @@ function TimelineTabView({
             atTc: tc(at),
           }) ?? nothing
         );
-      },
-      sequenceLine: () => {
-        if (!proj) return { note: m["tl.sel.noProject"]() };
-        const s = selRef.current;
-        if (!s)
-          return {
+}
+,
+      sequenceLine: () =>
+{
+  if (!proj) return { note: m["tl.sel.noProject"]() };
+  const s = selRef.current;
+  if (!s)
+    return {
             note: m["tl.sel.selectPeriod"](),
           };
-        const a = rowIndexOf(visRows, s.anchor.row);
-        const b = rowIndexOf(visRows, s.head.row);
-        if (a < 0 || b < 0) return { note: m["tl.sel.rectNoRow"]() };
-        // The cells the rectangle covers, its last one included, as every rectangle verb reads it.
-        const lo = Math.min(s.anchor.beat, s.head.beat);
-        const hi = Math.max(s.anchor.beat, s.head.beat) + 1;
-        // Sound lanes only, each once: a lane wired on two ports is one file.
-        const lanes = [
-          ...new Set(
-            visRows
-              .slice(Math.min(a, b), Math.max(a, b) + 1)
-              .flatMap((r) =>
-                r.kind === "track" && !r.track.generated
-                  ? [laneOf(r.track.id)]
-                  : [],
-              ),
-          ),
-        ];
-        if (!lanes.length) return { note: m["tl.sel.noLaneForSequence"]() };
-        const num = proj.timeSigNumerator;
-        const den = proj.timeSigDenominator;
-        setSel(null);
-        return {
+  const a = rowIndexOf(visRows, s.anchor.row);
+  const b = rowIndexOf(visRows, s.head.row);
+  if (a < 0 || b < 0) return { note: m["tl.sel.rectNoRow"]() };
+  // The cells the rectangle covers, its last one included, as every rectangle verb reads it.
+  const lo = Math.min(s.anchor.beat, s.head.beat);
+  const hi = Math.max(s.anchor.beat, s.head.beat) + 1;
+  // Sound lanes only, each once: a lane wired on two ports is one file.
+  const lanes = [
+    ...new Set(
+      visRows
+        .slice(Math.min(a, b), Math.max(a, b) + 1)
+        .flatMap((r) =>
+          r.kind === "track" && !r.track.generated ? [laneOf(r.track.id)] : [],
+        ),
+    ),
+  ];
+  if (!lanes.length) return { note: m["tl.sel.noLaneForSequence"]() };
+  const num = proj.timeSigNumerator;
+  const den = proj.timeSigDenominator;
+  setSel(null);
+  return {
           line: `sequence empty ${lanes.join(",")} ${beatsToPosition(lo, num, den)} ${beatsToPosition(hi, num, den)}`,
           note: m["tl.emptySequences"]({ lanes: lanes.join(", ") }),
         };
-      },
-      deleteLine: () => {
-        if (!proj) return { note: m["tl.sel.noProject"]() };
-        const num = proj.timeSigNumerator;
-        const den = proj.timeSigDenominator;
-        const s = selRef.current;
-        // NO RECTANGLE: the placement under the caret, the same one `copy` would take.
-        if (!s) {
-          const c = clipUnderCaret;
-          if (!c || caretRow?.kind !== "track" || caretRow.track.generated)
-            return {
+}
+,
+      deleteLine: () =>
+{
+  if (!proj) return { note: m["tl.sel.noProject"]() };
+  const num = proj.timeSigNumerator;
+  const den = proj.timeSigDenominator;
+  const s = selRef.current;
+  // NO RECTANGLE: the placement under the caret, the same one `copy` would take.
+  if (!s) {
+    const c = clipUnderCaret;
+    if (!c || caretRow?.kind !== "track" || caretRow.track.generated)
+      return {
               note: m["tl.sel.nothingToDelete"](),
             };
-          return {
+    return {
             line: `event remove ${caretRow.track.id} ${beatsToPosition(c.start, num, den)}`,
             note: m["tl.sel.eventDeleted"](),
           };
-        }
-        // A CLICKED clip: that placement and nothing else, whatever else starts in its beats.
-        if (s.clip) {
-          setSel(null);
-          return {
+  }
+  // A CLICKED clip: that placement and nothing else, whatever else starts in its beats.
+  if (s.clip) {
+    setSel(null);
+    return {
             line: `event remove ${s.clip.trackId} ${beatsToPosition(s.clip.start, num, den)}`,
             note: m["tl.sel.eventDeleted"](),
           };
-        }
-        const a = rowIndexOf(visRows, s.anchor.row);
-        const b = rowIndexOf(visRows, s.head.row);
-        if (a < 0 || b < 0) return { note: m["tl.sel.rectNoRow"]() };
-        const lo = Math.min(s.anchor.beat, s.head.beat);
-        const hi = Math.max(s.anchor.beat, s.head.beat) + 1;
-        // The rule `copy` keeps: track rows only, and an event is in the rectangle when it STARTS there.
-        const hits = visRows
-          .slice(Math.min(a, b), Math.max(a, b) + 1)
-          .flatMap((r) =>
-            r.kind === "track" && !r.track.generated
-              ? laneEvents(r)
-                  .events.filter(
-                    (e) => e.start >= lo - 1e-9 && e.start < hi - 1e-9,
-                  )
-                  .map((e) => ({
-                    track: r.track.id,
-                    start: beatsToPosition(e.start, num, den),
-                  }))
-              : [],
-          );
-        if (!hits.length) return { note: m["tl.sel.noEventInRect"]() };
-        // The rectangle held what is gone: it is dropped, as a cut leaves nothing selected.
-        setSel(null);
-        return {
+  }
+  const a = rowIndexOf(visRows, s.anchor.row);
+  const b = rowIndexOf(visRows, s.head.row);
+  if (a < 0 || b < 0) return { note: m["tl.sel.rectNoRow"]() };
+  const lo = Math.min(s.anchor.beat, s.head.beat);
+  const hi = Math.max(s.anchor.beat, s.head.beat) + 1;
+  // The rule `copy` keeps: track rows only, and an event is in the rectangle when it STARTS there.
+  const hits = visRows.slice(Math.min(a, b), Math.max(a, b) + 1).flatMap((r) =>
+    r.kind === "track" && !r.track.generated
+      ? laneEvents(r)
+          .events.filter((e) => e.start >= lo - 1e-9 && e.start < hi - 1e-9)
+          .map((e) => ({
+            track: r.track.id,
+            start: beatsToPosition(e.start, num, den),
+          }))
+      : [],
+  );
+  if (!hits.length) return { note: m["tl.sel.noEventInRect"]() };
+  // The rectangle held what is gone: it is dropped, as a cut leaves nothing selected.
+  setSel(null);
+  return {
           line: `events remove ${JSON.stringify(hits)}`,
           note: m["tl.sel.eventsDeleted"]({ n: hits.length }),
         };
-      },
+}
+,
       // shift+L: the selection becomes the loop region, spanning [lo, hi+1) so the last selected cell is inside it.
-      toggleLoop: () => {
-        const s = selRef.current;
-        if (s && proj) {
-          const lo = Math.min(s.anchor.beat, s.head.beat);
-          const hi = Math.max(s.anchor.beat, s.head.beat);
-          setLoop({ lo, hi });
-          setSel(null);
-          onSetLoop?.(
-            (lo * 60) / proj.tempo,
-            ((hi + 1) * 60) / proj.tempo,
-            true,
-          );
-          return;
-        }
-        if (loop) {
-          setLoop(null);
-          onSetLoop?.(0, 0, false);
-        }
-      },
+      toggleLoop: () =>
+{
+  const s = selRef.current;
+  if (s && proj) {
+    const lo = Math.min(s.anchor.beat, s.head.beat);
+    const hi = Math.max(s.anchor.beat, s.head.beat);
+    setLoop({ lo, hi });
+    setSel(null);
+    onSetLoop?.((lo * 60) / proj.tempo, ((hi + 1) * 60) / proj.tempo, true);
+    return;
+  }
+  if (loop) {
+    setLoop(null);
+    onSetLoop?.(0, 0, false);
+  }
+}
+,
       // m on a clip: pick up the placement under the caret. Cancels any selection — the arrows can only drive one mode.
-      startMove: () => {
-        if (moveRef.current && !moveRef.current.pending) return; // already carrying one
-        if (!caretRow || caretRow.kind !== "track" || caret.beat === LABEL)
-          return;
-        // A generated lane's clips are the scheduler's look-ahead, backed by no file — there is no `start:` to rewrite.
-        if (caretRow.track.generated) return;
-        const c = clipUnderCaret;
-        if (!c) return;
-        if (c.frozen) return; // a render, not a placement — see the pointer path above
-        setSel(null);
-        setMove({
-          trackId: caretRow.track.id,
-          clipId: c.id,
-          origStart: c.start,
-          length: c.length,
-          name: c.name || c.id,
-          offset: 0,
-          toTrackId: caretRow.track.id,
-        });
-        setStatus(m["status.timeline.moving"]({ name: c.name || c.id }));
-      },
+      startMove: () =>
+{
+  if (moveRef.current && !moveRef.current.pending) return; // already carrying one
+  if (!caretRow || caretRow.kind !== "track" || caret.beat === LABEL) return;
+  // A generated lane's clips are the scheduler's look-ahead, backed by no file — there is no `start:` to rewrite.
+  if (caretRow.track.generated) return;
+  const c = clipUnderCaret;
+  if (!c) return;
+  if (c.frozen) return; // a render, not a placement — see the pointer path above
+  setSel(null);
+  setMove({
+    trackId: caretRow.track.id,
+    clipId: c.id,
+    origStart: c.start,
+    length: c.length,
+    name: c.name || c.id,
+    offset: 0,
+    toTrackId: caretRow.track.id,
+  });
+  setStatus(m["status.timeline.moving"]({ name: c.name || c.id }));
+}
+,
       // The clock button: bars ⇄ seconds. Both units read the SAME grid — see docs/picture.md.
       toggleRuler,
       // The height button: tall lanes draw each clip's waveform or notes.
-      toggleLanes: () => {
-        if (!lanesLocked) setExpanded((v) => !v);
-      },
+      toggleLanes: () =>
+{
+  if (!lanesLocked) setExpanded((v) => !v);
+}
+,
       toggleAutomation: () => setShowAutomation((v) => !v),
       // Picking up a tool drops the rectangle: the two are different questions, and a press is about to mean something else.
-      setTool: (t) => {
-        setTool(t);
-        if (t !== "pointer") setSel(null);
-      },
+      setTool: (t) =>
+{
+  setTool(t);
+  if (t !== "pointer") setSel(null);
+}
+,
     }),
     [
       caret,
@@ -1892,359 +1936,357 @@ function TimelineTabView({
       lanesLocked,
       toggleRuler,
     ],
-  );
+  )
 
-  useEffect(
-    () =>
-      onView({
-        mode,
-        tool,
-        selecting: !!sel,
-        zoomed: zoom.length > 0,
-        loop: !!loop,
-        expanded: wantExpanded,
-      }),
-    [mode, tool, sel, zoom, loop, wantExpanded, onView],
-  );
+useEffect(
+  () =>
+    onView(
+{
+  mode, tool, selecting;
+  : !!sel,
+      zoomed: zoom.length > 0,
+      loop: !!loop,
+      expanded: wantExpanded,
+}
+),
+  [mode, tool, sel, zoom, loop, wantExpanded, onView],
+)
 
-  // Leaving the tab drops the pickup, rather than stranding a move whose keys no longer reach it.
-  useEffect(() => {
-    if (!active) setMove(null);
-  }, [active]);
+// Leaving the tab drops the pickup, rather than stranding a move whose keys no longer reach it.
+useEffect(() => {
+  if (!active) setMove(null);
+}, [active]);
 
-  // The playhead does NOT touch the caret: two independent positions, and only you move the caret — see docs/timeline.md.
+// The playhead does NOT touch the caret: two independent positions, and only you move the caret — see docs/timeline.md.
 
-  // The rectangle in on-screen rows, normalised so anchor-first and head-first draw the same box.
-  const selBox = useMemo(() => {
-    if (!sel) return null;
-    const a = rowIndexOf(visRows, sel.anchor.row);
-    const b = rowIndexOf(visRows, sel.head.row);
-    if (a < 0 || b < 0) return null;
-    return {
-      rowLo: Math.min(a, b),
-      rowHi: Math.max(a, b),
-      beatLo: Math.min(sel.anchor.beat, sel.head.beat),
-      beatHi: Math.max(sel.anchor.beat, sel.head.beat),
-    };
-  }, [sel, visRows]);
+// The rectangle in on-screen rows, normalised so anchor-first and head-first draw the same box.
+const selBox = useMemo(() => {
+  if (!sel) return null;
+  const a = rowIndexOf(visRows, sel.anchor.row);
+  const b = rowIndexOf(visRows, sel.head.row);
+  if (a < 0 || b < 0) return null;
+  return {
+    rowLo: Math.min(a, b),
+    rowHi: Math.max(a, b),
+    beatLo: Math.min(sel.anchor.beat, sel.head.beat),
+    beatHi: Math.max(sel.anchor.beat, sel.head.beat),
+  };
+}, [sel, visRows]);
 
-  /** The lanes a rectangle covers that can actually hold events, comma-joined, and its span — null rather than an empty string. */
-  const selRange = useMemo(() => {
-    // A clicked clip is no RANGE: the range verbs would take in whatever else starts in its beats.
-    if (!selBox || !proj || sel?.clip) return null;
-    const ids = visRows
-      .slice(selBox.rowLo, selBox.rowHi + 1)
-      .flatMap((r) =>
-        r.kind === "track" && !r.track.generated ? [r.track.id] : [],
-      );
-    if (!ids.length) return null;
+/** The lanes a rectangle covers that can actually hold events, comma-joined, and its span — null rather than an empty string. */
+const selRange = useMemo(() => {
+  // A clicked clip is no RANGE: the range verbs would take in whatever else starts in its beats.
+  if (!selBox || !proj || sel?.clip) return null;
+  const ids = visRows
+    .slice(selBox.rowLo, selBox.rowHi + 1)
+    .flatMap((r) =>
+      r.kind === "track" && !r.track.generated ? [r.track.id] : [],
+    );
+  if (!ids.length) return null;
+  const num = proj.timeSigNumerator;
+  const den = proj.timeSigDenominator;
+  return {
+    tracks: ids.join(","),
+    from: beatsToPosition(selBox.beatLo, num, den),
+    to: beatsToPosition(selBox.beatHi, num, den),
+  };
+}, [selBox, visRows, proj, sel?.clip]);
+
+// The caret, whole: where it is, what it is over, and what it has selected — one payload, because one gesture moves all three.
+useEffect(() => {
+  // The grid, read here rather than passed in: a beat means nothing without the time signature.
+  const at = (beat: number): string | null =>
+    proj
+      ? beatsToPosition(beat, proj.timeSigNumerator, proj.timeSigDenominator)
+      : null;
+  onCaret({
+    ...caret,
+    trackId: caretTrackId,
+    // LABEL is 'parked on the row's name', a row and not a moment, so it reports no timecode.
+    tc: caret.beat === LABEL ? null : at(caret.beat),
+    eventTc: clipUnderCaret ? at(clipUnderCaret.start) : null,
+    selection: selRange,
+  });
+}, [caret, caretTrackId, clipUnderCaret, selRange, proj, onCaret]);
+
+// While the bar is filling `events move`, the rectangle ANSWERS its region and re-answers on every change.
+useEffect(() => {
+  if (!feedEventsMove || !selRange) return;
+  feedEventsMove(selRange.tracks, selRange.from, selRange.to);
+}, [feedEventsMove, selRange]);
+
+useEffect(() => {
+  if (!active) return;
+  // A TOOL in hand outranks everything below: a press is about to do something other than what this pane usually does.
+  if (tool !== "pointer") {
+    setStatus(m["tl.toolPicked"]({ tool }));
+    return;
+  }
+  // Move mode owns the status line: where the clip started, where it sits now, and how to finish.
+  if (move && proj) {
     const num = proj.timeSigNumerator;
     const den = proj.timeSigDenominator;
-    return {
-      tracks: ids.join(","),
-      from: beatsToPosition(selBox.beatLo, num, den),
-      to: beatsToPosition(selBox.beatHi, num, den),
-    };
-  }, [selBox, visRows, proj, sel?.clip]);
+    const from = beatsToPosition(move.origStart, num, den);
+    const to = beatsToPosition(move.origStart + move.offset, num, den);
+    setStatus(m["status.timeline.movingFromTo"]({ name: move.name, from, to }));
+    return;
+  }
+  // Same for a resize — a drag with no numbers is a guess, and the span is the whole point of the gesture.
+  if (resize && proj) {
+    const num = proj.timeSigNumerator;
+    const den = proj.timeSigDenominator;
+    setStatus(
+      m["status.timeline.resizing"]({
+        from: beatsToPosition(resize.start, num, den),
+        to: beatsToPosition(resize.end, num, den),
+        beats: resize.end - resize.start,
+      }),
+    );
+    return;
+  }
+  // A zoom is a mode you can forget you are in, so say so on every line and name the way out.
+  const z = zoom.length
+    ? ` · ${m["status.timeline.zoomed"]({
+        depth: zoom.length,
+        from: Math.floor(beatLo / barBeats) + 1,
+        to: Math.floor(beatHi / barBeats) + 1,
+        rows: visRows.length,
+      })}`
+    : "";
+  if (selBox) {
+    setStatus(
+      m["status.timeline.selection"]({
+        beats: selBox.beatHi - selBox.beatLo + 1,
+        rows: selBox.rowHi - selBox.rowLo + 1,
+      }) + z,
+    );
+    return;
+  }
+  if (!caretRow) {
+    setStatus("");
+    return;
+  }
+  if (caret.beat !== LABEL) {
+    const name = caretRow.kind === "track" ? caretRow.track.name : "";
+    setStatus(m["status.timeline.caret"]({ name, beat: caret.beat + 1 }));
+    return;
+  }
+  // A label says what m/s will act on — on a pattern lane that is its group, so the redirect doesn't look like a miss.
+  if (caretRow.kind === "group")
+    setStatus(
+      m["status.timeline.selectedGroup"]({ name: caretRow.group.name }),
+    );
+  else if (caretRow.kind === "video")
+    setStatus(
+      m["status.timeline.selectedVideo"]({ name: caretRow.track.name }),
+    );
+  else if (caretRow.track.generated)
+    setStatus(
+      caretTrackId
+        ? m["status.timeline.selectedLive"]({
+            name: caretRow.track.name,
+            group: caretTrackId,
+          })
+        : m["status.timeline.selectedLiveAlone"]({
+            name: caretRow.track.name,
+          }),
+    );
+  else
+    setStatus(
+      m["status.timeline.selectedTrack"]({ name: caretRow.track.name }),
+    );
+}, [
+  active,
+  caret.beat,
+  caretRow,
+  caretTrackId,
+  setStatus,
+  // The readout also reflects the selection and zoom, which move neither the caret nor caretRow.
+  selBox,
+  zoom,
+  beatLo,
+  beatHi,
+  barBeats,
+  visRows,
+  // Resize mode does too, and its numbers change on every frame of the drag.
+  resize,
+  // Move mode takes over the readout, so a pickup / nudge / drop must refresh it.
+  move,
+  // …and a tool outranks even that.
+  tool,
+  proj,
+]);
 
-  // The caret, whole: where it is, what it is over, and what it has selected — one payload, because one gesture moves all three.
-  useEffect(() => {
-    // The grid, read here rather than passed in: a beat means nothing without the time signature.
-    const at = (beat: number): string | null =>
-      proj
-        ? beatsToPosition(beat, proj.timeSigNumerator, proj.timeSigDenominator)
-        : null;
-    onCaret({
-      ...caret,
-      trackId: caretTrackId,
-      // LABEL is 'parked on the row's name', a row and not a moment, so it reports no timecode.
-      tc: caret.beat === LABEL ? null : at(caret.beat),
-      eventTc: clipUnderCaret ? at(clipUnderCaret.start) : null,
-      selection: selRange,
-    });
-  }, [caret, caretTrackId, clipUnderCaret, selRange, proj, onCaret]);
-
-  // While the bar is filling `events move`, the rectangle ANSWERS its region and re-answers on every change.
-  useEffect(() => {
-    if (!feedEventsMove || !selRange) return;
-    feedEventsMove(selRange.tracks, selRange.from, selRange.to);
-  }, [feedEventsMove, selRange]);
-
-  useEffect(() => {
-    if (!active) return;
-    // A TOOL in hand outranks everything below: a press is about to do something other than what this pane usually does.
-    if (tool !== "pointer") {
-      setStatus(m["tl.toolPicked"]({ tool }));
-      return;
-    }
-    // Move mode owns the status line: where the clip started, where it sits now, and how to finish.
-    if (move && proj) {
-      const num = proj.timeSigNumerator;
-      const den = proj.timeSigDenominator;
-      const from = beatsToPosition(move.origStart, num, den);
-      const to = beatsToPosition(move.origStart + move.offset, num, den);
-      setStatus(
-        m["status.timeline.movingFromTo"]({ name: move.name, from, to }),
-      );
-      return;
-    }
-    // Same for a resize — a drag with no numbers is a guess, and the span is the whole point of the gesture.
-    if (resize && proj) {
-      const num = proj.timeSigNumerator;
-      const den = proj.timeSigDenominator;
-      setStatus(
-        m["status.timeline.resizing"]({
-          from: beatsToPosition(resize.start, num, den),
-          to: beatsToPosition(resize.end, num, den),
-          beats: resize.end - resize.start,
-        }),
-      );
-      return;
-    }
-    // A zoom is a mode you can forget you are in, so say so on every line and name the way out.
-    const z = zoom.length
-      ? ` · ${m["status.timeline.zoomed"]({
-          depth: zoom.length,
-          from: Math.floor(beatLo / barBeats) + 1,
-          to: Math.floor(beatHi / barBeats) + 1,
-          rows: visRows.length,
-        })}`
-      : "";
-    if (selBox) {
-      setStatus(
-        m["status.timeline.selection"]({
-          beats: selBox.beatHi - selBox.beatLo + 1,
-          rows: selBox.rowHi - selBox.rowLo + 1,
-        }) + z,
-      );
-      return;
-    }
-    if (!caretRow) {
-      setStatus("");
-      return;
-    }
-    if (caret.beat !== LABEL) {
-      const name = caretRow.kind === "track" ? caretRow.track.name : "";
-      setStatus(m["status.timeline.caret"]({ name, beat: caret.beat + 1 }));
-      return;
-    }
-    // A label says what m/s will act on — on a pattern lane that is its group, so the redirect doesn't look like a miss.
-    if (caretRow.kind === "group")
-      setStatus(
-        m["status.timeline.selectedGroup"]({ name: caretRow.group.name }),
-      );
-    else if (caretRow.kind === "video")
-      setStatus(
-        m["status.timeline.selectedVideo"]({ name: caretRow.track.name }),
-      );
-    else if (caretRow.track.generated)
-      setStatus(
-        caretTrackId
-          ? m["status.timeline.selectedLive"]({
-              name: caretRow.track.name,
-              group: caretTrackId,
-            })
-          : m["status.timeline.selectedLiveAlone"]({
-              name: caretRow.track.name,
-            }),
-      );
-    else
-      setStatus(
-        m["status.timeline.selectedTrack"]({ name: caretRow.track.name }),
-      );
-  }, [
-    active,
-    caret.beat,
-    caretRow,
-    caretTrackId,
-    setStatus,
-    // The readout also reflects the selection and zoom, which move neither the caret nor caretRow.
-    selBox,
-    zoom,
-    beatLo,
-    beatHi,
-    barBeats,
-    visRows,
-    // Resize mode does too, and its numbers change on every frame of the drag.
-    resize,
-    // Move mode takes over the readout, so a pickup / nudge / drop must refresh it.
-    move,
-    // …and a tool outranks even that.
-    tool,
-    proj,
-  ]);
-
-  // Only with nothing to draw: a failed RE-read keeps the last song on screen while useDocument retries.
-  if (error && !proj)
-    return (
+// Only with nothing to draw: a failed RE-read keeps the last song on screen while useDocument retries.
+if (error && !proj)
+  return (
       <div role="alert" className="p-4 text-sm text-(--k7-error)">
         {m["tl.unavailable"]({ error })}
       </div>
     );
-  if (!proj)
-    return (
+if (!proj)
+  return (
       <div className="p-4 text-sm text-muted-foreground">
         {m["common.loading"]()}
       </div>
     );
 
-  // Drawing extent: the view's beat range fills the pane exactly, so it never scrolls. See docs/timeline.md.
-  const availW = Math.max(0, paneW - GUTTER);
-  const spanBeats = beatHi - beatLo + 1; // contentBeats at rest and fit
-  // zoomX > 1 grows the lane past the pane so it can be panned; at or below 1 the lane is the pane and beatHi grew instead.
-  const zoomLane = Math.max(1, zoomX);
-  const ppb = availW > 0 ? (availW / spanBeats) * zoomLane : PX_PER_BEAT;
-  const laneW = availW > 0 ? availW * zoomLane : spanBeats * PX_PER_BEAT;
-  // Where a beat sits. The ONE place the zoom offset is applied, so nothing positioned can drift out of step.
-  ppbRef.current = ppb; // the drag reads this on pointerdown (see beginClipDrag)
-  const x = (beat: number) => (beat - beatLo) * ppb;
-  // The last beat drawn: the zoom's end, or the song's rounded-up extent.
-  const lastBeat = view ? beatHi : beatHi + 1;
-  // Beats per second — the whole conversion between the song's unit and the picture's, exact because there is ONE tempo, clamped off zero.
-  const bps = Math.max(1e-6, proj.tempo / 60);
-  // The ruler's scale, from the SHARED chooser (Ruler.tsx), so this ruler and the clip editors' cannot pick different ladders.
-  const { unit, secStep, barStride } = rulerScale(
-    rulerMode,
-    ppb,
-    barBeats,
-    bps,
-    lastBeat,
-    fps,
-  );
-  // The drawn ticks, for the gestures that SNAP to one — cached on what draws them: built whole, they are up to ~190 000 entries a render.
-  const ticksKey = `${rulerMode}|${beatLo}|${lastBeat}|${unit}|${barBeats}|${bps}|${secStep}|${fps}`;
-  if (ticksCache.current?.key !== ticksKey)
-    ticksCache.current = {
-      key: ticksKey,
-      beats: rulerTicks(
-        rulerMode,
-        beatLo,
-        lastBeat,
-        unit,
-        barBeats,
-        bps,
-        secStep,
-        undefined,
-        fps,
-      ).map((t) => t.beat),
-    };
-  const bars = ticksCache.current.beats;
-  ticksRef.current = bars;
-  bpsRef.current = bps;
-  /** …and the step a CLIP drag moves in, in beats: whatever the ruler is drawing, snapping the OFFSET rather than the resulting position. */
-  unitRef.current = rulerMode === "seconds" ? secStep * bps : unit;
-  // Both tick layers take the same seven, so the ruler and the grid cannot read different units.
-  const tickProps = {
-    mode: rulerMode,
-    beatLo,
-    lastBeat,
-    unit,
-    barBeats,
-    bps,
-    secStep,
-    fps,
+// Drawing extent: the view's beat range fills the pane exactly, so it never scrolls. See docs/timeline.md.
+const availW = Math.max(0, paneW - GUTTER);
+const spanBeats = beatHi - beatLo + 1; // contentBeats at rest and fit
+// zoomX > 1 grows the lane past the pane so it can be panned; at or below 1 the lane is the pane and beatHi grew instead.
+const zoomLane = Math.max(1, zoomX);
+const ppb = availW > 0 ? (availW / spanBeats) * zoomLane : PX_PER_BEAT;
+const laneW = availW > 0 ? availW * zoomLane : spanBeats * PX_PER_BEAT;
+// Where a beat sits. The ONE place the zoom offset is applied, so nothing positioned can drift out of step.
+ppbRef.current = ppb; // the drag reads this on pointerdown (see beginClipDrag)
+const x = (beat: number) => (beat - beatLo) * ppb;
+// The last beat drawn: the zoom's end, or the song's rounded-up extent.
+const lastBeat = view ? beatHi : beatHi + 1;
+// Beats per second — the whole conversion between the song's unit and the picture's, exact because there is ONE tempo, clamped off zero.
+const bps = Math.max(1e-6, proj.tempo / 60);
+// The ruler's scale, from the SHARED chooser (Ruler.tsx), so this ruler and the clip editors' cannot pick different ladders.
+const { unit, secStep, barStride } = rulerScale(
+  rulerMode,
+  ppb,
+  barBeats,
+  bps,
+  lastBeat,
+  fps,
+);
+// The drawn ticks, for the gestures that SNAP to one — cached on what draws them: built whole, they are up to ~190 000 entries a render.
+const ticksKey = `${rulerMode}|${beatLo}|${lastBeat}|${unit}|${barBeats}|${bps}|${secStep}|${fps}`;
+if (ticksCache.current?.key !== ticksKey)
+  ticksCache.current = {
+    key: ticksKey,
+    beats: rulerTicks(
+      rulerMode,
+      beatLo,
+      lastBeat,
+      unit,
+      barBeats,
+      bps,
+      secStep,
+      undefined,
+      fps,
+    ).map((t) => t.beat),
   };
+const bars = ticksCache.current.beats;
+ticksRef.current = bars;
+bpsRef.current = bps;
+/** …and the step a CLIP drag moves in, in beats: whatever the ruler is drawing, snapping the OFFSET rather than the resulting position. */
+unitRef.current = rulerMode === "seconds" ? secStep * bps : unit;
+// Both tick layers take the same seven, so the ruler and the grid cannot read different units.
+const tickProps = {
+  mode: rulerMode,
+  beatLo,
+  lastBeat,
+  unit,
+  barBeats,
+  bps,
+  secStep,
+  fps,
+};
 
-  // Markers inside the visible range, drawn in the ruler; num/den turn a right-click beat into a timecode.
-  const tsNum = proj.timeSigNumerator;
-  const tsDen = proj.timeSigDenominator;
-  const visMarkers = (proj.markers ?? []).filter(
-    (mk) => mk.beat >= beatLo && mk.beat <= lastBeat,
+// Markers inside the visible range, drawn in the ruler; num/den turn a right-click beat into a timecode.
+const tsNum = proj.timeSigNumerator;
+const tsDen = proj.timeSigDenominator;
+const visMarkers = (proj.markers ?? []).filter(
+  (mk) => mk.beat >= beatLo && mk.beat <= lastBeat,
+);
+// The tasks pinned somewhere in view; a timecode this song's grid cannot read is not drawn rather than drawn wrong.
+const visTasks = tasks.flatMap((t) => {
+  if (!t.at) return [];
+  try {
+    const beat = parsePosition(t.at.timecode, tsNum, tsDen);
+    return beat >= beatLo && beat <= lastBeat ? [{ ...t, beat }] : [];
+  } catch {
+    return [];
+  }
+});
+
+// --- dropping OS files on a lane (docs/timeline.md) -------------------------------
+
+/** The lanes a drop may walk down, in drawing order — a generated lane holds no file, a lane drawing shapes no placement. */
+const dropTargets = visRows.flatMap((r): DropLane[] =>
+  r.kind === "track" && !r.track.generated
+    ? [{ id: r.track.id, kind: "audio" }]
+    : r.kind === "video" && !r.track.shapes.length
+      ? [{ id: r.track.id, kind: "video" }]
+      : [],
+);
+const dropping = !readOnly && !!onDropFiles;
+// A timeline TAB dropped on a lane is `event add` of that timeline there (TimelineSwitch.tsx).
+const placing = !readOnly && !!cmds.addEvent;
+/** A resource goes on a lane of its own kind: audio on one holding events, a video on a picture lane. */
+const takesResource = (lane: string, kind: "audio" | "video") =>
+  !readOnly &&
+  !!onDropResource &&
+  dropTargets.some((d) => d.id === lane && d.kind === kind);
+/** The lane a timeline may go on: one holding events, never a picture lane. */
+const takesTimeline = (lane: string) =>
+  dropTargets.some((d) => d.id === lane && d.kind === "audio");
+/** Where a file drag is over: the DOM says which lane, as it does for a clip drag, and the lane's own left edge says which beat. */
+const dropPointAt = (
+  cx: number,
+  cy: number,
+): { lane: string; beat: number } | null => {
+  const el = document
+    .elementFromPoint(cx, cy)
+    ?.closest?.("[data-lane-track],[data-lane-video]");
+  const id =
+    el?.getAttribute("data-lane-track") ?? el?.getAttribute("data-lane-video");
+  if (!el || !id) return null;
+  const raw = Math.max(
+    0,
+    beatLo + (cx - el.getBoundingClientRect().left) / ppb,
   );
-  // The tasks pinned somewhere in view; a timecode this song's grid cannot read is not drawn rather than drawn wrong.
-  const visTasks = tasks.flatMap((t) => {
-    if (!t.at) return [];
-    try {
-      const beat = parsePosition(t.at.timecode, tsNum, tsDen);
-      return beat >= beatLo && beat <= lastBeat ? [{ ...t, beat }] : [];
-    } catch {
-      return [];
-    }
-  });
-
-  // --- dropping OS files on a lane (docs/timeline.md) -------------------------------
-
-  /** The lanes a drop may walk down, in drawing order — a generated lane holds no file, a lane drawing shapes no placement. */
-  const dropTargets = visRows.flatMap((r): DropLane[] =>
-    r.kind === "track" && !r.track.generated
-      ? [{ id: r.track.id, kind: "audio" }]
-      : r.kind === "video" && !r.track.shapes.length
-        ? [{ id: r.track.id, kind: "video" }]
-        : [],
-  );
-  const dropping = !readOnly && !!onDropFiles;
-  // A timeline TAB dropped on a lane is `event add` of that timeline there (TimelineSwitch.tsx).
-  const placing = !readOnly && !!cmds.addEvent;
-  /** A resource goes on a lane of its own kind: audio on one holding events, a video on a picture lane. */
-  const takesResource = (lane: string, kind: "audio" | "video") =>
-    !readOnly &&
-    !!onDropResource &&
-    dropTargets.some((d) => d.id === lane && d.kind === kind);
-  /** The lane a timeline may go on: one holding events, never a picture lane. */
-  const takesTimeline = (lane: string) =>
-    dropTargets.some((d) => d.id === lane && d.kind === "audio");
-  /** Where a file drag is over: the DOM says which lane, as it does for a clip drag, and the lane's own left edge says which beat. */
-  const dropPointAt = (
-    cx: number,
-    cy: number,
-  ): { lane: string; beat: number } | null => {
-    const el = document
-      .elementFromPoint(cx, cy)
-      ?.closest?.("[data-lane-track],[data-lane-video]");
-    const id =
-      el?.getAttribute("data-lane-track") ??
-      el?.getAttribute("data-lane-video");
-    if (!el || !id) return null;
-    const raw = Math.max(
-      0,
-      beatLo + (cx - el.getBoundingClientRect().left) / ppb,
-    );
-    // Snapped to the lines actually drawn, whichever unit the ruler is reading — the rule every gesture here follows.
-    return { lane: id, beat: nearestTick(bars, raw) ?? raw };
-  };
-  /** Where the drop would land on this lane — a caret rather than a block, the material having no width until it is read. */
-  const dropMark = (lane: string) =>
-    dropAt?.lane === lane ? (
-      <div
-        className="pointer-events-none absolute inset-y-0 z-30 w-0.5 bg-primary"
-        style={{ left: x(dropAt.beat) }}
-      />
-    ) : null;
-
-  // The rectangle's slice on one row: drawn per row so it clips with the lane and the row's dimming reads through.
-  const selSlice = (b: { beatLo: number; beatHi: number }) => (
+  // Snapped to the lines actually drawn, whichever unit the ruler is reading — the rule every gesture here follows.
+  return { lane: id, beat: nearestTick(bars, raw) ?? raw };
+};
+/** Where the drop would land on this lane — a caret rather than a block, the material having no width until it is read. */
+const dropMark = (lane: string) =>
+  dropAt?.lane === lane ? (
     <div
-      className="pointer-events-none absolute top-0 h-full bg-primary/25 outline outline-1 -outline-offset-1 outline-primary"
-      style={{ left: x(b.beatLo), width: (b.beatHi - b.beatLo + 1) * ppb }}
+      className="pointer-events-none absolute inset-y-0 z-30 w-0.5 bg-primary"
+      style={{ left: x(dropAt.beat) }}
     />
+  ) : null;
+
+// The rectangle's slice on one row: drawn per row so it clips with the lane and the row's dimming reads through.
+const selSlice = (b: { beatLo: number; beatHi: number }) => (
+  <div
+    className="pointer-events-none absolute top-0 h-full bg-primary/25 outline outline-1 -outline-offset-1 outline-primary"
+    style={{ left: x(b.beatLo), width: (b.beatHi - b.beatLo + 1) * ppb }}
+  />
+);
+
+// Lane height (taller when expanded, ROW_H for groups); the playhead spans the ruler plus every row, so sum them.
+const rowH = expanded ? ROW_H + EXPAND_EXTRA : ROW_H;
+// A phone's gutter puts M/S/A on a line under the name, which only a tall row has room for (docs/timeline.md).
+const msaLine = isMobile && expanded;
+// The name on one line and M/S/A on the next, everywhere but a collapsed phone row (docs/timeline.md).
+const twoLine = !isMobile || msaLine;
+const contentH =
+  ROW_H +
+  visRows.reduce(
+    // A group header and an automation row are short; a lane row is not.
+    (h, r) =>
+      h + (r.kind === "group" || r.kind === "automation" ? ROW_H : rowH),
+    0,
   );
+// Each row's top under the ruler, the y the clip window is tested against; the ruler's own height sits inside the margin.
+const rowTops: number[] = [];
+visRows.reduce((y, r) => {
+  rowTops.push(y);
+  return y + (r.kind === "group" || r.kind === "automation" ? ROW_H : rowH);
+}, 0);
+const rowNear = (ri: number, h: number) =>
+  rowTops[ri] + h >= clipWin.y0 && rowTops[ri] <= clipWin.y1;
+const xNear = (left: number, w: number) =>
+  left + w >= clipWin.x0 && left <= clipWin.x1;
 
-  // Lane height (taller when expanded, ROW_H for groups); the playhead spans the ruler plus every row, so sum them.
-  const rowH = expanded ? ROW_H + EXPAND_EXTRA : ROW_H;
-  // A phone's gutter puts M/S/A on a line under the name, which only a tall row has room for (docs/timeline.md).
-  const msaLine = isMobile && expanded;
-  // The name on one line and M/S/A on the next, everywhere but a collapsed phone row (docs/timeline.md).
-  const twoLine = !isMobile || msaLine;
-  const contentH =
-    ROW_H +
-    visRows.reduce(
-      // A group header and an automation row are short; a lane row is not.
-      (h, r) =>
-        h + (r.kind === "group" || r.kind === "automation" ? ROW_H : rowH),
-      0,
-    );
-  // Each row's top under the ruler, the y the clip window is tested against; the ruler's own height sits inside the margin.
-  const rowTops: number[] = [];
-  visRows.reduce((y, r) => {
-    rowTops.push(y);
-    return y + (r.kind === "group" || r.kind === "automation" ? ROW_H : rowH);
-  }, 0);
-  const rowNear = (ri: number, h: number) =>
-    rowTops[ri] + h >= clipWin.y0 && rowTops[ri] <= clipWin.y1;
-  const xNear = (left: number, w: number) =>
-    left + w >= clipWin.x0 && left <= clipWin.x1;
-
-  return (
+return (
     // min-w-0: without it the fixed-width lane sets this flex child's min width and the fit-to-pane scale ratchets.
     <div className="flex min-h-0 min-w-0 flex-1 flex-col">
       {/* What the pane draws: the song, or one of its timelines (TimelineSwitch.tsx). */}
@@ -3585,6 +3627,9 @@ function TimelineTabView({
                                   // A TIMELINE placed whole: dashed, its length fixed and its content drawn inside.
                                   c.timeline &&
                                     "outline-dashed outline-1 -outline-offset-1 outline-foreground/50",
+                                  // The clip Fit just framed: ringed a moment, so the eye finds it.
+                                  (flash === `${t.id}/${c.id}` || flash === `/${c.id}`) &&
+                                    "z-10 animate-pulse outline outline-2 outline-primary",
                                   // The clip in hand: ring it and lift it over its ghost.
                                   (moving || resizing) &&
                                     "z-10 outline outline-2 outline-primary",
