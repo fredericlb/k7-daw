@@ -346,6 +346,22 @@ target_compile_definitions(studio_stateapi_tests PRIVATE
 add_test(NAME studio_stateapi_tests COMMAND studio_stateapi_tests)
 set_tests_properties(studio_stateapi_tests PROPERTIES LABELS slow)
 
+# --- Machine and render area tests --------------------------------------------
+# The machine and render areas of the C ABI on a whole EngineHost, slow like the C ABI's own suite.
+add_executable(studio_machineapi_tests MachineApi_test.cpp)
+target_link_libraries(studio_machineapi_tests PRIVATE
+    studio_engine
+    tracktion::tracktion_engine)
+target_include_directories(studio_machineapi_tests PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/../engine)
+target_compile_definitions(studio_machineapi_tests PRIVATE
+    JUCE_MODAL_LOOPS_PERMITTED=1
+    JUCE_USE_CURL=0
+    JUCE_WEB_BROWSER=0
+    DONT_SET_USING_JUCE_NAMESPACE=1)
+add_test(NAME studio_machineapi_tests COMMAND studio_machineapi_tests)
+set_tests_properties(studio_machineapi_tests PROPERTIES LABELS slow)
+
 # --- State frame tests --------------------------------------------------------
 # The state frame as Serve.cpp builds it, held to the fixture the Rust server's frame is held to: nlohmann only, fast.
 add_executable(studio_stateframe_tests StateFrame_test.cpp)
