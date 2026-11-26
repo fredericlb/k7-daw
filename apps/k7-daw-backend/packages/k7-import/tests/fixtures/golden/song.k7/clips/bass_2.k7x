@@ -1,0 +1,2 @@
+source("clips/bass_2.wav")
+to("1:5")

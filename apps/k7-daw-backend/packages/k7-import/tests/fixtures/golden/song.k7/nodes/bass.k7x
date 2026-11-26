@@ -1,0 +1,6 @@
+extends("@meta/track")
+events([
+  ref("bass_0").start("1:1").fadeIn("0:0:1"),
+  ref("bass_1").start("2:2").fadeOut("0:1"),
+  ref("bass_2").start("3:3"),
+])

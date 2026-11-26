@@ -1,0 +1,5 @@
+// keys's strip: volume, pan and three bands, and the one place its level lives.
+//
+// Written by the import, because a lane without one plays at unity with nowhere to put a
+// level — see apps/k7-daw-frontend/packages/song/docs/trackMixer.md.
+extends("@meta/audio/mixer")

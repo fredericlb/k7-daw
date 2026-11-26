@@ -1,0 +1,22 @@
+// NOTE: 1 weighted send(s) arrived at full level — a destination says
+// WHERE the signal goes, not how much of it. Trim them on the bus's own module.
+modules({
+  drums: ["drums-instrument"],
+  keys: ["diva"],
+  bass: ["pro_q_3_bass"],
+  vox: ["kontakt_7"],
+  drums-instrument: ["mix-drums"],
+  mix-drums: ["MIX"],
+  diva: ["arp"],
+  arp: ["pro_q_3_keys"],
+  pro_q_3_keys: ["mix-keys"],
+  mix-keys: ["MIX", "valhallaroom"],
+  pro_q_3_bass: ["mix-bass"],
+  mix-bass: ["MIX"],
+  kontakt_7: ["mix-vox"],
+  mix-vox: ["MIX", "valhallaroom"],
+  valhallaroom: ["MIX"],
+  pro_l_2: ["OUT"],
+  MIX: ["pro_l_2"],
+})
+bypassed(["arp", "bass"])
