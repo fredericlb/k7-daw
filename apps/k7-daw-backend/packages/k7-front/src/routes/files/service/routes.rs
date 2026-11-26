@@ -55,6 +55,8 @@ pub enum H {
     Resources,
     References,
     Changes,
+    /// A foreign project imported into a new folder (`native/import_run.rs`).
+    Import,
     /// A command line run natively (`native/verb_run.rs`).
     Verb,
     /// The completions of a line under the caret, by the `verbs` crate.
@@ -137,6 +139,7 @@ pub fn route(method: &Method, path: &str) -> Route {
         ("/resources", true, _) => H::Resources,
         ("/references", true, _) => H::References,
         ("/changes", _, true) => H::Changes,
+        ("/import", _, true) => H::Import,
         ("/verb", _, true) => H::Verb,
         ("/verb/complete", _, true) => H::VerbComplete,
         ("/verb/catalogue", true, _) => H::VerbCatalogue,
@@ -165,6 +168,7 @@ pub fn writes(h: H) -> bool {
             | H::Undo
             | H::Redo
             | H::Changes
+            | H::Import
             | H::Verb
             | H::LibraryMove
             | H::Module
@@ -175,6 +179,7 @@ pub fn writes(h: H) -> bool {
 pub fn body_limit(h: H) -> usize {
     match h {
         H::VerbHost(m) => m.limit(),
+        H::Import => native::import_run::BODY_LIMIT,
         _ => body::JSON_LIMIT,
     }
 }
@@ -197,6 +202,8 @@ pub struct Call {
     pub engine: Option<Arc<super::native::engine::routes::Engine>>,
     /// The front's own routes asked as this request's caller, for a verb's host members; none outside `POST /verb`.
     pub reenter: Option<Reenter>,
+    /// The bytes of a dropped file, for `POST /import` alone: the body was no JSON.
+    pub raw: Option<Arc<Vec<u8>>>,
 }
 
 /// One request to the front with the caller's headers: its method, its target (path and query) and its JSON body.

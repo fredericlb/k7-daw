@@ -1,0 +1,4 @@
+source("clips/bass.wav")
+from("1:3")
+to("2:4")
+warp({ algorithm: "complex", markers: [[0, 0], [4, 2.1]] })

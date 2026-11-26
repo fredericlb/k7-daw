@@ -96,6 +96,7 @@ pub enum Tag {
     Export,
     ExportTracks,
     Changes,
+    Import,
     Verb,
     VerbComplete,
     /// The palette's catalogue, read from the `verbs` crate.
@@ -154,6 +155,7 @@ impl Tag {
             H::History => Some(Tag::History),
             H::HistoryEntries => Some(Tag::HistoryEntries),
             H::Changes => Some(Tag::Changes),
+            H::Import => Some(Tag::Import),
             H::Verb => Some(Tag::Verb),
             H::VerbComplete => Some(Tag::VerbComplete),
             H::VerbCatalogue => Some(Tag::VerbCatalogue),
@@ -201,6 +203,7 @@ impl Tag {
             | Tag::History
             | Tag::HistoryEntries
             | Tag::Changes
+            | Tag::Import
             | Tag::Verb
             | Tag::VerbComplete
             | Tag::VerbCatalogue
@@ -315,6 +318,7 @@ impl Tag {
             Tag::Export => "GET /export",
             Tag::ExportTracks => "GET /export/tracks",
             Tag::Changes => "POST /changes",
+            Tag::Import => "POST /import",
             Tag::Verb => "POST /verb",
             Tag::VerbComplete => "POST /verb/complete",
             Tag::VerbCatalogue => "GET /verb/catalogue",
