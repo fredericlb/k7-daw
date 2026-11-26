@@ -162,18 +162,20 @@ async fn every_refusal_is_a_not_ok_reply_and_no_bounce_starts() {
         refused("render: '//evil/share' is outside the folders this engine reads")
     );
     let doc = r#"{"tracks":[{"id":"t","clips":[{"id":"c","source":"//evil/a.wav"}]}]}"#;
-    let reply = w
-        .ask(&format!(
-            r#"{{"type":"render","id":"job-1","outDir":"/m8/refuse/c","doc":{doc}}}"#
-        ))
-        .await;
+    let reply = ask(
+        &mut w,
+        &format!(r#"{{"type":"render","id":"job-1","outDir":"/m8/refuse/c","doc":{doc}}}"#),
+    )
+    .await;
     assert_eq!(
         reply,
         refused("render: '//evil/a.wav' is outside the folders this engine may open")
     );
-    let reply = w
-        .ask(r#"{"type":"render","id":"job-1","outDir":"/m8/refuse/d","doc":{"tempo":"fast"}}"#)
-        .await;
+    let reply = ask(
+        &mut w,
+        r#"{"type":"render","id":"job-1","outDir":"/m8/refuse/d","doc":{"tempo":"fast"}}"#,
+    )
+    .await;
     assert!(
         reply.contains(r#""error":"bad project: [json.exception.type_error.302]"#),
         "{reply}"
