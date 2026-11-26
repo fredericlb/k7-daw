@@ -2416,7 +2416,7 @@ function TimelineTabView({
             // Room under the last lane: scrolled to the end, it stops above a desk's floating row (docs/shell.md).
             className={cn(
               "relative select-none font-mono text-xs",
-              !isMobile && "pb-[calc(var(--k7-float-h)+24px)]",
+              "pb-[calc(var(--k7-float-h)+24px)]",
             )}
           >
             {/* The GRID: the ruler's own ticks continued down the lanes, dashed and FIRST in the wrapper so everything paints over it. */}

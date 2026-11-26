@@ -22,10 +22,7 @@ export function MetronomeTempo({
   onLevel,
   recInfo,
   runCommand,
-  inline = false,
 }: {
-  /** A phone's strip: the icon and the bpm side by side, the strip being one short line. */
-  inline?: boolean;
   on: boolean;
   /** 0.2 … 1, from the compiled doc. */
   level: number;
@@ -83,11 +80,7 @@ export function MetronomeTempo({
           pressed={on}
           aria-label={label}
           title={label}
-          className={
-            inline
-              ? "h-8 gap-1 px-2 leading-none"
-              : "h-11 flex-col gap-0 px-2 leading-none desk:h-11"
-          }
+          className="h-11 flex-col gap-0 px-2 leading-none desk:h-11"
         >
           <MetronomeIcon />
           <span className="type-mono-value text-[11px] tabular-nums">

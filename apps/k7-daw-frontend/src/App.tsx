@@ -2582,7 +2582,7 @@ export default function App({
       // The song's own level, off the compiled doc — what the FILE says, so the fader reads right before a note has played.
       master={projectDoc?.masterVolume}
       onMaster={setMaster}
-      knob={!isMobile && portrait}
+      knob={isMobile || portrait}
     />
   );
 
@@ -2923,6 +2923,7 @@ export default function App({
   const bar = (
     <FloatingBar
       layout={layoutKind}
+      noOverview={isMobile && portrait}
       railChevron={
         isMobile ? (
           <RailChevron
@@ -3394,7 +3395,7 @@ export default function App({
                         : undefined
                 }
                 onCommandBar={isMobile || portrait ? summonBar : undefined}
-                bottom={isMobile ? 28 + stripH + 8 : undefined}
+                bottom={isMobile ? 12 + stripH + 8 : undefined}
                 save={(className) =>
                   gitWorkspace ? (
                     <>
@@ -3433,9 +3434,9 @@ export default function App({
             {ws?.activeIsDemo && ws.activeProject && (
               <DemoBanner project={ws.activeProject} />
             )}
-            {/* The panes reach the foot on a desk, the floating row over them (a phone keeps room for its bar); panels push nothing. */}
+            {/* The panes reach the foot, the floating row over them; panels push nothing. */}
             <div
-              className={`${editorPopin || rackBuilder ? "z-(--k7-z-menu)" : "z-(--k7-z-pane)"} flex min-h-0 flex-1 flex-col ${isMobile ? "pb-[88px]" : ""}`}
+              className={`${editorPopin || rackBuilder ? "z-(--k7-z-menu)" : "z-(--k7-z-pane)"} flex min-h-0 flex-1 flex-col`}
             >
               <div className="flex min-h-0 flex-1">
                 {/* The popin's backdrop: a click outside is the reliable way out, Escape belonging to the editor's vim. */}

@@ -1,8 +1,9 @@
-// FloatingBar.tsx — the bar of the transport capsule and a phone's command bar button (a desk's is beside the Mixer)
-// (buttons, clock, song overview, tempo, metronome, master volume); the pane's views float apart (ViewCapsule.tsx). On a phone the clock,
-// overview, metronome and volume move to a strip above the capsule; a desk or a pad draws it small at the bottom left; the tool is the timeline's corner (ToolMenu.tsx). It holds no state of its own: App hands it all.
+// FloatingBar.tsx — the transport capsule (buttons, clock, song overview, metronome, master volume) on one floating row, drawn small.
+// A desk's sits at the bottom left, its views and command bar button apart; a phone's spans the width, ends with the rail's chevron
+// and drops the overview in portrait. The tool is the timeline's corner (ToolMenu.tsx). It holds no state of its own: App hands it all.
 import { CapsuleDivider } from "@studio/ui/capsule";
 import { SquareTerminal } from "@studio/ui/icons";
+import { cn } from "@studio/ui/lib/utils";
 import type { ComponentProps, ReactNode, Ref } from "react";
 import { Minimap } from "../components/Minimap";
 import type { RecInfo } from "../hooks/useProjectDoc";
@@ -34,7 +35,10 @@ export function FloatingBar({
   runCommand,
   rootRef,
   railChevron,
+  noOverview = false,
 }: {
+  /** A phone in portrait has no width for the song overview. */
+  noOverview?: boolean;
   /** A phone's rail chevron, at its bar's right end where the command bar's button stood (the button moves into the rail). */
   railChevron?: ReactNode;
   /** The bar's root, so the editor popin can measure how tall it is. */
@@ -127,58 +131,44 @@ export function FloatingBar({
   ) : null;
 
   const capsule = (
-    <div className="float pointer-events-auto flex h-14 min-w-0 items-center gap-1 rounded-full p-1.5">
-      {buttons}
-      {!phone && (
-        <>
-          {clock && <CapsuleDivider />}
-          {clock}
-          {overview}
-          {(transport || metronome) && <CapsuleDivider />}
-          {metronome ? (
-            <MetronomeTempo
-              {...metronome}
-              recInfo={recInfo}
-              runCommand={runCommand}
-            />
-          ) : (
-            tempo
-          )}
-          {meter && <CapsuleDivider />}
-          {meter}
-        </>
+    <div
+      className={cn(
+        "float pointer-events-auto flex h-14 min-w-0 items-center gap-1 rounded-full p-1.5",
+        phone && "flex-1",
       )}
+    >
+      {buttons}
+      {clock && <CapsuleDivider />}
+      {clock}
+      {!noOverview && overview}
+      {(transport || metronome) && <CapsuleDivider />}
+      {metronome ? (
+        <MetronomeTempo
+          {...metronome}
+          recInfo={recInfo}
+          runCommand={runCommand}
+        />
+      ) : (
+        tempo
+      )}
+      {meter && <CapsuleDivider />}
+      {meter}
     </div>
   );
 
-  // A desk or a pad draws the bar small (zoomed to 40 px) and lifts it above the dock with --k7-float-bottom.
+  // One row, drawn small (zoomed to 40 px): a desk lifts it above the dock with --k7-float-bottom, a phone spans its width.
   const row = (
     <>
       <div
         role="group"
         aria-label={m["transport.region"]()}
-        className="pointer-events-none flex min-w-0 flex-col items-stretch gap-2"
-      >
-        {phone && transport && (
-          <div className="float pointer-events-auto flex h-[38px] items-center gap-2 rounded-full px-3.5">
-            {clock}
-            {overview}
-            {metronome ? (
-              <MetronomeTempo
-                {...metronome}
-                inline
-                recInfo={recInfo}
-                runCommand={runCommand}
-              />
-            ) : (
-              tempo
-            )}
-            {meter}
-          </div>
+        className={cn(
+          "pointer-events-none flex min-w-0 items-stretch",
+          phone && "flex-1",
         )}
+      >
         {capsule}
       </div>
-      <span className="flex-1" />
       {phone && (railChevron ?? commandButton)}
     </>
   );
@@ -186,9 +176,11 @@ export function FloatingBar({
     return (
       <div
         ref={rootRef}
-        className="pointer-events-none absolute inset-x-4 bottom-7 z-(--k7-z-bar) flex items-end gap-3"
+        className="pointer-events-none absolute inset-x-3 bottom-3 z-(--k7-z-bar)"
       >
-        {row}
+        <div className="flex items-end gap-2" style={{ zoom: BAR_ZOOM }}>
+          {row}
+        </div>
       </div>
     );
   return (
