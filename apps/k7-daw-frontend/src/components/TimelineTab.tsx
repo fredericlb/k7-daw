@@ -2265,6 +2265,8 @@ function TimelineTabView({
   const msaLine = isMobile && expanded;
   // The name on one line and M/S/A on the next, everywhere but a collapsed phone row (docs/timeline.md).
   const twoLine = !isMobile || msaLine;
+  // A desk's track header: the icon beside the two lines rather than on the first.
+  const iconAside = twoLine && !msaLine;
   const contentH =
     ROW_H +
     visRows.reduce(
@@ -3233,7 +3235,7 @@ function TimelineTabView({
                       msaLine
                         ? "flex-col justify-center gap-2 px-1"
                         : twoLine
-                          ? "flex-col justify-center gap-px px-2"
+                          ? "items-center gap-1.5 px-2"
                           : "items-center gap-1 px-2",
                       GUTTER_STICKY,
                       onReorder && !t.generated && GRAB_ROW,
@@ -3246,90 +3248,112 @@ function TimelineTabView({
                     {/* Both live meters, subscribing for themselves — see LaneMeter. */}
                     {/* None on a timeline's lane: the engine plays none, only the song lane it is placed on. */}
                     {!shownTimeline && <LaneMeter index={ti} armed={armed} />}
-                    {/* The instrument the name's prefix asks for ("ge.lead" → a strat), in the track's colour; undeclared gets a question mark. */}
-                    <span
-                      // The row shows the label alone, so the full name — the track's id and filename — has to be reachable here.
-                      title={[
-                        t.name,
-                        trackIcon(t.name)?.label,
-                        armed && "record-armed; records on play",
-                      ]
-                        .filter(Boolean)
-                        .join(" — ")}
-                      className={cn(
-                        "relative flex min-w-0 items-center gap-1 truncate",
-                        twoLine ? "flex-none" : "flex-1",
-                        row.grouped && "pl-3",
-                        // Armed red, soloed yellow. A ternary, not two classes: both can be true, and armed is about to write to disk.
-                        armed ? "text-arm" : eff.solo && "text-solo",
-                      )}
-                    >
+                    {/* On a desk the icon stands beside both lines, the name's and the M S A's, two lines tall. */}
+                    {iconAside && (
                       <TrackIcon
                         name={t.name}
                         color={t.color || undefined}
-                        // A coloured icon is the track's identity and holds full strength; an uncoloured one is decoration and sits back.
-                        className={cn("shrink-0", !t.color && "opacity-70")}
+                        className={cn(
+                          "relative shrink-0 text-[28px]",
+                          !t.color && "opacity-70",
+                          row.grouped && "ml-3",
+                        )}
                       />
-                      {/* Which attribute set this lane plays, before the name; `shrink-0` means a narrow gutter eats the name, not this. */}
-                      {alt && onNodeMenu && !shownTimeline && (
-                        <LaneAlternative
-                          track={t.name}
-                          names={alt.alternatives}
-                          current={alt.alternative}
-                          onOpen={(at) =>
-                            onNodeMenu(
-                              {
-                                // A lane IS a module node, so it is addressable as one (apps/k7-daw-frontend/packages/song/docs/trackModules.md).
-                                module: t.id,
-                                alternatives: alt.alternatives,
-                                alternative: alt.alternative,
-                                frozen: laneNodes?.frozen?.[t.id],
-                              },
-                              at,
-                            )
-                          }
+                    )}
+                    <div
+                      className={
+                        iconAside
+                          ? "flex min-w-0 flex-1 flex-col justify-center gap-px"
+                          : "contents"
+                      }
+                    >
+                      {/* The instrument the name's prefix asks for ("ge.lead" → a strat), in the track's colour; undeclared gets a question mark. */}
+                      <span
+                        // The row shows the label alone, so the full name — the track's id and filename — has to be reachable here.
+                        title={[
+                          t.name,
+                          trackIcon(t.name)?.label,
+                          armed && "record-armed; records on play",
+                        ]
+                          .filter(Boolean)
+                          .join(" — ")}
+                        className={cn(
+                          "relative flex min-w-0 items-center gap-1 truncate",
+                          twoLine ? "flex-none" : "flex-1",
+                          row.grouped && !iconAside && "pl-3",
+                          // Armed red, soloed yellow. A ternary, not two classes: both can be true, and armed is about to write to disk.
+                          armed ? "text-arm" : eff.solo && "text-solo",
+                        )}
+                      >
+                        {!iconAside && (
+                          <TrackIcon
+                            name={t.name}
+                            color={t.color || undefined}
+                            // A coloured icon is the track's identity and holds full strength; an uncoloured one is decoration and sits back.
+                            className={cn("shrink-0", !t.color && "opacity-70")}
+                          />
+                        )}
+                        {/* Which attribute set this lane plays, before the name; `shrink-0` means a narrow gutter eats the name, not this. */}
+                        {alt && onNodeMenu && !shownTimeline && (
+                          <LaneAlternative
+                            track={t.name}
+                            names={alt.alternatives}
+                            current={alt.alternative}
+                            onOpen={(at) =>
+                              onNodeMenu(
+                                {
+                                  // A lane IS a module node, so it is addressable as one (apps/k7-daw-frontend/packages/song/docs/trackModules.md).
+                                  module: t.id,
+                                  alternatives: alt.alternatives,
+                                  alternative: alt.alternative,
+                                  frozen: laneNodes?.frozen?.[t.id],
+                                },
+                                at,
+                              )
+                            }
+                          />
+                        )}
+                        {/* The label alone: the row's position and the icon already say what "3.ge." would repeat at the gutter's expense. */}
+                        <span className="truncate">{trackLabel(t.name)}</span>
+                        {trackWarnings?.[t.id] && (
+                          <LaneWarning
+                            sentences={trackWarnings[t.id]}
+                            onOpen={onProblems}
+                          />
+                        )}
+                        <LaneVstFreeze
+                          rendered={laneNodes?.autoFrozen?.[t.id]}
+                          waiting={laneNodes?.autoFreezeWaiting?.[t.id]}
                         />
-                      )}
-                      {/* The label alone: the row's position and the icon already say what "3.ge." would repeat at the gutter's expense. */}
-                      <span className="truncate">{trackLabel(t.name)}</span>
-                      {trackWarnings?.[t.id] && (
-                        <LaneWarning
-                          sentences={trackWarnings[t.id]}
-                          onOpen={onProblems}
-                        />
-                      )}
-                      <LaneVstFreeze
-                        rendered={laneNodes?.autoFrozen?.[t.id]}
-                        waiting={laneNodes?.autoFreezeWaiting?.[t.id]}
-                      />
-                    </span>
-                    {/* [m]ute / [s]olo / [a]rm, the graph's track nodes' own controls; a collapsed phone row keeps the name, mute and solo staying in the lane menu. */}
-                    {onTrackToggle &&
-                      !shownTimeline &&
-                      (msaLine || !isMobile) && (
-                        <div
-                          className={cn(
-                            "relative flex items-center",
-                            msaLine
-                              ? "w-full gap-0.5"
-                              : twoLine
-                                ? "shrink-0 gap-0.5"
-                                : "shrink-0 gap-1",
-                          )}
-                        >
-                          {msa.map(([control, on]) => (
-                            <LaneToggle
-                              key={control}
-                              kind={control}
-                              on={on}
-                              title={controlLabel(control, t.name)}
-                              ariaLabel={controlLabel(control, t.name)}
-                              touch={msaLine}
-                              onToggle={() => onTrackToggle(t.id, control)}
-                            />
-                          ))}
-                        </div>
-                      )}
+                      </span>
+                      {/* [m]ute / [s]olo / [a]rm, the graph's track nodes' own controls; a collapsed phone row keeps the name, mute and solo staying in the lane menu. */}
+                      {onTrackToggle &&
+                        !shownTimeline &&
+                        (msaLine || !isMobile) && (
+                          <div
+                            className={cn(
+                              "relative flex items-center",
+                              msaLine
+                                ? "w-full gap-0.5"
+                                : twoLine
+                                  ? "shrink-0 gap-0.5"
+                                  : "shrink-0 gap-1",
+                            )}
+                          >
+                            {msa.map(([control, on]) => (
+                              <LaneToggle
+                                key={control}
+                                kind={control}
+                                on={on}
+                                title={controlLabel(control, t.name)}
+                                ariaLabel={controlLabel(control, t.name)}
+                                touch={msaLine}
+                                onToggle={() => onTrackToggle(t.id, control)}
+                              />
+                            ))}
+                          </div>
+                        )}
+                    </div>
                     {onTrackToggle &&
                       !shownTimeline &&
                       isMobile &&
