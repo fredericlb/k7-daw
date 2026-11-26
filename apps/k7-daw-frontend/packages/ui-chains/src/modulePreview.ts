@@ -10,10 +10,8 @@ import type {
   WebModuleCategory,
 } from "@studio/graph-model";
 import { MODULE_CATEGORIES } from "@studio/graph-model";
-import {
-  MODULE_TYPES as MODULE_PORTS,
-  moduleEmits,
-} from "@studio/song-schema/moduleTypes";
+import { moduleEmits } from "@studio/k7-wasm/schema";
+import { MODULE_TYPES as MODULE_PORTS } from "@studio/song-schema/moduleTypes";
 
 /** The source node the module hangs off — it stands for "whatever will feed this". */
 export const PREVIEW_SOURCE = "in";

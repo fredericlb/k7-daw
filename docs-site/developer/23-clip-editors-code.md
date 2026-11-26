@@ -12,7 +12,7 @@ state is the browser's, and the arithmetic sits in pure modules beside the compo
 **The picture.** The file's envelope is decoded and cached once per source by `apps/k7-daw-frontend/packages/audio-analysis`, in a
 placement-independent `.cache` sidecar; `apps/k7-daw-backend/packages/k7-file-service/src/media/region.rs` slices it to the
 region a clip plays and derives the bar/beat grid from the song's tempo and the clip's warp map
-(`beatAtSource` / `sourceAtBeat` from `apps/k7-daw-frontend/packages/song-schema/src/warpPoints.ts`). The file service
+(`beat_at_source` / `source_at_beat` in `apps/k7-daw-wasm/song-schema/src/warp.rs`, asked through `@studio/k7-wasm/schema`). The file service
 serves it (`apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/media/waveform.rs`). `apps/k7-daw-frontend/packages/ui-waveform/src/Waveform.tsx`
 draws it in the `spectrum` look (`spectrum.ts`): peak as height, the low/mid/high balance as colour —
 the same painter the DJ desk uses, so there is one waveform in the product.

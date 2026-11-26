@@ -3,7 +3,7 @@
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 import type { Page } from "@playwright/test";
-import { builtinPluginForRef } from "@studio/song-schema/builtinParams";
+import { builtinPluginForRef } from "@studio/k7-wasm/schema";
 import { FileService } from "../../src/files.ts";
 import { expect, TARGET, test } from "../../src/target.ts";
 import { engineUp, transportBar } from "../../src/transport.ts";

@@ -2,12 +2,11 @@
 // as a playable list on the right. Two panes on purpose — you edit the file while hearing what
 // it describes. See ../docs/playlists.md.
 
-import { stripDocExt } from "@studio/song-schema/docExt";
+import { parsePlaylist, stripDocExt } from "@studio/k7-wasm/schema";
 import {
   appendPlaylistItem,
   movePlaylistItem,
   type PlaylistItem,
-  parsePlaylist,
   playlistStub,
   removePlaylistItem,
 } from "@studio/song-schema/playlist";

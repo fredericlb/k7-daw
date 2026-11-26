@@ -4,10 +4,10 @@
 // pinned files, the "open project" button, and the module-folder actions.
 // Why the second tab exists: apps/k7-daw-frontend/docs/sharedModules.md.
 
+import { isLibraryFileOf } from "@studio/k7-wasm/schema";
 import { showToast } from "@studio/project-shell/toast";
 import { docPattern } from "@studio/song-schema/docExt";
 import {
-  isLibraryFileOf,
   LIBRARY_FILE_FAMILIES,
   MODULE_SOURCES_DIR,
 } from "@studio/song-schema/moduleTypes";

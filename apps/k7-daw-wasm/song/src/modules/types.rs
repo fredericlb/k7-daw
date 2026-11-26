@@ -218,3 +218,8 @@ pub fn module_emits(category: Option<&str>, io: Option<&str>, outputs: &[Port]) 
 pub fn hosts_plugin(category: Option<&str>) -> bool {
     !matches!(category, Some("shaders" | "shapes" | "video_transitions"))
 }
+
+/// The type folders whose modules are a PASS over a picture: what a lane run, the frame and a fade stretch are made of.
+pub fn is_picture_pass(category: Option<&str>) -> bool {
+    matches!(category, Some("shaders" | "video_effects"))
+}

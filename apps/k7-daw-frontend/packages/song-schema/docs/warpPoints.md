@@ -1,10 +1,9 @@
 # The stretch map's points
 
-The rationale behind `apps/k7-daw-frontend/packages/song-schema/src/warpPoints.ts` — placing, moving and removing the
-points of a clip's stretch map. What warping IS, and what the engine does with a map, is
+The rationale behind the stretch map's arithmetic: where a moment lands (`apps/k7-daw-wasm/song-schema/src/warp.rs`, which the page asks through `@studio/k7-wasm/schema`), and placing, moving, removing and retiming the points of a clip's map (`apps/k7-daw-wasm/verbs/src/verbs/clip.rs`, `bounce.rs`). What warping IS, and what the engine does with a map, is
 `apps/k7-daw-frontend/packages/song/docs/warp.md`; this page is about the array work.
 
-## `readClipWarp`, and why it exists
+## `read_clip_warp`, and why it exists
 
 There are TWO compilers — `nodeProject` builds a placement, `project.mapClip` builds the unplaced
 clip a surface draws before any lane names it — and the clip editor asks for the whole FILE. This is
@@ -16,7 +15,7 @@ things from it: a placement that declines still has to say `warpOff` so the time
 icon, while an unplaced clip has nobody to say it to. Fewer than two markers is no map — one point
 cannot state a rate.
 
-## `beatAtSource` is piecewise
+## `beat_at_source` is piecewise
 
 **The engine is piecewise, so the drawing has to be.** `applyClipWarp` gives every interior marker to
 Tracktion's `WarpTimeManager`, which re-times each segment on its own (`EditBuilder.cpp`), while
@@ -27,9 +26,9 @@ it a point pinned in the middle moves the sound and leaves the picture where it 
 
 Outside the map, the end segments' own rate continues. Extrapolating rather than clamping is what
 the engine does too — a clip is not silent past its last marker — and it keeps the function
-monotonic, which is what makes `sourceAtBeat` an inverse rather than a guess.
+monotonic, which is what makes `source_at_beat` an inverse rather than a guess.
 
-## `setWarpPoint`: neighbours stay where they are
+## `set_warp_point`: neighbours stay where they are
 
 Only the two segments touching the moved point change their stretch; the rest of the clip is
 untouched. That is what every DAW does, and it is the predictable half of the choice: the
@@ -46,13 +45,13 @@ Both axes must rise: seconds because the source only runs one way, beats because
 too. Two source seconds within a millisecond are the same point; the UI hands back the exact second
 of the marker it grabbed, so that tolerance only has to survive a round trip.
 
-## `removeWarpPoint` refuses to go below two
+## `remove_warp_point` refuses to go below two
 
 Two is the schema's own floor and it is not arbitrary: a map with one point states where a single
 moment lands and nothing about the rate anywhere, so it cannot be applied at all. Removing the last
 INTERMEDIATE point is fine — that leaves an even stretch.
 
-## `seedWarp` changes nothing
+## `seed` changes nothing
 
 The two anchors a clip gets when it has no map yet are its start and its end: an identity map, which
 the engine SKIPS. A two-point warp whose ratio is 1 means "the source already runs at the project
@@ -60,7 +59,7 @@ tempo", and entering Tracktion's auto-tempo path for that is both pointless and 
 (`applyClipWarp`). So seeding is the right no-op: a clip you have not stretched should sound exactly
 as it did. The third point is what makes it a warp.
 
-## `retimeWarpMarkers`, after a bounce
+## `retime_warp_markers`, after a bounce
 
 The engine hands Tracktion the map's beat span as the length of the WHOLE source and lets auto-tempo
 stretch. So the map's last point has to sit at the file's end, or the engine reads the take's tempo

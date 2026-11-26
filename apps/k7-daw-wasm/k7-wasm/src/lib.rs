@@ -7,6 +7,8 @@ pub mod abi;
 pub mod error;
 pub mod ops;
 #[cfg(test)]
+mod schema_tests;
+#[cfg(test)]
 mod tests;
 
 pub use error::{ErrorCode, WasmError};

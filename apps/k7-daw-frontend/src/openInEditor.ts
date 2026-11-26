@@ -2,7 +2,7 @@
 // test holds the RULE rather than a copy of it. What it decides is one path out of what the tree
 // holds; opening it, and revealing the pane, are the shell's.
 
-import { materialRefOf } from "@studio/song-schema/placementId";
+import { materialRefOf } from "@studio/k7-wasm/schema";
 import { fuzzyScore } from "./fuzzy";
 
 /** The file `arg` names, or null: an exact path, then the best fuzzy match, then the MATERIAL behind a placement — and null rather than `arg`. */

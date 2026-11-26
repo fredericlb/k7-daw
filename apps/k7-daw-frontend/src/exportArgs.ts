@@ -8,6 +8,7 @@
 //
 // See ../docs/picture.md.
 
+import { SONG_TARGET as MAIN_TIMELINE } from "@studio/k7-wasm/consts";
 import {
   EXPORT_QUALITIES,
   parseVideoSettings,
@@ -15,7 +16,6 @@ import {
   type VideoFormat,
   type VideoSettings,
 } from "@studio/song-schema/renderSettings";
-import { SONG_TARGET as MAIN_TIMELINE } from "@studio/song-schema/timelineLane";
 
 /** The mixdown formats the file service will render. */
 export const MIX_FORMATS = ["wav", "mp3"] as const;

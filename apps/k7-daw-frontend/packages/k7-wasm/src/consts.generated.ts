@@ -108,3 +108,206 @@ export const IO_MODULES: Record<
   FILE: { io: "file" },
   MIDI: { io: "midi" },
 };
+
+/** The sum the mixer makes, and the device that plays it. */
+export const MIX_NODE = "MIX";
+
+/** The interface's output node. */
+export const OUT_NODE = "OUT";
+
+/** The picture's render node, on a project that declares a viewport. */
+export const RENDER_NODE = "RENDER";
+
+/** The picture's output device. */
+export const VIDEO_OUT_NODE = "VIDEO_OUT";
+
+/** The headphone bus: the one output that leaves the mixer's sum entirely. */
+export const CUE_NODE = "CUE";
+
+/** An audio input's node: a channel of the interface. */
+export const AUDIO_IN_NODE = "IN";
+
+/** A MIDI device's node. */
+export const MIDI_IN_NODE = "MIDI";
+
+/** A camera's node. */
+export const CAMERA_NODE = "CAM";
+
+/** The io kind a live picture source is. */
+export const CAMERA_IO = "camera";
+
+/** The io kind a MIDI device is. */
+export const MIDI_IN_IO = "midi";
+
+/** The owner a master chain's plugins are filed under while the document is built. */
+export const MASTER_OWNER = "@master";
+
+/** The type folder cold modules are filed in. */
+export const COLD_TYPE = "cold";
+
+/** The type folder a console's halves live in. */
+export const CONSOLE_TYPE = "console";
+
+/** The type folder a lane belongs to. */
+export const TRACK_CATEGORY = "tracks";
+
+/** Where a rack keeps the audio its symbols name, inside its own folder. */
+export const MODULE_SOURCES_DIR = "sources";
+
+/** A shader module's folder of GLSL. */
+export const SHADERS_DIR = "shaders";
+
+/** A shader's vertex file. */
+export const SHADER_VERTEX = "vertex.glsl";
+
+/** A shader's fragment file. */
+export const SHADER_FRAGMENT = "fragment.glsl";
+
+/** The type folder a shader module lives in. */
+export const SHADER_CATEGORY = "shaders";
+
+/** The type folder a transition module lives in. */
+export const TRANSITION_CATEGORY = "video_transitions";
+
+/** The type folder a shape module lives in. */
+export const SHAPE_CATEGORY = "shapes";
+
+/** What a shape module draws, named by its `shape:` field. */
+export const SHAPE_KINDS = ["square", "circle", "text"] as const;
+
+/** The four knobs every shader gets, numbered and 0..1. */
+export const SHADER_PARAMS = ["P1", "P2", "P3", "P4"] as const;
+
+/** The kind a bare `fade_in` means. */
+export const DISSOLVE = "dissolve";
+
+/** The kind a fade naming a `chain` and no `with` means. */
+export const OVER = "over";
+
+/** The picture lane's strip. */
+export const PICTURE_STRIP = "@meta/shaders/video-mixer";
+
+/** The strip's shader name, which the compiled scene still carries. */
+export const PICTURE_STRIP_SHADER = "video-mixer";
+
+/** How a chain names an engine module. */
+export const ENGINE_NS = "@engine";
+
+/** How a chain names a built-in: the app's own vocabulary. */
+export const META_NS = "@meta";
+
+/** The doc module's type folder. */
+export const DOC_CATEGORY = "docs";
+
+/** The module every note on the graph is a node of. */
+export const DOC_REF = "@meta/doc";
+
+/** What a node stands on when its plugin is one k7 cannot load. */
+export const NOT_SUPPORTED_REF = "@meta/not-supported";
+
+/** The not-supported module's category: no type folder. */
+export const NOT_SUPPORTED_CATEGORY = "misc";
+
+/** `plugin: { type: not_supported }`: the marker for a plugin k7 knows and cannot load. */
+export const NOT_SUPPORTED_TYPE = "not_supported";
+
+/** `plugin: { type: offline }`: no engine plugin, a pass onto disk first. */
+export const OFFLINE_TYPE = "offline";
+
+/** The modules a lane is a node of: sound, strudel, group, picture. */
+export const TRACK_REFS = [
+  "@meta/track",
+  "@meta/strudel-track",
+  "@meta/group-track",
+  "@meta/picture-track",
+] as const;
+
+/** How a module and its node are keyed: `module:node`. */
+export const NODE_SEP = ":";
+
+/** How a module's status asks to be treated by the completions. */
+export const MODULE_STATUSES = ["listed", "favorite", "hidden"] as const;
+
+/** The intrinsic a module's engine-side dry/wet is bound by. */
+export const MIX_PARAM = "@mix";
+
+/** The level into an audio module, in dB. */
+export const INPUT_VOLUME_PARAM = "@input-volume";
+
+/** The level out of anything with audio out, in dB. */
+export const OUTPUT_VOLUME_PARAM = "@output-volume";
+
+/** The range both levels take, in dB. */
+export const VOLUME_RANGE = { min: -60.0, max: 12.0, def: 0.0 } as const;
+
+/** A rack's first pad note: C1, General MIDI's kick. */
+export const RACK_FIRST_NOTE = 36;
+
+/** The two fixed levels a module can live at. */
+export const FIXED_NAMESPACES = ["engine", "workspace"] as const;
+
+/** The library an account's first repository is named. */
+export const DEFAULT_LIBRARY = "k7-core";
+
+/** The account's own library, `@account/…`. */
+export const ACCOUNT_LIBRARY = "account";
+
+/** The folder the account's libraries answer to in a workspace's file API. */
+export const LIBRARIES_DIR = "_libraries";
+
+/** Where the file service clones the libraries, under the machine's state. */
+export const LIBRARIES_HOME_DIR = "libraries";
+
+/** Where automatic VST renders are cached, under the machine's state. */
+export const AUTO_RENDERS_HOME_DIR = ".renders";
+
+/** Where every project's undo journal is kept, under the machine's state. */
+export const HISTORY_HOME_DIR = ".history";
+
+/** The folder a workspace's own shared library sits in. */
+export const SHARED_MODULES_DIR = "_modules";
+
+/** The params whose value is a file the plugin loads, not a number. */
+export const FILE_PARAMS = ["model", "onnx"] as const;
+
+/** File params whose file is in a library's shared folder. */
+export const LIBRARY_FILE_PARAMS = { ir: "irs" } as const;
+
+/** File params a module may fill from its own `assets/` or a library's shared folder. */
+export const SHARED_FILE_PARAMS = { model: "models" } as const;
+
+/** The library folders that hold files rather than modules, and what each is walked for. */
+export const LIBRARY_FILE_FAMILIES = {
+  samples: [".wav", ".aif", ".aiff", ".flac"],
+  irs: [".wav", ".aif", ".aiff", ".flac"],
+  wavetables: [".wav", ".aif", ".aiff", ".flac"],
+  models: [".nam", ".json"],
+} as const;
+
+/** What a rack tap's sample picker asks for. */
+export const TAP_SAMPLE = "sample";
+
+/** What separates a timeline from its lane, and the timelines a nested clip's id walks through. */
+export const NEST_SEP = ">";
+
+/** The placement fields a timeline event may not carry. */
+export const FIXED_FIELDS = [
+  "from",
+  "to",
+  "loop",
+  "fadeIn",
+  "fadeOut",
+  "warp",
+  "takes",
+  "comp",
+  "crossfades",
+] as const;
+
+/** The word for the project's own timeline. */
+export const SONG_TARGET = "main";
+
+/** Where the workspace's tasks live. */
+export const TASKS_FILE = "TODOS.md";
+
+/** The folder a workspace keeps its playlists in. */
+export const PLAYLISTS_DIR = "_playlists";

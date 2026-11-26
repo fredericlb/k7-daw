@@ -1,68 +1,12 @@
-// A shot's animation: what would go wrong silently is a value invented outside the keys, an ease
-// read off the wrong end of its segment, and a split whose tail no longer plays what the shot did.
+// A shot's animation as written: a split whose tail no longer plays what the shot did is what would go wrong silently.
+// Its value at an instant is the Rust crate's, tested there.
 
+import { valueAt } from "@studio/k7-wasm/schema";
 import { describe, expect, it } from "vitest";
-import {
-  AnimateSchema,
-  keysOf,
-  splitAnimate,
-  transformAt,
-  valueAt,
-} from "./keyframes";
+import { type Animate, AnimateSchema, keysOf, splitAnimate } from "./keyframes";
 
-describe("valueAt", () => {
-  const keys = keysOf([[1, 0], { t: 3, v: 100, ease: "hold" }, [5, 200]]);
-
-  it("holds the first value before it and the last after it", () => {
-    expect(valueAt(keys, 0)).toBe(0);
-    expect(valueAt(keys, 9)).toBe(200);
-  });
-
-  it("is linear between two linear keys", () => {
-    expect(valueAt(keys, 2)).toBe(50);
-  });
-
-  it("reads the ease off the key the segment LEAVES", () => {
-    // 3 → 5 leaves a `hold` key, so it stays at 100 until 5.
-    expect(valueAt(keys, 4.9)).toBe(100);
-    expect(valueAt(keys, 5)).toBe(200);
-  });
-
-  it("sorts keys written out of order", () => {
-    expect(
-      valueAt(
-        keysOf([
-          [2, 10],
-          [0, 0],
-        ]),
-        1,
-      ),
-    ).toBe(5);
-  });
-});
-
-describe("transformAt", () => {
-  it("leaves every property it is not told about at rest", () => {
-    expect(
-      transformAt(
-        {
-          opacity: [
-            [0, 0],
-            [1, 1],
-          ],
-        },
-        0.5,
-      ),
-    ).toEqual({
-      x: 0,
-      y: 0,
-      scale: 1,
-      opacity: 0.5,
-      rotate: 0,
-    });
-    expect(transformAt(undefined, 3).scale).toBe(1);
-  });
-});
+// `x` of a shot at `t`, through the Rust crate's evaluation.
+const xAt = (a: Animate, t: number): number => valueAt(keysOf(a.x ?? 0), t);
 
 describe("splitAnimate", () => {
   const animate = {
@@ -79,15 +23,9 @@ describe("splitAnimate", () => {
   it("cuts exactly: each half plays what the shot played over its span", () => {
     const { head, tail } = splitAnimate(animate as never, 5, 8);
     for (const t of [0, 1, 2.5, 4, 4.99])
-      expect(transformAt(head, t).x).toBeCloseTo(
-        transformAt(animate as never, t).x,
-        9,
-      );
+      expect(xAt(head, t)).toBeCloseTo(xAt(animate as never, t), 9);
     for (const t of [0, 0.5, 1.5, 3])
-      expect(transformAt(tail, t).x).toBeCloseTo(
-        transformAt(animate as never, t + 5).x,
-        9,
-      );
+      expect(xAt(tail, t)).toBeCloseTo(xAt(animate as never, t + 5), 9);
   });
 
   it("keeps only the keys that still shape each half", () => {
