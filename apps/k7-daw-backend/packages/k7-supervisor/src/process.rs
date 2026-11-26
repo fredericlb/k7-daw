@@ -45,6 +45,14 @@ pub fn spawn(opts: SpawnOptions) -> Result<u32, String> {
     {
         use std::os::unix::process::CommandExt;
         cmd.process_group(0);
+        // SIGPIPE ignored in the child, which Rust resets to its default: an engine outliving us must survive writing to our closed pipe.
+        // SAFETY: signal() is async-signal-safe, the one call made between fork and exec.
+        unsafe {
+            cmd.pre_exec(|| {
+                libc::signal(libc::SIGPIPE, libc::SIG_IGN);
+                Ok(())
+            });
+        }
     }
     #[cfg(windows)]
     {

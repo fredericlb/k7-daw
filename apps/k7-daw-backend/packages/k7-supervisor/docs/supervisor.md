@@ -69,7 +69,9 @@ made non-inheritable before anything is spawned ([windows.md](windows.md)).
 
 An app that dies closes our stdout, and the next frame we write would raise SIGPIPE, whose default
 action ends the process before the stdin EOF reaches the shutdown — no deregister, and an engine
-nobody watches. Rust ignores SIGPIPE before `main`, so that write fails as a write.
+nobody watches. Rust ignores SIGPIPE before `main`, so that write fails as a write. The engine is
+started with SIGPIPE ignored too, which Rust's spawn would otherwise reset: its output is piped to us,
+and an engine that outlives us would die at its next log line, before the next supervisor can adopt it.
 
 ## An engine is adopted by its PORT, and a probe that cannot ask says nothing
 
