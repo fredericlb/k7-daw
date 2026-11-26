@@ -206,7 +206,12 @@ async fn the_transport_verbs_reach_the_engine_in_order_and_toggle_from_its_state
     saw(&s, "preview_note k7:a t 60 0.5").await;
     let all: Vec<String> = calls(&s)
         .into_iter()
-        .filter(|c| !c.starts_with("is_playing") && c != "open_audio_device")
+        .filter(|c| {
+            !["is_playing", "state_start", "rewind_recorder"]
+                .iter()
+                .any(|p| c.starts_with(p))
+                && c != "open_audio_device"
+        })
         .collect();
     assert_eq!(
         all,

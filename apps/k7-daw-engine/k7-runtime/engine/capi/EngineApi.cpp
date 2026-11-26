@@ -11,7 +11,7 @@ extern "C" const K7EngineApi* k7_engine_api(void) {
         studio::capi::coreApi(),
         studio::capi::projectApi(),
         studio::capi::transportApi(),
-        nullptr,  // state
+        studio::capi::stateApi(),
         nullptr,  // plugins
         nullptr,  // machine
         nullptr,  // render

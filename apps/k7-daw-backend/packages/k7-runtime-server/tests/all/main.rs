@@ -9,6 +9,7 @@ mod pairing_gate;
 mod pairing_store;
 mod project_socket;
 mod server_socket;
+mod server_state;
 mod server_timers;
 mod server_units;
 mod stream;

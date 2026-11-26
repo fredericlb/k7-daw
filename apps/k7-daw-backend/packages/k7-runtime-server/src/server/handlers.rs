@@ -5,6 +5,7 @@
 
 use super::ctx::Request;
 use super::msg::Malformed;
+use super::state;
 use super::whoami;
 use std::collections::HashMap;
 use std::sync::Arc;
@@ -38,5 +39,6 @@ pub fn table() -> HandlerTable {
     whoami::add(&mut t);
     super::project::add(&mut t);
     super::transport::add(&mut t);
+    state::add(&mut t);
     t
 }

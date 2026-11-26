@@ -317,6 +317,7 @@ target_compile_definitions(studio_capi_tests PRIVATE
 add_test(NAME studio_capi_tests COMMAND studio_capi_tests)
 set_tests_properties(studio_capi_tests PROPERTIES LABELS slow)
 
+
 # --- DocReader tests ----------------------------------------------------------
 # The plain reader of the document the Rust server validated, held to the golden file its test writes: nlohmann only, fast.
 add_executable(studio_docreader_tests
@@ -328,3 +329,28 @@ target_link_libraries(studio_docreader_tests PRIVATE nlohmann_json::nlohmann_jso
 target_compile_definitions(studio_docreader_tests PRIVATE
     K7_GOLDEN_DOC="${CMAKE_CURRENT_SOURCE_DIR}/../../../k7-daw-backend/packages/k7-runtime-server/fixtures/project.validated.json")
 add_test(NAME studio_docreader_tests COMMAND studio_docreader_tests)
+
+# --- State area tests ---------------------------------------------------------
+# The state area of the C ABI on a whole EngineHost (a real timer's frame), slow like the C ABI's own suite.
+add_executable(studio_stateapi_tests StateApi_test.cpp)
+target_link_libraries(studio_stateapi_tests PRIVATE
+    studio_engine
+    tracktion::tracktion_engine)
+target_include_directories(studio_stateapi_tests PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/../engine)
+target_compile_definitions(studio_stateapi_tests PRIVATE
+    JUCE_MODAL_LOOPS_PERMITTED=1
+    JUCE_USE_CURL=0
+    JUCE_WEB_BROWSER=0
+    DONT_SET_USING_JUCE_NAMESPACE=1)
+add_test(NAME studio_stateapi_tests COMMAND studio_stateapi_tests)
+set_tests_properties(studio_stateapi_tests PROPERTIES LABELS slow)
+
+# --- State frame tests --------------------------------------------------------
+# The state frame as Serve.cpp builds it, held to the fixture the Rust server's frame is held to: nlohmann only, fast.
+add_executable(studio_stateframe_tests StateFrame_test.cpp)
+target_include_directories(studio_stateframe_tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../engine)
+target_link_libraries(studio_stateframe_tests PRIVATE nlohmann_json::nlohmann_json)
+target_compile_definitions(studio_stateframe_tests PRIVATE
+    K7_STATE_FIXTURE="${CMAKE_CURRENT_SOURCE_DIR}/../../../k7-daw-backend/packages/k7-runtime-server/fixtures/state_frame.txt")
+add_test(NAME studio_stateframe_tests COMMAND studio_stateframe_tests)

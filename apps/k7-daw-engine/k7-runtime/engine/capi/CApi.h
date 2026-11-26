@@ -49,5 +49,6 @@ void guardVoid(const char* what, F&& f) {
 const K7CoreApi* coreApi();
 const K7ProjectApi* projectApi();
 const K7TransportApi* transportApi();
+const K7StateApi* stateApi();
 
 }  // namespace studio::capi

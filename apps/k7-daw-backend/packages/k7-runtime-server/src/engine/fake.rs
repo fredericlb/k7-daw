@@ -8,6 +8,7 @@ pub mod project;
 pub mod transport;
 
 use super::Engine;
+use super::fake_state;
 use super::ffi::{
     self, K7AudioTiming, K7CoreApi, K7EngineApi, K7Host, K7Str, K7StrEach, K7Task, K7Warning,
     K7WarningSink,
@@ -26,7 +27,7 @@ pub fn api() -> &'static K7EngineApi {
         core: &CORE,
         project: std::ptr::from_ref(&project::TABLE).cast(),
         transport: std::ptr::from_ref(&transport::TABLE).cast(),
-        state: std::ptr::null(),
+        state: (&fake_state::STATE as *const super::state::K7StateApi).cast(),
         plugins: std::ptr::null(),
         machine: std::ptr::null(),
         render: std::ptr::null(),
@@ -44,6 +45,7 @@ pub struct FakeState {
     pub run_thread: Option<ThreadId>,
     pub project: project::ProjectFake,
     pub transport: transport::TransportFake,
+    pub state_area: fake_state::Area,
 }
 
 struct Queued {
@@ -73,10 +75,19 @@ pub fn with_state<R>(engine: &Engine, f: impl FnOnce(&mut FakeState) -> R) -> Op
     Some(f(&mut state))
 }
 
-fn log(host: *const K7Host, call: &str) {
+pub(super) fn log(host: *const K7Host, call: &str) {
     if let Ok(mut s) = fake(host).state.lock() {
         s.calls.push(call.to_string());
     }
+}
+
+/// An area's own state of a fake host, read and changed under its lock; `None` if it was poisoned.
+pub(super) fn with_host_state<R>(
+    host: *const K7Host,
+    f: impl FnOnce(&mut FakeState) -> R,
+) -> Option<R> {
+    let mut state = fake(host).state.lock().ok()?;
+    Some(f(&mut state))
 }
 
 struct Process {
