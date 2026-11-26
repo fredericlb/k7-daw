@@ -304,10 +304,6 @@ export function GraphPanel({
   };
 
   const mobile = useIsMobile();
-  const count = strips?.length ?? 0;
-  const title = strips
-    ? m["shell.panel.mixer"]()
-    : (trackId ?? m["graph.noTrack"]());
   const masterSection =
     strips && master && masteringOpen ? (
       <section
@@ -321,16 +317,6 @@ export function GraphPanel({
   if (strips)
     return (
       <div className="flex h-full min-h-0 flex-col gap-2">
-        <DockHeaderRow>
-          <p className="flex min-w-0 items-baseline gap-2 truncate">
-            <span className="type-label text-foreground">{title}</span>
-            <span className="font-mono text-fg-2 text-xs">
-              {(count === 1 ? m["graph.strips.one"] : m["graph.strips.other"])({
-                n: count,
-              })}
-            </span>
-          </p>
-        </DockHeaderRow>
         <DockHeaderRow>
           <button
             type="button"
@@ -358,9 +344,6 @@ export function GraphPanel({
     );
   return (
     <div className="flex h-full min-h-0 flex-col">
-      <DockHeaderRow>
-        <p className="truncate font-mono text-fg-2 text-xs">{title}</p>
-      </DockHeaderRow>
       <div className="min-h-0 flex-1">{body()}</div>
     </div>
   );

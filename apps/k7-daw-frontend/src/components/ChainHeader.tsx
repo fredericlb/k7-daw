@@ -51,19 +51,18 @@ export function ChainHeader({
   return (
     <DockHeaderRow>
       <div className="flex min-w-0 flex-1 items-center gap-2">
-        {cards && (
-          <div className="flex min-w-0 shrink flex-col" title={name}>
-            <span className="type-label truncate">{name}</span>
-            <span className="type-secondary truncate text-fg-2">
-              {(moduleCount === 1
-                ? m["chain.status.one"]
-                : m["chain.status.other"])({
-                n: moduleCount,
-              })}
-            </span>
-          </div>
+        {/* The view switch on the left (cards or the modules' panels), every other control on the right. */}
+        {cards && onControls && (
+          <button
+            type="button"
+            aria-pressed={controls}
+            onClick={onControls}
+            className={`${CHIP} type-label aria-pressed:bg-on-fill aria-pressed:text-lavender`}
+          >
+            {m["chain.controls"]()}
+          </button>
         )}
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="ml-auto flex shrink-0 items-center gap-2">
           {onArm && (
             <TrackToggle
               kind="arm"
@@ -72,16 +71,6 @@ export function ChainHeader({
               title={m["chain.armInput"]({ name })}
               onClick={onArm}
             />
-          )}
-          {cards && onControls && (
-            <button
-              type="button"
-              aria-pressed={controls}
-              onClick={onControls}
-              className={`${CHIP} type-label aria-pressed:bg-on-fill aria-pressed:text-lavender`}
-            >
-              {m["chain.controls"]()}
-            </button>
           )}
           {onInput &&
             INPUTS.map(({ kind, label, Icon }) => {

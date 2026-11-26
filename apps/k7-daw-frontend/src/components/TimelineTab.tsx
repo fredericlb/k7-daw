@@ -180,6 +180,8 @@ const EXPAND_EXTRA = 40;
 const SHOT_LABEL_H = 14;
 // Expand's movement, shared by the lanes and every line spanning them, so they travel as one.
 const NATURAL = 4;
+/** How long Fit's flash lasts, ms. */
+const FLASH_MS = 1500;
 /** Sources a browser does not decode as they are, shown as converting until an `optimized:` copy lands (song-video/docs/media.md). */
 const NEEDS_COPY = /\.(mov|mkv)$/i;
 
@@ -308,6 +310,13 @@ export interface TimelineHandle {
   zoomIn: () => void;
   zoomOut: () => void;
   zoomReset: () => void;
+  /** `ui fit` — the view centred on one placement, its lane on screen and the clip flashed; again, back to the view before. */
+  frameClip: (clip: {
+    track?: string;
+    id: string;
+    start: number;
+    length: number;
+  }) => void;
   seekToCaret: () => void;
   /** `transport step` — the drawn tick after (`1`) or before (`-1`) `sec`, in seconds; null past either end (docs/timeline.md). */
   stepTarget: (sec: number, dir: 1 | -1) => number | null;
@@ -584,6 +593,12 @@ function TimelineTabView({
   } | null>(null);
   // The zoom stack: [] is the song at rest, the last entry is what's drawn.
   const [zoom, setZoom] = useState<Viewport[]>([]);
+  const zoomRef = useLatest(zoom);
+  // The zoom level Fit pushed, so a second Fit pops that one level and nothing a person zoomed after it.
+  const fitRef = useRef<{ depth: number } | null>(null);
+  // The clip Fit just framed, outlined a moment so the eye finds it.
+  const [flash, setFlash] = useState<string | null>(null);
+  const flashTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
   // The transport loop as an inclusive beat range, or null. The engine enforces the wrap; this only draws the band.
   const [loop, setLoop] = useState<{ lo: number; hi: number } | null>(null);
   // …and the loop the ENGINE holds, as one string so a frame that repeats it re-renders nothing.
@@ -1565,13 +1580,47 @@ function TimelineTabView({
       },
       // shift+z: back out one level. A selection belongs to the view it was drawn in, so leaving that view drops it.
       zoomOut: () => {
+        fitRef.current = null;
         setSel(null);
         setZoom((z) => z.slice(0, -1));
       },
       // 0: all the way back to the song.
       zoomReset: () => {
+        fitRef.current = null;
         setSel(null);
         setZoom([]);
+      },
+      // The edited clip, centred, a quarter of its length clear either side, flashed; a second Fit takes that zoom back.
+      frameClip: ({ track, id, start, length }) => {
+        if (fitRef.current?.depth === zoomRef.current.length) {
+          fitRef.current = null;
+          setSel(null);
+          setZoom((z) => z.slice(0, -1));
+          return;
+        }
+        const len = length > 0 ? length : NATURAL;
+        const pad = Math.max(len / 4, 1);
+        if (!visRows.length) return;
+        setSel(null);
+        fitRef.current = { depth: zoomRef.current.length + 1 };
+        setFlash(`${track ?? ""}/${id}`);
+        clearTimeout(flashTimer.current);
+        flashTimer.current = setTimeout(() => setFlash(null), FLASH_MS);
+        // The lane comes on screen once the zoomed rows are drawn.
+        requestAnimationFrame(() => {
+          const sel = track ? `[data-lane-track="${CSS.escape(track)}"]` : "";
+          const lane = sel ? scrollRef.current?.querySelector(sel) : null;
+          lane?.scrollIntoView({ block: "nearest", inline: "nearest" });
+        });
+        setZoom((z) => [
+          ...z,
+          {
+            beatStart: Math.max(0, start - pad),
+            beatEnd: start + len + pad,
+            rowFrom: rowKey(visRows[0]),
+            rowTo: rowKey(visRows[visRows.length - 1]),
+          },
+        ]);
       },
       // t: seek the transport to the caret's beat. On a label there is nowhere to send it, so the key goes quiet.
       seekToCaret: () => {
@@ -3567,6 +3616,10 @@ function TimelineTabView({
                                   // A TIMELINE placed whole: dashed, its length fixed and its content drawn inside.
                                   c.timeline &&
                                     "outline-dashed outline-1 -outline-offset-1 outline-foreground/50",
+                                  // The clip Fit just framed: ringed a moment, so the eye finds it.
+                                  (flash === `${t.id}/${c.id}` ||
+                                    flash === `/${c.id}`) &&
+                                    "z-10 animate-pulse outline outline-2 outline-primary",
                                   // The clip in hand: ring it and lift it over its ghost.
                                   (moving || resizing) &&
                                     "z-10 outline outline-2 outline-primary",

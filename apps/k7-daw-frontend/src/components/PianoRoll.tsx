@@ -27,8 +27,6 @@ import {
   pasteNotes,
 } from "../clipboard";
 import { clipLoop, playedZone } from "../clipLoop";
-import { clipShownName, laneNamer } from "../clipNames";
-import { CLIP_NAME_WORDS } from "../clipNameWords";
 import type { MenuCtx } from "../contextMenu";
 import {
   type ClipGridHandle,
@@ -56,6 +54,7 @@ import {
 } from "../rollPending";
 import { useShell } from "../state/shellStore";
 import type { WebClip, WebProject } from "../types";
+import { DockFitButton } from "./DockFitButton";
 import { KEYS, KeyGutter, N_NOTES } from "./KeyGutter";
 import { LoopBrace, LoopToggle } from "./LoopBrace";
 import {
@@ -607,65 +606,25 @@ export function PianoRoll({
   return (
     // min-w-0, as in the timeline: the fixed-width grid must not become this flex child's minimum.
     <div className="flex h-full min-h-0 min-w-0 flex-col border-t-2 border-border">
-      <DockHeaderRow>
-        <div
-          className={cn(
-            "flex min-w-0 flex-1 gap-x-2 gap-y-0.5 text-xs",
-            inSheet ? "flex-col" : "flex-wrap items-center",
-          )}
-        >
-          {/* The name a musician knows the clip by; its id stays the tooltip's (clipNames.ts). */}
-          <span
-            className="min-w-0 truncate font-semibold text-primary-text"
-            title={clip.name || clip.id}
-          >
-            {clipShownName(
-              clip.name || clip.id,
-              laneNamer(project.tracks),
-              CLIP_NAME_WORDS,
-              laneNamer(project.tracks)(
-                project.tracks.find((t) =>
-                  t.clips.some((c) => c.id === clip.id),
-                )?.id ?? "",
-              ),
-            )}
-          </span>
-          <span className="text-muted-foreground">
-            {(visNotes.length === 1
-              ? m["roll.notes.one"]
-              : m["roll.notes.other"])({ n: visNotes.length })}
-            {/* What the cage hides, counted, so notes sitting before a file's `from` read as windowed rather than as data lost. */}
-            {notes.length > visNotes.length &&
-              ` (${m["roll.outsideWindow"]({
-                n: notes.length - visNotes.length,
-              })})`}{" "}
-            · {m["roll.beats"]({ n: Math.round(placedEnd) })}
-            {/* What the marks add up to, said in words: ten passes of eight beats is not an 80-beat pattern, though the pane is as wide. */}
-            {loop && (
-              <span className="ml-2 text-violet-400">
-                · {m["roll.loop"]({ win: +loop.win.toFixed(3) })}
-                {loop.passes > 1 && ` × ${loop.passes}`}
-              </span>
-            )}
-          </span>
-        </div>
-      </DockHeaderRow>
       {/* Pad and Desk draw the tools in the dock's header; the phone sheet keeps them as the body's first row. */}
+      {/* The first control: Fit centres the timeline on this clip (`ui fit` says so when the roll shows a file nothing places). */}
+      <DockFitButton command={onCommand} />
       <DockHeaderRow bodyOnPhone>
         <div
           className={cn(
-            "flex shrink-0 items-center gap-1 text-xs",
-            inSheet ? "px-3 py-1" : "ml-auto",
+            "flex flex-1 shrink-0 items-center gap-1 text-xs",
+            inSheet && "px-3 py-1",
           )}
         >
-          <span className="flex items-center gap-1">
-            {onModeChange && (
-              <RollToolMenu
-                modes={takes ? ROLL_MODES : ROLL_SOLO_MODES}
-                current={mode}
-                onPick={(next) => void onCommand?.(`ui roll ${next}`)}
-              />
-            )}
+          {/* The view's tools on the left; Loop and ×2 pushed to the right. */}
+          {onModeChange && (
+            <RollToolMenu
+              modes={takes ? ROLL_MODES : ROLL_SOLO_MODES}
+              current={mode}
+              onPick={(next) => void onCommand?.(`ui roll ${next}`)}
+            />
+          )}
+          <span className="ml-auto flex items-center gap-1">
             {/* Editable rolls only — `onCreateNote` is what says this one is (docs/clipEditors.md). */}
             <LoopToggle on={looped} onToggle={onLoop} />
             <SeqDoubleButton

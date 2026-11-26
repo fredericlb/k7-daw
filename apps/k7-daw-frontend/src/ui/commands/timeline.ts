@@ -154,6 +154,34 @@ export const TIMELINE_COMMANDS: LocalCommand[] = [
     { en: "Zoom back out one step", fr: "Revenir d'un cran en arrière" },
     (ctx) => ctx.timelineRef.current?.zoomOut(),
   ),
+  {
+    // The editor's Fit button: the timeline centred on the clip the dock is editing.
+    name: "ui fit",
+    readable: {
+      en: "Centre the timeline on the clip being edited",
+      fr: "Centrer la timeline sur le clip en cours d'édition",
+    },
+    run: (ctx) => {
+      const slot = ctx.shownSlot;
+      if (slot?.kind !== "clip" || slot.target.kind !== "clip") {
+        ctx.setStatus(m["status.noClipToFit"]());
+        return true;
+      }
+      const { clip, track } = slot.target;
+      const lane =
+        track ??
+        ctx.projectDoc?.tracks.find((t) =>
+          t.clips.some((c) => c.id === clip.id),
+        )?.id;
+      ctx.timelineRef.current?.frameClip({
+        track: lane,
+        id: clip.id,
+        start: clip.start,
+        length: clip.length,
+      });
+      return true;
+    },
+  },
   onTimeline(
     "ui zoom reset",
     { en: "Show the whole song", fr: "Afficher tout le morceau" },

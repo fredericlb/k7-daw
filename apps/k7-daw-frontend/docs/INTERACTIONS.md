@@ -25,8 +25,8 @@ An interaction is `<screen number>.<nn>` (`03.05`), one id shared by every devic
 | 08 Tasks & history panel | 08T (9) | 08M (9) | 08D (10) | LogPad, LogPhone, LogDesk |
 | 09 Export panel | 09T (6) | 09M (6) | 09D (6) | SharePad, SharePhone, ShareDesk |
 | 10 Settings panel | 10T (5) | 10M (5) | 10D (5) | SettingsPad, SettingsPhone, SettingsDesk |
-| 11 Clip editor | 11T (28) | 11M (28) | 11D (28) | ClipZoomPad, ClipPhone, ClipZoomDesk |
-| 12 Piano roll | 12T (21) | 12M (20) | 12D (25) | PianoSidePad, PianoPhone, PianoSideDesk |
+| 11 Clip editor | 11T (27) | 11M (27) | 11D (27) | ClipZoomPad, ClipPhone, ClipZoomDesk |
+| 12 Piano roll | 12T (22) | 12M (21) | 12D (26) | PianoSidePad, PianoPhone, PianoSideDesk |
 | 13 Node chain editor | 13T (10) | 13M (10) | 13D (10) | ChainSidePad, ChainPhone, ChainSideDesk |
 | 14 Export · folder picker | 14T (0) | 14M (0) | 14D (0) | ExportPickPad, ExportPickPhone, ExportPickDesk |
 | 15 Export · saved | 15T (0) | 15M (0) | 15D (0) | ExportDonePad, ExportDonePhone, ExportDoneDesk |
@@ -175,7 +175,7 @@ The header (Back, the name over its status line, spinner, warning chip, git caps
 | 03.25† | Show / hide the graph notes | click the notes button | — | tap | T M D |
 | 03.26 | Open the Mixer or the Events dock | click Mixer in the header's panel toolbar; opening a clip, a take or a roll opens Events | the key bound to `ui mixer` | tap Mixer in Views and panels | T M D |
 | 03.27 | Close the editor dock | click Close editor in the dock header | Esc | tap Close editor | T M D |
-| 03.28 | Resize the editor dock | drag the separator over its top edge (44 px tall, 120 px min); Expand editor fills the screen | ↑ / ↓ on the focused separator | drag the separator | T M D |
+| 03.28 | Resize the editor dock | drag the separator over its top edge (44 px tall, 120 px min); hold it 400 ms, then move up to expand the editor to full height or down to fold it back | ↑ / ↓ on the focused separator; Enter expands or folds | drag the separator; on a phone, hold the sheet's grabber, then move up to expand or down to fold | T M D |
 | 03.29 | Open / close a panel (resources, playlists, logs, tasks and history, export, settings) | click its button in the header's panel toolbar (a pressed button shows its name); the same button or the panel's Close closes it | the key bound to `ui <panel>` | tap its tile in Views and panels (phone); tap Close | T M D |
 | 03.30 | Switch pane (Arrangement / Graph / Source / Turntables) | click the pane switcher (its tooltip names the key); a pane another device shows is dimmed and says why | `1` `2` `3` `4`; `F6` / `⇧F6` | tap the pane in Views and panels (phone) | T M D |
 | 03.31 | Show / hide the viewport window | click Picture: the viewport in Lane views (a project with a picture) | — | tap Picture in Views and panels (phone) | T M D |
@@ -504,20 +504,19 @@ The `/settings` page (General, Devices, Services, Downloads, About), the engine 
 |---|---|---|---|---|---|
 | 11.03 | Switch the waveform view (standard / onsets / warp / takes) | pick in the view select, or click a mode strip button | `a` standard, `o` onsets, `w` warp; Esc back to standard; takes only via `ui wave takes` | tap a mode strip button | T M D |
 | 11.04 | Zoom the bar window | bare wheel zooms about the cursor; ⌘/Ctrl+wheel or trackpad pinch zooms smoothly | — | two-finger pinch | T M D |
-| 11.05 | Show every bar | click "all bars" (when zoomed in) | — | tap | T M D |
-| 11.06 | Frame the event again | click "the event" (when moved off it) | — | tap | T M D |
-| 11.07 | Set the event's gain | drag the Gain slider (written on release) | arrows (written on key up) | drag | T M D |
-| 11.08 | Reset the gain to 0 dB | double-click the slider | — | double-tap | T M D |
-| 11.09 | Toggle the event's loop (also in the roll header) | click Loop | Tab, Space/Enter | tap | T M D |
+| 11.07 | Set the event's gain | click "gain: 0.0 dB" in the title bar, drag the knob in the bubble above it (written on release) | Tab, Enter opens the bubble; arrows on the knob (written on key up) | tap gain, drag the knob | T M D |
+| 11.08 | Reset the gain to 0 dB | double-click the knob in the gain bubble | — | double-tap the knob | T M D |
+| 11.09 | Toggle the event's loop (also in the roll header) | click "loop: off" in the title bar, then the switch in its bubble (the roll header keeps its Loop button) | Tab, Enter opens the bubble; Space toggles the switch | tap loop, tap the switch | T M D |
 | 11.10 | Move the loop's start or end | drag a brace handle on the bars ruler (free) | — | drag | T M D |
 | 11.11 | Set the onset sensitivity (onsets view) | drag the threshold slider | arrows | drag | T M D |
-| 11.12 | Open the trim gate | click Trim, a pressed pill: the gate card opens under it (the kept part is drawn over the wave) | Tab, Enter | tap | T M D |
-| 11.13 | Set the trim gate threshold | drag the dB slider in the gate card | arrows | drag | T M D |
-| 11.14 | Trim the event to the gate | click Trim in the gate card | Tab, Enter | tap | T M D |
+| 11.12 | Open the trim gate | click Trim in the title bar: the gate opens as a popover from it (the kept part is drawn over the wave) | Tab, Enter | tap | T M D |
+| 11.13 | Set the trim gate threshold | drag the dB slider in the Trim popover | arrows | drag | T M D |
+| 11.14 | Trim the event to the gate | click Trim in the Trim popover | Tab, Enter | tap | T M D |
 | 11.15 | Run an operation chain on the clip | click Operations, search, click a chain | arrows, Enter | tap | T M D |
 | 11.16 | Discard the take | click the trash button | — | tap | T M D |
 | 11.17 | Finish editing | click Done (files the take as reviewed) | — | tap | T M D |
 | 11.18 | Close the editor | click Close editor in the dock header | Esc at the end of the ladder | tap | T M D |
+| 11.29† | Centre the timeline on the clip being edited | click Fit, the first button of the title bar: the clip centred, its lane on screen, the clip outlined 1.5 s; Fit again goes back to the view before (so does ⇧Z) | `ui fit` in the command bar | tap Fit | T M D |
 
 ### Clip editor / Waveform · Waveform
 
@@ -582,6 +581,12 @@ The roll: mode strip (select, create, remove, takes), key gutter, note lanes wit
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
 | 12.25 | Add or remove a note | click an empty cell / a note (1/16 grid) | — | tap | T M D |
+
+### Piano roll
+
+| ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
+|---|---|---|---|---|---|
+| 12.26† | Centre the timeline on the clip being edited | click Fit, the first button of the title bar: the clip centred, its lane on screen, the clip outlined 1.5 s; Fit again goes back to the view before (so does ⇧Z) | `ui fit` in the command bar | tap Fit | T M D |
 
 ## 13 Node chain editor
 

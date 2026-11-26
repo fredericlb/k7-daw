@@ -24,8 +24,6 @@ import {
 import { api } from "../api";
 import { anchorBars, barWindow, frameWindow, zoomBars } from "../barWindow";
 import { clamp } from "../clamp";
-import { clipShownName, laneNamer } from "../clipNames";
-import { CLIP_NAME_WORDS } from "../clipNameWords";
 import { chainOps, filterOps, processLine } from "../clipOps";
 import { warpLine } from "../clipWarp";
 import { useLatest } from "../hooks/useLatest";
@@ -48,6 +46,7 @@ import { ClipControls } from "./ClipControls";
 import { ClipMarksList, type MarkRow } from "./ClipMarksList";
 import { ClipToolBar } from "./ClipToolBar";
 import { CompStrip } from "./CompStrip";
+import { DockFitButton } from "./DockFitButton";
 import { LiveSeconds, LiveTakeWave, LiveWaveform } from "./LiveWaveform";
 import { LoopBrace } from "./LoopBrace";
 import { ArrangementRuler } from "./Ruler";
@@ -80,7 +79,6 @@ export function AudioClipPanel({
   startBeat = 0,
   trackOrder = NO_TRACKS,
   trackNames = NO_NAMES,
-  lanes,
   placedAt: placedAtProp = null,
   eventAt: eventAtProp = null,
   eventWindow: eventWindowProp = null,
@@ -109,8 +107,6 @@ export function AudioClipPanel({
   trackOrder?: string[];
   /** Track id → display name, for naming who is being recorded; which tracks those ARE comes off the engine store here. */
   trackNames?: Record<string, string>;
-  /** The song's lanes, to name a take by its lane; absent, `trackNames` stands in for them. */
-  lanes?: readonly { id: string; name: string }[];
   /** The arrangement beat where the clip's window PLAYS — null for a clip nothing places. */
   placedAt?: number | null;
   /** This event's start as a TIMECODE — given rather than derived, since turning a beat into one needs the time signature. */
@@ -234,14 +230,6 @@ export function AudioClipPanel({
   // `arrayEq`: `armed` is a new array every frame, and without it the panel re-rendered at frame rate.
   const armed = useEngineState((s) => s.armed, arrayEq);
   const armedNames = armed.map((id) => trackNames[id] ?? id);
-  // The clip as a musician knows it — its lane and bar for a take — the id staying the tooltip's (clipNames.ts).
-  const laneName = useMemo(
-    () =>
-      laneNamer(
-        lanes ?? Object.entries(trackNames).map(([id, name]) => ({ id, name })),
-      ),
-    [lanes, trackNames],
-  );
 
   // The transport's position in beats, re-rendering on whole beats only: one that followed every 20 Hz frame would redraw the waveform beside it.
   const curBeat = useEngineState((s) =>
@@ -485,9 +473,9 @@ export function AudioClipPanel({
       className="flex h-full min-h-0 w-full min-w-0 flex-1 flex-col gap-1 bg-card/40 px-3 py-2"
       aria-label={rolling ? m["clip.takeRolling"]() : `clip ${clip ?? ""}`}
     >
-      <DockHeaderRow>
-        <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
-          {rolling ? (
+      {rolling && (
+        <DockHeaderRow>
+          <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
             <>
               {/* The pre-roll counts DOWN, then the take counts up in bar:beat from where THIS take started (docs/shell.md). */}
               {count.phase === "count-in" ? (
@@ -527,36 +515,20 @@ export function AudioClipPanel({
                 <Square className="mr-1 h-3 w-3" /> Stop
               </Button>
             </>
-          ) : (
-            <>
-              {/* The name over where it lives: a clip nothing places has no lane to name, and works the same. */}
-              <div className="flex min-w-0 flex-1 flex-col">
-                <span
-                  className="min-w-0 truncate font-bold text-[17px] text-foreground"
-                  title={clip ?? ""}
-                >
-                  {clip &&
-                    clipShownName(
-                      clip,
-                      laneName,
-                      CLIP_NAME_WORDS,
-                      laneName(track),
-                    )}
-                </span>
-                {clip && (
-                  <span className="truncate font-mono text-[12px]" title={clip}>
-                    {track
-                      ? m["clip.onTrack"]({ track })
-                      : m["clip.offTrack"]()}{" "}
-                    · {clip}
-                  </span>
-                )}
-              </div>
-            </>
-          )}
-        </div>
-      </DockHeaderRow>
+          </div>
+        </DockHeaderRow>
+      )}
 
+      {/* The first control: Fit centres the timeline on this clip. */}
+      {!rolling && clip && <DockFitButton command={command} />}
+      {/* The tool axis, absent while a take rolls (no mark yet): it DISPATCHES `ui wave`, the only way to a tool a finger has. */}
+      {!rolling && clip && (
+        <ClipToolBar
+          modes={takes ? WAVE_MODES : WAVE_SOLO_MODES}
+          current={view}
+          onPick={(mode) => void command(`ui wave ${mode}`)}
+        />
+      )}
       {!rolling && (
         <ClipControls
           gainDb={gainDb}
@@ -587,14 +559,6 @@ export function AudioClipPanel({
           onPickOp={(c) => clip && void run(processLine(clip, c), "process")}
           onDiscard={onDiscard}
           onDone={onDiscard ? onClose : undefined}
-        />
-      )}
-      {/* The tool axis, absent while a take rolls (no mark yet): it DISPATCHES `ui wave`, the only way to a tool a finger has. */}
-      {!rolling && clip && (
-        <ClipToolBar
-          modes={takes ? WAVE_MODES : WAVE_SOLO_MODES}
-          current={view}
-          onPick={(mode) => void command(`ui wave ${mode}`)}
         />
       )}
       {!rolling && (editingOnsets || editingWarp) && (
@@ -735,38 +699,6 @@ export function AudioClipPanel({
                   : undefined
               }
             />
-          )}
-          {/* What is on screen and the two ways out, in the title bar: a window showing only some bars without saying so reads as a clip that was cut. */}
-          {!rolling && wf && !showList && win.allBars > 1 && (
-            <DockHeaderRow>
-              <span className="flex shrink-0 items-center gap-1 whitespace-nowrap text-muted-foreground text-xs tabular-nums">
-                <span title={m["clip.zoom"]()}>
-                  {Math.round(win.shown)}/{win.allBars} {m["clip.bars"]()}
-                </span>
-                {win.shown < win.allBars && (
-                  <button
-                    type="button"
-                    className="underline hover:text-foreground"
-                    onClick={() => setAsked({ bars: win.allBars, start: 0 })}
-                  >
-                    {m["clip.allBars"]()}
-                  </button>
-                )}
-                {framed && (
-                  <button
-                    type="button"
-                    className="underline hover:text-foreground"
-                    onClick={frameOnEvent}
-                    title={m["clip.backToEvent"]({
-                      from: act.from.toFixed(2),
-                      to: act.to.toFixed(2),
-                    })}
-                  >
-                    {m["clip.theEvent"]()}
-                  </button>
-                )}
-              </span>
-            </DockHeaderRow>
           )}
           {/* The SONG's ruler over the wave (Ruler.tsx), the placement's grid rather than the warp — see docs/clipEditors.md. */}
           {!rolling &&

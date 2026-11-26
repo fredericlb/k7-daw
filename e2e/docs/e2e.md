@@ -292,6 +292,7 @@ person reads too: a spec that cannot find a control by its name has found an acc
 
 The clip editor, Takes, the piano roll and the live take are in the editor dock, which is the Events
 panel: `complementary` named "Events" on Pad and Desk, a `dialog` of the same name on a phone, so
-`panelBody(page, "Events")` finds it as it finds a right panel. Its buttons are "Expand editor"
-(a toggle: read `aria-pressed`), "Close editor" and, on Pad and Desk, "Resize the editor: drag up or down".
+`panelBody(page, "Events")` finds it as it finds a right panel. Its controls are "Close editor" and its
+grabber: on Pad and Desk the separator named "Resize the editor: drag up or down; …" (Enter on it toggles
+the expanded state), on a phone the button "Expand editor" (a toggle: read `aria-pressed`).
 The Events toolbar button stays pressed while the dock is open, and a right panel may be open beside it.

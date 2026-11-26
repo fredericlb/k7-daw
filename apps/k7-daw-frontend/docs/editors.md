@@ -5,12 +5,24 @@ the live take, a sequence's grid, the takes.
 
 ## Choices
 
-- **Every option is in the title bar.** Tools, toggles, sliders, menus, the bars on screen, Stop,
-  Discard and Done are drawn through `DockHeaderRow` (`@studio/ui/editor-dock`) on the line of Expand
-  and Close. An editor has no toolbar of its own in its content.
+- **Every option is in the title bar.** Tools, toggles, sliders, menus, Stop,
+  Discard and Done are drawn through `DockHeaderRow` (`@studio/ui/editor-dock`) on the line of
+  Close. An editor has no toolbar of its own in its content.
+- **The view switch on the left, everything else on the right.** No editor names what it shows (no clip
+  name, no count, no path): the dock's visually hidden title names it. The title bar starts with the
+  view switch (the waveform's capsules, the roll's tool menu, the chain's Controls) and pushes the
+  settings and actions to the right.
+- **A clip editor starts with Fit.** The first control of the audio clip and the piano roll is Fit
+  (`DockFitButton`, `ui fit`): one zoom level of the timeline centred on the edited placement, a quarter
+  of its length clear either side, its lane scrolled on screen and the clip outlined for 1.5 s so the
+  eye finds it. Fit again takes that level back, to the view before; so does shift+z. It moves the
+  timeline, never the editor.
 - **The content holds only what is edited**: the cards, the strips, the notes, the wave, the takes'
   rows, and the edited data's own names and values (a lane's name on its card, a key's name, a ruler's
   numbers). No caption, no section heading, no help line.
+- **A setting is "name: value".** An editor's settings read as text in its title bar through
+  `DockProperty` ("gain: 0.0 dB", "loop: off"); the knob or switch that changes one opens in a bubble
+  above it on a tap. The waveform editor is the first; the others follow it.
 - **Help is one glyph.** An editor's help is `DockHint`: an info glyph in the title bar
   whose tooltip and accessible name are the words. An editor has at most one, and it follows the tool.
 - **Nothing to edit is said in the title bar, the content left blank.** Loading, an error, an empty
