@@ -2167,6 +2167,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "k7-supervisor"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "getrandom 0.3.4",
+ "k7-local",
+ "libc",
+ "serde_json",
+ "tokio",
+ "url",
+]
+
+[[package]]
 name = "k7-sync"
 version = "0.1.0"
 dependencies = [

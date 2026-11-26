@@ -1,0 +1,34 @@
+[package]
+name = "k7-supervisor"
+description = "The engine machine's supervisor in Rust: starts, adopts and watches k7-runtime, speaks the host protocol over NDJSON stdio (docs/rust-supervisor-plan.md)."
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+name = "k7-supervisor"
+path = "src/main.rs"
+test = false
+doc = false
+
+# An engine that only listens, for the tests alone: `tests/all/supervisor.rs` runs it through `CARGO_BIN_EXE_k7-fake-engine`.
+[[bin]]
+name = "k7-fake-engine"
+path = "src/bin/fake_engine.rs"
+test = false
+doc = false
+
+[dependencies]
+# Local wall-clock for the merged log's `HH:MM:SS`, UTC for the identity's `createdAt`.
+chrono.workspace = true
+getrandom.workspace = true
+# The pidfile's OS half (inspect, alive, kill_tree): one verdict with k7-local's host.
+k7-local.workspace = true
+# EMFILE and ENFILE, the probe's third answer; getppid on Android.
+libc = "0.2"
+serde_json.workspace = true
+tokio = { workspace = true, features = ["rt-multi-thread", "time", "sync", "macros", "signal", "io-util", "io-std"] }
+url.workspace = true
