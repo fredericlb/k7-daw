@@ -11,7 +11,7 @@ Both editors follow the dock's one rule ([editors.md](editors.md)): every option
 (`DockHeaderRow`, [editor-dock](../packages/ui/docs/editor-dock.md)) and the body is the clip alone.
 An audio clip's title bar starts with its view capsules, then the gain and Loop as "name: value" settings (a knob and a switch in their bubble), Trim / Operations
 (and Discard with Done for a take just filed) and the active tool's help glyph; Trim opens its gate as a popover from the bar. The piano roll's title
-bar holds its tool menu, Loop, ×2 and the help glyph. Neither names the clip: the dock's hidden title does, and the clip
+bar holds Fit, its tools as the same capsules, then "loop: off" and the lightning Operations menu on the right; it has no help glyph. Neither names the clip: the dock's hidden title does, and the clip
 on the lanes is the one the person opened. On a phone the tool row is the body's first row.
 
 The zoom ruler over an audio clip follows the clock switch (bars or seconds), like the timeline's. The
@@ -32,9 +32,9 @@ with its note name, since there the roll is read key by key rather than by octav
 widens to make room. A lane with no rack keeps the plain keyboard: octave Cs only, as a pitch
 reader expects.
 
-### ×2
+### Multiply the length by 2
 
-`SeqDoubleButton.tsx`, in the roll's header: the sequence twice as long, its notes played twice.
+The one entry of the roll's Operations menu (`RollOpsMenu.tsx`, a lightning button): the sequence twice as long, its notes played twice.
 It is a `sequence double` command like every other edit here, so it is one Ctrl+Z and reachable
 from the bar.
 
@@ -49,9 +49,8 @@ is why it sits apart from the precisions. What a "length"
 is — the stated window, else the notes' extent rounded up to the bar — is decided in the writer,
 and `apps/k7-daw-frontend/packages/song-schema/docs/noteEdits.md` is where that reasoning lives.
 
-The roll draws it only when the roll can be EDITED (`onCreateNote`, the same signal its "drag to
-draw" hint follows): a locked workspace draws the notes and takes none, and a ×2 there would be a
-button that reports a refusal.
+The roll draws the menu only when the roll can be EDITED (`onCreateNote`): a locked workspace draws
+the notes and takes none, and the entry there would be a button that reports a refusal.
 
 A MIDI clip always opens on the roll, a rack's included: it shows what was PLAYED, timing and
 length and velocity as they are.
@@ -135,8 +134,8 @@ here mounts a component, so arithmetic left inline in one is arithmetic no test 
 `rollMode.ts`: `select`, `create`, `remove` — and a fourth, `takes`, which is a VIEW rather than a
 gesture and is described below. They are the roll's own rather than the timeline's
 tools — what a lane holds here is NOTES, so creating and removing are the two acts, and neither
-means anything on a track. A tool menu in the panel header (`RollToolMenu.tsx`) is the third way to
-one, beside the keys and the bar, and the only one a finger has; each item dispatches
+means anything on a track. The title bar's capsules (`RollToolBar.tsx`, drawn as the waveform's views are) are the third way to
+one, beside the keys and the bar, and the only one a finger has; each segment dispatches
 `ui roll <mode>` rather than setting the state beside it.
 
 | mode | a press on a bare lane | a press on a note |
