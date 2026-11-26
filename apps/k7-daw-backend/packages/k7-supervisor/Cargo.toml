@@ -14,6 +14,13 @@ path = "src/main.rs"
 test = false
 doc = false
 
+# An engine that speaks the engine wire from files, for the queries part's tests: `tests/all/queries.rs`.
+[[bin]]
+name = "k7-ws-engine"
+path = "src/bin/ws_engine.rs"
+test = false
+doc = false
+
 # An engine that only listens, for the tests alone: `tests/all/supervisor.rs` runs it through `CARGO_BIN_EXE_k7-fake-engine`.
 [[bin]]
 name = "k7-fake-engine"
@@ -32,3 +39,6 @@ libc = "0.2"
 serde_json.workspace = true
 tokio = { workspace = true, features = ["rt-multi-thread", "time", "sync", "macros", "signal", "io-util", "io-std"] }
 url.workspace = true
+# The engine's WebSocket (`engine_client`): one connection, a reader task, the frames typed by hand.
+futures-util.workspace = true
+tokio-tungstenite.workspace = true

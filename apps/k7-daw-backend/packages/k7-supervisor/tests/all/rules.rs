@@ -76,11 +76,14 @@ fn the_candidate_ports_follow_the_first() {
 
 #[test]
 fn a_loopback_only_listener_holds_its_port_and_answers() {
-    let l = std::net::TcpListener::bind("127.0.0.1:0").unwrap();
-    let port = l.local_addr().unwrap().port();
-    assert!(!ports::bindable(port));
-    assert_eq!(ports::probe(port), ports::Probe::Up);
-    drop(l);
-    assert_eq!(ports::probe(port), ports::Probe::Down);
-    assert!(ports::bindable(port));
+    // A freed port may be taken at once by another test's `bind(0)`, which reads as up: try again.
+    let freed = (0..5).any(|_| {
+        let l = std::net::TcpListener::bind("127.0.0.1:0").unwrap();
+        let port = l.local_addr().unwrap().port();
+        assert!(!ports::bindable(port));
+        assert_eq!(ports::probe(port), ports::Probe::Up);
+        drop(l);
+        ports::probe(port) == ports::Probe::Down && ports::bindable(port)
+    });
+    assert!(freed);
 }

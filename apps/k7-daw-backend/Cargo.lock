@@ -2171,11 +2171,13 @@ name = "k7-supervisor"
 version = "0.1.0"
 dependencies = [
  "chrono",
+ "futures-util",
  "getrandom 0.3.4",
  "k7-local",
  "libc",
  "serde_json",
  "tokio",
+ "tokio-tungstenite",
  "url",
 ]
 
