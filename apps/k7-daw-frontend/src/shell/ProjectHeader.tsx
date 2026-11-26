@@ -1,4 +1,4 @@
-// ProjectHeader.tsx — a phone's header; on a desk or a pad no row, but the spinner, views, Mixer and rail's chevron floating.
+// ProjectHeader.tsx — a phone's header; on a desk or a pad no row: spinner, views, command bar, Mixer and rail's chevron floating.
 // A phone keeps Back, the name and the warning chip (it has no rail); the panes, panels and Close are PanelRail.tsx's.
 // The engine's state is only a data attribute here (e2e reads it): the person is told by toasts, never by a light.
 import { Badge } from "@studio/ui/badge";
@@ -9,6 +9,7 @@ import {
   ChevronLeft,
   ChevronUp,
   type LucideIcon,
+  SquareTerminal,
   TriangleAlert,
 } from "@studio/ui/icons";
 import { Spinner } from "@studio/ui/spinner";
@@ -22,6 +23,7 @@ import {
 } from "../processes";
 import type { createStatusLine } from "../statusLine";
 import type { ShellLayout } from "../useIsMobile";
+import { summonChord } from "./modKey";
 import { PANEL_DEFS, type PanelId } from "./panels";
 import { WarnBadge } from "./WarnBadge";
 
@@ -59,6 +61,7 @@ export function ProjectHeader({
   panels,
   rail,
   views,
+  onCommandBar,
   overflow,
   lockBanner,
 }: {
@@ -79,6 +82,8 @@ export function ProjectHeader({
   rail?: { open: boolean; onToggle: () => void; unsaved: number };
   /** The pane's view options (ViewCapsule.tsx), first of the floating controls on a desk. */
   views?: ReactNode;
+  /** Opens the command bar: a desk's button stands beside the Mixer, a phone's in its floating bar. */
+  onCommandBar?: () => void;
   /** The phone's menu, standing in for the capsules on the right. */
   overflow: ReactNode;
   /** The sentence under the header while a merge locks editing. */
@@ -112,6 +117,20 @@ export function ProjectHeader({
           {extra}
           {git}
           {views}
+          {onCommandBar && (
+            <Capsule>
+              <CapsuleButton
+                aria-label={m["shell.commandBar"]()}
+                title={m["shell.commandBar.tip"]({
+                  name: m["commandBar.list"](),
+                  keys: summonChord(),
+                })}
+                onClick={onCommandBar}
+              >
+                <SquareTerminal />
+              </CapsuleButton>
+            </Capsule>
+          )}
           {/* The dock's own buttons stay here; the right panels' are the rail's (PanelRail.tsx). */}
           <Capsule role="group" aria-label={m["shell.dock"]()}>
             {panels.map((p) => {

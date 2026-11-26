@@ -1,4 +1,4 @@
-// FloatingBar.tsx — the bar of the transport capsule, a phone's command bar button
+// FloatingBar.tsx — the bar of the transport capsule and a phone's command bar button (a desk's is beside the Mixer)
 // (buttons, clock, song overview, tempo, metronome, master volume); the pane's views float apart (ViewCapsule.tsx). On a phone the clock,
 // overview, tempo and volume move to a strip above the capsule; a desk or a pad draws it small at the bottom left, and the metronome to the overflow menu; the tool is the timeline's corner (ToolMenu.tsx), a phone's menu. It holds no state of its own: App hands it all.
 import { CapsuleDivider } from "@studio/ui/capsule";
@@ -141,7 +141,6 @@ export function FloatingBar({
   // A desk or a pad draws the bar small (zoomed to 40 px) and lifts it above the dock with --k7-float-bottom.
   const row = (
     <>
-      {!phone && commandButton}
       <div
         role="group"
         aria-label={m["transport.region"]()}
