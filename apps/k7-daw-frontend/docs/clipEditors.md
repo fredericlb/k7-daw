@@ -98,7 +98,8 @@ unit. Same threshold, so the `ArrangementRuler` over an audio clip and the wave 
 
 **The roll's zoom has no ceiling you can reach**, for the same reason the timeline's has none —
 one `useHZoom`, one derived limit, and tick layers that build only the lines on screen. The roll
-passes its own scroller to both. See `timeline.md`.
+passes its own scroller to both. See `timeline.md`. Its floor is the editor's width: the canvas
+always covers the roll, so zooming out stops once the whole canvas fills it.
 
 ### Both edges of a note stretch it, as both edges of an event do
 

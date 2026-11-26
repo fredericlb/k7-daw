@@ -302,7 +302,9 @@ export function PianoRoll({
   // Base scales: the framed rows fill the height and the framed beat span the width, then zoomX stretches the time axis.
   const rowH = availH > 0 ? availH / scale.rows : 12;
   const ppb0 = availW > 0 ? availW / scale.beats : PX_PER_BEAT;
-  const ppb = ppb0 * zoomX;
+  // The canvas always covers the editor's width: zooming out stops where the whole canvas fills it.
+  const ppbFill = availW > 0 && canvasBeats > 0 ? availW / canvasBeats : 0;
+  const ppb = Math.max(ppb0 * zoomX, ppbFill);
   const laneW = canvasBeats * ppb;
   const gridH = N_NOTES * rowH;
   const keyTop = (k: number) => (127 - k) * rowH;
