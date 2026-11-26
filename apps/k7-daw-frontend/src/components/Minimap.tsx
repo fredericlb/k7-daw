@@ -29,10 +29,7 @@ export const Minimap = memo(function Minimap({
   caret,
   highlight,
   onSeek,
-  unfoldDown = false,
 }: {
-  // In the header the full map unfolds downward, over the panes; at the foot it grows upward.
-  unfoldDown?: boolean;
   // Each lane's automation, by track id — taken for the reason the rows are built the same way: they must line up with the timeline's.
   automation?: Record<string, WebAutomationLane[]>;
   // The timeline caret. `beat < 0` means its row's LABEL is selected, so there is no column to mark.
@@ -107,7 +104,7 @@ export const Minimap = memo(function Minimap({
           )
         }
         title={m["minimap.movePlayhead"]()}
-        className={`absolute inset-x-0 ${unfoldDown ? "top-0" : "bottom-0"} z-30 cursor-pointer select-none overflow-hidden rounded-sm ${
+        className={`absolute inset-x-0 bottom-0 z-30 cursor-pointer select-none overflow-hidden rounded-sm ${
           peeked
             ? "border border-border bg-card shadow-lg"
             : "bg-muted-foreground/10"

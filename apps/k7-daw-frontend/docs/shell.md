@@ -263,9 +263,9 @@ bottom margin for the bar instead.
 
 | piece | file | what it is |
 |---|---|---|
-| header | `shell/ProjectHeader.tsx` | the spinner, the command-bar button, the dock's Mixer (an icon) and, last, the chevron that unfolds the rail; git's Save and Update, the pane switcher, the right panels' buttons and Close are the rail's (`shell/PanelRail.tsx`), and the folded chevron carries the unsaved and problem counts; a phone, with no rail, keeps Back, the name and the warning chip; laid out in flow: a `flex-1` left cluster and a right cluster of the same basis, so nothing overlaps at any width |
+| header | `shell/ProjectHeader.tsx` | a phone's header row (Back, the name, the warning chip, git's menu, the overflow menu); a desk or a pad has no header row, so every control floats over the panes and their whole height is the song's: at the bottom right the spinner, the view capsule, the dock's Mixer (an icon) and, last, the chevron that unfolds the rail upward, carrying the unsaved and problem counts while folded; git's Save and Update, the pane switcher, the right panels' buttons and Close are the rail's (`shell/PanelRail.tsx`) |
 | git capsule | `shell/HeaderGit.tsx` | Save with its count, a menu (Pull, Saves); while a merge waits, one "Resolve N conflicts" button and a banner |
-| bar | `shell/FloatingBar.tsx`, `shell/ShellTransport.tsx` | docked in the header's row on a desk or a pad (the header is 72 px to hold its 56 px controls; the panels and the dock then reach 16 px from the foot), floating at the foot on a phone with its command bar button: the transport capsule, the pane's capsule (Lane views or Graph views); the timeline's tool is its corner's, left of "+ lane" (`shell/ToolMenu.tsx`) |
+| bar | `shell/FloatingBar.tsx`, `shell/ShellTransport.tsx` | the command bar button and the transport capsule, floating at the bottom left; a desk or a pad draws its 56 px controls at 40 px (`--k7-float-h`, CSS `zoom`), so it reads as one family with the small view capsule (`shell/ViewCapsule.tsx`); the whole floating row sits 16 px from the foot, or right above the dock while it is open (`--k7-float-bottom`), and a right panel and the toasts end above it; the timeline's tool is its corner's, left of "+ lane" (`shell/ToolMenu.tsx`) |
 | panels | `shell/panels.tsx` | the registry: an id, a glyph and a title each, in the kit's `SidePanel` (Pad, Desk) or `Sheet` (Phone) |
 | dock | `shell/panels.tsx` (`DockFrame`), `hooks/useEditorDock.ts` | the bottom dock, in the kit's `EditorDock` (Pad, Desk) or `EditorSheet` (Phone); it holds the editors, the Mixer or a track's chain |
 | phone menu | `shell/OverflowMenu.tsx` | pane, lane views and the panel tiles in one menu |
@@ -358,8 +358,9 @@ visible.
 `automationShown`, `pictureShown`). The timeline still holds its own state, so the shell mirrors what it
 reports and what the `ui ruler` / `ui automation` commands flip, until the timeline reads the store.
 
-**The right-end capsule belongs to the current pane.** The arrangement shows the Lane views; the Graph
-shows `group "Graph views"` (Zoom fit, Auto layout, Stack, the last pressed while stacked); the editor
+**The view capsule belongs to the current pane**, small and floating at the bottom right so it covers little of
+the pane. The arrangement shows the Lane views; the Graph
+shows `group "Graph views"` (Zoom fit, Auto layout, Stack, the last pressed while stacked, their names in tooltips); the editor
 and the desk show nothing, not an empty capsule. Each view's buttons act on one pane, so a button that
 does nothing where it stands has no place there. The Graph keeps its camera, so its pane hands the
 bar the fit through the store (`graphView`); Auto layout and Stack are the shell's own commands.
@@ -644,9 +645,9 @@ is the whole point of that tab not being a dialog over the thing it meters.
 ## The right panels: one at a time
 
 Under the pane switcher, the buttons that open a right panel — Resources, Playlists, Logs, Tasks & history, Export, then Settings
-— are one vertical toolbar on the screen's right edge, under the header (`shell/PanelRail.tsx`), folded by
-default under the chevron at the header's right end: the panes keep the whole width until a person asks for the panels. The header
-keeps only the dock's Mixer (no Events button: the dock opens on the event a person opens, so a button
+— are one vertical toolbar on the screen's right edge, rising from the chevron at the bottom right (`shell/PanelRail.tsx`), folded by
+default: the panes keep the whole width until a person asks for the panels. The floating controls
+keep only the dock's Mixer (no Events button: the dock opens on the event a person opens, so a button
 would only repeat that). The right panel, the editor dock and the toasts keep clear of the unfolded rail
 (`--k7-rail-clear`). Each button toggles a panel floating over the right of the panes (a full-screen sheet
 on a phone, whose menu holds the same buttons); pressing the open one closes it. **One panel at a time**:

@@ -353,8 +353,6 @@ export function ExternalSurface({
             map={null}
             meter={null}
             metronome={null}
-            lanes={null}
-            graph={null}
             runCommand={(l) => commands.runCommand(l)}
           />
         )}
