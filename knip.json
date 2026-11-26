@@ -55,7 +55,7 @@
     "apps/k7-daw-android/web": {
       "ignoreDependencies": ["@capacitor/android"]
     },
-    "apps/k7-daw-frontend/packages/song": {
+    "apps/k7-daw-frontend/packages/ui-module-builder": {
       "entry": ["scripts/*.ts"]
     },
     "apps/k7-daw-frontend/packages/audio-probe": {

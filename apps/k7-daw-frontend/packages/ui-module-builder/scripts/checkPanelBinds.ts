@@ -2,16 +2,15 @@
 // REALLY exposes to the engine. A bind the plugin does not have is a control that moves and does
 // nothing: the engine drops the value with a warning nobody sees. Built-ins read the generated list;
 // an external is instantiated by the engine's own `--dump-params-ext`, so this runs only where the
-// plugin is installed. See apps/k7-daw-frontend/packages/song/docs/panelBinds.md.
-//
-// npx tsx apps/k7-daw-frontend/packages/song/scripts/checkPanelBinds.ts [library root] [--only <name filter>] [--json]
+// plugin is installed. See apps/k7-daw-frontend/packages/ui-module-builder/docs/panelBinds.md.
+// npx tsx apps/k7-daw-frontend/packages/ui-module-builder/scripts/checkPanelBinds.ts [library root] [--only <name filter>] [--json]
 
 import { execFileSync } from "node:child_process";
-import { readdirSync, statSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+import { homedir } from "node:os";
 import { dirname, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
-import { wsData } from "@studio/song/yaml/workspaceDoc";
-import { wsExists } from "@studio/song/yaml/workspaceFile";
+import { parse } from "@studio/k7x/document";
 import { builtinPluginFor } from "@studio/song-schema/builtinParams";
 import {
   engineModuleOf,
@@ -19,7 +18,47 @@ import {
   LIBRARY_FILE_PARAMS,
 } from "@studio/song-schema/moduleTypes";
 import { byCodePoint } from "@studio/song-schema/textOrder";
-import { scannedPlugins } from "../src/engineCatalogue";
+import { sugarFor } from "@studio/song-schema/yaml/sugar";
+
+const wsExists = (f: string): boolean => existsSync(f);
+
+/** A .k7x file's data, its short forms expanded by the kind its path names. */
+function wsData(f: string): Record<string, unknown> {
+  const data = parse(readFileSync(f, "utf8"));
+  return sugarFor(f)?.expand(data) ?? data;
+}
+
+type Scanned = {
+  name: string;
+  format: string;
+  role?: string;
+  instrument?: boolean;
+  category?: string;
+};
+
+/** The engine's plugin scan (`<state>/exts.json`, the C++ engine's PluginScan.cpp), sorted; empty when absent or corrupt. */
+function scannedPlugins(): Scanned[] {
+  const home = resolve(process.env.STUDIO_HOME || join(homedir(), ".k7"));
+  const out: Scanned[] = [];
+  try {
+    const scan = JSON.parse(readFileSync(join(home, "exts.json"), "utf8"));
+    for (const e of scan.entries ?? [])
+      for (const p of e.plugins ?? [])
+        if (p?.name && p?.format)
+          out.push({
+            name: String(p.name),
+            format: String(p.format),
+            role: p.role ? String(p.role) : undefined,
+            instrument: p.instrument === true,
+            category: p.category ? String(p.category) : undefined,
+          });
+  } catch {
+    return [];
+  }
+  return out.sort(
+    (a, b) => byCodePoint(a.name, b.name) || byCodePoint(a.format, b.format),
+  );
+}
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO = resolve(HERE, "../../../../..");

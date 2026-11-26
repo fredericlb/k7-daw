@@ -45,11 +45,11 @@ Where parameter names come from:
 
 ## `npm run lint:panels`
 
-Runs `apps/k7-daw-frontend/packages/song/scripts/checkPanelBinds.ts`.
+Runs `apps/k7-daw-frontend/packages/ui-module-builder/scripts/checkPanelBinds.ts`.
 
 ```bash
 npm run lint:panels
-npx tsx apps/k7-daw-frontend/packages/song/scripts/checkPanelBinds.ts [library root] [--only <name filter>] [--json]
+npx tsx apps/k7-daw-frontend/packages/ui-module-builder/scripts/checkPanelBinds.ts [library root] [--only <name filter>] [--json]
 ```
 
 For every module folder with a panel under the library root (default `k7-core`), it collects each

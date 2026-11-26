@@ -31,7 +31,7 @@ Every script in the root `package.json`, grouped by purpose. Run them from the r
 | `lint:comments` | `node scripts/check-comments.mjs` | No: reports a backlog. |
 | `lint:version` | `node scripts/check-version.mjs` | Yes (GitHub `k7` `lint` job). Every private workspace carries the root `package.json`'s version; `--set X.Y.Z` writes every copy, `--tag vX.Y.Z` also checks a release tag. |
 | `lint:dead` | `knip` | No: reports a backlog. |
-| `lint:panels` | `tsx apps/k7-daw-frontend/packages/song/scripts/checkPanelBinds.ts` | No: needs the external plugins installed on the machine. |
+| `lint:panels` | `tsx apps/k7-daw-frontend/packages/ui-module-builder/scripts/checkPanelBinds.ts` | No: needs the external plugins installed on the machine. |
 | `lint:layouts` | `tsx apps/k7-daw-frontend/packages/ui-module-builder/scripts/checkLayouts.ts` | No: run by hand after editing module panels. |
 
 Each is described in [Lints and conventions](./06-lints-and-conventions.md).

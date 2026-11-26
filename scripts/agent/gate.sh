@@ -82,8 +82,8 @@ step "gate lock"
 gate_lock_take "$(git symbolic-ref -q --short HEAD || echo detached)"
 step "check:changed"
 if [ "$K7_GATE_BASE" = main ]; then npm run --silent check:changed; else npm run --silent check:changed -- --base "$K7_GATE_BASE"; fi
-# The module answers what the native replays do (k7-wasm/docs/edit.md): run when the crate, the module or the stubs changed.
-if [ -n "$(changed 'apps/k7-daw-frontend/packages/song-edit/*' 'apps/k7-daw-frontend/packages/k7-wasm/*' 'apps/k7-daw-frontend/packages/song/src/*')" ]; then
+# The module answers what the native replays do (k7-wasm/docs/edit.md): run when the crate or the module changed.
+if [ -n "$(changed 'apps/k7-daw-wasm/song-edit/*' 'apps/k7-daw-frontend/packages/k7-wasm/*')" ]; then
   step "edit replay"
   npm run --silent test:edit-replay -w @studio/k7-wasm -- --target-dir "$HOME/.cache/k7-$(basename "$root")"
 fi
