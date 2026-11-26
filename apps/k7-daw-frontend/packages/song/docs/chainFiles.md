@@ -130,7 +130,7 @@ subchains([
 ```
 
 A subchain of a picture lane's chain that nothing links and that links nowhere is a **stretch**: the
-run a fade puts a shot through (`apps/k7-daw-frontend/packages/song-video/docs/transitions.md`). The file is its scope,
+run a fade puts a shot through (`apps/k7-daw-wasm/verbs/docs/picture/transitions.md`). The file is its scope,
 which is the scope a stretch needs — a fade on `main` can name only `main`'s — and it is named by its
 id, so a fade reads `chain: iris` rather than a node's uuid. In the segments it is the cable from
 its last node INTO the lane, the shape a graph project writes it in; written back, a run of picture

@@ -1106,10 +1106,10 @@ rules:
   nothing is invented between neighbours, because two cards side by side with no cable between them
   is the truth about a lane whose chains do not touch.
 - its `gap` option is the air between two cards: a rank of strips keeps it, since a channel is not
-  wired to the next, and one lane's path sets it to -1, its cards GLUED into one strip: each overlaps
-  the one before by a pixel, a stack's cards likewise, so two neighbours share ONE border — side by
-  side at 0 their two borders read as a line twice as thick. `rowSeams` takes a card ending on, or one
-  pixel past, the next one's start as touching. `rowSeams`
+  wired to the next, and one lane's path sets it to 20: each card stands apart, the cable between two
+  neighbours drawn, and the view draws no ground behind them (`DomChains`' `bare`). A gap of -1 GLUES
+  the cards into one strip instead: each overlaps the one before by a pixel, so two neighbours share
+  ONE border. `rowSeams` takes a card ending on, or one pixel past, the next one's start as touching. `rowSeams`
   then marks each arrow between two touching cards `glued` — the renderer draws no cable for it,
   one between touching cards being a loop backwards over the seam, but the live ripple still walks
   it — and puts a `+` on that seam and one past the last card. A seam with no arrow behind it

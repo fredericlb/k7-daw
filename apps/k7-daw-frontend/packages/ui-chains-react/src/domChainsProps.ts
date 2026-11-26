@@ -101,6 +101,8 @@ export interface DomChainsProps {
   row?: boolean;
   /** The camera is the FIT's alone: no wheel, drag or pinch moves it, and every resize re-frames (docs/camera.md). */
   fixed?: boolean;
+  /** No ground behind the nodes (no dot grid, no glow): the host's own background shows through, as in a lane's row. */
+  bare?: boolean;
   /** Draw the corner minimap, with its "Zoom fit" button — docs/minimap.md. Never on a ROW. */
   minimap?: boolean;
   /** Draw the minimap's own Fit / Organize / Stack buttons; false when the host draws them as labelled pills. */
@@ -128,6 +130,8 @@ export interface DomChainsProps {
   fitMaxZoom?: number;
   /** How much of the pane the first frame fills, 0..1 — 0.9 leaves air round the graph, 1 fills it edge to edge. */
   fitPad?: number;
+  /** Pixels kept clear on every side of the first frame, so the cards' borders show inside the pane. */
+  fitMargin?: number;
   /** Every card drawn whole at any zoom: no far LOD, for a view whose cards ARE the subject (docs/camera.md). */
   alwaysDetailed?: boolean;
   command: (line: string) => void | Promise<void>;

@@ -287,7 +287,7 @@ test("a module is made only under a root a library listing answered", async () =
 });
 
 test("the importers and a library move refuse what they cannot take", async () => {
-  // The import runs in the node runner, the Worker's own code over this service's routes.
+  // The import is the backend's `POST /import`, a workspace file by its path and a dropped one by its bytes.
   await expect(svc.importPath(ws, "none.dawproject")).rejects.toThrow(
     "no such file: none.dawproject",
   );

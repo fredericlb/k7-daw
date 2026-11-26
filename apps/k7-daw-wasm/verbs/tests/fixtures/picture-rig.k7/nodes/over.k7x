@@ -1,0 +1,3 @@
+extends("@meta/picture-track")
+events([start(0).length(8)])
+frame([100, 50, 640, 360])

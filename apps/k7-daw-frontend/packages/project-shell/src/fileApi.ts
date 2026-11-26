@@ -336,5 +336,16 @@ export function mediaUrl(path: string): string {
   return `${c.base}/media?${q.toString()}`;
 }
 
+/** A media URL with its `path` left for last and empty: the backend appends each file's encoded path to it. */
+export function mediaPrefix(): string {
+  const c = cfg();
+  const q = new URLSearchParams({
+    user: c.userEmail,
+    workspace: c.workspace,
+    token: c.engineToken,
+  });
+  return `${c.base}/media?${q.toString()}&path=`;
+}
+
 /** How long the gate waits on a question that answers at once when anything is there: `/auth/me` and the probe below. */
 export const PROBE_MS = 5000;

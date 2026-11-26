@@ -9,8 +9,8 @@ header carries no view switch.
 
 Both editors follow the dock's one rule ([editors.md](editors.md)): every option is in the title bar
 (`DockHeaderRow`, [editor-dock](../packages/ui/docs/editor-dock.md)) and the body is the clip alone.
-An audio clip's title bar starts with its view capsules, then the gain and Loop as "name: value" settings (a knob and a switch in their bubble), Trim / Operations
-(and Discard with Done for a take just filed) and the active tool's help glyph; Trim opens its gate as a popover from the bar. The piano roll's title
+An audio clip's title bar starts with Fit and its view capsules, then the gain and Loop as "name: value" settings (a knob and a switch in their bubble), the lightning Operations menu
+(`ClipOpsMenu.tsx`: Trim, and a Transformations submenu listing the chains a clip can be run through), Discard with Done for a take just filed, and the active tool's help glyph. Trim opens its gate as a popover hanging from the lightning button. The piano roll's title
 bar holds Fit, its tools as the same capsules, then "loop: off" and the lightning Operations menu on the right; it has no help glyph. Neither names the clip: the dock's hidden title does, and the clip
 on the lanes is the one the person opened. On a phone the tool row is the body's first row.
 
@@ -98,7 +98,8 @@ unit. Same threshold, so the `ArrangementRuler` over an audio clip and the wave 
 
 **The roll's zoom has no ceiling you can reach**, for the same reason the timeline's has none —
 one `useHZoom`, one derived limit, and tick layers that build only the lines on screen. The roll
-passes its own scroller to both. See `timeline.md`.
+passes its own scroller to both. See `timeline.md`. Its floor is the editor's width: the canvas
+always covers the roll, so zooming out stops once the whole canvas fills it.
 
 ### Both edges of a note stretch it, as both edges of an event do
 
@@ -465,7 +466,7 @@ Four rules worth knowing, each of which could reasonably have gone the other way
   onto it. The status line says how many were left.
 - **A paste is ONE command**, so it is one journal entry and one Ctrl+Z whatever it contained. The
   pane hands the shell a command *line* rather than writing; `events add` exists for this, the
-  bulk counterpart of `sequence note add` (`apps/k7-daw-frontend/packages/commands/docs/`).
+  bulk counterpart of `sequence note add` (`apps/k7-daw-wasm/verbs/docs/verbs/`).
 - **An event is copied WHOLE** — its window, its fades, its passes, its `disabled` and its
   `warp: false`, not just its `ref` and where it sat. See below for why that took a wire change.
 

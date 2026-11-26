@@ -56,7 +56,7 @@ modules({
 - **The wire is what puts sound in the file.** A video whose `audio` input nothing feeds exports
   silent: a sound that reaches the export without a cable saying so is a sound nobody can take out,
   or see is there. The browser export and the server render both read the compiled picture's
-  `sound` (`VideoProjectDoc`, `src/videoChains.ts` in `@studio/song-video`) and fetch the mixdown
+  `sound` (`VideoProjectDoc`, `apps/k7-daw-wasm/verbs/src/picture/chains.rs`) and fetch the mixdown
   only when it says `mix`.
 - **Only the mix feeds it, for now.** The export renders the engine's whole mixdown and nothing
   else: rendering one bus is engine work that does not exist. A lane or a bus wired there is told,
@@ -142,7 +142,7 @@ must not lose its card in the meantime.
 | validated | `src/graph.ts`: `isSink` takes all four names at their word, `validate()` exempts `from: RENDER` |
 | compiled | **nowhere** for the sound — and `nodeProject.ts` says so where it compiles the other pair; the picture's compile records what feeds `RENDER#audio` (`sound`) |
 | drawn | the `RENDER` and `VIDEO_OUT` cards (`@studio/ui-chains`), the second without a fader |
-| refused | `@studio/commands`' `setBuiltinOutParam` — both, by name |
+| refused | the verbs crate's `setBuiltinOutParam` — both, by name |
 
 ## Checking it
 

@@ -1,0 +1,4 @@
+// Pro-Q 3 — used 2 times in this song, so each use is a
+// NODE in nodes/ that extends this module. The plugin is declared once here;
+// each node carries only its own settings.
+plugin({ type: "vst3", name: "Pro-Q 3" })

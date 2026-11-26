@@ -20,13 +20,7 @@ import {
 import { resolveModuleMap } from "@studio/song/moduleResolve";
 import { insertChainStepAfter, writeDoc } from "@studio/song/testSupport";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import {
-  compileDisk,
-  compileReady,
-} from "../../commands/src/runtime/testing/compileDisk.ts";
 import { setModuleAsset } from "./projectEdit";
-
-beforeAll(compileReady);
 
 const here = dirname(fileURLToPath(import.meta.url)); // apps/k7-daw-frontend/packages/song/src
 const SONG = join(here, "..", "..", "..", "..", "..", "demos", "synth-demo.k7");
@@ -102,41 +96,6 @@ describe("a file-valued param", () => {
     });
     asset("secret.nam");
     expect(amp()?.model).toBeUndefined();
-  });
-
-  it("sits beside the numbers, and does not reach the engine as one", () => {
-    // `params` on the wire is a float map mirrored in C++, so the model leaves as `namFile`.
-    const proj = join(ws, "demo");
-    cpSync(SONG, proj, { recursive: true });
-    cpSync(DEMO_MODULES, join(ws, "_modules"), { recursive: true });
-    mkdirSync(join(ws, "_modules", "audio", "amp", "assets"), {
-      recursive: true,
-    });
-    writeDoc(join(ws, "_modules", "audio", "amp", "module.k7x"), {
-      plugin: { type: "internal", name: "Neural Amp Modeler" },
-      params: { model: "jcm800.nam", Normalize: 1 },
-    });
-    writeFileSync(
-      join(ws, "_modules", "audio", "amp", "assets", "jcm800.nam"),
-      "{}",
-      "utf8",
-    );
-    insertChainStepAfter(proj, "lead", { module: "@workspace/audio/amp" });
-
-    const melody = compileDisk(proj).tracks.find((t) => t.id === "melody");
-    const plugin = melody?.plugins.find((p) =>
-      p.id.endsWith(":@workspace/audio/amp"),
-    );
-    expect(plugin?.namFile).toBe(
-      join(ws, "_modules", "audio", "amp", "assets", "jcm800.nam"),
-    );
-    // The numeric param travels, beside the engine's own stage; the file-valued one does not appear in `params` at all.
-    expect(plugin?.params).toEqual({
-      Normalize: 1,
-      "@mix": 1,
-      "@input-volume": 0,
-      "@output-volume": 0,
-    });
   });
 
   it("warns about a file the module doesn't carry, instead of loading nothing", () => {

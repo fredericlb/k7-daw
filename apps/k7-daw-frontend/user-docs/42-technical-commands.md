@@ -1,6 +1,6 @@
 # commands — one verb list for every surface
 
-`apps/k7-daw-frontend/packages/commands` is the command layer: `commands.yaml` declares every command — its name, its arguments, what completes them — and `SID_HANDLERS` implements them once.
+`apps/k7-daw-wasm/verbs` is the command layer: `commands.yaml` declares every command — its name, its arguments, what completes them — and `SID_HANDLERS` implements them once.
 
 The CLI, the web command bar and the key bindings all dispatch through it, so a command added here appears everywhere at once, with completion, without a line of UI code.
 

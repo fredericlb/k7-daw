@@ -50,7 +50,7 @@ Once, for both completion surfaces, so they cannot come to offer different lists
 | surface | reads |
 |---|---|
 | the text editor's chain wiring and `bypassed` | `hints.modules` (`src/hints.ts`) |
-| the command bar's `<module>` arguments | the `modules` provider (`@studio/commands`' `providers.ts`) |
+| the command bar's `<module>` arguments | the `modules` provider (the verbs crate's `providers.ts`) |
 
 Both call `completionOrder` in `src/moduleTypes.ts`, which is **stable within each group**: it is
 handed an alphabetical list and gives one back, in two blocks. Sorting there would be a second

@@ -17,17 +17,20 @@ pub fn query(q: &str, name: &str) -> String {
         .join(",")
 }
 
+/// Whether a request's content type is JSON, parameters aside.
+pub fn is_json(content_type: Option<&str>) -> bool {
+    content_type.is_some_and(|t| {
+        t.split(';')
+            .next()
+            .unwrap_or("")
+            .trim()
+            .eq_ignore_ascii_case("application/json")
+    })
+}
+
 /// A JSON body as Express hands it on: `{}` without one or with another content type, else the value parsed.
 pub fn json(content_type: Option<&str>, bytes: &[u8]) -> Result<Value, String> {
-    let is_json = content_type
-        .map(|t| {
-            t.split(';')
-                .next()
-                .unwrap_or("")
-                .trim()
-                .eq_ignore_ascii_case("application/json")
-        })
-        .unwrap_or(false);
+    let is_json = is_json(content_type);
     if !is_json || bytes.is_empty() {
         return Ok(Value::Object(Map::new()));
     }

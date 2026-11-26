@@ -1,11 +1,10 @@
-//! The review's fixes to `POST /changes` and the bundle routes (3d): the lock's scope, the memo's bump, the 409 of another project,
-//! the check-only `read`, and the library route's cache scope, lengths and virtual paths.
+//! The review's fixes to `POST /changes` (3d): the lock's scope, the memo's bump, the 409 of another project,
+//! the check-only `read`, and the format a set that writes seconds raises.
 
 use std::path::Path;
 use std::sync::Arc;
 use std::time::{Duration, Instant};
 
-use hyper::header::CACHE_CONTROL;
 use k7_file_service::changes::plan::plan;
 use k7_file_service::changes::request::parse;
 use k7_file_service::revisions::Revisions;
@@ -17,11 +16,8 @@ use serde_json::{Value, json};
 use super::changes::land;
 use super::entries::calls;
 use super::tests::{ctx, until};
-use super::tests_account::{call, text};
-use super::tests_docs::{answering, world};
 use super::tests_journal::Bed;
 use super::{Ctx, Tag, locks};
-use crate::routes::files::service::routes::{self, H};
 
 const LABEL: &str = "track rename ge.lead lead";
 
@@ -147,107 +143,6 @@ async fn a_read_op_makes_a_stale_set_a_409_and_writes_nothing() {
     assert_eq!((status, ans["changed"].clone()), (200, json!([])), "{ans}");
     assert_eq!(ans["rev"], ans["revBefore"]);
     let _ = std::fs::remove_dir_all(&b.dir);
-}
-
-// F1, F3, B2 through the routes: the library answers `private`, with its lengths, under a virtual root; the bundle shows no folder.
-#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
-async fn the_library_route_is_private_serves_lengths_and_the_bundle_is_virtual() {
-    let (dir, acct) = world("chf-lib").await;
-    let lines = super::tests::Lines::default();
-    let home = ctx(&dir, Tag::VerbBundle, "", &lines).home;
-    let wav = Path::new(&home.account_home()).join("samples/kick.wav");
-    std::fs::create_dir_all(wav.parent().unwrap()).unwrap();
-    std::fs::write(&wav, tiny_wav()).unwrap();
-    let ask = |tag: Tag, query: &str| {
-        let c = answering(&acct, &dir, tag, &lines);
-        call(&dir, query, json!({}), Some(c))
-    };
-    let resp = routes::dispatch(H::VerbBundle, &ask(Tag::VerbBundle, "at=p.k7")).await;
-    let (status, body) = text(resp).await;
-    assert_eq!(status, 200, "{body}");
-    assert!(
-        !body.contains(&dir.display().to_string()),
-        "a server folder reached the browser"
-    );
-    let bundle: Value = serde_json::from_str(&body).unwrap();
-    assert_eq!(bundle["workspaceRoot"], json!("/w"));
-    let lib = bundle["libraries"]
-        .as_array()
-        .unwrap()
-        .iter()
-        .find(|l| l["name"] == "account")
-        .unwrap()
-        .clone();
-    assert_eq!(lib["root"], json!("/l/account"));
-    let hash = lib["hash"].as_str().unwrap();
-    let q = format!("at=p.k7&name=account&hash={hash}");
-    let resp = routes::dispatch(H::VerbLibrary, &ask(Tag::VerbLibrary, &q)).await;
-    let cache = resp
-        .headers()
-        .get(CACHE_CONTROL)
-        .and_then(|v| v.to_str().ok())
-        .map(str::to_string);
-    let (status, body) = text(resp).await;
-    assert_eq!(status, 200, "{body}");
-    assert_eq!(
-        cache.as_deref(),
-        Some("private, max-age=31536000, immutable")
-    );
-    let served: Value = serde_json::from_str(&body).unwrap();
-    assert_eq!(served["lengths"]["samples/kick.wav"], json!(0.1));
-    assert_eq!(served["files"]["samples/kick.wav"]["binary"], json!(true));
-    let q = "at=p.k7&name=account&hash=nope";
-    let resp = routes::dispatch(H::VerbLibrary, &ask(Tag::VerbLibrary, q)).await;
-    assert_eq!(text(resp).await.0, 404);
-    let _ = std::fs::remove_dir_all(&dir);
-}
-
-// Z1-3: the bundle of the workspace alone holds the shared texts and no project; a chain of another account's library is a 403.
-#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
-async fn the_bundle_of_the_workspace_alone_and_of_a_chain() {
-    let (dir, acct) = world("chf-targets").await;
-    let lines = super::tests::Lines::default();
-    let ask = |query: &str| {
-        let c = answering(&acct, &dir, Tag::VerbBundle, &lines);
-        call(&dir, query, json!({}), Some(c))
-    };
-    let (status, body) = text(routes::dispatch(H::VerbBundle, &ask("at=")).await).await;
-    assert_eq!(status, 200, "{body}");
-    let bundle: Value = serde_json::from_str(&body).unwrap();
-    assert_eq!(bundle["at"], json!(""));
-    assert!(bundle["rev"].as_str().unwrap().starts_with("none:"));
-    let files = bundle["source"]["files"].as_object().unwrap();
-    assert!(
-        files.keys().all(|k| !k.starts_with("/w/p.k7/")),
-        "the project's own files are not in a workspace-alone bundle"
-    );
-    let (status, _) =
-        text(routes::dispatch(H::VerbBundle, &ask("at=_libraries/nobody/chains/x")).await).await;
-    assert_eq!(status, 403);
-    let (status, _) = text(routes::dispatch(H::VerbBundle, &ask("at=other.k7")).await).await;
-    assert_eq!(status, 409);
-    let (status, _) = text(routes::dispatch(H::VerbBundle, &ask("")).await).await;
-    assert_eq!(status, 400);
-    let _ = std::fs::remove_dir_all(&dir);
-}
-
-/// A 16-bit mono 8 kHz WAV of 800 samples: a tenth of a second.
-fn tiny_wav() -> Vec<u8> {
-    let data = 1600u32;
-    let mut b = b"RIFF".to_vec();
-    b.extend((36 + data).to_le_bytes());
-    b.extend(b"WAVEfmt ");
-    b.extend(16u32.to_le_bytes());
-    b.extend(1u16.to_le_bytes());
-    b.extend(1u16.to_le_bytes());
-    b.extend(8000u32.to_le_bytes());
-    b.extend(16000u32.to_le_bytes());
-    b.extend(2u16.to_le_bytes());
-    b.extend(16u16.to_le_bytes());
-    b.extend(b"data");
-    b.extend(data.to_le_bytes());
-    b.extend(vec![0u8; data as usize]);
-    b
 }
 
 // O2: a change set that writes a lane in seconds raises the project's `format` natively.

@@ -203,8 +203,8 @@ export function TrackModulesPane({
             links: true,
             // …and the lane leads it: the signal starts on the lane, and its fader is the first thing in the path.
             ...(nodes ? {} : { track: trackId }),
-            // …glued: a lane's path is one strip, two cards sharing ONE border (two would draw it twice as thick).
-            gap: -1,
+            // …spaced: each card stands apart, 20 px from the next, the cable between them drawn.
+            gap: 20,
             // …and a STACK — a subchain run in place — one column, its cards one under another.
             stack: true,
             // …and, asked for, each card's curves in a column before it, the neighbours spaced to make room.
@@ -346,8 +346,9 @@ export function TrackModulesPane({
     fitKey: laidShown.nodes.map((n) => `${n.id}:${n.w}x${n.h}`).join("|"),
     // Fill the HEIGHT and let the row run off the right, which pans: fitting both axes would shrink every card as the lane grows.
     fitAxis: "height" as const,
-    // …all of it: the tallest card is the pane's height, the others centred on its line.
+    // …all of it but 4 px: the tallest card stops 4 px short of the pane's edges, its border in view.
     fitPad: 1,
+    fitMargin: 4,
     // A lane's few modules are what this pane is FOR: they never collapse to their far, name-only card.
     alwaysDetailed: true,
     // A row is read across: the wheel walks along it and nothing pans vertically.
@@ -456,6 +457,7 @@ export function TrackModulesPane({
       >
         <DomChains
           {...shared}
+          bare
           graph={glued?.graph ?? split?.row ?? laidShown}
           onEdgeInsert={edgeInsert || undefined}
           seams={glued?.seams}

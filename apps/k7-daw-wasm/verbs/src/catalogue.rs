@@ -1,7 +1,7 @@
 // catalogue.rs — commands.yaml as the crate reads it (`commands.json`, generated): the words, the SID, each argument's shape and completion.
 // A reader would get wrong that a timecode argument is checked in the song's meter: it is checked at 4/4, as the TypeScript does.
 
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use song_edit::js_text::{is_js_space, str_to_number};
 use song_schema::parse_position_on;
 use std::sync::OnceLock;
@@ -17,12 +17,37 @@ pub struct ArgSpec {
     /// …or the closed set the command itself fixes.
     #[serde(default)]
     pub values: Option<Vec<String>>,
+    /// A clue about what the argument accepts, when its class's own does not say enough.
+    #[serde(default)]
+    pub hint: Option<String>,
+    /// Trailing arguments only: the line runs without it.
+    #[serde(default)]
+    pub optional: bool,
+}
+
+/// The palette's sentence, in the two languages a surface can be asked for.
+#[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
+pub struct Readable {
+    pub en: String,
+    pub fr: String,
 }
 
 #[derive(Clone, Debug, Deserialize)]
 pub struct Spec {
     pub command: String,
     pub sid: String,
+    #[serde(default)]
+    pub help: Option<String>,
+    #[serde(default)]
+    pub readable: Option<Readable>,
+    /// Absent: the entry runs everywhere, which is `cli`.
+    #[serde(default)]
+    pub surfaces: Option<Vec<String>>,
+    /// The right-click menus that may offer it, as written; `palette.rs` checks the words.
+    #[serde(default)]
+    pub menu: Option<Vec<String>>,
+    #[serde(default)]
+    pub confirm: bool,
     #[serde(default)]
     pub args: Vec<ArgSpec>,
 }

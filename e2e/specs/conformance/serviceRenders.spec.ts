@@ -82,7 +82,7 @@ test("a file saved while a verb renders is kept, the journal holding the verb's 
   const labels = (await svc.get("/history/entries", ws)).body
     .slice(before)
     .map((e: { label: string }) => e.label);
-  // The Worker's set rests on the project it read: a save inside the render makes it stale, and a verb that called the
+  // A verb's set rests on the project it read: a save inside the render makes it stale, and a verb that called the
   // host is told to run again rather than land half. Either the verb's one step, or nothing of it: never a lost save.
   const moved = /the project moved/.test(done.body.output.join("\n"));
   expect(

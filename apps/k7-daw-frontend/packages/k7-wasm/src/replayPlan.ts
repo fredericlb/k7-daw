@@ -1,5 +1,5 @@
 // replayPlan.ts — the plan files the native replays wrote, found and loaded for the replay (`replayRun.ts`) to run.
-// A reader would get wrong where the replay runs: here it reads the disk; the Worker's copy is posted the plan.
+// A reader would get wrong where the plan is read: here, off the disk; `replayRun.ts` runs it and reads nothing.
 
 import { createRequire } from "node:module";
 import type { Plan } from "./replayRun.ts";

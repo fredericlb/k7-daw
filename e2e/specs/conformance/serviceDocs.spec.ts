@@ -40,7 +40,7 @@ test("a project's documents: the web view, the picture, the engine's, its surfac
     timeSigDenominator: 4,
   });
   expect(doc.tracks.map((t: { id: string }) => t.id)).toEqual(["melody"]);
-  // The picture is the Worker's answer, not a route's: the node runner is the same runtime.
+  // A project with no picture lane answers the empty picture, never a refusal.
   expect(await svc.picture(ws)).toEqual({
     doc: {
       name: "jsdsp-fx.k7",

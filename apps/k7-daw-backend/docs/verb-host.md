@@ -1,9 +1,9 @@
 # The host members' routes (step 3f)
 
-`/verb-host/…`: what a verb run in the browser's Worker asks the server for when it needs the machine (a render, a probe, a
-separation). The code is
-`apps/k7-daw-backend/packages/k7-file-service/src/verb_host/` (the job table, the gates), the front's `native/verb_host/` (the table of routes, the
-frame) and the Worker's `apps/k7-daw-frontend/packages/commands/src/runtime/members/`. The routes belong to the `journal` piece and have no fallback.
+`/verb-host/…`: what a verb asks the server for when it needs the machine (a render, a probe, a separation), through
+the front's `native/verb_ask.rs`. The code is
+`apps/k7-daw-backend/packages/k7-file-service/src/verb_host/` (the job table, the gates) and the front's `native/verb_host/` (the table
+of routes, the frame). The routes belong to the `journal` piece and have no fallback.
 
 ## Choices
 
@@ -46,7 +46,7 @@ frame) and the Worker's `apps/k7-daw-frontend/packages/commands/src/runtime/memb
 | a transcription is the CLI's own SRT read and written again by the Rust half (`k7-mediatek/src/whisper.rs`), the audio decoded to 16 kHz mono by the WebAssembly decoder and by ffmpeg only for a container it cannot open | the bytes of a transcript are the TypeScript's, pinned by vectors; the CLI is whoever the machine has |
 | a CLI that is not installed is stepped over; one that ran and failed is the error, said as it said it, and the other is not tried | retrying with another dialect would double a model download nobody asked for |
 | a transcription's work folder is the job's own and is removed with the answer | the answer is text, no file is adopted |
-| a picture is a job whose value is `{path}`, the film's file: the Worker's scene is posted whole, `into` names the absolute folder, and the front writes the film there itself (one render at a time per account, a second ask is 409; no `into` is a 400) | a film is the person's file in the folder they chose, not a change set of the project, and the person closes the page long before a render ends |
+| a picture is a job whose value is `{path}`, the film's file: the scene `picture render` built is posted whole, its files by path, `into` names the absolute folder, and the front writes the film there itself (one render at a time per account, a second ask is 409; no `into` is a 400) | a film is the person's file in the folder they chose, not a change set of the project, and the person closes the page long before a render ends |
 | a scene's `media/` URLs carry virtual paths, each judged by the person's read gate; one outside every root is left out and the page's fetch of it is a 404 | the scene is the browser's text, and the render page reaches only what the person could read |
 | the sound is the native mixdown of the open project as it stands on disk, asked only when `audio` is true | the verb asked for it only when the project wires the sound, and a silent film needs no machine |
 | the account's own members (engine, plugins, devices, onnx, library) read no path: they need no open project and hold no share of the call gate | a rescan waits a minute and the page asks them with no project open |

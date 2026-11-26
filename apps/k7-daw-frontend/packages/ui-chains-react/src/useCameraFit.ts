@@ -13,6 +13,7 @@ export function useCameraFit({
   fitKey,
   fitMaxZoom,
   fitPad,
+  fitMargin,
   fitted,
   graph,
   hostRef,
@@ -27,6 +28,7 @@ export function useCameraFit({
   fitKey: DomChainsProps["fitKey"];
   fitMaxZoom: DomChainsProps["fitMaxZoom"];
   fitPad: number;
+  fitMargin: number;
   fitted: RefObject<boolean>;
   graph: LaidOutGraph;
   hostRef: RefObject<HTMLDivElement | null>;
@@ -60,9 +62,10 @@ export function useCameraFit({
     const gw = graph.width - graph.left;
     const gh = graph.height - graph.top;
     if (!gw || !gh) return null;
-    const sw = host.clientWidth;
-    const sh = host.clientHeight;
-    if (!sw || !sh) return null;
+    // The margin comes off the pane before the fit, so the frame stops that many pixels short of each edge.
+    const sw = host.clientWidth - 2 * fitMargin;
+    const sh = host.clientHeight - 2 * fitMargin;
+    if (sw <= 0 || sh <= 0) return null;
     const pad = fitPad;
     // "height" frames the HEIGHT and lets the width run off the side, which is pannable — docs/camera.md.
     const k = clampZoom(
@@ -77,9 +80,10 @@ export function useCameraFit({
       k,
       // Height-fitted content overflows, so it is pinned LEFT and each offset carries the box's corner.
       x:
+        fitMargin +
         (fitAxis === "height" && gw * k > sw ? 0 : (sw - gw * k) / 2) -
         graph.left * k,
-      y: (sh - gh * k) / 2 - graph.top * k,
+      y: fitMargin + (sh - gh * k) / 2 - graph.top * k,
     };
   };
   // Frame once, and again only when `fitKey` says this is a different graph. See docs/chainsGraph.md.

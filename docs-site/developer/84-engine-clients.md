@@ -14,7 +14,7 @@ Two packages speak the [engine protocol](./83-engine-protocol.md): `@studio/engi
 | `./paths` | The `~/.k7` layout (twin of the supervisor's `Paths.cpp`): `studioDir`, `rootDir`, `mediatekDir`, `webEndpointsDir`, `slugify` |
 | `./pluginCache` | Reading `exts.json` |
 
-The main consumers are the account's engine link in the Rust front (`apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/engine/`), plus `apps/k7-daw-frontend/packages/commands`' test host, and `apps/k7-daw-frontend/packages/audio-passes`.
+The main consumers are the account's engine link in the Rust front (`apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/engine/`), plus `apps/k7-daw-wasm/verbs`' test host, and `apps/k7-daw-frontend/packages/audio-passes`.
 
 ## `@studio/engine-browser` (browser)
 

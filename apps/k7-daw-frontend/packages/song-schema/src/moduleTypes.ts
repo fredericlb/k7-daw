@@ -108,7 +108,7 @@ export const TRANSITION_CATEGORY = "video_transitions";
 /** The TYPE FOLDER a SHAPE module lives in — a drawn primitive, wired to a picture lane like a lens. */
 export const SHAPE_CATEGORY = "shapes";
 
-/** What a shape module DRAWS, named by its `shape:` field — see apps/k7-daw-frontend/packages/song-video/docs/shapes.md. */
+/** What a shape module DRAWS, named by its `shape:` field — see apps/k7-daw-wasm/verbs/docs/picture/shapes.md. */
 export const SHAPE_KINDS = ["square", "circle", "text"] as const;
 
 /** The type folders whose modules ARE their behaviour (GLSL, a shape's params), so an empty `plugin:` is no hole. */
@@ -132,7 +132,7 @@ export const DISSOLVE = "dissolve";
 /** …and the kind a fade naming a `chain` and no `with` means: the shot's own alpha, laid over what is under it. */
 export const OVER = "over";
 
-/** The four knobs every shader gets, numbered rather than named and 0..1 — see apps/k7-daw-frontend/packages/song-video/docs/shaders.md. */
+/** The four knobs every shader gets, numbered rather than named and 0..1 — see apps/k7-daw-wasm/verbs/docs/picture/shaders.md. */
 export const SHADER_PARAMS = ["P1", "P2", "P3", "P4"] as const;
 
 /** The uniform each of them lands on — one rule, so a panel and a shader cannot disagree. */
@@ -219,7 +219,7 @@ export const MODULE_TYPES: Record<
     inputs: [{ name: "in", type: "video" }],
     outputs: [{ name: "out", type: "video" }],
   },
-  // A SHADER: picture in, picture out, and an audio SIDE input allowed to be empty (apps/k7-daw-frontend/packages/song-video/docs/shaders.md).
+  // A SHADER: picture in, picture out, and an audio SIDE input allowed to be empty (apps/k7-daw-wasm/verbs/docs/picture/shaders.md).
   shaders: {
     kind: "plugin",
     inputs: [

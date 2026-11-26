@@ -51,6 +51,9 @@ pub enum Request {
     #[cfg(feature = "verbs")]
     #[serde(rename = "verb.complete")]
     VerbComplete(crate::verb_ops::CompleteArgs),
+    #[cfg(feature = "verbs")]
+    #[serde(rename = "verb.catalogue")]
+    VerbCatalogue,
     /// The hash of the Rust sources this module was built from (decision 756).
     #[serde(rename = "version")]
     Version,
@@ -77,7 +80,7 @@ pub struct Session {
     pub songs: crate::song_ops::SongTable,
 }
 
-fn write<T: Serialize>(out: &mut Vec<u8>, value: &T) -> Result<(), WasmError> {
+fn write<T: Serialize + ?Sized>(out: &mut Vec<u8>, value: &T) -> Result<(), WasmError> {
     serde_json::to_writer(out, value).map_err(|e| WasmError::bad_request(e.to_string()))
 }
 
@@ -112,6 +115,8 @@ impl Session {
             Request::VerbRun(a) => write(out, &crate::verb_ops::run(a)?),
             #[cfg(feature = "verbs")]
             Request::VerbComplete(a) => write(out, &crate::verb_ops::complete(a)?),
+            #[cfg(feature = "verbs")]
+            Request::VerbCatalogue => write(out, verbs::palette::catalogue()),
             Request::Version => write(
                 out,
                 &VersionAnswer {

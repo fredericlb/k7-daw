@@ -73,6 +73,6 @@ The media the file service reaches is `src/media/`: the waveform module runs in 
 
 | choice | why |
 |---|---|
-| one script stages it everywhere, `apps/k7-daw-backend/scripts/stageCodeRoot.mjs`: `apps/k7-daw-frontend/packages/song/meta`, `apps/k7-daw-frontend/packages/song/samples/video/sample.mp4`, `apps/k7-daw-frontend/packages/commands/commands.yaml`, `demos/`, at their repo paths (some 700 KB, 99 files) | the pieces read these files at their repo paths under the root; a test (`switch.rs`) names what a code root must hold |
+| one script stages it everywhere, `apps/k7-daw-backend/scripts/stageCodeRoot.mjs`: `apps/k7-daw-frontend/packages/song/meta`, `apps/k7-daw-frontend/packages/song/samples/video/sample.mp4`, `apps/k7-daw-wasm/verbs/commands.yaml`, `demos/`, at their repo paths (some 700 KB, 99 files) | the pieces read these files at their repo paths under the root; a test (`switch.rs`) names what a code root must hold |
 | picture render's page is not in it: `K7_RENDER_PAGE` names it (the image), a checkout builds it beside the crate | a build of its own (esbuild), and only the server renders pictures |
 | a `K7_CODE_ROOT` that lacks them is said in the log and ignored | a wrong folder must not run every compile against missing files |

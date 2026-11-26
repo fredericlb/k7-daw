@@ -22,6 +22,8 @@ k7-js.workspace = true
 song-edit = { path = "../../../k7-daw-wasm/song-edit" }
 # A command line run natively over the staged workspace (`edits/verb.rs`, docs/verbs-port.md).
 verbs = { path = "../../../k7-daw-wasm/verbs" }
+# A foreign project translated for the import route (`edits/import.rs`, docs/import.md).
+k7-import.workspace = true
 # One watcher for the process (1326): the workspace's own pin, no new crate.
 notify.workspace = true
 # `slotIdOf` folds accents with the full NFD, as `normalize("NFD")` does.

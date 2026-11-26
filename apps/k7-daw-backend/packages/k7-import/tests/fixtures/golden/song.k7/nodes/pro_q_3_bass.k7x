@@ -1,0 +1,2 @@
+// pro_q_3_bass — inherits pro_q_3 (the plugin); only what this use sets differs.
+extends("@workspace/audio/pro_q_3")

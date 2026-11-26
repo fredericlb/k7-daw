@@ -1,0 +1,7 @@
+extends("@meta/picture-track")
+events([
+  ref("film").start(0).length(4).from(1).fadeIn({ over: 0.5, with: "wipe" }).speed(2),
+  ref("film").start(4).length(3).fadeOut(1).effect("nowhere"),
+  ref("ghost").start(9).length(1),
+])
+frame([0, 0, 1280, 720])

@@ -52,7 +52,7 @@ k7, which moves its picture lanes (`formatLevel.md`). `viewport` sits in the SHA
 because one schema validates every dialect (the loader has no type to branch on when it reads the
 header), and a song is where it belongs:
 `loadVideoProject` is a second compile of the same folder, not a second kind of project
-(`apps/k7-daw-frontend/packages/song-video/docs/picture.md`).
+(`apps/k7-daw-wasm/verbs/docs/picture/picture.md`).
 
 ## The archetypes
 

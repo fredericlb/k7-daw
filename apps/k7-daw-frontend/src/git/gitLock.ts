@@ -47,6 +47,7 @@ const WRITING_ROUTES = new Set([
   "POST /undo",
   "POST /redo",
   "POST /changes",
+  "POST /import",
   "POST /upload",
   "POST /verb-host/playlist-stems",
   "POST /verb-host/take/save",

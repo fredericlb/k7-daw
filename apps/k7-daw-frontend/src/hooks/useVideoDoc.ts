@@ -1,7 +1,7 @@
 // useVideoDoc.ts — the song's PICTURE, refetched on reloadKey and kept when it did not change. A second compile of the same
 // folder (the Worker's `videoDoc`), not a slice of the project doc: a song has a tempo and its picture
 // has a viewport, and the engine must never be handed either of the latter's fields.
-// See apps/k7-daw-frontend/packages/song-video/docs/picture.md.
+// See apps/k7-daw-wasm/verbs/docs/picture/picture.md.
 
 import type { WebVideoProject } from "@studio/web-protocol";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";

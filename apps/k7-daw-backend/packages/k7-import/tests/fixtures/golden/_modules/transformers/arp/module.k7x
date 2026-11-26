@@ -1,0 +1,1 @@
+plugin({ type: "vst3", name: "Arp" })

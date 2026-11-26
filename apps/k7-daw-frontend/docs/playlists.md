@@ -41,7 +41,7 @@ Those buttons are not writes: they go up to `PlaylistEditor` exactly as the sear
 the BUFFER that changes. A panel writing the file while the text half holds an unsaved version of it
 would make two truths of one document. The verbs `playlist song remove` and `playlist song move` do
 write the file: they serve the CLI and the command bar, where no buffer is open
-(`apps/k7-daw-frontend/packages/commands/docs/playlist.md`).
+(`apps/k7-daw-wasm/verbs/docs/verbs/playlist.md`).
 
 A shape the text cannot reorder — an inline `items: [a, b]` — disables the three buttons with the
 reason in a tooltip, rather than reformatting somebody's file.

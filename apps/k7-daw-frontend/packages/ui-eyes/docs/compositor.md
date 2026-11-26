@@ -4,7 +4,7 @@
 bottom upwards. What the GLSL does in between is [passes.md](passes.md); how the picture follows
 playback is [realtime.md](realtime.md), and how a shot that MOVES is drawn on each path is
 [motion.md](motion.md). The video document's vocabulary is
-`apps/k7-daw-frontend/packages/song-video/docs/picture.md`.
+`apps/k7-daw-wasm/verbs/docs/picture/picture.md`.
 
 It is the **single renderer** both drivers share, because `texImage2D` takes an
 `HTMLVideoElement` and a `VideoFrame` the same way: the compositor never learns which of the two

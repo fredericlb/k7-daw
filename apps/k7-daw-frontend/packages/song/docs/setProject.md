@@ -209,7 +209,7 @@ the fade cannot take it away. Taking that track off the device silences the side
 an open gap rather than a bug in this file: a run consumed by a port has no way, today, to be
 heard only there.
 
-The four files come from `playlist stems` (`@studio/commands`), run beforehand: the desk never
+The four files come from `playlist stems` (the verbs crate (`apps/k7-daw-wasm/verbs`)), run beforehand: the desk never
 separates a record. What it does with them is `apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/stems.md`.
 
 **A set with one lane a deck** draws no stem column at all — the designed answer to an unwired

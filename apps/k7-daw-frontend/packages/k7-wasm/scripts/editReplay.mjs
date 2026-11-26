@@ -1,4 +1,4 @@
-// editReplay.mjs — the native replays write their screened calls, then both vitest configs and the built Worker re-run them through the module.
+// editReplay.mjs — the native replays write their screened calls, then the module re-runs them through `edit.call`.
 // A reader would get wrong why it is not part of `npm test`: it compiles the song-edit replays first, which takes minutes cold.
 
 import { execFileSync } from "node:child_process";
@@ -29,20 +29,3 @@ run(
   join(PKG, "..", "..", "..", "k7-daw-wasm", "song-edit"),
 );
 run("npx", ["vitest", "run", "src/edit.replay.test.ts"], PKG);
-run(
-  "npx",
-  [
-    "vitest",
-    "run",
-    "-c",
-    "vitest.vfs.config.ts",
-    "src/edit.replay.vfs.test.ts",
-  ],
-  PKG,
-);
-// The built Worker in Chromium; it skips when no browser is installed.
-run(
-  "npx",
-  ["vitest", "run", "verbs/editReplay.test.ts"],
-  join(PKG, "..", ".."),
-);

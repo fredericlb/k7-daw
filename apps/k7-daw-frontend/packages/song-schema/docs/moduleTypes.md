@@ -27,7 +27,7 @@ viewport. `RENDER` is where the compositor sums: every video lane arrives there 
 lane arrives at `MIX`, and carries no parameter for the same reason. A chain wired `from: RENDER` to
 `VIDEO_OUT` is the VIDEO MASTER CHAIN — where a `video_effects` or `shaders` module processes the
 whole composited frame. Not a `video_transitions` one: a transition is NAMED by a cut rather than
-wired, so it is never a chain step (`apps/k7-daw-frontend/packages/song-video/docs/transitions.md`).
+wired, so it is never a chain step (`apps/k7-daw-wasm/verbs/docs/picture/transitions.md`).
 
 `VideoPluginDoc` is modelled and nothing compiles it, so a module on this run is drawn and validated
 but changes no frame (`apps/k7-daw-frontend/packages/song/docs/videoOutputs.md`). Unlike the audio pair these are added
@@ -72,7 +72,7 @@ both.
 a shader will call its controls, and a shader author cannot rename a knob on a panel they never see.
 Four is what fits a row of the grid, and 0..1 is the range a GLSL uniform wants — no shader has to
 normalise, and no panel has to ask what the units are. They reach the fragment as `uP1`..`uP4`,
-beside `uAudio` (`apps/k7-daw-frontend/packages/song-video/docs/shaders.md`).
+beside `uAudio` (`apps/k7-daw-wasm/verbs/docs/picture/shaders.md`).
 
 The `shaders` entry of `MODULE_TYPES` is the only module type in the repo whose ports are of two
 different signals, and the reason is what a shader is for — a visual that MOVES with the sound. The

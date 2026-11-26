@@ -850,6 +850,7 @@
   "clip.viewLabel": "kind of view",
   "clip.threshold": "Threshold",
   "clip.sensitivityLabel": "onset detection sensitivity",
+  "clip.transformations": "Transformations",
   "clip.trim": "Trim",
   "clip.gateLabel": "trim threshold in dBFS",
   "clip.keeps": "keeps {from}s → {to}s",

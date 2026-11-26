@@ -2,7 +2,7 @@
 // through a ROUTE or from state only this browser holds: the undo journal, the master meter's
 // fix, the mixdown and the cut, the k7 publish and the share link, an import.
 
-import { sceneOf as videoSceneOf } from "@studio/k7-plugins/video";
+import { fetchScene } from "@studio/k7-plugins/video";
 import { runRedo, runUndo } from "@studio/project-shell/undo";
 import { EXPORT_USAGE, parseExportAsk } from "../../exportArgs";
 import { exportHost } from "../../exportHost";
@@ -133,13 +133,18 @@ export const PROJECT_COMMANDS: LocalCommand[] = [
       else {
         const silent = ctx.videoDoc?.sound === null;
         if (silent && ask.audio) ctx.setStatus(m["status.videoSilent"]());
-        void ctx.share.exportVideo(
-          ctx.videoDoc ? videoSceneOf(ctx.videoDoc, null, "export") : null,
-          ask.format,
-          // The sound is what RENDER's audio input carries; an older backend says nothing and means the mix.
-          silent ? null : ask.audio,
-          name ?? "video",
-          ask.settings,
+        const scene = ctx.videoDoc
+          ? fetchScene(null, "export").catch(() => null)
+          : Promise.resolve(null);
+        void scene.then((s) =>
+          ctx.share.exportVideo(
+            s,
+            ask.format,
+            // The sound is what RENDER's audio input carries; an older backend says nothing and means the mix.
+            silent ? null : ask.audio,
+            name ?? "video",
+            ask.settings,
+          ),
         );
       }
       return true;

@@ -383,7 +383,7 @@ test("the Logs panel: the engine machine's lines by byte, the service's own by n
   }
   const after = await svc.get(`/logs?after=${r.body.service.seq}`, ws);
   expect(after.body.service.seq).toBeGreaterThanOrEqual(r.body.service.seq);
-  // A verb runs in the Worker now, so the service says no `[cmd]` line of it; the open project still moves.
+  // A verb is `POST /verb`, so the service says no `[cmd]` line of it; the open project still moves.
   expect((await svc.open(ws, "clip-lane.k7")).status).toBe(200);
   const ran = await svc.verb(ws, "track new logs_probe", { want: [] });
   expect(ran.status).toBe(200);

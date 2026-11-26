@@ -25,5 +25,4 @@ nothing regenerates them: no generator is kept, so the set cannot drift to follo
 ## Who replays them
 
 `apps/k7-daw-wasm/song-edit/tests/replay` and `replay_lane` replay them natively. `npm run test:edit-replay -w @studio/k7-wasm` has those
-replays write the calls they screened, then runs each through `edit.call` over a temp folder, over the Vfs shims and in the built
-Worker inside Chromium; `scripts/check-vectors.sh` and `gate.sh` run it (`apps/k7-daw-frontend/packages/k7-wasm/docs/edit.md`).
+replays write the calls they screened, then runs each through `edit.call` over a temp folder; `scripts/check-vectors.sh` and `gate.sh` run it (`apps/k7-daw-frontend/packages/k7-wasm/docs/edit.md`).

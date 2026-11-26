@@ -81,7 +81,6 @@ mod shares_picture;
 mod song_ask;
 mod strict;
 mod tree;
-mod verb_bundle;
 mod verb_host_docpaths;
 mod verb_host_gate;
 mod verb_host_jobs;

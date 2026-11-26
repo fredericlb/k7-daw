@@ -2,7 +2,7 @@
 // shot's own start, so the animation travels with the shot when it is moved or split. Pure and
 // browser-safe: the compile validates it, the compositor evaluates it every frame, and a split
 // re-bases it. The one thing a reader gets wrong: a key's `ease` shapes the segment that LEAVES
-// it, not the one arriving. See apps/k7-daw-frontend/packages/song-video/docs/animation.md.
+// it, not the one arriving. See apps/k7-daw-wasm/verbs/docs/picture/animation.md.
 
 import { z } from "zod";
 

@@ -75,7 +75,7 @@ edit path in [The edit path](./21-edit-path.md).
 ## Picture
 
 - [The picture pipeline: architecture](./50-picture-architecture.md)
-- [song-video: the picture compile](./51-song-video.md)
+- [The picture compile](./51-song-video.md)
 - [ui-eyes: the WebGL compositor](./52-ui-eyes.md)
 - [The viewport plugin and the frontend's picture code](./53-viewport-and-frontend.md)
 - [Picture commands and media preparation](./54-picture-commands.md)

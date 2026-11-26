@@ -37,7 +37,7 @@ pub struct Line<'a> {
 }
 
 /// The folder the line runs on; with no project, a folder of the workspace that is never there, so the workspace's own files are found beside it.
-fn project_dir(at: &Line<'_>) -> String {
+pub(crate) fn project_dir(at: &Line<'_>) -> String {
     at.project.map_or_else(
         || posix(&crate::paths::join(&[at.root, ".no-project"])),
         posix,
@@ -45,7 +45,7 @@ fn project_dir(at: &Line<'_>) -> String {
 }
 
 /// Where a verb may write: the workspace (its project and the shared texts) and the studio's own folder (the preferences).
-fn mounts(home: &Home, root: &str, env: &Env) -> (Vec<String>, Vec<String>) {
+pub(crate) fn mounts(home: &Home, root: &str, env: &Env) -> (Vec<String>, Vec<String>) {
     let writes = vec![posix(root), posix(&home.studio)];
     let mut reads = vec![
         env.meta_root.clone(),
@@ -153,9 +153,27 @@ pub fn complete_verb(
     ))
 }
 
+/// The palette's catalogue, `GET /verb/catalogue`'s answer: built from the crate's `commands.json`, it reads no file.
+#[must_use]
+pub fn catalogue() -> serde_json::Value {
+    serde_json::to_value(verbs::palette::catalogue()).unwrap_or_default()
+}
+
 #[cfg(test)]
 mod tests {
-    use super::head_of;
+    use super::{catalogue, head_of};
+
+    #[test]
+    fn the_catalogue_is_a_list_of_commands() {
+        let rows = catalogue();
+        let rename = rows
+            .as_array()
+            .and_then(|r| r.iter().find(|c| c["command"] == "track rename"));
+        assert_eq!(
+            rename.map(|c| c["args"][0]["kind"].clone()),
+            Some("track".into())
+        );
+    }
 
     #[test]
     fn the_caret_counts_utf16_units() {

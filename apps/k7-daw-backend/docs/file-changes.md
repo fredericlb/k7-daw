@@ -1,9 +1,9 @@
-# The change set, the verb bundle and `POST /verb`
+# The change set, `POST /verb`, the picture and an import
 
-`POST /changes`, `GET /verb-bundle` and `GET /verb-bundle/library`: what the page's Worker commits an import to and reads a project from, native in
-the Rust file service. The code is `apps/k7-daw-backend/packages/k7-file-service/src/changes/`
-and `verb_bundle.rs`, and the front's `native/changes.rs` and `native/verb_bundle.rs`. The routes belong to the `journal` piece and
-have no fallback: a front that does not answer the journal says 503.
+`POST /changes`: a set of writes landed whole as one journal step, native in the Rust file service; a verb and an import
+land through it. The code is `apps/k7-daw-backend/packages/k7-file-service/src/changes/` and the front's
+`native/changes.rs`. The routes belong to the `journal` piece and have no fallback: a front that does not answer the
+journal says 503.
 
 ## Choices
 
@@ -55,15 +55,29 @@ have no fallback: a front that does not answer the journal says 503.
 The settle's k7x half is native (`k7_sync::k7x`); the relay batch is made by the capture. The directories `also_readable`, sample banks and
 the models cache are not in the bundle: a verb that reads them asks for them.
 
-## The Worker
+## The picture: `POST /picture` and `POST /picture/scene`
 
-A browser Worker holds the open project for its picture views and sends the import's change set: see `apps/k7-daw-frontend/packages/commands/docs/runtime.md`.
+`POST /picture` answers the open project's picture document and its warnings, `{doc, warnings}`, or the compile's refusal
+`{error}`; `POST /picture/scene {media, armed?, use?}` answers `{scene, mixes}`, the scene `@studio/ui-eyes` draws. Both are the
+`verbs` crate's `picture/` read over a `StagedFs` of the workspace; the code is the file service's `edits/picture.rs` and the
+front's `native/picture_run.rs`.
+
+| choice | why |
+|---|---|
+| a picture that does not build answers `{error}` with a 200 | the refusal is the compile's sentence, which the viewport shows; only a mount that cannot be read fails the call |
+| the document's media and LUT paths are workspace-relative | the page fetches every byte back through `/media` |
+| the scene's files are `media` followed by each one's encoded workspace path, `media` sent by the page | the page's `/media` URL carries its own session in the query, which the backend does not hold |
+| `use: export` reads the optimized copy or the source, never the proxy | a proxy is for drawing live, a film is made of the real picture |
+| both reads share the compile cache the verbs keep | a scene asked right after a line recompiles only what moved |
+| `picture render` builds its scene with the same builder and asks `POST /verb-host/picture`, its files by path; the route makes each `src` and `lut` a `media/` URL and maps a folder inside a root back to its real path | one builder for the preview and the film; the asker maps only strings that start with `/`, so the route makes the URLs the render page fetches |
 
 ## A verb run by the backend: `POST /verb`
 
 `{line, at?, journal?, want?}` in, the `verbs` crate's answer out (`{log, refuse, refused, effects, asks?, threw?}`) with `landed`,
 the step's `changed`, `revBefore` and `rev`, and `graph` when asked: the route the page runs every command line and editing gesture
-through (`docs/verbs-port.md`). `POST /verb/complete {line, cursor?, labelled?}` answers `{items}`. The code is the file service's
+through (`docs/verbs-port.md`). `POST /verb/complete {line, cursor?, labelled?}` answers `{items}`. `GET /verb/catalogue` answers the palette's `CommandInfo[]`
+(`apps/k7-daw-frontend/packages/web-protocol/commandTypes.ts`), built by the crate's `palette.rs` from its `commands.json`: it reads
+no file, so it answers the same for any workspace. The code is the file service's
 `edits/verb.rs` and the front's `native/verb_run.rs` and `native/verb_ask.rs`.
 
 | choice | why |
@@ -78,7 +92,10 @@ through (`docs/verbs-port.md`). `POST /verb/complete {line, cursor?, labelled?}`
 | the stage writes in the workspace and the studio's folder, and reads the meta modules, the libraries and the account's chains | a verb writes its project, the shared texts and the machine's preferences; nothing else is a verb's |
 | with no project open the line still runs, journaled as `skip` | the machine's verbs (`system …`) work with no project |
 | the engine is pushed once after a landing whose verb asked `reload` or `applyProject`, then the asks are asked and the lines they answer said | the push is the host's half of both effects, and an ask such as `transport play` needs the pushed song |
-| an ask named `page …` goes back in the answer's `asks` | a picture render's scene is the page's to build (`apps/k7-daw-frontend/packages/commands/docs/runtime.md`) |
 | `rev` is the project's token read after the push | the page adopts a token as its own only when it is the one after its line |
 | one compile cache, for the last project run, kept from one line to the next and shared with completion | its entries are keyed by each file's stamp, so a file that moved is decoded again; one project bounds what it holds |
 | the route is a write for the merge gate | a line may write anything a verb writes; a verb that writes nothing is refused while a merge waits, a minor cost |
+
+## A foreign project: `POST /import`
+
+The route builds a set with `create` from the translated files and lands it through the same path, after writing the samples into the folder it claims: `docs/import.md`.

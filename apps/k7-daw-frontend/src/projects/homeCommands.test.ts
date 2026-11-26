@@ -1,7 +1,7 @@
 // The home page's own verbs. Three things here would be wrong silently: a line landing in
 // the WRONG workspace (a project made where nobody was looking), a `project delete confirm`
 // that deletes whatever happened to be armed rather than what it names, and a catalogue row
-// whose sentence is missing or too long to read — the same rules commandSpec.test.ts holds the
+// whose sentence is missing or too long to read — the same rules the crate's palette.rs holds the
 // brain's to, said here for the half that never reaches it.
 
 import type { AccountWorkspace } from "@studio/web-protocol";

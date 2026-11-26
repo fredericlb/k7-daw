@@ -212,7 +212,7 @@ sample, resolved onto a file by the loader, a clip, or a slice window — so an 
 too.
 
 **A right-click is the pad's menu**: change note, change sample, rename, remove, add one before, add
-one after, each a `node tap …` command (`apps/k7-daw-frontend/packages/commands/docs/verbs.md`). An entry still owing a
+one after, each a `node tap …` command (`apps/k7-daw-wasm/verbs/docs/verbs/verbs.md`). An entry still owing a
 value — a note, a sample, a name — is handed to the command bar with the line written, where a sample
 completes from the libraries' `samples/`.
 

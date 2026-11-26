@@ -1,0 +1,7 @@
+// The ARRANGEMENT — the timeline, and the transport that rolls through it.
+//
+// Written by the import: what a .dawproject or .als carries is lanes on a ruler, so the
+// project that comes out of one draws them. Delete this file and the song still compiles
+// and still plays; you simply have no lanes on screen.
+type("timeline")
+layout("split")

@@ -84,6 +84,8 @@ const CSS = `
     radial-gradient(1100px 560px at 60% -10%, var(--card) 0%, var(--ground) 60%);
   color:var(--text); font-family:var(--font-sans,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif); }
 .dgx.panning { cursor:grabbing; }
+/* A lane's row: the nodes over the host's own background, nothing drawn behind them. */
+.dgx.bare { background:none; }
 .dgx-world { position:absolute; top:0; left:0; transform-origin:0 0; }
 /* Non-interactive except its hit paths and insert buttons, so empty space passes the pointer through. */
 .dgx-cables { position:absolute; top:0; left:0; overflow:visible; pointer-events:none; }

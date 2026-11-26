@@ -1,12 +1,15 @@
 // picture_render.rs — `picture render [webm|mp4] [wav|none] [size= quality= from= to=] into=<folder>`: the picture rendered in the background.
-// A reader would get wrong who builds the scene: the caller does, from the project as it lands, since the crate holds no compositor.
+// A reader would get wrong who draws the film: the verb builds the scene here, the front's picture job renders it in a browser.
 
 use super::picture_shared::picture_lane_ids;
 use super::shared::{Done, split_words};
 use crate::host::Host;
+use crate::picture::Use;
 use serde_json::json;
 use song_edit::js_text::js_trim;
 
+/// The front's route that renders a scene in the background, asked once the line has landed.
+const PICTURE: &str = "POST /verb-host/picture";
 const FORMATS: [&str; 2] = ["webm", "mp4"];
 const QUALITIES: [&str; 4] = ["low", "medium", "high", "max"];
 
@@ -139,11 +142,16 @@ pub fn picture_render(a: &str, h: &mut Host) -> Done {
         h.refuse(["this project draws no picture — nothing to render".to_owned()]);
         return Ok(());
     }
-    let ask = json!({ "into": js_trim(&into), "format": format, "settings": settings, "audio": audio, "background": "picture render" });
-    if let Err(e) = h.render_picture(ask) {
-        h.refuse([e.message]);
+    let built = crate::picture::scene_answer(&*h.fs, &mut h.cache, &h.env, &h.song_path, None, Use::Export, &|p| {
+        p.to_owned()
+    });
+    if let Some(e) = built.get("error").and_then(|e| e.as_str()) {
+        h.refuse([e.to_owned()]);
         return Ok(());
     }
+    let mixes = built.get("mixes") == Some(&json!(true));
+    let ask = json!({ "scene": built["scene"], "into": js_trim(&into), "format": format, "settings": settings, "audio": audio && mixes });
+    h.ask(PICTURE, ask);
     let silent = if audio { "" } else { ", silent" };
     h.log([format!(
         "rendering the picture in the background ({format}{silent}) — it lands in {into}"

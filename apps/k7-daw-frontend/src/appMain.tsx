@@ -60,7 +60,6 @@ import { m } from "./paraglide/messages.js";
 import { queryClient } from "./queries/client";
 import { forgetLeftScope } from "./scopeLeave";
 import { followSystemTextSize } from "./textScale";
-import { spawnBrowserWorker } from "./verbs/browserWorker";
 import { installPageVerbs } from "./verbs/pageHost";
 
 import "./index.css";
@@ -76,8 +75,8 @@ setFileApiTally(tally);
 setFileApiRevision(currentRevision, (path) =>
   /^\/(graph|project-doc|project-plugins)(\?|$)/.test(path),
 );
-// The command bar's verbs run in a Worker the first call starts (docs/verbs.md).
-installPageVerbs(spawnBrowserWorker);
+// The command bar's verbs run on the backend, through the file API's routes (docs/verbs.md).
+installPageVerbs();
 // A held finger or pen is a right-click on every surface, an iPad included (docs/contextMenu.md).
 installLongPress();
 

@@ -550,7 +550,7 @@ Beside it is **operations**: every chain the project and the library offer, norm
 (`clip process <clip> <chain>` over a chain naming the module library's `normalize` module). There is no
 `clip normalize` and no `track normalize`, and that is the trade — a treatment that can be followed by
 another, landing in a stamped render the clip is repointed at, rather than one hard-coded gain written
-over the take. See `@studio/commands`' `docs/processChain.md` for what it costs: a single gain shared
+over the take. See the verbs crate's `docs/processChain.md` for what it costs: a single gain shared
 across a whole track's files.
 
 The envelope reaches the command through `CommandHost.clipEnvelope?()`, optional for the reason
@@ -1035,8 +1035,8 @@ than no plug.
 
 **Every card takes the row's whole height** — the tallest card's, the lane's clip list included —
 so the row reads as one band and the side cables run straight, and the camera zooms so that height
-is the pane's whole height (`fitAxis="height"`, `fitPad={1}`, over a
-box `moduleRow` draws round the cards and nothing else). The row is a few cards you came to work on,
+is the pane's height less 4 px top and bottom, so the cards' borders show (`fitAxis="height"`,
+`fitPad={1}`, `fitMargin={4}`, over a box `moduleRow` draws round the cards and nothing else). The row is a few cards you came to work on,
 so it is drawn as large as the pane allows; the width runs off the right and the wheel walks along
 it.
 
@@ -1623,20 +1623,20 @@ Keeping it costs one habit — **the button runs the command, it does not call t
 | the settings panel's tabs | `ui settings editor\|io\|account` | `App` |
 | the settings panel's *Commandes* | `ui settings commands` — the one that is still a page | `App` |
 | the account tab's rows | `ui engine`, `ui workspace quit`, `ui language` | `App` |
-| the share panel's rows | `project export` | `@studio/commands` and `hooks/useShare.ts` |
+| the share panel's rows | `project export` | the verbs crate (`apps/k7-daw-wasm/verbs`) and `hooks/useShare.ts` |
 | `ui external <surface>` | the palette's way to a surface's address | `App` |
 | the editor tab's one toggle | `ui vim` | `toggleVim` in `App` |
 | Ctrl+Z / Ctrl+Y | `project undo`, `project redo` | `@studio/project-shell/undo` |
 | the file tree's right-click menu | `fs file new`, `fs folder new`, `fs file rename`, `fs file move`, `fs file delete`, `fs file upload`, `ui pin`, `ui copy path` | `EditorHandle`, and `FileTreeHandle` under it |
 | the clip panel's *stop*, while a take rolls | `transport stop` | the engine |
-| the roll's *×2* | `sequence double <séquence>` | `@studio/commands`, over `doubleSequence` — see [clipEditors.md](clipEditors.md) |
+| the roll's *×2* | `sequence double <séquence>` | the verbs crate (`apps/k7-daw-wasm/verbs`), over `doubleSequence` — see [clipEditors.md](clipEditors.md) |
 | a `.dawproject` / `.als` clicked in the tree | `project import <path>` | `useProjectImport` |
 | a file dropped on a timeline lane | `event add`, `picture add` — the PLACING half; the upload and the `clips/<id>.k7x` go through routes | `hooks/useTimelineDrop.ts`, see [timeline.md](timeline.md) |
 | the master meter's *fix* | `project master fix` | `fixClipping` in `App`, over `MasterMeterHandle` |
-| the channel strip's mono/stereo pairing | `system channel type <ch> <mono\|stereo>` | `@studio/commands` — the rig's file AND the engine |
-| the Playlists panel's *＋* | `playlist new <name>` | `@studio/commands`, in `_playlists/` |
-| the Playlists panel's *Separate the stems* | `playlist stems <playlist>` — the bar only starts it | `@studio/commands`, through the shell, see [playlists.md](playlists.md) |
-| the settings page's *Separation chains* | `system stems <chaîne>` — the page itself writes through `PUT /account/cold-chains/stems`, since it has no project to run a command in | `@studio/commands` — `<state>/preferences.k7x`, read by every screen that could start one |
+| the channel strip's mono/stereo pairing | `system channel type <ch> <mono\|stereo>` | the verbs crate (`apps/k7-daw-wasm/verbs`) — the rig's file AND the engine |
+| the Playlists panel's *＋* | `playlist new <name>` | the verbs crate (`apps/k7-daw-wasm/verbs`), in `_playlists/` |
+| the Playlists panel's *Separate the stems* | `playlist stems <playlist>` — the bar only starts it | the verbs crate (`apps/k7-daw-wasm/verbs`), through the shell, see [playlists.md](playlists.md) |
+| the settings page's *Separation chains* | `system stems <chaîne>` — the page itself writes through `PUT /account/cold-chains/stems`, since it has no project to run a command in | the verbs crate (`apps/k7-daw-wasm/verbs`) — `<state>/preferences.k7x`, read by every screen that could start one |
 
 Two of those handles exist only for this: `EditorHandle` carries the tree's own verbs, and `FileTreeHandle`
 exposes the two things nothing else holds — the pins, which are that component's `localStorage`, and the OS

@@ -5,8 +5,7 @@
 
 import type { RealtimeDriver } from "@studio/ui-eyes/realtime";
 import type { WebVideoProject } from "@studio/web-protocol";
-import { useMemo } from "react";
-import { sceneOf } from "./scene";
+import { useScene } from "./scene";
 import { VideoCanvas } from "./VideoCanvas";
 
 export function OutputPicture({
@@ -17,8 +16,9 @@ export function OutputPicture({
   /** The driver once drawing, and null when it goes: what the recording captures its stream from. */
   onDriver: (driver: RealtimeDriver | null) => void;
 }) {
-  // Rebuilt only when the document changes, as the viewport's is: a scene owns a GL context and a <video> per layer.
-  const scene = useMemo(() => sceneOf(doc), [doc]);
+  // Asked again only when the document changes, as the viewport's is: a scene owns a GL context and a <video> per layer.
+  const { scene } = useScene(doc);
+  if (!scene) return null;
   const [w, h] = scene.viewport;
   return (
     // Off screen but laid out: a canvas with no box would draw nothing to capture.

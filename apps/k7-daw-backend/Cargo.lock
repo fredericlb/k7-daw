@@ -2107,6 +2107,7 @@ version = "0.1.0"
 dependencies = [
  "getrandom 0.3.4",
  "indexmap",
+ "k7-import",
  "k7-js",
  "k7x",
  "libc",
@@ -2142,6 +2143,7 @@ dependencies = [
  "k7-file-service",
  "k7-git",
  "k7-hub",
+ "k7-import",
  "k7-js",
  "k7-lan",
  "k7-libraries",
@@ -2208,6 +2210,22 @@ dependencies = [
  "subtle",
  "tokio",
  "tokio-tungstenite",
+]
+
+[[package]]
+name = "k7-import"
+version = "0.1.0"
+dependencies = [
+ "flate2",
+ "indexmap",
+ "k7x",
+ "quick-xml",
+ "sha1 0.10.7",
+ "song",
+ "song-edit",
+ "song-schema",
+ "verbs",
+ "zip",
 ]
 
 [[package]]
@@ -3219,6 +3237,15 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 3.0.9",
+]
+
+[[package]]
+name = "quick-xml"
+version = "0.42.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "41b1177fdf999d2321d3fb46ff47159d9c1fb9ad66a4879f8c50a0b504615e9b"
+dependencies = [
+ "memchr",
 ]
 
 [[package]]

@@ -96,10 +96,14 @@ pub enum Tag {
     Export,
     ExportTracks,
     Changes,
+    Import,
     Verb,
     VerbComplete,
-    VerbBundle,
-    VerbLibrary,
+    /// The palette's catalogue, read from the `verbs` crate.
+    VerbCatalogue,
+    /// The picture document and its scene, read by the `verbs` crate.
+    Picture,
+    PictureScene,
     VerbHost(super::verb_host::Member),
     FrozenChains,
     LiveChains,
@@ -152,10 +156,12 @@ impl Tag {
             H::History => Some(Tag::History),
             H::HistoryEntries => Some(Tag::HistoryEntries),
             H::Changes => Some(Tag::Changes),
+            H::Import => Some(Tag::Import),
             H::Verb => Some(Tag::Verb),
             H::VerbComplete => Some(Tag::VerbComplete),
-            H::VerbBundle => Some(Tag::VerbBundle),
-            H::VerbLibrary => Some(Tag::VerbLibrary),
+            H::VerbCatalogue => Some(Tag::VerbCatalogue),
+            H::Picture => Some(Tag::Picture),
+            H::PictureScene => Some(Tag::PictureScene),
             H::VerbHost(m) => Some(Tag::VerbHost(m)),
             H::Project => Some(Tag::Project),
         }
@@ -198,10 +204,12 @@ impl Tag {
             | Tag::History
             | Tag::HistoryEntries
             | Tag::Changes
+            | Tag::Import
             | Tag::Verb
             | Tag::VerbComplete
-            | Tag::VerbBundle
-            | Tag::VerbLibrary
+            | Tag::VerbCatalogue
+            | Tag::Picture
+            | Tag::PictureScene
             | Tag::VerbHost(_) => Piece::Journal,
             Tag::Workspaces
             | Tag::WorkspaceMake
@@ -311,10 +319,12 @@ impl Tag {
             Tag::Export => "GET /export",
             Tag::ExportTracks => "GET /export/tracks",
             Tag::Changes => "POST /changes",
+            Tag::Import => "POST /import",
             Tag::Verb => "POST /verb",
             Tag::VerbComplete => "POST /verb/complete",
-            Tag::VerbBundle => "GET /verb-bundle",
-            Tag::VerbLibrary => "GET /verb-bundle/library",
+            Tag::VerbCatalogue => "GET /verb/catalogue",
+            Tag::Picture => "POST /picture",
+            Tag::PictureScene => "POST /picture/scene",
             Tag::VerbHost(m) => m.route(),
             Tag::FrozenChains => "GET /account/frozen-chains",
             Tag::LiveChains => "GET /account/live-chains",

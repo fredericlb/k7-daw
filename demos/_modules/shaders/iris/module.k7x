@@ -2,7 +2,7 @@
 // its presence, so the same node opens a shot in on a `fade_in` and closes one out on a `fade_out`.
 //
 // Wired as an ordinary lane effect it does nothing, since `uPresence` is 1 outside a fade.
-// See apps/k7-daw-frontend/packages/song-video/docs/transitions.md.
+// See apps/k7-daw-wasm/verbs/docs/picture/transitions.md.
 type("shader")
 shader("iris")
 params({
