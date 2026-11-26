@@ -94,6 +94,10 @@ impl Paths {
     pub fn slots_dir(&self) -> PathBuf {
         self.home.join("slots")
     }
+    /// The sampled instruments, one folder each, which the engine resolves `@instruments/` under.
+    pub fn instruments_dir(&self) -> PathBuf {
+        self.home.join("instruments")
+    }
     /// One server's files as this machine holds them.
     pub fn remote_cache(&self, key: &str) -> PathBuf {
         self.home.join("remote").join(key)
