@@ -1,19 +1,14 @@
-// ClipControls.tsx — the audio clip editor's options: the event's gain, Loop / Trim / Operations (and Discard and
+// ClipControls.tsx — the audio clip editor's options: the event's gain, Loop, the Operations menu (and Discard and
 // Done for a take just filed). They are the TITLE BAR's, like every editor's (docs/editors.md); a phone keeps them in the body.
 
 import { Button } from "@studio/ui/button";
 import { DockProperty } from "@studio/ui/dock-property";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@studio/ui/dropdown-menu";
 import { DockHeaderRow } from "@studio/ui/editor-dock";
-import { Check, Loader2, Trash2 } from "@studio/ui/icons";
+import { Check, Trash2 } from "@studio/ui/icons";
 import { Switch } from "@studio/ui/switch";
 import { m } from "../paraglide/messages.js";
-import { ChainOpsList } from "./ChainOpsList";
-import { OnsetThreshold, TrimGate } from "./ClipGateControls";
+import { OnsetThreshold } from "./ClipGateControls";
+import { ClipOpsMenu } from "./ClipOpsMenu";
 import { EventGainSlider } from "./EventGainSlider";
 
 export interface ClipControlsProps {
@@ -73,39 +68,23 @@ export function ClipControls(p: ClipControlsProps) {
             />
           </DockProperty>
         )}
-        {/* Trim OPENS a gate rather than applying one, drawing what would be KEPT over the wave (docs/shell.md). */}
-        <TrimGate
-          open={p.gateOpen}
-          onOpenChange={p.onGateOpen}
-          busy={p.busy === "trim"}
+        {/* Trim and the chain transformations, behind one lightning button as on the roll (docs/clipEditors.md). */}
+        <ClipOpsMenu
+          busy={p.busy}
           disabled={!!p.busy || !p.clip}
+          gateOpen={p.gateOpen}
+          onGateOpen={p.onGateOpen}
           gate={p.gate}
           onGate={p.onGate}
           keep={p.keep}
           canTrim={p.canTrim}
           onTrim={p.onTrim}
+          opSearch={p.opSearch}
+          onOpSearch={p.onOpSearch}
+          ops={p.ops}
+          opsPending={p.opsPending}
+          onPickOp={p.onPickOp}
         />
-        {/* Operations: every chain the project and the library offer, run over THIS clip (@studio/commands docs/processChain.md). */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button size="sm" variant="outline" disabled={!!p.busy || !p.clip}>
-              {p.busy === "process" ? (
-                <Loader2 className="h-3.5 w-3.5 animate-spin" />
-              ) : (
-                m["clip.operations"]()
-              )}
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-64 p-1">
-            <ChainOpsList
-              search={p.opSearch}
-              onSearch={p.onOpSearch}
-              ops={p.ops}
-              pending={p.opsPending}
-              onPick={p.onPickOp}
-            />
-          </DropdownMenuContent>
-        </DropdownMenu>
         {p.onDiscard && (
           <Button
             size="sm"

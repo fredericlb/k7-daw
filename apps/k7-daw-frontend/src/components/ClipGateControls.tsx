@@ -1,10 +1,10 @@
 // ClipGateControls.tsx — the clip panel's two thresholds: the onset editor's sensitivity, and the
-// trim gate, whose title-bar pill OPENS a gate popover rather than applying one so the wave can draw what it would keep.
+// trim gate, which the Operations menu OPENS as a popover rather than applying one, so the wave can draw what it would keep.
 // See ../../docs/clipEditors.md.
 
 import { Button } from "@studio/ui/button";
-import { Loader2 } from "@studio/ui/icons";
-import { Popover, PopoverContent, PopoverTrigger } from "@studio/ui/popover";
+import { Popover, PopoverAnchor, PopoverContent } from "@studio/ui/popover";
+import type * as React from "react";
 import { m } from "../paraglide/messages.js";
 
 // The bounds the file service clamps to anyway (see the /waveform route), repeated so the slider cannot ask for something silently adjusted.
@@ -41,22 +41,21 @@ export function OnsetThreshold({
   );
 }
 
-/** The Trim pill in the title bar and the gate it opens: a threshold, what it would keep, and the trim itself. */
+/** The trim gate, opened from the Operations menu: a threshold, what it would keep, and the trim itself. */
 export function TrimGate({
+  anchor,
   open,
   onOpenChange,
-  busy,
-  disabled,
   gate,
   onGate,
   keep,
   canTrim,
   onTrim,
 }: {
+  /** What the gate hangs from: the Operations menu's button. */
+  anchor: React.ReactNode;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  busy: boolean;
-  disabled: boolean;
   gate: number;
   onGate: (db: number) => void;
   /** What a trim at this gate would keep, in file seconds, or null for nothing above it. */
@@ -67,21 +66,10 @@ export function TrimGate({
 }) {
   return (
     <Popover open={open} onOpenChange={onOpenChange}>
-      <PopoverTrigger asChild>
-        <Button
-          size="sm"
-          variant="outline"
-          disabled={disabled}
-          aria-pressed={open}
-          className={open ? "bg-on-fill text-lavender" : undefined}
-        >
-          {busy ? (
-            <Loader2 className="h-3.5 w-3.5 animate-spin" />
-          ) : (
-            m["clip.trim"]()
-          )}
-        </Button>
-      </PopoverTrigger>
+      {/* The gate opens from the Operations menu; the menu's button is where it hangs. */}
+      <PopoverAnchor asChild>
+        <span className="inline-flex">{anchor}</span>
+      </PopoverAnchor>
       <PopoverContent
         align="start"
         className="w-80"

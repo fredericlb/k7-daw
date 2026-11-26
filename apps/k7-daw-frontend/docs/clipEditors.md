@@ -9,8 +9,8 @@ header carries no view switch.
 
 Both editors follow the dock's one rule ([editors.md](editors.md)): every option is in the title bar
 (`DockHeaderRow`, [editor-dock](../packages/ui/docs/editor-dock.md)) and the body is the clip alone.
-An audio clip's title bar starts with its view capsules, then the gain and Loop as "name: value" settings (a knob and a switch in their bubble), Trim / Operations
-(and Discard with Done for a take just filed) and the active tool's help glyph; Trim opens its gate as a popover from the bar. The piano roll's title
+An audio clip's title bar starts with Fit and its view capsules, then the gain and Loop as "name: value" settings (a knob and a switch in their bubble), the lightning Operations menu
+(`ClipOpsMenu.tsx`: Trim, and a Transformations submenu listing the chains a clip can be run through), Discard with Done for a take just filed, and the active tool's help glyph. Trim opens its gate as a popover hanging from the lightning button. The piano roll's title
 bar holds Fit, its tools as the same capsules, then "loop: off" and the lightning Operations menu on the right; it has no help glyph. Neither names the clip: the dock's hidden title does, and the clip
 on the lanes is the one the person opened. On a phone the tool row is the body's first row.
 

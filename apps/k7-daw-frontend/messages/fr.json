@@ -850,6 +850,7 @@
   "clip.viewLabel": "type de vue",
   "clip.threshold": "Seuil",
   "clip.sensitivityLabel": "sensibilité de détection des onsets",
+  "clip.transformations": "Transformations",
   "clip.trim": "Rogner",
   "clip.gateLabel": "seuil de rognage en dBFS",
   "clip.keeps": "garde {from}s → {to}s",
