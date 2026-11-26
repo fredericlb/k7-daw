@@ -129,7 +129,7 @@ suggestions open DOWNWARD from the row, best value nearest it, as the command li
 forward through either.
 
 A command may declare trailing params it runs without (`optional: true` in `commands.yaml` —
-see [that package's page](../packages/commands/docs/optionalArgs.md)). `requiredCount`
+see [that package's page](../../k7-daw-wasm/verbs/docs/verbs/optionalArgs.md)). `requiredCount`
 counts up to the last mandatory one and `canRun` asks whether those are answered; a trailing
 optional left blank is not an omission, it is the answer "not that". Without this the bar could
 not run `event move` at all: its fourth param moves the clip to another track and is usually
@@ -340,7 +340,7 @@ fact about the rig rather than about the song, and a built-in is what a module `
 a node to drop on a graph. It is browsed in the file tree's Libraries tab and offered by the
 module builder, which is the screen that authors an `extends:`. The command bar draws the same
 line for the same reason, and states it once:
-`apps/k7-daw-frontend/packages/commands/docs/completions.md`. A chain step naming one stays legal; it is simply not
+`apps/k7-daw-wasm/verbs/docs/verbs/completions.md`. A chain step naming one stays legal; it is simply not
 suggested here.
 
 `offered()` is where that line is drawn, and BOTH halves of the picker go through it — the tree

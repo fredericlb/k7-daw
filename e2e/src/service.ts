@@ -19,7 +19,6 @@ import {
   importFileVia,
   importPathVia,
   pictureOf,
-  renderPictureVia,
   runVerb,
   type VerbAnswer,
   type VerbService,
@@ -179,7 +178,7 @@ export class Service {
     return { status: 200, body };
   }
 
-  /** A project file of the workspace, imported by the runtime's node build into a new folder. */
+  /** A project file of the workspace, imported into a new folder by `POST /import`. */
   importPath(ws: string, rel: string, as?: string) {
     return importPathVia(this.verbService(), ws, rel, as);
   }
@@ -189,24 +188,9 @@ export class Service {
     return importFileVia(this.verbService(), ws, data, name, as);
   }
 
-  /** Performs `picture render`'s ask as the page does, on the open project; the picture job's id. */
-  async renderPicture(ws: string, args: Record<string, unknown>) {
-    const at =
-      ((await this.get("/workspace", ws)).body.activeProject as
-        | string
-        | null) ?? "";
-    const { rev } = (await this.get("/revision", ws)).body;
-    return renderPictureVia(this.verbService(), ws, at, rev, args);
-  }
-
-  /** The open project's picture and its warnings, from the runtime's node build, as the page reads them. */
-  async picture(ws: string) {
-    const at =
-      ((await this.get("/workspace", ws)).body.activeProject as
-        | string
-        | null) ?? "";
-    const { rev } = (await this.get("/revision", ws)).body;
-    return pictureOf(this.verbService(), ws, at, rev);
+  /** The open project's picture and its warnings, as `POST /picture` answers the page. */
+  picture(ws: string) {
+    return pictureOf(this.verbService(), ws);
   }
 
   /** The command bar's list, through `GET /verb/catalogue`. */

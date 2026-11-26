@@ -5,7 +5,7 @@
 | choice | why |
 |---|---|
 | One call, `edit.call {fn, args, env}`, named as the TypeScript names it (`song-edit/trackMix.editTrackStruct`); `edit.batch` runs calls in order and stops at the first throw | the 3e vectors name calls this way, so the replays and the module share one table (`song_edit::facade`) |
-| The crate's file system is a set of imports (`k7_fs_*`) answered through `node:fs` | `node:fs` is the Vfs in the Worker and the disk in node, so the Vfs stays the only state |
+| The crate's file system is a set of imports (`k7_fs_*`) answered through `node:fs` | the host's own file system stays the only state |
 | A path the host does not know is status `needs`, collected, and thrown as `needs_files` after the call returns | an exception through Rust frames skips destructors |
 | A text crosses in `k7_fs_buf`, never in the call's input buffer | `k7_call` borrows its input for the whole call |
 | Bytes are `{"$":"bytes","b64":…}`; ids come from `k7_new_id` (`setIdSource` pins them) | JSON carries no bytes, and the crate reads no random source |
@@ -15,6 +15,6 @@
 
 ## The proof
 
-`npm run test:edit-replay -w @studio/k7-wasm` has the native replays write the calls they make (`K7_EDIT_PLAN`), then re-runs each through the module over a temp folder over the Vfs shims and in the built Worker in Chromium; the answers and the changed files must equal the native ones. `gate.sh` and `check-vectors.sh` run it.
+`npm run test:edit-replay -w @studio/k7-wasm` has the native replays write the calls they make (`K7_EDIT_PLAN`), then re-runs each through the module over a temp folder; the answers and the changed files must equal the native ones. `gate.sh` and `check-vectors.sh` run it.
 
 On macOS the disk run departs on names APFS folds to NFD (a non-ASCII argument), counted as departures; the Vfs run has none.

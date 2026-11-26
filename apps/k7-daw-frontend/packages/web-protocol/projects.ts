@@ -116,7 +116,7 @@ export function projectBasename(
  * The foreign project files a DROP may carry: the self-contained ones. A `.dawproject` has its
  * audio inside it, and a `.zip` is an Ableton project folder with its samples. A lone `.als` is
  * not: it reads its samples off the disk beside it, so it is imported from the tree, where it sits
- * with its folder. See apps/k7-daw-frontend/packages/translator/docs/import.md.
+ * with its folder. See apps/k7-daw-backend/docs/import.md.
  */
 export const DROPPABLE_PROJECTS = [".dawproject", ".zip"] as const;
 

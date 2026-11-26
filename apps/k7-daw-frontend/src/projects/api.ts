@@ -87,9 +87,13 @@ async function call<T>(
     json?: unknown;
     body?: BodyInit;
     type?: string;
+    headers?: Record<string, string>;
   } = {},
 ): Promise<T> {
-  const headers = filesHeaders(m);
+  const headers: Record<string, string> = {
+    ...filesHeaders(m),
+    ...opts.headers,
+  };
   if (opts.workspace) headers[WORKSPACE_HEADER] = opts.workspace;
   let body = opts.body;
   if (opts.json !== undefined) {
@@ -247,31 +251,25 @@ export const accountFiles = {
   },
 
   /**
-   * A foreign project DROPPED on a workspace row: the verbs' Worker translates it, uploads its samples and lands the
-   * texts under the folder the popin named — nothing is left in the workspace but the project (apps/k7-daw-frontend/packages/translator/docs/import.md).
+   * A foreign project DROPPED on a workspace row: the backend translates it, writes its samples and lands the texts
+   * under the folder the popin named — nothing is left in the workspace but the project (apps/k7-daw-backend/docs/import.md).
    */
   importProjectFile: async (
     m: AccountFiles,
     workspace: string,
     file: File,
     folder: string,
-  ): Promise<{ project: string; log: string[] }> => {
-    // Its own Worker, on this row's workspace: the home page has no open project and so no file API session to share.
-    const [{ createVerbs }, { spawnBrowserWorker }] = await Promise.all([
-      import("../verbs/verbsWorker"),
-      import("../verbs/browserWorker"),
-    ]);
-    const verbs = createVerbs({
-      spawn: spawnBrowserWorker,
-      base: m.fileBase,
-      headers: () => ({ ...filesHeaders(m), [WORKSPACE_HEADER]: workspace }),
-    });
-    try {
-      return await verbs.importFile(file, file.name, folder);
-    } finally {
-      verbs.reset();
-    }
-  },
+  ): Promise<{ project: string; log: string[] }> =>
+    call(m, "/import", "import", {
+      method: "POST",
+      workspace,
+      body: file,
+      type: "application/octet-stream",
+      headers: {
+        "x-k7-file": encodeURIComponent(file.name),
+        ...(folder ? { "x-k7-as": encodeURIComponent(folder) } : {}),
+      },
+    }),
 
   /** Copy a project into another of the account's workspaces. No workspace HEADER: the body names both. */
   copyProject: async (

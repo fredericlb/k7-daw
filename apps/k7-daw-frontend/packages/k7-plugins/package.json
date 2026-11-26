@@ -33,7 +33,6 @@
     "@studio/k7x": "*",
     "@studio/project-shell": "*",
     "@studio/song-schema": "*",
-    "@studio/song-video": "*",
     "@studio/ui-chains": "*",
     "@studio/ui-eyes": "*",
     "@studio/ui-timeline": "*",

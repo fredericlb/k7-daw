@@ -49,7 +49,6 @@ the developer's real data:
 | Package config | Pins | Also |
 |---|---|---|
 | `apps/k7-daw-frontend/packages/song/vitest.config.ts` | `STUDIO_MEDIATEK`, `STUDIO_HOME` | 30 s timeouts |
-| `apps/k7-daw-frontend/packages/commands/vitest.config.ts` | `STUDIO_MEDIATEK`, `STUDIO_HOME` | 30 s timeouts |
 
 Other packages with a config of their own: `audio-passes`, `song-edit`, `song-video`, `translator`.
 

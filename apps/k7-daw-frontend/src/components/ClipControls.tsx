@@ -85,7 +85,7 @@ export function ClipControls(p: ClipControlsProps) {
           canTrim={p.canTrim}
           onTrim={p.onTrim}
         />
-        {/* Operations: every chain the project and the library offer, run over THIS clip (@studio/commands docs/processChain.md). */}
+        {/* Operations: every chain the project and the library offer, run over THIS clip (apps/k7-daw-wasm/verbs/docs/verbs/processChain.md). */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button size="sm" variant="outline" disabled={!!p.busy || !p.clip}>

@@ -20,7 +20,7 @@ describe("derived module fields", () => {
       // …and which primitive a shape module draws, and the family a `text` one is set in.
       "shape",
       "font",
-      // …and how a text shape's lines are set — apps/k7-daw-frontend/packages/song-video/docs/titles.md.
+      // …and how a text shape's lines are set — apps/k7-daw-wasm/verbs/docs/picture/titles.md.
       "align",
       "background",
       "shadow",
@@ -61,7 +61,7 @@ describe("derived module fields", () => {
       "strudel",
       // The PICTURE lane a lane plays the sound of — apps/k7-daw-frontend/packages/song/docs/videoSound.md.
       "video_source",
-      // A shader's 3D LUT — apps/k7-daw-frontend/packages/song-video/docs/effects.md.
+      // A shader's 3D LUT — apps/k7-daw-wasm/verbs/docs/picture/effects.md.
       "lut",
       // FROZEN at this module: the render standing in for everything upstream of it — see docs/freeze.md.
       "frozen",

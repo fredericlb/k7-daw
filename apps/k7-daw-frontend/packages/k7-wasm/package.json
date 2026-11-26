@@ -8,14 +8,12 @@
     "./curve": "./src/curve.ts",
     "./types": "./src/types/index.ts",
     "./boot": "./src/boot.ts",
-    "./song": "./src/song.ts",
-    "./edit": "./src/edit.ts",
-    "./replayRun": "./src/replayRun.ts"
+    "./edit": "./src/edit.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run && vitest run -c vitest.vfs.config.ts",
+    "test": "vitest run",
     "test:edit-replay": "node scripts/editReplay.mjs",
     "build:wasm": "node scripts/buildWasm.mjs"
   },

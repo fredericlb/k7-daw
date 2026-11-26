@@ -207,7 +207,7 @@ export function buildGraph(
       Array.isArray(b?.frame) && b.frame.length === 4
         ? b.frame.map(Number)
         : undefined,
-    // Which SHADER a shader node runs, inherited like `plugin` — see apps/k7-daw-frontend/packages/song-video/docs/shaders.md.
+    // Which SHADER a shader node runs, inherited like `plugin` — see apps/k7-daw-wasm/verbs/docs/picture/shaders.md.
     shader: typeof b?.shader === "string" && b.shader ? b.shader : undefined,
     lut: typeof b?.lut === "string" && b.lut ? b.lut : undefined,
     // The shape a `shapes` module draws, and how it is painted — inherited like `plugin` (docs/shapes.md).

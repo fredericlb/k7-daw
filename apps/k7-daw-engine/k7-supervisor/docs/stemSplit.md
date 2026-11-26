@@ -367,7 +367,7 @@ the opposite reason — the section on rates above.
 `coldPass.ts` says which model and whether this machine has it, and `processWithChain` runs the
 pass in place of the bounce — no render, no repoint, four files under `stems/`. The rules that
 follow (a chain separates or treats, never both; the pass runs before the engine check) are in
-`@studio/commands`' [processChain.md](../../../k7-daw-frontend/packages/commands/docs/processChain.md).
+`@studio/commands`' [processChain.md](../../../k7-daw-wasm/verbs/docs/verbs/processChain.md).
 
 The running arrives **as a function**: the seam is `CommandHost.runColdStep`, and the file
 service's implementation is the one place that knows what "run it" means — `startSeparate` + poll,

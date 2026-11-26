@@ -18,17 +18,11 @@ import { isProjectFolder } from "@studio/song/yaml/moduleIO";
 import { ClipSchema } from "@studio/song-schema/yaml/entitySchemas";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import {
-  compileDisk,
-  compileReady,
-} from "../../commands/src/runtime/testing/compileDisk.ts";
-import {
   insertChainStep,
   setModuleAsset,
   setModuleBypass,
   setModuleParam,
 } from "./projectEdit";
-
-beforeAll(compileReady);
 
 // A project end to end — the loader, the compiler, the writers, over a shipped demo song.
 
@@ -167,16 +161,5 @@ describe("a song is still a song", () => {
     expect(isProjectFolder(dir)).toBe(true);
     expect(isFolderProject(dir)).toBe(true);
     expect(isFolderProject(join(dir, "project.k7x"))).toBe(true);
-  });
-
-  it("compiles to a project with its tracks, plugins and clips", () => {
-    const doc = compileDisk(dir);
-    expect(doc.tracks.map((t) => t.id).sort()).toEqual([
-      "kit",
-      "melody",
-      "pad",
-    ]);
-    const melody = doc.tracks.find((t) => t.id === "melody");
-    expect(melody?.plugins.some((p) => p.type === "4osc")).toBe(true);
   });
 });

@@ -3,8 +3,11 @@
 k7's editing commands are the crate `apps/k7-daw-wasm/verbs`: every line typed in the command bar and every gesture that
 edits a project is a command line the crate runs over the project's files. The web page runs a line through the backend's
 `POST /verb` (`apps/k7-daw-backend/docs/file-changes.md`, "A verb run by the backend"); the page holds no verb of its own.
-The catalogue stays `apps/k7-daw-wasm/verbs/commands.yaml`, which the crate takes as
-`commands.json` and serves to the palette as `GET /verb/catalogue`. This page holds how a verb runs, how it reaches the machine, how it is tested, and what is ported.
+The catalogue is `apps/k7-daw-wasm/verbs/commands.yaml`, which the crate takes as `commands.json` and serves to the
+palette as `GET /verb/catalogue`. The picture's document and its scene are the crate's `picture/` module; an import is the
+backend's `k7-import` crate (`apps/k7-daw-backend/docs/import.md`). The page runs no editing code of its own. This page
+holds how a verb runs, how it reaches the machine, how it is tested, and what is ported; each verb family's choices are
+in `apps/k7-daw-wasm/verbs/docs/verbs/`, the picture's in `apps/k7-daw-wasm/verbs/docs/picture/`.
 
 ## Where a line runs
 
@@ -13,7 +16,8 @@ The catalogue stays `apps/k7-daw-wasm/verbs/commands.yaml`, which the crate take
 | the page sends the line to `POST /verb` on k7's backend, never to a WebAssembly module of its own | a verb's writes need the journal's gate and step, the account's write lock, the relay window and the engine's push, which only the front holds; the desktop app, the phones and a browser on the device all serve the page from that same backend, so one seam serves every shell |
 | the line runs under the lock and lands as one journal step labelled with it; `/undo` lays it back | undo and history are not verbs: the journal undoes a step whatever wrote it |
 | the page asks no bundle and compiles nothing to run a verb | a line costs one request on the device's own loopback, where the bundle, its compile and a 3 MB module cost seconds on a phone |
-| the Worker of `@studio/commands` holds a project only for its picture views and runs an import; after a line lands the page hands it the files the step changed | the picture compile is still the TypeScript read side, and a view read after an edit must be the project as it is now |
+| the picture is `POST /picture` (the document and its warnings) and `POST /picture/scene` (what the compositor draws), read by the crate's `picture/` over the same files | one compile of the picture, in Rust, serves the timeline, the preview and a film; the page builds nothing |
+| the scene has ONE builder, `picture/scene.rs`: the preview asks it with the armed lane and the page's `/media` prefix, `picture render` builds it itself and asks `POST /verb-host/picture` with it | a preview and its film can never disagree about which lane shows, which copy is read or which passes run |
 | completion is `POST /verb/complete` over the same files, read-only, with the compile cache the runs keep | the command bar asks on every key, and a kept cache recompiles only what moved |
 | k7-wasm's `verb.run` and `verb.complete` stay behind its `verbs` feature, which no browser module is built with | a host that holds files and lands them itself (a native app over its own folder) calls the crate the same way, through the JSON C ABI |
 
@@ -43,7 +47,8 @@ A verb that needs the machine names a route of the front: `h.call("POST /verb-ho
 | one entry, `{"op":"verb.run","args":{"line","project","env","answers"?,"stamp"?}}`, answers `{log, refuse, refused, effects, asks?, pending?, threw?}` | the backend and a native host speak the same answer |
 | a verb the crate has no handler for answers the dispatcher's own refusal, `command '…' has no handler (sid)` | a caller learns by the answer which verbs it may offer, with no table of its own to keep |
 | `event remove` and `events remove` on a lane that sounds a picture silence the shot under the clip, and every other `event…` verb on it refuses | a sounding lane's clip IS a shot's sound; the shot is found by the clip's name and start among the lane's shots as the compile cuts them |
-| `picture interchange` and `picture import` read each picture lane's own `events:` and a cut's `.otio` or `.edl` | the picture's compile (`loadVideoProject`) is TypeScript only; the lane files are what a cut hands over |
+| `picture interchange` and `picture import` read each picture lane's own `events:` and a cut's `.otio` or `.edl` | the lane files are what a cut hands over; a timeline's placed shots are the timeline's own |
+| a cut's transition is the nearest `video_transitions/<name>` module of any library | the name a fade writes is all a cut says, and a transition shipped in a library must play |
 | `timeline lane copy` of a picture lane copies its shots in seconds onto a timeline's `pictures:` or a new picture lane of the song | a timeline's picture lane has no frame and draws on the song's lane of its name, so only a copy within the song keeps `frame` and `color` |
 | tasks, playlists and library pins live in `workspace_dir_of(env, project)` | a project always stands in a workspace |
 
@@ -79,6 +84,8 @@ catalogue verb with none.
 | M6 | 22 of 22: lanes (new, order, rename, delete, mute, solo, rect), shots (add, move, length, head, split, delete, key, unkey, speed, silence), sound, prepare, interchange, import, render; a timeline's copy of a picture lane and `event remove` on a sounding lane | `pictures.rs`, `pictures_lanes.rs`, `pictures_media.rs` |
 | M7 | 19 of 19; `system stems` and `system instrumental` check their chain against the open project, `system onnx` bare says the machine's list, `transport arm` words the engine's answer | `system.rs`, `transport.rs` |
 | `track transcribe` | the film the lane's first shot places, heard by whisper through `POST /verb-host/transcribe` (a job); the subtitles land as `clips/<out>.srt`, a caption clip and its placement on a picture lane of their own | `transcribe.rs` |
+| the picture | the document (lanes in draw order, runs, lenses, shapes, captions, transitions, stretches, a timeline's pictures) and the scene, for the preview and `picture render` | `picture.rs`, `pictures_media.rs` |
+| the palette | the catalogue as `CommandInfo[]`, each provider's class and clue | `palette.rs` (unit tests) |
 | M8 | completion: the 25 providers, their labels and the command words | `complete.rs` |
 | the compile cache | kept from line to line; on `clip-lane`, 1.1 ms a line fresh and 0.7 ms kept, in release | `cache.rs` |
 

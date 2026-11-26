@@ -1,39 +1,20 @@
-// pageHost.ts — the one page host, made on first use over the real Worker and the file API's session.
-// What a reader gets wrong: nothing here starts a Worker at import; the first picture view does, through the spawner `installPageVerbs` was given.
+// pageHost.ts — the one page host, over the file API's routes, registered with the verbs' seam at boot.
+// What a reader gets wrong: the palette's catalogue is fetched on first use, not at boot, since the first paint needs none of it.
 
-import { cfg, fget, fileHeaders, fsend } from "@studio/project-shell/fileApi";
+import { fget, fsend } from "@studio/project-shell/fileApi";
 import { setVerbsHost } from "@studio/project-shell/verbsHost";
 import type { CommandInfo } from "@studio/web-protocol";
 import { trackProcess } from "../processes";
-import { createPageVerbs, fetchActiveProject } from "./pageVerbs.ts";
-import { createVerbs, type WorkerLike } from "./verbsWorker.ts";
-
-let spawner: (() => WorkerLike) | undefined;
-
-const verbs = createVerbs({
-  spawn: () => {
-    if (!spawner) throw new Error("the verbs' Worker is not installed");
-    return spawner();
-  },
-  base: () => cfg().base,
-  headers: () => ({ ...(fileHeaders() as Record<string, string>) }),
-});
+import { createPageVerbs } from "./pageVerbs.ts";
 
 export const pageVerbs = createPageVerbs({
-  verbs,
   send: (path, body) => fsend("POST", path, body),
-  // The crate builds the catalogue, so it is asked with the first palette, not at boot.
+  read: (path, body) => fsend("POST", path, body, { fence: false }),
   catalogue: () => fget<CommandInfo[]>("/verb/catalogue"),
-  session: () => {
-    const c = cfg();
-    return { key: `${c.base}|${c.workspace}|${c.engineToken}` };
-  },
-  activeProject: fetchActiveProject,
   track: trackProcess,
 });
 
-/** Registers the page's host with the file API's seam; `spawn` makes the real Worker (kept out of this file so a test needs no build of it). */
-export function installPageVerbs(spawn: () => WorkerLike): void {
-  spawner = spawn;
+/** Registers the page's host with the file API's seam. */
+export function installPageVerbs(): void {
   setVerbsHost(pageVerbs);
 }

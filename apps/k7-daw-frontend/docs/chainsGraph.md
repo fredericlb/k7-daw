@@ -189,7 +189,7 @@ camera fitting that box draws them a few pixels wide with empty grid around them
 its slice out with dagre and its own session memory, and takes no drag, so it never writes a pin.
 
 **The layout's own pins are no undo step.** Where dagre put a card that had no pin, the canvas
-writes down with one `graph pin` (`apps/k7-daw-frontend/packages/commands/docs/verbs.md`) — as a project opens, among
+writes down with one `graph pin` (`apps/k7-daw-wasm/verbs/docs/verbs/verbs.md`) — as a project opens, among
 other times — and sends it with `journal: "skip"`. Nobody made that write, so the first Ctrl+Z on a
 freshly opened project must reach the person's own last edit, not take back a layout they never
 touched.
@@ -229,7 +229,7 @@ stop on it.
 
 **A typed line has no cursor, and the verb answers for it** rather than handing the node to
 dagre: spliced, it is born halfway along the cable it was spliced into; wired to nothing, at
-`0,-30`, just above the origin. Both are in [verbs.md](../packages/commands/docs/verbs.md),
+`0,-30`, just above the origin. Both are in [verbs.md](../../k7-daw-wasm/verbs/docs/verbs/verbs.md),
 and the reason is that a fresh layout has least to say about exactly these two cases — an
 unconnected node has no run to be ranked within, so it lands wherever the pass happens to put it
 and the person who typed the line has to go looking. dagre is still the fallback for anything

@@ -126,9 +126,9 @@ export interface Module {
   output_volume?: number;
   // Which named BASE this module starts from — the opaque state UNDER `params:`; see docs/userPresets.md.
   base?: string;
-  // Which SHADER a shader node runs, absent when nothing is chosen — see apps/k7-daw-frontend/packages/song-video/docs/shaders.md.
+  // Which SHADER a shader node runs, absent when nothing is chosen — see apps/k7-daw-wasm/verbs/docs/picture/shaders.md.
   shader?: string;
-  // …and the 3D LUT it reads, project-relative — apps/k7-daw-frontend/packages/song-video/docs/effects.md.
+  // …and the 3D LUT it reads, project-relative — apps/k7-daw-wasm/verbs/docs/picture/effects.md.
   lut?: string;
   // …and which PRIMITIVE a shape module draws, its geometry being `params:` — see song-video/docs/shapes.md.
   shape?: string;
@@ -136,7 +136,7 @@ export interface Module {
   color?: string;
   // A `text` shape's CSS font family; its string is `content:`, the key a doc note already uses.
   font?: string;
-  // …and how a `text` shape's lines are set — apps/k7-daw-frontend/packages/song-video/docs/titles.md.
+  // …and how a `text` shape's lines are set — apps/k7-daw-wasm/verbs/docs/picture/titles.md.
   align?: "left" | "center" | "right";
   background?: string;
   shadow?: boolean;

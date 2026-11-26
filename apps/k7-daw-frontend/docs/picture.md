@@ -1,6 +1,6 @@
 # Picture in k7 — one timeline, two units
 
-A song carries video lanes ([apps/k7-daw-frontend/packages/song-video/docs/picture.md](../packages/song-video/docs/picture.md)).
+A song carries video lanes ([apps/k7-daw-wasm/verbs/docs/picture/picture.md](../../k7-daw-wasm/verbs/docs/picture/picture.md)).
 This page is the k7 half: where they are drawn, how they are edited, and what the ruler does.
 
 Two surfaces are involved (`apps/k7-daw-frontend/packages/song/docs/surfaces.md`):
@@ -103,7 +103,7 @@ from the keyboard through the same ordered binding `r` uses — `caret_track` fi
 
 - **M** is `picture mute`, which on picture means HIDDEN — the lane's own file carries it.
 - **S** is `picture solo`, which writes `project.k7x`'s `soloed:` — the SAME list audio uses
-  ([apps/k7-daw-frontend/packages/song-video/docs/picture.md](../packages/song-video/docs/picture.md)).
+  ([apps/k7-daw-wasm/verbs/docs/picture/picture.md](../../k7-daw-wasm/verbs/docs/picture/picture.md)).
 
 `pictureMix.ts` is the fold, and it is one module because two surfaces read it: the frame, which
 composites, and the timeline, which dims a row that is off screen. Two copies of "is this lane
@@ -257,7 +257,7 @@ every continuous gesture is left out (`shell.md`): a pointer move is not a sente
 `setVideoPlacementField`, and writes it once.
 
 The same five edits have verbs beside them — `picture move | length | head | delete | add`, in
-`apps/k7-daw-frontend/packages/commands/docs/picture.md` — which is what buys a context menu on a picture lane, an
+`apps/k7-daw-wasm/verbs/docs/verbs/picture.md` — which is what buys a context menu on a picture lane, an
 entry in the palette, a CLI and an undo entry.
 
 **The caret reports no track id on a picture lane**: a video lane is not an engine track — no
@@ -269,7 +269,7 @@ A surgical rewrite, never a re-serialisation: these files carry the comments tha
 format. **The drag's edit is keyed by the placement's INDEX** in the lane's `events:`, which is
 the only address that is always unique and always there: one source may be placed twice on a
 lane, and an ACTIVATION on a lane of shapes names no source at all
-(`apps/k7-daw-frontend/packages/song-video/docs/shapes.md`). A lane's OWN shots are its `events:` one to one, so the
+(`apps/k7-daw-wasm/verbs/docs/picture/shapes.md`). A lane's OWN shots are its `events:` one to one, so the
 row the pointer is over knows the address. The shots a placed timeline puts on a song lane come
 first in its compiled clips and are in no file of that lane: `ownShots` takes them off before an
 index is read, and they are drawn apart, out of the drag's reach (`docs/timeline.md`). A timeline's
@@ -435,4 +435,4 @@ whose first frame and first sample are both 1:30's.
 `project export timeline otio|edl [lane]` runs `picture interchange`, which says the cut as its first
 output line, then saves that text under the song's name in the folder the person chose (`export.md`).
 The verb writes no file, so the project holds no copy. What the formats carry, and what
-they cannot, is [apps/k7-daw-frontend/packages/song-video/docs/interchange.md](../packages/song-video/docs/interchange.md).
+they cannot, is [apps/k7-daw-wasm/verbs/docs/picture/interchange.md](../../k7-daw-wasm/verbs/docs/picture/interchange.md).

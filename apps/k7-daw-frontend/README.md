@@ -106,7 +106,7 @@ nodes/<name>.k7x       one USE of a module, flat, named by its file — the LANE
   timeline, whose ruler reads either unit, and a `surfaces/viewport.k7x` composites the
   frame. It is a second COMPILE of the same folder, so the document the engine is handed
   carries no picture at all. See
-  [apps/k7-daw-frontend/packages/song-video/docs/picture.md](./packages/song-video/docs/picture.md).
+  [apps/k7-daw-wasm/verbs/docs/picture/picture.md](./packages/song-video/docs/picture.md).
 - **A strudel lane streams its material from a pattern.** `strudel` links one file
   under `algo/`, and the lane's **name** picks which part of it to receive — the
   pattern's `.label("…")`, matched ignoring case and punctuation.

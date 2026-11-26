@@ -55,7 +55,7 @@ const ARCHETYPES: Record<
   video: {
     transport: true,
     draws: async (p) => {
-      // The picture is a second compile in the Worker, some seconds on a tablet after the project opens.
+      // The picture is a second compile of the folder, some seconds on a tablet after the project opens.
       await expect(lane(p, "main")).toBeVisible({ timeout: 30_000 });
       await expect(viewport(p)).toBeVisible();
     },
@@ -171,7 +171,7 @@ async function lit(
 /** Expects the viewport's canvas to carry a picture: mostly lit, and in more than a few colours. */
 async function expectPicture(page: Page) {
   const canvas = viewport(page).locator("canvas").first();
-  // The canvas comes with the picture, the Worker's second compile: some seconds on a tablet.
+  // The canvas comes with the picture, the second compile: some seconds on a tablet.
   await expect(canvas).toBeVisible({ timeout: 30_000 });
   // A WebView answers DevTools' capture with a dark frame (src/android.ts), so a phone's pixels are not readable here.
   if (TARGET === "android") return;

@@ -466,7 +466,7 @@ Four rules worth knowing, each of which could reasonably have gone the other way
   onto it. The status line says how many were left.
 - **A paste is ONE command**, so it is one journal entry and one Ctrl+Z whatever it contained. The
   pane hands the shell a command *line* rather than writing; `events add` exists for this, the
-  bulk counterpart of `sequence note add` (`apps/k7-daw-frontend/packages/commands/docs/`).
+  bulk counterpart of `sequence note add` (`apps/k7-daw-wasm/verbs/docs/verbs/`).
 - **An event is copied WHOLE** — its window, its fades, its passes, its `disabled` and its
   `warp: false`, not just its `ref` and where it sat. See below for why that took a wire change.
 

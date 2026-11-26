@@ -18,13 +18,12 @@ the map; the following pages go package by package.
 
 ```text
 project folder (project, picture lanes in nodes/ or tracks/, clips/, graph or chains/, modules)
-   │  loadVideoProject()                 apps/k7-daw-frontend/packages/song-video/src/videoProject.ts
+   │  compile()                          apps/k7-daw-wasm/verbs/src/picture/compile.rs
    ▼
-VideoProjectDoc   (seconds, absolute paths, GLSL inlined, warnings)
-   │  webVideoProjectOf()                apps/k7-daw-frontend/packages/song-video/src/webVideo.ts (the Worker's `videoDoc`)
+Doc               (seconds, GLSL inlined, warnings; paths workspace-relative on POST /picture)
+   │                                     apps/k7-daw-frontend/packages/web-protocol/timelineTypes.ts (WebVideoProject)
    ▼
-WebVideoProject                          apps/k7-daw-frontend/packages/web-protocol/timelineTypes.ts
-   │  sceneFrom() / sceneOf()            apps/k7-daw-frontend/packages/song-video/src/sceneFrom.ts
+   │  scene_of()                         apps/k7-daw-wasm/verbs/src/picture/scene.rs (POST /picture/scene, and picture render)
    ▼
 VideoScene        (plain structural type, media URLs, mute/solo/lens already folded)
    │

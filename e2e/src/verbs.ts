@@ -1,12 +1,5 @@
-// verbs.ts — the verbs for the specs: a line through `POST /verb`, a completion through `POST /verb/complete`, the picture from the Worker runtime's node build.
-// What a reader gets wrong: the runner is built here on first use (esbuild, a third of a second), not by the bed, and it is asked to OPEN the project before every line, so a spec's own writes are never stale.
-
-import { mkdtempSync } from "node:fs";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
-import { pathToFileURL } from "node:url";
-// @ts-expect-error the build script is plain JavaScript
-import { bundleRuntime } from "../../apps/k7-daw-frontend/packages/commands/scripts/bundleRuntime.mjs";
+// verbs.ts — the verbs for the specs, as the page sends them: a line through `POST /verb`, a completion, the picture and an import.
+// What a reader gets wrong: nothing here holds a project; every answer is the backend's, so a spec's own writes are never stale.
 
 /** What a run answers, the route's shape: the lines, the token either side, what it wrote, and the graph when asked. */
 export interface VerbAnswer {
@@ -18,24 +11,7 @@ export interface VerbAnswer {
   graph?: unknown;
   /** Whether the line's writes landed. */
   committed?: boolean;
-  /** The asks the page performs (`page renderPicture`). */
-  asks?: { route: string; args: Record<string, unknown> }[];
 }
-
-interface Runner {
-  open(at: string): Promise<void>;
-  videoDoc(token?: string): Promise<{ doc: unknown } | { error: string }>;
-  videoErrors(token?: string): Promise<{ errors: string[]; diagnostics: [] }>;
-  pictureScene(
-    token?: string,
-  ): Promise<{ scene: unknown; mixes: boolean } | { error: string }>;
-  close(): void;
-}
-
-type Make = (o: {
-  base: string;
-  headers: () => Record<string, string>;
-}) => Runner;
 
 /** What an import answers: the new project's folder and the lines the dialog shows. */
 export interface ImportAnswer {
@@ -43,118 +19,66 @@ export interface ImportAnswer {
   log: string[];
 }
 
-interface Importer {
-  importFile(data: Blob, name: string, as?: string): Promise<ImportAnswer>;
-  importPath(rel: string, as?: string): Promise<ImportAnswer>;
-}
-
-type MakeImporter = (o: {
+/** The service as the specs reach it: its URL and the headers a spec's calls carry. */
+export interface VerbService {
   base: string;
-  headers: () => Record<string, string>;
-}) => Importer;
-
-interface NodeRuntime {
-  createNodeRunner: Make;
-  createNodeImporter: MakeImporter;
+  headers(workspace: string): Record<string, string>;
 }
 
-let built: Promise<NodeRuntime> | undefined;
-
-/** The node build, made once per process into a folder of its own. */
-function nodeRuntime(): Promise<NodeRuntime> {
-  built ??= (async () => {
-    const out = mkdtempSync(join(tmpdir(), "k7-runtime-node-"));
-    await bundleRuntime({ target: "node", outdir: out });
-    return (await import(
-      pathToFileURL(join(out, "node.mjs")).href
-    )) as NodeRuntime;
-  })();
-  return built;
+/** One POST to the service, its answer thrown as its sentence when it is not a 2xx. */
+async function post<T>(
+  svc: VerbService,
+  workspace: string,
+  path: string,
+  body: BodyInit,
+  headers: Record<string, string>,
+): Promise<T> {
+  const r = await fetch(`${svc.base}${path}`, {
+    method: "POST",
+    headers: { ...svc.headers(workspace), ...headers },
+    body,
+  });
+  const answer = (await r.json().catch(() => ({}))) as T & { error?: string };
+  if (!r.ok) throw new Error(answer.error ?? `${path} answered ${r.status}`);
+  return answer;
 }
 
-/** The node runner, which answers the picture views. */
-async function runnerMaker(): Promise<Make> {
-  return (await nodeRuntime()).createNodeRunner;
-}
+/** One JSON POST, as the page's `fsend` sends it. */
+const postJson = <T>(
+  svc: VerbService,
+  workspace: string,
+  path: string,
+  body: unknown,
+  extra: Record<string, string> = {},
+): Promise<T> =>
+  post<T>(svc, workspace, path, JSON.stringify(body), {
+    ...extra,
+    "content-type": "application/json",
+  });
 
-/** A project file in the workspace, imported by the runtime's node build: the Worker's import, over the service's routes. */
-export async function importPathVia(
+/** A project file in the workspace, imported into a new folder by `POST /import`. */
+export function importPathVia(
   svc: VerbService,
   workspace: string,
   rel: string,
   as?: string,
 ): Promise<ImportAnswer> {
-  const { createNodeImporter } = await nodeRuntime();
-  return createNodeImporter({
-    base: svc.base,
-    headers: () => svc.headers(workspace),
-  }).importPath(rel, as);
+  return postJson(svc, workspace, "/import", { rel, ...(as ? { as } : {}) });
 }
 
-/** …and a file the caller holds, as the home page's drop hands it over. */
-export async function importFileVia(
+/** …and a file the caller holds, its bytes posted as the home page's drop posts them. */
+export function importFileVia(
   svc: VerbService,
   workspace: string,
   data: Blob,
   name: string,
   as?: string,
 ): Promise<ImportAnswer> {
-  const { createNodeImporter } = await nodeRuntime();
-  return createNodeImporter({
-    base: svc.base,
-    headers: () => svc.headers(workspace),
-  }).importFile(data, name, as);
-}
-
-/** The service as the runner reaches it: its URL and the headers a spec's calls carry. */
-export interface VerbService {
-  base: string;
-  headers(workspace: string): Record<string, string>;
-}
-
-const runners = new Map<string, Runner>();
-
-async function runnerFor(
-  svc: VerbService,
-  workspace: string,
-  at: string,
-  extra: Record<string, string> = {},
-): Promise<Runner> {
-  const key = `${svc.base}|${workspace}|${at}|${JSON.stringify(extra)}`;
-  let r = runners.get(key);
-  if (!r) {
-    const make = await runnerMaker();
-    r = make({
-      base: svc.base,
-      headers: () => ({ ...svc.headers(workspace), ...extra }),
-    });
-    runners.set(key, r);
-  }
-  // Opened again for every line: a spec writes around the runner, and a stale read costs more than the open.
-  await r.open(at);
-  return r;
-}
-
-/** One JSON POST to the service, as the page's `fsend` sends it. */
-async function post<T>(
-  svc: VerbService,
-  workspace: string,
-  path: string,
-  body: unknown,
-  extra: Record<string, string> = {},
-): Promise<T> {
-  const r = await fetch(`${svc.base}${path}`, {
-    method: "POST",
-    headers: {
-      ...svc.headers(workspace),
-      ...extra,
-      "content-type": "application/json",
-    },
-    body: JSON.stringify(body),
+  return post(svc, workspace, "/import", data, {
+    "content-type": "application/octet-stream",
+    "x-k7-file": encodeURIComponent(name),
+    ...(as ? { "x-k7-as": encodeURIComponent(as) } : {}),
   });
-  const answer = (await r.json().catch(() => ({}))) as T & { error?: string };
-  if (!r.ok) throw new Error(answer.error ?? `${path} answered ${r.status}`);
-  return answer;
 }
 
 /** What `POST /verb` answers. */
@@ -168,7 +92,6 @@ interface RouteAnswer {
   rev?: string;
   revBefore?: string;
   graph?: unknown;
-  asks?: { route: string; args: Record<string, unknown> }[];
 }
 
 /** Runs one line; `at` is the project as the workspace spells it, empty for the open one. */
@@ -184,7 +107,7 @@ export async function runVerb(
     headers?: Record<string, string>;
   } = {},
 ): Promise<VerbAnswer> {
-  const r = await post<RouteAnswer>(
+  const r = await postJson<RouteAnswer>(
     svc,
     workspace,
     "/verb",
@@ -204,7 +127,6 @@ export async function runVerb(
     changed: r.changed ?? [],
     committed: r.landed === true,
     ...(r.graph !== undefined ? { graph: r.graph } : {}),
-    ...(r.asks?.length ? { asks: r.asks } : {}),
   };
 }
 
@@ -215,54 +137,23 @@ export async function completeOf(
   line: string,
 ): Promise<unknown[]> {
   return (
-    await post<{ items: unknown[] }>(svc, workspace, "/verb/complete", { line })
+    await postJson<{ items: unknown[] }>(svc, workspace, "/verb/complete", {
+      line,
+    })
   ).items;
 }
 
-/** The open project's picture and its warnings, as the Worker answers them; `token` is the revision the spec just read. */
+/** The open project's picture and its warnings, as `POST /picture` answers the page; a refusal is thrown as its sentence. */
 export async function pictureOf(
   svc: VerbService,
   workspace: string,
-  at: string,
-  token: string,
 ): Promise<{
   doc: unknown;
   errors: { errors: string[]; diagnostics: [] };
 }> {
-  const r = await runnerFor(svc, workspace, at);
-  const doc = await r.videoDoc(token);
-  if ("error" in doc) throw new Error(doc.error);
-  return { doc: doc.doc, errors: await r.videoErrors(token) };
-}
-
-/** `picture render`'s ask as the page performs it: the scene from the Worker runtime, posted to the picture job; its job id. */
-export async function renderPictureVia(
-  svc: VerbService,
-  workspace: string,
-  at: string,
-  token: string,
-  args: Record<string, unknown>,
-): Promise<string> {
-  const s = await (await runnerFor(svc, workspace, at)).pictureScene(token);
-  if ("error" in s) throw new Error(s.error);
-  const { job } = await post<{ job: string }>(
-    svc,
-    workspace,
-    "/verb-host/picture",
-    {
-      at,
-      into: args.into,
-      scene: s.scene,
-      format: args.format,
-      settings: args.settings,
-      audio: args.audio === true && s.mixes,
-    },
-  );
-  return job;
-}
-
-/** Closes every runner (a spec file's afterAll). */
-export function closeVerbs(): void {
-  for (const r of runners.values()) r.close();
-  runners.clear();
+  const r = await postJson<
+    { doc: unknown; warnings: string[] } | { error: string }
+  >(svc, workspace, "/picture", {});
+  if ("error" in r) throw new Error(r.error);
+  return { doc: r.doc, errors: { errors: r.warnings, diagnostics: [] } };
 }

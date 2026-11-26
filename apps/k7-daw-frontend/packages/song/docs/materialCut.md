@@ -39,7 +39,7 @@ A PICTURE lane's split is virtual too, and for a stronger reason: a shot has no 
 to process, warp or replace. Its effects are the lane's, and its sound is another lane's
 (`videoSound.md`). Two placements of one clip lose nothing there, and re-encoding
 video to cut it would cost a render and a generation of quality for nothing
-(`apps/k7-daw-frontend/packages/commands/docs/picture.md`).
+(`apps/k7-daw-wasm/verbs/docs/verbs/picture.md`).
 
 ## The one contract
 

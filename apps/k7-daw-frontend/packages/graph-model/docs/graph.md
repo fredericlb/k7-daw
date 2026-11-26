@@ -27,7 +27,7 @@ from the other makes that impossible.
 
 `shaders` is its own category and not a flavour of `video_effects`, because it is the one module
 whose behaviour is a FILE it carries rather than a plugin it names. See
-`apps/k7-daw-frontend/packages/song-video/docs/shaders.md`.
+`apps/k7-daw-wasm/verbs/docs/picture/shaders.md`.
 
 `WebSignal`'s `event` is the odd one and stays out of the signal path: nothing is processed, an
 instant is announced — a note-on that restarts an envelope. It is a `WebSignal` so a socket can be

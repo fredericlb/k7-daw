@@ -133,14 +133,14 @@ memoised per revision and this route is not.
 beat — a shot is cut against the wall clock — and keeping it apart is what keeps the frame out of
 what the C++ engine is handed, without anything having to strip it on the way. One timeline draws
 both and its ruler reads either; see `apps/k7-daw-frontend/docs/picture.md` and
-`apps/k7-daw-frontend/packages/song-video/docs/picture.md`.
+`apps/k7-daw-wasm/verbs/docs/picture/picture.md`.
 
 `WebVideoPlugin` is one pass over the picture, a video chain's step compiled. A `shader` carries
 its GLSL **inline**: the browser cannot open the module's `shaders/` folder, and a page of text is
 smaller than the route that would serve it; absent when the node has nothing picked, which draws
 as a pass that lets its picture through. `audioFrom` names a LANE rather than carrying a number,
 because the number moves — the engine pushes levels at ~20 Hz and the surface holding that stream
-is the one that can look one up. See `apps/k7-daw-frontend/packages/song-video/docs/shaders.md`.
+is the one that can look one up. See `apps/k7-daw-wasm/verbs/docs/picture/shaders.md`.
 
 ## The command catalogue
 

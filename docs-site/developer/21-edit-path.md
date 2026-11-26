@@ -52,7 +52,7 @@ These verbs exist only in the web shell; the CLI does not have them.
 
 ## 3. The verb runs in the browser and its writes land as one change set
 
-The verb runs in a Worker over a virtual file system, not on the server (`apps/k7-daw-frontend/packages/commands/docs/runtime.md`).
+The verb runs on the backend, over a staged copy of the workspace it lands whole (`docs/verbs-port.md`).
 Its writes are staged there and posted as one `POST /changes`; the server lands the set whole or not at all,
 as one entry in the project's undo journal (`apps/k7-daw-backend/docs/file-changes.md`): one command, one
 Ctrl+Z, whatever the verb touched.

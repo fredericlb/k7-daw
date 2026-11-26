@@ -1,5 +1,5 @@
 // The preset tree's vocabulary: which folder a module's presets sit in, the file a name is, and the
-// text a preset is written as. The verbs over them are tested in @studio/commands' nodePreset.test.ts.
+// text a preset is written as. The verbs over them are tested in the verbs crate.
 
 import { join, resolve } from "node:path";
 import { parse } from "@studio/k7x/document";

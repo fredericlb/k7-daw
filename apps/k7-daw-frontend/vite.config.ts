@@ -7,18 +7,12 @@ import { defaultExclude } from "vitest/config";
 import { scaled } from "../../scripts/vitestScale.ts";
 import { noticesPlugin } from "./notices/vitePlugin.ts";
 import { entryPreloadPlugin } from "./preload/vitePlugin.ts";
-import { verbsWorkerPlugin } from "./verbs/vitePlugin.ts";
 
 /** The paths on this origin that are NOT k7's shell: the worker's scope is `/`, so only this list keeps a navigation to `/api` off it. */
 const OTHER_APPS = /^\/(api|auth)(\/|$)/;
 
 /** Heavy build files few sessions open, left out of the precache (apps/k7-daw-frontend/packages/vite-config/docs/pwa.md): the About page's notices, the Cyrillic subsets. */
-const RARELY_USED = [
-  "assets/_virtual_k7-notices-*.js",
-  "assets/*-cyrillic*",
-  // The verbs' Worker, 3.3 MB gzipped: fetched on first use and kept by the HTTP cache, its names being hashes.
-  "assets/verbs/*",
-];
+const RARELY_USED = ["assets/_virtual_k7-notices-*.js", "assets/*-cyrillic*"];
 
 /** The language every catalogue resolves the same way, so the plugins' follows k7's — docs/settings.md. */
 const STRATEGY: ["localStorage", "baseLocale"] = ["localStorage", "baseLocale"];
@@ -80,8 +74,6 @@ export default ({ command }: ConfigEnv) => {
         noticesPlugin(),
         // appMain's chunks named in the built page, so they arrive with the entry rather than after it — docs/shell.md.
         entryPreloadPlugin(),
-        // The verbs' Worker, built from apps/k7-daw-frontend/packages/commands' own bundle — docs/verbs.md.
-        verbsWorkerPlugin(),
       ],
       server: {
         // HMR by Vite's own port, so a page this Vite serves through another origin — the dev tray's 18789 — reaches it too (docs/dev.md).

@@ -1,4 +1,4 @@
-// serviceHost.spec.ts — the host members' routes under /verb-host, as the browser's Worker calls them (3f): the render family, the film's
+// serviceHost.spec.ts — the host members' routes under /verb-host, as a verb asks them (3f): the render family, the film's
 // probe and sound, a take, a clip prepared in the background, a film transcribed; paths outside refused, the limits.
 // Over 500 lines on purpose: one serial account holds every part, and a second file would race it.
 // The bed has the engine; it is judged on the native front.
@@ -70,7 +70,7 @@ async function browserDoc(): Promise<Record<string, unknown>> {
   return walk(doc) as Record<string, unknown>;
 }
 
-/** Polls a job to its end, as the Worker does each second. */
+/** Polls a job to its end, as the backend does each second. */
 async function ended(job: string, ms = 120_000) {
   return until(
     async () => (await svc.get(`/verb-host/job?id=${job}`, ws)).body,
@@ -198,7 +198,7 @@ test("a body past a route's limit is a 413 before it is read: 64 KiB for most, 8
   expect(ok.status).toBe(400);
 });
 
-// The Worker's scene for one 160x90 clip, as `sceneFrom` makes it; a full-size film never ends in the Mac's software GL.
+// A scene for one 160x90 clip, its file already a `media/` URL; a full-size film never ends in the Mac's software GL.
 const sceneOf = (src: string) => ({
   viewport: [160, 90],
   fps: 10,
@@ -216,7 +216,7 @@ const sceneOf = (src: string) => ({
   durationSec: 1,
 });
 
-test("a scene the Worker made is rendered into the named folder by the server's browser, and a bad shape is a 400", async () => {
+test("a scene is rendered into the named folder by the server's browser, and a bad shape is a 400", async () => {
   const sample = join(REPO, "e2e/fixtures/video-lane.k7/clips/sample.mp4");
   expect(
     (await svc.upload(ws, project, "sample.mp4", readFileSync(sample))).status,
