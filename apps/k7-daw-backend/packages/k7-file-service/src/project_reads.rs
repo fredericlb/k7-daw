@@ -3,7 +3,6 @@
 
 use indexmap::IndexMap;
 use serde_json::{Value, json};
-use song_schema::engine::{CataloguePlugin, PluginNeed, compatibility};
 use song::graph::load_graph;
 use song::lanes::inputs::load_inputs;
 use song::lanes::rig::Rig;
@@ -12,6 +11,7 @@ use song::modules::ScannedPlugin;
 use song::modules::types::hosts_plugin;
 use song::send_refs::EXTERNAL_FORMATS;
 use song::{Cache, Roots, Source, read_family};
+use song_schema::engine::{CataloguePlugin, PluginNeed, compatibility};
 
 use crate::confine::Disk;
 use crate::module_reads::Failure;
