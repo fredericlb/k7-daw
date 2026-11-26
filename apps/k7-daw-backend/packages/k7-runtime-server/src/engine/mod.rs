@@ -5,7 +5,9 @@
 //! an answer is `None`, never a call into freed memory (`docs/abi.md` beside this crate).
 
 pub mod fake;
+pub mod fake_state;
 pub mod ffi;
+pub mod state;
 
 use ffi::{K7CoreApi, K7EngineApi, K7Host, K7Str, K7Warning};
 use std::ffi::c_void;

@@ -47,5 +47,6 @@ void guardVoid(const char* what, F&& f) {
 
 // The table of each area, built where that area is implemented; one line per area in EngineApi.cpp.
 const K7CoreApi* coreApi();
+const K7StateApi* stateApi();
 
 }  // namespace studio::capi

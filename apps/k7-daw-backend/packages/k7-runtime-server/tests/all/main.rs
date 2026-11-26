@@ -7,6 +7,7 @@ mod harness;
 mod pairing_gate;
 mod pairing_store;
 mod server_socket;
+mod server_state;
 mod server_timers;
 mod server_units;
 mod stream;

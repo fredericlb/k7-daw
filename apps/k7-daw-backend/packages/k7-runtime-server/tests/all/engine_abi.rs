@@ -2,6 +2,7 @@
 //! order, and the top table's size. A signature is not compared: CApi_test.cpp and the fake's tests call them.
 
 use k7_runtime_server::engine::ffi::{K7CoreApi, K7EngineApi};
+use k7_runtime_server::engine::state::K7StateApi;
 
 const CAPI: &str = "apps/k7-daw-engine/k7-runtime/engine/capi";
 
@@ -62,4 +63,14 @@ fn every_area_slot_is_declared_by_the_header() {
             "{field}"
         );
     }
+}
+
+#[test]
+fn the_state_table_is_k7_engine_state_h() {
+    let header = crate::repo_file(&format!("{CAPI}/k7_engine_state.h"));
+    assert_eq!(header_fields(&header, "K7StateApi"), K7StateApi::FIELDS);
+    assert_eq!(
+        std::mem::size_of::<K7StateApi>(),
+        K7StateApi::FIELDS.len() * std::mem::size_of::<usize>()
+    );
 }
