@@ -10,7 +10,11 @@ pub struct Diagnostic {
 }
 
 /// Every diagnostic, by flag.
-pub const ALL: &[Diagnostic] = &[];
+pub const ALL: &[Diagnostic] = &[Diagnostic {
+    flag: "--probe",
+    usage: "--probe <address>",
+    run: crate::probe::run,
+}];
 
 /// The usage text, the app's mode and `--config` first.
 pub fn usage() -> String {

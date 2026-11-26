@@ -4,19 +4,26 @@
 //! What a reader gets wrong: the wire and the files are the C++ supervisor's, byte for byte, since the
 //! hosts and the conformance suite read them (`docs/rust-supervisor-plan.md` at the repo root).
 
+pub mod addresses;
 pub mod core;
 pub mod crash_loop;
 pub mod diagnostics;
 pub mod engine;
 pub mod frames;
 pub mod host_lock;
+pub mod http;
 pub mod identity;
 pub mod log;
 pub mod parts;
 pub mod paths;
+pub mod performance;
 pub mod pidfile;
 pub mod ports;
+pub mod probe;
 pub mod process;
 pub mod protocol;
+pub mod registry;
 pub mod run;
 pub mod settings;
+pub mod trust;
+pub mod urls;
