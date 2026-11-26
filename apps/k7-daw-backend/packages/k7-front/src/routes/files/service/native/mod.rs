@@ -63,7 +63,6 @@ pub mod stack;
 pub mod stats;
 mod tag;
 pub mod verb_ask;
-pub mod verb_bundle;
 pub mod verb_host;
 pub mod verb_run;
 pub mod workspaces;
@@ -183,8 +182,6 @@ impl Ctx {
                         | Tag::VerbComplete
                         | Tag::Picture
                         | Tag::PictureScene
-                        | Tag::VerbBundle
-                        | Tag::VerbLibrary
                         | Tag::VerbHost(_)
                         | Tag::ModuleCreate
                         | Tag::ModuleClone

@@ -104,8 +104,6 @@ pub enum Tag {
     /// The picture document and its scene, read by the `verbs` crate.
     Picture,
     PictureScene,
-    VerbBundle,
-    VerbLibrary,
     VerbHost(super::verb_host::Member),
     FrozenChains,
     LiveChains,
@@ -164,8 +162,6 @@ impl Tag {
             H::VerbCatalogue => Some(Tag::VerbCatalogue),
             H::Picture => Some(Tag::Picture),
             H::PictureScene => Some(Tag::PictureScene),
-            H::VerbBundle => Some(Tag::VerbBundle),
-            H::VerbLibrary => Some(Tag::VerbLibrary),
             H::VerbHost(m) => Some(Tag::VerbHost(m)),
             H::Project => Some(Tag::Project),
         }
@@ -214,8 +210,6 @@ impl Tag {
             | Tag::VerbCatalogue
             | Tag::Picture
             | Tag::PictureScene
-            | Tag::VerbBundle
-            | Tag::VerbLibrary
             | Tag::VerbHost(_) => Piece::Journal,
             Tag::Workspaces
             | Tag::WorkspaceMake
@@ -331,8 +325,6 @@ impl Tag {
             Tag::VerbCatalogue => "GET /verb/catalogue",
             Tag::Picture => "POST /picture",
             Tag::PictureScene => "POST /picture/scene",
-            Tag::VerbBundle => "GET /verb-bundle",
-            Tag::VerbLibrary => "GET /verb-bundle/library",
             Tag::VerbHost(m) => m.route(),
             Tag::FrozenChains => "GET /account/frozen-chains",
             Tag::LiveChains => "GET /account/live-chains",

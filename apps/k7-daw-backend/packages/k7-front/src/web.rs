@@ -16,7 +16,7 @@ use crate::AppState;
 use crate::settings::Settings;
 
 /// What a page may send: the studio headers, never the hub secret (`media/cors.ts`).
-const ALLOWED_HEADERS: &str = "Content-Type, Authorization, x-studio-user, x-studio-workspace, x-studio-engine-token, x-studio-engine-id";
+const ALLOWED_HEADERS: &str = "Content-Type, Authorization, x-studio-user, x-studio-workspace, x-studio-engine-token, x-studio-engine-id, x-k7-file, x-k7-as";
 
 /// The default JSON body limit.
 const JSON_LIMIT: usize = 256 * 1024;

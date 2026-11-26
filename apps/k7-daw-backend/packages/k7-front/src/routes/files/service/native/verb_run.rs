@@ -237,21 +237,14 @@ async fn finish(c: &Call, ctx: &Ctx, asker: &Asker<'_>, done: Done, end: End) ->
     if ran.landed.is_some() && pushes && open {
         super::journal::pushed(c).await;
     }
-    let mut page = Vec::new();
     for a in std::mem::take(&mut ran.answer.asks) {
         let route = a.get("route").and_then(Value::as_str).unwrap_or_default();
-        // An ask the page performs (a picture render, whose scene it builds) goes back in the answer.
-        if route.starts_with("page ") {
-            page.push(a);
-        } else if !ran.answer.refused {
+        if !ran.answer.refused {
             let lines = asker
                 .ask(route, a.get("args").unwrap_or(&Value::Null))
                 .await;
             ran.answer.log.extend(lines);
         }
-    }
-    if !ran.answer.refused {
-        ran.answer.asks = page;
     }
     let mut out = serde_json::to_value(&ran.answer).unwrap_or_else(|_| json!({}));
     if let Some(o) = out.as_object_mut() {

@@ -67,8 +67,6 @@ pub enum H {
     Picture,
     /// …and the scene the page draws or exports of it.
     PictureScene,
-    VerbBundle,
-    VerbLibrary,
     /// A host member's route (3f).
     VerbHost(native::verb_host::Member),
 }
@@ -149,8 +147,6 @@ pub fn route(method: &Method, path: &str) -> Route {
         ("/verb/catalogue", true, _) => H::VerbCatalogue,
         ("/picture", _, true) => H::Picture,
         ("/picture/scene", _, true) => H::PictureScene,
-        ("/verb-bundle", true, _) => H::VerbBundle,
-        ("/verb-bundle/library", true, _) => H::VerbLibrary,
         _ => match native::verb_host::Member::of(method, path) {
             Some(m) => H::VerbHost(m),
             None => return Route::Hooked,
