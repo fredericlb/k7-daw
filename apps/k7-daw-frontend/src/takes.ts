@@ -4,17 +4,17 @@
 // See apps/k7-daw-frontend/packages/song/docs/takes.md and docs/clipEditors.md.
 
 import {
-  materialRefOf,
-  placementStartOf,
-} from "@studio/song-schema/placementId";
-import { SERIES_COLORS, seriesColor } from "@studio/song-schema/seriesColors";
-import {
   beatsToDuration,
   beatsToPosition,
   parseDuration,
   parsePosition,
   roundBeat,
-} from "@studio/song-schema/timecode";
+} from "@studio/k7-wasm/timecode";
+import {
+  materialRefOf,
+  placementStartOf,
+} from "@studio/song-schema/placementId";
+import { SERIES_COLORS, seriesColor } from "@studio/song-schema/seriesColors";
 import type { WebClip, WebProject } from "./types";
 
 /** One row of the view: a take, or the event's own material, starting at `start` beats. */

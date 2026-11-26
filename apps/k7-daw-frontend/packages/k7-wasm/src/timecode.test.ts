@@ -1,59 +1,17 @@
+// timecode.test.ts — what the page reads of a timecode, through the module: the oracle the Rust port was held to.
+// A reader would get wrong that these test TypeScript arithmetic: every answer comes from song-schema's timecode.rs.
+
 import { describe, expect, it } from "vitest";
+import { K7WasmError } from "./abi.ts";
 import {
   beatsToDuration,
   beatsToPosition,
   parseDuration,
   parsePosition,
   roundBeat,
-  startAs,
-  startBeats,
-  startText,
-  startTolerance,
   TICKS_PER_QUARTER,
-} from "./timecode";
-import { PlacementSchema } from "./yaml/placementSchema";
-
-// An event's start: a NUMBER is seconds, a string a position (docs/timecode.md).
-describe("an event start", () => {
-  it("reads seconds through the tempo and a timecode through the bar", () => {
-    expect(startBeats(4.5, 4, 4, 120)).toBe(9);
-    expect(startBeats(4.5, 4, 4, 60)).toBe(4.5);
-    expect(startBeats("3:1", 4, 4, 120)).toBe(8);
-    expect(startBeats(undefined, 4, 4, 120)).toBe(0);
-    expect(startBeats(0, 4, 4, 120)).toBe(0);
-  });
-
-  it("writes back in the unit it was written in", () => {
-    expect(startAs(4.5, 10, 4, 4, 120)).toBe(5);
-    expect(startAs("3:1", 10, 4, 4, 120)).toBe("3:3");
-    expect(startAs(undefined, 4, 4, 4, 120)).toBe("2:1");
-    // Seconds to the millisecond, and never before the song's start.
-    expect(startAs(1, 1 / 3, 4, 4, 120)).toBe(0.167);
-    expect(startAs(1, -2, 4, 4, 120)).toBe(0);
-  });
-
-  it("is addressed exactly on the grid and within half a tick off it", () => {
-    expect(startTolerance("3:1")).toBe(1e-6);
-    expect(startTolerance(4.5)).toBe(0.5 / TICKS_PER_QUARTER);
-    expect(startText(4.5)).toBe("4.5s");
-    expect(startText("3:1")).toBe("3:1");
-  });
-
-  it("is a timecode or a non-negative number to the schema", () => {
-    expect(PlacementSchema.safeParse({ ref: "a", start: 4.5 }).success).toBe(
-      true,
-    );
-    expect(PlacementSchema.safeParse({ ref: "a", start: "3:1" }).success).toBe(
-      true,
-    );
-    expect(PlacementSchema.safeParse({ ref: "a", start: -1 }).success).toBe(
-      false,
-    );
-    expect(PlacementSchema.safeParse({ ref: "a", start: "4.5s" }).success).toBe(
-      false,
-    );
-  });
-});
+  TIMECODE,
+} from "./timecode.ts";
 
 // Time is beats = quarter notes; positions are 1-based and durations 0-based (docs/timecode.md).
 
@@ -214,5 +172,27 @@ describe("roundBeat", () => {
     expect(String(roundBeat(3 + 1 / 3))).toBe("3.333333");
     for (const x of [0, 0.125, 7.999999999, 1e-7, 123.4567895])
       expect(roundBeat(x)).toBe(Math.round(x * 1e6) / 1e6);
+  });
+});
+
+describe("the shape", () => {
+  it("is matched by TIMECODE exactly where the parser reads a timecode", () => {
+    for (const tc of ["1", "1:2", "1:1:1:1", "0:0.120", "1:1:1:1:3", "1.5"]) {
+      expect(TIMECODE.test(tc)).toBe(true);
+      expect(Number.isFinite(parsePosition(tc, 4, 4))).toBe(true);
+    }
+    for (const tc of ["", "a:b", "1:1.", ".5", "1:1.2.3", ":1", "1:"]) {
+      expect(TIMECODE.test(tc)).toBe(false);
+      expect(() => parsePosition(tc, 4, 4)).toThrow(K7WasmError);
+    }
+  });
+
+  it("throws a bad timecode as the module's own code", () => {
+    try {
+      parseDuration("a:b", 4, 4);
+      expect.unreachable();
+    } catch (e) {
+      expect((e as K7WasmError).code).toBe("bad_timecode");
+    }
   });
 });

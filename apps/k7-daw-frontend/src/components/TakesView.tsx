@@ -4,8 +4,8 @@
 // event has no spans: a click picks a WHOLE take. Its record button records the next take INTO
 // the event, from its start or punched into the span. See apps/k7-daw-frontend/packages/song/docs/takes.md.
 
+import { beatsToPosition } from "@studio/k7-wasm/timecode";
 import { setCompSpan } from "@studio/song-schema/takes";
-import { beatsToPosition } from "@studio/song-schema/timecode";
 import { Button } from "@studio/ui/button";
 import { DockHeaderRow, DockHint } from "@studio/ui/editor-dock";
 import { Check, Circle, Square, Trash2, X } from "@studio/ui/icons";

@@ -5,12 +5,12 @@
 // handle. See docs/timeline.md.
 
 import { arrayEq, useEngineState } from "@studio/engine-browser/store";
-import type { Task } from "@studio/song-schema/tasks";
 import {
   beatsToDuration,
   beatsToPosition,
   parsePosition,
-} from "@studio/song-schema/timecode";
+} from "@studio/k7-wasm/timecode";
+import type { Task } from "@studio/song-schema/tasks";
 import { trackLabel } from "@studio/song-schema/trackKind";
 import {
   DropdownMenu,

@@ -28,7 +28,7 @@ step further: `toolLine` in `apps/k7-daw-frontend/src/timelineTools.ts` returns 
 is what lets a test pin a blade press to `event split <track> <start> <at>` without a DOM.
 
 Positions are converted to timecodes at the edge, with `beatsToPosition` / `beatsToDuration` from
-`apps/k7-daw-frontend/packages/song-schema/src/timecode.ts`. The pane works in beats; the verbs speak
+`@studio/k7-wasm/timecode` (the Rust crate's `apps/k7-daw-wasm/song-schema/src/timecode.rs`). The pane works in beats; the verbs speak
 `bar:beat:eighth:sixteenth`, positions 1-based and durations 0-based. Getting the two kinds mixed up
 is the classic bug here, which is why every argument that is a length says so in its `hint:` in
 `apps/k7-daw-wasm/verbs/commands.yaml`.

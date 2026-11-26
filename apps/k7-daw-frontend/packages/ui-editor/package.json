@@ -43,6 +43,7 @@
     "@codemirror/view": "^6.34.0",
     "@lezer/highlight": "^1.2.0",
     "@replit/codemirror-vim": "^6.3.0",
+    "@studio/k7-wasm": "*",
     "@studio/k7x": "*",
     "@studio/song-schema": "*",
     "@studio/web-protocol": "*",
