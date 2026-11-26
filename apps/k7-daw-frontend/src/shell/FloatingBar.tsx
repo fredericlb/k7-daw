@@ -1,18 +1,8 @@
 // FloatingBar.tsx — the bar of the transport capsule, a phone's command bar button
-// (buttons, clock, song overview, tempo, metronome, master volume) and, at its right end, the current pane's views. On a phone the clock,
+// (buttons, clock, song overview, tempo, metronome, master volume); the pane's views float apart (ViewCapsule.tsx). On a phone the clock,
 // overview, tempo and volume move to a strip above the capsule; a desk or a pad docks it in the header's row, and the metronome to the overflow menu; the tool is the timeline's corner (ToolMenu.tsx), a phone's menu. It holds no state of its own: App hands it all.
-import { CapsuleButton, CapsuleDivider } from "@studio/ui/capsule";
-import {
-  Columns3,
-  Image,
-  Maximize,
-  Network,
-  Rows3,
-  Spline,
-  SquareTerminal,
-  ZoomIn,
-  ZoomOut,
-} from "@studio/ui/icons";
+import { CapsuleDivider } from "@studio/ui/capsule";
+import { SquareTerminal } from "@studio/ui/icons";
 import type { ComponentProps, ReactNode, Ref } from "react";
 import { MetronomeButton } from "../components/MetronomeButton";
 import { Minimap } from "../components/Minimap";
@@ -25,28 +15,6 @@ import { OutputRecordButton } from "./OutputRecordButton";
 import { ShellTransport } from "./ShellTransport";
 import { TempoMeter } from "./TempoMeter";
 
-export interface BarLaneViews {
-  expanded: boolean;
-  automation: boolean;
-  /** Only on a project with a picture lane: the picture card's toggle. */
-  picture: boolean | null;
-  onLanes: () => void;
-  onAutomation: () => void;
-  onPicture: () => void;
-  /** The timeline's zoom, the keys z, Shift+Z and 0 as buttons. */
-  onZoomIn: () => void;
-  onZoomOut: () => void;
-  onZoomFit: () => void;
-}
-
-export interface BarGraphViews {
-  onFit: () => void;
-  /** Absent where the host offers no auto layout. */
-  onOrganize?: () => void;
-  onStack?: () => void;
-  stacked: boolean;
-}
-
 export function FloatingBar({
   layout,
   onCommandBar,
@@ -58,8 +26,6 @@ export function FloatingBar({
   map,
   meter,
   metronome,
-  lanes,
-  graph,
   hidden,
   surfaceOnly = false,
   runCommand,
@@ -83,10 +49,6 @@ export function FloatingBar({
   map: ComponentProps<typeof Minimap> | null;
   meter: ReactNode;
   metronome: ComponentProps<typeof MetronomeButton> | null;
-  /** The arrangement's capsule; null on any other pane. */
-  lanes: BarLaneViews | null;
-  /** The Graph pane's capsule; null on any other pane (docs/shell.md, "The capsule follows the pane"). */
-  graph: BarGraphViews | null;
   /** The bar steps aside (an editor popin over everything). */
   hidden?: boolean;
   /** A surface of another device: the transport capsule and its clock alone, no tool, no views, no command button. */
@@ -176,101 +138,6 @@ export function FloatingBar({
     </div>
   );
 
-  const laneViews = lanes ? (
-    <div
-      role="group"
-      aria-label={m["shell.laneViews"]()}
-      className="float pointer-events-auto flex h-14 shrink-0 items-center gap-0.5 rounded-full p-1.5"
-    >
-      <CapsuleButton
-        pressed={lanes.expanded}
-        aria-label={m["shell.lane.lanes"]()}
-        title={m["shell.lane.lanes"]()}
-        onClick={lanes.onLanes}
-      >
-        <Rows3 />
-      </CapsuleButton>
-      <CapsuleButton
-        pressed={lanes.automation}
-        aria-label={m["shell.lane.automation"]()}
-        title={m["shell.lane.automation"]()}
-        onClick={lanes.onAutomation}
-      >
-        <Spline />
-      </CapsuleButton>
-      <CapsuleDivider />
-      <CapsuleButton
-        aria-label={m["shell.lane.zoomOut"]()}
-        title={m["shell.lane.zoomOut"]()}
-        onClick={lanes.onZoomOut}
-      >
-        <ZoomOut />
-      </CapsuleButton>
-      <CapsuleButton
-        aria-label={m["shell.lane.zoomIn"]()}
-        title={m["shell.lane.zoomIn"]()}
-        onClick={lanes.onZoomIn}
-      >
-        <ZoomIn />
-      </CapsuleButton>
-      <CapsuleButton
-        aria-label={m["shell.lane.zoomFit"]()}
-        title={m["shell.lane.zoomFit"]()}
-        onClick={lanes.onZoomFit}
-      >
-        <Maximize />
-      </CapsuleButton>
-      {lanes.picture !== null && (
-        <CapsuleButton
-          pressed={lanes.picture}
-          aria-label={m["shell.lane.pictureName"]()}
-          title={m["shell.lane.pictureName"]()}
-          onClick={lanes.onPicture}
-        >
-          <Image />
-        </CapsuleButton>
-      )}
-    </div>
-  ) : null;
-
-  const graphViews = graph ? (
-    <div
-      role="group"
-      aria-label={m["shell.graphViews"]()}
-      className="float pointer-events-auto flex h-14 shrink-0 items-center gap-0.5 rounded-full p-1.5"
-    >
-      <CapsuleButton
-        aria-label={m["graph.zoomFitName"]()}
-        title={m["graph.zoomFitName"]()}
-        onClick={graph.onFit}
-      >
-        <Maximize />
-        {m["graph.zoomFit"]()}
-      </CapsuleButton>
-      {graph.onOrganize && (
-        <CapsuleButton
-          aria-label={m["graph.autoLayoutName"]()}
-          title={m["graph.autoLayoutName"]()}
-          onClick={graph.onOrganize}
-        >
-          <Network />
-          {m["graph.autoLayout"]()}
-        </CapsuleButton>
-      )}
-      {graph.onStack && (
-        <CapsuleButton
-          pressed={graph.stacked}
-          aria-label={m["graph.stackName"]()}
-          title={m["graph.stackName"]()}
-          onClick={graph.onStack}
-        >
-          <Columns3 />
-          {m["graph.stack"]()}
-        </CapsuleButton>
-      )}
-    </div>
-  ) : null;
-
   return (
     <div
       ref={rootRef}
@@ -296,7 +163,6 @@ export function FloatingBar({
         {capsule}
       </div>
       <span className="flex-1" />
-      {!phone && (laneViews ?? graphViews)}
       {phone && commandButton}
     </div>
   );

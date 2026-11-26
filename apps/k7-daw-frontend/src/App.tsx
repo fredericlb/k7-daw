@@ -253,6 +253,7 @@ import {
 } from "./shell/panels";
 import { ShellOverlays } from "./shell/ShellOverlays";
 import { type PendingWire, useGraphActions } from "./shell/useGraphActions";
+import { ViewCapsule } from "./shell/ViewCapsule";
 import { PANE_META, VIEWPORT_META } from "./shellMeta";
 import { ShellContexts } from "./state/ShellContexts";
 import { createShellStore, type ShellVerbs } from "./state/shellStore";
@@ -2890,6 +2891,36 @@ export default function App({
         onToggle: output.toggle,
       }
     : null;
+  // The pane's view options, floating at the bottom right (shell/ViewCapsule.tsx).
+  const viewCapsule = isMobile ? null : (
+    <ViewCapsule
+      graph={
+        full === "chains" && graphView
+          ? {
+              onFit: graphView.fit,
+              onOrganize: graphCmds.organize,
+              onStack: graphCmds.stack,
+              stacked: stackView,
+            }
+          : null
+      }
+      lanes={
+        full === "timeline" && hasTimeline
+          ? {
+              expanded: lanesExpanded,
+              automation: automationShown,
+              picture: hasViewport ? viewportOpen : null,
+              onLanes: () => void runCommand("ui lanes"),
+              onAutomation: () => void runCommand("ui automation"),
+              onPicture: () => void runCommand("ui viewport"),
+              onZoomIn: () => void runCommand("ui zoom"),
+              onZoomOut: () => void runCommand("ui zoom out"),
+              onZoomFit: () => void runCommand("ui zoom reset"),
+            }
+          : null
+      }
+    />
+  );
   const bar = (
     <FloatingBar
       layout={layoutKind}
@@ -2942,31 +2973,6 @@ export default function App({
         onToggle: toggleMetronome,
         onLevel: (v) => void runCommand(`transport metronome volume ${v}`),
       }}
-      graph={
-        full === "chains" && graphView
-          ? {
-              onFit: graphView.fit,
-              onOrganize: graphCmds.organize,
-              onStack: graphCmds.stack,
-              stacked: stackView,
-            }
-          : null
-      }
-      lanes={
-        full === "timeline" && hasTimeline
-          ? {
-              expanded: lanesExpanded,
-              automation: automationShown,
-              picture: hasViewport ? viewportOpen : null,
-              onLanes: () => void runCommand("ui lanes"),
-              onAutomation: () => void runCommand("ui automation"),
-              onPicture: () => void runCommand("ui viewport"),
-              onZoomIn: () => void runCommand("ui zoom"),
-              onZoomOut: () => void runCommand("ui zoom out"),
-              onZoomFit: () => void runCommand("ui zoom reset"),
-            }
-          : null
-      }
     />
   );
   const header = (
@@ -3770,6 +3776,7 @@ export default function App({
             )}
 
             {isMobile && bar}
+            {viewCapsule}
 
             {panelHost}
             {dockHost}

@@ -265,7 +265,7 @@ bottom margin for the bar instead.
 |---|---|---|
 | header | `shell/ProjectHeader.tsx` | the spinner, the command-bar button, the dock's Mixer (an icon) and, last, the chevron that unfolds the rail; git's Save and Update, the pane switcher, the right panels' buttons and Close are the rail's (`shell/PanelRail.tsx`), and the folded chevron carries the unsaved and problem counts; a phone, with no rail, keeps Back, the name and the warning chip; laid out in flow: a `flex-1` left cluster and a right cluster of the same basis, so nothing overlaps at any width |
 | git capsule | `shell/HeaderGit.tsx` | Save with its count, a menu (Pull, Saves); while a merge waits, one "Resolve N conflicts" button and a banner |
-| bar | `shell/FloatingBar.tsx`, `shell/ShellTransport.tsx` | docked in the header's row on a desk or a pad (the header is 72 px to hold its 56 px controls; the panels and the dock then reach 16 px from the foot), floating at the foot on a phone with its command bar button: the transport capsule, the pane's capsule (Lane views or Graph views); the timeline's tool is its corner's, left of "+ lane" (`shell/ToolMenu.tsx`) |
+| bar | `shell/FloatingBar.tsx`, `shell/ShellTransport.tsx` | docked in the header's row on a desk or a pad (the header is 72 px to hold its 56 px controls; the panels and the dock then end 60 px from the foot, clear of the view capsule), floating at the foot on a phone with its command bar button: the transport capsule; the pane's views are a small capsule at the bottom right, icons only (`shell/ViewCapsule.tsx`); the timeline's tool is its corner's, left of "+ lane" (`shell/ToolMenu.tsx`) |
 | panels | `shell/panels.tsx` | the registry: an id, a glyph and a title each, in the kit's `SidePanel` (Pad, Desk) or `Sheet` (Phone) |
 | dock | `shell/panels.tsx` (`DockFrame`), `hooks/useEditorDock.ts` | the bottom dock, in the kit's `EditorDock` (Pad, Desk) or `EditorSheet` (Phone); it holds the editors, the Mixer or a track's chain |
 | phone menu | `shell/OverflowMenu.tsx` | pane, lane views and the panel tiles in one menu |
@@ -358,8 +358,9 @@ visible.
 `automationShown`, `pictureShown`). The timeline still holds its own state, so the shell mirrors what it
 reports and what the `ui ruler` / `ui automation` commands flip, until the timeline reads the store.
 
-**The right-end capsule belongs to the current pane.** The arrangement shows the Lane views; the Graph
-shows `group "Graph views"` (Zoom fit, Auto layout, Stack, the last pressed while stacked); the editor
+**The view capsule belongs to the current pane**, small and floating at the bottom right so it covers little of
+the pane. The arrangement shows the Lane views; the Graph
+shows `group "Graph views"` (Zoom fit, Auto layout, Stack, the last pressed while stacked, their names in tooltips); the editor
 and the desk show nothing, not an empty capsule. Each view's buttons act on one pane, so a button that
 does nothing where it stands has no place there. The Graph keeps its camera, so its pane hands the
 bar the fit through the store (`graphView`); Auto layout and Stack are the shell's own commands.

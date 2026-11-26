@@ -223,7 +223,7 @@
   --k7-rail-w: 48px; /* the right-edge toolbar and its gap; desk draws it narrower */
   --k7-rail-clear: calc(12px + var(--k7-rail-w));
   --k7-panel-gap-top: 8px; /* under the header */
-  --k7-panel-bottom: 16px; /* a desk's bar is in the header; also the toast's bottom */
+  --k7-panel-bottom: 60px; /* clear of the view capsule at the bottom right (36 + 16 + 8); also the toast's bottom */
   --k7-panel-padding: 6px 6px 14px 14px;
   --k7-panel-header-h: 44px;
   --k7-dock-h-pad: 380px; /* editor dock, normal height; 400 on Desk */
