@@ -12,11 +12,14 @@ path = "src/lib.rs"
 serde_json.workspace = true
 # The keys and codes of a pairing: the OS's generator, as the C++ store used `random_device`.
 getrandom.workspace = true
-# A reply from the message thread: `Engine::call`'s one-shot channel.
-tokio = { workspace = true, features = ["sync"] }
+# A reply from the message thread (`Engine::call`'s one-shot channel), and the socket's runtime.
+tokio = { workspace = true, features = ["sync", "rt-multi-thread", "net", "time", "signal", "macros"] }
+# The socket: tokio-tungstenite accepts, futures-util splits it into a reader and a writer.
+tokio-tungstenite.workspace = true
+futures-util.workspace = true
 
 [dev-dependencies]
-tokio = { workspace = true, features = ["sync", "rt", "macros"] }
+tokio = { workspace = true, features = ["sync", "rt-multi-thread", "net", "time", "macros"] }
 
 [[test]]
 name = "all"

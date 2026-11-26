@@ -6,4 +6,5 @@
 
 pub mod engine;
 pub mod pairing;
+pub mod server;
 pub mod wire;

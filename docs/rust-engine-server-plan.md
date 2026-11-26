@@ -41,7 +41,7 @@ server side moves.
 | milestone | content | hours |
 |---|---|---|
 | M1 the ABI and the wire's leaves (built) | the C ABI's top table and core area, its C++ implementation and test; `engine` (the safe wrapper, `Mt`, posted jobs, the fake engine); `wire` (the nlohmann-exact printer, the audio frame, the verb catalogue, the version) | 6 |
-| M2 the socket core | accept, the Origin and frame-size screens, nesting refusal, ping, send timeout, the per-client outbox, sessions, dispatch by verb against the fake engine | 10 |
+| M2 the socket core (built) | accept, the Origin and frame-size screens, nesting refusal, ping, send timeout, the per-client outbox, sessions, dispatch by verb against the fake engine | 10 |
 | M3 pairing (built) | who counts as the machine, the paired-devices store, the pairing verbs | 6 |
 | M4 the link | the static library; `build.mjs` runs cargo with `--target-dir`; a slow CMake test runs `serve` on the real host and probes `whoami`; the Android and iOS cross builds | 6 |
 | M5 project and transport | the `DocJson` port with its bounds, supersede, held notes; the project and transport areas | 12 |
@@ -88,3 +88,11 @@ its own, and numbers its sockets with a `SocketId` (`u64`).
 
 Its deviation from C++: a `name`, `key`, `requestId` or `deviceId` that is not a string is read as
 empty, where nlohmann's `value()` threw into the message handler's catch.
+
+## M2's choices
+
+The socket core is built (`apps/k7-daw-backend/packages/k7-runtime-server/docs/server.md`): a task pair per
+socket with its own outbox, the `Gate` of M3 called as its section says, the handler table in
+`server::handlers::table` (one line per module), startup order and signals. Deviations from the C++: the
+outbox caps are per socket; at most 32 connections, as IXWebSocket's default; no message size bound beyond
+256 MiB; a JSON parse error's text is serde's, not nlohmann's; `whoami`'s `safeMode` carries `crashes` only.
