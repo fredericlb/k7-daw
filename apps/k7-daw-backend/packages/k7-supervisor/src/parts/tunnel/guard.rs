@@ -37,7 +37,7 @@ fn weakly_canonical(p: &Path) -> PathBuf {
 }
 
 /// Whether a LOCAL path is inside this machine's copies of the servers' roots, by spelling and once links are resolved.
-fn mapped(cx: &Ctx, path: &str) -> bool {
+pub(super) fn mapped(cx: &Ctx, path: &str) -> bool {
     let root = cx.paths.studio_dir().join("remote");
     if relative_under(&utf8(&root), path).is_none() {
         return false;

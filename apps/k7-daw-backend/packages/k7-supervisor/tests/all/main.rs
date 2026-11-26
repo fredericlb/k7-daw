@@ -15,6 +15,7 @@ mod files;
 mod hub;
 mod instruments;
 mod instruments_part;
+mod machine;
 mod onnx_model;
 mod parts;
 mod performance;
@@ -29,6 +30,8 @@ mod separation_cut;
 #[path = "../support/server.rs"]
 mod server;
 mod settings;
+mod slots;
+mod slots_part;
 mod supervisor;
 mod tls;
 mod tunnel_agent;

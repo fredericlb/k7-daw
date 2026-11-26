@@ -106,6 +106,16 @@ fn answer(msg: &Value, state: &mut Value) -> Option<Value> {
             state["pairedDevices"] = json!(kept);
             None
         }
+        "project" => {
+            // A document played in a session: the row the engine lists for it once it is loaded.
+            let mut sessions: Vec<Value> = rows(state, "sessions")
+                .into_iter()
+                .filter(|r| !same(r, "id", &msg["session"]))
+                .collect();
+            sessions.push(json!({"id": msg["session"], "project": msg["doc"]["name"], "loaded": true, "playing": false, "tracks": 0, "listeners": 0}));
+            state["sessions"] = json!(sessions);
+            None
+        }
         "rescan-plugins" => {
             state["rescanned"] = json!(true);
             None

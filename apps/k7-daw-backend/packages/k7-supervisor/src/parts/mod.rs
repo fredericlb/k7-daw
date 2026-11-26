@@ -8,6 +8,7 @@ pub mod instruments;
 pub mod queries;
 mod registry;
 mod separation;
+pub mod slots;
 mod tunnel;
 
 /// Every part a run starts, in order.
@@ -17,6 +18,7 @@ pub fn all() -> Vec<PartSpec> {
         queries::spec(),
         separation::spec(),
         instruments::spec(),
+        slots::spec(),
         tunnel::spec(),
     ]
 }
