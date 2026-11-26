@@ -1,0 +1,18 @@
+{
+  "devices": [
+    {
+      "created": 1795698668016,
+      "id": "08a8718a",
+      "key": "c3dac30c0944b31b5aae6c220e6832b2ab78f0fb462e0e7fc05361683b439963",
+      "lastSeen": 1795698668016,
+      "name": "Pixel · é \"Chrome\"\n\\"
+    },
+    {
+      "created": 1795698668016,
+      "id": "d74ea8f4",
+      "key": "a161d00e5c2473644ac31c2a074848e4be7ffb2a6ac6a541bbfbb94de186e243",
+      "lastSeen": 1795698668016,
+      "name": "iPhone · Safari"
+    }
+  ]
+}

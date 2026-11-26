@@ -10,6 +10,8 @@ path = "src/lib.rs"
 
 [dependencies]
 serde_json.workspace = true
+# The keys and codes of a pairing: the OS's generator, as the C++ store used `random_device`.
+getrandom.workspace = true
 # A reply from the message thread: `Engine::call`'s one-shot channel.
 tokio = { workspace = true, features = ["sync"] }
 

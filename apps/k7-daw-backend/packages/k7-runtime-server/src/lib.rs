@@ -5,4 +5,5 @@
 //! format included, since every client and the conformance suite read it (`docs/rust-engine-server-plan.md`).
 
 pub mod engine;
+pub mod pairing;
 pub mod wire;

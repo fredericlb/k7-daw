@@ -3,6 +3,8 @@
 mod catalogue;
 mod engine_abi;
 mod engine_fake;
+mod pairing_gate;
+mod pairing_store;
 mod stream;
 mod wire_json;
 
