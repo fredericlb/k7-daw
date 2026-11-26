@@ -1210,10 +1210,11 @@ worth stating rather than trying.
 
 Two details carry it:
 
-- **An opaque ground**, as a `before:` layer. Every tint this column wears is semi-transparent — a
-  group's `bg-muted/60`, the caret's `bg-primary/25`, a selection's `/20` — so a sticky cell with
-  nothing behind it has the clips sliding visibly through the names. `-z-10` puts the ground under
-  the cell's own content and above whatever scrolls past.
+- **No ground: the lanes clip themselves.** The column is transparent, so the screen's backdrop shows
+  through the names. What has panned under it would slide visibly through them, so every lane-space
+  layer (each lane, the grid, the markers and the playhead) carries `clip-path: inset(0 0 0
+  var(--tl-clip))`, the scroller's `scrollLeft`, written on each scroll. A painted ground would hide the
+  backdrop; a second pane would bring back two scroll positions.
 - **A z-index that says what is in front of what.** The gutters are `z-30`: over the lane's own
   layers (a selected clip is `z-10`; an edge handle, a marker and the playhead are `z-20`) and
   under the ruler, which sticks the other way at `z-40`. So the playhead disappears behind the

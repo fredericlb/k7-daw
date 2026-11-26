@@ -256,9 +256,13 @@ const laneEvents = (r: Extract<Row, { kind: "track" }>) => ({
 const LABEL_SELECTED =
   "bg-primary/25 outline outline-1 -outline-offset-1 outline-primary";
 
-/** What holds the NAME COLUMN still while the lanes pan under it: `sticky left-0` on every cell, over the screen's own ground so the header reads transparent yet hides what pans under it, at z-30 (docs/timeline.md). */
-const GUTTER_STICKY =
-  "sticky left-0 z-30 before:absolute before:inset-0 before:-z-10 before:bg-background before:content-['']";
+/** What holds the NAME COLUMN still while the lanes pan under it: `sticky left-0` on every cell, transparent, at z-30; the lanes clip themselves under it (docs/timeline.md). */
+const GUTTER_STICKY = "sticky left-0 z-30";
+/** A lane-space layer hides what has panned under the name column: --tl-clip is the scroller's scrollLeft. */
+const UNDER_NAMES = "[clip-path:inset(0_0_0_var(--tl-clip,0px))]";
+/** The same for a layer whose lines overflow its box vertically (the playhead's head, a marker's glow). */
+const UNDER_NAMES_TALL =
+  "[clip-path:inset(-64px_-8px_-64px_var(--tl-clip,0px))]";
 
 // `beat: LABEL` puts the caret on the row's label — the only position a group or generated lane can take.
 const LABEL = -1;
@@ -780,10 +784,13 @@ function TimelineTabView({
     const el = scrollRef.current;
     if (!el) return;
     const remember = () => {
+      // What has panned under the name column, which every lane-space layer clips away (UNDER_NAMES).
+      el.style.setProperty("--tl-clip", `${el.scrollLeft}px`);
       if (el.clientWidth)
         savedScroll.current = { left: el.scrollLeft, top: el.scrollTop };
     };
     el.addEventListener("scroll", remember, { passive: true });
+    el.style.setProperty("--tl-clip", `${el.scrollLeft}px`);
     const ro = new ResizeObserver(() => {
       const { left, top } = savedScroll.current;
       if (!el.clientWidth || (!left && !top)) return;
@@ -2407,15 +2414,20 @@ function TimelineTabView({
             className="relative select-none font-mono text-xs"
           >
             {/* The GRID: the ruler's own ticks continued down the lanes, dashed and FIRST in the wrapper so everything paints over it. */}
-            <Grid
-              {...tickProps}
-              ppb={ppb}
-              laneW={laneW}
-              left0={GUTTER}
-              scroller={scrollRef}
-              top={ROW_H} // below the ruler, which draws its own solid tick
-              height={contentH - ROW_H}
-            />
+            <div
+              className={cn("pointer-events-none absolute top-0", UNDER_NAMES)}
+              style={{ left: GUTTER, width: laneW, height: contentH }}
+            >
+              <Grid
+                {...tickProps}
+                ppb={ppb}
+                laneW={laneW}
+                left0={0}
+                scroller={scrollRef}
+                top={ROW_H} // below the ruler, which draws its own solid tick
+                height={contentH - ROW_H}
+              />
+            </div>
             {/* ruler */}
             <div
               className="sticky top-0 z-40 flex bg-background"
@@ -2745,7 +2757,10 @@ function TimelineTabView({
                       </span>
                     </div>
                     <div
-                      className="relative overflow-hidden bg-muted/60"
+                      className={cn(
+                        "relative overflow-hidden bg-muted/60",
+                        UNDER_NAMES,
+                      )}
                       style={{ width: laneW }}
                     >
                       {inSel && selBox && selSlice(selBox)}
@@ -2885,6 +2900,7 @@ function TimelineTabView({
                         dropAt?.lane === vt.id && DROP_LANE,
                         // Armed red, the whole lane, exactly as an armed audio lane reads.
                         videoArmed === vt.id && "bg-arm/25",
+                        UNDER_NAMES,
                       )}
                       style={{ width: laneW }}
                     >
@@ -3123,7 +3139,12 @@ function TimelineTabView({
                     >
                       <span className="truncate">{lane.param}</span>
                     </div>
-                    <div className="relative flex-1 overflow-hidden">
+                    <div
+                      className={cn(
+                        "relative flex-1 overflow-hidden",
+                        UNDER_NAMES,
+                      )}
+                    >
                       <AutomationPoints
                         curve={lane.curve}
                         param={lane.param}
@@ -3420,6 +3441,7 @@ function TimelineTabView({
                         DROP_LANE,
                       dropAt?.lane === t.id && DROP_LANE,
                       mark?.lanes.has(t.id) && "bg-amber-500/15",
+                      UNDER_NAMES,
                     )}
                     style={{ width: laneW }}
                   >
@@ -3966,33 +3988,45 @@ function TimelineTabView({
               );
             })}
 
-            {/* marker lines spanning the ruler and every lane, non-interactive: the ruler handle above owns hover and right-click. */}
-            {visMarkers.map((mk) => (
-              <div
-                key={mk.tc}
-                className={cn("pointer-events-none absolute top-0 z-20", GROW)}
-                style={{
-                  left: GUTTER + x(mk.beat),
-                  height: contentH,
-                  width: 1,
-                  background: MARKER_COLOR,
-                  boxShadow:
-                    hoverMarker === mk.name
-                      ? `0 0 6px ${MARKER_COLOR}`
-                      : "none",
-                }}
+            {/* The lines over every lane, clipped under the names as the lanes are. */}
+            <div
+              className={cn(
+                "pointer-events-none absolute top-0 z-20",
+                UNDER_NAMES_TALL,
+              )}
+              style={{ left: GUTTER, width: laneW, height: contentH }}
+            >
+              {/* marker lines spanning the ruler and every lane, non-interactive: the ruler handle above owns hover and right-click. */}
+              {visMarkers.map((mk) => (
+                <div
+                  key={mk.tc}
+                  className={cn(
+                    "pointer-events-none absolute top-0 z-20",
+                    GROW,
+                  )}
+                  style={{
+                    left: x(mk.beat),
+                    height: contentH,
+                    width: 1,
+                    background: MARKER_COLOR,
+                    boxShadow:
+                      hoverMarker === mk.name
+                        ? `0 0 6px ${MARKER_COLOR}`
+                        : "none",
+                  }}
+                />
+              ))}
+              {/* playhead — its own subscriber, so the transport moves one div and re-renders nothing else here (see Playhead). */}
+              {/* …the song's, or the open timeline's while it is auditioned from its start (timelineView.ts). */}
+              <Playhead
+                tempo={proj.tempo}
+                beatLo={beatLo}
+                beatHi={lastBeat}
+                ppb={ppb}
+                left0={0}
+                height={contentH}
               />
-            ))}
-            {/* playhead — its own subscriber, so the transport moves one div and re-renders nothing else here (see Playhead). */}
-            {/* …the song's, or the open timeline's while it is auditioned from its start (timelineView.ts). */}
-            <Playhead
-              tempo={proj.tempo}
-              beatLo={beatLo}
-              beatHi={lastBeat}
-              ppb={ppb}
-              left0={GUTTER}
-              height={contentH}
-            />
+            </div>
           </div>
         </div>
       </div>
