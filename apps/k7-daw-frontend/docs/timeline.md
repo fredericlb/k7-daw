@@ -624,8 +624,8 @@ saying of what, and the eye would have nowhere to look for the take itself.
 
 Selecting one of them **lights the others** — a one-pixel primary outline and a touch of
 brightness, no more. It answers "where else does this play" while the eye is on the block you
-picked, so anything louder would compete with the thing being pointed at. Selecting here is the
-caret: parking on a block is what selects it, so a click already does it.
+picked, so anything louder would compete with the thing being pointed at. Selecting here is a
+click on the block, or the caret parked on it when nothing is picked.
 
 Two things are deliberately NOT counted, and the exclusions are the judgement:
 
@@ -717,24 +717,20 @@ has its picture never asks again for a count, so the bumps cost nothing once the
 
 ## Clicking an event
 
-A click on a clip parks the caret **over it**: the `v` rectangle, anchored at the event's first
-beat and headed at its last, on that event's lane. The caret is one cell, so covering something
-eight beats long is the rectangle or nothing.
+A click on an event **selects the event itself**, drawn on it: a two-pixel primary outline and a
+touch of brightness (`Selection.clips`). The caret does not move and no rectangle is drawn. A
+selection is what you pointed at, and a rectangle around an event says "these beats" when the
+person meant "this event" — the two read alike only until a neighbour starts inside it.
+**Shift+click** or **Cmd+click** adds an event to the picked ones, or takes it back out, so
+events on several lanes are one selection.
 
-**The rectangle remembers the clip it was drawn for.** Delete and copy act on THAT placement alone,
-and the right-click menu offers no range verbs over it: everyone who has clicked a clip and pressed
-Delete expects that clip to go, not a neighbour that happens to start in the same beat or one
-layered inside it. The rectangle's own rule — every event STARTING inside it — returns the moment
-it is reshaped (an arrow, a Shift+click, a drag), since it is then a range someone drew.
-
-That makes a click a starting point rather than a dead end. Everything the caret and the
-selection already drive applies to the thing you pointed at: `z` frames it, Shift+L loops it,
-`g` grabs it, `m`/`s` act on its lane, and the Editor panel follows the caret onto its file.
-None of it needs writing — it is what the caret is for.
-
-A length-0 placement is covered as it is DRAWN, over its natural four beats, not over the zero
-its file states. A caret stopping short of the block it is meant to be on would read as a
-rounding bug.
+**Delete and copy act on the picked events alone**, one `events remove` for the lot so it is one
+Ctrl+Z, and the right-click menu offers no range verbs over them: everyone who has clicked an
+event and pressed Delete expects that event to go, not a neighbour that happens to start in the
+same beat or one layered inside it. A single picked event is what the Editor panel edits, and it
+lights its copies elsewhere. The caret's verbs — `z`, Shift+L, `g`, `m`/`s` — still act on the
+caret and the rectangle: picking is not the caret, and an arrow or a Shift+drag on the lane
+turns the selection back into a rectangle someone drew.
 
 Two things it deliberately does not do. It fires on the pointer coming back UP without having
 moved — a drag is a move and ends as one. And it is skipped entirely while the command bar is
@@ -749,9 +745,8 @@ selection), headed at the cell under the pointer. Keeping the button down and **
 moves the head live, across beats and across rows, exactly as `hjkl` would move it — it is the
 same `Selection`, so `z`, Shift+L and `v` then act on it, and the status line counts it.
 
-A shifted press is a selection press even when it lands on a clip: `beginClipDrag` bails on
-`shiftKey` *before* stopping propagation, so the press bubbles to the lane instead of picking
-the clip up. And the head's row is read off the rows' own DOM (`data-sel-row`, on every row
+A shifted press on an event is not a rectangle press: it adds that event to the picked ones
+(above), so the rectangle is grown from the lane's own cells. And the head's row is read off the rows' own DOM (`data-sel-row`, on every row
 wrapper — groups and video lanes too), for the reason `laneAtPoint` hit-tests
 `data-lane-track`: rows come in three heights, and a second copy of that geometry would drift.
 Starting the gesture still needs a track lane, the only row a caret cell lives on; the drag can

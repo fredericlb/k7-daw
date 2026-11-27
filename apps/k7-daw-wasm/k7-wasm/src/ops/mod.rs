@@ -22,6 +22,12 @@ pub mod timecode;
 pub mod track;
 #[cfg(feature = "verbs")]
 pub mod verb;
+#[cfg(feature = "verbs")]
+pub mod verb_edit;
+#[cfg(feature = "verbs")]
+pub mod verb_menu;
+#[cfg(feature = "verbs")]
+pub mod verb_ui;
 
 use crate::error::WasmError;
 use serde::de::DeserializeOwned;
@@ -101,6 +107,12 @@ impl Session {
             "eyes" => eyes::dispatch(&mut self.floats, decode(input)?, out),
             #[cfg(feature = "verbs")]
             "verb" => verb::dispatch(decode(input)?, out),
+            #[cfg(feature = "verbs")]
+            "ui" => verb_ui::dispatch(decode(input)?, out),
+            #[cfg(feature = "verbs")]
+            "edit" => verb_edit::dispatch(decode(input)?, out),
+            #[cfg(feature = "verbs")]
+            "menu" => verb_menu::dispatch(decode(input)?, out),
             "version" => write(
                 out,
                 &VersionAnswer {

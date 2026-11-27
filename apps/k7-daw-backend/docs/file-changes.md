@@ -76,7 +76,7 @@ front's `native/picture_run.rs`.
 `{line, at?, journal?, want?}` in, the `verbs` crate's answer out (`{log, refuse, refused, effects, asks?, threw?}`) with `landed`,
 the step's `changed`, `revBefore` and `rev`, and `graph` when asked: the route the page runs every command line and editing gesture
 through (`docs/verbs-port.md`). `POST /verb/complete {line, cursor?, labelled?}` answers `{items}`. `GET /verb/catalogue` answers the palette's `CommandInfo[]`
-(`apps/k7-daw-frontend/packages/web-protocol/commandTypes.ts`), built by the crate's `palette.rs` from its `commands.json`: it reads
+(the generated `CommandInfo` of `apps/k7-daw-frontend/packages/k7-wasm/src/types/`), built by the crate's `palette.rs` from its `commands.json`: it reads
 no file, so it answers the same for any workspace. The code is the file service's
 `edits/verb.rs` and the front's `native/verb_run.rs` and `native/verb_ask.rs`.
 

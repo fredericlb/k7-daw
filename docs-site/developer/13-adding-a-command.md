@@ -63,7 +63,7 @@ provider, and the menu derives itself from the catalogue.
 
 ### A new completion provider
 
-Add it to the crate's providers in `apps/k7-daw-wasm/verbs/src/complete/mod.rs`, then give it a class and a hint in the table of `apps/k7-daw-wasm/verbs/src/complete/provider_info.rs` (a test fails when a name is in one and not the other). The provider and class names are mirrored on the wire as the `ArgProvider` and `ArgClass` unions in `apps/k7-daw-frontend/packages/web-protocol/commandTypes.ts`; add the new name there too.
+Add it to the crate's providers in `apps/k7-daw-wasm/verbs/src/complete/mod.rs`, then give it a class and a hint in the table of `apps/k7-daw-wasm/verbs/src/complete/provider_info.rs` (a test fails when a name is in one and not the other). The provider and class names are the `ArgProvider` and `ArgClass` enums of `apps/k7-daw-wasm/verbs/src/ui/wire.rs`, from which the page's unions are generated; add the new name there too (a test fails when it is missing).
 
 ## A `ui` command
 

@@ -3,6 +3,7 @@
 // `menu:`), this is the person's own list over it — several at once, since one verb belongs on
 // two menus. See ../../docs/contextMenu.md.
 
+import { menuChoice } from "@studio/k7-wasm/ui";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@studio/ui/dropdown-menu";
 import { cn } from "@studio/ui/lib/utils";
-import { type CommandPref, menuChoice } from "../commandPrefs";
+import type { CommandPref } from "../commandPrefs";
 import { m } from "../paraglide/messages.js";
 import { MENU_ENTITIES, type MenuEntity } from "../types";
 import type { PaletteCommand } from "./CommandBar";

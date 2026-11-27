@@ -9,6 +9,7 @@ import {
   setServiceProcesses,
   subscribeProcesses,
   trackProcess,
+  watchProcessEnds,
 } from "./processes";
 
 afterEach(() => {
@@ -63,5 +64,24 @@ describe("the process list", () => {
     setServiceProcesses(list.map((p) => ({ ...p })));
     expect(heard).not.toHaveBeenCalled();
     off();
+  });
+});
+
+describe("an ending", () => {
+  it("is told once for a process seen running, and never for one first seen ended", () => {
+    const ended: string[] = [];
+    const stop = watchProcessEnds((p) => ended.push(`${p.label}:${p.state}`));
+    const row = (state: "running" | "done" | "failed") => ({
+      id: "s1",
+      label: "track freeze drums",
+      state,
+      startedAt: 0,
+    });
+    setServiceProcesses([row("running")]);
+    setServiceProcesses([row("done")]);
+    setServiceProcesses([{ ...row("done"), endedAt: 5 }]);
+    setServiceProcesses([{ ...row("failed"), id: "s2", label: "old" }]);
+    stop();
+    expect(ended).toEqual(["track freeze drums:done"]);
   });
 });

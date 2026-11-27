@@ -35,7 +35,8 @@ export type PanelId =
   | "settings"
   | "chain"
   | "references"
-  | "history";
+  | "history"
+  | "tags";
 
 /** What the bottom dock holds: each is named and glyphed here, and none is a right panel. */
 export type DockPanel = "events" | "mixer" | "chain";
@@ -112,6 +113,11 @@ export const PANEL_DEFS: Record<PanelId, PanelDef> = {
     button: "resources",
   },
   history: {
+    icon: ListChecks,
+    title: () => m["shell.panel.tasks"](),
+    button: "tasks",
+  },
+  tags: {
     icon: ListChecks,
     title: () => m["shell.panel.tasks"](),
     button: "tasks",

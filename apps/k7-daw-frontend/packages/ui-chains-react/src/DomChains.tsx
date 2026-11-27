@@ -56,7 +56,14 @@ import {
 } from "react";
 import { Cables } from "./ChainsCables";
 import { Node } from "./ChainsNode";
-import { applyCam, type Cam, type Lod, lodFor, sameLod } from "./camera";
+import {
+  applyCam,
+  type Cam,
+  clampRowX,
+  type Lod,
+  lodFor,
+  sameLod,
+} from "./camera";
 import { cableColorFor, cableStrokeFor, MAUVE, useCss } from "./chainsCss";
 import { buildModel } from "./chainsModel";
 import { createOverrideStore, EMPTY_ORDER, NOOP } from "./chainsStores";
@@ -268,8 +275,19 @@ function DomChainsBody({
   };
   const persistRef = useRef(persist);
   persistRef.current = persist;
+  // A row's camera is held between its first card at the left and its last one ROW_TAIL px short of the right.
+  const holdRow = (c: Cam) => {
+    const host = hostRef.current;
+    if (!rowRef.current || !host || !Number.isFinite(graph.width)) return;
+    const w = host.clientWidth;
+    c.x = clampRowX(c.x, c.k, graph.left, graph.width, w, fitMargin);
+  };
+  const holdRowRef = useRef(holdRow);
+  holdRowRef.current = holdRow;
   // Put the camera somewhere outright — a fit, not a gesture, so it lands whole in one frame.
-  const place = (c: Cam) => {
+  const place = (to: Cam) => {
+    const c = { ...to };
+    holdRow(c);
     Object.assign(cam.current, c);
     Object.assign(goal.current, c);
     applyCam(worldRef.current, cam.current);
@@ -285,6 +303,7 @@ function DomChainsBody({
   placeRef.current = place;
   // A camera restored from the store is never placed by a fit, so it needs this one write.
   useLayoutEffect(() => {
+    holdRowRef.current(cam.current);
     applyCam(worldRef.current, cam.current);
     paintRef.current();
   }, []);
@@ -886,6 +905,7 @@ function DomChainsBody({
     flightHalf,
     goal,
     hostRef,
+    holdRowRef,
     hostSize,
     kick,
     lodRef,

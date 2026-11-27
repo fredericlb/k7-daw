@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "type": "module",
   "private": true,
-  "description": "The shapes the browser and the services agree on \u2014 the engine registry, the workspace and project listings, the quality vocabulary. Types and constants only, no runtime dependency, which is what lets both clients read the same numbers.",
+  "description": "The shapes the browser and the services agree on — the engine registry, the workspace and project listings, the quality vocabulary. Types and constants only, its command types generated from Rust, which is what lets both clients read the same numbers.",
   "types": "./types.ts",
   "exports": {
     ".": "./types.ts",
@@ -24,6 +24,7 @@
     "vitest": "^4.1.10"
   },
   "dependencies": {
-    "@studio/engine-protocol": "*"
+    "@studio/engine-protocol": "*",
+    "@studio/k7-wasm": "*"
   }
 }

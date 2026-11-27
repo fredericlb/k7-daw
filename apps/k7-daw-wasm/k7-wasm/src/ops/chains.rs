@@ -102,21 +102,21 @@ pub fn flow_seeds(a: FlowSeedsArgs) -> Vec<(String, NodeFlow)> {
 /// A graph and the lane a read is about.
 #[derive(Clone, Debug, Deserialize)]
 #[cfg_attr(feature = "ts", derive(ts_rs::TS))]
-pub struct LaneArgs {
+pub struct ChainLaneArgs {
     #[cfg_attr(feature = "ts", ts(type = "import(\"@studio/graph-model\").WebGraph"))]
     pub graph: GraphView,
     pub track: String,
 }
 
-pub fn subgraph_chains(a: LaneArgs) -> Vec<KeptChain> {
+pub fn subgraph_chains(a: ChainLaneArgs) -> Vec<KeptChain> {
     subgraph::subgraph_chains(&a.graph, &a.track)
 }
 
-pub fn subgraph_modules(a: LaneArgs) -> Vec<String> {
+pub fn subgraph_modules(a: ChainLaneArgs) -> Vec<String> {
     subgraph::track_modules(&a.graph, &a.track)
 }
 
-pub fn subgraph_inputs(a: LaneArgs) -> Vec<String> {
+pub fn subgraph_inputs(a: ChainLaneArgs) -> Vec<String> {
     subgraph::track_inputs(&a.graph, &a.track)
 }
 
@@ -219,7 +219,7 @@ pub fn place_without_curves(a: WithoutCurvesArgs) -> Option<Kept> {
 /// The graph to build, how, and which assemblies are open when it has any.
 #[derive(Clone, Debug, Deserialize)]
 #[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(optional_fields))]
-pub struct BuildArgs {
+pub struct ChainBuildArgs {
     #[cfg_attr(feature = "ts", ts(type = "import(\"@studio/graph-model\").WebGraph"))]
     pub graph: Graph,
     #[serde(default)]
@@ -236,7 +236,7 @@ pub struct Built {
     pub edges: Vec<Edge>,
 }
 
-pub fn graph_build(a: BuildArgs) -> Built {
+pub fn graph_build(a: ChainBuildArgs) -> Built {
     let (nodes, edges) = build_graph(&a.graph, &a.opts);
     let (nodes, edges) = match &a.open {
         Some(open) => fold_assemblies(&a.graph, nodes, edges, &open.iter().cloned().collect()),
@@ -373,11 +373,11 @@ pub enum ChainsRequest {
     #[serde(rename = "flow.seeds")]
     FlowSeeds(FlowSeedsArgs),
     #[serde(rename = "lane.chains")]
-    LaneChains(LaneArgs),
+    LaneChains(ChainLaneArgs),
     #[serde(rename = "lane.modules")]
-    LaneModules(LaneArgs),
+    LaneModules(ChainLaneArgs),
     #[serde(rename = "lane.inputs")]
-    LaneInputs(LaneArgs),
+    LaneInputs(ChainLaneArgs),
     #[serde(rename = "bindings.resolve")]
     BindingsResolve(BindingsArgs),
     #[serde(rename = "bindings.unmapped")]
@@ -393,7 +393,7 @@ pub enum ChainsRequest {
     #[serde(rename = "place.withoutCurves")]
     PlaceWithoutCurves(WithoutCurvesArgs),
     #[serde(rename = "graph.build")]
-    GraphBuild(BuildArgs),
+    GraphBuild(ChainBuildArgs),
     #[serde(rename = "graph.row")]
     GraphRow(RowArgs),
     #[serde(rename = "graph.align")]

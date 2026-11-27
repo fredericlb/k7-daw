@@ -1,10 +1,15 @@
-# Background processes — the header's spinner
+# Background processes — the running spinner
 
-Right of the project's name, a spinner shows while anything runs: a transcription, a chain bounce or a
-separation, a picture render or a video's copies, an export. It is a link named by the running count and
-opens Tasks & history, which lists each process with its command line, how far it is when it says so and
-how long it has run. An ended process stays a few seconds with a check or an alert, so its end is seen.
-With nothing running there is no spinner.
+At the app's top right, a spinner shows while anything runs: a transcription, a chain bounce or a
+separation, a picture render or a video's copies, an export (`shell/RunningBubble.tsx`). It is a button
+named by the running count; a press opens a bubble listing each process with its command line, how far
+it is when it says so and how long it has run. With nothing running there is no spinner. What runs is
+asked about where the eye already is, at a glance, so it is a bubble and not a panel to open and close.
+
+**An ending is a toast**, once, for a process this page saw running (`watchProcessEnds`, wired in
+`App`): "done" for a success, and for a failure an error toast that names why and waits to be
+dismissed, so the reason is still readable after the spinner has gone. One first seen already ended —
+a page opened after it — says nothing: it is not news. No list keeps ended work.
 
 ## Two sources, one list
 

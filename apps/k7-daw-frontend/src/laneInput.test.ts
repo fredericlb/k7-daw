@@ -1,7 +1,7 @@
 // A lane has an input when an audio input or a MIDI device feeds it, however many chains away.
 
 import { describe, expect, it } from "vitest";
-import { laneHasInput } from "./laneInput";
+import { laneHasInput, laneInput } from "./laneInput";
 import type { WebGraph } from "./types";
 
 const graph = (chains: Record<string, unknown>): WebGraph =>
@@ -27,5 +27,26 @@ describe("whether a lane has an input", () => {
     expect(laneHasInput(g, "vox")).toBe(true);
     expect(laneHasInput(g, "pad")).toBe(false);
     expect(laneHasInput(g, "bass")).toBe(false);
+  });
+});
+
+describe("the input a lane's title bar shows", () => {
+  it("names the module, its kind and the fields it writes", () => {
+    const g = graph({
+      mic: {
+        use: [{ module: "m", monitor: "auto", channel: [3, 4] }],
+        out: [{ to: "vox" }],
+      },
+      keys: { use: [{ module: "k", device: "Juno" }], out: [{ to: "lead" }] },
+    });
+    expect(laneInput(g, "vox")).toEqual({
+      module: "m",
+      kind: "audio",
+      channel: [3, 4],
+      monitor: "auto",
+      device: undefined,
+    });
+    expect(laneInput(g, "lead")?.kind).toBe("midi");
+    expect(laneInput(g, "pad")).toBeNull();
   });
 });

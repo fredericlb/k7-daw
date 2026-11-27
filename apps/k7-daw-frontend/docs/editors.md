@@ -10,7 +10,7 @@ the live take, a sequence's grid, the takes.
   Close. An editor has no toolbar of its own in its content.
 - **The view switch on the left, everything else on the right.** No editor names what it shows (no clip
   name, no count, no path): the dock's visually hidden title names it. The title bar starts with the
-  view switch (the waveform's views and the roll's tools as the same capsules, the chain's Controls) and pushes the
+  view switch (the waveform's views and the roll's tools as the same capsules) and pushes the
   settings and actions to the right.
 - **A clip editor starts with Fit.** The first control of the audio clip and the piano roll is Fit
   (`DockFitButton`, `ui fit`): one zoom level of the timeline centred on the edited placement, a quarter

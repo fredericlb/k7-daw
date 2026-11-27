@@ -442,7 +442,7 @@ The imported clips list.
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
-| 08.01 | Show running background processes | click the processes button (read-only popover) | Enter/Space on the button | tap | T M D |
+| 08.01 | Show running background processes | click the spinner at the app's top right, there only while something runs (a read-only bubble: each process with how far it is and for how long) | Enter/Space on the button | tap | T M D |
 
 ### Tasks & history
 
@@ -455,8 +455,8 @@ The task list with project tags, the edit journal, the Saves list, the sync hist
 | 08.04 | Tick / untick a task | click its checkbox | Space | tap | T M D |
 | 08.05 | Delete a task | click the bin (on hover; always on touch), confirm | Enter | tap | T M D |
 | 08.06 | Seek to a task's timecode | click the timecode (same project) | — | tap | T M D |
-| 08.07 | Add a project tag | type, Enter | Enter | on-screen keyboard | T M D |
-| 08.08 | Remove a project tag | click ✕ on the chip | — | tap | T M D |
+| 08.07 | Add a project tag | in the Tags tab (third, after Tasks and History): type, Enter | Enter | on-screen keyboard | T M D |
+| 08.08 | Remove a project tag | in the Tags tab: click ✕ on the chip | — | tap | T M D |
 | 08.09 | Light what an undo step touched | hover a journal row | — | — | D |
 | 08.10 | Switch Edits / Workspace / Saves | click a toggle (Saves only when the workspace is under git) | — | tap | T M D |
 
@@ -906,7 +906,7 @@ The Mixer (one strip per lane's mixer module, Master as the row's last strip wit
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
-| 34.04 | Save from a project | click Save, the first button of the right-edge toolbar (its count of changes on its corner and on the folded chevron; dimmed when nothing waits; a spinner while it runs; its tooltip says the last auto-save) | Tab, Enter | phone: tap the git button → Save | T M D |
+| 34.04 | Save from a project | click the Export button, the first of the right-edge toolbar (the count of changes on its corner and on the folded chevron), then Save, the panel's first row (dimmed when nothing waits; a spinner while it runs; the last auto-save under its name) | Tab, Enter | tap the Export button on the rail → Save | T M D |
 | 34.05 | Pull after a save not sent | toast "Saved on this device, not sent" · "The remote has new changes: pull first, then save again.": click Pull | — | tap | T M D |
 | 34.06 | Retry a save | toast "Not saved", or "Saved on this device, not sent" for any failure but a remote ahead: click Retry | — | tap | T M D |
 | 34.07 | Set the author after a save refused | toast "Not saved: no author yet" · "Set your name and email in Settings, then save again.": click Settings → Settings, General (23.01) | — | tap | T M D |

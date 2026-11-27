@@ -1,23 +1,20 @@
 // TasksPanel.tsx — the workspace's task list, `TODOS.md` at its root, as a panel on the right: a line to
 // type a task into, a box that pins it to where the playhead is in this song, and the list with a tick
 // and a bin per task. It writes nothing itself — every change is a `task …` command, then a re-read,
-// since the FILE is the truth and a person may edit it by hand (../docs/tasks.md). Above the list, the
-// open project's TAGS, written the same way through `project tag` / `project untag`.
+// since the FILE is the truth and a person may edit it by hand (../docs/tasks.md). The project's tags are
+// the panel's third tab (TagsPanel.tsx).
 
 import { TASKS_FILE } from "@studio/k7-wasm/consts";
-import { projectTagsOf } from "@studio/k7-wasm/rules";
 import { parseTasks, type Task } from "@studio/k7-wasm/schema";
 import { askConfirm } from "@studio/project-shell/ask";
 import { Button } from "@studio/ui/button";
 import { Checkbox } from "@studio/ui/checkbox";
-import { Plus, Trash2, X } from "@studio/ui/icons";
+import { Plus, Trash2 } from "@studio/ui/icons";
 import { Input } from "@studio/ui/input";
 import { useCallback, useEffect, useState } from "react";
 import { api } from "../api";
 import { useRevision } from "../hooks/useRevision";
 import { m } from "../paraglide/messages.js";
-import { projectDir } from "../projectPaths";
-import { ProcessesSection } from "./ProcessesSection";
 
 export function TasksPanel({
   project,
@@ -37,28 +34,7 @@ export function TasksPanel({
   const [error, setError] = useState("");
   const [text, setText] = useState("");
   const [attach, setAttach] = useState(false);
-  const [tags, setTags] = useState<string[]>([]);
-  const [tag, setTag] = useState("");
   const revision = useRevision();
-
-  const refreshTags = useCallback(async () => {
-    if (!project) return setTags([]);
-    try {
-      const dir = projectDir(project);
-      const file = dir ? `${dir}/project.k7x` : "project.k7x";
-      setTags(projectTagsOf((await api.read(file)).content));
-    } catch {
-      setTags([]);
-    }
-  }, [project]);
-  // biome-ignore lint/correctness/useExhaustiveDependencies: `revision` is the trigger, not an input.
-  useEffect(() => {
-    void refreshTags();
-  }, [refreshTags, revision]);
-  const runTag = async (line: string) => {
-    await onRun(line);
-    await refreshTags();
-  };
 
   const refresh = useCallback(async () => {
     try {
@@ -104,54 +80,16 @@ export function TasksPanel({
     if (ok) await run(`task remove ${n}`);
   };
 
-  const open = (tasks ?? []).filter((t) => !t.done).length;
+  // This project's tasks and the workspace-wide ones: a task pinned to another project is that project's business.
+  const shown = tasks?.filter((t) => !t.at || t.at.project === project) ?? null;
+  const open = (shown ?? []).filter((t) => !t.done).length;
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      <ProcessesSection />
       <p className="shrink-0 pb-2 font-mono text-[11px] text-muted-foreground">
         {TASKS_FILE}
         {open > 0 ? ` · ${m["tasks.openCount"]({ n: open })}` : ""}
       </p>
-
-      {project && (
-        <form
-          className="flex flex-wrap items-center gap-1 border-b border-border px-3 py-2"
-          onSubmit={(e) => {
-            e.preventDefault();
-            const t = tag.trim();
-            if (!t) return;
-            setTag("");
-            void runTag(`project tag ${t}`);
-          }}
-        >
-          {tags.map((t) => (
-            <span
-              key={t}
-              className="flex items-center gap-0.5 rounded bg-secondary py-0.5 pr-0.5 pl-1.5 text-muted-foreground text-xs"
-            >
-              {t}
-              <button
-                type="button"
-                className="rounded p-0.5 hover:bg-muted hover:text-foreground"
-                onClick={() => void runTag(`project untag ${t}`)}
-                title={m["tasks.untag"]({ tag: t })}
-                aria-label={m["tasks.untag"]({ tag: t })}
-              >
-                <X className="h-3 w-3" />
-              </button>
-            </span>
-          ))}
-          <Input
-            value={tag}
-            onChange={(e) => setTag(e.target.value)}
-            placeholder={m["tasks.tagPlaceholder"]()}
-            title={m["tasks.tagHint"]()}
-            aria-label={m["tasks.tagHint"]()}
-            className="min-w-[6rem]"
-          />
-        </form>
-      )}
 
       <form
         className="flex flex-col gap-1.5 border-b border-border px-3 py-2"
@@ -192,15 +130,14 @@ export function TasksPanel({
 
       <div className="min-h-0 flex-1 overflow-auto px-1 py-1">
         {error && <p className="px-2 py-1 text-error text-xs">{error}</p>}
-        {tasks?.length === 0 && (
+        {shown?.length === 0 && (
           <p className="px-2 py-4 text-center text-xs text-muted-foreground">
             {m["tasks.empty"]()}
           </p>
         )}
-        {tasks?.map((t, i) => {
-          const n = i + 1;
-          // A pin into THIS song jumps the playhead; one into another song only says where.
-          const here = !!t.at && t.at.project === project;
+        {shown?.map((t) => {
+          // The verbs number the WHOLE file's tasks, the hidden ones included.
+          const n = (tasks ?? []).indexOf(t) + 1;
           return (
             <div
               key={`${t.line}:${t.text}`}
@@ -223,18 +160,11 @@ export function TasksPanel({
                 {t.at && (
                   <button
                     type="button"
-                    disabled={!here}
                     onClick={() => t.at && onSeek(t.at.timecode)}
-                    className="font-mono text-[11px] text-muted-foreground enabled:cursor-pointer enabled:text-primary-text enabled:hover:underline"
-                    title={
-                      here
-                        ? m["tasks.seek"]()
-                        : m["tasks.elsewhere"]({ project: t.at.project })
-                    }
+                    className="cursor-pointer font-mono text-[11px] text-primary-text hover:underline"
+                    title={m["tasks.seek"]()}
                   >
-                    {here
-                      ? t.at.timecode
-                      : `${t.at.project} @ ${t.at.timecode}`}
+                    {t.at.timecode}
                   </button>
                 )}
               </div>
