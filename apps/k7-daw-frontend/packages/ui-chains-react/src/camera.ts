@@ -111,11 +111,21 @@ export const sameLod = (a: Lod, b: Lod): boolean =>
 // The one place the camera becomes a transform, written onto the element rather than rendered.
 export function applyCam(el: HTMLElement | null, c: Cam): void {
   if (!el) return;
-  el.style.transform = `translate(${c.x}px,${c.y}px) scale(${c.k})`;
+  // The world is laid out at its settled zoom (settleCam); the transform carries only what the gesture adds.
+  const z = Number(el.style.zoom) || 1;
+  el.style.transform = `translate(${c.x / z}px,${c.y / z}px) scale(${c.k / z})`;
   // The zoom for CSS too, which caps what it draws on SCREEN (chainsCss.ts); set only when it moves, a pan costing no restyle.
   const k = String(c.k);
   if (el.style.getPropertyValue("--dgx-k") !== k)
     el.style.setProperty("--dgx-k", k);
+}
+
+/** Lays the world out at the camera's zoom once it settles: CSS zoom paints text crisp, a scale stretches a 1x picture (docs/camera.md). */
+export function settleCam(el: HTMLElement | null, c: Cam): void {
+  if (!el) return;
+  const k = String(c.k);
+  if (el.style.zoom !== k) el.style.zoom = k;
+  applyCam(el, c);
 }
 
 /** How much of the pane a node framed by a double-click fills, and the zoom it never goes past. */

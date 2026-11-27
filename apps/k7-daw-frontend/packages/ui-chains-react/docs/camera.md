@@ -221,3 +221,13 @@ the wheel's own half-life, so the card stays on screen the whole way — interpo
 offsets instead drags it off an edge and back. Any wheel, drag or pinch drops the flight at once:
 the hand outranks a double-click that is still arriving. A ROW (the mixer) takes none of this; it
 is walked along, not zoomed into.
+
+## A settled camera is laid out, not stretched
+
+Once the camera settles (a fit, the end of a glide), the world takes the zoom as CSS `zoom` and its
+transform keeps only the translation (`settleCam`). A `scale()` on a composited layer is a picture
+rasterized at 1× and stretched, so a row framed above 1× — the per-track view — reads blurred; under
+`zoom` the text and borders are laid out and painted at the size they are shown. During a gesture
+the transform carries the zoom the gesture adds on top of the settled one, since re-laying the world
+out every frame is the cost `zoom` would add. WebKit and Chromium zoom a transform's lengths with the
+element, so the translation is divided by the settled zoom.
