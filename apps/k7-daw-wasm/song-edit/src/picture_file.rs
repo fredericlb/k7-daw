@@ -1,11 +1,11 @@
 // picture_file.rs — read and edit a PICTURE lane's `events:` list, each shot `{ref, start, length, from}` in decimal seconds.
 // A reader would get wrong that a refused edit is `Ok(false)` and writes nothing, as is an unreadable buffer.
 
-use super::picture_animate::{animate_path, animate_value, parse_animate, split_animate};
+use crate::picture_animate::{animate_path, animate_value, parse_animate, split_animate};
 use k7x::edit::{PathSeg, Scope, Value, WriteOptions};
-use song_edit::error::Res;
-use song_edit::js_text::js_to_number;
-use song_edit::start_time::js_round;
+use crate::error::Res;
+use crate::js_text::js_to_number;
+use crate::start_time::js_round;
 
 /// A placement of a picture lane's `events:`; absent fields read as the file's defaults.
 #[derive(Clone, Debug, PartialEq)]
@@ -19,7 +19,7 @@ pub struct Shot {
     pub silent: bool,
 }
 
-pub(super) fn key(k: &str) -> PathSeg {
+pub fn key(k: &str) -> PathSeg {
     PathSeg::Key(k.to_owned())
 }
 
@@ -41,14 +41,14 @@ fn data_of(sc: &Scope) -> Option<Value> {
     sc.to_js().ok().flatten().filter(|v| matches!(v, Value::Map(_)))
 }
 
-pub(super) fn events_of(sc: &Scope) -> Option<Vec<Value>> {
+pub fn events_of(sc: &Scope) -> Option<Vec<Value>> {
     match data_of(sc)?.get("events") {
         Some(Value::List(l)) => Some(l.clone()),
         _ => None,
     }
 }
 
-pub(super) fn has_index(events: &Option<Vec<Value>>, index: usize) -> bool {
+pub fn has_index(events: &Option<Vec<Value>>, index: usize) -> bool {
     events.as_ref().is_some_and(|e| index < e.len())
 }
 

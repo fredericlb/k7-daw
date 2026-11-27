@@ -2,9 +2,9 @@
 // A reader would get wrong what these see: the EXPANDED notes, since `ws_edit` hands them the short form already undone.
 
 use k7x::edit::{Document, PathSeg, Value, WriteOptions};
-use song_edit::error::{Res, fail};
-use song_edit::js_text::{js_string, str_to_number};
-use song_edit::start_time::js_round;
+use crate::error::{Res, fail};
+use crate::js_text::{js_string, str_to_number};
+use crate::start_time::js_round;
 use song_schema::{beats_to_position_on, parse_position_on};
 
 /// Two beat positions closer than this are the same one.

@@ -1,10 +1,10 @@
 // picture_animate.rs — a shot's `animate:` as keys: read, cut in two at a split, shifted by a head trim, one key set or removed.
 // A reader would get wrong that a lone key at 0 stays a key: it is written back as the constant it means.
 
-use super::picture_file::{events_of, has_index, key, ms};
+use crate::picture_file::{events_of, has_index, key, ms};
 use k7x::edit::{PathSeg, Scope, Value, WriteOptions};
-use song_edit::error::Res;
-use song_edit::start_time::js_round;
+use crate::error::Res;
+use crate::start_time::js_round;
 
 /// What a shot may animate, in the schema's own order.
 pub const ANIMATED_PROPS: [&str; 5] = ["x", "y", "scale", "opacity", "rotate"];
@@ -116,7 +116,7 @@ fn written(keys: &[Key]) -> Value {
     )
 }
 
-pub(super) fn animate_value(a: &Animate) -> Value {
+pub fn animate_value(a: &Animate) -> Value {
     Value::Map(
         a.iter()
             .map(|(p, x)| {
@@ -130,7 +130,7 @@ pub(super) fn animate_value(a: &Animate) -> Value {
     )
 }
 
-pub(super) fn animate_path(index: usize) -> Vec<PathSeg> {
+pub fn animate_path(index: usize) -> Vec<PathSeg> {
     vec![key("events"), PathSeg::Index(index), key("animate")]
 }
 
