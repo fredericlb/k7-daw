@@ -9,14 +9,14 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-secondary text-muted-foreground tabular-nums",
-        amber: "bg-amber/15 text-amber tabular-nums",
+        default: "bg-row text-fg-2 tabular-nums",
+        amber: "bg-warn/15 text-warn tabular-nums",
         rec: "bg-error/15 text-error tabular-nums",
         tag: "border border-primary/35 bg-primary/20 font-semibold text-primary-text",
         count:
-          "type-badge h-[22px] min-w-[22px] rounded-[11px] bg-primary px-1.5 py-0 text-primary-foreground tabular-nums",
+          "type-badge h-[22px] min-w-[22px] rounded-[11px] bg-primary px-1.5 py-0 text-on-accent tabular-nums",
         "count-sm":
-          "type-badge h-5 min-w-5 rounded-[10px] bg-primary px-1.5 py-0 text-primary-foreground tabular-nums",
+          "type-badge h-5 min-w-5 rounded-[10px] bg-primary px-1.5 py-0 text-on-accent tabular-nums",
         warn: "type-secondary h-[30px] gap-1.5 rounded-[15px] border border-(--k7-warn-line) bg-(--k7-warn-fill) px-2.5 py-0 font-bold text-warn tabular-nums",
       },
     },

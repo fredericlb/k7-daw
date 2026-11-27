@@ -32,7 +32,7 @@ export const Panel: Story = {
     children: null,
   },
   render: (args) => (
-    <div className="relative h-[560px] bg-background">
+    <div className="relative h-[560px] bg-ground">
       <SidePanel {...args} icon={<Mic />}>
         {rows}
       </SidePanel>
@@ -49,7 +49,7 @@ export const EditorHeader: Story = {
     children: null,
   },
   render: (args) => (
-    <div className="relative h-[560px] bg-background">
+    <div className="relative h-[560px] bg-ground">
       <SidePanel
         {...args}
         subtitle="audio · bar 2 · 0:00.50 → 0:01.75"
@@ -75,7 +75,7 @@ export const PhoneSheet: Story = {
     children: null,
   },
   render: (args) => (
-    <div className="relative mx-auto h-[720px] w-[390px] overflow-hidden bg-background">
+    <div className="relative mx-auto h-[720px] w-[390px] overflow-hidden bg-ground">
       <Sheet
         {...args}
         transport={
@@ -101,7 +101,7 @@ export const Closable: Story = {
   render: (args) => {
     const [open, setOpen] = React.useState(true);
     return (
-      <div className="relative h-[560px] bg-background p-4">
+      <div className="relative h-[560px] bg-ground p-4">
         <Button onClick={() => setOpen(true)}>Open panel</Button>
         {open ? (
           <SidePanel {...args} icon={<Mic />} onClose={() => setOpen(false)}>

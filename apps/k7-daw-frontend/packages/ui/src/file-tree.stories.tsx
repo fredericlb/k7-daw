@@ -85,7 +85,7 @@ export const Default: Story = {
   render: () => {
     const [active, setActive] = useState("travail/lundi");
     return (
-      <div className="h-96 w-64 border border-border bg-card/40">
+      <div className="h-96 w-64 border border-hairline bg-panel/40">
         <FileTree
           nodes={nodes}
           activePath={active}
@@ -105,7 +105,7 @@ export const WithRowMenuButton: Story = {
   render: () => {
     const [active, setActive] = useState("travail/lundi");
     return (
-      <div className="h-96 w-64 border border-border bg-card/40">
+      <div className="h-96 w-64 border border-hairline bg-panel/40">
         <FileTree
           nodes={nodes}
           activePath={active}
@@ -131,7 +131,7 @@ export const WithUploads: Story = {
     const say = (line: string) => setLog((l) => [...l.slice(-4), line]);
     return (
       <div className="w-72">
-        <div className="h-72 border border-border bg-card/40">
+        <div className="h-72 border border-hairline bg-panel/40">
           <FileTree
             nodes={nodes}
             rootPath="."
@@ -146,7 +146,7 @@ export const WithUploads: Story = {
         </div>
         <ul
           data-testid="drop-log"
-          className="mt-2 text-xs text-muted-foreground"
+          className="mt-2 text-xs text-fg-2"
         >
           {log.map((l) => (
             <li key={l}>{l}</li>
@@ -160,7 +160,7 @@ export const WithUploads: Story = {
 /** No menu, no drag: the tree degrades to plain navigation. */
 export const ReadOnly: Story = {
   render: () => (
-    <div className="h-96 w-64 border border-border bg-card/40">
+    <div className="h-96 w-64 border border-hairline bg-panel/40">
       <FileTree nodes={nodes} activePath="courses" ask={ask} />
     </div>
   ),
@@ -169,7 +169,7 @@ export const ReadOnly: Story = {
 /** A single wrapping row, never drawn — its children show at depth 0, as the médiathèque uses it. */
 export const WithCollapsedRoot: Story = {
   render: () => (
-    <div className="h-96 w-64 border border-border bg-card/40">
+    <div className="h-96 w-64 border border-hairline bg-panel/40">
       <FileTree
         nodes={[{ name: "NOTES", path: "", dir: true, children: nodes }]}
         collapseSingleRoot

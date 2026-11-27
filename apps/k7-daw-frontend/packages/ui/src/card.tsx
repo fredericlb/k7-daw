@@ -24,7 +24,7 @@ const Card = React.forwardRef<
     ref={ref}
     className={cn(
       SURFACES[variant],
-      "p-[18px] text-card-foreground",
+      "p-[18px] text-fg-1",
       className,
     )}
     {...props}

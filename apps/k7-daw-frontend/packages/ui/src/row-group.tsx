@@ -39,7 +39,7 @@ interface RowProps {
 }
 
 const ROW =
-  "type-body flex w-full min-h-11 items-center gap-3 px-3.5 py-2.5 text-left text-foreground";
+  "type-body flex w-full min-h-11 items-center gap-3 px-3.5 py-2.5 text-left text-fg-1";
 
 function RowBody({
   icon,

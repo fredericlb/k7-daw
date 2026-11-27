@@ -195,7 +195,7 @@ export function Knob({
               y1={hub[1]}
               x2={tip[0]}
               y2={tip[1]}
-              stroke="var(--color-foreground)"
+              stroke="var(--k7-text)"
               strokeWidth="2.5"
               strokeLinecap="round"
             />

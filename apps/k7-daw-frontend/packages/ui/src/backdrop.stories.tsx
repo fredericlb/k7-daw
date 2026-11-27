@@ -13,7 +13,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: () => (
-    <div className="relative h-[480px] overflow-hidden bg-background">
+    <div className="relative h-[480px] overflow-hidden bg-ground">
       <Backdrop />
     </div>
   ),

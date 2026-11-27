@@ -171,7 +171,7 @@ export function SearchList<T>({
           onKeyDown={keys}
           spellCheck={false}
           autoComplete="off"
-          className="type-body h-11 w-full rounded-xl border border-(--k7-input-line) bg-(--k7-input-fill) pr-3 pl-9 text-foreground outline-none placeholder:text-fg-3 focus:border-(--k7-focus-line) desk:h-8"
+          className="type-body h-11 w-full rounded-xl border border-(--k7-input-line) bg-(--k7-input-fill) pr-3 pl-9 text-fg-1 outline-none placeholder:text-fg-3 focus:border-(--k7-focus-line) desk:h-8"
         />
       </div>
       {idle !== undefined && !query.trim() ? (
@@ -200,7 +200,7 @@ export function SearchList<T>({
                 onMouseMove={() => n !== at && setActive(n)}
                 onClick={() => onPick(item)}
                 className={cn(
-                  "type-body flex min-h-11 w-full cursor-pointer items-center gap-2 rounded-xl px-3 text-left text-foreground desk:min-h-8",
+                  "type-body flex min-h-11 w-full cursor-pointer items-center gap-2 rounded-xl px-3 text-left text-fg-1 desk:min-h-8",
                   n === at && "bg-on-fill",
                   isSelected?.(item) && "text-lavender",
                   rowClassName,

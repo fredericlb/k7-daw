@@ -62,7 +62,7 @@ export function Picker({
         {trigger ?? (
           <>
             <span className="min-w-0 flex-1">
-              <span className="type-body block truncate text-foreground">
+              <span className="type-body block truncate text-fg-1">
                 {current?.label ?? placeholder}
               </span>
               {current?.detail ? (

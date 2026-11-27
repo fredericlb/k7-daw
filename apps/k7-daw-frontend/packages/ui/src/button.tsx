@@ -11,14 +11,14 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground shadow-(--k7-highlight) hover:bg-primary-hover",
-        secondary: "glass text-foreground hover:brightness-125",
+          "bg-primary text-on-accent shadow-(--k7-highlight) hover:bg-primary-hover",
+        secondary: "glass text-fg-1 hover:brightness-125",
         outline:
-          "border border-(--k7-hairline-strong) bg-transparent text-foreground hover:bg-on-fill",
-        ghost: "text-foreground hover:bg-on-fill",
+          "border border-(--k7-hairline-strong) bg-transparent text-fg-1 hover:bg-on-fill",
+        ghost: "text-fg-1 hover:bg-on-fill",
         glass:
-          "glass text-foreground hover:brightness-125 aria-pressed:bg-on-fill aria-pressed:text-lavender aria-pressed:shadow-(--k7-highlight)",
-        chip: "glass type-secondary font-bold text-foreground hover:brightness-125 aria-pressed:bg-on-fill aria-pressed:text-lavender aria-pressed:shadow-(--k7-highlight)",
+          "glass text-fg-1 hover:brightness-125 aria-pressed:bg-on-fill aria-pressed:text-lavender aria-pressed:shadow-(--k7-highlight)",
+        chip: "glass type-secondary font-bold text-fg-1 hover:brightness-125 aria-pressed:bg-on-fill aria-pressed:text-lavender aria-pressed:shadow-(--k7-highlight)",
         destructive: "bg-error text-ink hover:brightness-95",
         link: "h-auto rounded-none p-0 text-primary-text tabular-nums underline-offset-4 hover:underline",
       },
