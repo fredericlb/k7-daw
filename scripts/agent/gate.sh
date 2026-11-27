@@ -2,7 +2,8 @@
 # gate.sh — a branch's local checks, cheapest first, stopping at the first failure (docs/agent-playbook.md).
 # `--quick`: rustfmt, lint:docs, lint:bytes, biome, the generated files; with changed Rust, clippy and the Windows clippy on the affected crates.
 # `--milestone`: rustfmt to the generated files, then check:changed and mac-checks (a failed test rerun alone, a load flake carried past); the Windows clippy waits for the merge.
-# No flag: the merge gate, adding win-clippy, android-check and ios-check; `--ci-local` adds ci:local, which otherwise runs on main after merges.
+# No flag: the merge gate, adding win-clippy, android-check and ios-check — or only a page build when nothing native changed
+# (K7_GATE_NATIVE=1 forces them); `--ci-local` adds ci:local, which otherwise runs on main after merges.
 # `--base <branch>` (or K7_GATE_BASE) gates a stacked branch against its parent; the long steps hold a machine-wide lock (gate-lib.sh).
 # What a reader gets wrong: the long checks only start once the quick ones pass, so a slip costs seconds, not a run.
 set -euo pipefail
@@ -90,12 +91,24 @@ if [ "$mode" = "--milestone" ]; then
   exit 0
 fi
 bash scripts/agent/mac-checks.sh
-step "win-clippy"
-bash scripts/agent/win-clippy.sh
-step "android-check"
-bash scripts/agent/android-check.sh
-step "ios-check"
-bash scripts/agent/ios-check.sh
+# Native: anything the Windows, Android or iOS builds compile beyond the page, deleted files included.
+native="$(git diff --name-only "$base" -- '*.rs' '*Cargo.toml' '*Cargo.lock' '*.kt' '*.kts' '*.swift' '*.cpp' '*.h' '*.hpp' '*.mm' '*CMakeLists.txt' \
+  'apps/k7-daw-android/*' 'apps/k7-daw-ios/*' 'apps/k7-daw-engine/*' 'apps/k7-daw-desktop/src-tauri/*' 'apps/k7-daw-backend/*' 'apps/k7-daw-wasm/*' \
+  'k7-core/*' 'scripts/agent/*-check.sh' 'scripts/agent/win-clippy.sh' 'package-lock.json')"
+if [ -z "$native" ] && [ -z "${K7_GATE_NATIVE:-}" ]; then
+  # Only the page changed: the phones bundle it, so it is built once here instead of three native builds around it.
+  step "page build (no native change: win-clippy, android-check and ios-check skipped)"
+  out="$(mktemp -d)"
+  npm exec --workspace k7-frontend -- vite build --outDir "$out" --emptyOutDir --logLevel warn
+  rm -rf "$out"
+else
+  step "win-clippy"
+  bash scripts/agent/win-clippy.sh
+  step "android-check"
+  bash scripts/agent/android-check.sh
+  step "ios-check"
+  bash scripts/agent/ios-check.sh
+fi
 if [ "$mode" = "--ci-local" ]; then
   step "ci:local"
   npm run ci:local
