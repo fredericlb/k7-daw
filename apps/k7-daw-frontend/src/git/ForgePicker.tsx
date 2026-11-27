@@ -5,6 +5,7 @@ import { Button } from "@studio/ui/button";
 import { Checkbox } from "@studio/ui/checkbox";
 import { Lock, Plus } from "@studio/ui/icons";
 import { Input } from "@studio/ui/input";
+import { SectionHeading } from "@studio/ui/section-heading";
 import { Spinner } from "@studio/ui/spinner";
 import { useEffect, useId, useState } from "react";
 import { m } from "../paraglide/messages.js";
@@ -87,7 +88,7 @@ export function ForgePicker({
   const section = (title: string, list: GithubRepo[]) =>
     list.length > 0 && (
       <section aria-label={title} className="flex flex-col gap-1">
-        <h3 className="type-caps px-1 text-fg-3">{title}</h3>
+        <SectionHeading className="px-1">{title}</SectionHeading>
         {list.map((r) => (
           <button
             key={r.fullName}

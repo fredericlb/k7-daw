@@ -3,11 +3,12 @@
 // Frozen chains page; here it is enabled, disabled or removed. See ../../docs/slots.md.
 
 import { formatDate } from "@studio/recorder/format";
+import { Row } from "@studio/ui/row-group";
 import { m } from "../paraglide/messages.js";
 import { getLocale } from "../paraglide/runtime.js";
 import { askFootswitch } from "./askFootswitch";
 import { type DesktopEngineSnapshot, engineCommand } from "./desktopEngine";
-import { Action, Row, Section } from "./Section";
+import { Action, Section } from "./Section";
 
 /** A slot's line under its name: its chain, when it was saved, and its footswitch when it has one. */
 function slotDetail(slot: {
@@ -29,33 +30,44 @@ export function SlotsSection({ s }: { s: DesktopEngineSnapshot | null }) {
   const enabled = s?.enabledSlot ?? null;
   return (
     <Section title={m["slots.title"]()} hint={m["slots.hint"]()}>
-      {slots.length === 0 && <Row label={m["slots.none"]()} />}
+      {slots.length === 0 && <Row>{m["slots.none"]()}</Row>}
       {slots.map((slot) => (
-        <Row key={slot.id} label={slot.name} detail={slotDetail(slot)}>
-          {enabled === slot.id ? (
-            <Action onClick={() => engineCommand("slot.disable")}>
-              {m["slots.disable"]()}
-            </Action>
-          ) : (
-            <Action onClick={() => engineCommand("slot.enable", slot.id)}>
-              {m["slots.enable"]()}
-            </Action>
-          )}
-          <Action
-            onClick={async () => {
-              const cc = await askFootswitch(slot.name, slot.footswitch);
-              if (cc !== undefined)
-                engineCommand(
-                  "slot.footswitch",
-                  cc === null ? slot.id : `${slot.id}\u001f${cc}`,
-                );
-            }}
-          >
-            {m["slots.footswitch"]()}
-          </Action>
-          <Action danger onClick={() => engineCommand("slot.remove", slot.id)}>
-            {m["slots.remove"]()}
-          </Action>
+        <Row
+          key={slot.id}
+          detail={slotDetail(slot)}
+          trailing={
+            <>
+              {enabled === slot.id ? (
+                <Action onClick={() => engineCommand("slot.disable")}>
+                  {m["slots.disable"]()}
+                </Action>
+              ) : (
+                <Action onClick={() => engineCommand("slot.enable", slot.id)}>
+                  {m["slots.enable"]()}
+                </Action>
+              )}
+              <Action
+                onClick={async () => {
+                  const cc = await askFootswitch(slot.name, slot.footswitch);
+                  if (cc !== undefined)
+                    engineCommand(
+                      "slot.footswitch",
+                      cc === null ? slot.id : `${slot.id}\u001f${cc}`,
+                    );
+                }}
+              >
+                {m["slots.footswitch"]()}
+              </Action>
+              <Action
+                danger
+                onClick={() => engineCommand("slot.remove", slot.id)}
+              >
+                {m["slots.remove"]()}
+              </Action>
+            </>
+          }
+        >
+          {slot.name}
         </Row>
       ))}
     </Section>

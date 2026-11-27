@@ -12,6 +12,7 @@ import {
   usePluginParamValue,
 } from "@studio/engine-browser/params";
 import type { ProjectSurface } from "@studio/song-schema/yaml/surfaceFile";
+import { SectionHeading } from "@studio/ui/section-heading";
 import {
   Select,
   SelectContent,
@@ -175,7 +176,7 @@ function Part({
       aria-label={PART_LABEL[part]()}
       className="flex min-w-0 flex-col gap-2 rounded-2xl bg-(--k7-row) p-3"
     >
-      <h3 className="type-caps text-fg-2">{PART_LABEL[part]()}</h3>
+      <SectionHeading>{PART_LABEL[part]()}</SectionHeading>
       {has ? (
         <div className="flex flex-col gap-2">{children}</div>
       ) : (

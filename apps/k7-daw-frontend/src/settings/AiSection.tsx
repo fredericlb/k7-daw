@@ -5,10 +5,11 @@
 import { askConfirm } from "@studio/project-shell/ask";
 import { TriangleAlert } from "@studio/ui/icons";
 import { Input } from "@studio/ui/input";
+import { Row } from "@studio/ui/row-group";
 import { useEffect, useState } from "react";
 import { type AiSettingsView, aiOrganize } from "../api";
 import { m } from "../paraglide/messages.js";
-import { Action, Row, Section } from "./Section";
+import { Action, Section } from "./Section";
 
 export function AiSection() {
   const [view, setView] = useState<AiSettingsView | null>(null);
@@ -58,18 +59,18 @@ export function AiSection() {
   return (
     <Section title={m["ai.title"]()} hint={m["ai.hint"]()}>
       <Row
-        label={
-          view?.keyHint
-            ? m["ai.keyHint"]({ hint: view.keyHint })
-            : m["ai.noKey"]()
-        }
         detail={view?.keyHint ? m["ai.keyOn"]() : m["ai.keyOff"]()}
+        trailing={
+          view?.keyHint && (
+            <Action danger disabled={busy} onClick={() => void removeKey()}>
+              {m["ai.remove"]()}
+            </Action>
+          )
+        }
       >
-        {view?.keyHint && (
-          <Action danger disabled={busy} onClick={() => void removeKey()}>
-            {m["ai.remove"]()}
-          </Action>
-        )}
+        {view?.keyHint
+          ? m["ai.keyHint"]({ hint: view.keyHint })
+          : m["ai.noKey"]()}
       </Row>
       <div className="flex gap-2 px-3.5 py-2.5">
         <Input

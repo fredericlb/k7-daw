@@ -4,6 +4,7 @@
 // the phone's own engine. See ../../docs/settings.md.
 
 import { askConfirm } from "@studio/project-shell/ask";
+import { Row } from "@studio/ui/row-group";
 import { Spinner } from "@studio/ui/spinner";
 import { Switch } from "@studio/ui/switch";
 import { m } from "../paraglide/messages.js";
@@ -17,7 +18,7 @@ import {
   useDesktopEngine,
   useOnDesktopEngine,
 } from "./desktopEngine";
-import { Action, Row, Section } from "./Section";
+import { Action, Section } from "./Section";
 import { SettingsTabs } from "./SettingsTabs";
 import { SlotsSection } from "./SlotsSection";
 
@@ -54,37 +55,42 @@ export function EnginePage() {
     <>
       <Section title={m["engine.title"]()} hint={m["engine.hint"]()}>
         <Row
-          label={statusLine(s, state?.down ?? null)}
           detail={s?.engineId ? m["engine.id"]({ id: s.engineId }) : undefined}
+          trailing={
+            running ? (
+              <>
+                <Action onClick={() => engineCommand("engine.restart")}>
+                  {m["engine.restart"]()}
+                </Action>
+                <Action danger onClick={() => void stopEngine()}>
+                  {m["engine.stop"]()}
+                </Action>
+              </>
+            ) : (
+              <Action
+                disabled={!s}
+                onClick={() => engineCommand("engine.start")}
+              >
+                {m["engine.start"]()}
+              </Action>
+            )
+          }
         >
-          {running ? (
-            <>
-              <Action onClick={() => engineCommand("engine.restart")}>
-                {m["engine.restart"]()}
-              </Action>
-              <Action danger onClick={() => void stopEngine()}>
-                {m["engine.stop"]()}
-              </Action>
-            </>
-          ) : (
-            <Action disabled={!s} onClick={() => engineCommand("engine.start")}>
-              {m["engine.start"]()}
-            </Action>
-          )}
+          {statusLine(s, state?.down ?? null)}
         </Row>
       </Section>
 
       <Section title={m["engine.lanTitle"]()} hint={m["engine.lanHint"]()}>
         <Row
-          label={m["engine.lanOpen"]()}
           detail={lanOpen ? m["engine.lanOpenOn"]() : m["engine.lanOpenOff"]()}
-        >
-          <Switch
+          trailing=<Switch
             checked={lanOpen}
             disabled={!s}
             onCheckedChange={(on) => engineCommand("lan.open", on ? "1" : "0")}
             aria-label={m["engine.lanOpen"]()}
           />
+        >
+          {m["engine.lanOpen"]()}
         </Row>
       </Section>
       <SlotsSection s={s} />
@@ -97,25 +103,26 @@ export function EnginePage() {
       hint={m["engine.pluginsHint"]()}
     >
       <Row
-        label={
-          s?.pluginCount === undefined
-            ? m["engine.scanning"]()
-            : m["engine.pluginCount"]({ n: String(s.pluginCount) })
+        trailing={
+          <Action
+            disabled={!running}
+            onClick={() => engineCommand("plugins.rescan")}
+          >
+            {m["engine.rescan"]()}
+          </Action>
         }
       >
-        <Action
-          disabled={!running}
-          onClick={() => engineCommand("plugins.rescan")}
-        >
-          {m["engine.rescan"]()}
-        </Action>
+        {s?.pluginCount === undefined
+          ? m["engine.scanning"]()
+          : m["engine.pluginCount"]({ n: String(s.pluginCount) })}
       </Row>
       {(s?.plugins ?? []).map((p) => (
         <Row
           key={`${p.format}:${p.name}`}
-          label={p.name}
           detail={[p.manufacturer, p.format].filter(Boolean).join(" · ")}
-        />
+        >
+          {p.name}
+        </Row>
       ))}
     </Section>
   );

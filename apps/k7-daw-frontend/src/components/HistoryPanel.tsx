@@ -16,6 +16,7 @@ import {
   Undo2,
 } from "@studio/ui/icons";
 import { RowButton, RowGroup } from "@studio/ui/row-group";
+import { SectionHeading } from "@studio/ui/section-heading";
 import type { HistoryListEntry } from "@studio/web-protocol";
 import {
   type ReactNode,
@@ -173,9 +174,9 @@ export function HistoryPanel({
           return (
             <div key={r.id}>
               {newDay && (
-                <h3 className="type-caps px-1 pt-3 pb-2 text-fg-2">
+                <SectionHeading className="px-1 pt-3 pb-2">
                   {day(r.ts)}
-                </h3>
+                </SectionHeading>
               )}
               <RowGroup>
                 <RowButton

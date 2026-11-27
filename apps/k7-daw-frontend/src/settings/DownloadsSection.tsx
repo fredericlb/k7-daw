@@ -19,10 +19,11 @@ import {
   type LucideIcon,
 } from "@studio/ui/icons";
 import { Progress } from "@studio/ui/progress";
+import { Row } from "@studio/ui/row-group";
 import { Spinner } from "@studio/ui/spinner";
 import { useSyncExternalStore } from "react";
 import { m } from "../paraglide/messages.js";
-import { Action, Row, Section } from "./Section";
+import { Action, Section } from "./Section";
 
 const KIND_ICON: Record<DownloadKind, LucideIcon> = {
   song: Disc3,
@@ -64,14 +65,6 @@ function DownloadRow({ d }: { d: Download }) {
   const pct = percent(d);
   return (
     <Row
-      label={
-        <span className="flex items-center gap-2">
-          <Kind className="size-4 shrink-0 text-fg-2" aria-hidden />
-          <span className="truncate" title={d.label}>
-            {d.label}
-          </span>
-        </span>
-      }
       detail={
         <>
           <span className={d.phase === "failed" ? "text-error" : undefined}>
@@ -82,8 +75,16 @@ function DownloadRow({ d }: { d: Download }) {
           )}
         </>
       }
+      trailing=<PhaseIcon phase={d.phase} />
     >
-      <PhaseIcon phase={d.phase} />
+      {
+        <span className="flex items-center gap-2">
+          <Kind className="size-4 shrink-0 text-fg-2" aria-hidden />
+          <span className="truncate" title={d.label}>
+            {d.label}
+          </span>
+        </span>
+      }
     </Row>
   );
 }
@@ -94,13 +95,17 @@ export function DownloadsSection() {
   return (
     <Section title={m["downloads.heading"]()}>
       {all.length === 0 ? (
-        <Row label={m["downloads.empty"]()} />
+        <Row>{m["downloads.empty"]()}</Row>
       ) : (
         all.map((d) => <DownloadRow key={d.key} d={d} />)
       )}
       {finished && (
-        <Row label="">
-          <Action onClick={clearFinished}>{m["downloads.clear"]()}</Action>
+        <Row
+          trailing={
+            <Action onClick={clearFinished}>{m["downloads.clear"]()}</Action>
+          }
+        >
+          {""}
         </Row>
       )}
     </Section>

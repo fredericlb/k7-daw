@@ -26,6 +26,7 @@ export * from "./picker";
 export * from "./popover";
 export * from "./progress";
 export * from "./row-group";
+export * from "./section-heading";
 export * from "./select";
 export * from "./side-panel";
 export * from "./sign-in-screen";

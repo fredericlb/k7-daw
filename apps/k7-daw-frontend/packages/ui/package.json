@@ -42,6 +42,7 @@
     "./backdrop": "./src/backdrop.tsx",
     "./checkbox": "./src/checkbox.tsx",
     "./locale-picker": "./src/locale-picker.tsx",
+    "./section-heading": "./src/section-heading.tsx",
     "./modal-focus": "./src/modal-focus.ts"
   },
   "peerDependencies": {
