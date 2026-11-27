@@ -2830,6 +2830,7 @@
   "surfaces": [
    "cli"
   ],
+  "quiet": true,
   "args": [
    {
     "name": "category/name",
@@ -2853,6 +2854,7 @@
   "surfaces": [
    "cli"
   ],
+  "quiet": true,
   "args": [
    {
     "name": "category/name",
@@ -2890,6 +2892,7 @@
   "menu": [
    "node"
   ],
+  "quiet": true,
   "args": [
    {
     "name": "node",
@@ -3060,6 +3063,7 @@
   "menu": [
    "node"
   ],
+  "quiet": true,
   "args": [
    {
     "name": "node",
@@ -3265,6 +3269,7 @@
   "menu": [
    "node"
   ],
+  "quiet": true,
   "args": [
    {
     "name": "node",
@@ -4601,6 +4606,7 @@
   "menu": [
    "node"
   ],
+  "quiet": true,
   "args": [
    {
     "name": "before",

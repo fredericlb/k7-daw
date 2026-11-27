@@ -18,6 +18,7 @@ import {
   MAX_ZOOM,
   MIN_ZOOM,
   sameLod,
+  settleCam,
   wheelFactor,
   wheelPixels,
   ZOOM_HALF_LIFE,
@@ -158,6 +159,20 @@ describe("applyCam", () => {
     // The zoom, for the CSS that caps header text on screen (chainsCss.ts).
     expect(vars.get("--dgx-k")).toBe("0.75");
     expect(() => applyCam(null, { x: 0, y: 0, k: 1 })).not.toThrow();
+  });
+
+  it("leaves to the transform only what the settled zoom does not carry", () => {
+    const style = {
+      zoom: "",
+      getPropertyValue: () => "",
+      setProperty: () => {},
+    } as unknown as CSSStyleDeclaration;
+    const el = { style } as HTMLElement;
+    settleCam(el, { x: 10, y: -4, k: 2 });
+    expect(el.style.zoom).toBe("2");
+    expect(el.style.transform).toBe("translate(5px,-2px) scale(1)");
+    applyCam(el, { x: 10, y: -4, k: 3 });
+    expect(el.style.transform).toBe("translate(5px,-2px) scale(1.5)");
   });
 });
 
