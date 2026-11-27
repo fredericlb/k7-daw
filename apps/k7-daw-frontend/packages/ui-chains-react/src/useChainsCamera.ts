@@ -3,8 +3,8 @@
 // render; the numbers themselves are camera.ts — docs/camera.md.
 
 import type { GraphNode } from "@studio/ui-chains/graph";
-import { pinchFactor, spreadOf } from "@studio/ui-chains/zoomGesture";
 import { isMouseWheel, isZoomWheel } from "@studio/ui-timeline/panZoom";
+import { usePinch } from "@studio/ui-timeline/pinch";
 import {
   type Dispatch,
   type RefObject,
@@ -237,48 +237,40 @@ export function useChainsCamera({
     };
     host.addEventListener("keydown", keys);
 
-    // Two fingers where there is no wheel at all — TOUCH events, and absolute, docs/camera.md.
-    let pinch: { dist: number; k: number; x: number; y: number } | null = null;
-    const onTouchStart = (e: TouchEvent) => {
-      if (e.touches.length !== 2 || fixedRef.current) return;
-      flight.current = null;
-      pan.current = null; // a pinch is not a pan, whatever the first finger had started
-      setPanning(false);
-      pinch = { dist: spreadOf(e.touches[0], e.touches[1]), ...cam.current };
-    };
-    const onTouchMove = (e: TouchEvent) => {
-      if (!pinch || e.touches.length !== 2) return;
-      e.preventDefault();
-      const d = spreadOf(e.touches[0], e.touches[1]);
-      if (d <= 0) return;
-      const r = host.getBoundingClientRect();
-      const px = (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left;
-      const py = (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top;
-      userMoved.current = true;
-      const k = clampZoom(pinch.k * pinchFactor(pinch.dist, d));
-      // From the gesture's OWN starting camera, which is what makes the whole pinch absolute.
-      Object.assign(cam.current, zoomAbout(pinch, k, px, py));
-      Object.assign(goal.current, cam.current);
-      kick.current();
-    };
-    const onTouchEnd = (e: TouchEvent) => {
-      if (e.touches.length < 2) pinch = null;
-    };
-    host.addEventListener("touchstart", onTouchStart, { passive: false });
-    host.addEventListener("touchmove", onTouchMove, { passive: false });
-    host.addEventListener("touchend", onTouchEnd);
-    host.addEventListener("touchcancel", onTouchEnd);
-
     return () => {
       host.removeEventListener("wheel", wheel);
       host.removeEventListener("keydown", keys);
-      host.removeEventListener("touchstart", onTouchStart);
-      host.removeEventListener("touchmove", onTouchMove);
-      host.removeEventListener("touchend", onTouchEnd);
-      host.removeEventListener("touchcancel", onTouchEnd);
       if (raf) cancelAnimationFrame(raf);
     };
   }, []);
+
+  // Two fingers where there is no wheel at all, absolute from the camera the gesture started with — docs/camera.md.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: the inputs are refs and setters DomChains hands in, stable for its lifetime.
+  usePinch<Cam>(
+    hostRef,
+    {
+      onStart: () => {
+        if (fixedRef.current) return false;
+        flight.current = null;
+        pan.current = null; // a pinch is not a pan, whatever the first finger had started
+        setPanning(false);
+        return { ...cam.current };
+      },
+      onPinch: (from, ratio, c) => {
+        const r = hostRef.current?.getBoundingClientRect();
+        if (!r) return;
+        userMoved.current = true;
+        // From the gesture's OWN starting camera, which is what makes the whole pinch absolute.
+        Object.assign(
+          cam.current,
+          zoomAbout(from, clampZoom(from.k * ratio), c.x - r.left, c.y - r.top),
+        );
+        Object.assign(goal.current, cam.current);
+        kick.current();
+      },
+    },
+    [],
+  );
 
   // --- the double-click camera: onto a node, and back to where it was — docs/camera.md -----
   // biome-ignore lint/correctness/useExhaustiveDependencies: the inputs are refs and setters DomChains hands in, stable for its lifetime.

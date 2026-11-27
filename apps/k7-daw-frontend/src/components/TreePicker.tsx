@@ -1,13 +1,16 @@
-// TreePicker.tsx — the browsing popup: levels that open sideways on hover, a search field
-// at the root, keyboard navigation, and the same dismissal contract as ContextMenu.
+// TreePicker.tsx — the browsing popup: levels that open sideways on hover or tap, a search field
+// at the root (the kit's SearchList), and the same dismissal contract as ContextMenu (the kit's useDismiss).
 //
 // Generic over what a leaf CARRIES, because several things browse this way and behaving
 // differently would be a coin toss for the user: a module (ModulePicker), a file from the
 // asset library (AssetPicker), a node's preset (PresetPicker). All are "a nested catalogue,
 // searchable"; a caller with actions of its own puts them in `header`, above the search.
 
+import { EmptyRow } from "@studio/ui/empty-row";
 import { ChevronRight } from "@studio/ui/icons";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useDismiss, usePointClamp } from "@studio/ui/point-menu";
+import { SearchList } from "@studio/ui/search-list";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
 
 /** One row: a branch has `children`, a leaf has `entry`, and a row with neither is plain text — which is why both are optional. */
 export interface TreeNode<T> {
@@ -21,36 +24,51 @@ export interface TreeNode<T> {
   badge?: string;
 }
 
-const MENU_BASE =
-  "min-w-[13rem] rounded-md border border-border bg-popover py-1 text-sm shadow-md";
 // Scrolling and submenus can't share an element — an `overflow` clips a submenu away. They never need to.
 const MENU_SCROLL = "max-h-[min(28rem,80vh)] overflow-y-auto overflow-x-hidden";
+const ROW =
+  "type-label flex min-h-11 w-full cursor-pointer items-center justify-between gap-4 rounded-2xl px-3 text-left outline-none hover:bg-on-fill focus-visible:bg-on-fill desk:min-h-8";
 
-/** One level: its rows, and the next level beside whichever is open; `header` sits outside the scroll area so it stays put. */
+/** What a leaf looks like, in the tree and in the search results alike. */
+function Leaf<T>({ n }: { n: TreeNode<T> }) {
+  return (
+    <>
+      <span className="flex min-w-0 items-center gap-2">
+        {n.badge ? (
+          <span className="w-10 shrink-0 rounded bg-muted px-1 text-center font-mono text-[11px] uppercase text-muted-foreground">
+            {n.badge}
+          </span>
+        ) : null}
+        <span
+          className={`truncate font-mono ${n.entry || n.children ? "" : "text-muted-foreground"}`}
+        >
+          {n.label}
+        </span>
+      </span>
+      {n.hint ? (
+        <span className="shrink-0 truncate font-mono text-xs text-muted-foreground">
+          {n.hint}
+        </span>
+      ) : null}
+    </>
+  );
+}
+
+/** One level: its rows, and the next level beside whichever is open (hover, focus or a tap). */
 function Level<T>({
   nodes,
   onPick,
-  header,
   label,
-  selected,
-  onHover,
+  nested,
 }: {
   nodes: TreeNode<T>[];
   onPick: (e: T) => void;
-  header?: React.ReactNode;
   label?: string;
-  selected?: string | null;
-  onHover?: (key: string) => void;
+  nested?: boolean;
 }) {
   const [open, setOpen] = useState<string | null>(null);
   const [flip, setFlip] = useState(false);
   const subRef = useRef<HTMLDivElement>(null);
-  const selRef = useRef<HTMLButtonElement>(null);
-
-  // Keep the keyboard's row in view as ↑/↓ walk a list longer than the popup.
-  useEffect(() => {
-    selRef.current?.scrollIntoView({ block: "nearest" });
-  }, [selected]);
 
   // Flip a submenu left when it would run off the edge, MEASURED: levels differ wildly in width.
   useLayoutEffect(() => {
@@ -66,65 +84,57 @@ function Level<T>({
   const hasBranches = nodes.some((n) => n.children?.length);
 
   return (
-    <div className={MENU_BASE} role="menu" aria-label={label}>
-      {header}
-      <div className={hasBranches ? "" : MENU_SCROLL}>
-        {nodes.map((n) => {
-          const isLeaf = !n.children?.length;
-          return (
-            <div key={n.key} className="relative">
-              <button
-                type="button"
-                role="menuitem"
-                aria-label={n.label}
-                aria-description={n.hint}
-                ref={n.key === selected ? selRef : undefined}
-                // Hover opens a branch, click picks a leaf; a branch isn't clickable, there being nothing to pick.
-                onMouseEnter={() => {
-                  setOpen(isLeaf ? null : n.key);
-                  onHover?.(n.key); // keep the keyboard's row under the mouse
-                }}
-                onFocus={() => setOpen(isLeaf ? null : n.key)}
-                onClick={() => n.entry && onPick(n.entry)}
-                className={`flex w-full items-center justify-between gap-4 px-3 py-1 text-left hover:bg-accent hover:text-accent-foreground ${
-                  n.key === selected ? "bg-accent text-accent-foreground" : ""
-                }`}
+    <div
+      className={
+        nested
+          ? "menu min-w-[13rem] rounded-(--k7-r-menu) p-1.5 text-sm"
+          : hasBranches
+            ? ""
+            : MENU_SCROLL
+      }
+      role="menu"
+      aria-label={label}
+    >
+      {nodes.map((n) => {
+        const isLeaf = !n.children?.length;
+        return (
+          <div key={n.key} className="relative">
+            <button
+              type="button"
+              role="menuitem"
+              aria-label={n.label}
+              aria-description={n.hint}
+              aria-haspopup={isLeaf ? undefined : "menu"}
+              aria-expanded={isLeaf ? undefined : open === n.key}
+              // Hover and focus open a branch; a tap (which hovers first, then clicks) must not close it again.
+              onMouseEnter={() => setOpen(isLeaf ? null : n.key)}
+              onFocus={() => setOpen(isLeaf ? null : n.key)}
+              onClick={() =>
+                isLeaf ? n.entry && onPick(n.entry) : setOpen(n.key)
+              }
+              className={ROW}
+            >
+              {isLeaf ? (
+                <Leaf n={n} />
+              ) : (
+                <>
+                  <span className="truncate font-mono">{n.label}</span>
+                  <ChevronRight className="size-3.5 text-muted-foreground" />
+                </>
+              )}
+            </button>
+            {open === n.key && n.children?.length ? (
+              <div
+                ref={subRef}
+                className="absolute top-0 z-10"
+                style={flip ? { right: "100%" } : { left: "100%" }}
               >
-                <span className="flex min-w-0 items-center gap-2">
-                  {n.badge ? (
-                    <span className="w-10 shrink-0 rounded bg-muted px-1 text-center font-mono text-[11px] uppercase text-muted-foreground">
-                      {n.badge}
-                    </span>
-                  ) : null}
-                  <span
-                    className={`truncate font-mono ${n.entry || n.children ? "" : "text-muted-foreground"}`}
-                  >
-                    {n.label}
-                  </span>
-                </span>
-                {isLeaf ? (
-                  n.hint ? (
-                    <span className="shrink-0 truncate font-mono text-xs text-muted-foreground">
-                      {n.hint}
-                    </span>
-                  ) : null
-                ) : (
-                  <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
-                )}
-              </button>
-              {open === n.key && n.children?.length ? (
-                <div
-                  ref={subRef}
-                  className="absolute top-0 z-10"
-                  style={flip ? { right: "100%" } : { left: "100%" }}
-                >
-                  <Level nodes={n.children} onPick={onPick} />
-                </div>
-              ) : null}
-            </div>
-          );
-        })}
-      </div>
+                <Level nodes={n.children} onPick={onPick} nested />
+              </div>
+            ) : null}
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -165,63 +175,21 @@ export function TreePicker<T>({
   aside?: React.ReactNode;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const [pos, setPos] = useState({ x, y });
   const [query, setQuery] = useState("");
-  const [sel, setSel] = useState(0);
-  const searchRef = useRef<HTMLInputElement>(null);
+  const pos = usePointClamp(ref, x, y);
+  const results = useMemo(
+    () => (query.trim() ? runSearch(query) : []),
+    [query, runSearch],
+  );
 
-  const results = runSearch(query);
-  const searching = query.trim().length > 0;
-  const selIdx = results.length
-    ? ((sel % results.length) + results.length) % results.length
-    : 0;
-
-  useLayoutEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const r = el.getBoundingClientRect();
-    setPos({
-      x: Math.max(8, Math.min(x, window.innerWidth - r.width - 8)),
-      y: Math.max(8, Math.min(y, window.innerHeight - r.height - 8)),
-    });
-  }, [x, y]);
-
-  // The same dismissal contract as ContextMenu, deliberately: two popups that dismissed differently is a coin toss.
-  useEffect(() => {
-    const down = (e: PointerEvent) => {
-      if (!ref.current?.contains(e.target as Node)) onClose();
-    };
-    const key = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        e.stopPropagation();
-        // Escape backs out a step at a time: it clears a search before closing, so a typo doesn't cost you the popup.
-        if (searchRef.current?.value) {
-          setQuery("");
-          setSel(0);
-        } else onClose();
-      }
-    };
-    // A scroll under the picker moves its `+`, so it closes — but its own lists are exempt (scroll doesn't bubble).
-    const scrolled = (e: Event) => {
-      if (!ref.current?.contains(e.target as Node)) onClose();
-    };
-    window.addEventListener("pointerdown", down, true);
-    window.addEventListener("keydown", key, true);
-    window.addEventListener("blur", onClose);
-    window.addEventListener("scroll", scrolled, true);
-    return () => {
-      window.removeEventListener("pointerdown", down, true);
-      window.removeEventListener("keydown", key, true);
-      window.removeEventListener("blur", onClose);
-      window.removeEventListener("scroll", scrolled, true);
-    };
-  }, [onClose]);
-
-  // The search field takes the keys at once: typing a name is the fastest way in, and nothing else wants them.
-  useEffect(() => {
-    // preventScroll: focusing can scroll an ancestor, and a scroll is what dismisses this popup.
-    searchRef.current?.focus({ preventScroll: true });
-  }, []);
+  // Escape backs out a step at a time: it clears a search before closing, so a typo doesn't cost you the popup.
+  useDismiss(ref, onClose, {
+    onEscape: () => {
+      if (!query) return false;
+      setQuery("");
+      return true;
+    },
+  });
 
   // Nothing to offer: an empty popup would just be a grey box you have to dismiss.
   if (!tree.length && !header && !aside) return null;
@@ -231,77 +199,43 @@ export function TreePicker<T>({
     onClose();
   };
 
-  const search = (
-    <div className="border-b border-border px-2 pb-1">
-      {header}
-      <input
-        ref={searchRef}
-        value={query}
-        onChange={(e) => {
-          setQuery(e.target.value);
-          setSel(0);
-        }}
-        onKeyDown={(e) => {
-          if (!searching) return;
-          if (e.key === "ArrowDown" || e.key === "ArrowUp") {
-            e.preventDefault();
-            setSel((i) => i + (e.key === "ArrowDown" ? 1 : -1));
-          } else if (e.key === "Enter") {
-            e.preventDefault();
-            const hit = results[selIdx]?.entry;
-            if (hit) pick(hit);
-          }
-        }}
-        placeholder={placeholder}
-        role="searchbox"
-        aria-label={searchLabel ?? placeholder}
-        spellCheck={false}
-        autoComplete="off"
-        className="w-full bg-transparent px-1 py-1 rounded-sm font-mono text-sm outline-none focus-visible:ring-1 focus-visible:ring-ring placeholder:text-faint"
-      />
-    </div>
-  );
-
   return (
     <div
       ref={ref}
       style={{ left: pos.x, top: pos.y }}
-      className="fixed z-50 flex items-start"
+      className="fixed z-(--k7-z-menu) flex items-start"
     >
       {aside}
-      {searching ? (
-        <Level
-          nodes={
-            results.length
-              ? // A row with neither entry nor children renders as plain text: here, the
-                // note that the list was cut, so a query that matches half the catalogue doesn't silently look like it matched 40.
-                results.length === searchLimit
-                ? [
-                    ...results,
-                    { key: "more", label: `first ${searchLimit} matches` },
-                  ]
-                : results
-              : // Same trick: a query that matches nothing says so rather than leaving
-                // the popup blank.
-                [{ key: "none", label: emptyLabel }]
+      <div
+        role="dialog"
+        aria-label={menuLabel}
+        className="menu flex min-w-[13rem] max-w-[min(26rem,calc(100vw-16px))] flex-col gap-1 rounded-(--k7-r-menu) p-1.5 text-sm"
+      >
+        <SearchList
+          items={results}
+          rank={null}
+          query={query}
+          onQueryChange={setQuery}
+          onPick={(r) => r.entry !== undefined && pick(r.entry)}
+          renderRow={(r) => <Leaf n={r} />}
+          itemLabel={(r) => r.label}
+          rowClassName="justify-between gap-4"
+          emptyLabel={emptyLabel}
+          limit={searchLimit}
+          moreLabel={`first ${searchLimit} matches`}
+          searchLabel={searchLabel ?? placeholder}
+          placeholder={placeholder}
+          before={header}
+          autoFocus
+          idle={
+            tree.length ? (
+              <Level nodes={tree} onPick={pick} label={menuLabel} />
+            ) : (
+              <EmptyRow>{emptyLabel}</EmptyRow>
+            )
           }
-          onPick={pick}
-          header={search}
-          label={menuLabel}
-          selected={results.length ? results[selIdx].key : null}
-          onHover={(key) => {
-            const i = results.findIndex((r) => r.key === key);
-            if (i >= 0) setSel(i);
-          }}
         />
-      ) : (
-        <Level
-          nodes={tree.length ? tree : [{ key: "none", label: emptyLabel }]}
-          onPick={pick}
-          header={search}
-          label={menuLabel}
-        />
-      )}
+      </div>
     </div>
   );
 }

@@ -21,6 +21,7 @@ import {
 } from "@studio/engine-browser/meter";
 import { useEngineState } from "@studio/engine-browser/store";
 import { MASTER_MAX_DB } from "@studio/k7-wasm/consts";
+import { Knob } from "@studio/ui/knob";
 import { cn } from "@studio/ui/lib/utils";
 import {
   type Ref,
@@ -142,17 +143,28 @@ export function MasterMeter({
   if (knob && fader)
     return (
       <div className={cn("flex items-center gap-1.5", className)}>
-        <MasterKnob
-          level={level}
+        {/* The output as a knob: the pointer is the level set, the arc the level heard. */}
+        <Knob
+          label={m["shell.masterVolume"]()}
+          size={36}
+          value={level}
+          min={FADER_MIN_DB}
+          max={MASTER_MAX_DB}
+          step={0.5}
+          snap={0.5}
+          defaultValue={0}
+          pointer
           fill={w}
-          zone={clipped ? "clip" : meterZone(db)}
+          fillColor={ZONE_STROKE[clipped ? "clip" : meterZone(db)]}
+          valueClassName={clipped ? "text-meter-clip" : undefined}
+          format={(v) => `${v > 0 ? "+" : ""}${v.toFixed(1)}`}
           title={m["meter.hint"]({
             reading,
             level: `${level > 0 ? "+" : ""}${level.toFixed(1)}`,
             max: MASTER_MAX_DB,
           })}
-          onDrag={setDragged}
-          onCommit={(v) => onMaster?.(v)}
+          onValueChange={setDragged}
+          onValueCommit={(v) => onMaster?.(v)}
         />
         {clipped && !fixed && onFix && (
           <button
@@ -279,124 +291,3 @@ const ZONE_STROKE: Record<MeterZone, string> = {
   hot: "var(--color-meter-hot)",
   clip: "var(--color-meter-clip)",
 };
-
-const START = 135;
-const SWEEP = 270;
-const polar = (r: number, deg: number): [number, number] => {
-  const a = (deg * Math.PI) / 180;
-  return [20 + r * Math.cos(a), 20 + r * Math.sin(a)];
-};
-const arcPath = (from: number, to: number): string => {
-  const [x1, y1] = polar(15, START + from * SWEEP);
-  const [x2, y2] = polar(15, START + to * SWEEP);
-  return `M ${x1} ${y1} A 15 15 0 ${(to - from) * SWEEP > 180 ? 1 : 0} 1 ${x2} ${y2}`;
-};
-
-// The output as a knob: the pointer is the level set, the arc the level heard; drag up or down, arrows, release commits.
-function MasterKnob({
-  level,
-  fill,
-  zone,
-  title,
-  onDrag,
-  onCommit,
-}: {
-  level: number;
-  /** 0 … 1, the live meter. */
-  fill: number;
-  zone: MeterZone;
-  title: string;
-  onDrag: (db: number) => void;
-  onCommit: (db: number) => void;
-}) {
-  const drag = useRef<{ y: number; v: number; now: number } | null>(null);
-  const span = MASTER_MAX_DB - FADER_MIN_DB;
-  const clamp = (v: number) =>
-    Math.round(Math.min(MASTER_MAX_DB, Math.max(FADER_MIN_DB, v)) * 2) / 2;
-  const t = (level - FADER_MIN_DB) / span;
-  const [px, py] = polar(9, START + t * SWEEP);
-  const [qx, qy] = polar(15, START + t * SWEEP);
-  const key = useRef<number | null>(null);
-  return (
-    <div className="flex flex-col items-center gap-0.5">
-      <div
-        role="slider"
-        tabIndex={0}
-        aria-label={m["shell.masterVolume"]()}
-        aria-valuemin={FADER_MIN_DB}
-        aria-valuemax={MASTER_MAX_DB}
-        aria-valuenow={level}
-        title={title}
-        className="size-9 cursor-ns-resize touch-none rounded-full outline-none focus-visible:shadow-(--k7-focus-ring)"
-        onPointerDown={(e) => {
-          e.currentTarget.setPointerCapture(e.pointerId);
-          drag.current = { y: e.clientY, v: level, now: level };
-        }}
-        onPointerMove={(e) => {
-          const d = drag.current;
-          if (!d) return;
-          d.now = clamp(d.v + ((d.y - e.clientY) / 150) * span);
-          onDrag(d.now);
-        }}
-        onPointerUp={() => {
-          const d = drag.current;
-          drag.current = null;
-          if (d && d.now !== d.v) onCommit(d.now);
-        }}
-        onDoubleClick={() => onCommit(0)}
-        onKeyDown={(e) => {
-          const step =
-            e.key === "ArrowUp" || e.key === "ArrowRight"
-              ? 0.5
-              : e.key === "ArrowDown" || e.key === "ArrowLeft"
-                ? -0.5
-                : 0;
-          if (!step) return;
-          e.preventDefault();
-          key.current = clamp((key.current ?? level) + step);
-          onDrag(key.current);
-        }}
-        onKeyUp={() => {
-          if (key.current === null) return;
-          onCommit(key.current);
-          key.current = null;
-        }}
-      >
-        <svg viewBox="0 0 40 40" className="size-full" fill="none" aria-hidden>
-          <path
-            d={arcPath(0, 1)}
-            stroke="rgba(255,255,255,0.16)"
-            strokeWidth="4"
-            strokeLinecap="round"
-          />
-          {fill > 0.001 && (
-            <path
-              d={arcPath(0, Math.min(1, fill))}
-              stroke={ZONE_STROKE[zone]}
-              strokeWidth="4"
-              strokeLinecap="round"
-            />
-          )}
-          <line
-            x1={px}
-            y1={py}
-            x2={qx}
-            y2={qy}
-            stroke="var(--color-foreground)"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-          />
-        </svg>
-      </div>
-      <span
-        className={cn(
-          "font-mono text-[11px] leading-none tabular-nums",
-          zone === "clip" ? "text-meter-clip" : "text-muted-foreground",
-        )}
-      >
-        {level > 0 ? "+" : ""}
-        {level.toFixed(1)}
-      </span>
-    </div>
-  );
-}

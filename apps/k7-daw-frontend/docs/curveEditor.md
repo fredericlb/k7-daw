@@ -87,4 +87,4 @@ The list is `src/components/CurveConditions.tsx`.
 (`spec`), so `ui curve <id>` reads it there rather than locating and parsing the file in the browser.
 
 The draft and its arithmetic are `src/curveDraft.ts`, tested on their own; the popin is
-`src/components/CurveEditor.tsx`, the picture `CurvePlot.tsx`, the envelope's knobs `CurveKnob.tsx`.
+`src/components/CurveEditor.tsx`, the picture `CurvePlot.tsx`, the envelope's knobs are the kit's `Knob` (`@studio/ui/knob`), Shift-dragged finely.

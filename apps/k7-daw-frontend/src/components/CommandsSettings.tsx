@@ -16,11 +16,6 @@ import { askConfirm } from "@studio/project-shell/ask";
 import { Button } from "@studio/ui/button";
 import { Chip } from "@studio/ui/chip";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@studio/ui/dropdown-menu";
-import {
   ArrowDown,
   ArrowLeft,
   ArrowUp,
@@ -29,6 +24,7 @@ import {
 } from "@studio/ui/icons";
 import { Input } from "@studio/ui/input";
 import { cn } from "@studio/ui/lib/utils";
+import { Popover, PopoverContent, PopoverTrigger } from "@studio/ui/popover";
 import { Spinner } from "@studio/ui/spinner";
 import { useUnsavedGuard } from "@studio/ui-editor/unsaved";
 import {
@@ -370,14 +366,15 @@ const CommandRow = memo(function CommandRow({
     next: readonly MenuEntity[],
   ) => void;
 }) {
+  const [iconOpen, setIconOpen] = useState(false);
   const name = pref?.icon;
   const Icon = name ? icons?.[name] : undefined;
   const touched = !!pref;
   return (
     <div className="relative flex flex-wrap items-center gap-2 border-b border-(--k7-hairline) px-4 py-2">
       {/* The icon, and the picker behind it. */}
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
+      <Popover open={iconOpen} onOpenChange={setIconOpen}>
+        <PopoverTrigger asChild>
           <button
             type="button"
             title={m["cmds.pickIcon"]()}
@@ -385,8 +382,8 @@ const CommandRow = memo(function CommandRow({
           >
             {Icon ? <Icon className="size-4" /> : "—"}
           </button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="start" className="p-2">
+        </PopoverTrigger>
+        <PopoverContent align="start" className="w-auto p-2">
           <Suspense
             fallback={
               <div className="flex h-24 w-72 items-center justify-center">
@@ -396,11 +393,14 @@ const CommandRow = memo(function CommandRow({
           >
             <IconPicker
               value={pref?.icon}
-              onPick={(icon) => onPatch(c.canonical, { icon })}
+              onPick={(icon) => {
+                onPatch(c.canonical, { icon });
+                setIconOpen(false);
+              }}
             />
           </Suspense>
-        </DropdownMenuContent>
-      </DropdownMenu>
+        </PopoverContent>
+      </Popover>
 
       {/* The name, one field per language, each placeholder the catalogue's own sentence IN THAT language (docs/shell.md). */}
       {locales.map((l) => (

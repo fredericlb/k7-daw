@@ -5,7 +5,7 @@
 // docs/commandBar.md.
 
 import { isEngineRef } from "@studio/k7-wasm/schema";
-import { fuzzyScore } from "@studio/k7-wasm/ui";
+import { fuzzyScores } from "@studio/k7-wasm/ui";
 import { REMOTE_CAMERA_PREFIX } from "@studio/web-protocol/cameras";
 import { byPeople } from "@studio/web-protocol/tree";
 import { m as msg } from "../paraglide/messages.js";
@@ -248,15 +248,22 @@ export function searchModules(
   const ql = q.toLowerCase();
   const contains = (s: string) =>
     s.toLowerCase().includes(ql) ? SUBSTRING_BONUS : 0;
+  // One batched call per query for the names and one for the refs, not one per module.
+  const refs = baseModules.map((m) => (typeof m === "string" ? m : m.ref));
+  const nameScores = fuzzyScores(
+    q,
+    refs.map((r) => parseBaseRef(r).name),
+  );
+  const refScores = fuzzyScores(q, refs);
   const scored = baseModules
-    .map((m) => {
-      const ref = typeof m === "string" ? m : m.ref;
+    .map((m, i) => {
+      const ref = refs[i] as string;
       const parsed = parseBaseRef(ref);
       const { namespace, name } = parsed;
       const type =
         parsed.type ?? (typeof m === "string" ? undefined : m.category);
-      const byName = fuzzyScore(q, name);
-      const byRef = fuzzyScore(q, ref);
+      const byName = nameScores[i] ?? -1;
+      const byRef = refScores[i] ?? -1;
       const byPath = pathScore(q, ref);
       const score = Math.max(
         byRef < 0 ? -1 : byRef + contains(ref),

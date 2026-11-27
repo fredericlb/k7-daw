@@ -3,6 +3,12 @@
 // themselves below, edited as on the graph. Every change is a `node tap chain` command. See docs/shell.md.
 
 import { Button } from "@studio/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@studio/ui/dialog";
 import { ArrowDown, ArrowUp, Plus, X } from "@studio/ui/icons";
 import { moduleDisplayName } from "@studio/ui-chains/graph";
 import { useMemo } from "react";
@@ -57,33 +63,17 @@ export function TapChainEditor({
   const at = `${JSON.stringify(node)} ${JSON.stringify(tap)}`;
 
   return (
-    // Hand-rolled and UNDER the pickers (z-40 to their z-50): a modal dialog would block the picker it opens (docs/shell.md).
-    <div className="fixed inset-0 z-40 flex items-center justify-center">
-      <button
-        type="button"
-        aria-label={m["common.closeLower"]()}
-        className="absolute inset-0 bg-black/60"
-        onClick={onClose}
-      />
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-label={m["tapChain.title"]({ tap, node })}
-        className="relative flex max-h-[90vh] w-[min(64rem,94vw)] flex-col gap-3 overflow-y-auto rounded-lg border border-border bg-background p-4 shadow-xl"
+    // Not modal, and one layer under the pickers: a modal dialog would block the picker it opens (docs/shell.md).
+    <Dialog modal={false} open onOpenChange={(o) => !o && onClose()}>
+      <DialogContent
+        nonModal
+        layer="panel"
+        aria-describedby={undefined}
+        className="flex max-h-[90vh] w-[min(64rem,94vw)] max-w-none flex-col gap-3 sm:max-w-none"
       >
-        <div className="flex items-center justify-between">
-          <h2 className="font-semibold text-sm">
-            {m["tapChain.title"]({ tap, node })}
-          </h2>
-          <Button
-            size="icon"
-            variant="ghost"
-            aria-label={m["common.closeLower"]()}
-            onClick={onClose}
-          >
-            <X className="h-4 w-4" />
-          </Button>
-        </div>
+        <DialogHeader>
+          <DialogTitle>{m["tapChain.title"]({ tap, node })}</DialogTitle>
+        </DialogHeader>
         <p className="text-xs text-muted-foreground">
           {modules.length ? m["tapChain.routed"]() : m["tapChain.empty"]()}
         </p>
@@ -148,7 +138,7 @@ export function TapChainEditor({
             {renderCards(modules)}
           </div>
         )}
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

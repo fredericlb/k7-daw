@@ -7,6 +7,12 @@
 import { FIXED_NAMESPACES } from "@studio/k7-wasm/consts";
 import { showToast } from "@studio/project-shell/toast";
 import { Button } from "@studio/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@studio/ui/dialog";
 import { Grip, Pause, Play, X } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
 import { Spinner } from "@studio/ui/spinner";
@@ -249,32 +255,22 @@ export function RackBuilder({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* The backdrop closes, like every popin's. */}
-      <button
-        type="button"
-        aria-label={m["common.closeLower"]()}
-        className="absolute inset-0 bg-black/50"
-        onClick={onClose}
-      />
-      <div className="relative flex max-h-[90vh] w-[min(34rem,92vw)] flex-col gap-3 overflow-auto rounded-lg border border-border bg-background p-4 shadow-xl">
-        <div className="flex items-center gap-2">
-          <span className="font-semibold text-primary-text">
-            <Grip className="h-4 w-4" /> {m["rb.title"]()}
-          </span>
+    // Not modal: an upload failure raises a toast, which a modal's pointer lock would leave unreachable.
+    <Dialog modal={false} open onOpenChange={(o) => !o && onClose()}>
+      <DialogContent
+        nonModal
+        layer="panel"
+        aria-describedby={undefined}
+        className="flex max-h-[90vh] w-[min(34rem,92vw)] max-w-none flex-col gap-3 overflow-auto sm:max-w-none"
+      >
+        <DialogHeader className="flex-row flex-wrap items-center gap-2">
+          <DialogTitle className="flex items-center gap-1.5 text-primary-text">
+            <Grip className="size-4" /> {m["rb.title"]()}
+          </DialogTitle>
           <span className="text-xs text-muted-foreground">
             {m["rb.hint"]()}
           </span>
-          <Button
-            size="icon-xs"
-            variant="ghost"
-            className="ml-auto"
-            onClick={onClose}
-            aria-label={m["common.closeLower"]()}
-          >
-            <X className="h-3.5 w-3.5" />
-          </Button>
-        </div>
+        </DialogHeader>
 
         <label className="flex items-center gap-2 text-sm">
           nom
@@ -437,7 +433,7 @@ export function RackBuilder({
             {m["rb.create"]()}
           </Button>
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

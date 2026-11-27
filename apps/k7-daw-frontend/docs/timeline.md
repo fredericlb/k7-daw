@@ -808,9 +808,10 @@ rule the clip drag follows.
 Only a click. A drag on the ruler is still a selection or a zoom, because those gestures are
 how you get around and taking them away while a command is half-typed would strand you.
 
-Move mode is **modal**: every key is swallowed while it is live, and swallowed hard
-(`stopImmediatePropagation` on a capture-phase listener) so Enter and Escape do not also
-reach the shell's rewind/close bindings. Leaving the tab drops the pickup rather than
+Move mode is **modal**: every key but Escape is swallowed while it is live, and swallowed hard
+(`stopImmediatePropagation` on a capture-phase listener) so Enter does not also reach the shell's
+rewind binding. Escape is a layer on the popin ladder (`useEscapeLayer`), the same one a drawn
+rectangle uses, so the shell's `esc` binding puts the clip back and the fullscreen pane stays. Leaving the tab drops the pickup rather than
 stranding a half-finished move whose keys no longer reach it.
 
 ### A dropped clip STAYS dropped
@@ -1157,9 +1158,8 @@ taking the pinch back. Set by the hook rather than left to each caller's stylesh
 surface that mounts it and forgets the rule gets a gesture the browser silently swallows, with
 nothing on screen to explain it.
 
-`wheelFactor` is exported and tested. The graph keeps its own (`@studio/ui-chains/zoomGesture`)
-because its notch branch differs — it scales by the delta where this one steps — and an
-arrangement package importing the graph's would be the wrong way round.
+`wheelFactor` is exported and tested. The graph's `camera.ts` takes the pinch rate from it and keeps
+only its own notch (a detent scales by its delta there, where a pane takes a step).
 
 ## The name column is wider here than the shared default
 

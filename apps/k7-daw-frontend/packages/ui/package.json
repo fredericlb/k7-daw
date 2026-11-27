@@ -23,6 +23,7 @@
     "./dev-perf": "./src/dev-perf.ts",
     "./dropdown-menu": "./src/dropdown-menu.tsx",
     "./lib/utils": "./src/lib/utils.ts",
+    "./lib/pointer": "./src/lib/pointer.ts",
     "./capsule": "./src/capsule.tsx",
     "./disabled-reason": "./src/disabled-reason.ts",
     "./row-group": "./src/row-group.tsx",
@@ -45,7 +46,10 @@
     "./section-heading": "./src/section-heading.tsx",
     "./modal-focus": "./src/modal-focus.ts",
     "./series-colors": "./src/series-colors.ts",
-    "./record-drag": "./src/record-drag.ts"
+    "./record-drag": "./src/record-drag.ts",
+    "./point-menu": "./src/point-menu.tsx",
+    "./search-list": "./src/search-list.tsx",
+    "./empty-row": "./src/empty-row.tsx"
   },
   "peerDependencies": {
     "react": "^19.2.7",

@@ -3,7 +3,8 @@
 // quantised to half a viewport, so scrolling re-renders the roll a few times per screen, not per
 // pixel (../../docs/clipEditors.md).
 
-import { type RefObject, useLayoutEffect, useState } from "react";
+import { useElementWatch } from "@studio/ui-timeline/measure";
+import { type RefObject, useState } from "react";
 
 /** A culling window: beats `b0..b1` on the roll's own axis, rows `r0..r1` (row 0 = key 127). */
 export interface RollWindow {
@@ -47,10 +48,10 @@ export function useRollWindow(
   rowH: number,
 ): RollWindow | null {
   const [win, setWin] = useState<RollWindow | null>(null);
-  useLayoutEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const read = () => {
+  // Not a state per scroll: the window changes in half-viewport steps, and only those re-render the roll.
+  useElementWatch(
+    ref,
+    (el) => {
       const next = rollWindow(
         {
           left: el.scrollLeft,
@@ -61,15 +62,9 @@ export function useRollWindow(
         { origin, ppb, rowH },
       );
       setWin((cur) => (same(cur, next) ? cur : next));
-    };
-    read();
-    el.addEventListener("scroll", read, { passive: true });
-    const ro = new ResizeObserver(read);
-    ro.observe(el);
-    return () => {
-      el.removeEventListener("scroll", read);
-      ro.disconnect();
-    };
-  }, [ref, origin, ppb, rowH]);
+    },
+    { scroll: true },
+    [origin, ppb, rowH],
+  );
   return win;
 }

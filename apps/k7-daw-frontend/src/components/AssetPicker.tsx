@@ -9,7 +9,7 @@
 // (apps/k7-daw-wasm/song/docs/moduleAssets.md).
 
 import { assetsForParam } from "@studio/k7-wasm/module";
-import { fuzzyScore } from "@studio/k7-wasm/ui";
+import { fuzzyScores } from "@studio/k7-wasm/ui";
 import { type TreeNode, TreePicker } from "./TreePicker";
 
 const SEARCH_LIMIT = 40;
@@ -87,8 +87,12 @@ export function searchAssets(
   const q = query.trim();
   if (!q) return [];
   const scored: { node: TreeNode<string>; score: number }[] = [];
-  for (const file of assetsForParam(files, param, family)) {
-    const best = Math.max(fuzzyScore(q, stem(file)), fuzzyScore(q, file));
+  const found = assetsForParam(files, param, family);
+  // One batched call for the names and one for the paths, not one per file.
+  const byStem = fuzzyScores(q, found.map(stem));
+  const byPath = fuzzyScores(q, found);
+  for (const [i, file] of found.entries()) {
+    const best = Math.max(byStem[i] ?? -1, byPath[i] ?? -1);
     if (best <= 0) continue;
     scored.push({
       node: {

@@ -41,8 +41,8 @@ component, so the two behave identically instead of drifting.
   root of exactly one stays the reliable way to reach for this: a library
   that happens to hold a single real top-level folder would otherwise lose it
   the same way.
-- **The right-click menu**, including the inline follow-up some entries need:
-  a typed `prompt` (rename, new file) or a yes/no `confirm` — mutually
+- **The right-click menu**, on the kit's `PointMenu`, including the follow-up some entries need:
+  a typed `prompt` (rename, new file) or a yes/no `confirm`, both asked through `ask` — mutually
   exclusive, and an entry with neither runs the moment it is picked. `confirm`
   exists for an action too destructive for one click but with nothing to type
   (deleting a folder that is not the one thing selected, so there is no name
@@ -139,8 +139,8 @@ and the component is generic over anything extending it, so lanes keeps
 `isDisabled` and every action.
 
 Nor the strings: actions carry their own labels, already translated by the app.
-The single exception is the prompts' Cancel button (`cancelLabel`), which
-belongs to machinery no app renders itself.
+The prompts and confirms are not drawn here at all: the tree is handed `ask`
+(`TreeAsk`), the app's own question dialog, so their buttons, Escape and language are the app's.
 
 ## `dragover` and `preventDefault`
 
