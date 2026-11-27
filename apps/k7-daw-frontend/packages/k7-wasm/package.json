@@ -15,7 +15,8 @@
     "./types": "./src/types/index.ts",
     "./boot": "./src/boot.ts",
     "./module.wasm": "./src/k7Wasm.wasm",
-    "./engine": "./src/engine.ts"
+    "./engine": "./src/engine.ts",
+    "./eyes": "./src/eyes.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",

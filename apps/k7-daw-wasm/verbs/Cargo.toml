@@ -10,6 +10,7 @@ path = "src/lib.rs"
 crate-type = ["rlib"]
 
 [dependencies]
+eyes = { path = "../eyes" }
 k7x = { path = "../k7x" }
 song = { path = "../song", default-features = false }
 song-schema = { path = "../song-schema" }

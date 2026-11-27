@@ -34,7 +34,7 @@ A camera is listed under the name it was started with — the device's own by de
 device remembers. Two cameras of one account under one name get ` (2)`, ` (3)`: a label that names
 two lenses names none.
 
-`matchRemoteCamera` follows `matchCamera`'s rule for the same reasons: exact, then ignoring case,
+The hub's `match_remote_camera` follows `eyes::cameras::match_camera`'s rule for the same reasons: exact, then ignoring case,
 then containment. `remote:` alone is the newest camera that is on. A name that is not on falls back
 to the newest one, and the lane says which it shows and which are on — a project opened on a day the
 phone is called something else still draws a picture.

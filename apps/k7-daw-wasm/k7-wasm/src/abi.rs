@@ -74,6 +74,18 @@ pub extern "C" fn k7_round_beat(beats: f64) -> f64 {
     song_schema::round_beat(beats)
 }
 
+/// The rect a grip drag lands on, in the scalars as x, y, w, h: numbers in and out, called as often as a pointer moves.
+/// `NONE` for a grip code past the page's list (`eyes`'s `Grip::from_code`).
+#[unsafe(no_mangle)]
+pub extern "C" fn k7_drag_rect(x: f64, y: f64, w: f64, h: f64, grip: u32, dx: f64, dy: f64) -> u32 {
+    let Some(grip) = eyes::rect::Grip::from_code(grip) else {
+        return NONE;
+    };
+    let r = eyes::rect::drag_rect(eyes::rect::Rect { x, y, w, h }, grip, dx, dy);
+    SCALARS.with(|s| *s.borrow_mut() = [r.x, r.y, r.w, r.h]);
+    OK
+}
+
 /// The layout of the last `k7x.outline`, as u32 cells (k7x's outline.rs); valid until the next call.
 #[unsafe(no_mangle)]
 pub extern "C" fn k7_cells_ptr() -> *const u32 {
@@ -83,4 +95,15 @@ pub extern "C" fn k7_cells_ptr() -> *const u32 {
 #[unsafe(no_mangle)]
 pub extern "C" fn k7_cells_len() -> usize {
     SESSION.with(|s| s.borrow().k7x.cells.len())
+}
+
+/// The entries of the last `eyes.cube`, four floats each; valid until the next call.
+#[unsafe(no_mangle)]
+pub extern "C" fn k7_floats_ptr() -> *const f32 {
+    SESSION.with(|s| s.borrow().floats.as_ptr())
+}
+
+#[unsafe(no_mangle)]
+pub extern "C" fn k7_floats_len() -> usize {
+    SESSION.with(|s| s.borrow().floats.len())
 }

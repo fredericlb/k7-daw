@@ -8,6 +8,7 @@ import { mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { expect, test } from "@playwright/test";
+import { builtinTransitions, layerSchedule } from "@studio/k7-wasm/eyes";
 import { putTree, REPO } from "../../src/projectTree.ts";
 import { Service } from "../../src/service.ts";
 import type { SessionUser } from "../../src/session.ts";
@@ -198,23 +199,28 @@ test("a body past a route's limit is a 413 before it is read: 64 KiB for most, 8
   expect(ok.status).toBe(400);
 });
 
-// A scene for one 160x90 clip, its file already a `media/` URL; a full-size film never ends in the Mac's software GL.
-const sceneOf = (src: string) => ({
-  viewport: [160, 90],
-  fps: 10,
-  layers: [
-    {
-      id: "main",
-      hidden: false,
-      x: 0,
-      y: 0,
-      w: 160,
-      h: 90,
-      clips: [{ id: "sample", src, start: 0, length: 1, sourceFrom: 0 }],
-    },
-  ],
-  durationSec: 1,
-});
+// A scene for one 160x90 clip, its file already a `media/` URL; its schedule and transitions are the module's, as the server's scene carries them.
+const sceneOf = (src: string) => {
+  const clips = [{ id: "sample", src, start: 0, length: 1, sourceFrom: 0 }];
+  return {
+    viewport: [160, 90],
+    fps: 10,
+    layers: [
+      {
+        id: "main",
+        hidden: false,
+        x: 0,
+        y: 0,
+        w: 160,
+        h: 90,
+        clips,
+        schedule: layerSchedule(clips),
+      },
+    ],
+    durationSec: 1,
+    transitions: builtinTransitions(),
+  };
+};
 
 test("a scene is rendered into the named folder by the server's browser, and a bad shape is a 400", async () => {
   const sample = join(REPO, "e2e/fixtures/video-lane.k7/clips/sample.mp4");

@@ -3,7 +3,7 @@
 // not arrived reads a size of 0 and lets its picture through, and an export waits for `ready`.
 // See docs/luts.md.
 
-import { parseCube } from "./cube";
+import { parseCube } from "@studio/k7-wasm/eyes";
 import type { VideoScene } from "./scene";
 
 /** One LUT on the GPU: its texture and its edge size. */

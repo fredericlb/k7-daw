@@ -7,6 +7,7 @@ use k7_wasm::WasmError;
 use k7_wasm::ops::VersionAnswer;
 use k7_wasm::ops::curve::{CurveRequest, OpenAnswer};
 use k7_wasm::ops::engine::{BestAnswer, EngineRequest, WarningAnswer};
+use k7_wasm::ops::eyes::{CubeAnswer, EyesRequest};
 use k7_wasm::ops::fields::FieldsRequest;
 use k7_wasm::ops::file::FileRequest;
 use k7_wasm::ops::k7x::{K7xRequest, ReadAnswer};
@@ -54,6 +55,11 @@ fn write_types(dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
     Compatibility::export_all_to(dir)?;
     EngineLatency::export_all_to(dir)?;
     WarningAnswer::export_all_to(dir)?;
+    EyesRequest::export_all_to(dir)?;
+    CubeAnswer::export_all_to(dir)?;
+    eyes::scene::VideoScene::export_all_to(dir)?;
+    eyes::scene::Transition::export_all_to(dir)?;
+    eyes::cameras::Match::export_all_to(dir)?;
     let mut names = fs::read_dir(dir)?
         .map(|e| e.map(|e| e.file_name().to_string_lossy().into_owned()))
         .collect::<Result<Vec<_>, io::Error>>()?;

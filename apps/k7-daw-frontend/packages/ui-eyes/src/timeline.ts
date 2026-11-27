@@ -1,15 +1,19 @@
-// timeline.ts — which clips a layer shows at time t, where in their sources, and the transition
-// running between them. Pure and side-effect free (no WebGL, no DOM, no Date.now()), so it is
-// unit-testable off a bare scene and shared verbatim: realtime calls it per rAF tick, export per
-// frame. This is the ONLY place the transition rule lives. See song-video/docs/transitions.md.
+// timeline.ts — which clips a layer shows at time t, where in their sources, and the transition running between them.
+// A reader would get wrong that the rule is not here: Rust works it out into `layer.schedule`, and this only looks the span up.
+// No WebGL, no DOM, no clock, so realtime calls it per rAF tick and export per frame. See song-video/docs/transitions.md.
 
-import type { SceneClip, VideoLayer } from "./scene";
+import type {
+  SceneClip,
+  ScheduleRamp,
+  ScheduleSpan,
+  VideoLayer,
+} from "./scene";
 
 export interface Active {
   clip: SceneClip;
-  // Where in the SOURCE file this maps to, in seconds: sourceFrom + (t - start).
+  // Where in the SOURCE file this maps to, in seconds: sourceFrom + (t - start) * speed.
   sourceTime: number;
-  // Where this placement stops, by the interval rule below; Infinity for an open-ended last one.
+  // Where this placement stops; Infinity for an open-ended last one.
   end: number;
   // Its position in `layer.clips` — the driver's element key, since a clip's id is its REF and repeats.
   index: number;
@@ -35,32 +39,73 @@ export interface LayerFrame {
 
 const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
 
-// Where the placement at `i` stops: its own length, else the NEXT entry's start, else open.
-function endOf(clips: readonly SceneClip[], i: number): number {
-  const c = clips[i];
-  if (c.length > 0) return c.start + c.length;
-  return i + 1 < clips.length ? clips[i + 1].start : Number.POSITIVE_INFINITY;
+const ramp = (r: ScheduleRamp, t: number): number => {
+  const v = clamp01((t - r.start) / r.len);
+  return r.rising ? v : 1 - v;
+};
+
+// The span covering `t`: the last one that has begun, if it has not ended.
+function spanAt(layer: VideoLayer, t: number): ScheduleSpan | undefined {
+  const spans = layer.schedule.spans;
+  let lo = 0;
+  let hi = spans.length;
+  while (lo < hi) {
+    const mid = (lo + hi) >> 1;
+    if (spans[mid].at <= t) lo = mid + 1;
+    else hi = mid;
+  }
+  const s = spans[lo - 1];
+  return s && (s.until === undefined || t < s.until) ? s : undefined;
 }
 
-// Every clip active on `layer` at `t`, in FILE order. Half-open intervals; length 0 runs to the next start.
-export function activesAt(layer: VideoLayer, t: number): Active[] {
-  const clips = layer.clips;
-  const out: Active[] = [];
-  for (let i = 0; i < clips.length; i++) {
-    const c = clips[i];
-    if (t < c.start) continue;
-    const end = endOf(clips, i);
-    if (t < end)
-      out.push({
-        clip: c,
-        // The one mapping speed has: signed, so a freeze holds `sourceFrom` and a reverse runs back from it.
-        sourceTime: c.sourceFrom + (t - c.start) * (c.speed ?? 1),
-        end,
-        index: i,
-      });
-  }
-  // A lane has two decoders, so three at once is not renderable: the two on TOP win.
-  return out.length > 2 ? out.slice(-2) : out;
+const activeOf = (layer: VideoLayer, i: number, t: number): Active => {
+  const clip = layer.clips[i];
+  return {
+    clip,
+    // The one mapping speed has: signed, so a freeze holds `sourceFrom` and a reverse runs back from it.
+    sourceTime: clip.sourceFrom + (t - clip.start) * (clip.speed ?? 1),
+    end: layer.schedule.ends[i] ?? Number.POSITIVE_INFINITY,
+    index: i,
+  };
+};
+
+/** The whole frame for one layer — which two pictures, how far between them, and which run through a stretch. */
+export function layerFrameAt(layer: VideoLayer, t: number): LayerFrame {
+  const s = spanAt(layer, t);
+  if (!s) return { from: null, to: null, blend: null };
+  const b = s.blend;
+  return {
+    from: s.from === undefined ? null : activeOf(layer, s.from, t),
+    to: s.to === undefined ? null : activeOf(layer, s.to, t),
+    blend: b
+      ? {
+          name: b.name,
+          progress: ramp(b.progress, t),
+          ...(b.stretchFrom || b.stretchTo
+            ? {
+                stretch: {
+                  ...(b.stretchFrom
+                    ? {
+                        from: {
+                          chain: b.stretchFrom.chain,
+                          presence: ramp(b.stretchFrom.presence, t),
+                        },
+                      }
+                    : {}),
+                  ...(b.stretchTo
+                    ? {
+                        to: {
+                          chain: b.stretchTo.chain,
+                          presence: ramp(b.stretchTo.presence, t),
+                        },
+                      }
+                    : {}),
+                },
+              }
+            : {}),
+        }
+      : null,
+  };
 }
 
 /** The shot a picture SLOT holds this frame — 0 the outgoing side of a blend or the only picture of a cut, 1 the incoming. */
@@ -79,86 +124,13 @@ export function slotEffects(
   return out;
 }
 
-/** The clip on TOP at `t`, or null — the LAST active in file order, which is the one covering the rest. */
-// Last rather than first: a dissolve that completed would otherwise snap back to the outgoing shot.
+/** The clip on TOP at `t`, or null — the last in file order, which is the one covering the rest. */
 export function activeAt(layer: VideoLayer, t: number): Active | null {
-  const all = activesAt(layer, t);
-  return all.length ? all[all.length - 1] : null;
+  const s = spanAt(layer, t);
+  return s ? activeOf(layer, s.top, t) : null;
 }
 
-/** Is a layer of SHAPES on at `t`? Its clips carry no picture: each is a span saying the lane is
- *  on, and a layer stating none is on throughout — see song-video/docs/shapes.md. Here beside
- *  `activesAt` because it IS that rule, and realtime and export must not each keep their own. */
+/** Is a layer of SHAPES on at `t`? Its clips are spans saying the lane is on, and one stating none is on throughout. */
 export function shapesVisibleAt(layer: VideoLayer, t: number): boolean {
-  return !layer.clips.length || !!activeAt(layer, t);
-}
-
-/** A shot inside its OWN fade-out's stretch at `t`, measured back from its end; undefined outside it. */
-function leaving(a: Active, t: number): SlotStretch | undefined {
-  const fade = a.clip.fadeOut;
-  if (!fade?.chain || !Number.isFinite(a.end)) return undefined;
-  const len = Math.min(fade.over, a.end - a.clip.start);
-  const from = a.end - len;
-  if (!(len > 0) || t < from) return undefined;
-  return { chain: fade.chain, presence: 1 - clamp01((t - from) / len) };
-}
-
-// The stretch half of a blend, absent when neither side runs one — a blend without it is the plain case.
-const stretchOf = (
-  from: SlotStretch | undefined,
-  to: SlotStretch | undefined,
-) =>
-  from || to
-    ? { stretch: { ...(from ? { from } : {}), ...(to ? { to } : {}) } }
-    : {};
-
-/** The whole frame rule for one layer — which two pictures, how far between them, and which run through a stretch. */
-export function layerFrameAt(layer: VideoLayer, t: number): LayerFrame {
-  const all = activesAt(layer, t);
-  if (!all.length) return { from: null, to: null, blend: null };
-  const over = all[all.length - 1];
-  const under = all.length > 1 ? all[all.length - 2] : null;
-  // A fade is clamped to its own shot: a trim can leave one longer than what it runs over.
-  const span = over.end - over.clip.start;
-
-  const fadeIn = over.clip.fadeIn;
-  if (fadeIn) {
-    const len = Math.min(fadeIn.over, span);
-    // `under` may be null, and that is a fade from NOTHING — the same branch, which is the point.
-    if (len > 0 && t < over.clip.start + len) {
-      const progress = clamp01((t - over.clip.start) / len);
-      // The incoming shot governs the BLEND; the outgoing one still runs its own fade-out's stretch.
-      const into = fadeIn.chain
-        ? { chain: fadeIn.chain, presence: progress }
-        : undefined;
-      return {
-        from: under,
-        to: over,
-        blend: {
-          name: fadeIn.with,
-          progress,
-          ...stretchOf(under ? leaving(under, t) : undefined, into),
-        },
-      };
-    }
-  }
-
-  const fadeOut = over.clip.fadeOut;
-  // An open-ended shot has no end to measure back from; the schema refuses that pair, this survives it.
-  if (fadeOut && Number.isFinite(over.end)) {
-    const len = Math.min(fadeOut.over, span);
-    const from = over.end - len;
-    if (len > 0 && t >= from)
-      return {
-        from: over,
-        to: null,
-        blend: {
-          name: fadeOut.with,
-          progress: clamp01((t - from) / len),
-          ...stretchOf(leaving(over, t), undefined),
-        },
-      };
-  }
-
-  return { from: null, to: over, blend: null };
+  return !layer.clips.length || !!spanAt(layer, t);
 }

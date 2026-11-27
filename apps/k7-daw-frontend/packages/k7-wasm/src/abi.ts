@@ -46,6 +46,17 @@ interface Abi {
   k7_round_beat(beats: number): number;
   k7_cells_ptr(): number;
   k7_cells_len(): number;
+  k7_drag_rect(
+    x: number,
+    y: number,
+    w: number,
+    h: number,
+    grip: number,
+    dx: number,
+    dy: number,
+  ): number;
+  k7_floats_ptr(): number;
+  k7_floats_len(): number;
 }
 
 /** The module's address: Vite turns this into a hashed asset, node reads it as a file; read lazily, a bundle with no `import.meta.url` never gets here. */
@@ -233,4 +244,39 @@ export function roundBeatHot(beats: number): number {
 export function outlineCells(): Uint32Array {
   const x = instance();
   return new Uint32Array(x.memory.buffer, x.k7_cells_ptr(), x.k7_cells_len());
+}
+
+/** The rect a grip drag lands on as [x, y, w, h], or null for a grip code the module does not know; no JSON crosses. */
+export function dragRectHot(
+  rect: readonly [number, number, number, number],
+  grip: number,
+  dx: number,
+  dy: number,
+): [number, number, number, number] | null {
+  const x = instance();
+  try {
+    const status = x.k7_drag_rect(
+      rect[0],
+      rect[1],
+      rect[2],
+      rect[3],
+      grip,
+      dx,
+      dy,
+    );
+    if (status !== OK) return null;
+    const s = new Float64Array(x.memory.buffer, x.k7_scalars_ptr(), 4);
+    return [s[0], s[1], s[2], s[3]];
+  } catch (e) {
+    if (isTrap(e)) recover(e);
+    throw e;
+  }
+}
+
+/** A copy of the floats the last `eyes.cube` left: the module's view dies at the next call, which may grow the memory. */
+export function cubeFloats(): Float32Array {
+  const x = instance();
+  return new Float32Array(
+    new Float32Array(x.memory.buffer, x.k7_floats_ptr(), x.k7_floats_len()),
+  );
 }

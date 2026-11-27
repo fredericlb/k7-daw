@@ -201,7 +201,7 @@ layer under the pointer is reachable without a layer list.
   module carries its own geometry — so a box around it would move a number nothing reads.
 - **Nothing is clamped to the frame.** A shot may legitimately hang off the edge; refusing that
   would make a pan impossible to author.
-- **`MIN_SIDE` is the floor** (16 px). A layer resized to nothing is unclickable, so it could not
+- **`MIN_SIDE` is the floor** (16 px, `apps/k7-daw-wasm/eyes/src/rect.rs`). A layer resized to nothing is unclickable, so it could not
   be brought back — the one state a drag must not be able to reach.
 
 ## The three drags
