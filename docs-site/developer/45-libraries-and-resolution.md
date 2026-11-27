@@ -99,7 +99,7 @@ reaches the engine as a values-only diff.
 
 | Piece | Where |
 |---|---|
-| Template schema (`label`, `inputs`, `outputs`, `params`) and instance record (`uses`, `members`) | `apps/k7-daw-frontend/packages/song-schema/src/yaml/assemblySchema.ts`, `apps/k7-daw-frontend/packages/song-schema/src/yaml/assemblyFile.ts` |
+| Template schema (`label`, `inputs`, `outputs`, `params`) and instance record (`uses`, `members`) | `apps/k7-daw-wasm/song/src/assemblies/file.rs`, and the promoted-param writer `apps/k7-daw-wasm/song-edit/src/assembly_param.rs` |
 | Resolution to `GraphDoc.assemblies` | `apps/k7-daw-wasm/song/src/assemblies/mod.rs` |
 | `assembly new`, `delete`, `dissolve`, member renames | `apps/k7-daw-wasm/song-edit/src/assembly_edit.rs` |
 | Drawing | `apps/k7-daw-frontend/packages/ui-chains/src/assembly.ts` (`foldAssemblies`) |

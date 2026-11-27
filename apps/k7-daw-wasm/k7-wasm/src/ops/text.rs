@@ -108,7 +108,6 @@ pub(super) fn index(i: f64) -> Option<usize> {
     (i >= 0.0 && i.fract() == 0.0 && i < 4.0e9).then_some(i as usize)
 }
 
-
 #[derive(Clone, Debug, Deserialize)]
 #[cfg_attr(feature = "ts", derive(ts_rs::TS))]
 pub struct TextArgs {
@@ -178,7 +177,9 @@ pub fn dispatch(request: TextRequest, out: &mut Vec<u8>) -> Result<(), WasmError
             &run(&a.text, true, &a.ops, |d, op| {
                 let mut sc = d.at(&[]);
                 match op {
-                    PlaylistOp::Append { song, variant } => playlist_edit::append_item(&mut sc, song, variant.as_deref()),
+                    PlaylistOp::Append { song, variant } => {
+                        playlist_edit::append_item(&mut sc, song, variant.as_deref())
+                    }
                     PlaylistOp::Remove { index } => playlist_edit::remove_item(&mut sc, *index),
                     PlaylistOp::Move { from, to } => playlist_edit::move_item(&mut sc, *from, *to),
                 }
@@ -207,4 +208,3 @@ pub fn dispatch(request: TextRequest, out: &mut Vec<u8>) -> Result<(), WasmError
         TextRequest::SugarApply(a) => write(out, &sugar_apply(&a)),
     }
 }
-

@@ -68,7 +68,10 @@ pub struct MixArgs {
 #[derive(Clone, Debug, Serialize)]
 #[cfg_attr(feature = "ts", derive(ts_rs::TS))]
 pub struct MixViewRead {
-    #[cfg_attr(feature = "ts", ts(type = "Record<string, import(\"./ViewBinding\").ViewBinding | null> | null"))]
+    #[cfg_attr(
+        feature = "ts",
+        ts(type = "Record<string, import(\"./ViewBinding\").ViewBinding | null> | null")
+    )]
     pub value: Option<song::files::desk::MixView>,
     pub issues: Vec<ModuleIssue>,
 }
@@ -185,7 +188,12 @@ pub(super) fn pins_parsed(a: &TextArgs) -> LibraryPins {
     LibraryPins(
         parse_pins(&a.text)
             .into_iter()
-            .map(|(k, p)| (k, serde_json::to_value(PinVersion(p)).unwrap_or(serde_json::Value::Null)))
+            .map(|(k, p)| {
+                (
+                    k,
+                    serde_json::to_value(PinVersion(p)).unwrap_or(serde_json::Value::Null),
+                )
+            })
             .collect(),
     )
 }
@@ -320,7 +328,11 @@ pub(super) fn sugar_expand(a: &ExpandArgs) -> Result<serde_json::Value, WasmErro
 pub(super) fn sugar_apply(a: &ApplyArgs) -> TextAnswer {
     let mut doc = Document::new(&a.text);
     let sugar = sugar_for(&a.path);
-    let done = apply_sugared(&mut doc, &to_value(&a.after), sugar.as_ref().map(|s| s as &dyn k7x::edit::Sugar));
+    let done = apply_sugared(
+        &mut doc,
+        &to_value(&a.after),
+        sugar.as_ref().map(|s| s as &dyn k7x::edit::Sugar),
+    );
     match done {
         Ok(()) => answer(&doc, vec![true], None),
         Err(e) => {
@@ -329,4 +341,3 @@ pub(super) fn sugar_apply(a: &ApplyArgs) -> TextAnswer {
         }
     }
 }
-

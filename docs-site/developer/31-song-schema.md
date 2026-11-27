@@ -13,15 +13,13 @@ rest of the codebase shares (timecodes, module vocabulary, playlists, stems, tak
 | `apps/k7-daw-frontend/packages/song-schema/src/yaml/placementSchema.ts` | `PlacementSchema` (one event), `TIMECODE` (the regex), `TIMECODE_KEYS` (keys whose value must be written quoted). |
 | `apps/k7-daw-frontend/packages/song-schema/src/yaml/entitySchemas.ts` | The source extensions that tell a picture clip from an audio one, and `NoteSchema`. The clip, sequence and curve files are the Rust readers'. |
 | `apps/k7-daw-frontend/packages/song-schema/src/yaml/moduleSchema.ts` | `ModuleSchema` — every field a module, node or lane may carry — plus `AlternativeSchema`, `UISchema`/`UiFileSchema`, `WidgetSchema`, `RackSchema`. |
-| `apps/k7-daw-frontend/packages/song-schema/src/yaml/chainSchema.ts` | `ChainFileSchema` with its structural refinements (first step, last step, lanes only in `start: true` chains, subchain rules), and the step predicates (`isEndStep`, `isCallStep`, `isTrackItem`, `itemsOf`, `expandCalls`). |
 | `apps/k7-daw-frontend/packages/song-schema/src/yaml/graphSchema.ts` | `GraphFileSchema` (`modules`, `bypassed`, `bus_only`, `tap_feeds`, `positions`). |
 | `apps/k7-daw-frontend/packages/song-schema/src/yaml/surfaceSchema.ts`, `surfaceRegistry.ts` | `SurfaceSchema`, the type ↔ layout table, the mapping skeletons, and the open registry a plugin adds a surface type to. |
-| `apps/k7-daw-frontend/packages/song-schema/src/yaml/assemblySchema.ts` | `AssemblyTemplateSchema` (library) and `AssemblyFileSchema` (project). |
-| `apps/k7-daw-frontend/packages/song-schema/src/yaml/mixSchema.ts`, `mixViewSchema.ts` | A set's cue sheet and the control → param binding a surface's `mapping` reuses. |
-| the `*File.ts` modules of `apps/k7-daw-frontend/packages/song-schema/src/yaml/` | Readers and text editors per kind: `trackFile`, `sequenceFile`, `curveFile`, `videoTrackFile`, `takeFile`, `chainFile`, `graphFile`, `moduleFile`, `surfaceFile`, `assemblyFile`, `mixFile`, `alternativeFile`. |
+| `apps/k7-daw-frontend/packages/song-schema/src/yaml/mixViewSchema.ts` | The control → param binding a surface's `mapping` reuses. The cue sheet, chain and assembly files are the Rust readers'. |
+| `apps/k7-daw-wasm/song-edit/src/` writers (`sequence_file.rs`, `picture_file.rs`, `playlist_edit.rs`, `mix_cues.rs`, `library_pins.rs`, `assembly_param.rs`, `format_chain.rs`) | Text editors per kind, reached as `text.*` ops (`apps/k7-daw-frontend/packages/k7-wasm/src/text.ts`). |
 | `apps/k7-daw-wasm/song/src/files/validate.rs`, `route.rs` | The editor's check: path → the compile's own reader, reached as `file.validate`. |
 | `apps/k7-daw-wasm/song/src/views/fields.rs` | The editor's completion vocabulary, derived from the readers' own decoders, reached as `fields.*`. |
-| `apps/k7-daw-frontend/packages/song-schema/src/yaml/sugar.ts`, `k7xIssues.ts` | k7x short forms and k7x-located findings. |
+| `apps/k7-daw-frontend/packages/song-schema/src/yaml/k7xIssues.ts` | k7x-located findings. The short forms are `apps/k7-daw-wasm/song-edit/src/sugar.rs`'s, reached as `text.sugar_expand` and `text.sugar_apply`. |
 | `apps/k7-daw-frontend/packages/song-schema/src/moduleTypes.ts` | The module vocabulary: type folders and their default ports, built-in ends, namespaces, refs. |
 | `apps/k7-daw-frontend/packages/song-schema/src/keyframes.ts` | Shot animation keys and their evaluation. |
 | other `src/*.ts` | `playlist`, `reference`, `songRef`, `presets`, `tasks`, `projectTags`, `libraryVersions`, `alternatives`, `engines`, `stems`, `takes`, `warpPoints`, `trackKind`, `trackColor`, `placementId`, `seqWindow`, `curveVocab`, `builtinParams` (generated). |

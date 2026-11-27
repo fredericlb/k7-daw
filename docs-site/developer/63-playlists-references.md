@@ -4,7 +4,7 @@ Both are **workspace** folders at the root, beside `_modules`: `_playlists/` and
 
 ## The playlist format
 
-`apps/k7-daw-frontend/packages/song-schema/src/playlist.ts` (exported as `@studio/song-schema/playlist`) is the single definition of a workspace playlist, shared by k7 and the desk. It has no `node:` import, so the file service and the browser apply identical rules.
+`apps/k7-daw-wasm/song-edit/src/playlist.rs` (the reads, reached as `parsePlaylist` in `@studio/k7-wasm/schema`) and `apps/k7-daw-wasm/song-edit/src/playlist_edit.rs` (the writes, reached as `text.playlist` in `@studio/k7-wasm/text`) are the single definition of a workspace playlist, shared by k7 and the desk, so the file service and the browser apply identical rules.
 
 | Export | Role |
 |---|---|
@@ -12,7 +12,7 @@ Both are **workspace** folders at the root, beside `_modules`: `_playlists/` and
 | `playlistPathOf(name)` | A name to its workspace path; null for one that would escape the folder. Accepts an explicit `.k7x`. |
 | `parsePlaylist(text)` | `{ title?, items }` from k7x text, or **null** when the text is not a playlist. An unreadable file is not an empty one. Items are a bare string or `{ song }`, the record's workspace-relative path; anything else is skipped. |
 | `playlistStub(name)` | What `playlist new` writes: a comment, `title`, `items([])`. It parses, unlike an empty file. |
-| `appendPlaylistItem`, `removePlaylistItem`, `movePlaylistItem` | Edits on a `K7Scope`, preserving comments and layout. Each returns false when `items` is in a shape it cannot safely edit, and the caller refuses with "change the line by hand". |
+| `append`, `remove`, `move` (ops of `editPlaylist`) | Edits of the text, preserving comments and layout. Each returns false when `items` is in a shape it cannot safely edit, and the caller refuses with "change the line by hand". |
 
 Resolving a line against the workspace's audio files is `apps/k7-daw-frontend/packages/song-schema/src/records.ts`: `recordPathOf` (a line to its workspace path), `resolveRecords` (keeps unresolved lines, since a dropped row hides a typo; a record's stems are `stems/` beside it), `recordName`, `recordFolder`, and the drag payload (`RECORD_DRAG_TYPE`, `packRecordDrag`). What travels in a drag is the **line**, so a deck resolves it exactly as its own set list does.
 

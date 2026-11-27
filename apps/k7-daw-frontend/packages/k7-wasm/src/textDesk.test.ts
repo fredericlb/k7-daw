@@ -351,15 +351,15 @@ steps([
 
 describe("the short forms", () => {
   it("expands a sequence's notes and a graph's runs, and leaves a kind with none", () => {
-    expect(expandSugar("song/sequences/m.k7x", { notes: "c4 d4 ~ e4" })).toEqual(
-      {
-        notes: [
-          { t: 0, d: 1, k: 60 },
-          { t: 1, d: 1, k: 62 },
-          { t: 3, d: 1, k: 64 },
-        ],
-      },
-    );
+    expect(
+      expandSugar("song/sequences/m.k7x", { notes: "c4 d4 ~ e4" }),
+    ).toEqual({
+      notes: [
+        { t: 0, d: 1, k: 60 },
+        { t: 1, d: 1, k: 62 },
+        { t: 3, d: 1, k: 64 },
+      ],
+    });
     expect(
       expandSugar("song/graph.k7x", {
         modules: { MIX: ["OUT"] },

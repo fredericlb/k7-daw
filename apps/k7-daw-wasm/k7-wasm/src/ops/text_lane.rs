@@ -7,6 +7,7 @@ use crate::ops::k7x_edit::{Seg, path, to_value};
 use k7x::edit::{Document, Value};
 use serde::{Deserialize, Serialize};
 use song_edit::error::Error;
+use song_edit::picture_animate;
 use song_edit::picture_file::{
     add_shot, list_shots, remove_at, rename_fade_chains, set_field_at, set_field_by_ref, set_lane_rect, set_silent_at,
     set_speed_at, split_at,
@@ -17,7 +18,6 @@ use song_edit::sequence_file::{
 };
 use song_edit::sugar::sugar_for;
 use song_edit::workspace_doc::edit_sugared;
-use song_edit::picture_animate;
 
 // ---- a picture lane's `events:` ----------------------------------------------------------------
 
@@ -132,14 +132,18 @@ pub(super) fn video_list(a: &VideoListArgs) -> Vec<VideoPlacement> {
 pub(super) fn video_step(doc: &mut Document, at: &[Seg], op: &VideoOp) -> Result<bool, Error> {
     let mut sc = doc.at(&path(at));
     match op {
-        VideoOp::SetFieldAt { index: i, field, value } => index(*i).map_or(Ok(false), |i| set_field_at(&mut sc, i, field, *value)),
+        VideoOp::SetFieldAt { index: i, field, value } => {
+            index(*i).map_or(Ok(false), |i| set_field_at(&mut sc, i, field, *value))
+        }
         VideoOp::SetFieldByRef {
             reference,
             field,
             value,
         } => set_field_by_ref(&mut sc, reference, field, *value),
         VideoOp::SetSpeedAt { index: i, speed } => index(*i).map_or(Ok(false), |i| set_speed_at(&mut sc, i, *speed)),
-        VideoOp::SetSilentAt { index: i, silent } => index(*i).map_or(Ok(false), |i| set_silent_at(&mut sc, i, *silent)),
+        VideoOp::SetSilentAt { index: i, silent } => {
+            index(*i).map_or(Ok(false), |i| set_silent_at(&mut sc, i, *silent))
+        }
         VideoOp::RemoveAt { index: i } => index(*i).map_or(Ok(false), |i| remove_at(&mut sc, i)),
         VideoOp::SplitAt { index: i, cut } => index(*i).map_or(Ok(false), |i| split_at(&mut sc, i, *cut)),
         VideoOp::AddShot {
@@ -155,7 +159,6 @@ pub(super) fn video_step(doc: &mut Document, at: &[Seg], op: &VideoOp) -> Result
         VideoOp::SetLaneRect { x, y, w, h } => set_lane_rect(&mut sc, [*x, *y, *w, *h]),
     }
 }
-
 
 // ---- a sequence's notes ------------------------------------------------------------------------
 
@@ -319,8 +322,6 @@ pub(super) fn sequence(a: &SequenceArgs) -> TextAnswer {
     }
 }
 
-
-
 /// A sequence's data with its short form expanded, or the sentence of the short form that does not read.
 pub(super) fn sequence_data(a: &TextArgs) -> Result<serde_json::Value, WasmError> {
     let doc = Document::new(&a.text);
@@ -334,4 +335,3 @@ pub(super) fn sequence_data(a: &TextArgs) -> Result<serde_json::Value, WasmError
     };
     Ok(json_of(&expanded))
 }
-

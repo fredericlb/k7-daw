@@ -1,10 +1,10 @@
 // sequence_file.rs — editing a `sequences/<id>.k7x` document: one note by (key, start), a region of notes, the doubling.
 // A reader would get wrong what these see: the EXPANDED notes, since `ws_edit` hands them the short form already undone.
 
-use k7x::edit::{Document, PathSeg, Value, WriteOptions};
 use crate::error::{Res, fail};
 use crate::js_text::{js_string, str_to_number};
 use crate::start_time::js_round;
+use k7x::edit::{Document, PathSeg, Value, WriteOptions};
 use song_schema::{beats_to_position_on, parse_position_on};
 
 /// Two beat positions closer than this are the same one.

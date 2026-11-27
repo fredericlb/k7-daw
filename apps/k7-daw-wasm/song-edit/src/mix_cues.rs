@@ -57,7 +57,11 @@ pub fn with_markers(sc: &mut Scope, reference: &str, markers: &[Option<f64>]) ->
     }
     if kept.is_empty() {
         if at.is_none() {
-            sc.add_in(&[key("cues")], &Value::Str(reference.to_owned()), WriteOptions::default())?;
+            sc.add_in(
+                &[key("cues")],
+                &Value::Str(reference.to_owned()),
+                WriteOptions::default(),
+            )?;
         }
         return Ok(());
     }

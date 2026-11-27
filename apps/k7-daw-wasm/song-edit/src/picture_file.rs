@@ -1,11 +1,11 @@
 // picture_file.rs — read and edit a PICTURE lane's `events:` list, each shot `{ref, start, length, from}` in decimal seconds.
 // A reader would get wrong that a refused edit is `Ok(false)` and writes nothing, as is an unreadable buffer.
 
-use crate::picture_animate::{animate_path, animate_value, parse_animate, split_animate};
-use k7x::edit::{PathSeg, Scope, Value, WriteOptions};
 use crate::error::Res;
 use crate::js_text::js_to_number;
+use crate::picture_animate::{animate_path, animate_value, parse_animate, split_animate};
 use crate::start_time::js_round;
+use k7x::edit::{PathSeg, Scope, Value, WriteOptions};
 
 /// A placement of a picture lane's `events:`; absent fields read as the file's defaults.
 #[derive(Clone, Debug, PartialEq)]

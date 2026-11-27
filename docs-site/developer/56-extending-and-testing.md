@@ -18,7 +18,7 @@
    `apps/k7-daw-wasm/song/src/pictures/sound.rs` (does the sound follow it), and
    `apps/k7-daw-wasm/verbs/src/verbs/picture_interchange.rs` (carried, or listed as left out).
 6. If it is editable by command, add a verb (below) and a writer in
-   `apps/k7-daw-frontend/packages/song-schema/src/yaml/videoTrackFile.ts` that edits by index and rounds as the others do.
+   `apps/k7-daw-wasm/song-edit/src/picture_file.rs` that edits by index and rounds as the others do.
 
 ### A new `picture …` verb
 
@@ -64,7 +64,7 @@ are split out precisely so they can be tested.
 
 | area | tests |
 |---|---|
-| schemas and writers | `apps/k7-daw-frontend/packages/song-schema/src/yaml/videoTrackFile.test.ts`, `videoTrackYaml.test.ts`, `videoKeys.test.ts`, `videoSpeed.test.ts`, `apps/k7-daw-frontend/packages/song-schema/src/aspect.test.ts` |
+| schemas and writers | `apps/k7-daw-frontend/packages/k7-wasm/src/textVideo.test.ts`, `apps/k7-daw-frontend/packages/song-schema/src/yaml/videoTrackYaml.test.ts`, `videoKeys.test.ts`, `videoSpeed.test.ts`, `apps/k7-daw-frontend/packages/song-schema/src/aspect.test.ts` |
 | the compile and the scene | `apps/k7-daw-wasm/verbs/tests/picture.rs`, over `e2e/fixtures/video-lane.k7` and the crate's `tests/fixtures/picture-rig.k7` |
 | interchange | `apps/k7-daw-wasm/verbs/tests/pictures_media.rs` (writers, readers, round trips) |
 | song side | `apps/k7-daw-wasm/song/tests/all/pictures_sound.rs`, `pictures_doc.rs` |
