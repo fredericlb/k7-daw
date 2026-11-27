@@ -1066,7 +1066,7 @@ how a preamp goes in. A lane that reaches no module and no input leads nothing: 
 the pane says so, a single card with no cable not being a signal path.
 
 **A `+` waits on each seam**, shown while the pointer is on it, and **one stands past the last card**,
-always shown (`@studio/ui-chains`'s `rowSeams.ts`, drawn by `ui-chains-react`'s `Seams.tsx`). Both ask
+always shown (the `chains` crate's `row_seams.rs`, asked by `@studio/ui-chains`'s `rowSeams.ts`, drawn by `ui-chains-react`'s `Seams.tsx`). Both ask
 the same "which module?" a cable's `+` asks on the graph, and run the same `node insert`. The tail
 splices into the arrow OUT of the last card: before the lane's mixer when the row pinned one right —
 the fader closes the path, so a module added "at the end" belongs ahead of it — and otherwise into

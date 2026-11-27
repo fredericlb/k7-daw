@@ -8,7 +8,6 @@ import {
   buildCableGeom,
   cubicAt,
   cubicSegments,
-  insertFor,
   jackRef,
   liveVideoLanes,
   midByArc,
@@ -107,59 +106,6 @@ describe("liveVideoLanes", () => {
   });
 });
 
-describe("insertFor", () => {
-  const node = (
-    id: string,
-    kind: GraphNode["kind"],
-    chain?: string,
-  ): GraphNode =>
-    ({
-      id,
-      kind,
-      label: id,
-      chain,
-      x: 0,
-      y: 0,
-      w: 10,
-      h: 10,
-    }) as GraphNode;
-  const byId = (...nodes: GraphNode[]) => new Map(nodes.map((n) => [n.id, n]));
-
-  it("offers an insert between two modules", () => {
-    const m = byId(node("a", "module", "ch"), node("b", "module", "ch"));
-    expect(insertFor("a", "b", m)).toEqual({ before: "a", after: "b" });
-  });
-
-  it("offers one ACROSS chains too — an arrow is an arrow", () => {
-    // A same-chain rule would refuse this; `chains.k7x` states its edges. docs/graphBuild.md.
-    expect(
-      insertFor(
-        "a",
-        "b",
-        byId(node("a", "module", "x"), node("b", "module", "y")),
-      ),
-    ).toEqual({ before: "a", after: "b" });
-  });
-
-  it("offers one on the empty MASTER RUN, whose two ends are both sinks", () => {
-    // `MIX: [ OUT ]` is written by every template to be dropped on — apps/k7-daw-frontend/packages/song/docs/masterChain.md.
-    const sink = (name: string): GraphNode => ({
-      ...node(`snk:${name}`, "sink"),
-      label: name,
-    });
-    expect(
-      insertFor("snk:MIX", "snk:OUT", byId(sink("MIX"), sink("OUT"))),
-    ).toEqual({ before: "MIX", after: "OUT" });
-  });
-
-  it("refuses between two non-modules", () => {
-    // Two tracks never have an arrow, so a `+` there would address nothing.
-    expect(
-      insertFor("a", "b", byId(node("a", "track"), node("b", "track"))),
-    ).toBeNull();
-  });
-});
-
 describe("jackRef", () => {
   // A track node's id wears the trk: prefix but its LABEL is the chains name — same for the sink.
   const node = (
@@ -169,7 +115,7 @@ describe("jackRef", () => {
     module?: string,
   ) => ({ id, kind, label, module }) as GraphNode;
 
-  it("names a node as the chains spell it, exactly as insertFor does", () => {
+  it("names a node as the chains spell it, as the chains crate does", () => {
     expect(jackRef(node("module", "m1", "reverb (long)", "reverb"))).toBe(
       "reverb",
     );

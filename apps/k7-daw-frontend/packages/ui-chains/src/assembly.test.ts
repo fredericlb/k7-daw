@@ -4,7 +4,6 @@
 
 import type { WebGraph } from "@studio/graph-model";
 import { describe, expect, it } from "vitest";
-import { foldAssemblies } from "./assembly";
 import { jackRef } from "./cables";
 import { assemblyId, buildGraph, type GraphNode, layout } from "./graph";
 
@@ -33,8 +32,7 @@ const GRAPH: WebGraph = {
   warnings: [],
 };
 
-const fold = (open: string[] = []) =>
-  foldAssemblies(GRAPH, buildGraph(GRAPH), new Set(open));
+const fold = (open: string[] = []) => buildGraph(GRAPH, {}, open);
 
 const byId = (nodes: GraphNode[] | { id: string }[]) =>
   new Map(nodes.map((n) => [n.id, n as GraphNode]));
@@ -84,10 +82,10 @@ describe("a CLOSED box", () => {
     expect(box?.jacks?.in.map((j) => j.name)).toEqual(["in"]);
     expect(box?.jacks?.out.map((j) => j.name)).toEqual(["mix"]);
     // A source — a turntable — declares no input, and an input jack on one is a hole nothing fills.
-    const source = foldAssemblies(
+    const source = buildGraph(
       { ...GRAPH, assemblies: { turntableA: { ...BOX, inputs: [] } } },
-      buildGraph(GRAPH),
-      new Set(),
+      {},
+      [],
     ).nodes.find((n) => n.kind === "assembly");
     expect(source?.jacks?.in).toEqual([]);
   });
@@ -223,9 +221,8 @@ describe("making room for an open box", () => {
 });
 
 describe("a graph declaring none", () => {
-  it("is handed back untouched", () => {
+  it("is handed back as built", () => {
     const bare = { ...GRAPH, assemblies: undefined };
-    const built = buildGraph(bare);
-    expect(foldAssemblies(bare, built)).toBe(built);
+    expect(buildGraph(bare, {}, [])).toEqual(buildGraph(bare));
   });
 });

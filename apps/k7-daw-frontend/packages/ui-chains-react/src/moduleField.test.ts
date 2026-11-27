@@ -4,9 +4,33 @@
 
 import type { PageWidget } from "@studio/graph-model";
 import type { GraphNode } from "@studio/ui-chains/graph";
-import { cameraUI, inputUI, midiInUI } from "@studio/ui-chains/graph";
+import { buildGraph } from "@studio/ui-chains/graph";
 import { describe, expect, it } from "vitest";
 import { moduleFieldValue } from "./moduleField";
+
+/** The panel the build draws for a step of this kind: the synthesised ones have no file to read. */
+const panelOf = (
+  step: Record<string, unknown>,
+  opts: Parameters<typeof buildGraph>[1],
+) => {
+  const card = buildGraph(
+    {
+      chains: { c: { from: "t", use: [{ module: "m", ...step }], out: [] } },
+      tracks: ["t"],
+      warnings: [],
+    } as never,
+    opts,
+  ).nodes.find((n) => n.module === "m");
+  return card?.ui as NonNullable<typeof card>["ui"] & object;
+};
+const cameraUI = (cameras: string[], _current: unknown) =>
+  panelOf({ camera: "" }, { cameras });
+const inputUI = (
+  inputDevices: { name: string; channels: number[] }[],
+  channel: number[],
+) => panelOf({ monitor: "on", channel }, { inputDevices });
+const midiInUI = (midiDevices: string[]) =>
+  panelOf({ device: "" }, { midiDevices });
 
 /** A card carrying whichever fields the case is about — the rest of a node is not read here. */
 const node = (fields: Partial<GraphNode>): GraphNode =>

@@ -1,10 +1,11 @@
 // cables.ts — the cable DRAWING geometry: smooth a routed polyline into cubic beziers,
 // resample it by arc-length for the live-signal wobble, find the insert `+` midpoint,
-// and resolve what an arrow inserts or automates. Pure math over the laid-out graph (graph.ts
+// and resolve what an arrow automates. Pure math over the laid-out graph (graph.ts
 // owns the layout); the signal's strength along the edges is `computeFlow` in `@studio/k7-wasm/chains`.
 
 import { panelWidgets } from "@studio/graph-model/panel";
-import type { EdgeInsert, GraphEdge, GraphNode, Pt } from "./graph";
+import { jackRefOp } from "@studio/k7-wasm/graph";
+import type { GraphEdge, GraphNode, Pt } from "./graph";
 import { columnW, curveOutPoint, menuH, stripWidgetRect } from "./graph";
 
 // A cubic bezier segment (Catmull-Rom → Bezier — see cubicSegments).
@@ -169,50 +170,9 @@ export function liveVideoLanes(
   return ids;
 }
 
-/** Whether an arrow maps to an insert: at least one end a module, or the two built-in ends of a master run. */
-export function insertFor(
-  sourceId: string,
-  targetId: string,
-  byId: Map<string, GraphNode>,
-): EdgeInsert | null {
-  const s = byId.get(sourceId);
-  const t = byId.get(targetId);
-  if (!s || !t) return null;
-  // Sink to sink is `MIX → OUT`, the empty master run — the one line every template writes to be dropped on.
-  const masterRun = s.kind === "sink" && t.kind === "sink";
-  // A closed box stands for a MODULE at one end, which is what makes its boundary arrow spliceable.
-  const spliceable = (n: GraphNode) => n.kind === "module" || !!n.assemblyOf;
-  if (!spliceable(s) && !spliceable(t) && !masterRun) return null;
-  // The box's own name is never written into a chain: the arrow's real end is the MEMBER behind its plug.
-  return {
-    before: jackRef(s, portOn(s, "out")),
-    after: jackRef(t, portOn(t, "in")),
-  };
-}
-
-/** A closed box's only plug on that side, when it has exactly one — what an ARROW's end must resolve to. */
-function portOn(n: GraphNode, side: "in" | "out"): string | undefined {
-  if (!n.assemblyOf) return undefined;
-  const jacks = n.jacks?.[side]?.filter((j) => j.name);
-  return jacks?.length === 1 ? jacks[0].name : undefined;
-}
-
-/** The chains.k7x name a JACK click has in hand — `insertFor`'s resolution, plus `#port`.
- *
- * An ASSEMBLY answers with the MEMBER behind the plug, never with itself: the box is a drawing and
- * `graph.k7x` has no key for it, so a cable dropped on `turntableA#mix` writes `fadeA`. Its bare
- * name is still its own — that is what a pin and `graph move` address. See docs/graphBuild.md. */
-export function jackRef(n: GraphNode, port?: string): string {
-  if (n.assemblyOf && port) {
-    const plug = n.assemblyOf.plugs[port];
-    if (plug) return plug.port ? `${plug.node}#${plug.port}` : plug.node;
-  }
-  const name =
-    n.kind === "module" || n.kind === "assembly"
-      ? (n.module ?? n.label)
-      : n.label;
-  return port ? `${name}#${port}` : name;
-}
+/** The chains.k7x name a JACK click has in hand, plus `#port`; a box answers with the MEMBER behind the plug (the `chains` crate's rule). */
+export const jackRef = (n: GraphNode, port?: string): string =>
+  jackRefOp(n, port);
 
 // Where an automation arrow lands: the target widget's border, or the module's left edge.
 export interface AutoTarget {

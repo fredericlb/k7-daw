@@ -52,6 +52,12 @@ fn write_types(dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
     WarningAnswer::export_all_to(dir)?;
     ChainsRequest::export_all_to(dir)?;
     Kept::export_all_to(dir)?;
+    k7_wasm::ops::chains::Built::export_all_to(dir)?;
+    k7_wasm::ops::chains::Size::export_all_to(dir)?;
+    chains::row_seams::SeamsAnswer::export_all_to(dir)?;
+    chains::stack_layout::StackAnswer::export_all_to(dir)?;
+    chains::module_row::Spaced::export_all_to(dir)?;
+    chains::node::EdgeInsert::export_all_to(dir)?;
     chains::bindings::ResolvedMapping::export_all_to(dir)?;
     chains::subgraph::KeptChain::export_all_to(dir)?;
     chains::curve_placement::Moved::export_all_to(dir)?;

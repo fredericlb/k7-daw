@@ -23,7 +23,7 @@ resolved.
 
 On the wire, a panel is `WebModuleUI` with `WebWidget`s (`apps/k7-daw-frontend/packages/graph-model/types.ts`). The
 renderer draws it in `apps/k7-daw-frontend/packages/ui-chains-react/src/DomChains.tsx`, folding wide grids with
-`apps/k7-daw-frontend/packages/ui-chains/src/gridFit.ts`. `widgets.js` runs in the widget sandbox
+`apps/k7-daw-wasm/chains/src/grid_fit.rs`. `widgets.js` runs in the widget sandbox
 (`apps/k7-daw-frontend/packages/ui-chains/src/widgetSandbox.ts`, `apps/k7-daw-frontend/packages/ui-chains/src/widgetRuntime.ts`) against the
 contract in `apps/k7-daw-frontend/packages/ui-chains/src/lcdScreen.ts`.
 

@@ -1,14 +1,23 @@
 // ops/chains.rs — the Chains tab's rules as JSON ops over the `chains` crate: a widget's value maths, the cables' flow, the lane reads, the bindings.
 // A reader would get wrong that the graph travels whole in a lane read or a binding: each runs once per document change, not per frame.
 
+use crate::error::WasmError;
+use crate::ops::write;
+use chains::assembly::fold_assemblies;
 use chains::bindings::{self, BindGraph, PluglessPolicy, ResolvedMapping, SurfaceBinding};
+use chains::build::{BuildOptions, build_graph};
 use chains::curve_placement::{self, Box2, Moved, PlaceEdge};
 use chains::flow::{self, FlowEdge, LaneSource, NodeFlow};
+use chains::geom::node_size;
+use chains::graph::Graph;
+use chains::module_row::{RankNode, RowOptions, Spaced, align_ranks, module_row, space_modules};
+use chains::node::{Edge, EdgeInsert, Laid, Node};
+use chains::panel::Panel;
+use chains::row_seams::{SeamsAnswer, inserts_for, jack_ref, row_exit, row_seams};
+use chains::stack_layout::{StackAnswer, stack_layout};
 use chains::subgraph::{self, GraphView, KeptChain};
 use chains::widget_value::WidgetScale;
 use indexmap::{IndexMap, IndexSet};
-use crate::error::WasmError;
-use crate::ops::write;
 use serde::Deserialize;
 use std::collections::HashMap;
 
@@ -207,10 +216,145 @@ pub fn place_without_curves(a: WithoutCurvesArgs) -> Option<Kept> {
     curve_placement::without_curves(&a.nodes, &a.edges).map(|(nodes, edges)| Kept { nodes, edges })
 }
 
+/// The graph to build, how, and which assemblies are open when it has any.
+#[derive(Clone, Debug, Deserialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(optional_fields))]
+pub struct BuildArgs {
+    #[cfg_attr(feature = "ts", ts(type = "import(\"@studio/graph-model\").WebGraph"))]
+    pub graph: Graph,
+    #[serde(default)]
+    pub opts: BuildOptions,
+    /// Fold the graph's assemblies, these ones drawn open; absent leaves the graph as built.
+    pub open: Option<Vec<String>>,
+}
+
+/// What a build answers: the cards, and the cables between them, unpositioned.
+#[derive(Clone, Debug, serde::Serialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS))]
+pub struct Built {
+    pub nodes: Vec<Node>,
+    pub edges: Vec<Edge>,
+}
+
+pub fn graph_build(a: BuildArgs) -> Built {
+    let (nodes, edges) = build_graph(&a.graph, &a.opts);
+    let (nodes, edges) = match &a.open {
+        Some(open) => fold_assemblies(&a.graph, nodes, edges, &open.iter().cloned().collect()),
+        None => (nodes, edges),
+    };
+    Built { nodes, edges }
+}
+
+#[derive(Clone, Debug, Deserialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(optional_fields))]
+pub struct RowArgs {
+    #[cfg_attr(feature = "ts", ts(type = "import(\"@studio/graph-model\").WebGraph"))]
+    pub graph: Graph,
+    pub modules: Vec<String>,
+    #[serde(default)]
+    pub opts: RowOptions,
+}
+
+pub fn graph_row(a: RowArgs) -> Laid {
+    module_row(&a.graph, &a.modules, &a.opts)
+}
+
+#[derive(Clone, Debug, Deserialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS))]
+pub struct RankArgs {
+    pub nodes: Vec<RankNode>,
+    pub modules: Vec<String>,
+}
+
+pub fn graph_align(a: RankArgs) -> Vec<(String, f64)> {
+    align_ranks(&a.nodes, &a.modules)
+}
+
+pub fn graph_space(a: RankArgs) -> Option<Spaced> {
+    space_modules(&a.nodes, &a.modules)
+}
+
+#[derive(Clone, Debug, Deserialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS))]
+pub struct SeamsArgs {
+    /// The row as laid before a card was lifted off its end, and the row shown.
+    pub full: Laid,
+    pub row: Laid,
+    #[cfg_attr(feature = "ts", ts(type = "import(\"@studio/graph-model\").WebGraph"))]
+    pub graph: Graph,
+    pub branch: bool,
+}
+
+pub fn graph_seams(a: SeamsArgs) -> SeamsAnswer {
+    let exit = row_exit(&a.full, &a.row, &a.graph);
+    row_seams(&a.row, exit, a.branch)
+}
+
+#[derive(Clone, Debug, Deserialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS))]
+pub struct InsertsArgs {
+    pub nodes: Vec<Node>,
+    pub pairs: Vec<(String, String)>,
+}
+
+pub fn graph_inserts(a: InsertsArgs) -> Vec<Option<EdgeInsert>> {
+    inserts_for(&a.nodes, &a.pairs)
+}
+
+#[derive(Clone, Debug, Deserialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(optional_fields))]
+pub struct JackRefArgs {
+    pub node: Node,
+    pub port: Option<String>,
+}
+
+pub fn graph_jack_ref(a: JackRefArgs) -> String {
+    jack_ref(&a.node, a.port.as_deref())
+}
+
+#[derive(Clone, Debug, Deserialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(rename = "StackArgs"))]
+#[serde(rename_all = "camelCase")]
+pub struct StackArgsOp {
+    pub nodes: Vec<Node>,
+    pub edges: Vec<Edge>,
+    #[cfg_attr(feature = "ts", ts(type = "import(\"@studio/graph-model\").WebGraph"))]
+    pub graph: Graph,
+    pub track_order: Vec<String>,
+}
+
+pub fn graph_stack(a: StackArgsOp) -> StackAnswer {
+    stack_layout(&a.nodes, &a.edges, &a.graph, &a.track_order)
+}
+
+/// A panel and whether the card carries its bottom bar: what `graph.nodeSize` measures.
+#[derive(Clone, Debug, Deserialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(optional_fields))]
+pub struct NodeSizeArgs {
+    #[cfg_attr(feature = "ts", ts(type = "import(\"@studio/graph-model\").PageModuleUI"))]
+    pub ui: Option<Panel>,
+    pub footer: Option<bool>,
+}
+
+/// A card's size.
+#[derive(Clone, Debug, serde::Serialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS))]
+pub struct Size {
+    pub w: f64,
+    pub h: f64,
+}
+
+pub fn graph_node_size(a: NodeSizeArgs) -> Size {
+    let (w, h) = node_size(a.ui.as_ref(), a.footer == Some(true));
+    Size { w, h }
+}
+
 /// The chains families' requests: `{"op": "widget.norm", "args": {…}}`, and the flow, lane, bindings and place families beside it.
 #[derive(Clone, Debug, Deserialize)]
 #[cfg_attr(feature = "ts", derive(ts_rs::TS))]
 #[serde(tag = "op", content = "args")]
+// A request is decoded once and consumed at once, so its largest variant costs nothing held.
+#[allow(clippy::large_enum_variant)]
 pub enum ChainsRequest {
     #[serde(rename = "widget.norm")]
     WidgetNorm(WidgetValueArgs),
@@ -248,6 +392,24 @@ pub enum ChainsRequest {
     PlaceUnderLeft(PlaceArgs),
     #[serde(rename = "place.withoutCurves")]
     PlaceWithoutCurves(WithoutCurvesArgs),
+    #[serde(rename = "graph.build")]
+    GraphBuild(BuildArgs),
+    #[serde(rename = "graph.row")]
+    GraphRow(RowArgs),
+    #[serde(rename = "graph.align")]
+    GraphAlign(RankArgs),
+    #[serde(rename = "graph.space")]
+    GraphSpace(RankArgs),
+    #[serde(rename = "graph.seams")]
+    GraphSeams(SeamsArgs),
+    #[serde(rename = "graph.inserts")]
+    GraphInserts(InsertsArgs),
+    #[serde(rename = "graph.jackRef")]
+    GraphJackRef(JackRefArgs),
+    #[serde(rename = "graph.stack")]
+    GraphStack(StackArgsOp),
+    #[serde(rename = "graph.nodeSize")]
+    GraphNodeSize(NodeSizeArgs),
 }
 
 pub fn dispatch(request: ChainsRequest, out: &mut Vec<u8>) -> Result<(), WasmError> {
@@ -271,5 +433,14 @@ pub fn dispatch(request: ChainsRequest, out: &mut Vec<u8>) -> Result<(), WasmErr
         R::PlaceLeftOf(a) => write(out, &place_left_of(a)),
         R::PlaceUnderLeft(a) => write(out, &place_under_left(a)),
         R::PlaceWithoutCurves(a) => write(out, &place_without_curves(a)),
+        R::GraphBuild(a) => write(out, &graph_build(a)),
+        R::GraphRow(a) => write(out, &graph_row(a)),
+        R::GraphAlign(a) => write(out, &graph_align(a)),
+        R::GraphSpace(a) => write(out, &graph_space(a)),
+        R::GraphSeams(a) => write(out, &graph_seams(a)),
+        R::GraphInserts(a) => write(out, &graph_inserts(a)),
+        R::GraphJackRef(a) => write(out, &graph_jack_ref(a)),
+        R::GraphStack(a) => write(out, &graph_stack(a)),
+        R::GraphNodeSize(a) => write(out, &graph_node_size(a)),
     }
 }

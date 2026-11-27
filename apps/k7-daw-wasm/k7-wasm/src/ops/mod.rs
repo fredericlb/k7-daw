@@ -70,7 +70,7 @@ impl Session {
         match family {
             "curve" => curve::dispatch(&mut self.curves, decode(input)?, out),
             "engine" | "text" => engine::dispatch(decode(input)?, out),
-            "widget" | "flow" | "lane" | "bindings" | "place" => chains::dispatch(decode(input)?, out),
+            "widget" | "flow" | "lane" | "bindings" | "place" | "graph" => chains::dispatch(decode(input)?, out),
             "schema" => schema::dispatch(decode(input)?, out),
             "timecode" => timecode::dispatch(decode(input)?, out),
             "fields" => fields::dispatch(decode(input)?, out),

@@ -7,12 +7,14 @@ has no modules), and that is what `from`/`out` connect to.
 The code is deliberately **renderer-agnostic** — plain numbers, no Pixi, no DOM — the seam that lets
 dagre own layout and lets the same geometry serve the hit areas and the drawing by construction.
 
-`graph.ts` is the one import site; behind it each stage has a file. `graphNode.ts` holds the shapes,
-`geometry.ts` the measurements, `nodeUIs.ts` the built-in cards' panels and `@studio/k7-wasm/chains` (Rust) a
-widget's value maths. `buildGraph.ts` runs the build: a `Build` (`buildContext.ts`) holds the run's
-maps and writers, the steps that add cards are `buildChains.ts`, and the socket and rank passes
-close it. `graphLayout.ts` and `moduleRow.ts` place the result. Hosts import `./graph` alone, so
-the split stays internal.
+`graph.ts` is the one import site. The build is Rust's (`apps/k7-daw-wasm/chains`, reached through
+`@studio/k7-wasm/graph`): `build.rs` holds a run's maps and writers, the socket and rank passes and the
+narrow and fold passes; `build_chains.rs` the steps that add cards; `node_ui.rs` the built-in cards' panels;
+`geom.rs` the measurements; `grid_fit.rs`, `assembly.rs`, `module_row.rs`, `row_seams.rs` and `stack_layout.rs`
+the post-passes and arrangements. Here, `graphNode.ts` holds the generated shapes, `geometry.ts` the
+DRAWING geometry (where a socket sits, the cable between two), `buildGraph.ts` and the other facades ask
+Rust and put the answer in the page's shapes, and `graphLayout.ts` places the result with dagre. Hosts
+import `./graph` alone, so the split stays internal.
 
 ## What a node carries from its step
 
@@ -150,7 +152,7 @@ card keeps the ranks close and the cables short.
 The fold is what serves a panel no one authored a shape for — a workspace module, a VST scanned on
 the spot. `buildGraph`'s `fit` holds every card's widget grid to a number of ROWS or of COLUMNS,
 never both: one side is the constraint, the other takes what overflows. Held to four rows, a
-nine-row panel becomes bands side by side, each as wide as what it holds (`gridFit.ts`). Held to
+nine-row panel becomes bands side by side, each as wide as what it holds (`grid_fit.rs`). Held to
 columns, the bands go below. The per-track view holds 4 rows on a desktop and 4 columns on a phone,
 so an authored panel passes through the fold untouched.
 
@@ -232,7 +234,7 @@ draws no tab column. An SFZ kit draws no empty cells, since its pads are the kit
 each pad for that pad's gain, and a column on the right for the kit's level, on every tab.
 
 `rackGrid`, the square-ish grid of at least 2×2 and at most four wide, is what an ASSEMBLY's
-boxes are laid out on (`src/assembly.ts`): those have no notes to place them by.
+boxes are laid out on (`assembly.rs`): those have no notes to place them by.
 
 **A pad draws bare.** The widget still carries the symbol as its `label`, which is what a tooltip
 and a right-click name it by, but `DomChains` prints it for every button *except* a pad: sixteen
@@ -279,7 +281,7 @@ An **authored** panel wins over all of this, exactly as for a rack.
 
 `stepUI` picks it: the authored grid if there is one, else a rack's pads, else an input's sockets.
 Both readers go through it — the node's `ui` and `nodeSize` — and that is the whole reason it
-exists. Take the node's panel from `carryStep` (the step's raw `ui`) and only its SIZE from
+exists. Take the node's panel from the step's carried fields (its raw `ui`) and only its SIZE from
 `stepUI`, and the one thing `stepUI` does on its own — folding the module's base list into the
 authored panel (`withFolderOptions`) — is computed, measured, then dropped: every base dropdown draws
 `none` and nothing else, on a panel whose author wrote exactly what the format asks for.
@@ -526,7 +528,7 @@ at them without starting the engine, the supervisor, the file service and the ed
 
 ## Assemblies — a box instead of its members
 
-`assembly.ts` folds them in AFTER `buildGraph`, in the family of `alignModuleRank` and
+`assembly.rs` folds them in AFTER the build (`buildGraph`'s `open` argument), in the family of `alignModuleRank` and
 `masterRunAside`: what it reads is a drawing fact, so nothing there may change what a cable means,
 only where it lands. The host holds which boxes are OPEN — session state, not the document.
 

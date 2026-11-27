@@ -1,32 +1,9 @@
 // A binding's depth: what a knob draws as the stretch its curve sweeps.
 
 import { describe, expect, it } from "vitest";
-import {
-  decodeDepth,
-  depthOf,
-  depthSpan,
-  encodeDepth,
-} from "./automationDepth";
+import { decodeDepth, depthSpan, encodeDepth } from "./automationDepth";
 
 describe("automation depth", () => {
-  it("reads the curve's amplitude and polarity, and has none for an on/off curve", () => {
-    expect(depthOf({ type: "lfo" })).toEqual({ amplitude: 1, bipolar: false });
-    expect(
-      depthOf({
-        type: "lfo",
-        spec: {
-          type: "lfo",
-          polarity: "bipolar",
-          amplitude: 0.4,
-          shape: "sine",
-          frequency: 1,
-          phase: 0,
-        },
-      }),
-    ).toEqual({ amplitude: 0.4, bipolar: true });
-    expect(depthOf({ type: "onoff" })).toBeUndefined();
-  });
-
   it("sweeps 0..amplitude unipolar, and ±amplitude/2 around the set value bipolar, inside the travel", () => {
     expect(depthSpan({ amplitude: 0.6, bipolar: false }, 0.9)).toEqual([
       0, 0.6,

@@ -52,7 +52,7 @@ by side, at most four. A screen is as wide as the 4 columns, its height chosen f
 ## When a module has no layout of that shape
 
 Workspace modules, a VST scanned on the spot, a rack: whatever has no authored shape is FOLDED to it as
-the view draws it (`ui-chains`' `gridFit.ts`) — 4 rows across, or 4 columns down. The fold never cuts a
+the view draws it (the `chains` crate's `grid_fit.rs`) — 4 rows across, or 4 columns down. The fold never cuts a
 control and does its best; an authored layout is always better, which is why every library module has
 one.
 

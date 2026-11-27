@@ -1,7 +1,6 @@
-// graph.ts — the Chains routing graph's one import site: model -> nodes/edges -> laid-out
-// geometry, each step in a file of its own (graphNode, geometry, nodeUIs, widgetValue,
-// buildGraph, moduleRow, graphLayout, subgraph). Renderer-agnostic: what comes out is plain
-// geometry any renderer can consume. Hosts import "./graph"; the split is internal.
+// graph.ts — the Chains routing graph's one import site: model -> nodes/edges -> laid-out geometry. The build, the arrangements
+// and the widget maths are Rust's (`@studio/k7-wasm`); the drawing geometry and the layout (dagre) are here. Renderer-agnostic.
+// Hosts import "./graph"; the split is internal.
 
 export {
   isMixKnob,
@@ -14,6 +13,21 @@ export {
   widgetText,
   widgetTyped,
 } from "@studio/k7-wasm/chains";
+export {
+  INPUT_VOLUME_PARAM,
+  MIX_OUT,
+  MIX_PARAM,
+  OUTPUT_VOLUME_PARAM,
+  RENDER_OUT,
+} from "@studio/k7-wasm/consts";
+export {
+  RACK_ADD_BIND,
+  RACK_BIND,
+  rackAddBind,
+  rackAddBindAt,
+  rackBindSymbol,
+} from "@studio/song-schema/yaml/moduleSchema";
+export { projectBindField } from "./binds";
 export { buildGraph, withOpenTabs } from "./buildGraph";
 export {
   assemblyId,
@@ -34,18 +48,14 @@ export {
   HEADER_MIN_PX,
   headerFontPx,
   jackPoint,
-  jacksFor,
   MAIN_OUT,
-  MIX_OUT,
   menuH,
   moduleDisplayName,
   NODE_H,
   NODE_MIN_W,
   NODE_W,
   nodeSize,
-  noteSize,
   PORT_PLATE,
-  RENDER_OUT,
   ROW_GAP,
   rowsHeight,
   stripWidgetRect,
@@ -81,31 +91,3 @@ export type {
   TrackControlValues,
 } from "./graphNode";
 export { alignModuleRank, moduleRow, spaceModulesEvenly } from "./moduleRow";
-export {
-  CAMERA_BIND,
-  cameraUI,
-  DEVICE_BIND,
-  INPUT_VOLUME_PARAM,
-  inputUI,
-  MAIN_OUT_UI,
-  MIX_PARAM,
-  midiInUI,
-  OUTPUT_VOLUME_PARAM,
-  octaveName,
-  PADS_ACROSS,
-  PADS_UP,
-  PROJECT_BIND,
-  projectBindField,
-  RACK_ADD_BIND,
-  RACK_BIND,
-  RENDER_UI,
-  rackAddBind,
-  rackAddBindAt,
-  rackBindSymbol,
-  rackGrid,
-  rackUI,
-  TAP_COLS,
-  TAP_ROWS,
-  TRACK_UI,
-  VIDEO_TRACK_UI,
-} from "./nodeUIs";
