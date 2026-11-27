@@ -7,6 +7,7 @@ import {
   applyCam,
   approach,
   type Cam,
+  clampRowX,
   clampZoom,
   FRAME_FILL,
   FRAME_MAX_ZOOM,
@@ -211,5 +212,23 @@ describe("flyStep", () => {
     for (let i = 0; i < 200 && (c.x !== to.x || c.k !== to.k); i++)
       c = flyStep(c, to, 0.25, 1000, 600);
     expect(c).toEqual(to);
+  });
+});
+
+describe("clampRowX", () => {
+  // A row of cards from world x 0 to 1000, at zoom 1, in a 400 px pane with a 4 px margin.
+  const at = (x: number) => clampRowX(x, 1, 0, 1000, 400, 4);
+  it("never shows anything left of the first card", () => {
+    expect(at(200)).toBe(4);
+  });
+  it("stops with the last card 30 px short of the right edge", () => {
+    expect(at(-5000)).toBe(400 - 30 - 1000);
+  });
+  it("leaves a camera between the two ends where it is", () => {
+    expect(at(-300)).toBe(-300);
+  });
+  it("pins a row that fits to the left rather than centring it", () => {
+    expect(clampRowX(150, 1, 0, 200, 400, 4)).toBe(4);
+    expect(clampRowX(-80, 1, 0, 200, 400, 4)).toBe(4);
   });
 });

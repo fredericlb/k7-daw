@@ -1,14 +1,15 @@
-// PanelRail.tsx — one vertical toolbar rising from the chevron: git's Save and Pull nearest it, the panes, the panels, Settings, Close on top.
+// PanelRail.tsx — one vertical toolbar rising from the chevron: the Export panel (git's Save and Pull inside) nearest it, the panes, the panels, Settings, Close on top.
 // It rises from the chevron at the bottom right once unfolded; a phone has no rail, its overflow menu holds the same buttons (docs/shell.md).
 
+import { Badge } from "@studio/ui/badge";
 import { Capsule, CapsuleButton, CapsuleDivider } from "@studio/ui/capsule";
 import {
   LogOut,
   type LucideIcon,
   Settings,
+  Share2,
   SquareTerminal,
 } from "@studio/ui/icons";
-import type { ReactNode } from "react";
 import { m } from "../paraglide/messages.js";
 import { summonChord } from "./modKey";
 import type { HeaderPane, HeaderPanel } from "./ProjectHeader";
@@ -35,7 +36,8 @@ export interface RailView {
 
 export function PanelRail({
   views,
-  save,
+  share,
+  unsaved = 0,
   panes,
   pane,
   onPane,
@@ -50,8 +52,10 @@ export function PanelRail({
   views?: RailView[];
   /** Where it stands on a phone, whose bar is measured; a desk's sits on --k7-float-bottom. */
   bottom?: number;
-  /** Git's Update and Save, last, nearest the chevron (HeaderGit.tsx's GitRailPull, GitRailSave), drawn with the rail's button class; null outside a git workspace. */
-  save: (className: string) => ReactNode;
+  /** The Export panel, which holds git's Save and Update: last, nearest the chevron. */
+  share?: HeaderPanel;
+  /** The changes waiting to be saved, counted on the Export button. */
+  unsaved?: number;
   panes: HeaderPane[];
   pane: string;
   onPane: (id: string) => void;
@@ -70,7 +74,7 @@ export function PanelRail({
       style={bottom === undefined ? undefined : { bottom }}
       className="float absolute right-4 bottom-[calc(var(--k7-float-bottom)+var(--k7-float-h)+8px)] z-(--k7-z-bar) h-auto max-h-[calc(100%-var(--k7-float-bottom)-var(--k7-float-h)-24px)] flex-col gap-1.5 overflow-x-hidden overflow-y-auto p-1 [scrollbar-width:none] desk:h-auto [&::-webkit-scrollbar]:hidden"
     >
-      {/* Read from the chevron up: Save nearest it, Close at the top. */}
+      {/* Read from the chevron up: Export nearest it, Close at the top. */}
       <a
         href={closeHref}
         aria-label={m["shell.close"]()}
@@ -169,7 +173,31 @@ export function PanelRail({
           </CapsuleButton>
         </>
       )}
-      {save(SQUARE)}
+      {share && (
+        <>
+          <CapsuleDivider className="mx-0 my-0.5 h-px w-5" />
+          <CapsuleButton
+            className={`relative ${SQUARE}`}
+            pressed={share.pressed}
+            disabled={share.disabled}
+            disabledReason={share.title}
+            aria-label={PANEL_DEFS.export.title()}
+            title={share.title ?? PANEL_DEFS.export.title()}
+            onClick={share.onPress}
+          >
+            <Share2 />
+            {unsaved > 0 && (
+              <Badge
+                variant="count-sm"
+                aria-hidden
+                className="pointer-events-none absolute -top-1.5 -right-1.5"
+              >
+                {unsaved}
+              </Badge>
+            )}
+          </CapsuleButton>
+        </>
+      )}
     </Capsule>
   );
 }

@@ -216,8 +216,6 @@ function NodeInner({
     n.bar ? "bar" : "",
     n.bare ? "bare" : "", // no header, its panel lifted into that space (chainsCss.ts)
     "tappable",
-    // A lane's row: the cards are one strip, joined at the sides and framed by nothing above or below.
-    inLaneRow ? "across" : "",
     sel ? "sel" : "",
     marked ? "marked" : "",
     n.frozen || n.autoFrozen ? "frozen" : "", // the frost wash, on the point and on everything inside its render

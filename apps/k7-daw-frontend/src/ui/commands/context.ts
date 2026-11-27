@@ -59,6 +59,7 @@ export type RightPanelId =
   | "resources"
   | "tasks"
   | "history"
+  | "tags"
   | "export"
   | "comments";
 

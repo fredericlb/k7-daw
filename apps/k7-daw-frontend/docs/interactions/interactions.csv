@@ -231,14 +231,14 @@ ID,Screen,Interaction,Mouse / trackpad,Keyboard,Touch,Devices,Not drawn,Area,Not
 07.05,07,Seek in the reference,click or drag the slider,arrows (written on key up),drag,T M D,FALSE,Arrange · Reference player and stems bar,
 07.06,07,Close the reference bar,click ✕,—,tap,T M D,FALSE,Arrange · Reference player and stems bar,
 07.07,07,Preview an imported clip,click play / stop on the row,—,tap,T M D,FALSE,Resources,
-08.01,08,Show running background processes,click the processes button (read-only popover),Enter/Space on the button,tap,T M D,FALSE,Global (every screen),
+08.01,08,Show running background processes,"click the spinner at the app's top right, there only while something runs (a read-only bubble: each process with how far it is and for how long)",Enter/Space on the button,tap,T M D,FALSE,Global (every screen),"an ending is a toast, once: done, or failed with why (waits to be dismissed); no list keeps ended work"
 08.02,08,Add a task,"type in the line, click add",Enter,tap,T M D,FALSE,Tasks & history,
 08.03,08,Pin a new task to the playhead,tick the checkbox beside the line,Space,tap,T M D,FALSE,Tasks & history,
 08.04,08,Tick / untick a task,click its checkbox,Space,tap,T M D,FALSE,Tasks & history,
 08.05,08,Delete a task,"click the bin (on hover; always on touch), confirm",Enter,tap,T M D,FALSE,Tasks & history,
 08.06,08,Seek to a task's timecode,click the timecode (same project),—,tap,T M D,FALSE,Tasks & history,
-08.07,08,Add a project tag,"type, Enter",Enter,on-screen keyboard,T M D,FALSE,Tasks & history,
-08.08,08,Remove a project tag,click ✕ on the chip,—,tap,T M D,FALSE,Tasks & history,
+08.07,08,Add a project tag,"in the Tags tab (third, after Tasks and History): type, Enter",Enter,on-screen keyboard,T M D,FALSE,Tasks & history,
+08.08,08,Remove a project tag,in the Tags tab: click ✕ on the chip,—,tap,T M D,FALSE,Tasks & history,
 08.09,08,Light what an undo step touched,hover a journal row,—,—,D,FALSE,Tasks & history,
 08.10,08,Switch Edits / Workspace / Saves,click a toggle (Saves only when the workspace is under git),—,tap,T M D,FALSE,Tasks & history,
 09.01,09,Choose the timeline to render,pick in the select,native,native,T M D,FALSE,Export,
@@ -527,7 +527,7 @@ ID,Screen,Interaction,Mouse / trackpad,Keyboard,Touch,Devices,Not drawn,Area,Not
 29.02,43,Name the clone,"Clone's Other host tab: type in ""Name of the workspace"" (it follows the address, or the picked repository's name, until typed; a taken or bad name is said under it)",—,"tap, type",T M D,TRUE,Git screens,the canvas draws no name field
 29.06,29,Go to Settings → Services from the GitHub tab,"GitHub tab with no account that lists repositories: click ""Open Settings → Services"" and sign in there (41.01)","Tab, Enter",tap,T M D,TRUE,Git screens,"""This build of k7 has no GitHub sign-in."" where GitHub is off"
 33.02,33,Open the Saves list from the git menu,Tasks & history on the rail → its Saves list,"Enter, arrows in the menu",tap Tasks & history on the rail → Saves,T M D,FALSE,Git screens,
-34.04,34,Save from a project,"click Save, the first button of the right-edge toolbar (its count of changes on its corner and on the folded chevron; dimmed when nothing waits; a spinner while it runs; its tooltip says the last auto-save)","Tab, Enter",phone: tap the git button → Save,T M D,FALSE,Git screens,"Update (pull) sits under Save on the toolbar, with the count to fetch, dimmed with its reason while changes wait; a phone's git menu holds Save, Update and Saves; on a desk the Saves list is Tasks & history"
+34.04,34,Save from a project,"click the Export button, the first of the right-edge toolbar (the count of changes on its corner and on the folded chevron), then Save, the panel's first row (dimmed when nothing waits; a spinner while it runs; the last auto-save under its name)","Tab, Enter",tap the Export button on the rail → Save,T M D,FALSE,Git screens,"Update (pull) is the row under Save in the Export panel, with the count to fetch, dimmed with its reason while changes wait; on a desk the Saves list is Tasks & history"
 34.05,34,Pull after a save not sent,"toast ""Saved on this device, not sent"" · ""The remote has new changes: pull first, then save again."": click Pull",—,tap,T M D,FALSE,Git screens,the save stays on this device
 34.06,34,Retry a save,"toast ""Not saved"", or ""Saved on this device, not sent"" for any failure but a remote ahead: click Retry",—,tap,T M D,FALSE,Git screens,a Retry after the commit only sends: it never commits twice
 34.07,34,Set the author after a save refused,"toast ""Not saved: no author yet"" · ""Set your name and email in Settings, then save again."": click Settings → Settings, General (23.01)",—,tap,T M D,FALSE,Git screens,

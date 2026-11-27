@@ -112,6 +112,12 @@ only one useful direction out of two is worse than one with a single honest dire
 takes whichever axis the device reports, because a mouse has no `deltaX` to offer and its notch
 has to drive x here.
 
+A row is also BOUNDED (`clampRowX`): it opens on its first card at the left, a walk left stops at
+that card, and a walk right stops once the last card ends `ROW_TAIL` (30 px) short of the right
+edge. A row narrower than the pane is pinned left, not centred: the lane's head is where reading
+starts. The bound is applied where the camera lands (`place`) and on every frame of the loop, so
+the wheel, a drag, the keys and a pinch all meet the same ends.
+
 ## A FIXED camera belongs to the fit
 
 `fixed` turns every gesture off: no wheel, drag, pinch or double-click moves the camera. Because
