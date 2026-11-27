@@ -227,12 +227,7 @@ import { pictureRowId, placementOf, type RowKey, type RowTarget } from "./rows";
 import { saveLabel } from "./saveLabel";
 import { useEngineLostToast, useProgressToast } from "./shell/engineToasts";
 import { FloatingBar } from "./shell/FloatingBar";
-import {
-  GitRailPull,
-  GitRailSave,
-  HeaderGit,
-  unsavedCount,
-} from "./shell/HeaderGit";
+import { GitShareRows, HeaderGit, unsavedCount } from "./shell/HeaderGit";
 import { PanelRail, type RailView } from "./shell/PanelRail";
 import {
   type HeaderPane,
@@ -3321,6 +3316,15 @@ export default function App({
             hasPicture={!!videoDoc}
             timelines={(projectDoc?.timelines ?? []).map((t) => t.id)}
             onRun={(c) => void runCommand(c)}
+            sync={
+              gitWorkspace ? (
+                <GitShareRows
+                  git={gitHandle}
+                  transport={gitTransport}
+                  workspace={gitWorkspace}
+                />
+              ) : undefined
+            }
           />
         );
       case "logs":
@@ -3423,32 +3427,15 @@ export default function App({
                 }
                 onCommandBar={isMobile || portrait ? summonBar : undefined}
                 bottom={isMobile ? 12 + stripH + 8 : undefined}
-                save={(className) =>
-                  gitWorkspace ? (
-                    <>
-                      <GitRailPull
-                        git={gitHandle}
-                        workspace={gitWorkspace}
-                        className={className}
-                      />
-                      <GitRailSave
-                        git={gitHandle}
-                        transport={gitTransport}
-                        workspace={gitWorkspace}
-                        className={className}
-                      />
-                    </>
-                  ) : null
-                }
+                share={headerPanels.find((p) => p.id === "export")}
+                unsaved={gitWorkspace ? unsavedCount(gitHandle) : 0}
                 closeHref={projectsUrl(window.location.href)}
                 panes={switcherPanes}
                 pane={full}
                 onPane={(id) => void runCommand(`ui ${id}`)}
-                panels={
-                  isMobile
-                    ? headerPanels
-                    : headerPanels.filter((p) => p.id !== "mixer")
-                }
+                panels={headerPanels.filter(
+                  (p) => p.id !== "export" && (isMobile || p.id !== "mixer"),
+                )}
                 settingsPressed={shownId === "settings"}
                 onSettings={() =>
                   shownId === "settings"

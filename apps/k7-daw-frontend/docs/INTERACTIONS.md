@@ -906,7 +906,7 @@ The Mixer (one strip per lane's mixer module, Master as the row's last strip wit
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
-| 34.04 | Save from a project | click Save, the first button of the right-edge toolbar (its count of changes on its corner and on the folded chevron; dimmed when nothing waits; a spinner while it runs; its tooltip says the last auto-save) | Tab, Enter | phone: tap the git button → Save | T M D |
+| 34.04 | Save from a project | click the Export button, the first of the right-edge toolbar (the count of changes on its corner and on the folded chevron), then Save, the panel's first row (dimmed when nothing waits; a spinner while it runs; the last auto-save under its name) | Tab, Enter | tap the Export button on the rail → Save | T M D |
 | 34.05 | Pull after a save not sent | toast "Saved on this device, not sent" · "The remote has new changes: pull first, then save again.": click Pull | — | tap | T M D |
 | 34.06 | Retry a save | toast "Not saved", or "Saved on this device, not sent" for any failure but a remote ahead: click Retry | — | tap | T M D |
 | 34.07 | Set the author after a save refused | toast "Not saved: no author yet" · "Set your name and email in Settings, then save again.": click Settings → Settings, General (23.01) | — | tap | T M D |

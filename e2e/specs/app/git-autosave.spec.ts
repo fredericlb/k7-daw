@@ -6,6 +6,7 @@ import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
+import { panel } from "../../src/nav.ts";
 import { expect, test } from "../../src/target.ts";
 
 const WS = "E2E-autosave";
@@ -74,10 +75,8 @@ test("an edit is auto-saved to the person's branch and a Save squashes it onto m
       );
     });
 
-    await test.step("Save, the right-edge rail's first button, says when the last auto-save was", async () => {
-      await page
-        .getByRole("button", { name: "Show the toolbar", exact: true })
-        .click();
+    await test.step("Save, in the Export panel the rail opens first, says when the last auto-save was", async () => {
+      await (await panel(page, "Export")).click();
       await expect(page.getByTestId("git-autosaved")).toHaveText(
         /^Auto-saved at \d{1,2}:\d\d/,
         SLOW,
