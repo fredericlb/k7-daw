@@ -177,7 +177,7 @@ test("a factory preset from the node's dropdown switches the Surge node's base, 
     shelf.getByRole("combobox", { name: "Search presets" }),
   ).toBeVisible();
   await shelf
-    .getByRole("option", { name: "Basses - Bass 2", exact: true })
+    .getByRole("menuitem", { name: "Basses - Bass 2", exact: true })
     .click();
 
   const after = await expectFile(page, WS, SYNTH_NODE, (t) =>
