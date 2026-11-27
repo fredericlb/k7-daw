@@ -11,7 +11,7 @@ import {
 } from "@studio/k7-wasm/chains";
 import type { MixView } from "@studio/song-schema/yaml/mixViewSchema";
 import { widgetDenorm } from "@studio/ui-chains/graph";
-import { MIX_CONTROLS, type MixControl } from "./controls";
+import { type MixControl, mixControls } from "./controls";
 import type { DeckId, DeckTempos } from "./deckVocabulary";
 
 // The graph half of the join is `@studio/k7-wasm/chains`, shared with k7's mastering strip.
@@ -38,7 +38,7 @@ export function resolveBindings(
   // `track` and not `refuse`: an `offline` module compiles to no plugin, and a tempo fader binds
   // it by the track its chain draws from. That policy is the desk's — see docs/controls.md.
   const { rows, problems } = resolveMapping(view, graph, {
-    controls: MIX_CONTROLS,
+    controls: mixControls(),
     noun: "of the desk",
     plugless: "track",
     withAlso: true,

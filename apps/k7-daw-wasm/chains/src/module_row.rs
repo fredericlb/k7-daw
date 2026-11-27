@@ -22,7 +22,7 @@ const ROW_MARGIN: f64 = 16.0;
 /// A node that only says where the signal comes from, drawn first and cabled into the first card.
 #[derive(Clone, Debug, Deserialize)]
 #[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(optional_fields))]
-pub struct Lead {
+pub struct RowLead {
     pub id: String,
     pub label: String,
     pub sub: Option<String>,
@@ -53,7 +53,7 @@ pub struct RowOptions {
     pub cameras: Option<Vec<String>>,
     pub midi_devices: Option<Vec<String>>,
     pub fit: Option<GridFit>,
-    pub lead: Option<Lead>,
+    pub lead: Option<RowLead>,
     pub layout: Option<String>,
     /// The tab each card has open, by node id.
     pub tab_of: Option<HashMap<String, f64>>,

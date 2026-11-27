@@ -151,6 +151,7 @@ export type * from "./ResolvedTarget";
 export type * from "./ResolvedVideo";
 export type * from "./ResolveSettingsArgs";
 export type * from "./RowArgs";
+export type * from "./RowLead";
 export type * from "./RowOptions";
 export type * from "./RowSeam";
 export type * from "./RulerMode";
