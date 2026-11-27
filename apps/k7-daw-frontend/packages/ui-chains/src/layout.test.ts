@@ -1,5 +1,4 @@
-// graphLayout.test.ts — the dagre layout: one row per rank, one line of tracks, the pins, and a
-// receiver kept below what feeds it.
+// layout.test.ts — the layout: one row per rank, one line of tracks, the pins, and a receiver kept below what feeds it.
 
 import type { WebGraph } from "@studio/graph-model";
 import { describe, expect, it } from "vitest";
@@ -15,7 +14,7 @@ const graph = (
 });
 
 describe("layout puts every rank on its own row", () => {
-  // dagre treats a rank as a hint and pushes a node as LATE as it can. See docs/graphBuild.md.
+  // the engine treats a rank as a hint. See docs/graphBuild.md.
   const deepAndShallow = graph(
     {
       long: {
@@ -74,7 +73,7 @@ describe("layout puts every rank on its own row", () => {
   });
 
   it("parts two nodes the collapse would have stacked", () => {
-    // dagre places x assuming its own y, so collapsing two lines onto one row can overlap them.
+    // the engine places x assuming its own y, so collapsing two lines onto one row can overlap them.
     const { l } = laid();
     const a = l.nodes;
     for (let i = 0; i < a.length; i++)
@@ -88,7 +87,7 @@ describe("layout puts every rank on its own row", () => {
   });
 
   it("reports an extent that covers where the nodes ACTUALLY are", () => {
-    // dagre's own figure describes the picture before the rows moved — 488px short, measured.
+    // the layout engine's own figure describes the picture before the rows moved — 488px short, measured.
     const { l } = laid();
     expect(l.width).toBeGreaterThanOrEqual(
       Math.max(...l.nodes.map((n) => n.x + n.w)),
@@ -100,7 +99,7 @@ describe("layout puts every rank on its own row", () => {
 });
 
 describe("layout puts every track on one line", () => {
-  // Tracks carry `rank: 0` and dagre overrides it, scattering the source line. docs/graphBuild.md.
+  // Tracks carry `rank: 0` and the layout engine ignores it, scattering the source line. docs/graphBuild.md.
   const uneven = graph(
     {
       long: {
@@ -154,13 +153,13 @@ describe("layout honours the pins", () => {
     ["vox"],
   );
 
-  it("a pinned module sits exactly where its pin says; everything ABOVE it keeps dagre's answer", () => {
+  it("a pinned module sits exactly where its pin says; everything ABOVE it keeps the engine's answer", () => {
     const { nodes, edges } = buildGraph(uneven);
     const free = layout(nodes, edges);
     const laid = layout(nodes, edges, { comp: { x: 640, y: 480 } });
     const comp = laid.nodes.find((n) => n.module === "comp");
     expect(comp).toMatchObject({ x: 640, y: 480 });
-    // Its own INPUTS are untouched — dagre still owns everything the pin does not stand under.
+    // Its own INPUTS are untouched — the layout engine still owns everything the pin does not stand under.
     const vox = laid.nodes.find((x) => x.label === "vox");
     const wasVox = free.nodes.find((f) => f.id === vox?.id);
     expect({ x: vox?.x, y: vox?.y }).toEqual({ x: wasVox?.x, y: wasVox?.y });
@@ -201,7 +200,7 @@ describe("layout honours the pins", () => {
     );
   });
 
-  it("`prev` holds a drawn node in place through an edit — dagre speaks only for the new", () => {
+  it("`prev` holds a drawn node in place through an edit — the engine speaks only for the new", () => {
     const { nodes, edges } = buildGraph(uneven);
     const first = layout(nodes, edges);
     const prev = new Map(first.nodes.map((n) => [n.id, { x: n.x, y: n.y }]));
@@ -249,7 +248,7 @@ describe("a receiver stays below what feeds it", () => {
     });
   };
 
-  it("holds with no pins at all, which is dagre doing its job", () => {
+  it("holds with no pins at all, which is the engine doing its job", () => {
     const { nodes, edges } = buildGraph(chain);
     for (const { from, to } of spans(layout(nodes, edges)))
       expect(to.y).toBeGreaterThanOrEqual(from.y + from.h);

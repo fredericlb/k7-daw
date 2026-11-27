@@ -11,6 +11,7 @@ pub mod curve_placement;
 pub mod flow;
 pub mod geom;
 pub mod graph;
+pub mod graph_layout;
 pub mod grid_fit;
 pub mod module_row;
 pub mod node;

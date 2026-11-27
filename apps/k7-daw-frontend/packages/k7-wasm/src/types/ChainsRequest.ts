@@ -6,6 +6,7 @@ import type { FlowArgs } from "./FlowArgs";
 import type { FlowSeedsArgs } from "./FlowSeedsArgs";
 import type { InsertsArgs } from "./InsertsArgs";
 import type { JackRefArgs } from "./JackRefArgs";
+import type { LayoutArgs } from "./LayoutArgs";
 import type { NodeSizeArgs } from "./NodeSizeArgs";
 import type { PlaceArgs } from "./PlaceArgs";
 import type { PlaceTargetsArgs } from "./PlaceTargetsArgs";
@@ -50,4 +51,5 @@ export type ChainsRequest =
   | { op: "graph.inserts"; args: InsertsArgs }
   | { op: "graph.jackRef"; args: JackRefArgs }
   | { op: "graph.stack"; args: StackArgs }
-  | { op: "graph.nodeSize"; args: NodeSizeArgs };
+  | { op: "graph.nodeSize"; args: NodeSizeArgs }
+  | { op: "graph.layout"; args: LayoutArgs };

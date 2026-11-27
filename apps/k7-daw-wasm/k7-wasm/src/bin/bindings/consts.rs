@@ -246,6 +246,12 @@ fn plain() -> Vec<[String; 3]> {
         export("node h", "NODE_H", &json!(chains::geom::NODE_H)),
         export("node min w", "NODE_MIN_W", &json!(chains::geom::NODE_MIN_W)),
         export(
+            "What an open box adds around its members: a title strip and a margin.",
+            "FRAME_HEAD",
+            &json!(chains::geom::FRAME_HEAD),
+        ),
+        export("frame pad", "FRAME_PAD", &json!(chains::geom::FRAME_PAD)),
+        export(
             "A grid cell, and the air around the grid, in graph units.",
             "CELL",
             &json!(chains::geom::CELL),
