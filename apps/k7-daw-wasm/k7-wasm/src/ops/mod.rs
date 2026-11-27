@@ -4,6 +4,7 @@
 
 pub mod curve;
 pub mod engine;
+pub mod eyes;
 pub mod fields;
 pub mod file;
 pub mod gesture;
@@ -59,6 +60,8 @@ pub struct Session {
     pub songs: song::SongTable,
     /// The k7x reads' arena and the last outline's layout.
     pub k7x: k7x::K7xState,
+    /// The last `eyes.cube`'s entries, RGBA, read by the page as a view.
+    pub floats: Vec<f32>,
 }
 
 pub(crate) fn write<T: Serialize + ?Sized>(out: &mut Vec<u8>, value: &T) -> Result<(), WasmError> {
@@ -98,6 +101,7 @@ impl Session {
             "file" => file::dispatch(decode(input)?, out),
             "song" => song::dispatch(&mut self.songs, decode(input)?, out),
             "k7x" => k7x::dispatch(&mut self.k7x, decode(input)?, out),
+            "eyes" => eyes::dispatch(&mut self.floats, decode(input)?, out),
             #[cfg(feature = "verbs")]
             "verb" => verb::dispatch(decode(input)?, out),
             "version" => write(

@@ -17,6 +17,7 @@ export const CRATES = [
   "apps/k7-daw-wasm/song-edit",
   "apps/k7-daw-wasm/k7x",
   "apps/k7-daw-wasm/verbs",
+  "apps/k7-daw-wasm/eyes",
 ];
 
 function files(dir) {

@@ -8,13 +8,13 @@ the picture range.
 
 ## The renderer seam
 
-`apps/k7-daw-frontend/packages/take-render/src/renderer.ts` defines `Renderer`: a function that takes a compiled document
+`apps/k7-daw-engine/k7-runtime/scripts/lib/take-render/renderer.ts` defines `Renderer`: a function that takes a compiled document
 and an output folder and resolves to a `RenderManifest` (`parseManifest` reads the engine's stdout).
 `localRenderer(bin, timeout)` runs the engine binary as a one-shot process with `--render`;
 `renderToWav` is the common wrapper.
 
 Which renderer a verb gets is the file service's decision (`apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/jobs/render.rs`; `localRenderer` in
-`apps/k7-daw-frontend/packages/take-render/src/renderer.ts` for the engine scripts), tried in order:
+`apps/k7-daw-engine/k7-runtime/scripts/lib/take-render/renderer.ts` for the engine scripts), tried in order:
 
 1. the engine binary on the service's own machine, as a separate process;
 2. otherwise the engine machine the workspace is bound to, over the tunnel;
@@ -77,7 +77,7 @@ the others; a bounce that writes nothing undoes the copy.
 ## Freezing
 
 `node freeze` (the lane's alternative badge, or the chains graph) bakes everything upstream of a node
-into one render with `freezeUpstreamRender` (`apps/k7-daw-frontend/packages/take-render/src/renderer.ts`) and marks the
+into one render with `freezeUpstreamRender` (`apps/k7-daw-engine/k7-runtime/scripts/lib/take-render/renderer.ts`) and marks the
 module `frozen:`. The timeline then draws the lane's block as a render: it cannot be moved, and a
 double-click opens the authored notes under it (`openFrozenNotes` in `TimelineTab.tsx`).
 

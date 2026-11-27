@@ -12,7 +12,7 @@ import { fileURLToPath } from "node:url";
 import WebSocket from "ws";
 import { clipDoc, emptyDoc, pluginDoc, trackDoc } from "../../../k7-daw-frontend/packages/engine-protocol/build.ts";
 import type { ProjectDoc } from "../../../k7-daw-frontend/packages/engine-protocol/project.ts";
-import { findEngineBinary } from "../../../k7-daw-frontend/packages/engine-client/src/engineBinary.ts";
+import { findEngineBinary } from "./lib/engine-client/engineBinary.ts";
 import { readWav, wavFile } from "./wav.ts";
 
 const here = dirname(fileURLToPath(import.meta.url));

@@ -28,7 +28,7 @@ permissions on a Mac ask again, and a Windows install of the old identifier stay
 installer keys on it.
 
 Neither may `<state>` (`~/.k7`) move, nor what is under it, nor the `STUDIO_*` variables
-(`apps/k7-daw-frontend/packages/engine-client/docs/paths.md`).
+(`apps/k7-daw-engine/k7-runtime/docs/enginePaths.md`).
 
 ## k7 in a window, and in the browser
 

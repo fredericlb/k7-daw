@@ -7,6 +7,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Compositor } from "./compositor";
 import { coverUV, sourceAR } from "./geometry";
 import type { SceneClip, SceneTransition, VideoScene } from "./scene";
+import { layerOf, sceneOf } from "./sceneFixture";
 
 type Log = string[];
 
@@ -142,13 +143,16 @@ const clip = (over: Partial<SceneClip> = {}): SceneClip => ({
 const scene = (
   clips: SceneClip[],
   transitions?: Record<string, SceneTransition>,
-): VideoScene => ({
-  viewport: [64, 32],
-  fps: 30,
-  durationSec: 10,
-  layers: [{ id: "main", hidden: false, x: 0, y: 0, w: 64, h: 32, clips }],
-  ...(transitions ? { transitions } : {}),
-});
+): VideoScene =>
+  sceneOf(
+    {
+      viewport: [64, 32],
+      fps: 30,
+      durationSec: 10,
+      layers: [layerOf({ id: "main", x: 0, y: 0, w: 64, h: 32, clips })],
+    },
+    transitions,
+  );
 
 /** Build a compositor over the fake, the way `create` does for an export. */
 function make(s: VideoScene) {

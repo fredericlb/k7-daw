@@ -334,7 +334,7 @@ system-wide change and nothing in this repo writes it.
 ## What fails hard, and why that is not a contradiction
 
 The decode fails the job **hard** — a file it cannot read is an error, never a fallback — which
-looks like it contradicts the rule stated in `@studio/take-render/render`, that a
+looks like it contradicts the rule stated in `k7-runtime/scripts/lib/take-render/renderer.ts`, that a
 missing ffmpeg costs the FORMAT and never the render.
 
 It does not. That rule holds because there is always a lesser result to fall back to: the

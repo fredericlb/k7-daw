@@ -6,7 +6,7 @@
 // Usage: npx tsx apps/k7-daw-engine/k7-runtime/scripts/two-sessions.ts [ws://host:port]   (default :8833; the
 // dev session's engine is on :8765)
 
-import { EngineClient } from "@studio/engine-client/engineClient";
+import { EngineClient } from "./lib/engine-client/engineClient.ts";
 import type { ProjectDoc } from "@studio/engine-protocol/project";
 import { SESSIONS } from "@studio/engine-protocol/sessions";
 import WebSocket from "ws";

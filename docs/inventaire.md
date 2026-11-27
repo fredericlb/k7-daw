@@ -84,7 +84,7 @@ without anyone seeing it.
 
 ### A deep import bypasses the `exports` maps
 
-`apps/k7-daw-engine/k7-runtime/scripts/render-once.ts` → `apps/k7-daw-frontend/packages/take-render/src/renderProject.ts`. The file looks
+`apps/k7-daw-engine/k7-runtime/scripts/render-once.ts` → `apps/k7-daw-engine/k7-runtime/scripts/lib/take-render/renderProject.ts`. The file looks
 unreachable if you look only at `exports`.
 
 ---

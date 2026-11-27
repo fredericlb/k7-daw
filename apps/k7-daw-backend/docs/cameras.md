@@ -27,7 +27,7 @@ that misses a ping for thirty seconds is dropped, so a phone that lost its netwo
 
 ## What the hub decides
 
-- **Which camera a viewer gets**: `matchRemoteCamera`'s rule over the account's cameras, never
+- **Which camera a viewer gets**: `match_remote_camera`'s rule (`names.rs`) over the account's cameras, never
   anyone else's. The sentence explaining a fallback travels on the camera's offer.
 - **The unique name**: a second camera under a name already on gets ` (2)`.
 - **Who may talk to whom**: a camera's frame reaches a viewer only if that viewer asked for that

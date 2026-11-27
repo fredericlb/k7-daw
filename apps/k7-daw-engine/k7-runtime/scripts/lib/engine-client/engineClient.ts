@@ -4,7 +4,7 @@
 import type { ProjectDoc } from "@studio/engine-protocol/project";
 import { EngineControl } from "./engineControl";
 
-// Re-exported so an importer of `@studio/engine-client/engineClient` gets the control types too, without a second import.
+// Re-exported so an importer of `engineClient.ts` gets the control types too, without a second import.
 export type {
   AudioDeviceInfo,
   EditPluginInfo,
