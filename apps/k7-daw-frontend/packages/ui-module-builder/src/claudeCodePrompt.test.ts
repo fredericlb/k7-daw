@@ -1,7 +1,7 @@
 // The prompt AI organize copies for a local Claude Code session: the same brief and module as the
 // API's, and in place of a JSON answer, WHICH files to write and where — a repository and a path in it.
 
-import type { AiOrganizeRequest } from "@studio/panel-rules/ai-organize";
+import type { AiRequest as AiOrganizeRequest } from "@studio/k7-wasm/panel";
 import { describe, expect, it } from "vitest";
 import { claudeCodePrompt, whereIs } from "./claudeCodePrompt";
 

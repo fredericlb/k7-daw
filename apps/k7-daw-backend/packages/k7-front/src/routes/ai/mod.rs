@@ -1,9 +1,10 @@
-//! ai/ — `/api/ai/settings`, `GET /api/ai/organize` and `POST /api/ai/organize/turn`: the account's Claude key and model
+//! ai/ — `/api/ai/settings`, `GET /api/ai/organize` and `POST /api/ai/organize`: the account's Claude key and model
 //! in one small file under `<prefs>/ai`, re-read on every request.
-//! The thing a reader would get wrong: the turn (`turn.rs`) makes ONE model turn; the conversation and every check are
-//! the page's (`apps/k7-daw-frontend/docs/aiOrganize.md`).
+//! The thing a reader would get wrong: the organize route (`organize.rs`) runs the WHOLE conversation and every check on this
+//! side; the page sends one request and draws the stream (`apps/k7-daw-frontend/docs/aiOrganize.md`).
 
 pub mod claude;
+pub mod organize;
 pub mod sse;
 pub mod turn;
 

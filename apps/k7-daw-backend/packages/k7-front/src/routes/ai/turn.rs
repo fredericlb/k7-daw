@@ -1,33 +1,27 @@
-//! turn.rs — `POST /api/ai/organize/turn`: ONE model turn on the account's key and model, streamed to the browser
-//! as NDJSON with a heartbeat. The browser owns the conversation and the checks (`panel-rules`' `aiLoop.ts`); this
-//! side owns what must not reach a page: the key, the model, the output limits. Choices: `apps/k7-daw-frontend/docs/aiOrganize.md`.
+//! turn.rs — ONE model turn on the account's key and model, and the NDJSON stream a route answers it through, with a heartbeat.
+//! `organize.rs` runs the conversation and every check; this side owns what must not reach a page: the key, the model, the output limits.
+//! Choices: `apps/k7-daw-frontend/docs/aiOrganize.md`.
 
+use std::future::Future;
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
 use axum::body::Body;
-use axum::extract::{Request, State};
 use axum::response::Response;
 use hyper::StatusCode;
 use hyper::body::Bytes;
 use serde_json::{Map, Value, json};
+use song::modules::ui::ai_answer::AiEvent;
 use tokio::sync::mpsc::{UnboundedSender, unbounded_channel};
 
 use super::claude::{Claude, Failure};
-use super::{AI_BODY_LIMIT, DEFAULT_AI_MODEL, read_for_update};
-use crate::AppState;
-use crate::js::{truthy, utf16_len};
-use crate::session::holds;
-use crate::web::{error, read_json_within};
+use crate::js::utf16_len;
+use crate::web::error;
 
 /// The heartbeat's period: the last status again, for an idle-timing proxy.
 pub const HEARTBEAT: Duration = Duration::from_secs(15);
-/// A conversation is a request, an answer and a repair: five messages at most.
-const MAX_MESSAGES: usize = 5;
-/// The constant prompt is some 30 KB; a body claiming more is not the browser's.
-const MAX_SYSTEM: usize = 200_000;
 
-/// One turn as the browser asks for it.
+/// One turn: the constant prompt, the answer's schema and the conversation so far.
 #[derive(Debug, Clone)]
 pub struct Turn {
     pub system: String,
@@ -35,98 +29,59 @@ pub struct Turn {
     pub messages: Vec<Value>,
 }
 
-/// A block of the kinds the loop sends (text, images, and the model's own thinking handed back); no document, no tool result.
-fn plain_block(b: &Value) -> bool {
-    let kinds = ["text", "image", "thinking", "redacted_thinking"];
-    matches!(b.get("type").and_then(Value::as_str), Some(k) if kinds.contains(&k))
+/// What the browser is told, one JSON line at a time; the last status is kept for the heartbeat.
+#[derive(Clone)]
+pub struct Say {
+    tx: UnboundedSender<Bytes>,
+    last: Arc<Mutex<Option<Bytes>>>,
 }
 
-/// The body checked: a constant prompt, a schema, and a conversation that starts and ends with the user.
-pub fn parse_turn(body: &Value) -> Result<Turn, String> {
-    let system = match body.get("system") {
-        Some(Value::String(s)) if !s.is_empty() && s.len() <= MAX_SYSTEM => s.clone(),
-        _ => {
-            return Err(format!(
-                "system: expected a text of 1 to {MAX_SYSTEM} bytes"
-            ));
-        }
-    };
-    let schema = match body.get("schema") {
-        Some(s @ Value::Object(_)) => s.clone(),
-        _ => return Err("schema: expected an object".into()),
-    };
-    let messages = match body.get("messages") {
-        Some(Value::Array(m)) if (1..=MAX_MESSAGES).contains(&m.len()) => m.clone(),
-        _ => return Err(format!("messages: expected 1 to {MAX_MESSAGES} messages")),
-    };
-    for (i, m) in messages.iter().enumerate() {
-        let role = m.get("role").and_then(Value::as_str);
-        let want = if i % 2 == 0 { "user" } else { "assistant" };
-        if role != Some(want) {
-            return Err(format!("messages[{i}]: expected the role {want}"));
-        }
-        let ok = match m.get("content") {
-            Some(Value::String(s)) => !s.is_empty(),
-            Some(Value::Array(a)) => !a.is_empty() && a.iter().all(plain_block),
-            _ => false,
-        };
-        if !ok {
-            return Err(format!(
-                "messages[{i}]: expected a text or a list of blocks"
-            ));
+impl Say {
+    /// One event as a line.
+    pub fn line(&self, event: &AiEvent) -> Bytes {
+        let mut text = serde_json::to_string(event).unwrap_or_default();
+        text.push('\n');
+        let b = Bytes::from(text);
+        let _ = self.tx.send(b.clone());
+        b
+    }
+
+    /// Progress; the heartbeat repeats the last one.
+    pub fn status(&self, text: &str) {
+        let b = self.line(&AiEvent::Status { text: text.into() });
+        if let Ok(mut last) = self.last.lock() {
+            *last = Some(b);
         }
     }
-    if messages.len() % 2 == 0 {
-        return Err("messages: the last one is the user's".into());
+
+    pub fn error(&self, message: &str) {
+        self.line(&AiEvent::Error {
+            error: message.into(),
+        });
     }
-    // Only the keys the API reads: nothing else of the browser's body reaches it.
-    let messages = messages
-        .iter()
-        .map(|m| json!({ "role": m["role"], "content": m["content"] }))
-        .collect();
-    Ok(Turn {
-        system,
-        schema,
-        messages,
-    })
+
+    /// The status again, or a ping while there is none.
+    fn beat(&self) {
+        let last = self.last.lock().ok().and_then(|l| l.clone());
+        match last {
+            Some(b) => {
+                let _ = self.tx.send(b);
+            }
+            None => {
+                self.line(&AiEvent::Ping);
+            }
+        }
+    }
 }
 
-/// POST `/organize/turn`: the body parsed ahead of every guard, then the session, the key, the shape, the stream.
-pub async fn post_turn(State(state): State<Arc<AppState>>, req: Request) -> Response {
-    let session = holds(req.headers(), &state.settings);
-    let body = match read_json_within(req, AI_BODY_LIMIT).await {
-        Ok((_, v)) => v,
-        Err(r) => return r,
-    };
-    if !session {
-        return error(StatusCode::UNAUTHORIZED, "unauthenticated");
-    }
-    let stored = read_for_update(&state).ok().flatten();
-    let field = |k: &str| {
-        stored
-            .as_ref()
-            .and_then(|s| s.get(k))
-            .filter(|v| truthy(v))
-            .and_then(Value::as_str)
-            .map(str::to_string)
-    };
-    let Some(key) = field("apiKey") else {
-        let message = "no Claude key for this account — set one in the settings panel";
-        return error(StatusCode::NOT_FOUND, message);
-    };
-    let model = field("model").unwrap_or_else(|| DEFAULT_AI_MODEL.into());
-    let base = state.settings.anthropic_base_url.clone();
-    let turn = match parse_turn(&body) {
-        Ok(t) => t,
-        Err(m) => return error(StatusCode::BAD_REQUEST, &m),
-    };
-    answer(&base, key, model, turn, HEARTBEAT)
-}
-
-/// The NDJSON stream of one turn; a closed tab drops the request to Claude.
-pub fn answer(base: &str, key: String, model: String, turn: Turn, heartbeat: Duration) -> Response {
+/// The NDJSON stream of one piece of work; a closed tab drops the work, and the request to Claude with it.
+pub fn stream<F, Fut>(heartbeat: Duration, work: F) -> Response
+where
+    F: FnOnce(Say) -> Fut + Send + 'static,
+    Fut: Future<Output = ()> + Send + 'static,
+{
     let (tx, mut rx) = unbounded_channel::<Bytes>();
-    tokio::spawn(run(Claude::new(base), key, model, turn, tx, heartbeat));
+    tokio::spawn(run(work, tx, heartbeat));
     let stream = futures_util::stream::poll_fn(move |cx| {
         rx.poll_recv(cx)
             .map(|b| b.map(Ok::<_, std::convert::Infallible>))
@@ -138,58 +93,17 @@ pub fn answer(base: &str, key: String, model: String, turn: Turn, heartbeat: Dur
         .unwrap_or_else(|_| error(StatusCode::INTERNAL_SERVER_ERROR, "no stream"))
 }
 
-/// What the browser is told, one JSON line at a time; the last status is kept for the heartbeat.
-#[derive(Clone)]
-struct Say {
-    tx: UnboundedSender<Bytes>,
-    last: Arc<Mutex<Option<Bytes>>>,
-}
-
-impl Say {
-    fn line(&self, v: Value) -> Bytes {
-        let mut text = v.to_string();
-        text.push('\n');
-        let b = Bytes::from(text);
-        let _ = self.tx.send(b.clone());
-        b
-    }
-    fn status(&self, text: &str) {
-        let b = self.line(json!({ "type": "status", "text": text }));
-        if let Ok(mut last) = self.last.lock() {
-            *last = Some(b);
-        }
-    }
-    fn error(&self, message: &str) {
-        self.line(json!({ "type": "error", "error": message }));
-    }
-    /// The status again, or a ping while there is none.
-    fn beat(&self) {
-        let last = self.last.lock().ok().and_then(|l| l.clone());
-        match last {
-            Some(b) => {
-                let _ = self.tx.send(b);
-            }
-            None => {
-                self.line(json!({ "type": "ping" }));
-            }
-        }
-    }
-}
-
-/// The turn with the heartbeat beside it.
-async fn run(
-    claude: Claude,
-    key: String,
-    model: String,
-    turn: Turn,
-    tx: UnboundedSender<Bytes>,
-    heartbeat: Duration,
-) {
+/// The work with the heartbeat beside it.
+async fn run<F, Fut>(work: F, tx: UnboundedSender<Bytes>, heartbeat: Duration)
+where
+    F: FnOnce(Say) -> Fut,
+    Fut: Future<Output = ()>,
+{
     let say = Say {
         tx: tx.clone(),
         last: Arc::default(),
     };
-    let work = one_turn(&claude, &key, &model, &turn, &say);
+    let work = work(say.clone());
     tokio::pin!(work);
     let mut beat = tokio::time::interval_at(tokio::time::Instant::now() + heartbeat, heartbeat);
     loop {
@@ -201,8 +115,14 @@ async fn run(
     }
 }
 
-/// Ask once; the answer's text and content blocks, or why there is no text.
-async fn one_turn(claude: &Claude, key: &str, model: &str, turn: &Turn, say: &Say) {
+/// Ask once: the answer's text and content blocks, or why there is no text.
+pub async fn ask(
+    claude: &Claude,
+    key: &str,
+    model: &str,
+    turn: &Turn,
+    say: &Say,
+) -> Result<(String, Value), String> {
     let body = Bytes::from(request_body(model, turn).to_string());
     let (mut chars, mut last) = (0usize, 0usize);
     let mut on_text = |delta: &str| {
@@ -214,17 +134,13 @@ async fn one_turn(claude: &Claude, key: &str, model: &str, turn: &Turn, say: &Sa
         let k = (chars as f64 / 1000.0).round();
         say.status(&format!("Writing… {k}k characters"));
     };
-    let msg = match claude.stream(key, body, &mut on_text).await {
-        Ok(m) => m,
-        Err(f) => return say.error(&f.message()),
-    };
-    match answer_text(&msg) {
-        Ok(text) => {
-            let content = msg.get("content").cloned().unwrap_or(Value::Null);
-            say.line(json!({ "type": "turn", "text": text, "content": content }));
-        }
-        Err(f) => say.error(&f.message()),
-    }
+    let msg = claude
+        .stream(key, body, &mut on_text)
+        .await
+        .map_err(|f| f.message())?;
+    let text = answer_text(&msg).map_err(|f| f.message())?;
+    let content = msg.get("content").cloned().unwrap_or(Value::Null);
+    Ok((text, content))
 }
 
 /// The body `messages.stream` sends for one turn, its keys in the SDK's order.
@@ -280,65 +196,33 @@ fn answer_text(msg: &Value) -> Result<String, Failure> {
 mod tests {
     use super::*;
 
-    fn good() -> Value {
-        json!({
-            "system": "You design panels.",
-            "schema": { "type": "object" },
-            "messages": [
-                { "role": "user", "content": "go" },
-                { "role": "assistant", "content": [{ "type": "text", "text": "{}" }] },
-                { "role": "user", "content": "again" },
-            ],
-        })
-    }
-
     #[test]
-    fn a_turn_is_a_prompt_a_schema_and_a_conversation_ending_with_the_user() {
-        assert_eq!(parse_turn(&good()).unwrap().messages.len(), 3);
-        let bad = |f: &dyn Fn(&mut Value)| {
-            let mut v = good();
-            f(&mut v);
-            parse_turn(&v).unwrap_err()
+    fn the_request_names_only_what_the_account_and_the_server_decide() {
+        let turn = Turn {
+            system: "S".into(),
+            schema: json!({ "type": "object" }),
+            messages: vec![json!({ "role": "user", "content": "go" })],
         };
-        assert!(bad(&|v| v["system"] = json!("")).starts_with("system"));
-        assert!(bad(&|v| v["system"] = json!(5)).starts_with("system"));
-        assert!(bad(&|v| v["system"] = json!("x".repeat(MAX_SYSTEM + 1))).starts_with("system"));
-        assert!(bad(&|v| v["schema"] = json!("x")).starts_with("schema"));
-        for kind in ["document", "tool_result", "tool_use", "server_tool_use"] {
-            let set = |v: &mut Value| v["messages"][0]["content"] = json!([{ "type": kind }]);
-            assert!(bad(&set).starts_with("messages[0]"), "{kind}");
-        }
-        let mut v = good();
-        v["messages"][0]["content"] = json!([{ "type": "text", "text": "a" }, { "type": "image" }]);
-        assert!(parse_turn(&v).is_ok());
-        assert!(bad(&|v| v["messages"] = json!([])).starts_with("messages"));
-        assert!(bad(&|v| v["messages"] = json!("x")).starts_with("messages"));
-        assert!(
-            bad(&|v| v["messages"] = json!(vec![json!({"role":"user","content":"a"}); 6]))
-                .starts_with("messages")
-        );
-        assert!(bad(&|v| v["messages"][0]["role"] = json!("assistant")).contains("messages[0]"));
-        assert!(bad(&|v| v["messages"][1]["role"] = json!("user")).contains("messages[1]"));
-        assert!(bad(&|v| v["messages"][2]["content"] = json!(7)).contains("messages[2]"));
-        assert!(bad(&|v| v["messages"][1]["content"] = json!([1])).contains("messages[1]"));
-        assert!(bad(&|v| v["messages"][1]["content"] = json!([])).contains("messages[1]"));
-        assert!(
-            bad(&|v| {
-                v["messages"].as_array_mut().unwrap().pop();
-            })
-            .contains("the last one")
-        );
-        assert!(parse_turn(&json!([])).is_err());
-        assert!(parse_turn(&Value::Null).is_err());
+        let body = request_body("claude-opus-5", &turn);
+        assert_eq!(body["model"], "claude-opus-5");
+        assert_eq!(body["max_tokens"], 64000);
+        assert_eq!(body["output_config"]["effort"], "high");
+        assert!(request_body("claude-haiku-4-5", &turn)["output_config"]["effort"].is_null());
     }
 
     #[test]
-    fn only_the_keys_the_api_reads_go_up() {
-        let mut v = good();
-        v["messages"][0]["cache_control"] = json!({ "type": "ephemeral" });
-        v["model"] = json!("claude-evil");
-        let t = parse_turn(&v).unwrap();
-        assert_eq!(t.messages[0], json!({ "role": "user", "content": "go" }));
-        assert_eq!(request_body("claude-opus-5", &t)["model"], "claude-opus-5");
+    fn a_refusal_and_a_cut_off_say_different_things() {
+        let refused = json!({ "stop_reason": "refusal", "stop_details": { "explanation": "no" } });
+        assert_eq!(
+            answer_text(&refused).unwrap_err().message(),
+            "Claude declined: no"
+        );
+        let cut = json!({ "stop_reason": "max_tokens" });
+        assert_eq!(
+            answer_text(&cut).unwrap_err().message(),
+            "the answer ran past the output limit"
+        );
+        let said = json!({ "content": [{ "type": "text", "text": "a" }, { "type": "thinking" }, { "type": "text", "text": "b" }] });
+        assert_eq!(answer_text(&said).unwrap(), "ab");
     }
 }

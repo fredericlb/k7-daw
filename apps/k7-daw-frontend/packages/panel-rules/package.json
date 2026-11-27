@@ -3,15 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "The rules a module's panel is checked against — group geometry, the two layouts — and AI organize's wire, check, prompt and loop built on them. No React, so a test or a server imports it without the builder's frontend stack (docs/panelRules.md). Consumed as source.",
+  "description": "The browser's reader of AI organize's NDJSON stream. The panel rules, the check, the prompt and the conversation are Rust's: the song crate's `modules/ui` through `@studio/k7-wasm/panel`, and the backend's `routes/ai` (docs/panelRules.md). Consumed as source.",
   "exports": {
-    "./ai-organize": "./src/aiOrganize.ts",
-    "./ai-organize-loop": "./src/aiLoop.ts",
-    "./ai-turn-stream": "./src/aiTurnStream.ts",
-    "./ai-prompt": "./src/aiPrompt.ts",
-    "./group-geometry": "./src/groupGeometry.ts",
-    "./layout-twins": "./src/layoutTwins.ts",
-    "./panel-text": "./src/panelText.ts"
+    "./organize-stream": "./src/organizeStream.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",
@@ -19,10 +13,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@studio/engine-protocol": "*",
-    "@studio/graph-model": "*",
-    "@studio/k7-wasm": "*",
-    "zod": "^4.4.3"
+    "@studio/k7-wasm": "*"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",

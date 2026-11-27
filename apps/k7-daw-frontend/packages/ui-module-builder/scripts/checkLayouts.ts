@@ -1,23 +1,11 @@
-// checkLayouts.ts — every library module's panel against the two-layout rules (apps/k7-daw-frontend/packages/panel-rules/src/layoutTwins.ts) and the
-// AI brief's checks, and against what it offered BEFORE: a migrated panel must keep every control the
-// committed one had, wherever it moved. Usage: tsx scripts/checkLayouts.ts [module dirs…] (default: all of
-// k7-core). Exits 1 on any issue. See docs/layouts.md.
+// checkLayouts.ts — every library module's panel against the two-layout rules, the AI brief's checks, and what it offered BEFORE: a migrated panel must keep every control the
+// committed one had, wherever it moved. The rules are Rust's (`panel.check_layout`); this walks the library, asks git for the committed text and compiles each widgets.js for its screens.
+// Usage: tsx scripts/checkLayouts.ts [module dirs…] (default: all of k7-core). Exits 1 on any issue. See docs/layouts.md.
 
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
-import type {
-  WebModuleUI as ModuleUI,
-  WebWidget as Widget,
-} from "@studio/graph-model";
-import { parse } from "@studio/k7-wasm/k7x";
-import { validatePanel } from "@studio/k7-wasm/validate";
-import {
-  atControlIssues,
-  eqBandIssues,
-  loneGroupIssues,
-} from "@studio/panel-rules/ai-organize";
-import { gridIssues, twinIssues } from "@studio/panel-rules/layout-twins";
+import { checkLayout } from "@studio/k7-wasm/panel";
 
 const LIBRARY = resolve(import.meta.dirname, "../../../../../k7-core");
 
@@ -45,101 +33,36 @@ function targets(args: string[]): string[] {
   ].filter((f) => existsSync(f));
 }
 
-/** Every control a panel offers, all its pages and both its shapes: binds counted, frames and labels aside. */
-function offers(ui: Pick<ModuleUI, "widgets" | "tabs">): Set<string> {
-  const all = [
-    ...Object.values(ui.widgets),
-    ...(ui.tabs ?? []).flatMap((t) => Object.values(t.widgets)),
-  ];
-  return new Set(
-    all
-      .filter((w) => w.bind && w.type !== "group" && w.type !== "label")
-      .map((w) => w.bind as string),
-  );
-}
-
-/** The committed panel, if the library's HEAD has one — what the migration must not lose. */
-function committed(file: string): ModuleUI | null {
+/** The committed text of a panel, if the library's HEAD has one — what the migration must not lose. */
+function committed(file: string): string | null {
   try {
-    const text = execFileSync(
+    return execFileSync(
       "git",
       ["-C", LIBRARY, "show", `HEAD:${relative(LIBRARY, file)}`],
       { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] },
     );
-    return validatePanel(text).ok ? (parse(text) as ModuleUI) : null;
   } catch {
     return null;
   }
 }
 
-function pagesOf(
-  layout: Pick<ModuleUI, "widgets" | "tabs">,
-): [string, [string, Widget][]][] {
-  const top = Object.entries(layout.widgets);
-  if (!layout.tabs?.length) return [["panel", top]];
-  return layout.tabs.map((t) => [
-    `tab ${t.name}`,
-    [...top, ...Object.entries(t.widgets)],
-  ]);
-}
-
 /** The screen ids a widgets.js draws, compiled as the widget sandbox compiles it (ui-chains' widgetRuntime.ts): `export default` becomes a return. */
-function screensOf(source: string): Set<string> {
-  if (!source.trim()) return new Set();
+function screensOf(source: string): string[] {
+  if (!source.trim()) return [];
   try {
     const out = new Function(
       `"use strict";\n${source.replace(/\bexport\s+default\b/, "return ")}`,
     )() as Record<string, unknown> | undefined;
-    return new Set(Object.keys(out ?? {}));
+    return Object.keys(out ?? {});
   } catch {
-    return new Set();
+    return [];
   }
 }
 
 function check(file: string): string[] {
-  let raw: unknown;
-  try {
-    raw = parse(readFileSync(file, "utf8"));
-  } catch (e) {
-    return [`unreadable: ${(e as Error).message}`];
-  }
-  const verdict = validatePanel(readFileSync(file, "utf8"));
-  if (!verdict.ok)
-    return verdict.issues.map((i) => `${i.path || "(root)"}: ${i.message}`);
-  const ui = raw as ModuleUI;
-  const issues = [...twinIssues(ui)];
-  for (const [where, ws] of pagesOf(ui))
-    issues.push(...gridIssues(ui, where, ws));
-  // The brief's structural rules, in BOTH shapes.
-  for (const layout of [ui, ...(ui.vertical ? [ui.vertical] : [])])
-    for (const [, ws] of pagesOf(layout)) {
-      issues.push(...atControlIssues(ws));
-      issues.push(...eqBandIssues(ws));
-    }
-  issues.push(...loneGroupIssues(Object.entries(ui.widgets)));
-  for (const t of ui.tabs ?? [])
-    issues.push(...loneGroupIssues(Object.entries(t.widgets)));
-  const before = committed(file);
-  if (before) {
-    const now = offers(ui);
-    // An `@` control is one the brief forbids, so dropping it is the fix rather than a loss.
-    const lost = [...offers(before)].filter(
-      (b) => !now.has(b) && !b.startsWith("@"),
-    );
-    if (lost.length)
-      issues.push(
-        `controls the committed panel had are gone: ${lost.map((b) => `\`${b}\``).join(", ")}`,
-      );
-  }
-  // Every screen needs its draw function in the panel's widgets.js — asked of the COMPILED script, whose keys may be built.
   const js = join(dirname(file), "widgets.js");
   const drawn = screensOf(existsSync(js) ? readFileSync(js, "utf8") : "");
-  for (const layout of [ui, ...(ui.vertical ? [ui.vertical] : [])])
-    for (const [, ws] of pagesOf(layout))
-      for (const [id, w] of ws)
-        if (w.type === "lcdscreen" && !drawn.has(id))
-          issues.push(`screen \`${id}\` has no draw function in widgets.js`);
-  return [...new Set(issues)];
+  return checkLayout(readFileSync(file, "utf8"), committed(file), drawn);
 }
 
 const files = targets(process.argv.slice(2));

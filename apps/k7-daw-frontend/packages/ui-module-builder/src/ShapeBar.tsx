@@ -1,7 +1,7 @@
 // ShapeBar.tsx — the switch between a panel's two shapes, horizontal and its `vertical` twin, and
 // what the pair still breaks: the same check the library is held to. See docs/layouts.md.
 
-import { LAYOUT_MAX, twinIssues } from "@studio/panel-rules/layout-twins";
+import { LAYOUT_MAX, twinIssues } from "@studio/k7-wasm/panel";
 import type { ModuleUI } from "./moduleUi";
 
 /** The switch between the panel's two shapes, and what the pair still breaks — the same check the library is held to. */

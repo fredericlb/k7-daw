@@ -499,6 +499,36 @@ fn page_vocab() -> Vec<[String; 3]> {
             &json!(song::modules::WAVEFORM_SOURCES),
         ),
         export(
+            "The widget kinds that bind a param: the only ones a dragged parameter can bounce off.",
+            "BINDABLE_WIDGET_TYPES",
+            &json!(song::modules::ui::edit::BINDABLE_WIDGET_TYPES),
+        ),
+        export(
+            "The widget kinds that carry a range.",
+            "RANGED_WIDGET_TYPES",
+            &json!(song::modules::ui::edit::RANGED_WIDGET_TYPES),
+        ),
+        export(
+            "A fresh group's tint: the OP palette's blue, faint enough that the controls on it stay legible.",
+            "GROUP_COLOR",
+            &json!(song::modules::ui::edit::GROUP_COLOR),
+        ),
+        export(
+            "The horizontal layout's height, and the vertical one's width.",
+            "LAYOUT_MAX",
+            &json!(song::modules::ui::geometry::LAYOUT_MAX),
+        ),
+        export(
+            "How many cells a knob takes in an auto-organised panel.",
+            "KNOB_SPAN",
+            &json!(song::modules::ui::auto::KNOB_SPAN),
+        ),
+        export(
+            "The page `@base` leads in an auto-organised panel.",
+            "GENERAL_PAGE",
+            &json!(song::modules::ui::auto::GENERAL_PAGE),
+        ),
+        export(
             "The longest a tab's name may be, in characters.",
             "TAB_NAME_MAX",
             &json!(song::modules::TAB_NAME_MAX),

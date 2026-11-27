@@ -12,6 +12,7 @@
     "./validate": "./src/validate.ts",
     "./fields": "./src/fields.ts",
     "./module": "./src/module.ts",
+    "./panel": "./src/panel.ts",
     "./picture": "./src/picture.ts",
     "./records": "./src/records.ts",
     "./rules": "./src/rules.ts",

@@ -6,14 +6,12 @@
 // writes the files itself. Rationale: docs/aiOrganize.md.
 
 import {
-  type AiOrganizeMode,
-  type AiOrganizeRequest,
-  type AiOrganizeResult,
-  type AiParam,
+  type AiRequest,
+  type AiResult,
   bindableNames,
   checkAiResult,
   hasLayout,
-} from "@studio/panel-rules/ai-organize";
+} from "@studio/k7-wasm/panel";
 import { askChoice, askTextAction } from "@studio/project-shell/ask";
 import { useCallback, useRef, useState } from "react";
 import { claudeCodePrompt, whereIs } from "./claudeCodePrompt";
@@ -22,11 +20,26 @@ import { hasLcd } from "./moduleUi";
 /** The dialog's second button: the prompt on the clipboard, for a Claude Code session to write the files. */
 const COPY = "claude-code";
 
+type AiOrganizeMode = AiRequest["mode"];
+type AiParam = AiRequest["params"][number];
+
 /** What a host passes to offer the button; absent, the button is not drawn. */
 export type AiOrganizeCall = (
-  req: AiOrganizeRequest,
+  req: AiRequest,
   onStatus: (text: string) => void,
-) => Promise<AiOrganizeResult>;
+) => Promise<AiResult>;
+
+/** Whether the browser compiles the script: Rust reads its brackets, only an engine reads it for real, and nothing in it runs here. */
+function compiles(script: string): string | null {
+  try {
+    new Function(
+      `"use strict";\n${script.replace(/^\s*export\s+default\s+/m, "return ")}`,
+    );
+    return null;
+  } catch (e) {
+    return (e as Error).message;
+  }
+}
 
 export function useAiOrganize({
   call,
@@ -108,7 +121,7 @@ export function useAiOrganize({
           },
     );
     if (asked == null) return;
-    const req: AiOrganizeRequest = {
+    const req: AiRequest = {
       module,
       moduleText,
       params: params.map(({ name, meta, value }) => ({ name, meta, value })),
@@ -143,6 +156,8 @@ export function useAiOrganize({
         bindableNames({ params, moduleText }),
         req,
       );
+      const broken = res.widgetsJs.trim() ? compiles(res.widgetsJs) : null;
+      if (broken) issues.push(`widgets_js does not compile: ${broken}`);
       if (!ui || issues.length) throw new Error(issues.join("; "));
       const screens = hasLcd(ui);
       if (screens && !canWriteScript)

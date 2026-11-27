@@ -343,6 +343,13 @@ fn the_layout_constants_the_page_reads_are_the_ones_the_crate_decides_with() {
     use chains::node_ui as ui;
     // The panels' binds are the file format's vocabulary, spelled once in song: a drift here would write a bind nothing reads.
     assert_eq!(ui::RACK_BIND, "@rack:");
+    assert_eq!(ui::RACK_BIND, song::modules::ui::ai_check::RACK_BIND);
+    assert_eq!(ui::RACK_ADD_BIND, song::modules::ui::ai_check::RACK_ADD_BIND);
+    let bindable: Vec<&str> = song::modules::WIDGET_TYPES
+        .into_iter()
+        .filter(|t| song::modules::ui::edit::bindable(t))
+        .collect();
+    assert_eq!(bindable, song::modules::ui::edit::BINDABLE_WIDGET_TYPES);
     assert_eq!(ui::OUTPUT_VOLUME_PARAM, song::modules::names::OUTPUT_VOLUME_PARAM);
     assert_eq!(
         ui::VOLUME_RANGE,

@@ -7,7 +7,7 @@ A route is the front's once the conformance suite (`e2e/docs/conformance.md`) pa
 | `GET /api/health` | phase 1 | nothing |
 | `GET`, `PUT /api/preferences` | phase 1 | a method it does not own |
 | `GET /api/cameras`, `POST /api/cameras/ticket`, `WS /api/cameras/ws` | phase 1 | the same as the preferences, for all three at once; a request to the socket's path that is no upgrade |
-| `GET`, `PUT /api/ai/settings`, `GET /api/ai/organize`, `POST /api/ai/organize/turn` | phase 3 | the same as the preferences |
+| `GET`, `PUT /api/ai/settings`, `GET /api/ai/organize`, `POST /api/ai/organize` | phase 3 | the same as the preferences |
 | `GET /auth/me` | phase 3 | the same as the preferences |
 | `GET /api/local` | phase 4a; on every device since 6.1 (`local.md`) | off a device, where the backend answers 404 |
 | `GET /api/local/engine[/events]`, `POST /api/local/engine/{cmd,slots}`, `GET /api/internal/engine/local` | phase 4a, behind `K7_LOCAL_ENGINE=front` (`local.md`) | all of it unless a device's host turned the switch on |

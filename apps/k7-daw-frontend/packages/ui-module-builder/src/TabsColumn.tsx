@@ -3,18 +3,18 @@
 // place, moved up or down, or removed; `+` adds one. Every edit is panelTabs.ts, this only asks.
 
 import { TAB_NAME_MAX } from "@studio/k7-wasm/consts";
-import { askConfirm } from "@studio/project-shell/ask";
-import { ChevronDown, ChevronUp, Plus, Trash2 } from "@studio/ui/icons";
-import { cn } from "@studio/ui/lib/utils";
-import { useEffect, useState } from "react";
-import type { ModuleUI } from "./moduleUi";
 import {
   addTab,
   moveTab,
   type PageRef,
   removeTab,
   renameTab,
-} from "./panelTabs";
+} from "@studio/k7-wasm/panel";
+import { askConfirm } from "@studio/project-shell/ask";
+import { ChevronDown, ChevronUp, Plus, Trash2 } from "@studio/ui/icons";
+import { cn } from "@studio/ui/lib/utils";
+import { useEffect, useState } from "react";
+import type { ModuleUI } from "./moduleUi";
 
 export function TabsColumn({
   ui,

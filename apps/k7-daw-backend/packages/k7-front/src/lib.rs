@@ -131,7 +131,7 @@ async fn claim(
         || (path == "/api/preferences" && method == Method::PUT)
         || (path == "/api/cameras/ticket" && method == Method::POST)
         || (path == "/api/ai/settings" && method == Method::PUT)
-        || (path == "/api/ai/organize/turn" && method == Method::POST);
+        || (path == "/api/ai/organize" && method == Method::POST);
     if !owned_method {
         return declined(State(state), peer, req).await;
     }
@@ -194,10 +194,9 @@ fn build(config: &Config, limits: routes::cameras::Limits, port: u16) -> Built {
             "/api/ai/settings",
             sessioned(get(routes::ai::get_settings).put(routes::ai::put_settings)),
         )
-        .route("/api/ai/organize", sessioned(get(routes::ai::get_organize)))
         .route(
-            "/api/ai/organize/turn",
-            sessioned(post(routes::ai::turn::post_turn)),
+            "/api/ai/organize",
+            sessioned(get(routes::ai::get_organize).post(routes::ai::organize::post_organize)),
         )
         .route("/auth/me", sessioned(get(routes::auth::me)))
         .route("/api/local", get(routes::local::routes::info))

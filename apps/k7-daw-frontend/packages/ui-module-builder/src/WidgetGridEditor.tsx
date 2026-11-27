@@ -6,7 +6,30 @@
 // the one every tab shows, or one tab's (TabsColumn.tsx, docs/pages.md). A group frames what lies
 // inside its box and moves it along (groupGeometry.ts); the inspector is WidgetInspector.tsx.
 
-import { clash, framedBy, groupOf } from "@studio/panel-rules/group-geometry";
+import {
+  type AutoParam,
+  autoOrganize,
+  boxBetween,
+  type Cell,
+  CORNERS,
+  type Corner,
+  clash,
+  clipIds,
+  copyWidgets,
+  cornerAnchor,
+  firstFree,
+  framedBy,
+  groupOf,
+  groupsFirst,
+  nextId,
+  type PageRef,
+  pageIn,
+  panelIds,
+  pasteWidgets,
+  span,
+  widgetsAt,
+  writeWidgetsAt,
+} from "@studio/k7-wasm/panel";
 import { askConfirm } from "@studio/project-shell/ask";
 import { Button } from "@studio/ui/button";
 import {
@@ -21,41 +44,16 @@ import { cn } from "@studio/ui/lib/utils";
 import { Spinner } from "@studio/ui/spinner";
 import { usePointerFollow } from "@studio/ui-timeline/drag";
 import { useCallback, useRef, useState } from "react";
-import { type AutoParam, autoOrganize } from "./autoLayout";
 import { GridMenu } from "./GridMenu";
-import {
-  boxBetween,
-  type Cell,
-  CORNERS,
-  type Corner,
-  cornerAnchor,
-  firstFree,
-  groupsFirst,
-  nextId,
-  span,
-} from "./gridCells";
 import type { ModuleUI, Widget, WidgetType } from "./moduleUi";
-import {
-  type PageRef,
-  pageIn,
-  panelIds,
-  widgetsAt,
-  writeWidgetsAt,
-} from "./panelTabs";
 import { isParamDrag, type ParamDrag, readParamDrag } from "./paramDrag";
 import { Stepper } from "./Stepper";
 import { TabsColumn } from "./TabsColumn";
 import { WidgetInspector } from "./WidgetInspector";
-import {
-  clipIds,
-  copyWidgets,
-  heldClip,
-  holdClip,
-  pasteWidgets,
-} from "./widgetClipboard";
+import { heldClip, holdClip } from "./widgetClipboard";
 import { bindable, GROUP_COLOR, ICON, ranged, TYPES } from "./widgetKinds";
 
-export { boxBetween, type Corner, cornerAnchor } from "./gridCells";
+export { boxBetween, type Corner, cornerAnchor } from "@studio/k7-wasm/panel";
 
 // Row height in px (columns are elastic), in one place so the pointer→cell maths and the CSS grid agree.
 const ROW_PX = 64;
