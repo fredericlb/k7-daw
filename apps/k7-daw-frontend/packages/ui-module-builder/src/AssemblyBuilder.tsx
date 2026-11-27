@@ -278,7 +278,7 @@ export function AssemblyBuilder({
               hints={hints}
               vimMode={vimMode}
               readOnly={readOnly}
-              onChange={edit}
+              onChange={(text) => edit({ text, error: null })}
               onSave={save}
             />
           )}
