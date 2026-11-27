@@ -9,25 +9,13 @@
 // Full rationale: docs/builder.md, and apps/k7-daw-frontend/packages/song/docs/assemblies.md.
 
 import type { WebGraph } from "@studio/graph-model";
-import {
-  type AssemblyOp,
-  editAssembly,
-  readAssemblyTemplate,
-} from "@studio/k7-wasm/text";
+import { readAssemblyTemplate } from "@studio/k7-wasm/text";
 import { useAutosave } from "@studio/ui-editor/autosave";
 import { YamlPane } from "@studio/ui-editor/yaml-pane";
 import type { Hints } from "@studio/web-protocol";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { assemblyProblem, editedAssembly } from "./assemblyEdit";
 import type { ModuleStore } from "./store";
-
-/** The template's text with one writer run on it, or as it was when the writer refuses. */
-function edited(text: string, op: AssemblyOp): string {
-  try {
-    return editAssembly(text, [op]).text;
-  } catch {
-    return text;
-  }
-}
 
 /** One promotable row: a member, one of its params, and whether the box already wears it. */
 interface Row {
@@ -119,6 +107,10 @@ export function AssemblyBuilder({
     () => (content == null ? null : readAssemblyTemplate(content)),
     [content],
   );
+  const problem = useMemo(
+    () => (content == null ? null : assemblyProblem(content)),
+    [content],
+  );
   const promoted = parsed?.params ?? {};
   const rows = useMemo(() => rowsOf(graph, promoted), [graph, promoted]);
 
@@ -136,8 +128,9 @@ export function AssemblyBuilder({
     },
   });
 
-  const edit = useCallback((next: string) => {
-    setContent(next);
+  const edit = useCallback((next: { text: string; error: string | null }) => {
+    setContent(next.text);
+    setNote(next.error);
   }, []);
 
   const toggle = useCallback(
@@ -145,12 +138,12 @@ export function AssemblyBuilder({
       if (content == null || readOnly) return;
       if (row.as) {
         const as = row.as;
-        edit(edited(content, { op: "dropParam", name: as }));
+        edit(editedAssembly(content, { op: "dropParam", name: as }));
         return;
       }
       const name = freeName(row.param, new Set(Object.keys(promoted)));
       edit(
-        edited(content, {
+        editedAssembly(content, {
           op: "setParam",
           name,
           node: row.node,
@@ -216,6 +209,9 @@ export function AssemblyBuilder({
         </span>
       </header>
 
+      {problem ? (
+        <p className="border-b px-4 py-1 text-amber-500 text-xs">{problem}</p>
+      ) : null}
       {note ? (
         <p className="border-b px-4 py-1 text-xs text-muted-foreground">
           {note}
