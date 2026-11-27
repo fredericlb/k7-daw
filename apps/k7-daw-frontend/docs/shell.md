@@ -1030,7 +1030,7 @@ still happens underneath, deliberately: closing the panel leaves the graph alrea
 track it was about.
 
 A picture lane gets the same row: it is a lane node in the graph like a sound lane, its chain ending on
-`VIDEO_OUT`. Its row has no *audio in* / *midi in*, since `track input` is a sound lane's verb.
+`VIDEO_OUT`. Its title bar has no Input menu, since `track input` is a sound lane's verb, and its camera stays a card ahead of the lane.
 
 **The cards are GLUED** (`moduleRow`'s `gap: 0`): a lane's path is one strip read left to right, and
 two cards touching IS the cable between them. That arrow is still in the row, marked `glued` — the
@@ -1622,7 +1622,8 @@ Keeping it costs one habit — **the button runs the command, it does not call t
 | a pane button in the floating bar (the desk, the timeline…) | `ui <pane>` | `fullscreen` / `setFull` in `App`, like any pane |
 | the timeline header's clock / height / automation | `ui ruler`, `ui lanes`, `ui automation` | `TimelineHandle` |
 | the per-track view's curve button, in its left column (`ModeStrip`, the timeline's) | `ui curves` — shows or hides its curve cards | `App` |
-| the per-track view's *audio in* / *midi in*, above it — greyed while something already feeds the lane (`laneHasInput`) | `track input <track> audio\|midi` | `App` |
+| the per-track view's Input menu, on a lane with no input — the pick is written once the new node is there | `track input <track> audio\|midi`, then `node param <input> @channel\|@device` | `App` |
+| the per-track view's Input menu, monitor and width, on a lane's input (`laneInput`) | `node param <input> @channel\|@device\|@monitor <value>` | `TrackModulesPane` |
 | the timeline corner's ＋ piste | `track new`, and `picture lane new` on a project with a viewport | `App` — the menu appears only when there are two kinds of lane, see [timeline.md](timeline.md) |
 | a timeline header dragged to another row | `track order`, `picture lane order` | `App` — the drag names the lane whose place is taken, see [timeline.md](timeline.md) |
 | a layer moved or resized in the VIEWPORT | `picture rect` | `App` — the selection box is `components/ViewportOverlay.tsx`, see [picture.md](picture.md) |

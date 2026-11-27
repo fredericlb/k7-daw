@@ -23,7 +23,7 @@ import { nodePredicate } from "../historyMarks";
 import { useLatest } from "../hooks/useLatest";
 import { usePendingBypass } from "../hooks/usePendingBypass";
 import { useRackTrigger } from "../hooks/useRackTrigger";
-import { laneHasInput } from "../laneInput";
+import { laneInput } from "../laneInput";
 import { midiActivity } from "../midiActivity";
 import { nodeNameFor } from "../nodeInsert";
 import { m } from "../paraglide/messages.js";
@@ -33,6 +33,11 @@ import { useReloadKey, useShell, useVerbs } from "../state/shellStore";
 import type { WebProject } from "../types";
 import { useIsMobile } from "../useIsMobile";
 import { ChainHeader } from "./ChainHeader";
+import {
+  ChainInputMenu,
+  ChainInputProps,
+  type InputPick,
+} from "./ChainInputControls";
 import { GraphSlotPane } from "./GraphSlotPane";
 
 /** A card here is HORIZONTAL on a desktop, at most 4 rows, and VERTICAL on a phone, at most 4 columns — a panel without that shape is folded to it. */
@@ -173,9 +178,12 @@ export function TrackModulesPane({
     () => nodes ?? (graph ? trackModules(graph, trackId) : []),
     [graph, trackId, nodes],
   );
-  // …and what feeds the lane, drawn ahead of it: the signal starts at the input, not at the lane.
+  // A sound lane's input is the title bar's (ChainInputControls.tsx); only a picture lane's camera is drawn ahead of it.
   const inputs = useMemo(
-    () => (graph && !nodes ? trackInputs(graph, trackId) : []),
+    () =>
+      graph && !nodes && graph.videoTracks?.includes(trackId)
+        ? trackInputs(graph, trackId)
+        : [],
     [graph, trackId, nodes],
   );
   // The tab each card has open: a folded card is as wide as the page it shows, so a switch reflows the row (ui-chains' `tabW`).
@@ -275,12 +283,34 @@ export function TrackModulesPane({
     };
   }, [pluginIds, watchPluginParams]);
 
-  // An input already feeding the lane, or no graph yet to say: either way the input buttons wait.
-  const hasInput = !graph || laneHasInput(graph, trackId);
+  // The input feeding the lane, read off the graph document; null before there is one.
+  const input = useMemo(
+    () => (graph ? laneInput(graph, trackId) : null),
+    [graph, trackId],
+  );
   // A picture lane takes no audio or MIDI input: `track input` is a sound lane's verb.
   const onInput = graph?.videoTracks?.includes(trackId)
     ? undefined
     : onTrackInput;
+  const writeInput = useCallback(
+    (module: string, field: string, value: string) =>
+      void onModuleField(`node param ${module} @${field} ${value}`),
+    [onModuleField],
+  );
+  // A pick on a lane with no input adds one first; the socket or device is written once the new node is in the graph.
+  const [pendingPick, setPendingPick] = useState<InputPick | null>(null);
+  useEffect(() => {
+    if (!pendingPick || input?.kind !== pendingPick.kind) return;
+    setPendingPick(null);
+    writeInput(input.module, pendingPick.field, pendingPick.value);
+  }, [pendingPick, input, writeInput]);
+  const pickInput = (p: InputPick) => {
+    if (input) writeInput(input.module, p.field, p.value);
+    else if (onInput) {
+      setPendingPick(p);
+      onInput(p.kind);
+    }
+  };
 
   // A row ending on the lane's mixer pins that mixer to the right, headerless — @studio/ui-chains's anchorRight.ts.
   const split = useMemo(
@@ -391,9 +421,27 @@ export function TrackModulesPane({
               ? () => onTrackToggle(trackId, "arm")
               : undefined
           }
-          hasInput={hasInput}
-          onInput={onInput}
-          onReason={onStatus}
+          inputMenu={
+            onInput && (
+              <ChainInputMenu
+                input={input}
+                audioSets={inputDevices ?? []}
+                midiDevices={midiDevices ?? []}
+                onPick={pickInput}
+                onReason={onStatus}
+              />
+            )
+          }
+          inputProps={
+            onInput && (
+              <ChainInputProps
+                input={input}
+                onField={(field, value) =>
+                  input && writeInput(input.module, field, value)
+                }
+              />
+            )
+          }
           showCurves={showCurves}
           onToggleCurves={onToggleCurves}
         />
