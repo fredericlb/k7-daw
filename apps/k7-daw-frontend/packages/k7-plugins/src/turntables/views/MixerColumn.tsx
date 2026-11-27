@@ -17,6 +17,7 @@ import {
   useEngineStoreOrNull,
   useStoreState,
 } from "@studio/engine-browser/store";
+import { Slider } from "@studio/ui/slider";
 import { useEffect, useRef, useState } from "react";
 import { m } from "../../paraglide/messages.js";
 import { type DeckId, LEVEL_DB, MIX_CENTRE } from "../deckVocabulary";
@@ -172,14 +173,13 @@ function ChannelFader({
             className="pointer-events-none absolute left-1/2 h-px w-3 -translate-x-1/2 translate-y-1/2 bg-foreground/40"
             style={{ bottom: notchAt((0 - lo) / (hi - lo)) }}
           />
-          <input
-            type="range"
+          <Slider
             min={lo}
             max={hi}
             step={0.5}
             value={level}
             disabled={!live}
-            aria-label={m["fader.aria"]({ side })}
+            label={m["fader.aria"]({ side })}
             title={
               live
                 ? m["fader.title"]({
@@ -188,7 +188,7 @@ function ChannelFader({
                   })
                 : m["fader.unwired"]({ side })
             }
-            onChange={(e) => onChange(Number(e.target.value))}
+            onValueChange={onChange}
             onDoubleClick={() => live && onChange(0)}
             className={CHANNEL_INPUT}
           />
@@ -292,16 +292,15 @@ export function MixerColumn({
                 aria-hidden="true"
                 className="pointer-events-none absolute top-1/2 left-1/2 h-3 w-px -translate-x-1/2 -translate-y-1/2 bg-foreground/40"
               />
-              <input
-                type="range"
+              <Slider
                 min={0}
                 max={1}
                 step={0.01}
                 value={mix}
-                onChange={(e) => onChange(Number(e.target.value))}
+                onValueChange={onChange}
                 disabled={!ready}
                 className={CROSSFADER_INPUT}
-                aria-label={m["xfade.aria"]()}
+                label={m["xfade.aria"]()}
               />
             </div>
             <span className="w-3 shrink-0 text-center font-semibold text-xs">

@@ -8,9 +8,10 @@ import { StatusText } from "../components/StatusText";
 import { m } from "../paraglide/messages.js";
 import type { createStatusLine } from "../statusLine";
 import type { ShellLayout } from "../useIsMobile";
-import { FLOAT_BUTTON, FLOAT_CAPSULE } from "./floatCapsule";
+import { FLOAT_CAPSULE } from "./floatCapsule";
 import { summonChord } from "./modKey";
-import { PANEL_DEFS, type PanelId } from "./panels";
+import { PanelButton } from "./PanelButton";
+import type { PanelId } from "./panels";
 import { RailChevron } from "./RailChevron";
 import { RunningBubble } from "./RunningBubble";
 
@@ -89,7 +90,7 @@ export function ProjectHeader({
         {!phone && onCommandBar && (
           <Capsule className={FLOAT_CAPSULE}>
             <CapsuleButton
-              className={FLOAT_BUTTON}
+              size="float"
               aria-label={m["shell.commandBar"]()}
               title={m["shell.commandBar.tip"]({
                 name: m["commandBar.list"](),
@@ -108,23 +109,9 @@ export function ProjectHeader({
             aria-label={m["shell.dock"]()}
             className={FLOAT_CAPSULE}
           >
-            {panels.map((p) => {
-              const def = PANEL_DEFS[p.id];
-              return (
-                <CapsuleButton
-                  className={FLOAT_BUTTON}
-                  key={p.id}
-                  pressed={p.pressed}
-                  disabled={p.disabled}
-                  disabledReason={p.title}
-                  aria-label={def.title()}
-                  title={p.title ?? def.title()}
-                  onClick={p.onPress}
-                >
-                  <def.icon />
-                </CapsuleButton>
-              );
-            })}
+            {panels.map((p) => (
+              <PanelButton key={p.id} panel={p} size="float" />
+            ))}
           </Capsule>
         )}
         {!phone && rail && (

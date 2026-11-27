@@ -3,6 +3,7 @@
 
 import { tapTempo } from "@studio/k7-wasm/reads";
 import { askText } from "@studio/project-shell/ask";
+import { Button } from "@studio/ui/button";
 import type { RecInfo } from "../hooks/useProjectDoc";
 import { m } from "../paraglide/messages.js";
 
@@ -36,9 +37,10 @@ export function TempoMeter({
 }) {
   return (
     <span className="type-mono-value flex items-center gap-0.5 whitespace-nowrap tabular-nums">
-      <button
-        type="button"
-        className="h-9 cursor-pointer rounded-full px-2 text-foreground outline-none hover:bg-on-fill focus-visible:shadow-(--k7-focus-ring)"
+      <Button
+        variant="ghost"
+        size="bar"
+        className="type-mono-value tabular-nums"
         title={m["transport.tempoEdit"]()}
         onClick={() =>
           void askTempo(recInfo.tempo).then((v) => {
@@ -47,11 +49,12 @@ export function TempoMeter({
         }
       >
         {recInfo.tempo} {m["transport.bpm"]()}
-      </button>
+      </Button>
 
-      <button
-        type="button"
-        className="h-9 cursor-pointer rounded-full px-2 text-foreground outline-none hover:bg-on-fill focus-visible:shadow-(--k7-focus-ring)"
+      <Button
+        variant="ghost"
+        size="bar"
+        className="type-mono-value tabular-nums"
         title={m["transport.meterEdit"]()}
         onClick={() =>
           void askText({
@@ -67,7 +70,7 @@ export function TempoMeter({
         }
       >
         {recInfo.beatsPerBar}/{recInfo.beatUnit}
-      </button>
+      </Button>
     </span>
   );
 }

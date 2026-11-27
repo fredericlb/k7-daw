@@ -16,6 +16,8 @@ import {
 } from "@studio/ui/dialog";
 import { Input } from "@studio/ui/input";
 import { Knob } from "@studio/ui/knob";
+import { SelectField } from "@studio/ui/select";
+import { Slider } from "@studio/ui/slider";
 import { useId, useState } from "react";
 import {
   type CurveDraft,
@@ -156,30 +158,26 @@ export function CurveEditor({
           </label>
           <label className={FIELD}>
             <span className={LABEL}>{m["curve.shape"]()}</span>
-            <select
+            <SelectField
+              size="sm"
               value={draft.shape}
-              onChange={(e) => set({ shape: e.target.value as DraftShape })}
+              onValueChange={(shape) => set({ shape: shape as DraftShape })}
               // A boolean has one shape to follow: shown, so it is clear what the curve is, and not a choice.
               disabled={shapes.length < 2}
-              className="min-w-0 flex-1 rounded border border-border bg-background px-2 py-1 text-sm"
-            >
-              {shapes.map((s) => (
-                <option key={s} value={s}>
-                  {shapeLabel(s)}
-                </option>
-              ))}
-            </select>
+              options={shapes.map((s) => ({ value: s, label: shapeLabel(s) }))}
+              className="flex-1"
+            />
           </label>
           {/* Depth and, for an oscillator, where it starts — one row, the two sliders side by side. */}
           {draft.shape !== "onoff" && (
             <div className={FIELD}>
-              <Slider
+              <LabelledSlider
                 label={m["curve.amplitude"]()}
                 value={draft.amplitude}
                 onChange={(amplitude) => set({ amplitude })}
               />
               {oscillator && (
-                <Slider
+                <LabelledSlider
                   label={m["curve.phase"]()}
                   value={draft.phase}
                   onChange={(phase) => set({ phase })}
@@ -208,17 +206,16 @@ export function CurveEditor({
                 <span className="text-xs text-muted-foreground">
                   {m["curve.cut"]()}
                 </span>
-                <select
+                <SelectField
+                  size="sm"
                   value={draft.cut}
-                  onChange={(e) => set({ cut: e.target.value as CurveCut })}
-                  className="min-w-0 flex-1 rounded border border-border bg-background px-2 py-1 text-sm"
-                >
-                  {CURVE_CUTS.map((c) => (
-                    <option key={c} value={c}>
-                      {cutLabel(c)}
-                    </option>
-                  ))}
-                </select>
+                  onValueChange={(cut) => set({ cut: cut as CurveCut })}
+                  options={CURVE_CUTS.map((c) => ({
+                    value: c,
+                    label: cutLabel(c),
+                  }))}
+                  className="flex-1"
+                />
               </label>
             </div>
           )}
@@ -315,7 +312,7 @@ export function CurveEditor({
 }
 
 /** A 0..1 slider with its name before it and its value after — half a row when it shares one. */
-function Slider({
+function LabelledSlider({
   label,
   value,
   onChange,
@@ -327,13 +324,12 @@ function Slider({
   return (
     <label className="flex min-w-0 flex-1 items-center gap-2">
       <span className="text-xs text-muted-foreground">{label}</span>
-      <input
-        type="range"
+      <Slider
         min={0}
         max={1}
         step={0.01}
         value={value}
-        onChange={(e) => onChange(Number(e.target.value))}
+        onValueChange={onChange}
         className="min-w-0 flex-1"
       />
       <span className="w-8 text-right font-mono text-xs tabular-nums">

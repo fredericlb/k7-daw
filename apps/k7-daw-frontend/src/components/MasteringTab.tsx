@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@studio/ui/select";
+import { Slider } from "@studio/ui/slider";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { useRevision } from "../hooks/useRevision";
 import {
@@ -256,23 +257,19 @@ function Knob({
   return (
     <label className="type-secondary flex items-center gap-2">
       <span className="w-28 shrink-0 text-fg-2">{label()}</span>
-      <input
-        type="range"
+      <Slider
         min={min}
         max={max}
         step={step}
         value={value}
-        className="h-5 w-40 cursor-pointer accent-(--k7-accent-text)"
-        onChange={(e) => {
-          const v = Number(e.target.value);
+        className="w-40"
+        label={label()}
+        onValueChange={(v) => {
           setHeld(v);
           onSet(binding.pluginId, binding.param, v);
           unwritten.current = v;
         }}
-        // Whichever ends the gesture writes it: the pointer let go, a key released, or focus leaving.
-        onPointerUp={write}
-        onKeyUp={write}
-        onBlur={write}
+        onValueCommit={write}
       />
       <span className="w-16 shrink-0 text-right font-mono tabular-nums">
         {shown}

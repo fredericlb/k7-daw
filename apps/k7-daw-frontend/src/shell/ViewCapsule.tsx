@@ -34,8 +34,6 @@ export interface BarGraphViews {
 // As tall as the floating row (40 px), 32 px buttons, 16 px icons.
 const CAPSULE =
   "float pointer-events-auto flex h-(--k7-float-h) items-center gap-0.5 rounded-full p-1";
-const BTN =
-  "h-8 min-w-8 px-1.5 desk:h-8 desk:min-w-8 desk:rounded-full rounded-full [&_svg]:size-4 desk:[&_svg]:size-4";
 
 export function ViewCapsule({
   lanes,
@@ -49,7 +47,7 @@ export function ViewCapsule({
   const laneViews = lanes ? (
     <div role="group" aria-label={m["shell.laneViews"]()} className={CAPSULE}>
       <CapsuleButton
-        className={BTN}
+        size="float"
         pressed={lanes.expanded}
         aria-label={m["shell.lane.lanes"]()}
         title={m["shell.lane.lanes"]()}
@@ -58,7 +56,7 @@ export function ViewCapsule({
         <Rows3 />
       </CapsuleButton>
       <CapsuleButton
-        className={BTN}
+        size="float"
         pressed={lanes.automation}
         aria-label={m["shell.lane.automation"]()}
         title={m["shell.lane.automation"]()}
@@ -68,7 +66,7 @@ export function ViewCapsule({
       </CapsuleButton>
       <CapsuleDivider />
       <CapsuleButton
-        className={BTN}
+        size="float"
         aria-label={m["shell.lane.zoomFit"]()}
         title={m["shell.lane.zoomFit"]()}
         onClick={lanes.onZoomFit}
@@ -77,7 +75,7 @@ export function ViewCapsule({
       </CapsuleButton>
       {lanes.picture !== null && (
         <CapsuleButton
-          className={BTN}
+          size="float"
           pressed={lanes.picture}
           aria-label={m["shell.lane.pictureName"]()}
           title={m["shell.lane.pictureName"]()}
@@ -92,7 +90,7 @@ export function ViewCapsule({
   const graphViews = graph ? (
     <div role="group" aria-label={m["shell.graphViews"]()} className={CAPSULE}>
       <CapsuleButton
-        className={BTN}
+        size="float"
         aria-label={m["graph.zoomFitName"]()}
         title={m["graph.zoomFitName"]()}
         onClick={graph.onFit}
@@ -101,7 +99,7 @@ export function ViewCapsule({
       </CapsuleButton>
       {graph.onOrganize && (
         <CapsuleButton
-          className={BTN}
+          size="float"
           aria-label={m["graph.autoLayoutName"]()}
           title={m["graph.autoLayoutName"]()}
           onClick={graph.onOrganize}
@@ -111,7 +109,7 @@ export function ViewCapsule({
       )}
       {graph.onStack && (
         <CapsuleButton
-          className={BTN}
+          size="float"
           pressed={graph.stacked}
           aria-label={m["graph.stackName"]()}
           title={m["graph.stackName"]()}
