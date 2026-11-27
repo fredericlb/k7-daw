@@ -6,7 +6,6 @@ import { beforeAll, describe, expect, it } from "vitest";
 import { wasmReady } from "./abi.ts";
 import {
   computeFlow,
-  curvesUnderLeft,
   resolveMapping,
   seedFlows,
   seedsEq,
@@ -115,11 +114,6 @@ describe("the curve cards", () => {
     { id: "c", kind: "module", x: 2000, y: 900, w: 200, h: 120, label: "c" },
     { id: "crv", kind: "curve", x: 0, y: 0, w: 200, h: 120, label: "crv" },
   ];
-
-  it("spreads the new place over the page's node and keeps the rest of it", () => {
-    const [, crv] = curvesUnderLeft(nodes, new Map([["crv", "c"]]));
-    expect(crv).toMatchObject({ x: 1776, y: 924, label: "crv" });
-  });
 
   it("drops the curve cards and their cables, and hands back the same graph when there is none", () => {
     const edges = [

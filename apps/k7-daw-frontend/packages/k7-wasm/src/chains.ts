@@ -8,7 +8,6 @@ import type {
   Kept,
   KeptChain,
   LaneSource,
-  Moved,
   NodeFlow,
   ResolvedMapping,
   ResolvedRow,
@@ -254,81 +253,6 @@ export function unmappedControls<C extends { id: string }>(
   );
   return controls.filter((c) => ids.has(c.id));
 }
-
-interface Box {
-  id: string;
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-}
-
-const boxes = (nodes: readonly Box[]) =>
-  nodes.map(({ id, x, y, w, h }) => ({ id, x, y, w, h }));
-
-/** Each curve card's target, read off its automation cable: one binding, one card, one target. */
-export const curveTargets = (
-  edges: readonly { source: string; target: string; automation?: unknown }[],
-  isCurve: (id: string) => boolean,
-): Map<string, string> => {
-  const driven = edges.filter((e) => e.automation).map((e) => e.source);
-  const curveIds = [...new Set(driven)].filter(isCurve);
-  const slim = edges.map(({ source, target, automation }) => ({
-    source,
-    target,
-    automation: automation ? true : undefined,
-  }));
-  const out = call<Record<string, string>>({
-    op: "place.targets",
-    args: { edges: slim, curveIds },
-  });
-  return new Map(Object.entries(out));
-};
-
-/** The x a row sweep sorts each node by, in node order: a curve just before its target. */
-export const rowSortKeys = (
-  nodes: readonly Box[],
-  targets: ReadonlyMap<string, string>,
-): number[] =>
-  call<number[]>({
-    op: "place.rowKeys",
-    args: { nodes: boxes(nodes), targets: Object.fromEntries(targets) },
-  });
-
-const spread = <N extends Box>(nodes: N[], moved: Moved[]): N[] => {
-  if (!moved.length) return nodes;
-  const at = new Map(moved.map((m) => [m.id, m]));
-  return nodes.map((n) => {
-    const m = at.get(n.id);
-    return m ? { ...n, x: m.x, y: m.y } : n;
-  });
-};
-
-/** Put a fresh curve left of its target on the target's line, ahead of the row sweep that parts collisions. */
-export const curvesLeftOfTargets = <N extends Box>(
-  nodes: N[],
-  targets: ReadonlyMap<string, string>,
-): N[] =>
-  spread(
-    nodes,
-    call<Moved[]>({
-      op: "place.leftOf",
-      args: { nodes: boxes(nodes), targets: Object.fromEntries(targets) },
-    }),
-  );
-
-/** Every curve card to the left of its target and under its top, several stacked down: forced, whatever was remembered. */
-export const curvesUnderLeft = <N extends Box>(
-  nodes: N[],
-  targets: ReadonlyMap<string, string>,
-): N[] =>
-  spread(
-    nodes,
-    call<Moved[]>({
-      op: "place.underLeft",
-      args: { nodes: boxes(nodes), targets: Object.fromEntries(targets) },
-    }),
-  );
 
 /** The graph with no curve card and no cable touching one, the same graph when it holds none. */
 export function withoutCurves<

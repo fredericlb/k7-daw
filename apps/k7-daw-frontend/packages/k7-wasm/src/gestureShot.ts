@@ -167,6 +167,3 @@ export const crossfadePair = (
     op: "gesture.crossfade_pair",
     args: { clips: clips.map(fadeClip), pressed: fadeClip(pressed), at },
   });
-
-/** What a crossfade click makes, in beats: a drag sizes it instead. */
-export const crossfadeBeats = (): number => run((x) => x.k7_g_const(8));

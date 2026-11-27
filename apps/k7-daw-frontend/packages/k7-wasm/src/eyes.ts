@@ -33,17 +33,7 @@ export function parseCube(text: string): { size: number; data: Float32Array } {
 }
 
 /** The grips of a drag, in the order the module reads their code. */
-export const GRIPS = [
-  "body",
-  "n",
-  "s",
-  "e",
-  "w",
-  "ne",
-  "nw",
-  "se",
-  "sw",
-] as const;
+const GRIPS = ["body", "n", "s", "e", "w", "ne", "nw", "se", "sw"] as const;
 
 export type GripName = (typeof GRIPS)[number];
 

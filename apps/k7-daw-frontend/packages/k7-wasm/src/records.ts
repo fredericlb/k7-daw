@@ -13,10 +13,6 @@ const ask = <R>(op: string, args: object): R =>
 export const recordPathOf = (line: string): string | null =>
   ask("path_of", { line });
 
-/** A ref the cue sheet may key a record by: a workspace path already in its plain form. */
-export const isRecordRef = (v: unknown): v is string =>
-  typeof v === "string" && ask<boolean>("is_ref", { line: v });
-
 /** What a row is called: the file's name without its extension. */
 export const recordName = (path: string): string => ask("name", { path });
 

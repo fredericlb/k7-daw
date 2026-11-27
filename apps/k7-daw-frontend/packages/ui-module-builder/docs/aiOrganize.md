@@ -142,7 +142,7 @@ The model answers JSON (`AI_RESULT_SCHEMA`, enforced by structured outputs): a o
 panel as DATA, `widgets.js` as text and a few notes. The panel is data rather than k7x text because a
 structured output constrains data and nothing else — text the model typed would be refused only after
 the minute it took to write. A structured output also takes no map whose keys the model chooses, so
-every `widgets` arrives as a LIST of widgets each carrying its `id`; `readAiAnswer` turns the lists
+every `widgets` arrives as a LIST of widgets each carrying its `id`; `read_ai_answer` (song's `modules/ui/ai_answer.rs`) turns the lists
 into the id-keyed maps the file holds and prints the panel through `panelText.ts`, a widget a line,
 the header as its `//` line. An id given twice in one list cannot become a map key twice, so it is
 reported rather than dropped. Then `checkAiResult` refuses what would break the module:

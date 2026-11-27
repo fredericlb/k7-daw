@@ -346,6 +346,3 @@ export const rollScale = (
     const s = scalars(x);
     return { rowH: s[0] as number, ppb: s[1] as number, laneW: s[2] as number };
   });
-
-/** The shortest a stretch may leave a note: a 64th at any tempo. */
-export const minNoteBeats = (): number => run((x) => x.k7_g_const(7));

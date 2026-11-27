@@ -2,18 +2,12 @@
 // A reader would get wrong where the accents go: the browser's `normalize` folds them here and Rust reads the folded name (song-edit's intake.rs).
 
 import { call } from "./abi.ts";
-import type {
-  DropKind,
-  DropLane,
-  DropPlan,
-  DroppedClip,
-} from "./types/index.ts";
+import type { DropKind, DropLane, DropPlan } from "./types/index.ts";
 
 export type {
   DropKind,
   DropLane,
   DropPlan,
-  DroppedClip,
 } from "./types/index.ts";
 
 const ask = <R>(op: string, args: object): R =>
@@ -39,10 +33,6 @@ export const MAX_SUFFIX = 50;
 /** Which kind of material a dropped file is, or null: the EXTENSION decides, as it does for the compiler. */
 export const droppedKind = (name: string): DropKind | null =>
   ask("kind", { name });
-
-/** A dropped file as it will sit in `clips/`: its own name reduced to what a path may hold, or null when it is neither kind. */
-export const droppedClip = (name: string): DroppedClip | null =>
-  ask("clip", { name, folded: fold(name) });
 
 /** The declaration a dropped file gets: `source` and nothing else, the window being the whole file. */
 export const clipDecl = (upload: string): string => ask("decl", { upload });

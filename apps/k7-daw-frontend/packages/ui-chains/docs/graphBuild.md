@@ -869,7 +869,7 @@ pushing a neighbour between them. Neither the automation edge nor the event one 
 `pushBelowInputs` — a curve is not an input, and reading the pair as feeds would put the curve below
 its node and the node below the curve.
 
-The place is FORCED (`curvesUnderLeft`), after the pins and after the cards' remembered places: a
+The place is FORCED (`curves_under_left` in the chains crate), after the pins and after the cards' remembered places: a
 curve card goes where its target IS, whatever it was before. It is a detail of that node, so a
 binding added to a graph you arranged lands beside it, and a node moved takes its curves along —
 which is also why a curve card cannot be dragged away from its node.

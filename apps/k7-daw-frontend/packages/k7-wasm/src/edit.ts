@@ -207,11 +207,3 @@ export const playlistValuesAt = (
   });
 
 // ---- the merge's gate -------------------------------------------------------
-
-/** What a command line does to the workspace: it writes, only reads, or writes this device's settings. */
-export const classOfLine = (line: string): VerbClass =>
-  call<VerbClass>({ op: "edit.class_of_line", args: { line } });
-
-/** Every verb of the catalogue, which the gate classes. */
-export const classedVerbs = (): string[] =>
-  call<string[]>({ op: "edit.classed_verbs" });

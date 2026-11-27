@@ -34,10 +34,6 @@ export const isVideoTrackFile = (
   pictureLanes.length > 0 &&
   ask("is_video_track", { path, pictureLanes: [...pictureLanes] });
 
-/** A module file whose rack's `source:` names a file BESIDE it, rather than the project-relative path a clip's source is. */
-export const isRackModuleFile = (path: string): boolean =>
-  is("rackModule", path);
-
 /** A module file the BUILDER opens: both trees, since the builder edits both. */
 export const isModuleFile = (path: string): boolean => is("module", path);
 
@@ -74,9 +70,6 @@ export const inActiveProject = (
 /** The generic module file beside `rel`: a node's sibling. */
 export const moduleFileOf = (rel: string): string =>
   ask("module_file_of", { path: rel });
-
-/** The folder a path sits in: "" at the root, which every file route reads as the workspace. */
-export const parentDir = (path: string): string => ask("parent", { path });
 
 /** The last segment of a path: the name a rename starts from. */
 export const baseName = (path: string): string => ask("base", { path });

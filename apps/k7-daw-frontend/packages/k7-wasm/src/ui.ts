@@ -48,10 +48,6 @@ export const fuzzyScores = (q: string, strings: readonly string[]): number[] =>
   call<Scores>({ op: "ui.fuzzy_scores", args: { q, strings: [...strings] } })
     .scores;
 
-/** One string's fuzzy score, -1 for no match: contiguous runs and word starts score higher, shorter strings win ties. */
-export const fuzzyScore = (q: string, s: string): number =>
-  fuzzyScores(q, [s])[0] ?? -1;
-
 /** The catalogue ranked against what was typed, on the sentence and the name, recent commands nudged up; at most `limit`. */
 export function rankCommands<C extends { canonical: string; readable: string }>(
   commands: readonly C[],
@@ -84,13 +80,6 @@ export function rankOptions(
     args: { options: [...options], query, limit },
   }).indices.map((i) => options[i] as ArgOption);
 }
-
-/** A param's candidate values, ranked the same way. */
-export const rankValues = (
-  values: readonly string[],
-  query: string,
-  limit = 30,
-): string[] => rankOptions(toOptions(values), query, limit).map((o) => o.value);
 
 /** `/complete`'s whole lines as one field's options: the prefix sliced back off, deduped, labels kept. */
 export const optionsFromCompletions = (
@@ -374,20 +363,3 @@ export const menuChoice = <E extends string = string>(
 /** The verbs catalogue as the palette lists it: every command with each argument class, provider and clue. */
 export const verbCatalogue = (): unknown[] =>
   call<unknown[]>({ op: "verb.catalogue" });
-
-/** May a right-click on `entity` offer `canonical`? No entity asks whether any menu does. */
-export const inMenu = (
-  canonical: string,
-  prefs: Prefs,
-  entity?: string,
-  catalogue?: readonly string[],
-): boolean =>
-  call<boolean>({
-    op: "ui.in_menu",
-    args: {
-      canonical,
-      prefs,
-      ...(entity ? { entity } : {}),
-      ...(catalogue ? { catalogue: [...catalogue] } : {}),
-    },
-  });

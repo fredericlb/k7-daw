@@ -114,13 +114,8 @@ export const subdivideGrid = (
     );
   });
 
-/** A ruler's constants, read once the module is ready: the widest column, the finest grid split. */
+/** A ruler's widest column, read once the module is ready. */
 export const maxColumnPx = (): number => run((x) => x.k7_g_const(0));
-export const maxGridSplit = (): number => run((x) => x.k7_g_const(1));
-export const minLabelPx = (): number => run((x) => x.k7_g_const(2));
-export const monoCharPx = (): number => run((x) => x.k7_g_const(3));
-export const labelGapPx = (): number => run((x) => x.k7_g_const(4));
-export const maxLanePx = (): number => run((x) => x.k7_g_const(6));
 
 /** The ticks a ruler draws, in BEATS whichever unit it reads in. */
 export const rulerTicks = (
