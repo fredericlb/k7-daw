@@ -1,8 +1,8 @@
 // knob.tsx — a 270 degree arc knob for a panel (36 to 44 px): drag up or down (Shift finer), arrow keys, Home and End.
 // The arc runs clockwise from 7:30 to 4:30; a peak chip turns error-filled while the signal clips.
 
-import { usePointerDrag } from "@studio/ui-timeline/drag";
 import * as React from "react";
+import { usePointerDrag } from "./lib/pointer";
 import { cn } from "./lib/utils";
 
 const START = 135;

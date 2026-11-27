@@ -19,7 +19,8 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@studio/k7-wasm": "*"
+    "@studio/k7-wasm": "*",
+    "@studio/ui": "*"
   },
   "devDependencies": {
     "@studio/tsconfig": "*",
