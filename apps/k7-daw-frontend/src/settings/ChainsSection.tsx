@@ -3,7 +3,7 @@
 // (`apps/k7-daw-backend/docs/engine/chains.md`). The choice is from the library's COLD chains only — a chain that
 // does not separate could never answer either question. See ../../docs/settings.md.
 
-import { INPUT_CLASS } from "@studio/ui/input";
+import { SelectField } from "@studio/ui/select";
 import type { ColdChainsReply } from "@studio/web-protocol";
 import { useEffect, useState } from "react";
 import { engines } from "../api";
@@ -66,27 +66,27 @@ function ChainPicker({
   const mine = fetching && fetching.ref === value ? fetching : null;
   return (
     <div className="flex flex-col gap-1.5 px-3.5 py-2.5">
-      <select
+      <SelectField
         value={value ?? ""}
         disabled={disabled}
-        onChange={(e) => onChoose(e.target.value)}
-        className={INPUT_CLASS}
-        aria-label={label}
-      >
-        <option value="">{none}</option>
-        {shown.map((c) => (
-          <option key={c.ref} value={c.ref}>
-            {/* A model this machine can FETCH is a download away, not a dead end — the tag says which. */}
-            {c.unavailable
+        onValueChange={onChoose}
+        label={label}
+        className="w-full"
+        options={[
+          { value: "", label: none },
+          ...shown.map((c) => ({
+            value: c.ref,
+            // A model this machine can FETCH is a download away, not a dead end — the tag says which.
+            label: c.unavailable
               ? `${c.ref} — ${
                   c.downloads.length
                     ? m["settings.chains.downloadTag"]()
                     : m["settings.chains.unavailableTag"]()
                 }`
-              : c.ref}
-          </option>
-        ))}
-      </select>
+              : c.ref,
+          })),
+        ]}
+      />
       {why && (
         <p className="type-secondary text-warn">
           {m["settings.chains.unavailable"]({ reason: why })}

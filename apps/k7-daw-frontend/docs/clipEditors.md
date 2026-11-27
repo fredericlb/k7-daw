@@ -135,7 +135,7 @@ here mounts a component, so arithmetic left inline in one is arithmetic no test 
 `rollMode.ts`: `select`, `create`, `remove` — and a fourth, `takes`, which is a VIEW rather than a
 gesture and is described below. They are the roll's own rather than the timeline's
 tools — what a lane holds here is NOTES, so creating and removing are the two acts, and neither
-means anything on a track. The title bar's capsules (`RollToolBar.tsx`, drawn as the waveform's views are) are the third way to
+means anything on a track. The title bar's capsules (`RollToolBar.tsx`, the kit `Choice`) are the third way to
 one, beside the keys and the bar, and the only one a finger has; each segment dispatches
 `ui roll <mode>` rather than setting the state beside it.
 
@@ -699,7 +699,7 @@ The help glyph says what a press would do on every change of view, and the foote
 name while it is anything but `standard`. Same reason as the timeline's: the status line is a
 message and passes, a mode does not.
 
-The tools are a **segmented radiogroup** in the title bar (`ClipToolBar.tsx`), glyphs named by their
+The tools are a **segmented kit `Choice`** in the title bar (`ClipToolBar.tsx`), glyphs named by their
 words, the only way to one that a finger has. It is drawn only once there is a file: while a take rolls there is no mark
 to point at. Each segment dispatches the command. There is **no whole-clip overview**: in the bottom dock the
 zoom runs the panel's whole width, so a second strip of the same file only takes height from it.

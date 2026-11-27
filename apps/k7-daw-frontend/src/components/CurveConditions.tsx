@@ -12,6 +12,7 @@ import {
 import { Button } from "@studio/ui/button";
 import { Plus, X } from "@studio/ui/icons";
 import { Input } from "@studio/ui/input";
+import { SelectField } from "@studio/ui/select";
 import { useId } from "react";
 import { m } from "../paraglide/messages.js";
 
@@ -25,8 +26,6 @@ const WHEN_LABEL: Record<DraftWhen, () => string> = {
 
 const FIELD = "flex items-center gap-3";
 const LABEL = "w-24 shrink-0 text-xs text-muted-foreground";
-const SELECT =
-  "min-w-0 flex-1 rounded border border-border bg-background px-2 py-1 text-sm";
 
 export function CurveConditions({
   conditions,
@@ -96,17 +95,17 @@ function ConditionRow({
   return (
     <div className="flex flex-col gap-2 border-t border-border pt-2">
       <div className={FIELD}>
-        <select
+        <SelectField
+          size="sm"
+          label={m["curve.when"]()}
           value={c.when}
-          onChange={(e) => onPatch({ when: e.target.value as DraftWhen })}
-          className={SELECT}
-        >
-          {DRAFT_WHENS.map((w) => (
-            <option key={w} value={w}>
-              {WHEN_LABEL[w]()}
-            </option>
-          ))}
-        </select>
+          onValueChange={(when) => onPatch({ when: when as DraftWhen })}
+          options={DRAFT_WHENS.map((w) => ({
+            value: w,
+            label: WHEN_LABEL[w](),
+          }))}
+          className="flex-1"
+        />
         <Button
           variant="ghost"
           size="sm"
@@ -151,19 +150,15 @@ function ConditionRow({
           <span className={LABEL}>{m["curve.event"]()}</span>
           {events ? (
             // From a node: what it announces, and nothing it does not.
-            <select
+            <SelectField
+              size="sm"
               id={`${uid}-event`}
               value={c.event}
-              onChange={(e) => onPatch({ event: e.target.value })}
+              onValueChange={(event) => onPatch({ event })}
               disabled={!events.length}
-              className={SELECT}
-            >
-              {events.map((ev) => (
-                <option key={ev} value={ev}>
-                  {ev}
-                </option>
-              ))}
-            </select>
+              options={events.map((ev) => ({ value: ev, label: ev }))}
+              className="flex-1"
+            />
           ) : (
             <Input
               id={`${uid}-event`}

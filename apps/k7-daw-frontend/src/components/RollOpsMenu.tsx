@@ -1,6 +1,7 @@
 // RollOpsMenu.tsx — the piano roll's operations, behind one lightning button in the title bar: today, the length times two.
 // "Times two" is `sequence double`, which plays the notes twice over the doubled length (docs/clipEditors.md).
 
+import { Button } from "@studio/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,14 +23,15 @@ export function RollOpsMenu({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button
-          type="button"
+        <Button
+          variant="glass"
+          size="icon-md"
+          className="shrink-0"
           aria-label={m["roll.ops"]()}
           title={m["roll.ops"]()}
-          className="glass grid size-9 shrink-0 cursor-pointer place-items-center rounded-full text-foreground outline-none focus-visible:shadow-(--k7-focus-ring)"
         >
           <Zap className="size-4" />
-        </button>
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem

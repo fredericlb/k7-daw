@@ -2,26 +2,18 @@
 // It rises from the chevron at the bottom right once unfolded; a phone has no rail, its overflow menu holds the same buttons (docs/shell.md).
 
 import { Badge } from "@studio/ui/badge";
+import { Button } from "@studio/ui/button";
 import { Capsule, CapsuleButton, CapsuleDivider } from "@studio/ui/capsule";
 import {
   LogOut,
   type LucideIcon,
   Settings,
-  Share2,
   SquareTerminal,
 } from "@studio/ui/icons";
 import { m } from "../paraglide/messages.js";
 import { summonChord } from "./modKey";
+import { PanelButton } from "./PanelButton";
 import type { HeaderPane, HeaderPanel } from "./ProjectHeader";
-import { PANEL_DEFS } from "./panels";
-import { WarnBadge } from "./WarnBadge";
-
-// A rail button is a round square, not the header's wide segment.
-const SQUARE =
-  "size-10 min-w-0 rounded-full px-0 desk:size-8 desk:min-w-0 desk:rounded-full";
-
-// Close is a link (the projects list is another page) drawn as the rail's buttons.
-const CLOSE = `inline-flex items-center justify-center text-foreground outline-none transition-colors hover:bg-on-fill focus-visible:shadow-(--k7-focus-ring) [&_svg]:size-5 desk:[&_svg]:size-[18px] ${SQUARE}`;
 
 /** A view option of the pane, on a phone's rail (its lane views, its graph's fit): a switch, or an action. */
 export interface RailView {
@@ -75,16 +67,23 @@ export function PanelRail({
       className="float absolute right-4 bottom-[calc(var(--k7-float-bottom)+var(--k7-float-h)+8px)] z-(--k7-z-bar) h-auto max-h-[calc(100%-var(--k7-float-bottom)-var(--k7-float-h)-24px)] flex-col gap-1.5 overflow-x-hidden overflow-y-auto p-1 [scrollbar-width:none] desk:h-auto [&::-webkit-scrollbar]:hidden"
     >
       {/* Read from the chevron up: Export nearest it, Close at the top. */}
-      <a
-        href={closeHref}
-        aria-label={m["shell.close"]()}
-        title={m["shell.close"]()}
-        className={CLOSE}
+      {/* A link (the projects list is another page) drawn as the rail's buttons. */}
+      <Button
+        asChild
+        variant="ghost"
+        size="icon"
+        className="[&_svg]:size-5 desk:[&_svg]:size-[18px]"
       >
-        <LogOut />
-      </a>
+        <a
+          href={closeHref}
+          aria-label={m["shell.close"]()}
+          title={m["shell.close"]()}
+        >
+          <LogOut />
+        </a>
+      </Button>
       <CapsuleButton
-        className={SQUARE}
+        size="icon"
         pressed={settingsPressed}
         aria-label={m["settings.menu"]()}
         title={m["settings.menu"]()}
@@ -93,24 +92,9 @@ export function PanelRail({
         <Settings />
       </CapsuleButton>
       <CapsuleDivider className="mx-0 my-0.5 h-px w-5" />
-      {[...panels].reverse().map((p) => {
-        const def = PANEL_DEFS[p.id];
-        return (
-          <CapsuleButton
-            key={p.id}
-            className={`relative ${SQUARE}`}
-            pressed={p.pressed}
-            disabled={p.disabled}
-            disabledReason={p.title}
-            aria-label={def.title()}
-            title={p.title ?? def.title()}
-            onClick={p.onPress}
-          >
-            <def.icon />
-            <WarnBadge n={p.badge ?? 0} />
-          </CapsuleButton>
-        );
-      })}
+      {[...panels].reverse().map((p) => (
+        <PanelButton key={p.id} panel={p} size="icon" />
+      ))}
       <CapsuleDivider className="mx-0 my-0.5 h-px w-5" />
       {views && views.length > 0 && (
         <>
@@ -122,7 +106,7 @@ export function PanelRail({
             {views.map((v) => (
               <CapsuleButton
                 key={v.id}
-                className={SQUARE}
+                size="icon"
                 pressed={v.action ? undefined : v.on}
                 aria-label={v.label}
                 title={v.label}
@@ -143,7 +127,7 @@ export function PanelRail({
         {[...panes].reverse().map((p) => (
           <CapsuleButton
             key={p.id}
-            className={SQUARE}
+            size="icon"
             pressed={pane === p.id}
             disabled={!!p.blocked}
             disabledReason={p.blocked}
@@ -161,7 +145,7 @@ export function PanelRail({
         <>
           <CapsuleDivider className="mx-0 my-0.5 h-px w-5" />
           <CapsuleButton
-            className={SQUARE}
+            size="icon"
             aria-label={m["shell.commandBar"]()}
             title={m["shell.commandBar.tip"]({
               name: m["commandBar.list"](),
@@ -176,16 +160,7 @@ export function PanelRail({
       {share && (
         <>
           <CapsuleDivider className="mx-0 my-0.5 h-px w-5" />
-          <CapsuleButton
-            className={`relative ${SQUARE}`}
-            pressed={share.pressed}
-            disabled={share.disabled}
-            disabledReason={share.title}
-            aria-label={PANEL_DEFS.export.title()}
-            title={share.title ?? PANEL_DEFS.export.title()}
-            onClick={share.onPress}
-          >
-            <Share2 />
+          <PanelButton panel={share} size="icon">
             {unsaved > 0 && (
               <Badge
                 variant="count-sm"
@@ -195,7 +170,7 @@ export function PanelRail({
                 {unsaved}
               </Badge>
             )}
-          </CapsuleButton>
+          </PanelButton>
         </>
       )}
     </Capsule>

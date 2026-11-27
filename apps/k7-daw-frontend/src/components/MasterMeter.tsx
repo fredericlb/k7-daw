@@ -23,6 +23,7 @@ import { useEngineState } from "@studio/engine-browser/store";
 import { MASTER_MAX_DB } from "@studio/k7-wasm/consts";
 import { Knob } from "@studio/ui/knob";
 import { cn } from "@studio/ui/lib/utils";
+import { Slider } from "@studio/ui/slider";
 import {
   type Ref,
   useEffect,
@@ -223,21 +224,19 @@ export function MasterMeter({
         )}
         {/* THE FADER — a native range over the bar, transparent track, `onChange` painting and the release committing (docs/masterMeter.md). */}
         {fader && (
-          <input
-            type="range"
+          <Slider
             min={FADER_MIN_DB}
             max={MASTER_MAX_DB}
             step={0.5}
             value={level}
-            aria-label={m["shell.masterVolume"]()}
+            label={m["shell.masterVolume"]()}
             title={m["meter.hint"]({
               reading,
               level: `${level > 0 ? "+" : ""}${level.toFixed(1)}`,
               max: MASTER_MAX_DB,
             })}
-            onChange={(e) => setDragged(Number(e.target.value))}
-            onPointerUp={() => dragged !== null && onMaster?.(dragged)}
-            onKeyUp={() => dragged !== null && onMaster?.(dragged)}
+            onValueChange={setDragged}
+            onValueCommit={(v) => onMaster?.(v)}
             // A HANDLE and no track of its own, through per-browser pseudo-elements since there is no standard one — both written, or Firefox draws none.
             className={cn(
               "absolute inset-0 h-full w-full cursor-pointer appearance-none rounded-full bg-transparent",

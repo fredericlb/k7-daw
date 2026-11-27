@@ -1,8 +1,7 @@
 // ConflictCard.tsx — the open conflict of a merge: where it is and one card per choice it offers (Mine, Theirs, ...).
 // What a reader gets wrong: a card draws `offered`, so "both" never shows where the merge would refuse it.
 
-import { cn } from "@studio/ui/lib/utils";
-import { moveFocus } from "../menuTabs";
+import { Choice as ChoiceGroup } from "@studio/ui/choice";
 import { m } from "../paraglide/messages.js";
 import type { Choice, Conflict } from "./gitTypes";
 import { offered } from "./mergeState";
@@ -96,58 +95,14 @@ export function ConflictCard({
         </div>
       )}
       <p className="type-caps text-fg-3">{m["git.choiceCaps"]()}</p>
-      <div
-        role="radiogroup"
-        aria-label={m["git.choose"]()}
-        className="flex flex-col gap-1.5"
-        // One tab stop for the group; the arrows move the choice and the focus together, as a radio group does.
-        onKeyDown={(e) => {
-          const all = offered(c);
-          const at = chosen ? all.indexOf(chosen) : -1;
-          const key =
-            e.key === "ArrowRight"
-              ? "ArrowDown"
-              : e.key === "ArrowLeft"
-                ? "ArrowUp"
-                : e.key;
-          const to = disabled ? null : moveFocus(key, at, all.length);
-          if (to === null) return;
-          e.preventDefault();
-          onPick(all[to]);
-          e.currentTarget
-            .querySelectorAll<HTMLElement>('[role="radio"]')
-            [to]?.focus();
-        }}
-      >
-        {offered(c).map((o, i) => (
-          <button
-            key={o}
-            type="button"
-            role="radio"
-            aria-checked={chosen === o}
-            tabIndex={chosen === o || (!chosen && i === 0) ? 0 : -1}
-            disabled={disabled}
-            onClick={() => onPick(o)}
-            className={cn(
-              "type-body flex min-h-11 cursor-pointer items-center gap-3 rounded-xl border px-3 text-left outline-none transition-colors focus-visible:shadow-(--k7-focus-ring) disabled:opacity-40",
-              chosen === o
-                ? "border-primary bg-on-fill"
-                : "border-(--k7-hairline-strong) bg-(--k7-row)",
-            )}
-          >
-            <span
-              aria-hidden
-              className={cn(
-                "size-4 shrink-0 rounded-full border",
-                chosen === o
-                  ? "border-primary bg-primary"
-                  : "border-(--k7-hairline-strong)",
-              )}
-            />
-            {radioLabel(o)}
-          </button>
-        ))}
-      </div>
+      <ChoiceGroup
+        layout="rows"
+        label={m["git.choose"]()}
+        value={chosen ?? ""}
+        disabled={disabled}
+        onValueChange={onPick}
+        options={offered(c).map((o) => ({ value: o, label: radioLabel(o) }))}
+      />
       {chosen === "both" && c.kind === "k7x" && (
         <p className="type-secondary text-fg-2">{m["git.bothNamed"]()}</p>
       )}
