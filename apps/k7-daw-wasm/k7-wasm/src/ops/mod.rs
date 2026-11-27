@@ -6,6 +6,7 @@ pub mod curve;
 pub mod engine;
 pub mod fields;
 pub mod file;
+pub mod gesture;
 pub mod k7x;
 pub mod k7x_edit;
 pub mod module;
@@ -88,6 +89,7 @@ impl Session {
             "rules" => rules::dispatch(decode(input)?, out),
             "stems" => stems::dispatch(decode(input)?, out),
             "track" => track::dispatch(decode(input)?, out),
+            "gesture" => gesture::dispatch(decode(input)?, out),
             "file" => file::dispatch(decode(input)?, out),
             "song" => song::dispatch(&mut self.songs, decode(input)?, out),
             "k7x" => k7x::dispatch(&mut self.k7x, decode(input)?, out),

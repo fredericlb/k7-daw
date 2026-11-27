@@ -1,12 +1,23 @@
 // PianoRoll.tsx — a piano-roll view/editor of a MIDI clip. A clip that states a window
 // (`from`/`to`) is FRAMED on it with a margin either side, the canvas still spanning the whole
 // sequence: what is outside sounds in no pass, so it is drawn dimmed and cannot be edited
-// (rollFit.ts, docs/clipEditors.md). Left-click-drag draws a note via `sequence note new`, a body
+// (apps/k7-daw-wasm/gesture/src/roll_fit.rs, docs/clipEditors.md). Left-click-drag draws a note via `sequence note new`, a body
 // drag moves it in TIME and in PITCH, either edge stretches it, and `x` removes what the caret is
-// on. What each gesture writes is rollDrag.ts, where it is tested; a wheel zooms and middle drags pan.
+// on. What each gesture writes is gesture's roll_drag.rs, where it is tested; a wheel zooms and middle drags pan.
 // The gestures themselves are ../hooks/useRollGestures.ts; this file is the layout and the drawing.
 // Drawn by the Editor bottom panel and, when a clip is clicked, where the graph is (ClipView).
 
+import {
+  cellBox,
+  colSpan,
+  groupOffset,
+  rollFit,
+  rollPoint,
+  rollScale,
+  selBox,
+  songSecondsOfCol,
+  tSpan,
+} from "@studio/k7-wasm/gesture";
 import { DockProperty } from "@studio/ui/dock-property";
 import { DockHeaderRow, useInSheet } from "@studio/ui/editor-dock";
 import { cn } from "@studio/ui/lib/utils";
@@ -30,14 +41,7 @@ import {
 } from "../clipboard";
 import { clipLoop, playedZone } from "../clipLoop";
 import type { MenuCtx } from "../contextMenu";
-import {
-  type ClipGridHandle,
-  cellBox,
-  colSpan,
-  type OnGridSelection,
-  selBox,
-  songSecondsOfCol,
-} from "../gridCaret";
+import type { ClipGridHandle, OnGridSelection } from "../gridCaret";
 import { useGridCaret } from "../hooks/useGridCaret";
 import { useRollGestures } from "../hooks/useRollGestures";
 import { useRollHover } from "../hooks/useRollHover";
@@ -45,8 +49,6 @@ import { useRollWindow } from "../hooks/useRollWindow";
 import { cursorOf } from "../modeIcons";
 import { isBlack, noteName, pc } from "../noteNames";
 import { m } from "../paraglide/messages.js";
-import { groupOffset, tSpan } from "../rollDrag";
-import { rollFit } from "../rollFit";
 import { ROLL_MODES, ROLL_SOLO_MODES, type RollMode } from "../rollMode";
 import {
   noteAddr,
@@ -270,7 +272,7 @@ export function PianoRoll({
     setZoomX(1);
   }, [clip.id, setZoomX]);
 
-  // What the view opens on, both axes (rollFit.ts, where the arithmetic is tested); `origin` is the beat at the left edge.
+  // What the view opens on, both axes (gesture's roll_fit.rs, where the arithmetic is tested); `origin` is the beat at the left edge.
   const fit = rollFit(notes, clip.length, barBeats, loop);
   const { placedEnd, canvasBeats, origin } = fit;
   const fitHiK = fit.hiKey;
@@ -300,12 +302,15 @@ export function PianoRoll({
     scaleFor.current = { id: clip.id, rows: fit.rows, beats: fit.beats };
   const scale = scaleFor.current;
   // Base scales: the framed rows fill the height and the framed beat span the width, then zoomX stretches the time axis.
-  const rowH = availH > 0 ? availH / scale.rows : 12;
-  const ppb0 = availW > 0 ? availW / scale.beats : PX_PER_BEAT;
-  // The canvas always covers the editor's width: zooming out stops where the whole canvas fills it.
-  const ppbFill = availW > 0 && canvasBeats > 0 ? availW / canvasBeats : 0;
-  const ppb = Math.max(ppb0 * zoomX, ppbFill);
-  const laneW = canvasBeats * ppb;
+  const { rowH, ppb, laneW } = rollScale(
+    availW,
+    availH,
+    scale.rows,
+    scale.beats,
+    canvasBeats,
+    zoomX,
+    PX_PER_BEAT,
+  );
   const gridH = N_NOTES * rowH;
   const keyTop = (k: number) => (127 - k) * rowH;
   const showLabels = rowH >= 9; // a row too short for 9px text is labelled nowhere
@@ -363,15 +368,15 @@ export function PianoRoll({
     useCallback(
       (e: React.PointerEvent) => {
         const r = e.currentTarget.getBoundingClientRect();
-        const beat = Math.min(
-          origin + canvasBeats,
-          Math.max(origin, origin + (e.clientX - r.left) / ppb),
+        const { beat, key } = rollPoint(
+          e.clientX - r.left,
+          e.clientY - r.top,
+          origin,
+          ppb,
+          canvasBeats,
+          rowH,
         );
-        const row = Math.min(
-          127,
-          Math.max(0, Math.floor((e.clientY - r.top) / rowH)),
-        );
-        return { row, col: colOfBeat(beat) };
+        return { row: 127 - key, col: colOfBeat(beat) };
       },
       [origin, canvasBeats, ppb, rowH, colOfBeat],
     ),

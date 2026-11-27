@@ -3,12 +3,16 @@
 
 mod consts;
 
+use gesture::roll_drag::GroupMove;
+use gesture::ruler::RulerTick;
+use gesture::tools::{FadePair, ToolAct};
 use k7_wasm::WasmError;
 use k7_wasm::ops::VersionAnswer;
 use k7_wasm::ops::curve::{CurveRequest, OpenAnswer};
 use k7_wasm::ops::engine::{BestAnswer, EngineRequest, WarningAnswer};
 use k7_wasm::ops::fields::FieldsRequest;
 use k7_wasm::ops::file::FileRequest;
+use k7_wasm::ops::gesture::GestureRequest;
 use k7_wasm::ops::k7x::{K7xRequest, ReadAnswer};
 use k7_wasm::ops::k7x_edit::EditAnswer;
 use k7_wasm::ops::module::ModuleRequest;
@@ -66,6 +70,7 @@ fn write_types(dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
     ExportFormat::export_all_to(dir)?;
     ExportQuality::export_all_to(dir)?;
     Stem::export_all_to(dir)?;
+    GestureRequest::export_all_to(dir)?;
     FileKind::export_all_to(dir)?;
     Validity::export_all_to(dir)?;
     WasmError::export_all_to(dir)?;
@@ -77,6 +82,10 @@ fn write_types(dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
     Compatibility::export_all_to(dir)?;
     EngineLatency::export_all_to(dir)?;
     WarningAnswer::export_all_to(dir)?;
+    GroupMove::export_all_to(dir)?;
+    ToolAct::export_all_to(dir)?;
+    FadePair::export_all_to(dir)?;
+    RulerTick::export_all_to(dir)?;
     let mut names = fs::read_dir(dir)?
         .map(|e| e.map(|e| e.file_name().to_string_lossy().into_owned()))
         .collect::<Result<Vec<_>, io::Error>>()?;

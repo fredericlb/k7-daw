@@ -6,7 +6,7 @@ import {
   labelled,
   labelMinPx,
   labelStride,
-  MAX_COLUMN_PX,
+  maxColumnPx,
   nearestTick,
   subdivideGrid,
 } from "@studio/ui-timeline/ticks";
@@ -450,7 +450,7 @@ function WaveformInner({
       bars.length > 1
         ? timeToX(bars[1].t) - timeToX(bars[0].t)
         : Number.POSITIVE_INFINITY;
-    const showBeats = Number.isFinite(barGap) && barGap > MAX_COLUMN_PX;
+    const showBeats = Number.isFinite(barGap) && barGap > maxColumnPx();
 
     // Numbered from the ruler's origin, so panning can't change which ones survive.
     let barNo = 0;

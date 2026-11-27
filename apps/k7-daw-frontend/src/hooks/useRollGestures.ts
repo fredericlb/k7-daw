@@ -1,28 +1,29 @@
 // useRollGestures.ts — what a pointer on the piano roll DOES: draw a note on the lane, drag a
 // note's velocity line, move or stretch it by its body and edges, drag a whole selection, and the
 // right-click menu. PianoRoll draws the notes and the ghosts this hands back; the arithmetic each
-// gesture writes is ../rollDrag.ts. See ../../docs/clipEditors.md.
+// gesture writes is apps/k7-daw-wasm/gesture/src/roll_drag.rs. See ../../docs/clipEditors.md.
 
-import { usePointerFollow } from "@studio/ui-timeline/drag";
-import { type RefObject, useRef, useState } from "react";
-import { clamp } from "../clamp";
-import type { MenuCtx } from "../contextMenu";
-import { selBox } from "../gridCaret";
-import { m } from "../paraglide/messages.js";
 import {
   dragMoved,
   drawSpan,
+  freeSnap,
   type GroupNote,
-  keyOffset,
   movesPitch,
   planGroupMove,
   type RollDrag,
+  rollDragDelta,
+  rollPoint,
+  selBox,
+  snapMode,
   tSpan,
   velAt,
-} from "../rollDrag";
+} from "@studio/k7-wasm/gesture";
+import { usePointerFollow } from "@studio/ui-timeline/drag";
+import { type RefObject, useRef, useState } from "react";
+import type { MenuCtx } from "../contextMenu";
+import { m } from "../paraglide/messages.js";
 import { laneDraws, type RollMode } from "../rollMode";
 import { noteAddr, type RollNote } from "../rollPending";
-import { freeSnap, snapMode, snapPosition } from "../snap";
 import type { GridCaret } from "./useGridCaret";
 
 /** The roll's scale and grid, as the gestures read a pointer through them. */
@@ -140,13 +141,14 @@ export function useRollGestures({
   const atEvent = (e: PointerEvent | React.PointerEvent) => {
     const r = laneRef.current!.getBoundingClientRect();
     // Lane x → an ABSOLUTE beat: the lane's left edge is the origin, and a windowed clip cannot be pointed outside its window.
-    const beat = clamp(
-      origin + (e.clientX - r.left) / ppb,
+    return rollPoint(
+      e.clientX - r.left,
+      e.clientY - r.top,
       origin,
-      origin + canvasBeats,
+      ppb,
+      canvasBeats,
+      rowH,
     );
-    const key = clamp(127 - Math.floor((e.clientY - r.top) / rowH), 0, 127);
-    return { beat, key };
   };
 
   /** Where a pointer is, as a GRID cell — the caret's coordinates rather than the lane's. */
@@ -155,7 +157,7 @@ export function useRollGestures({
     return { row: 127 - key, col: colOfBeat(beat) };
   };
 
-  /** The span a draw gesture covers, in beats — the cells it crossed, `gridUnit` being what a Ctrl-freed click is worth (rollDrag.ts). */
+  /** The span a draw gesture covers, in beats — the cells it crossed, `gridUnit` being what a Ctrl-freed click is worth (apps/k7-daw-wasm/gesture/src/roll_drag.rs). */
   const drawnSpan = (a: number, b: number, step: number) =>
     drawSpan(a, b, step, origin, gridUnit);
 
@@ -217,7 +219,7 @@ export function useRollGestures({
     moved: boolean;
   }
 
-  /** --- drag a note's TIME RANGE and its PITCH: four grips, each a PLACE rather than a direction (rollDrag.ts holds the arithmetic). */
+  /** --- drag a note's TIME RANGE and its PITCH: four grips, each a PLACE rather than a direction (apps/k7-daw-wasm/gesture/src/roll_drag.rs holds the arithmetic). */
   const EDGE_PX = 6;
   /** How far either side of the white line still counts as holding it — a line is one pixel and nobody can hit one. */
   const VEL_PX = 5;
@@ -230,7 +232,7 @@ export function useRollGestures({
   const [vDraw, setVDraw] = useState<VDrag | null>(null);
   const vDrag = useRef<VDrag | null>(null);
 
-  /** The pointer's velocity, once its Y is expressed inside the note's own row (the scale itself is rollDrag.ts's). */
+  /** The pointer's velocity, once its Y is expressed inside the note's own row (the scale itself is apps/k7-daw-wasm/gesture/src/roll_drag.rs's). */
   const velOf = (clientY: number, top: number): number => {
     const el = laneRef.current;
     if (!el) return 1;
@@ -374,17 +376,20 @@ export function useRollGestures({
     }
     const d = tDrag.current;
     if (!d || !from) return;
-    // The timeline's keys, read live: nothing lands on the grid, Ctrl moves by whole steps, Shift frees it (snap.ts).
-    const anchor = d.mode === "end" ? d.time + d.dur : d.time;
-    const raw = (e.clientX - from.x) / Math.max(1, ppb);
+    // The timeline's keys, read live: nothing lands on the grid, Ctrl moves by whole steps, Shift frees it (apps/k7-daw-wasm/gesture/src/snap.rs).
+    // No modifier reaches the key axis: a row IS a semitone, and there is nothing between two of them to free.
     const next: RollDrag = {
       ...d,
-      dBeats: snapPosition(anchor, raw, gridUnit, snapMode(e)) - anchor,
-      // No modifier reaches this axis: a row IS a semitone, and there is nothing between two of them to free.
-      dKeys:
-        (onMoveNote || groupRef.current) && d.mode === "move"
-          ? keyOffset(e.clientY - from.y, rowH)
-          : 0,
+      ...rollDragDelta(
+        d,
+        e.clientX - from.x,
+        e.clientY - from.y,
+        ppb,
+        rowH,
+        gridUnit,
+        snapMode(e),
+        !!(onMoveNote || groupRef.current),
+      ),
     };
     // Each ROW crossed is heard as it is crossed: a transposition judged by eye against a 128-lane grid is not judged.
     if (next.dKeys !== d.dKeys) onPreviewNote?.(tSpan(next).key, 1);

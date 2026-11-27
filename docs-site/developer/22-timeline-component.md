@@ -80,7 +80,7 @@ continues the ticks down the lanes.
 
 Every gesture snaps to **the ticks actually drawn**. Clicks on the ruler and file drops use
 `nearestTick` over the cached tick list; drags snap their **offset** to the ruler's unit at the
-moment of the grab (`unitRef`), through `apps/k7-daw-frontend/src/snap.ts`:
+moment of the grab (`unitRef`), through `apps/k7-daw-wasm/gesture/src/snap.rs`:
 
 | `snapMode(e)` | Meaning |
 |---|---|

@@ -1,9 +1,9 @@
 // RecordingClip.tsx — the take being recorded, drawn on its lane as it grows. See ../../../docs/playhead.md.
 
+import { recordingFrom } from "@studio/k7-wasm/gesture";
 import { useCallback, useRef } from "react";
 import { usePlayheadFrames } from "../../hooks/usePlayheadFrames";
 import { m } from "../../paraglide/messages.js";
-import { recordingFrom } from "../../takeCounter";
 
 /** The take being recorded, drawn on its lane as it grows — its OWN subscription, so a frame rewrites one absolutely positioned div (docs/playhead.md). */
 export function RecordingClip({
