@@ -268,6 +268,8 @@ const LABEL_SELECTED =
 /** What holds the NAME COLUMN still while the lanes pan under it: `sticky left-0` on every cell, transparent, at z-30; the lanes clip themselves under it (docs/timeline.md). */
 // The gap an event keeps from each of its own edges, so neighbours that touch stay apart.
 const EVENT_INSET = 1;
+// The narrowest an event is drawn, still a block to grab: a beat wide covered the start of the next one.
+const MIN_EVENT_PX = 6;
 const GUTTER_STICKY = "sticky left-0 z-30";
 /** A lane-space layer hides what has panned under the name column: --tl-clip is the scroller's scrollLeft. */
 const UNDER_NAMES = "[clip-path:inset(0_0_0_var(--tl-clip,0px))]";
@@ -2922,7 +2924,7 @@ function TimelineTabView({
                             key={`${c.timeline}@${c.start}:${c.id}`}
                             clip={c}
                             left={x(c.start * bps)}
-                            width={Math.max(ppb, c.length * bps * ppb)}
+                            width={Math.max(MIN_EVENT_PX, c.length * bps * ppb)}
                             onOpen={setOpenTimeline}
                           />
                         ) : null,
@@ -3616,7 +3618,10 @@ function TimelineTabView({
                               !resizing &&
                               !(
                                 rowNear(ri, rowH) &&
-                                xNear(x(drawStart), Math.max(ppb, drawW))
+                                xNear(
+                                  x(drawStart),
+                                  Math.max(MIN_EVENT_PX, drawW),
+                                )
                               )
                             )
                               return null;
@@ -3699,7 +3704,9 @@ function TimelineTabView({
                                 // 1 px of air on each side: two events that touch read as two, not as one over the other.
                                 style={{
                                   left: x(drawStart) + EVENT_INSET,
-                                  width: Math.max(ppb, drawW) - 2 * EVENT_INSET,
+                                  width:
+                                    Math.max(MIN_EVENT_PX, drawW) -
+                                    2 * EVENT_INSET,
                                 }}
                               >
                                 {/* The fill, with the content's activity running through it: 50% opaque where quiet, 100% where loud (docs/timeline.md). */}
