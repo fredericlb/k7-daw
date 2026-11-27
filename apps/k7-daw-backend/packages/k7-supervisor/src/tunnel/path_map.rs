@@ -1,7 +1,7 @@
 //! path_map.rs — the engine names files by LOCAL path and the server by its own; this rewrites every JSON string
 //! under a shared root as a frame crosses, and moves the file FIRST: downloaded before a frame naming it reaches
 //! the engine, uploaded before a frame naming a file the engine wrote reaches the server. Whole strings only,
-//! never substrings. A channel the server syncs itself only rewrites. The twin of `engine-tunnel/pathMap.ts`.
+//! never substrings. A channel the server syncs itself only rewrites.
 
 use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};

@@ -80,4 +80,70 @@ mod tests {
         assert_eq!(tunnel_spelling("{\"a\":1.0}", &roots, '/'), "{\"a\":1.0}");
         assert_eq!(tunnel_spelling("not json", &roots, '\\'), "not json");
     }
+
+    fn root(remote: &str, name: &str) -> Root {
+        Root {
+            remote: remote.into(),
+            name: name.into(),
+            writable: true,
+            per_child: None,
+        }
+    }
+
+    #[test]
+    fn joins_below_a_root_with_a_slash_the_root_kept_as_the_server_names_it() {
+        let ws = r"C:\k7\workspaces\me\workspace";
+        let renders = r"C:\k7\workspaces\me\.renders";
+        let roots = [root(ws, "ws-me"), root(renders, "renders-me")];
+        let spell = |p: &str| {
+            let out = tunnel_spelling(&serde_json::to_string(p).unwrap(), &roots, '\\');
+            serde_json::from_str::<String>(&out).unwrap()
+        };
+        assert_eq!(
+            spell(&format!(r"{renders}\ab\cd.wav")),
+            format!("{renders}/ab/cd.wav")
+        );
+        // Outside every root, the root itself and an already-spelt path stay as they are.
+        assert_eq!(spell(r"C:\elsewhere\x.wav"), r"C:\elsewhere\x.wav");
+        assert_eq!(spell(ws), ws);
+        assert_eq!(spell(&format!("{ws}/a/b.wav")), format!("{ws}/a/b.wav"));
+    }
+
+    #[test]
+    fn a_posix_server_changes_nothing() {
+        let roots = [root("/srv/ws", "ws")];
+        let job = r#""/srv/ws/a/b.wav""#;
+        assert_eq!(tunnel_spelling(job, &roots, '/'), job);
+    }
+
+    #[test]
+    fn rewrites_every_path_of_a_render_job_nested_ones_included() {
+        let ws = r"C:\k7\workspaces\me\workspace";
+        let renders = r"C:\k7\workspaces\me\.renders";
+        let roots = [root(ws, "ws-me"), root(renders, "renders-me")];
+        let job = serde_json::json!({
+            "type": "render",
+            "out": format!(r"{renders}\f.wav"),
+            "doc": { "tracks": [{ "clips": [{ "source": format!(r"{ws}\song\clips\a.wav") }] }], "bpm": 110 },
+        });
+        let out: serde_json::Value =
+            serde_json::from_str(&tunnel_spelling(&job.to_string(), &roots, '\\')).unwrap();
+        assert_eq!(
+            out,
+            serde_json::json!({
+                "type": "render",
+                "out": format!("{renders}/f.wav"),
+                "doc": { "tracks": [{ "clips": [{ "source": format!("{ws}/song/clips/a.wav") }] }], "bpm": 110 },
+            })
+        );
+    }
+
+    #[test]
+    fn names_a_path_by_the_nearer_of_two_nested_roots() {
+        let roots = [root(r"C:\a", "outer"), root(r"C:\a\b", "inner")];
+        assert_eq!(
+            tunnel_spelling(r#""C:\\a\\b\\c.wav""#, &roots, '\\'),
+            r#""C:\\a\\b/c.wav""#
+        );
+    }
 }

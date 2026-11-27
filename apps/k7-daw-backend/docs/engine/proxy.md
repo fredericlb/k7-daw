@@ -47,7 +47,7 @@ its tunnel alone.
 No mixed content, no local network permission, no port to open in a firewall.
 
 **The engine's own tunnel comes first.** An engine whose supervisor dialled in
-(`apps/k7-daw-frontend/packages/engine-tunnel/docs/tunnel.md`) is reached through that socket, whatever network it is
+(`apps/k7-daw-backend/docs/engine/tunnel.md`) is reached through that socket, whatever network it is
 on; the addresses above are the fallback, and they only answer when the server shares the
 engine's network.
 
@@ -60,7 +60,7 @@ cookie: a page of another origin dials it too (below). There is no file half: fi
 
 The upgrade is checked before any session, for anyone who sends one: an engine id that is not
 valid percent-encoding is a 400, and nothing read off the request or either socket reaches a panic
-(`apps/k7-daw-frontend/packages/engine-tunnel/docs/tunnel.md`, "Nothing on a tunnel is trusted for shape").
+(`apps/k7-daw-backend/docs/engine/tunnel.md`, "Nothing on a tunnel is trusted for shape").
 
 The front is the one process that holds a registry (see [shared.md](shared.md)); every page of the
 origin relays through it.
@@ -133,14 +133,14 @@ That queue is bounded like the claim gate's (256 frames, 8 MiB — `HeldFrames` 
 `apps/k7-daw-backend/packages/k7-engine/src/tunnel/backpressure.rs`): a client that sends more before the engine answers is
 closed with 1013. Once both ends are up, every frame goes through the same file's `admit`, so
 a browser that stops reading costs the server at most a bounded backlog
-(`apps/k7-daw-frontend/packages/engine-tunnel/docs/backpressure.md`).
+(`apps/k7-daw-backend/docs/engine/backpressure.md`).
 
 ## Both ends are pinged
 
 A phone that drops off the network sends no FIN, and the relay pair, the engine session behind it
 and the gate's timer would live until TCP gives up, hours later. The browser's socket, and the
 upstream when it is a socket the server dialled, are pinged every 30 s (`HEARTBEAT_MS`,
-`apps/k7-daw-frontend/packages/engine-tunnel/docs/upgrade.md`): one unanswered ping and the socket is terminated, which
+`apps/k7-daw-backend/docs/engine/sockets.md`): one unanswered ping and the socket is terminated, which
 closes its pair. A tunnel channel
 needs none of its own: the tunnel is pinged by the hub, and its channels end with it.
 

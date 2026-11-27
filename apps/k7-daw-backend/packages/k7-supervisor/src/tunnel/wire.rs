@@ -1,6 +1,6 @@
 //! wire.rs — the agent's reading of the hub: the hub's text frames typed, the tunnel's URL and its pacing
 //! constants. The frames' bytes are `k7-engine`'s own (`tunnel/frames`), the hub's code reused, so the two ends
-//! cannot drift; the shapes the hub only SENDS are read here, leniently, as the TypeScript agent reads them.
+//! cannot drift; the shapes the hub only SENDS are read here, leniently.
 
 use std::time::Duration;
 

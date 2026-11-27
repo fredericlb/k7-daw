@@ -35,7 +35,7 @@ browser-safe candidate, but the tunnel and `live-sync` do not and should not pul
 
 ## What stays elsewhere
 
-- The tunnel's `safeSegment` (`apps/k7-daw-frontend/packages/engine-tunnel/segments.ts`) builds on `isPlainSegment` and
+- The tunnel's `safe_segment` (`apps/k7-daw-backend/packages/k7-supervisor/src/tunnel/segments.rs`) builds on `isPlainSegment` and
   is stricter on purpose: it refuses what Windows would open as a device or trim to a dot, since a
   segment it passes becomes a file name on the engine's machine.
 - `live-sync`'s `syncPathError` keeps its own reasons — a backslash, a drive letter — since a

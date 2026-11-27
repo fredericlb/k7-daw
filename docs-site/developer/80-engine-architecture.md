@@ -8,7 +8,7 @@ This section covers everything that links a k7 page to sound: the C++ engine, it
 | [82 — The supervisor](./82-k7-supervisor.md) | `apps/k7-daw-backend/packages/k7-supervisor`: run modes, the host protocol, settings, registry, tunnel agent, machine jobs |
 | [83 — The engine protocol](./83-engine-protocol.md) | `apps/k7-daw-frontend/packages/engine-protocol` and the C++ handlers: every message, the state frame, the ProjectDoc, sessions, the audio stream |
 | [84 — Engine clients](./84-engine-clients.md) | `apps/k7-daw-frontend/packages/engine-client` (Node) and `apps/k7-daw-frontend/packages/engine-browser` (browser): access, probe, choice, lease, store, pairing |
-| [85 — Registry and tunnel](./85-registry-and-tunnel.md) | `k7-engine` (the Rust registry, relay and hub) and `apps/k7-daw-frontend/packages/engine-tunnel`: heartbeats, claims, the relay, the hub and agent, jobs |
+| [85 — Registry and tunnel](./85-registry-and-tunnel.md) | `k7-engine` (the Rust registry, relay and hub) and the supervisor's tunnel agent: heartbeats, claims, the relay, the hub and agent, jobs |
 | [86 — The desktop app and the phone apps](./86-desktop-and-android.md) | `k7-local`, `apps/k7-daw-desktop`, `apps/k7-daw-android` |
 | [87 — Building and shipping engines](./87-engine-build-and-shipping.md) | `apps/k7-daw-engine/scripts`, CMake presets, release archives |
 
@@ -77,7 +77,6 @@ The account's files live on the server. When a project opens on an engine, the f
 | `apps/k7-daw-frontend/packages/engine-browser/` | The browser client, React stores, access/probe/choose/lease, pairing, audio stream player |
 | `apps/k7-daw-backend/packages/k7-engine/` | The registry, the relay, the tunnel hub (routed by `k7-front`'s `routes/engine/`) |
 | `packages/engine-registry/` | The internal seam's paths and client, through which TypeScript reaches the registry and the hub |
-| `apps/k7-daw-frontend/packages/engine-tunnel/` | The tunnel's wire, the TypeScript reference agent, jobs client |
 | `apps/k7-daw-backend/packages/k7-local/` | Running the supervisor as a child of k7's Rust front under the desktop app |
 | `apps/k7-daw-desktop/` | The desktop app (Tauri), k7 on a computer |
 
@@ -91,6 +90,5 @@ Several contracts have a C++ side and a TypeScript side kept equal by hand:
 | Host protocol (supervisor ↔ app) | `apps/k7-daw-backend/packages/k7-supervisor/src/protocol/mod.rs` | the Rust `apps/k7-daw-backend/packages/k7-local/src/protocol.rs`, the Kotlin in `apps/k7-daw-android` |
 | `~/.k7` layout | `apps/k7-daw-backend/packages/k7-supervisor/src/paths.rs` | `apps/k7-daw-frontend/packages/engine-client/src/paths.ts` |
 | URL rules (registry, family, cache key) | `apps/k7-daw-backend/packages/k7-supervisor/src/urls.rs` | `apps/k7-daw-frontend/packages/web-protocol/services.ts` |
-| Tunnel agent | `apps/k7-daw-backend/packages/k7-supervisor/src/tunnel/agent.rs` | `apps/k7-daw-frontend/packages/engine-tunnel/agent.ts` |
 
-TypeScript cannot check a wire change against C++. When you change one side, change the other in the same commit and verify by running the engine. The tunnel is the exception that has a shared test: `apps/k7-daw-frontend/packages/engine-tunnel` runs its suites against both agents (see [85](./85-registry-and-tunnel.md#tests)).
+TypeScript cannot check a wire change against C++. When you change one side, change the other in the same commit and verify by running the engine. The tunnel has no such pair: its hub and its agent are both Rust, and `apps/k7-daw-backend/packages/k7-front/tests/tunnel` runs the one against the other (see [85](./85-registry-and-tunnel.md#tests)).

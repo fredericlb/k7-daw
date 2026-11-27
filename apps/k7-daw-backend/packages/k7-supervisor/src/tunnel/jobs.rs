@@ -127,7 +127,7 @@ impl Shared {
         });
     }
 
-    /// Copy the listed files, one `syncing` reply per file copied, then `synced` (`engine-tunnel/docs/tunnel.md`).
+    /// Copy the listed files, one `syncing` reply per file copied, then `synced` (`apps/k7-daw-backend/docs/engine/tunnel.md`).
     fn run_sync(self: &Arc<Self>, c: &Arc<Channel>, req: &Map<String, Value>, emit: Emit) {
         let locals: Vec<String> = req
             .get("files")

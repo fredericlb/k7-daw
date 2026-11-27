@@ -15,7 +15,7 @@ preset, the project cannot record.
 | **read** — every other path a document names, `preview`'s `file`, `set-preset`'s `path` | the write roots, and the system's temp directory |
 
 `<state>` covers what the engine is actually sent. A server-owned file is played from the
-supervisor's copy under `<state>/remote/<server>/<root>` (`apps/k7-daw-frontend/packages/engine-tunnel/docs/tunnel.md`) —
+supervisor's copy under `<state>/remote/<server>/<root>` (`apps/k7-daw-backend/docs/engine/tunnel.md`) —
 the account's workspace, the libraries, the models — and an `@instruments/`
 instrument resolves under `<state>/instruments`. A take and a saved preset land in that same copy,
 which is what the tunnel uploads back.

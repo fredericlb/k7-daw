@@ -9,24 +9,23 @@ the engine's machine to ask.
 ## One request, its replies, the last one settling it
 
 A request is one JSON frame, `{ type, id, … }`; the machine answers with as many frames carrying
-the same `id` as it has news, and the caller decides which one is the last (`requestJob`,
-`jobsClient.ts`). A `type: "error"` reply ends it. A request is started once its files are on the
+the same `id` as it has news, and the caller decides which one is the last (`request_job`,
+`apps/k7-daw-backend/packages/k7-front/src/routes/engine_reach/job.rs`). A `type: "error"` reply ends it. A request is started once its files are on the
 machine and **not awaited**: a separation takes minutes, and the next request on the channel must
 not wait behind it.
 
-A caller waits for a bounded time: 15 minutes without a reply (`JOB_IDLE_MS`), or an hour in all
-(`JOB_TIMEOUT_MS`), each overridable per call. Either ends the request with a `JobError` and closes
+A caller waits for a bounded time: 15 minutes without a reply (`JOB_IDLE`), or an hour in all
+(`JOB_TOTAL`), each overridable per call. Either ends the request with a `JobError` and closes
 the channel, so a machine that went quiet holds no server-side promise, and no channel, for ever. The
 idle bound is long because a `render` says `rendering` once and nothing more until its files are up.
 
-A caller holding no channel of its own — the hosted file service, which reaches the bound machine
-at a loopback path — asks through `requestJobAt`: a socket per request, closed once it settles. A
+A caller holding no channel of its own — the file service, which reaches the bound machine
+at a loopback path — asks through a socket per request (`WsChannel`), closed once it settles. A
 request is rare and long, so a pooled socket would buy nothing and would have to survive the
 machine's restarts.
 
 What a machine does is registered by type; the supervisor's list is
-`apps/k7-daw-backend/packages/k7-supervisor/src/parts/tunnel/table.rs` (`TunnelAgentOptions.jobs` for the TypeScript reference
-agent the server's tests run on). A type it does not know is refused by name.
+`apps/k7-daw-backend/packages/k7-supervisor/src/parts/tunnel/table.rs` (`Options.jobs`, the table a test fills). A type it does not know is refused by name.
 
 Some types are **settings, not work**: `onnx-providers` and `chains` answer in one frame
 and write the machine's own file on the way (`apps/k7-daw-backend/packages/k7-supervisor/docs/supervisor.md`), so the studio's
@@ -65,7 +64,7 @@ then `/` between the segments below it. A Windows server — the desktop app's o
 its paths with `\`, and such a path would cross unmapped and be refused by the handler. So a request
 reaching a jobs channel through the hub's loopback path has every path under a root respelt first
 (`apps/k7-daw-backend/packages/k7-engine/src/tunnel/spelling.rs`), as does a stem cut, which opens its
-channel itself (`jobSpelling.ts`). On a `/` server that changes
+channel itself (`spelling.rs` again). On a `/` server that changes
 nothing. An ENGINE channel is left as sent: the desktop app's engine opens its backend's own files.
 
 `sync` is the one request the AGENT answers rather than the machine's list, since copying is the

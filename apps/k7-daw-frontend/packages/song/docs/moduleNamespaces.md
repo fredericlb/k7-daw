@@ -76,7 +76,7 @@ the three, each of which costs a real afternoon.
 
 What this does NOT do is put the bytes there. The library lives on the server, and a module
 reaches the engine's machine through the tunnel when the engine opens it
-(`apps/k7-daw-frontend/packages/engine-tunnel/docs/tunnel.md`).
+(`apps/k7-daw-backend/docs/engine/tunnel.md`).
 
 `@engine` is the odd one and always will be: it names **no folder at all**. A scanned
 plugin is a module the engine merely reports (`engineCatalogue.ts`), which is fine until

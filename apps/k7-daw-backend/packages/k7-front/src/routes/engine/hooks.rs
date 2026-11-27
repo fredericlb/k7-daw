@@ -183,19 +183,6 @@ async fn hook(
             hub.unbind_local(&s(&b, "path"));
             Value::Null
         }
-        "hubSignal" => match hub
-            .signal(
-                &id,
-                &s(&b, "sdp"),
-                std::time::Duration::from_millis(
-                    b.get("timeoutMs").and_then(Value::as_u64).unwrap_or(10_000),
-                ),
-            )
-            .await
-        {
-            Ok(sdp) => json!({ "sdp": sdp }),
-            Err(e) => json!({ "error": e }),
-        },
         "verify" => {
             let stub: Option<k7_engine::tunnel::hub::Verify> = match s(&b, "mode").as_str() {
                 "all" => Some(Arc::new(|_, _, _| true)),
