@@ -2,7 +2,6 @@
 // A reader would get wrong that `clip` is a file's path: it is the clip's ref, that stem being the only name the verb knows.
 
 use song_edit::js_text::js_trim;
-use std::cmp::Ordering;
 
 /// The folder a separation writes its stems into, beside the file.
 const STEMS_DIR: &str = "stems";
@@ -36,11 +35,6 @@ pub fn record_path_of(line: &str) -> Option<String> {
         .then(|| clean.to_owned())
 }
 
-/// UTF-16 code unit order: the order a default sort gives a list of paths.
-fn by_units(a: &String, b: &String) -> Ordering {
-    a.encode_utf16().cmp(b.encode_utf16())
-}
-
 /// The records a line may name: every audio file but a `stems/` folder's, sorted.
 #[must_use]
 pub fn playlist_refs(files: &[String]) -> Vec<String> {
@@ -51,7 +45,8 @@ pub fn playlist_refs(files: &[String]) -> Vec<String> {
         })
         .cloned()
         .collect();
-    refs.sort_by(by_units);
+    // UTF-16 code unit order: the order a default sort gives a list of paths.
+    refs.sort_by(|a, b| a.encode_utf16().cmp(b.encode_utf16()));
     refs
 }
 

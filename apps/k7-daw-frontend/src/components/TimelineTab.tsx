@@ -3656,7 +3656,7 @@ function TimelineTabView({
                                         proj.timeSigDenominator,
                                       ),
                                       // …and the RECTANGLE, when one is drawn: a range verb takes a span, and the placement only says where it starts.
-                                      sel: selRange,
+                                      sel: selRange ?? undefined,
                                     },
                                     e.clientX,
                                     e.clientY,

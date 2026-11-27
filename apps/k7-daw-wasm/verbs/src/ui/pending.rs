@@ -216,7 +216,7 @@ pub fn pending_clips(track: &str, clips: &[ClipFields], edits: &[PendingEdit]) -
                         // `length || undefined`: a zero fade is no fade.
                         fades[slot] = (*length != 0.0).then_some(*length);
                         let name = if slot == 0 { "fadeIn" } else { "fadeOut" };
-                        touched.insert(name.to_owned(), fades[slot].map_or(Value::Null, |l| Value::from(l)));
+                        touched.insert(name.to_owned(), fades[slot].map_or(Value::Null, Value::from));
                     }
                     // `on` follows the map; the clip's flag is the opposite one, that it is declined.
                     PendingEdit::Warp { key: k, on } if *k == key => {

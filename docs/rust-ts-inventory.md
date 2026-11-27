@@ -60,7 +60,7 @@ milestone ends with `bash scripts/agent/gate.sh --milestone`; the hours are agen
 | **M2a** chains build | `ui-chains` build and measure steps (buildGraph, buildChains, buildContext, assembly, subgraph, bindings, geometry, moduleRow, rowSeams, gridFit, stackLayout, nodeUIs, widgetValue, flow, the logic of cables, curvePlacement...), `chainsModel`, `moduleField`, `widgetTarget`; graphNode generated; dagre stays in TS until M5b | 3,700 | new crate `apps/k7-daw-wasm/chains`, op `chains_build` | M1b | 16 |
 | **M2b** gesture arithmetic | snap, rollDrag, rollFit, gridCaret, barWindow, clipPlayhead, clipWarp, videoDrag, takeCounter, timelineTools, formatAt; the arithmetic inside TimelineTab, useRollGestures, PianoRoll, useEdgeDrags, useVideoDrag, AudioClipPanel; the ruler's tick ladder and `ui-timeline` ticks and anchored zoom | 1,900 | new crate `apps/k7-daw-wasm/gesture`, typed exports | decision 1 | 13 |
 | **M2c** tunnel stand-in (done) | the hub suites ported to Rust tests over the Rust supervisor; `e2e/src/standInEngine.ts` on the supervisor binary with a fake engine; `engine-tunnel` deleted with its 2,100 test lines | 2,500 | k7-supervisor, k7-hub tests | nothing | 10 |
-| **M3a** verbs catalogue | contextMenu, menuTabs, menuTitle, palette, argOptions, rankCommands, fuzzy, commandFill, commandPrefs, emptyBar, stepSentence, exportArgs, pendingEdits, nodeInsert, nodeMenu, clipOps, playlistVocabulary, reloadScope, verbWrites, homeCommands' catalogue and parse; `commandTypes.ts` generated | 2,500 | verbs crate | verbs branch merged; decisions 2, 6 | 14 |
+| **M3a** verbs catalogue (built, see below) | contextMenu, menuTabs, menuTitle, palette, argOptions, rankCommands, fuzzy, commandFill, commandPrefs, emptyBar, stepSentence, exportArgs, pendingEdits, nodeInsert, nodeMenu, clipOps, playlistVocabulary, reloadScope, verbWrites, homeCommands' catalogue and parse; `commandTypes.ts` generated | 2,500 | verbs crate | verbs branch merged; decisions 2, 6 | 14 |
 | **M3b** pictures and render tooling | take-render's verbs-only files deleted; engine-client and the render scripts relocated to `k7-runtime/scripts`; ui-eyes scene generated; its clip schedule, transitions and `.cube` reader; viewportRect; the camera name rules | 1,000 | verbs picture code, k7-front cameras | verbs branch merged; decision 7 | 8 |
 | **M3c** git rules and media bytes | gitState, commitState, connectState, forgejoState, gitLock, gitPageTabs, mergeState, saveAct, githubState and roamState rules; serde structs for the git routes, then their types generated; webmDuration, trimGate, spectrumColour | 1,000 | k7-git, k7-front, waveform | decision 5 | 11 |
 | **M4a** reads on the doc | takes, rackLit, noteSpans, videoSpans, activity, clipLoop, clipInstances, clipNames, rows, timelineView, mixerStrips, gainTrim, mastering, midiIn, laneInput, rackFor, graphNotes, templateGraph, headphonesHint; the hooks' and pickers' doc reads, one mute/solo rule, tapTempo, projectName, projectKind; `engine-protocol/project.ts` and `timelineTypes.ts` generated, `build.ts` moved | 2,800 | song crate, k7-file-service | rust-song-twins merged | 16 |
@@ -102,6 +102,20 @@ can depend on. What stays, and what each needs:
 | `engineTaken.ts` | a three-flag decision over React state, called on render | stays |
 | `lcdSounds`' WAV decode | the waveform module is embedded by the Rust front, the page does not load it | a decode route in the file service |
 | `libraryTree`, `historyMarks`, `surfaceRows`, `paneInUse` | no Rust function answers them: ports, not replacements | M4a (doc reads), M3c (git), M5c |
+
+**M3a, as built.** The bar's, the menus' and the edits' rules are the `verbs` crate's `ui` module (`apps/k7-daw-wasm/verbs/docs/verbs/ui.md`),
+reached by the `ui.*`, `edit.*` and `menu.*` ops, which the browser's module carries by building with the crate's `verbs` feature
+(the module grows by about 1.1 MB). Gone from TypeScript: `fuzzy`, `rankCommands`, `argOptions`, `emptyBar`, `commandFill`, `stepSentence`,
+`commandPrefs`' rules, `exportArgs`, `pendingEdits`, `reloadScope`' predicates, `nodeInsert`'s rules, `playlistVocabulary`'s, `clipOps`' filter and line,
+the table of `verbWrites` (a verb is a write unless listed as a read or the device's), the whole of `contextMenu`'s derivation, `menuTabs`, `menuTitle`'s
+rule, `nodeMenu`, `palette`'s merge and vocabularies, `homeCommands`' catalogue and readers, and `commandTypes.ts` (generated). Each TS test first ran
+against the Rust ops, then became a Rust test. What stays, and what moves it:
+
+| module | why it stays |
+|---|---|
+| `commandPrefs.ts` (types), `reloadScope.ts` (type and hook), `clipOps.chainOps`, `nodeInsert.ts`, `playlistVocabulary.ts`, `menuTitle.ts`, `nodeMenu.ts`, `menuTabs.ts` | thin glue: the page's own types, the browser's collator, a namer callback, a message catalogue, or a re-export that keeps an import path |
+| the shell's command registry rows (`ui/commands`) | decision 11 asked for its sentences and arguments to become catalogue data; they are still read from the registry and handed to Rust (`buildPaletteCommands`), so that move is open |
+| `homeCommands.runHomeCommand`'s branches | they call the file service's acts and keep the order of their refusals |
 
 **M2c, as built.** `engine-tunnel` is gone (about 4,300 lines: 2,500 of tests and their harness, 1,800 of source); its four doc pages
 live in `apps/k7-daw-backend/docs/engine/` (`tunnel.md`, `tunnelJobs.md`, `backpressure.md`, `sockets.md`). The choices:

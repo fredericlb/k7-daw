@@ -4,6 +4,6 @@ import type { FormArg } from "./FormArg";
 export type EnterArgs = {
   args: Array<FormArg>;
   values: Array<string>;
-  active: bigint;
+  active: number;
   suggestion?: string;
 };

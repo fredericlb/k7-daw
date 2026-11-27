@@ -68,6 +68,7 @@ pub struct OfferArgs {
     pub args: Vec<FormArg>,
     pub offered: HashMap<String, String>,
     pub values: Vec<String>,
+    #[cfg_attr(feature = "ts", ts(type = "number"))]
     pub active: i64,
 }
 
@@ -84,6 +85,7 @@ pub struct CaretArgs {
 #[cfg_attr(feature = "ts", derive(ts_rs::TS))]
 pub struct KindArgs {
     pub args: Vec<FormArg>,
+    #[cfg_attr(feature = "ts", ts(type = "number"))]
     pub active: i64,
     pub kind: String,
 }
@@ -93,6 +95,7 @@ pub struct KindArgs {
 pub struct EnterArgs {
     pub args: Vec<FormArg>,
     pub values: Vec<String>,
+    #[cfg_attr(feature = "ts", ts(type = "number"))]
     pub active: i64,
     #[serde(default)]
     #[cfg_attr(feature = "ts", ts(optional))]
@@ -126,6 +129,7 @@ pub struct MoveArgs {
     #[cfg_attr(feature = "ts", ts(type = "Record<string, unknown>"))]
     pub prefs: Map<String, Value>,
     pub canonical: String,
+    #[cfg_attr(feature = "ts", ts(type = "number"))]
     pub by: i64,
 }
 

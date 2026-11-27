@@ -93,7 +93,41 @@ fn export_ui(dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
     EmptyRow::export_all_to(dir)?;
     View::export_all_to(dir)?;
     Step::export_all_to(dir)?;
-    export_edit(dir)
+    export_edit(dir)?;
+    export_menu(dir)
+}
+
+/// The `menu.*` requests and answers, and the catalogue's own types.
+#[cfg(feature = "verbs")]
+fn export_menu(dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
+    use k7_wasm::ops::verb_menu::{Danger, Focus, MenuRequest, Named, Position};
+    use verbs::palette::CommandInfo;
+    use verbs::ui::home::{HomeRow, Parsed, Resolved};
+    use verbs::ui::menu::{Item, MenuTarget, TabGroup};
+    use verbs::ui::palette::{ArgSource, PaletteRow};
+    use verbs::ui::wire::{ArgClass, ArgProvider, MenuEntity};
+    MenuRequest::export_all_to(dir)?;
+    for r in [
+        Danger::export_all_to(dir),
+        Focus::export_all_to(dir),
+        Named::export_all_to(dir),
+        Position::export_all_to(dir),
+        CommandInfo::export_all_to(dir),
+        HomeRow::export_all_to(dir),
+        Parsed::export_all_to(dir),
+        Resolved::export_all_to(dir),
+        Item::export_all_to(dir),
+        MenuTarget::export_all_to(dir),
+        TabGroup::export_all_to(dir),
+        ArgSource::export_all_to(dir),
+        PaletteRow::export_all_to(dir),
+        ArgClass::export_all_to(dir),
+        ArgProvider::export_all_to(dir),
+        MenuEntity::export_all_to(dir),
+    ] {
+        r?;
+    }
+    Ok(())
 }
 
 /// The `edit.*` requests and answers, and the verbs types their answers carry.

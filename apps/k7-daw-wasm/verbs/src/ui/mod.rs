@@ -4,12 +4,16 @@
 pub mod export;
 pub mod fill;
 pub mod fuzzy;
+pub mod home;
 pub mod lines;
+pub mod menu;
 pub mod node_insert;
 pub mod order;
+pub mod palette;
 pub mod pending;
 pub mod prefs;
 pub mod rank;
 pub mod reload;
 pub mod step;
+pub mod wire;
 pub mod writes;

@@ -5,5 +5,5 @@ export type OfferArgs = {
   args: Array<FormArg>;
   offered: { [key in string]?: string };
   values: Array<string>;
-  active: bigint;
+  active: number;
 };

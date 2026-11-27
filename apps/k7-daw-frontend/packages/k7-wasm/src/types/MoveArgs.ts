@@ -5,5 +5,5 @@ export type MoveArgs = {
   commands: Array<Like>;
   prefs: Record<string, unknown>;
   canonical: string;
-  by: bigint;
+  by: number;
 };

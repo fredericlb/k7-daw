@@ -16,7 +16,8 @@
     "./boot": "./src/boot.ts",
     "./engine": "./src/engine.ts",
     "./ui": "./src/ui.ts",
-    "./edit": "./src/edit.ts"
+    "./edit": "./src/edit.ts",
+    "./menu": "./src/menu.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",
