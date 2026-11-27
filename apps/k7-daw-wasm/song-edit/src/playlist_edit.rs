@@ -47,6 +47,11 @@ fn items_of(sc: &Scope) -> Res<Result<Vec<Value>, ()>> {
     })
 }
 
+/// A position that names one of `len` lines: a whole number below it.
+fn position(i: f64, len: usize) -> Option<usize> {
+    (i >= 0.0 && i.fract() == 0.0 && i < len as f64).then_some(i as usize)
+}
+
 /// One more line on the end of `items`, made when missing; false when `items` is something other than a list.
 ///
 /// # Errors
@@ -63,11 +68,11 @@ pub fn append_item(sc: &mut Scope, song: &str, variant: Option<&str>) -> Res<boo
 ///
 /// # Errors
 /// What the document's edit fails with.
-pub fn remove_item(sc: &mut Scope, index: i64) -> Res<bool> {
+pub fn remove_item(sc: &mut Scope, index: f64) -> Res<bool> {
     let Ok(items) = items_of(sc)? else {
         return Ok(false);
     };
-    let Some(i) = usize::try_from(index).ok().filter(|i| *i < items.len()) else {
+    let Some(i) = position(index, items.len()) else {
         return Ok(false);
     };
     Ok(sc.delete_in(&[items_key()[0].clone(), PathSeg::Index(i)], false)?)
@@ -77,11 +82,11 @@ pub fn remove_item(sc: &mut Scope, index: i64) -> Res<bool> {
 ///
 /// # Errors
 /// What the document's edit fails with.
-pub fn move_item(sc: &mut Scope, from: i64, to: i64) -> Res<bool> {
+pub fn move_item(sc: &mut Scope, from: f64, to: f64) -> Res<bool> {
     let Ok(items) = items_of(sc)? else {
         return Ok(false);
     };
-    let ok = |i: i64| usize::try_from(i).ok().filter(|i| *i < items.len());
+    let ok = |i: f64| position(i, items.len());
     let (Some(from), Some(to)) = (ok(from), ok(to)) else {
         return Ok(false);
     };

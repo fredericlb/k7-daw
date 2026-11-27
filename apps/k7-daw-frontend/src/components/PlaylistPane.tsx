@@ -4,7 +4,7 @@
 // resolves the same lines. See ../docs/playlists.md.
 
 import { mediaUrl } from "@studio/project-shell/fileApi";
-import type { PlaylistItem } from "@studio/song-schema/playlist";
+import type { PlaylistItem } from "@studio/k7-wasm/types";
 import {
   packRecordDrag,
   RECORD_DRAG_TYPE,

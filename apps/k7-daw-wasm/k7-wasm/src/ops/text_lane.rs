@@ -57,7 +57,7 @@ pub struct VideoListArgs {
 #[serde(tag = "op", rename_all = "camelCase", rename_all_fields = "camelCase")]
 pub enum VideoOp {
     SetFieldAt {
-        index: i64,
+        index: f64,
         field: String,
         value: f64,
     },
@@ -68,18 +68,18 @@ pub enum VideoOp {
         value: f64,
     },
     SetSpeedAt {
-        index: i64,
+        index: f64,
         speed: f64,
     },
     SetSilentAt {
-        index: i64,
+        index: f64,
         silent: bool,
     },
     RemoveAt {
-        index: i64,
+        index: f64,
     },
     SplitAt {
-        index: i64,
+        index: f64,
         cut: f64,
     },
     AddShot {
@@ -90,7 +90,7 @@ pub enum VideoOp {
         source_from: f64,
     },
     ShiftAnimationAt {
-        index: i64,
+        index: f64,
         delta: f64,
     },
     RenameFadeChains {

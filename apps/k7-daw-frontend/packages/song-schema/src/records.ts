@@ -6,7 +6,7 @@
 import { isAudio } from "@studio/k7-wasm/schema";
 import { plainSegments } from "@studio/web-protocol/paths";
 import { extOf } from "./audioFiles";
-import type { PlaylistItem } from "./playlist";
+import type { PlaylistItem } from "@studio/k7-wasm/types";
 import { STEMS, STEMS_DIR, stemFile } from "./stems";
 
 /** A line as the workspace path of its record, its slashes trimmed; null for one that leaves the workspace or names a library (`@`). */

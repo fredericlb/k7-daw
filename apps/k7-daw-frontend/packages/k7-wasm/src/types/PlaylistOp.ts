@@ -5,5 +5,5 @@
  */
 export type PlaylistOp =
   | { op: "append"; song: string; variant?: string }
-  | { op: "remove"; index: bigint }
-  | { op: "move"; from: bigint; to: bigint };
+  | { op: "remove"; index: number }
+  | { op: "move"; from: number; to: number };

@@ -3,12 +3,14 @@
 
 import { HttpError } from "@studio/http-client/call";
 import {
-  LIBRARY_LEVEL,
-  LIBRARY_PINS_FILE,
   type LibraryPins as Pins,
   parseLibraryPins,
-  pinnedVersion,
   stringifyLibraryPins,
+} from "@studio/k7-wasm/text";
+import {
+  LIBRARY_LEVEL,
+  LIBRARY_PINS_FILE,
+  pinnedVersion,
 } from "@studio/song-schema/libraryVersions";
 import { Button } from "@studio/ui/button";
 import { Check } from "@studio/ui/icons";

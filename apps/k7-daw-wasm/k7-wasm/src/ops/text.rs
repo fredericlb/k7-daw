@@ -103,8 +103,9 @@ pub(super) fn json_of(v: &Value) -> serde_json::Value {
     }
 }
 
-pub(super) fn index(i: i64) -> Option<usize> {
-    usize::try_from(i).ok()
+/// A position a page counted: a whole number from 0, else none.
+pub(super) fn index(i: f64) -> Option<usize> {
+    (i >= 0.0 && i.fract() == 0.0 && i < 4.0e9).then_some(i as usize)
 }
 
 

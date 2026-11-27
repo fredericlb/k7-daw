@@ -3,6 +3,7 @@
 // the file service and the browser read them by the same rules. Rationale: docs/library-versions-plan.md.
 
 import { parse, stringify } from "@studio/k7-wasm/k7x";
+import type { LibraryPins } from "@studio/k7-wasm/types";
 
 /** What this k7 can run: a library whose `requires` is above it is refused — raise it when a library may use something new. */
 export const LIBRARY_LEVEL = 2;
@@ -84,31 +85,8 @@ export const isRunnable = (
   level = LIBRARY_LEVEL,
 ): boolean => m.requires <= level;
 
-/** A workspace's pins, library name → version; a library absent here is UNPINNED_VERSION. */
-export type LibraryPins = Record<string, LibraryVersion>;
-
-/** Pins from data already read, whatever the file's format; an entry that is no version is dropped, so it reads as unpinned. */
-function libraryPinsData(doc: unknown): LibraryPins {
-  if (!doc || typeof doc !== "object" || Array.isArray(doc)) return {};
-  const out: LibraryPins = {};
-  for (const [name, v] of Object.entries(doc as Record<string, unknown>)) {
-    if (v === DRAFT_VERSION) out[name] = DRAFT_VERSION;
-    else if (int(v)) out[name] = v as number;
-  }
-  return out;
-}
-
-/** Read `_library-pins.k7x`; a text that does not read is no pins. */
-export function parseLibraryPins(text: string): LibraryPins {
-  return libraryPinsData(dataOf(text));
-}
-
-/** Write `_library-pins.k7x`, libraries in name order so a diff stays one line. */
-export function stringifyLibraryPins(pins: LibraryPins): string {
-  const sorted: LibraryPins = {};
-  for (const name of Object.keys(pins).sort()) sorted[name] = pins[name];
-  return stringify(sorted);
-}
+/** A workspace's pins, library name → version (read and written by the Rust writer, `@studio/k7-wasm/text`); a library absent here is UNPINNED_VERSION. */
+export type { LibraryPins };
 
 /** The version `pins` resolves `library` to. */
 export const pinnedVersion = (

@@ -8,20 +8,17 @@
 import { redo, redoDepth, undo, undoDepth } from "@codemirror/commands";
 import { Transaction } from "@codemirror/state";
 import type { EditorView } from "@codemirror/view";
+import { editVideo, listVideoPlacements } from "@studio/k7-wasm/text";
 import { askConfirm } from "@studio/project-shell/ask";
 import { isStaleWrite } from "@studio/project-shell/files";
 import { showToast } from "@studio/project-shell/toast";
 import { LIBRARIES_DIR } from "@studio/song-schema/moduleTypes";
-import {
-  listVideoPlacements,
-  setVideoPlacementField,
-} from "@studio/song-schema/yaml/videoTrackFile";
 import type { DroppedFile } from "@studio/ui/file-tree";
 import { FolderTree, X } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
 import { Sheet } from "@studio/ui/side-panel";
 import { recallBuffer, useAutosave } from "@studio/ui-editor/autosave";
-import { editK7xText } from "@studio/ui-editor/k7x/bufferEdit";
+import { editTextBy } from "@studio/ui-editor/k7x/bufferEdit";
 import type { LintItem } from "@studio/ui-editor/lint";
 import { InputChannelBar } from "@studio/ui-module-builder/input-channels";
 import { setChannelIn } from "@studio/ui-module-builder/module-ui";
@@ -1195,8 +1192,8 @@ function EditorTabView({
           ? {
               ...f,
               content:
-                editK7xText(f.content, (doc) =>
-                  setVideoPlacementField(doc, ref, field, value),
+                editTextBy(f.content, (text) =>
+                  editVideo(text, [{ op: "setFieldByRef", ref, field, value }]),
                 ) ?? f.content,
             }
           : f,

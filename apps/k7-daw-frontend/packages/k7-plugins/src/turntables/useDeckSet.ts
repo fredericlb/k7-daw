@@ -13,14 +13,9 @@ import {
 } from "@studio/engine-browser/params";
 import type { ProjectDoc } from "@studio/engine-protocol/project";
 import type { WebGraph } from "@studio/graph-model";
-import { K7Document } from "@studio/k7-wasm/k7x";
+import { editMix, mixCues } from "@studio/k7-wasm/text";
 import { projectApi as api } from "@studio/project-shell/project";
 import { STEMS, type Stem, stemControl } from "@studio/song-schema/stems";
-import {
-  cueMarkers,
-  parseMix,
-  withMarkers,
-} from "@studio/song-schema/yaml/mixFile";
 import type { MixView as MixViewFile } from "@studio/song-schema/yaml/mixViewSchema";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { m } from "../paraglide/messages.js";
@@ -329,7 +324,7 @@ export function useDeckSet(
   );
   const mix = shownValue(bindingFor("crossfade"), held, live) ?? MIX_CENTRE;
   // Every song's cues, by ref — re-read from the text, so the file stays the one place a cue lives.
-  const cues = useMemo(() => cueMarkers(parseMix(mixText).value), [mixText]);
+  const cues = useMemo(() => mixCues(mixText).markers, [mixText]);
   const canAlign = DECKS.every((d) => tempos[d]?.phase !== undefined);
   // Asked for, not necessarily happening: the wish is kept and the possibility derived (docs/metronome.md).
   const [wantsClick, setWantsClick] = useState(false);
@@ -750,9 +745,9 @@ export function useDeckSet(
       next[slot] = at;
 
       // The text on disk is edited, never reprinted from a parse — its comments are the worked example.
-      const doc = new K7Document(mixRef.current);
-      withMarkers(doc.at([]), ref, next);
-      const text = doc.toString();
+      const text = editMix(mixRef.current, [
+        { op: "withMarkers", ref, markers: next },
+      ]).text;
       setMixText(text);
       void writeMixText(project, text).catch((e: Error) =>
         // Said out loud: the button has already gone coloured, so a silent failure would lose the cue.

@@ -101,11 +101,11 @@ pub enum PlaylistOp {
         variant: Option<String>,
     },
     Remove {
-        index: i64,
+        index: f64,
     },
     Move {
-        from: i64,
-        to: i64,
+        from: f64,
+        to: f64,
     },
 }
 

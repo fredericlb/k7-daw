@@ -4,12 +4,12 @@
  * One edit of a lane, named as the writer it runs.
  */
 export type VideoOp =
-  | { op: "setFieldAt"; index: bigint; field: string; value: number }
+  | { op: "setFieldAt"; index: number; field: string; value: number }
   | { op: "setFieldByRef"; ref: string; field: string; value: number }
-  | { op: "setSpeedAt"; index: bigint; speed: number }
-  | { op: "setSilentAt"; index: bigint; silent: boolean }
-  | { op: "removeAt"; index: bigint }
-  | { op: "splitAt"; index: bigint; cut: number }
+  | { op: "setSpeedAt"; index: number; speed: number }
+  | { op: "setSilentAt"; index: number; silent: boolean }
+  | { op: "removeAt"; index: number }
+  | { op: "splitAt"; index: number; cut: number }
   | {
       op: "addShot";
       ref: string;
@@ -17,6 +17,6 @@ export type VideoOp =
       length: number;
       sourceFrom: number;
     }
-  | { op: "shiftAnimationAt"; index: bigint; delta: number }
+  | { op: "shiftAnimationAt"; index: number; delta: number }
   | { op: "renameFadeChains"; renames: Array<[string, string]> }
   | { op: "setLaneRect"; x: number; y: number; w: number; h: number };

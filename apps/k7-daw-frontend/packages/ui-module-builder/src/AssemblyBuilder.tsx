@@ -9,23 +9,24 @@
 // Full rationale: docs/builder.md, and apps/k7-daw-frontend/packages/song/docs/assemblies.md.
 
 import type { WebGraph } from "@studio/graph-model";
-import { K7Document, type K7Scope } from "@studio/k7-wasm/k7x";
 import {
-  dropAssemblyParam,
-  parseAssemblyTemplate,
-  setAssemblyParam,
-} from "@studio/song-schema/yaml/assemblyFile";
+  type AssemblyOp,
+  editAssembly,
+  readAssemblyTemplate,
+} from "@studio/k7-wasm/text";
 import { useAutosave } from "@studio/ui-editor/autosave";
 import { YamlPane } from "@studio/ui-editor/yaml-pane";
 import type { Hints } from "@studio/web-protocol";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ModuleStore } from "./store";
 
-/** A writer run on the template's text, which comes back edited. */
-function edited(text: string, write: (doc: K7Scope) => unknown): string {
-  const doc = new K7Document(text);
-  write(doc.at([]));
-  return doc.toString();
+/** The template's text with one writer run on it, or as it was when the writer refuses. */
+function edited(text: string, op: AssemblyOp): string {
+  try {
+    return editAssembly(text, [op]).text;
+  } catch {
+    return text;
+  }
 }
 
 /** One promotable row: a member, one of its params, and whether the box already wears it. */
@@ -115,10 +116,10 @@ export function AssemblyBuilder({
   }, [store, path]);
 
   const parsed = useMemo(
-    () => (content == null ? null : parseAssemblyTemplate(content)),
+    () => (content == null ? null : readAssemblyTemplate(content)),
     [content],
   );
-  const promoted = parsed?.value?.params ?? {};
+  const promoted = parsed?.params ?? {};
   const rows = useMemo(() => rowsOf(graph, promoted), [graph, promoted]);
 
   const autosave = useAutosave({
@@ -144,14 +145,17 @@ export function AssemblyBuilder({
       if (content == null || readOnly) return;
       if (row.as) {
         const as = row.as;
-        edit(edited(content, (doc) => dropAssemblyParam(doc, as)));
+        edit(edited(content, { op: "dropParam", name: as }));
         return;
       }
       const name = freeName(row.param, new Set(Object.keys(promoted)));
       edit(
-        edited(content, (doc) =>
-          setAssemblyParam(doc, name, { node: row.node, param: row.param }),
-        ),
+        edited(content, {
+          op: "setParam",
+          name,
+          node: row.node,
+          param: row.param,
+        }),
       );
     },
     [content, readOnly, promoted, edit],
