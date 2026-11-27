@@ -9,7 +9,7 @@
 // Full rationale: docs/builder.md, and apps/k7-daw-frontend/packages/song/docs/assemblies.md.
 
 import type { WebGraph } from "@studio/graph-model";
-import { K7Document, type K7Scope } from "@studio/k7x/document";
+import { K7Document, type K7Scope } from "@studio/k7-wasm/k7x";
 import {
   dropAssemblyParam,
   parseAssemblyTemplate,

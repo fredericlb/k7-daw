@@ -2,8 +2,8 @@
 // round-trips to the exact k7x the compiler reads back. A write changes only the notes that changed, a pad keeps
 // its effects, and a `notes("c4 d4")` short form stays while it still says the same thing. See docs/noteGrids.md.
 
+import { K7Document } from "@studio/k7-wasm/k7x";
 import { roundBeat } from "@studio/k7-wasm/timecode";
-import { K7Document } from "@studio/k7x/document";
 import {
   editSequence,
   sequenceData,

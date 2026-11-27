@@ -1,5 +1,5 @@
+import { K7Document } from "@studio/k7-wasm/k7x";
 import { validateFile } from "@studio/k7-wasm/validate";
-import { K7Document } from "@studio/k7x/document";
 import { describe, expect, it } from "vitest";
 import {
   setModuleAutomation,

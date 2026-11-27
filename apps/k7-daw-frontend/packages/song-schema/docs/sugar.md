@@ -3,7 +3,7 @@
 A `.k7x` file may write some data in a short form, for the person typing it: a sequence's notes as a
 line of mini-notation, a graph's segments as runs. `src/yaml/sugar.ts` expands them into the data
 they stand for before anything reads the file — the schema, the compile, the editor's check — so no
-reader knows they exist. The format they live in is `apps/k7-daw-frontend/packages/k7x/docs/language.md`.
+reader knows they exist. The format they live in is `apps/k7-daw-wasm/k7x/docs/language.md`.
 
 ```js
 // sequences/riff.k7x
@@ -27,7 +27,7 @@ The alternative, writing the short form back, only works for what the short form
 a grid at one velocity, segments that line up into runs. A roll edits notes off the grid and one at
 a time, so a rule that kept the short form would have to give up on most edits anyway, and an edit
 that half kept it would be worse than either. The rule has one implementation, `applySugared` in
-`apps/k7-daw-frontend/packages/k7x/src/sugared.ts`, re-exported by `src/yaml/sugar.ts`: it lives in k7x because it is a rule
+`src/yaml/sugared.ts`, re-exported by `src/yaml/sugar.ts`: it is one rule
 about documents rather than about any kind of file, and k7x cannot depend on this package. Song's
 k7x door applies it to every edit of a file with short forms (`apps/k7-daw-frontend/packages/song/docs/k7xFiles.md`).
 

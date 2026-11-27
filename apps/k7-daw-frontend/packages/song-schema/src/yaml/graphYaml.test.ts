@@ -1,4 +1,4 @@
-import { K7Document } from "@studio/k7x/document";
+import { K7Document } from "@studio/k7-wasm/k7x";
 import { describe, expect, it } from "vitest";
 import {
   addNode,

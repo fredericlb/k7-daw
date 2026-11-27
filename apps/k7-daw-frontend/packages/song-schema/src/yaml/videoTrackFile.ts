@@ -3,9 +3,8 @@
 // A reader would get wrong that a refused edit throws: it answers false and leaves the file alone, as does an unreadable buffer.
 // Two ways in: by INDEX, which the drag and the verbs use, and by REF for the editor's readers.
 
-import type { K7Scope } from "@studio/k7x/document";
-import { K7Document } from "@studio/k7x/document";
-import { K7SyntaxError } from "@studio/k7x/parse";
+import type { K7Scope } from "@studio/k7-wasm/k7x";
+import { K7Document, K7SyntaxError } from "@studio/k7-wasm/k7x";
 import {
   type Animate,
   AnimateSchema,

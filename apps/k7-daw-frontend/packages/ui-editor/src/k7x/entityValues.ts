@@ -3,7 +3,7 @@
 // Shared by entityLinks and the tests; the offsets are the buffer's own, quotes excluded (docs/k7xTree.md).
 
 import type { EditorState } from "@codemirror/state";
-import { walk } from "@studio/k7x/ast";
+import { walk } from "@studio/k7-wasm/k7x";
 import { mapSpan, treeOf } from "./tree";
 
 export interface ValueToken {

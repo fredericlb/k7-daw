@@ -14,7 +14,7 @@ import {
 import type { ProjectDoc } from "@studio/engine-protocol/project";
 import type { WebGraph } from "@studio/graph-model";
 import { STEMS, type Stem, stemControl } from "@studio/k7-wasm/stems";
-import { K7Document } from "@studio/k7x/document";
+import { K7Document } from "@studio/k7-wasm/k7x";
 import { projectApi as api } from "@studio/project-shell/project";
 import {
   cueMarkers,

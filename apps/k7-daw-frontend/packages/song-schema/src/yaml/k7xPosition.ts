@@ -1,7 +1,7 @@
 // k7xPosition.ts — where a schema finding's key path is written in k7x text, so a parser reports on the .k7x file itself.
 // A reader would get wrong that a path must exist: it lands on the deepest entry or item that does, at its key when it has one.
 
-import { K7Document } from "@studio/k7x/document";
+import { K7Document } from "@studio/k7-wasm/k7x";
 import type { ModuleIssue } from "./moduleFile";
 
 /** A finding's path: zod's segments, or the dotted string a ModuleIssue carries. */

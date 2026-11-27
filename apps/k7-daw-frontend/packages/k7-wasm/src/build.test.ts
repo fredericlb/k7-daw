@@ -24,6 +24,8 @@ import { BYTES, SOURCES } from "./k7Wasm.generated.ts";
 
 const EXPORTS = [
   "k7_call",
+  "k7_cells_len",
+  "k7_cells_ptr",
   "k7_curve_playhead",
   "k7_input",
   "k7_output_len",

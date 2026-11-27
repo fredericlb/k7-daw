@@ -41,7 +41,7 @@ Regenerate the others on purpose (`npx tsx apps/k7-daw-backend/fixtures/make…V
 
 The merge of one op against a room's text is native: `k7-sync`'s `settle.rs` decides a whole text, a
 removal and the diff3 merge ("The text merge", below), and its `k7x` module (`locate`, `diff`, `apply`) decides a
-k7x op on `apps/k7-daw-frontend/packages/k7x`'s document editor.  the committed
+k7x op on `apps/k7-daw-wasm/k7x`'s document editor.  the committed
 vectors, which node's TypeScript wrote (`settleFileOp`, `applyFileOp`, `fileOpFor`), are the referee.
 
 ### The choices

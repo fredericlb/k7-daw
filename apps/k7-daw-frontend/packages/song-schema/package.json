@@ -59,7 +59,6 @@
     "zod": "^4.4.3",
     "@studio/graph-model": "*",
     "@studio/k7-wasm": "*",
-    "@studio/k7x": "*",
     "@studio/web-protocol": "*"
   },
   "devDependencies": {

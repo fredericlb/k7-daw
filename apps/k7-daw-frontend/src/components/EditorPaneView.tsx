@@ -110,7 +110,7 @@ export default function EditorPaneView({
     Vim.defineEx("write", "w", () => saveRef.current());
   }, []);
 
-  // A workspace file — the ones that get the k7x mode, completion, links, the ▶ gutter and lint (apps/k7-daw-frontend/packages/k7x/docs/language.md).
+  // A workspace file — the ones that get the k7x mode, completion, links, the ▶ gutter and lint (apps/k7-daw-wasm/k7x/docs/language.md).
   const isK7xFile = !!file && /\.k7x$/i.test(file.path);
   const isStrudel = !!file && file.path.endsWith(".strudel");
   // The textbox's accessible name: the open file, `project.k7x — editor`.

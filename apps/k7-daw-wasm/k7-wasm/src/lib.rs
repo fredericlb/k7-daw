@@ -14,6 +14,7 @@ mod tests;
 mod tests_file;
 #[cfg(test)]
 mod tests_rules;
+mod tests_k7x;
 
 pub use error::{ErrorCode, WasmError};
 pub use ops::Session;

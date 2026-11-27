@@ -11,7 +11,7 @@ the per-account file service that serves them.
 | [song-schema](./31-song-schema.md) | `apps/k7-daw-frontend/packages/song-schema` — the file format, browser-safe |
 | [The compiler](./32-song-compiler.md) | `apps/k7-daw-frontend/packages/song` — loader, inheritance, compile |
 | [song-edit](./33-song-edit.md) | `apps/k7-daw-frontend/packages/song-edit` — surgical writes |
-| [k7x](./34-k7x.md) | `apps/k7-daw-frontend/packages/k7x` — the parser, the printer, the document every writer edits |
+| [k7x](./34-k7x.md) | `apps/k7-daw-wasm/k7x` — the parser, the printer, the document every writer edits |
 | [song-strudel](./35-song-strudel.md) | `apps/k7-daw-frontend/packages/song-strudel` — pattern lanes |
 | [file-service](./36-file-service.md) | `apps/k7-daw-backend/packages/k7-file-service` — the per-account file service and its HTTP API |
 | [file-hub](./37-file-hub.md) | `apps/k7-daw-backend/packages/k7-hub` — the account's runtime, libraries, device pairing |

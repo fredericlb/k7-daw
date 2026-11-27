@@ -3,9 +3,9 @@
 // `@studio/k7-wasm/schema`). No `node:fs`, so the file service and the browser go by the same rules.
 // See docs/playlists.md.
 
+import type { K7Scope } from "@studio/k7-wasm/k7x";
+import { stringify } from "@studio/k7-wasm/k7x";
 import type { PlaylistItem } from "@studio/k7-wasm/types";
-import type { K7Scope } from "@studio/k7x/document";
-import { stringify } from "@studio/k7x/print";
 
 export type { Playlist, PlaylistItem } from "@studio/k7-wasm/types";
 

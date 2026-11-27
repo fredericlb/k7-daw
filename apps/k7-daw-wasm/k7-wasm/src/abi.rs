@@ -73,3 +73,14 @@ pub extern "C" fn k7_scalars_ptr() -> *const f64 {
 pub extern "C" fn k7_round_beat(beats: f64) -> f64 {
     song_schema::round_beat(beats)
 }
+
+/// The layout of the last `k7x.outline`, as u32 cells (k7x's outline.rs); valid until the next call.
+#[unsafe(no_mangle)]
+pub extern "C" fn k7_cells_ptr() -> *const u32 {
+    SESSION.with(|s| s.borrow().k7x.cells.as_ptr())
+}
+
+#[unsafe(no_mangle)]
+pub extern "C" fn k7_cells_len() -> usize {
+    SESSION.with(|s| s.borrow().k7x.cells.len())
+}

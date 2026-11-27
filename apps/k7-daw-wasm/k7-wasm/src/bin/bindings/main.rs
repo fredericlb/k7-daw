@@ -13,6 +13,8 @@ use k7_wasm::ops::module::ModuleRequest;
 use k7_wasm::ops::picture::{Aspect, PictureRequest};
 use k7_wasm::ops::records::{RecordsRequest, ResolvedRecord};
 use k7_wasm::ops::rules::{RulesRequest, SeqWindowDto, WindowSpan};
+use k7_wasm::ops::k7x::{K7xRequest, ReadAnswer};
+use k7_wasm::ops::k7x_edit::EditAnswer;
 use k7_wasm::ops::schema::{BuiltinPluginDto, EngineModule, PlaylistDto, SchemaRequest, TaskDto, TimelineLane};
 use k7_wasm::ops::stems::{StemLane, StemsRequest};
 use k7_wasm::ops::timecode::TimecodeRequest;
@@ -41,6 +43,9 @@ fn write_types(dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
     PlaylistDto::export_all_to(dir)?;
     TaskDto::export_all_to(dir)?;
     TimelineLane::export_all_to(dir)?;
+    K7xRequest::export_all_to(dir)?;
+    ReadAnswer::export_all_to(dir)?;
+    EditAnswer::export_all_to(dir)?;
     VersionAnswer::export_all_to(dir)?;
     FieldsRequest::export_all_to(dir)?;
     FileRequest::export_all_to(dir)?;

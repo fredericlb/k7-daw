@@ -1,9 +1,8 @@
 // panelWrite.ts — a panel's plain data written into a k7x document with the fewest edits, each widget on ONE line.
 // A reader would get wrong that a structure is ever rebuilt from scratch: only one that cannot be edited in place is (docs/builder.md).
 
-import type { K7Path } from "@studio/k7x/ast";
-import type { K7Scope } from "@studio/k7x/document";
-import { stringify } from "@studio/k7x/print";
+import type { K7Path, K7Scope } from "@studio/k7-wasm/k7x";
+import { stringify } from "@studio/k7-wasm/k7x";
 import { isWidgetAt } from "@studio/panel-rules/panel-text";
 
 type Data = Record<string, unknown>;

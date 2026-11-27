@@ -2,7 +2,7 @@
 // set drops the needle. Browser-safe (no fs), because the app that DRAWS a desk is the one that
 // needs it. Full rationale: docs/mixFile.md.
 
-import type { K7Scope } from "@studio/k7x/document";
+import type { K7Scope } from "@studio/k7-wasm/k7x";
 import { parseK7xWith } from "./k7xIssues";
 import { MARKER_SLOTS, type MixFile, MixFileSchema } from "./mixSchema";
 import type { ModuleIssue } from "./moduleFile";

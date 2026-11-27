@@ -1,5 +1,5 @@
+import { K7Document, type K7Scope } from "@studio/k7-wasm/k7x";
 import { parsePlaylist } from "@studio/k7-wasm/schema";
-import { K7Document, type K7Scope } from "@studio/k7x/document";
 import { describe, expect, it } from "vitest";
 import {
   appendPlaylistItem,
