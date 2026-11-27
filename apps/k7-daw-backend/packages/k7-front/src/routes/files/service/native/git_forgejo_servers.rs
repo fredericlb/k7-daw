@@ -204,7 +204,7 @@ async fn probe(base: &str, id: &str) -> Result<ForgeProbe, Response> {
         lfs: !lfs_off,
         root_url: root,
         root_answers,
-        redirects: redirects().into_iter().map(Into::into).collect(),
+        redirects: redirects().to_vec(),
         scopes: SCOPES.iter().map(|s| (*s).to_string()).collect(),
     })
 }
