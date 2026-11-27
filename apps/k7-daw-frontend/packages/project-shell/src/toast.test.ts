@@ -39,8 +39,8 @@ describe("showToast", () => {
     );
   });
 
-  it("places a toast bottom-right unless asked, and answers its id", () => {
-    expect(shown({ message: "a" }).placement).toBe("bottom-right");
+  it("places a toast top-right unless asked, and answers its id", () => {
+    expect(shown({ message: "a" }).placement).toBe("top-right");
     expect(shown({ message: "a", placement: "top-centre" }).placement).toBe(
       "top-centre",
     );

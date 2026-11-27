@@ -117,7 +117,7 @@ module's `automations: [{param, curve}]`, keyed by param. Verbs:
 **The editor.** `apps/k7-daw-frontend/src/components/CurveEditor.tsx` edits a draft (`apps/k7-daw-frontend/src/curveDraft.ts`)
 and writes nothing until Save, which is one `curve set`. The draft is computed with
 `@studio/k7-wasm`, the same Rust arithmetic the bake uses (`apps/k7-daw-wasm/song-schema/src/curve.rs`).
-`CurvePlot.tsx` draws it and edits a custom curve's points; `CurveKnob.tsx` the ADSR knobs;
+`CurvePlot.tsx` draws it and edits a custom curve's points; the kit `Knob` the ADSR knobs;
 `CurveConditions.tsx` the when-it-runs rows (`start`, `end`, `between`, `event`).
 
 **The timeline's automation rows** are `automation` rows in `rows.ts`, drawn by `TimelineTab` as a

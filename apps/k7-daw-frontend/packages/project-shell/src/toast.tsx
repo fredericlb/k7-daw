@@ -32,7 +32,7 @@ export interface ToastItem {
   variant: ToastVariant;
   /** Milliseconds before it leaves on its own, or 0 to stay until dismissed. */
   duration: number;
-  /** Bottom-right by default; top-right or top-centre for what must not be missed behind the transport bar. */
+  /** Top-right by default, where nothing floats over it; top-centre for what must not be missed; bottom-right on request. */
   placement: ToastPlacement;
   /** Replaces the variant's icon (an engine toast draws an unplugged cable). */
   icon?: ReactNode;
@@ -99,7 +99,7 @@ export function showToast(opts: {
     title: opts.title,
     variant,
     duration: opts.duration ?? defaultDuration(variant, !!opts.progress),
-    placement: opts.placement ?? "bottom-right",
+    placement: opts.placement ?? "top-right",
     icon: opts.icon,
     action: opts.action,
     progress: opts.progress,
@@ -270,9 +270,9 @@ function Toast({
       className={cx(
         "float pointer-events-auto flex flex-col gap-2 rounded-(--k7-r-toast) py-2 pr-1 pl-3.5 text-foreground",
         line,
-        item.placement === "top-centre"
-          ? "animate-[k7-toast-in_var(--k7-dur-toast)_var(--k7-ease-lozenge)]"
-          : "animate-in fade-in slide-in-from-bottom-4 duration-300",
+        item.placement === "bottom-right"
+          ? "animate-in fade-in slide-in-from-bottom-4 duration-300"
+          : "animate-[k7-toast-in_var(--k7-dur-toast)_var(--k7-ease-lozenge)]",
       )}
     >
       <div className="flex items-center gap-2.5">

@@ -1,6 +1,6 @@
 # The chains graph (`@studio/ui-chains-react`)
 
-The routing graph, drawn as HTML nodes plus an SVG cable layer. dagre owns the layout and only
+The routing graph, drawn as HTML nodes plus an SVG cable layer. The layout (rust-sugiyama, in the `chains` crate) owns the layout and only
 the *drawing* is React, which buys real type, CSS effects and a DOM a test can read. It hosts
 both the Chains tab and the Graph panel, so mount it only where it has a real size: `fit()`
 frames to the host.
@@ -35,7 +35,7 @@ instant and a zoom glides — is the package's own
   leaves the graph mis-framed.
 - **`fit()` returns whether it framed anything.** Before the host has a size, or the graph
   has extents, there is nothing to fit and the caller must try again rather than count it as
-  done. The extents check is `isFinite`, not truthy: an empty dagre layout reports
+  done. The extents check is `isFinite`, not truthy: an empty the layout engine layout reports
   `-Infinity`, which passes a `!graph.width` check, produces an Infinity translation and
   *still* returns true — so the view marks itself framed over nothing and never frames the
   real graph when it arrives. `buildGraph` normalises that to 0; this check is the belt.
@@ -170,7 +170,7 @@ canvas under the overhanging half) instead of the button.
 Window-level pointer listeners are bound once and read the latest callbacks through refs, so
 they never re-subscribe. A movement threshold is what keeps a pan from also selecting.
 
-### Moving a card, and where dagre still rules
+### Moving a card, and where the layout engine still rules
 
 Drag any node's header and it goes where you put it: written to graph.k7x's `positions:` by
 `graph move` (the drop runs the verb outright, like the cable's landing). Everything that
@@ -179,16 +179,16 @@ addressed by one name: its chains name, a curve by its curve id, the sink by `OU
 one card per BINDING, not one per curve — the node id is `crv:<curve>@<module>:<param>` — because
 an envelope's event input is per-binding, and one card could not say "fired by the drums here and
 by the synth there". The layout
-places only what has no pin: dagre owns every NEW module and everything nobody moved,
+places only what has no pin: The layout engine owns every NEW module and everything nobody moved,
 which keeps its "never hand-roll layout" rule intact — a pin is not routing, it is somebody's
 answer overriding the ranker's for one card. The mixer row ignores pins entirely (a strip
 dragged out of the line would put a console's channel wherever it last was), and so does the
 graph panel (`trackPanelLayout.ts`). A pin is a place on the WHOLE graph's canvas: a track's
 slice placed by the pins is a few cards scattered over every coordinate the project spans, and a
 camera fitting that box draws them a few pixels wide with empty grid around them. The panel lays
-its slice out with dagre and its own session memory, and takes no drag, so it never writes a pin.
+its slice out with the layout engine and its own session memory, and takes no drag, so it never writes a pin.
 
-**The layout's own pins are no undo step.** Where dagre put a card that had no pin, the canvas
+**The layout's own pins are no undo step.** Where the layout engine put a card that had no pin, the canvas
 writes down with one `graph pin` (`apps/k7-daw-wasm/verbs/docs/verbs/verbs.md`) — as a project opens, among
 other times — and sends it with `journal: "skip"`. Nobody made that write, so the first Ctrl+Z on a
 freshly opened project must reach the person's own last edit, not take back a layout they never
@@ -228,21 +228,21 @@ between the two commands is the shell's plumbing, never a state the person made,
 stop on it.
 
 **A typed line has no cursor, and the verb answers for it** rather than handing the node to
-dagre: spliced, it is born halfway along the cable it was spliced into; wired to nothing, at
+the layout engine: spliced, it is born halfway along the cable it was spliced into; wired to nothing, at
 `0,-30`, just above the origin. Both are in [verbs.md](../../k7-daw-wasm/verbs/docs/verbs/verbs.md),
 and the reason is that a fresh layout has least to say about exactly these two cases — an
 unconnected node has no run to be ranked within, so it lands wherever the pass happens to put it
-and the person who typed the line has to go looking. dagre is still the fallback for anything
+and the person who typed the line has to go looking. The layout engine is still the fallback for anything
 neither the cursor nor the arrow can answer, never the boss of a node somebody placed.
 
 **An edit never reorganizes the picture.** Re-ranking the whole graph on the reload after a
 cable is pulled makes every card jump, which reads as the delete scrambling the view. Both hosts
 keep a session memory of where every node was DRAWN (`prevLaid`, handed to `layout()` as
-`prev`): dagre still runs on each layout, but its answer lands only on nodes it has never
-placed. Precedence is pin > held > dagre — the file outranks the session, since another tab
+`prev`): The layout engine still runs on each layout, but its answer lands only on nodes it has never
+placed. Precedence is pin > held > the layout engine — the file outranks the session, since another tab
 may have written a pin. `graph organize` is the ONE reorganizing operation: it clears
 `positions:` in the file, the shell bumps `organizeKey` so the hosts drop their held
-positions in the same breath (or the command would visibly do nothing), and dagre lays out
+positions in the same breath (or the command would visibly do nothing), and the layout engine lays out
 everything once, deliberately.
 
 ### The patch cable
@@ -323,8 +323,8 @@ out from under the cursor instead of growing around it.
 A wheel notch reports a delta in the hundreds, and `0.001` turns that into ~10% a notch. A
 trackpad pinch arrives as Ctrl+wheel with small continuous deltas, where that same coefficient
 gives a fraction of a percent each — the "very slow" of two fingers on a trackpad. It gets ten
-times the coefficient (`wheelZoomFactor` in `@studio/ui-chains/zoomGesture`, tested there), which
-leaves the wheel untouched.
+times the coefficient (the panes' own `wheelFactor`, reached through `wheelFactor` in
+`ui-chains-react/src/camera.ts`, tested there), which leaves the wheel untouched.
 
 ### A wheel and a trackpad send the same event and mean opposite things
 
@@ -378,3 +378,5 @@ row is the lane's signal path through its modules, and an input card at its head
 pane spent on two dropdowns. A pick of the other kind is refused in words: changing an audio input into
 a MIDI one is a removal and an addition, which the menu does not do behind one click. A picture lane
 keeps its camera as a card, whose lens dropdown is the only place it is chosen.
+
+The layout's cable routes are two straight centres: the engine routes nothing, and `cablePath` replaces both ends with the sockets.

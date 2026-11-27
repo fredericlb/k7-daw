@@ -138,9 +138,9 @@ and being the handler itself avoids a React synthetic event per notch, of which 
 sends a great many.
 
 The RATE is a separate question from the units, and it does not live here: `wheelFactor`
-normalises with `wheelPixels` and then defers to `zoomGesture` in `@studio/ui-chains`, because
-that is the half of the graph with tests and because the arrangement panes settle the same
-question the same way. A trackpad pinch cannot share a notch's coefficient — a notch is one
+normalises with `wheelPixels`, scales a notch by its delta, and takes a pinch's rate from the
+arrangement panes' own `wheelFactor` (`@studio/ui-timeline/panZoom`), so the pinch is one formula
+across the app. A trackpad pinch cannot share a notch's coefficient — a notch is one
 event with a large delta, a pinch is dozens of small ones a second, so one coefficient for both
 makes the pinch crawl.
 

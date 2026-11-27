@@ -141,6 +141,7 @@ fn write_types(dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
     Kept::export_all_to(dir)?;
     k7_wasm::ops::chains::Built::export_all_to(dir)?;
     k7_wasm::ops::chains::Size::export_all_to(dir)?;
+    k7_wasm::ops::chains::Placement::export_all_to(dir)?;
     chains::row_seams::SeamsAnswer::export_all_to(dir)?;
     chains::stack_layout::StackAnswer::export_all_to(dir)?;
     chains::module_row::Spaced::export_all_to(dir)?;
