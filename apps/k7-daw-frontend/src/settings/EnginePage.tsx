@@ -140,9 +140,7 @@ export function EnginePage() {
             {onAndroid ? (
               <AndroidEngineSection />
             ) : (
-              <p className="text-muted-foreground text-xs">
-                {m["settings.trayHint"]()}
-              </p>
+              <p className="text-fg-2 text-xs">{m["settings.trayHint"]()}</p>
             )}
           </div>
         ) : (

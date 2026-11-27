@@ -154,7 +154,7 @@ export function TabBarRound({
     <button
       type="button"
       className={cn(
-        "grid cursor-pointer place-items-center rounded-full text-foreground outline-none focus-visible:shadow-(--k7-focus-ring)",
+        "grid cursor-pointer place-items-center rounded-full text-fg-1 outline-none focus-visible:shadow-(--k7-focus-ring)",
         small
           ? "size-11 border border-(--k7-hairline-strong) bg-(--k7-on-fill) [&_svg]:size-[22px] desk:size-8 desk:[&_svg]:size-[18px]"
           : "float size-(--k7-tabbar-h) [&_svg]:size-6",

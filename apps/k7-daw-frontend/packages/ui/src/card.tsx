@@ -22,11 +22,7 @@ const Card = React.forwardRef<
 >(({ className, variant = "row", ...props }, ref) => (
   <div
     ref={ref}
-    className={cn(
-      SURFACES[variant],
-      "p-[18px] text-card-foreground",
-      className,
-    )}
+    className={cn(SURFACES[variant], "p-[18px] text-fg-1", className)}
     {...props}
   />
 ));

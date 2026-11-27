@@ -80,7 +80,7 @@ const ARG_COLOR: Record<ArgClass, string> = {
   timecode: "text-warn",
   number: "text-warn",
   note: "text-error",
-  text: "text-foreground",
+  text: "text-fg-1",
 };
 
 // The shell focuses the bar and PRE-WRITES lines through this; prewrite parses one back into command + params.
@@ -498,7 +498,7 @@ export const CommandBar = forwardRef<CommandBarHandle, CommandBarProps>(
                   ? `${listId}-${highlighted}`
                   : undefined
               }
-              className="type-mono-command min-w-0 flex-1 bg-transparent text-foreground outline-none placeholder:text-faint pointer-coarse:text-[16px]"
+              className="type-mono-command min-w-0 flex-1 bg-transparent text-fg-1 outline-none placeholder:text-faint pointer-coarse:text-[16px]"
             />
           )}
         </div>
@@ -542,7 +542,7 @@ export const CommandBar = forwardRef<CommandBarHandle, CommandBarProps>(
                   <EmptyMark recent={emptyRows[i].recent} />
                 )}
                 {/* The sentence leads, being what was searched for; the name follows in the corner, where a palette puts a keybinding. */}
-                <span className="type-secondary min-w-0 flex-1 truncate text-foreground">
+                <span className="type-secondary min-w-0 flex-1 truncate text-fg-1">
                   {c.readable}
                 </span>
                 <span className="type-mono-command shrink-0 text-fg-3">
@@ -575,7 +575,7 @@ function EmptyMark({ recent }: { recent: boolean }) {
   const label = recent ? m["commandBar.recent"]() : m["commandBar.starter"]();
   const Icon = recent ? History : Lightbulb;
   return (
-    <span title={label} className="shrink-0 self-center text-muted-foreground">
+    <span title={label} className="shrink-0 self-center text-fg-2">
       <Icon className="size-[18px]" role="img" aria-label={label} />
     </span>
   );

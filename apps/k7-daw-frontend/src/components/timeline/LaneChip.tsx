@@ -39,7 +39,7 @@ export function LaneChip({
             ? "bg-(--k7-mute-on) text-ink"
             : solo
               ? "bg-(--k7-solo-on) text-ink"
-              : "bg-(--k7-track-btn-off) text-foreground/70",
+              : "bg-(--k7-track-btn-off) text-fg-1/70",
       )}
     >
       {on || "···"}

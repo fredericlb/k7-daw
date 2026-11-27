@@ -19,7 +19,7 @@ mod schema;
 mod tree;
 mod type_table;
 pub mod types;
-mod ui;
+pub mod ui;
 mod unions;
 mod vocab;
 pub mod weight;

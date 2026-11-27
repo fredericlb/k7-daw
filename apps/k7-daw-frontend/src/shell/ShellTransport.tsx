@@ -173,10 +173,10 @@ export function ShellTransport({
               : m["transport.play"]()
         }
         aria-busy={transportWaiting}
-        className="bg-primary text-primary-foreground shadow-(--k7-highlight) aria-pressed:bg-primary aria-pressed:text-primary-foreground hover:bg-primary-hover"
+        className="bg-primary text-on-accent shadow-(--k7-highlight) aria-pressed:bg-primary aria-pressed:text-on-accent hover:bg-primary-hover"
       >
         {transportWaiting ? (
-          <Spinner className="text-primary-foreground" />
+          <Spinner className="text-on-accent" />
         ) : playing ? (
           <Pause />
         ) : (

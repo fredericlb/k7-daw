@@ -232,7 +232,7 @@ export function TakesView({
     <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-1">
       {/* The takes' tools are the title bar's, like every editor's options (docs/editors.md). */}
       <DockHeaderRow>
-        <div className="flex shrink-0 items-center gap-2 text-xs text-muted-foreground">
+        <div className="flex shrink-0 items-center gap-2 text-xs text-fg-2">
           <Button
             size="icon"
             variant={host.recording ? "default" : "glass"}
@@ -263,7 +263,7 @@ export function TakesView({
               <Circle className="size-4 fill-record text-record" />
             )}
           </Button>
-          <span className="rounded-full bg-(--k7-row) px-3 py-1 font-mono text-[12px] text-foreground">
+          <span className="rounded-full bg-(--k7-row) px-3 py-1 font-mono text-[12px] text-fg-1">
             {sel
               ? `${pos(sel.from)} → ${pos(sel.to)}`
               : m["takes.fromPosition"]({ position: pos(ev.start) })}
@@ -313,7 +313,7 @@ export function TakesView({
         <button
           type="button"
           aria-label={m["takes.seek"]()}
-          className="relative block h-4 min-w-0 flex-1 cursor-pointer border-b border-border/50 text-left font-mono text-[11px] text-muted-foreground"
+          className="relative block h-4 min-w-0 flex-1 cursor-pointer border-b border-hairline/50 text-left font-mono text-[11px] text-fg-2"
           onClick={(e) => onSeek?.((beatAt(e.clientX) * 60) / tempo)}
         >
           {bars.map((b) => (
@@ -347,11 +347,7 @@ export function TakesView({
                 className="flex min-h-10 flex-1 basis-0 [@media(pointer:coarse)]:min-h-11"
               >
                 <div className="flex w-28 shrink-0 items-center gap-1 px-1 text-xs [@media(pointer:coarse)]:w-40 [@media(pointer:coarse)]:gap-2">
-                  <span
-                    className={
-                      heard.length ? "text-foreground" : "text-muted-foreground"
-                    }
-                  >
+                  <span className={heard.length ? "text-fg-1" : "text-fg-2"}>
                     {label}
                   </span>
                   <Button

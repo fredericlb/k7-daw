@@ -52,7 +52,7 @@ export function GitPage({
       ref={ref}
       aria-label={region}
       // Beside the home's sidebar, which stays: only a phone's page covers the whole window.
-      className={`fixed inset-y-0 right-0 z-50 overflow-y-auto bg-background text-foreground ${phone ? "left-0" : "left-[calc(var(--k7-sidebar-w)+32px)]"}`}
+      className={`fixed inset-y-0 right-0 z-50 overflow-y-auto bg-ground text-fg-1 ${phone ? "left-0" : "left-[calc(var(--k7-sidebar-w)+32px)]"}`}
       onKeyDown={(e) => {
         // An open menu or question takes its own Escape first.
         if (e.key !== "Escape" || e.defaultPrevented || busy) return;

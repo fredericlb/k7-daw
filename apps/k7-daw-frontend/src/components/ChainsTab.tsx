@@ -642,11 +642,7 @@ function ChainsTabView({
       </div>
     );
   if (!graph || !laid)
-    return (
-      <div className="p-4 text-sm text-muted-foreground">
-        {m["common.loading"]()}
-      </div>
-    );
+    return <div className="p-4 text-sm text-fg-2">{m["common.loading"]()}</div>;
 
   // Past the guard `laid` is real; the fallback never fires and is only how the narrowing reaches a memo computed above.
   const shown = withPending ?? laid;
@@ -662,7 +658,7 @@ function ChainsTabView({
           type="button"
           onClick={() => setListOpen((o) => !o)}
           aria-expanded={listOpen}
-          className="absolute left-2 top-2 z-30 flex items-center gap-1 rounded border border-border bg-card/90 px-2 py-1 text-xs shadow"
+          className="absolute left-2 top-2 z-30 flex items-center gap-1 rounded border border-hairline bg-panel/90 px-2 py-1 text-xs shadow"
         >
           <List className="h-3.5 w-3.5" />
           {m["chains.list"]()}
@@ -671,14 +667,14 @@ function ChainsTabView({
       {showList && (!isMobile || listOpen) && (
         <aside
           className={cn(
-            "flex flex-col border-r border-border text-sm",
+            "flex flex-col border-r border-hairline text-sm",
             isMobile
-              ? "absolute inset-y-0 left-0 z-20 w-64 bg-card shadow-xl"
-              : "w-72 shrink-0 bg-card/40",
+              ? "absolute inset-y-0 left-0 z-20 w-64 bg-panel shadow-xl"
+              : "w-72 shrink-0 bg-panel/40",
           )}
         >
           <div className="min-h-0 flex-1 overflow-auto p-2">
-            <div className="mb-1 px-1 text-xs uppercase tracking-wide text-muted-foreground">
+            <div className="mb-1 px-1 text-xs uppercase tracking-wide text-fg-2">
               {chainCount(Object.keys(graph.chains).length)}
             </div>
             {Object.keys(graph.chains).map((name) => {
@@ -702,7 +698,7 @@ function ChainsTabView({
                       if (willSelect) camApi.current?.fitTo(chainNodes(name));
                       if (isMobile && willSelect) setListOpen(false);
                     }}
-                    className={`flex w-full items-center gap-1 truncate rounded px-2 py-1 text-left font-mono text-xs text-foreground hover:bg-accent ${isSelected ? "bg-accent" : ""}`}
+                    className={`flex w-full items-center gap-1 truncate rounded px-2 py-1 text-left font-mono text-xs text-fg-1 hover:bg-row ${isSelected ? "bg-row" : ""}`}
                   >
                     <ChevronRight
                       className={`h-3 w-3 shrink-0 transition-transform ${isExpanded ? "rotate-90" : ""}`}
@@ -712,7 +708,7 @@ function ChainsTabView({
                   {isExpanded && (
                     <>
                       {fromLabel && (
-                        <div className="truncate py-0.5 pl-7 pr-2 font-mono text-xs text-muted-foreground">
+                        <div className="truncate py-0.5 pl-7 pr-2 font-mono text-xs text-fg-2">
                           {shownName(fromLabel)}
                         </div>
                       )}
@@ -737,7 +733,7 @@ function ChainsTabView({
                                     });
                                 }
                               }}
-                              className={`min-w-0 flex-1 truncate rounded py-0.5 pl-7 pr-1 text-left font-mono text-xs text-muted-foreground hover:bg-accent hover:text-foreground ${modSelected ? "bg-accent text-foreground" : ""}`}
+                              className={`min-w-0 flex-1 truncate rounded py-0.5 pl-7 pr-1 text-left font-mono text-xs text-fg-2 hover:bg-row hover:text-fg-1 ${modSelected ? "bg-row text-fg-1" : ""}`}
                             >
                               {shownName(step.module)}
                             </button>
@@ -747,7 +743,7 @@ function ChainsTabView({
                       {toLabels.map((t) => (
                         <div
                           key={t}
-                          className="truncate py-0.5 pl-7 pr-2 font-mono text-xs text-muted-foreground"
+                          className="truncate py-0.5 pl-7 pr-2 font-mono text-xs text-fg-2"
                         >
                           {shownName(t)}
                         </div>
@@ -758,7 +754,7 @@ function ChainsTabView({
               );
             })}
             {graph.warnings.length > 0 && (
-              <div className="mt-3 border-t border-border pt-2 text-xs text-amber-400">
+              <div className="mt-3 border-t border-hairline pt-2 text-xs text-amber-400">
                 {graphWarningLines(graph).map((w, i) => (
                   <div key={i}>! {w}</div>
                 ))}

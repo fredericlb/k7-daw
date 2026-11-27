@@ -24,7 +24,7 @@ function SurfaceTabView({ surface, ...rest }: ShellPaneProps) {
       {pane ? (
         pane({ surface, ...rest })
       ) : (
-        <div className="flex flex-1 items-center justify-center p-8 text-center text-sm text-muted-foreground">
+        <div className="flex flex-1 items-center justify-center p-8 text-center text-sm text-fg-2">
           {m["srf.drawnByShell"]({ type: surface.surface.type })}
         </div>
       )}

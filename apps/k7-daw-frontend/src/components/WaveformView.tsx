@@ -178,8 +178,8 @@ export function WaveformView({
     wf && wf.clipBeats > 0 ? (body.w * zoomX) / wf.clipBeats : 0;
 
   return (
-    <div className="flex h-full min-h-0 flex-col border-t-2 border-border bg-background">
-      <div className="flex items-center gap-2 border-b border-border px-3 py-1 text-xs">
+    <div className="flex h-full min-h-0 flex-col border-t-2 border-hairline bg-ground">
+      <div className="flex items-center gap-2 border-b border-hairline px-3 py-1 text-xs">
         {onPlay && (
           <button
             type="button"
@@ -195,7 +195,7 @@ export function WaveformView({
             }}
             title={m["wave.listenHint"]()}
             aria-label={m["wave.listen"]()}
-            className="rounded p-0.5 text-muted-foreground hover:bg-accent hover:text-foreground"
+            className="rounded p-0.5 text-fg-2 hover:bg-row hover:text-fg-1"
           >
             <Play className="h-3.5 w-3.5" />
           </button>
@@ -204,7 +204,7 @@ export function WaveformView({
           <Volume2 className="h-3.5 w-3.5" /> {clip.name || clip.id}
         </span>
         {wf && (
-          <span className="text-muted-foreground">
+          <span className="text-fg-2">
             {wf.seconds.toFixed(2)}s · {wf.clipBeats.toFixed(2)} beats
             {/* What the marks add up to, said in words — the roll's header says the same. */}
             {loop && (
@@ -219,7 +219,7 @@ export function WaveformView({
           <button
             onClick={onClose}
             title={m["editor.closeHint"]()}
-            className="ml-auto rounded px-2 py-0.5 text-muted-foreground hover:bg-accent hover:text-foreground"
+            className="ml-auto rounded px-2 py-0.5 text-fg-2 hover:bg-row hover:text-fg-1"
           >
             close <X className="h-3.5 w-3.5" />
           </button>
@@ -235,9 +235,7 @@ export function WaveformView({
             {m["wave.unavailable"]({ error })}
           </div>
         ) : !wf ? (
-          <div className="p-3 text-sm text-muted-foreground">
-            {m["wave.decoding"]()}
-          </div>
+          <div className="p-3 text-sm text-fg-2">{m["wave.decoding"]()}</div>
         ) : (
           // A relative wrapper so windows overlay by time-fraction; its width scales with zoom and the container scrolls.
           <div
@@ -299,7 +297,7 @@ export function WaveformView({
                       {/* No name on a hollow band: it is not a window, it is two handles. */}
                       {!r.hollow && (
                         <span
-                          className="absolute left-0.5 top-0.5 rounded bg-background/70 px-0.5 font-mono text-[11px] text-primary-text"
+                          className="absolute left-0.5 top-0.5 rounded bg-ground/70 px-0.5 font-mono text-[11px] text-primary-text"
                           style={r.color ? { color: r.color } : undefined}
                         >
                           {r.symbol}

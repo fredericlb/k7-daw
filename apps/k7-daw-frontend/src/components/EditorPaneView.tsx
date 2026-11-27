@@ -168,13 +168,13 @@ export default function EditorPaneView({
 
   if (!file)
     return (
-      <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
+      <div className="flex h-full items-center justify-center text-sm text-fg-2">
         {m["editorPane.selectFile"]()}
       </div>
     );
   if (file.binary)
     return (
-      <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
+      <div className="flex h-full items-center justify-center text-sm text-fg-2">
         {m["editorPane.binary"]({ file: file.path })}
       </div>
     );

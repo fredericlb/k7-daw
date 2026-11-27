@@ -314,7 +314,7 @@ export function Waveform({
 
   return (
     <div
-      className={`relative w-full shrink-0 overflow-hidden rounded-md bg-muted/40 ${
+      className={`relative w-full shrink-0 overflow-hidden rounded-md bg-row/40 ${
         onShove ? "cursor-ew-resize touch-none" : ""
       }`}
       style={{ height: `${height}px` }}
@@ -325,7 +325,7 @@ export function Waveform({
     >
       <canvas ref={canvas} className="h-full w-full" />
       {analysing ? (
-        <span className="absolute inset-0 flex items-center justify-center text-xs text-muted-foreground">
+        <span className="absolute inset-0 flex items-center justify-center text-xs text-fg-2">
           {m["wave.analysing"]()}
         </span>
       ) : null}
@@ -340,12 +340,12 @@ export function Waveform({
       ) : null}
       {envelope && !envelope.bpm ? (
         // No tempo means no grid, said out loud: missing yellow lines would otherwise read as a bug.
-        <span className="absolute right-2 top-1 text-[10px] text-muted-foreground">
+        <span className="absolute right-2 top-1 text-[10px] text-fg-2">
           {m["wave.noTempo"]()}
         </span>
       ) : null}
       {envelope?.bpm ? (
-        <span className="absolute right-2 top-1 font-mono text-[10px] tabular-nums text-muted-foreground">
+        <span className="absolute right-2 top-1 font-mono text-[10px] tabular-nums text-fg-2">
           {envelope.bpm.toFixed(1)} BPM
         </span>
       ) : null}

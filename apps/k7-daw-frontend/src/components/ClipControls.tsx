@@ -43,7 +43,7 @@ export interface ClipControlsProps {
 export function ClipControls(p: ClipControlsProps) {
   return (
     <DockHeaderRow bodyOnPhone>
-      <div className="ml-auto flex shrink-0 flex-wrap items-center gap-2 text-xs text-muted-foreground">
+      <div className="ml-auto flex shrink-0 flex-wrap items-center gap-2 text-xs text-fg-2">
         <EventGainSlider
           db={p.gainDb}
           onCommit={

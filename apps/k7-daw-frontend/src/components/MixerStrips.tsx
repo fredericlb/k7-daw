@@ -225,7 +225,7 @@ function MasterStrip({
           aria-expanded={mastering.open}
           title={m["mixer.masterOpen"]()}
           onClick={mastering.onToggle}
-          className="type-label rounded-full px-2 py-0.5 text-foreground hover:bg-on-fill aria-expanded:bg-on-fill aria-expanded:text-lavender"
+          className="type-label rounded-full px-2 py-0.5 text-fg-1 hover:bg-on-fill aria-expanded:bg-on-fill aria-expanded:text-lavender"
         >
           {m["mixer.masterOut"]()}
         </button>

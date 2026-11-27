@@ -6,7 +6,8 @@
 mod http_support;
 mod support;
 
-mod ai_turn;
+mod ai_organize;
+mod ai_vectors;
 mod auth;
 mod cameras;
 mod engine;

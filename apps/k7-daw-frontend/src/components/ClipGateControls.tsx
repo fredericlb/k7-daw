@@ -89,7 +89,7 @@ export function TrimGate({
           <span className="w-14 tabular-nums">{gate} dB</span>
         </div>
         <div className="mt-2 flex items-center gap-3">
-          <p className="min-w-0 flex-1 text-[11px] text-muted-foreground">
+          <p className="min-w-0 flex-1 text-[11px] text-fg-2">
             {keep
               ? m["clip.keeps"]({
                   from: keep.from.toFixed(2),

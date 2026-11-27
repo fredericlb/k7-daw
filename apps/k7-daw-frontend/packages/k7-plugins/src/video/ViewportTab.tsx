@@ -79,7 +79,7 @@ export function ViewportTab({
   // Declared and empty is a real state: the surface says this song draws picture, and saying which file to add beats a black rectangle.
   if (!scene)
     return (
-      <div className="flex h-full w-full items-center justify-center p-6 text-center text-sm text-muted-foreground">
+      <div className="flex h-full w-full items-center justify-center p-6 text-center text-sm text-fg-2">
         <span>
           <CodeText text={m["video.noPicture"]()} />
         </span>
@@ -109,7 +109,7 @@ export function ViewportTab({
         </VideoCanvas>
       </div>
       {/* The strip: the format always, and the per-lane sync error only while profiling, it costing a 5 Hz re-render (docs/picture.md). */}
-      <div className="flex shrink-0 items-center gap-3 border-t border-border bg-background px-3 py-1 font-mono text-[11px] text-muted-foreground">
+      <div className="flex shrink-0 items-center gap-3 border-t border-hairline bg-ground px-3 py-1 font-mono text-[11px] text-fg-2">
         <span>
           {scene.viewport[0]}×{scene.viewport[1]}
         </span>

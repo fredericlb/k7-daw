@@ -37,12 +37,12 @@ export function UploadProgress({
       : `${fileName}  ${formatBytes(loaded)} / ${formatBytes(total)}`;
 
   return (
-    <div className="border-t border-border bg-card/60 px-3 py-1.5">
-      <div className="mb-1 flex items-center justify-between text-[11px] text-muted-foreground">
+    <div className="border-t border-hairline bg-panel/60 px-3 py-1.5">
+      <div className="mb-1 flex items-center justify-between text-[11px] text-fg-2">
         <span className="truncate">{label}</span>
         <span className="ml-2 shrink-0 tabular-nums">{pct}%</span>
       </div>
-      <div className="h-1 overflow-hidden rounded-full bg-muted">
+      <div className="h-1 overflow-hidden rounded-full bg-row">
         <div
           className={cn(
             "h-full rounded-full transition-[width] duration-150 ease-out",

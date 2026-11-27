@@ -135,7 +135,7 @@ async function dropWorkers(): Promise<void> {
 /** What is on screen while a split-out screen arrives: at startup, under the splash; later, the bar alone (apps/k7-daw-frontend/docs/shell.md). */
 function Booting() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-ground">
       <GateWait label={m["startup.loading"]()} />
     </div>
   );

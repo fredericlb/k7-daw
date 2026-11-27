@@ -210,7 +210,7 @@ export function ViewportOverlay({
               return (
                 <span
                   key={g}
-                  className="-translate-x-1/2 -translate-y-1/2 absolute size-2 border border-primary bg-background"
+                  className="-translate-x-1/2 -translate-y-1/2 absolute size-2 border border-primary bg-ground"
                   style={{ left: `${fx * 100}%`, top: `${fy * 100}%` }}
                 />
               );
@@ -220,7 +220,7 @@ export function ViewportOverlay({
       {/* What is selected, and how big it is — the one readout a drag needs, and it moves with the box. */}
       {sel && selRect && (
         <span
-          className="pointer-events-none absolute rounded-sm bg-background/80 px-1 font-mono text-[10px] text-foreground"
+          className="pointer-events-none absolute rounded-sm bg-ground/80 px-1 font-mono text-[10px] text-fg-1"
           style={{
             left: px(selRect.x),
             top: Math.max(0, px(selRect.y) - 14),

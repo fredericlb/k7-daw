@@ -20,7 +20,7 @@ export function GraphSlotPane({
     <div className="flex h-full min-h-0 w-full min-w-0 flex-1 flex-col">
       {bar !== undefined && (
         <DockHeaderRow>
-          <div className="flex min-w-0 flex-1 items-center gap-2 text-xs text-muted-foreground">
+          <div className="flex min-w-0 flex-1 items-center gap-2 text-xs text-fg-2">
             {bar}
           </div>
         </DockHeaderRow>

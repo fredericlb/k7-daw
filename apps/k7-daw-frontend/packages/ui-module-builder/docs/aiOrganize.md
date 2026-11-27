@@ -9,12 +9,12 @@ draws screens that show the sound's shape.
 
 | file | holds |
 |---|---|
-| `apps/k7-daw-frontend/packages/panel-rules/src/aiPrompt.ts` | the system prompt: the grid, every widget, the lcdscreen contract, the design brief |
-| `apps/k7-daw-frontend/packages/panel-rules/src/aiOrganize.ts` | the wire types, the per-module message, the check — in `@studio/panel-rules`, which has no React (`apps/k7-daw-frontend/packages/panel-rules/docs/panelRules.md`) |
-| `apps/k7-daw-frontend/packages/panel-rules/src/aiAnswer.ts` | the JSON the model answers, and its turn into `ui.k7x` text |
+| `apps/k7-daw-wasm/song/src/modules/ui/ai_prompt.rs` | the system prompt: the grid, every widget, the lcdscreen contract, the design brief |
+| `apps/k7-daw-wasm/song/src/modules/ui/ai_check.rs` | the wire types, the per-module message, the check, in the song crate (`apps/k7-daw-frontend/packages/panel-rules/docs/panelRules.md`) |
+| `apps/k7-daw-wasm/song/src/modules/ui/ai_answer.rs` | the JSON the model answers, and its turn into `ui.k7x` text |
 | `src/useAiOrganize.ts` | the builder's half: ask, send, land the answer in the buffers |
-| `apps/k7-daw-frontend/packages/panel-rules/src/aiLoop.ts` | the conversation: the request check, the prompts, the checks above and one repair round, run by the host's page with a turn function it is given |
-| `apps/k7-daw-backend/packages/k7-front/src/routes/ai/turn.rs` | k7's half: one model turn on the account's key (`apps/k7-daw-frontend/docs/aiOrganize.md`) |
+| `apps/k7-daw-backend/packages/k7-front/src/routes/ai/organize.rs` | the conversation: the request check, the prompts, the checks above and one repair round, on the host that holds the key (`apps/k7-daw-frontend/docs/aiOrganize.md`) |
+| `apps/k7-daw-backend/packages/k7-front/src/routes/ai/turn.rs` | one model turn on the account's key, and the stream the run answers through |
 | `apps/k7-daw-backend/packages/k7-front/src/routes/ai/mod.rs` | the account's key and model, write-only from the browser |
 
 ## The key is the account's, and the button is the host's to offer
@@ -149,7 +149,7 @@ reported rather than dropped. Then `checkAiResult` refuses what would break the 
 
 - the schema's own refusals, with their paths, since `UiFileSchema` is what the loader runs;
 - a widget outside the grid, or two on top of each other — a `group` excepted, which frames what
-  lies wholly inside it, so a widget straddling a group's edge is refused (`apps/k7-daw-frontend/packages/panel-rules/src/groupGeometry.ts`,
+  lies wholly inside it, so a widget straddling a group's edge is refused (`apps/k7-daw-wasm/song/src/modules/ui/geometry.rs`,
   the rule the grid editor applies too); a page is checked **together with the
   panel-level widgets**, because those are drawn over every page;
 - an id used twice anywhere in the panel;

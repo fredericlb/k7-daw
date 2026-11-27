@@ -129,7 +129,7 @@ export function ReferencesPanel({
       />
 
       {busy ? (
-        <p className="flex shrink-0 items-center gap-2 border-b bg-muted/30 px-2 py-1.5 text-muted-foreground text-xs">
+        <p className="flex shrink-0 items-center gap-2 border-b bg-row/30 px-2 py-1.5 text-fg-2 text-xs">
           <Spinner size="xs" inherit className="shrink-0" /> {busy}
         </p>
       ) : null}
@@ -152,7 +152,7 @@ export function ReferencesPanel({
 
       <div className="min-h-0 flex-1 overflow-y-auto">
         {rows === null ? (
-          <div className="p-4 text-muted-foreground text-sm">
+          <div className="p-4 text-fg-2 text-sm">
             <Loading label={m["common.loading"]()} />
           </div>
         ) : rows.length === 0 ? (
@@ -170,19 +170,19 @@ export function ReferencesPanel({
                   onClick={() => (playing === r.path ? onToggle() : onPlay(r))}
                   title={r.path}
                   aria-current={playing === r.path}
-                  className={`flex min-w-0 flex-1 items-center gap-2 rounded px-1.5 py-1 text-left text-sm hover:bg-accent ${
-                    playing === r.path ? "text-foreground" : ""
+                  className={`flex min-w-0 flex-1 items-center gap-2 rounded px-1.5 py-1 text-left text-sm hover:bg-row ${
+                    playing === r.path ? "text-fg-1" : ""
                   }`}
                 >
                   {playing === r.path && sounding ? (
-                    <Pause className="h-3 w-3 shrink-0 text-foreground" />
+                    <Pause className="h-3 w-3 shrink-0 text-fg-1" />
                   ) : (
                     <Play
-                      className={`h-3 w-3 shrink-0 ${playing === r.path ? "text-foreground" : "text-muted-foreground"}`}
+                      className={`h-3 w-3 shrink-0 ${playing === r.path ? "text-fg-1" : "text-fg-2"}`}
                     />
                   )}
                   <span className="min-w-0 flex-1 truncate">{r.name}</span>
-                  <span className="shrink-0 font-mono text-[11px] text-muted-foreground tabular-nums">
+                  <span className="shrink-0 font-mono text-[11px] text-fg-2 tabular-nums">
                     {formatBytes(r.bytes)}
                   </span>
                 </button>

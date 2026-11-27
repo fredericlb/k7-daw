@@ -75,7 +75,7 @@ function Meter({ db }: { db: number }) {
   const fill = meterFill(db);
   return (
     <div
-      className="relative w-1.5 shrink-0 overflow-hidden rounded-full bg-foreground/15"
+      className="relative w-1.5 shrink-0 overflow-hidden rounded-full bg-fg-1/15"
       data-testid="deck-meter"
       title={m["meter.level"]({ value: dbText(db) })}
     >
@@ -123,7 +123,7 @@ export function MasterMeter() {
         value: dbText(db),
       })}
     >
-      <div className="relative h-1.5 w-20 overflow-hidden rounded-full bg-foreground/15">
+      <div className="relative h-1.5 w-20 overflow-hidden rounded-full bg-fg-1/15">
         <div
           className={`absolute inset-y-0 left-0 w-full origin-left rounded-full ${
             ZONE_FILL[meterZone(db)]
@@ -137,7 +137,7 @@ export function MasterMeter() {
         className={`h-1.5 w-1.5 shrink-0 rounded-full ${
           clipped
             ? "bg-meter-clip shadow-[0_0_4px_1px] shadow-meter-clip/60"
-            : "bg-foreground/20"
+            : "bg-fg-1/20"
         }`}
       />
     </div>
@@ -170,7 +170,7 @@ function ChannelFader({
           <span aria-hidden="true" className={RAIL_V} />
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute left-1/2 h-px w-3 -translate-x-1/2 translate-y-1/2 bg-foreground/40"
+            className="pointer-events-none absolute left-1/2 h-px w-3 -translate-x-1/2 translate-y-1/2 bg-fg-1/40"
             style={{ bottom: notchAt((0 - lo) / (hi - lo)) }}
           />
           <Slider
@@ -290,7 +290,7 @@ export function MixerColumn({
               <span aria-hidden="true" className={RAIL_H} />
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute top-1/2 left-1/2 h-3 w-px -translate-x-1/2 -translate-y-1/2 bg-foreground/40"
+                className="pointer-events-none absolute top-1/2 left-1/2 h-3 w-px -translate-x-1/2 -translate-y-1/2 bg-fg-1/40"
               />
               <Slider
                 min={0}
@@ -321,7 +321,7 @@ export function MixerColumn({
             className={`h-6 w-8 rounded border font-mono text-[10px] ${
               quantise
                 ? "border-amber-500 bg-amber-500 text-white"
-                : "border-border bg-background text-muted-foreground"
+                : "border-hairline bg-ground text-fg-2"
             }`}
           >
             Q
@@ -332,7 +332,7 @@ export function MixerColumn({
               type="button"
               onDoubleClick={() => onChange(MIX_CENTRE)}
               title={m["xfade.recentre"]()}
-              className="font-mono text-muted-foreground text-xs tabular-nums"
+              className="font-mono text-fg-2 text-xs tabular-nums"
             >
               {Math.round(mix * 100)}%
             </button>

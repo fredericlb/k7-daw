@@ -86,19 +86,19 @@ const k7x = StreamLanguage.define<K7xState>({
 
 // The YAML mode's palette, a key taking the accent there as here.
 const k7xHighlight = HighlightStyle.define([
-  { tag: t.comment, color: "var(--sh-muted-foreground)", fontStyle: "italic" },
-  { tag: t.string, color: "var(--sh-green)" },
-  { tag: t.number, color: "var(--sh-amber)" },
-  { tag: t.bool, color: "var(--sh-amber)" },
-  { tag: t.null, color: "var(--sh-amber)" },
-  { tag: t.propertyName, color: "var(--sh-primary)" },
+  { tag: t.comment, color: "var(--k7-text-2)", fontStyle: "italic" },
+  { tag: t.string, color: "var(--k7-ok)" },
+  { tag: t.number, color: "var(--k7-warn)" },
+  { tag: t.bool, color: "var(--k7-warn)" },
+  { tag: t.null, color: "var(--k7-warn)" },
+  { tag: t.propertyName, color: "var(--k7-accent)" },
   {
     tag: t.invalid,
     color: "var(--k7-error)",
     textDecoration: "underline wavy",
   },
-  { tag: t.bracket, color: "var(--sh-muted-foreground)" },
-  { tag: t.punctuation, color: "var(--sh-muted-foreground)" },
+  { tag: t.bracket, color: "var(--k7-text-2)" },
+  { tag: t.punctuation, color: "var(--k7-text-2)" },
 ]);
 
 /** The language support for a .k7x project file. */

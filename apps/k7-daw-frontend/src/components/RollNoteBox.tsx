@@ -174,11 +174,11 @@ export function RollHoverBands({
   return (
     <>
       <div
-        className="pointer-events-none absolute left-0 right-0 bg-foreground/[0.05]"
+        className="pointer-events-none absolute left-0 right-0 bg-fg-1/[0.05]"
         style={{ top: hover.row * rowH, height: Math.max(1, rowH) }}
       />
       <div
-        className="pointer-events-none absolute inset-y-0 bg-foreground/[0.05]"
+        className="pointer-events-none absolute inset-y-0 bg-fg-1/[0.05]"
         style={{ left: colLeft(hover.col), width: Math.max(1, colW) }}
       />
     </>

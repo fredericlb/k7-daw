@@ -217,7 +217,7 @@ function AskDialog({
         onClick={cancel}
       />
       <div className="panel-dialog relative flex max-h-full w-[min(var(--k7-dialog-w),92vw)] flex-col gap-3.5 overflow-y-auto rounded-(--k7-r-dialog) p-[22px] animate-[k7-dialog-in_var(--k7-dur-dialog)_var(--k7-ease-spring)]">
-        <h2 className="type-sheet-title text-foreground">{pending.title}</h2>
+        <h2 className="type-sheet-title text-fg-1">{pending.title}</h2>
         {pending.body ? (
           <p className="whitespace-pre-line text-sm leading-[19px] text-fg-2">
             {pending.body}

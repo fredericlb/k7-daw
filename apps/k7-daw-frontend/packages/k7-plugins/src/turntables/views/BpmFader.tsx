@@ -68,7 +68,7 @@ export function BpmFader({
     <div className="flex min-h-0 w-full flex-1 flex-col items-center gap-1">
       <span
         className={`font-mono text-[11px] tabular-nums ${
-          driven ? "text-muted-foreground" : ""
+          driven ? "text-fg-2" : ""
         }`}
       >
         {has ? target.toFixed(1) : "—"}
@@ -80,7 +80,7 @@ export function BpmFader({
         {has ? (
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute left-1/2 h-px w-6 -translate-x-1/2 translate-y-1/2 bg-foreground/40"
+            className="pointer-events-none absolute left-1/2 h-px w-6 -translate-x-1/2 translate-y-1/2 bg-fg-1/40"
             style={{ bottom: notchAt(home) }}
           />
         ) : null}
@@ -118,7 +118,7 @@ export function BpmFader({
         className={`font-mono text-[10px] tabular-nums ${
           has && Math.abs(target - natural) > natural * PITCH_RANGE
             ? "text-amber-500"
-            : "text-muted-foreground"
+            : "text-fg-2"
         }`}
         title={
           has && Math.abs(target - natural) > natural * PITCH_RANGE
@@ -146,9 +146,7 @@ export function BpmFader({
             disabled={!act}
             onClick={act}
             className={`h-5 flex-1 rounded font-mono text-[9px] leading-none ${
-              act
-                ? "bg-muted text-muted-foreground hover:bg-accent"
-                : "bg-muted/40 text-muted-foreground/40"
+              act ? "bg-row text-fg-2 hover:bg-row" : "bg-row/40 text-fg-2/40"
             }`}
             title={act ? why : m["bpm.noTempo"]()}
           >
@@ -169,7 +167,7 @@ export function BpmFader({
       {/* The KEY, and its Camelot code — typed in the médiathèque, never detected (docs/grid.md). */}
       {songKey ? (
         <span
-          className="shrink-0 font-mono text-[9px] text-muted-foreground leading-none"
+          className="shrink-0 font-mono text-[9px] text-fg-2 leading-none"
           title={m["bpm.key"]({ key: songKey })}
         >
           {camelotOf(songKey)}
@@ -183,8 +181,8 @@ export function BpmFader({
         // As tall as the PLAY under it: two blocks a hand finds without looking down.
         className={`h-12 w-full shrink-0 rounded px-1 font-mono text-[10px] leading-none ${
           keylock
-            ? "bg-primary/80 text-primary-foreground"
-            : "bg-muted text-muted-foreground hover:bg-accent"
+            ? "bg-primary/80 text-on-accent"
+            : "bg-row text-fg-2 hover:bg-row"
         }`}
         title={keylock ? m["bpm.keylockOn"]() : m["bpm.keylockOff"]()}
       >

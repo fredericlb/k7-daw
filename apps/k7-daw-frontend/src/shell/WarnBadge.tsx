@@ -8,7 +8,7 @@ export function WarnBadge({ n }: { n: number }) {
       variant="count-sm"
       aria-hidden
       data-testid="problem-count"
-      className="pointer-events-none absolute -top-1.5 -right-1.5 bg-warn text-background"
+      className="pointer-events-none absolute -top-1.5 -right-1.5 bg-warn text-ground"
     >
       {n}
     </Badge>

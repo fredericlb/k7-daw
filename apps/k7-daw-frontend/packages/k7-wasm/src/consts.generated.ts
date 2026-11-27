@@ -536,6 +536,40 @@ export const WIDGET_TYPES = [
 /** What a waveform widget draws: the live signal either side of its module. */
 export const WAVEFORM_SOURCES = ["input", "output"] as const;
 
+/** The widget kinds that bind a param: the only ones a dragged parameter can bounce off. */
+export const BINDABLE_WIDGET_TYPES = [
+  "knob",
+  "slider",
+  "fader",
+  "number",
+  "toggle",
+  "button",
+  "meter",
+  "dropdown",
+  "filepicker",
+  "tap",
+] as const;
+
+/** The widget kinds that carry a range. */
+export const RANGED_WIDGET_TYPES = [
+  "knob",
+  "slider",
+  "fader",
+  "number",
+] as const;
+
+/** A fresh group's tint: the OP palette's blue, faint enough that the controls on it stay legible. */
+export const GROUP_COLOR = "#3d7dff26";
+
+/** The horizontal layout's height, and the vertical one's width. */
+export const LAYOUT_MAX = 4;
+
+/** How many cells a knob takes in an auto-organised panel. */
+export const KNOB_SPAN = 2;
+
+/** The page `@base` leads in an auto-organised panel. */
+export const GENERAL_PAGE = "General";
+
 /** The longest a tab's name may be, in characters. */
 export const TAB_NAME_MAX = 10;
 

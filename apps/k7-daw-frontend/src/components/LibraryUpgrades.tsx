@@ -88,7 +88,7 @@ export function LibraryUpgrades({
       : levels.filter((l) => (l.version?.requires ?? 1) > engineLevel);
   if (!substituted.length && !ready.length && !tooNew.length) return null;
   return (
-    <div className="flex flex-col gap-1 border-b border-border px-2 py-1.5 text-xs">
+    <div className="flex flex-col gap-1 border-b border-hairline px-2 py-1.5 text-xs">
       {substituted.map((s) => (
         <SubstitutionLine
           key={`pin-${s.library}`}
@@ -117,7 +117,7 @@ export function LibraryUpgrades({
         const to = l.version?.upgrade as number;
         return (
           <div key={l.ns} className="flex items-center gap-2">
-            <span className="flex-1 truncate text-muted-foreground">
+            <span className="flex-1 truncate text-fg-2">
               {m["libs.upgradeReady"]({
                 name: l.ns,
                 from: String(l.version?.pinned),

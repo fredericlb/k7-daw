@@ -17,7 +17,7 @@ export function lazyDrawer<P extends object>(
       <Suspense
         fallback={
           <div className="flex min-h-0 flex-1 items-center justify-center">
-            <Spinner className="text-muted-foreground" />
+            <Spinner className="text-fg-2" />
           </div>
         }
       >

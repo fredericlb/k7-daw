@@ -30,7 +30,7 @@ function Stage({
 }) {
   useEffect(() => show(), [show]);
   return (
-    <div className="relative h-[560px] bg-background">
+    <div className="relative h-[560px] bg-ground">
       {<Toaster phone={phone} />}
     </div>
   );

@@ -16,18 +16,18 @@ export function Stepper({
   onChange: (v: number) => void;
 }) {
   return (
-    <div className="flex items-center gap-1 text-xs text-muted-foreground">
+    <div className="flex items-center gap-1 text-xs text-fg-2">
       <span>{label}</span>
       <button
-        className="grid h-6 w-6 place-items-center rounded border border-border hover:bg-accent disabled:opacity-40"
+        className="grid h-6 w-6 place-items-center rounded border border-hairline hover:bg-row disabled:opacity-40"
         disabled={disabled || value <= min}
         onClick={() => onChange(value - 1)}
       >
         <Minus className="h-3 w-3" />
       </button>
-      <span className="w-4 text-center font-mono text-foreground">{value}</span>
+      <span className="w-4 text-center font-mono text-fg-1">{value}</span>
       <button
-        className="grid h-6 w-6 place-items-center rounded border border-border hover:bg-accent disabled:opacity-40"
+        className="grid h-6 w-6 place-items-center rounded border border-hairline hover:bg-row disabled:opacity-40"
         disabled={disabled}
         onClick={() => onChange(value + 1)}
       >

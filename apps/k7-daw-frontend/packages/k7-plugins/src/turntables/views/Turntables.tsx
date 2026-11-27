@@ -31,7 +31,7 @@ export function Turntables({
   if (missing.length)
     return (
       <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-4 p-8">
-        <Unplug className="h-8 w-8 text-muted-foreground" aria-hidden="true" />
+        <Unplug className="h-8 w-8 text-fg-2" aria-hidden="true" />
         <ul className="flex max-w-xl flex-col gap-1.5">
           {missing.map((c) => (
             <li
@@ -43,7 +43,7 @@ export function Turntables({
           ))}
         </ul>
         {/* The fix, not just the fault: a line somebody can copy, in the file it goes in. */}
-        <p className="max-w-xl text-center text-xs text-muted-foreground">
+        <p className="max-w-xl text-center text-xs text-fg-2">
           <CodeText
             text={m["gate.fix"]({ file, shape: "{ module: …, param: … }" })}
           />

@@ -44,7 +44,7 @@ export function TagsPanel({
 
   if (!project)
     return (
-      <p className="px-2 py-4 text-center text-xs text-muted-foreground">
+      <p className="px-2 py-4 text-center text-xs text-fg-2">
         {m["tags.noProject"]()}
       </p>
     );
@@ -62,12 +62,12 @@ export function TagsPanel({
       {tags.map((t) => (
         <span
           key={t}
-          className="flex items-center gap-0.5 rounded bg-secondary py-0.5 pr-0.5 pl-1.5 text-muted-foreground text-xs"
+          className="flex items-center gap-0.5 rounded bg-row py-0.5 pr-0.5 pl-1.5 text-fg-2 text-xs"
         >
           {t}
           <button
             type="button"
-            className="rounded p-0.5 hover:bg-muted hover:text-foreground"
+            className="rounded p-0.5 hover:bg-row hover:text-fg-1"
             onClick={() => void runTag(`project untag ${t}`)}
             title={m["tasks.untag"]({ tag: t })}
             aria-label={m["tasks.untag"]({ tag: t })}

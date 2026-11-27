@@ -75,7 +75,7 @@ const DialogContent = React.forwardRef<
           // A menu or picker opened from inside a non-modal dialog is outside it, and must not close it.
           onInteractOutside={nonModal ? (e) => e.preventDefault() : undefined}
           className={cn(
-            "panel-dialog fixed left-1/2 top-1/2 grid max-h-[calc(100dvh-2rem)] w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-3.5 overflow-y-auto rounded-(--k7-r-dialog) p-[22px] text-popover-foreground outline-none sm:max-w-(--k7-dialog-w)",
+            "panel-dialog fixed left-1/2 top-1/2 grid max-h-[calc(100dvh-2rem)] w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-3.5 overflow-y-auto rounded-(--k7-r-dialog) p-[22px] text-fg-1 outline-none sm:max-w-(--k7-dialog-w)",
             LAYER[layer],
             "data-[state=open]:animate-[k7-dialog-in_var(--k7-dur-dialog)_var(--k7-ease-spring)] data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
             className,

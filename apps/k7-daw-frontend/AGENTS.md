@@ -364,7 +364,7 @@ file:
   unstyled. A path that is simply MISSING from the list fails the same way, and worse: every
   class that package alone uses is dropped while the layout classes it shares with the app
   (`flex`, `w-16`) are generated anyway. Leave out `apps/k7-daw-frontend/packages/k7-plugins/src` and the desk's
-  strip stands in the right place, correctly spaced, with `fill-muted` and `stroke-foreground`
+  strip stands in the right place, correctly spaced, with `fill-row` and `stroke-fg-1`
   undefined — SVG knobs with no fill and no stroke. Present, positioned and invisible, which
   reads as "the control is gone" and sends you looking at the component. **Check the list
   against every package that renders JSX, not one at a time**:

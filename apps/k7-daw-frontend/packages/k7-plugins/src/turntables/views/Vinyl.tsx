@@ -280,10 +280,8 @@ export function Vinyl({
           type="button"
           onClick={onPick}
           title={loaded ? m["vinyl.change"]() : m["vinyl.choose"]()}
-          className={`pointer-events-auto flex aspect-square w-[46%] cursor-pointer flex-col items-center justify-center rounded-full px-3 text-center transition-shadow hover:ring-2 hover:ring-foreground/30 ${
-            loaded
-              ? "bg-accent text-accent-foreground"
-              : "bg-muted text-muted-foreground"
+          className={`pointer-events-auto flex aspect-square w-[46%] cursor-pointer flex-col items-center justify-center rounded-full px-3 text-center transition-shadow hover:ring-2 hover:ring-fg-1/30 ${
+            loaded ? "bg-row text-fg-1" : "bg-row text-fg-2"
           }`}
         >
           {loaded ? (
@@ -301,7 +299,7 @@ export function Vinyl({
             <span className="text-xs">{m["vinyl.deck"]({ side })}</span>
           )}
           {/* The spindle hole — the one detail that makes the ring read as a label. */}
-          <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-background" />
+          <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-ground" />
         </button>
       </div>
     </div>

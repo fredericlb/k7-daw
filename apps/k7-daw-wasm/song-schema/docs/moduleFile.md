@@ -1,7 +1,7 @@
 # The module file
 
 The rationale behind `apps/k7-daw-wasm/song/src/modules/schema.rs` and
-`apps/k7-daw-wasm/song/src/modules/ui.rs` — a `module.k7x`'s shape, the panel and the
+`apps/k7-daw-wasm/song/src/modules/ui/mod.rs` — a `module.k7x`'s shape, the panel and the
 controller beside it (`apps/k7-daw-wasm/song/src/modules/panels.rs`), and the readers over the lot.
 
 ## What the schema does not check

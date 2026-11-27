@@ -54,9 +54,9 @@ export function WidgetInspector({
   };
 
   return (
-    <div className="max-h-[38%] shrink-0 space-y-2 overflow-auto border-t border-border bg-card/40 p-3 text-sm">
+    <div className="max-h-[38%] shrink-0 space-y-2 overflow-auto border-t border-hairline bg-panel/40 p-3 text-sm">
       <div className="flex items-center justify-between">
-        <span className="font-mono text-xs text-muted-foreground">
+        <span className="font-mono text-xs text-fg-2">
           {id} · {w.type}
         </span>
         <Button
@@ -93,7 +93,7 @@ export function WidgetInspector({
         ) : isLcd ? (
           // Nothing to bind: the screen is whatever widgets.js draws under this id.
           <Field label="Drawn by">
-            <span className="block truncate rounded border border-border bg-muted/40 px-2 py-1 font-mono text-xs">
+            <span className="block truncate rounded border border-hairline bg-row/40 px-2 py-1 font-mono text-xs">
               widgets.js → {id}
             </span>
           </Field>
@@ -128,7 +128,7 @@ export function WidgetInspector({
                       onPatch({ invert: e.target.checked || undefined })
                     }
                   />
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-xs text-fg-2">
                     on while the param is off
                   </span>
                 </label>
@@ -320,7 +320,7 @@ function Field({
 }) {
   return (
     <label className="flex flex-col gap-0.5">
-      <span className="text-[10px] uppercase tracking-wide text-muted-foreground">
+      <span className="text-[10px] uppercase tracking-wide text-fg-2">
         {label}
       </span>
       {children}
@@ -348,7 +348,7 @@ function ColorField({
     <div className="flex items-center gap-1">
       <input
         type="color"
-        className="h-7 w-8 shrink-0 cursor-pointer rounded border border-border bg-background p-0.5"
+        className="h-7 w-8 shrink-0 cursor-pointer rounded border border-hairline bg-ground p-0.5"
         value={rgb}
         disabled={disabled}
         onChange={(e) => {

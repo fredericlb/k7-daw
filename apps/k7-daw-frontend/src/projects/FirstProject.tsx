@@ -59,7 +59,7 @@ export function FirstProject({
   };
 
   return (
-    <div className="flex h-full items-center justify-center bg-background p-8 text-foreground">
+    <div className="flex h-full items-center justify-center bg-ground p-8 text-fg-1">
       <div className="flex w-full max-w-2xl flex-col gap-4">
         <div className="flex flex-col gap-1">
           <h1 className="flex items-center gap-2 font-semibold text-lg">

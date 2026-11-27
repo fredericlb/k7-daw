@@ -213,9 +213,7 @@ export function PointMenuItem({
       }}
       className={cn(
         "type-label flex min-h-11 w-full cursor-pointer items-center gap-2 rounded-2xl px-3 text-left outline-none hover:bg-on-fill focus-visible:bg-on-fill desk:min-h-8 disabled:cursor-default disabled:opacity-40 aria-disabled:opacity-40",
-        danger
-          ? "text-error"
-          : "hover:text-accent-foreground focus-visible:text-accent-foreground",
+        danger ? "text-error" : "hover:text-fg-1 focus-visible:text-fg-1",
         className,
       )}
     >
@@ -230,7 +228,7 @@ export function PointMenuItem({
         children
       )}
       {shortcut ? (
-        <kbd className="shrink-0 rounded border border-border px-1 font-mono text-[11px] text-muted-foreground">
+        <kbd className="shrink-0 rounded border border-hairline px-1 font-mono text-[11px] text-fg-2">
           {shortcut}
         </kbd>
       ) : null}

@@ -229,7 +229,7 @@ function Row<N extends TreeNode>(props: RowProps<N>) {
         const r = e.currentTarget.getBoundingClientRect();
         onMenuAt(node, r.left, r.bottom);
       }}
-      className="flex h-6 w-6 shrink-0 items-center justify-center rounded text-muted-foreground opacity-0 hover:text-foreground focus-visible:opacity-100 group-hover/row:opacity-100 group-focus-within/row:opacity-100 [@media(hover:none)]:h-8 [@media(hover:none)]:w-8 [@media(hover:none)]:opacity-100"
+      className="flex h-6 w-6 shrink-0 items-center justify-center rounded text-fg-2 opacity-0 hover:text-fg-1 focus-visible:opacity-100 group-hover/row:opacity-100 group-focus-within/row:opacity-100 [@media(hover:none)]:h-8 [@media(hover:none)]:w-8 [@media(hover:none)]:opacity-100"
     >
       <EllipsisVertical className="h-4 w-4" />
     </button>
@@ -303,7 +303,7 @@ function Row<N extends TreeNode>(props: RowProps<N>) {
             "flex items-center pr-1",
             // An openable folder is a row you select, so it highlights like a leaf does — on the
             // wrapper, for the same reason: a trailing badge would else cut the highlight short.
-            opens && activePath === node.path && "bg-secondary",
+            opens && activePath === node.path && "bg-row",
             dropTarget === node.path &&
               "rounded bg-primary/20 ring-1 ring-inset ring-primary/60",
             pressable,
@@ -328,7 +328,7 @@ function Row<N extends TreeNode>(props: RowProps<N>) {
                   : undefined
               }
               className={cn(
-                "flex min-w-0 items-center gap-1 py-0.5 text-left text-sm text-muted-foreground hover:text-foreground",
+                "flex min-w-0 items-center gap-1 py-0.5 text-left text-sm text-fg-2 hover:text-fg-1",
                 opens ? "shrink-0" : "flex-1",
               )}
             >
@@ -354,7 +354,7 @@ function Row<N extends TreeNode>(props: RowProps<N>) {
               type="button"
               {...dragProps}
               onClick={() => onOpen?.(node)}
-              className="flex min-w-0 flex-1 items-center gap-1 py-0.5 text-left text-sm text-muted-foreground hover:text-foreground"
+              className="flex min-w-0 flex-1 items-center gap-1 py-0.5 text-left text-sm text-fg-2 hover:text-fg-1"
             >
               {icon?.(node, isOpen) ?? <Folder className="h-4 w-4 shrink-0" />}
               <span className="truncate">{node.name}</span>
@@ -391,7 +391,7 @@ function Row<N extends TreeNode>(props: RowProps<N>) {
         "flex items-center",
         // On the wrapper, not the button: a row with a trailing badge would
         // otherwise be highlighted only up to where the badge starts.
-        activePath === node.path && "bg-secondary",
+        activePath === node.path && "bg-row",
         pressable,
       )}
     >
@@ -408,9 +408,9 @@ function Row<N extends TreeNode>(props: RowProps<N>) {
         className={cn(
           "flex min-w-0 flex-1 items-center gap-1 py-0.5 text-left text-sm",
           disabled
-            ? "cursor-default text-muted-foreground/50"
-            : "text-foreground/80 hover:text-foreground",
-          activePath === node.path && "text-foreground",
+            ? "cursor-default text-fg-2/50"
+            : "text-fg-1/80 hover:text-fg-1",
+          activePath === node.path && "text-fg-1",
         )}
       >
         <span className="w-3.5 shrink-0" />

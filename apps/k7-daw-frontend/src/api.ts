@@ -14,17 +14,9 @@ import { DSP_FILE, JSDSP_FILE } from "@studio/engine-protocol/build";
 import { readJson as json } from "@studio/http-client/call";
 import { upload } from "@studio/http-client/upload";
 import { WIDGETS_SCRIPT } from "@studio/k7-wasm/consts";
+import type { AiRequest, AiResult } from "@studio/k7-wasm/panel";
 import type { NodePresets, ReferenceTrack } from "@studio/k7-wasm/types";
-import type {
-  AiOrganizeRequest,
-  AiOrganizeResult,
-  AiSettingsView,
-} from "@studio/panel-rules/ai-organize";
-import {
-  type AiTurnCall,
-  organizeLoop,
-} from "@studio/panel-rules/ai-organize-loop";
-import { readTurnStream } from "@studio/panel-rules/ai-turn-stream";
+import { readOrganizeStream } from "@studio/panel-rules/organize-stream";
 import { cfg, fget, fileHeaders, fsend } from "@studio/project-shell/fileApi";
 import { projectApi } from "@studio/project-shell/project";
 import type { ModuleStore } from "@studio/ui-module-builder/store";
@@ -398,7 +390,12 @@ export const moduleStore: ModuleStore = {
   },
 };
 
-export type { AiSettingsView };
+/** The account's Claude settings as the browser may see them: the model, and the key only as a hint. */
+export interface AiSettingsView {
+  model: string | null;
+  defaultModel: string;
+  keyHint: string | null;
+}
 
 /** The module builder's "AI organize", on THIS origin's front — the one holding the account's key (apps/k7-daw-backend/docs/files.md). */
 export const aiOrganize = {
@@ -423,22 +420,19 @@ export const aiOrganize = {
     if (!res?.ok) return false;
     return ((await res.json()) as { enabled?: boolean }).enabled === true;
   },
-  /** One run: the conversation and its checks are here, each model turn is the host's (apps/k7-daw-frontend/docs/aiOrganize.md). */
-  run: (
-    req: AiOrganizeRequest,
+  /** One run on THIS origin's front, which holds the account's key and runs the whole conversation: NDJSON of progress, then the panel or the error. */
+  run: async (
+    req: AiRequest,
     onStatus: (text: string) => void,
-  ): Promise<AiOrganizeResult> => organizeLoop(req, aiTurn, onStatus),
-};
-
-/** One model turn on THIS origin's front, which holds the account's key: NDJSON of progress, then the turn or the error. */
-const aiTurn: AiTurnCall = async (turn, onStatus) => {
-  const res = await fetch(`${BASE}/api/ai/organize/turn`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(turn),
-  });
-  if (!res.ok || !res.body) return json<never>(res, "ai/organize/turn");
-  return readTurnStream(res.body, onStatus);
+  ): Promise<AiResult> => {
+    const res = await fetch(`${BASE}/api/ai/organize`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(req),
+    });
+    if (!res.ok || !res.body) return json<never>(res, "ai/organize");
+    return readOrganizeStream(res.body, onStatus);
+  },
 };
 
 /** The graph's thaw, fire-and-forget: a control on an automatically frozen VST asks, and the reload is the answer. */

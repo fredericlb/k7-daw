@@ -3449,7 +3449,7 @@ export default function App({
             data-layout={layoutKind}
             // The toasts clear the panel while one is open (project-shell toast.tsx reads --toast-right).
             style={shellVars ? (shellVars as React.CSSProperties) : undefined}
-            className="relative flex h-full flex-col overflow-hidden bg-background text-foreground"
+            className="relative flex h-full flex-col overflow-hidden bg-ground text-fg-1"
           >
             <Backdrop />
             <UndoFlash />
@@ -3520,7 +3520,7 @@ export default function App({
                     "isolate flex min-h-0 min-w-0 flex-col",
                     // The SAME element in the same place in the tree, restyled — so the open file, its undo history and the CodeMirror node survive.
                     editorPopin
-                      ? "fixed inset-4 z-50 overflow-hidden rounded-lg border border-border bg-background shadow-2xl sm:inset-x-[12%] sm:inset-y-[8%]"
+                      ? "fixed inset-4 z-50 overflow-hidden rounded-lg border border-hairline bg-ground shadow-2xl sm:inset-x-[12%] sm:inset-y-[8%]"
                       : full === "editor"
                         ? "flex-1"
                         : "hidden",
@@ -3533,7 +3533,7 @@ export default function App({
                   {editorPopin && (
                     <button
                       type="button"
-                      className="absolute right-2 top-2 z-10 rounded p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
+                      className="absolute right-2 top-2 z-10 rounded p-1 text-fg-2 hover:bg-row hover:text-fg-1"
                       title={m["common.close"]()}
                       onClick={() => setEditorPopin(false)}
                     >

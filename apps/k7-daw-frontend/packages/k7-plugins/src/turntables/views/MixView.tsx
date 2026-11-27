@@ -216,7 +216,7 @@ export function MixView({
             ) : null}
             {/* Not an error but a desk pointed at no set list, said with the one line that fixes it. */}
             {set?.absent ? (
-              <Card className="p-3 text-sm text-muted-foreground">
+              <Card className="p-3 text-sm text-fg-2">
                 <CodeText text={m["mix.noPlaylist"]({ file })} />
               </Card>
             ) : null}
@@ -366,7 +366,7 @@ export function MixView({
           {/* Only while there is something left to analyse — ../../docs/prewarm.md. */}
           {prewarming(warm) ? (
             <span
-              className="shrink-0 font-mono text-[10px] text-muted-foreground tabular-nums"
+              className="shrink-0 font-mono text-[10px] text-fg-2 tabular-nums"
               title={m[warm.failed ? "mix.prewarmFailed" : "mix.prewarm"](warm)}
             >
               <Music className="size-3" /> {warm.done}/{warm.total}

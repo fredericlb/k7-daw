@@ -58,7 +58,7 @@ export function EngineSyncFailedDialog({
           </DialogDescription>
         </DialogHeader>
         {(sync?.error || failures.length > 0) && (
-          <div className="max-h-60 overflow-y-auto rounded bg-muted px-2 py-1.5 font-mono text-xs text-red-400">
+          <div className="max-h-60 overflow-y-auto rounded bg-row px-2 py-1.5 font-mono text-xs text-red-400">
             {sync?.error && <div>{sync.error}</div>}
             {failures.slice(0, LISTED).map((line) => (
               <div key={line}>{line}</div>

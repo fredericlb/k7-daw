@@ -99,7 +99,7 @@ export function FloatingBar({
         name: m["commandBar.list"](),
         keys: summonChord(),
       })}
-      className="float pointer-events-auto grid size-14 shrink-0 cursor-pointer place-items-center rounded-full text-foreground outline-none focus-visible:shadow-(--k7-focus-ring) [&_svg]:size-6"
+      className="float pointer-events-auto grid size-14 shrink-0 cursor-pointer place-items-center rounded-full text-fg-1 outline-none focus-visible:shadow-(--k7-focus-ring) [&_svg]:size-6"
     >
       <SquareTerminal />
     </button>

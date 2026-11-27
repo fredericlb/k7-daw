@@ -1396,7 +1396,7 @@ function EditorTabView({
         {showTree && !isMobile && (
           <aside
             aria-label={m["editor.filesLabel"]()}
-            className="flex w-64 shrink-0 flex-col overflow-hidden border-r border-(--k7-hairline-row) bg-card/40 p-2"
+            className="flex w-64 shrink-0 flex-col overflow-hidden border-r border-(--k7-hairline-row) bg-panel/40 p-2"
           >
             {treeBody}
           </aside>
@@ -1416,7 +1416,7 @@ function EditorTabView({
           {chainsBuilder}
           {/* …and so does the module builder: the tree stays beside it, to open the next module from (../../docs/moduleBuilder.md). */}
           {moduleBuilder ? (
-            <div className="absolute inset-0 z-30 bg-background">
+            <div className="absolute inset-0 z-30 bg-ground">
               {moduleBuilder}
             </div>
           ) : null}
@@ -1513,7 +1513,7 @@ function EditorTabView({
           )}
           {/* A picture lane's readers, docked under its text: the in-point of a shot is a FRAME you recognise, not a number. */}
           {readers.length > 0 && (
-            <div className="h-52 shrink-0 border-t border-border">
+            <div className="h-52 shrink-0 border-t border-hairline">
               <VideoReadersStrip
                 readers={readers}
                 onSetFrom={(ref, t) => setPlacement(ref, "from", t)}
