@@ -11,11 +11,7 @@ const meta = {
   args: {
     title: "k7 — Sign in",
     description: "Sign in with your frediverse account.",
-    children: (
-      <Button className="w-full">
-        Sign in
-      </Button>
-    ),
+    children: <Button className="w-full">Sign in</Button>,
   },
 } satisfies Meta<typeof SignInScreen>;
 
