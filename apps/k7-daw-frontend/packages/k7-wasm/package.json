@@ -14,7 +14,11 @@
     "./consts": "./src/consts.generated.ts",
     "./types": "./src/types/index.ts",
     "./boot": "./src/boot.ts",
+    "./module.wasm": "./src/k7Wasm.wasm",
     "./engine": "./src/engine.ts",
+    "./gesture": "./src/gesture.ts",
+    "./gestureTicks": "./src/gestureTicks.ts",
+    "./gestureTimeline": "./src/gestureTimeline.ts",
     "./git": "./src/git.ts",
     "./media": "./src/media.ts"
   },

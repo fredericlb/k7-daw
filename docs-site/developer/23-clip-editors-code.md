@@ -17,8 +17,8 @@ serves it (`apps/k7-daw-backend/packages/k7-front/src/routes/files/service/nativ
 draws it in the `spectrum` look (`spectrum.ts`): peak as height, the low/mid/high balance as colour —
 the same painter the DJ desk uses, so there is one waveform in the product.
 
-`barWindow.ts` decides how many bars of the file are shown (twelve by default; the wheel zooms) and
-where; `clipPlayhead.ts` maps the song's playhead to a second of the file, and is null outside the
+`apps/k7-daw-wasm/gesture/src/bar_window.rs` decides how many bars of the file are shown (twelve by default; the wheel zooms) and
+where; `apps/k7-daw-wasm/gesture/src/clip_playhead.rs` maps the song's playhead to a second of the file, and is null outside the
 event so the panel never shows a playhead that is not playing this event.
 
 **Modes are the tool.** `apps/k7-daw-frontend/src/waveMode.ts` lists `standard`, `onsets`, `warp`,
@@ -32,7 +32,7 @@ setting state, so the menu, the key and the palette stay one path.
 | onsets | Click → `clip onset add`; click a pin → `clip onset remove`; drag → `clip onset move` |
 | warp | Double-click → `clip warp clip src beat`; handle drag → `clip warp` (same verb); right-click → `clip warp remove` via the `warp-point` menu |
 
-`apps/k7-daw-frontend/src/clipWarp.ts` converts a display second into a **file second** and a **beat**.
+`apps/k7-daw-wasm/gesture/src/clip_warp.rs` converts a display second into a **file second** and a **beat**.
 The picture is warped, so the inversion has to walk the piecewise map, not divide by the overall
 ratio — getting it wrong puts a stretch point somewhere the drawing never showed, and the redrawn
 picture is "right about the wrong point". Its tests pin that.
@@ -62,7 +62,7 @@ no length).
 A MIDI clip is edited in the piano roll alone.
 
 **Piano roll** — `apps/k7-daw-frontend/src/components/PianoRoll.tsx` draws; `apps/k7-daw-frontend/src/hooks/useRollGestures.ts` turns pointers into
-gestures; `rollDrag.ts` holds their arithmetic; `rollFit.ts` the key range and zoom. Modes come from
+gestures; `apps/k7-daw-wasm/gesture/src/roll_drag.rs` holds their arithmetic; `apps/k7-daw-wasm/gesture/src/roll_fit.rs` the key range and zoom. Modes come from
 `rollMode.ts` (`select` default, `create`, `remove`, `takes`). A note has four grips decided on the
 press — start edge, end edge, body, velocity line — and each commits one verb:
 

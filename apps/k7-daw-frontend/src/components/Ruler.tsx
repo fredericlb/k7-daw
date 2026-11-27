@@ -3,105 +3,18 @@
 // to where the clip sits in the song. One tick ladder, one label stride, one look — a position
 // reads the same wherever it is met. See docs/timeline.md for the ladder's rationale.
 
-import { cn } from "@studio/ui/lib/utils";
 import {
-  chooseTick,
-  formatClock,
-  formatSecondTick,
-  labelled,
-  labelMinPx,
-  labelStride,
-  nearestTick,
-  secondTicks,
-  subdivideBeats,
-  ticksUpTo,
-} from "@studio/ui-timeline/ticks";
+  type RulerMode,
+  type RulerTick,
+  rulerScale,
+  rulerTicks,
+} from "@studio/k7-wasm/gestureTicks";
+import { cn } from "@studio/ui/lib/utils";
+import { labelled, nearestTick } from "@studio/ui-timeline/ticks";
 import { memo, type RefObject, useEffect, useState } from "react";
 import { m } from "../paraglide/messages.js";
 
-/** What the ruler is READING IN — not what the song is placed in, which is always beats; a per-SESSION toggle (docs/picture.md). */
-export type RulerMode = "bars" | "seconds";
-
-// A tick's weight and its number — at module level because two things ask, the ruler and the lanes' grid, and they must read one answer.
-const tickAt = (b: number, barBeats: number) => {
-  const bar = Math.abs(b / barBeats - Math.round(b / barBeats)) < 1e-6;
-  const onBeat = Math.abs(b - Math.round(b)) < 1e-6;
-  return {
-    bar,
-    onBeat,
-    label: bar
-      ? String(Math.round(b / barBeats) + 1)
-      : onBeat
-        ? `${Math.floor(b / barBeats) + 1}.${Math.round(b % barBeats) + 1}`
-        : "",
-  };
-};
-
-// Every tick drawn between the view's edges, from the ruler's ORIGIN rather than the first visible one, so the two cannot drift as you pan.
-const tickBeats = (
-  beatLo: number,
-  lastBeat: number,
-  unit: number,
-): number[] => {
-  const out: number[] = [];
-  for (let b = Math.ceil(beatLo / unit - 1e-9) * unit; b <= lastBeat; b += unit)
-    out.push(b);
-  return out;
-};
-
-export interface RulerTick {
-  beat: number; // where it sits — the surface's one coordinate, whatever the ruler counts in
-  index: number; // its number from the ORIGIN, for the label stride
-  key: string;
-  label: string;
-  // Coarse / medium / fine — a bar, a beat, a subdivision; or a minute, a second, a fraction.
-  level: 0 | 1 | 2;
-}
-
-/** The ticks a ruler draws, in BEATS whichever unit it reads in — one function for both ladders, called separately so no array prop defeats the memo. */
-export const rulerTicks = (
-  mode: RulerMode,
-  beatLo: number,
-  lastBeat: number,
-  unit: number,
-  barBeats: number,
-  bps: number, // beats per second — the whole of the conversion, since there is no tempo map
-  secStep: number,
-  /** The slice actually ON SCREEN, when the caller knows it — what makes the zoom unbounded, `index` still being computed from the ORIGIN. */
-  view?: { lo: number; hi: number },
-  /** The picture's frame rate, when the song has one: a fine seconds tick is then labelled by its frame (docs/picture.md). */
-  fps?: number,
-): RulerTick[] => {
-  const lo = Math.max(beatLo, view?.lo ?? beatLo);
-  const hi = Math.min(lastBeat, view?.hi ?? lastBeat);
-  if (mode === "bars")
-    return tickBeats(lo, hi, unit).map((b) => {
-      const { bar, onBeat, label } = tickAt(b, barBeats);
-      return {
-        beat: b,
-        index: Math.round(b / unit),
-        key: `b:${b}`,
-        label,
-        level: bar ? 0 : onBeat ? 1 : 2,
-      };
-    });
-  const out: RulerTick[] = [];
-  // From the ORIGIN and not from the first visible second, exactly as `tickBeats` is, or panning would re-place every line.
-  for (const sec of ticksUpTo(hi / bps, secStep)) {
-    const beat = sec * bps;
-    if (beat < lo - 1e-9) continue;
-    const whole = Math.abs(sec - Math.round(sec)) < 1e-6;
-    out.push({
-      beat,
-      index: Math.round(sec / secStep),
-      key: `s:${sec}`,
-      label: formatSecondTick(sec, secStep, fps),
-      // A minute carries the bar's weight and a whole second the beat's, so the eye reads the same three-level rhythm in either unit.
-      level: Math.abs(sec % 60) < 1e-6 ? 0 : whole ? 1 : 2,
-    });
-  }
-  return out;
-};
+export { type RulerMode, type RulerTick, rulerScale, rulerTicks };
 
 /** How far past each edge the ticks are still built, in px — a scroll must reveal lines, not a bare strip. */
 const VIEW_MARGIN_PX = 400;
@@ -144,31 +57,6 @@ export interface TickProps {
   secStep: number;
   /** The picture's frame rate, absent for a song with none — what puts the seconds ladder's fine rungs on frames. */
   fps?: number;
-}
-
-/** The scale a ruler draws at — ONE function, so the timeline and the clip editors cannot pick different ladders for the same zoom. */
-export function rulerScale(
-  mode: RulerMode,
-  ppb: number,
-  barBeats: number,
-  bps: number,
-  lastBeat: number,
-  fps?: number,
-): { unit: number; secStep: number; barStride: number } {
-  const unit = subdivideBeats(barBeats, ppb);
-  const secStep = chooseTick(
-    secondTicks(fps),
-    ppb / bps,
-    labelMinPx(formatClock(Math.max(lastBeat, 0) / bps, 1)),
-  );
-  const lastBarNo = Math.floor(Math.max(lastBeat, 0) / barBeats) + 1;
-  const widestLabel =
-    unit < barBeats
-      ? `${lastBarNo}.${Math.round(barBeats)}`
-      : String(lastBarNo);
-  const barStride =
-    mode === "bars" ? labelStride(unit * ppb, labelMinPx(widestLabel)) : 1;
-  return { unit, secStep, barStride };
 }
 
 /** The tick layer, memoised: a pure function of the VIEW WINDOW, every prop a number, so a host re-render leaves it untouched (docs/timeline.md). */

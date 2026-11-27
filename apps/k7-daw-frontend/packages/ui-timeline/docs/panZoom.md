@@ -3,7 +3,8 @@
 `src/panZoom.ts` is the navigation the media panes share. They scale to **FIT** by default, so
 there is nothing to scroll until you zoom: `useHZoom` scales horizontally, anchored so the point
 under the cursor stays put, and `usePanScroll` pans on a MIDDLE-mouse drag. It is unit-free on
-purpose — the caller multiplies its own lane width, in beats or in seconds.
+purpose — the caller multiplies its own lane width, in beats or in seconds. The arithmetic (the wheel's factor, the
+ceiling, the scroll that keeps the anchor) is the `gesture` crate's (`apps/k7-daw-wasm/gesture/src/pan_zoom.rs`).
 
 Space is not a pan modifier, because Space is the transport toggle in every app that mounts these.
 

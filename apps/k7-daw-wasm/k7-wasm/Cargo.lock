@@ -96,6 +96,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "gesture"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "song-schema",
+ "ts-rs",
+]
+
+[[package]]
 name = "git-rules"
 version = "0.1.0"
 dependencies = [
@@ -133,6 +142,7 @@ name = "k7-wasm"
 version = "0.1.0"
 dependencies = [
  "base64",
+ "gesture",
  "git-rules",
  "k7x",
  "serde",

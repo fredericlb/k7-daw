@@ -53,5 +53,5 @@ reached peer to peer (`apps/k7-daw-frontend/packages/web-protocol/docs/cameras.m
 A finished picture drag writes the lane file directly through `useVideoEdits`, as the clip drags do;
 the `picture …` verbs exist for the command bar, the CLI, the tools and the context menu. A drag
 holds its live position until the reload lands, so a shot does not snap back for a round trip.
-Snapping reads the ruler's drawn ticks (`snap.ts`): Ctrl snaps relative to the shot's own offset,
+Snapping reads the ruler's drawn ticks (`apps/k7-daw-wasm/gesture/src/snap.rs`): Ctrl snaps relative to the shot's own offset,
 Shift is free.

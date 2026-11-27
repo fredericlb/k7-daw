@@ -6,6 +6,7 @@ pub mod curve;
 pub mod engine;
 pub mod fields;
 pub mod file;
+pub mod gesture;
 pub mod git;
 pub mod k7x;
 pub mod k7x_edit;
@@ -78,6 +79,7 @@ impl Session {
             "schema" => schema::dispatch(decode(input)?, out),
             "timecode" => timecode::dispatch(decode(input)?, out),
             "fields" => fields::dispatch(decode(input)?, out),
+            "gesture" => gesture::dispatch(decode(input)?, out),
             "file" => file::dispatch(decode(input)?, out),
             "git" => git::dispatch(decode(input)?, out),
             "media" => media::dispatch(decode(input)?, out),

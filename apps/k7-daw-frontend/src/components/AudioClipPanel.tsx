@@ -5,6 +5,16 @@
 
 import { arrayEq, useEngineState } from "@studio/engine-browser/store";
 import { DEFAULT_TRIM_DB, trimWindow } from "@studio/k7-wasm/media";
+import {
+  anchorBars,
+  barBeat,
+  barSec,
+  barWindow,
+  frameWindow,
+  takeCounter,
+  warpLine,
+  zoomBars,
+} from "@studio/k7-wasm/gesture";
 import { projectApi } from "@studio/project-shell/project";
 import { Button } from "@studio/ui/button";
 import { DockHeaderRow, DockHint, DockStatus } from "@studio/ui/editor-dock";
@@ -22,17 +32,14 @@ import {
   useState,
 } from "react";
 import { api } from "../api";
-import { anchorBars, barWindow, frameWindow, zoomBars } from "../barWindow";
 import { clamp } from "../clamp";
 import { chainOps, filterOps, processLine } from "../clipOps";
-import { warpLine } from "../clipWarp";
 import { useLatest } from "../hooks/useLatest";
 import { useLiveEnvelope } from "../hooks/useLiveEnvelope";
 import { isTyping, useWindowKey } from "../hooks/useWindowKey";
 import { cursorOf } from "../modeIcons";
 import { m } from "../paraglide/messages.js";
 import { useReloadKey, useShell, useVerbs } from "../state/shellStore";
-import { barBeat, takeCounter } from "../takeCounter";
 import { pieceEdgeLines } from "../takes";
 import type { WebWaveform } from "../types";
 import { useFingerFirst } from "../useIsMobile";
@@ -235,7 +242,7 @@ export function AudioClipPanel({
   const curBeat = useEngineState((s) =>
     Math.floor((s.playhead * tempo) / 60 + 1e-6),
   );
-  // `startBeat` arrives from the shell, taken on the rolling edge — a capture per MOUNT measured every later take against the first (takeCounter.ts).
+  // `startBeat` arrives from the shell, taken on the rolling edge — a capture per MOUNT measured every later take against the first (apps/k7-daw-wasm/gesture/src/take_counter.rs).
   const count = takeCounter(startBeat, curBeat, countIn * beatsPerBar);
   /** The count-in is not the take: nothing is recorded during it, so nothing is drawn and nothing is COLLECTED — `recording` is the honest edge. */
   const counting = rolling && count.phase === "count-in";
@@ -305,18 +312,11 @@ export function AudioClipPanel({
     () => (gateOpen && wf ? trimWindow(wf.rms, wf.seconds, gate, act) : null),
     [gateOpen, wf, gate, act],
   );
-  // The window on the FILE: `asked.bars` bars from `asked.start` — the maths and its edges live in barWindow.ts.
+  // The window on the FILE: `asked.bars` bars from `asked.start` — the maths and its edges live in gesture's bar_window.rs.
   const win = barWindow(reach, asked.bars, tempo, beatsPerBar, asked.start);
   /** Frame the event, with a bar of context either side — what the panel opens on. */
   const frameOnEvent = useCallback(
-    () =>
-      setAsked(
-        frameWindow(
-          reach,
-          act,
-          (Math.max(1, beatsPerBar) * 60) / Math.max(1, tempo),
-        ),
-      ),
+    () => setAsked(frameWindow(reach, act, barSec(tempo, beatsPerBar))),
     [reach, act, beatsPerBar, tempo],
   );
   /** …and do it when the event being looked at CHANGES, not on every re-read, or each edit would throw away the zoom. */
@@ -811,7 +811,7 @@ export function AudioClipPanel({
                 markerPlace="low"
                 // The clip's stretch points, if it has a map: a dashed rule at the source moment, a blue one where its beat lands.
                 warps={editingWarp ? wf.warpMarks : undefined}
-                /** Double-click places a stretch point and dragging its handle says where it should land — one verb for both (clipWarp.ts). */
+                /** Double-click places a stretch point and dragging its handle says where it should land — one verb for both (apps/k7-daw-wasm/gesture/src/clip_warp.rs). */
                 onWarpAdd={
                   editingWarp && clip
                     ? (sec) =>
