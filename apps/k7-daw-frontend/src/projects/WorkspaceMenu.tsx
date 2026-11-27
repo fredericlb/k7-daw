@@ -115,7 +115,7 @@ export function WorkspaceMenu({
         </DropdownMenuItem>
         {/* In red: the one act on this row that cannot be undone at all. */}
         <DropdownMenuItem
-          className="text-destructive [&_svg]:text-destructive"
+          className="text-error [&_svg]:text-error"
           disabled={Boolean(locked)}
           disabledReason={locked || undefined}
           title={locked || undefined}

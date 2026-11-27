@@ -157,7 +157,7 @@ function ResourceRow({
         <span className="min-w-0 flex-1 truncate py-1 text-sm">{r.id}</span>
         {r.missing ? (
           <span
-            className="flex shrink-0 items-center gap-1 text-destructive text-xs"
+            className="flex shrink-0 items-center gap-1 text-error text-xs"
             title={m["res.missing"]()}
           >
             <TriangleAlert className="h-3 w-3" /> {m["res.missingShort"]()}

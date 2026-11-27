@@ -143,7 +143,7 @@ export function ReferencesPanel({
       ) : null}
 
       {note ? (
-        <p className="shrink-0 border-b px-2 py-1.5 text-destructive text-xs">
+        <p className="shrink-0 border-b px-2 py-1.5 text-error text-xs">
           {note}
         </p>
       ) : null}

@@ -275,10 +275,10 @@ export function PlaylistEditor({
       <footer className="flex shrink-0 items-center gap-3 border-t px-3 py-1 text-xs text-muted-foreground">
         {/* Said here and not over the list: text stops parsing on nearly every keystroke, and a pane emptying itself each time would flicker. */}
         {broken ? (
-          <span className="text-destructive">{m["pls.brokenYaml"]()}</span>
+          <span className="text-error">{m["pls.brokenYaml"]()}</span>
         ) : null}
         {filesError ? (
-          <span className="text-destructive">
+          <span className="text-error">
             {m["pls.files"]()} : {filesError}
           </span>
         ) : null}

@@ -165,7 +165,7 @@ export function ContextMenu({
         onFocus={() => onHint?.(it.description)}
         className={`type-label flex min-h-11 w-full cursor-pointer desk:min-h-8 items-center gap-2 rounded-2xl px-3 text-left outline-none hover:bg-on-fill focus-visible:bg-on-fill ${
           destructive
-            ? "text-destructive"
+            ? "text-error"
             : "hover:text-accent-foreground focus-visible:text-accent-foreground"
         }`}
       >

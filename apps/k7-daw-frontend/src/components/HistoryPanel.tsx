@@ -397,7 +397,7 @@ function SyncHistorySection({
         />
       )}
       {(error || hist?.error) && (
-        <div className="shrink-0 px-3 py-1 text-destructive">
+        <div className="shrink-0 px-3 py-1 text-error">
           {error || m["synchist.noRoom"]({ error: hist?.error ?? "" })}
         </div>
       )}

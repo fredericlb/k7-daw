@@ -87,7 +87,7 @@ export function ProjectMenu({
           </DropdownMenuItem>
           {/* Last, and the only one that reads as danger: a rare destructive act sits apart from the two that keep it. */}
           <DropdownMenuItem
-            className="text-destructive [&_svg]:text-destructive"
+            className="text-error [&_svg]:text-error"
             onSelect={() => setAct("delete")}
           >
             <Trash2 />

@@ -61,7 +61,7 @@ export function FileViewer({
             <Spinner size="sm" inherit />
           </div>
         ) : shown.kind === "error" ? (
-          <div className="p-4 text-destructive">{shown.message}</div>
+          <div className="p-4 text-error">{shown.message}</div>
         ) : shown.kind === "binary" ? (
           <div className="p-4 text-muted-foreground">
             {m["repos.binaryFile"]()}

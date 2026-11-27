@@ -309,7 +309,7 @@ export function ChainsBuilder({
         {(error ?? fileError) && (
           <div
             role="alert"
-            className="absolute inset-x-0 top-0 z-10 flex items-start gap-2 bg-destructive/10 p-2 text-xs"
+            className="absolute inset-x-0 top-0 z-10 flex items-start gap-2 bg-error/10 p-2 text-xs"
           >
             <p className="min-w-0 flex-1">{error ?? fileError}</p>
             {/* It covers the top of the drawing, so it has to be closable without running another verb. */}

@@ -146,7 +146,7 @@ function MasteringTabView({
 
       {/* Lines naming something the project has not got, reported rather than dropped: they are typos about the person's own project. */}
       {problems.length > 0 && (
-        <ul className="shrink-0 list-inside list-disc text-xs text-destructive">
+        <ul className="shrink-0 list-inside list-disc text-xs text-error">
           {problems.map((p) => (
             <li key={p.control}>
               <code className="font-mono">{p.control}</code> — {p.message}

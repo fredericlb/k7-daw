@@ -132,11 +132,11 @@ export function BarBody({
       </div>
       {said && <p className="text-muted-foreground">{said}</p>}
       {v.fetchError && !failure && (
-        <p className="text-destructive">
+        <p className="text-error">
           {m["git.fetchFailed"]({ error: v.fetchError })}
         </p>
       )}
-      {failure && <p className="text-destructive">{failure}</p>}
+      {failure && <p className="text-error">{failure}</p>}
     </section>
   );
 }
