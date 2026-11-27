@@ -338,10 +338,14 @@ export function TrackModulesPane({
   const frame = (body: React.ReactNode, aside?: React.ReactNode) =>
     nodes ? body : <GraphSlotPane aside={aside}>{body}</GraphSlotPane>;
   // With no row to draw, the title bar says why and the content stays blank (docs/editors.md).
-  const say = (text: string, tone?: "error") =>
-    frame(<DockStatus tone={tone}>{text}</DockStatus>);
+  const say = (text: string, tone?: "error", raw?: string) =>
+    frame(
+      <DockStatus tone={tone} title={raw}>
+        {text}
+      </DockStatus>,
+    );
 
-  if (error) return say(error, "error");
+  if (error) return say(m["graph.failed"](), "error", error);
   if (!laidShown) return say(m["common.loading"]());
   if (!laidShown.nodes.length)
     return say(nodes ? m["chain.noModules"]() : m["chain.laneReachesNone"]());

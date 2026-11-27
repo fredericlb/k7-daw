@@ -146,7 +146,7 @@ export function MidiTakeRoll({
           onClick={onStop}
           title={m["clip.stopTake"]()}
         >
-          <Square className="mr-1 h-3 w-3" /> Stop
+          <Square className="mr-1 h-3 w-3" /> {m["transport.stop"]()}
         </Button>
       </DockHeaderRow>
       <DockHint text={m["clip.takeHint"]()} />
