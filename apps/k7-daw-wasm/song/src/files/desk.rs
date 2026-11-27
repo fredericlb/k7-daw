@@ -115,7 +115,7 @@ pub fn decode_mix(file: &str, text: &str) -> Result<MixFile, Finding> {
 }
 
 /// `views/mix.k7x`: control id to what it drives, `null` being a real value for a control not wired yet.
-#[derive(Debug, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct MixView(pub IndexMap<String, Nullable<ViewBinding>>);
 

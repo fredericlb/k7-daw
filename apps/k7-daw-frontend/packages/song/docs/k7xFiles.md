@@ -17,7 +17,7 @@ read, listed or written. The plan this belongs to is [k7x-plan.md](../../../../.
 
 - **An edit of a file with short forms sees their expanded data.** The edit runs on a scratch
   document of that data, and the result goes back over the real one by `applySugared`
-  (`apps/k7-daw-frontend/packages/song-schema/src/yaml/sugared.ts`, `apps/k7-daw-frontend/packages/song-schema/docs/sugar.md`), so a writer never has to know
+  (`apps/k7-daw-wasm/k7x/src/edit/sugared.rs`, reached as `text.sugar_apply`, `apps/k7-daw-frontend/packages/song-schema/docs/sugar.md`), so a writer never has to know
   that `notes("c4 d4")` is a string. A file that holds no short form is edited as written, so a
   key renamed or an item inserted keeps its line and its comments: a data diff would delete and
   re-add it. A writer that keeps a short form itself — graphFile's, which rename inside `runs(...)`

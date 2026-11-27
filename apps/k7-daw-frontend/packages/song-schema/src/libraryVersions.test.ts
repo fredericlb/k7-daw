@@ -3,10 +3,8 @@ import {
   isRunnable,
   LIBRARY_LEVEL,
   parseLibraryManifest,
-  parseLibraryPins,
   pinnedVersion,
   stringifyLibraryManifest,
-  stringifyLibraryPins,
   versionOfDir,
 } from "./libraryVersions";
 
@@ -19,15 +17,9 @@ describe("libraryVersions", () => {
     expect(versionOfDir("modules")).toBeNull();
   });
 
-  it("reads pins, dropping what is no version, and writes them in name order", () => {
-    const pins = parseLibraryPins(
-      '"k7-core"(7)\ndrums("draft")\nbass("soon")\nkeys(0)\n',
-    );
-    expect(pins).toEqual({ "k7-core": 7, drums: "draft" });
-    expect(pinnedVersion(pins, "bass")).toBe(1);
-    expect(stringifyLibraryPins(pins)).toBe('drums("draft")\nk7-core(7)\n');
-    expect(parseLibraryPins(stringifyLibraryPins(pins))).toEqual(pins);
-    expect(parseLibraryPins("drums(")).toEqual({});
+  it("resolves a library the pins do not name to version 1", () => {
+    expect(pinnedVersion({ "k7-core": 7, drums: "draft" }, "bass")).toBe(1);
+    expect(pinnedVersion({ "k7-core": 7 }, "k7-core")).toBe(7);
   });
 
   it("round-trips a manifest and says whether this k7 runs it", () => {

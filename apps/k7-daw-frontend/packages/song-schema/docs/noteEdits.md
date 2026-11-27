@@ -1,6 +1,6 @@
 # Editing a sequence's notes
 
-The rationale behind `apps/k7-daw-frontend/packages/song-schema/src/yaml/sequenceFile.ts` — the writers behind the piano
+The rationale behind `apps/k7-daw-wasm/song-edit/src/sequence_file.rs` (reached as `text.sequence`) — the writers behind the piano
 roll and `note add`. One note per line (a flow mapping), which is the shape a
 recorded sequence shares with a hand-entered one.
 

@@ -52,8 +52,8 @@ Take, as an example, a new optional number on a lane's event.
    then basenames. Without this the editor checks syntax only.
 3. **Completion.** Add a kind to `file_kind_for` and `fields_at` in
    `apps/k7-daw-wasm/song/src/views/fields.rs`.
-4. **k7x short form**, if one is wanted: a `SugarPart` in `apps/k7-daw-frontend/packages/song-schema/src/yaml/sugar.ts`,
-   returned by `sugarFor(path)`. It must expand to plain data the schema already accepts.
+4. **k7x short form**, if one is wanted: a `SugarPart` in `apps/k7-daw-wasm/song-edit/src/sugar.rs`,
+   returned by `sugar_for(path)`. It must expand to plain data the schema already accepts.
 5. **Loader.** Read it in `apps/k7-daw-wasm/song-edit/src/loader.rs` — a flat folder of entities can be added to
    `ENTITY_SCHEMAS` and read through `readYamlEntities`/`exportSub`; an optional folder with its own
    reader follows `apps/k7-daw-wasm/song/src/views/surfaces.rs` or `apps/k7-daw-wasm/song/src/assemblies/mod.rs`. Always go through

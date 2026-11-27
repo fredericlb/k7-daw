@@ -27,7 +27,7 @@ pub use project::{
 };
 pub use scalar::{WindowEdge, has_ext};
 pub use timeline::{Timeline, TimelineLane};
-pub use validate::{ModuleIssue, Validity, ValidityDepth, validate_file};
+pub use validate::{ModuleIssue, Validity, ValidityDepth, finding_issue, validate_file};
 
 use k7x::{Bump, MapNode, Node, PathSeg, Scalar, parse_tree};
 use serde::de::DeserializeOwned;
