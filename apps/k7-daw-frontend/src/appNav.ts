@@ -4,6 +4,7 @@
 // one thing a reader would get wrong: a link crossing scopes is caught at the document, because a
 // router only writes below its own basename. See ../docs/shell.md.
 
+import { wasmReady } from "@studio/k7-wasm/boot";
 import { resetFileApi } from "@studio/project-shell/fileApi";
 import { setAddressNavigator } from "@studio/project-shell/launch";
 import {
@@ -33,7 +34,6 @@ onLeave(() => {
   forgetBuffers();
   setBufferScope(currentScopeKey());
 });
-setBufferScope(currentScopeKey());
 onLeave(() => queryClient.clear());
 
 /** Hear the address cross into another scope — Root's re-render. */
@@ -46,7 +46,12 @@ export function subscribeAddress(listener: () => void): () => void {
 let selfPop = false;
 
 // What was on screen before the last move, to put back when a Back is refused.
-let lastKey = currentScopeKey();
+// Read once the Rust module that parses an address is compiled; nothing navigates before then.
+let lastKey = "";
+wasmReady().finally(() => {
+  lastKey = currentScopeKey();
+  setBufferScope(lastKey);
+});
 let lastHref = window.location.href;
 let lastState: unknown = window.history.state;
 

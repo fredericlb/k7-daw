@@ -11,7 +11,7 @@ export type {
   MenuEntity,
 } from "@studio/k7-wasm/types";
 export * from "./engineAccess.ts";
-export * from "./machineTypes.ts";
+export type * from "./generated";
 export * from "./timelineTypes.ts";
 export * from "./workspaceTypes.ts";
 

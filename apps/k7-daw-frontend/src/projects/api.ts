@@ -32,7 +32,10 @@ import {
 type Addressable = Pick<AccountWorkspace, "name">;
 
 /** Where a project opens: by its workspace's folder name, the one address (../../docs/projects.md). */
-export function projectHref(ws: Addressable, p: RepoProject): string {
+export function projectHref(
+  ws: Addressable,
+  p: Pick<RepoProject, "path" | "app">,
+): string {
   return localProjectUrl(window.location.origin, ws.name, p.path, p.app);
 }
 
