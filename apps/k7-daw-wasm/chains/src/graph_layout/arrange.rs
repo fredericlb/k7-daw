@@ -23,7 +23,13 @@ pub fn y(n: &Node) -> f64 {
 pub fn boxes(nodes: &[Node]) -> Vec<Box2> {
     nodes
         .iter()
-        .map(|n| Box2 { id: n.id.clone(), x: x(n), y: y(n), w: n.w, h: n.h })
+        .map(|n| Box2 {
+            id: n.id.clone(),
+            x: x(n),
+            y: y(n),
+            w: n.w,
+            h: n.h,
+        })
         .collect()
 }
 
@@ -216,7 +222,9 @@ pub fn push_below_inputs(mut nodes: Vec<Node>, edges: &[Edge]) -> Vec<Node> {
         return nodes;
     }
     let mut ys: Vec<f64> = nodes.iter().map(y).collect();
-    let mut ready: Vec<usize> = (0..nodes.len()).filter(|i| waiting.get(i).copied().unwrap_or(0) == 0).collect();
+    let mut ready: Vec<usize> = (0..nodes.len())
+        .filter(|i| waiting.get(i).copied().unwrap_or(0) == 0)
+        .collect();
     // Kahn: a node's y is final only once every input's is, which is what makes one pass enough.
     let mut i = 0;
     while i < ready.len() {

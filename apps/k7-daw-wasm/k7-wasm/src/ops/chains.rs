@@ -9,8 +9,8 @@ use chains::build::{BuildOptions, build_graph};
 use chains::curve_placement::{self, Box2, Moved, PlaceEdge};
 use chains::flow::{self, FlowEdge, LaneSource, NodeFlow};
 use chains::geom::node_size;
-use chains::graph_layout::layout;
 use chains::graph::Graph;
+use chains::graph_layout::layout;
 use chains::module_row::{RankNode, RowOptions, Spaced, align_ranks, module_row, space_modules};
 use chains::node::{AssemblyOf, Edge, EdgeInsert, Kind, Laid, Node, Pt, Signal};
 use chains::panel::Panel;
@@ -370,7 +370,7 @@ pub struct LayoutArgs {
 /// Where a layout put a card, the size a box grew to, and where a pushed card belonged.
 #[derive(Clone, Debug, serde::Serialize)]
 #[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(optional_fields))]
-pub struct Placed {
+pub struct Spot {
     pub id: String,
     pub x: f64,
     pub y: f64,
@@ -384,7 +384,7 @@ pub struct Placed {
 #[derive(Clone, Debug, serde::Serialize)]
 #[cfg_attr(feature = "ts", derive(ts_rs::TS))]
 pub struct Placement {
-    pub nodes: Vec<Placed>,
+    pub nodes: Vec<Spot>,
     pub edges: Vec<(String, Vec<Pt>)>,
     pub width: f64,
     pub height: f64,
@@ -435,7 +435,7 @@ pub fn graph_layout(a: LayoutArgs) -> Placement {
         nodes: laid
             .nodes
             .into_iter()
-            .map(|n| Placed {
+            .map(|n| Spot {
                 x: n.x.unwrap_or(0.0),
                 y: n.y.unwrap_or(0.0),
                 w: n.w,
@@ -445,7 +445,11 @@ pub fn graph_layout(a: LayoutArgs) -> Placement {
                 id: n.id,
             })
             .collect(),
-        edges: laid.edges.into_iter().map(|e| (e.id, e.points.unwrap_or_default())).collect(),
+        edges: laid
+            .edges
+            .into_iter()
+            .map(|e| (e.id, e.points.unwrap_or_default()))
+            .collect(),
         width: laid.width,
         height: laid.height,
         left: laid.left,

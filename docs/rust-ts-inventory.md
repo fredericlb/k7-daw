@@ -67,7 +67,7 @@ milestone ends with `bash scripts/agent/gate.sh --milestone`; the hours are agen
 | **M4b** buffer text and paths | bufferReads, clipWindowText, sliceSymbols, clipFiles, timelineDrop, rackBuilder, presetOrder, videoTake, editorPaths, projectPaths, localTargets, openInEditor, sequenceEdit, moduleBehind, scalarField, curveDraft, clipboard; the editor's cursor scan, entity values and preview triggers; noteGrid's notes | 1,500 | song-edit, song-schema, k7x | rust-song-twins merged | 10 |
 | **M4c** panels and AI organize | layoutTwins, groupGeometry, autoLayout, gridCells, panelTabs, widgetClipboard, widgetKinds, useParamRows, moduleUi, panelWrite, panelText, checkLayouts; the AI loop to a backend route | 2,700 | song `modules/ui`, k7-front `routes/ai` | rust-song-twins merged; decision 3 | 11 |
 | **M5a** DJ desk | deck, metronome, beats, grid, loop, mapping, controls, mixBindings, mixView, setList, useDeckSet's arithmetic, put-on; deckVocabulary generated | 2,100 | new crate `apps/k7-daw-wasm/turntables` | M2a (bindings), M4a | 11 |
-| **M5b** graph layout | graphLayout (the only dagre importer), ChainsTab's and GraphPanel's shaping, pendingNode, trackPanelLayout | 600 | chains crate + rust-sugiyama (decision 2) | M2a | 5 |
+| **M5b** (built) graph layout | graphLayout (the only dagre importer) in the `chains` crate, `graph.layout` op; `pendingNode`, `trackPanelLayout` and the screens' shaping stay (see "M5b, as built") | 440 | chains crate + rust-sugiyama (decision 2) | M2a | 5 |
 | **M5c** web-protocol's rest | workspace, machine, playlists, resources and cameras types generated; the project address grammar of `projects.ts` | 1,100 | k7-file-service, k7-front | M1b | 8 |
 
 **M1a is done.** It removed: `barTint`, `PairThisDevice` and `requestPairing`, `RemoteSlotsSection`,
@@ -166,6 +166,21 @@ against the Rust ops, then became a Rust test. What stays, and what moves it:
 | `commandPrefs.ts` (types), `reloadScope.ts` (type and hook), `clipOps.chainOps`, `nodeInsert.ts`, `playlistVocabulary.ts`, `menuTitle.ts`, `nodeMenu.ts`, `menuTabs.ts` | thin glue: the page's own types, the browser's collator, a namer callback, a message catalogue, or a re-export that keeps an import path |
 | the shell's command registry rows (`ui/commands`) | decision 11 asked for its sentences and arguments to become catalogue data; they are still read from the registry and handed to Rust (`buildPaletteCommands`), so that move is open |
 | `homeCommands.runHomeCommand`'s branches | they call the file service's acts and keep the order of their refusals |
+
+**M5b, as built.** `ui-chains/src/graphLayout.ts` (440 lines) and its tests are gone, and `@dagrejs/dagre` with them: the
+layout is `apps/k7-daw-wasm/chains/src/graph_layout.rs` (engine, nested frames) and `graph_layout/arrange.rs` (rank rows, master run, push
+below inputs, frames pushed aside), reached by the op `graph.layout` and the 60-line facade `ui-chains/src/layout.ts`. The engine is
+**rust-sugiyama 0.4.0** (published 2025-09-21) over **petgraph 0.8.3**, in the chains crate only; no golden vectors were pinned
+(the user's change of plan: the layouts are judged in the app). Kept on top of its answer: the rank rows and collision sweep, the master
+run, the pins and held places, the curve cards beside their targets, the push below inputs, the open frames laid out by a recursive pass
+and pushed aside. Dropped: the cables' weights and the build's rank as a layering hint (the engine takes neither), a cable's route (it was
+already replaced by the sockets, so it is the two centres), and dagre's own margin (replaced by the same 16 px). Added: the cables that
+close a cycle are withheld from the engine, because rust-sugiyama never returns on some dense cyclic graphs (a 12-card, 53-cable random
+graph hung it), and the separate pieces it returns are set side by side. 122 Rust tests in the crate (14 of the layout, 9 of the arranging
+rules ported from the old tests, one run of 1,000 random cyclic graphs under a watchdog), 1 dispatch test in `k7-wasm`; the old layout tests
+run unchanged through the facade, minus the numbers that were dagre's. Left in TypeScript: `pendingNode` (it splices the page's own laid-out
+cards with the drawing's `jackPoint`, and the laid graph would cross the ABI both ways for a spliced cable) and `trackPanelLayout`
+(a composition of three Rust ops), and ChainsTab's and GraphPanel's memo shaping (React state).
 
 **M2b, as built.** Eleven modules and the rulers' ladder went (about 1,100 lines of logic, 1,800 of
 tests; the page keeps `timelineTools.ts` (the tool names, their labels and the words of a note),

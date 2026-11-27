@@ -10,7 +10,10 @@ mod tests_arrange;
 use crate::curve_placement::{PlaceEdge, curve_targets, curves_left_of_targets, curves_under_left};
 use crate::geom::{FRAME_HEAD, FRAME_PAD, NODE_H, NODE_W};
 use crate::node::{Edge, Kind, Laid, Node, Pt};
-use arrange::{NODE_SEP, RANK_SEP, boxes, master_run_aside, member_of, push_aside_frames, push_below_inputs, snap_to_rank_rows, x, y};
+use arrange::{
+    NODE_SEP, RANK_SEP, boxes, master_run_aside, member_of, push_aside_frames, push_below_inputs, snap_to_rank_rows, x,
+    y,
+};
 use indexmap::IndexMap;
 use rust_sugiyama::{configure::Config, from_vertices_and_edges};
 use std::collections::{HashMap, HashSet};
@@ -65,7 +68,9 @@ fn layout_nested(
             m.assembly = None;
             m
         });
-        let inner_edges = raw.iter().filter(|e| ids.contains(e.source.as_str()) && ids.contains(e.target.as_str()));
+        let inner_edges = raw
+            .iter()
+            .filter(|e| ids.contains(e.source.as_str()) && ids.contains(e.target.as_str()));
         let laid = layout_flat(stripped.collect(), inner_edges.cloned().collect(), None, None);
         outer_nodes[bi].w = NODE_W.max(laid.width - laid.left + FRAME_PAD * 2.0);
         outer_nodes[bi].h = NODE_H.max(laid.height - laid.top + FRAME_PAD + FRAME_HEAD);
@@ -84,13 +89,21 @@ fn layout_nested(
         if !seen.insert(key.clone()) {
             continue;
         }
-        outer_edges.push(Edge { id: key, source, target, ..e.clone() });
+        outer_edges.push(Edge {
+            id: key,
+            source,
+            target,
+            ..e.clone()
+        });
     }
     // The push runs BEFORE the members are placed, so a frame that stepped aside takes them with it.
     let outer = push_aside_frames(layout_flat(outer_nodes, outer_edges, positions, prev).nodes);
     let mut members: Vec<Node> = Vec::new();
     for (name, laid) in &laid_inside {
-        let Some(b) = outer.iter().find(|n| n.kind == Kind::Assembly && n.module.as_deref() == Some(name)) else {
+        let Some(b) = outer
+            .iter()
+            .find(|n| n.kind == Kind::Assembly && n.module.as_deref() == Some(name))
+        else {
             continue;
         };
         let dx = x(b) + FRAME_PAD - laid.left;
@@ -112,14 +125,23 @@ fn layout_nested(
 /// Every cable with the two centres of its cards, never zero points: the renderer skips an edge with fewer than two.
 fn edges_between(nodes: &[Node], raw: &[Edge]) -> Vec<Edge> {
     let placed: HashMap<&str, &Node> = nodes.iter().map(|n| (n.id.as_str(), n)).collect();
-    let centre = |n: &Node| Pt { x: x(n) + n.w / 2.0, y: y(n) + n.h / 2.0 };
+    let centre = |n: &Node| Pt {
+        x: x(n) + n.w / 2.0,
+        y: y(n) + n.h / 2.0,
+    };
     raw.iter()
         .map(|e| {
             let points = match (placed.get(e.source.as_str()), placed.get(e.target.as_str())) {
                 (Some(s), Some(t)) => vec![centre(s), centre(t)],
                 _ => Vec::new(),
             };
-            Edge { weight: None, side: None, glued: None, points: Some(points), ..e.clone() }
+            Edge {
+                weight: None,
+                side: None,
+                glued: None,
+                points: Some(points),
+                ..e.clone()
+            }
         })
         .collect()
 }
@@ -142,7 +164,14 @@ fn finish(nodes: Vec<Node>, edges: Vec<Edge>) -> Laid {
     };
     let (width, height) = (extent(&|n| x(n) + n.w), extent(&|n| y(n) + n.h));
     let (left, top) = (least(&|n| x(n)), least(&|n| y(n)));
-    Laid { nodes, edges, width, height, left, top }
+    Laid {
+        nodes,
+        edges,
+        width,
+        height,
+        left,
+        top,
+    }
 }
 
 /// The cables with the ones that close a cycle left out: the engine never ends on a dense cyclic graph, so it is only shown a DAG.
@@ -179,12 +208,21 @@ fn without_back_edges(n: usize, edges: &[(u32, u32)]) -> Vec<(u32, u32)> {
             }
         }
     }
-    edges.iter().enumerate().filter(|(k, _)| !back.contains(k)).map(|(_, e)| *e).collect()
+    edges
+        .iter()
+        .enumerate()
+        .filter(|(k, _)| !back.contains(k))
+        .map(|(_, e)| *e)
+        .collect()
 }
 
 /// The engine's top-left for each card: components side by side, each from the margin, cards centred in their layer.
 fn engine_places(nodes: &[Node], raw: &[Edge]) -> Vec<(f64, f64)> {
-    let index: HashMap<&str, u32> = nodes.iter().enumerate().map(|(i, n)| (n.id.as_str(), i as u32)).collect();
+    let index: HashMap<&str, u32> = nodes
+        .iter()
+        .enumerate()
+        .map(|(i, n)| (n.id.as_str(), i as u32))
+        .collect();
     // Self-loops and repeated cables tell the engine nothing, and it takes neither.
     let mut seen: HashSet<(u32, u32)> = HashSet::new();
     let mut edges: Vec<(u32, u32)> = Vec::new();
@@ -203,14 +241,23 @@ fn engine_places(nodes: &[Node], raw: &[Edge]) -> Vec<(f64, f64)> {
         .enumerate()
         .map(|(i, n)| (i as u32, (n.w, n.h + RANK_SEP - NODE_SEP)))
         .collect();
-    let config = Config { vertex_spacing: NODE_SEP, ..Config::default() };
+    let config = Config {
+        vertex_spacing: NODE_SEP,
+        ..Config::default()
+    };
     let mut components = from_vertices_and_edges(&sizes, &edges, &config);
     components.sort_by_key(|(c, _, _)| c.iter().map(|(i, _)| *i).min().unwrap_or(usize::MAX));
     let mut out: Vec<Option<(f64, f64)>> = vec![None; nodes.len()];
     let mut cursor = GRAPH_MARGIN;
     for (comp, _, _) in &components {
-        let left = comp.iter().map(|(i, (cx, _))| cx - nodes[*i].w / 2.0).fold(f64::INFINITY, f64::min);
-        let top = comp.iter().map(|(i, (_, cy))| cy - nodes[*i].h / 2.0).fold(f64::INFINITY, f64::min);
+        let left = comp
+            .iter()
+            .map(|(i, (cx, _))| cx - nodes[*i].w / 2.0)
+            .fold(f64::INFINITY, f64::min);
+        let top = comp
+            .iter()
+            .map(|(i, (_, cy))| cy - nodes[*i].h / 2.0)
+            .fold(f64::INFINITY, f64::min);
         let mut right = cursor;
         for (i, (cx, cy)) in comp {
             let n = &nodes[*i];
@@ -240,10 +287,18 @@ fn layout_flat(mut nodes: Vec<Node>, raw: Vec<Edge>, positions: Memory, prev: Me
         n.x = Some(px);
         n.y = Some(py);
     }
-    let curve_ids: HashSet<&str> = nodes.iter().filter(|n| n.kind == Kind::Curve).map(|n| n.id.as_str()).collect();
+    let curve_ids: HashSet<&str> = nodes
+        .iter()
+        .filter(|n| n.kind == Kind::Curve)
+        .map(|n| n.id.as_str())
+        .collect();
     let place_edges: Vec<PlaceEdge> = raw
         .iter()
-        .map(|e| PlaceEdge { source: e.source.clone(), target: e.target.clone(), automation: e.automation.is_some().then_some(true) })
+        .map(|e| PlaceEdge {
+            source: e.source.clone(),
+            target: e.target.clone(),
+            automation: e.automation.is_some().then_some(true),
+        })
         .collect();
     let curves = curve_targets(&place_edges, |id| curve_ids.contains(id));
     // A curve's engine spot is dropped: it goes beside its target, and the row sweep makes the room.
@@ -255,8 +310,15 @@ fn layout_flat(mut nodes: Vec<Node>, raw: Vec<Edge>, positions: Memory, prev: Me
     out = master_run_aside(out, &raw);
     if positions.is_some() || prev.is_some() {
         for n in &mut out {
-            let named = if matches!(n.kind, Kind::Module | Kind::Assembly) { n.module.as_ref().unwrap_or(&n.label) } else { &n.label };
-            if let Some(p) = positions.and_then(|m| m.get(named)).or_else(|| prev.and_then(|m| m.get(&n.id))) {
+            let named = if matches!(n.kind, Kind::Module | Kind::Assembly) {
+                n.module.as_ref().unwrap_or(&n.label)
+            } else {
+                &n.label
+            };
+            if let Some(p) = positions
+                .and_then(|m| m.get(named))
+                .or_else(|| prev.and_then(|m| m.get(&n.id)))
+            {
                 n.x = Some(p.x);
                 n.y = Some(p.y);
             }

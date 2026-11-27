@@ -71,7 +71,6 @@ export {
   VIDEO_OUT,
   widgetRect,
 } from "./geometry";
-export { layout } from "./layout";
 export type {
   EdgeAutomation,
   EdgeInsert,
@@ -85,4 +84,5 @@ export type {
   RawNode,
   TrackControlValues,
 } from "./graphNode";
+export { layout } from "./layout";
 export { alignModuleRank, moduleRow, spaceModulesEvenly } from "./moduleRow";

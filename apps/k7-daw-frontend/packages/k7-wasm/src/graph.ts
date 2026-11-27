@@ -19,7 +19,15 @@ import type {
   StackAnswer,
 } from "./types/index.ts";
 
-export type { Built, EdgeInsert, Laid, Placement, SeamsAnswer, Spaced, StackAnswer };
+export type {
+  Built,
+  EdgeInsert,
+  Laid,
+  Placement,
+  SeamsAnswer,
+  Spaced,
+  StackAnswer,
+};
 
 /** The generated options with every list readonly: a host holds its lists as state and must not be asked to copy them. */
 type Loose<T> = {

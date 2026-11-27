@@ -37,7 +37,10 @@ fn chain() -> (Vec<Node>, Vec<Edge>) {
         card("d", Kind::Track, Some(0.0)),
         card("e", Kind::Module, Some(1.0)),
     ];
-    (nodes, vec![edge("a", "b"), edge("b", "c"), edge("d", "e"), edge("e", "c")])
+    (
+        nodes,
+        vec![edge("a", "b"), edge("b", "c"), edge("d", "e"), edge("e", "c")],
+    )
 }
 
 #[test]
@@ -61,7 +64,11 @@ fn a_row_is_parted_where_two_cards_collide() {
 
 #[test]
 fn disconnected_pieces_and_loners_all_get_a_place() {
-    let nodes = vec![card("a", Kind::Module, None), card("b", Kind::Module, None), card("z", Kind::Module, None)];
+    let nodes = vec![
+        card("a", Kind::Module, None),
+        card("b", Kind::Module, None),
+        card("z", Kind::Module, None),
+    ];
     let l = layout(nodes, vec![edge("a", "b")], None, None);
     assert_eq!(l.nodes.len(), 3);
     let z = at(&l, "z");
@@ -72,11 +79,21 @@ fn disconnected_pieces_and_loners_all_get_a_place() {
 #[test]
 fn a_cycle_a_self_loop_and_a_repeated_cable_do_not_stop_it() {
     let nodes = vec![card("a", Kind::Module, None), card("b", Kind::Module, None)];
-    let edges = vec![edge("a", "b"), edge("b", "a"), edge("a", "a"), Edge::new("again", "a", "b"), edge("a", "ghost")];
+    let edges = vec![
+        edge("a", "b"),
+        edge("b", "a"),
+        edge("a", "a"),
+        Edge::new("again", "a", "b"),
+        edge("a", "ghost"),
+    ];
     let l = layout(nodes, edges, None, None);
     assert_eq!(l.nodes.len(), 2);
     assert_eq!(l.edges.len(), 5);
-    assert!(l.edges.iter().all(|e| e.points.as_ref().is_some_and(|p| p.len() >= 2) || e.target == "ghost"));
+    assert!(
+        l.edges
+            .iter()
+            .all(|e| e.points.as_ref().is_some_and(|p| p.len() >= 2) || e.target == "ghost")
+    );
 }
 
 #[test]
@@ -92,7 +109,10 @@ fn the_layout_is_the_same_every_time() {
 fn a_pin_by_name_outranks_the_memory_and_the_memory_outranks_the_layout() {
     let (nodes, edges) = chain();
     let pins = HashMap::from([("b".to_owned(), Pt { x: 500.0, y: 800.0 })]);
-    let memory = HashMap::from([("b".to_owned(), Pt { x: 1.0, y: 1.0 }), ("e".to_owned(), Pt { x: 7.0, y: 900.0 })]);
+    let memory = HashMap::from([
+        ("b".to_owned(), Pt { x: 1.0, y: 1.0 }),
+        ("e".to_owned(), Pt { x: 7.0, y: 900.0 }),
+    ]);
     let l = layout(nodes, edges, Some(&pins), Some(&memory));
     assert_eq!((x(at(&l, "b")), y(at(&l, "b"))), (500.0, 800.0));
     assert_eq!((x(at(&l, "e")), y(at(&l, "e"))), (7.0, 900.0));
@@ -137,7 +157,13 @@ fn an_open_box_grows_around_its_members_and_they_stay_inside() {
     let mut j = card("j", Kind::Module, Some(1.0));
     i.assembly = Some("r".into());
     j.assembly = Some("r".into());
-    let nodes = vec![card("t", Kind::Track, Some(0.0)), frame, i, j, card("o", Kind::Module, Some(2.0))];
+    let nodes = vec![
+        card("t", Kind::Track, Some(0.0)),
+        frame,
+        i,
+        j,
+        card("o", Kind::Module, Some(2.0)),
+    ];
     let edges = vec![edge("t", "i"), edge("i", "j"), edge("j", "o")];
     let l = layout(nodes, edges, None, None);
     let f = at(&l, "asm:r");
@@ -195,14 +221,26 @@ fn a_thousand_random_cyclic_graphs_all_lay_out_and_none_hangs() {
     for round in 0..1000 {
         let n = 1 + next(60) as usize;
         let ranks: Vec<f64> = (0..n).map(|_| next(6) as f64).collect();
-        let pairs: Vec<(usize, usize)> = (0..next(150)).map(|_| (next(n as u64) as usize, next(n as u64) as usize)).collect();
+        let pairs: Vec<(usize, usize)> = (0..next(150))
+            .map(|_| (next(n as u64) as usize, next(n as u64) as usize))
+            .collect();
         let (tx, rx) = mpsc::channel();
         let (p2, r2) = (pairs.clone(), ranks.clone());
         std::thread::spawn(move || {
-            let nodes: Vec<Node> = (0..n).map(|i| card(&format!("n{i}"), Kind::Module, Some(r2[i]))).collect();
-            let edges: Vec<Edge> = p2.iter().enumerate().map(|(k, (a, b))| Edge::new(&format!("e{k}"), &format!("n{a}"), &format!("n{b}"))).collect();
+            let nodes: Vec<Node> = (0..n)
+                .map(|i| card(&format!("n{i}"), Kind::Module, Some(r2[i])))
+                .collect();
+            let edges: Vec<Edge> = p2
+                .iter()
+                .enumerate()
+                .map(|(k, (a, b))| Edge::new(&format!("e{k}"), &format!("n{a}"), &format!("n{b}")))
+                .collect();
             let l = layout(nodes, edges, None, None);
-            let _ = tx.send((l.nodes.len(), l.edges.len(), l.nodes.iter().all(|c| x(c).is_finite() && y(c).is_finite())));
+            let _ = tx.send((
+                l.nodes.len(),
+                l.edges.len(),
+                l.nodes.iter().all(|c| x(c).is_finite() && y(c).is_finite()),
+            ));
         });
         // The engine loops forever on some cyclic graphs, so a hang is a failure, not a wait.
         match rx.recv_timeout(std::time::Duration::from_secs(10)) {

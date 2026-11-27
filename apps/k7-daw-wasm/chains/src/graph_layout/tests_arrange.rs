@@ -10,7 +10,10 @@ fn card(id: &str, kind: Kind, px: f64, py: f64) -> Node {
 }
 
 fn edges(pairs: &[(&str, &str)]) -> Vec<Edge> {
-    pairs.iter().map(|(s, t)| Edge::new(&format!("{s}>{t}"), s, t)).collect()
+    pairs
+        .iter()
+        .map(|(s, t)| Edge::new(&format!("{s}>{t}"), s, t))
+        .collect()
 }
 
 fn find<'a>(nodes: &'a [Node], id: &str) -> &'a Node {
@@ -19,14 +22,22 @@ fn find<'a>(nodes: &'a [Node], id: &str) -> &'a Node {
 
 #[test]
 fn a_push_is_carried_all_the_way_down_a_chain() {
-    let nodes = vec![card("a", Kind::Module, 0.0, 500.0), card("b", Kind::Module, 0.0, 100.0), card("c", Kind::Module, 0.0, 200.0)];
+    let nodes = vec![
+        card("a", Kind::Module, 0.0, 500.0),
+        card("b", Kind::Module, 0.0, 100.0),
+        card("c", Kind::Module, 0.0, 200.0),
+    ];
     let out = push_below_inputs(nodes, &edges(&[("a", "b"), ("b", "c")]));
     assert_eq!([y(&out[0]), y(&out[1]), y(&out[2])], [500.0, 540.0, 580.0]);
 }
 
 #[test]
 fn the_lowest_of_several_inputs_is_cleared() {
-    let nodes = vec![card("a", Kind::Module, 0.0, 10.0), card("b", Kind::Module, 0.0, 900.0), card("sum", Kind::Module, 0.0, 0.0)];
+    let nodes = vec![
+        card("a", Kind::Module, 0.0, 10.0),
+        card("b", Kind::Module, 0.0, 900.0),
+        card("sum", Kind::Module, 0.0, 0.0),
+    ];
     let out = push_below_inputs(nodes, &edges(&[("a", "sum"), ("b", "sum")]));
     assert_eq!(y(&out[2]), 940.0);
 }
@@ -40,7 +51,10 @@ fn nothing_out_of_place_nothing_moves() {
 #[test]
 fn a_cycle_is_left_alone() {
     let nodes = vec![card("a", Kind::Module, 0.0, 0.0), card("b", Kind::Module, 0.0, 0.0)];
-    assert_eq!(push_below_inputs(nodes.clone(), &edges(&[("a", "b"), ("b", "a")])), nodes);
+    assert_eq!(
+        push_below_inputs(nodes.clone(), &edges(&[("a", "b"), ("b", "a")])),
+        nodes
+    );
 }
 
 #[test]
@@ -66,7 +80,10 @@ fn the_master_run_moves_as_a_block_on_both_axes() {
 
 #[test]
 fn a_run_left_too_far_out_is_pulled_back_in() {
-    let nodes = vec![card("MIX", Kind::Sink, 5000.0, 5000.0), card("a", Kind::Module, 0.0, 0.0)];
+    let nodes = vec![
+        card("MIX", Kind::Sink, 5000.0, 5000.0),
+        card("a", Kind::Module, 0.0, 0.0),
+    ];
     let out = master_run_aside(nodes, &edges(&[("a", "MIX")]));
     assert_eq!((x(find(&out, "MIX")), y(find(&out, "MIX"))), (160.0, 110.0));
 }
