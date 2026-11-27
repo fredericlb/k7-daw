@@ -19,7 +19,7 @@ logged, the song simply stops being loaded.
 
 ## Who passes what
 
-Both clients — `@studio/engine-browser`'s `EngineClient` and `@studio/engine-client`'s
+Both clients — `@studio/engine-browser`'s `EngineClient` and the bench scripts' Node client (`k7-runtime/scripts/lib/engine-client`)'s
 `EngineControl` — take the session in their constructor and stamp it on **every** outgoing
 message, at the single `send()` both funnel through. That is the point: a verb added later
 is addressed by construction, and there is no per-call site to forget.
@@ -55,7 +55,7 @@ which reads as "the engine ignores Play".
 They reach the same string by different routes: the browser slugs the logged-in email, and the
 file service is TOLD the email — `noteOwner`, from the header every request carries — rather than
 reading it out of a path: no level of the workspace path names a person
-(`apps/k7-daw-frontend/packages/engine-client/docs/paths.md`), since one machine holds one person's workspaces. a test of the file service's engine module says the two halves still agree.
+(`apps/k7-daw-engine/k7-runtime/docs/enginePaths.md`), since one machine holds one person's workspaces. a test of the file service's engine module says the two halves still agree.
 It is the only thing in the repo that would catch them drifting.
 
 **Filtering incoming frames is on disagreement, not absence.** `forSession()` lets a frame

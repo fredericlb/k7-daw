@@ -7,8 +7,8 @@
 import { mkdtempSync, writeFileSync } from "node:fs";
 import { homedir, tmpdir } from "node:os";
 import { join } from "node:path";
-import { findEngineBinary } from "../../../k7-daw-frontend/packages/engine-client/src/engineBinary.ts";
-import { renderProject } from "../../../k7-daw-frontend/packages/take-render/src/renderProject.ts";
+import { findEngineBinary } from "./lib/engine-client/engineBinary.ts";
+import { renderProject } from "./lib/take-render/renderProject.ts";
 import { peakOf, wavFile } from "./wav.ts";
 
 const base = {

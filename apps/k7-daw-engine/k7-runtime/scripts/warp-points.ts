@@ -6,7 +6,7 @@
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { renderProject } from "../../../k7-daw-frontend/packages/take-render/src/renderProject.ts";
+import { renderProject } from "./lib/take-render/renderProject.ts";
 import { channelOf, readWav, wavFile } from "./wav.ts";
 
 const RATE = 48000;

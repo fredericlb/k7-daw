@@ -4,7 +4,7 @@
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { findEngineBinary } from "@studio/engine-client/engineBinary";
+import { findEngineBinary } from "../engine-client/engineBinary.ts";
 import type { ProjectDoc } from "@studio/engine-protocol/project";
 import { localRenderer } from "./renderer.ts";
 
