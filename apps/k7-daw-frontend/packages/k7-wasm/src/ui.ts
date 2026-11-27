@@ -13,10 +13,10 @@ import type {
   MenuChoiceAnswer,
   Offered,
   PrefsAnswer,
+  PrefsView,
   Scores,
   Step,
   StepCommand,
-  PrefsView,
 } from "./types/index.ts";
 
 export {
@@ -33,9 +33,9 @@ export type {
   EnterAction,
   FormArg,
   Offered,
+  PrefsView,
   Step,
   StepCommand,
-  PrefsView,
 };
 
 /** The page's per-command overrides, keyed by the canonical line (apps/k7-daw-frontend/src/commandPrefs docs). */
