@@ -3,4 +3,8 @@
 /**
  * How far a curve moves the param it drives.
  */
-export type Depth = { amplitude: number; bipolar: boolean; cut?: string };
+export type Depth = {
+  amplitude: number;
+  bipolar: boolean;
+  cut?: import("@studio/graph-model").Cut;
+};
