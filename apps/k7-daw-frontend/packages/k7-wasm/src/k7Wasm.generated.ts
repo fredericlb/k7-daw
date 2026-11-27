@@ -6,4 +6,4 @@ export const SOURCES = "9b0fe4b56ec45f77";
 export const TYPES = "4dfee26a05eda37a";
 
 /** The size of k7Wasm.wasm, in bytes. */
-export const BYTES = 11031065;
+export const BYTES = 8608404;
