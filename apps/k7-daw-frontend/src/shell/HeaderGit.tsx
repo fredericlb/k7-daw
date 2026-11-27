@@ -118,6 +118,12 @@ export function GitRailSave({
       className={`relative ${className}`}
     >
       {saving ? <Loader2 className="animate-spin" /> : <Save />}
+      {/* The tooltip's auto-save line, readable without a hover (the suite reads it here). */}
+      {autosaved && (
+        <span className="sr-only" data-testid="git-autosaved">
+          {autosaved}
+        </span>
+      )}
       {v.changed > 0 && (
         <Badge
           variant="count-sm"
