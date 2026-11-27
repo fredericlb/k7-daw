@@ -3,6 +3,7 @@
 
 pub mod address;
 pub mod files;
+pub mod forge;
 pub mod github;
 pub mod merge;
 pub mod roam;
@@ -13,8 +14,9 @@ pub use address::{
     PortAnswer, SshHost, clone_name, is_web_address, name_from_url, remote_name, short_version, ssh_host, ssh_port,
 };
 pub use files::{Change, CommitView, Entry, LogEntry, commit_view};
+pub use forge::{DeviceCode, ForgeAccount, ForgeKind, ForgeProbe, ForgeStart, ForgeStatus, PollAnswer, PollState};
 pub use github::{Ago, AgoUnit, Arranged, GithubRepo, arrange, pushed_ago};
-pub use merge::{Choice, Conflict, Kind, can_finish, offered, remaining};
+pub use merge::{Choice, Conflict, Kind, PullState, can_finish, offered, remaining};
 pub use roam::{RoamAnswer, RoamEntry, RoamState, offered_roam};
 pub use save::save_when;
 pub use state::{

@@ -28,6 +28,18 @@ pub enum Kind {
     Presence,
 }
 
+/// How a pull ended, said by `POST /git/pull`.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS))]
+#[serde(rename_all = "kebab-case")]
+pub enum PullState {
+    UpToDate,
+    FastForward,
+    Merged,
+    Conflicts,
+    EmptyRemote,
+}
+
 /// One thing the merge could not settle by itself.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[cfg_attr(feature = "ts", derive(ts_rs::TS))]

@@ -152,6 +152,11 @@ pub(super) fn answer_error(e: &Error) -> Response {
     json_answer(e.status(), &b)
 }
 
+/// A wire struct as the route's JSON answer.
+pub(super) fn typed(status: u16, v: &impl serde::Serialize) -> Response {
+    json_answer(status, &serde_json::to_value(v).unwrap_or(Value::Null))
+}
+
 pub(super) fn bad(message: &str) -> Response {
     json_answer(400, &json!({ "error": message, "code": "bad-request" }))
 }

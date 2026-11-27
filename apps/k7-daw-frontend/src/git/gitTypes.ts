@@ -8,15 +8,9 @@ export type {
   Conflict,
   GitState,
   MergeChoice as Choice,
+  PullState,
   StatusEntry,
 } from "@studio/k7-wasm/git";
-
-export type PullState =
-  | "up-to-date"
-  | "fast-forward"
-  | "merged"
-  | "conflicts"
-  | "empty-remote";
 
 export type MergeView =
   | { pending: false }

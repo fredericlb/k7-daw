@@ -5,13 +5,14 @@
 use std::path::Path;
 
 use axum::response::Response;
+use git_rules::ForgeProbe;
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 
 use k7_roam::forges;
 use k7_roam::store::ListStore;
 
-use super::git::{Ctx, bad, field};
+use super::git::{Ctx, bad, field, typed as typed_answer};
 use super::git_forge::{Forge, drop_token, fail};
 use super::git_forge_routes::id_ok;
 use super::git_forgejo::{SCOPES, api_of, redirects};
@@ -147,7 +148,7 @@ pub(super) fn address(typed: &str) -> Result<(String, String, String), String> {
     clippy::result_large_err,
     reason = "the refusal is the answer to give, built once"
 )]
-async fn probe(base: &str, id: &str) -> Result<Value, Response> {
+async fn probe(base: &str, id: &str) -> Result<ForgeProbe, Response> {
     let api = api_of(base);
     let version = match api.get_open("/version").await {
         Ok(r) if r.ok() && r.body.get("version").is_some() => r.body["version"].clone(),
@@ -195,10 +196,17 @@ async fn probe(base: &str, id: &str) -> Result<Value, Response> {
     // LFS goes over HTTP(S) to the server's own ROOT_URL, which may not be the address the person typed.
     let root_answers =
         root == base || matches!(api_of(&root).get_open("/version").await, Ok(r) if r.ok());
-    Ok(json!({
-        "id": id, "url": base, "version": version, "pageSize": page_size, "lfs": !lfs_off,
-        "rootUrl": root, "rootAnswers": root_answers, "redirects": redirects(), "scopes": SCOPES,
-    }))
+    Ok(ForgeProbe {
+        id: id.to_string(),
+        url: base.to_string(),
+        version: version.as_str().unwrap_or_default().to_string(),
+        page_size,
+        lfs: !lfs_off,
+        root_url: root,
+        root_answers,
+        redirects: redirects().into_iter().map(Into::into).collect(),
+        scopes: SCOPES.iter().map(|s| (*s).to_string()).collect(),
+    })
 }
 
 /// `POST /git/forges/probe { url }`: what the server is and the two redirects to register; nothing is kept.
@@ -208,7 +216,7 @@ pub(super) async fn probe_route(b: &Value) -> Response {
     };
     match address(typed) {
         Ok((base, id, _)) => match probe(&base, &id).await {
-            Ok(v) => json_answer(200, &v),
+            Ok(v) => typed_answer(200, &v),
             Err(r) => r,
         },
         Err(e) => fail(400, "bad-address", &e),
@@ -244,7 +252,7 @@ pub(super) async fn add(ctx: &Ctx, b: &Value) -> Response {
         return bad("the ssh host or port is not valid");
     }
     let mut v = match probe(&base, &id).await {
-        Ok(v) => v,
+        Ok(v) => serde_json::to_value(v).unwrap_or_default(),
         Err(r) => return r,
     };
     let server = Server {

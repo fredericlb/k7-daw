@@ -4,7 +4,9 @@
 import {
   type Ago,
   arrange,
+  type DeviceCode,
   type GithubRepo,
+  type PollAnswer,
   pushedAgo,
 } from "@studio/k7-wasm/git";
 import type { ForgeStatus } from "./forgeState";
@@ -12,21 +14,7 @@ import type { ForgeStatus } from "./forgeState";
 /** What `GET /git/github` says: GitHub's account under the forge seam. */
 export type GithubStatus = ForgeStatus;
 
-export type { GithubRepo };
-
-export interface DeviceCode {
-  userCode: string;
-  verificationUri: string;
-  interval: number;
-  expiresIn: number;
-}
-
-export interface PollAnswer {
-  state: "pending" | "slow_down" | "expired" | "denied" | "ok";
-  interval?: number;
-  login?: string;
-  keyNote?: string;
-}
+export type { DeviceCode, GithubRepo, PollAnswer };
 
 /** Settings → Services asks everything in one code: the person, the key, and `repo` for Connect's picker. */
 export const GITHUB_SCOPES = ["read:user", "write:public_key", "repo"];

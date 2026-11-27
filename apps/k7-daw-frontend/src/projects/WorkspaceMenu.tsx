@@ -105,7 +105,7 @@ export function WorkspaceMenu({
             >
               <GitBranch />
               <span className="truncate">
-                {m["git.menuConnected"]({ remote: view.remote })}
+                {m["git.menuConnected"]({ remote: view.remote ?? "" })}
               </span>
             </DropdownMenuItem>
           ) : (

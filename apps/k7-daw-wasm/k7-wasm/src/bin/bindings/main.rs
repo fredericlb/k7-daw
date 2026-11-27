@@ -48,6 +48,13 @@ fn write_types(dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
     GitRequest::export_all_to(dir)?;
     MediaRequest::export_all_to(dir)?;
     git_rules::GitState::export_all_to(dir)?;
+    git_rules::ForgeAccount::export_all_to(dir)?;
+    git_rules::ForgeStatus::export_all_to(dir)?;
+    git_rules::ForgeProbe::export_all_to(dir)?;
+    git_rules::ForgeStart::export_all_to(dir)?;
+    git_rules::DeviceCode::export_all_to(dir)?;
+    git_rules::PollAnswer::export_all_to(dir)?;
+    git_rules::PullState::export_all_to(dir)?;
     git_rules::Entry::export_all_to(dir)?;
     git_rules::LogEntry::export_all_to(dir)?;
     git_rules::Conflict::export_all_to(dir)?;
