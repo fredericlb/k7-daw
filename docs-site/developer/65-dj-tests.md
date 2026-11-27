@@ -8,7 +8,7 @@ Each package runs vitest on its own:
 
 ```bash
 npm run test --workspace @studio/k7-plugins
-npm run test --workspace @studio/song-schema
+cargo test --manifest-path apps/k7-daw-wasm/song-schema/Cargo.toml
 cargo test --manifest-path apps/k7-daw-wasm/verbs/Cargo.toml
 ```
 
@@ -43,7 +43,7 @@ From the root, `npm run test` runs `scripts/workspaces.mjs test`, which runs the
 | Test | Holds |
 |---|---|
 | `apps/k7-daw-frontend/packages/k7-wasm/src/textDesk.test.ts` | Parsing and the text edits (append, remove, move), every refused shape. |
-| `apps/k7-daw-frontend/packages/song-schema/src/reference.test.ts` | Reference file rules and paths. |
+| `apps/k7-daw-backend/packages/k7-file-service/tests/all/listings_workspace.rs` | Which files of `_references/` a listing offers. |
 | `apps/k7-daw-wasm/song-schema/src/stems.rs` | Stem names and node naming. |
 | `apps/k7-daw-frontend/packages/k7-wasm/src/textDesk.test.ts` | The cue sheet: reading, and writing markers into the text. |
 | `apps/k7-daw-wasm/song-edit/tests/replay_lane/main.rs` | The mix and live scaffolds compile and wire what they say. |

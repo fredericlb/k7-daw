@@ -3,7 +3,6 @@
 // recorder closes the file it draws that file instead, with its onsets, its threshold and the
 // button that brings it up to level. Same waveform, same place, one view of one clip.
 
-import { DEFAULT_TRIM_DB, trimWindow } from "@studio/audio-probe/trim-gate";
 import { arrayEq, useEngineState } from "@studio/engine-browser/store";
 import {
   anchorBars,
@@ -15,6 +14,7 @@ import {
   warpLine,
   zoomBars,
 } from "@studio/k7-wasm/gesture";
+import { DEFAULT_TRIM_DB, trimWindow } from "@studio/k7-wasm/media";
 import { projectApi } from "@studio/project-shell/project";
 import { Button } from "@studio/ui/button";
 import { DockHeaderRow, DockHint, DockStatus } from "@studio/ui/editor-dock";
@@ -847,7 +847,7 @@ export function AudioClipPanel({
                 }
                 // The EVENT's window, lit as ground with its edges picked out, and passed only when it actually cuts something.
                 sourceWindow={framed ? act : null}
-                /** …and its two edges DRAG, which is how an event's window is set — an `event …` verb, only where there is one to address (apps/k7-daw-frontend/packages/song/docs/materialCut.md). */
+                /** …and its two edges DRAG, which is how an event's window is set — an `event …` verb, only where there is one to address (apps/k7-daw-wasm/song/docs/materialCut.md). */
                 onWindowMove={
                   piece && takes
                     ? (w) => {

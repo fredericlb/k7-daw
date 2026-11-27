@@ -1,6 +1,7 @@
 // saveAct.ts — Save, one press: everything in the workspace is committed under a dated message, then pushed; a toast says each step.
 // What a reader gets wrong: a push the remote refuses as behind leaves the save on this device, and the toast offers the Pull.
 
+import { saveWhen } from "@studio/k7-wasm/git";
 import {
   dismissToast,
   showToast,
@@ -15,9 +16,7 @@ import { remoteName } from "./gitState";
 
 /** The message a save is recorded under: the moment, as the canvas writes it (23/11/2026 00:14). */
 export function saveMessage(at: Date): string {
-  const p = (n: number) => String(n).padStart(2, "0");
-  const when = `${p(at.getDate())}/${p(at.getMonth() + 1)}/${at.getFullYear()} ${p(at.getHours())}:${p(at.getMinutes())}`;
-  return m["git.save.message"]({ when });
+  return m["git.save.message"]({ when: saveWhen(at) });
 }
 
 const saving = new Set<string>();

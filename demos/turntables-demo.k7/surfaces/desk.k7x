@@ -1,6 +1,6 @@
 // The DESK, and what each of its controls drives.
 //
-// A surface: a special view the project asks its editor to draw (apps/k7-daw-frontend/packages/song/docs/surfaces.md).
+// A surface: a special view the project asks its editor to draw (apps/k7-daw-wasm/song/docs/surfaces.md).
 // `split` means a PANE — a slot in the layout, over the graph, the way the arrangement sits
 // in a song. Press its number, or fullscreen it, exactly as you would any other pane.
 //
@@ -22,7 +22,7 @@
 // `playlist` is what the song browser lists — the twelve songs to hand tonight rather
 // than the two hundred and seventy-nine on the volume. A NAME under `_playlists/` at the
 // root of the repository, not a path: the folder is fixed. Write the playlists themselves
-// in k7, under the cog. See apps/k7-daw-frontend/packages/song/docs/playlists.md.
+// in k7, under the cog. See apps/k7-daw-wasm/song/docs/playlists.md.
 //
 // This demo's list is `_playlists/turntables-demo.k7x`: two beats kept in `records/`.
 type("turntables")

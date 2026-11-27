@@ -14,6 +14,7 @@ const LOCKED = [
   "apps/k7-daw-desktop/src-tauri",
   "apps/k7-daw-wasm/song-schema",
   "apps/k7-daw-wasm/chains",
+  "apps/k7-daw-wasm/git-rules",
   "apps/k7-daw-wasm/k7-wasm",
   "apps/k7-daw-wasm/song",
 ];

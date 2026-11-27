@@ -67,7 +67,7 @@ success.
   pre-answers `at` (k7's `commandFill`'s `CARET_ANSWERS`), so from the timeline this reads
   "insert two bars here"; from the CLI it is a whole line, which is what keeps it usable from
   both. What moves is everything positioned in song time and nothing else — see
-  `apps/k7-daw-frontend/packages/song/docs/insertTime.md` for the inventory and for the rule about a straddling
+  `apps/k7-daw-wasm/song/docs/insertTime.md` for the inventory and for the rule about a straddling
   event, decided by its START like every other range operation here.
 
 `event window <track> <at> <from> <to>` is the deliberate exception: `from`/`to` are in SECONDS of
@@ -78,13 +78,13 @@ them is the ordinary timecode. An edge that restates the material's own is clear
 written, the same rule the fades follow.
 
 `event gain <track> <at> <dB>` is an audio event's own trim, −6 to +6, refused on a MIDI event
-(`apps/k7-daw-frontend/packages/song-edit/docs/eventGain.md`).
+(`apps/k7-daw-wasm/song-edit/docs/eventGain.md`).
 
 `event loop points <track> <at> <from> <to>` takes the MATERIAL's unit instead — beats into a
 sequence, seconds into an audio file — because it is the clip panels' brace that sends it, and each
 panel's ruler is drawn in its material's unit. One verb for both kinds rather than two, since the
 event names its material and the material names the unit. `event loop` beside it is the switch:
-on, off or toggle (`apps/k7-daw-frontend/packages/song-edit/docs/eventLoop.md`).
+on, off or toggle (`apps/k7-daw-wasm/song-edit/docs/eventLoop.md`).
 
 ## One implementation, two commands
 
@@ -134,7 +134,7 @@ identical, and the second one would drift. A factory rather than a SID lookup in
 
 `off` rather than `0` or `1`: those are values, and the file has no way to say them. A pad that
 plays once on every pass is a pad with neither key, so turning an effect off is a DELETION — the
-same rule the velocity drag follows going back to full. See `apps/k7-daw-frontend/packages/song/docs/padEffects.md`.
+same rule the velocity drag follows going back to full. See `apps/k7-daw-wasm/song/docs/padEffects.md`.
 
 ## `track group` takes the tracks first, and moves them
 
@@ -149,12 +149,12 @@ no `trackOrder`: it is drawn above its first member.
 ## `track new` has no kind
 
 A lane is not typed by what it carries: one lane holds events naming clips and events naming
-sequences alike (`apps/k7-daw-frontend/packages/song/docs/trackModules.md`). Seeding the empty sequence a lane plays is
+sequences alike (`apps/k7-daw-wasm/song/docs/trackModules.md`). Seeding the empty sequence a lane plays is
 `sequence new`'s, a separate act.
 
 ## `track mute` — a lane's mute IS its module's bypass
 
-One state, in the one place a bypass is written (`apps/k7-daw-frontend/packages/song/docs/trackModules.md`). A group is
+One state, in the one place a bypass is written (`apps/k7-daw-wasm/song/docs/trackModules.md`). A group is
 a lane too — one that carries no signal — and both are silenced the same way, by name, in
 `graph.k7x`'s `bypassed:`. Solo is not a set of mutes but project state (`soloed:` in
 `project.k7x`). The doc is mutated and pushed rather than reloaded, so a mixer move stays snappy.
@@ -168,7 +168,7 @@ a meeting point and stays shared — it is a bus, not part of one lane's chain.
 
 ## `track rename` takes the whole name
 
-A lane's name IS its filename, `[position.][prefix.]label` (`apps/k7-daw-frontend/packages/song/docs/trackKind.md`), so
+A lane's name IS its filename, `[position.][prefix.]label` (`apps/k7-daw-wasm/song/docs/trackKind.md`), so
 the new name is typed whole: `track rename ge.lead vo.lead` changes the instrument as well as the
 file. Everything that names the lane follows — `graph.k7x`'s keys and arrows (a `#port` kept),
 `bypassed`, the boxes, `project.k7x`'s `trackOrder` and `soloed`, a chain project's lane item — and
@@ -196,7 +196,7 @@ is typed rather than offered on a menu — a hidden lane is on no screen to righ
 `event window`'s seconds into a file. The event is found in the LANE FILE by where it starts, not
 among the compiled clips: once comped, its first clip may be a take starting elsewhere. `event take
 arm` is session state the file service keeps, like an arm; `event take midi` is the browser filing a
-MIDI pass. The format and the recording path are `apps/k7-daw-frontend/packages/song/docs/takes.md`.
+MIDI pass. The format and the recording path are `apps/k7-daw-wasm/song/docs/takes.md`.
 
 ## `event crossfade` makes an overlap, not a key
 
@@ -249,7 +249,7 @@ answered, so a refused transcription costs nothing.
 
 ## `node tap` writes the NODE, never the module
 
-A rack's kit is its node's (`apps/k7-daw-frontend/packages/song/docs/racks.md`), so the six `node tap` verbs — `note`,
+A rack's kit is its node's (`apps/k7-daw-wasm/song/docs/racks.md`), so the six `node tap` verbs — `note`,
 `sample`, `add`, `insert`, `rename`, `remove` — edit `nodes/<name>.k7x` (or the alternative that is
 on), and a node that is not a rack is refused. `sample` takes a library file only, checked against
 the same list its `samples` completion offers, and `none` clears it. `add` picks the next free `T<n>`
@@ -263,7 +263,7 @@ whose notes are contiguous, "before SN" lands below the lowest of them, not betw
 `out <node> <tap> <subchain|none>` sends one tap to a subchain of the node's chain file, on an
 output of its own, and is the one tap verb that also takes an SFZ kit's pad. It checks the
 subchain before writing, so a route to nowhere is refused here rather than at the next compile
-(`apps/k7-daw-frontend/packages/song/docs/racks.md`, "A tap with a chain of its own").
+(`apps/k7-daw-wasm/song/docs/racks.md`, "A tap with a chain of its own").
 
 `chain add|move|remove` edit that subchain from the tap, writing the chain file directly rather than
 through a graph rewrite: the first `add` makes the subchain and routes the tap, and the `remove` of the
@@ -282,7 +282,7 @@ Their arguments may be QUOTED, a sample's path holding spaces; the tap card quot
 
 The names are read off the module's own file rather than off the compiled doc: an alternative may
 change any field, so the doc carries the chosen one collapsed in and has nothing left to say about
-the others. See `apps/k7-daw-frontend/packages/song/docs/alternatives.md`.
+the others. See `apps/k7-daw-wasm/song/docs/alternatives.md`.
 
 `select` is patched rather than reloaded when it CAN be: when the set that was on and the set
 asked for state nothing but numeric `params`, the switch is sent as values over the held doc
@@ -340,7 +340,7 @@ its own card on the graph — so nothing is orphaned invisibly, and rebinding is
 `curve set <name> <json>` is the curve editor's Save (`ui curve`): the JSON is the file's own fields,
 validated against the schema, and the file is created or replaced with exactly them — one command, so
 one save is one undo. The partial edits stay `curve point add|move|remove`; this is for the editor,
-which holds every field anyway. See `apps/k7-daw-frontend/packages/song/docs/curves.md`.
+which holds every field anyway. See `apps/k7-daw-wasm/song/docs/curves.md`.
 
 ## `curve point add|move|remove`
 
@@ -365,7 +365,7 @@ parsing.
 
 The one question that decides whether a cable may land on a lane: a track's material is its clips,
 and the single exception the model makes is a live input's signal, which is what recording onto a
-lane IS — an audio input's sound, or a MIDI device's notes (`apps/k7-daw-frontend/packages/song/docs/midiIn.md`). `apps/k7-daw-frontend/packages/song`'s `graph.ts` asks the same thing of the chain whose `out` names the track,
+lane IS — an audio input's sound, or a MIDI device's notes (`apps/k7-daw-wasm/song/docs/midiIn.md`). `apps/k7-daw-wasm/song`'s `graph.ts` asks the same thing of the chain whose `out` names the track,
 and warns when the answer is no.
 
 UPSTREAM, not "somewhere in this node's chain". A preamp reaches a compressor through the mic
@@ -390,7 +390,7 @@ file and read when the module is BUILT.
 
 That is also what makes them reachable from a widget: a `bind: "@channel"` in a module's `ui.k7x`
 needs no command of its own, and the day a fourth field is bindable it needs no verb either — one
-line in the table. See `apps/k7-daw-frontend/packages/song/docs/intrinsics.md`.
+line in the table. See `apps/k7-daw-wasm/song/docs/intrinsics.md`.
 
 Each entry takes the value as TYPED and answers with what to say about it, or throws the sentence
 that says why it cannot.
@@ -454,13 +454,13 @@ second control, which is why `project master` is the same write under another na
 WRITTEN: 0 dB deletes the key rather than writing a zero — the rule `type:` and a module's
 `status:` already follow. It is patched into the running engine rather than reloaded, like every
 other `node param`: the diff answers `MasterVolumeChanged` and sets the gain in place, so moving
-the fader does not stop the song. See `apps/k7-daw-frontend/packages/song/docs/masterVolume.md`.
+the fader does not stop the song. See `apps/k7-daw-wasm/song/docs/masterVolume.md`.
 
 The other three are refused BY NAME rather than left to the generic message, because each is what
 somebody will type. `MIX` because a sum is a place the signal passes through and a level belongs to
 what leaves. `RENDER` and `VIDEO_OUT` because they look like `MIX` and `OUT` and the symmetry stops
 exactly here: a frame has no level, so the picture's pair is pure routing
-(`apps/k7-daw-frontend/packages/song/docs/videoOutputs.md`).
+(`apps/k7-daw-wasm/song/docs/videoOutputs.md`).
 
 ## `track new` writes the file first
 
@@ -488,7 +488,7 @@ earlier trim removed (undo is how that comes back, deliberately). A gate that re
 the panel shows lit would cut on evidence nobody could see.
 
 There is no clip window — a clip file describes the bytes, a placement describes the use
-(`apps/k7-daw-frontend/packages/song/docs/materialCut.md`) — so the verb names the EVENT it acts on, and trimming one
+(`apps/k7-daw-wasm/song/docs/materialCut.md`) — so the verb names the EVENT it acts on, and trimming one
 placement leaves the others alone by construction rather than by a warning in the help.
 
 ## `clip warp`
@@ -521,7 +521,7 @@ its level and its pan are `node param <mixer node> Volume|Pan`, like every other
 module. Addressing them by the lane's name would be one module's params under the wrong noun.
 
 `node alternative *` and `node freeze` reach a lane and a reverb alike, because a lane IS a module.
-See `apps/k7-daw-frontend/packages/song/docs/trackModules.md`.
+See `apps/k7-daw-wasm/song/docs/trackModules.md`.
 
 There is no `track normalize` / `clip normalize` either: normalising is a treatment, and a
 treatment is a chain — `track process` / `clip process` apply one.
@@ -531,7 +531,7 @@ treatment is a chain — `track process` / `clip process` apply one.
 A destination track makes it a move BETWEEN lanes, refused only when the destination has nowhere to
 put THIS event. A lane is not typed, so the question is about the EVENT: a lane takes a note when
 its midi output is wired and a clip when its audio one is, and the wire says which in one word
-(`apps/k7-daw-frontend/packages/song/docs/trackModules.md`). Comparing the two lanes' kinds instead would refuse every
+(`apps/k7-daw-wasm/song/docs/trackModules.md`). Comparing the two lanes' kinds instead would refuse every
 move between an audio lane and a sequences one.
 
 ## `timeline …` — the project's other timelines
@@ -541,10 +541,10 @@ are the `event` verbs', on the lane address `<timeline>><lane>`, which `trackOf`
 resolves a song lane. Placing a timeline is `event add`, since it is placed like a clip. A timeline
 event is found by its own start (`eventAt`), and only `event gain`, `event status mute`, move,
 remove and paste take it: every other `event` verb would give it an extent of its own, and its
-length is fixed (`apps/k7-daw-frontend/packages/song/docs/timelines.md`). A write that would put a timeline inside
+length is fixed (`apps/k7-daw-wasm/song/docs/timelines.md`). A write that would put a timeline inside
 itself is refused before it lands, since the project would no longer load.
 `timeline play` sets the session's audition through the optional `CommandHost.timelinePlay`: a host
-with no engine refuses it, and nothing is written (`apps/k7-daw-frontend/packages/song/docs/timelines.md`).
+with no engine refuses it, and nothing is written (`apps/k7-daw-wasm/song/docs/timelines.md`).
 `selection timeline` makes one from a rectangle: the events of ONE lane STARTING in `[from, to]`
 move into a new timeline as long as the range, and one event of it takes their place at `from`.
 One lane, because a timeline plays through the lane it sits on, so events of several lanes would
@@ -582,7 +582,7 @@ pointing at each (`@studio/song-edit`'s `materialCut`), so each half is notes to
 is split VIRTUALLY: the same file placed twice, the head's window ending at the cut and the tail's
 starting there, with nothing rendered and no engine needed — a cut is the first edit anyone makes,
 and it must be instant and work offline. A half that has to be processed apart is given a material
-of its own by `selection consolidate` (`apps/k7-daw-frontend/packages/song/docs/materialCut.md`).
+of its own by `selection consolidate` (`apps/k7-daw-wasm/song/docs/materialCut.md`).
 
 A looped audio event is refused, as before: its window repeats, and a cut inside a repeat has no
 single place in the source.
@@ -785,7 +785,7 @@ the node name is free — makes the node extend THAT ref directly, the `<categor
 naming the node by default. This is what the graph's `+` sends for a CATALOGUE pick. No workspace
 module is scaffolded in between: a one-line module that only extends a library one hides the
 library module's preset shelf, since presets are keyed by what a node extends
-(`apps/k7-daw-frontend/packages/song/docs/userPresets.md`), and adds a file nobody chose to own.
+(`apps/k7-daw-wasm/song/docs/userPresets.md`), and adds a file nobody chose to own.
 
 `node new @<library>/<category>/<name> [<node-name>] [x,y]` — a WHOLE ref in the target's place —
 makes the node extend that ref as it stands, with no workspace module in between
@@ -829,7 +829,7 @@ them both, and `graph organize` is the way out, the same as for any other pin.
 
 One arrow is accepted **before** the file states it: `MIX → OUT`, and the picture's
 `RENDER → VIDEO_OUT`. The graph DRAWS a sum straight to its device whenever anything reaches the
-sum, whether or not a master run is written (`apps/k7-daw-frontend/packages/song/docs/masterChain.md`), so a `+` there
+sum, whether or not a master run is written (`apps/k7-daw-wasm/song/docs/masterChain.md`), so a `+` there
 addresses a wire that is on screen and not in the file. The verb writes the run and then splices
 into it, in that order — one command, which is what the `+` promises. Only when the sum feeds
 NOTHING: a sum already running somewhere else is refused as any other non-arrow is, since accepting
@@ -889,7 +889,7 @@ move` did not ask at all, so dragging `MIX` or `OUT` refused with a list of modu
 going to be in; `graph chain connect` and its replug twin spelled `name === "OUT"` by hand, which
 left a set's `fadeA: [ MIX ]` unwireable from the picture. One `namesANode` now, because the rule
 that everything on the graph is a node is only true if every gate agrees on it
-(`apps/k7-daw-frontend/packages/song/docs/graphModel.md`).
+(`apps/k7-daw-wasm/song/docs/graphModel.md`).
 
 `graph chain connect <from> <to>` is the patch-cable gesture and how a new chain begins. Unlike
 `node insert` there is no existing arrow to validate against, so the checks are the ends themselves:

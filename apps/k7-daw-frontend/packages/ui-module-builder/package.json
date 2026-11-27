@@ -23,10 +23,8 @@
     "@studio/ui": "*",
     "@studio/engine-protocol": "*",
     "@studio/graph-model": "*",
-    "@studio/k7-wasm": "*",
     "@studio/panel-rules": "*",
     "@studio/project-shell": "*",
-    "@studio/song-schema": "*",
     "@studio/ui-editor": "*",
     "@studio/ui-timeline": "*",
     "@studio/web-protocol": "*"

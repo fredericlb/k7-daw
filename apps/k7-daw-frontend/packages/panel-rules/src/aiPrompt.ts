@@ -4,7 +4,7 @@
 // The one thing easy to get wrong: WIDGET_DOCS must cover every schema type — a test pins it.
 // Rationale: apps/k7-daw-frontend/packages/ui-module-builder/docs/aiOrganize.md.
 
-import type { WidgetType } from "@studio/song-schema/yaml/moduleSchema";
+import type { WidgetType } from "@studio/graph-model";
 
 /** One line per widget kind: what it is for and the fields it takes beyond col/row/colSpan/rowSpan/label/hidden. */
 export const WIDGET_DOCS: Record<WidgetType, string> = {

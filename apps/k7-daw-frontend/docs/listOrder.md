@@ -1,7 +1,7 @@
 # The order a list is drawn in
 
 The file service and the compile path answer every listing in Unicode code-point order
-(`@studio/song-schema`'s `docs/textOrder.md`): every capitalised name before the lower-case ones,
+(`song-schema`'s `docs/textOrder.md`): every capitalised name before the lower-case ones,
 `_` between the two, `10` before `2`. That order is the one the compiler can give identically in
 node, the browser and Rust; it is not one a person reads. So every view that draws such a listing
 sorts it again in the browser, with `@studio/web-protocol/tree`.

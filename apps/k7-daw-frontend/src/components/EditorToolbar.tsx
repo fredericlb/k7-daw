@@ -2,7 +2,7 @@
 // popin, the module builder's door, a clip's Process menu, and the save state in place of a Save
 // button — and the bar that says the open file moved on disk under an edit. See ../../docs/shell.md.
 
-import { docPattern } from "@studio/song-schema/docExt";
+import { docPattern } from "@studio/k7-wasm/schema";
 import { Button } from "@studio/ui/button";
 import { Choice } from "@studio/ui/choice";
 import {

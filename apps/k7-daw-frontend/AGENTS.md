@@ -118,7 +118,7 @@ context alive while you are looking elsewhere.
 field, and both schemas are `.strict()`, so a file still holding one refuses to load. A note is a
 node of the built-in `@meta/doc`: one input, no output, one field (`content`), drawn as written
 on the graph and wired from whatever it is about. Off by default; the note button sits in the
-footer beside the mixer. Read `apps/k7-daw-frontend/packages/song/docs/docModules.md`.
+footer beside the mixer. Read `apps/k7-daw-wasm/song/docs/docModules.md`.
 
 **A project declares its SURFACES.** A `surfaces/` folder, one file per special view — `type`,
 `layout`, and a `mapping` saying which module each of its components moves. Four types, and the
@@ -150,7 +150,7 @@ own between the hooks and the screen. Get it wrong and the crossfader re-centres
 trip while the sound stays where you put it — see `apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/deckSet.md`.
 
 A component with no mapping is reported on the surface itself, not by refusing the project.
-Read `apps/k7-daw-frontend/packages/song/docs/surfaces.md`.
+Read `apps/k7-daw-wasm/song/docs/surfaces.md`.
 
 **There is ONE layout, and nobody chooses it either.** Which panes it holds is what the open
 project DECLARES: `viewPanes` in `src/routes.ts` takes the surface flags and answers with the
@@ -160,7 +160,7 @@ timeline, and the transport and the minimap go with it.
 
 `project.k7x` has no `project_type` and there is no `View` type: `surfaces/` answers the same
 question and is the only thing that answers it, so two sources cannot contradict. Read
-`apps/k7-daw-frontend/packages/song/docs/surfaces.md` before touching any of it.
+`apps/k7-daw-wasm/song/docs/surfaces.md` before touching any of it.
 
 The vocabulary is two words, and `src/routes.ts` is where they are declared —
 read it before changing layout. A **pane** is one of five (`editor | timeline | turntables |
@@ -229,7 +229,7 @@ interpolate conditions into command names (`f` → `{focus_pane}`).
   service refuses a library write. A library changes with an app update, not by an edit. One
   store and one path space: the file hub keeps ONE folder of each
   library for the device, seeded from `k7-core`, and the file service answers it at
-  the virtual `_libraries/<name>/…` in every workspace (`apps/k7-daw-frontend/packages/song/docs/sharedFolders.md`,
+  the virtual `_libraries/<name>/…` in every workspace (`apps/k7-daw-wasm/song/docs/sharedFolders.md`,
   `apps/k7-daw-backend/docs/files/hub.md`). `docs/sharedModules.md` is the page to read; a
   chain's bench, `/@banc/<chain>/live.k7`, is a live RIG that edits no origin library: `chain save`
   writes it into the account's own (`docs/frozenChains.md`).
@@ -250,7 +250,7 @@ interpolate conditions into command names (`f` → `{focus_pane}`).
   for the zoom stack, `m`/`s` for mute/solo. Neither is a session flag: `m` rewrites the
   lane's BYPASS in `graph.k7x` — a lane is a module, and its mute is that module's bypass —
   and `s` toggles the lane in project.k7x's root `soloed:` list, several at once, resolved by
-  the ENGINE (`apps/k7-daw-frontend/packages/song/docs/trackModules.md`). Selection
+  the ENGINE (`apps/k7-daw-wasm/song/docs/trackModules.md`). Selection
   and zoom are a stack; the innermost entry describes the view. Unlike chains, this one
   stays k7-only.
 

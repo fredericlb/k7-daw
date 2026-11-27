@@ -9,7 +9,7 @@ import {
   resolveRecords,
 } from "@studio/k7-wasm/records";
 import { parsePlaylist } from "@studio/k7-wasm/schema";
-import type { RecordDrag } from "@studio/song-schema/records";
+import type { RecordDrag } from "@studio/ui/record-drag";
 import { m } from "../paraglide/messages.js";
 
 /** One line of the set list: what the playlist named, and whether the workspace holds it. */

@@ -2,7 +2,7 @@
 // flips the box rather than collapsing it. What a corner drag writes is pinned here, since nothing
 // mounts the grid.
 
-import type { Widget } from "@studio/song-schema/yaml/moduleSchema";
+import type { WebWidget as Widget } from "@studio/graph-model";
 import { describe, expect, it } from "vitest";
 import { boxBetween, cornerAnchor } from "./WidgetGridEditor";
 

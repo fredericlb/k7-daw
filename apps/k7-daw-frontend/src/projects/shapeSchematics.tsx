@@ -3,7 +3,7 @@
 // than icons, so they are drawn here and not taken from @studio/ui/icons; they inherit
 // `currentColor`, which is how the picked card turns them violet. See ../../docs/projects.md.
 
-import type { ProjectShape } from "@studio/song-schema/yaml/projectSchema";
+import type { ProjectShape } from "@studio/k7-wasm/types";
 import type { ReactNode } from "react";
 
 /** The clips of the drawn lanes, each with the lane it sits on: a fixed picture, keyed by where it is. */

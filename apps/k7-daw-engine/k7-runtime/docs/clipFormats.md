@@ -30,7 +30,7 @@ disclaimer JUCE prints beside the flag predates that.
 ## What stays unplayable
 
 `m4a`, `opus` and `webm` are three of the nine extensions a workspace takes as audio
-(`apps/k7-daw-frontend/packages/song-schema/src/audioFiles.ts`), and JUCE has no decoder for any of them. They reach the engine on
+(`apps/k7-daw-wasm/song-schema/src/audio_files.rs`), and JUCE has no decoder for any of them. They reach the engine on
 an Apple machine, through CoreAudio, and nowhere else: a file in one of them is silent on a Linux
 engine, with the same one-line warning and no way to tell it from a missing file. A format the engine
 cannot read is a reason to keep recordings as wav or flac.

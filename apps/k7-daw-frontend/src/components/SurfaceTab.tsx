@@ -6,7 +6,7 @@
 // It needs no `open` prop to keep the DOCUMENT alive while the screen is hidden: a pane is
 // mounted once and hidden with CSS, and that shell invariant covers it.
 //
-// See apps/k7-daw-frontend/packages/song/docs/surfaces.md and apps/k7-daw-frontend/packages/k7-plugins/docs/plugins.md.
+// See apps/k7-daw-wasm/song/docs/surfaces.md and apps/k7-daw-frontend/packages/k7-plugins/docs/plugins.md.
 
 import { memo } from "react";
 import { m } from "../paraglide/messages.js";

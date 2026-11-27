@@ -30,7 +30,7 @@ export interface ModuleStore {
   /** The `widgets.js` beside the module, answered like the panel — its lcdscreen widgets' drawing; docs/store.md. */
   widgetsScript?(path: string): Promise<ModuleSidecarFile>;
 
-  /** The ENGINES beside a module file and the one it runs; absent is a host with none (apps/k7-daw-frontend/packages/song/docs/engines.md). */
+  /** The ENGINES beside a module file and the one it runs; absent is a host with none (apps/k7-daw-wasm/song/docs/engines.md). */
   engines?(path: string): Promise<{ engines: string[]; engine?: string }>;
 
   /** What the code pane completes against. A host with nothing to offer returns empty lists. */

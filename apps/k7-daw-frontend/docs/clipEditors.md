@@ -42,12 +42,12 @@ On a clip that LOOPS, it halves the passes as it doubles the window: four passes
 become two of two, so the same span plays and the two halves can now differ — which is the whole
 reason to press it on a loop. A placement it cannot follow (an odd number of passes, or a window
 of its own) is left alone and NAMED in the status line, because that one just got twice as long.
-`apps/k7-daw-frontend/packages/song-edit/docs/sequenceLoops.md` is the page.
+`apps/k7-daw-wasm/song-edit/docs/sequenceLoops.md` is the page.
 
 It is **the one edit in this header that is about the sequence** rather than about a note, which
 is why it sits apart from the precisions. What a "length"
 is — the stated window, else the notes' extent rounded up to the bar — is decided in the writer,
-and `apps/k7-daw-frontend/packages/song-schema/docs/noteEdits.md` is where that reasoning lives.
+and `apps/k7-daw-wasm/song-schema/docs/noteEdits.md` is where that reasoning lives.
 
 The roll draws the menu only when the roll can be EDITED (`onCreateNote`): a locked workspace draws
 the notes and takes none, and the entry there would be a button that reports a refusal.
@@ -180,7 +180,7 @@ Which verb commits is decided by whether the pitch changed:
 - it did not → `sequence note timerange`, as before.
 
 Not one verb for both, though `move` could carry a purely horizontal drag: `moveNote` **refuses an
-occupied destination** and `setNoteTimeRange` does not (`@studio/song-schema` `docs/noteEdits.md`),
+occupied destination** and `setNoteTimeRange` does not (`song-schema` `docs/noteEdits.md`),
 so routing every move through it would start refusing drags that work today. A drag whose pitch
 change the keyboard's edge swallowed counts as horizontal, which is what `movesPitch` answers.
 
@@ -407,14 +407,14 @@ about the same box.
 
 Each is **one pass over the file** and therefore one journal entry.
 Running the singular verb N times would be N of them, and half could land while the rest failed —
-an undo would then be a fifth of the way back. `mapNotesInRegion` in `@studio/song-schema` is
+an undo would then be a fifth of the way back. `mapNotesInRegion` in `song-edit` is
 where that pass lives; the four verbs are four three-line functions over it.
 
 They are offered on the note's own right-click, when the click landed inside the rectangle. The
 three that owe a value go to the bar with the box already spelt (`needsMore`), which is what the
 mechanism is for and what spares the shell three more key bindings. What each of them decided —
 quantize keeps the length, transpose clamps rather than drops, velocity is absolute and 1 clears
-the field — is in `@studio/song-schema` `docs/noteEdits.md`, beside the writers.
+the field — is in `song-schema` `docs/noteEdits.md`, beside the writers.
 
 ### The roll paints first too
 
@@ -601,7 +601,7 @@ outside `whole` mode) spans the placed length and draws the marks in violet
 windows) — as a tinted band with its two edges picked out and a fainter line per repeat.
 
 **The two axes have different origins, and the compiler states the loop in whichever space its own
-material lives in** (`apps/k7-daw-frontend/packages/song/docs/alternatives.md` is not this; the fields are set in
+material lives in** (`apps/k7-daw-wasm/song/docs/alternatives.md` is not this; the fields are set in
 `nodeProject.ts`). That difference is the whole reason this is a module and not two inline sums:
 
 | | what `loopStart`/`loopEnd` mean | where the window is drawn |
@@ -630,7 +630,7 @@ dispatched rather than doubled, and a panel showing no placement (a sequence fil
 comp) draws no switch. On, the switch's colour is the loop marks' violet.
 
 While it is on, **the loop's two points are a brace in the ruler**, and they drag. The points are
-the event's window — there is no loop range apart from it (`apps/k7-daw-frontend/packages/song-edit/docs/eventLoop.md`)
+the event's window — there is no loop range apart from it (`apps/k7-daw-wasm/song-edit/docs/eventLoop.md`)
 — so the brace sits on the ruler drawn in the window's own unit:
 
 | panel | ruler | unit | snaps |
@@ -646,7 +646,7 @@ verb while the event loops, rather than `event window`, which keeps the passes a
 The audio clip panel's header carries the event's **gain** beside the switch: a slider from −6 to
 +6 dB (`src/components/EventGainSlider.tsx`), committed once on release as `event gain`, and put
 back to unity by a double-click. The roll has none: a MIDI event has no level of its own
-(`apps/k7-daw-frontend/packages/song-edit/docs/eventGain.md`).
+(`apps/k7-daw-wasm/song-edit/docs/eventGain.md`).
 
 `src/components/LoopBrace.tsx` is both halves, unit-free: each panel hands it its own mapping to
 pixels, and the bounds the event cannot leave (the material's).
@@ -751,7 +751,7 @@ What acting "only on it" means, verb by verb:
 
 **What a trim WRITES is this EVENT's window**, so there is no caveat to carry about the other
 placements of the same clip: a clip file describes the bytes and a placement describes the use
-(`apps/k7-daw-frontend/packages/song/docs/materialCut.md`), and trimming one event leaves the others alone by
+(`apps/k7-daw-wasm/song/docs/materialCut.md`), and trimming one event leaves the others alone by
 construction. The verb says it — `event trim` names the placement it acts on, like every other
 `event …`.
 
@@ -902,7 +902,7 @@ then written again.
 
 `takes` is the fourth mode of the waveform and of the roll (`TakesView.tsx`): the open EVENT's takes
 stacked, its own material first, on one song-time axis — the format and the recording path are
-`apps/k7-daw-frontend/packages/song/docs/takes.md`. It is a mode and not a third panel because it is a view of the same
+`apps/k7-daw-wasm/song/docs/takes.md`. It is a mode and not a third panel because it is a view of the same
 event the panel is open on, and a mode is how both panels already switch what a press means.
 
 - **The event, not the clicked clip.** A comped event is several clips on the timeline; whichever

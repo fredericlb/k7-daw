@@ -128,7 +128,7 @@ public function wrapping them. Counted so the figure does not surprise the next 
 
 **Tooling with no entry point** — programs, not dead code, but nothing wires them:
 
-- `apps/k7-daw-frontend/packages/song/scripts/` — run by hand, apart from `checkPanelBinds.ts`, which is `npm run lint:panels`.
+- `apps/k7-daw-wasm/song/scripts/` — run by hand, apart from `checkPanelBinds.ts`, which is `npm run lint:panels`.
   `projectFingerprint.ts` records what a
   real project compiles to, to diff before and after a refactor.
 - `apps/k7-daw-frontend/packages/k7-plugins/scripts/turntables/put-on.ts` — this one is **documented** and run by hand
@@ -187,7 +187,7 @@ Written here so it stops being mistaken for laziness.
 
 | what is doubled | why it stays |
 |---|---|
-| The `-100 dBFS` floor: `PEAK_FLOOR_DB` (`audio-analysis/src/peak.ts`), `MIN_DB` (`audio-probe/src/trimGate.ts`), and three times in `@studio/dsp` | `trimGate` is **browser-safe** — k7's clip panel imports it — and `peak.ts` spawns a decoder. Sharing the constant would bring a process launcher into the browser to save one number. The generated JSON cannot import at all |
+| The `-100 dBFS` floor: `PEAK_FLOOR_DB` (`audio-analysis/src/peak.ts`), `MIN_DB` (`waveform`'s `trim.rs`), and three times in `@studio/dsp` | `trim.rs` is Rust, reached through the page's WebAssembly module, and `peak.ts` spawns a decoder. Sharing the constant would bring a process launcher into the browser to save one number. The generated JSON cannot import at all |
 
 ### Cosmetic, but real
 

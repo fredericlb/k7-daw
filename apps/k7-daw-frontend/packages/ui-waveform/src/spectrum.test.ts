@@ -1,5 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { columnsOf, interpolated, mirroredYs, smoothColumns } from "./spectrum";
+import {
+  bandsAt,
+  columnsOf,
+  interpolated,
+  mirroredYs,
+  PLAIN,
+  paintColumns,
+  smoothColumns,
+} from "./spectrum";
 
 // Ten buckets of 100 ms: one second of material.
 const env = (over = {}) => ({
@@ -79,5 +87,43 @@ describe("smoothColumns", () => {
     const c = { amp: 0.4, bands: { low: 1, mid: 0, high: 0 } };
     const out = smoothColumns([c, c, c, c, c]);
     expect(out[2]?.amp).toBeCloseTo(0.4);
+  });
+});
+
+describe("paintColumns", () => {
+  it("paints a column in the colour Rust blends from its bands, and a band-less one in grey", () => {
+    const fills: string[] = [];
+    const ctx = {
+      set fillStyle(v: string) {
+        fills.push(v);
+      },
+      fillRect: () => undefined,
+    } as unknown as CanvasRenderingContext2D;
+    paintColumns(
+      ctx,
+      [
+        { amp: 0.5, bands: { low: 0.5, mid: 0, high: 0 } },
+        { amp: 0.5, bands: null },
+        null,
+      ],
+      0,
+      3,
+      40,
+    );
+    expect(fills).toEqual(["rgb(255,45,10)", PLAIN]);
+  });
+});
+
+describe("bandsAt", () => {
+  const env = { low: [0.5], mid: [0.2], high: [0.1] };
+
+  it("takes all three at one index", () => {
+    expect(bandsAt(env, 0)).toEqual({ low: 0.5, mid: 0.2, high: 0.1 });
+  });
+
+  it("says nothing for a file analysed before the bands existed, or past the end", () => {
+    expect(bandsAt({}, 0)).toBeNull();
+    expect(bandsAt({ low: [0.5], mid: [0.2] }, 0)).toBeNull();
+    expect(bandsAt(env, 5)).toBeNull();
   });
 });

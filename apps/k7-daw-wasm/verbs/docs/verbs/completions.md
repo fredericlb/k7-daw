@@ -22,7 +22,7 @@ whole command bar down with it, and the command itself already has the refusal i
 ## `modules` and `nodes` are not the same list
 
 `nodes` is this project's **uses** of modules, by the name the chains call them — off the compiled
-project, so a name it offers is one the chains actually hold (`apps/k7-daw-frontend/packages/song/docs/nodes.md`).
+project, so a name it offers is one the chains actually hold (`apps/k7-daw-wasm/song/docs/nodes.md`).
 
 `modules` is that same list **plus the inherited modules by ref**, because those are nameable
 before any chain has used one and therefore cannot come off the project. The two providers exist
@@ -34,21 +34,21 @@ file every other project reads.
 scan, so its size is a fact about the MACHINE rather than about the song: a rig with four hundred
 plugins puts four hundred entries in front of the dozen modules a project has. It is browsed
 instead, in the file tree's Libraries tab. `baseModules` leaves it out as well: a scanned plugin is
-what a LIBRARY's module extends to give it a face (`apps/k7-daw-frontend/packages/song/docs/moduleNamespaces.md`), and a
+what a LIBRARY's module extends to give it a face (`apps/k7-daw-wasm/song/docs/moduleNamespaces.md`), and a
 node pointed at the raw `@engine` ref instead gets no panel, whatever the library draws for it.
 `module own` is the one verb that takes an engine ref, and it asks `engineModules`, which holds
 nothing else. The filter is on the vocabulary half only: a ref the project
 already USES arrives through `collectPluginModules` and stays completable, because a node that
 exists is a node its verbs have to be able to name.
 
-Both are ranked by each module's `status:` (`apps/k7-daw-frontend/packages/song/docs/moduleStatus.md`). The ranking
+Both are ranked by each module's `status:` (`apps/k7-daw-wasm/song/docs/moduleStatus.md`). The ranking
 reads the **ref map** and not the compiled project — `status` is an authoring fact that never
 reaches the engine, so it only ever lives on the files. A lookup rather than a list, so one read
 answers for every name a provider offers.
 
 A value is what is INSERTED, and in a chain project a node's is its uuid. So a provider may also
 give a LABEL for the values a person cannot read — `PROVIDER_LABELS`, which `nodes` alone fills,
-with the module and the place (`apps/k7-daw-frontend/packages/song/docs/chainFiles.md`). `completionItems` carries it;
+with the module and the place (`apps/k7-daw-wasm/song/docs/chainFiles.md`). `completionItems` carries it;
 `completions` is the same list as bare lines, for a caller that has nowhere to show a label.
 
 ### The label on the wire

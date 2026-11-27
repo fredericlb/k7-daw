@@ -7,13 +7,13 @@ use std::collections::HashMap;
 use std::sync::{Mutex, Once, OnceLock};
 
 use axum::response::Response;
+use git_rules::{DeviceCode, PollAnswer, PollState};
 use serde_json::{Value, json};
 
-use super::git::{Ctx, bad};
+use super::git::{Ctx, bad, typed};
 use super::git_forge::{Entry, Profile, Step, TOPIC, Tokens, fail};
 use super::git_forge_api::{Api, Reply, base};
 use super::git_forge_token::fingerprint;
-use crate::routes::files::json_answer;
 
 /// GitHub's account id in the routes (`/git/forges/github.com`), and its ssh host.
 pub(super) const ID: &str = "github.com";
@@ -149,12 +149,14 @@ impl GitHub {
                 interval,
             },
         );
-        json_answer(
+        typed(
             200,
-            &json!({
-                "userCode": text("user_code"), "verificationUri": text("verification_uri"),
-                "interval": interval, "expiresIn": num("expires_in", 900),
-            }),
+            &DeviceCode {
+                user_code: text("user_code"),
+                verification_uri: text("verification_uri"),
+                interval,
+                expires_in: num("expires_in", 900),
+            },
         )
     }
 
@@ -164,7 +166,9 @@ impl GitHub {
             let map = pending().lock().unwrap_or_else(|p| p.into_inner());
             match map.get(&slot(ctx)) {
                 Some(p) => (p.device_code.clone(), p.interval),
-                None => return Step::Answer(json_answer(200, &json!({ "state": "expired" }))),
+                None => {
+                    return Step::Answer(typed(200, &PollAnswer::state(PollState::Expired)));
+                }
             }
         };
         let sent = json!({
@@ -183,24 +187,31 @@ impl GitHub {
                 expiry: None,
             });
         }
-        let state =
-            |s: &str, interval: u64| json_answer(200, &json!({ "state": s, "interval": interval }));
+        let state = |s: PollState, interval: u64| {
+            typed(
+                200,
+                &PollAnswer {
+                    interval: Some(interval),
+                    ..PollAnswer::state(s)
+                },
+            )
+        };
         Step::Answer(match r.body.get("error").and_then(Value::as_str) {
-            Some("authorization_pending") => state("pending", interval),
+            Some("authorization_pending") => state(PollState::Pending, interval),
             Some("slow_down") => {
                 let mut map = pending().lock().unwrap_or_else(|p| p.into_inner());
                 let more = interval + 5;
                 if let Some(p) = map.get_mut(&slot(ctx)) {
                     p.interval = more;
                 }
-                state("slow_down", more)
+                state(PollState::SlowDown, more)
             }
             Some(done @ ("expired_token" | "access_denied")) => {
                 take(ctx);
                 let said = if done == "expired_token" {
-                    "expired"
+                    PollState::Expired
                 } else {
-                    "denied"
+                    PollState::Denied
                 };
                 state(said, interval)
             }

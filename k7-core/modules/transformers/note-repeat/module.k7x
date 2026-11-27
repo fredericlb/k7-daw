@@ -29,4 +29,4 @@ params({
 // se lit "Count × Division" — 1 × 1/8 refrappe toutes les croches, 2 × 1/8 toutes les noires.
 // `Gate` dit à quel moment du pas la répétition se relâche. Un accord est refrappé en entier.
 //
-// (La description d'un module est son en-tête, ici — voir apps/k7-daw-frontend/packages/song/docs/docModules.md.)
+// (La description d'un module est son en-tête, ici — voir apps/k7-daw-wasm/song/docs/docModules.md.)

@@ -136,13 +136,7 @@ pub fn run(cx: &mut Ctx, _module: &str, f: &str, a: &[Json]) -> Option<Out> {
             r.map_or(Json::Null, |x| json!(x))
         }),
         "listNodePresets" => done(crate::presets::list_node_presets(fs, e, &dir, &m), |l| {
-            let presets: Vec<Json> = l
-                .presets
-                .iter()
-                .map(|p| json!({ "scope": p.scope, "name": p.name }))
-                .collect();
-            let reference = l.reference.map_or(Json::Null, |x| json!(x));
-            json!({ "ref": reference, "presets": presets, "scopes": l.scopes })
+            serde_json::to_value(&l).unwrap_or(Json::Null)
         }),
         "writeNodePreset" => {
             let mode = if s(a, 4) == "update" {

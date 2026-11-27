@@ -10,7 +10,7 @@ use song::views::surfaces::project_surfaces;
 use song_edit::insert_time::splice_project_time;
 use song_edit::js_text::{js_trim, str_to_number};
 use song_edit::loader::load_module_refs;
-use song_edit::project_root::load_project_root;
+use song_edit::project_root::{MASTER_MAX_DB, MASTER_MIN_DB, load_project_root};
 use song_edit::start_time::js_round;
 use song_edit::time_splice::Mode;
 use song_edit::video_outputs::ensure_video_run;
@@ -19,8 +19,6 @@ use song_edit::workspace_file::ws_exists;
 use song_edit::yaml_edit::{delete_file_value, set_file_value};
 use song_schema::{TimeSig, parse_duration};
 
-const MASTER_MIN_DB: f64 = -100.0;
-const MASTER_MAX_DB: f64 = 12.0;
 const TAG_MAX: usize = 32;
 
 fn path(keys: &[&str]) -> Vec<PathSeg> {
@@ -125,7 +123,7 @@ pub fn project_master(a: &str, h: &mut Host) -> Done {
             js_number(MASTER_MAX_DB)
         )];
         if db > MASTER_MAX_DB {
-            lines.push("a mix that needs more than +12 on its output has its headroom in the STRIPS — see apps/k7-daw-frontend/packages/song/docs/masterVolume.md".to_owned());
+            lines.push("a mix that needs more than +12 on its output has its headroom in the STRIPS — see apps/k7-daw-wasm/song/docs/masterVolume.md".to_owned());
         }
         h.refuse(lines);
         return Ok(());
@@ -255,6 +253,12 @@ fn surface_type(t: &str) -> Option<(&'static str, Vec<(String, String)>)> {
         ),
         _ => return None,
     })
+}
+
+/// The components a new surface file of type `t` lists unmapped, `[id, note]`, in the signal's order.
+#[must_use]
+pub fn surface_skeleton(t: &str) -> Option<Vec<(String, String)>> {
+    surface_type(t).map(|(_, skeleton)| skeleton)
 }
 
 pub(crate) const SURFACE_TYPES: [&str; 4] = ["turntables", "timeline", "viewport", "mastering"];

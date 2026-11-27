@@ -1,5 +1,5 @@
 // OutputRecordButton.tsx — the bar's record on a project with no timeline: record what the project sends out,
-// and its clock while it does. The recording itself is useOutputRecording's (apps/k7-daw-frontend/packages/song/docs/outputRecording.md).
+// and its clock while it does. The recording itself is useOutputRecording's (apps/k7-daw-wasm/song/docs/outputRecording.md).
 import { CapsuleButton } from "@studio/ui/capsule";
 import { Circle } from "@studio/ui/icons";
 import { Spinner } from "@studio/ui/spinner";

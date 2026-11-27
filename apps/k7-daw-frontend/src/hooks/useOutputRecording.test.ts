@@ -1,4 +1,4 @@
-// The bar's record button on a rig: offered only once the picture's read has answered (apps/k7-daw-frontend/packages/song/docs/outputRecording.md).
+// The bar's record button on a rig: offered only once the picture's read has answered (apps/k7-daw-wasm/song/docs/outputRecording.md).
 
 import { describe, expect, it } from "vitest";
 import { outputAvailable } from "./useOutputRecording";

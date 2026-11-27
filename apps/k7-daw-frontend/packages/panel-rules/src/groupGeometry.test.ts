@@ -1,7 +1,7 @@
 // A group frames what lies wholly inside its box and holds none of it: these are the rules the grid
 // editor and AI organize's check both apply, so a panel the one accepts is one the other accepts.
 
-import type { Widget } from "@studio/song-schema/yaml/moduleSchema";
+import type { WebWidget as Widget } from "@studio/graph-model";
 import { describe, expect, it } from "vitest";
 import { clash, framedBy, groupOf, inside, overlaps } from "./groupGeometry";
 

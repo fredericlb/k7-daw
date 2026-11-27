@@ -31,7 +31,7 @@ On k7's side:
 | `apps/k7-daw-frontend/src/routes.ts` | `viewPanes`: a `turntables` pane exists in the ring only when the project declares the surface. |
 | `apps/k7-daw-frontend/src/keys.ts` | `4` is `ui turntables`. |
 
-The surface type itself is a builtin of the schema (`apps/k7-daw-frontend/packages/song-schema/src/yaml/surfaceSchema.ts`), so the plugin registers no type, only its drawing.
+The surface type itself is a builtin of the schema (`apps/k7-daw-wasm/song/src/views/surfaces.rs`), so the plugin registers no type, only its drawing.
 
 ## The `Deck` seam
 
@@ -98,6 +98,6 @@ File-service calls carry `fileHeaders()`. Errors surface the server's own senten
 
 ## Extending
 
-- **A new desk control**: add it to `MIX_CONTROLS` in `controls.ts` (and to `REQUIRED_CONTROLS` in `mapping.ts` only if a desk is unusable without it), add its row to `SURFACE_MAPPING_SKELETON.turntables` in `apps/k7-daw-frontend/packages/song-schema/src/yaml/surfaceSchema.ts`, wire it in `scaffoldSet.ts`, and expose `xOf`/`xLive`/`turnX` from `useDeckSet`. `mapping.test.ts` holds the schema skeleton and the control list together.
+- **A new desk control**: add it to `MIX_CONTROLS` in `controls.ts` (and to `REQUIRED_CONTROLS` in `mapping.ts` only if a desk is unusable without it), add its row to the skeleton in `apps/k7-daw-wasm/verbs/src/verbs/project_more.rs` (`SURFACE_MAPPING_SKELETON.turntables` in `@studio/k7-wasm/consts`), wire it in `scaffoldSet.ts`, and expose `xOf`/`xLive`/`turnX` from `useDeckSet`. `mapping.test.ts` holds the schema skeleton and the control list together.
 - **A third deck**: `DECKS` in `deckVocabulary.ts` and the Rust set scaffold (`apps/k7-daw-wasm/song-edit/src/scaffold_set.rs`); control ids, stem names and required controls derive from it. The views still mount two `DeckSide`s explicitly.
 - **Another host**: implement `Deck`, mount `TurntablesPane` with a `ProjectSurface`, a project path and a revision token.

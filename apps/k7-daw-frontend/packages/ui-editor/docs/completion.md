@@ -24,7 +24,7 @@ that completes against nothing at all.
 It reads `hints.baseModules`, which the protocol carries and k7's backend fills from the same
 scan cache the engine writes. In a project's NODE file (`nodes/<name>.k7x`) the `@engine` refs are
 dropped from it: a node reaches a scanned plugin through the library module that gives it a face,
-and one extending the raw ref shows no panel (`apps/k7-daw-frontend/packages/song/docs/moduleNamespaces.md`). A
+and one extending the raw ref shows no panel (`apps/k7-daw-wasm/song/docs/moduleNamespaces.md`). A
 library's `module.k7x` is where an engine ref belongs, so there it is offered.
 
 ## The graph vocabulary is POSITIONAL

@@ -1,4 +1,4 @@
-// abi.rs — the C ABI the browser calls: the JSON call, the curve's playhead and the buffers every call crosses by (apps/k7-daw-frontend/packages/song-schema/docs/wasmBoundary.md); the typed gesture calls are typed.rs.
+// abi.rs — the C ABI the browser calls: the JSON call, the curve's playhead and the buffers every call crosses by (apps/k7-daw-wasm/song-schema/docs/wasmBoundary.md); the typed gesture calls are typed.rs.
 // A reader would get wrong that JS never frees or holds a pointer across a call: any call may grow the memory.
 // The module imports nothing: a call reads only what its request carries.
 

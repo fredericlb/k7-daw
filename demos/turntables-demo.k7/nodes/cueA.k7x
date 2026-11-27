@@ -11,7 +11,7 @@
 // Where it comes OUT is not this file's business and not the project's: `CUE` is a pair of
 // the interface, named once per MACHINE in preferences.yaml. A machine with no
 // second pair plays this bus nowhere at all — never into the room, which is measured in
-// apps/k7-daw-engine/k7-runtime/scripts/cue-bus.ts. See apps/k7-daw-frontend/packages/song/docs/cue.md.
+// apps/k7-daw-engine/k7-runtime/scripts/cue-bus.ts. See apps/k7-daw-wasm/song/docs/cue.md.
 extends("@workspace/audio/turntables/fade")
 params({
   // SILENT at rest: a set starts with nothing in the headphones, and the button is what opens it.

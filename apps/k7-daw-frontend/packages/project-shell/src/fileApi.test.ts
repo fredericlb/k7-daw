@@ -8,10 +8,8 @@ import {
   fget,
   fsend,
   READ_MS,
-  ReadOnlyDocument,
   setFileApiRevision,
   setFileApiTally,
-  setWriteGate,
   WRITE_MS,
 } from "./fileApi.ts";
 import { LEAVING_MS, markLeaving } from "./leaving.ts";
@@ -360,29 +358,7 @@ describe("a page that is leaving", () => {
   });
 });
 
-describe("a host's write gate", () => {
-  afterEach(() => setWriteGate(null));
-
-  it("refuses a file write with the host's sentence, before anything leaves", async () => {
-    setWriteGate((ask) => (ask.kind === "file" ? "held by ana" : null));
-    await expect(fsend("PUT", "/file", {})).rejects.toThrow(ReadOnlyDocument);
-    await expect(fsend("PUT", "/file", {})).rejects.toThrow("held by ana");
-    expect(served).toEqual([]);
-  });
-
-  it("lets a write through once the gate is lifted", async () => {
-    setWriteGate(() => "no");
-    setWriteGate(null);
-    const p = fsend("PUT", "/file", {});
-    releaseAll();
-    await p;
-    expect(served.length).toBe(1);
-  });
-});
-
 describe("a write refused over a waiting merge", () => {
-  afterEach(() => setWriteGate(null));
-
   it("fails with the server's one sentence and its status, not a crash", async () => {
     vi.stubGlobal("fetch", () =>
       Promise.resolve({
@@ -397,7 +373,10 @@ describe("a write refused over a waiting merge", () => {
           }),
       } as unknown as Response),
     );
-    const e = await fsend("PUT", "/file", {}).catch((x) => x);
+    const e = (await fsend("PUT", "/file", {}).catch((x: unknown) => x)) as {
+      message: string;
+      status: number;
+    };
     expect(e.message).toBe("a merge is waiting");
     expect(e.status).toBe(423);
   });

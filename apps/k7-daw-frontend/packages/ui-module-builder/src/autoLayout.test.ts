@@ -2,8 +2,9 @@
 // The interesting cases are all collisions — a word two families want — and the family table's
 // order is what settles them, so most of this file is those pairs pinned in place.
 
+import { stringify } from "@studio/k7-wasm/k7x";
+import { validatePanel } from "@studio/k7-wasm/validate";
 import { LAYOUT_MAX, twinIssues } from "@studio/panel-rules/layout-twins";
-import { UISchema } from "@studio/song-schema/yaml/moduleSchema";
 import { describe, expect, it } from "vitest";
 import {
   type AutoParam,
@@ -15,6 +16,9 @@ import {
   isPlumbing,
 } from "./autoLayout";
 import type { ModuleUI, Widget } from "./moduleUi";
+
+/** Does the Rust panel reader accept this panel? */
+const accepted = (ui: ModuleUI): boolean => validatePanel(stringify(ui)).ok;
 
 /** Every page as name → widgets: the tabs, or the panel itself when one family made no tabs. */
 const pagesOf = (ui: ModuleUI): Record<string, Record<string, Widget>> =>
@@ -116,7 +120,7 @@ describe("the pages", () => {
     // Not a page of leftovers and not a crash: a schema-valid empty grid, same as no params.
     const ui = autoOrganize([p("Select Preset"), p("MPE_Aftertouch_2")]);
     expect(ui.widgets).toEqual({});
-    expect(UISchema.safeParse(ui).success).toBe(true);
+    expect(accepted(ui)).toBe(true);
   });
 
   it("claims the lane's own names early — to drop them, `@base` apart", () => {
@@ -262,9 +266,9 @@ describe("the panel it proposes", () => {
 
   it("proposes something the schema accepts, empty list included", () => {
     // A panel the schema refuses takes the graph node with it.
-    expect(UISchema.safeParse(ui).success).toBe(true);
+    expect(accepted(ui)).toBe(true);
     const none = autoOrganize([]);
-    expect(UISchema.safeParse(none).success).toBe(true);
+    expect(accepted(none)).toBe(true);
     expect(none.widgets).toEqual({});
   });
 });

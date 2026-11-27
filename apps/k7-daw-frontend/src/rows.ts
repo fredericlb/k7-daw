@@ -4,7 +4,7 @@
 // component. Both must be fed the same tracks — live Strudel lanes come from their own
 // endpoint, so passing only `project.tracks` silently loses them and any group they fill.
 
-import { splitPort } from "@studio/song-schema/moduleTypes";
+import { splitPort } from "@studio/graph-model";
 import { HATCH } from "@studio/ui-timeline/lanes";
 import type {
   WebAutomationLane,

@@ -25,7 +25,7 @@ crate's `widget_value` module. Both consumers depend on the facade already, so n
 `package.json`.
 
 The input type is **structural** (`SurfaceMapping`) rather than imported from
-`@studio/song-schema`: the file's SHAPE is validated there, what it means against a graph is
+`song-schema`: the file's SHAPE is validated there, what it means against a graph is
 decided here, and this package keeps its two dependencies.
 
 ## What is NOT here, and must not come here

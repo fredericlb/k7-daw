@@ -5,7 +5,7 @@ import {
   ADSR_DEFAULT_LEVEL,
   CURVE_CUTS,
   LFO_SHAPES,
-} from "@studio/song-schema/curveVocab";
+} from "@studio/k7-wasm/consts";
 import { beforeAll, describe, expect, expectTypeOf, it } from "vitest";
 import { call, K7WasmError, wasmReady } from "./abi.ts";
 import { CurveHandle, curvePreview } from "./curve.ts";

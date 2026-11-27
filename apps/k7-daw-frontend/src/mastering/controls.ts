@@ -4,7 +4,7 @@
 // See ../../docs/mastering.md.
 
 import { unmappedControls as unmapped } from "@studio/k7-wasm/chains";
-import type { MixView } from "@studio/song-schema/yaml/mixViewSchema";
+import type { MixView } from "@studio/k7-wasm/text";
 import { m } from "../paraglide/messages.js";
 
 /** The three appliances inside one quick-master node, in the order the signal meets them. */

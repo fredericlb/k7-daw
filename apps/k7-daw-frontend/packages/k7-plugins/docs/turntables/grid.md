@@ -21,7 +21,7 @@ correction is made again next time; the gain is that a gesture at the desk never
 behind it. It is the file service's analysis, cached beside the record, that stays as measured.
 
 MARKERS are another matter: two bands covering the same record drop the needle in different
-places, which is why those live in `mix.k7x` ([mixFile.md](../../../song/docs/mixFile.md)).
+places, which is why those live in `mix.k7x` ([mixFile.md](../../../../../k7-daw-wasm/song/docs/mixFile.md)).
 
 ## `bpm` replaces what the record IS
 

@@ -6,7 +6,7 @@
 // The param list comes from the template's own GRAPH: an assembly folder is a graph folder, so
 // `GET /graph?at=<path>` resolves every member through its `extends` and hands back what it runs
 // with. That is the same road the chains builder takes, and it costs no new route.
-// Full rationale: docs/builder.md, and apps/k7-daw-frontend/packages/song/docs/assemblies.md.
+// Full rationale: docs/builder.md, and apps/k7-daw-wasm/song/docs/assemblies.md.
 
 import type { WebGraph } from "@studio/graph-model";
 import { readAssemblyTemplate } from "@studio/k7-wasm/text";

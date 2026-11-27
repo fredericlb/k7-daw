@@ -12,7 +12,7 @@ modules/<type>/<name>/ui.k7x         what it looks like
 ```
 
 Its named settings are NOT here: a preset is a file of the presets tree, keyed by the module's ref
-and kept in the workspace or a library (`apps/k7-daw-frontend/packages/song/docs/userPresets.md`).
+and kept in the workspace or a library (`apps/k7-daw-wasm/song/docs/userPresets.md`).
 
 In the media library, clicking any of them opens the same builder as k7.
 
@@ -31,7 +31,7 @@ In the media library, clicking any of them opens the same builder as k7.
 3. The folder is the key, and the file carries no `ref:`: that would be a second source of truth.
    `uiPathFor` writes `<type>/<sub>/ui.k7x`, `loadUiLibrary` walks the **module** libraries and
    derives the ref from the folder, `writeUiFile` resolves the ref to its library
-   (rationale in `apps/k7-daw-frontend/packages/song/docs/uiLibrary.md`).
+   (rationale in `apps/k7-daw-wasm/song/docs/uiLibrary.md`).
 
 The `io/` case is the remaining exception: a bare io ref (`desk`) has no type segment, so
 `uiPathFor` puts the `io/` back or the file lands at the root of the library. The test states it
@@ -65,7 +65,7 @@ block offers it in place of `ui file`, which has no file to open. `writeUiFile` 
 ## Presets are not the builder's
 
 A preset is chosen, saved and updated on a NODE of the graph, which is where its values are heard;
-the builder's Preset menu holds the plugin's factory banks only (`apps/k7-daw-frontend/packages/song/docs/userPresets.md`).
+the builder's Preset menu holds the plugin's factory banks only (`apps/k7-daw-wasm/song/docs/userPresets.md`).
 
 ## The shared package, and the seam
 

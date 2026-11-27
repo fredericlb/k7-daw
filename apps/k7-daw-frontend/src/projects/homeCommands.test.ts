@@ -186,7 +186,7 @@ describe("what a field offers", () => {
       "arrangement",
       "mix",
       "video",
-      // The two that open on no timeline — apps/k7-daw-frontend/packages/song/docs/liveProject.md.
+      // The two that open on no timeline — apps/k7-daw-wasm/song/docs/liveProject.md.
       "live",
       "live-video",
     ]);

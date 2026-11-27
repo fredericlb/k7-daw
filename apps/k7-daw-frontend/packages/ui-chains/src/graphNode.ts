@@ -42,6 +42,6 @@ export interface TrackControlValues {
   mute: number;
   solo: number;
   arm: number;
-  /** Heard 10 dB up from the mixer's highlight button — apps/k7-daw-frontend/packages/song/docs/highlight.md. */
+  /** Heard 10 dB up from the mixer's highlight button — apps/k7-daw-wasm/song/docs/highlight.md. */
   highlight?: number;
 }

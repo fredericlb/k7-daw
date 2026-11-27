@@ -8,7 +8,7 @@ that answers with audio. The cut is the supervisor's (`apps/k7-daw-backend/packa
 ## Why it is a module, and why it cannot be a plugin
 
 A stem separator is the second **cold** module (`@studio/song`'s
-[coldModules.md](../../../../k7-daw-frontend/packages/song/docs/coldModules.md)), and it is cold for both reasons that
+[coldModules.md](../../../../k7-daw-wasm/song/docs/coldModules.md)), and it is cold for both reasons that
 word covers at once: the answer needs the whole input, and the analysis is affordable once
 over a file and hopeless per block.
 
@@ -27,7 +27,7 @@ module vanishes from a compile with no warning at all.
 
 The wiring is real: `graph.k7x` can key a module by its output
 (`stemsplit#vocals: [ reverb ]`), the derivation carries that port along the edge, and
-the graph draws a jack per stem. See `@studio/song`'s [ports.md](../../../../k7-daw-frontend/packages/song/docs/ports.md).
+the graph draws a jack per stem. See `@studio/song`'s [ports.md](../../../../k7-daw-wasm/song/docs/ports.md).
 
 ## Why a job, when a render is not one
 
@@ -79,7 +79,7 @@ formats that need no proxy, and there 24 bits is simply the small one:
 
 What 24 bits costs is a quantisation floor at −144 dBFS, and even that is not paid in full: a
 part is scaled by its knob, so its own noise enters in proportion to the knob and vanishes with
-it ([song-schema/docs/stems.md](../../../../k7-daw-frontend/packages/song-schema/docs/stems.md)). It is not
+it ([song-schema/docs/stems.md](../../../../k7-daw-wasm/song-schema/docs/stems.md)). It is not
 dithered, for the same order of magnitude — truncation at 24 bits is under the noise of any
 converter this will come out of, and dither would put a floor there on purpose instead.
 
@@ -98,7 +98,7 @@ own rate and `writeStem()` resamples on the way out when it differs; the rate go
 
 That matters — four parts a few milliseconds apart are a flam on every hit — but it is not
 *critical*, because the desk **plays the four parts** and never subtracts them from the record
-([song-schema/docs/stems.md](../../../../k7-daw-frontend/packages/song-schema/docs/stems.md) has the reasons and the numbers): a
+([song-schema/docs/stems.md](../../../../k7-daw-wasm/song-schema/docs/stems.md) has the reasons and the numbers): a
 subtraction would cancel only while the two signals stay aligned to the sample, which a
 pitch-preserving stretch breaks as soon as the tempo moves.
 
@@ -205,7 +205,7 @@ than the very recording it is switched against — the desk swaps one for the ot
 on a single element — so the overshoot is clamped and SAID in the job's lines rather than mixed away.
 
 **Where it lives** is the one place this departs from
-[moduleAssets.md](../../../../k7-daw-frontend/packages/song/docs/moduleAssets.md). That page argues a module carries its
+[moduleAssets.md](../../../../k7-daw-wasm/song/docs/moduleAssets.md). That page argues a module carries its
 material — and the argument inverts past a few hundred megabytes, where the file would be
 committed into a shared module's git repository and cloned whole by every machine that opens
 it. So the module **declares** the model as an ordinary file-valued param (`onnx:`, exactly as
@@ -382,6 +382,6 @@ be a different verb.
 
 **And a whole set at once** is `playlist stems <playlist> <chain>`, which runs this over every
 record a set list names, as the workspace holds it. It is the preparation half of cutting
-a stem live on a deck (`apps/k7-daw-frontend/packages/song-schema/docs/stems.md`): a separated record is played as its four
+a stem live on a deck (`apps/k7-daw-wasm/song-schema/docs/stems.md`): a separated record is played as its four
 parts rather than as itself, so the files have to be there before it goes on. Sequential, skipping what is
 already done, and leaning on the id hashing the work so an interrupted evening resumes for free.

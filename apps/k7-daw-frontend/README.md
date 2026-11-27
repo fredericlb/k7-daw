@@ -92,7 +92,7 @@ nodes/<name>.k7x       one USE of a module, flat, named by its file — the LANE
   events naming clips and events naming sequences in one list, and each leaves by the one
   its own material fits (`gtr#audio:` / `gtr#midi:` in `graph.k7x` when the two need
   different chains). See
-  [apps/k7-daw-frontend/packages/song/docs/trackModules.md](./packages/song/docs/trackModules.md).
+  [apps/k7-daw-wasm/song/docs/trackModules.md](../k7-daw-wasm/song/docs/trackModules.md).
 - **A group holds no material — only membership.** `tracks` lists the member lane
   names. That's all a group is.
 - **Mute is the lane's BYPASS**, one name in `graph.k7x`'s `bypassed:`; solo is derived by
@@ -142,7 +142,7 @@ nodes/<name>.k7x       one USE of a module, flat, named by its file — the LANE
   library module needs no local folder for it. `node new
   instruments/synth lead` scaffolds one and puts it in the graph, and `demos/synth-demo.k7/nodes/`
   is the worked example — one 4OSC module, a `lead` and a `pad`, each driving its own chain.
-  See `apps/k7-daw-frontend/packages/song/docs/nodes.md`.
+  See `apps/k7-daw-wasm/song/docs/nodes.md`.
 - A **chain** (in `graph.k7x`) is a signal path, written as a flat list of nodes: a
   **head**, the modules the signal passes through, and the sink it ends at. `chains` is
   a **list**, not a map — a chain needn't be named.

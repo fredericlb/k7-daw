@@ -68,7 +68,7 @@ Three readings:
    That is the item to watch as a song grows.
 3. The curve is gentle: 8× the tracks still costs **5.8×** on the compile.
 
-Page: [`apps/k7-daw-frontend/packages/song/docs/benchSettle.md`](../apps/k7-daw-frontend/packages/song/docs/benchSettle.md).
+Page: [`apps/k7-daw-wasm/song/docs/benchSettle.md`](../apps/k7-daw-wasm/song/docs/benchSettle.md).
 
 ### Do not cache zod's `safeParse`
 

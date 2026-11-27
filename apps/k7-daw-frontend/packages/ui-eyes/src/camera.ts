@@ -1,5 +1,5 @@
 // camera.ts — opening a LIVE lens for a layer that names one. Which lens a label names is Rust's rule (`eyes::cameras`), asked through
-// the module: a project says the LABEL a person reads, because a deviceId is salted per browser. See apps/k7-daw-frontend/packages/song/docs/camera.md.
+// the module: a project says the LABEL a person reads, because a deviceId is salted per browser. See apps/k7-daw-wasm/song/docs/camera.md.
 
 import { matchCamera } from "@studio/k7-wasm/eyes";
 import type { CameraMatch } from "@studio/k7-wasm/types";
@@ -32,7 +32,7 @@ export function releaseLens(lens: Pick<Lens, "stream" | "close">): void {
 
 /** How a live lane gets its picture. Injected, because the browser that DRAWS a surface is not
  *  always the one that may open a camera: over the LAN a tablet has no secure context, so its
- *  lens arrives over a peer connection instead. See apps/k7-daw-frontend/packages/song/docs/camera.md. */
+ *  lens arrives over a peer connection instead. See apps/k7-daw-wasm/song/docs/camera.md. */
 export type LensOpener = (label: string) => Promise<Lens>;
 
 /** This browser's own camera — the ordinary opener, and the only one on the machine itself. */

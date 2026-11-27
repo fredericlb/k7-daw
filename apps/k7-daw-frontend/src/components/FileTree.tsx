@@ -4,14 +4,13 @@
 // pinned files, the "open project" button, and the module-folder actions.
 // Why the second tab exists: apps/k7-daw-frontend/docs/sharedModules.md.
 
-import { isLibraryFileOf } from "@studio/k7-wasm/schema";
-import { askConfirm, askText } from "@studio/project-shell/ask";
-import { showToast } from "@studio/project-shell/toast";
-import { docPattern } from "@studio/song-schema/docExt";
 import {
   LIBRARY_FILE_FAMILIES,
   MODULE_SOURCES_DIR,
-} from "@studio/song-schema/moduleTypes";
+} from "@studio/k7-wasm/consts";
+import { docPattern, isLibraryFileOf } from "@studio/k7-wasm/schema";
+import { askConfirm, askText } from "@studio/project-shell/ask";
+import { showToast } from "@studio/project-shell/toast";
 import { Choice } from "@studio/ui/choice";
 import {
   type DroppedFile,
@@ -591,7 +590,7 @@ export function FileTree({
             reveal={lib.tree[0]?.path ?? null}
             // A read-only level's rows are greyed: they name a plugin the engine reports, with no file behind them to open.
             isDisabled={(n) => isBinary(n) || frozen.has(n.path)}
-            // A MODULE row drags onto another folder of its library: a move, its refs following it (apps/k7-daw-frontend/packages/song/docs/moduleMove.md).
+            // A MODULE row drags onto another folder of its library: a move, its refs following it (apps/k7-daw-wasm/song/docs/moduleMove.md).
             onMove={onMoveLibraryModule}
             canMove={(n) =>
               lib.modules.has(n.path) &&

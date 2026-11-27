@@ -1,5 +1,5 @@
 import { parse } from "@studio/k7-wasm/k7x";
-import { ModuleSchema } from "@studio/song-schema/yaml/moduleSchema";
+import { validateFile } from "@studio/k7-wasm/validate";
 import { describe, expect, it } from "vitest";
 import {
   buildKitNode,
@@ -91,7 +91,7 @@ describe("the kit the builder writes", () => {
       engine: string;
       rack: { symbols: Record<string, { note: number; sample: string }> };
     };
-    expect(ModuleSchema.safeParse(doc).success).toBe(true);
+    expect(validateFile("nodes/drums.k7x", text).ok).toBe(true);
     expect(doc.extends).toBe(RACK);
     // The sampler ENGINE, said outright: the module's default is an SFZ kit, which would ignore the taps.
     expect(doc.engine).toBe("samples");

@@ -15,7 +15,7 @@ events([
 ])
 ```
 
-`@studio/song-schema`'s `keyframes.ts` is the format and its arithmetic; `ui-eyes`' `motion.ts`
+`song-schema`'s `keyframes.rs` is the format and its arithmetic; `ui-eyes`' `motion.ts`
 is what draws it ([../../ui-eyes/docs/motion.md](../../ui-eyes/docs/motion.md)).
 
 ## Keys live ON the placement, in seconds from the shot's start

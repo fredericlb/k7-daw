@@ -29,7 +29,7 @@ control at its range minimum misreports it: **4OSC's filter opens at 69 of 0..13
 ```
 k7-runtime --dump-builtin-params          # what a TYPE has: name, range, default, named states
 node apps/k7-daw-engine/k7-runtime/scripts/gen-builtin-params.mjs
-  → apps/k7-daw-frontend/packages/song-schema/src/builtinParams.generated.json
+  → apps/k7-daw-wasm/song/src/modules/builtinParams.generated.json
 ```
 
 The script instantiates every entry of `builtInPlugins()` — the same list

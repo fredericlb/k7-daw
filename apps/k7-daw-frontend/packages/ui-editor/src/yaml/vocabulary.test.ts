@@ -110,7 +110,7 @@ describe("the chains vocabulary", () => {
         "type",
       ),
     ).toEqual(["plugin", "rack", "video_effect", "video_transition"]);
-    // A NODE file, which is what a lane is (apps/k7-daw-frontend/packages/song/docs/trackModules.md).
+    // A NODE file, which is what a lane is (apps/k7-daw-wasm/song/docs/trackModules.md).
     expect(
       schemaVocabulary("nodes/melody.k7x", HINTS).valuesAt?.(
         ["modules"],

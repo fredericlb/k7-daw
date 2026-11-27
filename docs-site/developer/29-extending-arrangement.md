@@ -6,10 +6,9 @@ menu cannot offer.
 
 ## 1. The writer, in `@studio/song-edit`
 
-Add (or extend) a function in `apps/k7-daw-frontend/packages/song-edit/src/` that changes the value and nothing else:
+Add (or extend) a function in `apps/k7-daw-wasm/song-edit/src/` that changes the value and nothing else:
 read the file with `wsRead`, edit through the structured helpers of
-`apps/k7-daw-frontend/packages/song-schema/src/yaml/` (`trackFile.ts` for placements: `findPlacementAt`,
-`setPlacementField`, `movePlacementAt`…), write with `wsWrite`. Address an event by its lane and its
+`apps/k7-daw-wasm/song-edit/src/` (`track_file.rs` for placements), write with `wsWrite`. Address an event by its lane and its
 start in beats. Quote timecodes. Delete a field rather than writing its default — a file that never
 mentioned `gain` should not grow `gain: 0`.
 

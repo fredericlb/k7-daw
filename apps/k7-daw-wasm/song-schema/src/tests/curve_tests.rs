@@ -239,3 +239,11 @@ fn thins_the_beat_lines_of_a_huge_span_to_whole_bars() {
 fn keeps_every_beat_line_while_they_are_few() {
     assert_eq!(preview(&lfo(Shape::Saw, 1.0, Some(400.0)), 160, None).beats.len(), 401);
 }
+
+#[test]
+fn the_vocabulary_lists_are_the_enums_spelled_as_a_file_spells_them() {
+    let shapes = [Shape::Sine, Shape::Triangle, Shape::Saw, Shape::Square].map(|s| serde_json::to_value(s).unwrap());
+    assert_eq!(shapes.map(|v| v.as_str().unwrap().to_owned()), LFO_SHAPES);
+    let cuts = [Cut::None, Cut::Positive, Cut::Negative].map(|c| serde_json::to_value(c).unwrap());
+    assert_eq!(cuts.map(|v| v.as_str().unwrap().to_owned()), CURVE_CUTS);
+}

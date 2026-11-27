@@ -4,7 +4,7 @@
 // the screen reader's "3 of 5" come from the browser. Shared by a workspace's first project and a
 // project added to one. See ../../docs/projects.md.
 
-import type { ProjectShape } from "@studio/song-schema/yaml/projectSchema";
+import type { ProjectShape } from "@studio/k7-wasm/types";
 import { cn } from "@studio/ui/lib/utils";
 import { useId } from "react";
 import { m } from "../paraglide/messages.js";

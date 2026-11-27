@@ -13,12 +13,11 @@ use song_edit::js_text::str_to_number;
 use song_edit::list_files::{ListOpts, list_files_under};
 use song_edit::loader::{load_module_refs, resolve_node};
 use song_edit::project_edit::{set_module_asset, set_module_param};
+use song_edit::project_root::{MASTER_MAX_DB, MASTER_MIN_DB};
 use song_edit::yaml_edit::{delete_file_value, set_file_value};
 
 const SHADER_PARAMS: [&str; 4] = ["P1", "P2", "P3", "P4"];
 const ASSET_EXTS: [&str; 3] = [".nam", ".json", ".onnx"];
-const MASTER_MIN_DB: f64 = -100.0;
-const MASTER_MAX_DB: f64 = 12.0;
 const USAGE: &str = r#"usage: node param <node> <param> <value>  (e.g. node param synth "Filter Freq" 69)"#;
 
 /// The first word, or a `"quoted"` one with its quotes, and the rest after its spaces.
@@ -191,7 +190,7 @@ fn builtin_out(h: &mut Host, node: &str, param: &str, value: f64) -> Done {
             js_number(MASTER_MAX_DB)
         )];
         if value > MASTER_MAX_DB {
-            why.push("a mix that needs more than +12 on its output has its headroom in the STRIPS — see apps/k7-daw-frontend/packages/song/docs/masterVolume.md".to_owned());
+            why.push("a mix that needs more than +12 on its output has its headroom in the STRIPS — see apps/k7-daw-wasm/song/docs/masterVolume.md".to_owned());
         }
         h.refuse(why);
         return Ok(());

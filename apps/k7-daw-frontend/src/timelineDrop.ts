@@ -5,12 +5,12 @@
 // docs/timeline.md.
 
 import { stringify } from "@studio/k7-wasm/k7x";
-import { isAudio } from "@studio/k7-wasm/schema";
 import {
   CAPTION_SOURCE,
   IMAGE_SOURCE,
+  isAudio,
   VIDEO_SOURCE,
-} from "@studio/song-schema/yaml/entitySchemas";
+} from "@studio/k7-wasm/schema";
 import { m } from "./paraglide/messages.js";
 
 /** Audio or picture — the two kinds of material a lane holds, and the two verbs that place one. */

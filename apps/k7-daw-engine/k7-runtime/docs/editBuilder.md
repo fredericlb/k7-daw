@@ -117,7 +117,7 @@ quieter every pass (`apps/k7-daw-wasm/verbs/docs/verbs/peakPass.md`).
 It stays a hard 0. The song's own output level does **not** go here: this fader stops at +6 dB and
 a master trim is exactly where that ceiling bites, so `masterVolume` is applied by a gain the
 engine owns (`MasterGainPlugin.h`), on the master plugin list just after the chain. Pinning this
-one is what keeps the two from multiplying — `apps/k7-daw-frontend/packages/song/docs/masterVolume.md`.
+one is what keeps the two from multiplying — `apps/k7-daw-wasm/song/docs/masterVolume.md`.
 
 ## What sits on the master list, and in which order — `populateMasterChain`
 
@@ -212,7 +212,7 @@ is a rebuild, and a level alone is set in place (`docs/projectDiff.md`).
 A track has one output, so only the first destination can be a routing. The rest fall through to
 `AuxSend` as usual — and they carry signal, because the routed track is **not muted**. That is what
 makes "one source, several buses, heard nowhere else" expressible: a pre-fade headphone tap beside
-a crossfade (`apps/k7-daw-frontend/packages/song/docs/cue.md`), and any bus that wants two consumers.
+a crossfade (`apps/k7-daw-wasm/song/docs/cue.md`), and any bus that wants two consumers.
 
 Requiring `enabled == 1` would drop a second destination out of the routed case entirely and mute
 the track with two dead sends — silent everywhere. Measured, on the shape a cue needs:
@@ -224,13 +224,13 @@ the track with two dead sends — silent everywhere. Measured, on the shape a cu
 | two destinations, source left unmuted | 0.0 dBFS — the dry path included |
 
 `npx tsx apps/k7-daw-engine/k7-runtime/scripts/cue-bus.ts` replays all three. The project says which buses want this
-with `bus_only:` — `apps/k7-daw-frontend/packages/song/docs/busOnly.md` for why that is not the same word as `bypassed:`.
+with `bus_only:` — `apps/k7-daw-wasm/song/docs/busOnly.md` for why that is not the same word as `bypassed:`.
 
 **The same measurement kills `setOutputToDeviceID({})`**, tried for a run consumed by another
 module's port. It takes the track off the device, and takes it off the sidechain with it: in this
 engine a track's signal reaches a sidechain only if that track also reaches a device. A run whose
 signal is consumed by a port and heard nowhere else is therefore **not expressible today** — see
-`apps/k7-daw-frontend/packages/song/docs/setProject.md`, where the crossfade's second input needs exactly that.
+`apps/k7-daw-wasm/song/docs/setProject.md`, where the crossfade's second input needs exactly that.
 
 ## A bipolar curve rides the SET value — `applyAutomationLane`
 

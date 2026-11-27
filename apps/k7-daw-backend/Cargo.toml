@@ -22,6 +22,7 @@ k7-replica = { path = "packages/k7-replica" }
 k7-capture = { path = "packages/k7-capture" }
 k7-libraries = { path = "packages/k7-libraries" }
 k7-git = { path = "packages/k7-git" }
+git-rules = { path = "../k7-daw-wasm/git-rules" }
 k7-roam = { path = "packages/k7-roam" }
 k7-lan = { path = "packages/k7-lan" }
 k7-import = { path = "packages/k7-import" }

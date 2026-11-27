@@ -39,7 +39,7 @@ in the frame; before them, both took a text editor.
 
 `picture split` is VIRTUAL, as an audio `event split` is: two placements of one clip, the head
 ending at the cut and the tail starting there with `from` moved on by the head's length,
-so the frames played do not change (`apps/k7-daw-frontend/packages/song/docs/materialCut.md` says why a sequence is the
+so the frames played do not change (`apps/k7-daw-wasm/song/docs/materialCut.md` says why a sequence is the
 other way). The tail is inserted RIGHT AFTER the head and not appended, because file order
 decides which shot covers which (`apps/k7-daw-wasm/verbs/docs/picture/transitions.md`), and an appended tail
 would cover every shot placed between the two. The head keeps the `fadeIn` and the tail takes
@@ -48,7 +48,7 @@ halves.
 
 `picture sound` is the one that is not a gesture's twin: it makes the shots audible through the
 engine, extracting what is missing, so running it twice changes nothing
-(`apps/k7-daw-frontend/packages/song/docs/videoSound.md`). In a node project it makes no lane, the picture lane's own
+(`apps/k7-daw-wasm/song/docs/videoSound.md`). In a node project it makes no lane, the picture lane's own
 `#audio` half playing the sound; in a chain project, which spells no port, it makes the
 `video_source:` lane once, or reuses the one already there. It lives in `src/verbs/pictureSound.ts`,
 beside the verbs it borrows `laneFile` from.

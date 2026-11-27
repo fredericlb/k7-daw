@@ -1,11 +1,11 @@
 // bindings.ts — join a `mastering` surface's mapping to the compiled chains: which control moves
 // which param, on which plugin, over which range. Two of the desk's three joins
-// (apps/k7-daw-frontend/packages/song/docs/viewBindings.md); the third — the scale — is deliberately absent here.
+// (apps/k7-daw-wasm/song/docs/viewBindings.md); the third — the scale — is deliberately absent here.
 // See ../../docs/mastering.md.
 
 import type { WebGraph, WebWidget } from "@studio/graph-model";
 import { type BindingProblem, resolveMapping } from "@studio/k7-wasm/chains";
-import type { MixView } from "@studio/song-schema/yaml/mixViewSchema";
+import type { MixView } from "@studio/k7-wasm/text";
 import { MASTER_CONTROLS, type MasterControl } from "./controls";
 
 // The graph half of the join is `@studio/k7-wasm/chains`, shared with the DJ desk, in Rust (@studio/k7-wasm/chains). What stays

@@ -42,14 +42,14 @@ another chain is opened.
 ## The shape is `live`
 
 No arrangement, no lane, no surface: the same scaffold `k7` writes for a `live` project
-([apps/k7-daw-frontend/packages/song/docs/liveProject.md](../../k7-daw-frontend/packages/song/docs/liveProject.md)), and the
+([apps/k7-daw-wasm/song/docs/liveProject.md](../../k7-daw-wasm/song/docs/liveProject.md)), and the
 same file that writes it — a second copy of a rig is a second rig to keep in step. The rig is a
 GRAPH project rather than chain files, since `spliceChain` wires the chain between nodes it names.
 
 ## What it needs
 
 The **library** — every module the rig can name is in one, except the fader: it is a use of
-`@meta/audio/mixer`, which ships with k7 (`apps/k7-daw-frontend/packages/song/docs/metaModules.md`). So the file service
+`@meta/audio/mixer`, which ships with k7 (`apps/k7-daw-wasm/song/docs/metaModules.md`). So the file service
 refuses a bench before the origin lists a library. The workspace the rig sits in is the bench's
 own, `Banc`, reserved by convention the way `Examples` is.
 

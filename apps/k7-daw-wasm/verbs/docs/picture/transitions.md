@@ -148,7 +148,7 @@ stretch is drawn on the graph as cards with knobs, can be bypassed step by step,
 kind of file.
 
 In a CHAIN project — the main layout — a stretch is a **subchain of the lane's chain file**, and a
-fade names it by its id: `chain: iris` (`apps/k7-daw-frontend/packages/song/docs/chainFiles.md`). The file is the scope,
+fade names it by its id: `chain: iris` (`apps/k7-daw-wasm/song/docs/chainFiles.md`). The file is the scope,
 so a fade can reach only its own lane's stretches. Read into segments, that subchain IS the cable
 from its last node into the lane, so everything downstream sees the same graph either way, and the
 compile turns the id into the node the run starts at.
@@ -284,8 +284,8 @@ to **the layer below**.
 | | |
 |---|---|
 | written | `fadeIn` / `fadeOut` on an event of a picture lane (`nodes/<lane>.k7x`, `tracks/` in a chain project), `modules/video_transitions/<name>/`, and a stretch's run in `graph.k7x` |
-| declared | `apps/k7-daw-frontend/packages/song-schema/src/moduleTypes.ts` — `TRANSITION_CATEGORY`, `DISSOLVE`, `OVER`, `isPicturePass` |
-| validated | `apps/k7-daw-frontend/packages/song-schema/src/yaml/placementSchema.ts` — `FadeSchema` and the widening; `src/videoTracks.ts` — the refusal of an endless `fadeOut` |
+| declared | `apps/k7-daw-wasm/song/src/modules/names.rs` — `TRANSITION_CATEGORY`, `DISSOLVE`, `OVER`, `isPicturePass` |
+| validated | `apps/k7-daw-wasm/song/src/files/placement.rs` — the fade's two spellings and the widening; `src/videoTracks.ts` — the refusal of an endless `fadeOut` |
 | guarded | `apps/k7-daw-wasm/song/src/graph/index.rs` — `is_stretch`, and a stretch's head counted as fed in `check_chain_inputs` (`apps/k7-daw-wasm/song/src/lanes/wiring.rs`) |
 | read | `src/videoTransitions.ts` — the ancestry from `src/shaders.ts`, and `resolveStretches`; `src/videoChains.ts` — the stretches |
 | compiled | `apps/k7-daw-wasm/verbs/src/picture/lanes.rs` -> a clip's `fadeIn`, and `apps/k7-daw-wasm/verbs/src/picture/compile.rs` -> the document's `transitions` and `stretches`, the GLSL **inline** |
@@ -301,7 +301,7 @@ to **the layer below**.
 
 ```bash
 cargo test --manifest-path apps/k7-daw-wasm/verbs/Cargo.toml --test picture
-npx vitest run apps/k7-daw-frontend/packages/song-schema/src/yaml/videoTrackYaml.test.ts
+npx vitest run apps/k7-daw-frontend/packages/k7-wasm/src/validateModule.test.ts
 cargo test --manifest-path apps/k7-daw-wasm/eyes/Cargo.toml schedule && npx vitest run apps/k7-daw-frontend/packages/ui-eyes/src/timeline.test.ts apps/k7-daw-frontend/packages/ui-eyes/src/compositor.test.ts
 ```
 

@@ -1,14 +1,11 @@
 // PresetPicker.tsx — "which preset?", asked by a node's one dropdown on the graph. The same popup as
 // the module and asset pickers, with a header of its own — SAVE the node as a new preset, kept in the
 // workspace or a library, and UPDATE the one last loaded — and, for a module with several engines, a
-// left bar to pick the ENGINE. Every action is a verb the caller runs. See apps/k7-daw-frontend/packages/song/docs/userPresets.md.
+// left bar to pick the ENGINE. Every action is a verb the caller runs. See apps/k7-daw-wasm/song/docs/userPresets.md.
 
+import { isPresetName } from "@studio/k7-wasm/schema";
+import type { NodePresets, PresetEntry } from "@studio/k7-wasm/types";
 import { fuzzyScores } from "@studio/k7-wasm/ui";
-import {
-  type NodePresets,
-  PRESET_NAME,
-  type PresetEntry,
-} from "@studio/song-schema/presets";
 import { RefreshCw, Save } from "@studio/ui/icons";
 import type { NodeEngines } from "@studio/ui-chains-react";
 import { byPeople } from "@studio/web-protocol/tree";
@@ -91,7 +88,7 @@ export function PresetPicker({
   const [scope, setScope] = useState(data.scopes[0] ?? "workspace");
   const clean = name.trim();
   const taken = data.presets.some((p) => p.scope === scope && p.name === clean);
-  const canSave = PRESET_NAME.test(clean) && !taken;
+  const canSave = isPresetName(clean) && !taken;
   const save = () => {
     if (!canSave) return;
     onSave(clean, scope);

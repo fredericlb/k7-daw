@@ -19,7 +19,7 @@ is the one after.
 | Audio clip panel | `apps/k7-daw-frontend/src/components/AudioClipPanel.tsx`, `EventGainSlider.tsx`, `LoopBrace.tsx`, with `apps/k7-daw-wasm/gesture/src/clip_warp.rs`, `clipOps.ts`, `apps/k7-daw-wasm/gesture/src/bar_window.rs`, `waveMode.ts` |
 | Waveform drawing | `apps/k7-daw-frontend/packages/ui-waveform/src/Waveform.tsx`, `spectrum.ts`, `ticks.ts` |
 | Waveform data | `apps/k7-daw-backend/packages/k7-file-service/src/media/region.rs` (envelope slicing, beat grid), `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/media/waveform.rs` (serving it) |
-| Trim gate | `apps/k7-daw-frontend/packages/audio-probe/src/trimGate.ts` |
+| Trim gate | `apps/k7-daw-backend/packages/waveform/src/trim.rs` |
 | Note views | `apps/k7-daw-frontend/src/components/PianoRoll.tsx`, `apps/k7-daw-frontend/src/hooks/useRollGestures.ts`, `apps/k7-daw-wasm/gesture/src/roll_drag.rs`, `rollMode.ts`; grid caret in `apps/k7-daw-frontend/src/hooks/useGridCaret.ts` + `gridCaret.ts` |
 | Curve editor | `apps/k7-daw-frontend/src/components/CurveEditor.tsx`, `CurvePlot.tsx`, `CurveConditions.tsx`, `curveDraft.ts` |
 | MIDI | `apps/k7-daw-frontend/src/webmidi.ts`, `midiIn.ts`, `midiControl.ts`, `midiActivity.ts`, `apps/k7-daw-frontend/src/hooks/useMidiRecording.ts`, `apps/k7-daw-frontend/src/hooks/useMidiControl.ts`, `apps/k7-daw-frontend/src/components/MidiTakeRoll.tsx` |
@@ -33,7 +33,7 @@ is the one after.
 | Import | `apps/k7-daw-backend/packages/k7-import/src/` (`dawproject.rs`, `ableton.rs`, `als_zip.rs`, `emit.rs`), run by `POST /import` (`apps/k7-daw-backend/packages/k7-file-service/src/edits/import.rs`) |
 | Undo journal | `apps/k7-daw-backend/packages/k7-file-service/src/journal/` (server), `apps/k7-daw-frontend/packages/project-shell/src/undo.ts` (client), `apps/k7-daw-frontend/src/components/HistoryPanel.tsx` |
 | The verbs | `apps/k7-daw-wasm/verbs/commands.yaml` (names, args, menus), `apps/k7-daw-wasm/verbs/src/verbs/` (handlers) |
-| The writes | `apps/k7-daw-frontend/packages/song-edit/src/` — `trackMix.ts` (placements), `materialCut.ts`, `insertTime.ts`, `crossfade.ts`, `eventLoop.ts`, `eventGain.ts`, `onsets.ts`, `takeEdit.ts`, `projectEdit.ts` (module params, warp, bindings) |
+| The writes | `apps/k7-daw-wasm/song-edit/src/` — `trackMix.ts` (placements), `materialCut.ts`, `insertTime.ts`, `crossfade.ts`, `eventLoop.ts`, `eventGain.ts`, `onsets.ts`, `takeEdit.ts`, `projectEdit.ts` (module params, warp, bindings) |
 | Key bindings | `apps/k7-daw-frontend/src/keys.ts` |
 | Shell-local verbs | `apps/k7-daw-frontend/src/palette.ts` (`LOCAL_COMMANDS`), `localCommands.ts`, and `runLocalCommand` in `apps/k7-daw-frontend/src/App.tsx` |
 | Right-click menus | `apps/k7-daw-frontend/src/contextMenu.ts` |

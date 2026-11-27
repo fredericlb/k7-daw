@@ -1,6 +1,11 @@
 // mergeState.ts — the merge screen's choices: one per conflict, what each offers, when "Finish merge" is allowed.
 // What a reader gets wrong: "both" is offered only where the route says so (a keyed list item, a binary's copy beside).
 
+import {
+  canFinish as canFinishOf,
+  offered,
+  remaining as remainingOf,
+} from "@studio/k7-wasm/git";
 import type { Choice, Conflict } from "./gitTypes";
 
 export interface MergeChoices {
@@ -13,11 +18,7 @@ export type MergeEvent =
   | { type: "pick"; id: string; choice: Choice }
   | { type: "pickAll"; choice: "mine" | "theirs" };
 
-/** The choices a conflict offers: a removed file keeps or goes; the rest take a side, and both where it is offered. */
-export function offered(c: Conflict): Choice[] {
-  if (c.kind === "presence") return ["keep", "remove"];
-  return c.both ? ["mine", "theirs", "both"] : ["mine", "theirs"];
-}
+export { offered };
 
 export const emptyChoices: MergeChoices = { conflicts: [], chosen: {} };
 
@@ -48,13 +49,16 @@ export function choicesAfter(s: MergeChoices, e: MergeEvent): MergeChoices {
   }
 }
 
+/** The ids of the conflicts that have a choice. */
+const chosenIds = (s: MergeChoices): string[] => Object.keys(s.chosen);
+
 /** Conflicts still without a choice. */
 export const remaining = (s: MergeChoices): number =>
-  s.conflicts.filter((c) => !s.chosen[c.id]).length;
+  remainingOf(s.conflicts, chosenIds(s));
 
 /** Whether "Finish merge" is allowed: every conflict has a choice. */
 export const canFinish = (s: MergeChoices): boolean =>
-  s.conflicts.length > 0 && remaining(s) === 0;
+  canFinishOf(s.conflicts, chosenIds(s));
 
 /** The body of the resolve call. */
 export const resolveChoices = (

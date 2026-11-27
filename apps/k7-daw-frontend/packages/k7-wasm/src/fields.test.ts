@@ -12,7 +12,7 @@ const fields = (kind: keyof typeof PATHS, at: string[]) =>
 const values = (kind: keyof typeof PATHS, at: string[], field: string) =>
   valuesAt(PATHS[kind], at, field);
 
-// These tests pin the completions the editor derives from the Rust readers — see apps/k7-daw-frontend/packages/song-schema/docs/fields.md.
+// These tests pin the completions the editor derives from the Rust readers — see apps/k7-daw-wasm/song-schema/docs/fields.md.
 
 describe("derived module fields", () => {
   it("matches the hand-kept table, plus the field the table was missing", () => {
@@ -36,18 +36,18 @@ describe("derived module fields", () => {
       "shadow",
       "params",
       "rack",
-      // An SFZ drum kit's pads, name → note, drawn as a rack's taps — apps/k7-daw-frontend/packages/song/docs/racks.md.
+      // An SFZ drum kit's pads, name → note, drawn as a rack's taps — apps/k7-daw-wasm/song/docs/racks.md.
       "tap_outs",
       "kit",
       // A COLD module works only on audio already on disk — see docs/coldModules.md.
       "cold",
-      // …and where the model a file-valued param names can be downloaded from — apps/k7-daw-frontend/packages/song/docs/moduleAssets.md.
+      // …and where the model a file-valued param names can be downloaded from — apps/k7-daw-wasm/song/docs/moduleAssets.md.
       "model_url",
       // `ir`, `nam` and `jsdsp` carry no field of their own, so there is nothing to complete against (docs/fields.md).
       "channel",
       // …and WHICH lens an io "camera" opens, plus where in the viewport it draws — docs/camera.md.
       "camera",
-      // …and WHICH MIDI device an io "midi" records from — apps/k7-daw-frontend/packages/song/docs/midiIn.md.
+      // …and WHICH MIDI device an io "midi" records from — apps/k7-daw-wasm/song/docs/midiIn.md.
       "device",
       "frame",
       // No `track`: where an input LANDS is the chain's business (docs/fields.md).
@@ -69,7 +69,7 @@ describe("derived module fields", () => {
       "disabled",
       "tracks",
       "strudel",
-      // The PICTURE lane a lane plays the sound of — apps/k7-daw-frontend/packages/song/docs/videoSound.md.
+      // The PICTURE lane a lane plays the sound of — apps/k7-daw-wasm/song/docs/videoSound.md.
       "video_source",
       // A shader's 3D LUT — apps/k7-daw-wasm/verbs/docs/picture/effects.md.
       "lut",
@@ -138,7 +138,7 @@ describe("derived lane fields", () => {
     expect(inside).toContain("name");
     expect(inside).toContain("params");
     expect(inside).toContain("events");
-    // A set may name a module of its own — it is then another module entirely (apps/k7-daw-frontend/packages/song/docs/alternatives.md).
+    // A set may name a module of its own — it is then another module entirely (apps/k7-daw-wasm/song/docs/alternatives.md).
     expect(inside).toContain("extends");
     expect(inside).not.toContain("alternatives");
     // The list itself has no field vocabulary — its entries are positions, not names.
@@ -212,7 +212,7 @@ describe("derived values", () => {
 
 describe("chain fields", () => {
   it("offers the file's five sections, and nothing inside them", () => {
-    // `bus_only:` is NOT a synonym of `bypassed:` — see apps/k7-daw-frontend/packages/song/docs/busOnly.md.
+    // `bus_only:` is NOT a synonym of `bypassed:` — see apps/k7-daw-wasm/song/docs/busOnly.md.
     expect(fields("chains", [])).toEqual([
       "modules",
       "bypassed",

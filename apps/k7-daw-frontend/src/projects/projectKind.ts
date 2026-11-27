@@ -2,7 +2,7 @@
 // declared surfaces amount to, and how long ago it last changed. Pure, so both are tested without
 // a page. See ../../docs/projects.md.
 
-import type { ProjectShape } from "@studio/song-schema/yaml/projectSchema";
+import type { ProjectShape } from "@studio/k7-wasm/types";
 
 /** The archetype a project's surfaces read as, or null when the service is too old to say. */
 export function shapeOfSurfaces(

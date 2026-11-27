@@ -188,7 +188,7 @@ export interface TrackDoc {
   highlight?: boolean;
   disabled: boolean;
   inputChannels: number[]; // 1-based physical channels; a label is resolved against ~/.k7 first, so the engine only ever sees numbers
-  // Where this track LEAVES by. Empty is the mixer's sum, which is every track but a CUE bus — apps/k7-daw-frontend/packages/song/docs/cue.md.
+  // Where this track LEAVES by. Empty is the mixer's sum, which is every track but a CUE bus — apps/k7-daw-wasm/song/docs/cue.md.
   outputChannels: number[]; // 1-based physical channels, resolved the same way and for the same reason
   monitor: string; // Tracktion's "off" | "auto" (armed) | "on"; ignored when inputChannels is empty
   inputGain: number; // interface input trim in dB, 0 == unity; ignored when inputChannels is empty

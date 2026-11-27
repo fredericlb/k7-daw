@@ -3,8 +3,7 @@
 // place so the conventions can't drift apart between features. Matched with `(^|\/)` rather
 // than an anchored `^`, since a path may carry a project-folder prefix in a workspace.
 
-import { stripDocExt } from "@studio/k7-wasm/schema";
-import { docPattern } from "@studio/song-schema/docExt";
+import { docPattern, stripDocExt } from "@studio/k7-wasm/schema";
 
 const kind = (folder: string): RegExp => docPattern(`(^|/)${folder}/[^/]+`);
 
@@ -36,7 +35,7 @@ export const rackKeyOf = (path: string): string | null => {
   const p = norm(path);
   if (isRackModuleFile(p))
     return p.replace(MODULE_TAIL, "").split("/").pop() ?? null;
-  // A chain project's file holds many nodes, keyed by uuid, so its path names none (apps/k7-daw-frontend/packages/song/docs/chainFiles.md).
+  // A chain project's file holds many nodes, keyed by uuid, so its path names none (apps/k7-daw-wasm/song/docs/chainFiles.md).
   const m = NODE_FILE.exec(p);
   return m ? m[2] : null;
 };

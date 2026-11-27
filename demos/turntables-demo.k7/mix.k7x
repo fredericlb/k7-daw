@@ -5,7 +5,7 @@
 //
 // It does NOT say which songs the set plays: that is the playlist `surfaces/desk.k7x`
 // names, a file in `_playlists/` at the root of the repository, written in k7 under the
-// cog. See apps/k7-daw-frontend/packages/song/docs/playlists.md.
+// cog. See apps/k7-daw-wasm/song/docs/playlists.md.
 //
 // What is left here is the half a playlist has no place for. A cue belongs to the DESK
 // that plays a song, not to a list other sets read: two bands covering the same track

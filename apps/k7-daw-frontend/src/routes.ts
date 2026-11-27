@@ -3,7 +3,7 @@
 // parameter. There is one LAYOUT and it is not addressable: which panes it holds is what the
 // project declares. See docs/shellRouting.md.
 
-// No `viewport`: the picture is a WINDOW over the layout, not a page of it (apps/k7-daw-frontend/packages/song/docs/surfaces.md).
+// No `viewport`: the picture is a WINDOW over the layout, not a page of it (apps/k7-daw-wasm/song/docs/surfaces.md).
 export type Pane = "editor" | "timeline" | "turntables" | "chains";
 // No `View` and no `docs` panel: there is ONE layout, and which panes it holds is `viewPanes`' answer (docs/shellRouting.md).
 export type Panel = "event" | "graph" | "mix" | "logs";

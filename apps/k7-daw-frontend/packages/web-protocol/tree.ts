@@ -1,5 +1,5 @@
 // tree.ts — the order a person reads names in: blind to case and accents, "2" before "10".
-// The services answer in code-point order (song-schema/docs/textOrder.md), so every view that
+// The services answer in code-point order (apps/k7-daw-wasm/song-schema/docs/textOrder.md), so every view that
 // draws a listing for people sorts it again with these; one collator, so two views never
 // disagree. Here rather than in an app because pl8 draws its families with it too.
 

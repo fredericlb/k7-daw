@@ -3,6 +3,12 @@
 // A value a loop asks of many inputs has a batch form (`beatsAtSources`): one call, not one per sample.
 
 import { call } from "./abi.ts";
+import {
+  CAPTION_EXTS,
+  DOC_EXT_SRC,
+  IMAGE_EXTS,
+  VIDEO_EXTS,
+} from "./consts.generated.ts";
 import type {
   BuiltinPluginInfo,
   CompSpan,
@@ -90,6 +96,37 @@ export const builtinPluginForRef = (
   ref
     ? (ask<BuiltinPluginInfo | null>("builtin_for_ref", { ref }) ?? undefined)
     : undefined;
+
+/** The built-in a module's `plugin:` declares (`type: internal`, any spelling of the name), or undefined. */
+export const builtinPluginFor = (
+  plugin: { type?: unknown; name?: unknown } | null | undefined,
+): BuiltinPluginInfo | undefined =>
+  typeof plugin?.type === "string" && typeof plugin.name === "string"
+    ? (ask<BuiltinPluginInfo | null>("builtin_for_plugin", {
+        type: plugin.type,
+        name: plugin.name,
+      }) ?? undefined)
+    : undefined;
+
+/** Is this a name a preset can have: its file's name, held to what every filesystem agrees on. */
+export const isPresetName = (name: string): boolean =>
+  ask("is_preset_name", { name });
+
+/** The start in beats a placement id names, a repeat's `#n` aside; NaN when it names none. */
+export const placementStartOf = (id: string): number =>
+  ask<number | null>("placement_start_of", { id }) ?? Number.NaN;
+
+/** A regex matching `prefix` (pattern source) followed by the document extension at the end. */
+export const docPattern = (prefix: string, flags = "i"): RegExp =>
+  new RegExp(`${prefix}${DOC_EXT_SRC}$`, flags);
+
+const ending = (exts: readonly string[]): RegExp =>
+  new RegExp(`\\.(${exts.join("|")})$`, "i");
+
+/** A clip is a PICTURE when its source ends in one of these, a STILL in the next and CAPTIONS in the last. */
+export const VIDEO_SOURCE = ending(VIDEO_EXTS);
+export const IMAGE_SOURCE = ending(IMAGE_EXTS);
+export const CAPTION_SOURCE = ending(CAPTION_EXTS);
 
 /** A name ending in the document extension `.k7x`, any case. */
 export const isDocFile = (name: string): boolean =>

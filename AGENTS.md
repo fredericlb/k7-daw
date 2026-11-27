@@ -28,6 +28,7 @@ the zone's `docs/` directory is where the justification belongs:
 |---|---|
 | a shared package (the UI kit, i18n, env, vite-config and tsconfig included) | `apps/k7-daw-frontend/packages/<pkg>/docs/` |
 | the k7 frontend | `apps/k7-daw-frontend/docs/` |
+| the song model (the Rust crates `song`, `song-edit` and `song-schema`, whose `meta/` and `samples/` data sit in `song`) | `apps/k7-daw-wasm/<crate>/docs/` |
 | the engine reach | `apps/k7-daw-backend/docs/engine/` (the routes) |
 | the DJ desk | `apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/` |
 | the project shell | `apps/k7-daw-frontend/packages/project-shell/docs/` |
@@ -70,7 +71,7 @@ the production image, and the repo-wide pages in `docs/`. The short map:
 | `apps/k7-daw-android`, `apps/k7-daw-ios` | the engine and supervisor on a phone, with k7's backend bundled (`apps/k7-daw-engine/k7-runtime/docs/android.md`, `ios.md`) |
 | `apps/k7-daw-frontend` | the text-first DAW's page — React/Vite, the one place k7's TypeScript lives: its own source, its `packages/` (`@studio/*`, consumed as raw TypeScript through `exports` subpaths: a bare deep import fails on purpose; most serve the page or the verbs' Worker, and `engine-client`, `env`, `song-strudel`, `tsconfig` and `vite-config` serve only scripts, tests and builds) and `user-docs/`, the documentation rendered at `/docs`; k7 runs on devices only, no hosted app (its own `AGENTS.md`) |
 | `apps/k7-daw-backend` | k7's backend in Rust: one process answering the session, the preferences, the file hub, AI organize, the engine registry and the built page; its crates are its `packages/`, `waveform` (the measure, decoders and encoders, built into the backend, the supervisor and, as WebAssembly, the page's `waveform.wasm`) among them (`docs/rust-backend-plan.md`) |
-| `apps/k7-daw-wasm` | the Rust crates that build for the browser as WebAssembly, `k7-wasm`'s one module, and are linked by the backend too: `song`, `song-schema`, `song-edit`, `k7x`, `k7-wasm` (the TypeScript halves are the frontend's `packages/`) |
+| `apps/k7-daw-wasm` | the Rust crates that build for the browser as WebAssembly, `k7-wasm`'s one module, and are linked by the backend too: `song`, `song-schema`, `song-edit`, `k7x`, `git-rules` (git's wire shapes and the page's rules over them), `k7-wasm` (the page reaches them as `@studio/k7-wasm/*`) |
 | `apps/k7-daw-desktop` | K7 DAW, k7 on Windows, Linux and macOS (Apple silicon): a Tauri app with one window that runs k7's backend on `127.0.0.1:18789`, which runs the machine's supervisor and engine; k7 shows in its window, or in the browser from the desktop app's menu. Built locally on each OS (`apps/k7-daw-desktop/docs/`) |
 | `k7-core/` | the `@k7-core` modules library, the seed every library folder is copied from |
 | `e2e/` | the Playwright functional suite (`e2e/docs/`) |

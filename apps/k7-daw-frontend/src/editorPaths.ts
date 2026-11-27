@@ -2,7 +2,7 @@
 // open, where a gutter's source resolves, what a clip or a sequence names. Pure, so EditorTab.tsx
 // keeps only the pane.
 
-import { VIDEO_SOURCE } from "@studio/song-schema/yaml/entitySchemas";
+import { VIDEO_SOURCE } from "@studio/k7-wasm/schema";
 import { isRackModuleFile, toProjectRelative } from "./projectPaths";
 import { readScalarField } from "./scalarField";
 import type { FileNode, WebProject } from "./types";

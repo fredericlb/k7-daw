@@ -17,8 +17,8 @@ import {
 } from "@studio/engine-browser/store";
 import type { TransportAction } from "@studio/engine-protocol";
 import type { Deck } from "@studio/k7-plugins/turntables/engine";
+import type { ProjectSurface } from "@studio/k7-wasm/types";
 import { surfacesUrl } from "@studio/project-shell/launch";
-import type { ProjectSurface } from "@studio/song-schema/yaml/surfaceFile";
 import { Button } from "@studio/ui/button";
 import { ChevronLeft, House, Unplug } from "@studio/ui/icons";
 import { Spinner } from "@studio/ui/spinner";

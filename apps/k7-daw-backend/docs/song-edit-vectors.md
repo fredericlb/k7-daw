@@ -1,6 +1,6 @@
 # song-edit vectors
 
-The Rust `song-edit` crate is `song-edit`: the TypeScript under `apps/k7-daw-frontend/packages/song-edit/src` and song's write side are stubs that call it.
+The Rust `song-edit` crate is `song-edit`: the TypeScript under `apps/k7-daw-wasm/song-edit/src` and song's write side are stubs that call it.
 Its proof is a frozen set of vectors, each a folder in and a folder out, in `apps/k7-daw-backend/tests/vectors/song-edit/` (one
 file per module; `index.json` counts them and lists the exported functions no vector reaches) and the goldens in
 `apps/k7-daw-wasm/song-edit/tests/goldens/`. They were harvested from the TypeScript implementation before the stubs replaced it, and

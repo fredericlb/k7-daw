@@ -3,7 +3,10 @@
 // panel, so each page must offer the same controls in both — a knob missing from one shape is a control that
 // vanishes when the screen turns. Geometry is checked as the builder checks it. See apps/k7-daw-frontend/packages/ui-module-builder/docs/layouts.md.
 
-import type { ModuleUI, Widget } from "@studio/song-schema/yaml/moduleSchema";
+import type {
+  WebModuleUI as ModuleUI,
+  WebWidget as Widget,
+} from "@studio/graph-model";
 import { clash } from "./groupGeometry";
 
 /** The horizontal layout's height, and the vertical one's width. */

@@ -41,7 +41,7 @@ const TAB_META: Record<
     label: m["settings.io"](),
     command: "ui settings io",
   },
-  // What the open song says about its whole mix — apps/k7-daw-frontend/packages/song/docs/console.md.
+  // What the open song says about its whole mix — apps/k7-daw-wasm/song/docs/console.md.
   project: {
     icon: FolderCog,
     label: m["settings.project"](),

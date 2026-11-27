@@ -38,7 +38,7 @@ playlist carrying one set's marks would hand them to the other. So the cues live
 A playlist line names an audio **file of the workspace** by its workspace-relative path, and the
 desk reads nothing else about it: there is no catalogue to consult. A row shows the file's name
 and, above it, the folder holding it. `resolveSet` crosses the playlist with the workspace's
-files — the same `resolveRecords` k7's playlist pane uses (`@studio/song-schema/records`), and
+files — the same `resolveRecords` k7's playlist pane uses (`@studio/k7-wasm/records`), and
 that is the point: "which file does this line mean" is a rule, and two copies would diverge the
 day one of them learnt a case.
 
@@ -114,4 +114,4 @@ set's real chains, crossfade included. A `jsdsp` module is a graph baked into th
 compiler, which runs the module's source in a child process: the browser cannot produce one, and
 `deckDoc` is only a stand-in of one track per deck until the compile arrives. See
 [mix.md](mix.md) and
-[apps/k7-daw-frontend/packages/song/docs/setProject.md](../../../song/docs/setProject.md).
+[apps/k7-daw-wasm/song/docs/setProject.md](../../../../../k7-daw-wasm/song/docs/setProject.md).

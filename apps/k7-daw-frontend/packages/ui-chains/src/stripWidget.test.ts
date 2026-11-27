@@ -2,7 +2,7 @@ import type { PageModuleUI } from "@studio/graph-model";
 import { describe, expect, it } from "vitest";
 import { nodeSize, stripWidgetRect, widgetRect } from "./graph";
 
-// The strip's own panel, as apps/k7-daw-frontend/packages/song/meta/audio/mixer/ui.k7x declares it.
+// The strip's own panel, as apps/k7-daw-wasm/song/meta/audio/mixer/ui.k7x declares it.
 const ui: PageModuleUI = {
   cols: 2,
   rows: 4,

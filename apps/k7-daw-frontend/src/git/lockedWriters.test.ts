@@ -1,17 +1,12 @@
-// The local writers a merge's gate cannot see: each is refused by the command itself.
+// The local writers of a locked workspace: each is refused by the command itself.
 
-import { setWriteGate } from "@studio/project-shell/fileApi";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { runLocal } from "../ui/commands/dispatch";
 import type { LocalCtx } from "../ui/commands/index";
-import { importRefusal } from "../ui/commands/locked";
-import { mergeGate } from "./gitLock";
 
 vi.mock("../paraglide/messages.js", () => ({
   m: new Proxy({}, { get: (_t, k) => () => String(k) }),
 }));
-
-afterEach(() => setWriteGate(null));
 
 function ctxOf(over: Partial<LocalCtx>) {
   const status: string[] = [];
@@ -52,10 +47,5 @@ describe("a locked workspace's local writers", () => {
       recordWithoutArmRef: { current: false },
     });
     expect(runLocal(ctx, "transport play")).toBe(false);
-  });
-  it("the import dialog's own write is refused by the gate", () => {
-    expect(importRefusal()).toBe(null);
-    setWriteGate(mergeGate);
-    expect(importRefusal()).toBe("git.lockedByMerge");
   });
 });

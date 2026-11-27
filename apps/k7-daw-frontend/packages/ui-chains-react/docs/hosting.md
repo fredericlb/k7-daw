@@ -38,7 +38,7 @@ the way it did. The throw in `useIcons` is unreachable: the compiler is the guar
 
 `icons` carries one thing that is not a glyph: **`trackLabel`**, a lane's name without the
 instrument code its icon was picked from. It rides here rather than in the graph document because
-it is the same knowledge and the same table — which codes exist is `@studio/song-schema`'s, and a
+it is the same knowledge and the same table — which codes exist is `song-schema`'s, and a
 package that draws a graph must not depend on the one that parses a song. It is the only OPTIONAL
 member: a host that supplies none gets full names, which is merely plainer, never wrong.
 
@@ -110,7 +110,7 @@ picture reads, so the card shows those and the host writes the node itself. Its 
 a target of its own (`offline` with `shader: true`) whatever `moduleParams` says, and only
 `onShaderParam` makes it writable. Folding it into `onModuleParam` would have made writability one
 answer for both, and a deck's tempo, which the graph only borrows, would have turned against
-nothing (apps/k7-daw-frontend/packages/song/docs/videoMixer.md).
+nothing (apps/k7-daw-wasm/song/docs/videoMixer.md).
 
 `trackInputs` is a plain record for the same reason, like `engineWarnings` beside it: it is what
 the HOST knows about a live input and the graph does not. The chip is drawn only where
@@ -142,7 +142,7 @@ pressing it reports the node, a viewport point and — when the module runs as m
 the host gave `onEngine` — the engines and which is on, and the host draws the list there: the
 presets, and a left bar of the engines whose pick is the host's `node engine`. The list is
 the host's because what a preset is, where it is kept and how saving one is written are all
-file-service matters (`apps/k7-daw-frontend/packages/song/docs/userPresets.md`), and because its header — save the node
+file-service matters (`apps/k7-daw-wasm/song/docs/userPresets.md`), and because its header — save the node
 as a new preset, update the one loaded — is the host's commands. Same split as `onAssetBrowse`.
 
 `presetNames` is what the button wears: the preset each node last loaded, by node, which only the

@@ -2,7 +2,7 @@
 // through the account's file service on the server: that is where the workspaces live, and the
 // share carries every change on to the other devices. See ../../docs/projects.md.
 
-import type { ProjectShape } from "@studio/song-schema/yaml/projectSchema";
+import type { ProjectShape } from "@studio/k7-wasm/types";
 // `m` is the file service in every function here, so the catalogue comes in under its own name.
 import { m as msg } from "../paraglide/messages.js";
 import { type AccountFiles, accountFiles } from "./api";

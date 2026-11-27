@@ -11,14 +11,14 @@ use axum::body::Body;
 use axum::response::Response;
 use base64::Engine;
 use base64::engine::general_purpose::URL_SAFE_NO_PAD;
-use serde_json::{Value, json};
+use git_rules::{ForgeStart, PollAnswer, PollState};
+use serde_json::Value;
 use sha2::{Digest, Sha256};
 
-use super::git::Ctx;
+use super::git::{Ctx, typed};
 use super::git_forge::{Forge, fail, find};
 use super::git_forge_token::finish;
 use super::git_forgejo::{APP_REDIRECT, CALLBACK, Forgejo};
-use crate::routes::files::json_answer;
 
 /// How long a started sign-in waits for the browser to come back.
 const WAIT: Duration = Duration::from_secs(600);
@@ -35,7 +35,7 @@ struct Pending {
 #[derive(Default)]
 struct Flows {
     pending: HashMap<String, Pending>,
-    ended: HashMap<String, Value>,
+    ended: HashMap<String, PollAnswer>,
 }
 
 fn flows() -> std::sync::MutexGuard<'static, Flows> {
@@ -91,9 +91,13 @@ pub(super) fn start(ctx: &Ctx, f: &Forgejo, b: &Value) -> Response {
         at: Instant::now(),
     };
     g.pending.insert(state, p);
-    json_answer(
+    typed(
         200,
-        &json!({ "authorizeUrl": url, "redirect": redirect, "expiresIn": WAIT.as_secs() }),
+        &ForgeStart {
+            authorize_url: url,
+            redirect,
+            expires_in: WAIT.as_secs(),
+        },
     )
 }
 
@@ -102,13 +106,15 @@ pub(super) fn poll(ctx: &Ctx, f: &Forgejo) -> Response {
     let here = slot(ctx, &f.server.id);
     let mut g = flows();
     if let Some(v) = g.ended.remove(&here) {
-        return json_answer(200, &v);
+        return typed(200, &v);
     }
     let waiting = g.pending.values().any(|p| p.slot == here);
-    json_answer(
-        200,
-        &json!({ "state": if waiting { "pending" } else { "expired" } }),
-    )
+    let state = if waiting {
+        PollState::Pending
+    } else {
+        PollState::Expired
+    };
+    typed(200, &PollAnswer::state(state))
 }
 
 fn arg(query: &str, name: &str) -> Option<String> {
@@ -139,31 +145,43 @@ pub(super) async fn callback(ctx: &Ctx, query: &str) -> Response {
     let outcome = match (arg(query, "error"), arg(query, "code")) {
         (Some(e), _) => {
             let state = if e == "access_denied" {
-                "denied"
+                PollState::Denied
             } else {
-                "error"
+                PollState::Error
             };
             let said = arg(query, "error_description").unwrap_or(e);
-            json!({ "state": state, "error": said })
+            PollAnswer {
+                error: Some(said),
+                ..PollAnswer::state(state)
+            }
         }
         (None, Some(code)) => match g.exchange(&code, &p.redirect, &p.verifier).await {
             Ok(t) => match finish(ctx, f, t).await {
-                Ok(d) => {
-                    json!({ "state": "ok", "login": d.login, "scopes": d.scopes, "keyNote": d.note })
-                }
-                Err((_, code, said)) => json!({ "state": "error", "code": code, "error": said }),
+                Ok(d) => PollAnswer {
+                    login: Some(d.login),
+                    scopes: Some(d.scopes),
+                    key_note: d.note,
+                    ..PollAnswer::state(PollState::Ok)
+                },
+                Err((_, code, said)) => PollAnswer {
+                    code: Some(code),
+                    error: Some(said),
+                    ..PollAnswer::state(PollState::Error)
+                },
             },
-            Err(said) => json!({ "state": "error", "error": said }),
+            Err(said) => PollAnswer {
+                error: Some(said),
+                ..PollAnswer::state(PollState::Error)
+            },
         },
-        (None, None) => json!({ "state": "error", "error": "Forgejo sent no code back" }),
+        (None, None) => PollAnswer {
+            error: Some("Forgejo sent no code back".to_string()),
+            ..PollAnswer::state(PollState::Error)
+        },
     };
-    let mut outcome = outcome;
-    if let Some(m) = outcome.as_object_mut() {
-        m.retain(|_, v| !v.is_null());
-    }
-    let ok = outcome["state"] == "ok";
-    let said = outcome["error"].as_str().unwrap_or("").to_string();
-    let login = outcome["login"].as_str().unwrap_or("").to_string();
+    let ok = outcome.state == PollState::Ok;
+    let said = outcome.error.clone().unwrap_or_default();
+    let login = outcome.login.clone().unwrap_or_default();
     flows().ended.insert(p.slot, outcome);
     if ok {
         let line = format!("Signed in to {} as {login}: you can close this tab.", p.id);

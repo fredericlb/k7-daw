@@ -6,7 +6,7 @@
 // The choices are the module's OWN assets/, `assets/`-relative and nested — a NAM pack is a
 // folder per amp — so they are filtered by the EXTENSION the bound param takes and never by a
 // folder prefix: a module's assets carry no kind prefix, so such a filter matches nothing
-// (apps/k7-daw-frontend/packages/song/docs/moduleAssets.md).
+// (apps/k7-daw-wasm/song/docs/moduleAssets.md).
 
 import { assetsForParam } from "@studio/k7-wasm/module";
 import { fuzzyScores } from "@studio/k7-wasm/ui";

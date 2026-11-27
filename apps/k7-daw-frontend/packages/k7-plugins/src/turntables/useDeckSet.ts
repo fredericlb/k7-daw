@@ -14,9 +14,9 @@ import {
 import type { ProjectDoc } from "@studio/engine-protocol/project";
 import type { WebGraph } from "@studio/graph-model";
 import { STEMS, type Stem, stemControl } from "@studio/k7-wasm/stems";
+import type { MixView as MixViewFile } from "@studio/k7-wasm/text";
 import { editMix, mixCues } from "@studio/k7-wasm/text";
 import { projectApi as api } from "@studio/project-shell/project";
-import type { MixView as MixViewFile } from "@studio/song-schema/yaml/mixViewSchema";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { m } from "../paraglide/messages.js";
 import { alignSeek } from "./beats";
@@ -817,7 +817,7 @@ export function useDeckSet(
       looping.loopOff(deckId);
       // …and so do the stem knobs. A part's level is its PLATTER's `Gain`, and `deckFile` is part
       // of a plugin's identity, so a new record re-creates the platter at the declared unity — the
-      // knob would go on drawing a cut nobody is applying. See ../../song-schema/docs/stems.md.
+      // knob would go on drawing a cut nobody is applying. See apps/k7-daw-wasm/song-schema/docs/stems.md.
       setEq((e) => {
         const next = { ...e };
         for (const s of STEMS) delete next[stemControl(deckId, s)];

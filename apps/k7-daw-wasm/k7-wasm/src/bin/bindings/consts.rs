@@ -159,6 +159,11 @@ fn plain() -> Vec<[String; 3]> {
             "SHADER_PARAMS",
             &json!(n::SHADER_PARAMS),
         ),
+        export(
+            "The gate `event trim` cuts a take at, in dBFS.",
+            "DEFAULT_TRIM_DB",
+            &json!(waveform::trim::DEFAULT_TRIM_DB),
+        ),
         export("The kind a bare `fade_in` means.", "DISSOLVE", &s(n::DISSOLVE)),
         export(
             "The kind a fade naming a `chain` and no `with` means.",
@@ -483,6 +488,159 @@ fn plain() -> Vec<[String; 3]> {
     ]
 }
 
+/// The vocabulary the page's panels, pickers and drops read: widget kinds, rack binds, levels, folders and extensions.
+fn page_vocab() -> Vec<[String; 3]> {
+    let list = |v: &[&str]| json!(v);
+    #[cfg_attr(not(feature = "verbs"), allow(unused_mut))]
+    let mut out = vec![
+        export(
+            "The widget kinds a panel may use, in the order a picker lists them.",
+            "WIDGET_TYPES",
+            &json!(song::modules::WIDGET_TYPES),
+        ),
+        export(
+            "What a waveform widget draws: the live signal either side of its module.",
+            "WAVEFORM_SOURCES",
+            &json!(song::modules::WAVEFORM_SOURCES),
+        ),
+        export(
+            "The longest a tab's name may be, in characters.",
+            "TAB_NAME_MAX",
+            &json!(song::modules::TAB_NAME_MAX),
+        ),
+        export(
+            "The script beside `ui.k7x` that draws a panel's lcdscreen widgets.",
+            "WIDGETS_SCRIPT",
+            &json!(song::modules::panels::WIDGETS_SCRIPT),
+        ),
+        export(
+            "The bind prefix a rack pad carries: `@rack:BD` fires the sound `BD`.",
+            "RACK_BIND",
+            &json!(chains::node_ui::RACK_BIND),
+        ),
+        export(
+            "The bind of a rack's last tap, which adds a sound rather than playing one.",
+            "RACK_ADD_BIND",
+            &json!(chains::node_ui::RACK_ADD_BIND),
+        ),
+        export(
+            "How a module asks to be treated by the completions when its file says nothing.",
+            "DEFAULT_MODULE_STATUS",
+            &json!(song::modules::types::module_status_of(None)),
+        ),
+        export(
+            "The recorder a project with no timeline gets on its master run, by plugin id: what its record button drives.",
+            "OUTPUT_RECORDER_ID",
+            &json!(song::doc::OUTPUT_RECORDER_ID),
+        ),
+        export(
+            "What a track the compile has not coloured yet is drawn in: the `other` category's one shade.",
+            "UNCOLOURED_SHADE",
+            &json!(song::doc::category_shade(song::doc::TrackCategory::Other, 0, 1)),
+        ),
+        export(
+            "The oscillator shapes of a curve, in the order a picker lists them.",
+            "LFO_SHAPES",
+            &json!(song_schema::LFO_SHAPES),
+        ),
+        export(
+            "The cuts a curve can take, the default first.",
+            "CURVE_CUTS",
+            &json!(song_schema::CURVE_CUTS),
+        ),
+        export(
+            "Where an ADSR's decay lands when the file does not say.",
+            "ADSR_DEFAULT_LEVEL",
+            &json!(song_schema::ADSR_DEFAULT_LEVEL),
+        ),
+        export(
+            "The project format this k7 reads and writes: a root above it is refused.",
+            "FORMAT_LEVEL",
+            &json!(song_edit::format_level::FORMAT_LEVEL),
+        ),
+        export(
+            "What this k7 can run: a library whose `requires` is above it is refused.",
+            "LIBRARY_LEVEL",
+            &json!(song_edit::shared_folders::LIBRARY_LEVEL),
+        ),
+        export(
+            "The file a workspace keeps its library pins in, at its root.",
+            "LIBRARY_PINS_FILE",
+            &json!(song_edit::shared_folders::LIBRARY_PINS_FILE),
+        ),
+        export(
+            "The version a library the pins do not name resolves to.",
+            "UNPINNED_VERSION",
+            &json!(song_edit::shared_folders::UNPINNED_VERSION.parse::<u32>().unwrap_or(1)),
+        ),
+        export(
+            "The master fader's lowest level, in dB.",
+            "MASTER_MIN_DB",
+            &json!(song_edit::project_root::MASTER_MIN_DB),
+        ),
+        export(
+            "The master fader's highest level, in dB.",
+            "MASTER_MAX_DB",
+            &json!(song_edit::project_root::MASTER_MAX_DB),
+        ),
+        export(
+            "The project's graph file.",
+            "GRAPH_FILE",
+            &json!(song_edit::graph_schema::GRAPH_FILE),
+        ),
+        export(
+            "The folder a workspace keeps its reference tracks in.",
+            "REFERENCES_DIR",
+            &json!(song_edit::shared_folders::REFERENCES_DIR),
+        ),
+        export(
+            "The extensions offered as reference tracks, without their dot.",
+            "REFERENCE_EXTS",
+            &list(&song::wire::REFERENCE_EXTS),
+        ),
+        export(
+            "The archetypes a project is created as, in the order the new-project menu lists them.",
+            "PROJECT_SHAPES",
+            &json!(song::wire::PROJECT_SHAPES),
+        ),
+        export(
+            "The extension a workspace document has, as pattern source for a regex.",
+            "DOC_EXT_SRC",
+            &json!(song::wire::DOC_EXT_SRC),
+        ),
+        export(
+            "The extensions a clip's `source` names as a picture, without their dot.",
+            "VIDEO_EXTS",
+            &list(song::wire::VIDEO_EXTS),
+        ),
+        export(
+            "The extensions a clip's `source` names as a still, without their dot.",
+            "IMAGE_EXTS",
+            &list(song::wire::IMAGE_EXTS),
+        ),
+        export(
+            "The extensions a clip's `source` names as captions, without their dot.",
+            "CAPTION_EXTS",
+            &list(song::wire::CAPTION_EXTS),
+        ),
+    ];
+    #[cfg(feature = "verbs")]
+    out.push(export(
+        "Which components each surface type has and what each wants, `[id, note]`, as `project surface new` lists them.",
+        "SURFACE_MAPPING_SKELETON",
+        &Value::Object(
+            SURFACE_TYPES
+                .iter()
+                .map(|t| {
+                    let rows = verbs::surface_skeleton(t).unwrap_or_default();
+                    ((*t).to_owned(), json!(rows))
+                })
+                .collect(),
+        ),
+    ));
+    out
+}
+
 /// The constants of the command bar and the menus.
 #[cfg(feature = "verbs")]
 fn ui_consts() -> Vec<[String; 3]> {
@@ -553,6 +711,7 @@ pub fn text() -> String {
     ]
     .to_vec();
     lines.extend(plain().into_iter().flatten());
+    lines.extend(page_vocab().into_iter().flatten());
     #[cfg(feature = "verbs")]
     lines.extend(ui_consts().into_iter().flatten());
     lines.join("\n")

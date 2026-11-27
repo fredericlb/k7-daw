@@ -11,8 +11,8 @@ use crate::read::open_regular;
 use crate::space::Declined;
 use crate::tree::Limits;
 
-/// What this k7 can run: a version whose `requires` is above it is not offered. A test holds it equal to `libraryVersions.ts`.
-pub const LIBRARY_LEVEL: u32 = 2;
+/// What this k7 can run: a version whose `requires` is above it is not offered. The crates' own constant, which the page reads too.
+pub const LIBRARY_LEVEL: u32 = song_edit::shared_folders::LIBRARY_LEVEL;
 /// The version a library the pins do not name resolves to.
 pub const UNPINNED_VERSION: u32 = 1;
 /// A published version's manifest.

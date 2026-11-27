@@ -1,6 +1,6 @@
 // EventGainSlider.tsx — an audio event's own trim, ±6 dB: "gain: 0.0 dB" in the clip panel's title bar, a knob in its bubble.
 // The knob moves locally and the value COMMITS once, on release — one `event gain`, one write, one reload —
-// and a double-click puts it back to unity. See apps/k7-daw-frontend/packages/song-edit/docs/eventGain.md.
+// and a double-click puts it back to unity. See apps/k7-daw-wasm/song-edit/docs/eventGain.md.
 
 import { DockKnobProperty } from "@studio/ui/dock-property";
 import { m } from "../paraglide/messages.js";

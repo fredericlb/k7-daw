@@ -18,7 +18,7 @@ union the shell declares — because there is exactly one surface per type, so t
 There are three: the timeline, the turntables and the mastering strip. The viewport is not one — a
 window over the layout rather than a page in it, with no address. What the three
 reach is the pane list below, which is a function of what the project declares rather than a
-constant. See [apps/k7-daw-frontend/packages/song/docs/surfaces.md](../packages/song/docs/surfaces.md).
+constant. See [apps/k7-daw-wasm/song/docs/surfaces.md](../../k7-daw-wasm/song/docs/surfaces.md).
 
 ### The layout is the project's, not the user's
 
@@ -53,7 +53,7 @@ the layout rather than parsing into a state nothing can draw.
 > timeline still has one — which is where you would write the arrangement it has not got. Nothing
 > outside `surfaces/` chooses a layout; a `project.k7x` field saying which one to draw could only
 > contradict the folder it sits in. See
-> [apps/k7-daw-frontend/packages/song/docs/surfaces.md](../packages/song/docs/surfaces.md).
+> [apps/k7-daw-wasm/song/docs/surfaces.md](../../k7-daw-wasm/song/docs/surfaces.md).
 
 `full` is the SCREEN, so it owns the path. `panel` is a modifier on whatever
 screen you are on — you can have the mix open over the timeline or over the chains — so

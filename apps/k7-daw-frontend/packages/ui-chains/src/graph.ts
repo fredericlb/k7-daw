@@ -26,7 +26,7 @@ export {
   rackAddBind,
   rackAddBindAt,
   rackBindSymbol,
-} from "@studio/song-schema/yaml/moduleSchema";
+} from "@studio/k7-wasm/rack-binds";
 export { projectBindField } from "./binds";
 export { buildGraph, withOpenTabs } from "./buildGraph";
 export {

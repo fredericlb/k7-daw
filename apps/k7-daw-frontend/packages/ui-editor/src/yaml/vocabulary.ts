@@ -1,11 +1,10 @@
 // vocabulary.ts — the adapter between the schema-agnostic completion and a studio project: a file's path becomes a
-// kind, and @studio/song-schema answers that kind's fields and values, derived so they cannot fall behind the schema.
+// kind, and @studio/k7-wasm answers that kind's fields and values, derived so they cannot fall behind the schema.
 // Shared by k7's EditorPane, YamlPane and the module builder; the k7x and YAML modes both read it (docs/completion.md).
 
 import type { FileKind } from "@studio/k7-wasm/fields";
 import { fieldsAt, fileKindFor, valuesAt } from "@studio/k7-wasm/fields";
-import { isEngineRef } from "@studio/k7-wasm/schema";
-import { docPattern } from "@studio/song-schema/docExt";
+import { docPattern, isEngineRef } from "@studio/k7-wasm/schema";
 import type { Hints } from "@studio/web-protocol";
 import type { YamlVocabulary } from "./completions";
 

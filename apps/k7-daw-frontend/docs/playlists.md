@@ -1,7 +1,7 @@
 # Playlists — a set list and the files it names
 
 The format, and why a playlist lives in the workspace, are in
-[`apps/k7-daw-frontend/packages/song/docs/playlists.md`](../packages/song/docs/playlists.md). This page is the
+[`apps/k7-daw-wasm/song/docs/playlists.md`](../../k7-daw-wasm/song/docs/playlists.md). This page is the
 screen.
 
 ```
@@ -53,7 +53,7 @@ autosave, same resolved list. Two components would be two documents to keep in s
 ## Its own panel, not a settings tab, not a pane
 
 This shell's panes are the **open song** — editor, timeline, graph, viewport — and what they draw is
-what the project DECLARES (`docs/shell.md`, `apps/k7-daw-frontend/packages/song/docs/surfaces.md`). A playlist is
+what the project DECLARES (`docs/shell.md`, `apps/k7-daw-wasm/song/docs/surfaces.md`). A playlist is
 declared by no project and belongs to none: it is at the root of the workspace and it is the same
 whichever song you are working on. So it is not a pane, even now that it has a column — and it is
 not in the URL either.
@@ -141,7 +141,7 @@ list. This screen is where a line and the files are both in hand, and therefore 
 does not exist" is a question that can be answered.
 
 The resolution itself is pure and tested separately (`resolveRecords`, in
-`@studio/song-schema/records`): a line is a workspace-relative path, nothing else. The desk reads
+`@studio/k7-wasm/records`): a line is a workspace-relative path, nothing else. The desk reads
 the same function, so a row greyed here is a row greyed there.
 
 A line resolving to nothing **stays on screen**, and that is the point: the file is edited by hand,

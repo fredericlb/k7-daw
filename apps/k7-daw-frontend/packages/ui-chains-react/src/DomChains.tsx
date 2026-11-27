@@ -108,7 +108,7 @@ const NO_SAMPLES: CableGeom["samples"] = [];
 
 /** The shell-menu context of a card, for a host that draws its own cards and wants the graph's menu on them. */
 export { nodeToCtx as graphMenuCtx } from "./useNodeActions";
-// `Cam` lives in camera.ts, a rack tap's edit is apps/k7-daw-frontend/packages/song/docs/racks.md — docs/hosting.md.
+// `Cam` lives in camera.ts, a rack tap's edit is apps/k7-daw-wasm/song/docs/racks.md — docs/hosting.md.
 export type { Cam, NodeEngines, TapAction };
 
 /** What every AUTOMATION cable wears — a curve into its knob, and a node's event into the curve it fires. */

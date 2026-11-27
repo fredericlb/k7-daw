@@ -249,7 +249,7 @@ pub fn node_stack(a: &str, h: &mut Host) -> Done {
     }
     let dir = h.song_path.clone();
     if !is_chain_project(&*h.fs, &dir) {
-        h.refuse(["node stack: a stack is a subchain, and only a chain project has them (apps/k7-daw-frontend/packages/song/docs/chainFiles.md)".to_owned()]);
+        h.refuse(["node stack: a stack is a subchain, and only a chain project has them (apps/k7-daw-wasm/song/docs/chainFiles.md)".to_owned()]);
         return Ok(());
     }
     let name = |p: &str| chain_node_name(&*h.fs, &dir, p).unwrap_or_else(|_| p.to_owned());

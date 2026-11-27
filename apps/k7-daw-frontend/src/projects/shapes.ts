@@ -2,10 +2,8 @@
 // dialog because two of them offer the list now: a new workspace's first project, and a project
 // added to one that exists. See ../../docs/projects.md.
 
-import {
-  PROJECT_SHAPES,
-  type ProjectShape,
-} from "@studio/song-schema/projectShapes";
+import { PROJECT_SHAPES } from "@studio/k7-wasm/consts";
+import type { ProjectShape } from "@studio/k7-wasm/types";
 import {
   ChartGantt,
   Clapperboard,
