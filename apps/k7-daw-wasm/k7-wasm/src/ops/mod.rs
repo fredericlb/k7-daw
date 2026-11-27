@@ -18,8 +18,10 @@ pub mod git;
 pub mod intake;
 pub mod k7x;
 pub mod k7x_edit;
+pub mod library;
 pub mod media;
 pub mod module;
+pub mod nodes;
 pub mod panel;
 pub mod paths;
 pub mod picture;
@@ -29,6 +31,7 @@ pub mod rules;
 pub mod schema;
 pub mod song;
 pub mod stems;
+pub mod surfaces;
 pub mod text;
 pub mod text_buffer;
 pub mod text_desk;
@@ -117,7 +120,10 @@ impl Session {
             "paths" => paths::dispatch(decode(input)?, out),
             "timecode" => timecode::dispatch(decode(input)?, out),
             "fields" => fields::dispatch(decode(input)?, out),
+            "library" => library::dispatch(decode(input)?, out),
             "module" => module::dispatch(decode(input)?, out),
+            "nodes" => nodes::dispatch(decode(input)?, out),
+            "surfaces" => surfaces::dispatch(decode(input)?, out),
             "panel" => panel::dispatch(decode(input)?, out),
             "picture" => picture::dispatch(decode(input)?, out),
             "reads" => reads::dispatch(decode(input)?, out),

@@ -1,3 +1,6 @@
+// The sets the surfaces test against: one wiring case for Rust's marks, and the page's own `nodeMarked` rule.
+// Which file lights what is tested in the chains crate: apps/k7-daw-wasm/chains/src/history_marks/tests.rs.
+
 import type { WebGraph } from "@studio/graph-model";
 import { describe, expect, it } from "vitest";
 import { historyMarks, isEmptyMark, nodeMarked } from "./historyMarks";
@@ -14,34 +17,17 @@ const graph = {
   warnings: [],
 } as unknown as WebGraph;
 
-describe("historyMarks — what a History row lights", () => {
-  it("lights a lane for its track file, and a clip for its sequence or audio file", () => {
-    const m = historyMarks([
-      "tracks/da.main.k7x",
-      "sequences/irrupt_kit_5_1.k7x",
-      "clips/take 3.wav",
-    ]);
-    expect([...m.lanes]).toEqual(["da.main"]);
-    expect([...m.clips].sort()).toEqual(["irrupt_kit_5_1", "take 3"]);
-  });
-
-  it("lights only the node a journal label names, inside the chain it changed", () => {
+describe("historyMarks", () => {
+  it("answers Rust's marks as sets, the label's node lit inside its chain", () => {
     const m = historyMarks(
-      ["chains/be.bass.k7x"],
+      ["tracks/da.main.k7x", "chains/be.bass.k7x"],
       'node param "5ee626e6" "model" "@k7-core/x.nam"',
       graph,
     );
+    expect([...m.lanes]).toEqual(["da.main"]);
     expect([...m.modules]).toEqual(["5ee626e6"]);
     expect(m.chains.size).toBe(0);
-  });
-
-  it("lights the whole chain when nothing names a node — a commit, say", () => {
-    const m = historyMarks(["chains/be.bass.k7x"], "sync", graph);
-    expect([...m.chains]).toEqual(["be.bass"]);
-  });
-
-  it("lights nothing for project-level files", () => {
-    expect(isEmptyMark(historyMarks(["project.k7x", "layout.k7x"]))).toBe(true);
+    expect(isEmptyMark(historyMarks(["project.k7x"]))).toBe(true);
   });
 });
 

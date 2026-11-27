@@ -139,3 +139,6 @@ impl Panel {
         self.widgets.iter().chain(tabs)
     }
 }
+
+#[cfg(test)]
+mod tests;

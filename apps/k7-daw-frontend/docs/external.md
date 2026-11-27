@@ -36,7 +36,7 @@ or the one reason the row does not open. Devices sort by name, surfaces by their
 once its hello answered, so the list does not grow line by line; a device that never answers reads "Not answering".
 
 The filters run in a fixed order and a failed one disables the row instead of hiding it
-(`src/surfaces/surfaceRows.ts`): reached, trusted (the engine gave this device its token), compatible (the door's `api` and
+(`apps/k7-daw-wasm/chains/src/surface_rows.rs`, reached by `src/surfaces/surfaceRows.ts`): reached, trusted (the engine gave this device its token), compatible (the door's `api` and
 the engine's protocol agree, else "Update k7 on <the older device>"), drawable (`deviceSurfaceDrawer` has the type, else
 "Drawn in k7's window only"). This device's own engine is never listed, and neither is the project this device has open: the
 editor is where its own screens open.
@@ -60,7 +60,7 @@ in both. A remote beats a presence line to the main device every five seconds an
 
 ## The exclusion, on the main device
 
-`surfaces/paneInUse.ts` maps a remote's surface to the control it is on the main device: the timeline pane, the desk pane or the
+`surfaces/paneInUse.ts` (the rules are `apps/k7-daw-wasm/chains/src/pane_in_use.rs`) maps a remote's surface to the control it is on the main device: the timeline pane, the desk pane or the
 picture window; a mastering surface has no pane there, so nothing of it is blocked. A blocked pane in the header's switcher is
 dimmed and says "In use on <device>" on a press (the kit's `disabledReason`), the `ui` pane verbs and the picture window refuse
 with the same sentence in the status line, and the polling that feeds it is every two seconds while a project is open. A pane

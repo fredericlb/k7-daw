@@ -121,6 +121,14 @@ fn write_types(dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
     k7_wasm::ops::text_desk::ChainRead::export_all_to(dir)?;
     k7_wasm::ops::text_desk::LibraryPins::export_all_to(dir)?;
     ModuleRequest::export_all_to(dir)?;
+    k7_wasm::ops::library::LibraryRequest::export_all_to(dir)?;
+    k7_wasm::ops::nodes::NodesRequest::export_all_to(dir)?;
+    k7_wasm::ops::surfaces::SurfacesRequest::export_all_to(dir)?;
+    chains::surface_rows::RowGroup::export_all_to(dir)?;
+    chains::pane_in_use::InUse::export_all_to(dir)?;
+    chains::history_marks::HistoryMark::export_all_to(dir)?;
+    chains::master_controls::MasterControl::export_all_to(dir)?;
+    chains::anchor_right::SplitMixer::export_all_to(dir)?;
     k7_wasm::ops::panel::PanelRequest::export_all_to(dir)?;
     k7_wasm::ops::panel::Tabbed::export_all_to(dir)?;
     k7_wasm::ops::panel::Pasted::export_all_to(dir)?;
