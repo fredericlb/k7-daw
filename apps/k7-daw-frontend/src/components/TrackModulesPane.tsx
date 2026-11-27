@@ -94,11 +94,7 @@ export function TrackModulesPane({
   /** The cameras and MIDI devices this browser sees — what those nodes' dropdowns offer, as in the full graph. */
   cameras?: readonly string[];
   /** The interface's inputs as the engine groups them — what an audio input's "in" dropdown offers. */
-  inputDevices?: readonly {
-    name: string;
-    channels: number[];
-    interface?: string;
-  }[];
+  inputDevices?: readonly { name: string; channels: number[] }[];
   midiDevices?: readonly string[];
   /** A RECORDER's button, straight through — see DomChains' prop. */
   /** Set a PROJECT setting — the RENDER card's frame dropdown. */
