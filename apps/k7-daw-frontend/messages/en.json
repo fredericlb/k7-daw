@@ -2113,5 +2113,6 @@
   "git.fj.expired": "The sign-in expired.",
   "git.fj.denied": "Sign-in was refused on {server}.",
   "git.fj.failed": "Sign-in failed: {error}",
-  "git.fj.taken": "A repository named {name} already exists on {server}."
+  "git.fj.taken": "A repository named {name} already exists on {server}.",
+  "tl.autoRemove": "Remove this automation"
 }

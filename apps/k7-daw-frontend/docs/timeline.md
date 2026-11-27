@@ -932,6 +932,15 @@ by group afterwards. So dragging within a group does what it looks like, and dra
 the middle of another group moves it in the file and then draws it back outside — its `group:` is
 a different fact, and a drag does not change it.
 
+## An automation lane is removed from its header
+
+A click on an automation lane's header selects the row, as any header does, and opens a bubble with
+**Remove this automation** (`AutomationHeader.tsx`), which runs `track automation remove <track>
+<param>`. It removes the BINDING: the curve file stays, since another knob may read it, and deleting
+a file nobody asked to delete would make the act heavier than it looks. The header is where the eye
+is when the lane is unwanted, and a right-click alone is a gesture a tablet does not have. A
+read-only timeline opens no bubble.
+
 ## The corner button makes a lane — of which KIND, when there are two
 
 The `＋ piste` button over the name column dispatches `track new`, like every other button here.
