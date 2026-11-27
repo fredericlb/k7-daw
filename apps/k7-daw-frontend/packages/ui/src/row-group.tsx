@@ -25,7 +25,9 @@ interface RowProps {
   children: React.ReactNode;
   /** A 12 px text-3 line under the label. */
   detail?: React.ReactNode;
-  /** Anything trailing: a badge, a switch, a value. */
+  /** What went wrong with this row, in the error colour and wrapped, never cut; it replaces the detail. */
+  error?: React.ReactNode;
+  /** Anything trailing: a badge, a switch, a value, a few actions. */
   trailing?: React.ReactNode;
   /** A chevron-right marks a row that opens something. */
   disclosure?: boolean;
@@ -39,7 +41,14 @@ interface RowProps {
 const ROW =
   "type-body flex w-full min-h-11 items-center gap-3 px-3.5 py-2.5 text-left text-foreground";
 
-function RowBody({ icon, children, detail, trailing, disclosure }: RowProps) {
+function RowBody({
+  icon,
+  children,
+  detail,
+  error,
+  trailing,
+  disclosure,
+}: RowProps) {
   return (
     <>
       {icon ? (
@@ -49,11 +58,17 @@ function RowBody({ icon, children, detail, trailing, disclosure }: RowProps) {
       ) : null}
       <span className="min-w-0 flex-1">
         <span className="block truncate">{children}</span>
-        {detail ? (
+        {error ? (
+          <span role="alert" className="type-status block text-error">
+            {error}
+          </span>
+        ) : detail ? (
           <span className="type-status block truncate text-fg-3">{detail}</span>
         ) : null}
       </span>
-      {trailing}
+      {trailing ? (
+        <span className="flex shrink-0 items-center gap-2">{trailing}</span>
+      ) : null}
       {disclosure ? (
         <ChevronRight
           className="size-4 shrink-0 text-fg-3"
@@ -79,6 +94,7 @@ type Shown = Omit<React.HTMLAttributes<HTMLDivElement>, keyof RowProps>;
 export function Row({
   icon,
   detail,
+  error,
   trailing,
   disclosure,
   selected,
@@ -89,7 +105,9 @@ export function Row({
 }: RowProps & Shown) {
   return (
     <div className={rowClass({ selected, tall, className })} {...div}>
-      <RowBody {...{ icon, detail, trailing, disclosure }}>{children}</RowBody>
+      <RowBody {...{ icon, detail, error, trailing, disclosure }}>
+        {children}
+      </RowBody>
     </div>
   );
 }
@@ -105,6 +123,7 @@ export const RowButton = React.forwardRef<HTMLButtonElement, RowProps & Acting>(
     {
       icon,
       detail,
+      error,
       trailing,
       disclosure,
       selected,
@@ -125,7 +144,9 @@ export const RowButton = React.forwardRef<HTMLButtonElement, RowProps & Acting>(
       )}
       {...btn}
     >
-      <RowBody {...{ icon, detail, trailing, disclosure }}>{children}</RowBody>
+      <RowBody {...{ icon, detail, error, trailing, disclosure }}>
+        {children}
+      </RowBody>
     </button>
   ),
 );

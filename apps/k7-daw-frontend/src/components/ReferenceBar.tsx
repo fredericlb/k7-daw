@@ -115,7 +115,7 @@ export function ReferenceBar({
             }
             status={
               error ? (
-                <span className="min-w-0 truncate text-destructive text-xs">
+                <span className="min-w-0 truncate text-error text-xs">
                   {error}
                 </span>
               ) : done ? (

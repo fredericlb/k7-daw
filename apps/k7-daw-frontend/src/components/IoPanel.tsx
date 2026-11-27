@@ -12,6 +12,7 @@ import { INPUT_VU_MAX_DB, INPUT_VU_MIN_DB } from "@studio/engine-browser/store";
 import { ArrowDownToLine, ArrowUpFromLine } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
 import { RowGroup } from "@studio/ui/row-group";
+import { SectionHeading } from "@studio/ui/section-heading";
 import { sortForPeople } from "@studio/web-protocol/tree";
 import { useEffect, useMemo, useState } from "react";
 import { api } from "../api";
@@ -315,10 +316,10 @@ export function IoPanel({
   }, [engine, ports]);
 
   const heading = (title: string, icon: React.ReactNode) => (
-    <h3 className="type-caps flex items-center gap-1.5 px-1 pt-3 pb-2 text-fg-2">
+    <SectionHeading className="flex items-center gap-1.5 px-1 pt-3 pb-2">
       {icon}
       {title}
-    </h3>
+    </SectionHeading>
   );
   const none = (
     <p className="type-status px-3.5 py-3 text-fg-3">

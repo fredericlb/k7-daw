@@ -19,7 +19,7 @@ export function PanelError({
     <p
       role="alert"
       title={detail}
-      className="flex shrink-0 flex-wrap items-center gap-x-2 border-b px-2 py-1.5 text-destructive text-xs"
+      className="flex shrink-0 flex-wrap items-center gap-x-2 border-b px-2 py-1.5 text-error text-xs"
     >
       {m["panel.readFailed"]({ what })}
       <Button type="button" variant="link" size="xs" onClick={onRetry}>

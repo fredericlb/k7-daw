@@ -234,11 +234,11 @@ export function WaveformView({
       >
         {error ? (
           <div className="p-3 text-sm text-red-400">
-            waveform unavailable — {error}
+            {m["wave.unavailable"]({ error })}
           </div>
         ) : !wf ? (
           <div className="p-3 text-sm text-muted-foreground">
-            decoding audio…
+            {m["wave.decoding"]()}
           </div>
         ) : (
           // A relative wrapper so windows overlay by time-fraction; its width scales with zoom and the container scrolls.

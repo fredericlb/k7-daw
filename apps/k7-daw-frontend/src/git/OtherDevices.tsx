@@ -5,6 +5,7 @@
 import { Button } from "@studio/ui/button";
 import { Cloud, GitBranch } from "@studio/ui/icons";
 import { RowGroup } from "@studio/ui/row-group";
+import { SectionHeading } from "@studio/ui/section-heading";
 import { m } from "../paraglide/messages.js";
 import { useGitTransport } from "./GitContext";
 import { openClone } from "./gitPages";
@@ -75,7 +76,9 @@ export function OtherList({
   if (entries.length === 0) return null;
   return (
     <section aria-label={m["roam.title"]()} className="flex flex-col gap-2">
-      <h2 className="type-caps px-1 text-fg-3">{m["roam.title"]()}</h2>
+      <SectionHeading as="h2" className="px-1">
+        {m["roam.title"]()}
+      </SectionHeading>
       <RowGroup>
         {entries.map((e) => (
           <CloneRow

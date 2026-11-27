@@ -13,6 +13,7 @@ import {
   selBox,
 } from "@studio/k7-wasm/gesture";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { m } from "../paraglide/messages.js";
 import { useLatest } from "./useLatest";
 import { isTyping } from "./useWindowKey";
 
@@ -131,7 +132,7 @@ export function useGridCaret({
       const selecting = !!selRef.current;
       if (selecting && e.key === "Escape") {
         clearSelect();
-        onStatus?.("selection cancelled");
+        onStatus?.(m["grid.selectionCancelled"]());
         e.preventDefault();
         e.stopImmediatePropagation();
         return;

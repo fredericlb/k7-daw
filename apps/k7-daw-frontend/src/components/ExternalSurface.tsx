@@ -20,7 +20,8 @@ import type { Deck } from "@studio/k7-plugins/turntables/engine";
 import { surfacesUrl } from "@studio/project-shell/launch";
 import type { ProjectSurface } from "@studio/song-schema/yaml/surfaceFile";
 import { Button } from "@studio/ui/button";
-import { ChevronLeft, House, Loader2, Unplug } from "@studio/ui/icons";
+import { ChevronLeft, House, Unplug } from "@studio/ui/icons";
+import { Spinner } from "@studio/ui/spinner";
 import type { WebVideoProject } from "@studio/web-protocol";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { api, engines } from "../api";
@@ -243,7 +244,7 @@ export function ExternalSurface({
   if (!surfaces.length && !surface)
     return (
       <Centre>
-        <Loader2 className="h-5 w-5 animate-spin" />
+        <Spinner inherit />
       </Centre>
     );
 

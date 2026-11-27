@@ -6,6 +6,7 @@ import { EngineClient } from "@studio/engine-browser";
 import { bestEngine } from "@studio/engine-browser/choose";
 import { isReachable } from "@studio/engine-browser/probe";
 import { askConfirm } from "@studio/project-shell/ask";
+import { Row } from "@studio/ui/row-group";
 import { useEffect, useState } from "react";
 import { engines } from "../api";
 import { PairRequestCard } from "../pairing/PairRequestsPrompt";
@@ -13,7 +14,7 @@ import { usePairing } from "../pairing/usePairing";
 import { m } from "../paraglide/messages.js";
 import { getLocale } from "../paraglide/runtime.js";
 import type { RankedEngine } from "../types";
-import { Action, Row, Section } from "./Section";
+import { Action, Section } from "./Section";
 
 /** The engine this page reached over loopback, if any — the one on this machine — else the one k7 would pick. */
 function machineEngine(
@@ -98,18 +99,22 @@ export function PairedDevicesSection() {
       hint={m["pairing.settingsHint"]()}
     >
       {client === null ? (
-        <Row label={m["pairing.noEngine"]()} />
+        <Row>{m["pairing.noEngine"]()}</Row>
       ) : localOnly ? (
-        <Row label={m["pairing.localOnly"]()} />
+        <Row>{m["pairing.localOnly"]()}</Row>
       ) : !client || !connected ? (
         late ? (
-          <Row label={m["pairing.noAnswer"]()}>
-            <Action onClick={() => setAttempt((n) => n + 1)}>
-              {m["common.retry"]()}
-            </Action>
+          <Row
+            trailing={
+              <Action onClick={() => setAttempt((n) => n + 1)}>
+                {m["common.retry"]()}
+              </Action>
+            }
+          >
+            {m["pairing.noAnswer"]()}
           </Row>
         ) : (
-          <Row label={m["pairing.connecting"]()} />
+          <Row>{m["pairing.connecting"]()}</Row>
         )
       ) : (
         <>
@@ -119,24 +124,26 @@ export function PairedDevicesSection() {
             </div>
           ))}
           {devices.length === 0 ? (
-            <Row label={m["pairing.noDevices"]()} />
+            <Row>{m["pairing.noDevices"]()}</Row>
           ) : (
             devices.map((d) => (
               <Row
                 key={d.deviceId}
-                label={d.name}
                 detail={m["pairing.deviceDetail"]({
                   paired: when(d.created),
                   seen: when(d.lastSeen),
                 })}
+                trailing={
+                  <Action
+                    danger
+                    label={m["pairing.revokeNamed"]({ name: d.name })}
+                    onClick={() => void revoke(d)}
+                  >
+                    {m["pairing.revoke"]()}
+                  </Action>
+                }
               >
-                <Action
-                  danger
-                  label={m["pairing.revokeNamed"]({ name: d.name })}
-                  onClick={() => void revoke(d)}
-                >
-                  {m["pairing.revoke"]()}
-                </Action>
+                {d.name}
               </Row>
             ))
           )}

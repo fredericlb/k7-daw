@@ -26,7 +26,7 @@ Rules every picture verb shares (`verbs/picture.ts`):
 - **Containment.** `laneFile` accepts one path segment and resolves it to a picture lane's own file
   (`picture_lane_file` in `apps/k7-daw-wasm/song-edit/src/lane_files.rs`): `nodes/`, or a chain project's `tracks/`.
 - **Undo.** `put` calls `h.snapshot(abs)` before writing, so every verb is one journal entry.
-- **Writers.** All edits go through `apps/k7-daw-frontend/packages/song-schema/src/yaml/videoTrackFile.ts` and
+- **Writers.** All edits go through `apps/k7-daw-wasm/song-edit/src/picture_file.rs` and
   `apps/k7-daw-wasm/song-edit/src/track_file.rs`: surgical, by placement **index** (a ref may be
   placed twice; an activation has no ref), millisecond rounding. `splitVideoPlacementAt` inserts
   the tail right after the head (file order decides covering), keeps `fadeIn` on the head and

@@ -3,7 +3,8 @@
 // only ever holds its public line.
 
 import { Button } from "@studio/ui/button";
-import { Check, Copy, Loader2 } from "@studio/ui/icons";
+import { Check, Copy } from "@studio/ui/icons";
+import { Spinner } from "@studio/ui/spinner";
 import { useEffect, useRef, useState } from "react";
 import { m } from "../paraglide/messages.js";
 import { copyText } from "./copyText";
@@ -82,7 +83,7 @@ export function GitKey({ fail }: { fail: (message: string) => void }) {
         </>
       ) : (
         <p className="text-fg-2 type-secondary">
-          <Loader2 className="mr-1 inline size-3 animate-spin" />
+          <Spinner size="xs" inherit className="mr-1 inline" />
           {m["git.keyLoading"]()}
         </p>
       )}

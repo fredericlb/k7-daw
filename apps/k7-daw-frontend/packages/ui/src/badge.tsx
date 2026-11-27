@@ -11,7 +11,7 @@ const badgeVariants = cva(
       variant: {
         default: "bg-secondary text-muted-foreground tabular-nums",
         amber: "bg-amber/15 text-amber tabular-nums",
-        rec: "bg-destructive/15 text-destructive tabular-nums",
+        rec: "bg-error/15 text-error tabular-nums",
         tag: "border border-primary/35 bg-primary/20 font-semibold text-primary-text",
         count:
           "type-badge h-[22px] min-w-[22px] rounded-[11px] bg-primary px-1.5 py-0 text-primary-foreground tabular-nums",

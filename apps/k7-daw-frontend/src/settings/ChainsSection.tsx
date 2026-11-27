@@ -3,6 +3,7 @@
 // (`apps/k7-daw-backend/docs/engine/chains.md`). The choice is from the library's COLD chains only — a chain that
 // does not separate could never answer either question. See ../../docs/settings.md.
 
+import { INPUT_CLASS } from "@studio/ui/input";
 import type { ColdChainsReply } from "@studio/web-protocol";
 import { useEffect, useState } from "react";
 import { engines } from "../api";
@@ -12,7 +13,7 @@ import { m } from "../paraglide/messages.js";
 import { type AccountFiles, accountFiles } from "../projects/api";
 import { findAccountFiles } from "./accountFiles";
 import { type EngineChains, loadChains, saveChains } from "./engineChains";
-import { FIELD, Section } from "./Section";
+import { Section } from "./Section";
 
 type Which = "stems" | "instrumental";
 type Chain = ColdChainsReply["chains"][number];
@@ -69,7 +70,7 @@ function ChainPicker({
         value={value ?? ""}
         disabled={disabled}
         onChange={(e) => onChoose(e.target.value)}
-        className={FIELD}
+        className={INPUT_CLASS}
         aria-label={label}
       >
         <option value="">{none}</option>

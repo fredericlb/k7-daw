@@ -15,12 +15,12 @@ import {
   Folder,
   GitBranch,
   HardDrive,
-  Loader2,
   Plus,
   Search,
   ServerOff,
 } from "@studio/ui/icons";
 import { Input } from "@studio/ui/input";
+import { Loading } from "@studio/ui/spinner";
 import type { AccountWorkspace, RepoProject } from "@studio/web-protocol";
 import { byPeople, byPeoplePath } from "@studio/web-protocol/tree";
 import { useState } from "react";
@@ -279,8 +279,8 @@ export function RepoList({
 
       {lookingForFiles ? (
         // The file service boots after the page on a phone: its first silence is not a refusal (docs/projects.md).
-        <div className="type-secondary flex items-center gap-2 text-fg-2">
-          <Loader2 className="size-4 animate-spin" /> {m["common.loading"]()}
+        <div className="type-secondary text-fg-2">
+          <Loading label={m["common.loading"]()} />
         </div>
       ) : !hasFileService ? (
         // With no file service there is no list, and an empty one would read as a new account.
@@ -294,8 +294,8 @@ export function RepoList({
           })}
         </EmptyState>
       ) : workspaces.length === 0 && busy ? (
-        <div className="type-secondary flex items-center gap-2 text-fg-2">
-          <Loader2 className="size-4 animate-spin" /> {m["common.loading"]()}
+        <div className="type-secondary text-fg-2">
+          <Loading label={m["common.loading"]()} />
         </div>
       ) : workspaces.length === 0 ? (
         emptyState

@@ -8,8 +8,8 @@
 import type { ParamMeta } from "@studio/engine-protocol";
 import { alignTabs, reflowNarrow } from "@studio/panel-rules/layout-twins";
 import { FILE_PARAMS } from "@studio/song-schema/moduleTypes";
-import { Loader2 } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
+import { Loading } from "@studio/ui/spinner";
 import type { AutosaveStatus } from "@studio/ui-editor/autosave";
 import { YamlPane } from "@studio/ui-editor/yaml-pane";
 import type { PresetInfo } from "@studio/web-protocol";
@@ -322,7 +322,7 @@ export function ModuleScreen({
         </div>
       ) : content == null || !hints || !ui ? (
         <div className="flex flex-1 items-center justify-center text-sm text-muted-foreground">
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" /> loading…
+          <Loading label="loading…" />
         </div>
       ) : (
         <div className="flex min-h-0 flex-1">

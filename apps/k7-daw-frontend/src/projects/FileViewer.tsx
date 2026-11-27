@@ -2,7 +2,7 @@
 // writes; a project is edited open.
 // See ../../docs/projects.md § A workspace's files.
 
-import { Loader2 } from "@studio/ui/icons";
+import { Spinner } from "@studio/ui/spinner";
 import { useEffect, useState } from "react";
 import { m } from "../paraglide/messages.js";
 import type { TreeSource } from "./workspaceFiles";
@@ -58,10 +58,10 @@ export function FileViewer({
       <div className="min-h-0 flex-1 overflow-auto py-2 font-mono text-xs leading-5">
         {shown === null ? (
           <div className="flex items-center gap-2 p-4 text-muted-foreground">
-            <Loader2 className="h-4 w-4 animate-spin" />
+            <Spinner size="sm" inherit />
           </div>
         ) : shown.kind === "error" ? (
-          <div className="p-4 text-destructive">{shown.message}</div>
+          <div className="p-4 text-error">{shown.message}</div>
         ) : shown.kind === "binary" ? (
           <div className="p-4 text-muted-foreground">
             {m["repos.binaryFile"]()}

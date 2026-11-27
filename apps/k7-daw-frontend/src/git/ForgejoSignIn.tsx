@@ -2,7 +2,8 @@
 // What a reader gets wrong: polling goes on while this page is hidden, since the person is in the other tab; the front says each end once.
 
 import { Button, buttonVariants } from "@studio/ui/button";
-import { ExternalLink, Loader2 } from "@studio/ui/icons";
+import { ExternalLink } from "@studio/ui/icons";
+import { Spinner } from "@studio/ui/spinner";
 import { useEffect, useReducer, useRef, useState } from "react";
 import { m } from "../paraglide/messages.js";
 import { POLL_MS, signInAfter, startingSignIn } from "./forgejoState";
@@ -117,7 +118,7 @@ export function ForgejoSignIn({
           </a>
         )}
         <p className="text-fg-2 type-secondary" role="status">
-          <Loader2 className="mr-1 inline size-3 animate-spin" />
+          <Spinner size="xs" inherit className="mr-1 inline" />
           {m["git.fj.waiting"]({ server: server.name })}
         </p>
         <Button
@@ -132,7 +133,7 @@ export function ForgejoSignIn({
     );
   return (
     <p className="text-fg-2 type-secondary" role="status">
-      <Loader2 className="mr-1 inline size-3 animate-spin" />
+      <Spinner size="xs" inherit className="mr-1 inline" />
       {m["git.fj.starting"]({ server: server.name })}
     </p>
   );

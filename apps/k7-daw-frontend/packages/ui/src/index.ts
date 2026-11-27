@@ -6,8 +6,6 @@
 // package's export surface at once (type extraction, bundling for external
 // consumption) — nothing in the frontend imports from it directly.
 
-export * from "./app-header";
-export * from "./ask";
 export * from "./backdrop";
 export * from "./badge";
 export * from "./button";
@@ -20,18 +18,15 @@ export * from "./dialog";
 export * from "./dropdown-menu";
 export * from "./empty-state";
 export * from "./error-card";
-export * from "./field";
 export * from "./file-tree";
-export * from "./frediverse-mark";
-export * from "./hamburger-menu";
 export * from "./input";
 export * from "./knob";
-export * from "./label";
 export * from "./locale-picker";
 export * from "./picker";
 export * from "./popover";
 export * from "./progress";
 export * from "./row-group";
+export * from "./section-heading";
 export * from "./select";
 export * from "./side-panel";
 export * from "./sign-in-screen";
@@ -39,8 +34,5 @@ export * from "./spinner";
 export * from "./starfield";
 export * from "./switch";
 export * from "./tab-bar";
-export * from "./table";
 export * from "./tabs";
-export * from "./textarea";
-export * from "./timeline";
 export * from "./track-toggle";

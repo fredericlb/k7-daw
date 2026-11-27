@@ -2,7 +2,7 @@
 // What a reader gets wrong: there is no secret to type; the device's own key signs in and only its public line is shown.
 
 import { Button } from "@studio/ui/button";
-import { Loader2 } from "@studio/ui/icons";
+import { Spinner } from "@studio/ui/spinner";
 import type { ReactNode } from "react";
 import { ready } from "./connectState";
 import { RemoteFields } from "./RemoteFields";
@@ -54,7 +54,7 @@ export function OtherHostForm({
         </p>
       )}
       <Button type="submit" className="self-start" disabled={!ok}>
-        {busy && <Loader2 className="mr-1 size-3 animate-spin" />}
+        {busy && <Spinner size="xs" inherit className="mr-1" />}
         {busy ? step : submit}
       </Button>
     </form>
