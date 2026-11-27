@@ -7,8 +7,8 @@ import type { EngineClient } from "@studio/engine-browser";
 import type { PluginParamsStore } from "@studio/engine-browser/params";
 import type { EngineStore } from "@studio/engine-browser/store";
 import type { Deck } from "@studio/k7-plugins/turntables/engine";
+import { SURFACE_TYPES } from "@studio/k7-wasm/consts";
 import type { ProjectSurface } from "@studio/song-schema/yaml/surfaceFile";
-import { allSurfaceTypes } from "@studio/song-schema/yaml/surfaceRegistry";
 import type { WebVideoProject } from "@studio/web-protocol";
 import type { ReactNode } from "react";
 import type { CommandPrefs } from "./commandPrefs";
@@ -75,14 +75,13 @@ const panes = new Map<string, SurfacePaneContribution>();
 
 /** Contribute a surface's drawers. A builtin's name is not free, and a type the SCHEMA has never
  *  heard of is refused too: a drawer for a type no project can declare is a drawer drawn by
- *  nobody — the registry checks the type against the schema's own list, so the type is
- *  contributed first (a plugin's surface types), then the drawer. */
+ *  nobody — the type is checked against the schema's own list (`SURFACE_TYPES`). */
 export function registerSurfacePane(c: SurfacePaneContribution): void {
   if (panes.has(c.type))
     throw new Error(`surface type '${c.type}' already has a pane`);
-  if (!allSurfaceTypes().includes(c.type))
+  if (!(SURFACE_TYPES as readonly string[]).includes(c.type))
     throw new Error(
-      `surface type '${c.type}' is not registered — contribute it to the surface registry first`,
+      `surface type '${c.type}' is not one a project can declare`,
     );
   panes.set(c.type, c);
 }

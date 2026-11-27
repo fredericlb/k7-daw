@@ -4,7 +4,7 @@ Two long-running jobs that feed the DJ side: cutting a record or a clip into ste
 
 ## Stems: the vocabulary
 
-`apps/k7-daw-frontend/packages/song-schema/src/stems.ts` is the one definition three packages share:
+`apps/k7-daw-wasm/song-schema/src/stems.rs` is the one definition three packages share:
 
 - `STEMS = ["drums", "bass", "other", "vocals"]` **in the order the model returns them**; the output tensor carries no names, so the order is the knowledge.
 - `STEMS_DIR = "stems"`: outputs go in `stems/` beside the source, as `<stem>.wav` (`stemFile`). `INSTRUMENTAL` (`instrumental.wav`) sums every stem but vocals.
@@ -12,7 +12,7 @@ Two long-running jobs that feed the DJ side: cutting a record or a clip into ste
 - `STEM_PARAM = "Gain"`, `STEM_RANGE = [0, 2]`, `STEM_NEUTRAL = 1`: the desk knob drives the stem platter's own gain.
 - Node names: `stemLane`, `stemPlatter`, `deckPlatter`, `stemControl`, `stemLaneOf`, `turntableMembers`, `TURNTABLE_REF`.
 
-Tested by `apps/k7-daw-frontend/packages/song-schema/src/stems.test.ts`.
+Tested by the tests in `apps/k7-daw-wasm/song-schema/src/stems.rs`.
 
 ## Stems: who runs the cut
 

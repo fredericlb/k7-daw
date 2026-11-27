@@ -57,8 +57,17 @@ M3a moved 24 names (`moduleTypes` predicates but `splitPort`, `docExt`, `audioFi
 `@studio/k7-wasm/schema`, and generated the name constants of the module vocabulary (`consts.generated.ts`,
 from `song::modules::names`). The module is 3.55 MB raw, 1.09 MB gzip, 0.77 MB brotli. A call costs
 about a microsecond (`isDocFile` 0.8 µs, `valueAt` 1.2 µs, a thousand `beatsAtSources` over 40 markers 0.08 ms,
-desktop under load). Group (b) still holds `renderSettings`, `trackKind`, `fields` and `sugar`
-(M3b, M4b), and the `k7x` names (M3c).
+desktop under load). Group (b) still holds `fields` and `sugar` (M3b) and the `k7x` names (M3c).
+
+M4b moved the readers and rules of group (c) that are not writers: `records`, `stems`, `trackKind` (its label and kind),
+`aspect`, `renderSettings`, `seqWindow`, `projectTags`, `assetsForParam`, `moduleKeyFromPath`, `libraryRef` and
+`shaderUniformFor`, as six op families of `apps/k7-daw-wasm/k7-wasm/src/ops/` (`track`, `stems`, `records`, `picture`,
+`rules`, `module`), reached as `@studio/k7-wasm/track`, `/stems`, `/records`, `/picture`, `/rules` and `/module`. Their
+vocabularies (`STEMS`, `ASPECTS`, the export formats and qualities, `SURFACE_TYPES`, `TRACK_CATEGORIES`, `TRACK_PREFIXES`)
+are generated constants. The surface registry left whole: nothing registered a type, so the page reads `SURFACE_TYPES`.
+What no caller used left with its file (`aspectSize`, `normalizeTag`, `withTag`, `withoutTag`, `stemsComplete`, the
+turntable member table, the separation outputs, `orderTracks`, `trackCategory`, `reorderTracks`, `orderPosition`: Rust has
+each in `song::doc` and `verbs`). The module is 3.93 MB raw, 1.20 MB gzip, 0.83 MB brotli (3.73 and 1.15 before).
 
 ## Inventory
 
@@ -88,7 +97,7 @@ Target: one op family per crate area (`k7x.*`, `schema.*`, `fields.*`), M2 to M3
 
 - `song-schema/yaml/validate`: `validateFile`, `firstIssue` — the router over the per-file schemas, zod inside (M3b, built: `@studio/k7-wasm/validate`)
 - writers of a file's text: `yaml/videoTrackFile` (`listVideoPlacements`, `setVideoPlacementField`, `setVideoPlacementFieldAt`, `shiftVideoAnimationAt`), `yaml/assemblyFile` (`dropAssemblyParam`, `parseAssemblyTemplate`, `setAssemblyParam`), `yaml/sequenceFile` (`editSequence`, `sequenceData`), `yaml/mixFile` (`cueMarkers`, `parseMix`, `withMarkers`), `yaml/mixViewFile` (`parseMixView`), `yaml/chainFile` (`parseChain`), `yaml/chainSchema` (`isEndStep`, `itemsOf`), `yaml/moduleSchema` (`rackAddBind`, `rackAddBindAt`, `rackBindSymbol`), `playlist` (`appendPlaylistItem`, `movePlaylistItem`, `playlistStub`, `removePlaylistItem`), `libraryVersions` (`parseLibraryPins`, `pinnedVersion`, `stringifyLibraryPins`)
-- readers and rules: `records` (`audioFilesOf`, `recordFolder`, `recordMatches`, `recordName`, `recordPathOf`, `resolveRecords`), `stems` (`deckPlatter`, `stemControl`, `stemFile`, `stemLane`, `stemLaneOf`, `stemPlatter`), `seqWindow` (`seqWindowFromText`, `windowSpan`), `trackKind` (`trackKind`, `trackLabel`, `reorderTracks`†), `moduleTypes` (`assetsForParam`, `libraryRef`, `moduleKeyFromPath`, `shaderUniformFor`), `aspect` (`aspectOf`), `builtinParams` (`builtinPluginFor`), `placementId` (`placementStartOf`), `projectTags` (`projectTagsOf`), `renderSettings` (`parseVideoSettings`), `surfaceRegistry` (`allSurfaceTypes`, `surfaceTypeOf`†), `docExt` (`docPattern`)
+- readers and rules (M4b, built: everything but `builtinParams`, `placementId` and `docExt`'s, which the M3a ops answer; the writers are M4a): `records` (`audioFilesOf`, `recordFolder`, `recordMatches`, `recordName`, `recordPathOf`, `resolveRecords`), `stems` (`deckPlatter`, `stemControl`, `stemFile`, `stemLane`, `stemLaneOf`, `stemPlatter`), `seqWindow` (`seqWindowFromText`, `windowSpan`), `trackKind` (`trackKind`, `trackLabel`, `reorderTracks`†), `moduleTypes` (`assetsForParam`, `libraryRef`, `moduleKeyFromPath`, `shaderUniformFor`), `aspect` (`aspectOf`), `builtinParams` (`builtinPluginFor`), `placementId` (`placementStartOf`), `projectTags` (`projectTagsOf`), `renderSettings` (`parseVideoSettings`), `surfaceRegistry` (`allSurfaceTypes`, `surfaceTypeOf`†), `docExt` (`docPattern`)
 
 Target: written in Rust (`song-schema` for rules, `song-edit` for text-in, text-out writers), then
 reached as wasm ops (M3b, M4a, M4b). M4a built the writers: `@studio/k7-wasm/text` carries the video track, sequence, cue sheet, playlist, pins, assembly and chain reads, and `sugared.ts` and `sugar.ts` left with `sugarFor` (`text.sugar_expand`, `text.sugar_apply`); `rackAddBind*` stay in `moduleSchema.ts` with the widget schema, and `pinnedVersion` stays a lookup in `libraryVersions.ts` (`apps/k7-daw-frontend/packages/k7-wasm/docs/text.md`).
@@ -149,7 +158,7 @@ They move into the page's own packages with M5, since no Rust side shares them.
 | M3b | validation and completion: `file.validate`, `fields.at`, `fields.values`; the router ported to Rust over `song::files`; `validate.ts`, `fields.ts` and the schemas only they read leave song-schema; `zod` stays there until M4a/M4b move the readers that still use it | M2 | built | 6 |
 | M3c | k7x: `k7x.edit`, `k7x.data`, `k7x.print`, `k7x.outline`; ui-editor, ui-module-builder, panel-rules and the page move over; `@studio/k7x` deleted, its vectors frozen | M2 | built | 6 |
 | M4a | the text writers of group (c) in `song-edit` (video track, assembly, sequence, mix markers, playlist edits, library pins, chain reads), reached as `text.*` ops | M3a, M3c | built | 6 |
-| M4b | the readers and rules of group (c): `records`, `stems`, `seqWindow`, `trackKind`, `aspect`, `renderSettings`, `projectTags`, `surfaceRegistry`, the rest of `moduleTypes` | M3a | B | 4 |
+| M4b | the readers and rules of group (c): `records`, `stems`, `seqWindow`, `trackKind`, `aspect`, `renderSettings`, `projectTags`, `surfaceRegistry`, the rest of `moduleTypes` | M3a | B | 4, built |
 | M5 | `@studio/song-schema` deleted (group e moves into the page's packages); `song/docs`, `song/meta`, `song/samples`, `song-edit/docs`, `song-schema/docs` move into their crates if decision 3 says so | M4a, M4b | alone | 3 |
 
 Group A runs three builders on disjoint files once M2 has split the dispatch: M3a owns

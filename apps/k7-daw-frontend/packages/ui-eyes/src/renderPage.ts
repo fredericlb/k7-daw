@@ -3,10 +3,9 @@
 // nothing of accounts or projects: the job server hands it a scene whose URLs are its own, and it
 // takes the finished file. See docs/serverRender.md.
 
-import type {
-  ExportFormat,
-  ExportQuality,
-} from "@studio/song-schema/renderSettings";
+import { provideWasmBytes, wasmReady } from "@studio/k7-wasm/boot";
+import wasmBytes from "@studio/k7-wasm/module.wasm";
+import type { ExportFormat, ExportQuality } from "@studio/k7-wasm/picture";
 import { exportScene } from "./export";
 import type { VideoScene } from "./scene";
 
@@ -49,6 +48,9 @@ async function postFilm(buffer: ArrayBuffer, type: string): Promise<void> {
 }
 
 async function run(): Promise<void> {
+  provideWasmBytes(wasmBytes);
+  if (!(await wasmReady()))
+    throw new Error("the render page's WebAssembly module did not load");
   const job = (await (await fetch("job.json")).json()) as RenderJob;
   let audio: AudioBuffer | undefined;
   if (job.audio) {

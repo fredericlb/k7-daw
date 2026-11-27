@@ -16,6 +16,9 @@ pub enum TrackCategory {
     Other,
 }
 
+/// The categories' names, in the order their tracks are laid out.
+pub const TRACK_CATEGORIES: [&str; 7] = ["vox", "drums", "bass", "guitar", "keys", "synth", "other"];
+
 /// A needle and whether a word edge is required before it and after it (`\b`).
 type Word = (&'static str, bool, bool);
 

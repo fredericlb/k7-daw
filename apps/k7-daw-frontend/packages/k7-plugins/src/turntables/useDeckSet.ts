@@ -13,9 +13,9 @@ import {
 } from "@studio/engine-browser/params";
 import type { ProjectDoc } from "@studio/engine-protocol/project";
 import type { WebGraph } from "@studio/graph-model";
+import { STEMS, type Stem, stemControl } from "@studio/k7-wasm/stems";
 import { editMix, mixCues } from "@studio/k7-wasm/text";
 import { projectApi as api } from "@studio/project-shell/project";
-import { STEMS, type Stem, stemControl } from "@studio/song-schema/stems";
 import type { MixView as MixViewFile } from "@studio/song-schema/yaml/mixViewSchema";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { m } from "../paraglide/messages.js";

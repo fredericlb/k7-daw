@@ -1,9 +1,9 @@
 // trackIcons.tsx — the instrument glyph a track's two-letter NAME PREFIX asks for
-// (@studio/song-schema/trackKind owns that table; this is only the drawings). Qlementine
+// (@studio/k7-wasm/consts owns that table; this is only the drawings). Qlementine
 // Icons, inlined rather than fetched at runtime: twelve paths is a few KB against ~880
 // icons of JSON, and an inlined path can't flash in after the row has painted.
 
-import { trackKind } from "@studio/song-schema/trackKind";
+import { trackKind } from "@studio/k7-wasm/track";
 
 export interface TrackGlyph {
   vb: string;
@@ -66,7 +66,7 @@ const GLYPHS: Record<string, TrackGlyph> = {
   },
 };
 
-// prefix → glyph; the family and label live in @studio/song-schema/trackKind, and four are near-misses, Qlementine having no glyph for them.
+// prefix → glyph; the family and label live in @studio/k7-wasm/consts, and four are near-misses, Qlementine having no glyph for them.
 const GLYPH_FOR: Record<string, string> = {
   be: "bass-16",
   ba: "cello-16",

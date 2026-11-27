@@ -2,14 +2,14 @@
 // failures are kept apart on purpose: a set list that will not parse, and a line naming no file
 // the workspace holds. See ../../docs/setList.md.
 
-import { parsePlaylist } from "@studio/k7-wasm/schema";
 import {
-  type RecordDrag,
   recordFolder,
   recordName,
   recordPathOf,
   resolveRecords,
-} from "@studio/song-schema/records";
+} from "@studio/k7-wasm/records";
+import { parsePlaylist } from "@studio/k7-wasm/schema";
+import type { RecordDrag } from "@studio/song-schema/records";
 import { m } from "../paraglide/messages.js";
 
 /** One line of the set list: what the playlist named, and whether the workspace holds it. */

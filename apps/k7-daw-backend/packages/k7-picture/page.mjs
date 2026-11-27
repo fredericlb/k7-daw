@@ -17,6 +17,7 @@ const r = await build({
   bundle: true,
   format: "iife",
   platform: "browser",
+  loader: { ".wasm": "binary" },
   write: false,
   logLevel: "error",
 });

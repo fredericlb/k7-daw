@@ -14,6 +14,7 @@ const ALL = ["apps/k7-daw-engine/scripts/sccache.mjs", "rust-toolchain"];
 const BROWSER = [
   "apps/k7-daw-wasm/song/",
   "apps/k7-daw-wasm/song-schema/",
+  "apps/k7-daw-wasm/gesture/",
   "apps/k7-daw-wasm/k7-wasm/",
   "apps/k7-daw-wasm/k7x/",
   "apps/k7-daw-wasm/song-edit/",

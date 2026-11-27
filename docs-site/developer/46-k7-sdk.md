@@ -53,9 +53,9 @@ export const definePlugin = <T extends K7Plugin>(p: T): T => p;
    calls `registerVerb(spec, handler)`. `registerVerb` adds the spec to the catalogue (refusing a
    command word already there) and the handler to the dispatch (refusing a SID that already has
    one). A plugin may put its verb in a core family (`track.transcribe`) or under its own prefix.
-2. For each surface type, calls `registerSurfaceType`
-   (`apps/k7-daw-frontend/packages/song-schema/src/yaml/surfaceRegistry.ts`), which refuses a duplicate or a type with
-   no layout.
+
+The kinds of surface are closed: `SURFACE_TYPES` in `apps/k7-daw-wasm/song/src/views/surfaces.rs`, which the
+page reads as a generated constant; a plugin contributes a drawer for one, never a new type.
 
 `pluginOf(sid)` answers which plugin installed a SID (undefined for a built-in).
 

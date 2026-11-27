@@ -3,17 +3,16 @@
 // those files. The lines' rules are `@studio/song-schema/records`, shared with the DJ desk, which
 // resolves the same lines. See ../docs/playlists.md.
 
-import type { PlaylistItem } from "@studio/k7-wasm/types";
-import { mediaUrl } from "@studio/project-shell/fileApi";
 import {
-  packRecordDrag,
-  RECORD_DRAG_TYPE,
   type ResolvedRecord,
   recordFolder,
   recordMatches,
   recordName,
   resolveRecords,
-} from "@studio/song-schema/records";
+} from "@studio/k7-wasm/records";
+import type { PlaylistItem } from "@studio/k7-wasm/types";
+import { mediaUrl } from "@studio/project-shell/fileApi";
+import { packRecordDrag, RECORD_DRAG_TYPE } from "@studio/song-schema/records";
 import { Button } from "@studio/ui/button";
 import {
   ChevronDown,

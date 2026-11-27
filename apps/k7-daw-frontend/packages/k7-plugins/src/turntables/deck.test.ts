@@ -5,7 +5,7 @@ import {
   STEMS,
   stemLane,
   stemPlatter,
-} from "@studio/song-schema/stems";
+} from "@studio/k7-wasm/stems";
 import { describe, expect, it } from "vitest";
 import {
   deckDoc,

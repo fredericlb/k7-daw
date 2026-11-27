@@ -31,7 +31,7 @@ entry look as though something were missing.
 uses for "named exactly once". Duplicates are dropped on read rather than refused: two people merging
 their halves of a set should not have to resolve that by hand.
 
-The ref vocabulary itself is `records.ts` (`isRecordRef`) — a leaf, so a browser can hold it without a parser.
+The ref vocabulary itself is `is_record_ref` in `apps/k7-daw-wasm/song-edit/src/records.rs` (`isRecordRef` in `@studio/k7-wasm/records`), one rule for the page and the compile.
 
 ### Reading and writing it
 
