@@ -6,9 +6,10 @@ named by the running count; a press opens a bubble listing each process with its
 it is when it says so and how long it has run. With nothing running there is no spinner. What runs is
 asked about where the eye already is, at a glance, so it is a bubble and not a panel to open and close.
 
-An ended process moves to **Tasks & history**, under Ended, with a check or an alert and its failure
-(`components/ProcessesSection.tsx`): a failure has to stay readable after the spinner has gone, and a
-panel is where a list is read at leisure. It stays a few seconds, or until Clear.
+**An ending is a toast**, once, for a process this page saw running (`watchProcessEnds`, wired in
+`App`): "done" for a success, and for a failure an error toast that names why and waits to be
+dismissed, so the reason is still readable after the spinner has gone. One first seen already ended —
+a page opened after it — says nothing: it is not news. No list keeps ended work.
 
 ## Two sources, one list
 

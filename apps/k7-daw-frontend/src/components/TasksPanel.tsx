@@ -17,7 +17,6 @@ import { api } from "../api";
 import { useRevision } from "../hooks/useRevision";
 import { m } from "../paraglide/messages.js";
 import { projectDir } from "../projectPaths";
-import { ProcessesSection } from "./ProcessesSection";
 
 export function TasksPanel({
   project,
@@ -104,11 +103,12 @@ export function TasksPanel({
     if (ok) await run(`task remove ${n}`);
   };
 
-  const open = (tasks ?? []).filter((t) => !t.done).length;
+  // This project's tasks and the workspace-wide ones: a task pinned to another project is that project's business.
+  const shown = tasks?.filter((t) => !t.at || t.at.project === project) ?? null;
+  const open = (shown ?? []).filter((t) => !t.done).length;
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      <ProcessesSection />
       <p className="shrink-0 pb-2 font-mono text-[11px] text-muted-foreground">
         {TASKS_FILE}
         {open > 0 ? ` · ${m["tasks.openCount"]({ n: open })}` : ""}
@@ -192,15 +192,14 @@ export function TasksPanel({
 
       <div className="min-h-0 flex-1 overflow-auto px-1 py-1">
         {error && <p className="px-2 py-1 text-error text-xs">{error}</p>}
-        {tasks?.length === 0 && (
+        {shown?.length === 0 && (
           <p className="px-2 py-4 text-center text-xs text-muted-foreground">
             {m["tasks.empty"]()}
           </p>
         )}
-        {tasks?.map((t, i) => {
-          const n = i + 1;
-          // A pin into THIS song jumps the playhead; one into another song only says where.
-          const here = !!t.at && t.at.project === project;
+        {shown?.map((t) => {
+          // The verbs number the WHOLE file's tasks, the hidden ones included.
+          const n = (tasks ?? []).indexOf(t) + 1;
           return (
             <div
               key={`${t.line}:${t.text}`}
@@ -223,18 +222,11 @@ export function TasksPanel({
                 {t.at && (
                   <button
                     type="button"
-                    disabled={!here}
                     onClick={() => t.at && onSeek(t.at.timecode)}
-                    className="font-mono text-[11px] text-muted-foreground enabled:cursor-pointer enabled:text-primary-text enabled:hover:underline"
-                    title={
-                      here
-                        ? m["tasks.seek"]()
-                        : m["tasks.elsewhere"]({ project: t.at.project })
-                    }
+                    className="cursor-pointer font-mono text-[11px] text-primary-text hover:underline"
+                    title={m["tasks.seek"]()}
                   >
-                    {here
-                      ? t.at.timecode
-                      : `${t.at.project} @ ${t.at.timecode}`}
+                    {t.at.timecode}
                   </button>
                 )}
               </div>

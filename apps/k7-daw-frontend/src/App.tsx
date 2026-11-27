@@ -181,7 +181,7 @@ import { m } from "./paraglide/messages.js";
 import { type PendingEdit, pendingOf } from "./pendingEdits";
 import type { PendingNode } from "./pendingNode";
 import { resourceRows } from "./placeResource";
-import { setServiceProcesses } from "./processes";
+import { setServiceProcesses, watchProcessEnds } from "./processes";
 import { ENGINE_SETTINGS_ROUTE } from "./projects/api";
 import {
   type EditFocus,
@@ -2442,6 +2442,27 @@ export default function App({
     window.addEventListener("keydown", onKey, true);
     return () => window.removeEventListener("keydown", onKey, true);
   }, [commandsPage, historyDeps, undoConfirm]);
+
+  // A process this page saw running says how it ended, once, as a toast: no list keeps ended work (docs/processes.md).
+  useEffect(
+    () =>
+      watchProcessEnds((p) =>
+        showToast(
+          p.state === "failed"
+            ? {
+                message: p.detail
+                  ? m["processes.toastFailedWhy"]({
+                      label: p.label,
+                      why: p.detail,
+                    })
+                  : m["processes.toastFailed"]({ label: p.label }),
+                variant: "error",
+              }
+            : { message: m["processes.toastDone"]({ label: p.label }) },
+        ),
+      ),
+    [],
+  );
 
   // Two fingers double-tapped: undo; three: redo — the touch shell's Ctrl+Z and Ctrl+Y, on the same journal (multiTap.ts).
   useEffect(() => {

@@ -35,12 +35,14 @@ the tasks survive the app, and the app adds a heading only to a file it creates.
 Every action on it is a `task` command — `task add <text>`, `task mark <timecode> <text>` (the same,
 pinned to the open project), `task done <n>` (ticks or unticks), `task remove <n>` —
 (`apps/k7-daw-wasm/verbs/src/verbs/tasks.rs`), as every action in this shell is. A task is addressed by its
-NUMBER, its place in the list as the panel shows it, which is also what a person reading the panel
-would type. After each one the panel reads the file again rather than patching its own list: the file
+NUMBER, its place in `TODOS.md`, the whole file's list: the panel shows only part of it (below), so
+it counts each row's number in the file rather than in what it draws. After each one the panel reads the file again rather than patching its own list: the file
 is the truth, and it re-reads on the workspace's revision too, so an edit made elsewhere shows up.
 
-A task pinned to the OPEN project shows its timecode as a link that puts the playhead there; one pinned
-to another song shows where, and does nothing. **Attach timecode** is greyed with no song open.
+**The panel lists the open project's tasks and the workspace-wide ones**: a task pinned to another
+song is hidden, since it is that song's work and a list of everyone's pins buries the ones that are
+here. A task pinned to the open project shows its timecode as a link that puts the playhead there.
+**Attach timecode** is greyed with no song open.
 
 **The timeline flags them too.** Each task pinned to the open project is a small flag at the foot of
 the ruler, on its timecode — amber while open, faded once done — and hovering one (or tabbing to it)
@@ -78,9 +80,8 @@ The panel's first segment switches Tasks and History; History has its own three,
 journal), Workspace (the sync history) and Commits (git's list, offered only under git). One
 segment shows one list, since two stacked lists leave each half a panel high.
 
-## Ended processes sit above the tasks
+## Processes are not tasks
 
-An ended process, and a failed one first of all, is listed at the top of the Tasks segment
-(`ProcessesSection.tsx`), one kit row each with its outcome and its failure text; the segment draws
-nothing for them while none has ended. What still runs is the spinner's bubble at the app's top right
-(`RunningBubble.tsx`), so a process that failed is seen here and nowhere else.
+The panel lists no process. What runs is the spinner's bubble at the app's top right
+(`RunningBubble.tsx`), and an ending is a toast (docs/processes.md): a list of ended work is read once
+and then only grows, where a toast says it at the moment it matters and goes.

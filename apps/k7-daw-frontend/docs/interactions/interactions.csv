@@ -231,7 +231,7 @@ ID,Screen,Interaction,Mouse / trackpad,Keyboard,Touch,Devices,Not drawn,Area,Not
 07.05,07,Seek in the reference,click or drag the slider,arrows (written on key up),drag,T M D,FALSE,Arrange · Reference player and stems bar,
 07.06,07,Close the reference bar,click ✕,—,tap,T M D,FALSE,Arrange · Reference player and stems bar,
 07.07,07,Preview an imported clip,click play / stop on the row,—,tap,T M D,FALSE,Resources,
-08.01,08,Show running background processes,"click the spinner at the app's top right, there only while something runs (a read-only bubble: each process with how far it is and for how long)",Enter/Space on the button,tap,T M D,FALSE,Global (every screen),"ended work stays in Tasks & history under Ended, with its outcome and its failure"
+08.01,08,Show running background processes,"click the spinner at the app's top right, there only while something runs (a read-only bubble: each process with how far it is and for how long)",Enter/Space on the button,tap,T M D,FALSE,Global (every screen),"an ending is a toast, once: done, or failed with why (waits to be dismissed); no list keeps ended work"
 08.02,08,Add a task,"type in the line, click add",Enter,tap,T M D,FALSE,Tasks & history,
 08.03,08,Pin a new task to the playhead,tick the checkbox beside the line,Space,tap,T M D,FALSE,Tasks & history,
 08.04,08,Tick / untick a task,click its checkbox,Space,tap,T M D,FALSE,Tasks & history,

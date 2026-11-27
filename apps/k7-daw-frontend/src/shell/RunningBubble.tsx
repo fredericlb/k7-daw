@@ -1,13 +1,62 @@
 // RunningBubble.tsx — the spinner at the app's top right while something runs; a press opens a bubble listing what
-// runs, each with how far it is and for how long (ProcessesSection.tsx's rows). Nothing runs, nothing is drawn.
+// runs, each with how far it is and for how long. Nothing runs, nothing is drawn; an ending is a toast (docs/processes.md).
 
 import { Popover, PopoverContent, PopoverTrigger } from "@studio/ui/popover";
-import { RowGroup } from "@studio/ui/row-group";
+import { Progress } from "@studio/ui/progress";
+import { Row, RowGroup } from "@studio/ui/row-group";
 import { Spinner } from "@studio/ui/spinner";
-import { useSyncExternalStore } from "react";
-import { ProcessRow, useProcessClock } from "../components/ProcessesSection";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { m } from "../paraglide/messages.js";
-import { processesSnapshot, subscribeProcesses } from "../processes";
+import {
+  elapsedOf,
+  processesSnapshot,
+  runningCount,
+  type ShownProcess,
+  subscribeProcesses,
+} from "../processes";
+
+/** One running process: its line, how far when it says, and how long; the list holds nothing else. */
+function ProcessRow({ p, now }: { p: ShownProcess; now: number }) {
+  const pct = p.progress !== undefined ? Math.floor(p.progress * 100) : null;
+  const said = [
+    pct === null ? m["processes.running"]() : `${pct} %`,
+    p.detail,
+    elapsedOf(p, now),
+    p.local ? m["processes.here"]() : undefined,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+  return (
+    <div>
+      <Row detail={said} trailing={<Spinner />}>
+        <span className="type-mono-value" title={p.label}>
+          {p.label}
+        </span>
+      </Row>
+      {pct !== null ? (
+        <Progress
+          value={pct}
+          label={p.label}
+          className="mx-3.5 mb-2.5 w-auto"
+        />
+      ) : null}
+    </div>
+  );
+}
+
+/** The clock the rows' elapsed times read: a second's tick while something runs. */
+function useProcessClock(all: readonly ShownProcess[]): number {
+  const running = runningCount(all);
+  const [now, setNow] = useState(() => Date.now());
+  // biome-ignore lint/correctness/useExhaustiveDependencies: `all` restarts the clock when the list changes.
+  useEffect(() => {
+    setNow(Date.now());
+    if (!running) return;
+    const t = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(t);
+  }, [running, all]);
+  return now;
+}
 
 export function RunningBubble({ className }: { className?: string }) {
   const all = useSyncExternalStore(
