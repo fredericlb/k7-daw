@@ -37,6 +37,7 @@ export function useChainsCamera({
   flight,
   flightHalf,
   goal,
+  holdRowRef,
   hostRef,
   hostSize,
   kick,
@@ -62,6 +63,7 @@ export function useChainsCamera({
   flight: RefObject<Cam | null>;
   flightHalf: RefObject<number | undefined>;
   goal: RefObject<Cam>;
+  holdRowRef: RefObject<(c: Cam) => void>;
   hostRef: RefObject<HTMLDivElement | null>;
   hostSize: RefObject<{ w: number; h: number }>;
   kick: RefObject<() => void>;
@@ -128,6 +130,9 @@ export function useChainsCamera({
         Object.assign(g, { x: c.x, y: c.y });
         moving = moving || !near;
       }
+      // A row never walks off its ends, whichever gesture moved it.
+      holdRowRef.current(c);
+      holdRowRef.current(g);
       applyCam(worldRef.current, c);
       paintRef.current(); // the canvas is outside `.dgx-world`, so the transform misses it
       const next = lodFor(c.k);

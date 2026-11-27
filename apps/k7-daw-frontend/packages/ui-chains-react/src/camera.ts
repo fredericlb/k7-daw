@@ -56,6 +56,24 @@ export function frameOriginX(
   return spills ? (paneW * (1 - pad)) / 2 : (paneW - contentW) / 2;
 }
 
+// How far a row may be walked past its last card: the end of the lane, and a little air after it.
+export const ROW_TAIL = 30;
+
+/** A row's camera x: its first card no further right than the left edge, its last no further left than `tail` from the right — docs/camera.md. */
+export function clampRowX(
+  x: number,
+  k: number,
+  left: number,
+  right: number,
+  paneW: number,
+  margin: number,
+  tail = ROW_TAIL,
+): number {
+  const first = margin - left * k;
+  const last = paneW - tail - right * k;
+  return Math.max(Math.min(x, first), Math.min(last, first));
+}
+
 /** Zoom to `k` keeping the world point under (px, py) under it, on EVERY frame of a glide — docs/camera.md. */
 export function zoomAbout(cam: Cam, k: number, px: number, py: number): Cam {
   const f = k / cam.k;
