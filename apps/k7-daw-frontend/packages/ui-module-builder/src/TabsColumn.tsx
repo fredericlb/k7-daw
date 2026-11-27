@@ -65,7 +65,7 @@ export function TabsColumn({
   };
 
   return (
-    <div className="flex w-36 shrink-0 flex-col gap-0.5 border-r border-border p-1 text-xs">
+    <div className="flex w-36 shrink-0 flex-col gap-0.5 border-r border-hairline p-1 text-xs">
       {tabs.length > 0 && (
         <button
           type="button"
@@ -74,8 +74,8 @@ export function TabsColumn({
           className={cn(
             "rounded px-2 py-1 text-left italic",
             at === null
-              ? "bg-secondary text-foreground"
-              : "text-muted-foreground hover:text-foreground",
+              ? "bg-row text-fg-1"
+              : "text-fg-2 hover:text-fg-1",
           )}
         >
           Every tab
@@ -83,9 +83,9 @@ export function TabsColumn({
       )}
       {tabs.map((t, i) =>
         i === at ? (
-          <div key={t.name} className="space-y-0.5 rounded bg-secondary p-1">
+          <div key={t.name} className="space-y-0.5 rounded bg-row p-1">
             <input
-              className="w-full rounded border border-border bg-background px-1.5 py-0.5 text-xs text-foreground outline-none focus:border-primary"
+              className="w-full rounded border border-hairline bg-ground px-1.5 py-0.5 text-xs text-fg-1 outline-none focus:border-primary"
               value={draft ?? t.name}
               maxLength={TAB_NAME_MAX}
               disabled={disabled}
@@ -126,7 +126,7 @@ export function TabsColumn({
             key={t.name}
             type="button"
             onClick={() => onSelect(i)}
-            className="truncate rounded px-2 py-1 text-left text-muted-foreground hover:text-foreground"
+            className="truncate rounded px-2 py-1 text-left text-fg-2 hover:text-fg-1"
           >
             {t.name}
           </button>
@@ -141,7 +141,7 @@ export function TabsColumn({
             ? "Add a tab"
             : "Split the panel into tabs — what is on it becomes the first one"
         }
-        className="mt-1 flex items-center gap-1 rounded px-2 py-1 text-left text-muted-foreground hover:text-foreground disabled:opacity-50"
+        className="mt-1 flex items-center gap-1 rounded px-2 py-1 text-left text-fg-2 hover:text-fg-1 disabled:opacity-50"
       >
         <Plus className="h-3.5 w-3.5" /> {tabs.length ? "Tab" : "Add tabs"}
       </button>
@@ -166,7 +166,7 @@ function IconBtn({
       title={title}
       disabled={disabled}
       onClick={onClick}
-      className="rounded p-0.5 text-muted-foreground hover:text-foreground disabled:opacity-30"
+      className="rounded p-0.5 text-fg-2 hover:text-fg-1 disabled:opacity-30"
     >
       {children}
     </button>

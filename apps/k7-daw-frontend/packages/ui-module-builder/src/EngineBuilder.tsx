@@ -67,8 +67,8 @@ export function ModuleBuilder(props: Props) {
       className={cn(
         "rounded px-2 py-0.5 text-xs",
         on === id
-          ? "bg-secondary text-foreground"
-          : "text-muted-foreground hover:text-foreground",
+          ? "bg-row text-fg-1"
+          : "text-fg-2 hover:text-fg-1",
         dirty && on !== id && "opacity-50",
       )}
     >
@@ -78,8 +78,8 @@ export function ModuleBuilder(props: Props) {
 
   return (
     <div className="flex h-full min-h-0 flex-col">
-      <div className="flex shrink-0 items-center gap-1 border-b border-border px-2 py-1">
-        <span className="mr-1 text-[11px] text-muted-foreground">engine</span>
+      <div className="flex shrink-0 items-center gap-1 border-b border-hairline px-2 py-1">
+        <span className="mr-1 text-[11px] text-fg-2">engine</span>
         {list.engines.map((e) =>
           tab(
             e,
@@ -89,7 +89,7 @@ export function ModuleBuilder(props: Props) {
               : `${e} — its own panel, widgets and presets`,
           ),
         )}
-        <span className="mx-1 h-3 w-px bg-border" />
+        <span className="mx-1 h-3 w-px bg-hairline" />
         {tab(
           null,
           "module",

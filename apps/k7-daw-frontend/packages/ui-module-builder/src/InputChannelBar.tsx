@@ -51,10 +51,10 @@ export function InputChannelBar({
       : "no input";
 
   return (
-    <div className="flex shrink-0 flex-wrap items-center gap-2 border-t border-border bg-card/30 px-2 py-1">
-      <Mic className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+    <div className="flex shrink-0 flex-wrap items-center gap-2 border-t border-hairline bg-panel/30 px-2 py-1">
+      <Mic className="h-3.5 w-3.5 shrink-0 text-fg-2" />
       <span className="text-xs font-medium">Input</span>
-      <div className="flex overflow-hidden rounded border border-border">
+      <div className="flex overflow-hidden rounded border border-hairline">
         {([1, 2] as const).map((n) => (
           <button
             type="button"
@@ -64,8 +64,8 @@ export function InputChannelBar({
             className={cn(
               "px-2 py-0.5 text-[11px]",
               width === n
-                ? "bg-secondary text-foreground"
-                : "text-muted-foreground hover:text-foreground",
+                ? "bg-row text-fg-1"
+                : "text-fg-2 hover:text-fg-1",
               readOnly && "opacity-50",
             )}
           >
@@ -105,7 +105,7 @@ export function InputChannelBar({
               <span
                 className={cn(
                   "ml-auto shrink-0 text-[10px]",
-                  o.regroup ? "text-amber-500" : "text-muted-foreground",
+                  o.regroup ? "text-amber-500" : "text-fg-2",
                 )}
               >
                 {o.regroup
@@ -119,7 +119,7 @@ export function InputChannelBar({
         </DropdownMenuContent>
       </DropdownMenu>
       {devices.length === 0 ? (
-        <span className="truncate text-[10px] text-muted-foreground">
+        <span className="truncate text-[10px] text-fg-2">
           no interface answering — the engine lists the inputs
         </span>
       ) : offered.some((o) => o.regroup) ? (

@@ -296,7 +296,7 @@ export function ModuleScreen({
   });
 
   return (
-    <div className="flex h-full flex-col bg-background text-foreground">
+    <div className="flex h-full flex-col bg-ground text-fg-1">
       <BuilderHeader
         kind={kind}
         moduleName={moduleName}
@@ -321,15 +321,15 @@ export function ModuleScreen({
           couldn't open {path} — {error}
         </div>
       ) : content == null || !hints || !ui ? (
-        <div className="flex flex-1 items-center justify-center text-sm text-muted-foreground">
+        <div className="flex flex-1 items-center justify-center text-sm text-fg-2">
           <Loading label="loading…" />
         </div>
       ) : (
         <div className="flex min-h-0 flex-1">
           {/* Left column: the files on top, and under them the card they make. */}
-          <div className="flex min-h-0 w-1/2 shrink-0 flex-col border-r border-border">
+          <div className="flex min-h-0 w-1/2 shrink-0 flex-col border-r border-hairline">
             {/* Three files, one pane, so it says which of them you are typing into. */}
-            <div className="flex shrink-0 items-center gap-1 border-b border-border px-2 py-1">
+            <div className="flex shrink-0 items-center gap-1 border-b border-hairline px-2 py-1">
               {/* Each tab is named by its FILE: they are three files on disk, not three views of one. */}
               {paneTabs({
                 path,
@@ -355,8 +355,8 @@ export function ModuleScreen({
                   className={cn(
                     "rounded px-2 py-0.5 text-xs",
                     pane === id
-                      ? "bg-secondary text-foreground"
-                      : "text-muted-foreground hover:text-foreground",
+                      ? "bg-row text-fg-1"
+                      : "text-fg-2 hover:text-fg-1",
                     !ready && "opacity-50",
                   )}
                 >
@@ -365,7 +365,7 @@ export function ModuleScreen({
                 </button>
               ))}
               {sidecar && pane !== "module" && (
-                <span className="ml-auto truncate text-[11px] text-muted-foreground">
+                <span className="ml-auto truncate text-[11px] text-fg-2">
                   {sidecar.path}
                   {sidecar.exists ? "" : " (new)"}
                 </span>
@@ -424,7 +424,7 @@ export function ModuleScreen({
             )}
             {/* The bottom HALF: the node the panel becomes, beside the text that makes it — docs/builder.md. */}
             {renderPreview && (
-              <div className="h-1/2 min-h-0 shrink-0 grow-0 border-t border-border">
+              <div className="h-1/2 min-h-0 shrink-0 grow-0 border-t border-hairline">
                 {renderPreview({
                   ui,
                   params: paramValues,

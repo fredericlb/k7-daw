@@ -145,7 +145,7 @@ nothing.
 and the host's own controls. Stretched across a wide window they end up at opposite edges, the
 clocks far from the bar they read, and a long drag is a longer one for nothing. The bar itself — its
 background — still spans the window, and the close stays in its corner, where a bar's close is looked
-for. It draws no edge of its own: `bg-card` against the page's `bg-background` is what separates the
+for. It draws no edge of its own: `bg-panel` against the page's `bg-ground` is what separates the
 two, and a `border-t` that names no colour draws in `currentColor`, near white.
 
 ## The dock
