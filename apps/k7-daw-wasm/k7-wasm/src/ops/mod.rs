@@ -15,10 +15,10 @@ pub mod records;
 pub mod rules;
 pub mod schema;
 pub mod song;
+pub mod stems;
 pub mod text;
 pub mod text_desk;
 pub mod text_lane;
-pub mod stems;
 pub mod timecode;
 pub mod track;
 #[cfg(feature = "verbs")]

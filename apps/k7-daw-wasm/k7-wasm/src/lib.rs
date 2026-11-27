@@ -14,9 +14,9 @@ mod tests;
 mod tests_file;
 #[cfg(test)]
 mod tests_k7x;
+mod tests_rules;
 #[cfg(test)]
 mod tests_text;
-mod tests_rules;
 pub mod typed;
 pub mod typed_editors;
 pub mod typed_ticks;
