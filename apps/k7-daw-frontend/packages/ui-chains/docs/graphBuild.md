@@ -1144,20 +1144,19 @@ the caller decide there is nothing to frame yet.
 
 ## Zooming the graph
 
-`zoomGesture.ts` lives here rather than in the renderer because a wheel notch and a trackpad pinch
-cannot share one answer, and that is a decision with a right and a wrong result.
+A wheel notch and a trackpad pinch cannot share one answer, and that is a decision with a right and a
+wrong result (the rate itself is `ui-chains-react/src/camera.ts`'s, the pinch's the panes').
 
 A mouse wheel arrives as ONE event per detent with a delta in the hundreds, so `0.001` gives a
 comfortable ~10% a notch. A trackpad PINCH arrives as Ctrl+wheel, a stream of small continuous
 deltas dozens a second, where the same coefficient gives a fraction of a percent each — the "very
 slow" you feel with two fingers. Ten times the coefficient makes a pinch track the fingers and
-leaves the wheel as it was. The pinch delta is CLAMPED first (`WHEEL_CLAMP`) because browsers
-disagree about the units they report a pinch in, and one answering in hundreds would jump a decade
-in a single event.
+leaves the wheel as it was. The pinch delta is CLAMPED first because browsers disagree about the
+units they report a pinch in, and one answering in hundreds would jump a decade in a single event.
 
-`pinchFactor` measures a two-finger spread against the spread the gesture STARTED at, not the
-previous frame: a ratio of ratios accumulates rounding, so you would pinch out and back in without
-returning where you began. A zero or negative spread is not a gesture and answers 1.
+A two-finger spread is measured against the spread the gesture STARTED at (`usePinch`, in
+`@studio/ui-timeline/pinch`), not the previous frame: a ratio of ratios accumulates rounding, so you
+would pinch out and back in without returning where you began.
 
 ## The module builder's preview graph
 

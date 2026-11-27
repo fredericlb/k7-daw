@@ -28,6 +28,13 @@ cost a real failure:
 A release on a gesture that only ever showed something — a vinyl let go, a held effect button —
 is the same act as a cancel, and passes one function for both.
 
+## From an element: `usePointerDrag`
+
+`usePointerDrag({ onStart, onMove, onEnd, onCancel })` returns the `onPointerDown` for the element that
+starts the gesture, with `followPointer` under it, so a knob or a plot gets all three ends for free.
+`onStart` may return `false` to refuse the press; the handlers always run as of the latest render. A
+cancelled gesture undoes what it showed: the kit `Knob` is told its starting value and commits nothing.
+
 ## What does not go through it
 
 A gesture that captures the pointer on its own element (`setPointerCapture`) and listens there

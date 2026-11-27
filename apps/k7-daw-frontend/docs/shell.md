@@ -640,8 +640,10 @@ its `popin` condition. Two things fall out of it, both deliberate:
 Three things deliberately do NOT take part. The **pickers** (module, asset — both `TreePicker`) and the
 **context menu** listen in the *capture* phase and swallow the key, so the shell never sees it. The
 **settings PAGE and the module builder** own the surface they are on: the listener returns early. And
-**`AudioClipPanel`** keeps Escape for stopping a rolling take, which is neither a popin nor a slot but a
-transport action.
+A **layer** is the exception that proves the rule: `useEscapeLayer(active, onEscape)` registers the innermost
+rungs — a drawn selection (the timeline's and each clip grid's), a clip in hand, a span on the takes view,
+and `AudioClipPanel`'s rolling take, which Escape stops — on this same stack, so the shell resolves the key to
+the topmost one and typing already stands the shell aside.
 
 The **docked panels** are deliberately not in that list: a docked panel leaves the panes on
 screen, so the keys that drive them have to keep working — Space while you watch a level on the I/O tab

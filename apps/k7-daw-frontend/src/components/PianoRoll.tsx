@@ -505,8 +505,6 @@ export function PianoRoll({
     onLanePointerDown,
     onNoteMenu,
     onNotePointerDown,
-    onNotePointerMove,
-    endVDrag,
   } = useRollGestures({
     mode,
     grid,
@@ -569,24 +567,12 @@ export function PianoRoll({
     [canVel, canRange, canPitch],
   );
   // Stable handlers over the gestures' latest closures, so a memoised note is not re-rendered by a new function.
-  const gestures = useRef({
-    onNotePointerDown,
-    onNoteMenu,
-    onNotePointerMove,
-    endVDrag,
-  });
-  gestures.current = {
-    onNotePointerDown,
-    onNoteMenu,
-    onNotePointerMove,
-    endVDrag,
-  };
+  const gestures = useRef({ onNotePointerDown, onNoteMenu });
+  gestures.current = { onNotePointerDown, onNoteMenu };
   const noteHandlers = useMemo<RollNoteHandlers>(
     () => ({
       down: (e, n, grip) => gestures.current.onNotePointerDown(e, n, grip),
       menu: (e, n) => gestures.current.onNoteMenu(e, n),
-      move: (e, top) => gestures.current.onNotePointerMove(e, top),
-      end: () => gestures.current.endVDrag(),
     }),
     [],
   );
