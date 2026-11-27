@@ -3,9 +3,6 @@
 // order is what settles them, so most of this file is those pairs pinned in place.
 
 import { stringify } from "@studio/k7-wasm/k7x";
-import { validatePanel } from "@studio/k7-wasm/validate";
-import { LAYOUT_MAX, twinIssues } from "@studio/panel-rules/layout-twins";
-import { describe, expect, it } from "vitest";
 import {
   type AutoParam,
   autoOrganize,
@@ -14,7 +11,11 @@ import {
   groupParams,
   isBlend,
   isPlumbing,
-} from "./autoLayout";
+  LAYOUT_MAX,
+  twinIssues,
+} from "@studio/k7-wasm/panel";
+import { validatePanel } from "@studio/k7-wasm/validate";
+import { describe, expect, it } from "vitest";
 import type { ModuleUI, Widget } from "./moduleUi";
 
 /** Does the Rust panel reader accept this panel? */

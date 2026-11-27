@@ -65,7 +65,7 @@ milestone ends with `bash scripts/agent/gate.sh --milestone`; the hours are agen
 | **M3c** (done) git rules and media bytes | gitState, commitState, connectState, forgejoState, gitLock, gitPageTabs, mergeState, saveAct, githubState and roamState rules; serde structs for the git routes, then their types generated; webmDuration, trimGate, spectrumColour | 1,000 | git-rules (new, `apps/k7-daw-wasm`), k7-git, k7-front, waveform, k7-wasm | decision 5 | 11 |
 | **M4a** reads on the doc | takes, rackLit, noteSpans, videoSpans, activity, clipLoop, clipInstances, clipNames, rows, timelineView, mixerStrips, gainTrim, mastering, midiIn, laneInput, rackFor, graphNotes, templateGraph, headphonesHint; the hooks' and pickers' doc reads, one mute/solo rule, tapTempo, projectName, projectKind; `engine-protocol/project.ts` and `timelineTypes.ts` generated, `build.ts` moved | 2,800 | song crate, k7-file-service | rust-song-twins merged | 16 |
 | **M4b** buffer text and paths | bufferReads, clipWindowText, sliceSymbols, clipFiles, timelineDrop, rackBuilder, presetOrder, videoTake, editorPaths, projectPaths, localTargets, openInEditor, sequenceEdit, moduleBehind, scalarField, curveDraft, clipboard; the editor's cursor scan, entity values and preview triggers; noteGrid's notes | 1,500 | song-edit, song-schema, k7x | rust-song-twins merged | 10 |
-| **M4c** panels and AI organize | layoutTwins, groupGeometry, autoLayout, gridCells, panelTabs, widgetClipboard, widgetKinds, useParamRows, moduleUi, panelWrite, panelText, checkLayouts; the AI loop to a backend route | 2,700 | song `modules/ui`, k7-front `routes/ai` | rust-song-twins merged; decision 3 | 11 |
+| **M4c** (built) panels and AI organize | layoutTwins, groupGeometry, autoLayout, gridCells, panelTabs, widgetClipboard, widgetKinds, useParamRows, moduleUi, panelWrite, panelText, checkLayouts; the AI loop to a backend route (see "M4c, as built") | 2,860 (415 of tests) | song `modules/ui`, k7-front `routes/ai` | rust-song-twins merged; decision 3 | 11 |
 | **M5a** DJ desk | deck, metronome, beats, grid, loop, mapping, controls, mixBindings, mixView, setList, useDeckSet's arithmetic, put-on; deckVocabulary generated | 2,100 | new crate `apps/k7-daw-wasm/turntables` | M2a (bindings), M4a | 11 |
 | **M5b** (built) graph layout | graphLayout (the only dagre importer) in the `chains` crate, `graph.layout` op; `pendingNode`, `trackPanelLayout` and the screens' shaping stay (see "M5b, as built") | 440 | chains crate + rust-sugiyama (decision 2) | M2a | 5 |
 | **M5c** (done) web-protocol's rest | workspace, machine, playlists, resources and cameras types generated; the project address grammar of `projects.ts` | 1,100 | k7-file-service, k7-front | M1b | 8 |
@@ -108,6 +108,23 @@ a real grade. The old TypeScript tests became `eyes/tests/*.rs` with their input
 verbs branch merges, M3c meanwhile (it waits on nothing but decision 5). Wave 4: M4a, M4b, M4c
 once the song twins merge. Wave 5: M5a, M5b, M5c. About 155 agent-hours of building, five waves,
 plus one review per milestone.
+
+**M4c, as built.** The panel's rules are the song crate's `modules/ui` (`apps/k7-daw-wasm/song/src/modules/ui`): `geometry` (groups, cells,
+the two layouts), `edit` (tabs, clipboard, retype), `auto` (the proposal from a parameter list, its pattern table matched by `rx`, a 150-line matcher
+for the few JavaScript regular expressions it keeps as written), `write` (a panel read from and printed to its k7x text, the fewest edits, a widget a
+line), `rows` (the union of a module's params), `check` (`lint:layouts`) and the AI organize files `ai_prompt`, `ai_answer`, `ai_check`, `ai_script`.
+They are reached through the `panel.*` ops and `@studio/k7-wasm/panel`, a panel travelling as loose JSON. Gone: `groupGeometry`, `layoutTwins`,
+`panelText`, `gridCells`, `panelTabs`, `autoLayout`, `panelWrite`, the panel half of `moduleUi`, the union of `useParamRows`, `checkLayouts`' rules, the
+retype, bindable and ranged rules of `widgetKinds`, the cut, copy and paste of `widgetClipboard` (2,860 lines of TypeScript, 415 of them tests; 5,400
+of Rust, 1,100 of them tests, 155 of them the model's prompt). The AI loop is `POST /api/ai/organize` (`routes/ai/organize.rs`, decision 3):
+`aiLoop`, `aiRequest`, `aiAnswer`, `aiOrganize`, `aiPrompt`, the `/organize/turn` route and `zod` in `panel-rules` are gone, the package keeps the
+reader of the run's stream. What stays TypeScript: the palette and icons (`widgetKinds`), the held clip, the file's other fields in `moduleUi` (M4a's),
+the collator that orders the rows, and the browser's compile of `widgets.js`. Parity: the old TypeScript against the ops on the 250 library panels and
+1,500 generated ones, 764,000 comparisons in all (every rule of geometry, tabs, clipboard, retype and auto layout; 1,975 writes of a `ui.k7x` and 1,975 of a
+module's `ui(…)` block after one to three edits, byte for byte; 1,204 param-row unions; 1,500 AI proposals judged, 1,250 answers read, 400 prompts built), and the
+sixteen recorded cases of `organize-vectors.json` replayed through a whole front (the same requests to Claude, progress lines and end). `lint:layouts` prints
+the same on the 250 panels and on 250 mutated ones (156 with findings). Two differences on purpose: the host reads `widgets.js`' strings, comments and brackets
+(it has no JavaScript engine; the page still compiles it where the panel lands), and a refused request says its own sentence, not zod's.
 
 **M2a, first part as built.** The crate `apps/k7-daw-wasm/chains` (no dependency but serde, serde_json and
 indexmap) and `@studio/k7-wasm/chains` carry `widgetValue`, `subgraph`, `bindings` (with `stepsByModule`,

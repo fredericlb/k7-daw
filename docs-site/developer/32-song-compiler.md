@@ -64,7 +64,7 @@ File-valued params and a `base:` named by the child are re-resolved against the 
 folders, nearest first (`withInheritedFiles`, `basePreset.ts`, `libraryFiles.ts`).
 
 Panels come from the `ui.k7x` beside each module, attached by ref in `applyUiLibrary`
-(`apps/k7-daw-wasm/song-edit/src/loader.rs`); `apps/k7-daw-wasm/song/src/modules/ui.rs` holds the panel lookup helpers.
+(`apps/k7-daw-wasm/song-edit/src/loader.rs`); `apps/k7-daw-wasm/song/src/modules/ui/mod.rs` holds the panel lookup helpers.
 
 ## Lanes
 

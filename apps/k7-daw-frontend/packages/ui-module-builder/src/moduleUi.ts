@@ -1,13 +1,8 @@
-// moduleUi.ts — the bridge between a module file's k7x text and the visual widget editor:
-// read its `ui(…)` block into a model, write an edited model back, and resolve `extends` so
-// "edit the base module" finds the right file. Runs in the BROWSER (the grid edits the
-// editor's buffer) and asks the loader's own Rust reader, so the grid can't offer a widget
-// the file would be refused for. Writes edit the document value by value (panelWrite.ts).
+// moduleUi.ts — the bridge between a module file's k7x text and the visual widget editor: read its `ui(…)` block into a model, write an edited model back.
+// The panel's reading and writing are Rust's (`@studio/k7-wasm/panel`); what stays here is the file's other fields, read off a parsed document.
+// A reader would get wrong that `extends` is only a reference: "edit the base module" resolves it to the base's file elsewhere.
 
-import type {
-  WebModuleUI as ModuleUI,
-  WebWidget as Widget,
-} from "@studio/graph-model";
+import type { WebModuleUI as ModuleUI } from "@studio/graph-model";
 import { panelWidgets } from "@studio/graph-model/panel";
 import {
   DEFAULT_MODULE_STATUS,
@@ -15,10 +10,13 @@ import {
   META_NS,
   type MODULE_STATUSES,
 } from "@studio/k7-wasm/consts";
-import { K7Document, type K7Scope, stringify } from "@studio/k7-wasm/k7x";
+import { K7Document, type K7Scope } from "@studio/k7-wasm/k7x";
+import {
+  readParams as readParamsOp,
+  readUi as readUiOp,
+  writeUi as writeUiOp,
+} from "@studio/k7-wasm/panel";
 import { moduleStatusOf } from "@studio/k7-wasm/schema";
-import { validatePanel } from "@studio/k7-wasm/validate";
-import { mergeLayout, panelSource, writePanelFile } from "./panelWrite";
 
 /** How a module asks the completions to treat it: the words `status:` may say. */
 export type ModuleStatus = (typeof MODULE_STATUSES)[number];
@@ -37,9 +35,6 @@ export function hasLcd(ui: ModuleUI | null): boolean {
 
 /** A fresh, empty UI for a file that has none yet — small enough to see the whole grid. */
 export const EMPTY_UI: ModuleUI = { cols: 4, rows: 2, widgets: {} };
-
-/** How many cells a knob takes in an AUTO-ORGANISED panel, and only there — see docs/builder.md. */
-export const KNOB_SPAN = 2;
 
 /** A module file's k7x document. */
 export type ModuleDoc = K7Document;
@@ -62,193 +57,42 @@ function editText(fileText: string, edit: (doc: K7Scope) => void): string {
   return doc.toString();
 }
 
-/** The `ui(…)` block validated, or null. */
-function parseUi(fileText: string): ModuleUI | null {
-  const raw = docOf(fileText)?.getIn(["ui"]);
-  if (raw === undefined || raw === null) return null;
-  return checkedUi(raw as Record<string, unknown>);
-}
-
-/** The panel the Rust reader accepts, cut down to the keys a panel has; null when it refuses it or the keys do not print. */
-function checkedUi(raw: Record<string, unknown>): ModuleUI | null {
-  const ui = {
-    cols: raw.cols,
-    rows: raw.rows,
-    widgets: raw.widgets,
-    ...(raw.tabs !== undefined ? { tabs: raw.tabs } : {}),
-    ...(raw.vertical !== undefined ? { vertical: raw.vertical } : {}),
-  };
-  try {
-    return validatePanel(stringify(ui)).ok ? (ui as ModuleUI) : null;
-  } catch {
-    return null;
-  }
-}
-
 /** The authored `ui(…)` block, or an empty grid when there is none this can read. */
 export function readUi(fileText: string): ModuleUI {
-  return parseUi(fileText) ?? { ...EMPTY_UI, widgets: {} };
+  return readUiOp(fileText).ui ?? { ...EMPTY_UI, widgets: {} };
 }
 
 /** Whether the `ui(…)` block round-trips; when false the right pane warns rather than misreading it. */
 export function hasParsableUi(fileText: string): boolean {
-  return parseUi(fileText) !== null;
+  return readUiOp(fileText).ui !== null;
 }
 
 /** True only when a `ui(…)` block is PRESENT and unreadable; absence is not malformed. */
 export function hasMalformedUi(fileText: string): boolean {
-  const doc = docOf(fileText);
-  if (!doc) return false; // the file doesn't parse at all; that is the code editor's news
-  const raw = doc.getIn(["ui"]);
-  return raw !== undefined && raw !== null && parseUi(fileText) === null;
+  return readUiOp(fileText).malformed;
 }
 
 /** The `params(…)` block as name -> value as TEXT, never numbers — see docs/builder.md. */
-export function readParams(fileText: string): Record<string, string> {
-  const doc = docOf(fileText);
-  const params = doc?.getNode(["params"]);
-  if (!doc || params?.kind !== "map") return {};
-  const out: Record<string, string> = {};
-  for (const { key, value } of params.entries) {
-    if (value.kind !== "scalar") continue;
-    // A string as the text it holds, anything else as it is written: `1.0` stays `1.0`.
-    out[key] =
-      typeof value.value === "string"
-        ? value.value
-        : (doc.getSource(["params", key]) ?? "");
-  }
-  return out;
-}
-
-// A widget as MINIMAL source: drop defaults and empty optionals, so the block stays as terse as a hand-written one.
-function widgetToPlain(w: Widget): Record<string, unknown> {
-  const isLabel = w.type === "label";
-  const isWaveform = w.type === "waveform";
-  const isLcd = w.type === "lcdscreen";
-  const isGroup = w.type === "group";
-  const isDropdown = w.type === "dropdown";
-  const isRanged =
-    w.type === "knob" ||
-    w.type === "slider" ||
-    w.type === "fader" ||
-    w.type === "number";
-  return {
-    type: w.type,
-    col: w.col,
-    row: w.row,
-    colSpan: w.colSpan && w.colSpan > 1 ? w.colSpan : undefined,
-    rowSpan: w.rowSpan && w.rowSpan > 1 ? w.rowSpan : undefined,
-    label: w.label || undefined,
-    text: isLabel ? w.text || undefined : undefined,
-    bind: !isLabel && !isWaveform && !isLcd ? w.bind || undefined : undefined,
-    // Range fields belong to the NUMERIC kinds only: a `min` on a toggle fails to load — docs/builder.md.
-    min: isRanged ? w.min : undefined,
-    max: isRanged ? w.max : undefined,
-    step: isRanged ? w.step : undefined,
-    curve: isRanged ? w.curve : undefined,
-    hidden: w.hidden ? true : undefined,
-    source: isWaveform ? (w.source ?? "output") : undefined,
-    // A dropdown's settings, written out in full: the module must draw the same with no engine to re-fetch them.
-    options: isDropdown && w.options?.length ? w.options : undefined,
-    // …or the library its choices come from. Both are written when both are set: the file says what the author put.
-    library: isDropdown ? w.library || undefined : undefined,
-    color: isGroup ? w.color || undefined : undefined,
-    // Written only on a group that binds: without a switch there is nothing to read backwards.
-    invert: isGroup && w.bind && w.invert ? true : undefined,
-    pair: w.type === "knob" ? w.pair || undefined : undefined,
-  };
-}
-
-/** Drop the `undefined` entries, recursively — they are "not written", not "written null". */
-function prune(value: unknown): unknown {
-  if (Array.isArray(value)) return value.map(prune);
-  if (value && typeof value === "object") {
-    const out: Record<string, unknown> = {};
-    for (const [k, v] of Object.entries(value as Record<string, unknown>))
-      if (v !== undefined) out[k] = prune(v);
-    return out;
-  }
-  return value;
-}
-
-const plainWidgets = (ws: Record<string, Widget>): Record<string, unknown> =>
-  Object.fromEntries(
-    Object.entries(ws).map(([id, w]) => [id, widgetToPlain(w)]),
-  );
-
-/** A panel as the plain data its file holds, minimal and pruned. */
-export function uiToPlain(ui: ModuleUI): Record<string, unknown> {
-  return prune({
-    cols: ui.cols,
-    rows: ui.rows,
-    widgets: plainWidgets(ui.widgets),
-    // Written only when there ARE tabs: a one-page panel has no list, the second tab is what makes one.
-    tabs: ui.tabs?.length
-      ? ui.tabs.map((t) => ({ name: t.name, widgets: plainWidgets(t.widgets) }))
-      : undefined,
-    // The narrow twin, written the same way (layouts.md).
-    vertical: ui.vertical
-      ? {
-          cols: ui.vertical.cols,
-          rows: ui.vertical.rows,
-          widgets: plainWidgets(ui.vertical.widgets),
-          tabs: ui.vertical.tabs?.length
-            ? ui.vertical.tabs.map((t) => ({
-                name: t.name,
-                widgets: plainWidgets(t.widgets),
-              }))
-            : undefined,
-        }
-      : undefined,
-  }) as Record<string, unknown>;
-}
+export const readParams = readParamsOp;
 
 /** Rewrite the module's `ui(…)` block from the model, in place where it can be, every other line untouched. */
-export function writeUiIn(doc: K7Scope, ui: ModuleUI): void {
-  const plain = uiToPlain(ui);
-  if (!mergeLayout(doc, ["ui"], plain))
-    doc.setSourceIn(["ui"], panelSource(plain));
-}
-
-/** `writeUiIn` over a buffer's text. */
-export function writeUi(fileText: string, ui: ModuleUI): string {
-  return editText(fileText, (doc) => writeUiIn(doc, ui));
-}
+export const writeUi = (fileText: string, ui: ModuleUI): string =>
+  writeUiOp(fileText, ui);
 
 // --- `ui.k7x` panel files ------------------------------------------------------
 
-// The same model at the TOP level of its own file, so it needs its own functions — see docs/builder.md.
-
-/** The panel a `ui.k7x` declares, or null when the text isn't one this can round-trip. */
-function parseUiFileText(text: string): ModuleUI | null {
-  const raw = docOf(text)?.toJS();
-  if (!raw) return null;
-  return checkedUi(raw);
-}
-
 /** A `ui.k7x`'s panel, or an empty grid when it has none this can read. */
 export function readUiFile(text: string): ModuleUI {
-  return parseUiFileText(text) ?? { ...EMPTY_UI, widgets: {} };
+  return readUiOp(text, true).ui ?? { ...EMPTY_UI, widgets: {} };
 }
 
 /** True only when the file HAS a panel this can't read — an empty file is not malformed. */
-export function hasMalformedUiFile(text: string): boolean {
-  const doc = docOf(text);
-  if (!doc) return false; // doesn't parse at all; that's the code editor's news
-  const raw = doc.toJS();
-  const stated = raw.cols !== undefined || raw.widgets !== undefined;
-  return stated && parseUiFileText(text) === null;
-}
+export const hasMalformedUiFile = (text: string): boolean =>
+  readUiOp(text, true).malformed;
 
 /** Rewrite a `ui.k7x`'s grid statement by statement, so its header comment survives — see docs/builder.md. */
-export function writeUiFileIn(doc: K7Scope, ui: ModuleUI): void {
-  writePanelFile(doc, uiToPlain(ui));
-}
-
-/** `writeUiFileIn` over a buffer's text. */
-export function writeUiFile(text: string, ui: ModuleUI): string {
-  return editText(text, (doc) => writeUiFileIn(doc, ui));
-}
+export const writeUiFile = (text: string, ui: ModuleUI): string =>
+  writeUiOp(text, ui, true);
 
 /** The `plugin(…)` block a module declares, off the FILE and SHALLOW on purpose — see docs/builder.md. */
 export function readPlugin(

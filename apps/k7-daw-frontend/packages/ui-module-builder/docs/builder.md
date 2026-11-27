@@ -310,7 +310,7 @@ landing point, a folder-backed dropdown's options — reads the panel's top leve
 so a group holding its controls would hide them from all of it
 (`apps/k7-daw-wasm/song-schema/docs/moduleFile.md`).
 
-What the grid does about it, in `apps/k7-daw-frontend/packages/panel-rules/src/groupGeometry.ts` (the one rule, shared with AI organize's
+What the grid does about it, in `apps/k7-daw-wasm/song/src/modules/ui/geometry.rs` (the one rule, shared with AI organize's
 check) and `src/WidgetGridEditor.tsx`:
 
 - **Moving a group carries what it framed when the drag started**, so a section moves as one
