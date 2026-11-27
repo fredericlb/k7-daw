@@ -66,7 +66,7 @@ read answers `{}` for a root that fails its schema, and a writer acting on that 
 rewrite a newer file with what this build understood of it. The command layer refuses every verb on
 such a project for the same reason, since several verbs write the root without reading it first.
 
-The editor's check (`validateFile`) answers the same message as the one issue of a project root
+The editor's check (`file.validate`) answers the same message as the one issue of a project root
 file, so the autosave holds the buffer back with the reason rather than a schema error.
 
 ## On the wire

@@ -4,7 +4,7 @@
 // A row reads the catalogue's sentence in the app's language, with the command's NAME minus the
 // word naming what was clicked beside it as the verb. See docs/contextMenu.md.
 
-import { timelineLaneOf } from "@studio/song-schema/timelineLane";
+import { timelineLaneOf } from "@studio/k7-wasm/schema";
 import { type CommandPrefs, inMenu } from "./commandPrefs";
 import type { ResourceDropEvent } from "./hooks/useTimelineDrop";
 import { m } from "./paraglide/messages.js";

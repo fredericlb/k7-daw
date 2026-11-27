@@ -3,7 +3,7 @@
 // shows its seam, a range move shifts. A refused line takes it back; the next document makes it true.
 // Drags need none of this — they hold their own result until the reload. See docs/timeline.md.
 
-import { parseDuration, parsePosition } from "@studio/song-schema/timecode";
+import { parseDuration, parsePosition } from "@studio/k7-wasm/timecode";
 
 /** One event, as the lines name it: its lane and the beat it starts on. */
 export const eventKey = (track: string, startBeats: number): string =>

@@ -16,7 +16,7 @@ pub struct VerbRequest {
     pub line: String,
     /// The project folder, in the `Fs`'s spelling.
     pub project: String,
-    /// `{studioHome, metaRoot, ...}`, as `edit.call` takes it.
+    /// `{studioHome, metaRoot, ...}`, as song-edit's facade reads it.
     #[serde(default)]
     pub env: Json,
     /// The answers of the routes earlier runs of this line called, in order (`Host::call`).

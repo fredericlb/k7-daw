@@ -1,4 +1,0 @@
-// The other half of the same pattern. Nothing here says "audio": an event whose sound
-// resolves to a sample plays as one, every other event plays as a note.
-extends("@meta/strudel-track")
-strudel("algo/pattern.strudel")

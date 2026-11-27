@@ -93,7 +93,7 @@ looks exactly like dead code.
 
 | Script | Checks |
 |---|---|
-| `lint:panels` (`apps/k7-daw-frontend/packages/song/scripts/checkPanelBinds.ts`) | Every control a library panel binds against the parameters its plugin really exposes. Built-in plugins are read from the generated parameter list; an external plugin is instantiated by the engine's `--dump-params-ext`, so this only runs where that plugin is installed. Options: `[library root] [--only <filter>] [--json]`. |
+| `lint:panels` (`apps/k7-daw-frontend/packages/ui-module-builder/scripts/checkPanelBinds.ts`) | Every control a library panel binds against the parameters its plugin really exposes. Built-in plugins are read from the generated parameter list; an external plugin is instantiated by the engine's `--dump-params-ext`, so this only runs where that plugin is installed. Options: `[library root] [--only <filter>] [--json]`. |
 | `lint:layouts` (`apps/k7-daw-frontend/packages/ui-module-builder/scripts/checkLayouts.ts`) | Every library module's panel against the two-layout rules and the AI brief's checks, and against the committed version: a reworked panel must keep every control it had. Default target: all of `k7-core`. Exits 1 on any issue. |
 
 ## Coding conventions

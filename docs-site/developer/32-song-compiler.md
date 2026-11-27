@@ -8,11 +8,11 @@ layouts. It reads; changing a project is `@studio/song-edit`'s job ([song-edit](
 
 | Function | File | What it does |
 |---|---|---|
-| `loadGraph(dir)`, `parseChains`, `checkChainInputs` | `apps/k7-daw-frontend/packages/song/src/graph.ts` | The derived chain graph, its validation, and the port type checks. |
-| `loadModules`, `loadModuleRefs`, `loadChains`, `loadLanes`, `loadVideoTracks`, `loadProjectRoot`, `loadSettings`, `exportSub`, `readYamlEntities` | `apps/k7-daw-frontend/packages/song/src/loader.ts` | Reading each file kind off disk, validated or not. |
-| `resolveModule`, `resolveModuleMap` | `apps/k7-daw-frontend/packages/song/src/moduleResolve.ts` | Inheritance. |
-| `projectSurfaces`, `projectAssemblies` | `apps/k7-daw-frontend/packages/song/src/surfaces.ts`, `assemblies.ts` | The optional `surfaces/` and `assemblies/` folders. |
-| `scaffold`, `setProjectFiles`, the live scaffolds | `apps/k7-daw-frontend/packages/song/src/scaffold.ts`, `scaffoldSet.ts`, `scaffoldLive.ts` | New projects per archetype. |
+| `loadGraph(dir)`, `parseChains`, `checkChainInputs` | `apps/k7-daw-wasm/song/src/graph/`, `apps/k7-daw-wasm/song/src/lanes/wiring.rs` | The derived chain graph, its validation, and the port type checks. |
+| `loadModules`, `loadModuleRefs`, `loadChains`, `loadLanes`, `loadVideoTracks`, `loadProjectRoot`, `loadSettings`, `exportSub`, `readYamlEntities` | `apps/k7-daw-wasm/song-edit/src/loader.rs`, `apps/k7-daw-wasm/song/src/modules/` | Reading each file kind off disk, validated or not. |
+| `resolveModule`, `resolveModuleMap` | `apps/k7-daw-wasm/song/src/resolve/extends.rs` | Inheritance. |
+| `projectSurfaces`, `projectAssemblies` | `apps/k7-daw-wasm/song/src/views/surfaces.rs`, `apps/k7-daw-wasm/song/src/assemblies/mod.rs` | The optional `surfaces/` and `assemblies/` folders. |
+| `scaffold`, `setProjectFiles`, the live scaffolds | `apps/k7-daw-wasm/song-edit/src/scaffold.rs`, `scaffold_set.rs`, `scaffold_live.rs` | New projects per archetype. |
 
 The output types are the wire's, in `apps/k7-daw-frontend/packages/engine-protocol/project.ts`: `ProjectDoc` (tempo,
 metre, `masterVolume`, `masterPlugins`, `recordDir`, `tracks`, `groups`, `markers`, `settings`), with
@@ -25,7 +25,7 @@ reaches the engine.
 
 A project's routing is written either as segments (`graph.k7x` + `nodes/<name>.k7x`) or as chain
 files (`chains/*.k7x` + `tracks/` + `vstpresets/` + `layout.k7x`). `isChainProject(dir)` in
-`apps/k7-daw-frontend/packages/song/src/chainProject.ts` decides by the presence of `chains/`.
+`apps/k7-daw-wasm/song-edit/src/chain_project.rs` decides by the presence of `chains/`.
 
 The compiler reads only segments. `loadChains` turns a chain project into segments
 (`readChainProject` → `toSegments`), so everything downstream — chain derivation, port checks,
@@ -47,7 +47,7 @@ the TypeScript here keeps is the read side the verbs and the pages call: the mod
 
 ## Inheritance
 
-`resolveModule` in `apps/k7-daw-frontend/packages/song/src/moduleResolve.ts` folds `extends` deepest-first (cycle-guarded by
+`resolveModule` in `apps/k7-daw-wasm/song/src/resolve/extends.rs` folds `extends` deepest-first (cycle-guarded by
 ref) with `mergeAuthored`:
 
 - the child's defined keys win over the parent's;
@@ -64,11 +64,11 @@ File-valued params and a `base:` named by the child are re-resolved against the 
 folders, nearest first (`withInheritedFiles`, `basePreset.ts`, `libraryFiles.ts`).
 
 Panels come from the `ui.k7x` beside each module, attached by ref in `applyUiLibrary`
-(`apps/k7-daw-frontend/packages/song/src/loader.ts`); `apps/k7-daw-frontend/packages/song/src/uiLibrary.ts` holds the panel lookup helpers.
+(`apps/k7-daw-wasm/song-edit/src/loader.rs`); `apps/k7-daw-wasm/song/src/modules/ui.rs` holds the panel lookup helpers.
 
 ## Lanes
 
-A lane is a node of one of three built-in modules (`apps/k7-daw-frontend/packages/song/src/trackModule.ts`), none with a
+A lane is a node of one of three built-in modules (`apps/k7-daw-wasm/song/src/modules/builtin.rs`), none with a
 file: `@meta/track`, `@meta/strudel-track` (generated), `@meta/group-track` (no outputs). A lane has
 no input and two outputs, `audio` and `midi`, and is not typed by its signal; `laneOf` is the one
 projection every surface reads. Strudel lanes are compiled by the song crate
@@ -94,13 +94,13 @@ draws a `?`. A missing `extends` target is.
 ## Caching
 
 Parsed files are cached against `(mtime, size)` once the mtime is old enough that a later write could
-not reproduce it (`apps/k7-daw-frontend/packages/song/src/yaml/yamlCache.ts`, `settledParse`); module trees likewise
-(`moduleCache.ts`). A file is read and edited as k7x through `apps/k7-daw-frontend/packages/song/src/yaml/workspaceDoc.ts`
+not reproduce it (`apps/k7-daw-wasm/song/src/cache.rs`); module trees likewise
+(`moduleCache.ts`). A file is read and edited as k7x through `apps/k7-daw-wasm/song-edit/src/workspace_doc.rs`
 (`wsText`, `wsData`, `wsEdit`…), plain bytes through `workspaceFile.ts` — see [k7x](./34-k7x.md).
 
 ## Tests
 
-- `apps/k7-daw-frontend/packages/song/src/testSupport.ts` holds the helpers that write a temporary project.
+- `apps/k7-daw-wasm/song-edit/src/mem_fs.rs` is the in-memory filesystem the tests write a temporary project to.
 - `scaffold.test.ts`, `scaffoldLive.test.ts` scaffold each archetype and read it back.
 - The compile's own tests are the song crate's (`apps/k7-daw-wasm/song/tests/all/`); the verbs' tests compile a project
   through it with the verbs crate's `tests/support` (`apps/k7-daw-wasm/verbs/tests/support/mod.rs`).

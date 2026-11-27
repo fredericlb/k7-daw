@@ -68,7 +68,7 @@ recording beats a silent engine whose playhead never moves.
 
 `set-audio-device` switches the RUNNING engine and is forgotten the moment it exits — in dev
 the engine exits on every native rebuild, so a pick made that way lasts minutes. The first row is
-what survives it: the field in `preferences.k7x` (`apps/k7-daw-frontend/packages/song/src/preferences.ts`) is replayed
+what survives it: the field in `preferences.k7x` (`apps/k7-daw-wasm/song-edit/src/preferences.rs`) is replayed
 by `engineLink` on every connect.
 
 That second row is an ordered LIST, best first, and no longer a pick plus a fallback: the

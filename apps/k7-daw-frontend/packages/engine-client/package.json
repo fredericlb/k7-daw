@@ -3,12 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "k7's engine client \u2014 drives the C++ audio engine over the WebSocket protocol. Consumed as source.",
+  "description": "The bench scripts' engine client: drives the C++ audio engine over the WebSocket protocol from node. Consumed as source.",
   "exports": {
     "./engineClient": "./src/engineClient.ts",
     "./engineControl": "./src/engineControl.ts",
     "./engineBinary": "./src/engineBinary.ts",
-    "./pluginCache": "./src/pluginCache.ts",
     "./paths": "./src/paths.ts"
   },
   "scripts": {
@@ -22,7 +21,6 @@
   },
   "dependencies": {
     "@studio/engine-protocol": "*",
-    "@studio/song": "*",
     "@studio/web-protocol": "*",
     "ws": "^8.18.0"
   },

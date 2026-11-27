@@ -1,24 +1,17 @@
-// lib.rs — the browser's one WebAssembly module: the C ABI (abi.rs) over a plain-Rust dispatch (ops.rs).
+// lib.rs — the browser's one WebAssembly module: the C ABI (abi.rs) over a plain-Rust dispatch split by family (ops/).
 // A reader would get wrong that only abi.rs touches the ABI: everything else is ordinary Rust a native host can call.
 
 #![cfg_attr(not(test), deny(clippy::unwrap_used, clippy::expect_used, clippy::panic))]
 
 pub mod abi;
-pub mod chains_ops;
-pub mod curve_ops;
-#[cfg(feature = "song")]
-pub mod edit_ops;
-pub mod engine_ops;
 pub mod error;
-#[cfg(feature = "song")]
-pub mod host_fs;
 pub mod ops;
-#[cfg(feature = "song")]
-pub mod song_ops;
+#[cfg(test)]
+mod schema_tests;
 #[cfg(test)]
 mod tests;
-#[cfg(feature = "verbs")]
-pub mod verb_ops;
+#[cfg(test)]
+mod tests_file;
 
 pub use error::{ErrorCode, WasmError};
-pub use ops::{Request, Session};
+pub use ops::Session;

@@ -4,9 +4,10 @@
 // since the FILE is the truth and a person may edit it by hand (../docs/tasks.md). Above the list, the
 // open project's TAGS, written the same way through `project tag` / `project untag`.
 
+import { TASKS_FILE } from "@studio/k7-wasm/consts";
+import { parseTasks, type Task } from "@studio/k7-wasm/schema";
 import { askConfirm } from "@studio/project-shell/ask";
 import { projectTagsOf } from "@studio/song-schema/projectTags";
-import { parseTasks, TASKS_FILE, type Task } from "@studio/song-schema/tasks";
 import { Button } from "@studio/ui/button";
 import { Checkbox } from "@studio/ui/checkbox";
 import { Plus, Trash2, X } from "@studio/ui/icons";

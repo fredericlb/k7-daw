@@ -30,7 +30,7 @@ each for its own reason:
 1. **The core** — `@studio/k7x`: grammar, span-carrying tree, canonical printer, a document whose
    edits keep every other byte. Proven on the whole corpus against the Rust reader, a print/parse
    round trip and the comment lines every edit must keep (`apps/k7-daw-frontend/packages/k7x/src/corpus.test.ts`). Done.
-2. **One door for reading and writing a file** — `apps/k7-daw-frontend/packages/song/src/yaml/workspaceDoc.ts`: a file is
+2. **One door for reading and writing a file** — `apps/k7-daw-wasm/song-edit/src/workspace_doc.rs`: a file is
    read as k7x text or data, edited as a k7x document by key path, or written whole from data. A
    writer takes a document scope and changes values in it, so a knob drag is a one-line diff and an
    author's comments stay (`apps/k7-daw-frontend/packages/song/docs/k7xFiles.md`). Done.

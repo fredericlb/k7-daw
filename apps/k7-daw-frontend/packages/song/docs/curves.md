@@ -184,9 +184,9 @@ breakpoints, so a clamped endpoint alone would make the cut start at the next po
 crossing — a drawn ramp from -1 to +1 would rise from its first point instead of from its middle.
 
 The arithmetic — an oscillator's wave, an envelope's shape, a drawn curve's interpolation, amplitude
-and polarity — is `apps/k7-daw-frontend/packages/song/src/curveSample.ts`, with no fs, and `curveBake.ts` bakes through it.
-The browser's curve editor previews through the Rust port of it (`apps/k7-daw-wasm/song-schema`), a sweep
-holding the two together; the TypeScript stays because the compiler runs where WebAssembly does not.
+and polarity — is `apps/k7-daw-wasm/song-schema/src/curve.rs`, with no fs, and
+`apps/k7-daw-wasm/song/src/curves/bake.rs` bakes through it. The browser's curve editor previews through the same
+crate compiled to WebAssembly.
 
 ## On/off: a boolean param's curve
 

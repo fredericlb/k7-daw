@@ -1,7 +1,8 @@
 # The editor's field vocabulary
 
-The rationale behind `apps/k7-daw-frontend/packages/song-schema/src/yaml/fields.ts` and its test — the completions the
-k7x editor offers, DERIVED from the Zod schemas rather than hand-kept.
+The rationale behind `apps/k7-daw-wasm/song/src/views/fields.rs` and its page, `@studio/k7-wasm/fields` — the completions the
+k7x editor offers, DERIVED from the Rust readers rather than hand-kept. Each derived decoder names its own keys,
+which the editor asks through `fields.kind`, `fields.at` and `fields.values`.
 
 ## Why it is derived
 
@@ -16,7 +17,7 @@ which a single flat table cannot do. Every object gets its own fields, `project:
 `modules/audio/cab/module.k7x` is a module whatever it is called, and so is `nodes/melody.k7x` — a
 node is an ordinary module that happens to live in `nodes/`, LANES INCLUDED
 (`apps/k7-daw-frontend/packages/song/docs/trackModules.md`). There is no `tracks/` kind for exactly that reason: a chain
-project's `tracks/<lane>.k7x` is a module file too, and `validate.ts` reads the folder the same way.
+project's `tracks/<lane>.k7x` is a module file too, and the editor's check (`file.validate`) reads the folder the same way.
 
 A chain project's `chains/<name>.k7x` is a kind of its own, `chain` — not `chains`, which is the
 segments file under its older root name `chains.k7x`, and stays one inside a library's older

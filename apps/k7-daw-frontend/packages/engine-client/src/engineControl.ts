@@ -1,7 +1,6 @@
 // engineControl.ts — the WebSocket link to the C++ engine, minus the project: connect,
-// send a command, emit the reply as an event. Nothing here knows what a song is, and that
-// is the point — importing @studio/song in this file would silently pull ~3 MB of
-// compiler into the supervisor's bundle. Outgoing messages buffer until the socket opens.
+// send a command, emit the reply as an event. Nothing here knows what a song is.
+// Outgoing messages buffer until the socket opens.
 
 import { EventEmitter } from "node:events";
 import type { TransportAction } from "@studio/engine-protocol";

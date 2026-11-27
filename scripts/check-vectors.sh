@@ -24,6 +24,6 @@ fi
 # The file service's frozen vectors replayed by the crate; a vector edited by hand or a replay broken fails here.
 eval "$(node apps/k7-daw-engine/scripts/sccache.mjs agent --export)"
 (cd apps/k7-daw-backend && cargo test --locked --target-dir "${K7_VECTORS_TARGET:-$HOME/.cache/k7-vectors}" -p k7-file-service --test all -- vectors rig::)
-# The frozen vectors replayed through the WebAssembly module, over a Vfs and a temp folder.
-npm run --silent test:edit-replay -w @studio/k7-wasm -- ${K7_EDIT_TARGET:+--target-dir "$K7_EDIT_TARGET"}
+# song-edit's frozen vectors and goldens replayed by the crate itself.
+(cd apps/k7-daw-wasm/song-edit && cargo test --locked --release --target-dir "${K7_EDIT_TARGET:-$HOME/.cache/k7-edit-replay}" --test replay --test replay_lane)
 echo "vectors: committed vectors match the generator"

@@ -77,8 +77,8 @@ grouped by type and where scrolling is the point, rather than completed there, w
 Absent from the SUGGESTIONS, not forbidden: a chain step may still name `@engine/nam`, and
 typing it works — a completion list is an offer, never a validator. And the
 one question where the engine's catalogue *is* the right answer keeps it: `extends:`, and the
-`module new` / `node replace` / `module own` arguments that ask what to inherit from. `isEngineRef`
-in `apps/k7-daw-frontend/packages/song-schema/src/moduleTypes.ts` is the predicate, and it is a function rather than a
+`module new` / `node replace` / `module own` arguments that ask what to inherit from. `is_engine_ref`
+in `apps/k7-daw-wasm/song/src/modules/types.rs` (the page asks it as `isEngineRef` in `@studio/k7-wasm/schema`) is the predicate, and it is a function rather than a
 `startsWith` at each call site so that a library called `@engineering` is not swallowed with it.
 
 Two things about it are synthesised, and it is worth knowing which:

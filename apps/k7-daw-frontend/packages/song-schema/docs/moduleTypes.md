@@ -352,3 +352,12 @@ the tree. It returns null when the path names no module. It is in this leaf rath
 loader so a BROWSER can ask: `@studio/song/loader` opens `node:fs` on import, and this is a question
 about a string. It searches the LAST `modules/` segment so a workspace-relative path
 (`song.k7/modules/…`) and an absolute one both land on the same place.
+
+## Where the tables and the rules live
+
+The names (nodes, type folders, params, library folders) and the tables (`MODULE_TYPES`, `IO_MODULES`,
+the file families) are Rust constants, printed into `consts.generated.ts`; `moduleTypes.ts` re-exports
+them and keeps only what a browser alone needs. The rules a name or a ref is judged by (`isEngineRef`,
+`moduleEmits`, `moduleStatusOf`, `ownLevelSide`, `isLibraryName`…) are the crate's functions, asked
+through `@studio/k7-wasm/schema`: the compiler and the page read one rule, not two. `splitPort` stays in
+`@studio/graph-model`, which owns it and calls it itself.

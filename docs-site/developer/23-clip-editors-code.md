@@ -12,7 +12,7 @@ state is the browser's, and the arithmetic sits in pure modules beside the compo
 **The picture.** The file's envelope is decoded and cached once per source by `apps/k7-daw-frontend/packages/audio-analysis`, in a
 placement-independent `.cache` sidecar; `apps/k7-daw-backend/packages/k7-file-service/src/media/region.rs` slices it to the
 region a clip plays and derives the bar/beat grid from the song's tempo and the clip's warp map
-(`beatAtSource` / `sourceAtBeat` from `apps/k7-daw-frontend/packages/song-schema/src/warpPoints.ts`). The file service
+(`beat_at_source` / `source_at_beat` in `apps/k7-daw-wasm/song-schema/src/warp.rs`, asked through `@studio/k7-wasm/schema`). The file service
 serves it (`apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/media/waveform.rs`). `apps/k7-daw-frontend/packages/ui-waveform/src/Waveform.tsx`
 draws it in the `spectrum` look (`spectrum.ts`): peak as height, the low/mid/high balance as colour —
 the same painter the DJ desk uses, so there is one waveform in the product.
@@ -37,14 +37,14 @@ The picture is warped, so the inversion has to walk the piecewise map, not divid
 ratio — getting it wrong puts a stretch point somewhere the drawing never showed, and the redrawn
 picture is "right about the wrong point". Its tests pin that.
 
-Onset corrections are stored as a difference from the detector (`apps/k7-daw-frontend/packages/song-edit/src/onsets.ts`),
+Onset corrections are stored as a difference from the detector (`apps/k7-daw-wasm/song-edit/src/onsets.rs`),
 in seconds, so re-detecting at another sensitivity keeps them; a time within 25 ms of an existing
 onset means that onset.
 
 **Header controls** map to verbs: the gain slider (`EventGainSlider.tsx`, ±6 dB, double-click 0) to
-`event gain` (`apps/k7-daw-frontend/packages/song-edit/src/eventGain.ts` rounds to a tenth and deletes at 0); the loop
+`event gain` (`apps/k7-daw-wasm/song-edit/src/event_gain.rs` rounds to a tenth and deletes at 0); the loop
 toggle and the ruler brace (`LoopBrace.tsx`) to `event loop` / `event loop points`
-(`apps/k7-daw-frontend/packages/song-edit/src/eventLoop.ts`: a looped event keeps its length and its pass count is
+(`apps/k7-daw-wasm/song-edit/src/event_loop.rs`: a looped event keeps its length and its pass count is
 recomputed); the trim gate to `event trim`, previewed in the browser with the same gate maths the
 verb uses (`apps/k7-daw-frontend/packages/audio-probe/src/trimGate.ts`); the operations menu to `clip process`
 (`apps/k7-daw-frontend/src/clipOps.ts` builds the line).
@@ -53,7 +53,7 @@ verb uses (`apps/k7-daw-frontend/packages/audio-probe/src/trimGate.ts`); the ope
 
 A material file describes the bytes; a placement describes the use. `from`/`to` are therefore on the
 **event**, and `event window`, `event trim` and `event resize` narrow only the event they address,
-clamped inside whatever the material file still states. `apps/k7-daw-frontend/packages/song-edit/src/clipResize.ts`
+clamped inside whatever the material file still states. `apps/k7-daw-wasm/song-edit/src/clip_resize.rs`
 turns "span these two beats" into the fields the model has (window and loop count; a placement has
 no length).
 
@@ -85,7 +85,7 @@ milliseconds, so `rollPending.ts` paints the expected result immediately and dro
 reload lands or the command is refused.
 
 `SeqDoubleButton.tsx` runs `sequence double`, whose writer then halves the loop count of every placement
-(`apps/k7-daw-frontend/packages/song-edit/src/sequenceLoops.ts`) so the arrangement does not move. Repeat and skip are
+(`apps/k7-daw-wasm/song-edit/src/sequence_loops.rs`) so the arrangement does not move. Repeat and skip are
 `sequence note repeat|skip`, which the engine realises from the compiled document without expanding them.
 
 **Inline grid** — `SeqGridFile.tsx` reads the sequence file and writes every edit back to it;
@@ -102,7 +102,7 @@ rectangle exactly as drawn.
 
 ## Curves and automation
 
-A curve is a file (`curves/<id>.k7x`, read by `apps/k7-daw-frontend/packages/song/src/curves.ts`); a binding is a
+A curve is a file (`curves/<id>.k7x`, read by `apps/k7-daw-wasm/song/src/curves/file.rs`); a binding is a
 module's `automations: [{param, curve}]`, keyed by param. Verbs:
 
 - `curve set <name> <json>` — the whole curve, from the editor (`apps/k7-daw-wasm/verbs/src/verbs/curve.rs`).
@@ -116,7 +116,7 @@ module's `automations: [{param, curve}]`, keyed by param. Verbs:
 
 **The editor.** `apps/k7-daw-frontend/src/components/CurveEditor.tsx` edits a draft (`apps/k7-daw-frontend/src/curveDraft.ts`)
 and writes nothing until Save, which is one `curve set`. The draft is computed with
-`@studio/k7-wasm`, a Rust port of the arithmetic the bake uses (`apps/k7-daw-frontend/packages/song/src/curveSample.ts`), held to it by a parity sweep.
+`@studio/k7-wasm`, the same Rust arithmetic the bake uses (`apps/k7-daw-wasm/song-schema/src/curve.rs`).
 `CurvePlot.tsx` draws it and edits a custom curve's points; `CurveKnob.tsx` the ADSR knobs;
 `CurveConditions.tsx` the when-it-runs rows (`start`, `end`, `between`, `event`).
 

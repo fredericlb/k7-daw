@@ -3,8 +3,9 @@
 // Apart from the shell because everything here is a pure function of the backend's catalogue
 // plus a `files()` getter, with no shell state. See docs/commandBar.md.
 
+import { stripDocExt } from "@studio/k7-wasm/schema";
 import type { Completion } from "@studio/project-shell/project";
-import { docPattern, stripDocExt } from "@studio/song-schema/docExt";
+import { docPattern } from "@studio/song-schema/docExt";
 import { api } from "./api";
 import { type ArgOption, optionsFromCompletions } from "./argOptions";
 import type { PaletteArg, PaletteCommand } from "./components/CommandBar";

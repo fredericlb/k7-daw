@@ -1047,8 +1047,7 @@ cannot express.
 **A fade is a LENGTH.** The gesture sends `beatsToDuration`, and `event fadein` reads it back with
 `parseDuration`. The same number spelled as a POSITION is several bars, both spellings are legal
 timecodes, and nothing between here and the engine can tell them apart — which is why the wedge
-and the command are tested against each other end to end rather than each on its own
-(`apps/k7-daw-frontend/packages/song-edit/src/eventFade.test.ts`).
+and the command are tested against each other end to end rather than each on its own.
 
 The wedge follows the cursor while a drag is in hand rather than waiting for the round trip, the
 same courtesy a moved clip gets — the gesture in hand is read before the clip's own value.

@@ -15,9 +15,9 @@ bumps `/revision`, k7 re-vets the project, the graph rebuilds, other tabs adopt 
 and the engine is handed a document that does not compile. The editor would spend most of its
 life publishing broken states.
 
-So the buffer is judged before it is written. `@studio/song-schema/yaml/validate` answers the
-question — see [that package's page](../../song/docs/validate.md) — and the answer is the same
-one the loader gives, because it is the same parsers and the same Zod schemas.
+So the buffer is judged before it is written. `file.validate` (`@studio/k7-wasm/validate`) answers the
+question — see [that page](../../song/docs/validate.md) — and the answer is the same
+one the loader gives, because it is the same decoders.
 
 ## The three answers
 

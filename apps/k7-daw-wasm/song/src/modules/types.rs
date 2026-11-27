@@ -56,7 +56,7 @@ pub struct TypeMeta {
 
 use PortType::{Audio, Midi, Video};
 
-pub use super::types_generated::{IO_MODULES, IO_SOURCES, MODULE_TYPES};
+pub use super::type_table::{IO_MODULES, IO_SOURCES, MODULE_TYPES};
 
 pub fn type_meta(name: &str) -> Option<&'static TypeMeta> {
     MODULE_TYPES.iter().find(|t| t.name == name)
@@ -217,4 +217,9 @@ pub fn module_emits(category: Option<&str>, io: Option<&str>, outputs: &[Port]) 
 /// The type folders whose modules are their behaviour, so an empty `plugin:` is no hole.
 pub fn hosts_plugin(category: Option<&str>) -> bool {
     !matches!(category, Some("shaders" | "shapes" | "video_transitions"))
+}
+
+/// The type folders whose modules are a PASS over a picture: what a lane run, the frame and a fade stretch are made of.
+pub fn is_picture_pass(category: Option<&str>) -> bool {
+    matches!(category, Some("shaders" | "video_effects"))
 }

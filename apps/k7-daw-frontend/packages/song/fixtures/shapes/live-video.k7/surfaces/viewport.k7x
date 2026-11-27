@@ -1,7 +1,0 @@
-// The FRAME — where the lens is composited with WebGL. The one surface this shape has:
-// an arrangement can be left undrawn, but a picture nothing composites is not shown at all.
-//
-// `floating` is the only layout it draws in: a window over whichever page is on screen,
-// moved by its title bar and sized by its corner. `ui viewport` shows or hides it.
-type("viewport")
-layout("floating")

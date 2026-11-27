@@ -10,8 +10,8 @@ a beat of error, worse the faster it was driven (`apps/k7-daw-frontend/packages/
 It is CATALOGUED, as `Turntable` with the role `instrument` (a source: no audio in). A mix project's
 deck nodes name it through `@meta/audio/turntable`, and an engine's compatibility with a project is
 scored against the catalogue, so a platter left out of it reads as "this engine is missing:
-studio_turntable" on every engine that plays the deck. `apps/k7-daw-frontend/packages/song/src/metaCatalogue.test.ts`
-holds every `@meta` module's built-in to that.
+studio_turntable" on every engine that plays the deck. a test in `apps/k7-daw-wasm/song/tests/all/` holds every `@meta` module's
+built-in to that.
 
 ## Rate, not position
 

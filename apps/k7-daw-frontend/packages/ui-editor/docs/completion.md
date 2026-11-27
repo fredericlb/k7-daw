@@ -9,7 +9,7 @@ There are three layers, and each answers a question the one below it cannot:
 
 | layer | lives in | answers |
 |---|---|---|
-| the schema | `@studio/song-schema`'s `yaml/fields.ts` | which fields a `module.k7x` may carry, and which values a closed enum allows |
+| the reader | `fields.at` and `fields.values` (`@studio/k7-wasm/fields`), over `apps/k7-daw-wasm/song/src/views/fields.rs` | which fields a `module.k7x` may carry, and which values a closed enum allows |
 | the project | `vocabulary.ts`'s `projectValues` | names nothing could enumerate ahead of time — a graph's nodes, what a module may `extends` |
 | the caller | a `YamlVocabulary` of its own | a file the project schemas have never heard of |
 
@@ -53,7 +53,7 @@ and `io` enums and keeps them, so the graph vocabulary cannot spill into another
 ## The third layer, and why the path cannot always say
 
 `schemaVocabulary(path, hints)` is the adapter to a **studio project**: it maps a path to a
-`FileKind` and asks `@studio/song-schema`. A playlist is not a project file, so `fileKindFor`
+`FileKind` and asks the Rust reader's vocabulary. A playlist is not a project file, so `fileKindFor`
 answers null and the vocabulary is empty — correctly, since a playlist's values are RECORDS, and
 knowing what a file listing looks like is the host's business rather than the compiler's.
 

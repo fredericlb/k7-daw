@@ -1,6 +1,6 @@
 # Editing a curve file
 
-The rationale behind `apps/k7-daw-frontend/packages/song-schema/src/yaml/curveFile.ts`. What a curve IS and how it is
+The rationale behind `apps/k7-daw-wasm/song-edit/src/curve_file.rs`. What a curve IS and how it is
 baked lives in `apps/k7-daw-frontend/packages/song/docs/curves.md`; this page is about editing
 `curves/<id>.k7x` in place.
 

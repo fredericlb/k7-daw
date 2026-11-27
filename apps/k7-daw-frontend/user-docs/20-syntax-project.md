@@ -10,14 +10,6 @@ The song header: tempo, rate, meter — plus what the song borrows from outside 
 // rather than misreading a key it does not know.
 format(1)
 
-// What this folder IS: `k7`, the default, so it can be left out.
-//
-// The folder's own suffix (`.k7`) is what decides which app opens it, and it
-// wins if the two disagree — k7 reports the contradiction rather than picking a side.
-// This line is here so the file says it too, which is the only signal there is when
-// the workspace IS the project and there is no suffix to read.
-type("k7")
-
 // What this project DRAWS is not written here at all: it is the `surfaces/`
 // folder beside this file, one file per screen. A `surfaces/timeline.k7x`
 // is what puts an arrangement on screen; a folder without one opens on its
@@ -27,10 +19,9 @@ type("k7")
 // names the PLAYLIST it plays through. Two decks meeting at a crossfade, a
 // set list to play through them, and no timeline. Nothing else marks one.
 //
-// A `project_type:` line is accepted here and read by nothing: the surfaces
-// are what the screen goes by, and a second declaration beside them would
-// only be free to disagree with them. A file carrying one still opens — drop
-// the line next time you edit it.
+// There is no `type` and no `project_type` line: the surfaces are what the
+// screen goes by, and a second declaration beside them would only be free to
+// disagree with them. A file carrying one is refused as an unknown key.
 
 project({
   name: "my-song",

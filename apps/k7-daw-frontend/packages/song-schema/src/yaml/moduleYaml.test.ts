@@ -1,7 +1,7 @@
+import { validateFile } from "@studio/k7-wasm/validate";
 import { K7Document } from "@studio/k7x/document";
 import { describe, expect, it } from "vitest";
 import {
-  parseModule,
   setModuleAutomation,
   setModuleList,
   setModuleValue,
@@ -19,9 +19,13 @@ const edit = (text: string, write: (doc: K7Document) => void): string => {
   return doc.toString();
 };
 
+/** The editor's check of a module file's text, answered by the Rust reader the compile uses. */
+const judge = (text: string) =>
+  validateFile("modules/audio/x/module.k7x", text);
+
 describe("validation", () => {
   it("accepts a module the app actually writes", () => {
-    const { value, issues } = parseModule(
+    const v = judge(
       M(`
 plugin({ type: "internal", name: "Chorus" })
 ui({
@@ -31,50 +35,36 @@ ui({
 })
 `),
     );
-    expect(issues).toEqual([]);
-    expect(value?.ui?.widgets.w1.bind).toBe("Depth");
-    // The schema's default `type: plugin`, applied on the way out — not into the file.
-    expect(value?.type).toBe("plugin");
+    expect(v.issues).toEqual([]);
   });
 
   it("reads an empty file as an empty module", () => {
-    const { value, issues } = parseModule("");
-    expect(issues).toEqual([]);
-    expect(value?.type).toBe("plugin");
+    expect(judge("").issues).toEqual([]);
   });
 
-  it("leaves the type unstated when the file extends — the parent's is the answer", () => {
-    const { value, issues } = parseModule(
-      'extends("@workspace/instruments/kit")\n',
-    );
-    expect(issues).toEqual([]);
-    // A node over a rack states nothing; a default here would beat the rack it inherits.
-    expect(value?.type).toBeUndefined();
+  it("reads a file that extends and states no type", () => {
+    expect(judge('extends("@workspace/instruments/kit")\n').issues).toEqual([]);
   });
 
   it("refuses a `label` — a module is shown by its file name, and there is no second one", () => {
-    const { value, issues } = parseModule(
+    const { ok, issues } = judge(
       'label("Grande salle")\nplugin({ type: "internal", name: "Reverb" })\n',
     );
-    expect(value).toBeNull();
+    expect(ok).toBe(false);
     expect(issues[0].message).toMatch(/label/);
   });
 
   it("catches the typo a closed struct is for, and says where", () => {
     // A closed struct is what makes the typo an error at all — an open one drops `paramz` silently.
-    const { value, issues } = parseModule(
-      'plugin({ type: "internal" })\nparamz({})\n',
-    );
-    expect(value).toBeNull();
+    const { ok, issues } = judge('plugin({ type: "internal" })\nparamz({})\n');
+    expect(ok).toBe(false);
     expect(issues[0].message).toMatch(/paramz/);
     expect(issues[0]).toMatchObject({ line: 2, col: 1 });
   });
 
   it("reports a syntax error at its line and column", () => {
-    const { value, issues } = parseModule(
-      'plugin({ type: "internal" })\nui(\n',
-    );
-    expect(value).toBeNull();
+    const { malformed, issues } = judge('plugin({ type: "internal" })\nui(\n');
+    expect(malformed).toBe(true);
     expect(issues).toHaveLength(1);
     expect(issues[0].path).toBe("");
     expect(issues[0].line).toBeGreaterThanOrEqual(2);
@@ -82,7 +72,7 @@ ui({
 
   it("reports a widget field that belongs to another type, on its line", () => {
     // The common typo, three times over: `library` on a non-dropdown, `min` on a toggle.
-    const { issues } = parseModule(
+    const { issues } = judge(
       M(`
 ui({
   cols: 1,
@@ -95,12 +85,12 @@ ui({
     );
     expect(issues).toHaveLength(1);
     expect(issues[0].path).toBe("ui.widgets.w2.min");
-    expect(issues[0].message).toMatch(/carry a range/);
+    expect(issues[0].message).toMatch(/range/);
     expect(issues[0].line).toBe(5);
   });
 
   it("accepts the asset dropdown that started all this", () => {
-    const { issues } = parseModule(
+    const { issues } = judge(
       M(`
 params({ model: "jcm800.nam" })
 ui({
@@ -114,7 +104,7 @@ ui({
   });
 
   it("tells a slice rack from a samples one", () => {
-    const slice = parseModule(
+    const slice = judge(
       M(`
 type("rack")
 rack({ rack_type: "slice", source: "break.wav", symbols: { BD: { note: 36, from: 0, to: 0.5 } } })
@@ -122,47 +112,40 @@ rack({ rack_type: "slice", source: "break.wav", symbols: { BD: { note: 36, from:
     );
     expect(slice.issues).toEqual([]);
     // A slice rack with no source: the flavour's own branch is what catches it.
-    const bad = parseModule(
+    const bad = judge(
       M(`
 type("rack")
 rack({ rack_type: "slice", symbols: { BD: { note: 36, from: 0, to: 0.5 } } })
 `),
     );
-    expect(bad.value).toBeNull();
+    expect(bad.ok).toBe(false);
   });
 
   it("refuses pads written outside `symbols:` rather than reading an empty kit", () => {
-    const { value, issues } = parseModule(
+    const { ok, issues } = judge(
       `type("rack")\nrack({ Kick: { note: 36, sample: "@k7-core/k.wav" } })\n`,
     );
-    expect(value).toBeNull();
-    expect(issues.map((i) => i.message).join("\n")).toMatch(
-      /not a rack field: Kick/,
-    );
+    expect(ok).toBe(false);
+    expect(issues.map((i) => i.message).join("\n")).toMatch(/Kick/);
   });
 
   it.each(["rack(null)\n", "rack({})\n", "rack({ symbols: null })\n"])(
     "reads an empty rack as a kit with no pads of its own: %j",
     (rack) => {
-      const { value, issues } = parseModule(`type("rack")\n${rack}`);
-      expect(issues).toEqual([]);
-      expect(value?.rack).toEqual({ rack_type: "samples", symbols: {} });
+      expect(judge(`type("rack")\n${rack}`).issues).toEqual([]);
     },
   );
 });
 
 describe("this app's vocabulary", () => {
   it("keeps a note name and a param name with spaces", () => {
-    const { value, issues } = parseModule(
+    const { issues } = judge(
       M(`
 params({ "Filter Freq": 69, "Transpose - Bypass": 1 })
 content("C4")
 `),
     );
     expect(issues).toEqual([]);
-    expect(value?.params?.["Filter Freq"]).toBe(69);
-    expect(value?.params?.["Transpose - Bypass"]).toBe(1);
-    expect(value?.content).toBe("C4");
   });
 });
 
@@ -241,7 +224,10 @@ ui({
     const after = edit(AUTHORED, (d) =>
       setModuleValue(d.at([]), ["params", "Mix"], 0.25),
     );
-    expect(parseModule(after).value?.params?.Mix).toBe(0.25);
+    expect(judge(after).ok).toBe(true);
+    expect(
+      (new K7Document(after).toJS() as { params: { Mix: number } }).params.Mix,
+    ).toBe(0.25);
   });
 
   it("writes a list of numbers on one line", () => {

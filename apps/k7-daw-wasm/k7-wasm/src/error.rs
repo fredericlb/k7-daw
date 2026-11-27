@@ -10,7 +10,7 @@ use song_schema::SchemaError;
 pub enum ErrorCode {
     /// The JSON does not decode, the op is unknown, or an argument is out of range.
     BadRequest,
-    /// A timecode that does not parse; its message is the one timecode.ts throws.
+    /// A timecode that does not parse.
     BadTimecode,
     BadCurve,
     UnknownHandle,
@@ -20,8 +20,6 @@ pub enum ErrorCode {
     Unavailable,
     /// A read reached a file the bundle does not hold: `files` names them, and the caller fetches and asks again.
     NeedsFiles,
-    /// A song-edit function threw: the message is the TypeScript's own.
-    EditFailed,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize)]
