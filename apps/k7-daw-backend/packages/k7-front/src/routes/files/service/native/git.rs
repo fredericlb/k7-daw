@@ -10,6 +10,7 @@ use std::sync::{Arc, Mutex, OnceLock};
 
 use axum::extract::Request;
 use axum::response::Response;
+use git_rules::{Autosave, FetchError, GitState, LastFetch, Mode};
 use http_body_util::BodyExt;
 use hyper::Method;
 use hyper::header::CONTENT_TYPE;
@@ -149,6 +150,11 @@ pub(super) fn answer_error(e: &Error) -> Response {
         m.extend(x.clone());
     }
     json_answer(e.status(), &b)
+}
+
+/// A wire struct as the route's JSON answer.
+pub(super) fn typed(status: u16, v: &impl serde::Serialize) -> Response {
+    json_answer(status, &serde_json::to_value(v).unwrap_or(Value::Null))
 }
 
 pub(super) fn bad(message: &str) -> Response {
@@ -438,24 +444,36 @@ async fn state(ctx: &Ctx, root: &Path) -> Answer {
             None => (r.head_commits()?, 0),
         };
         let pending = r.merge_pending()?;
-        let autosave = branch
-            .as_deref()
-            .and_then(|b| r.autosave_info(b).map(|(at, unsent)| json!({ "branch": b, "at": at.saturating_mul(1000), "unsent": unsent })));
-        let mut v = json!({
-            "mode": if origin.is_some() { "connected" } else { "local" },
-            "branch": r.branch(),
-            "remote": origin.as_ref().map(|o| o.url.clone()),
-            "user": origin.and_then(|o| o.user),
-            "ahead": ahead, "behind": behind,
-            "changed": r.status()?.iter().filter(|e| !e.too_large).count(),
-            "merge": pending.as_ref().map(|p| p.conflicts.iter().filter(|c| c.choice.is_none()).count()),
-            "autosave": autosave,
-            "lastFetch": last.map(|o| json!({ "at": o.at.saturating_mul(1000), "error": o.error.map(|(c, m)| json!({ "code": c, "error": m })) })),
+        let autosave = branch.as_deref().and_then(|b| {
+            r.autosave_info(b).map(|(at, unsent)| Autosave {
+                branch: b.to_string(),
+                at: u64::try_from(at).unwrap_or(0).saturating_mul(1000),
+                unsent,
+            })
         });
-        if remote_empty {
-            v["remoteEmpty"] = json!(true);
-        }
-        Ok(v)
+        let state = GitState {
+            mode: if origin.is_some() {
+                Mode::Connected
+            } else {
+                Mode::Local
+            },
+            branch: r.branch(),
+            remote: origin.as_ref().map(|o| o.url.clone()),
+            user: origin.and_then(|o| o.user),
+            ahead: Some(ahead as u32),
+            behind: Some(behind as u32),
+            changed: Some(r.status()?.iter().filter(|e| !e.too_large).count() as u32),
+            merge: pending
+                .as_ref()
+                .map(|p| p.conflicts.iter().filter(|c| c.choice.is_none()).count() as u32),
+            remote_empty: remote_empty.then_some(true),
+            autosave,
+            last_fetch: last.map(|o| LastFetch {
+                at: o.at.saturating_mul(1000),
+                error: o.error.map(|(code, error)| FetchError { code, error }),
+            }),
+        };
+        serde_json::to_value(state).map_err(|e| Error::Io(e.to_string()))
     })
     .await
 }

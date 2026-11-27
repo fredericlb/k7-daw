@@ -2,17 +2,30 @@
 // its linear peak and coloured by what is IN it. The DJ desk's band and the shared canvas both
 // paint through `spectrumColumns`, which is what makes it one waveform. See ../docs/spectrum.md.
 
-import { type Bands, bandsAt, columnColour } from "./spectrumColour";
+import { type BandColumn, spectrumStrip } from "@studio/k7-wasm/media";
 
-export {
-  BAND_COLOURS,
-  type Bands,
-  bandsAt,
-  columnColour,
-} from "./spectrumColour";
+/** One column's three band peaks, 0..1. */
+export interface Bands {
+  low: number;
+  mid: number;
+  high: number;
+}
 
 /** What a column with no band analysis is drawn in — grey, which reads as "not analysed that way". */
-export const PLAIN = "rgb(148,163,184)";
+const PLAIN_RGB = [148, 163, 184] as const;
+export const PLAIN = `rgb(${PLAIN_RGB.join(",")})`;
+
+/** One column's bands, or null when this file was analysed before they existed. */
+export function bandsAt(
+  env: { low?: number[]; mid?: number[]; high?: number[] },
+  i: number,
+): Bands | null {
+  const low = env.low?.[i];
+  const mid = env.mid?.[i];
+  const high = env.high?.[i];
+  if (low === undefined || mid === undefined || high === undefined) return null;
+  return { low, mid, high };
+}
 
 /** One pixel column: its height, 0..1 of full scale, and its bands, or null when the file has none. */
 export interface Column {
@@ -111,10 +124,17 @@ export function paintColumns(
   height: number,
 ): void {
   const mid = Math.round(height / 2) + 0.5;
+  // The colours of the whole tile come from Rust in one call, four bytes a column.
+  const bands: BandColumn[] = [];
+  for (let px = 0; px < count; px++) {
+    const b = cols[from + px]?.bands;
+    bands.push(b ? [b.low, b.mid, b.high] : null);
+  }
+  const strip = spectrumStrip(bands, PLAIN_RGB);
   for (let px = 0; px < count; px++) {
     const c = cols[from + px];
     if (!c) continue;
-    ctx.fillStyle = c.bands ? columnColour(c.bands, PLAIN) : PLAIN;
+    ctx.fillStyle = `rgb(${strip[px * 4]},${strip[px * 4 + 1]},${strip[px * 4 + 2]})`;
     const half = Math.max(0.5, c.amp * (height / 2 - 1));
     ctx.fillRect(px, mid - half, 1, half * 2);
   }

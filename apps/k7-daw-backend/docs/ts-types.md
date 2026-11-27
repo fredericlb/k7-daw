@@ -7,6 +7,7 @@ This page holds the choices of that pipeline.
 
 | choice | why |
 |---|---|
+| a wire struct that the page's WebAssembly rules take as an argument (git's state, status, conflicts: `apps/k7-daw-wasm/git-rules`) is exported by `k7-wasm`'s bindings into `@studio/k7-wasm`'s `types/`, not by this binary | a generated file imports its neighbours by relative path, so a request type and the structs inside it must land in one folder |
 | each crate derives `ts_rs::TS` on its wire structs behind its own `ts` feature | the struct and its TypeScript type live in one place, and a build without the feature carries no ts-rs |
 | one binary, `k7-front`'s `bindings` (`--features ts`), exports every crate's types | the crates stay free of an output path, and the page's packages are written from one command |
 | the binary writes a `generated/` folder into each package that owns types, `graph-model` today | a surface that draws a graph must not drag in `@studio/web-protocol`, so the graph's types land beside the graph, and the next package takes one line in `PACKAGES` |

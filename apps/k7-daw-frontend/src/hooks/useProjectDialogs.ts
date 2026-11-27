@@ -3,7 +3,6 @@
 // DELETE flow too, until k7 stopped showing a workspace to pick a project out of.
 
 import { useCallback, useState } from "react";
-import { importRefusal } from "../ui/commands/locked";
 import { pageVerbs } from "../verbs/pageHost";
 
 export function useProjectImport(opts: {
@@ -35,12 +34,6 @@ export function useProjectImport(opts: {
   // Phase 1: translate the file and keep the log; the dialog then offers to open it (phase 2, below).
   const confirmImport = useCallback(async () => {
     if (!importPath) return;
-    // The Worker writes through its own routes, so the shell's gate is asked here first.
-    const locked = importRefusal();
-    if (locked) {
-      setImportError(locked);
-      return;
-    }
     setImporting(true);
     setImportError(null);
     try {

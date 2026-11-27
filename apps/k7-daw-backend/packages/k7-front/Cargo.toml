@@ -41,6 +41,7 @@ k7-libraries.workspace = true
 # The native capture each account starts, and the one k7x half the relay shares (1i).
 k7-capture.workspace = true
 k7-git.workspace = true
+git-rules.workspace = true
 k7-roam.workspace = true
 # The LAN door's discovery: mDNS, a host's own, or a fixed list (docs/lan.md).
 k7-lan.workspace = true

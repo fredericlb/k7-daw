@@ -4,6 +4,7 @@
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
 
+use git_rules::PullState;
 use k7_capture::landing::Land;
 use k7_git::{Begin, Choice, Error, Identity};
 use serde_json::{Value, json};
@@ -15,6 +16,11 @@ use crate::routes::files::json_answer;
 use super::git::{Answer, Ctx, bad, field, merge_waits, open, run};
 
 /// The device's identity as a commit uses it: what was typed, each empty field filled from a source (`git_author.rs`).
+/// A pull's answer: it worked, and how it ended.
+fn pulled(state: PullState) -> Value {
+    json!({ "ok": true, "state": state })
+}
+
 pub(super) fn prefilled(ctx: &Ctx) -> Result<Identity, Error> {
     Ok(super::git_author::resolve(ctx)?.id)
 }
@@ -166,27 +172,27 @@ pub(super) async fn pull(ctx: &Ctx, root: &Path, b: &Value) -> Answer {
             }
             repo.fetch_blocking(&net, &origin)?;
             let Some(theirs) = repo.remote_tip() else {
-                return Ok(json!({ "ok": true, "state": "empty-remote" }));
+                return Ok(pulled(PullState::EmptyRemote));
             };
             let began = repo
                 .merge_begin_fetching(&theirs, |lfs| repo.lfs_fetch_objects(&net, &origin, lfs))?;
             match began {
-                Begin::UpToDate => Ok(json!({ "ok": true, "state": "up-to-date" })),
+                Begin::UpToDate => Ok(pulled(PullState::UpToDate)),
                 Begin::FastForward { theirs, head } => {
                     let wanted = repo.lfs_wanted_by(&theirs)?;
                     repo.lfs_fetch_objects(&net, &origin, &wanted)?;
                     repo.merge_fast_forward(&theirs, head.as_deref(), &through)?;
                     repo.lfs_prune_held()?;
-                    Ok(json!({ "ok": true, "state": "fast-forward" }))
+                    Ok(pulled(PullState::FastForward))
                 }
                 Begin::Merge(s) => {
                     if s.conflicts.is_empty() {
                         let me = id.ok_or(Error::NoIdentity)?;
                         repo.merge_resolve(&[], &through, &me, &device)?;
                         repo.lfs_prune_held()?;
-                        return Ok(json!({ "ok": true, "state": "merged" }));
+                        return Ok(pulled(PullState::Merged));
                     }
-                    Ok(json!({ "ok": true, "state": "conflicts", "conflicts": s.conflicts }))
+                    Ok(json!({ "ok": true, "state": PullState::Conflicts, "conflicts": s.conflicts }))
                 }
             }
         })

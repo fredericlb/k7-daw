@@ -21,13 +21,7 @@ import type {
   WebProject,
   WebVideoProject,
 } from "@studio/web-protocol";
-import {
-  fenceReads,
-  fget,
-  fsend,
-  ReadOnlyDocument,
-  refusedWrite,
-} from "./fileApi.ts";
+import { fenceReads, fget, fsend } from "./fileApi.ts";
 import { fileRoutes } from "./files.ts";
 import { verbsHost } from "./verbsHost.ts";
 
@@ -147,8 +141,6 @@ export const projectApi = {
     // `at` points the verbs at another folder — a path this caller was GIVEN, never one it built.
     opts?: { at?: string; want?: CommandWant[]; journal?: CommandJournal },
   ) => {
-    const locked = refusedWrite({ kind: "command", line });
-    if (locked) throw new ReadOnlyDocument(locked);
     // Absent `want` means the graph, as the route said; an empty list is a caller refusing it.
     const r = await verbsHost().run(line, {
       ...(opts?.at ? { at: opts.at } : {}),

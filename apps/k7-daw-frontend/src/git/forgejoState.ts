@@ -1,6 +1,7 @@
 // forgejoState.ts — the two screens of a Forgejo server as data: adding one (address, check, registration) and signing in.
 // What a reader gets wrong: nothing here holds a token or a secret; the client id is public, the grant stays in the front.
 
+import { shortVersion, sshPort } from "@studio/k7-wasm/git";
 import type { ForgePoll, ForgeProbe, ForgeStart } from "./forgeState";
 
 export type AddServer =
@@ -41,16 +42,7 @@ export function addAfter(s: AddServer, e: AddEvent): AddServer {
   }
 }
 
-/** A server's version without its build metadata: "17.0.2+gitea-1.22.0" is "17.0.2". */
-export const shortVersion = (v: string): string => v.split("+")[0].trim();
-
-/** The ssh port field: empty is the default, anything else a whole port or "bad". */
-export function sshPort(typed: string): number | undefined | "bad" {
-  const t = typed.trim();
-  if (!t) return undefined;
-  const n = Number(t);
-  return Number.isInteger(n) && n > 0 && n < 65536 ? n : "bad";
-}
+export { shortVersion, sshPort };
 
 /** Add is ready with no bad port: no client id is Forgejo's built-in client (`docs/git.md`). */
 export const canAdd = (port: string): boolean => sshPort(port) !== "bad";

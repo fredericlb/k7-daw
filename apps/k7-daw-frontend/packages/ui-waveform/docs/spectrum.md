@@ -29,11 +29,11 @@ same linear axis, which on an analysed file sits under a peak-height picture.
 
 ## The colour is a blend, not a lookup table
 
-[spectrumColour.ts](../src/spectrumColour.ts) blends the three band peaks the engine writes into
+The `waveform` crate's `spectrum.rs` (`apps/k7-daw-backend/packages/waveform/src/spectrum.rs`) blends the three band peaks the engine writes into
 the sidecar (`apps/k7-daw-frontend/packages/audio-analysis/docs/analysis.md`). The mix is **additive**: bass red, mid green
 and top blue blend like ordinary light, so bass with mid gives orange-yellow, bass with top gives
 violet, and all three give white. The palette comes out of arithmetic rather than a table of
-special cases.
+special cases. The page asks for a tile's colours in one call (`spectrumStrip` of `@studio/k7-wasm/media`), an RGBA strip with four bytes a column.
 
 - Each band leans towards its hue (bass towards orange, top towards violet) and keeps only a
   **weak** contribution in the two channels it does not own. If those contributions are too
