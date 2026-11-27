@@ -1,6 +1,6 @@
 # project.k7x
 
-The rationale behind `apps/k7-daw-frontend/packages/song-schema/src/yaml/projectSchema.ts` — the file's two tiers, the
+The rationale behind `apps/k7-daw-wasm/song/src/files/project.rs` — the file's two tiers, the
 fields that are dead and still accepted, and the archetypes.
 
 The root `format` key, the level a newer k7 is refused at, is [formatLevel.md](formatLevel.md).

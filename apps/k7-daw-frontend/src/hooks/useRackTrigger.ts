@@ -29,7 +29,7 @@ export function rackPreviewReq(sound: {
   return null;
 }
 
-/** The engine lane a node plays on: its plugin id is `<lane>:<node>` (apps/k7-daw-frontend/packages/song's nodeProject). */
+/** The engine lane a node plays on: its plugin id is `<lane>:<node>` (apps/k7-daw-wasm/song's nodeProject). */
 export function laneOfPlugin(
   pluginId: string | undefined,
   module: string,

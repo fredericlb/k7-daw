@@ -2,7 +2,7 @@
 name = "song-edit"
 version = "0.1.0"
 edition = "2024"
-description = "The song editor in Rust, base: the workspace's files read and written as k7x, the module folders, the confinement, the chain item and lane strip writes, after ../../k7-daw-frontend/packages/song-edit/src/ and the write side of ../../k7-daw-frontend/packages/song/src"
+description = "The song editor in Rust, base: the workspace's files read and written as k7x, the module folders, the confinement, the chain item and lane strip writes."
 publish = false
 
 [lib]

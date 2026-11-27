@@ -1,6 +1,6 @@
 # Clips, sequences, curves and video tracks
 
-The rationale behind `apps/k7-daw-frontend/packages/song-schema/src/yaml/entitySchemas.ts` — the per-entity shapes. Each
+The rationale behind `apps/k7-daw-wasm/song/src/files/entity.rs` — the per-entity shapes. Each
 is a FLAT file keyed by its own filename (`clips/kick.k7x` has no `id:`, the name is the id), which
 also rules out one file declaring several ids.
 

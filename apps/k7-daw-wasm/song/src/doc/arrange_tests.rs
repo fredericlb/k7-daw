@@ -244,7 +244,10 @@ fn a_category_has_one_hue_and_several_of_it_two_shades() {
     // Green: the green channel leads.
     let channel = |s: &str, at: usize| u8::from_str_radix(&s[at..at + 2], 16).unwrap();
     assert!(channel(&a, 3) > channel(&a, 1));
-    assert_eq!(category_shade(TrackCategory::Drums, 0, 1), category_shade(TrackCategory::Drums, 0, 1));
+    assert_eq!(
+        category_shade(TrackCategory::Drums, 0, 1),
+        category_shade(TrackCategory::Drums, 0, 1)
+    );
     assert_ne!(
         category_shade(TrackCategory::Drums, 0, 3),
         category_shade(TrackCategory::Drums, 2, 3)

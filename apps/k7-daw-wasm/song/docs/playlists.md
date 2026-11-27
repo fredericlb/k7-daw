@@ -78,7 +78,7 @@ browser go by exactly the same rules.
 So it is the job of whoever holds both lists — k7's playlist pane
 (`apps/k7-daw-frontend/docs/playlists.md`) and the desk (`apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/setList.md`),
 each with the playlist on one side and the files on the other. They share the resolution itself
-rather than each having a copy: `resolveRecords` in `@studio/song-schema/records`, since two
+rather than each having a copy: `resolveRecords` in `@studio/k7-wasm/records`, since two
 copies would diverge at the first case learned on one side only.
 
 ## What the listing reads anyway

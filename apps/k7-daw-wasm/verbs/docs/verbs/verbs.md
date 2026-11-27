@@ -365,7 +365,7 @@ parsing.
 
 The one question that decides whether a cable may land on a lane: a track's material is its clips,
 and the single exception the model makes is a live input's signal, which is what recording onto a
-lane IS — an audio input's sound, or a MIDI device's notes (`apps/k7-daw-wasm/song/docs/midiIn.md`). `apps/k7-daw-frontend/packages/song`'s `graph.ts` asks the same thing of the chain whose `out` names the track,
+lane IS — an audio input's sound, or a MIDI device's notes (`apps/k7-daw-wasm/song/docs/midiIn.md`). `apps/k7-daw-wasm/song`'s `graph.ts` asks the same thing of the chain whose `out` names the track,
 and warns when the answer is no.
 
 UPSTREAM, not "somewhere in this node's chain". A preamp reaches a compressor through the mic

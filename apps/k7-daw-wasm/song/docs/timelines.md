@@ -1,7 +1,7 @@
 # Timelines — an arrangement placed whole as one event
 
 `timelines/<id>.k7x` is a material, like `clips/` and `sequences/`: lanes of events, placed on a song
-lane by `ref` as one event. The schema is `@studio/song-schema`'s `yaml/timelineSchema.ts`, the
+lane by `ref` as one event. The reader is `apps/k7-daw-wasm/song/src/files/timeline.rs`, the
 compile `src/compile/timelines.ts`, the user's page `apps/k7-daw-frontend/user-docs/22-syntax-material.md`.
 
 ## Its sound goes through the lane it is placed on
@@ -33,7 +33,7 @@ what runs past it — a clip with no stated length is given the room left, which
 the file.
 
 So a timeline event takes no `from`, `to`, `loop`, fades, `warp`, takes, comp or crossfades
-(`FIXED_FIELDS` in `@studio/song-schema`'s `timelineLane.ts`): each would give the event an extent
+(`FIXED_FIELDS`, `@studio/k7-wasm/consts`): each would give the event an extent
 of its own, which is precisely what a fixed length rules out. The compile refuses them by name, and
 the verbs refuse before writing them. `gain` and `disabled` are the two words it keeps, applied to
 every clip it plays — the gain to audio only, as on any event (`song-edit` `docs/eventGain.md`).

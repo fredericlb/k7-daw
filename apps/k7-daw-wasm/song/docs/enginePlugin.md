@@ -56,7 +56,7 @@ is empty: `format` is the authored `plugin.type` and `name` the plugin's real na
 only judged absent against a cache that has something in it.
 
 **While the scan cannot say, the built-ins stand in for it.** Every engine has them, so
-`engineModules()` offers the generated table (`@studio/song-schema/builtinParams`) as the scan
+`engineModules()` offers the generated table (`@studio/k7-wasm/schema`) as the scan
 would list them — `internal`, by display name and role — whenever the cache is empty. An account's
 file service has no cache until an engine is bound to it (`apps/k7-daw-backend/packages/k7-hub/src/binding.rs` writes it
 then), and a project compiled before that — an open through the API, a fresh install on a computer — would

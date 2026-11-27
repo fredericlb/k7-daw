@@ -1,7 +1,6 @@
 # A surface file
 
-The rationale behind `apps/k7-daw-frontend/packages/song-schema/src/yaml/surfaceSchema.ts` and
-`apps/k7-daw-frontend/packages/song-schema/src/yaml/surfaceFile.ts` — `surfaces/<name>.k7x`, the special VIEW a project
+The rationale behind `apps/k7-daw-wasm/song/src/views/surfaces.rs` — `surfaces/<name>.k7x`, the special VIEW a project
 asks its editor to draw. What a surface IS lives in `apps/k7-daw-wasm/song/docs/surfaces.md`; this page is
 about the file's shape and what the schema refuses.
 
@@ -58,7 +57,7 @@ component MOVES, and neither has a component that moves one. The arrangement dra
 lanes and the frame composites its own layers.
 
 **The desk's vocabulary is written out here and held to the original by a test.**
-`@studio/song-schema` does not know what a `crossfade` is, and that is the rule — what the test
+`song-schema` does not know what a `crossfade` is, and that is the rule — what the test
 protects against is a copy going STALE. `@studio/ui-turntables` owns the real list (`MIX_CONTROLS`,
 `REQUIRED_CONTROLS`) and cannot be imported from here in either direction: it reaches
 `@studio/engine-browser` through `deck.ts`, and the node-side half of the song packages would drag

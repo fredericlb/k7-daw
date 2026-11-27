@@ -1,5 +1,5 @@
 // gen-builtin-params.mjs — ask the engine what every built-in plugin's parameters are, and write the
-// table @studio/song-schema ships. Run it after bumping Tracktion or adding a built-in; the file it
+// table song-schema ships. Run it after bumping Tracktion or adding a built-in; the file it
 // writes is generated and committed, so no build step depends on a C++ binary.
 // The table is JSON with one plugin per line, so a real change reads as the plugins it touched.
 // See docs/builtinParams.md.

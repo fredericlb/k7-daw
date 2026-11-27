@@ -1,6 +1,6 @@
 # graph.k7x — the shape, and the edits
 
-The rationale behind `apps/k7-daw-frontend/packages/song-schema/src/yaml/graphSchema.ts`,
+The rationale behind `apps/k7-daw-wasm/song/src/routing/graph_file.rs`,
 `apps/k7-daw-wasm/song-edit/src/graph_file.rs` and its vectors. The compile side lives in
 `apps/k7-daw-wasm/song/docs/graphFile.md`; this page is about the FILE — what it declares, and what each
 edit has to preserve.

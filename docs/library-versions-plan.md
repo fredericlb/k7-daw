@@ -48,7 +48,7 @@ k7 has several version schemes: the image stamp (`26.08031412`), the desktop's s
   the previous version's, so a publish never raises the floor by accident.
 - On a desktop or a phone the backend and the engine ship together, so they share one level. On the
   server, the supervisor states its machine's level in every heartbeat (`kLibraryLevel`, which
-  `../apps/k7-daw-frontend/packages/song-schema/src/libraryLevel.test.ts` keeps equal to `LIBRARY_LEVEL`); one older than
+  `../apps/k7-daw-frontend/packages/k7-wasm/src/schemaPage.test.ts` keeps equal to `LIBRARY_LEVEL`); one older than
   the field states none and runs level 1. The editor then warns, above the file tree, for each
   library whose pinned version `requires` more than the engine playing it. A warning and not a
   refusal: what that version adds is unknown to the old engine, and the rest of the song still plays.
@@ -129,7 +129,7 @@ library and every workspace, and runs at the highest level, so latest, old and f
 
 ## Lots
 
-1. **Built.** `library.k7x`, `LIBRARY_LEVEL` (`../apps/k7-daw-frontend/packages/song-schema/src/libraryVersions.ts`), the
+1. **Built.** `library.k7x`, `LIBRARY_LEVEL` (`../apps/k7-daw-wasm/song-edit/src/shared_folders.rs`), the
    `draft/` + `<n>/` layout on the origin, an existing library moved into `1/`, the draft made on an
    admin's ask, and `LibraryStore.publish` (`k7-libraries`).
 2. **Built.** `_library-pins.k7x`: the compile, the file tree and the presets read the pinned

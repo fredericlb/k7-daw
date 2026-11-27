@@ -1,9 +1,8 @@
 # The module vocabulary
 
-The rationale behind `apps/k7-daw-frontend/packages/song-schema/src/moduleTypes.ts` — the type folders, what each one
-means, and how a module is NAMED. The file itself is a leaf: no filesystem, no imports beyond
-`@studio/graph-model`, because these tables are the one thing everything about a module derives
-from and a browser has to read them too.
+The rationale behind `apps/k7-daw-wasm/song/src/modules/type_table.rs` and `types.rs` — the type folders, what each one
+means, and how a module is NAMED. The tables are Rust's and the page reads them as `@studio/k7-wasm/consts`,
+because they are the one thing everything about a module derives from and a browser has to read them too.
 
 ## The io sources
 

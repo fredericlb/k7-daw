@@ -946,7 +946,7 @@
 # past the far edge. Each is ONE pass over the file and so one undo — running the singular
 # verb N times would be N journal entries, and half of them could land while the rest fail.
 # An empty rectangle is refused by name; a pad's `repeat`/`skip` are never touched.
-# See @studio/song-schema docs/noteEdits.md.
+# See song-schema docs/noteEdits.md.
 - command: "sequence notes remove"
   sid: sequence.notesRemove
   readable:
@@ -1026,7 +1026,7 @@
     ]
 
 # A dragged SELECTION, and not a rectangle verb: every note names its own destination. One write, so one Ctrl+Z; a note may land
-# where another MOVING note leaves, never on one that stays. See @studio/song-schema docs/noteEdits.md.
+# where another MOVING note leaves, never on one that stays. See song-schema docs/noteEdits.md.
 - command: "sequence notes move"
   sid: sequence.notesMove
   readable:

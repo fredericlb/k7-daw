@@ -92,7 +92,7 @@ nodes/<name>.k7x       one USE of a module, flat, named by its file — the LANE
   events naming clips and events naming sequences in one list, and each leaves by the one
   its own material fits (`gtr#audio:` / `gtr#midi:` in `graph.k7x` when the two need
   different chains). See
-  [apps/k7-daw-wasm/song/docs/trackModules.md](./packages/song/docs/trackModules.md).
+  [apps/k7-daw-wasm/song/docs/trackModules.md](../k7-daw-wasm/song/docs/trackModules.md).
 - **A group holds no material — only membership.** `tracks` lists the member lane
   names. That's all a group is.
 - **Mute is the lane's BYPASS**, one name in `graph.k7x`'s `bypassed:`; solo is derived by

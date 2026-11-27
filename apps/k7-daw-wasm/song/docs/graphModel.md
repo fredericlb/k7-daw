@@ -253,12 +253,9 @@ packaged file service bundles this one as a library.
 
 ## Compiling a placement into a clip
 
-`placementId` and its inverse live in `apps/k7-daw-frontend/packages/song-schema/src/placementId.ts` — two lines of rule
-with no imports, so the BROWSER can hold them too (the context menu hands the editor a placement
-id). `nodeProject.ts`
-re-exports them because that is where every existing importer looks, and IMPORTS them as well:
-`export … from` re-publishes a name without BINDING it locally, and `placementToClip` calls
-`placementId`.
+`placement_id` and its inverse live in `apps/k7-daw-wasm/song/src/clips/` (`distinct.rs`, `audio_def.rs`) — two lines of rule
+the BROWSER holds too, as `schema.material_ref_of` and `schema.placement_start_of` (the context menu hands the
+editor a placement id).
 
 A clip's `id` is the PLACEMENT's identity, not the material's — `name` is the material, and the
 two are only the same string while a material is placed once. A SPLIT makes two placements of one

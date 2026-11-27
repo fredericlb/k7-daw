@@ -1,7 +1,7 @@
 # ui-eyes: the WebGL compositor
 
 `@studio/ui-eyes` (`apps/k7-daw-frontend/packages/ui-eyes/`) draws a `VideoScene` with WebGL2: live against a clock, or
-frame by frame into a video file. It depends only on `@studio/song-schema` (for the keyframe
+frame by frame into a video file. It depends only on `song-schema` (for the keyframe
 evaluation and vocabulary) and `mediabunny` (demuxing, encoding, muxing). It imports none of the
 Node packages, which is what lets it run in a browser.
 

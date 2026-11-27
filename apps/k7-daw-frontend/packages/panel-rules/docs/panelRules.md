@@ -13,7 +13,7 @@ Two things apply these rules: the builder's grid, and AI organize's loop (`src/a
 proposal from Claude in the page before it reaches the buffers. The builder is React, CodeMirror and Radix; a
 test or a server taking the check from it would carry all of that, for some 850 lines of pure functions.
 
-So the rules have no React and no DOM, and depend on the file format (`@studio/song-schema`,
+So the rules have no React and no DOM, and depend on the file format (`song-schema`,
 `@studio/k7-wasm/k7x`) and nothing above it. The builder imports them like any other host, and still answers
 `@studio/ui-module-builder/ai-organize` for the frontend that reaches AI organize's types
 through it.

@@ -3,7 +3,7 @@
 Sub-step 2k of [rustCompiler.md](rustCompiler.md), whose decisions 1 to 120, output rules, hostile-input rules and stage gate it keeps; 2e's, 2f's and 2g's
 are in [rustCompilerLanes.md](rustCompilerLanes.md), [rustCompilerClips.md](rustCompilerClips.md) and [rustCompilerCurves.md](rustCompilerCurves.md).
 It ports what the Chains tab DRAWS: the `WebGraph` of `@studio/graph-model`, every node's flags, panel and choices, every lane's clips and signal,
-the warnings `validate` raises, and a library chain's graph. It builds no `ProjectDoc` and nothing here is wired to a route. Paths are relative to `apps/k7-daw-frontend/packages/song`.
+the warnings `validate` raises, and a library chain's graph. It builds no `ProjectDoc` and nothing here is wired to a route. Paths are relative to `apps/k7-daw-wasm/song`.
 The graph takes what the compile hands as plain data (`Handed`); `view/handed.rs` is the one file that reads 2h's `Compiled` and makes it.
 
 ## Corrections to the 2k row of `rustCompiler.md`

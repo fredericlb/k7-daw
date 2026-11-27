@@ -21,7 +21,7 @@ pub const EXTERNAL_FORMATS: [&str; 9] = ["vst3", "vst", "vst2", "au", "audiounit
 /// The folder a workspace keeps its playlists in.
 const PLAYLISTS_DIR: &str = "_playlists";
 
-/// The audio extensions, `AUDIO_EXT` in `@studio/song-schema/audioFiles`.
+/// The audio extensions, `AUDIO_EXT` in `@studio/k7-wasm/schema`.
 const AUDIO_EXT: [&str; 9] = [
     ".wav", ".flac", ".aiff", ".aif", ".mp3", ".ogg", ".opus", ".m4a", ".webm",
 ];

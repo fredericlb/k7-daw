@@ -362,7 +362,11 @@ fn an_unknown_schema_op_is_a_bad_request() {
 #[test]
 fn a_module_plugin_is_a_builtin_only_when_it_is_internal_and_named_by_any_spelling() {
     let by = |kind: Value, name: &str| ask("builtin_for_plugin", json!({ "type": kind, "name": name }));
-    assert!(by(json!("internal"), "4OSC")["params"].as_array().is_some_and(|p| !p.is_empty()));
+    assert!(
+        by(json!("internal"), "4OSC")["params"]
+            .as_array()
+            .is_some_and(|p| !p.is_empty())
+    );
     assert_eq!(by(json!("internal"), "4osc"), by(json!("internal"), "4OSC"));
     assert!(by(json!("vst3"), "4OSC").is_null());
     assert!(by(json!(null), "4OSC").is_null());

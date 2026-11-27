@@ -355,7 +355,7 @@ The RENDER node's card carries the list. Three things hold it together:
   this command, which re-reads and rewrites it.
 
 The two names are spelled twice — in `ASPECTS` and in `RENDER_UI` — because `@studio/ui-chains`
-does not see `@studio/song-schema`. The verb REFUSES a name it does not know, so a drift is a
+does not see `song-schema`. The verb REFUSES a name it does not know, so a drift is a
 refusal rather than a wrong size written silently.
 
 ## Exporting the picture — `project export video`

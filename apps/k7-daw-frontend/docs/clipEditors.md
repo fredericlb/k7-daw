@@ -180,7 +180,7 @@ Which verb commits is decided by whether the pitch changed:
 - it did not → `sequence note timerange`, as before.
 
 Not one verb for both, though `move` could carry a purely horizontal drag: `moveNote` **refuses an
-occupied destination** and `setNoteTimeRange` does not (`@studio/song-schema` `docs/noteEdits.md`),
+occupied destination** and `setNoteTimeRange` does not (`song-schema` `docs/noteEdits.md`),
 so routing every move through it would start refusing drags that work today. A drag whose pitch
 change the keyboard's edge swallowed counts as horizontal, which is what `movesPitch` answers.
 
@@ -406,14 +406,14 @@ about the same box.
 
 Each is **one pass over the file** and therefore one journal entry.
 Running the singular verb N times would be N of them, and half could land while the rest failed —
-an undo would then be a fifth of the way back. `mapNotesInRegion` in `@studio/song-schema` is
+an undo would then be a fifth of the way back. `mapNotesInRegion` in `song-edit` is
 where that pass lives; the four verbs are four three-line functions over it.
 
 They are offered on the note's own right-click, when the click landed inside the rectangle. The
 three that owe a value go to the bar with the box already spelt (`needsMore`), which is what the
 mechanism is for and what spares the shell three more key bindings. What each of them decided —
 quantize keeps the length, transpose clamps rather than drops, velocity is absolute and 1 clears
-the field — is in `@studio/song-schema` `docs/noteEdits.md`, beside the writers.
+the field — is in `song-schema` `docs/noteEdits.md`, beside the writers.
 
 ### The roll paints first too
 

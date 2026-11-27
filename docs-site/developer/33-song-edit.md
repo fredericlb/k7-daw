@@ -1,6 +1,6 @@
 # song-edit: surgical writes
 
-`apps/k7-daw-frontend/packages/song-edit` changes a project in its own vocabulary — "set `Filter Freq` on node `lead`",
+`apps/k7-daw-wasm/song-edit` changes a project in its own vocabulary — "set `Filter Freq` on node `lead`",
 "split this event at beat 9", "insert two bars at bar 17" — by finding the file a name lives in and
 rewriting **only the value that changes**. Every other byte stays: comments, key order, quoting,
 inline lists. A knob drag is therefore a one-line diff, the file stays readable in git, and the
@@ -18,7 +18,7 @@ the timeline, the mixer, the chains view — goes through.
 | Layer | File | What it does |
 |---|---|---|
 | One value in one file | `apps/k7-daw-wasm/song-edit/src/yaml_edit.rs` | `setFileValue(file, path, value)`, `deleteFileValue`: one key path set or removed on the file's k7x document, so the rest of it is reproduced byte for byte; an inline list stays inline. |
-| Writers per file kind | the `*File.ts` modules of `apps/k7-daw-frontend/packages/song-schema/src/yaml/` | Functions over a `K7Scope`: `trackFile` (events), `sequenceFile` (notes), `videoTrackFile`, `takeFile`, `curveFile`, `graphFile` (segments), `chainFile`, `moduleFile`. Browser-safe, because editor panes apply them to unsaved buffers too. |
+| Writers per file kind | `track_file.rs`, `sequence_file.rs`, `picture_file.rs`, `take_file.rs`, `curve_file.rs`, `graph_file.rs`, `chain_*.rs`, `module_file.rs` of `apps/k7-daw-wasm/song-edit/src/` | Functions over a k7x document: events, notes, shots, takes, curves, segments, chains, modules. The text-in, text-out ones are reached as `text.*` ops, because editor panes apply them to unsaved buffers too. |
 | The k7x document | `apps/k7-daw-frontend/packages/k7-wasm/src/k7x/document.ts` | `K7Document` with `setIn`/`deleteIn`/`applyIn` on key paths, rewriting only the span of the value. |
 | The door | `apps/k7-daw-wasm/song-edit/src/workspace_doc.rs` | `wsEdit(path, edit)` runs a writer on the file's document and writes it back atomically, skipping a write that changes nothing (`apps/k7-daw-wasm/song/docs/k7xFiles.md`). |
 

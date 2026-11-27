@@ -56,7 +56,7 @@ pub fn is_workspace_name(w: &str) -> bool {
         && !w.contains('\u{0}')
 }
 
-/// Names a library cannot take (`RESERVED_LIBRARY_NAMES` in `@studio/song-schema`).
+/// Names a library cannot take (`RESERVED_LIBRARY_NAMES` in `song-schema`).
 const RESERVED_LIBRARY_NAMES: [&str; 6] = [
     "engine",
     "workspace",

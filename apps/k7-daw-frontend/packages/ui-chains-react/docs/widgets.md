@@ -71,7 +71,7 @@ incoming frame until that frame catches up.
 always report a value it was never sent, and a strip with no authored `Volume` plays at 0 dB: a
 fader reading "–" with its cap on the floor tells the user half the mix is muted, and they drag it
 up to fix what was never broken. The default is the one the built-in plugin table declares
-(`@studio/song-schema/builtinParams`), sent on the node as `defaults` for the params its panel
+(`@studio/k7-wasm/schema`), sent on the node as `defaults` for the params its panel
 binds only — a synth declares hundreds, and the graph travels whole on every reload. The stage's
 `@mix` (1) and levels (0 dB) keep their own fallback, being the engine's and in no plugin's table.
 An external plugin declares nothing k7 can read before it loads, so its widget stays unknown.

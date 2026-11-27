@@ -306,7 +306,7 @@ to "is this surface valid".
 
 ```
 surfaces/<id>.k7x
-  → SurfaceSchema          apps/k7-daw-frontend/packages/song-schema/src/yaml/surfaceSchema.ts   (browser-safe)
+  → SurfaceFile            apps/k7-daw-wasm/song/src/views/surfaces.rs (the shape, browser-safe)
   → projectSurfaces(dir)   apps/k7-daw-wasm/song/src/views/surfaces.rs (the disk walk)
   → GET /surfaces          a derived view, like /graph beside it
   → useSurfaces            apps/k7-daw-frontend/src/hooks/useSurfaces.ts

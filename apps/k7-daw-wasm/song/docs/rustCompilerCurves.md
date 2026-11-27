@@ -1,7 +1,7 @@
 # The curves in Rust (2g)
 
 Sub-step 2g of the compiler's port. It extends [rustCompiler.md](rustCompiler.md), whose decisions 1 to 87, output rules,
-hostile-input rules and stage gate it keeps. Paths are relative to `apps/k7-daw-frontend/packages/song`.
+hostile-input rules and stage gate it keeps. Paths are relative to `apps/k7-daw-wasm/song`.
 
 A curve file is a function of time; the engine plays a list of breakpoints. This sub-step reads `curves/<id>.k7x`
 (`rust/src/curves/file.rs`), resolves each against the song's time signature (`resolved.rs`), and bakes it to `[beat, value]`

@@ -141,7 +141,7 @@ list. This screen is where a line and the files are both in hand, and therefore 
 does not exist" is a question that can be answered.
 
 The resolution itself is pure and tested separately (`resolveRecords`, in
-`@studio/song-schema/records`): a line is a workspace-relative path, nothing else. The desk reads
+`@studio/k7-wasm/records`): a line is a workspace-relative path, nothing else. The desk reads
 the same function, so a row greyed here is a row greyed there.
 
 A line resolving to nothing **stays on screen**, and that is the point: the file is edited by hand,

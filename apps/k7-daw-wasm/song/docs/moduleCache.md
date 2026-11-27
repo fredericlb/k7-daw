@@ -66,7 +66,7 @@ Walking the stamp **once per turn of the event loop** — memoise it, clear it o
 — looks safe and is not. The reasoning behind it ("nothing can land between two synchronous
 reads") forgets that this process is itself a writer: `node param` writes a module file and
 reloads the project in the same synchronous stretch, so the second read would be answered from
-a stamp taken before the write. `apps/k7-daw-frontend/packages/song`'s suite catches it — 13 failures in
+a stamp taken before the write. `apps/k7-daw-wasm/song`'s suite catches it — 13 failures in
 `presets.test.ts` and its neighbours, all of the shape "module 'synth' has no params". The
 walk is 20 ms; pay it per call.
 
@@ -138,7 +138,7 @@ Measured here — 3000 same-size rewrites, as fast as Node can issue them:
 
 A cache keyed on that serves the previous content — for a clip file, the edit you just made
 silently not happening. It is the same class of mistake as the tick memo above, and it is found
-the same way, by trying to break it rather than by a green suite: `apps/k7-daw-frontend/packages/song` passes with the
+the same way, by trying to break it rather than by a green suite: `apps/k7-daw-wasm/song` passes with the
 unsafe key.
 
 The fix is not a finer key but a narrower one. An mtime is trusted only once it is **older than

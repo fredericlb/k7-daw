@@ -6,7 +6,10 @@ use crate::files::{Check, DeError, Finding, decode_with, from_map};
 use k7x::{MapNode, Node, Scalar};
 use serde::de::{self, Deserialize, Deserializer, IgnoredAny};
 use serde::{Deserialize as Derive, Serialize};
-use song_schema::{ADSR_DEFAULT_LEVEL, AdsrSpec, CurveSpec, Cut, LfoSpec, PointSpec, PointsSpec, Polarity, Shape, TimeSig, parse_duration};
+use song_schema::{
+    ADSR_DEFAULT_LEVEL, AdsrSpec, CurveSpec, Cut, LfoSpec, PointSpec, PointsSpec, Polarity, Shape, TimeSig,
+    parse_duration,
+};
 
 /// A curve file as `parseCurve` answers it: the pilot's spec, and the conditions when there are any.
 #[derive(Clone, Debug, PartialEq, Serialize)]

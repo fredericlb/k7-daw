@@ -14,7 +14,7 @@ Both are **workspace** folders at the root, beside `_modules`: `_playlists/` and
 | `playlistStub(name)` | What `playlist new` writes: a comment, `title`, `items([])`. It parses, unlike an empty file. |
 | `append`, `remove`, `move` (ops of `editPlaylist`) | Edits of the text, preserving comments and layout. Each returns false when `items` is in a shape it cannot safely edit, and the caller refuses with "change the line by hand". |
 
-Resolving a line against the workspace's audio files is `apps/k7-daw-wasm/song-edit/src/records.rs`, reached as `@studio/k7-wasm/records`: `recordPathOf` (a line to its workspace path), `resolveRecords` (keeps unresolved lines, since a dropped row hides a typo; a record's stems are `stems/` beside it), `recordName`, `recordFolder`, and, in `apps/k7-daw-frontend/packages/song-schema/src/records.ts`, the drag payload (`RECORD_DRAG_TYPE`, `packRecordDrag`). What travels in a drag is the **line**, so a deck resolves it exactly as its own set list does.
+Resolving a line against the workspace's audio files is `apps/k7-daw-wasm/song-edit/src/records.rs`, reached as `@studio/k7-wasm/records`: `recordPathOf` (a line to its workspace path), `resolveRecords` (keeps unresolved lines, since a dropped row hides a typo; a record's stems are `stems/` beside it), `recordName`, `recordFolder`, and, in `apps/k7-daw-frontend/packages/ui/src/record-drag.ts`, the drag payload (`RECORD_DRAG_TYPE`, `packRecordDrag`). What travels in a drag is the **line**, so a deck resolves it exactly as its own set list does.
 
 ## Commands
 
@@ -55,7 +55,7 @@ A line that names no workspace audio file is not pre-fetched.
 
 ## Reference tracks
 
-`apps/k7-daw-frontend/packages/song-schema/src/reference.ts`: `REFERENCES_DIR`, `REFERENCE_EXTS` (what a browser `<audio>` may decode) and `REFERENCE_ACCEPT` for the file picker, `isReferenceFile` (the extension is the whole rule; no sidecar), `referenceName`, `referencePathOf`, `ReferenceTrack`. Tested by `apps/k7-daw-frontend/packages/song-schema/src/reference.test.ts`.
+`apps/k7-daw-wasm/song/src/wire.rs`: `REFERENCE_EXTS` (what a browser `<audio>` may decode; the extension is the whole rule, no sidecar) and `ReferenceTrack`, and `apps/k7-daw-wasm/song-edit/src/shared_folders.rs`: `REFERENCES_DIR`. The page reads them as `@studio/k7-wasm/consts` and `@studio/k7-wasm/types`, and builds the file picker's `accept` string in `apps/k7-daw-frontend/src/components/ReferencesPanel.tsx`.
 
 | Path | Role |
 |---|---|

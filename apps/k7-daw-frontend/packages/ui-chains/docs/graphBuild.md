@@ -298,7 +298,7 @@ serves both from one site.
 is a position in the list and nothing more — `setModuleField` writes the option's LABEL, which is
 the base's name, so adding a base can renumber the list without changing what any entry writes.
 The rows after `none` are sorted for people with `@studio/web-protocol/tree`'s collator, each keeping
-its position as its value: the list arrives in code-point order (`@studio/song-schema`'s
+its position as its value: the list arrives in code-point order (`song-schema`'s
 `docs/textOrder.md`), which puts every capitalised name before the lower-case ones.
 
 ## An intrinsic that can be SET must be readable BACK
@@ -503,7 +503,7 @@ plugged into a jack that will not give it back.
 
 > What may LAND on that socket is narrower than what may be dragged to it: a run carrying a live
 > interface input, and nothing else — recording a preamp onto a lane. `graph chain connect` asks the
-> same question `apps/k7-daw-frontend/packages/song` asks, by walking UPSTREAM of the cable's source (`runCarriesInput`).
+> same question `apps/k7-daw-wasm/song` asks, by walking UPSTREAM of the cable's source (`runCarriesInput`).
 > Refusing every track outright would be stricter than the model it guards and leave an `IN` node in
 > the graph with nowhere to go; and since the derivation splits `mic → comp` into two chains,
 > reading either one's steps would answer no for every recording path with a plugin on it.

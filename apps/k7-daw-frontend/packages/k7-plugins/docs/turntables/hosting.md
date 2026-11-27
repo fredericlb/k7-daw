@@ -49,7 +49,7 @@ fields: the difference between a seam and a shape one host happens to have.
 
 Everything else the desk needs is already shared and is imported directly rather than injected:
 the file routes are `@studio/project-shell`'s `projectApi`, the playlist format is `@studio/song`'s
-and the set list's resolution is `@studio/song-schema/records`. A seam over those would be a seam
+and the set list's resolution is `@studio/k7-wasm/records`. A seam over those would be a seam
 over something that is already one thing.
 
 ### The desk does not stream into the tab

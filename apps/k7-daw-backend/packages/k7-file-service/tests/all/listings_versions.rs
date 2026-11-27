@@ -5,7 +5,9 @@ use crate::support;
 
 use k7_file_service::libraries::Version;
 use k7_file_service::listings::levels::module_libraries;
-use k7_file_service::listings::versions::{LIBRARY_LEVEL, Remote, UNPINNED_VERSION, VersionRow, versions_at};
+use k7_file_service::listings::versions::{
+    LIBRARY_LEVEL, Remote, UNPINNED_VERSION, VersionRow, versions_at,
+};
 use k7_file_service::space::{Declined, Space};
 use k7_file_service::tree::Limits;
 use serde_json::Value;
@@ -131,5 +133,8 @@ fn a_levels_row_carries_its_version_in_the_literals_order() {
 #[test]
 fn the_constants_are_the_song_crates() {
     assert_eq!(LIBRARY_LEVEL, song_edit::shared_folders::LIBRARY_LEVEL);
-    assert_eq!(UNPINNED_VERSION.to_string(), song_edit::shared_folders::UNPINNED_VERSION);
+    assert_eq!(
+        UNPINNED_VERSION.to_string(),
+        song_edit::shared_folders::UNPINNED_VERSION
+    );
 }

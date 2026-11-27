@@ -82,10 +82,7 @@ mod tests {
         let env = env_of(&home, "C:\\code");
         assert_eq!(env.studio_home, "/C:/Users/a/.k7");
         assert_eq!(env.libraries_home, "/C:/Users/a/.k7/libraries");
-        assert_eq!(
-            env.meta_root,
-            "/C:/code/apps/k7-daw-wasm/song/meta"
-        );
+        assert_eq!(env.meta_root, "/C:/code/apps/k7-daw-wasm/song/meta");
         assert!(env.models_root.starts_with("/C:/Users/a/.k7"));
     }
 

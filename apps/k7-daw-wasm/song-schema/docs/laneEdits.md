@@ -82,10 +82,10 @@ placement in a take or an alternative is a placement — and deletes the key rat
 
 ## A placement's id
 
-`apps/k7-daw-frontend/packages/song-schema/src/placementId.ts` holds it in two functions with no imports, so a BROWSER can
-have the rule: it is written by the compiler, logged by the engine, carried on `/waveform`, and read
-back by every surface that has to find the file behind a clip. It is kept out of `nodeProject.ts`,
-which reaches for `node:fs` and `node:child_process`, for the reason `graph-model` is its own tier.
+`apps/k7-daw-wasm/song/src/clips/distinct.rs` and `apps/k7-daw-wasm/song/src/clips/audio_def.rs` hold it (`without_repeat`, `material_ref_of`,
+`placement_start_of`), and the page asks them as `schema.material_ref_of` and `schema.placement_start_of`: it is
+written by the compiler, logged by the engine, carried on `/waveform`, and read back by every surface that has to find
+the file behind a clip.
 
 Two placements of one material are the ordinary case — a split makes a pair of them, and any lane may
 drop the same sample twice — so the material's name alone cannot identify one. The start almost

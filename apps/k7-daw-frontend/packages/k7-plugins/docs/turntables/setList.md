@@ -38,7 +38,7 @@ playlist carrying one set's marks would hand them to the other. So the cues live
 A playlist line names an audio **file of the workspace** by its workspace-relative path, and the
 desk reads nothing else about it: there is no catalogue to consult. A row shows the file's name
 and, above it, the folder holding it. `resolveSet` crosses the playlist with the workspace's
-files — the same `resolveRecords` k7's playlist pane uses (`@studio/song-schema/records`), and
+files — the same `resolveRecords` k7's playlist pane uses (`@studio/k7-wasm/records`), and
 that is the point: "which file does this line mean" is a rule, and two copies would diverge the
 day one of them learnt a case.
 

@@ -100,7 +100,7 @@ because the glyph beside it is what that `ge.` was for and saying it twice costs
 card. The TRACK node keeps its full id — it IS addressed by that string, and a lane whose card and
 whose commands disagree about its name is worse than a repeated prefix.
 
-Which codes exist is `@studio/song-schema`'s table, and drawing a graph must not drag that in — so
+Which codes exist is `song-schema`'s table, and drawing a graph must not drag that in — so
 `trackLabel` arrives through `ChainsIcons`, beside `TrackIcon`, for the reason `chainsIcons.tsx`
 gives for the glyph itself. Same table on both sides: the prefix the icon is picked from is the
 prefix the name drops, so one cannot change without the other. It is optional, and a host supplying

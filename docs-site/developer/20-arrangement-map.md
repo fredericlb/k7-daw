@@ -33,7 +33,7 @@ is the one after.
 | Import | `apps/k7-daw-backend/packages/k7-import/src/` (`dawproject.rs`, `ableton.rs`, `als_zip.rs`, `emit.rs`), run by `POST /import` (`apps/k7-daw-backend/packages/k7-file-service/src/edits/import.rs`) |
 | Undo journal | `apps/k7-daw-backend/packages/k7-file-service/src/journal/` (server), `apps/k7-daw-frontend/packages/project-shell/src/undo.ts` (client), `apps/k7-daw-frontend/src/components/HistoryPanel.tsx` |
 | The verbs | `apps/k7-daw-wasm/verbs/commands.yaml` (names, args, menus), `apps/k7-daw-wasm/verbs/src/verbs/` (handlers) |
-| The writes | `apps/k7-daw-frontend/packages/song-edit/src/` — `trackMix.ts` (placements), `materialCut.ts`, `insertTime.ts`, `crossfade.ts`, `eventLoop.ts`, `eventGain.ts`, `onsets.ts`, `takeEdit.ts`, `projectEdit.ts` (module params, warp, bindings) |
+| The writes | `apps/k7-daw-wasm/song-edit/src/` — `trackMix.ts` (placements), `materialCut.ts`, `insertTime.ts`, `crossfade.ts`, `eventLoop.ts`, `eventGain.ts`, `onsets.ts`, `takeEdit.ts`, `projectEdit.ts` (module params, warp, bindings) |
 | Key bindings | `apps/k7-daw-frontend/src/keys.ts` |
 | Shell-local verbs | `apps/k7-daw-frontend/src/palette.ts` (`LOCAL_COMMANDS`), `localCommands.ts`, and `runLocalCommand` in `apps/k7-daw-frontend/src/App.tsx` |
 | Right-click menus | `apps/k7-daw-frontend/src/contextMenu.ts` |

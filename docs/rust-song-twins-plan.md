@@ -9,9 +9,9 @@ replacement: no TypeScript stands behind a Rust call, and a minor bug is fixed f
 
 | package | TypeScript (src, tests) | state |
 |---|---|---|
-| `@studio/song` | 0 | M1 deleted its code; `docs/`, `meta/` and `samples/` stay where the backend and the crates read them |
-| `@studio/song-edit` | 0 | M1 deleted its code; `docs/` stays |
-| `@studio/song-schema` | 6.1k + 4.4k lines | 212 names imported by the page and its packages (below) less the timecode's, the 24 M3a moved and the validation's; its module-type tables and name constants come from Rust since M2 and M3a, its check and completions since M3b |
+| `@studio/song` | 0 | M1 deleted its code; M5 moved `docs/`, `meta/` and `samples/` into `apps/k7-daw-wasm/song/` |
+| `@studio/song-edit` | 0 | M1 deleted its code; M5 moved `docs/` into `apps/k7-daw-wasm/song-edit/` |
+| `@studio/song-schema` | 0 | M5 deleted it: what the page still read comes from `@studio/k7-wasm` (constants, types, ops) or, where it only draws, from `@studio/ui`; `docs/` moved into `apps/k7-daw-wasm/song-schema/` |
 | `@studio/k7x` | 0 | M3c deleted it: the page reads and edits k7x through `@studio/k7-wasm/k7x` over the `k7x.*` ops; its vectors are frozen in the crate |
 
 M1 found that nothing in production reached `@studio/song` or `@studio/song-edit` once the verbs
@@ -34,8 +34,7 @@ dispatch is split per family (`apps/k7-daw-wasm/k7-wasm/src/ops/`); the page's t
 
 M3b added `file.validate`, `fields.kind`, `fields.at` and `fields.values` (families `ops/file.rs` and
 `ops/fields.rs`) over `song::files::validate_file` and `song::views::fields`. The module grew to 3.46 MB raw,
-1.07 MB gzip, 0.76 MB brotli. The editor's check and completions run in Rust; what keeps `zod` in
-`@studio/song-schema` is below.
+1.07 MB gzip, 0.76 MB brotli. The editor's check and completions run in Rust.
 
 A user does not notice the mount delay, on the phone either, so the module stays whole (decision 1).
 
@@ -105,19 +104,28 @@ reached as wasm ops (M3b, M4a, M4b). M4a built the writers: `@studio/k7-wasm/tex
 ### (d) types and constants, generated from Rust: 105
 
 - types (31): `K7MapNode`, `K7Path`, `K7Change`, `K7Scope`, `Key`, `LibraryPins`, `LibraryFileFamily`, `ModuleStatus`, `PlaylistItem`, `NodePresets`, `PresetEntry`, `ProjectShape` (both), `ResolvedRecord`, `ReferenceTrack`, `ExportFormat`, `ExportQuality`, `VideoFormat`, `VideoSettings`, `WindowSpan`, `Stem`, `Task`, `FileKind`, `MixView`, `ModuleUI`, `Widget`, `WidgetType`, `ProjectSurface`, `ProjectSurfaces`, `ModuleIssue`, `Validity` — ts-rs from the Rust struct the value is decoded into
-- zod schemas (17): `ClipSchema`†, `CurveSchema`†, `SequenceSchema`†, `GraphFileSchema`†, `MixViewSchema`†, `ModuleConfigSchema`†, `ModuleSchema`†, `UISchema`, `UiFileSchema`, `PresetFileSchema`†, `ProjectFileSchema`†, `SettingsSchema`†, `SurfaceSchema`†, `TimelineSchema`†, … — M3b removed the clip, sequence, curve, timeline, preset, project, settings, controller and config schemas, which only `validateFile` and the docs test read; the module, ui, graph, surface and mix-view schemas stay while their readers (`parseSurface`) and the zod of the widget and placement types do (M4a removed `parseChain`, `parseMixView`, `parseMix` and `parseAssembly` with the chain, mix and assembly schemas) and the `Widget` and `ModuleUI` types do, until M3a and M4a/M4b move them; what a page reads of one is its ts-rs type
+- zod schemas (17): none left. `file.validate` and the Rust decoders read every file; what a page reads of one is its ts-rs type
 - constants (57): the `moduleTypes` tables (`MODULE_TYPES`, `IO_MODULES`, `FILE_PARAMS`, `MIX_PARAM`, `INPUT_VOLUME_PARAM`, `OUTPUT_VOLUME_PARAM`, `SHADER_PARAMS`, `META_NS`, the folder names…), the file names (`TASKS_FILE`, `PLAYLISTS_DIR`, `STEMS_DIR`, `GRAPH_FILE`, `MIX_BASE`…), the vocabularies (`ASPECTS`, `STEMS`, `EXPORT_FORMATS`, `VIDEO_FORMATS`, `LFO_SHAPES`, `CURVE_CUTS`, `WIDGET_TYPES`…), the bounds (`MASTER_MAX_DB`, `VOLUME_RANGE`, `STEM_RANGE`, `TAB_NAME_MAX`…), `TIMECODE`
 
 Target: `@studio/k7-wasm/types` and a generated `@studio/k7-wasm/consts` (M2 built the door with `TIMECODE`, `TICKS_PER_QUARTER`, `MODULE_TYPES`, `IO_MODULES` and `IO_SOURCES`; M3a adds the rest).
 
-### (e) UI-only, stays TypeScript: 9
+### (e) UI-only, TypeScript: 9
 
-- `seriesColors` (`SERIES_COLORS`, `seriesColor`), `trackColor` (`categoryShade`): colors on screen
-- `records` (`RECORD_DRAG_TYPE`, `RecordDrag`, `packRecordDrag`, `parseRecordDrag`): the browser's drag-and-drop payload
-- `reference` (`REFERENCE_ACCEPT`): a file input's `accept` string
-- `textOrder` (`byCodePoint`): the order a list is drawn in
+- `seriesColors` (`SERIES_COLORS`, `seriesColor`): colors on screen, `@studio/ui/series-colors`. `categoryShade` has a Rust twin (`song::doc::category_shade`), so the page reads the one shade it needs as the generated `UNCOLOURED_SHADE`
+- `records` (`RECORD_DRAG_TYPE`, `RecordDrag`, `packRecordDrag`, `parseRecordDrag`): the browser's drag-and-drop payload, `@studio/ui/record-drag`
+- `reference` (`REFERENCE_ACCEPT`): a file input's `accept` string, built from the generated `REFERENCE_EXTS` in the references panel
+- `textOrder` (`byCodePoint`): the order a list is drawn in; Rust's `str` order is the same order, and the one script that sorted with it compares UTF-8 bytes
 
-They move into the page's own packages with M5, since no Rust side shares them.
+### M5
+
+M5 deleted the package. Its constants are generated (`WIDGET_TYPES`, `TAB_NAME_MAX`, `RACK_BIND`, `LIBRARY_LEVEL`,
+`FORMAT_LEVEL`, `PROJECT_SHAPES`, `LFO_SHAPES`, the media extensions, `SURFACE_MAPPING_SKELETON`…); its types are
+ts-rs (`ProjectSurface(s)`, `ProjectShape`, `NodePresets`, `ReferenceTrack`, the widget and panel types of
+`@studio/graph-model`); the three schema ops it lacked are `schema.builtin_for_plugin`, `schema.is_preset_name` and
+`schema.placement_start_of`. The panel, module, surface, graph and mix-view zod schemas are gone: what read them asks
+`file.validate` (`validatePanel` for a panel's text). `zod` stays in the lockfile for `@studio/env` and
+`@studio/panel-rules`' request schema. The rack-bind spellings (`rackAddBind`…) are small string rules in
+`@studio/k7-wasm/rack-binds`, the one piece of logic that still has no Rust twin.
 
 ## Choices
 
@@ -159,7 +167,7 @@ They move into the page's own packages with M5, since no Rust side shares them.
 | M3c | k7x: `k7x.edit`, `k7x.data`, `k7x.print`, `k7x.outline`; ui-editor, ui-module-builder, panel-rules and the page move over; `@studio/k7x` deleted, its vectors frozen | M2 | built | 6 |
 | M4a | the text writers of group (c) in `song-edit` (video track, assembly, sequence, mix markers, playlist edits, library pins, chain reads), reached as `text.*` ops | M3a, M3c | built | 6 |
 | M4b | the readers and rules of group (c): `records`, `stems`, `seqWindow`, `trackKind`, `aspect`, `renderSettings`, `projectTags`, `surfaceRegistry`, the rest of `moduleTypes` | M3a | B | 4, built |
-| M5 | `@studio/song-schema` deleted (group e moves into the page's packages); `song/docs`, `song/meta`, `song/samples`, `song-edit/docs`, `song-schema/docs` move into their crates if decision 3 says so | M4a, M4b | alone | 3 |
+| M5 | `@studio/song-schema` deleted (group e moves into the page's packages); `song/docs`, `song/meta`, `song/samples`, `song-edit/docs`, `song-schema/docs` move into their crates | M4a, M4b | alone | 3, built |
 
 Group A runs three builders on disjoint files once M2 has split the dispatch: M3a owns
 `ops/schema.rs` and the song-schema rule files, M3b `ops/fields.rs` and `yaml/validate.ts` with its

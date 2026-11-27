@@ -7,7 +7,7 @@ the value is saved in the song, and the sound does not change. `scripts/checkPan
 every such control in a library.
 
 **The list it checks against is the engine's own.** A built-in's parameters come from
-`@studio/song-schema`'s generated `builtinParams` list, read out of real instances; an external is
+`song-schema`'s generated `builtinParams` list, read out of real instances; an external is
 instantiated by the engine binary's `--dump-params-ext`, which lists exactly the names
 `applyPluginParams` matches — Tracktion's automatable parameters. A plugin's own window, its preset
 browser or a vendor's manual may show more: a parameter the plugin does not mark automatable is not

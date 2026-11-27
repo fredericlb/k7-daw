@@ -92,7 +92,7 @@ when drawing the growing block (`apps/k7-daw-wasm/gesture/src/take_counter.rs`, 
 ## Takes and comps
 
 An event's takes and comp are placement fields (`takes`, `comp`, `crossfades` in
-`apps/k7-daw-frontend/packages/song-schema/src/yaml/placementSchema.ts`); `comp` spans are **song positions**, unlike the
+`apps/k7-daw-wasm/song/src/files/placement.rs`); `comp` spans are **song positions**, unlike the
 window's seconds. The YAML half is `apps/k7-daw-wasm/song-edit/src/take_file.rs`, the disk half
 `apps/k7-daw-wasm/song-edit/src/take_edit.rs`, the verbs `apps/k7-daw-wasm/verbs/src/verbs/event_takes.rs`:
 

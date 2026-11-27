@@ -1,10 +1,10 @@
 # The compiler in Rust
 
-The compiler (and the `@studio/song-schema` readers it stands on) is one Rust crate, linked natively by the backend and
+The compiler (and the `song-schema` readers it stands on) is one Rust crate, linked natively by the backend and
 compiled to WebAssembly for the browser. The engine's `ProjectDoc`, the file service's
 routes and answers, and the frontend's calls and types are its contract; the legacy syntaxes are not.
 
-Paths below without a top folder are relative to `apps/k7-daw-frontend/packages/song` (`rust/src/source.rs` is the crate's).
+Paths below without a top folder are relative to `apps/k7-daw-wasm/song` (`rust/src/source.rs` is the crate's).
 
 ## What stays a contract
 
@@ -130,8 +130,8 @@ let answer = compile(&source, &mut cache, &Request { roots, rig, vsts, want });
 | `engine` (`ProjectDoc`) | never: the file service sends it to the engine (`/engine-doc` for the host) | never |
 | `web` (`WebProject`), `diagnostics` (`ProjectErrors`) | `/project-doc`, `/project-errors` after every revision | in WebAssembly, over a draft, before it is saved (`song.compile`) |
 | `graph` (`WebGraph`) | `/graph` | in WebAssembly, the graph of a draft |
-| `hints`, the field vocabulary | `/hints`; `@studio/song-schema/yaml/fields` imported by the editor | in WebAssembly (`song.hints`) |
-| a buffer's issues | `@studio/song-schema/yaml/validate` imported by autosave, per keystroke | in WebAssembly, `song.validate {path, text}`, debounced |
+| `hints`, the field vocabulary | `/hints`; `@studio/k7-wasm/fields` imported by the editor | in WebAssembly (`song.hints`) |
+| a buffer's issues | `@studio/k7-wasm/validate` imported by autosave, per keystroke | in WebAssembly, `song.validate {path, text}`, debounced |
 | `surfaces`, `io_ports`, `catalogue`, `base_modules` | their routes | their routes |
 
 ### The host

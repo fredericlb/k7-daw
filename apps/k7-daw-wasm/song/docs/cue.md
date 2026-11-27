@@ -93,7 +93,7 @@ and both `fadeA` and `cueA` become separate buses. Which forces the **dry** path
 | | |
 |---|---|
 | written | `graph.k7x` — a `CUE` destination |
-| the word | `CUE_NODE` in `@studio/song-schema`'s `moduleTypes.ts`, in `BUILTIN_OUTPUTS` |
+| the word | `CUE_NODE` in `apps/k7-daw-wasm/song/src/modules/names.rs`, read by the page as `@studio/k7-wasm/consts` |
 | the machine | `cueOutput` in `preferences.k7x`, written by `system cue`, read by `resolveCueOutput` |
 | compiled | `nodeProject.ts`: the bus track carries `outputChannels`, or `mute` if there is no pair |
 | the wire | `TrackDoc.outputChannels`, an exact mirror of `inputChannels` |

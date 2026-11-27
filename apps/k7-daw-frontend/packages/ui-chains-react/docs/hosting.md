@@ -38,7 +38,7 @@ the way it did. The throw in `useIcons` is unreachable: the compiler is the guar
 
 `icons` carries one thing that is not a glyph: **`trackLabel`**, a lane's name without the
 instrument code its icon was picked from. It rides here rather than in the graph document because
-it is the same knowledge and the same table — which codes exist is `@studio/song-schema`'s, and a
+it is the same knowledge and the same table — which codes exist is `song-schema`'s, and a
 package that draws a graph must not depend on the one that parses a song. It is the only OPTIONAL
 member: a host that supplies none gets full names, which is merely plainer, never wrong.
 

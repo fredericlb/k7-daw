@@ -4,7 +4,7 @@ An account library holds more than modules: beside `modules/`, `chains/` and `as
 carry **`samples/`**, **`irs/`** and **`wavetables/`**, folders of sound files any song on the account
 can use — the last one single-cycle wavetable frames — and **`models/`**, amp models (`.nam`, or an AIDA-X / Proteus `.json`). `libraryFiles.ts` lists and
 resolves them; `LibraryFamily` names all seven families, and `LIBRARY_FILE_FAMILIES` (in
-`@studio/song-schema/moduleTypes`) what each file folder is walked for. The Libraries tab draws each
+`@studio/k7-wasm/consts`) what each file folder is walked for. The Libraries tab draws each
 of the four file folders under its library, and takes a dropped file in any of them.
 
 ## Shared files, where a module's `assets/` are its own
@@ -44,7 +44,7 @@ of the folder, since a ref is text a hand-edited file holds.
 
 ## Which params take one
 
-`LIBRARY_FILE_PARAMS` (in `@studio/song-schema/moduleTypes`, so the browser's picker can filter by
+`LIBRARY_FILE_PARAMS` (in `@studio/k7-wasm/consts`, so the browser's picker can filter by
 it) maps a param to its family: today `ir` → `irs`. `SHARED_FILE_PARAMS` maps the params that take a
 library's file OR the module's own, by the `@` — today `model` → `models`; `resolveFileParamIn` is
 that choice, made once for the loader and for an inherited ref alike. Such a param is set like any file-valued one —

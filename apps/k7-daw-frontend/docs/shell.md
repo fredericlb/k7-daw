@@ -329,7 +329,7 @@ song reads them, canvases included (through the CSS variable, since a canvas can
 | violet as text | `primary-text` | no one violet passes both as a fill under white type and as text on this ground (`primary` is the fill) |
 | text below muted | `faint` | it replaces `/50`–`/70` fades of the muted grey, which fell to 2.4:1 |
 
-Takes, slices and cues are a SERIES, coloured by order from `@studio/song-schema`'s
+Takes, slices and cues are a SERIES, coloured by order from `song-schema`'s
 `seriesColors.ts`; a track keeps its category colour, and one the compile has not coloured yet is
 that scheme's `other` grey rather than a type hue of its own.
 
@@ -1523,7 +1523,7 @@ of a module, never a schema, a parser or a package's whole index for one constan
 | the home path imports | rather than | which would bring |
 |---|---|---|
 | `@studio/ui-editor/autosave-buffers` (`appNav`) | `autosave` | its validator: the song schema, `yaml`, the k7x printer |
-| `@studio/song-schema/moduleFiles`, `projectShapes`, `timecode` | `yaml/moduleSchema`, `yaml/projectSchema`, `yaml/placementSchema` | zod and every schema |
+| `@studio/k7-wasm/consts`, `projectShapes`, `timecode` | `yaml/moduleSchema`, `yaml/projectSchema`, `yaml/placementSchema` | zod and every schema |
 | `scalarField.ts`, only from the editor | `projectPaths.ts` carrying it | the k7x parser |
 | `rankCommands.ts` (`CommandBar`) | `palette.ts` | the editor's command registry, every command's sentences in both languages |
 

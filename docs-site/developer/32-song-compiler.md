@@ -1,6 +1,6 @@
-# The compiler: apps/k7-daw-frontend/packages/song
+# The compiler: apps/k7-daw-wasm/song
 
-`apps/k7-daw-frontend/packages/song` reads a project folder: the files, the module vocabulary, the lanes and the graph the pages and the verbs read. The compile into the `ProjectDoc` the engine plays is the Rust `song` crate (`apps/k7-daw-wasm/song`), run natively by the front and as WebAssembly in the verbs' Worker. The package also owns everything that walks a disk around a project: the shared `_modules/` folder, the
+`apps/k7-daw-wasm/song` reads a project folder: the files, the module vocabulary, the lanes and the graph the pages and the verbs read. The compile into the `ProjectDoc` the engine plays is the Rust `song` crate (`apps/k7-daw-wasm/song`), run natively by the front and as WebAssembly in the verbs' Worker. The package also owns everything that walks a disk around a project: the shared `_modules/` folder, the
 account's libraries, surfaces, assemblies, the archetype scaffolds, and the migrations between file
 layouts. It reads; changing a project is `@studio/song-edit`'s job ([song-edit](./33-song-edit.md)).
 

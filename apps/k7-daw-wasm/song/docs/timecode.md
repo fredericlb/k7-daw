@@ -50,7 +50,7 @@ a few times land on the grid rather than exactly where they were. The worst of i
 tick — about a quarter of a millisecond at 110bpm.
 
 **The dot overlaps a number**, where the colon form does not: `1.5` unquoted is a number, while
-`25:1` unquoted does not parse. So `TIMECODE` in `apps/k7-daw-frontend/packages/song-schema/src/yaml/placementSchema.ts`
+`25:1` unquoted does not parse. So `TIMECODE` (`@studio/k7-wasm/consts`, from `apps/k7-daw-wasm/song-schema/src/timecode.rs`)
 accepts the dot — a timecode is the quoted string `"1.5"`, and the number 1.5 is a beat.
 
 The model measures time in beats = QUARTER NOTES (Tracktion's unit; the ABC parser

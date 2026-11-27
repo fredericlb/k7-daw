@@ -128,7 +128,7 @@ public function wrapping them. Counted so the figure does not surprise the next 
 
 **Tooling with no entry point** — programs, not dead code, but nothing wires them:
 
-- `apps/k7-daw-frontend/packages/song/scripts/` — run by hand, apart from `checkPanelBinds.ts`, which is `npm run lint:panels`.
+- `apps/k7-daw-wasm/song/scripts/` — run by hand, apart from `checkPanelBinds.ts`, which is `npm run lint:panels`.
   `projectFingerprint.ts` records what a
   real project compiles to, to diff before and after a refactor.
 - `apps/k7-daw-frontend/packages/k7-plugins/scripts/turntables/put-on.ts` — this one is **documented** and run by hand

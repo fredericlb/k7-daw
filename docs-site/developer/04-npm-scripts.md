@@ -55,7 +55,7 @@ These are run with `--workspace <name>`:
 |---|---|---|
 | `k7-runtime` | `build:mac`, `build:win`, `build:android` | Engine build in the `macos-clang`, `windows-msvc` or `android-arm64` preset, through `apps/k7-daw-engine/k7-runtime/scripts/build.mjs`. |
 | `k7-runtime` | `test`, `test:all` | Builds and runs the C++ `studio_*` test targets; `test:all` adds the slow Tracktion-linked ones. |
-| `k7-runtime` | `gen:builtin-params` | Regenerates `apps/k7-daw-frontend/packages/song-schema/src/builtinParams.generated.json` from a real engine, one plugin per line. |
+| `k7-runtime` | `gen:builtin-params` | Regenerates `apps/k7-daw-wasm/song/src/modules/builtinParams.generated.json` from a real engine, one plugin per line. |
 | `k7-runtime` | `gen:strudel-bundle`, `gen:surge-panel` | Regenerate committed generated files (the pattern-lane bundle the engine embeds; the Surge XT module's panel in `k7-core`). |
 | `k7-desktop` | `stage` | Stages the frontend, the page and library bundle and the engine binaries into `apps/k7-daw-desktop/src-tauri/resources/`. |
 | `k7-desktop` | `dev`, `build` | `tauri dev`; `tauri build`, the installers. |

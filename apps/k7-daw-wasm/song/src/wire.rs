@@ -50,9 +50,7 @@ pub struct ReferenceTrack {
 }
 
 /// The extensions offered as reference tracks: what a browser's `<audio>` can be asked to decode.
-pub const REFERENCE_EXTS: [&str; 10] = [
-    "wav", "flac", "mp3", "m4a", "aac", "ogg", "opus", "aif", "aiff", "webm",
-];
+pub const REFERENCE_EXTS: [&str; 10] = ["wav", "flac", "mp3", "m4a", "aac", "ogg", "opus", "aif", "aiff", "webm"];
 
 /// The extensions a clip's `source` names as a picture, a still and a caption file: what makes a clip file say only `source:`.
 pub const VIDEO_EXTS: &[&str] = crate::files::scalar::VIDEO_EXTS;

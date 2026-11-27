@@ -57,7 +57,7 @@ aiming the peak at −6 dB, clamped to the fader's range — and the shell write
 
 A project declares a `mastering` surface (`surfaces/<id>.k7x`, layout `split`), whose `mapping` names
 which module parameter each of thirteen controls drives (schema:
-`apps/k7-daw-frontend/packages/song-schema/src/yaml/mixViewSchema.ts`, `surfaceSchema.ts`). `apps/k7-daw-frontend/src/components/MasteringTab.tsx`
+`apps/k7-daw-wasm/song/src/files/desk.rs`, `apps/k7-daw-wasm/song/src/views/surfaces.rs`). `apps/k7-daw-frontend/src/components/MasteringTab.tsx`
 draws them as three appliances, with the control list in `apps/k7-daw-frontend/src/mastering/controls.ts`
 and the resolution in `apps/k7-daw-frontend/src/mastering/bindings.ts`, which reuses `resolveMapping` from
 `apps/k7-daw-wasm/chains/src/bindings.rs`, through `@studio/k7-wasm/chains` (shared with the DJ desk). A required control left unmapped is

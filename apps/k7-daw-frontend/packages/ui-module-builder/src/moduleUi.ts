@@ -70,7 +70,7 @@ function parseUi(fileText: string): ModuleUI | null {
 }
 
 /** The panel the Rust reader accepts, cut down to the keys a panel has; null when it refuses it or the keys do not print. */
-export function checkedUi(raw: Record<string, unknown>): ModuleUI | null {
+function checkedUi(raw: Record<string, unknown>): ModuleUI | null {
   const ui = {
     cols: raw.cols,
     rows: raw.rows,

@@ -4,7 +4,7 @@ Sub-step 2i of [rustCompiler.md](rustCompiler.md), whose decisions 1 to 120, out
 [rustCompilerClips.md](rustCompilerClips.md) and 2e's in [rustCompilerLanes.md](rustCompilerLanes.md). A picture lane's shots are sound as well as picture: 2i turns a
 lane's shots into the audio clips the engine plays, heard exactly where each shot is seen, and expands a placed timeline's `pictures:` into shots on the song's picture lane
 of the same name, so those sound too. It makes `ClipDoc`s and findings and no track: 2h places them (decision 333). Nothing here is wired to a route. Paths are relative
-to `apps/k7-daw-frontend/packages/song`.
+to `apps/k7-daw-wasm/song`.
 
 ## Corrections to the 2i row of `rustCompiler.md`
 

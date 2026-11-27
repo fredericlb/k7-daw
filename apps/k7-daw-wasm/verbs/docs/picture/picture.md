@@ -105,7 +105,7 @@ events([
 ```
 
 A shot's fields are spelled like an audio event's where they mean the same thing — `start`,
-`from`, `fadeIn`, `fadeOut` — so one `PlacementSchema` (`song-schema/src/yaml/placementSchema.ts`)
+`from`, `fadeIn`, `fadeOut` — so one `Placement` (`apps/k7-daw-wasm/song/src/files/placement.rs`)
 validates both, and the compile, which knows each ref's material, refuses an audio-only field on a
 shot and the reverse. `frame` is the camera module's spelling for the same fact.
 

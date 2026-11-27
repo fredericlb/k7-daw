@@ -57,7 +57,7 @@ the short form `notes("c4 d4 ~ e4")`. The roll goes through here, so a grid edit
 to the exact text the compiler reads back.
 
 `readSequence` reads the notes EXPANDED, so a short form shows on the grid like any list.
-`writeNotes` hands the grid's list to `@studio/song-schema`'s `editSequence` and makes the
+`writeNotes` hands the grid's list to `@studio/k7-wasm/text`'s `editSequence` and makes the
 file's data equal it with the fewest edits (`applyIn`): one note moved is one line changed,
 and the comments, the `use_rack` and the window around the list are never rewritten. A short
 form stays while it still expands to the grid's notes, and is written out in full the moment

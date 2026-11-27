@@ -6,7 +6,7 @@ Panels page of the user guide.
 
 ## The format
 
-The schema is `UISchema` / `UiFileSchema` in `apps/k7-daw-frontend/packages/song-schema/src/yaml/moduleSchema.ts`
+The reader is `Ui` in `apps/k7-daw-wasm/song/src/modules/ui.rs`, reached as `validatePanel` from `@studio/k7-wasm/validate`
 (strict: an unknown key is an error). `WIDGET_TYPES` lists the fourteen widget kinds. The rules
 that cross widgets live elsewhere:
 
@@ -35,9 +35,9 @@ as a control that moves and does nothing. That is what `lint:panels` exists for.
 
 Where parameter names come from:
 
-- **Built-in plugins**: `apps/k7-daw-frontend/packages/song-schema/src/builtinParams.generated.json`, generated from real
+- **Built-in plugins**: `apps/k7-daw-wasm/song/src/modules/builtinParams.generated.json`, generated from real
   instances by `apps/k7-daw-engine/k7-runtime/scripts/gen-builtin-params.mjs`, and read through
-  `apps/k7-daw-frontend/packages/song-schema/src/builtinParams.ts` (`builtinPluginFor`). Re-run the script when the
+  `apps/k7-daw-wasm/song/src/modules/builtin.rs`, reached as `builtinPluginFor` from `@studio/k7-wasm/schema`. Re-run the script when the
   engine's built-ins change.
 - **External plugins**: only a loaded instance knows. The engine binary answers
   `--dump-params-ext <format> <id> <state>`.
@@ -89,9 +89,9 @@ library panels, and after an AI organize run over many modules.
 
 ## Adding a widget kind
 
-1. Add it to `WIDGET_TYPES` and its fields to the widget schema in
-   `apps/k7-daw-frontend/packages/song-schema/src/yaml/moduleSchema.ts`, and to `WebWidget` in
-   `apps/k7-daw-frontend/packages/graph-model/types.ts`.
+1. Add it to `WIDGET_TYPES` and its fields to the widget in
+   `apps/k7-daw-wasm/song/src/modules/ui.rs`; `WebWidget` in
+   `apps/k7-daw-frontend/packages/graph-model/generated/WebWidget.ts` follows from it.
 2. Draw it in `apps/k7-daw-frontend/packages/ui-chains-react/src/DomChains.tsx` and size it if needed in
    `apps/k7-daw-frontend/packages/ui-chains/src/graph.ts`.
 3. Offer it in the builder: `apps/k7-daw-frontend/packages/ui-module-builder/src/widgetKinds.ts` and the inspector's

@@ -1,8 +1,8 @@
 # The module file
 
-The rationale behind `apps/k7-daw-frontend/packages/song-schema/src/yaml/moduleSchema.ts` and
-`apps/k7-daw-frontend/packages/song-schema/src/yaml/moduleFile.ts` — a `module.k7x`'s shape, the panel and the
-controller beside it, and the reader/writer pair over the lot.
+The rationale behind `apps/k7-daw-wasm/song/src/modules/schema.rs` and
+`apps/k7-daw-wasm/song/src/modules/ui.rs` — a `module.k7x`'s shape, the panel and the
+controller beside it (`apps/k7-daw-wasm/song/src/modules/panels.rs`), and the readers over the lot.
 
 ## What the schema does not check
 
@@ -272,9 +272,9 @@ unless that set already holds a list of its own, which would hide it (`apps/k7-d
 
 ## A placement
 
-`apps/k7-daw-frontend/packages/song-schema/src/yaml/placementSchema.ts` is its own file because a placement is not a
-track's alone: a lane is a module, so `moduleSchema` is what carries `events:` and this is what it
-imports.
+`apps/k7-daw-wasm/song/src/files/placement.rs` is its own file because a placement is not a
+track's alone: a lane is a module, so the module reader is what carries `events:` and this is what it
+reads.
 
 The `TIMECODE` shape is colon-separated numbers, then optionally `.ticks`, always a string: `1.5`
 unquoted is a number, so a tick form is only a timecode when it is quoted. The colon chain may still

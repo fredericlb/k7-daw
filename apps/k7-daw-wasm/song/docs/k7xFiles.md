@@ -24,9 +24,9 @@ read, listed or written. The plan this belongs to is [k7x-plan.md](../../../../d
   — passes `raw` and edits the document as written too.
 - **An absent file is an error unless the caller says `create`**: then it is an empty document, and
   is only written once the edit put something in it.
-- **A finding carries the line of the k7x text.** Each parser validates the file's data and places
-  zod's findings back on the text by key path (`apps/k7-daw-frontend/packages/song-schema/src/yaml/k7xPosition.ts`); a
-  syntax error is one finding with its own line and column (`apps/k7-daw-frontend/packages/song-schema/src/yaml/k7xIssues.ts`).
+- **A finding carries the line of the k7x text.** Each reader decodes the file and places its first
+  finding on the key it is about (`apps/k7-daw-wasm/song/src/files/validate.rs`); a
+  syntax error is one finding with its own line and column.
 - **A library's pins and manifest are workspace files too**: `_library-pins.k7x` and `library.k7x`.
 - **What is not a workspace file is read by name.** A
   machine's `preferences.k7x` under the studio home, the repository's `commands.yaml` and `env.yaml`
