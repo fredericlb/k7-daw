@@ -688,6 +688,57 @@ fn ui_consts() -> Vec<[String; 3]> {
     ]
 }
 
+/// The names an address reserves: its repositories, its segment and its pages.
+fn address_consts() -> Vec<[String; 3]> {
+    use song_schema::address as a;
+    let s = |v: &str| json!(v);
+    vec![
+        export(
+            "The suffix of a project folder.",
+            "PROJECT_SUFFIX",
+            &s(a::PROJECT_SUFFIX),
+        ),
+        export(
+            "The workspace stocked with the demos.",
+            "EXAMPLES_WORKSPACE",
+            &s(a::EXAMPLES_WORKSPACE),
+        ),
+        export("The bench's reserved repository name.", "BENCH_REPO", &s(a::BENCH_REPO)),
+        export(
+            "The workspace the bench lives in on the machine.",
+            "BENCH_WORKSPACE",
+            &s(a::BENCH_WORKSPACE),
+        ),
+        export("The bench's one project.", "BENCH_PROJECT", &s(a::BENCH_PROJECT)),
+        export(
+            "The repository of a project in a workspace with none.",
+            "LOCAL_REPO",
+            &s(a::LOCAL_REPO),
+        ),
+        export(
+            "The repository of a surface on another device.",
+            "LAN_REPO",
+            &s(a::LAN_REPO),
+        ),
+        export(
+            "The segment below a project that opens one surface.",
+            "EXTERNAL_SEGMENT",
+            &s(a::EXTERNAL_SEGMENT),
+        ),
+        export("The surfaces page.", "SURFACES_PAGE", &s(a::SURFACES_PAGE)),
+        export("The libraries page.", "LIBRARIES_PAGE", &s(a::LIBRARIES_PAGE)),
+        export("The settings page.", "SETTINGS_PAGE", &s(a::SETTINGS_PAGE)),
+        export("The about page.", "ABOUT_PAGE", &s(a::ABOUT_PAGE)),
+        export("The tasks page.", "TASKS_PAGE", &s(a::TASKS_PAGE)),
+        export("The media library's prefix.", "MEDIA_PAGE", &s(a::MEDIA_PAGE)),
+        export(
+            "The foreign project files a drop may carry.",
+            "DROPPABLE_PROJECTS",
+            &json!(a::DROPPABLE_PROJECTS),
+        ),
+    ]
+}
+
 /// The whole file; biome formats it after it is written.
 pub fn text() -> String {
     let port = "{ name: string; type: \"audio\" | \"midi\" | \"video\"; mandatory?: boolean }";
@@ -716,6 +767,7 @@ pub fn text() -> String {
     ]
     .to_vec();
     lines.extend(plain().into_iter().flatten());
+    lines.extend(address_consts().into_iter().flatten());
     lines.extend(page_vocab().into_iter().flatten());
     #[cfg(feature = "verbs")]
     lines.extend(ui_consts().into_iter().flatten());

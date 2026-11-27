@@ -18,15 +18,7 @@ use crate::space::Declined;
 /// The address's chain: none for the bare rig, and `None` outside for an address that names no bench (`benchChainOf`).
 #[must_use]
 pub fn bench_chain_of(project: &str) -> Option<Option<String>> {
-    if project == PROJECT {
-        return Some(None);
-    }
-    let reference = project.strip_suffix(&format!("/{PROJECT}"))?;
-    let plain = |s: &str| !s.is_empty() && s != "." && s != ".." && !s.ends_with(".k7");
-    reference
-        .split('/')
-        .all(plain)
-        .then(|| Some(reference.to_owned()))
+    song_schema::address::bench_chain_of(project)
 }
 
 /// Whether `r` is a bare `@<library>`, which names no chain.

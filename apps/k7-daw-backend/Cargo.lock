@@ -2129,6 +2129,7 @@ dependencies = [
  "k7x",
  "libc",
  "notify",
+ "serde",
  "serde_json",
  "sha1 0.10.7",
  "sha2 0.10.9",
@@ -2136,6 +2137,7 @@ dependencies = [
  "song-edit",
  "song-schema",
  "tokio",
+ "ts-rs",
  "unicode-normalization",
  "verbs",
 ]

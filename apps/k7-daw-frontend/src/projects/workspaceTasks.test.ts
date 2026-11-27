@@ -5,7 +5,12 @@ import { anchorProject } from "./workspaceTasks";
 const ws = (paths: string[]): AccountWorkspace => ({
   name: "band",
   isSingleProject: paths.length === 1 && paths[0] === ".",
-  projects: paths.map((path) => ({ path, app: "k7" })),
+  projects: paths.map((path) => ({
+    path,
+    app: "k7",
+    surfaces: [],
+    active: false,
+  })),
 });
 
 describe("anchorProject", () => {

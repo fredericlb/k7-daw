@@ -5,6 +5,7 @@
 mod hub;
 mod names;
 pub(crate) mod ticket;
+pub mod wire;
 
 use std::net::SocketAddr;
 use std::sync::Arc;

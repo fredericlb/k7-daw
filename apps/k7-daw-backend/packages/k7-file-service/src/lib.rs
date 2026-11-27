@@ -40,6 +40,7 @@ pub mod verb_host;
 pub mod verb_paths;
 pub mod watch;
 pub mod watcher;
+pub mod wire;
 pub mod workspaces;
 // 3j M5: the bench and the slot.
 pub mod bench;

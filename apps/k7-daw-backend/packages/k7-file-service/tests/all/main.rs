@@ -86,6 +86,7 @@ mod verb_host_gate;
 mod verb_host_jobs;
 mod watcher;
 mod watching;
+mod wire;
 mod workspaces_copy;
 mod workspaces_demos;
 mod workspaces_hostile;

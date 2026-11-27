@@ -27,17 +27,9 @@ fn project<'a>(rows: &'a [Row], ws: &str, path: &str) -> &'a Project {
 }
 
 #[test]
-fn the_names_held_equal_to_web_protocols() {
-    let repo = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-        .ancestors()
-        .nth(4)
-        .unwrap();
-    let text = std::fs::read_to_string(
-        repo.join("apps/k7-daw-frontend/packages/web-protocol/projects.ts"),
-    )
-    .unwrap();
-    assert!(text.contains(&format!("EXAMPLES_WORKSPACE = \"{EXAMPLES}\"")));
-    assert!(text.contains(&format!("BENCH_WORKSPACE = \"{BENCH}\"")));
+fn the_names_held_equal_to_the_address_grammars() {
+    assert_eq!(EXAMPLES, song_schema::address::EXAMPLES_WORKSPACE);
+    assert_eq!(BENCH, song_schema::address::BENCH_WORKSPACE);
 }
 
 #[test]

@@ -68,7 +68,7 @@ milestone ends with `bash scripts/agent/gate.sh --milestone`; the hours are agen
 | **M4c** panels and AI organize | layoutTwins, groupGeometry, autoLayout, gridCells, panelTabs, widgetClipboard, widgetKinds, useParamRows, moduleUi, panelWrite, panelText, checkLayouts; the AI loop to a backend route | 2,700 | song `modules/ui`, k7-front `routes/ai` | rust-song-twins merged; decision 3 | 11 |
 | **M5a** DJ desk | deck, metronome, beats, grid, loop, mapping, controls, mixBindings, mixView, setList, useDeckSet's arithmetic, put-on; deckVocabulary generated | 2,100 | new crate `apps/k7-daw-wasm/turntables` | M2a (bindings), M4a | 11 |
 | **M5b** (built) graph layout | graphLayout (the only dagre importer) in the `chains` crate, `graph.layout` op; `pendingNode`, `trackPanelLayout` and the screens' shaping stay (see "M5b, as built") | 440 | chains crate + rust-sugiyama (decision 2) | M2a | 5 |
-| **M5c** web-protocol's rest | workspace, machine, playlists, resources and cameras types generated; the project address grammar of `projects.ts` | 1,100 | k7-file-service, k7-front | M1b | 8 |
+| **M5c** (done) web-protocol's rest | workspace, machine, playlists, resources and cameras types generated; the project address grammar of `projects.ts` | 1,100 | k7-file-service, k7-front | M1b | 8 |
 
 **M1a is done.** It removed: `barTint`, `PairThisDevice` and `requestPairing`, `RemoteSlotsSection`,
 `menuAccount`, the `EngineSyncProgress` component (`syncRunning` now sits in `EngineSyncFailedDialog.tsx`),
@@ -302,6 +302,12 @@ specs passing on the Rust supervisor.
   Choices: the folder lands in `graph-model`, not `web-protocol`, so drawing a graph drags nothing in, and the next
   package takes one line in the binary; the page's additions to a panel (`arg`, a tab's `cols`, `tabsAs`) are `Page*`
   types in `types.ts`; the app's mirrors (AuthUser, K7Prefs and the rest of the row) are not done and follow with M5c.
+- **M5c** (done) generates `web-protocol/generated/` (63 types) from `k7-file-service/src/wire/` (workspace, machine, library
+  structs), `k7-front`'s `cameras/wire.rs` and song's `Hints`, `IoPort` and `CatalogueModule`; `workspaceTypes.ts` keeps the upload
+  limit and two aliases, `machineTypes.ts` is gone, `ChangedFile` is k7-wasm's. The address grammar is `song-schema/src/address.rs`
+  behind the `address.*` ops (`@studio/k7-wasm/address`); `projects.ts` (355 to about 130 lines) keeps the origin join and the
+  signatures callers use. Choices: the routes write JSON by hand, so the wire structs are checked by `tests/all/wire.rs` rather than
+  serialised; `RepoProject.surfaces` and `active` are required, as the route always sends them.
 - **M1c** replaced the TS twins that had a Rust function by calls to it (`k7-wasm/docs/engine.md`); the rest had no Rust twin to call.
 - `pulledSentence` is written twice (`src/git/GitBar.tsx`, `src/shell/HeaderGit.tsx`): one copy.
 - knip's unused exports in the zone (`setListenHere`, `knobWidgets`, `filterWorkspaces`,
