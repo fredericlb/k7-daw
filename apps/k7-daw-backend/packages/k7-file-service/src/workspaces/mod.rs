@@ -16,9 +16,9 @@ use crate::entries::{DESCRIPTIONS, EntryError};
 use crate::space::{Declined, PathError};
 
 /// The workspace the demos are mirrored into; a test holds it equal to web-protocol's `EXAMPLES_WORKSPACE`.
-pub const EXAMPLES: &str = "Examples";
+pub const EXAMPLES: &str = song_schema::address::EXAMPLES_WORKSPACE;
 /// The bench's workspace, opened by its address and never listed; a test holds it equal to `BENCH_WORKSPACE`.
-pub const BENCH: &str = "Banc";
+pub const BENCH: &str = song_schema::address::BENCH_WORKSPACE;
 
 /// Why an act on a workspace is refused or fails, each as its route words it.
 #[derive(Clone, Debug, PartialEq, Eq)]

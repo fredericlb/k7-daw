@@ -124,7 +124,10 @@ pub fn dispatch(request: AddressRequest, out: &mut Vec<u8>) -> Result<(), WasmEr
         R::IsHomePage(r) => write(out, &a::is_home_page(&r.pathname, &r.base)),
         R::LaunchPath(r) => write(out, &a::launch_path(&r.repo, &r.project)),
         R::ExternalOf(r) => write(out, &a::external_of(&r.project_url, &r.surface)),
-        R::LanSurfacePath(r) => write(out, &a::lan_surface_path(&r.engine_id, &r.workspace, &r.project, &r.surface)),
+        R::LanSurfacePath(r) => write(
+            out,
+            &a::lan_surface_path(&r.engine_id, &r.workspace, &r.project, &r.surface),
+        ),
         R::LocalProjectPath(r) => write(out, &a::local_project_path(&r.workspace, &r.project)),
         R::LocalTarget(r) => write(out, &a::local_target(&r.name)),
         R::BenchChain(r) => write(out, &a::bench_chain_of(&r.name).map(|chain| BenchRef { chain })),

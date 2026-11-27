@@ -458,6 +458,51 @@ export const TRACK_PREFIXES = {
   sx: ["sax", "saxophone"],
 } as const;
 
+/** The suffix of a project folder. */
+export const PROJECT_SUFFIX = ".k7";
+
+/** The workspace stocked with the demos. */
+export const EXAMPLES_WORKSPACE = "Examples";
+
+/** The bench's reserved repository name. */
+export const BENCH_REPO = "@banc";
+
+/** The workspace the bench lives in on the machine. */
+export const BENCH_WORKSPACE = "Banc";
+
+/** The bench's one project. */
+export const BENCH_PROJECT = "live.k7";
+
+/** The repository of a project in a workspace with none. */
+export const LOCAL_REPO = "@local";
+
+/** The repository of a surface on another device. */
+export const LAN_REPO = "@lan";
+
+/** The segment below a project that opens one surface. */
+export const EXTERNAL_SEGMENT = "@external";
+
+/** The surfaces page. */
+export const SURFACES_PAGE = "surfaces";
+
+/** The libraries page. */
+export const LIBRARIES_PAGE = "libraries";
+
+/** The settings page. */
+export const SETTINGS_PAGE = "settings";
+
+/** The about page. */
+export const ABOUT_PAGE = "about";
+
+/** The tasks page. */
+export const TASKS_PAGE = "tasks";
+
+/** The media library's prefix. */
+export const MEDIA_PAGE = "media";
+
+/** The foreign project files a drop may carry. */
+export const DROPPABLE_PROJECTS = [".dawproject", ".zip"] as const;
+
 /** What a right-click can be on, as commands.yaml `menu:` names it. */
 export const MENU_ENTITIES = [
   "track",

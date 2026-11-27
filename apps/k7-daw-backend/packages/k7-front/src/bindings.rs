@@ -9,10 +9,30 @@ use ts_rs::TS;
 type Exports = fn(&Path) -> Result<(), ts_rs::ExportError>;
 
 /// A package and the roots whose types land in its `generated/` folder, each export walking its own dependencies.
-const PACKAGES: &[(&str, Exports)] = &[("graph-model", graph_model), ("web-protocol", web_protocol)];
+const PACKAGES: &[(&str, Exports)] =
+    &[("graph-model", graph_model), ("web-protocol", web_protocol)];
 
 fn graph_model(dir: &Path) -> Result<(), ts_rs::ExportError> {
     song::graph::view::web::WebGraph::export_all_to(dir)
+}
+
+/// Biome's order for two names: by letter, a capital before its lowercase where only the case differs.
+fn biome_order(a: &str, b: &str) -> std::cmp::Ordering {
+    for (x, y) in a.chars().zip(b.chars()) {
+        if x == y {
+            continue;
+        }
+        let (lx, ly) = (
+            x.to_lowercase().next().unwrap_or(x),
+            y.to_lowercase().next().unwrap_or(y),
+        );
+        return if lx == ly {
+            x.is_lowercase().cmp(&y.is_lowercase())
+        } else {
+            lx.cmp(&ly)
+        };
+    }
+    a.len().cmp(&b.len())
 }
 
 fn web_protocol(dir: &Path) -> Result<(), ts_rs::ExportError> {
@@ -67,7 +87,7 @@ fn write_package(
     let mut names = fs::read_dir(&dir)?
         .map(|e| e.map(|e| e.file_name().to_string_lossy().into_owned()))
         .collect::<Result<Vec<_>, io::Error>>()?;
-    names.sort();
+    names.sort_by(|a, b| biome_order(a, b));
     let index: String = names
         .iter()
         .filter_map(|n| n.strip_suffix(".ts"))

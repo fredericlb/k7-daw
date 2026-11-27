@@ -2,7 +2,12 @@
 // A reader would get wrong that no origin is here: a path comes back, and the page joins its own origin (web-protocol's projects.ts).
 
 import { call } from "./abi.ts";
-import type { BenchRef, LanSurface, Launch, LocalTarget } from "./types/index.ts";
+import type {
+  BenchRef,
+  LanSurface,
+  Launch,
+  LocalTarget,
+} from "./types/index.ts";
 
 export {
   ABOUT_PAGE,
@@ -72,7 +77,10 @@ export const lanSurfacePath = (
 
 /** The path of a project in a workspace with no repository. */
 export const localProjectPath = (workspace: string, project: string): string =>
-  call<string>({ op: "address.local_project_path", args: { workspace, project } });
+  call<string>({
+    op: "address.local_project_path",
+    args: { workspace, project },
+  });
 
 /** Split the project half of a `@local` address, checked not trusted. */
 export const localTarget = (project: string): LocalTarget | null =>

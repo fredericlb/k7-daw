@@ -524,17 +524,17 @@ fn address_consts() -> Vec<[String; 3]> {
     use song_schema::address as a;
     let s = |v: &str| json!(v);
     vec![
-        export("The suffix of a project folder.", "PROJECT_SUFFIX", &s(a::PROJECT_SUFFIX)),
+        export(
+            "The suffix of a project folder.",
+            "PROJECT_SUFFIX",
+            &s(a::PROJECT_SUFFIX),
+        ),
         export(
             "The workspace stocked with the demos.",
             "EXAMPLES_WORKSPACE",
             &s(a::EXAMPLES_WORKSPACE),
         ),
-        export(
-            "The bench's reserved repository name.",
-            "BENCH_REPO",
-            &s(a::BENCH_REPO),
-        ),
+        export("The bench's reserved repository name.", "BENCH_REPO", &s(a::BENCH_REPO)),
         export(
             "The workspace the bench lives in on the machine.",
             "BENCH_WORKSPACE",

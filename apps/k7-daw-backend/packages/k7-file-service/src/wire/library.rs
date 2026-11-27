@@ -133,7 +133,10 @@ pub struct ChainInput {
     #[cfg_attr(feature = "ts", ts(type = "string | number[]"))]
     pub channel: Value,
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[cfg_attr(feature = "ts", ts(optional, type = "boolean | \"off\" | \"auto\" | \"on\""))]
+    #[cfg_attr(
+        feature = "ts",
+        ts(optional, type = "boolean | \"off\" | \"auto\" | \"on\"")
+    )]
     pub monitor: Option<Value>,
 }
 

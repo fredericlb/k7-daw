@@ -139,10 +139,12 @@ mod tests {
 
     #[test]
     fn a_listing_and_a_ticket_read_back() {
-        let list: Vec<RemoteCamera> = serde_json::from_value(json!([{ "name": "a", "since": 1700000000000.0 }])).unwrap();
+        let list: Vec<RemoteCamera> =
+            serde_json::from_value(json!([{ "name": "a", "since": 1700000000000.0 }])).unwrap();
         assert_eq!(list[0].name, "a");
         let ticket: CameraTicket =
-            serde_json::from_value(json!({ "ticket": "t", "iceServers": [{ "urls": "stun:x" }] })).unwrap();
+            serde_json::from_value(json!({ "ticket": "t", "iceServers": [{ "urls": "stun:x" }] }))
+                .unwrap();
         assert_eq!(ticket.ice_servers.len(), 1);
     }
 }

@@ -1,7 +1,7 @@
 # The address of a project
 
-`projects.ts` states two contracts: which studio app owns a folder, decided by the folder's NAME,
-and the address that names one, `/@local/<workspace>/<project>`. Both sit between the side that
+The grammar is Rust's (`apps/k7-daw-wasm/song-schema/src/address.rs`, reached by the page as `@studio/k7-wasm/address`): which studio app owns a folder, decided by the folder's NAME,
+and the address that names one, `/@local/<workspace>/<project>`. `projects.ts` only joins the origin to the paths Rust answers, so the backend's bench rule and the page's are one function. Both sit between the side that
 WRITES an address — k7's home page — and the apps that read one back, which is why they are stated
 once, browser-safe, and nowhere else. See `apps/k7-daw-frontend/docs/projects.md` and
 `apps/k7-daw-frontend/packages/project-shell/docs/launch.md`.

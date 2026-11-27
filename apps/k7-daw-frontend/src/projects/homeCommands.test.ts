@@ -25,7 +25,12 @@ const FILES: AccountFiles = {
 const ws = (name: string, projects: string[] = []): AccountWorkspace => ({
   name,
   isSingleProject: false,
-  projects: projects.map((path) => ({ path, app: "k7" })),
+  projects: projects.map((path) => ({
+    path,
+    app: "k7",
+    surfaces: [],
+    active: false,
+  })),
 });
 
 /** What each act was called with — the whole point of injecting them. */
