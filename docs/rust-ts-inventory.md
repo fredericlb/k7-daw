@@ -61,7 +61,7 @@ milestone ends with `bash scripts/agent/gate.sh --milestone`; the hours are agen
 | **M2b** (built) gesture arithmetic | snap, rollDrag, rollFit, gridCaret, barWindow, clipPlayhead, clipWarp, videoDrag, takeCounter, timelineTools, formatAt; the arithmetic inside TimelineTab, useRollGestures, PianoRoll, useEdgeDrags, useVideoDrag, AudioClipPanel; the ruler's tick ladder and `ui-timeline` ticks and anchored zoom; what stays, see below | 1,100 (1,800 of tests) | new crate `apps/k7-daw-wasm/gesture`, typed exports | decision 1 | 13 |
 | **M2c** tunnel stand-in (done) | the hub suites ported to Rust tests over the Rust supervisor; `e2e/src/standInEngine.ts` on the supervisor binary with a fake engine; `engine-tunnel` deleted with its 2,100 test lines | 2,500 | k7-supervisor, k7-hub tests | nothing | 10 |
 | **M3a** verbs catalogue (built, see below) | contextMenu, menuTabs, menuTitle, palette, argOptions, rankCommands, fuzzy, commandFill, commandPrefs, emptyBar, stepSentence, exportArgs, pendingEdits, nodeInsert, nodeMenu, clipOps, playlistVocabulary, reloadScope, verbWrites, homeCommands' catalogue and parse; `commandTypes.ts` generated | 2,500 | verbs crate | verbs branch merged; decisions 2, 6 | 14 |
-| **M3b** pictures and render tooling | take-render's verbs-only files deleted; engine-client and the render scripts relocated to `k7-runtime/scripts`; ui-eyes scene generated; its clip schedule, transitions and `.cube` reader; viewportRect; the camera name rules | 1,000 | verbs picture code, k7-front cameras | verbs branch merged; decision 7 | 8 |
+| **M3b** pictures and render tooling (done) | take-render's verbs-only files deleted; engine-client and the render scripts relocated to `k7-runtime/scripts/lib`; ui-eyes scene generated; its clip schedule, transitions and `.cube` reader; the grip drag of `viewportRect`; the camera name rules | 1,000 | new crate `apps/k7-daw-wasm/eyes`, op family `eyes` | verbs branch merged; decision 7 | 8 |
 | **M3c** git rules and media bytes | gitState, commitState, connectState, forgejoState, gitLock, gitPageTabs, mergeState, saveAct, githubState and roamState rules; serde structs for the git routes, then their types generated; webmDuration, trimGate, spectrumColour | 1,000 | k7-git, k7-front, waveform | decision 5 | 11 |
 | **M4a** reads on the doc | takes, rackLit, noteSpans, videoSpans, activity, clipLoop, clipInstances, clipNames, rows, timelineView, mixerStrips, gainTrim, mastering, midiIn, laneInput, rackFor, graphNotes, templateGraph, headphonesHint; the hooks' and pickers' doc reads, one mute/solo rule, tapTempo, projectName, projectKind; `engine-protocol/project.ts` and `timelineTypes.ts` generated, `build.ts` moved | 2,800 | song crate, k7-file-service | rust-song-twins merged | 16 |
 | **M4b** buffer text and paths | bufferReads, clipWindowText, sliceSymbols, clipFiles, timelineDrop, rackBuilder, presetOrder, videoTake, editorPaths, projectPaths, localTargets, openInEditor, sequenceEdit, moduleBehind, scalarField, curveDraft, clipboard; the editor's cursor scan, entity values and preview triggers; noteGrid's notes | 1,500 | song-edit, song-schema, k7x | rust-song-twins merged | 10 |
@@ -80,6 +80,29 @@ socket (`engine-browser/src/socket.ts` is the 5-line `openSocket` left), `rtcFra
 `rtc` flag of an engine's listing and the `rtc-offer` and `rtc-answer` frames in the hub, the supervisor and the TS
 reference agent, `/api/engine/<id>/rtc` in k7-front, `node-datachannel` and `docs/rtc.md`. The generated
 `INTERACTIONS.md` and `gaps.csv` lost the gap line naming `RemoteSlotsSection`; the Sheet's Gaps row still holds it.
+
+**M3b, as built.** About 500 lines of page TypeScript went (the scene's 240 interfaces, `timeline`'s rule,
+`transitions`, `cube`, `matchCamera`, the grip arithmetic, the three camera name rules the page never called),
+with about 450 of their tests; 734 lines of engine tooling moved out of `packages/` to `k7-runtime/scripts/lib`
+(`engine-client`, `take-render`, their two test files and two doc pages). About 1,100 lines of Rust came in the
+`eyes` crate (`docs/eyes.md` there) and its `eyes.*` ops. The take-render files the row named
+(`materialRender`, `renderToWav`, `wavLength`) were already gone with `@studio/commands`. The choices:
+
+| choice | why |
+|---|---|
+| one new crate, `eyes`, which `verbs` (the server's scene) and `k7-wasm` (the page's ops) both depend on | the scene's types and the rules over them have one home that both a native and a browser host can link; `verbs` itself is built into no browser module |
+| the scene's types are generated into `k7-wasm`'s `types/`, and `ui-eyes/src/scene.ts` re-exports them | `k7-wasm`'s bindings binary already runs with the module build; a second bindings target would need `k7-front` to link `eyes` for nothing |
+| a layer carries a `schedule`, a table of spans looked up by binary search; a blend's progress is a ramp | the per-frame rule stays off the wasm boundary (decision 12), and `layerFrameAt` shrinks to a lookup plus three ramp reads |
+| the scene always carries the two built-in transitions | the compositor drops its own copies; a hand-built test scene takes them from `eyes.builtins` (`ui-eyes/src/sceneFixture.ts`) |
+| a LUT's floats come back as a view of the module's memory (`k7_floats_ptr`), the grip drag as a typed export (`k7_drag_rect`) | JSON would carry a million numbers once, or a rect per pointer move |
+| `cleanCameraName`, `uniqueCameraName` and `matchRemoteCamera` are deleted, not moved | the page called none of them: the hub's Rust (`k7-front`'s `names.rs`) is the one copy, pinned by the committed `camera-vectors.json` |
+| `gripAt`, `layersAt` and the other hit-tests of `viewportRect` stay TypeScript | they read what is on screen |
+
+The proofs: `layerFrameAt` against the old TypeScript rule on 3,000 random layers, 606,500 times read at the
+breakpoints, a hair either side and at random (frame, top shot and shape-lane visibility all equal); the new
+reader against the old on forty generated `.cube` files (sizes 2 to 65, domains, CRLF, scientific notation),
+byte for byte, and the same message for seven malformed ones. The repository holds no `.cube` file, so none is
+a real grade. The old TypeScript tests became `eyes/tests/*.rs` with their inputs unchanged.
 
 **Parallel groups.** Wave 1: M1a, M1b, M1c. Wave 2: M2a, M2b, M2c. Wave 3: M3a and M3b once the
 verbs branch merges, M3c meanwhile (it waits on nothing but decision 5). Wave 4: M4a, M4b, M4c

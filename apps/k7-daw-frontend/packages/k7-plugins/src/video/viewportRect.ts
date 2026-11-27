@@ -1,7 +1,7 @@
-// viewportRect.ts — picking a layer in the frame and dragging its rect: which layer a click
-// lands on, which of the eight grips it grabbed, and what each grip does to x/y/w/h. Pure px
-// arithmetic, kept out of the component because it is the half that ends up in a file and the
-// half a test can reach — a GL context draws none of it. See docs/picture.md.
+// viewportRect.ts — picking a layer in the frame: which layer a click lands on and which of the eight grips it grabbed.
+// What a grip does to x/y/w/h is Rust's (`eyes::rect`), reached by a typed export, since it runs on every pointer move. See docs/picture.md.
+
+import { dragRectBy } from "@studio/k7-wasm/eyes";
 
 /** A layer's rect in VIEWPORT px, which is exactly what a picture lane's `frame` states. */
 export interface Rect {
@@ -20,9 +20,6 @@ export interface PickLayer {
   rect: Rect;
   hidden: boolean;
 }
-
-/** Never let a resize invert or vanish a layer: below this it is unclickable and unrecoverable. */
-export const MIN_SIDE = 16;
 
 /** How far outside an edge still counts as grabbing it, in VIEWPORT px at scale 1 — the caller scales it. */
 export const GRIP_TOL = 8;
@@ -92,41 +89,10 @@ export function gripAt(
   return inside(r, x, y) ? "body" : null;
 }
 
-/** How far a grip may travel before it would take the rect under `MIN_SIDE` — the clamp, said once per axis. */
-const limit = (d: number, side: number, moving: "lo" | "hi"): number =>
-  moving === "lo" ? Math.min(d, side - MIN_SIDE) : Math.max(d, MIN_SIDE - side);
-
-/**
- * The rect a drag lands on. A grip moves the edges it names and leaves the others where they
- * are — the same invariant the timeline's head trim keeps, and the reason a resize is not a move
- * wearing a resize's clothes. Integers, because a frame is measured in whole pixels.
- */
+/** The rect a drag lands on: a grip moves the edges it names and leaves the others where they are, in whole pixels. */
 export function dragRect(r: Rect, grip: Grip, dx: number, dy: number): Rect {
-  if (grip === "body")
-    return { ...r, x: Math.round(r.x + dx), y: Math.round(r.y + dy) };
-  const west = grip === "w" || grip === "nw" || grip === "sw";
-  const east = grip === "e" || grip === "ne" || grip === "se";
-  const north = grip === "n" || grip === "nw" || grip === "ne";
-  const south = grip === "s" || grip === "sw" || grip === "se";
-  let { x, y, w, h } = r;
-  if (west) {
-    const d = limit(dx, w, "lo");
-    x += d;
-    w -= d;
-  }
-  if (east) w += limit(dx, w, "hi");
-  if (north) {
-    const d = limit(dy, h, "lo");
-    y += d;
-    h -= d;
-  }
-  if (south) h += limit(dy, h, "hi");
-  return {
-    x: Math.round(x),
-    y: Math.round(y),
-    w: Math.round(w),
-    h: Math.round(h),
-  };
+  const [x, y, w, h] = dragRectBy([r.x, r.y, r.w, r.h], grip, dx, dy);
+  return { x, y, w, h };
 }
 
 /** The CSS cursor a grip asks for — one table, so the pointer cannot say a different thing from the drag. */

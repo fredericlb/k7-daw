@@ -23,7 +23,9 @@ import { isIdentityPass, type ScenePass, type VideoScene } from "./scene";
 import { Sides } from "./slots";
 import { Stretches } from "./stretches";
 import type { SlotStretch } from "./timeline";
-import { builtinDissolve, builtinOver, DISSOLVE } from "./transitions";
+
+/** The built-in a missing transition falls back to — `eyes::transitions::DISSOLVE`. */
+const DISSOLVE = "dissolve";
 
 /** What a layer is blending this frame: which program, how far, and which of the two slots carry a picture. */
 // The slots are stated rather than inferred: `hasFrame` never resets, so it cannot answer "this frame".
@@ -154,15 +156,11 @@ export class Compositor {
       this.canvas.height = scene.viewport[1];
     const [vw, vh] = scene.viewport;
 
-    // One program per name the cuts use, the built-in FIRST so a module of that name overrides it.
+    // One program per name the cuts use; the scene carries the two built in, which a module of that name replaces.
     this.transitions = new Map();
     this.warned.clear();
-    for (const t of [
-      builtinDissolve(),
-      builtinOver(),
-      ...Object.values(scene.transitions ?? {}),
-    ])
-      this.transitions.set(t.name, compileTransition(gl, t));
+    for (const t of Object.values(scene.transitions))
+      if (t) this.transitions.set(t.name, compileTransition(gl, t));
     this.stretches.setScene(scene);
     this.sides.setScene(scene);
     this.luts.setScene(scene);

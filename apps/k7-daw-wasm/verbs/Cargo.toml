@@ -15,6 +15,7 @@ ts = ["dep:ts-rs"]
 
 [dependencies]
 ts-rs = { version = "11", optional = true }
+eyes = { path = "../eyes" }
 k7x = { path = "../k7x" }
 song = { path = "../song", default-features = false }
 song-schema = { path = "../song-schema" }

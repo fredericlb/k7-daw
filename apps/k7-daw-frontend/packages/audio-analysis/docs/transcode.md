@@ -20,7 +20,7 @@ ffmpeg is a 100 MB dependency of the hosted image that a crafted upload talks to
 can hang where the shared backend cannot reach it. The WebAssembly build is one path on every host —
 the server, the desktop, the phone — reads only the file it is handed, through the host's reads,
 and runs on a worker the pool terminates past its deadline. What ffmpeg still does here is what no
-Rust crate does well: video, and an mp3 (`apps/k7-daw-frontend/packages/take-render/docs/rendering.md`).
+Rust crate does well: video, and an mp3 (`apps/k7-daw-engine/k7-runtime/docs/rendering.md`).
 
 ## The crates, and what each is for
 

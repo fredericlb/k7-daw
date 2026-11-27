@@ -1,5 +1,5 @@
 //! paths.rs — the state directory's layout: `~/.k7`, or `$STUDIO_HOME`. The twin of
-//! `apps/k7-daw-frontend/packages/engine-client/src/paths.ts`: a name spelt otherwise does not fail, it reads
+//! `apps/k7-daw-engine/k7-runtime/scripts/lib/engine-client/paths.ts`: a name spelt otherwise does not fail, it reads
 //! as an empty file. Held as a value rather than read from the environment at each call, so a test owns its home.
 
 use std::path::{Component, Path, PathBuf};

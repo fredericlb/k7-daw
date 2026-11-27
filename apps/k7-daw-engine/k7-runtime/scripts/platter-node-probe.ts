@@ -8,7 +8,7 @@
 //
 // Its own session, dropped at the end, and `Rate: 0` throughout: nothing here should make a sound.
 
-import { EngineClient } from "@studio/engine-client/engineClient";
+import { EngineClient } from "./lib/engine-client/engineClient.ts";
 import { writeWav } from "./platterBench";
 
 const url = process.argv.find((a) => a.startsWith("ws://")) ?? "ws://127.0.0.1:8765";

@@ -9,7 +9,6 @@ import {
   hitLayer,
   layerBelow,
   layersAt,
-  MIN_SIDE,
   type PickLayer,
   type Rect,
   sameRect,
@@ -90,7 +89,7 @@ describe("gripAt", () => {
   });
 
   it("prefers a corner to an edge, since on a small layer the bands overlap", () => {
-    expect(gripAt(r(0, 0, MIN_SIDE, MIN_SIDE), 0, 0)).toBe("nw");
+    expect(gripAt(r(0, 0, 16, 16), 0, 0)).toBe("nw");
   });
 
   it("calls the middle the body", () => {
@@ -103,37 +102,13 @@ describe("gripAt", () => {
 });
 
 describe("dragRect", () => {
+  // The rule is Rust's, tested in `eyes/tests/rules.rs`; this holds the wrapper to the page's rect shape.
   const box = r(100, 100, 200, 200);
 
-  it("moves the body and changes no size", () => {
+  it("answers the rect a grip drag lands on", () => {
     expect(dragRect(box, "body", 10, -20)).toEqual(r(110, 80, 200, 200));
-  });
-
-  it("pins the opposite edge on every resize", () => {
-    // West: x and w both move, so the EAST edge stays at 300.
-    const w = dragRect(box, "w", 50, 0);
-    expect(w).toEqual(r(150, 100, 150, 200));
-    expect(w.x + w.w).toBe(300);
-    // East: only w moves, so x stays at 100.
-    expect(dragRect(box, "e", 50, 0)).toEqual(r(100, 100, 250, 200));
-  });
-
-  it("takes both axes on a corner", () => {
+    expect(dragRect(box, "w", 50, 0)).toEqual(r(150, 100, 150, 200));
     expect(dragRect(box, "se", 40, 60)).toEqual(r(100, 100, 240, 260));
-    expect(dragRect(box, "nw", 40, 60)).toEqual(r(140, 160, 160, 140));
-  });
-
-  it("stops at MIN_SIDE rather than inverting", () => {
-    const tiny = dragRect(box, "e", -1000, 0);
-    expect(tiny.w).toBe(MIN_SIDE);
-    // …and from the other side the pinned edge is still pinned.
-    const west = dragRect(box, "w", 1000, 0);
-    expect(west.w).toBe(MIN_SIDE);
-    expect(west.x + west.w).toBe(300);
-  });
-
-  it("answers whole pixels — a frame is measured in them", () => {
-    expect(dragRect(box, "body", 0.4, 0.6)).toEqual(r(100, 101, 200, 200));
   });
 
   it("a drag that came back where it started writes nothing", () => {

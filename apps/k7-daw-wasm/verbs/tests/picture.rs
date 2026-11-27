@@ -150,7 +150,7 @@ fn the_scene_folds_solo_and_the_lens_and_reads_the_proxy_only_in_the_preview() {
     );
     assert!(l[0].get("camera").is_none());
     assert_eq!(l[0]["clips"][1]["src"], format!("url:{WS}/picture-rig/clips/film.mp4"));
-    assert_eq!(l[0]["passes"][0]["audio"], 0);
+    assert_eq!(l[0]["passes"][0]["audio"], json!(0.0));
     assert_eq!(shut["scene"]["durationSec"], json!(10.0));
     let armed = scene(&p, Some("main"), Use::Preview);
     let l = layers(&armed);
