@@ -30,8 +30,10 @@ echo "mac-checks: areas [$areas], backend crates [$crates], target $target"
 tests() {
   [ -z "$clippy_only" ] || return 0
   if cargo nextest --version > /dev/null 2>&1; then
-    # Only the backend call names crates; the filter is the first run's, a rerun names its own tests.
-    K7_NEXTEST_FILTER="$([ $# -eq 0 ] || printf '%s' "$slow_filter")" rerun_nextest --locked --target-dir "$target" --no-fail-fast "$@"
+    # Only the backend call names crates (-p …): the filter names backend tests, and a wasm crate's flags (--features) must not carry it.
+    local filter=""
+    case "${1:-}" in -p | --workspace) filter="$slow_filter" ;; esac
+    K7_NEXTEST_FILTER="$filter" rerun_nextest --locked --target-dir "$target" --no-fail-fast "$@"
   else
     cargo test --locked --target-dir "$target" --no-fail-fast "$@"
   fi
