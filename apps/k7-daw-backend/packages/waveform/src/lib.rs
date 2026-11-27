@@ -16,17 +16,17 @@ pub mod ffi_decode;
 #[cfg(all(feature = "encode", target_arch = "wasm32"))]
 pub mod ffi_encode;
 pub mod measure;
-pub mod spectrum;
-pub mod trim;
-pub mod webm_duration;
 #[cfg(feature = "decode")]
 pub mod opus;
 #[cfg(feature = "encode")]
 pub mod resample;
 #[cfg(feature = "encode")]
 pub mod sink;
+pub mod spectrum;
+pub mod trim;
 #[cfg(feature = "decode")]
 pub mod webm;
+pub mod webm_duration;
 #[cfg(feature = "encode")]
 pub mod webm_write;
 

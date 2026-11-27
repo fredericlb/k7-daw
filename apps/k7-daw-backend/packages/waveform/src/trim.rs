@@ -17,12 +17,21 @@ pub struct TrimWindow {
 /// A linear 0..1 amplitude as dBFS, with zero at the floor rather than minus infinity.
 #[must_use]
 pub fn amp_to_db(amp: f64) -> f64 {
-    if amp > 0.0 { 20.0 * amp.log10() } else { MIN_DB }
+    if amp > 0.0 {
+        20.0 * amp.log10()
+    } else {
+        MIN_DB
+    }
 }
 
 /// The span of `env` above `gate_db` in seconds, bucket-accurate and clamped to `within`.
 #[must_use]
-pub fn trim_window(env: &[f64], seconds: f64, gate_db: f64, within: Option<TrimWindow>) -> Option<TrimWindow> {
+pub fn trim_window(
+    env: &[f64],
+    seconds: f64,
+    gate_db: f64,
+    within: Option<TrimWindow>,
+) -> Option<TrimWindow> {
     if env.is_empty() || seconds.is_nan() || seconds <= 0.0 {
         return None;
     }
@@ -76,7 +85,10 @@ mod tests {
 
     #[test]
     fn keeps_a_bucket_of_margin() {
-        assert_eq!(trim_window(&[0.0, db(-6.0), 0.0], 3.0, -40.0, None), w(0.0, 3.0));
+        assert_eq!(
+            trim_window(&[0.0, db(-6.0), 0.0], 3.0, -40.0, None),
+            w(0.0, 3.0)
+        );
     }
 
     #[test]

@@ -47,24 +47,38 @@ fn read_vint(buf: &[u8], at: usize, keep_marker: bool) -> Option<Vint> {
             all_ones = false;
         }
     }
-    Some(Vint { value, width, unknown: !keep_marker && all_ones })
+    Some(Vint {
+        value,
+        width,
+        unknown: !keep_marker && all_ones,
+    })
 }
 
 fn read_element(buf: &[u8], at: usize) -> Option<Element> {
     let id = read_vint(buf, at, true)?;
     let size = read_vint(buf, at + id.width, false)?;
     let data_start = at + id.width + size.width;
-    Some(Element { id: id.value, size, start: at, data_start })
+    Some(Element {
+        id: id.value,
+        size,
+        start: at,
+        data_start,
+    })
 }
 
 /// The end of an element's data; an unknown or absurd size saturates, so a loop over it ends.
 fn data_end(el: &Element) -> usize {
-    el.data_start.saturating_add(usize::try_from(el.size.value).unwrap_or(usize::MAX))
+    el.data_start
+        .saturating_add(usize::try_from(el.size.value).unwrap_or(usize::MAX))
 }
 
 fn read_uint(buf: &[u8], at: usize, len: usize) -> Option<u64> {
     let bytes = buf.get(at..at.checked_add(len)?)?;
-    Some(bytes.iter().fold(0u64, |v, b| v.wrapping_mul(256).wrapping_add(u64::from(*b))))
+    Some(
+        bytes
+            .iter()
+            .fold(0u64, |v, b| v.wrapping_mul(256).wrapping_add(u64::from(*b))),
+    )
 }
 
 fn write_uint(buf: &mut [u8], at: usize, len: usize, mut value: u64) -> Option<()> {
@@ -98,7 +112,10 @@ pub fn patch_head(head: &[u8], duration_ms: f64) -> Option<Patched> {
     if ebml.id != ID_EBML || ebml.size.unknown {
         return None;
     }
-    let seg = read_element(head, ebml.data_start + usize::try_from(ebml.size.value).ok()?)?;
+    let seg = read_element(
+        head,
+        ebml.data_start + usize::try_from(ebml.size.value).ok()?,
+    )?;
     if seg.id != ID_SEGMENT {
         return None;
     }
@@ -156,14 +173,24 @@ pub fn patch_head(head: &[u8], duration_ms: f64) -> Option<Patched> {
             _ => f64::NAN,
         };
         if current > 0.0 {
-            return Some(Patched { bytes: Vec::new(), consumed: 0 });
+            return Some(Patched {
+                bytes: Vec::new(),
+                consumed: 0,
+            });
         }
         match duration_len {
-            8 => out.get_mut(at..at + 8)?.copy_from_slice(&ticks.to_be_bytes()),
-            4 => out.get_mut(at..at + 4)?.copy_from_slice(&(ticks as f32).to_be_bytes()),
+            8 => out
+                .get_mut(at..at + 8)?
+                .copy_from_slice(&ticks.to_be_bytes()),
+            4 => out
+                .get_mut(at..at + 4)?
+                .copy_from_slice(&(ticks as f32).to_be_bytes()),
             _ => return None,
         }
-        return Some(Patched { bytes: out, consumed: info_end });
+        return Some(Patched {
+            bytes: out,
+            consumed: info_end,
+        });
     }
 
     // No Duration: append one to Info, which grows Info, the Segment if sized, and every SeekPosition past Info.
@@ -192,11 +219,19 @@ pub fn patch_head(head: &[u8], duration_ms: f64) -> Option<Patched> {
     bytes.extend_from_slice(&info_size);
     bytes.extend_from_slice(&out[info.data_start..info_end]);
     bytes.extend_from_slice(&duration_el);
-    Some(Patched { bytes, consumed: info_end })
+    Some(Patched {
+        bytes,
+        consumed: info_end,
+    })
 }
 
 /// Moves, in place, every SeekPosition that points past Info by `grown` bytes.
-fn shift_seek_positions(buf: &mut [u8], (start, end): (usize, usize), info_offset: usize, grown: u64) -> Option<()> {
+fn shift_seek_positions(
+    buf: &mut [u8],
+    (start, end): (usize, usize),
+    info_offset: usize,
+    grown: u64,
+) -> Option<()> {
     let mut p = start;
     while p < end {
         let seek = read_element(buf, p)?;
@@ -239,19 +274,29 @@ mod tests {
     }
 
     fn ebml() -> Vec<u8> {
-        el(&[0x1a, 0x45, 0xdf, 0xa3], &el(&[0x42, 0x82], &[0x77, 0x65], false), false)
+        el(
+            &[0x1a, 0x45, 0xdf, 0xa3],
+            &el(&[0x42, 0x82], &[0x77, 0x65], false),
+            false,
+        )
     }
     fn scale() -> Vec<u8> {
         el(&[0x2a, 0xd7, 0xb1], &[0x0f, 0x42, 0x40], false)
     }
     fn info() -> Vec<u8> {
-        el(&[0x15, 0x49, 0xa9, 0x66], &cat(&[&scale(), &el(&[0x4d, 0x80], &[], false)]), false)
+        el(
+            &[0x15, 0x49, 0xa9, 0x66],
+            &cat(&[&scale(), &el(&[0x4d, 0x80], &[], false)]),
+            false,
+        )
     }
     fn tracks() -> Vec<u8> {
         el(&[0x16, 0x54, 0xae, 0x6b], &[0xaa, 0xbb], false)
     }
     fn cluster() -> Vec<u8> {
-        vec![0x1f, 0x43, 0xb6, 0x75, 0x01, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 1, 2, 3, 4]
+        vec![
+            0x1f, 0x43, 0xb6, 0x75, 0x01, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 1, 2, 3, 4,
+        ]
     }
     fn duration_of(b: &[u8]) -> f64 {
         for i in 0..b.len().saturating_sub(10) {
@@ -264,14 +309,24 @@ mod tests {
 
     #[test]
     fn appends_a_duration_to_info_in_a_mediarecorder_shaped_file() {
-        let seg = el(&[0x18, 0x53, 0x80, 0x67], &cat(&[&info(), &tracks(), &cluster()]), true);
+        let seg = el(
+            &[0x18, 0x53, 0x80, 0x67],
+            &cat(&[&info(), &tracks(), &cluster()]),
+            true,
+        );
         let file = cat(&[&ebml(), &seg]);
         let out = patch_head(&file, 12_345.0).unwrap();
         assert_eq!(duration_of(&out.bytes), 12_345.0);
-        assert_eq!(file[out.consumed..out.consumed + 4], [0x16, 0x54, 0xae, 0x6b]);
+        assert_eq!(
+            file[out.consumed..out.consumed + 4],
+            [0x16, 0x54, 0xae, 0x6b]
+        );
         // Info grew by the 11 bytes of the Duration element.
         let info_size_at = ebml().len() + 12 + 4;
-        assert_eq!(out.bytes[info_size_at], 0x80 | (info().len() - 5 + 11) as u8);
+        assert_eq!(
+            out.bytes[info_size_at],
+            0x80 | (info().len() - 5 + 11) as u8
+        );
     }
 
     #[test]
@@ -279,7 +334,10 @@ mod tests {
         let seek_pos = (info().len() + 30) as u8;
         let seek = el(
             &[0x4d, 0xbb],
-            &cat(&[&el(&[0x53, 0xab], &[0x16, 0x54, 0xae, 0x6b], false), &el(&[0x53, 0xac], &[0, seek_pos], false)]),
+            &cat(&[
+                &el(&[0x53, 0xab], &[0x16, 0x54, 0xae, 0x6b], false),
+                &el(&[0x53, 0xac], &[0, seek_pos], false),
+            ]),
             false,
         );
         let seek_head = el(&[0x11, 0x4d, 0x9b, 0x74], &seek, false);
@@ -307,7 +365,11 @@ mod tests {
 
     #[test]
     fn keeps_the_tail_as_the_original_bytes() {
-        let seg = el(&[0x18, 0x53, 0x80, 0x67], &cat(&[&info(), &cluster()]), true);
+        let seg = el(
+            &[0x18, 0x53, 0x80, 0x67],
+            &cat(&[&info(), &cluster()]),
+            true,
+        );
         let file = cat(&[&ebml(), &seg]);
         let out = patch_head(&file, 2000.0).unwrap();
         assert_eq!(out.bytes.len() + file.len() - out.consumed, file.len() + 11);

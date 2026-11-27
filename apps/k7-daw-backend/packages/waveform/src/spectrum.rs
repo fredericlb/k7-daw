@@ -2,7 +2,11 @@
 // A reader would get wrong that the loudest band normalises the mix, not the sum: pure bass stays pure red.
 
 /// The three band colours, ADDITIVE, each kept low in the two channels it does not own.
-pub const BAND_COLOURS: [[f64; 3]; 3] = [[255.0, 45.0, 10.0], [90.0, 235.0, 80.0], [110.0, 80.0, 255.0]];
+pub const BAND_COLOURS: [[f64; 3]; 3] = [
+    [255.0, 45.0, 10.0],
+    [90.0, 235.0, 80.0],
+    [110.0, 80.0, 255.0],
+];
 
 /// One column's three band peaks, 0..1: low, mid, high.
 pub type Bands = [f64; 3];
@@ -15,7 +19,11 @@ pub fn column_rgb(b: Bands, fallback: [u8; 3]) -> [u8; 3] {
         return fallback;
     }
     let (l, m, h) = (b[0] / top, b[1] / top, b[2] / top);
-    let mix = |i: usize| (BAND_COLOURS[0][i] * l + BAND_COLOURS[1][i] * m + BAND_COLOURS[2][i] * h).round().min(255.0) as u8;
+    let mix = |i: usize| {
+        (BAND_COLOURS[0][i] * l + BAND_COLOURS[1][i] * m + BAND_COLOURS[2][i] * h)
+            .round()
+            .min(255.0) as u8
+    };
     [mix(0), mix(1), mix(2)]
 }
 
