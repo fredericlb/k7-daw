@@ -378,3 +378,5 @@ row is the lane's signal path through its modules, and an input card at its head
 pane spent on two dropdowns. A pick of the other kind is refused in words: changing an audio input into
 a MIDI one is a removal and an addition, which the menu does not do behind one click. A picture lane
 keeps its camera as a card, whose lens dropdown is the only place it is chosen.
+
+The layout's cable routes are two straight centres: the engine routes nothing, and `cablePath` replaces both ends with the sockets.
