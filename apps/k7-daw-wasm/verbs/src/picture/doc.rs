@@ -134,12 +134,21 @@ pub struct Doc {
     pub frame_plugins: Vec<Plugin>,
     #[cfg_attr(feature = "ts", ts(type = "\"mix\" | null"))]
     pub sound: Option<&'static str>,
-    #[cfg_attr(feature = "ts", ts(type = "Record<string, import(\"./SceneTransition\").SceneTransition>"))]
+    #[cfg_attr(
+        feature = "ts",
+        ts(type = "Record<string, import(\"./SceneTransition\").SceneTransition>")
+    )]
     pub transitions: IndexMap<String, Transition>,
-    #[cfg_attr(feature = "ts", ts(type = "Record<string, Array<import(\"./WebVideoPlugin\").WebVideoPlugin>>"))]
+    #[cfg_attr(
+        feature = "ts",
+        ts(type = "Record<string, Array<import(\"./WebVideoPlugin\").WebVideoPlugin>>")
+    )]
     pub stretches: IndexMap<String, Vec<Plugin>>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[cfg_attr(feature = "ts", ts(type = "Record<string, Array<import(\"./WebVideoTrack\").WebVideoTrack>>", optional))]
+    #[cfg_attr(
+        feature = "ts",
+        ts(type = "Record<string, Array<import(\"./WebVideoTrack\").WebVideoTrack>>", optional)
+    )]
     pub timelines: Option<IndexMap<String, Vec<Track>>>,
 }
 
