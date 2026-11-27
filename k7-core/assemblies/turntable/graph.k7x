@@ -26,5 +26,5 @@ modules({
 })
 // Every source is heard through its bus only: `out` is parallel, so an unmuted lane doubles.
 bypassed(["deck", "stemDrums", "stemBass", "stemOther", "stemVocals"])
-// …and the strip's HEAD loses its dry path to the sum — see apps/k7-daw-frontend/packages/song/docs/busOnly.md.
+// …and the strip's HEAD loses its dry path to the sum — see apps/k7-daw-wasm/song/docs/busOnly.md.
 bus_only(["trim"])

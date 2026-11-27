@@ -330,7 +330,7 @@ The graph canvas (Chains page, Graph and Mix panels, a lane's module row, the bu
 | 05.24 | Abort a knob drag | release outside the window | — | pointer cancel | T M D |
 | 05.25 | Toggle a button, trigger a rack pad | click | Enter | tap | T M D |
 | 05.26 | Pick from a dropdown widget | click, choose | native select keys | native picker | T M D |
-| 05.27 | Pick a file for a filepicker widget | click the file button → asset tree | — | tap | T M D |
+| 05.27 | Pick a file for a filepicker widget | click the file button → asset tree (a branch opens on click as on hover) | — | tap; a tap opens a branch | T M D |
 | 05.28 | Switch a group on / off | click the group's dot | — | tap | T M D |
 | 05.29 | Play an interactive LCD screen | press, drag, release on it | modifiers reach the script | drag | T M D |
 | 05.30 | Bypass / enable a module | click the icon bubble | Enter | tap | T M D |
@@ -410,7 +410,7 @@ The editor pane (CodeMirror with autosave, vim mode, preview gutter, docked wave
 | 06.19 | Pin / unpin a file, open a pinned file | menu Pin / Unpin; click a pinned row; its ✕ | Enter | tap; long-press for the menu | T M D |
 | 06.20 | Row menu entries | right-click a row or click ⋯ (on hover) → Upload files / folder, New file / folder / module / node, Clone module, Pin, Copy path, Rename, Delete | — | long-press or tap ⋯ | T M D |
 | 06.21 | Background menu entries | right-click empty space → root actions | — | long-press empty space | T M D |
-| 06.22 | Name a new, renamed or cloned item | type in the inline prompt | Enter commits, Esc closes | on-screen keyboard | T M D |
+| 06.22 | Name a new, renamed or cloned item | type in the name dialog (a delete asks in the same dialog) | Enter confirms, Esc cancels | on-screen keyboard | T M D |
 | 06.23 | Delete an item | menu Delete, confirm | — | same | T M D |
 | 06.24 | Move a file or folder into a folder | drag a row onto a folder | — | — | D |
 | 06.25 | Upload by dropping | drop OS files or folders on a folder row or the background | — | from Files on iPad; none on phone | T D |

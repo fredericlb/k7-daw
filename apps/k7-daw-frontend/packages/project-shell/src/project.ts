@@ -5,7 +5,7 @@
 import type { ProjectDoc } from "@studio/engine-protocol/project";
 import type { WebGraph } from "@studio/graph-model";
 // The wire shape only, type-only, so nothing of the parser that walks a disk ships here.
-import type { ProjectSurfaces } from "@studio/song-schema/yaml/surfaceFile";
+import type { ProjectSurfaces } from "@studio/k7-wasm/types";
 import type {
   CatalogueModule,
   Hints,
@@ -49,7 +49,7 @@ export const projectApi = {
     fget<{ chains: { ref: string; path: string; nodes: string[] }[] }>(
       "/library-chains",
     ),
-  /** …and the ASSEMBLY templates, the third family — apps/k7-daw-frontend/packages/song/docs/assemblies.md. */
+  /** …and the ASSEMBLY templates, the third family — apps/k7-daw-wasm/song/docs/assemblies.md. */
   libraryAssemblies: () =>
     fget<{ assemblies: { ref: string; path: string; file: string }[] }>(
       "/library-assemblies",
@@ -85,11 +85,11 @@ export const projectApi = {
   /** The graph of a library CHAIN, by the path `/library-chains` gave — the builder's drawing. */
   graphAt: (path: string) =>
     fget<WebGraph>(`/graph?at=${encodeURIComponent(path)}`),
-  // The project's `surfaces/` folder, parsed, and empty for almost every project — apps/k7-daw-frontend/packages/song/docs/surfaces.md.
+  // The project's `surfaces/` folder, parsed, and empty for almost every project — apps/k7-daw-wasm/song/docs/surfaces.md.
   surfaces: () => fget<ProjectSurfaces>("/surfaces"),
   projectErrors: () => fget<ProjectErrors>("/project-errors"),
 
-  /** Move a library module to another folder of its library, its refs repointed — apps/k7-daw-frontend/packages/song/docs/moduleMove.md. */
+  /** Move a library module to another folder of its library, its refs repointed — apps/k7-daw-wasm/song/docs/moduleMove.md. */
   moveLibraryModule: (path: string, toDir: string) =>
     fsend<{ path: string; from: string; to: string; repointed: string[] }>(
       "POST",
@@ -107,12 +107,12 @@ export const projectApi = {
   moduleCatalogue: () => fget<CatalogueModule[]>("/module-catalogue"),
   moduleUi: (path: string) =>
     fget<ModuleUiFile>(`/module-ui?path=${encodeURIComponent(path)}`),
-  /** The console systems this project may run, and the one it does — apps/k7-daw-frontend/packages/song/docs/console.md. */
+  /** The console systems this project may run, and the one it does — apps/k7-daw-wasm/song/docs/console.md. */
   consoles: () =>
     fget<{ systems: { ref: string; label: string }[]; current?: string }>(
       "/consoles",
     ),
-  /** The engines beside a module file — apps/k7-daw-frontend/packages/song/docs/engines.md. */
+  /** The engines beside a module file — apps/k7-daw-wasm/song/docs/engines.md. */
   moduleEngines: (path: string) =>
     fget<{ engines: string[]; engine?: string }>(
       `/module-engines?path=${encodeURIComponent(path)}`,

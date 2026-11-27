@@ -239,8 +239,8 @@ pub(super) fn invalid(c: &Call, schema: &[(&str, Field)]) -> Option<Response> {
 pub(super) const PATH: [(&str, Field); 1] = [("path", Field::Text)];
 pub(super) const PATH_NAME: [(&str, Field); 2] = [("path", Field::Text), ("name", Field::Text)];
 pub(super) const PATH_TO: [(&str, Field); 2] = [("path", Field::Text), ("toDir", Field::Text)];
-/// `PROJECT_SHAPES` (`apps/k7-daw-frontend/packages/song-schema/src/projectShapes.ts`), held to it by a test.
-pub(super) const SHAPES: &[&str] = &["arrangement", "mix", "video", "live", "live-video"];
+/// The archetypes a project is created as: the song crate's list, which the page reads as `PROJECT_SHAPES`.
+pub(super) const SHAPES: &[&str] = &song::wire::PROJECT_SHAPES;
 
 /// Whether a route answers a compile of the project, and so names the compiler that made it (decision 758).
 pub fn reports_compiler(h: H) -> bool {
@@ -361,18 +361,5 @@ mod tests {
             assert_eq!(route(&method, path), Route::Hooked, "{method} {path}");
             assert!(!native::refuse::owned(&method, path), "{method} {path}");
         }
-    }
-
-    #[test]
-    fn knows_every_archetype_the_typescript_does() {
-        let at = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-            .join("../../../..")
-            .join("apps/k7-daw-frontend/packages/song-schema/src")
-            .join("projectShapes.ts");
-        let ts = std::fs::read_to_string(at).unwrap();
-        let list = &ts[ts.find("PROJECT_SHAPES = [").unwrap()..];
-        let list = &list[..list.find(']').unwrap()];
-        let names: Vec<&str> = list.split('"').skip(1).step_by(2).collect();
-        assert_eq!(names, SHAPES);
     }
 }

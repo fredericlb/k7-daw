@@ -1,7 +1,7 @@
 // sfz-to-rack.ts — turn an SFZ drum kit into a RACK kit: one sample per piece, rendered through the engine's own
 // SFZ player at one velocity, written into a library's samples/ with a rack preset that maps each one to its note.
 // The one thing a reader would get wrong: a piece is RENDERED, not copied — a kit plays several mics per hit, and
-// the sample is what the player sounds for that hit, mics mixed. See apps/k7-daw-frontend/packages/song/docs/racks.md.
+// the sample is what the player sounds for that hit, mics mixed. See apps/k7-daw-wasm/song/docs/racks.md.
 //
 //   npx tsx apps/k7-daw-engine/k7-runtime/scripts/sfz-to-rack.ts --sfz <kit.sfz> --library <library root> --folder <name>
 //     --preset "<name>" --pieces "Kick=36,Snare=38,Crash=49:6" [--velocity 100] [--seconds 2] [--name k7]
@@ -113,7 +113,7 @@ async function main() {
   }
   const presets = join(library, "presets", "k7-core", "instruments", "k7-rack");
   mkdirSync(presets, { recursive: true });
-  // `engine: samples`: the rack's taps are its sampler engine's, its default being an SFZ kit (apps/k7-daw-frontend/packages/song/docs/racks.md).
+  // `engine: samples`: the rack's taps are its sampler engine's, its default being an SFZ kit (apps/k7-daw-wasm/song/docs/racks.md).
   const text = stringify(
     { engine: "samples", rack },
     {

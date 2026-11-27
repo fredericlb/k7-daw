@@ -62,7 +62,7 @@ impl World {
             workspace: Some(s.path("studio/workspace/Banc")),
             confine: Some(s.path("studio/workspace")),
             libraries,
-            meta: Some(format!("{repo}/apps/k7-daw-frontend/packages/song/meta")),
+            meta: Some(format!("{repo}/apps/k7-daw-wasm/song/meta")),
             models: Some(s.path("models")),
             ..Roots::default()
         };

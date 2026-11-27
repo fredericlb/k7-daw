@@ -2,7 +2,7 @@
 // and chains bundled with the app. A device has no admin and nothing here edits a library; a library
 // changes with an app update. See docs/projects.md.
 
-import { LIBRARY_LEVEL } from "@studio/song-schema/libraryVersions";
+import { LIBRARY_LEVEL } from "@studio/k7-wasm/consts";
 import { Chip } from "@studio/ui/chip";
 import { ErrorCard } from "@studio/ui/error-card";
 import { LibraryBig } from "@studio/ui/icons";

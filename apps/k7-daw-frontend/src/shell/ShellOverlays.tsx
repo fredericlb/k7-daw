@@ -262,7 +262,7 @@ export function ShellOverlays({
         </div>
       )}
 
-      {/* The SCREEN surfaces were mounted here; they are panes in the column above now — apps/k7-daw-frontend/packages/song/docs/surfaces.md. */}
+      {/* The SCREEN surfaces were mounted here; they are panes in the column above now — apps/k7-daw-wasm/song/docs/surfaces.md. */}
 
       {/* The project's files did not all reach the engine's machine: fatal until reloaded (engineSync.md). */}
       <EngineSyncFailedDialog

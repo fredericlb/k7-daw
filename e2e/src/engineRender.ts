@@ -1,6 +1,6 @@
 // engineRender.ts — an engine document rendered offline by the command-line engine, and its peak read back.
 // `--render` bounces the whole edit; `--decode` hands the frames back, so no WAV parser lands in the suite.
-// The one thing a reader gets wrong: a missing binary FAILS with a sentence, it never skips (apps/k7-daw-frontend/packages/song/docs/rustCompilerHost.md, 908).
+// The one thing a reader gets wrong: a missing binary FAILS with a sentence, it never skips (apps/k7-daw-wasm/song/docs/rustCompilerHost.md, 908).
 import { execFile } from "node:child_process";
 import {
   existsSync,

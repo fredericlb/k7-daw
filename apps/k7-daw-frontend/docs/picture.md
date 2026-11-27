@@ -3,7 +3,7 @@
 A song carries video lanes ([apps/k7-daw-wasm/verbs/docs/picture/picture.md](../../k7-daw-wasm/verbs/docs/picture/picture.md)).
 This page is the k7 half: where they are drawn, how they are edited, and what the ruler does.
 
-Two surfaces are involved (`apps/k7-daw-frontend/packages/song/docs/surfaces.md`):
+Two surfaces are involved (`apps/k7-daw-wasm/song/docs/surfaces.md`):
 
 | surface | layout | draws |
 |---|---|---|
@@ -111,7 +111,7 @@ showing" is two answers to a question with one.
 
 The third rule in it is the LENS: a camera wired to a lane opens `off` never, `auto` while that
 lane is armed, and `on` always
-([apps/k7-daw-frontend/packages/song/docs/camera.md](../packages/song/docs/camera.md)). A shut lens is dropped
+([apps/k7-daw-wasm/song/docs/camera.md](../../k7-daw-wasm/song/docs/camera.md)). A shut lens is dropped
 from the scene rather than drawn-and-hidden, so the camera is never opened and its indicator stays
 off — which is what `off` has to mean to be worth having.
 
@@ -128,7 +128,7 @@ only kind there is for now — is captured while the transport rolls, and on sto
 other placement.
 
 **The capture is the browser's, top to bottom**, for exactly the reason the lens itself is: the
-engine never hears about a camera ([apps/k7-daw-frontend/packages/song/docs/camera.md](../packages/song/docs/camera.md)).
+engine never hears about a camera ([apps/k7-daw-wasm/song/docs/camera.md](../../k7-daw-wasm/song/docs/camera.md)).
 `useVideoRecording.ts` is the hook, and `useMidiRecording.ts` beside it is the same shape — the
 third kind of arm this app holds, after the ENGINE's (an audio lane) and the browser's (a MIDI
 lane). Which is why arming a picture lane is `ui picture arm` and not `transport arm`: nothing is
@@ -355,7 +355,7 @@ The RENDER node's card carries the list. Three things hold it together:
   this command, which re-reads and rewrites it.
 
 The two names are spelled twice — in `ASPECTS` and in `RENDER_UI` — because `@studio/ui-chains`
-does not see `@studio/song-schema`. The verb REFUSES a name it does not know, so a drift is a
+does not see `song-schema`. The verb REFUSES a name it does not know, so a drift is a
 refusal rather than a wrong size written silently.
 
 ## Exporting the picture — `project export video`

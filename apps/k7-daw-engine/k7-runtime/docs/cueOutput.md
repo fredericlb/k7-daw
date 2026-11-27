@@ -4,7 +4,7 @@
 is every track but a cue bus. The mirror of `inputChannels`, including the rule that a label is
 resolved by the brain so the engine only ever sees numbers.
 
-What it is FOR is `apps/k7-daw-frontend/packages/song/docs/cue.md`: a headphone feed on a second pair of the interface.
+What it is FOR is `apps/k7-daw-wasm/song/docs/cue.md`: a headphone feed on a second pair of the interface.
 This page is what the engine does with it.
 
 ## One function, two callers, and the second one is the trap
@@ -91,6 +91,6 @@ The mix source stays in ALL passes on purpose: an empty mixdown is also what a b
 like, so "the file is silent" would prove nothing.
 
 The same harness measures the send behaviour `feedsBusOnly` rests on — see
-`apps/k7-daw-frontend/packages/song/docs/busOnly.md`, and `docs/editBuilder.md` for the routing itself.
+`apps/k7-daw-wasm/song/docs/busOnly.md`, and `docs/editBuilder.md` for the routing itself.
 
 **What cannot be checked here is listening.** That the headphones really come out of 3/4 is a sound.

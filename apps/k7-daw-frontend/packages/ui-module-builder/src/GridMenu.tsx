@@ -1,9 +1,8 @@
 // GridMenu.tsx — the builder grid's right-click menu: a short list at the pointer, nothing more.
-// Dismissed by Escape, a press outside it, a scroll, or a pick. Rationale: docs/builder.md.
+// It is the kit's PointMenu, so it dismisses and answers the keys like every pointer menu. Rationale: docs/builder.md.
 
 import type { LucideIcon } from "@studio/ui/icons";
-import { cn } from "@studio/ui/lib/utils";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { PointMenu, PointMenuItem } from "@studio/ui/point-menu";
 
 export interface GridMenuItem {
   label: string;
@@ -24,61 +23,18 @@ export function GridMenu({
   items: GridMenuItem[];
   onClose: () => void;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [pos, setPos] = useState({ x, y });
-
-  // Kept inside the viewport once it can be measured: a click near the edge must not open half a menu.
-  useLayoutEffect(() => {
-    const r = ref.current?.getBoundingClientRect();
-    if (!r) return;
-    setPos({
-      x: Math.min(x, window.innerWidth - r.width - 4),
-      y: Math.min(y, window.innerHeight - r.height - 4),
-    });
-  }, [x, y]);
-
-  useEffect(() => {
-    const away = (e: Event) => {
-      if (!ref.current?.contains(e.target as Node)) onClose();
-    };
-    const key = (e: KeyboardEvent) => e.key === "Escape" && onClose();
-    window.addEventListener("pointerdown", away, true);
-    window.addEventListener("scroll", onClose, true);
-    window.addEventListener("keydown", key);
-    return () => {
-      window.removeEventListener("pointerdown", away, true);
-      window.removeEventListener("scroll", onClose, true);
-      window.removeEventListener("keydown", key);
-    };
-  }, [onClose]);
-
   return (
-    <div
-      ref={ref}
-      role="menu"
-      className="fixed z-50 min-w-[8rem] rounded-md border border-border bg-popover p-1 text-sm shadow-md"
-      style={{ left: pos.x, top: pos.y }}
-      onContextMenu={(e) => e.preventDefault()}
-    >
+    <PointMenu x={x} y={y} onClose={onClose} className="min-w-[8rem]">
       {items.map((it) => (
-        <button
+        <PointMenuItem
           key={it.label}
-          type="button"
-          role="menuitem"
+          icon={it.icon}
           disabled={it.disabled}
-          onClick={() => {
-            onClose();
-            it.onPick();
-          }}
-          className={cn(
-            "flex w-full items-center gap-2 rounded px-2 py-1 text-left",
-            it.disabled ? "cursor-default text-faint" : "hover:bg-secondary",
-          )}
+          onSelect={it.onPick}
         >
-          <it.icon className="h-3.5 w-3.5" />
           {it.label}
-        </button>
+        </PointMenuItem>
       ))}
-    </div>
+    </PointMenu>
   );
 }

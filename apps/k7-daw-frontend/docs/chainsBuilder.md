@@ -9,7 +9,7 @@ as it was.
 ## Why there is no second editor
 
 A chain template is a chain FILE, `<library>/chains/<path>.k7x` — the format a project's chains
-are written in, ending at `@out` (`apps/k7-daw-frontend/packages/song/docs/sharedFolders.md`). A library may also hold
+are written in, ending at `@out` (`apps/k7-daw-wasm/song/docs/sharedFolders.md`). A library may also hold
 FOLDER chains, `graph.k7x` with `nodes/` beside it, and the screen opens both:
 
 | where | what it does |

@@ -14,7 +14,7 @@
 // node deliberately still lets clips through to aux sends and sidechains, so the crossfade keeps
 // its second signal while the master stops getting a duplicate. Measured: with it, Mix 0 is the
 // kick alone, Mix 1 the snare alone; without it, the snare is there at every setting. See
-// apps/k7-daw-frontend/packages/song/docs/ports.md.
+// apps/k7-daw-wasm/song/docs/ports.md.
 //
 // TODO: try automating Mix so the two decks trade places over a bar.
 extends("@meta/track")

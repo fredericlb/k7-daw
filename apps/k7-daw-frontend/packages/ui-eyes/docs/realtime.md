@@ -29,7 +29,7 @@ the dissolve B stays where it is and the next transition loads C on the element 
 first frame after the scrub blends the right shot with a stale one.
 
 The element is muted (a shot's sound is the ENGINE's, on an audio lane —
-`apps/k7-daw-frontend/packages/song/docs/videoSound.md` — and muted is also what lets it autoplay), parked 1px and invisible but NOT `display:none` — a `display:none` element
+`apps/k7-daw-wasm/song/docs/videoSound.md` — and muted is also what lets it autoplay), parked 1px and invisible but NOT `display:none` — a `display:none` element
 is allowed to skip decoding.
 
 ## An edit is a `setScene`, never a new driver

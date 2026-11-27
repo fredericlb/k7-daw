@@ -40,11 +40,11 @@
 # its filename, so naming it up front saves a rename later.
 #
 # ONE verb and no kind: a lane is not typed by what it carries
-# (apps/k7-daw-frontend/packages/song/docs/trackModules.md), so one lane holds clips and sequences alike. Seeding the
+# (apps/k7-daw-wasm/song/docs/trackModules.md), so one lane holds clips and sequences alike. Seeding the
 # empty sequence a lane plays is `sequence new`'s, a separate act.
 #
 # It DOES write the lane's strip, which is not a separate act: a lane with no `Mixer` module has
-# nowhere to put a level, so its faders would draw and do nothing. See apps/k7-daw-frontend/packages/song/docs/trackMixer.md.
+# nowhere to put a level, so its faders would draw and do nothing. See apps/k7-daw-wasm/song/docs/trackMixer.md.
 - command: "track new"
   sid: track.new
   readable:
@@ -79,7 +79,7 @@
 # Every lane coloured by its CATEGORY and the whole order stated — vox, drums, basses, guitars,
 # keys, synths, the rest — shades of one colour within a category. Writes over the colours a lane
 # had (an import brings its own), so it is one command and one undo. See
-# apps/k7-daw-frontend/packages/song-schema/docs/trackColor.md.
+# apps/k7-daw-wasm/song-schema/docs/trackColor.md.
 - command: "track arrange"
   sid: track.arrange
   readable:
@@ -89,7 +89,7 @@
   surfaces: [cli, timeline]
 # The order lanes are DRAWN and mixed in. A project states it or it does not: with no `trackOrder`
 # the names decide (a "3." pin, then the instrument family), and the first reorder writes the whole
-# list — half an order is not an order. See apps/k7-daw-frontend/packages/song/docs/trackKind.md.
+# list — half an order is not an order. See apps/k7-daw-wasm/song/docs/trackKind.md.
 - command: "track order"
   sid: track.order
   readable:
@@ -155,7 +155,7 @@
       { name: kind, hint: "audio or midi" },
     ]
 # Set a lane aside without deleting it: `hidden: true` on its chain, so nothing draws, compiles or plays
-# it, and every file stays as written. A chain project's verb — see apps/k7-daw-frontend/packages/song/docs/chainFiles.md.
+# it, and every file stays as written. A chain project's verb — see apps/k7-daw-wasm/song/docs/chainFiles.md.
 - command: "track hide"
   sid: track.hide
   readable:
@@ -222,7 +222,7 @@
 # TIMELINES — another arrangement, placed WHOLE as one event on a lane, whose sound goes through
 # that lane. Its length is fixed: `timeline length` is the one way to change what every placement
 # of it plays. Its events are edited with the `event` verbs on `<timeline>><lane>`
-# (apps/k7-daw-frontend/packages/song/docs/timelines.md).
+# (apps/k7-daw-wasm/song/docs/timelines.md).
 - command: "timeline new"
   sid: timeline.new
   readable:
@@ -549,7 +549,7 @@
   menu: [track]
   args: [{ name: track, complete: tracks }]
 # A lane's alternatives and its freeze are addressed as a module's: `node alternative *` and
-# `node freeze`, since a lane IS a module. See apps/k7-daw-frontend/packages/song/docs/trackModules.md.
+# `node freeze`, since a lane IS a module. See apps/k7-daw-wasm/song/docs/trackModules.md.
 
 # The AUTOMATION of a track's sound, addressed from the LANE rather than from the module.
 #
@@ -885,7 +885,7 @@
 # states them, else the notes' extent rounded up to the bar — so an unwindowed sequence is left
 # unwindowed, its extent doubling on its own once the copies are in. The notes the window HOLDS
 # are copied one window later, which is the same "in when it STARTS inside" rule every bulk edit
-# in this family follows. See apps/k7-daw-frontend/packages/song-schema/docs/noteEdits.md.
+# in this family follows. See apps/k7-daw-wasm/song-schema/docs/noteEdits.md.
 - command: "sequence double"
   sid: sequence.double
   readable:
@@ -946,7 +946,7 @@
 # past the far edge. Each is ONE pass over the file and so one undo — running the singular
 # verb N times would be N journal entries, and half of them could land while the rest fail.
 # An empty rectangle is refused by name; a pad's `repeat`/`skip` are never touched.
-# See @studio/song-schema docs/noteEdits.md.
+# See song-schema docs/noteEdits.md.
 - command: "sequence notes remove"
   sid: sequence.notesRemove
   readable:
@@ -1026,7 +1026,7 @@
     ]
 
 # A dragged SELECTION, and not a rectangle verb: every note names its own destination. One write, so one Ctrl+Z; a note may land
-# where another MOVING note leaves, never on one that stays. See @studio/song-schema docs/noteEdits.md.
+# where another MOVING note leaves, never on one that stays. See song-schema docs/noteEdits.md.
 - command: "sequence notes move"
   sid: sequence.notesMove
   readable:
@@ -1075,7 +1075,7 @@
 # A project draws nothing it has not declared: the arrangement, the frame, the desk and the
 # mastering strip are all files in surfaces/. Under `project` with the markers, because a surface is a property of the PROJECT rather than of anything in it.
 # There is no layout argument — every type is drawn in exactly one, and the schema refuses the
-# other, so it is derived. See apps/k7-daw-frontend/packages/song/docs/surfaces.md.
+# other, so it is derived. See apps/k7-daw-wasm/song/docs/surfaces.md.
 - command: "project surface new"
   sid: project.surface.create
   readable:
@@ -1379,7 +1379,7 @@
 
 # WHICH PAIR the `CUE` bus leaves by — the headphones, on a desk. Kept beside the answers above and
 # for the same reason: an interface has one headphone socket whatever project is open, so this is a
-# fact about the rig. See apps/k7-daw-frontend/packages/song/docs/cue.md.
+# fact about the rig. See apps/k7-daw-wasm/song/docs/cue.md.
 #
 # Unset is a legitimate state and not a half-configured one: a laptop with a single output pair has
 # nowhere to send a cue, and a CUE bus on such a machine plays NOWHERE — deliberately silent rather
@@ -1845,7 +1845,7 @@
       },
     ]
 # One shot's sound off, or on again; the picture is untouched. Removing a clip from the lane that
-# plays the sound runs the same edit — apps/k7-daw-frontend/packages/song/docs/videoSound.md.
+# plays the sound runs the same edit — apps/k7-daw-wasm/song/docs/videoSound.md.
 - command: "picture silence"
   sid: picture.silence
   readable:
@@ -1943,7 +1943,7 @@
 # A templated set of nodes, drawn as one box. Instancing copies the template's node files into
 # the project and its wiring into graph.k7x, so what lands on disk is an ordinary graph plus one
 # record saying which nodes are that box — nothing about the sound changes, in either direction.
-# See apps/k7-daw-frontend/packages/song/docs/assemblies.md.
+# See apps/k7-daw-wasm/song/docs/assemblies.md.
 - command: "assembly new"
   sid: assembly.new
   readable:
@@ -2054,11 +2054,11 @@
 # INTRINSICS take no verb of their own. A module's own field rather than a plugin's parameter,
 # they are written `node param <node> @channel 1,2` / `@monitor auto`, beside `@gain`. One
 # vocabulary: what a widget binds (`@channel`) is what you type.
-# See `INTRINSICS` in commands.ts and apps/k7-daw-frontend/packages/song/docs/intrinsics.md.
+# See `INTRINSICS` in commands.ts and apps/k7-daw-wasm/song/docs/intrinsics.md.
 # A project with no timeline RECORDS ITS OUTPUT from the bar: record and stop go down the engine's
 # socket and write nothing, so they are not verbs. Filing the take moves bytes, so it is one.
 # Named by the FILES: the engine's take and the page's picture, both in the project's record
-# directory. See apps/k7-daw-frontend/packages/song/docs/outputRecording.md.
+# directory. See apps/k7-daw-wasm/song/docs/outputRecording.md.
 - command: "project record save"
   sid: project.record.save
   readable:
@@ -2083,7 +2083,7 @@
 # you stamp into the module's params. This is a set of attributes the module can be switched
 # BETWEEN: both survive, one is on, and switching is one line of its own file. Any field a
 # module has may differ — params, a lane's clips, even the plugin. See
-# apps/k7-daw-frontend/packages/song/docs/alternatives.md.
+# apps/k7-daw-wasm/song/docs/alternatives.md.
 #
 # The name is optional everywhere: an unnamed one answers to its position, counting the module's
 # own fields as 1. The ⋮ button on a node's corner runs these three.
@@ -2133,7 +2133,7 @@
     ]
 # A module with ENGINES runs as one of them — a compressor as Tracktion's or as an Airwindows one.
 # Not an alternative: the MODULE declares its engines, and the node picks. The knobs are kept per
-# engine, so switching back finds them as they were. See apps/k7-daw-frontend/packages/song/docs/engines.md.
+# engine, so switching back finds them as they were. See apps/k7-daw-wasm/song/docs/engines.md.
 - command: "node engine"
   sid: node.engine
   readable:
@@ -2149,7 +2149,7 @@
     ]
 # A node's PRESETS: one file each under a `presets/` tree — the workspace's `_presets/` or a
 # library's `presets/` — keyed by the module the node extends. The scope says where it is KEPT.
-# See apps/k7-daw-frontend/packages/song/docs/userPresets.md.
+# See apps/k7-daw-wasm/song/docs/userPresets.md.
 - command: "node preset apply"
   sid: node.preset.apply
   readable:
@@ -2195,7 +2195,7 @@
 # --- a rack node's TAPS: the sounds of THIS kit, written into the node, never the module ---
 # A rack module is the sampler; each node of it is a kit, so a tap — a note and the library sample it
 # fires — belongs to the node. On an alternative other than the first, to that set. The sample is a
-# file in a library's `samples/`, named `@<library>/<path>`. See apps/k7-daw-frontend/packages/song/docs/racks.md.
+# file in a library's `samples/`, named `@<library>/<path>`. See apps/k7-daw-wasm/song/docs/racks.md.
 - command: "node tap note"
   sid: node.tap.note
   readable:
@@ -2282,7 +2282,7 @@
     ]
 # Silences a tap without removing it: the pad stays, its note and sample kept, and the sampler is not
 # given it. A TOGGLE without on/off. An SFZ kit's pad mutes through the player's `Mute <note>` param
-# instead, since its pads are the kit's (apps/k7-daw-frontend/packages/song/docs/racks.md).
+# instead, since its pads are the kit's (apps/k7-daw-wasm/song/docs/racks.md).
 - command: "node tap mute"
   sid: node.tap.mute
   readable:
@@ -2374,7 +2374,7 @@
 # gives you the amped sound, not the sound going in. Everything DOWNSTREAM stays live, which is
 # the point of freezing rather than bouncing. Refused when something upstream also feeds a node
 # outside the set: its signal would be in the render and still playing. The ⋮ button on a node's
-# corner runs this. See apps/k7-daw-frontend/packages/song/docs/freeze.md.
+# corner runs this. See apps/k7-daw-wasm/song/docs/freeze.md.
 - command: "node freeze"
   sid: node.freeze
   readable:
@@ -2448,7 +2448,7 @@
 # The event is found by its start position; only that placement's `start:` is rewritten.
 # The optional 4th arg moves the placement to ANOTHER track, refused only when the destination
 # has nowhere to put THIS event: a lane takes a note when its midi output is wired and a clip
-# when its audio one is (apps/k7-daw-frontend/packages/song/docs/trackModules.md). The timeline's clip drag sends
+# when its audio one is (apps/k7-daw-wasm/song/docs/trackModules.md). The timeline's clip drag sends
 # this form when a clip is dropped on a different lane.
 # Puts an existing clip/sequence on a track at a timecode — the one ADDITIVE verb of this family,
 # and the counterpart of `event remove`. It creates an event, which is why it is named for one and
@@ -2457,7 +2457,7 @@
 #
 # What it is for: a take the recorder wrote but could not place, and anything else you want on a
 # lane without dragging. It lands on the set the track is PLAYING, like every other placement edit
-# (see apps/k7-daw-frontend/packages/song/docs/alternatives.md).
+# (see apps/k7-daw-wasm/song/docs/alternatives.md).
 - command: "event add"
   sid: event.add
   readable:
@@ -2849,7 +2849,7 @@
 # them. An audio clip is split VIRTUALLY: the same file placed twice, the head's window ending at
 # the cut and the tail's starting there — nothing rendered, no engine needed. A half to process on
 # its own gets its own file from `selection consolidate`, which also rejoins anything at all. See
-# apps/k7-daw-frontend/packages/song/docs/materialCut.md.
+# apps/k7-daw-wasm/song/docs/materialCut.md.
 #
 # What a sequence split cut is left on disk: another placement, on another lane, may still be
 # playing it, and this verb has no way to know what was meant to be kept.
@@ -2902,7 +2902,7 @@
     ]
 # A rectangle's events into a TIMELINE of their own, one event of it put back where they started,
 # so the lane sounds the same. ONE lane, like consolidate: a timeline plays through the lane it sits
-# on (apps/k7-daw-frontend/packages/song/docs/timelines.md).
+# on (apps/k7-daw-wasm/song/docs/timelines.md).
 - command: "selection timeline"
   sid: selection.timeline
   readable:
@@ -2952,7 +2952,7 @@
 # No chain to name: the two ends ARE an edge in graph.k7x, so there is nothing to disambiguate.
 # The bottom `+` under a card in a chain project: the new node goes UNDER the one above, both in a
 # subchain run in that one's place — the per-track row draws the pair as one column. A graph.k7x
-# project has no subchains, so it refuses. See apps/k7-daw-frontend/packages/song/docs/chainFiles.md, "Subchains".
+# project has no subchains, so it refuses. See apps/k7-daw-wasm/song/docs/chainFiles.md, "Subchains".
 - command: "node stack"
   sid: node.stack
   readable:

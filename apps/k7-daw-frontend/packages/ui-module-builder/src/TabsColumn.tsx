@@ -2,8 +2,8 @@
 // "Every tab" for the widgets each page shows, then the tabs in order. The open one is renamed in
 // place, moved up or down, or removed; `+` adds one. Every edit is panelTabs.ts, this only asks.
 
+import { TAB_NAME_MAX } from "@studio/k7-wasm/consts";
 import { askConfirm } from "@studio/project-shell/ask";
-import { TAB_NAME_MAX } from "@studio/song-schema/yaml/moduleSchema";
 import { ChevronDown, ChevronUp, Plus, Trash2 } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
 import { useEffect, useState } from "react";

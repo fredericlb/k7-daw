@@ -31,7 +31,6 @@
     "@studio/panel-rules": "*",
     "@studio/project-shell": "*",
     "@studio/recorder": "*",
-    "@studio/song-schema": "*",
     "@studio/ui": "*",
     "@studio/ui-chains": "*",
     "@studio/ui-chains-react": "*",

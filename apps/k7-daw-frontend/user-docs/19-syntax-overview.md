@@ -8,7 +8,7 @@ Files are **flat**: no wrapper key, no package clause. A node file starts at `ex
 
 A string is always quoted, so nothing is read as something else: a track called `no` is a track called `no`, and `monitor("on")` is the word `on`.
 
-**Every file is validated on load** against a schema (`apps/k7-daw-frontend/packages/song-schema/src/yaml`), and the editor's completions come from those same schemas — what it offers you is what the loader will accept.
+**Every file is validated on load** against a schema (`apps/k7-daw-wasm/song-schema/src/yaml`), and the editor's completions come from those same schemas — what it offers you is what the loader will accept.
 
 Unknown fields are an **error**, not a shrug: a typo in a key would otherwise be a setting that silently never applies. `settings.k7x` is the one deliberate exception.
 

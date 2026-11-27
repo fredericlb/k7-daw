@@ -14,7 +14,8 @@ use song_edit::workspace_doc::{EditOpts, ws_edit};
 use song_edit::workspace_file::{k7x_data, ws_exists, ws_read};
 
 /// What this k7 runs: a version whose manifest `requires` more is refused.
-const LIBRARY_LEVEL: f64 = 2.0;
+#[allow(clippy::cast_lossless)]
+const LIBRARY_LEVEL: f64 = song_edit::shared_folders::LIBRARY_LEVEL as f64;
 const DRAFT: &str = "draft";
 
 fn int(v: Option<&Value>) -> Option<f64> {

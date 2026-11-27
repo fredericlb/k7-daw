@@ -5,7 +5,7 @@ use super::arrange::{
     TRACK_PREFIXES, TrackFamily, order_tracks, parse_track_name, sort_tracks_by_kind, track_kind, track_kind_rank,
     track_label,
 };
-use super::category::{TrackCategory, track_category};
+use super::category::{TrackCategory, category_shade, track_category};
 
 fn prefix(name: &str) -> Option<&'static str> {
     parse_track_name(name).prefix.map(|(p, _)| p)
@@ -232,4 +232,24 @@ fn a_category_falls_back_on_what_the_instrument_says_and_only_then_on_other() {
         TrackCategory::Keys
     );
     assert_eq!(track_category("audio_7", &["mixer"]), TrackCategory::Other);
+}
+
+// trackColor.test.ts, "the colours": one hue per category, shades within one.
+#[test]
+fn a_category_has_one_hue_and_several_of_it_two_shades() {
+    let a = category_shade(TrackCategory::Guitar, 0, 2);
+    let b = category_shade(TrackCategory::Guitar, 1, 2);
+    assert_ne!(a, b);
+    assert_eq!(a.len(), 7);
+    // Green: the green channel leads.
+    let channel = |s: &str, at: usize| u8::from_str_radix(&s[at..at + 2], 16).unwrap();
+    assert!(channel(&a, 3) > channel(&a, 1));
+    assert_eq!(
+        category_shade(TrackCategory::Drums, 0, 1),
+        category_shade(TrackCategory::Drums, 0, 1)
+    );
+    assert_ne!(
+        category_shade(TrackCategory::Drums, 0, 3),
+        category_shade(TrackCategory::Drums, 2, 3)
+    );
 }

@@ -92,7 +92,7 @@ The diff depends on **stable identity**: tracks, clips and plugins match by `id`
 
 Applying in place is what keeps a reverb tail ringing and a held note held while you edit. `needsFullRebuild()` decides; a full rebuild goes through `EditBuilder` (`apps/k7-daw-engine/k7-runtime/engine/EditBuilder.cpp`), which also builds the offline render's edit. Sends are planned once for the whole song in `SendPlan.h`, shared by the builder and the diff.
 
-To add a field to `ProjectDoc`: add it to `apps/k7-daw-engine/k7-runtime/engine/ProjectDoc.h`, parse and bound it in `apps/k7-daw-backend/packages/k7-runtime-server/src/doc/`, read it in `apps/k7-daw-engine/k7-runtime/engine/DocReader.cpp`, compare it in `apps/k7-daw-engine/k7-runtime/engine/ProjectDiff.cpp` (choosing in place or rebuild), apply it in `EngineHost`/`EditBuilder`, mirror it in `apps/k7-daw-frontend/packages/engine-protocol/project.ts`, and produce it in the compiler (`apps/k7-daw-frontend/packages/song`). Add a case to `apps/k7-daw-engine/k7-runtime/tests/ProjectDiff_test.cpp`.
+To add a field to `ProjectDoc`: add it to `apps/k7-daw-engine/k7-runtime/engine/ProjectDoc.h`, parse and bound it in `apps/k7-daw-backend/packages/k7-runtime-server/src/doc/`, read it in `apps/k7-daw-engine/k7-runtime/engine/DocReader.cpp`, compare it in `apps/k7-daw-engine/k7-runtime/engine/ProjectDiff.cpp` (choosing in place or rebuild), apply it in `EngineHost`/`EditBuilder`, mirror it in `apps/k7-daw-frontend/packages/engine-protocol/project.ts`, and produce it in the compiler (`apps/k7-daw-wasm/song`). Add a case to `apps/k7-daw-engine/k7-runtime/tests/ProjectDiff_test.cpp`.
 
 ## Hosted plugins
 
@@ -126,7 +126,7 @@ The JavaScript comes from `apps/k7-daw-frontend/packages/song-strudel/src/engine
 npm run gen:strudel-bundle --workspace k7-runtime
 ```
 
-Other generators in the same workspace: `gen:builtin-params` (writes `apps/k7-daw-frontend/packages/song-schema/src/builtinParams.generated.json` from `--dump-builtin-params`) and `gen:surge-panel`.
+Other generators in the same workspace: `gen:builtin-params` (writes `apps/k7-daw-wasm/song/src/modules/builtinParams.generated.json` from `--dump-builtin-params`) and `gen:surge-panel`.
 
 ## Tests
 

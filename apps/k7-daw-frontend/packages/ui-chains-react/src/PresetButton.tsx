@@ -2,7 +2,7 @@
 // Only the button: the list is a popup the HOST draws at the point this reports — its presets, and a
 // left bar of the engines when the module runs as more than one — since what a preset is, where it is
 // kept and which engines exist are the host's. Its LEAST width is set; it grows into the line, to 300 px.
-// See apps/k7-daw-frontend/packages/song/docs/userPresets.md and apps/k7-daw-frontend/packages/song/docs/engines.md.
+// See apps/k7-daw-wasm/song/docs/userPresets.md and apps/k7-daw-wasm/song/docs/engines.md.
 
 import { ChevronDown, ChevronLeft, ChevronRight } from "@studio/ui/icons";
 import { type ChainsLabels, ENGLISH_CHAINS_LABELS } from "./labels";

@@ -200,7 +200,7 @@ std::vector<std::pair<std::string, double>> stageParams(te::Plugin& module)
 
 int ownMixSide(const std::string& name)
 {
-    // The same words `ownMixSide` in @studio/song-schema reads, so the compile and the engine agree on which params these are.
+    // The same words `ownMixSide` in song-schema reads, so the compile and the engine agree on which params these are.
     static const std::regex wet(R"(\b(wet|mix)\b)", std::regex::icase);
     static const std::regex dry(R"(\bdry\b)", std::regex::icase);
     if (!name.empty() && name[0] == '@') return 0;
@@ -211,7 +211,7 @@ int ownMixSide(const std::string& name)
 
 int ownLevelSide(const std::string& name)
 {
-    // The same WHOLE names `ownLevelSide` in @studio/song-schema reads: "Output", "Input Gain", "Out Level".
+    // The same WHOLE names `ownLevelSide` in song-schema reads: "Output", "Input Gain", "Out Level".
     static const std::regex in(R"(^(input|in)(\s+(volume|vol|gain|level|lvl|trim))?$)", std::regex::icase);
     static const std::regex out(R"(^(output|out)(\s+(volume|vol|gain|level|lvl|trim))?$)", std::regex::icase);
     if (std::regex_match(name, in)) return 1;

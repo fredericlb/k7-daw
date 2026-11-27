@@ -7,7 +7,7 @@
 | Subpath | File | Holds |
 |---|---|---|
 | `./k7x/language`, `./k7x/completions` | `src/k7x/` | The k7x language mode for workspace files, and a completion source for field names and values at the cursor's key path. |
-| `./yaml/vocabulary` | `apps/k7-daw-frontend/packages/ui-editor/src/yaml/vocabulary.ts` | `schemaVocabulary(path, hints)`: turns a file path into a file kind and asks `@studio/song-schema` for that kind's fields and values (Zod introspection), adding project values from the file service's hints (modules to extend, tracks, io sinks). |
+| `./yaml/vocabulary` | `apps/k7-daw-frontend/packages/ui-editor/src/yaml/vocabulary.ts` | `schemaVocabulary(path, hints)`: turns a file path into a file kind and asks `song-schema` for that kind's fields and values (Zod introspection), adding project values from the file service's hints (modules to extend, tracks, io sinks). |
 | `./k7x/tree` | `apps/k7-daw-frontend/packages/ui-editor/src/k7x/tree.ts` | The buffer's k7x tree as a CodeMirror field, kept through a half-typed edit (`apps/k7-daw-frontend/packages/ui-editor/docs/k7xTree.md`). |
 | `./k7x/entityLinks` | `apps/k7-daw-frontend/packages/ui-editor/src/k7x/entityLinks.ts` | Dotted underline on a value naming a file; `Ctrl`/`⌘`-click opens it. Which fields link comes from `hints.paths`, the values from that tree (`k7x/entityValues.ts`). |
 | `./k7x/previewGutter` | `src/k7x/previewGutter.ts`, `src/k7x/previewTriggers.ts` | The ▶ audition gutter on lines naming something playable. |

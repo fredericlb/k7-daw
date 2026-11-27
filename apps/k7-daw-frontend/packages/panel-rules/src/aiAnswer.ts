@@ -2,10 +2,7 @@
 // A reader would get wrong that the model writes k7x: it writes the panel as JSON data, and panelText.ts prints it.
 // Widgets come as LISTS carrying their id, since a structured output allows no map with keys of the model's choosing.
 
-import {
-  WAVEFORM_SOURCES,
-  WIDGET_TYPES,
-} from "@studio/song-schema/yaml/moduleSchema";
+import { WAVEFORM_SOURCES, WIDGET_TYPES } from "@studio/k7-wasm/consts";
 import { panelFileText } from "./panelText";
 
 /** What the host answers: both files as TEXT, already checked. */

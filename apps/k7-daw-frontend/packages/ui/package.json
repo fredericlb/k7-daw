@@ -44,7 +44,12 @@
     "./checkbox": "./src/checkbox.tsx",
     "./locale-picker": "./src/locale-picker.tsx",
     "./section-heading": "./src/section-heading.tsx",
-    "./modal-focus": "./src/modal-focus.ts"
+    "./modal-focus": "./src/modal-focus.ts",
+    "./series-colors": "./src/series-colors.ts",
+    "./record-drag": "./src/record-drag.ts",
+    "./point-menu": "./src/point-menu.tsx",
+    "./search-list": "./src/search-list.tsx",
+    "./empty-row": "./src/empty-row.tsx"
   },
   "peerDependencies": {
     "react": "^19.2.7",
@@ -63,5 +68,8 @@
     "lucide-react": "^1.24.0",
     "radix-ui": "^1.6.2",
     "tailwind-merge": "^3.6.0"
+  },
+  "scripts": {
+    "test": "vitest run"
   }
 }

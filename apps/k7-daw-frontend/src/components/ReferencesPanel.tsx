@@ -2,12 +2,9 @@
 // `_references/`, a ＋ that uploads into it, and a row you click to hear. It plays nothing
 // itself — the player (ReferenceBar) does, drawing its card in this panel's slot (../docs/references.md).
 
+import { REFERENCE_EXTS, REFERENCES_DIR } from "@studio/k7-wasm/consts";
+import type { ReferenceTrack } from "@studio/k7-wasm/types";
 import { askConfirm } from "@studio/project-shell/ask";
-import {
-  REFERENCE_ACCEPT,
-  REFERENCES_DIR,
-  type ReferenceTrack,
-} from "@studio/song-schema/reference";
 import { Button } from "@studio/ui/button";
 import { EmptyState } from "@studio/ui/empty-state";
 import { Music, Pause, Play, Plus, Trash2 } from "@studio/ui/icons";
@@ -19,6 +16,9 @@ import { api } from "../api";
 import { parts } from "../i18nParts";
 import { m } from "../paraglide/messages.js";
 import { PanelError } from "./PanelError";
+
+/** The extensions a file picker offers, as one `accept` string. */
+const REFERENCE_ACCEPT = REFERENCE_EXTS.map((e) => `.${e}`).join(",");
 
 export function ReferencesPanel({
   playing,

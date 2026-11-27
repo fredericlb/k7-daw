@@ -33,7 +33,7 @@ each for its own reason:
 2. **One door for reading and writing a file** — `apps/k7-daw-wasm/song-edit/src/workspace_doc.rs`: a file is
    read as k7x text or data, edited as a k7x document by key path, or written whole from data. A
    writer takes a document scope and changes values in it, so a knob drag is a one-line diff and an
-   author's comments stay (`apps/k7-daw-frontend/packages/song/docs/k7xFiles.md`). Done.
+   author's comments stay (`apps/k7-daw-wasm/song/docs/k7xFiles.md`). Done.
 3. **Reading `.k7x` only** — wherever a kind is looked up by name, the name is `.k7x`; a folder
    listing, the revision token and the browser's path rules know no other. The file service refuses
    to save a YAML name into a workspace. Every demo
@@ -57,7 +57,7 @@ each for its own reason:
 8. **Sugar, kind by kind** — `notes("c4 d4 ~ e4")` for a sequence's notes, `runs([[…]])` for a
    graph's segments (a chain cannot repeat `.to(…)`, a key being unique in a map). Expanded before
    any reader sees the file; kept through an edit that leaves its expansion alone, written as the full
-   data by one that changes it (`apps/k7-daw-frontend/packages/song-schema/docs/sugar.md`). Done.
+   data by one that changes it (`apps/k7-daw-wasm/song-schema/docs/sugar.md`). Done.
 
 ## The hazards
 

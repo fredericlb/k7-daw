@@ -2,7 +2,7 @@
 // event, its own material first, on one song-time axis. A drag selects a span; a click on a row
 // with a span picks that take for it (`event comp`), without one it moves the playhead. A MIDI
 // event has no spans: a click picks a WHOLE take. Its record button records the next take INTO
-// the event, from its start or punched into the span. See apps/k7-daw-frontend/packages/song/docs/takes.md.
+// the event, from its start or punched into the span. See apps/k7-daw-wasm/song/docs/takes.md.
 
 import { setCompSpan } from "@studio/k7-wasm/schema";
 import { beatsToPosition } from "@studio/k7-wasm/timecode";

@@ -221,7 +221,7 @@ in `@studio/song`).
 A **picture lane** gets the picture's mute and solo — mute means hidden — and no record arm, gain or
 pan: a full strip there would be controls that do nothing to a picture. Its card has two outputs, its
 picture and its shots' sound; the sound's fader, mute and solo are its `#audio` half's strip, which a
-cable leaving that output feeds (`apps/k7-daw-frontend/packages/song/docs/videoSound.md`).
+cable leaving that output feeds (`apps/k7-daw-wasm/song/docs/videoSound.md`).
 
 ## A RACK carries one too — a grid of pads
 
@@ -305,7 +305,7 @@ serves both from one site.
 is a position in the list and nothing more — `setModuleField` writes the option's LABEL, which is
 the base's name, so adding a base can renumber the list without changing what any entry writes.
 The rows after `none` are sorted for people with `@studio/web-protocol/tree`'s collator, each keeping
-its position as its value: the list arrives in code-point order (`@studio/song-schema`'s
+its position as its value: the list arrives in code-point order (`song-schema`'s
 `docs/textOrder.md`), which puts every capitalised name before the lower-case ones.
 
 ## An intrinsic that can be SET must be readable BACK
@@ -510,7 +510,7 @@ plugged into a jack that will not give it back.
 
 > What may LAND on that socket is narrower than what may be dragged to it: a run carrying a live
 > interface input, and nothing else — recording a preamp onto a lane. `graph chain connect` asks the
-> same question `apps/k7-daw-frontend/packages/song` asks, by walking UPSTREAM of the cable's source (`runCarriesInput`).
+> same question `apps/k7-daw-wasm/song` asks, by walking UPSTREAM of the cable's source (`runCarriesInput`).
 > Refusing every track outright would be stricter than the model it guards and leave an `IN` node in
 > the graph with nowhere to go; and since the derivation splits `mic → comp` into two chains,
 > reading either one's steps would answer no for every recording path with a plugin on it.
@@ -615,7 +615,7 @@ changed for any of this: a cable dropped on `turntableA#mix` writes `graph chain
 `graph move` address, which is why `layout`'s pin lookup reads `module` for an assembly as it does
 for a module.
 
-See `apps/k7-daw-frontend/packages/song/docs/assemblies.md`.
+See `apps/k7-daw-wasm/song/docs/assemblies.md`.
 
 ## Cables
 
@@ -908,7 +908,7 @@ audio.
 `isLane` — either kind — is what decides three things: whether a chain's source is drawn as a lane,
 whether its signal is followed or read off the lane, and whether a run's DESTINATION is an existing
 card or a sink to invent. Reading `graph.tracks` alone for that third one makes a lens wired to a
-picture lane (`apps/k7-daw-frontend/packages/song/docs/camera.md`) resolve to an unknown destination and get a **sink
+picture lane (`apps/k7-daw-wasm/song/docs/camera.md`) resolve to an unknown destination and get a **sink
 card of its own**, named after the lane — an output node nobody asked for, sitting beside the real
 lane with the camera cabled to the wrong one. A lane is never a sink: it is already on the canvas.
 

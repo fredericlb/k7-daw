@@ -12,6 +12,10 @@ pub const SHARED_MODULES_DIR: &str = "_modules";
 pub const ACCOUNT_LIBRARY: &str = "account";
 pub const LIBRARY_PINS_FILE: &str = "_library-pins.k7x";
 pub const UNPINNED_VERSION: &str = "1";
+/// What this k7 can run: a library whose `requires` is above it is refused; raised when a library may use something new.
+pub const LIBRARY_LEVEL: u32 = 2;
+/// The folder a workspace keeps its reference tracks in, beside `_modules` and `_playlists`.
+pub const REFERENCES_DIR: &str = "_references";
 const ACCOUNT_LIBRARY_DIR: &str = "library";
 
 /// A library by name and the folder it is read from.

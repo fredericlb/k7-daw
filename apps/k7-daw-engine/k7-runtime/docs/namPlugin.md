@@ -13,7 +13,7 @@ guitar -> nam (the amp) -> impulse-response (the cabinet) -> OUT
 ```
 
 The model file is named by the module's `model:` param: one it carries in its `assets/`, or one
-of a library's shared `models/` as `@<library>/<path>` (`apps/k7-daw-frontend/packages/song/docs/libraryFiles.md`). `EditBuilder` calls `loadModel()` when it builds the plugin.
+of a library's shared `models/` as `@<library>/<path>` (`apps/k7-daw-wasm/song/docs/libraryFiles.md`). `EditBuilder` calls `loadModel()` when it builds the plugin.
 
 ## Levels: `Normalize`, `Input`, `Output`
 
@@ -87,7 +87,7 @@ needs the load to finish before the graph is built, or a graph rebuild when the 
 
 A NAM capture is often the amp alone, and an amp without a cabinet is a fizz no speaker ever made.
 So the module convolves an IR after its model when the document names one (`irFile`, from the
-module's `ir:` param — a file in a library's `irs/`, `apps/k7-daw-frontend/packages/song/docs/libraryFiles.md`), the
+module's `ir:` param — a file in a library's `irs/`, `apps/k7-daw-wasm/song/docs/libraryFiles.md`), the
 way the official NAM plugin does. It runs at the ENGINE's rate, after the rate bridge: JUCE's
 `Convolution` resamples the IR to that rate when it loads, so a 44.1 kHz IR and a 48 kHz model mix
 without either being told.

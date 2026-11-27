@@ -13,6 +13,8 @@ import { DSP_FILE, JSDSP_FILE } from "@studio/engine-protocol/build";
 // The reader `@studio/engine-browser` wants: it owns the routes, this app owns the errors.
 import { readJson as json } from "@studio/http-client/call";
 import { upload } from "@studio/http-client/upload";
+import { WIDGETS_SCRIPT } from "@studio/k7-wasm/consts";
+import type { NodePresets, ReferenceTrack } from "@studio/k7-wasm/types";
 import type {
   AiOrganizeRequest,
   AiOrganizeResult,
@@ -25,9 +27,6 @@ import {
 import { readTurnStream } from "@studio/panel-rules/ai-turn-stream";
 import { cfg, fget, fileHeaders, fsend } from "@studio/project-shell/fileApi";
 import { projectApi } from "@studio/project-shell/project";
-import { WIDGETS_SCRIPT } from "@studio/song-schema/moduleFiles";
-import type { NodePresets } from "@studio/song-schema/presets";
-import type { ReferenceTrack } from "@studio/song-schema/reference";
 import type { ModuleStore } from "@studio/ui-module-builder/store";
 import { MAX_UPLOAD_BYTES, type ModelDownloadJob } from "@studio/web-protocol";
 import type { PlaylistInfo } from "@studio/web-protocol/playlists";
@@ -138,12 +137,12 @@ export const api = {
   // The shared half, spread rather than re-listed, so this app and @studio/project-shell cannot drift on a route name.
   ...projectApi,
 
-  // --- The workspace's playlists (`_playlists/`, see apps/k7-daw-frontend/packages/song/docs/playlists.md) ---
+  // --- The workspace's playlists (`_playlists/`, see apps/k7-daw-wasm/song/docs/playlists.md) ---
 
   // Only the LISTING is its own route: `read`/`write` above already serve any workspace path, and `playlist new` is a command.
   playlists: () => fget<{ playlists: PlaylistInfo[] }>("/playlists"),
 
-  // --- The workspace's reference tracks (`_references/`, see @studio/song-schema/docs/references.md) ---
+  // --- The workspace's reference tracks (`_references/`, see apps/k7-daw-wasm/song-schema/docs/references.md) ---
 
   // The LISTING only: a track goes up with `upload` and is played over `mediaUrl`, both of which already take any workspace path.
   references: () => fget<{ references: ReferenceTrack[] }>("/references"),
@@ -155,7 +154,7 @@ export const api = {
 
   // Copy the project to the engine's machine again after a copy failed — apps/k7-daw-backend/docs/file-engine.md.
   retryEngineSync: () => fsend<{ ok: true }>("POST", "/engine/sync/retry", {}),
-  // Leave an automatically frozen VST live while it is edited — apps/k7-daw-frontend/packages/song/docs/autoFreeze.md.
+  // Leave an automatically frozen VST live while it is edited — apps/k7-daw-wasm/song/docs/autoFreeze.md.
   thawAutoFreeze: (module: string, on = true) =>
     fsend<{ ok: true }>("POST", "/auto-freeze/thaw", { module, on }),
   // --- A node's model, fetched onto this machine (the right-click's "Download model") ---
@@ -312,7 +311,7 @@ export const api = {
       ref,
     }),
 
-  // A node's presets, files under a presets tree; applying and saving are `node preset` verbs — apps/k7-daw-frontend/packages/song/docs/userPresets.md.
+  // A node's presets, files under a presets tree; applying and saving are `node preset` verbs — apps/k7-daw-wasm/song/docs/userPresets.md.
   nodePresets: (node: string) =>
     fget<NodePresets>(`/presets?node=${encodeURIComponent(node)}`),
 };

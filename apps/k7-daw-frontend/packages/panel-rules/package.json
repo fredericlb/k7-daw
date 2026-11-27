@@ -20,8 +20,8 @@
   },
   "dependencies": {
     "@studio/engine-protocol": "*",
+    "@studio/graph-model": "*",
     "@studio/k7-wasm": "*",
-    "@studio/song-schema": "*",
     "zod": "^4.4.3"
   },
   "devDependencies": {

@@ -18,4 +18,4 @@ pub use api::{Answer, Replay, VerbRequest, run_answered, run_in_env, run_replaye
 pub use complete::{CompleteRequest, Item, complete_in_env, complete_request};
 pub use host::{Failed, Host, Thrown};
 pub use run::run_line;
-pub use verbs::ported;
+pub use verbs::{ported, surface_skeleton};

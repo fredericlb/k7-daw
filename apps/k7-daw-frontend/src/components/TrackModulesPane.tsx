@@ -114,9 +114,9 @@ export function TrackModulesPane({
   onBypassModule?: (module: string) => void;
   /** …the alternative badges on a node, and the file-valued param's browser, for the same reason. */
   onAlternative?: (module: string, name: string | null) => void;
-  /** A node's engine dropdown — straight through, the command being the SHELL's (apps/k7-daw-frontend/packages/song/docs/engines.md). */
+  /** A node's engine dropdown — straight through, the command being the SHELL's (apps/k7-daw-wasm/song/docs/engines.md). */
   onEngine?: (module: string, name: string) => void;
-  /** A node's preset dropdown — the shell draws the list (apps/k7-daw-frontend/packages/song/docs/userPresets.md). */
+  /** A node's preset dropdown — the shell draws the list (apps/k7-daw-wasm/song/docs/userPresets.md). */
   /** The arrows beside a node's preset dropdown: load its previous (-1) or next (+1) preset. */
   onPresetStep?: (module: string, step: -1 | 1) => void;
   onPresets?: (
@@ -128,7 +128,7 @@ export function TrackModulesPane({
   /** The preset each node last loaded, by node. */
   presetNames?: Record<string, string>;
   onAssetBrowse?: (module: string, kind: string, x: number, y: number) => void;
-  /** A rack tap's edit — the shell runs its `node tap` command (apps/k7-daw-frontend/packages/song/docs/racks.md). */
+  /** A rack tap's edit — the shell runs its `node tap` command (apps/k7-daw-wasm/song/docs/racks.md). */
   onTapEdit?: (module: string, action: TapAction) => void;
   onWatchWaveform?: (
     pluginId: string,
@@ -187,7 +187,7 @@ export function TrackModulesPane({
   );
   // The tab each card has open: a folded card is as wide as the page it shows, so a switch reflows the row (ui-chains' `tabW`).
   const [openTabs, setOpenTabs] = useState<Record<string, number>>({});
-  // The phone's narrow card, its tabs a menu: the panel's `vertical` layout (song-schema's LayoutSchema).
+  // The phone's narrow card, its tabs a menu: the panel's `vertical` layout (the song crate's `Layout`).
   const mobile = useIsMobile();
   const onOpenTab = useCallback(
     (id: string, tab: number) =>

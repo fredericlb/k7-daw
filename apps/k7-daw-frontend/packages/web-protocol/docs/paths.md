@@ -21,7 +21,7 @@ browser-safe candidate, but the tunnel and `live-sync` do not and should not pul
   `startsWith(root)` that forgot the separator was this bug.
 - **Lexical only.** Both sides are taken as already resolved; nothing reads the disk. A symlink
   inside the root may still lead out, so a check that must hold against links is song's
-  `confineTo` (`apps/k7-daw-frontend/packages/song/docs/confine.md`), which runs this test on the resolved path and again
+  `confineTo` (`apps/k7-daw-wasm/song/docs/confine.md`), which runs this test on the resolved path and again
   on the real path of its nearest existing ancestor.
 - **The root decides the platform.** A root spelt with a drive letter or as a UNC share is a Windows
   path: both separators count, and case is folded, as NTFS folds it. Any other root is POSIX: only

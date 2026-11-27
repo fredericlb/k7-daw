@@ -4,12 +4,12 @@
 // take apart by hand. Nothing here is authoritative — see docs/autoLayout.md.
 
 import type { ParamMeta } from "@studio/engine-protocol";
-import { ownLevelSide, ownMixSide } from "@studio/k7-wasm/schema";
 import {
   INPUT_VOLUME_PARAM,
   MIX_PARAM,
   OUTPUT_VOLUME_PARAM,
-} from "@studio/song-schema/moduleTypes";
+} from "@studio/k7-wasm/consts";
+import { ownLevelSide, ownMixSide } from "@studio/k7-wasm/schema";
 
 /** The engine's stage around any plugin: what the mix corner holds. */
 const STAGE = new Set([INPUT_VOLUME_PARAM, MIX_PARAM, OUTPUT_VOLUME_PARAM]);

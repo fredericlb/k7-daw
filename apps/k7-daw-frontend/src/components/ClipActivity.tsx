@@ -3,7 +3,7 @@
 // block. The mapping itself is pure and lives in src/activity.ts; this layer fetches what it
 // needs and paints. It replaces the block's flat background, masked or (no data yet) at 70%.
 
-import { categoryShade } from "@studio/song-schema/trackColor";
+import { UNCOLOURED_SHADE } from "@studio/k7-wasm/consts";
 import { cn } from "@studio/ui/lib/utils";
 import { memo, useMemo } from "react";
 import { activityMask, audioActivity, midiActivity } from "../activity";
@@ -11,8 +11,8 @@ import type { EnvelopeProject } from "../clipEnvelope";
 import type { WebClip } from "../types";
 import { useClipWaveform } from "./ClipContent";
 
-/** What a track the compile has not coloured yet is drawn in: the `other` category's shade (trackColor.ts). */
-export const UNCOLOURED = categoryShade("other", 0, 1);
+/** What a track the compile has not coloured yet is drawn in: the `other` category's shade. */
+export const UNCOLOURED = UNCOLOURED_SHADE;
 
 /** Memoised for the reason ClipContent is: one per clip, re-rendered by everything the timeline does, while its inputs barely move. */
 export const ClipActivity = memo(function ClipActivity({

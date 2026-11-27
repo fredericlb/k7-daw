@@ -2,7 +2,7 @@
 // creating — as AddSong shows the tree before uploading, because here too the name decides
 // everything. The card already knows its workspace. See ../../docs/projects.md.
 
-import type { ProjectShape } from "@studio/song-schema/yaml/projectSchema";
+import type { ProjectShape } from "@studio/k7-wasm/types";
 import { Button } from "@studio/ui/button";
 import { Plus } from "@studio/ui/icons";
 import { useState } from "react";

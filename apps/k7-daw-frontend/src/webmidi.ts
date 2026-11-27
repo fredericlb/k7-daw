@@ -20,7 +20,7 @@ export interface MidiInputInfo {
 }
 
 /** Which of `names` a midi-in node's `device` label means: exact, then case-insensitive, then by
- *  containment either way — the camera's rule (apps/k7-daw-frontend/packages/song/docs/midiIn.md). "" is every device. */
+ *  containment either way — the camera's rule (apps/k7-daw-wasm/song/docs/midiIn.md). "" is every device. */
 export function matchMidiDevice(
   label: string,
   names: readonly string[],

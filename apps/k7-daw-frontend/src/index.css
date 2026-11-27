@@ -53,7 +53,7 @@
 /* One colour per MEANING across every view of a song, canvas included (it reads these variables):
    the playhead, the three lane states, the meter's three zones. `static`, so each variable exists
    even where no class names it. The series palette for takes, slices and cues is
-   @studio/song-schema's seriesColors.ts, since a canvas and an SVG draw it too. */
+   @studio/ui's series-colors.ts, since a canvas and an SVG draw it too. */
 @theme static {
   --color-faint: var(--k7-text-3);
   --color-playhead: var(--k7-playhead);

@@ -20,7 +20,7 @@ Three states existed and already excluded one another — a clip in hand, a rect
 neither — and each already made `hjkl` mean something different. `timelineMode.ts` gives them one
 name, and **derives it rather than storing it**: naming a state must not add a fourth source of
 truth that can come to disagree with the three it reads. That is the rule
-`apps/k7-daw-frontend/packages/song/docs/surfaces.md` states for `surfaces/` against a `project_type`, applied here.
+`apps/k7-daw-wasm/song/docs/surfaces.md` states for `surfaces/` against a `project_type`, applied here.
 
 | mode | what the keys do |
 |---|---|
@@ -391,7 +391,7 @@ the notes it was made from. Expanded, the block draws them over its waveform, ea
 its own place and in a colour the waveform does not use. A double-click on the block opens the piano
 roll on the authored clip under the pointer, or the first one when the press falls between two: the
 render has no notes of its own to open, and the waveform panel would show nothing the lane does not.
-`apps/k7-daw-frontend/packages/song/docs/freeze.md` says where those clips come from.
+`apps/k7-daw-wasm/song/docs/freeze.md` says where those clips come from.
 
 ## A lane's alternatives
 
@@ -402,7 +402,7 @@ something about its sound, and `shrink-0` beside a truncating label means a narr
 the name and never the badge.
 
 Alternatives belong to the MODULE a lane is, so the pair comes from
-`apps/k7-daw-frontend/packages/song/docs/alternatives.md` and not from a field of the lane's own.
+`apps/k7-daw-wasm/song/docs/alternatives.md` and not from a field of the lane's own.
 
 Two things about it:
 
@@ -914,7 +914,7 @@ front, so dragging a lane to the top row puts it in front — see
 taken, and the verb counts. It has to be that way round: this view CLUSTERS its rows — a group's
 members follow its header, wherever they sit in the compiled list — so a position counted here
 could name a different lane in the file. Naming the lane is the one spelling both sides read the
-same. `apps/k7-daw-frontend/packages/song/docs/trackKind.md` has the file's side.
+same. `apps/k7-daw-wasm/song/docs/trackKind.md` has the file's side.
 
 Three rows are deliberately not draggable and not droppable:
 
@@ -976,7 +976,7 @@ each **placed** — `event add` on an audio lane, `picture add` on a picture one
 
 A drop onto a picture lane then runs **`picture sound <lane>`**, once per lane, so the footage
 arrives with its sound, which the engine plays on the picture lane's own `#audio` half
-(`apps/k7-daw-frontend/packages/song/docs/videoSound.md`). It is a fourth round trip rather than part of the placement
+(`apps/k7-daw-wasm/song/docs/videoSound.md`). It is a fourth round trip rather than part of the placement
 because it can take a while, extracting a long file's sound, and because it is safe to repeat: what
 is already extracted is kept.
 
@@ -1095,12 +1095,12 @@ The engine plays a comped event as several clips; every surface sees ONE (`foldC
 service): the event's id and start, spanning its pieces, carrying them for drawing. The block wears a
 layers icon, draws each piece's activity and waveform where it plays, and opens in its clip panel
 with the comp drawn piece by piece (`docs/clipEditors.md`). Move, copy, mute and fade address the EVENT; resize, window, trim and split refuse it,
-since they would rewrite one take's window (`apps/k7-daw-frontend/packages/song/docs/takes.md`).
+since they would rewrite one take's window (`apps/k7-daw-wasm/song/docs/takes.md`).
 
 ## Another timeline in the pane
 
 The bar above the lanes (`TimelineSwitch.tsx`) names what the pane draws: **Main**, the song's own
-timeline, or one of the project's `timelines/` (`apps/k7-daw-frontend/packages/song/docs/timelines.md`). It is drawn only
+timeline, or one of the project's `timelines/` (`apps/k7-daw-wasm/song/docs/timelines.md`). It is drawn only
 once there is another timeline: a song with one has nothing to switch between, and a bar of one tab
 is height taken from every song for nothing. Opening one puts its lanes in place of the song's
 tracks (`timelineView.ts`), so every gesture — move, resize, drop, paste — addresses
@@ -1124,7 +1124,7 @@ edited here like the song's, by the same drag and the same `picture` verbs, at `
 gutter has no mute, solo or arm, since what they draw on is the song lane of their name, and those three
 are its. On that song lane the shots a placed timeline puts there are dashed `PlacedShot` blocks that no
 drag or menu reaches: the drag writes the lane's file BY INDEX, and they are not in it. A double-click
-opens their timeline, as it does a timeline event (`apps/k7-daw-frontend/packages/song/docs/timelines.md`).
+opens their timeline, as it does a timeline event (`apps/k7-daw-wasm/song/docs/timelines.md`).
 
 A timeline EVENT on a song lane is one dashed block of its fixed length, its clips' activity drawn
 where each plays. It has no edge or fade handles — its length is its timeline's — and a
@@ -1250,7 +1250,7 @@ work, so the status line names the group instead and the redirect shows.
 
 Neither `m` nor `s` writes a flag on the lane itself. `m` is the lane's module BYPASS, one
 name in `graph.k7x`'s `bypassed:`; `s` bypasses every OTHER lane, and nothing on disk says
-"soloed" (`apps/k7-daw-frontend/packages/song/docs/trackModules.md`).
+"soloed" (`apps/k7-daw-wasm/song/docs/trackModules.md`).
 
 How a lane *reads* is not the same as the flag on it: a track is dimmed if it is muted, if
 its group is, or if something else is soloed and it is not — mirroring `withGroupMix` plus

@@ -19,8 +19,8 @@ Every workspace that has tests declares `"test": "vitest run"`. A few packages a
 npm run test                        # every workspace's `test`, one at a time
 npm run test -- --jobs 4            # four workspaces at once
 npm run test --workspace @studio/song          # one package
-cd apps/k7-daw-frontend/packages/song && npx vitest run src/loader.test.ts   # one file
-cd apps/k7-daw-frontend/packages/song && npx vitest                  # watch mode
+cd apps/k7-daw-wasm/song && npx vitest run src/loader.test.ts   # one file
+cd apps/k7-daw-wasm/song && npx vitest                  # watch mode
 ```
 
 `npm run test` and `npm run typecheck` go through `scripts/workspaces.mjs <script> [--jobs N]`. It

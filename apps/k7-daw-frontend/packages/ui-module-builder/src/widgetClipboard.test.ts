@@ -1,4 +1,4 @@
-import type { Widget } from "@studio/song-schema/yaml/moduleSchema";
+import type { WebWidget as Widget } from "@studio/graph-model";
 import { describe, expect, it } from "vitest";
 import { clipIds, copyWidgets, pasteWidgets } from "./widgetClipboard";
 

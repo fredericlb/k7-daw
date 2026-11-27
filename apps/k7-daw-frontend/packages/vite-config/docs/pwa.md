@@ -79,7 +79,7 @@ cost nothing, and that is the price of starting on the build that is deployed. A
 the precache is empty but for the fallback, so dev keeps `navigateFallback`, limited to `/` there.
 
 The precache takes `.wasm` with the scripts: k7 mounts only once its WebAssembly module is compiled
-(`apps/k7-daw-frontend/packages/song-schema/docs/wasmBoundary.md`), so a module left to the network
+(`apps/k7-daw-wasm/song-schema/docs/wasmBoundary.md`), so a module left to the network
 would put a download of its 3 MB before every opening.
 
 ## Every deploy reaches every open tab

@@ -1,10 +1,10 @@
 // rackBuilder.ts — the rack builder's arithmetic: which pad fires which note, in which order the
 // taps are written, where the samples go, and the KIT node the CREATE button commits — a node of the
-// library's `k7-rack` on its `samples` engine, carrying its own taps (apps/k7-daw-frontend/packages/song/docs/racks.md).
+// library's `k7-rack` on its `samples` engine, carrying its own taps (apps/k7-daw-wasm/song/docs/racks.md).
 // Pure, because what lands in the project deserves a test; the popin is a grid drawn around these numbers.
 
+import { RACK_FIRST_NOTE } from "@studio/k7-wasm/consts";
 import { stringify } from "@studio/k7-wasm/k7x";
-import { RACK_FIRST_NOTE } from "@studio/song-schema/moduleTypes";
 import { m } from "./paraglide/messages.js";
 import { projectDir } from "./projectPaths";
 

@@ -60,7 +60,7 @@ the file already uses.
 
 The language itself has none. A kind of file may: a sequence may write its notes as mini-notation,
 a graph its segments as runs — read by that kind's reader into the same data
-(`apps/k7-daw-frontend/packages/song-schema/docs/sugar.md`). They are an authoring aid, not a second way to store data.
+(`apps/k7-daw-wasm/song-schema/docs/sugar.md`). They are an authoring aid, not a second way to store data.
 
 ## Comments
 

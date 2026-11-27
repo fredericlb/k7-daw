@@ -3,7 +3,7 @@
 // What reads wrong: a file dropped on any part of a card imports into that workspace, so the drop handlers sit on
 // the card itself (`data-workspace` stays for the e2e). See ../../docs/projects.md.
 
-import type { ProjectShape } from "@studio/song-schema/yaml/projectSchema";
+import type { ProjectShape } from "@studio/k7-wasm/types";
 import {
   ChevronDown,
   ChevronRight,

@@ -372,7 +372,7 @@ plugged in mid-song is seen at the next stop — the price of a song that keeps 
 
 Tracktion opens every MIDI input it finds and enables, and enables a new one by default. k7 never
 reads one there: a keyboard is read by the BROWSER, which records it and sends what is played as
-`midi-live` (`apps/k7-daw-frontend/packages/song/docs/midiIn.md`). On Windows a MIDI input has one owner, so an engine
+`midi-live` (`apps/k7-daw-wasm/song/docs/midiIn.md`). On Windows a MIDI input has one owner, so an engine
 holding the keyboard leaves the page listing it and receiving nothing from it. The engine therefore
 disables every physical MIDI input each time Tracktion applies a device list (`closePhysicalMidiInputs`
 in `engine/EngineHost.cpp`), which covers the first scan, a rescan and a keyboard plugged in later.

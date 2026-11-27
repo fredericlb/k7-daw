@@ -36,7 +36,9 @@ pub use scan::{SCAN_CAP, Scan, ScannedPlugin, builtin_scan, engine_module_of, en
 pub use schema::{Alternative, Automation, EngineSet, IoKind, Module, ModuleType, Plugin, decode_module};
 pub use tree::{ModuleFolder, TreeRead, read_tree, read_tree_in};
 pub use types::{MODULE_TYPES, TypeMeta};
-pub use ui::{Curve, Layout, Tab, TabName, Ui, Widget, WidgetOption, WidgetType};
+pub use ui::{
+    Curve, Layout, TAB_NAME_MAX, Tab, TabName, Ui, WAVEFORM_SOURCES, WIDGET_TYPES, Widget, WidgetOption, WidgetType,
+};
 pub use unions::{AlternativePick, Input, Monitor, ParamValue};
 pub use vocab::{
     Absent, MAX_ENTRIES, Vocabulary, base_module_refs, build_vocabulary, build_vocabulary_with, builtin_modules,

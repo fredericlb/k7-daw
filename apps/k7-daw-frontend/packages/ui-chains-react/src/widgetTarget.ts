@@ -80,7 +80,7 @@ export function widgetTarget(
   offline = false,
 ): WidgetTarget | null {
   if (!w.bind) return null;
-  // A PROMOTED param resolves to the member's own, then takes the arms below — apps/k7-daw-frontend/packages/song/docs/assemblies.md.
+  // A PROMOTED param resolves to the member's own, then takes the arms below — apps/k7-daw-wasm/song/docs/assemblies.md.
   const promoted = n.assemblyOf?.params?.[w.bind];
   if (promoted)
     return promoted.pluginId

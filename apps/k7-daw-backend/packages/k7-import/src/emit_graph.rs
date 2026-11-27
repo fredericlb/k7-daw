@@ -109,7 +109,7 @@ fn add_track_mixer(ctx: &mut EmitCtx<'_>, entry: &str) -> String {
     let note = format!(
         "{entry}'s strip: volume, pan and three bands, and the one place its level lives.\n\n\
          Written by the import, because a lane without one plays at unity with nowhere to put a\n\
-         level — see apps/k7-daw-frontend/packages/song/docs/trackMixer.md."
+         level — see apps/k7-daw-wasm/song/docs/trackMixer.md."
     );
     ctx.write_doc(
         &format!("nodes/{name}.k7x"),

@@ -1,50 +1,44 @@
 # song-schema: the file format
 
-`apps/k7-daw-frontend/packages/song-schema` defines every file a project is made of: one zod schema per file kind, a
-reader/writer for the kinds k7 edits by hand-shaped text transforms, and the small pure modules the
-rest of the codebase shares (timecodes, module vocabulary, playlists, stems, takes…). It has no
-`node:` import: the browser imports it directly.
+Every file a project is made of is read by a Rust decoder: `apps/k7-daw-wasm/song` holds the readers, the module
+vocabulary and the views, `apps/k7-daw-wasm/song-schema` the small value rules (timecodes, curves, stems, aspects),
+and `apps/k7-daw-wasm/song-edit` the writers. The page reaches them through the one WebAssembly module
+(`apps/k7-daw-wasm/k7-wasm`), as `@studio/k7-wasm/*`; nothing of the file format is written twice. Their pages
+are the `docs/` of each crate.
 
 ## Layout
 
 | Path | Contents |
 |---|---|
-| `apps/k7-daw-frontend/packages/song-schema/src/yaml/projectSchema.ts` | `PROJECT_SHAPES` (the five archetypes), `MASTER_MIN_DB`/`MASTER_MAX_DB`. The file's own shape is the Rust reader's. |
-| `apps/k7-daw-frontend/packages/song-schema/src/yaml/placementSchema.ts` | `PlacementSchema` (one event), `TIMECODE` (the regex), `TIMECODE_KEYS` (keys whose value must be written quoted). |
-| `apps/k7-daw-frontend/packages/song-schema/src/yaml/entitySchemas.ts` | The source extensions that tell a picture clip from an audio one, and `NoteSchema`. The clip, sequence and curve files are the Rust readers'. |
-| `apps/k7-daw-frontend/packages/song-schema/src/yaml/moduleSchema.ts` | `ModuleSchema` — every field a module, node or lane may carry — plus `AlternativeSchema`, `UISchema`/`UiFileSchema`, `WidgetSchema`, `RackSchema`. |
-| `apps/k7-daw-frontend/packages/song-schema/src/yaml/graphSchema.ts` | `GraphFileSchema` (`modules`, `bypassed`, `bus_only`, `tap_feeds`, `positions`). |
-| `apps/k7-daw-frontend/packages/song-schema/src/yaml/surfaceSchema.ts` | `SurfaceSchema`, the type ↔ layout table and the mapping skeletons; the surface types themselves are Rust's `SURFACE_TYPES`. |
-| `apps/k7-daw-frontend/packages/song-schema/src/yaml/mixViewSchema.ts` | The control → param binding a surface's `mapping` reuses. The cue sheet, chain and assembly files are the Rust readers'. |
+| `apps/k7-daw-wasm/song/src/files/` | The per-kind readers: `project.rs` (the root, its two tiers, the archetypes), `placement.rs` (one event, a sound or a shot), `entity.rs` (clips, sequences, curves), `desk.rs` (the cue sheet and `views/mix.k7x`), `preset_file.rs`, `timeline.rs`. |
+| `apps/k7-daw-wasm/song/src/modules/` | `schema.rs` (every field a module, node or lane may carry), `ui.rs` and `panels.rs` (the panel and the controller beside it), `type_table.rs` and `types.rs` (the module vocabulary: type folders and their default ports, built-in ends, namespaces, refs). |
+| `apps/k7-daw-wasm/song/src/routing/graph_file.rs` | `graph.k7x`: `modules`, `bypassed`, `bus_only`, `tap_feeds`, `positions`. |
+| `apps/k7-daw-wasm/song/src/views/surfaces.rs` | `surfaces/<name>.k7x`: the type and layout pair, the playlist, the mapping. |
+| `apps/k7-daw-wasm/song/src/wire.rs` | The small shapes a route answers that the page reads (`ProjectShape`, `NodePresets`, `ReferenceTrack`), and the words they are spelled from. |
 | `apps/k7-daw-wasm/song-edit/src/` writers (`sequence_file.rs`, `picture_file.rs`, `playlist_edit.rs`, `mix_cues.rs`, `library_pins.rs`, `assembly_param.rs`, `format_chain.rs`) | Text editors per kind, reached as `text.*` ops (`apps/k7-daw-frontend/packages/k7-wasm/src/text.ts`). |
-| `apps/k7-daw-wasm/song/src/files/validate.rs`, `route.rs` | The editor's check: path → the compile's own reader, reached as `file.validate`. |
+| `apps/k7-daw-wasm/song/src/files/validate.rs`, `route.rs` | The editor's check: path to the compile's own reader, reached as `file.validate`. |
 | `apps/k7-daw-wasm/song/src/views/fields.rs` | The editor's completion vocabulary, derived from the readers' own decoders, reached as `fields.*`. |
-| `apps/k7-daw-frontend/packages/song-schema/src/yaml/k7xIssues.ts` | k7x-located findings. The short forms are `apps/k7-daw-wasm/song-edit/src/sugar.rs`'s, reached as `text.sugar_expand` and `text.sugar_apply`. |
-| `apps/k7-daw-frontend/packages/song-schema/src/moduleTypes.ts` | The module vocabulary: type folders and their default ports, built-in ends, namespaces, refs. |
-| `apps/k7-daw-frontend/packages/song-schema/src/keyframes.ts` | Shot animation keys and their evaluation. |
-| other `src/*.ts` | `playlist`, `reference`, `songRef`, `presets`, `tasks`, `libraryVersions`, `alternatives`, `engines`, `takes`, `warpPoints`, `trackColor`, `placementId`, `curveVocab`, `builtinParams` (generated). |
+| `apps/k7-daw-wasm/song-edit/src/sugar.rs` | The short forms, reached as `text.sugar_expand` and `text.sugar_apply`. |
+| `apps/k7-daw-wasm/song-schema/src/keyframes.rs` | Shot animation keys and their evaluation. |
+| `apps/k7-daw-frontend/packages/k7-wasm/src/consts.generated.ts`, `src/types/` | What the page reads of them: the constants printed from the crates, and the types ts-rs emits. |
 
 ## Choices
 
-**Strict objects.** Almost every schema is `.strict()`: an unknown key is a typo, and silently
+**Strict objects.** Almost every reader refuses an unknown key: an unknown key is a typo, and silently
 ignoring `paramz:` costs more than refusing it. The exceptions are deliberate: `settings.k7x` is
-loose; a chain's node item is `.passthrough()` because its module fields are vetted by `parseModule`
-after `NODE_ITEM_KEYS` are stripped; `plugin:` is a loose object because the plugin's shape is the
-engine's business. Fields that are dead but still found on disk (`modules_from`, `video`, `type`) are
-accepted and ignored rather than removed, because a strict refusal would make an old project
-unopenable.
+loose; `plugin:` is a loose object because the plugin's shape is the engine's business. Fields that are
+dead but still found on disk (`modules_from`, `video`, `type`) are accepted and ignored rather than
+removed, because a strict refusal would make an old project unopenable.
 
-**Refinements, not unions, where the editor is mid-edit.** A widget's per-type fields are checked in a
-`superRefine` over one flat object: a union would reject the half second where the user changed
-`type` but not yet the fields, and would report a typo as a bare "Invalid input" with no line.
-Transitions are widened with `z.preprocess` (`1` → `{ over: 1 }`) for the same reason.
+**Refinements, not unions, where the editor is mid-edit.** A widget's per-type fields are checked after the
+widget is read as one flat struct: a union would reject the half second where the user changed `type` but not
+yet the fields, and would report a typo as a bare "Invalid input" with no line.
 
 **Cross-file references are not checked here.** `extends`, a placement's `ref`, a rack's `clip`
-need the rest of the project; they are checked by `@studio/song` at compile time.
+need the rest of the project; they are checked by the compile.
 
-**Every parser takes k7x text.** A string in k7x is always quoted, so `5:1:1` and `on` stay
-strings with no rule of their own, and a finding is placed on the text's own lines by key path
-(`k7xPosition.ts`).
+**Every reader takes k7x text.** A string in k7x is always quoted, so `5:1:1` and `on` stay
+strings with no rule of their own, and a finding is placed on the text's own lines by key path.
 
 **Defaults applied on the way out, never into the file.** The module reader sets `type: "plugin"` on the
 value it returns only when the module says neither `type`, `io` nor `extends`, so an inherited type is
@@ -63,7 +57,8 @@ never overridden and the file stays as terse as written.
    `project`, `settings`, `mix`. Unknown paths get `depth: "syntax"`.
 
 The result is `{ ok, issues, depth, malformed }`, each issue `{ path, message, line?, col? }` with the
-columns in UTF-16 units; only the first finding is reported. `firstIssue` phrases one for a status line.
+columns in UTF-16 units; only the first finding is reported. `firstIssue` phrases one for a status line;
+`validatePanel` asks the same of a panel's text.
 The editor's autosave (`apps/k7-daw-frontend/packages/ui-editor/src/autosave.ts`) holds a malformed buffer,
 and holds a schema-failing one when the file on disk was valid.
 
@@ -85,6 +80,7 @@ quarter of the previous).
 
 ## Tests
 
-`npm test` in the package runs vitest over the `*.test.ts` beside each module. The k7x writers are
-tested on literal texts (an edit must keep comments and every other byte); `validate` behaviour is covered
-in `apps/k7-daw-wasm/song/tests/all/` beside the loader.
+`cargo test` in each crate holds the readers and the writers: the writers on literal texts (an edit must keep
+comments and every other byte), `validate` beside the loader in `apps/k7-daw-wasm/song/tests/all/`. What the
+page sees through the module is `npm test -w @studio/k7-wasm`, where `validateModule.test.ts` judges a module,
+its panel and a lane's events with the readers the compile uses.

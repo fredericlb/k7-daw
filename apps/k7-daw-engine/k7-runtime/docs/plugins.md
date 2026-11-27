@@ -246,7 +246,7 @@ reply carries `scanning` too, so whoever asks for the list knows it is about to 
 `plugin-scan` with `scanning: false` — a scan that throws included, since a gate waiting on it
 would otherwise wait for nothing. A client that re-reads the catalogue on the end finds the list
 already sent; the account file services and the hub write their copy of the scan from it
-(`apps/k7-daw-frontend/packages/song/docs/enginePlugin.md`).
+(`apps/k7-daw-wasm/song/docs/enginePlugin.md`).
 
 `cachedPluginInfos()` memoises the parsed cache, because `makeExternalPlugin` runs per plugin and
 re-parsing added up on projects with many. It is handed out as a **shared snapshot**, not a

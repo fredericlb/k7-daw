@@ -3,8 +3,8 @@
 // It imports NO shell code — the deps below are all packages.
 
 import type { WebGraph } from "@studio/graph-model";
+import type { ProjectSurface } from "@studio/k7-wasm/types";
 import { projectApi } from "@studio/project-shell/project";
-import type { ProjectSurface } from "@studio/song-schema/yaml/surfaceFile";
 import { useEffect, useMemo, useState } from "react";
 import type { Deck } from "./engine";
 import { useDeckSet } from "./useDeckSet";

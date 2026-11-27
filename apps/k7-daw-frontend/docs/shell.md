@@ -329,7 +329,7 @@ song reads them, canvases included (through the CSS variable, since a canvas can
 | violet as text | `primary-text` | no one violet passes both as a fill under white type and as text on this ground (`primary` is the fill) |
 | text below muted | `faint` | it replaces `/50`–`/70` fades of the muted grey, which fell to 2.4:1 |
 
-Takes, slices and cues are a SERIES, coloured by order from `@studio/song-schema`'s
+Takes, slices and cues are a SERIES, coloured by order from `song-schema`'s
 `seriesColors.ts`; a track keeps its category colour, and one the compile has not coloured yet is
 that scheme's `other` grey rather than a type hue of its own.
 
@@ -398,7 +398,7 @@ strip inside DomChains would drift from it. The cables stay on the Graph pane.
 Which modules are strips is the project's answer, not the package's: `mixerStrips.ts` reads it off
 the compiled doc and `useProjectDoc` hands the list up. **Every audio lane has a strip**, and
 `track new` writes it with the lane
-([apps/k7-daw-frontend/packages/song/docs/trackMixer.md](../packages/song/docs/trackMixer.md)): a module of
+([apps/k7-daw-wasm/song/docs/trackMixer.md](../../k7-daw-wasm/song/docs/trackMixer.md)): a module of
 plugin type `Mixer` (`trackMixer`, `MIXER_PLUGIN`) last in the lane's run.
 
 A song can still have **none** — one whose lanes all run into buses, or one with no `graph.k7x` at
@@ -603,7 +603,7 @@ anything:
 
 There is no fourth piece: which pages exist is not state. It is a function of what the project
 declares, read fresh wherever it is needed. See [shellRouting.md](shellRouting.md) and
-[apps/k7-daw-frontend/packages/song/docs/surfaces.md](../packages/song/docs/surfaces.md).
+[apps/k7-daw-wasm/song/docs/surfaces.md](../../k7-daw-wasm/song/docs/surfaces.md).
 
 Because nothing is torn down by a change of page, the state that would be expensive to rebuild — the
 open file and its undo history, the timeline caret, the zoom stack, the graph canvas — simply never
@@ -707,7 +707,7 @@ set list is a thing you work from, and a reference is a thing you put on beside 
 takes a minute and says where the file went.
 
 None of them is a **pane**. A pane is what the project DECLARES ([shellRouting.md](shellRouting.md),
-`apps/k7-daw-frontend/packages/song/docs/surfaces.md`); none of this is the project's, which is why none of it is in the URL
+`apps/k7-daw-wasm/song/docs/surfaces.md`); none of this is the project's, which is why none of it is in the URL
 either.
 
 ## The open file follows the disk (`hooks/useDiskSync.ts`)
@@ -831,7 +831,7 @@ pane does, and waits while the commands page or the undo confirmation is open, a
 
 ### Headphones, said when a live input becomes audible
 
-A live rig monitors its input on purpose (`apps/k7-daw-frontend/packages/song/docs/liveProject.md`), so the moment the
+A live rig monitors its input on purpose (`apps/k7-daw-wasm/song/docs/liveProject.md`), so the moment the
 input reaches a channel it is heard — and a laptop's own mic and speakers feed back. The scaffold
 stays audible; what changes is that it is SAID, in a toast that stays until dismissed, at the two
 moments it becomes true: a channel picked on the input's card (`node param <input> @channel …`), or
@@ -910,7 +910,7 @@ through `node new <ref>`, so the node lands in the graph, journalled and extendi
 as it stands, then its taps in one write rather than a reload per pad. The builder writes no sampler
 of its own: one per workspace would be one copy of the same `type: rack` per workspace, so a library
 holding none is said on the popin before any upload runs. A kit is the node's and a
-sample lives in a samples/ folder, never in a module (`apps/k7-daw-frontend/packages/song/docs/racks.md`), so the builder no
+sample lives in a samples/ folder, never in a module (`apps/k7-daw-wasm/song/docs/racks.md`), so the builder no
 longer writes a module at all. Auditioning is a local object-URL, with no server round trip.
 
 The notes are the drum-machine page, pinned in `rackBuilder.ts`: bottom-left is 36, rightward, then the
@@ -940,7 +940,7 @@ instead of flashing the text editor for a frame.
 ### The TAP CHAIN popin — one pad's own chain of effects
 
 `ui tap chain <node> <tap>`, a pad's **Edit chain…**, opens `TapChainEditor.tsx` on the subchain that
-pad feeds (`apps/k7-daw-frontend/packages/song/docs/racks.md`, "A tap with a chain of its own"): the modules in order, each
+pad feeds (`apps/k7-daw-wasm/song/docs/racks.md`, "A tap with a chain of its own"): the modules in order, each
 moved or removed, **Add module…** through the ordinary module picker, and the cards themselves below.
 
 - **Every button is a command** — `node tap chain add|move|remove` — so the popin holds no state of
@@ -954,9 +954,10 @@ moved or removed, **Add module…** through the ordinary module picker, and the 
   (`moduleRow`'s `lead`, in `apps/k7-daw-frontend/packages/ui-chains/src/graph.ts`).
 - **The picker hands back a ref** rather than placing a node (`onRef` on its state): the chain is
   written by the verb, not by `node new` and a splice. This project's own modules leave as `@workspace/…`.
-- **Not a modal dialog.** It is a hand-rolled overlay at `z-40`, under the pickers' `z-50`, as the rack
+- **A non-modal kit `Dialog`** on the `panel` layer (`z-50`), under the menus and pickers (`z-60`), as the rack
   builder is: a modal dialog makes everything outside it unclickable — the module picker it opens
-  included — and closes on the click that reaches it. Escape still backs out one layer (`usePopin`).
+  included — and closes on the click that reaches it. The scrim is drawn by the content (`nonModal`), a
+  press outside the content is ignored, and Escape still backs out one layer (`usePopin`).
 
 ### The GRAPH SLOT — what takes the graph's place
 
@@ -1525,7 +1526,7 @@ of a module, never a schema, a parser or a package's whole index for one constan
 | the home path imports | rather than | which would bring |
 |---|---|---|
 | `@studio/ui-editor/autosave-buffers` (`appNav`) | `autosave` | its validator: the song schema, `yaml`, the k7x printer |
-| `@studio/song-schema/moduleFiles`, `projectShapes`, `timecode` | `yaml/moduleSchema`, `yaml/projectSchema`, `yaml/placementSchema` | zod and every schema |
+| `@studio/k7-wasm/consts`, `projectShapes`, `timecode` | `yaml/moduleSchema`, `yaml/projectSchema`, `yaml/placementSchema` | zod and every schema |
 | `scalarField.ts`, only from the editor | `projectPaths.ts` carrying it | the k7x parser |
 | `rankCommands.ts` (`CommandBar`) | `palette.ts` | the editor's command registry, every command's sentences in both languages |
 

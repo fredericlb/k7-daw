@@ -5,7 +5,7 @@
 // See docs/curveEditor.md.
 
 import type { CurveCut, CurveSpec } from "@studio/graph-model";
-import { CURVE_CUTS } from "@studio/song-schema/curveVocab";
+import { CURVE_CUTS } from "@studio/k7-wasm/consts";
 import { Button } from "@studio/ui/button";
 import {
   Dialog,

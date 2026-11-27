@@ -5,7 +5,9 @@ use crate::support;
 
 use k7_file_service::libraries::Version;
 use k7_file_service::listings::levels::module_libraries;
-use k7_file_service::listings::versions::{LIBRARY_LEVEL, Remote, VersionRow, versions_at};
+use k7_file_service::listings::versions::{
+    LIBRARY_LEVEL, Remote, UNPINNED_VERSION, VersionRow, versions_at,
+};
 use k7_file_service::space::{Declined, Space};
 use k7_file_service::tree::Limits;
 use serde_json::Value;
@@ -128,16 +130,11 @@ fn a_levels_row_carries_its_version_in_the_literals_order() {
     assert_eq!(v["libraries"][0]["ns"], "k7-core");
 }
 
-/// A file of the repository, by its path from the root.
-fn ts(rel: &str) -> String {
-    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../..");
-    std::fs::read_to_string(root.join(rel)).unwrap()
-}
-
 #[test]
-fn the_constants_are_the_typescripts() {
-    let versions = ts("apps/k7-daw-frontend/packages/song-schema/src/libraryVersions.ts");
-    assert!(versions.contains(&format!("export const LIBRARY_LEVEL = {LIBRARY_LEVEL};")));
-    assert!(versions.contains("export const UNPINNED_VERSION = 1;"));
-    assert!(versions.contains("export const LIBRARY_MANIFEST = \"library.k7x\";"));
+fn the_constants_are_the_song_crates() {
+    assert_eq!(LIBRARY_LEVEL, song_edit::shared_folders::LIBRARY_LEVEL);
+    assert_eq!(
+        UNPINNED_VERSION.to_string(),
+        song_edit::shared_folders::UNPINNED_VERSION
+    );
 }

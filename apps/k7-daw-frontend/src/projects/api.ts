@@ -5,7 +5,7 @@
 // so `fileApi`'s module-level transport is unconfigured here and would throw. See ../../docs/projects.md.
 
 import { readJson } from "@studio/http-client/call";
-import type { ProjectShape } from "@studio/song-schema/yaml/projectSchema";
+import type { ProjectShape } from "@studio/k7-wasm/types";
 import {
   type AccountLibrariesReply,
   type AccountWorkspace,

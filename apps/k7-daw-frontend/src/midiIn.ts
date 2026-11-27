@@ -1,6 +1,6 @@
 // midiIn.ts — which MIDI device records into a lane, and which instruments a keyboard plays directly:
 // the midi-in nodes wired to them in the graph. Pure, off the graph document, so the rules are tests.
-// The one thing a reader would get wrong: no node is not "any device", it is no MIDI at all (apps/k7-daw-frontend/packages/song/docs/midiIn.md).
+// The one thing a reader would get wrong: no node is not "any device", it is no MIDI at all (apps/k7-daw-wasm/song/docs/midiIn.md).
 
 import type { WebGraph } from "./types";
 
@@ -30,7 +30,7 @@ export interface PlayedTarget {
   device: string;
 }
 
-/** Every instrument a midi-in node feeds directly — played live whatever is armed, never recorded (apps/k7-daw-frontend/packages/song/docs/midiIn.md). */
+/** Every instrument a midi-in node feeds directly — played live whatever is armed, never recorded (apps/k7-daw-wasm/song/docs/midiIn.md). */
 export function midiInPlayed(g: WebGraph): PlayedTarget[] {
   const lanes = new Set(g.tracks ?? []);
   const out: PlayedTarget[] = [];

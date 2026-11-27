@@ -36,8 +36,8 @@ flips it by changing one constant, and `scripts/check-cargo-locks.test.mjs` prov
 lock that pins it (`scripts/fixtures/locks/`). `ci:local` runs it beside `lint:docs`.
 
 The browser's crates, `apps/k7-daw-wasm/song-schema`, `apps/k7-daw-wasm/k7-wasm` and the compiler's `apps/k7-daw-wasm/song`,
-are held the same way, each its own workspace with its own lock (`apps/k7-daw-frontend/packages/song-schema/docs/wasmBoundary.md`,
-`apps/k7-daw-frontend/packages/song/docs/rustCompiler.md`).
+are held the same way, each its own workspace with its own lock (`apps/k7-daw-wasm/song-schema/docs/wasmBoundary.md`,
+`apps/k7-daw-wasm/song/docs/rustCompiler.md`).
 
 ## `lint:docs` — a page that points at nothing
 

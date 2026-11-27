@@ -1,6 +1,6 @@
 // PlaylistPane.tsx — the right half of a playlist's screen: its lines resolved against the
 // workspace's audio files, each one playable, and one way of putting another one there — search
-// those files. The lines' rules are `@studio/song-schema/records`, shared with the DJ desk, which
+// those files. The lines' rules are `@studio/k7-wasm/records`, shared with the DJ desk, which
 // resolves the same lines. See ../docs/playlists.md.
 
 import {
@@ -12,7 +12,6 @@ import {
 } from "@studio/k7-wasm/records";
 import type { PlaylistItem } from "@studio/k7-wasm/types";
 import { mediaUrl } from "@studio/project-shell/fileApi";
-import { packRecordDrag, RECORD_DRAG_TYPE } from "@studio/song-schema/records";
 import { Button } from "@studio/ui/button";
 import {
   ChevronDown,
@@ -28,6 +27,7 @@ import {
 } from "@studio/ui/icons";
 import { Input } from "@studio/ui/input";
 import { cn } from "@studio/ui/lib/utils";
+import { packRecordDrag, RECORD_DRAG_TYPE } from "@studio/ui/record-drag";
 import { Row, RowButton, RowGroup } from "@studio/ui/row-group";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { api } from "../api";

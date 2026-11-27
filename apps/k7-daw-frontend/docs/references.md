@@ -2,7 +2,7 @@
 
 A **reference track** is a finished recording you listen against while you work. It is a file in
 `_references/` at the root of the workspace and nothing else — what one is and where it lives is
-`@studio/song-schema`'s `docs/references.md`. This page is the editor's half: who plays it, and
+`song-schema`'s `docs/references.md`. This page is the editor's half: who plays it, and
 where it is drawn.
 
 ## It is NOT played by the engine, and that is the whole point

@@ -105,7 +105,7 @@ events([
 ```
 
 A shot's fields are spelled like an audio event's where they mean the same thing — `start`,
-`from`, `fadeIn`, `fadeOut` — so one `PlacementSchema` (`song-schema/src/yaml/placementSchema.ts`)
+`from`, `fadeIn`, `fadeOut` — so one `Placement` (`apps/k7-daw-wasm/song/src/files/placement.rs`)
 validates both, and the compile, which knows each ref's material, refuses an audio-only field on a
 shot and the reverse. `frame` is the camera module's spelling for the same fact.
 
@@ -165,7 +165,7 @@ A picture lane draws its placements. Wire an `io: camera` node to it in `graph.k
 it draws a live picture instead — the same lane, the same rect, the same `mute`, the same passes
 over it. That is the one thing in the picture model that comes off `graph.k7x`'s SOURCES rather
 than out of the lane's events, and it is why it costs no new road: everything a live layer needs, a
-lane already had. See [apps/k7-daw-frontend/packages/song/docs/camera.md](../../song/docs/camera.md).
+lane already had. See [apps/k7-daw-wasm/song/docs/camera.md](../../song/docs/camera.md).
 
 An export leaves such a layer out: a lens has no frame at *t*, and a render walks a timeline.
 

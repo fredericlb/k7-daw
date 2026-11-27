@@ -1,7 +1,7 @@
 // MixDeck.tsx — one deck of the desk: `DeckSide` bound to the set's verbs for ONE deck id, so the
 // two columns MixView draws cannot wire a gesture to a different deck. See ../../docs/mix.md.
 
-import type { RecordDrag } from "@studio/song-schema/records";
+import type { RecordDrag } from "@studio/ui/record-drag";
 import type { ComponentProps } from "react";
 import type { DeckId } from "../deckVocabulary";
 import type { DeckSet } from "../useDeckSet";

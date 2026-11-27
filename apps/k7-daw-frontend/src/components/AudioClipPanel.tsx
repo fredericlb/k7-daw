@@ -847,7 +847,7 @@ export function AudioClipPanel({
                 }
                 // The EVENT's window, lit as ground with its edges picked out, and passed only when it actually cuts something.
                 sourceWindow={framed ? act : null}
-                /** …and its two edges DRAG, which is how an event's window is set — an `event …` verb, only where there is one to address (apps/k7-daw-frontend/packages/song/docs/materialCut.md). */
+                /** …and its two edges DRAG, which is how an event's window is set — an `event …` verb, only where there is one to address (apps/k7-daw-wasm/song/docs/materialCut.md). */
                 onWindowMove={
                   piece && takes
                     ? (w) => {

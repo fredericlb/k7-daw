@@ -95,7 +95,7 @@ function cannotLoad(c: Case): string | undefined {
   if (slug && NEEDS_A_USER_FILE.has(slug))
     return `@engine/${slug} loads nothing until the node names a file of the user's`;
   if (isOffline(text))
-    return "an offline module is a pass that writes files before the render, never a plugin (apps/k7-daw-frontend/packages/song/docs/coldModules.md)";
+    return "an offline module is a pass that writes files before the render, never a plugin (apps/k7-daw-wasm/song/docs/coldModules.md)";
   return cannotCompile(c);
 }
 
@@ -128,7 +128,7 @@ function moduleNode(c: Case): string {
   return `extends("${c.ref}")\n${engine}${rack}`;
 }
 
-// Nodes m0, m1…: an instrument on a lane of its own, the rest in one run around 4OSC; a cold module too (apps/k7-daw-frontend/packages/song/docs/fileInput.md).
+// Nodes m0, m1…: an instrument on a lane of its own, the rest in one run around 4OSC; a cold module too (apps/k7-daw-wasm/song/docs/fileInput.md).
 function projectFiles(cases: Case[], name = "library"): Record<string, string> {
   const files: Record<string, string> = {
     "project.k7x": projectFile(name),
@@ -218,7 +218,7 @@ async function compileProblems(
     if (!node && !isOffline(resolvedText(c.dir)))
       each[i].push("no plugin in the engine document");
     const type = c.engine && expectedType(c);
-    // An engine named wrong falls back to the default silently (apps/k7-daw-frontend/packages/song/docs/engines.md), so the plugin says which ran.
+    // An engine named wrong falls back to the default silently (apps/k7-daw-wasm/song/docs/engines.md), so the plugin says which ran.
     if (node && type && node.type !== type)
       each[i].push(`runs ${node.type}, not its engine's ${type}`);
   });

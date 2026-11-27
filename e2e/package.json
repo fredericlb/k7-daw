@@ -14,7 +14,6 @@
   "dependencies": {
     "@studio/env": "*",
     "@studio/k7-wasm": "*",
-    "@studio/song-schema": "*",
     "fflate": "^0.8.2",
     "ws": "^8.18.0"
   },

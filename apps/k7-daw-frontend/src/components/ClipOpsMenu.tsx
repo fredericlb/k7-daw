@@ -5,15 +5,13 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@studio/ui/dropdown-menu";
 import { Zap } from "@studio/ui/icons";
 import { Spinner } from "@studio/ui/spinner";
+import { useState } from "react";
 import { m } from "../paraglide/messages.js";
-import { ChainOpsList } from "./ChainOpsList";
+import { ChainOpsPopover } from "./ChainOpsList";
 import { TrimGate } from "./ClipGateControls";
 
 export function ClipOpsMenu(p: {
@@ -32,6 +30,8 @@ export function ClipOpsMenu(p: {
   opsPending: boolean;
   onPickOp: (chain: string) => void;
 }) {
+  // The chains are a popover of their own, opened by the menu's second row: a pick must close it.
+  const [opsOpen, setOpsOpen] = useState(false);
   const working = p.busy === "trim" || p.busy === "process";
   const button = (
     <DropdownMenu>
@@ -51,26 +51,27 @@ export function ClipOpsMenu(p: {
         <DropdownMenuItem onSelect={() => p.onGateOpen(true)}>
           {m["clip.trim"]()}
         </DropdownMenuItem>
-        <DropdownMenuSub>
-          <DropdownMenuSubTrigger>
-            {m["clip.transformations"]()}
-          </DropdownMenuSubTrigger>
-          <DropdownMenuSubContent className="w-64 p-1">
-            <ChainOpsList
-              search={p.opSearch}
-              onSearch={p.onOpSearch}
-              ops={p.ops}
-              pending={p.opsPending}
-              onPick={p.onPickOp}
-            />
-          </DropdownMenuSubContent>
-        </DropdownMenuSub>
+        <DropdownMenuItem onSelect={() => setOpsOpen(true)}>
+          {m["clip.transformations"]()}
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
+  const withChains = (
+    <ChainOpsPopover
+      anchor={button}
+      open={opsOpen}
+      onOpenChange={setOpsOpen}
+      search={p.opSearch}
+      onSearch={p.onOpSearch}
+      ops={p.ops}
+      pending={p.opsPending}
+      onPick={p.onPickOp}
+    />
+  );
   return (
     <TrimGate
-      anchor={button}
+      anchor={withChains}
       open={p.gateOpen}
       onOpenChange={p.onGateOpen}
       gate={p.gate}

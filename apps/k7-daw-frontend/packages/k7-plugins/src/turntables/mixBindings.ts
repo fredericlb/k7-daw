@@ -9,7 +9,7 @@ import {
   type ResolvedTarget,
   resolveMapping,
 } from "@studio/k7-wasm/chains";
-import type { MixView } from "@studio/song-schema/yaml/mixViewSchema";
+import type { MixView } from "@studio/k7-wasm/text";
 import { widgetDenorm } from "@studio/ui-chains/graph";
 import { type MixControl, mixControls } from "./controls";
 import type { DeckId, DeckTempos } from "./deckVocabulary";

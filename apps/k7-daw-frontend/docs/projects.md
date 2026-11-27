@@ -168,7 +168,7 @@ contract with the gate that reads it back, and one builder is one encoding.
 Everything an k7 project can BE is in the **surfaces** it declares inside the `.k7`, rather than
 in some kind of folder: a `viewport` and video lanes for picture
 (`apps/k7-daw-wasm/verbs/docs/picture/picture.md`), a `turntables` surface and the playlist it names for a set
-(`apps/k7-daw-frontend/packages/song/docs/setProject.md`). That is why the three archetypes in the creation menu are
+(`apps/k7-daw-wasm/song/docs/setProject.md`). That is why the three archetypes in the creation menu are
 named after their surface.
 
 ## This screen's command bar
@@ -239,7 +239,7 @@ come with the app.
 
 **A list of NAMES, one folder each.** The name is the level its refs use — `@drums/audio/kick` — and
 the first library is called `k7`, which is what every `@k7-core/…` means
-([apps/k7-daw-frontend/packages/song/docs/sharedFolders.md](../packages/song/docs/sharedFolders.md)). A row whose
+([apps/k7-daw-wasm/song/docs/sharedFolders.md](../../k7-daw-wasm/song/docs/sharedFolders.md)). A row whose
 folder is not there says *not on the server yet*; the bundled seed is the only source of a library's
 content ([sharedModules.md](sharedModules.md)).
 
@@ -561,7 +561,7 @@ stay the archetypes', since the command bar (`project new <type>`) and the file 
 
 Everything is a `.k7` folder opened by the same k7, so "what kind of project" has no answers to
 tell apart — what differs is the surface the project DECLARES
-(`apps/k7-daw-frontend/packages/song/docs/surfaces.md`). There is no "the graph alone, no surface" archetype: an entry
+(`apps/k7-daw-wasm/song/docs/surfaces.md`). There is no "the graph alone, no surface" archetype: an entry
 whose whole description would be "none of the three" is not a choice made on purpose, and a
 hand-written rig opens anyway. The `live` MODE is something else: it is what `mix` declares.
 

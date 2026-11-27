@@ -100,7 +100,7 @@ definitions reach that one translation unit, and `SurgePlugin.cpp` includes a pl
 ## Choices inside the plugin
 
 **A patch is a BASE**, `base: Pads/Bell Pad`, a file under the module's `base/` beside any
-`.vstpreset` (`apps/k7-daw-frontend/packages/song/docs/userPresets.md`). That is k7's place for a plugin whose state is not
+`.vstpreset` (`apps/k7-daw-wasm/song/docs/userPresets.md`). That is k7's place for a plugin whose state is not
 its parameters, and a patch is exactly that: its routing, wavetables and step shapes are no knob. So it
 gets what every base gets — chosen per node, the node's own values applied over it — and a preset keeps the base it was taken on. The library's preset shelf holds a
 FACTORY preset per patch, `<Category> - <Patch>`, generated beside the panel: a base and nothing else,

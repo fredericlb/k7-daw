@@ -1,31 +1,34 @@
 // moduleUi.ts — the bridge between a module file's k7x text and the visual widget editor:
 // read its `ui(…)` block into a model, write an edited model back, and resolve `extends` so
 // "edit the base module" finds the right file. Runs in the BROWSER (the grid edits the
-// editor's buffer) and shares the loader's Zod schema, so the grid can't offer a widget
+// editor's buffer) and asks the loader's own Rust reader, so the grid can't offer a widget
 // the file would be refused for. Writes edit the document value by value (panelWrite.ts).
 
+import type {
+  WebModuleUI as ModuleUI,
+  WebWidget as Widget,
+} from "@studio/graph-model";
 import { panelWidgets } from "@studio/graph-model/panel";
-import { K7Document, type K7Scope } from "@studio/k7-wasm/k7x";
-import { moduleStatusOf } from "@studio/k7-wasm/schema";
 import {
   DEFAULT_MODULE_STATUS,
   IO_MODULES,
   META_NS,
-  type ModuleStatus,
-} from "@studio/song-schema/moduleTypes";
-import {
-  type ModuleUI,
-  UISchema,
-  type Widget,
-} from "@studio/song-schema/yaml/moduleSchema";
+  type MODULE_STATUSES,
+} from "@studio/k7-wasm/consts";
+import { K7Document, type K7Scope, stringify } from "@studio/k7-wasm/k7x";
+import { moduleStatusOf } from "@studio/k7-wasm/schema";
+import { validatePanel } from "@studio/k7-wasm/validate";
 import { mergeLayout, panelSource, writePanelFile } from "./panelWrite";
 
+/** How a module asks the completions to treat it: the words `status:` may say. */
+export type ModuleStatus = (typeof MODULE_STATUSES)[number];
+
 export type {
-  ModuleUI,
-  Widget,
+  WebModuleUI as ModuleUI,
+  WebWidget as Widget,
   WidgetType,
-} from "@studio/song-schema/yaml/moduleSchema";
-export { WIDGETS_SCRIPT } from "@studio/song-schema/yaml/moduleSchema";
+} from "@studio/graph-model";
+export { WIDGETS_SCRIPT } from "@studio/k7-wasm/consts";
 
 /** Does the panel draw a screen anywhere, on any tab? That is what earns widgets.js a tab. */
 export function hasLcd(ui: ModuleUI | null): boolean {
@@ -63,8 +66,23 @@ function editText(fileText: string, edit: (doc: K7Scope) => void): string {
 function parseUi(fileText: string): ModuleUI | null {
   const raw = docOf(fileText)?.getIn(["ui"]);
   if (raw === undefined || raw === null) return null;
-  const r = UISchema.safeParse(raw);
-  return r.success ? r.data : null;
+  return checkedUi(raw as Record<string, unknown>);
+}
+
+/** The panel the Rust reader accepts, cut down to the keys a panel has; null when it refuses it or the keys do not print. */
+function checkedUi(raw: Record<string, unknown>): ModuleUI | null {
+  const ui = {
+    cols: raw.cols,
+    rows: raw.rows,
+    widgets: raw.widgets,
+    ...(raw.tabs !== undefined ? { tabs: raw.tabs } : {}),
+    ...(raw.vertical !== undefined ? { vertical: raw.vertical } : {}),
+  };
+  try {
+    return validatePanel(stringify(ui)).ok ? (ui as ModuleUI) : null;
+  } catch {
+    return null;
+  }
 }
 
 /** The authored `ui(…)` block, or an empty grid when there is none this can read. */
@@ -205,14 +223,7 @@ export function writeUi(fileText: string, ui: ModuleUI): string {
 function parseUiFileText(text: string): ModuleUI | null {
   const raw = docOf(text)?.toJS();
   if (!raw) return null;
-  const r = UISchema.safeParse({
-    cols: raw.cols,
-    rows: raw.rows,
-    widgets: raw.widgets,
-    ...(raw.tabs !== undefined ? { tabs: raw.tabs } : {}),
-    ...(raw.vertical !== undefined ? { vertical: raw.vertical } : {}),
-  });
-  return r.success ? r.data : null;
+  return checkedUi(raw);
 }
 
 /** A `ui.k7x`'s panel, or an empty grid when it has none this can read. */

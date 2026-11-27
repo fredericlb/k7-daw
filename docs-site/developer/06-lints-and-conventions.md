@@ -81,7 +81,7 @@ the start of its own comment.
 
 - test and bench files are entry points through the Vitest plugin;
 - per-workspace entries cover scripts and generated files knip cannot reach by imports (root
-  `scripts/**/*.mjs`, `apps/k7-daw-engine/k7-runtime/scripts`, `apps/k7-daw-frontend/packages/song/scripts`,
+  `scripts/**/*.mjs`, `apps/k7-daw-engine/k7-runtime/scripts`, `apps/k7-daw-wasm/song/scripts`,
   `packages/dsp/modules/**/jsdsp.ts` and others);
 - binaries used from scripts (`cmake`, `ctest`, `ffmpeg`, `tilt`, `where.exe`, `osascript`) and a few
   tool dependencies (`tsx`, `concurrently`, Vite plugins, `esbuild`, `yaml`) are ignored.

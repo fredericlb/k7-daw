@@ -1,7 +1,7 @@
 # The file service in native Rust
 
 The account's file logic in Rust, piece by piece, on the I/O the front has (`service.md`). The compiler is the `song` crate
-(`apps/k7-daw-frontend/packages/song/docs/rustCompiler.md`), which the native file service calls directly. 
+(`apps/k7-daw-wasm/song/docs/rustCompiler.md`), which the native file service calls directly. 
 
 The crate is `apps/k7-daw-backend/packages/k7-file-service`: no HTTP, no tokio runtime of its own; plain functions over a
 workspace's folder, called by the front's routes (`apps/k7-daw-backend/packages/k7-front/src/routes/files/service/`).
@@ -48,5 +48,5 @@ Every piece answers on every host. Each has its own page for the choices.
 
 | difference | why |
 |---|---|
-| the compile's answers are the `song` crate's | `apps/k7-daw-frontend/packages/song/docs/rustCompiler.md`, "Where it answers differently" |
+| the compile's answers are the `song` crate's | `apps/k7-daw-wasm/song/docs/rustCompiler.md`, "Where it answers differently" |
 | the revision token is spelled differently | no client reads it but for equality |

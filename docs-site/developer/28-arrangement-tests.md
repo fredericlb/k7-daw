@@ -11,7 +11,7 @@ about a gesture's feel or a drawing. Exercise those in the running app.
 npm test                                   # every workspace, from the repo root
 cd apps/k7-daw-frontend && npx vitest run      # the frontend's pure modules
 cargo test --manifest-path apps/k7-daw-wasm/verbs/Cargo.toml     # the verbs
-cd apps/k7-daw-frontend/packages/song-edit && npx vitest run    # the k7x writers
+cd apps/k7-daw-wasm/song-edit && npx vitest run    # the k7x writers
 npx vitest run src/clipLoop.test.ts       # one file, from inside its package
 cargo test --manifest-path apps/k7-daw-wasm/gesture/Cargo.toml   # the gestures' arithmetic
 ```
@@ -59,7 +59,7 @@ holds the catalogue itself to its rules (both languages present, readable senten
 characters, known completion providers). `apps/k7-daw-wasm/verbs/tests/support/mod.rs` is the fake
 `CommandHost` they run against.
 
-### Writers (`apps/k7-daw-frontend/packages/song-edit/src/`)
+### Writers (`apps/k7-daw-wasm/song-edit/src/`)
 
 `moveEvent.test.ts`, `clipResize.test.ts`, `eventWindow.test.ts`, `eventFade.test.ts`,
 `eventLoop.test.ts`, `eventWarp.test.ts`, `loopWindow.test.ts`, `crossfade.test.ts`,

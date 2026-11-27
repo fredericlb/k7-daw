@@ -22,7 +22,6 @@
   },
   "dependencies": {
     "@studio/k7-wasm": "*",
-    "@studio/song-schema": "*",
     "mediabunny": "^1.50.8"
   },
   "devDependencies": {

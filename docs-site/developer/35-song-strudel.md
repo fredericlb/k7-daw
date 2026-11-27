@@ -30,5 +30,5 @@ kept here so it can be tested under Node.
 ## Tests
 
 `apps/k7-daw-frontend/packages/song-strudel/src/engineEntry.test.ts` loads patterns through the same entry the engine
-uses and checks the per-lane split and the catch-all. The scaffold tests in `apps/k7-daw-frontend/packages/song`
+uses and checks the per-lane split and the catch-all. The scaffold tests in `apps/k7-daw-wasm/song`
 compile the `arrangement` archetype, which has two lanes on one pattern file.

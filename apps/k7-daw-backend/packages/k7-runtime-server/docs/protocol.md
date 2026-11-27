@@ -116,7 +116,7 @@ two are one wire.
 
 They go on the master plugin list **before** the meter and the broadcast tap, and therefore before
 `MasterGainPlugin`: those process the mix, this one trims the delivery. The song side of it is
-`apps/k7-daw-frontend/packages/song/docs/masterChain.md`.
+`apps/k7-daw-wasm/song/docs/masterChain.md`.
 
 ### `tracks` — the delta, and what it deliberately cannot do
 

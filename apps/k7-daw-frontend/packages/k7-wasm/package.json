@@ -33,7 +33,8 @@
     "./gestureTimeline": "./src/gestureTimeline.ts",
     "./eyes": "./src/eyes.ts",
     "./git": "./src/git.ts",
-    "./media": "./src/media.ts"
+    "./media": "./src/media.ts",
+    "./rack-binds": "./src/rackBinds.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",
@@ -47,7 +48,6 @@
   },
   "devDependencies": {
     "@studio/graph-model": "*",
-    "@studio/song-schema": "*",
     "@types/node": "^22.10.0",
     "typescript": "^7.0.2",
     "vitest": "^4.1.10"

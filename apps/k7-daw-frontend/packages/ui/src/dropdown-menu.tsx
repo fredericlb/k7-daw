@@ -1,7 +1,7 @@
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import * as React from "react";
 import { reasonOf, showReason } from "./disabled-reason";
-import { ChevronRight } from "./icons";
+import { Check, ChevronRight } from "./icons";
 import { cn } from "./lib/utils";
 
 const DropdownMenu = DropdownMenuPrimitive.Root;
@@ -56,6 +56,34 @@ const DropdownMenuItem = React.forwardRef<
   );
 });
 DropdownMenuItem.displayName = DropdownMenuPrimitive.Item.displayName;
+
+// A row that toggles: it stays open on a pick, since choosing several takes several picks.
+const DropdownMenuCheckboxItem = React.forwardRef<
+  React.ElementRef<typeof DropdownMenuPrimitive.CheckboxItem>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.CheckboxItem>
+>(({ className, children, onSelect, ...props }, ref) => (
+  <DropdownMenuPrimitive.CheckboxItem
+    ref={ref}
+    onSelect={(e) => {
+      e.preventDefault();
+      onSelect?.(e);
+    }}
+    className={cn(
+      "type-body relative flex min-h-11 cursor-pointer select-none items-center gap-2.5 rounded-xl px-3 py-2 outline-none transition-colors focus:bg-on-fill data-[disabled]:pointer-events-none data-[disabled]:opacity-40 desk:min-h-8 desk:py-1",
+      className,
+    )}
+    {...props}
+  >
+    <span className="flex size-4 shrink-0 items-center justify-center rounded border border-(--k7-hairline-strong)">
+      <DropdownMenuPrimitive.ItemIndicator>
+        <Check className="size-3" strokeWidth={3} />
+      </DropdownMenuPrimitive.ItemIndicator>
+    </span>
+    {children}
+  </DropdownMenuPrimitive.CheckboxItem>
+));
+DropdownMenuCheckboxItem.displayName =
+  DropdownMenuPrimitive.CheckboxItem.displayName;
 
 const DropdownMenuLabel = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Label>,
@@ -125,6 +153,7 @@ DropdownMenuSubContent.displayName =
 
 export {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,

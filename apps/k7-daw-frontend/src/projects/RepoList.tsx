@@ -2,7 +2,7 @@
 // workspace cards (ProjectsTable.tsx), "On your other devices" at their foot, or what stands in for them when there is
 // nothing to list. Presentational — the section holds the async and this file draws. See ../../docs/projects.md.
 
-import type { ProjectShape } from "@studio/song-schema/yaml/projectSchema";
+import type { ProjectShape } from "@studio/k7-wasm/types";
 import { Button } from "@studio/ui/button";
 import {
   DropdownMenu,

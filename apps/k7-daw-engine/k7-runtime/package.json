@@ -21,7 +21,6 @@
   "devDependencies": {
     "@studio/engine-protocol": "*",
     "@studio/k7-wasm": "*",
-    "@studio/song-schema": "*",
     "@studio/web-protocol": "*",
     "@types/node": "^22.10.0",
     "@types/ws": "^8.5.10",

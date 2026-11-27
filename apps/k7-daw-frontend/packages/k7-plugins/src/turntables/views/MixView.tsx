@@ -8,10 +8,10 @@
 
 import { PLAYLISTS_DIR } from "@studio/k7-wasm/consts";
 import { playlistPathOf } from "@studio/k7-wasm/schema";
-import type { RecordDrag } from "@studio/song-schema/records";
 import { Button } from "@studio/ui/button";
 import { Card } from "@studio/ui/card";
 import { AudioLines, Music, RefreshCw } from "@studio/ui/icons";
+import type { RecordDrag } from "@studio/ui/record-drag";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { CodeText } from "../../CodeText";
 import { m } from "../../paraglide/messages.js";

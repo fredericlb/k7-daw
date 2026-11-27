@@ -1,9 +1,9 @@
 // takes.ts — what the TAKES view of the waveform and piano roll panels draws, off the open project:
 // the event a clip belongs to (a comped event is several clips, each marked with its event), its
 // takes as rows, and which spans of each row the comp plays. Pure, so the arithmetic is a test.
-// See apps/k7-daw-frontend/packages/song/docs/takes.md and docs/clipEditors.md.
+// See apps/k7-daw-wasm/song/docs/takes.md and docs/clipEditors.md.
 
-import { materialRefOf } from "@studio/k7-wasm/schema";
+import { materialRefOf, placementStartOf } from "@studio/k7-wasm/schema";
 import {
   beatsToDuration,
   beatsToPosition,
@@ -11,8 +11,7 @@ import {
   parsePosition,
   roundBeat,
 } from "@studio/k7-wasm/timecode";
-import { placementStartOf } from "@studio/song-schema/placementId";
-import { SERIES_COLORS, seriesColor } from "@studio/song-schema/seriesColors";
+import { SERIES_COLORS, seriesColor } from "@studio/ui/series-colors";
 import type { WebClip, WebProject } from "./types";
 
 /** One row of the view: a take, or the event's own material, starting at `start` beats. */

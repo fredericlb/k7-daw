@@ -1,3 +1,3 @@
 // delay — @k7-core's audio/delay with only the `echo` engine, the one the turntables demo plays.
-// A copy so the demo compiles with no library installed, as every demo must (apps/k7-daw-frontend/packages/song/docs/libraryFiles.md).
+// A copy so the demo compiles with no library installed, as every demo must (apps/k7-daw-wasm/song/docs/libraryFiles.md).
 engine("echo")
