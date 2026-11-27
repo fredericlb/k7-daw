@@ -305,7 +305,7 @@ function EditorTabView({
     const stem = fileStem(p);
     const item: MinimapItem | null =
       // A file of ANOTHER project in this workspace points at nothing here: the minimap draws the
-      // one the engine holds, and its ids are that project's — projectPaths.ts.
+      // one the engine holds, and its ids are that project's — @studio/k7-wasm/paths.
       !file || file.binary || !inActiveProject(p, activeProject)
         ? null
         : isClipFile(p) || isSeqFile(p)
