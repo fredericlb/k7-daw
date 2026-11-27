@@ -1,6 +1,5 @@
-//! backpressure.rs — what a relay does with a frame for a peer that stopped reading, as `backpressure.ts`
-//! decides it: past 8 MiB unsent a frame a newer one replaces is dropped, past 64 MiB of what may not be
-//! dropped the peer is closed, a reply is never dropped (`apps/k7-daw-frontend/packages/engine-tunnel/docs/backpressure.md`).
+//! backpressure.rs — what a relay does with a frame for a peer that stopped reading: past 8 MiB unsent a frame a newer one replaces is dropped, past 64 MiB of what may not be
+//! dropped the peer is closed, a reply is never dropped (`apps/k7-daw-backend/docs/engine/backpressure.md`).
 
 use std::collections::VecDeque;
 
@@ -85,5 +84,78 @@ impl HeldFrames {
     pub fn drain(&mut self) -> Vec<Frame> {
         self.bytes = 0;
         self.frames.drain(..).collect()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// A stream frame as the engine's audio broadcast writes one: its magic first, little-endian.
+    fn audio() -> Frame {
+        let mut b = STREAM_MAGIC.to_le_bytes().to_vec();
+        b.extend_from_slice(&[0; 28]);
+        Frame::binary(b)
+    }
+
+    fn state() -> Frame {
+        Frame::text(r#"{"levels":[0],"playing":true,"type":"state"}"#)
+    }
+
+    fn reply() -> Frame {
+        Frame::text(r#"{"type":"plugins","plugins":[]}"#)
+    }
+
+    #[test]
+    fn what_may_be_dropped_is_an_audio_broadcast_frame_a_state_or_a_meter_feed_never_a_reply() {
+        assert!(is_droppable(&audio()));
+        assert!(is_droppable(&state()));
+        assert!(is_droppable(&Frame::text(r#"{"type":"io-levels"}"#)));
+        assert!(is_droppable(&Frame::text(
+            r#"{"type":"plugin-params-live"}"#
+        )));
+        assert!(!is_droppable(&reply()));
+        assert!(!is_droppable(&Frame::binary(&b"not a stream frame"[..])));
+        assert!(!is_droppable(&Frame::text("not json")));
+    }
+
+    #[test]
+    fn everything_below_the_soft_limit_is_sent() {
+        assert_eq!(admit(SOFT_LIMIT_BYTES - 1, &audio()), Admit::Send);
+        assert_eq!(admit(SOFT_LIMIT_BYTES - 1, &reply()), Admit::Send);
+    }
+
+    #[test]
+    fn a_replaceable_frame_past_the_soft_limit_is_dropped_and_a_reply_still_queued() {
+        let past = SOFT_LIMIT_BYTES + 1;
+        assert_eq!(admit(past, &audio()), Admit::Drop);
+        assert_eq!(admit(past, &state()), Admit::Drop);
+        assert_eq!(admit(past, &reply()), Admit::Send);
+    }
+
+    #[test]
+    fn the_peer_is_given_up_on_only_when_replies_alone_pass_the_hard_limit() {
+        assert_eq!(admit(HARD_LIMIT_BYTES, &reply()), Admit::Close);
+        assert_eq!(admit(HARD_LIMIT_BYTES, &state()), Admit::Drop);
+    }
+
+    #[test]
+    fn held_frames_refuse_past_their_frame_bound_and_give_back_what_they_held_in_order() {
+        let mut h = HeldFrames::default();
+        for i in 0..MAX_HELD_FRAMES {
+            assert!(h.push(Frame::text(i.to_string())));
+        }
+        assert!(!h.push(Frame::text("one more")));
+        let out = h.drain();
+        assert_eq!(out.len(), MAX_HELD_FRAMES);
+        assert_eq!(out[0], Frame::text("0"));
+        assert!(h.push(Frame::text("again")));
+    }
+
+    #[test]
+    fn held_frames_refuse_past_their_byte_bound() {
+        let mut h = HeldFrames::default();
+        assert!(h.push(Frame::binary(vec![0u8; MAX_HELD_BYTES])));
+        assert!(!h.push(Frame::text("x")));
     }
 }

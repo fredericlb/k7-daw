@@ -1,6 +1,0 @@
-project({
-  name: "arrangement.k7",
-  tempo: 120,
-  sampleRate: 48000,
-  timeSignature: "4/4",
-})

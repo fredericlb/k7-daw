@@ -37,10 +37,10 @@ is refused on purpose — the first word says which half of the project leaves.
 
 ## Splitting and consolidating material
 
-`apps/k7-daw-frontend/packages/take-render/src/materialRender.ts` holds `consolidateAudioMaterial`: render a range on one
+`apps/k7-daw-wasm/verbs/src/verbs/material_render.rs` holds `consolidate_audio`: render a range on one
 lane (gaps kept as silence) into one new file, write its `clips/<id>.k7x`, and replace the
 placements. An audio split renders nothing: it places the same file twice, windowed either side of
-the cut (`splitAudioPlacement` in `apps/k7-daw-frontend/packages/song-edit/src/materialCut.ts`, where the sequence split
+the cut (`splitAudioPlacement` in `apps/k7-daw-wasm/song-edit/src/material_cut.rs`, where the sequence split
 and consolidate are text edits too). The material a consolidate or a sequence split replaced is left
 on disk, since another lane may still play it. A split refuses a looped event — the cut position has
 as many answers as there are passes.

@@ -164,7 +164,7 @@ A separation runs its model on the machine an ENGINE runs on — its CPU, its GP
 models — and never on the server that hosts the workspaces. The server-hosted file service still
 starts and polls jobs through `startSeparate` / `separateJob`, but it installs a **runner**
 (`setSeparationRunner`) that sends each one over the jobs channel of the engine it is bound to
-(`apps/k7-daw-frontend/packages/engine-tunnel/docs/jobs.md`), and the supervisor there runs it. The mix and the model
+(`apps/k7-daw-backend/docs/engine/tunnelJobs.md`), and the supervisor there runs it. The mix and the model
 travel to that machine before the run, the stems back before the reply — so every caller works in
 the server's paths.
 

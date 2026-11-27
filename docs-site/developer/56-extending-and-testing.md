@@ -15,7 +15,7 @@
 4. Use it in `apps/k7-daw-frontend/packages/ui-eyes/src/timeline.ts` when it changes *which* frame shows, or in
    `slots.ts` / `motion.ts` when it changes *how* a slot is drawn — every driver goes through those.
 5. Decide what the writers must do with it: `splitVideoPlacementAt` (which half keeps it),
-   `apps/k7-daw-frontend/packages/song/src/videoSound.ts` (does the sound follow it), and
+   `apps/k7-daw-wasm/song/src/pictures/sound.rs` (does the sound follow it), and
    `apps/k7-daw-wasm/verbs/src/verbs/picture_interchange.rs` (carried, or listed as left out).
 6. If it is editable by command, add a verb (below) and a writer in
    `apps/k7-daw-frontend/packages/song-schema/src/yaml/videoTrackFile.ts` that edits by index and rounds as the others do.
@@ -51,9 +51,9 @@ module with its two stages directly in the module folder, reading `uFrom`, `uTo`
 
 ### A new project archetype field
 
-The `video` and `live-video` file maps are `videoProjectFiles` in `apps/k7-daw-frontend/packages/song/src/scaffold.ts`
-and `liveVideoProjectFiles` in `apps/k7-daw-frontend/packages/song/src/scaffoldLive.ts`; both splice the base
-archetype's graph rather than restating it, and `addVideoRun` (`apps/k7-daw-frontend/packages/song/src/videoOutputs.ts`)
+The `video` and `live-video` file maps are `videoProjectFiles` in `apps/k7-daw-wasm/song-edit/src/scaffold.rs`
+and `liveVideoProjectFiles` in `apps/k7-daw-wasm/song-edit/src/scaffold_live.rs`; both splice the base
+archetype's graph rather than restating it, and `add_video_run` (`apps/k7-daw-wasm/song-edit/src/video_outputs.rs`)
 adds the `RENDER → VIDEO_OUT` run.
 
 ## Tests
@@ -67,7 +67,7 @@ are split out precisely so they can be tested.
 | schemas and writers | `apps/k7-daw-frontend/packages/song-schema/src/yaml/videoTrackFile.test.ts`, `videoTrackYaml.test.ts`, `videoKeys.test.ts`, `videoSpeed.test.ts`, `apps/k7-daw-frontend/packages/song-schema/src/aspect.test.ts` |
 | the compile and the scene | `apps/k7-daw-wasm/verbs/tests/picture.rs`, over `e2e/fixtures/video-lane.k7` and the crate's `tests/fixtures/picture-rig.k7` |
 | interchange | `apps/k7-daw-wasm/verbs/tests/pictures_media.rs` (writers, readers, round trips) |
-| song side | `apps/k7-daw-frontend/packages/song/src/videoOutputs.test.ts`, `videoSound.test.ts`, `chainPicture.test.ts` |
+| song side | `apps/k7-daw-wasm/song/tests/all/pictures_sound.rs`, `pictures_doc.rs` |
 | renderer | `apps/k7-daw-frontend/packages/ui-eyes/src/timeline.test.ts`, `compositor.test.ts`, `passes.test.ts`, `motion.test.ts`, `text.test.ts`, `cube.test.ts`, `camera.test.ts`, `exportSupport.test.ts` |
 | plugin | `viewportRect.test.ts`, `shaderAudio.test.ts` in `apps/k7-daw-frontend/packages/k7-plugins/src/video/` |
 | verbs | `apps/k7-daw-wasm/verbs/tests/pictures.rs`, `pictureSpeed.test.ts`, `pictureSound.test.ts`, `pictureMedia.test.ts`, `pictureInterchange.test.ts`, `pictureImport.test.ts`, `pictureRender.test.ts`, `projectAspect.test.ts` |

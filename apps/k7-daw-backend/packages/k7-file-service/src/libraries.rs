@@ -13,7 +13,7 @@ pub const PINS_FILE: &str = "_library-pins.k7x";
 const MAX_PINS_BYTES: u64 = 16 << 20;
 /// The account's own library, `@account/...`.
 pub const ACCOUNT_LIBRARY: &str = "account";
-/// What a library may be called, as `moduleTypes.ts` writes it; a test holds the two equal (1030).
+/// What a library may be called, as the song crate's `is_library_name` reads it; a test holds the two equal (1030).
 pub const NAME_PATTERN: &str = "^[a-z0-9][a-z0-9-]{0,39}$";
 /// A published version's folder name, as `libraryVersions.ts` writes it.
 pub const VERSION_PATTERN: &str = "^[1-9][0-9]{0,5}$";

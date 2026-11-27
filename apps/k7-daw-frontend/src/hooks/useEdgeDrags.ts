@@ -4,7 +4,7 @@
 
 import { freeSnap, snapMode } from "@studio/k7-wasm/gesture";
 import { edgeResize, fadeLen } from "@studio/k7-wasm/gestureTimeline";
-import { beatsToDuration, beatsToPosition } from "@studio/song-schema/timecode";
+import { beatsToDuration, beatsToPosition } from "@studio/k7-wasm/timecode";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { m } from "../paraglide/messages.js";
 import type { WebProject } from "../types";

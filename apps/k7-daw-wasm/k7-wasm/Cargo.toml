@@ -2,7 +2,7 @@
 name = "k7-wasm"
 version = "0.1.0"
 edition = "2024"
-description = "The browser's one WebAssembly module: a C ABI carrying JSON, the dispatch of operations, and the handles of the song-schema crate's curves."
+description = "The browser's one WebAssembly module: a C ABI carrying JSON, the dispatch of operations split by family, over song-schema, song (its decoders and views) and k7x."
 publish = false
 
 [lib]
@@ -12,21 +12,19 @@ crate-type = ["cdylib", "rlib"]
 
 [[bin]]
 name = "bindings"
-path = "src/bin/bindings.rs"
+path = "src/bin/bindings/main.rs"
 required-features = ["ts"]
 
 [features]
-ts = ["dep:ts-rs", "song-schema/ts", "gesture/ts"]
-# The compile behind song.* ops and the edits behind edit.* ops: built into the verbs' module only, so the curves' module stays small.
-song = ["dep:song", "dep:song-edit"]
-# The verbs behind the verb.run op: the native app's, built into no browser module yet (docs/verbs-port.md).
-verbs = ["song", "dep:verbs"]
+ts = ["dep:ts-rs", "song-schema/ts", "song/ts", "gesture/ts"]
+# The verbs over a native host's file system, and the verb.catalogue op: built into no browser module (docs/verbs-port.md).
+verbs = ["dep:verbs"]
 
 [dependencies]
 song-schema = { path = "../song-schema" }
 gesture = { path = "../gesture" }
-song = { path = "../song", default-features = false, optional = true }
-song-edit = { path = "../song-edit", optional = true }
+song = { path = "../song", default-features = false }
+song-edit = { path = "../song-edit" }
 verbs = { path = "../verbs", optional = true }
 serde = { version = "1", features = ["derive"] }
 serde_json = { version = "1", features = ["float_roundtrip"] }

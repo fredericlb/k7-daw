@@ -8,7 +8,7 @@
 // a title (a dropdown, a ＋ and the text button), which a shared tab strip has nowhere to put.
 // See ../docs/playlists.md.
 
-import { playlistPathOf } from "@studio/song-schema/playlist";
+import { playlistPathOf } from "@studio/k7-wasm/schema";
 import { Button } from "@studio/ui/button";
 import { Loader2, Maximize2, Plus, TriangleAlert } from "@studio/ui/icons";
 import { Input } from "@studio/ui/input";

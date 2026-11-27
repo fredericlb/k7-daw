@@ -26,7 +26,7 @@ A module opts in with `plugin({ type: "dsp", name })` and a `dsp.k7x` beside its
 (fixed name: `DSP_TYPE` and `DSP_FILE` in `apps/k7-daw-frontend/packages/engine-protocol/build.ts`). The file is k7x data,
 not code: `params({…})`, `wires(…)` and `graph([…])`.
 
-1. The loader (`apps/k7-daw-frontend/packages/song/src/loader.ts`, the song crate's module reader) finds the source for each
+1. The loader (`apps/k7-daw-wasm/song-edit/src/loader.rs`, the song crate's module reader) finds the source for each
    module folder; `dsp` is one of the folder's own file names, never a node.
 2. Compiling the project decodes the file on every compile, with no cache: the song crate's
    `dsp_literal::decode` in every Rust host, and the same function in the WebAssembly song module. A file that does not decode plays a pass-through graph and is one error on the module, `line N: …`.

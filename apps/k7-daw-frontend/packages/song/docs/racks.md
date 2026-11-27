@@ -138,7 +138,7 @@ subchains([
 - **Edited from the tap.** A pad's **Edit chain…** opens a popin on its chain (k7's `docs/shell.md`),
   whose buttons are `node tap chain add|move|remove`: the first module makes the subchain and routes
   the tap, and the last one removed takes both away — a tap-fed subchain with no node feeds nothing,
-  and the next graph edit would drop it and leave the route dangling (`apps/k7-daw-frontend/packages/song-edit/src/tapChain.ts`).
+  and the next graph edit would drop it and leave the route dangling (`apps/k7-daw-wasm/song-edit/src/tap_chain.rs`).
 
 ## The node draws a TAP per sound
 

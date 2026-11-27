@@ -224,6 +224,7 @@ dependencies = [
  "serde_json",
  "sha2",
  "song-schema",
+ "ts-rs",
 ]
 
 [[package]]

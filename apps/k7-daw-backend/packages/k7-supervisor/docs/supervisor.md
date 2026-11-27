@@ -115,11 +115,8 @@ were spent. A heartbeat still in flight now makes the next tick skip.
 
 The server's half of the tunnel is `apps/k7-daw-backend/packages/k7-engine/src/tunnel/`, and the machine's half
 is this crate's `src/tunnel/`, which reads and writes the hub's own frame code ([tunnel.md](tunnel.md)). Both are
-held to ONE suite: `apps/k7-daw-frontend/packages/engine-tunnel`'s tunnel and jobs tests run against the Rust hub with
-every agent `testAgents.ts` finds — the TypeScript reference, and this crate's `tunnel_harness`.
-
-`agent.ts` stays as that reference and as the stand-in machine the server's own tests run their
-jobs on. It runs in production nowhere.
+held to ONE suite: `apps/k7-daw-backend/packages/k7-front/tests/tunnel` runs this crate's agent, as a library, against the
+real hub, and the conformance suite's stand-in engine runs its `tunnel_harness` binary.
 
 ## A server reaches this disk only under its roots
 
@@ -212,7 +209,7 @@ written `fatal: …` to the merged log (`run::log_panics`).
 
 The tunnel never blocks a socket's own thread: a frame that must wait for a download waits on its
 channel's queue (`SerialQueue`), one per direction, which also keeps frames in order; a channel's
-close drains that queue first, within a bound (`apps/k7-daw-frontend/packages/engine-tunnel/docs/tunnel.md`). A job runs on
+close drains that queue first, within a bound (`apps/k7-daw-backend/docs/engine/tunnel.md`). A job runs on
 a task of its own. What a job changes in the settings goes through the core, the settings' single
 writer (`Ctx::update_settings`) — a job writing the file beside the core's own copy would be undone by
 the next save of that copy.

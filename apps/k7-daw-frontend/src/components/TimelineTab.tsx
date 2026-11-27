@@ -16,12 +16,12 @@ import {
   crossfadeLen,
   timelineLayout,
 } from "@studio/k7-wasm/gestureTimeline";
-import type { Task } from "@studio/song-schema/tasks";
 import {
   beatsToDuration,
   beatsToPosition,
   parsePosition,
-} from "@studio/song-schema/timecode";
+} from "@studio/k7-wasm/timecode";
+import type { Task } from "@studio/k7-wasm/types";
 import { trackLabel } from "@studio/song-schema/trackKind";
 import {
   DropdownMenu,

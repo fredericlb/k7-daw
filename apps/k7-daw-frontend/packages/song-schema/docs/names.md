@@ -1,6 +1,6 @@
 # Naming things
 
-The rationale behind `apps/k7-daw-frontend/packages/song-schema/src/instanceName.ts` — how a thing this project makes
+The rationale behind `apps/k7-daw-wasm/song-edit/src/instance_name.rs` (the page asks it through `@studio/k7-wasm/schema`) — how a thing this project makes
 is named after what it came from. `apps/k7-daw-frontend/packages/song/docs/trackKind.md` covers the other naming rule,
 a track's `[position.][prefix.]label`.
 
@@ -10,7 +10,7 @@ a track's `[position.][prefix.]label`.
 the same question — "what do I call this use of that" — so there is ONE rule and both go through it.
 A rule spelled in two places is two answers (`apps/k7-daw-frontend/packages/song/docs/nodes.md`).
 
-`namePart` keeps one segment of the module vocabulary: `createNode` and `createModuleFile` both
+`name_part` keeps one segment of the module vocabulary: `createNode` and `createModuleFile` both
 refuse anything else, and a lane is called `vo.jo`, so it is not cosmetic. A name that survives as
 nothing at all becomes `"x"`, since an empty segment would make `_1` the whole name — a file called
 nothing.
@@ -24,12 +24,12 @@ matters: `vo_reverb` and `vo_reverb_2` would read as different KINDS of thing ra
 first and second of a series, and a name that has to be renamed to make room for a sibling is a name
 that breaks every chain that spelled it.
 
-`taken` is injected rather than read here so the file touches no disk: the service asks the project,
-the browser asks the graph it is drawing.
+`taken` is a list the caller hands over rather than read here, so the rule touches no disk: the service asks the project,
+the browser lists the names of the graph it is drawing.
 
 ## Renaming a use when the thing under it changes
 
-`renamedInstance` returns null when the name is not one this convention made, and that null is the
+`renamed_instance` returns null when the name is not one this convention made, and that null is the
 whole point. `node replace` swaps the module a node extends, and a node still wearing
 `vo_jo_reverb_1` while it extends a delay is a name that lies — but one somebody deliberately called
 `wash` means `wash`, and renaming it would rewrite every chain that spells it to undo a decision.
@@ -39,7 +39,7 @@ bare canvas is `reverb_1` with no lane in it, and it keeps having none after it 
 run. Following the module it names is what was asked for; growing a prefix it never had would be a
 second change nobody asked for.
 
-The counter is NOT carried over — `instanceName` picks the first free one for the new stem.
+The counter is NOT carried over — `instance_name` picks the first free one for the new stem.
 `vo_jo_reverb_2` becoming `vo_jo_delay_1` looks like a step backwards and is not: the number counts
 uses of THAT module, and there is one of the new one.
 

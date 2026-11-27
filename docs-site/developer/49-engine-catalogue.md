@@ -25,11 +25,11 @@ and writes `<STUDIO_HOME>/exts.json`, listing each plugin's name, format, identi
 manufacturer and role, plus the built-ins as format `internal`. The TypeScript side reads the same
 file:
 
-- `apps/k7-daw-frontend/packages/song/src/engineCatalogue.ts` turns each entry into an `@engine/<slug>` module
+- `apps/k7-daw-wasm/song/src/modules/scan.rs` turns each entry into an `@engine/<slug>` module
   (`slugifyPluginName`), filed under `instruments`, `transformers` or `audio` by
   `categoryForRole` (`apps/k7-daw-frontend/packages/song-schema/src/moduleTypes.ts`). No wrapper file mirrors the scan:
   a folder exists only for what someone authored (`module own` creates one).
-- `apps/k7-daw-frontend/packages/engine-client/src/pluginCache.ts` (`isPluginScanned`) is what
+- `apps/k7-daw-wasm/song/src/modules/scan.rs` (`is_plugin_scanned`) is what
   the graph route (`apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/docs.rs`) asks to mark a node whose plugin is absent.
 
 The verb `system plugins scan` and the engine settings' Rescan button refresh it.

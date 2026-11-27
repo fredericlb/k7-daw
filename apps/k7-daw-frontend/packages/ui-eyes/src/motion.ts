@@ -3,7 +3,7 @@
 // the lane's rect crops it, on every path — plain, through passes, through a blend — so a shot
 // looks the same mid-dissolve as on either side of it. Pure: no GL call. See docs/motion.md.
 
-import { type Key, valueAt } from "@studio/song-schema/keyframes";
+import { type Key, valueAt } from "@studio/k7-wasm/schema";
 import type { SceneAnimate, SceneClip } from "./scene";
 import { type LayerFrame, slotActive } from "./timeline";
 

@@ -4,10 +4,9 @@
 // LOADER resolves against — they sit outside the active project, so the file tree does not and
 // must not contain them. Why the tab exists: apps/k7-daw-frontend/docs/sharedModules.md.
 
-import { isDocFile } from "@studio/song-schema/docExt";
+import { isDocFile, isLibraryName } from "@studio/k7-wasm/schema";
 import {
   FIXED_NAMESPACES,
-  isLibraryName,
   LIBRARIES_DIR,
   type LibraryFileFamily,
   SHARED_MODULES_DIR,

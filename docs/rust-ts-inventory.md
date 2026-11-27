@@ -59,7 +59,7 @@ milestone ends with `bash scripts/agent/gate.sh --milestone`; the hours are agen
 | **M1c** (built) Rust twins | textHash, compat, quality and choose, engineWarnings and engineMissing (classified by Rust, decision 4), performance (the page's scoring deleted; the supervisor scores); paths, clipEnvelope, engineSession, engineTaken and the five rows with no Rust function (lcdSounds, libraryTree, historyMarks, surfaceRows, paneInUse) stay, see below | 310 | song-schema `engine/` and `text_hash`, k7-wasm ops, k7-file-service, k7-supervisor | nothing | 10 |
 | **M2a** chains build | `ui-chains` build and measure steps (buildGraph, buildChains, buildContext, assembly, subgraph, bindings, geometry, moduleRow, rowSeams, gridFit, stackLayout, nodeUIs, widgetValue, flow, the logic of cables, curvePlacement...), `chainsModel`, `moduleField`, `widgetTarget`; graphNode generated; dagre stays in TS until M5b | 3,700 | new crate `apps/k7-daw-wasm/chains`, op `chains_build` | M1b | 16 |
 | **M2b** (built) gesture arithmetic | snap, rollDrag, rollFit, gridCaret, barWindow, clipPlayhead, clipWarp, videoDrag, takeCounter, timelineTools, formatAt; the arithmetic inside TimelineTab, useRollGestures, PianoRoll, useEdgeDrags, useVideoDrag, AudioClipPanel; the ruler's tick ladder and `ui-timeline` ticks and anchored zoom; what stays, see below | 1,100 (1,800 of tests) | new crate `apps/k7-daw-wasm/gesture`, typed exports | decision 1 | 13 |
-| **M2c** tunnel stand-in | the hub suites ported to Rust tests over the Rust supervisor; `e2e/src/standInEngine.ts` on the supervisor binary with a fake engine; `engine-tunnel` deleted with its 2,100 test lines | 2,500 | k7-supervisor, k7-hub tests | nothing | 10 |
+| **M2c** tunnel stand-in (done) | the hub suites ported to Rust tests over the Rust supervisor; `e2e/src/standInEngine.ts` on the supervisor binary with a fake engine; `engine-tunnel` deleted with its 2,100 test lines | 2,500 | k7-supervisor, k7-hub tests | nothing | 10 |
 | **M3a** verbs catalogue | contextMenu, menuTabs, menuTitle, palette, argOptions, rankCommands, fuzzy, commandFill, commandPrefs, emptyBar, stepSentence, exportArgs, pendingEdits, nodeInsert, nodeMenu, clipOps, playlistVocabulary, reloadScope, verbWrites, homeCommands' catalogue and parse; `commandTypes.ts` generated | 2,500 | verbs crate | verbs branch merged; decisions 2, 6 | 14 |
 | **M3b** pictures and render tooling | take-render's verbs-only files deleted; engine-client and the render scripts relocated to `k7-runtime/scripts`; ui-eyes scene generated; its clip schedule, transitions and `.cube` reader; viewportRect; the camera name rules | 1,000 | verbs picture code, k7-front cameras | verbs branch merged; decision 7 | 8 |
 | **M3c** git rules and media bytes | gitState, commitState, connectState, forgejoState, gitLock, gitPageTabs, mergeState, saveAct, githubState and roamState rules; serde structs for the git routes, then their types generated; webmDuration, trimGate, spectrumColour | 1,000 | k7-git, k7-front, waveform | decision 5 | 11 |
@@ -67,7 +67,7 @@ milestone ends with `bash scripts/agent/gate.sh --milestone`; the hours are agen
 | **M4b** buffer text and paths | bufferReads, clipWindowText, sliceSymbols, clipFiles, timelineDrop, rackBuilder, presetOrder, videoTake, editorPaths, projectPaths, localTargets, openInEditor, sequenceEdit, moduleBehind, scalarField, curveDraft, clipboard; the editor's cursor scan, entity values and preview triggers; noteGrid's notes | 1,500 | song-edit, song-schema, k7x | rust-song-twins merged | 10 |
 | **M4c** panels and AI organize | layoutTwins, groupGeometry, autoLayout, gridCells, panelTabs, widgetClipboard, widgetKinds, useParamRows, moduleUi, panelWrite, panelText, checkLayouts; the AI loop to a backend route | 2,700 | song `modules/ui`, k7-front `routes/ai` | rust-song-twins merged; decision 3 | 11 |
 | **M5a** DJ desk | deck, metronome, beats, grid, loop, mapping, controls, mixBindings, mixView, setList, useDeckSet's arithmetic, put-on; deckVocabulary generated | 2,100 | new crate `apps/k7-daw-wasm/turntables` | M2a (bindings), M4a | 11 |
-| **M5b** graph layout | graphLayout (the only dagre importer), ChainsTab's and GraphPanel's shaping, pendingNode, trackPanelLayout | 600 | chains crate + the chosen layout crate | M2a; decision 2 | 5 |
+| **M5b** graph layout | graphLayout (the only dagre importer), ChainsTab's and GraphPanel's shaping, pendingNode, trackPanelLayout | 600 | chains crate + rust-sugiyama (decision 2) | M2a | 5 |
 | **M5c** web-protocol's rest | workspace, machine, playlists, resources and cameras types generated; the project address grammar of `projects.ts` | 1,100 | k7-file-service, k7-front | M1b | 8 |
 
 **M1a is done.** It removed: `barTint`, `PairThisDevice` and `requestPairing`, `RemoteSlotsSection`,
@@ -96,7 +96,7 @@ can depend on. What stays, and what each needs:
 
 | module | why it stays | what moves it |
 |---|---|---|
-| `web-protocol/paths.ts` | its callers are the song twins and the engine tunnel | their deletion (rust-song-twins, M2c); then it is unused |
+| `web-protocol/paths.ts` | its callers are the song twins | their deletion (rust-song-twins); then it is unused |
 | `clipEnvelope.ts` | not a twin of `wfSig`: it keys what the page holds, `wfSig` what the service holds | the service sending its signature with the waveform |
 | `engineSession.ts` | address parsing around a one-line slug; `session_of` takes a workspace root, not an address | M5c's project address grammar |
 | `engineTaken.ts` | a three-flag decision over React state, called on render | stays |
@@ -124,6 +124,17 @@ per scroll). What did not move:
 | `useChainsCamera`'s wheel use of `panZoom` | `ui-chains-react` belongs to M2a; it still imports `isMouseWheel` and `isZoomWheel` from the re-exports |
 | `ClipActivity`, `clipLoop`, `playedZone` and the other reads on the doc | M4a |
 
+**M2c, as built.** `engine-tunnel` is gone (about 4,300 lines: 2,500 of tests and their harness, 1,800 of source); its four doc pages
+live in `apps/k7-daw-backend/docs/engine/` (`tunnel.md`, `tunnelJobs.md`, `backpressure.md`, `sockets.md`). The choices:
+
+| choice | why |
+|---|---|
+| the hub's suites are Rust, in `k7-front/tests/tunnel`, over the real agent linked as a library and the testbed in a process of its own | the hub's routes and sockets are the front's; a process per test keeps its registry and its limits apart, and the agent as a library needs no binary beside it |
+| `k7-front` turns `test-hooks` on for its own tests through a dev-dependency on itself | `cargo test` then builds the testbed the suite spawns, so the gate runs the suite without a feature flag |
+| the TypeScript unit tests of code that is gone moved to the Rust unit that holds the rule (`k7-engine`'s backpressure, frames and spelling; `request_job`'s time limits in `k7-front`; the agent's drain mark in `k7-supervisor`) | the rule stays pinned where it lives; the agent's path map and segment cases were already `tunnel_paths.rs` |
+| the conformance stand-in keeps its TypeScript fake engine (the specs script its frames) and runs the supervisor's `tunnel_harness` for the tunnel | the specs need frames they choose and a heard-list; only the machine's end is the supervisor's. The real `k7-supervisor` would add its own probes to that list |
+| `e2e-macos.sh` builds `tunnel_harness` into the bed's target folder and names it in `TUNNEL_HARNESS_BIN`; a missing binary fails the stand-in's start | nothing is skipped without a word |
+
 **Tests.** A moved function's TS tests become Rust `#[test]`s with the same inputs and expected
 values; a large table becomes a JSON vector file the Rust test reads. During the milestone the TS
 test runs once against the wasm call (parity), then goes with the TS twin. A typed export carries
@@ -136,7 +147,7 @@ specs passing on the Rust supervisor.
 | # | decision | options | recommendation |
 |---|---|---|---|
 | 1 | gesture arithmetic on pointer moves | typed numeric wasm export; JSON ops; keep it in TS | a typed export for the hot functions (snap, rollDrag, videoDrag, clip edges, widget drags), JSON for the rest |
-| 2 | the crate that replaces dagre (`ui-chains/src/graphLayout.ts`) | **rust-sugiyama**: petgraph-based Sugiyama like dagre, takes node sizes; young, small API, no edge routing points, multi-edges folded first. **layout-rs**: Graphviz-dot style in pure Rust, no dependency; coarser node-size control, one maintainer. **a Sugiyama of our own on petgraph** (600-900 lines): full control of rank snapping, which graphLayout already post-processes heavily; the most work, no dependency. dagre ports to Rust: sparse and unmaintained. elkjs: JS only. | pin today's dagre output as golden vectors first, try rust-sugiyama against them, fall back to our own on petgraph |
+| 2 | the crate that replaces dagre (`ui-chains/src/graphLayout.ts`) | **rust-sugiyama**: petgraph-based Sugiyama like dagre, takes node sizes; young, small API, no edge routing points, multi-edges folded first. **layout-rs**: Graphviz-dot style in pure Rust, no dependency; coarser node-size control, one maintainer. **a Sugiyama of our own on petgraph** (600-900 lines): full control of rank snapping, which graphLayout already post-processes heavily; the most work, no dependency. dagre ports to Rust: sparse and unmaintained. elkjs: JS only. | **chosen (2026-11-27): rust-sugiyama**, with petgraph; today's dagre output pinned as golden vectors first, and our own Sugiyama on petgraph if rust-sugiyama misses them |
 | 3 | where AI organize's loop runs | in wasm with the page holding the request; on a backend route | the backend route: the key stays on the host and the page keeps one request and the UI |
 | 4 | engine warnings carry prose from the C++ engine | codes in the C++ engine; classify the prose in k7-engine | classify in k7-engine now, send codes to the page; codes in C++ later |
 | 5 | the page's merge-lock gate (`src/git/gitLock.ts`) | keep it beside the backend's refusal; drop it | drop it: the backend's refusal and its toast are the one gate, at the cost of one round trip |

@@ -923,7 +923,7 @@ moved or removed, **Add module…** through the ordinary module picker, and the 
 
 - **Every button is a command** — `node tap chain add|move|remove` — so the popin holds no state of
   its own and re-reads the graph after each, as every pane here does. The first module added makes the
-  subchain and routes the tap; the last one removed takes both away (`apps/k7-daw-frontend/packages/song-edit/src/tapChain.ts`).
+  subchain and routes the tap; the last one removed takes both away (`apps/k7-daw-wasm/song-edit/src/tap_chain.rs`).
 - **The cards are the lane view's.** `TrackModulesPane` draws any list of nodes when handed one, with
   no lane card, inputs or frame, so a knob here is the same knob, on the same stores, as on the graph.
 - **The chain starts at a node called `input`**, cabled into its first card: a pass-through that says

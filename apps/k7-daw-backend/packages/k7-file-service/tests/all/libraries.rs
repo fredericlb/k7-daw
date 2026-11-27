@@ -18,21 +18,35 @@ fn ts(rel: &str) -> String {
 
 #[test]
 fn knows_the_names_and_versions_the_typescript_does() {
-    let types = ts("apps/k7-daw-frontend/packages/song-schema/src/moduleTypes.ts");
-    assert!(
-        types.contains(&format!("const LIBRARY_NAME = /{NAME_PATTERN}/;")),
-        "the name rule"
+    // The name rule lives in the song crate since the schema moved to Rust (M3a); the two copies are held equal.
+    assert_eq!(song::modules::names::ACCOUNT_LIBRARY, ACCOUNT_LIBRARY);
+    assert_eq!(
+        song::modules::names::FIXED_NAMESPACES,
+        ["engine", "workspace"]
     );
-    assert!(types.contains("FIXED_NAMESPACES = [\"engine\", \"workspace\"]"));
-    assert!(types.contains("export const ACCOUNT_LIBRARY = \"account\";"));
-    assert!(
-        types.contains("\"studio\", // an older name of @meta")
-            && types.contains("\"mediatek\", // an older name of the default library")
-    );
-    assert!(
-        ts("apps/k7-daw-frontend/packages/song-schema/src/metaRefs.ts")
-            .contains("export const META_NS = \"@meta\";")
-    );
+    for name in [
+        "a",
+        "k7-core",
+        "0-x",
+        &"a".repeat(40),
+        &"a".repeat(41),
+        "A",
+        "-a",
+        "a_b",
+        "",
+        "meta",
+        "studio",
+        "mediatek",
+        "account",
+        "engine",
+        "workspace",
+    ] {
+        assert_eq!(
+            is_library_name(name),
+            song::modules::types::is_library_name(name),
+            "the name rule: {name:?}"
+        );
+    }
     let reserved: Vec<&str> = RESERVED.to_vec();
     assert_eq!(
         reserved,

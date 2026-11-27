@@ -3,7 +3,7 @@
 One directory holds everything k7 keeps on a musician's machine: the engine's identity, the
 supervisor's settings, the plugin scan cache, the SSH keys, the merged log
 and the **workspaces**. `apps/k7-daw-frontend/packages/engine-client/src/paths.ts` is the TypeScript definition of what
-is in it, for the entries a TypeScript process reads; `apps/k7-daw-frontend/packages/song/src/studioHome.ts` is where it is.
+is in it, for the entries a TypeScript process reads, and its `studioDir` is where it is.
 
 Throughout the docs it is written `<state>`.
 
@@ -15,7 +15,7 @@ gets a directory of its own.
 ## One path, because two languages compute it
 
 The per-platform location each OS prefers would be the tidier answer if one program owned this
-directory. Three do, in two languages: `apps/k7-daw-frontend/packages/song/src/studioHome.ts`,
+directory. Three do, in three languages: `apps/k7-daw-frontend/packages/engine-client/src/paths.ts`,
 `apps/k7-daw-backend/packages/k7-supervisor/src/paths.rs`, and `apps/k7-daw-engine/k7-runtime/engine/PluginScan.cpp`.
 
 Each language's idea of "where application data goes" is subtly its own, and they do not line up:
@@ -43,9 +43,8 @@ account would cost more than it buys:
 ## Every path through `paths.ts`
 
 **Use the functions in `paths.ts`, never a hand-joined path.** A wrong path does not throw — it
-reads as an empty file — so a second spelling diverges in silence. That is why `studioHome`
-lives in `@studio/song` (a leaf, node builtins only) rather than being re-derived per package,
-and why a test points `$STUDIO_HOME` somewhere rather than faking `HOME`: a faked home directory
+reads as an empty file — so a second spelling diverges in silence. That is why `studioDir`
+is defined once rather than re-derived per script, and why a test points `$STUDIO_HOME` somewhere rather than faking `HOME`: a faked home directory
 misses `%APPDATA%` and `$XDG_CONFIG_HOME` entirely.
 
 ## The settings file has one name

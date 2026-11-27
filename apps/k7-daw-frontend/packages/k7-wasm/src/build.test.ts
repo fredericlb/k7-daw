@@ -8,6 +8,7 @@ import {
   readdirSync,
   readFileSync,
   rmSync,
+  statSync,
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
@@ -20,25 +21,30 @@ import {
   rustSourceHash,
 } from "../scripts/rustSources.mjs";
 import { call, wasmReady } from "./abi.ts";
-import { SOURCES, WASM } from "./k7Wasm.generated.ts";
-import { SONG_SOURCES, SONG_WASM } from "./k7WasmSong.generated.ts";
+import { BYTES, SOURCES } from "./k7Wasm.generated.ts";
 
 const EXPORTS = [
   "k7_call",
   "k7_curve_playhead",
   "k7_f64_in",
   "k7_f64_out_ptr",
-  "k7_fs_buf",
   "k7_input",
   "k7_output_len",
   "k7_output_ptr",
+  "k7_round_beat",
   "k7_scalars_ptr",
 ];
 
+const MODULE = new URL("./k7Wasm.wasm", import.meta.url);
+
 describe("the WebAssembly module", () => {
-  it("builds the verbs' module, with the compiler, from the same sources", () => {
-    expect(SONG_SOURCES).toBe(SOURCES);
-    expect(SONG_WASM.length).toBeGreaterThan(WASM.length * 5);
+  it("is the file the hashes were stamped for", () => {
+    expect(statSync(MODULE).size).toBe(BYTES);
+  });
+
+  it("imports nothing from its host", () => {
+    const mod = new WebAssembly.Module(readFileSync(MODULE));
+    expect(WebAssembly.Module.imports(mod)).toEqual([]);
   });
 
   it("is built from the crates it hashes, every path dependency of the facade among them", () => {
@@ -112,7 +118,7 @@ describe("the WebAssembly module", () => {
   });
 
   it("exports the ABI and nothing else of ours", () => {
-    const bin = Uint8Array.from(atob(WASM), (c) => c.charCodeAt(0));
+    const bin = readFileSync(MODULE);
     const names = WebAssembly.Module.exports(new WebAssembly.Module(bin)).map(
       (e) => e.name,
     );

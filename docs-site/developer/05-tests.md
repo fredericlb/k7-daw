@@ -7,7 +7,7 @@
 | TypeScript (packages, apps) | [Vitest](https://vitest.dev) 4 | `*.test.ts` / `*.test.tsx` next to the code they test; `*.bench.ts` for benchmarks |
 | C++ engine | CTest over CMake targets named `studio_*` | `apps/k7-daw-engine/k7-runtime/tests` |
 | Rust supervisor | cargo nextest, in the backend's workspace | `apps/k7-daw-backend/packages/k7-supervisor/tests` |
-| Supervisor tunnel wire | Vitest, run against both the TypeScript agent and the Rust `tunnel_harness` | `apps/k7-daw-frontend/packages/engine-tunnel` |
+| Tunnel hub against the supervisor's agent | cargo test, a testbed process per test | `apps/k7-daw-backend/packages/k7-front/tests/tunnel` |
 | Engine behaviour that needs a running engine | Node harness scripts, run by hand | `apps/k7-daw-engine/k7-runtime/scripts` |
 
 Every workspace that has tests declares `"test": "vitest run"`. A few packages also declare `"bench": "vitest bench --run"`
@@ -42,15 +42,8 @@ Vitest's default excludes and adds `apps/k7-daw-engine/k7-runtime/build/**`, `ap
 (CMake vendors JUCE there, whose demo apps contain `App.test.js` files) and `.claude/worktrees/**`.
 It sets `testTimeout` and `hookTimeout` to 30 seconds.
 
-A package's own `vitest.config.ts` **replaces** the root one, so packages that need the timeouts
-repeat them. Several packages pin ambient state to folders that do not exist so that no test reads
-the developer's real data:
-
-| Package config | Pins | Also |
-|---|---|---|
-| `apps/k7-daw-frontend/packages/song/vitest.config.ts` | `STUDIO_MEDIATEK`, `STUDIO_HOME` | 30 s timeouts |
-
-Other packages with a config of their own: `audio-passes`, `song-edit`, `song-video`, `translator`.
+A package's own `vitest.config.ts` (`k7-wasm`, `k7x`) **replaces** the root one, so a package that needs the
+timeouts repeats them.
 
 `@studio/env` never reads `env.yaml` under a test runner, so tests do not see local secrets.
 
@@ -85,14 +78,14 @@ noticed when its target is built: run the tests after touching the engine's data
 
 ## Supervisor tests
 
-The supervisor's tests are the backend workspace's (`cargo nextest run -p k7-supervisor`, in the Mac's checks). Its
-`tunnel_harness` binary is what `apps/k7-daw-frontend/packages/engine-tunnel/testAgents.ts` finds under the backend's
-cargo target (or `$TUNNEL_HARNESS_BIN`), and every tunnel suite runs against it as well as against the TypeScript
-agent. Without that build, the Rust agent's cases are skipped.
+The supervisor's tests are the backend workspace's (`cargo nextest run -p k7-supervisor`, in the Mac's checks). The
+tunnel hub is judged against the supervisor's own agent by `k7-front`'s `tests/tunnel`, which spawns the engine testbed
+(`k7-engine-testbed`, built with the `test-hooks` feature that suite turns on) once per test. The conformance suite's
+stand-in engine runs the supervisor's `tunnel_harness` binary (`$TUNNEL_HARNESS_BIN`, else the cargo target's).
 
 ```bash
+(cd apps/k7-daw-backend && cargo test -p k7-front --test tunnel)
 (cd apps/k7-daw-backend && cargo build -p k7-supervisor --bin tunnel_harness)
-cd apps/k7-daw-frontend/packages/engine-tunnel && npx vitest run
 ```
 
 ## Where tests run automatically

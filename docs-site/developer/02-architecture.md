@@ -65,7 +65,7 @@ remote engine, so the link speaks plain `ws://` and does not know how far away t
 
 An engine machine never accepts inbound connections from the server. Its supervisor dials the
 backend at `/api/engine-tunnel` (`apps/k7-daw-backend/packages/k7-engine/src/tunnel/` is the server end, the C++
-supervisor the machine end, `apps/k7-daw-frontend/packages/engine-tunnel/agent.ts` its TypeScript reference), and
+supervisor the machine end), and
 everything the server needs from the engine travels as channels over that socket.
 
 A browser reaches an engine in one of two ways:

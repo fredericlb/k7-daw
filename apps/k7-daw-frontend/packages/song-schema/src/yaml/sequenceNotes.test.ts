@@ -3,9 +3,9 @@
 // note per line, the other notes untouched, no `v(1)` written where the schema's default already
 // says it, and a short form kept or written in full by sugar's rule.
 
+import { validateFile } from "@studio/k7-wasm/validate";
 import { K7Document, type K7Scope, parse } from "@studio/k7x/document";
 import { describe, expect, it } from "vitest";
-import { SequenceSchema } from "./entitySchemas";
 import {
   editSequence,
   findNote,
@@ -28,7 +28,7 @@ const edit = (text: string, fn: (doc: K7Scope) => void): string =>
   editSequence(text, fn).text;
 const notesOf = (text: string) =>
   parse(text).notes as Record<string, unknown>[];
-const valid = (text: string) => SequenceSchema.safeParse(parse(text)).success;
+const valid = (text: string) => validateFile("sequences/s.k7x", text).ok;
 
 describe("findNote", () => {
   it("addresses a note by key and start", () => {

@@ -140,7 +140,7 @@ same rule the velocity drag follows going back to full. See `apps/k7-daw-fronten
 
 `track group <tracks> [name]` writes a group lane where a lane's file goes. In a chain project that
 is `tracks/` plus a one-step chain, since a lane is loaded only when a chain names it
-(`apps/k7-daw-frontend/packages/song/src/groupLanes.ts`). The tracks come FIRST so the timeline's right-click can fill
+(`apps/k7-daw-wasm/verbs/src/verbs/track_group.rs`). The tracks come FIRST so the timeline's right-click can fill
 them from the lanes shift-clicked and run the verb at once. The name comes second and defaults to
 `group-N`. A track already in a group is taken out of that group's `tracks:`, because membership
 is written only on the group and a track in two lists is the "in two groups" warning. The group joins
@@ -268,7 +268,7 @@ subchain before writing, so a route to nowhere is refused here rather than at th
 `chain add|move|remove` edit that subchain from the tap, writing the chain file directly rather than
 through a graph rewrite: the first `add` makes the subchain and routes the tap, and the `remove` of the
 last module takes both away, since an empty tap-fed subchain is one the next graph edit drops. A module
-is named by its ref; a node by its id, which is what the popin sends (`apps/k7-daw-frontend/packages/song-edit/src/tapChain.ts`).
+is named by its ref; a node by its id, which is what the popin sends (`apps/k7-daw-wasm/song-edit/src/tap_chain.rs`).
 
 `rename` changes the symbol in place, keeping its note, its sample and its line in the file. Nothing
 else names a symbol but the node's own `rack:` and a hand-made panel's `@rack:<symbol>` bind, which
@@ -789,7 +789,7 @@ library module's preset shelf, since presets are keyed by what a node extends
 
 `node new @<library>/<category>/<name> [<node-name>] [x,y]` — a WHOLE ref in the target's place —
 makes the node extend that ref as it stands, with no workspace module in between
-(`apps/k7-daw-frontend/packages/song/src/nodeOnRef.ts`). It is for a module that is already right as it is, the
+(`apps/k7-daw-wasm/verbs/src/verbs/node_make.rs`). It is for a module that is already right as it is, the
 library's `k7-rack` being the case that needs it: the rack builder's kit is a node of it, and a
 local shim extending it would be a second file standing for the same sampler. The ref must resolve.
 

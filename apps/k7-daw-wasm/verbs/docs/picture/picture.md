@@ -23,7 +23,7 @@ Two compiles over one folder say the same thing structurally, and say it where a
 it. The split is by META REF, not by folder: a picture lane is a lane node like a sound lane —
 muted, soloed, ordered and renamed as every lane is — and `extends("@meta/picture-track")` is what
 sends it to this compile. `lanesOf` answers the sound lanes only, `pictureLanesOf` the rest
-(`apps/k7-daw-frontend/packages/song/src/trackModule.ts`).
+(`apps/k7-daw-wasm/song/src/lanes/mod.rs`, `apps/k7-daw-wasm/verbs/src/picture/lanes.rs`).
 
 A sound lane is not typed by what it carries, but a picture lane must be: an EMPTY one — what
 `picture lane new` makes — would otherwise read as an empty sound lane, and the rows, the graph
@@ -84,7 +84,7 @@ picture will not compile" stay two different answers.
 
 ### Making a lane writes the lane AND the rows
 
-`createPictureLaneFile` (`apps/k7-daw-frontend/packages/song/src/projectFiles.ts`) writes the lane file **and** states
+`createPictureLaneFile` (`apps/k7-daw-wasm/song-edit/src/lane_files.rs`) writes the lane file **and** states
 `trackOrder` with the new lane above the picture lanes there are, and the verb behind it —
 `picture lane new` — is what k7's timeline calls. Above, so it draws in FRONT, where you can see
 what you just made; stated, because with no `trackOrder` the order is a sort of the names, which

@@ -4,7 +4,7 @@ A desk control moves a module parameter that the **project** names. Nothing abou
 
 ## The surface file
 
-Schema: `apps/k7-daw-frontend/packages/song-schema/src/yaml/surfaceSchema.ts`; reader: `apps/k7-daw-frontend/packages/song-schema/src/yaml/surfaceFile.ts`; project-side listing and creation: `apps/k7-daw-frontend/packages/song/src/surfaces.ts`.
+Schema: `apps/k7-daw-frontend/packages/song-schema/src/yaml/surfaceSchema.ts`; reader: `apps/k7-daw-frontend/packages/song-schema/src/yaml/surfaceFile.ts`; project-side listing and creation: `apps/k7-daw-wasm/song/src/views/surfaces.rs`.
 
 - `type: turntables` must have `layout: split` (`SURFACE_LAYOUTS_BY_TYPE`).
 - `playlist` is refused on any other type (`superRefine`), rather than ignored.

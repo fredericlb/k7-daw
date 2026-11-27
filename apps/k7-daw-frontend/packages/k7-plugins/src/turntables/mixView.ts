@@ -1,9 +1,9 @@
 // mixView.ts — reading the project's `views/mix.k7x`. Its own file because the desk and the
 // hook that owns the decks both need it, and neither should have to import the other.
 
+import { playlistPathOf } from "@studio/k7-wasm/schema";
 // The shared file routes, direct — an app-level re-export would be a seam over something already shared.
 import { projectApi as api } from "@studio/project-shell/project";
-import { playlistPathOf } from "@studio/song-schema/playlist";
 import { MIX_BASE } from "@studio/song-schema/yaml/mixFile";
 import {
   MIX_VIEW_BASE,

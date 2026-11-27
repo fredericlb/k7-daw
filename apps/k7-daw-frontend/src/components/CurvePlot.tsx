@@ -3,7 +3,7 @@
 // drag to move it, double-click to take it out. A point sits where the curve passes, so it is placed
 // through the inverse of the amplitude and polarity. See docs/curveEditor.md.
 
-import { parsePosition } from "@studio/song-schema/timecode";
+import { parsePosition } from "@studio/k7-wasm/timecode";
 import { useRef } from "react";
 import {
   type CurveDraft,

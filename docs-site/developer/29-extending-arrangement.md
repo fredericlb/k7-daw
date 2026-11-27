@@ -14,7 +14,7 @@ start in beats. Quote timecodes. Delete a field rather than writing its default 
 mentioned `gain` should not grow `gain: 0`.
 
 Test it the house way, asserting the file differs by exactly the line you meant (see
-`apps/k7-daw-frontend/packages/song-edit/src/moveEvent.test.ts`). If it is a new module, add it to the package's
+`apps/k7-daw-wasm/song-edit/tests/replay/time_goldens.rs`). If it is a new module, add it to the package's
 `exports`; packages are consumed as source through those subpaths, and a deep import fails on purpose.
 
 ## 2. The verb, in the verbs crate (`apps/k7-daw-wasm/verbs`)

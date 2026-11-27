@@ -2,14 +2,10 @@
 // kind, and @studio/song-schema answers that kind's fields and values, derived so they cannot fall behind the schema.
 // Shared by k7's EditorPane, YamlPane and the module builder; the k7x and YAML modes both read it (docs/completion.md).
 
+import type { FileKind } from "@studio/k7-wasm/fields";
+import { fieldsAt, fileKindFor, valuesAt } from "@studio/k7-wasm/fields";
+import { isEngineRef } from "@studio/k7-wasm/schema";
 import { docPattern } from "@studio/song-schema/docExt";
-import { isEngineRef } from "@studio/song-schema/moduleTypes";
-import type { FileKind } from "@studio/song-schema/yaml/fields";
-import {
-  fieldsAt,
-  fileKindFor,
-  valuesAt,
-} from "@studio/song-schema/yaml/fields";
 import type { Hints } from "@studio/web-protocol";
 import type { YamlVocabulary } from "./completions";
 
@@ -57,14 +53,14 @@ const isNodeFile = (path: string): boolean =>
 /** The vocabulary for the file at `path`. Offers nothing for a file that isn't ours. */
 export function schemaVocabulary(path?: string, hints?: Hints): YamlVocabulary {
   const kind = fileKindFor(path);
-  if (!kind) return { fieldsAt: () => [] };
+  if (!path || !kind) return { fieldsAt: () => [] };
   return {
-    fieldsAt: (keyPath) => fieldsAt(kind, keyPath),
+    fieldsAt: (keyPath) => fieldsAt(path, keyPath),
     valuesAt: (keyPath, field) => {
-      const schema = valuesAt(kind, keyPath, field);
+      const schema = valuesAt(path, keyPath, field);
       return schema.length || !hints
         ? schema
-        : projectValues(kind, keyPath, field, hints, path ?? "");
+        : projectValues(kind, keyPath, field, hints, path);
     },
   };
 }

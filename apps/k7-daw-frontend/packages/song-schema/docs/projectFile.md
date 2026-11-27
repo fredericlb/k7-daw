@@ -36,12 +36,9 @@ ignored".
   libraries because of where they are (`sharedFolders.ts`), so nothing reads these.
 - `video`: what draws the frame is a `surfaces/` file, and what says a song HAS picture is
   its picture lanes — a boolean agreeing with neither would just be a third answer.
-- `type`: it names the DIALECT for the one case the folder name cannot — a repository that IS the
-  project, with no suffix to read. There is ONE dialect compiled, so a folder saying nothing is it
-  and nothing branches on the answer. Not an enum, and not dropped.
-- `project_type`: nothing reads it — what a project draws is what its `surfaces/` folder says. Not
-  an enum either, deliberately: refusing a typo in a field nobody consults would be a compile error
-  about nothing.
+`type` and `project_type` are not fields at all: what a project draws is what its `surfaces/` folder
+says, and the folder's suffix says which app opens it, so a declaration beside them would be free to
+disagree. The compile and the editor's check refuse both as unknown keys.
 
 ## `viewport`
 

@@ -37,7 +37,7 @@ The keys you need in dev:
 
 Machine state that is not configuration (the engine's identity, plugin cache, downloaded
 instruments, project copies) lives in `~/.k7`, or in `$STUDIO_HOME` when set
-(`apps/k7-daw-frontend/packages/song/src/studioHome.ts`).
+(`studioDir()` in `apps/k7-daw-frontend/packages/engine-client/src/paths.ts`).
 
 ## `npm run dev`
 

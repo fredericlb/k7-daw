@@ -2,7 +2,7 @@
 // failures are kept apart on purpose: a set list that will not parse, and a line naming no file
 // the workspace holds. See ../../docs/setList.md.
 
-import { parsePlaylist } from "@studio/song-schema/playlist";
+import { parsePlaylist } from "@studio/k7-wasm/schema";
 import {
   type RecordDrag,
   recordFolder,

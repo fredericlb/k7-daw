@@ -131,6 +131,12 @@ export K7_FRONT_TARGET_DIR="$HOME/.cache/k7-macbed-$(basename "$tree")"
   { tail -60 "$logs/build-front.log"; exit 1; }
 lap "front build"
 
+# The conformance suite's stand-in engine runs the supervisor's tunnel agent beside its own fake engine (e2e/src/standInEngine.ts).
+(cd apps/k7-daw-backend && cargo build --locked --release -p k7-supervisor --bin tunnel_harness --target-dir "$K7_FRONT_TARGET_DIR") > "$logs/build-harness.log" 2>&1 ||
+  { tail -60 "$logs/build-harness.log"; exit 1; }
+export TUNNEL_HARNESS_BIN="$K7_FRONT_TARGET_DIR/release/tunnel_harness"
+lap "tunnel agent build"
+
 # The conformance suite needs both too: picture render drives this Chromium, with the page built here.
 echo "=== Playwright's Chromium, kept for this tree, and the render page ==="
 export PLAYWRIGHT_BROWSERS_PATH="$HOME/k7-trees/e2e-macos-browsers"

@@ -24,6 +24,7 @@
     "node": ">=18"
   },
   "dependencies": {
+    "@studio/k7-wasm": "*",
     "@studio/ui": "*",
     "@studio/audio-probe": "*",
     "@studio/engine-browser": "*",

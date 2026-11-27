@@ -112,4 +112,4 @@ loads — an amp's model, its samples — live in one, and no workspace holds a 
 
 What drives or needs the machine's own hardware, for every account alike: its audio devices, its
 plugins, the separations its CPU runs, and playing a song on its speakers. No file runtime runs
-there: the server asks for that work as jobs over the tunnel (`apps/k7-daw-frontend/packages/engine-tunnel/docs/jobs.md`).
+there: the server asks for that work as jobs over the tunnel (`apps/k7-daw-backend/docs/engine/tunnelJobs.md`).

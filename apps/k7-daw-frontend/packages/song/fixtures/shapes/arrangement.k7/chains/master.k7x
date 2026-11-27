@@ -1,2 +1,0 @@
-start("MIX")
-steps([to([chain("OUT")])])

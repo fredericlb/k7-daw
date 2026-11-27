@@ -3,9 +3,6 @@
 // where it is KEPT (the workspace or a library); the path is which module it is FOR. No node:fs here,
 // so the browser shares the vocabulary. See apps/k7-daw-frontend/packages/song/docs/userPresets.md.
 
-import { stringify } from "@studio/k7x/print";
-import { z } from "zod";
-
 /** The workspace's preset tree, beside `_modules/` — the `@workspace` level's spelling. */
 export const SHARED_PRESETS_DIR = "_presets";
 
@@ -46,37 +43,4 @@ export function presetModulePath(ref: string): string | null {
   return segs.length >= 2 && segs.every((s) => SEGMENT.test(s))
     ? segs.join("/")
     : null;
-}
-
-/** One pad of a rack's kit, as a preset keeps it: a note and a LIBRARY sample, never a project's. */
-const PresetTapSchema = z
-  .object({
-    note: z.number().int().min(0).max(127),
-    sample: z.string().min(1).optional(),
-  })
-  .strict();
-
-/** One preset file: the values it sets, the engine they were taken on, and a rack's kit. */
-export const PresetFileSchema = z
-  .object({
-    engine: z.string().min(1).optional(),
-    // The named base the values were taken on — a whole state they only make sense over (apps/k7-daw-frontend/packages/song/docs/userPresets.md).
-    base: z.string().min(1).optional(),
-    params: z.record(z.string().min(1), z.number()).optional(),
-    rack: z.record(z.string().min(1), PresetTapSchema).optional(),
-  })
-  .strict();
-
-export type PresetFile = z.infer<typeof PresetFileSchema>;
-
-/** A preset as k7x text, headed by the module it is for; a rack's pad stays on one line, the way a node's file writes its taps. */
-export function presetFileText(ref: string, preset: PresetFile): string {
-  const { engine, base, params, rack } = PresetFileSchema.parse(preset);
-  return stringify(
-    { engine, base, params, rack },
-    {
-      header: [`preset for ${ref}`],
-      inline: (path) => path.length === 2 && path[0] === "rack",
-    },
-  );
 }

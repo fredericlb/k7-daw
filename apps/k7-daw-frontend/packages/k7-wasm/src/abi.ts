@@ -1,8 +1,8 @@
-// abi.ts — loads the WebAssembly module and speaks its C ABI: JSON in, JSON out, a hot call returning two numbers, and the typed gesture calls (gesture.ts).
+// abi.ts — loads the WebAssembly module and speaks its C ABI: JSON in, JSON out, two hot calls returning numbers, and the typed gesture calls (gesture.ts).
 // A reader would get wrong that a view of the module's memory dies at the next call: any call may grow it.
+// The module is a file beside this one (k7Wasm.wasm): a page streams the hashed asset, node reads it from disk at once.
 // There is no TypeScript fallback: without WebAssembly every call throws `unavailable`.
 
-import { WASM } from "./k7Wasm.generated.ts";
 import type { ErrorCode, XY } from "./types/index.ts";
 
 /** What a failed call throws: the Rust side's codes, plus `panic` and `unavailable` raised here. */
@@ -22,13 +22,15 @@ export class K7WasmError extends Error {
 interface Instance {
   exports: unknown;
 }
+interface Compiled {
+  module: object;
+  instance: Instance;
+}
 interface WasmApi {
   Module: new (bytes: Uint8Array) => object;
-  Instance: new (module: object, imports?: object) => Instance;
-  instantiate(
-    bytes: Uint8Array,
-    imports?: object,
-  ): Promise<{ module: object; instance: Instance }>;
+  Instance: new (module: object) => Instance;
+  instantiate(bytes: ArrayBuffer): Promise<Compiled>;
+  instantiateStreaming?(response: Promise<unknown>): Promise<Compiled>;
   RuntimeError: new (message?: string) => Error;
 }
 const wasm = (globalThis as { WebAssembly?: WasmApi }).WebAssembly;
@@ -41,7 +43,7 @@ interface Abi {
   k7_output_len(): number;
   k7_curve_playhead(handle: number, beat: number): number;
   k7_scalars_ptr(): number;
-  k7_fs_buf(len: number): number;
+  k7_round_beat(beats: number): number;
   k7_f64_in(len: number): number;
   k7_f64_out_ptr(): number;
   /** The gestures' typed calls: numbers in, a number or a status back (docs/gesture.md). */
@@ -51,96 +53,72 @@ interface Abi {
 /** What gesture.ts calls: the instance, its memory and its typed exports. */
 export type TypedAbi = Abi;
 
-/** What the imports of a host reach the live instance through. */
-export interface HostMemory {
-  /** Writes `bytes` into the instance's file buffer, where the module reads them when the import returns. */
-  put(bytes: Uint8Array): void;
-  /** A copy of the instance's bytes at `ptr`, `len` long (a view dies at the next call). */
-  copy(ptr: number, len: number): Uint8Array;
-}
+/** The module's address: Vite turns this into a hashed asset, node reads it as a file. */
+const URL_OF_MODULE = new URL("./k7Wasm.wasm", import.meta.url);
 
-type ImportsMaker = (memory: HostMemory) => Record<string, object>;
+/** node's file reader, reached without an import a page's bundle would try to resolve. */
+const nodeFs = (
+  globalThis as {
+    process?: { getBuiltinModule?: (id: string) => unknown };
+  }
+).process?.getBuiltinModule?.("node:fs") as
+  | { readFileSync(path: URL): Uint8Array }
+  | undefined;
 
 const OK = 0;
 const ERROR = 1;
 const NONE = 2;
 
-/** The live instance; null before the first call, after a trap, and while the async compile runs. */
+/** The live instance; null before the module is ready and after a trap. */
 let abi: Abi | null = null;
 let compiled: object | null = null;
 let pending: Promise<void> | null = null;
-let syncTried = false;
-/** Set when no compile can succeed in this runtime: calls say so instead of asking for a wait. */
+let started = false;
+/** Set when no load can succeed in this runtime: calls say so instead of asking for a wait. */
 let failed = false;
 let epoch = 0;
 
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 
-/** The module this runtime loads: the curves' by default, or the one `provide` named before the first call. */
-let source: string = WASM;
-
-/** Names the base64 module to load instead (the verbs' Worker's, with the compiler in it); it must come before any call. */
-export function provide(base64: string): void {
-  if (syncTried || abi)
-    throw new Error("provide() comes before the first call");
-  source = base64;
-}
-
-function bytes(): Uint8Array<ArrayBuffer> {
-  const bin = atob(source);
-  const out = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
-  return out;
-}
-
-/** Names the imports the verbs' module asks of its host (its file system, its ids); it must come before the first call. */
-let makeImports: ImportsMaker | undefined;
-export function provideImports(make: ImportsMaker): void {
-  if (syncTried || abi)
-    throw new Error("provideImports() comes before the first call");
-  makeImports = make;
-}
-
-const hostMemory: HostMemory = {
-  put(b) {
-    const x = abi as Abi;
-    const at = x.k7_fs_buf(b.length);
-    new Uint8Array(x.memory.buffer, at, b.length).set(b);
-  },
-  copy(ptr, len) {
-    const x = abi as Abi;
-    return new Uint8Array(x.memory.buffer, ptr, len).slice();
-  },
-};
-
 function start(module: object): Abi {
-  const imports = makeImports?.(hostMemory);
-  return new (wasm as WasmApi).Instance(module, imports)
-    .exports as unknown as Abi;
+  return new (wasm as WasmApi).Instance(module).exports as unknown as Abi;
 }
 
-/** Compiles synchronously where the runtime allows it, else starts the async compile and leaves `abi` null. */
-function load(): void {
-  if (!wasm || syncTried) return;
-  syncTried = true;
-  try {
-    compiled = new wasm.Module(bytes());
-    abi = start(compiled);
-  } catch {
-    // A browser's main thread refuses a synchronous compile past a size; wasmReady() awaits the async one.
-    pending = Promise.resolve()
-      .then(() =>
-        (wasm as WasmApi).instantiate(bytes(), makeImports?.(hostMemory)),
-      )
-      .then(({ module, instance }) => {
-        compiled = module;
-        abi = instance.exports as unknown as Abi;
-      })
-      .catch(() => {
-        failed = true;
-      });
+/** The page's load: streamed while it downloads, or compiled from the whole body where the server's type refuses streaming. */
+async function fetched(api: WasmApi): Promise<Compiled> {
+  const response = fetch(URL_OF_MODULE);
+  if (api.instantiateStreaming) {
+    try {
+      return await api.instantiateStreaming(response);
+    } catch {
+      // A server that sends no `application/wasm` refuses the stream, never the bytes.
+    }
   }
+  return api.instantiate(await (await response).arrayBuffer());
+}
+
+/** Loads at once from disk in node; in a page, starts the fetch and leaves `abi` null until it lands. */
+function load(): void {
+  if (!wasm || started) return;
+  started = true;
+  if (nodeFs) {
+    try {
+      compiled = new wasm.Module(nodeFs.readFileSync(URL_OF_MODULE));
+      abi = start(compiled);
+    } catch {
+      failed = true;
+    }
+    return;
+  }
+  pending = fetched(wasm)
+    .then(({ module, instance }) => {
+      compiled = module;
+      abi = instance.exports as unknown as Abi;
+    })
+    .catch(() => {
+      failed = true;
+    });
 }
 
 /** Resolves when the module is as ready as it will get, true if it can answer; it never rejects. */
@@ -163,7 +141,7 @@ function instance(): Abi {
     !wasm
       ? "WebAssembly is not available in this runtime"
       : failed
-        ? "the WebAssembly module could not be compiled in this runtime"
+        ? "the WebAssembly module could not be loaded in this runtime"
         : "the WebAssembly module is not ready: await wasmReady() first",
   );
 }
@@ -228,6 +206,17 @@ export function playhead(handle: number, beat: number): XY | null | undefined {
     // A fresh view per call: the one read here is the only thing between it and the call.
     const s = new Float64Array(x.memory.buffer, x.k7_scalars_ptr(), 4);
     return { x: s[0], y: s[1] };
+  } catch (e) {
+    if (isTrap(e)) recover(e);
+    throw e;
+  }
+}
+
+/** A beat rounded to six decimals, by the hot call: no JSON crosses. */
+export function roundBeatHot(beats: number): number {
+  const x = instance();
+  try {
+    return x.k7_round_beat(beats);
   } catch (e) {
     if (isTrap(e)) recover(e);
     throw e;

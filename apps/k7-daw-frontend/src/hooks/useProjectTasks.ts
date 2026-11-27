@@ -3,7 +3,8 @@
 // A task pinned to another song is not this one's, so only an anchor naming `project` is kept.
 // See apps/k7-daw-frontend/docs/tasks.md.
 
-import { parseTasks, TASKS_FILE, type Task } from "@studio/song-schema/tasks";
+import { TASKS_FILE } from "@studio/k7-wasm/consts";
+import { parseTasks, type Task } from "@studio/k7-wasm/schema";
 import { useEffect, useState } from "react";
 import { api } from "../api";
 import { keepIfSame } from "../shellEquality";

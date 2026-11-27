@@ -3,8 +3,9 @@
 // playlist pane edits the lines and the desk loads one: two copies would drift. See docs/playlists.md.
 // What a reader gets wrong: a record's stems are `stems/` beside it, so one record per folder has its own.
 
+import { isAudio } from "@studio/k7-wasm/schema";
 import { plainSegments } from "@studio/web-protocol/paths";
-import { extOf, isAudio } from "./audioFiles";
+import { extOf } from "./audioFiles";
 import type { PlaylistItem } from "./playlist";
 import { STEMS, STEMS_DIR, stemFile } from "./stems";
 

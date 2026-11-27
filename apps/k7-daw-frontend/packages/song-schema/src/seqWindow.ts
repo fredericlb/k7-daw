@@ -2,8 +2,8 @@
 // clip: the note grids are handed the document, not a ClipDoc. Timecodes only and POSITIONS, as
 // SeqEdge defines them. See apps/k7-daw-frontend/user-docs/22-syntax-material.md.
 
+import { parsePosition } from "@studio/k7-wasm/timecode";
 import { parse } from "@studio/k7x/document";
-import { parsePosition } from "./timecode";
 
 export interface SeqWindow {
   /** Where the window opens, in beats. 0 when the file states no `from`. */

@@ -1,6 +1,6 @@
 # The tunnel agent
 
-The engine's machine dials out to every registry that lists it (`apps/k7-daw-frontend/packages/engine-tunnel/docs/tunnel.md`
+The engine's machine dials out to every registry that lists it (`apps/k7-daw-backend/docs/engine/tunnel.md`
 says what the wire is and why). This page is what the Rust agent chose; the wire itself is the hub's and is not
 restated here.
 
@@ -8,7 +8,7 @@ restated here.
 
 | choice | why |
 |---|---|
-| frames are `k7-engine`'s (`tunnel/frames`), not a second copy | the hub's code is the one that already reads every agent's frames; an agent that spelled a header another way would be the drift `engine-tunnel`'s suites exist to catch. Only the shapes a hub SENDS are read here (`tunnel/wire.rs`), leniently, as the TypeScript agent reads them |
+| frames are `k7-engine`'s (`tunnel/frames`), not a second copy | the hub's code is the one that already reads every agent's frames; an agent that spelled a header another way would be the drift the hub's suite (`apps/k7-daw-backend/packages/k7-front/tests/tunnel`) exists to catch. Only the shapes a hub SENDS are read here (`tunnel/wire.rs`), leniently |
 | tasks and queues, not threads | a channel is two `SerialQueue`s and a task for its engine socket, and the socket's reader never waits on a download |
 | closing a queue drops the task it is running too | a task that waits on a download for ever is cancelled with its channel, and its half file goes with it |
 | `Link` counts the unsent bytes | tokio-tungstenite has no `bufferedAmount`; the writer task says when a frame is out, and the shedding of meters and the upload's high water (256 KB, 1 MB) read that count |
@@ -30,7 +30,7 @@ handler with `Jobs::add`, taking the part's `Ctx` for what it needs (the paths, 
   paths it writes with `require_writable`, and the ones it reads with `require_mapped` (`parts/tunnel/guard.rs`);
 - runs blocking work on `spawn_blocking`, never on the task that serves the channel.
 
-`sync` has no line: the path map answers it. The test jobs `where` and `upper` belong to `tunnel_harness` alone.
+`sync` has no line: the path map answers it. The `prefetch` job of `tunnel_harness` is for the conformance suite's stand-in engine alone.
 
 ## What stays Windows's
 
@@ -40,6 +40,7 @@ a file something holds open lands beside it (`clip~<mtime>.wav`) on every platfo
 ## How it is tested
 
 `tests/all/tunnel_*.rs` run the agent against a hub and an engine on 127.0.0.1 (`tests/support/hub.rs`), and
-`tests/tunnel_part.rs` runs the part inside the whole core. `tunnel_harness` is the agent alone, which
-`engine-tunnel`'s suites spawn beside the TypeScript agent against the Rust hub (`testAgents.ts` finds it in the
-backend's cargo target, or in `$TUNNEL_HARNESS_BIN`).
+`tests/tunnel_part.rs` runs the part inside the whole core. The agent against the real hub, with its files, jobs,
+confinement, drains and redials, is `k7-front`'s `tests/tunnel` (the agent dialled as a library). `tunnel_harness` is the
+agent alone, which the conformance suite's stand-in engine (`e2e/src/standInEngine.ts`) spawns beside its fake engine
+(`$TUNNEL_HARNESS_BIN`, else the cargo target's).
