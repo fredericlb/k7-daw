@@ -2,6 +2,8 @@
 //! machine's real agent (`k7-supervisor`) dialling it, a fake engine behind the agent and clients on bound paths.
 //! The cases are the ones `engine-tunnel`'s TypeScript suites held, over the Rust agent alone (`docs/engine.md`).
 
+// The confinement cases are Unix-only (symlinks), and the bed's helpers only they use go unread on Windows.
+#[cfg_attr(not(unix), allow(dead_code))]
 mod bed;
 mod hub_confinement;
 mod hub_drain;
