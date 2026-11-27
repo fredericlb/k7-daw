@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { ForgeAccount } from "./forgeState";
 import { pageHref, takeClonePrefill } from "./gitPages";
-import { firstTab, nameFromUrl } from "./gitPageTabs";
+import { firstTab } from "./gitPageTabs";
 
 const gh = (over: Partial<ForgeAccount> = {}): ForgeAccount => ({
   id: "github.com",
@@ -36,17 +36,6 @@ describe("the tab a git page opens on", () => {
     expect(firstTab([], "")).toBe("other");
     expect(firstTab([fj({ login: undefined })], "")).toBe("other");
     expect(firstTab([gh()], "git@host:me/songs.git")).toBe("other");
-  });
-});
-
-describe("the name a clone takes from its address", () => {
-  it("is the repository's last segment, without .git", () => {
-    expect(nameFromUrl("git@git.example.org:me/songs.git")).toBe("songs");
-    expect(nameFromUrl("ssh://git@host:2222/band/live-set.git")).toBe(
-      "live-set",
-    );
-    expect(nameFromUrl("file:///tmp/k7/remote.git/")).toBe("remote");
-    expect(nameFromUrl("")).toBe("");
   });
 });
 

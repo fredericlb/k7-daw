@@ -32,6 +32,8 @@
     "./gestureTicks": "./src/gestureTicks.ts",
     "./gestureTimeline": "./src/gestureTimeline.ts",
     "./eyes": "./src/eyes.ts",
+    "./git": "./src/git.ts",
+    "./media": "./src/media.ts",
     "./rack-binds": "./src/rackBinds.ts",
     "./paths": "./src/paths.ts",
     "./buffer": "./src/buffer.ts",

@@ -204,7 +204,7 @@ import { cfg } from "@studio/project-shell/fileApi";
 import { Backdrop } from "@studio/ui/backdrop";
 import { placeSubject, placeWarnings, warningSentence } from "./engineWarnings";
 import { type FloatState, loadFloat, saveFloat } from "./floatingRect";
-import { installGates, lockSentence } from "./git/gitLock";
+import { lockSentence } from "./git/gitLock";
 import { lockedBy as mergeLockedBy } from "./git/gitState";
 import { projectTransport } from "./git/transports";
 import { useGitState } from "./git/useGitState";
@@ -326,10 +326,6 @@ export default function App({
   const gitHandle = useGitState(gitTransport, gitWorkspace);
   const merging = mergeLockedBy(gitHandle.state);
   const locked = merging;
-  // The shell's choke points refuse every write and verb line while a merge waits (git.md).
-  useLayoutEffect(() => {
-    return installGates(merging);
-  }, [merging]);
   const lockedSay = lockSentence;
   // What the panes read for themselves — the reload signal, the verbs, the overlays (state/shellStore.ts, docs/state.md).
   const shellVerbs = useRef<ShellVerbs | null>(null);

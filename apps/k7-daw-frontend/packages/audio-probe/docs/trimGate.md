@@ -1,8 +1,8 @@
-# `trimGate.ts` — where a take starts and stops SOUNDING
+# `trim.rs` — where a take starts and stops SOUNDING
 
 A recorded take begins with the tail of a count-in and the player settling, and ends with a room
 and a hand leaving a string. `event trim` cuts both by asking where the envelope crosses a gate,
-and `trimWindow` is the whole of that decision — pure, and nothing else.
+and `trim_window` (`apps/k7-daw-backend/packages/waveform/src/trim.rs`, reached by the page as `trimWindow` of `@studio/k7-wasm/media`) is the whole of that decision — pure, and nothing else.
 
 ## Bucket-accurate, and one bucket of margin
 
@@ -28,15 +28,11 @@ silence or a gate set too high, and both are things to SAY rather than to apply 
 would leave a clip of zero length that plays nothing. A single bucket over the gate still has to
 come back as a window and not a point.
 
-## The floor, and why it is duplicated
+## The floor
 
-`ampToDb` puts a zero bucket at −100 dB rather than at −Infinity, so comparisons are TOTAL:
-`-Infinity > gate` is false, but so is `NaN`, and one of those is a bug waiting to happen.
-
-That −100 is the same floor `@studio/audio-analysis`'s `peak.ts` declares as `PEAK_FLOOR_DB`, and
-it is deliberately not imported from there: this file is browser-safe and k7's clip panel imports
-it, while `peak.ts` spawns a decoder. Sharing the constant would drag a process spawner into the
-browser to save one number. The duplication is structural — see `docs/inventaire.md`.
+`amp_to_db` puts a zero bucket at −100 dB rather than at −infinity, so comparisons are TOTAL: a NaN
+and an infinity both compare false, and one of those is a bug waiting to happen. The same floor is
+`PEAK_FLOOR_DB` of `@studio/audio-analysis`'s `peak.ts`, which spawns a decoder and so is not shared.
 
 The default gate is −40 dBFS: below a room's noise floor on any usable take, above true digital
 silence, so a take recorded with the preamp up does not trim to nothing.

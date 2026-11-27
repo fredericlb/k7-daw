@@ -3,9 +3,7 @@ import {
   addAfter,
   canAdd,
   probeOf,
-  shortVersion,
   signInAfter,
-  sshPort,
   startAdding,
   startingSignIn,
 } from "./forgejoState";
@@ -55,25 +53,10 @@ describe("adding a Forgejo server", () => {
     expect(probeOf(failed)).toBeUndefined();
   });
 
-  it("reads the ssh port: empty is the default, a whole port, or bad", () => {
-    expect(sshPort("")).toBeUndefined();
-    expect(sshPort(" 2222 ")).toBe(2222);
-    expect(sshPort("0")).toBe("bad");
-    expect(sshPort("70000")).toBe("bad");
-    expect(sshPort("2x")).toBe("bad");
-  });
-
   it("is ready with a client id and no bad port", () => {
     expect(canAdd("")).toBe(true);
     expect(canAdd("2222")).toBe(true);
     expect(canAdd("abc")).toBe(false);
-  });
-});
-
-describe("a server's version", () => {
-  it("drops the build metadata after the first plus", () => {
-    expect(shortVersion("17.0.2+gitea-1.22.0")).toBe("17.0.2");
-    expect(shortVersion("17.0.2")).toBe("17.0.2");
   });
 });
 

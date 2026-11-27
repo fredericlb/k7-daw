@@ -5,37 +5,13 @@
 use std::path::Path;
 
 use git2::{Delta, DiffFindOptions, DiffOptions};
-use serde::Serialize;
 
 use crate::lfs::Attributes;
 use crate::lfs::pointer::Pointer;
 use crate::lfs::store::StatCache;
 use crate::{Repo, Result};
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
-#[serde(rename_all = "lowercase")]
-pub enum Change {
-    Added,
-    Modified,
-    Removed,
-    Renamed,
-}
-
-#[derive(Clone, Debug, PartialEq, Eq, Serialize)]
-pub struct Entry {
-    pub path: String,
-    pub change: Change,
-    /// The old path of a rename.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub from: Option<String>,
-    pub size: u64,
-    pub binary: bool,
-    /// The file goes through LFS: git holds a pointer, the store the bytes.
-    pub lfs: bool,
-    /// Over the size a git host takes: a commit leaves it out and `status` keeps naming it.
-    #[serde(rename = "tooLarge")]
-    pub too_large: bool,
-}
+pub use git_rules::{Change, Entry};
 
 /// A NUL in the first 8000 bytes, as git reads it.
 pub(crate) fn looks_binary(head: &[u8]) -> bool {

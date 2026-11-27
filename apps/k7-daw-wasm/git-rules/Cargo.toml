@@ -1,0 +1,21 @@
+[package]
+name = "git-rules"
+version = "0.1.0"
+edition = "2024"
+description = "The shapes the git routes answer and the rules the page applies to them: the workspace bar's offers, a save's files, a merge's choices, an address's host and name. Pure, so the backend serialises them and the browser's WebAssembly applies them."
+publish = false
+
+[lib]
+path = "src/lib.rs"
+crate-type = ["rlib"]
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+chrono = { version = "0.4", default-features = false }
+ts-rs = { version = "11", optional = true }
+
+[features]
+ts = ["dep:ts-rs"]
+
+[dev-dependencies]
+serde_json = "1"

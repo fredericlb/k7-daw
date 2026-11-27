@@ -1,55 +1,16 @@
 // forgeState.ts — the accounts of Settings → Services as data: what `GET /git/forges` lists, one entry per forge account.
 // What a reader gets wrong: GitHub's page still calls `/git/github/*`, an alias of `/git/forges/github.com/*`.
 
-/** The forges k7 knows how to draw; a new one is a new member here. */
-export type ForgeKind = "github" | "forgejo";
+import type { ForgeAccount } from "@studio/k7-wasm/git";
 
-/** What `GET /git/forges/<id>` says: the sign-in exists in this build, and who is signed in. */
-export interface ForgeStatus {
-  available: boolean;
-  login?: string;
-  scopes: string[];
-  /** Whether signing out (and, for a Forgejo server, removing it) reaches the person's other Apple devices too. */
-  synced?: boolean;
-}
-
-/** One entry of `GET /git/forges`: the account's id (its forge's host), its kind and its name. */
-export interface ForgeAccount extends ForgeStatus {
-  id: string;
-  kind: ForgeKind;
-  name: string;
-  /** A Forgejo server's address, as the person typed it. */
-  url?: string;
-}
-
-/** What `POST /git/forges/probe` read from a server without a token. */
-export interface ForgeProbe {
-  id: string;
-  url: string;
-  version: string;
-  pageSize: number;
-  lfs: boolean;
-  rootUrl: string;
-  rootAnswers: boolean;
-  redirects: string[];
-  scopes: string[];
-}
-
-/** What `POST /git/forges/<id>/start` answers: the page to open in a browser. */
-export interface ForgeStart {
-  authorizeUrl: string;
-  redirect: string;
-  expiresIn: number;
-}
-
-/** How a Forgejo sign-in ended, said once by `POST …/poll`. */
-export interface ForgePoll {
-  state: "pending" | "ok" | "denied" | "error" | "expired";
-  login?: string;
-  scopes?: string[];
-  keyNote?: string;
-  error?: string;
-}
+export type {
+  ForgeAccount,
+  ForgeKind,
+  ForgeProbe,
+  ForgeStart,
+  ForgeStatus,
+  PollAnswer as ForgePoll,
+} from "@studio/k7-wasm/git";
 
 export const forgejoServers = (a: ForgeAccount[]): ForgeAccount[] =>
   a.filter((x) => x.kind === "forgejo");

@@ -62,7 +62,7 @@ milestone ends with `bash scripts/agent/gate.sh --milestone`; the hours are agen
 | **M2c** tunnel stand-in (done) | the hub suites ported to Rust tests over the Rust supervisor; `e2e/src/standInEngine.ts` on the supervisor binary with a fake engine; `engine-tunnel` deleted with its 2,100 test lines | 2,500 | k7-supervisor, k7-hub tests | nothing | 10 |
 | **M3a** verbs catalogue (built, see below) | contextMenu, menuTabs, menuTitle, palette, argOptions, rankCommands, fuzzy, commandFill, commandPrefs, emptyBar, stepSentence, exportArgs, pendingEdits, nodeInsert, nodeMenu, clipOps, playlistVocabulary, reloadScope, verbWrites, homeCommands' catalogue and parse; `commandTypes.ts` generated | 2,500 | verbs crate | verbs branch merged; decisions 2, 6 | 14 |
 | **M3b** pictures and render tooling (done) | take-render's verbs-only files deleted; engine-client and the render scripts relocated to `k7-runtime/scripts/lib`; ui-eyes scene generated; its clip schedule, transitions and `.cube` reader; the grip drag of `viewportRect`; the camera name rules | 1,000 | new crate `apps/k7-daw-wasm/eyes`, op family `eyes` | verbs branch merged; decision 7 | 8 |
-| **M3c** git rules and media bytes | gitState, commitState, connectState, forgejoState, gitLock, gitPageTabs, mergeState, saveAct, githubState and roamState rules; serde structs for the git routes, then their types generated; webmDuration, trimGate, spectrumColour | 1,000 | k7-git, k7-front, waveform | decision 5 | 11 |
+| **M3c** (done) git rules and media bytes | gitState, commitState, connectState, forgejoState, gitLock, gitPageTabs, mergeState, saveAct, githubState and roamState rules; serde structs for the git routes, then their types generated; webmDuration, trimGate, spectrumColour | 1,000 | git-rules (new, `apps/k7-daw-wasm`), k7-git, k7-front, waveform, k7-wasm | decision 5 | 11 |
 | **M4a** reads on the doc | takes, rackLit, noteSpans, videoSpans, activity, clipLoop, clipInstances, clipNames, rows, timelineView, mixerStrips, gainTrim, mastering, midiIn, laneInput, rackFor, graphNotes, templateGraph, headphonesHint; the hooks' and pickers' doc reads, one mute/solo rule, tapTempo, projectName, projectKind; `engine-protocol/project.ts` and `timelineTypes.ts` generated, `build.ts` moved | 2,800 | song crate, k7-file-service | rust-song-twins merged | 16 |
 | **M4b** (built) buffer text and paths | bufferReads, clipWindowText, sliceSymbols, clipFiles, timelineDrop, rackBuilder, presetOrder, videoTake, editorPaths, projectPaths, localTargets, openInEditor, sequenceEdit, moduleBehind, scalarField, curveDraft, clipboard; the editor's cursor scan, entity values and preview triggers; noteGrid's notes | 1,500 | song-edit, song-schema, k7x | rust-song-twins merged | 10 |
 | **M4c** panels and AI organize | layoutTwins, groupGeometry, autoLayout, gridCells, panelTabs, widgetClipboard, widgetKinds, useParamRows, moduleUi, panelWrite, panelText, checkLayouts; the AI loop to a backend route | 2,700 | song `modules/ui`, k7-front `routes/ai` | rust-song-twins merged; decision 3 | 11 |
@@ -214,6 +214,30 @@ live in `apps/k7-daw-backend/docs/engine/` (`tunnel.md`, `tunnelJobs.md`, `backp
 | the conformance stand-in keeps its TypeScript fake engine (the specs script its frames) and runs the supervisor's `tunnel_harness` for the tunnel | the specs need frames they choose and a heard-list; only the machine's end is the supervisor's. The real `k7-supervisor` would add its own probes to that list |
 | `e2e-macos.sh` builds `tunnel_harness` into the bed's target folder and names it in `TUNNEL_HARNESS_BIN`; a missing binary fails the stand-in's start | nothing is skipped without a word |
 
+**M3c, as built.** About 1,525 lines of TypeScript left (805 of source, 720 of tests), against 464 of wrappers and tests and 611 of
+generated types; 2,490 lines of Rust came (700 of them tests, 77 tests, every old case ported). The page's rules of git and the three
+media modules are Rust, reached through `@studio/k7-wasm/git` and `@studio/k7-wasm/media`. What each became:
+
+| module | now |
+|---|---|
+| `gitState`, `commitState`, `connectState`, `forgejoState`, `gitPageTabs`, `mergeState`, `saveAct`, `githubState`, `roamState` | the rules are `git-rules`' (`address.rs`, `state.rs`, `files.rs`, `merge.rs`, `github.rs`, `roam.rs`, `save.rs`); the TypeScript keeps the reducers, the menu's wording and the toasts, and calls the crate |
+| `gitTypes`, `forgeState`'s and `githubState`'s wire types | generated from `git-rules`' structs by `k7-wasm`'s bindings; the front's state, forge, GitHub, Forgejo and pull routes build those structs |
+| `gitLock` | the gate, its route table and its installation in `App.tsx` are gone, with `setWriteGate`, `refusedWrite` and `ReadOnlyDocument` of `project-shell`; `afterRead` (fail closed) and the sentence stay |
+| `webmDuration` | `waveform`'s `webm_duration.rs` patches the head; the Blob slicing and the whole-file fallback stay |
+| `trimGate` | `waveform`'s `trim.rs`; `AudioClipPanel` calls `trimWindow` of `@studio/k7-wasm/media` |
+| `spectrumColour` | `waveform`'s `spectrum.rs` returns an RGBA strip per tile; `paintColumns` draws from it, and `bandsAt` moved into `spectrum.ts` |
+
+| choice | why |
+|---|---|
+| the git rules live in a new crate, `git-rules`, with no git2, and `k7-git` re-exports its `Entry`, `Conflict` and `LogEntry` | the inventory named `k7-git`, but libgit2 does not build for the browser: the page's WebAssembly module needs the rules and the backend needs the shapes, so both link one pure crate |
+| the git wire types are exported by `k7-wasm`'s bindings, not by `k7-front`'s (decision 8's one binary) | a generated file imports its neighbours by relative path, and a request type must land in one folder with the structs inside it; the derives are in the crate behind its `ts` feature all the same |
+| a rule is one JSON call of the page's module, not a field the route adds to its answer | the page keeps its fixtures and tests, and a rule on typed input (an address, a filter) has no route to ask |
+| a list's by-name order stays in the browser (`localeCompare`) | Rust has no locale collation, and the roam list is the one place a person reads names in order |
+| a repository with no push date sorts last in the picker | the old comparator left it in place, which no total order can say |
+| the Rust WebM patcher refuses a head whose sizes run past its end, where the old one patched it with a NaN scale | a refused head falls back to the whole-file fix; garbage in no longer yields garbage out |
+| `waveform` gains a default `ffi` feature, which `k7-wasm` turns off | linking the arithmetic must not add the sidecar module's exports to the page's module |
+| a duplicate of `trim_window` remains in `apps/k7-daw-wasm/verbs/src/verbs/event_render.rs` | the verbs crate is another milestone's; it takes `waveform::trim` when that merges |
+
 **M4b, as built.** About 1,000 lines of page TypeScript went net (1,930 deleted, 930 of facades and glue written; 1,630 lines of
 tests went with them), replaced by 3,900 lines of Rust and 1,140 of Rust tests. The rules live in `song-edit` (`project_paths`, `buffer_text`,
 `intake`, `kit`, `clipboard`, `curve_draft`) and `k7x` (`cursor`, `scan`, `tokens`), reached by six op families (`paths.*`, `buffer.*`,
@@ -259,7 +283,7 @@ specs passing on the Rust supervisor.
 | 2 | the crate that replaces dagre (`ui-chains/src/graphLayout.ts`) | **rust-sugiyama**: petgraph-based Sugiyama like dagre, takes node sizes; young, small API, no edge routing points, multi-edges folded first. **layout-rs**: Graphviz-dot style in pure Rust, no dependency; coarser node-size control, one maintainer. **a Sugiyama of our own on petgraph** (600-900 lines): full control of rank snapping, which graphLayout already post-processes heavily; the most work, no dependency. dagre ports to Rust: sparse and unmaintained. elkjs: JS only. | **chosen (2026-11-27): rust-sugiyama**, with petgraph; no golden vectors: the user judged the layouts in the app and kept them (2026-11-27) |
 | 3 | where AI organize's loop runs | in wasm with the page holding the request; on a backend route | **chosen (2026-11-27): in Rust, on the backend route** (k7-front `routes/ai`): the key stays on the host and the page keeps one request and the UI |
 | 4 | engine warnings carry prose from the C++ engine | codes in the C++ engine; classify the prose in k7-engine | classify in k7-engine now, send codes to the page; codes in C++ later |
-| 5 | the page's merge-lock gate (`src/git/gitLock.ts`) | keep it beside the backend's refusal; drop it | drop it: the backend's refusal and its toast are the one gate, at the cost of one round trip |
+| 5 | the page's merge-lock gate (`src/git/gitLock.ts`) | keep it beside the backend's refusal; drop it | **dropped (M3c)**: the backend's refusal and its toast are the one gate, at the cost of one round trip |
 | 6 | the home page's commands (`src/projects/homeCommands.ts`) | their own table in TS; a `home` scope of the verbs catalogue | the verbs catalogue, where the editor's commands already are |
 | 7 | engine-client and take-render's render scripts (Node, used by k7-runtime's dev scripts) | relocate under `k7-runtime/scripts`; rewrite on the Rust engine client | relocate now, rewrite when a script changes |
 | 8 | ts-rs in the backend | one shared types crate; derives in each crate exported by one bindings binary into `web-protocol` | derives in each crate, one binary in k7-front |
