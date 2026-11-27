@@ -148,6 +148,7 @@ import type {
 } from "../types";
 import { useIsMobile } from "../useIsMobile";
 import { DRAG_SLOP, type VideoEdit } from "../videoDrag";
+import { AutomationHeader } from "./AutomationHeader";
 import { ClipActivity } from "./ClipActivity";
 import { ClipContent } from "./ClipContent";
 import type { EditTarget } from "./ClipView";
@@ -3160,6 +3161,7 @@ function TimelineTabView({
                           kind: "curve-point",
                           curve: row.lane.curve,
                           param: row.lane.param,
+                          module: row.lane.module,
                           tc: beatsToPosition(
                             nearestTick(bars, raw) ?? raw,
                             proj?.timeSigNumerator ?? 4,
@@ -3171,19 +3173,19 @@ function TimelineTabView({
                       );
                     }}
                   >
-                    <div
-                      style={{ width: GUTTER }}
-                      {...gutterProps(row)}
+                    <AutomationHeader
+                      module={lane.module}
+                      param={lane.param}
+                      curve={lane.curve}
+                      width={GUTTER}
+                      gutter={gutterProps(row)}
                       className={cn(
                         "flex shrink-0 cursor-pointer select-none items-center gap-1 truncate border-r border-border px-2 text-[11px] text-muted-foreground",
                         GUTTER_STICKY,
                         // Indented past its lane: the knob belongs to the lane above.
                         "pl-5",
                       )}
-                      title={`${lane.module} · ${lane.param} ← ${lane.curve}`}
-                    >
-                      <span className="truncate">{lane.param}</span>
-                    </div>
+                    />
                     <div
                       className={cn(
                         "relative flex-1 overflow-hidden",
@@ -3212,6 +3214,7 @@ function TimelineTabView({
                               kind: "curve-point",
                               curve: lane.curve,
                               param: lane.param,
+                              module: lane.module,
                               tc,
                             },
                             cx,

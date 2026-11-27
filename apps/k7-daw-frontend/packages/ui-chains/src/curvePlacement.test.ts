@@ -1,7 +1,6 @@
 // A curve card beside the node it drives: on a fresh layout, and when it is new among cards that kept their place.
 
 import { describe, expect, it } from "vitest";
-import { withoutCurves } from "./curvePlacement";
 import { layout, type RawEdge, type RawNode } from "./graph";
 
 const card = (id: string, kind: RawNode["kind"], rank: number): RawNode =>
@@ -69,18 +68,5 @@ describe("curve cards", () => {
     prev.set("crv", { x: 0, y: 0 });
     const crv = at(layout(nodes, edges, undefined, prev), "crv");
     expect(crv).toMatchObject({ x: 2000 - 200 - 24, y: 900 + 24 });
-  });
-});
-
-describe("the zoomed-out graph", () => {
-  it("drops every curve card and every cable touching one, and nothing else", () => {
-    const g = withoutCurves({ nodes, edges });
-    expect(g.nodes.map((n) => n.id)).toEqual(["t", "a", "b", "c"]);
-    expect(g.edges.map((e) => e.id)).toEqual(["e1", "e2", "e3"]);
-  });
-
-  it("hands back the same graph when it holds no curve", () => {
-    const g = { nodes: nodes.slice(0, 2), edges: edges.slice(0, 1) };
-    expect(withoutCurves(g)).toBe(g);
   });
 });

@@ -53,10 +53,10 @@ most of their constants):
 
 | Module | Role |
 |---|---|
-| `assembly.ts` | `foldAssemblies(drawn, built, open)`: a closed box replaces its members (one knob per promoted param, bound `asm:<Name>`); an open box becomes a titled frame. |
-| `stackLayout.ts` | The stack view: one column per lane, edge to edge, no dagre. |
-| `rowSeams.ts` | Where a glued row offers its `+`, and the branch (stack) button in a chain project. |
-| `gridFit.ts` | Folds a card's widget grid to a maximum number of rows or columns. |
+| `assembly.rs` (Rust) | `buildGraph(drawn, opts, open)` folds the assemblies: a closed box replaces its members (one knob per promoted param, bound `asm:<Name>`); an open box becomes a titled frame. |
+| `stackLayout.ts` (asks `stack_layout.rs`) | The stack view: one column per lane, edge to edge, no dagre. |
+| `rowSeams.ts` (asks `row_seams.rs`) | Where a glued row offers its `+`, and the branch (stack) button in a chain project. |
+| `grid_fit.rs` (Rust) | Folds a card's widget grid to a maximum number of rows or columns. |
 | `anchorRight.ts` | Lifts a row's trailing mixer card out so the host can pin it to the pane's edge. |
 | `curvePlacement.ts` | Puts a curve card left of the node it drives. |
 | `cables.ts` | Cable drawing geometry: smoothing, arc-length resampling, the insert `+` midpoint. |

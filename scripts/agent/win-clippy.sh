@@ -28,7 +28,7 @@ fi
 [ -z "$crates" ] || (cd "$root/apps/k7-daw-backend" && cargo clippy "${win[@]}" $crates -- -D warnings)
 [ "$desktop" = 0 ] || (cd "$root/apps/k7-daw-desktop/src-tauri" && PATH="$bin:$PATH" cargo clippy "${win[@]}" -- -D warnings)
 [[ " $areas " == *" browser "* ]] || { echo "win-clippy: clean (no browser crate touched)"; exit 0; }
-for crate in apps/k7-daw-wasm/song-schema apps/k7-daw-wasm/gesture apps/k7-daw-wasm/k7-wasm apps/k7-daw-wasm/song; do
+for crate in apps/k7-daw-wasm/song-schema apps/k7-daw-wasm/chains apps/k7-daw-wasm/gesture apps/k7-daw-wasm/k7-wasm apps/k7-daw-wasm/song; do
   (cd "$root/$crate" && cargo clippy "${win[@]}" --features ts -- -D warnings)
 done
 (cd "$root/apps/k7-daw-wasm/k7x" && cargo clippy "${win[@]}" -- -D warnings)

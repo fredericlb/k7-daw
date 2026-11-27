@@ -8,6 +8,7 @@ use gesture::ruler::RulerTick;
 use gesture::tools::{FadePair, ToolAct};
 use k7_wasm::WasmError;
 use k7_wasm::ops::VersionAnswer;
+use k7_wasm::ops::chains::{ChainsRequest, Kept};
 use k7_wasm::ops::curve::{CurveRequest, OpenAnswer};
 use k7_wasm::ops::engine::{BestAnswer, EngineRequest, WarningAnswer};
 use k7_wasm::ops::eyes::{CubeAnswer, EyesRequest};
@@ -112,6 +113,18 @@ fn write_types(dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
     Compatibility::export_all_to(dir)?;
     EngineLatency::export_all_to(dir)?;
     WarningAnswer::export_all_to(dir)?;
+    ChainsRequest::export_all_to(dir)?;
+    Kept::export_all_to(dir)?;
+    k7_wasm::ops::chains::Built::export_all_to(dir)?;
+    k7_wasm::ops::chains::Size::export_all_to(dir)?;
+    chains::row_seams::SeamsAnswer::export_all_to(dir)?;
+    chains::stack_layout::StackAnswer::export_all_to(dir)?;
+    chains::module_row::Spaced::export_all_to(dir)?;
+    chains::node::EdgeInsert::export_all_to(dir)?;
+    chains::bindings::ResolvedMapping::export_all_to(dir)?;
+    chains::subgraph::KeptChain::export_all_to(dir)?;
+    chains::curve_placement::Moved::export_all_to(dir)?;
+    chains::flow::NodeFlow::export_all_to(dir)?;
     #[cfg(feature = "verbs")]
     export_ui(dir)?;
     EyesRequest::export_all_to(dir)?;

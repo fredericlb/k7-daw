@@ -3,8 +3,8 @@
 // is keyed by; `@studio/song` accepts any key and this is the list that is actually drawn.
 // See ../../docs/mastering.md.
 
+import { unmappedControls as unmapped } from "@studio/k7-wasm/chains";
 import type { MixView } from "@studio/song-schema/yaml/mixViewSchema";
-import { unmappedControls as unmapped } from "@studio/ui-chains/bindings";
 import { m } from "../paraglide/messages.js";
 
 /** The three appliances inside one quick-master node, in the order the signal meets them. */

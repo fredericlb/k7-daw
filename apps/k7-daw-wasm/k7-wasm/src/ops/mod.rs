@@ -2,6 +2,7 @@
 // A reader would get wrong that one enum lists every op: each family declares its own, so a new family touches one match arm here.
 // A second reader mistake: an answer is the operation's value itself; only an error has a wrapper, and the status says which.
 
+pub mod chains;
 pub mod curve;
 pub mod engine;
 pub mod eyes;
@@ -94,6 +95,7 @@ impl Session {
             "engine" => engine::dispatch(decode(input)?, out),
             "text" if op == "text.hash" => engine::dispatch(decode(input)?, out),
             "text" => text::dispatch(decode(input)?, out),
+            "widget" | "flow" | "lane" | "bindings" | "place" | "graph" => chains::dispatch(decode(input)?, out),
             "schema" => schema::dispatch(decode(input)?, out),
             "timecode" => timecode::dispatch(decode(input)?, out),
             "fields" => fields::dispatch(decode(input)?, out),

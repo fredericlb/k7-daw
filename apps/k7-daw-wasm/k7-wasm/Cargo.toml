@@ -16,7 +16,7 @@ path = "src/bin/bindings/main.rs"
 required-features = ["ts"]
 
 [features]
-ts = ["dep:ts-rs", "song-schema/ts", "song/ts", "gesture/ts", "eyes/ts", "verbs?/ts"]
+ts = ["dep:ts-rs", "song-schema/ts", "song/ts", "chains/ts", "gesture/ts", "eyes/ts", "verbs?/ts"]
 # The verbs over a native host's file system, and the verb.catalogue op: built into no browser module (docs/verbs-port.md).
 verbs = ["dep:verbs"]
 
@@ -27,6 +27,8 @@ song = { path = "../song", default-features = false }
 k7x = { path = "../k7x" }
 eyes = { path = "../eyes" }
 song-edit = { path = "../song-edit" }
+chains = { path = "../chains" }
+indexmap = { version = "2", features = ["serde"] }
 verbs = { path = "../verbs", optional = true }
 serde = { version = "1", features = ["derive"] }
 serde_json = { version = "1", features = ["float_roundtrip"] }

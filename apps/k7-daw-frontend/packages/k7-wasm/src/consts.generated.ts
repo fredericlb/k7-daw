@@ -240,6 +240,90 @@ export const OUTPUT_VOLUME_PARAM = "@output-volume";
 /** The range both levels take, in dB. */
 export const VOLUME_RANGE = { min: -60.0, max: 12.0, def: 0.0 } as const;
 
+/** The plain size of a card and the narrowest one may be, in graph units. */
+export const NODE_W = 160.0;
+
+/** node h */
+export const NODE_H = 70.0;
+
+/** node min w */
+export const NODE_MIN_W = 72.0;
+
+/** A grid cell, and the air around the grid, in graph units. */
+export const CELL = 36.0;
+
+/** ui pad */
+export const UI_PAD = 6.0;
+
+/** ui header */
+export const UI_HEADER = 38.0;
+
+/** ui top gap */
+export const UI_TOP_GAP = 4.0;
+
+/** ui content top */
+export const UI_CONTENT_TOP = 42.0;
+
+/** ui edge */
+export const UI_EDGE = 12.0;
+
+/** row gap */
+export const ROW_GAP = 8.0;
+
+/** col gap */
+export const COL_GAP = 6.0;
+
+/** A tabbed card's tab column, and a narrow card's tab menu. */
+export const TAB_COL_W = 66.0;
+
+/** tab h */
+export const TAB_H = 20.0;
+
+/** tab menu h */
+export const TAB_MENU_H = 26.0;
+
+/** tab col max rows */
+export const TAB_COL_MAX_ROWS = 4.0;
+
+/** The bottom bar a module card carries. */
+export const FOOTER_H = 20.0;
+
+/** How many clips a lane card lists before it counts the rest. */
+export const CLIP_LIST_MAX = 6;
+
+/** A pad's footprint in cells, and an octave's pads across and up. */
+export const TAP_COLS = 2.0;
+
+/** tap rows */
+export const TAP_ROWS = 2.0;
+
+/** pads across */
+export const PADS_ACROSS = 4.0;
+
+/** pads up */
+export const PADS_UP = 3.0;
+
+/** The main output, as a chain's `out.to` spells it. */
+export const MAIN_OUT = "OUT";
+
+/** The mixer's sum. */
+export const MIX_OUT = "MIX";
+
+/** The picture's sum and its device. */
+export const RENDER_OUT = "RENDER";
+
+/** VIDEO_OUT */
+export const VIDEO_OUT = "VIDEO_OUT";
+
+/** The bind prefix a project setting carries. */
+export const PROJECT_BIND = "@project:";
+
+/** The intrinsic a camera's dropdown writes. */
+export const CAMERA_BIND = "@camera";
+
+/** The intrinsic a MIDI device's dropdown writes. */
+export const DEVICE_BIND = "@device";
+
 /** A rack's first pad note: C1, General MIDI's kick. */
 export const RACK_FIRST_NOTE = 36;
 

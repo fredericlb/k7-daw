@@ -3,8 +3,8 @@
 // validates the SHAPE of a mapping and deliberately not its ids.
 // See apps/k7-daw-frontend/packages/song/docs/surfaces.md.
 
+import { unmappedControls as unmapped } from "@studio/k7-wasm/chains";
 import type { MixView } from "@studio/song-schema/yaml/mixViewSchema";
-import { unmappedControls as unmapped } from "@studio/ui-chains/bindings";
 import { type MixControl, mixControls } from "./controls";
 import { DECKS } from "./deckVocabulary";
 

@@ -241,6 +241,9 @@ The speakers play: the transport spec sounds through the Mac's default output.
 An agent never runs `e2e-macos.sh` itself: `scripts/agent/bed.sh` runs it from the branch's worktree, and the script
 waits for a free bed slot. It takes the macOS script's parameters as environment (`E2E_SUITE`, `E2E_FILTER`, `K7_BED_SOUND`), run from
 the branch's worktree. The front runs one mode, every piece native: a bed names no switch.
+`E2E_FILTER` names spec FILES, space-separated (`"editing features"`), not a pattern. A worktree with no
+`node_modules` of its own is linked first (`worktree-init`): without it `@studio/*` resolves into the main checkout,
+whose files the bed's Vite refuses to serve, and the page fails on its WebAssembly module with nothing pointing there.
 
 ```bash
 E2E_SUITE=conformance E2E_FILTER="serviceFiles" bash scripts/agent/bed.sh

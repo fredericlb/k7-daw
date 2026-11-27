@@ -4,12 +4,12 @@
 // See docs/shell.md.
 
 import type { PluginParamsStore } from "@studio/engine-browser/params";
+import type { GridFit } from "@studio/k7-wasm/types";
 import { DockStatus } from "@studio/ui/editor-dock";
 import { splitTrailingMixer } from "@studio/ui-chains/anchorRight";
 import type { EdgeInsert, TrackControlValues } from "@studio/ui-chains/graph";
 import { moduleRow, trackInputs, trackModules } from "@studio/ui-chains/graph";
-import type { GridFit } from "@studio/ui-chains/gridFit";
-import { rowExit, rowSeams } from "@studio/ui-chains/rowSeams";
+import { rowSeams } from "@studio/ui-chains/rowSeams";
 import {
   DomChains,
   type NodeEngines,
@@ -323,7 +323,7 @@ export function TrackModulesPane({
     if (!laidShown || !graph) return null;
     const row = split?.row ?? laidShown;
     // A branch on each seam only where it can make a subchain: `stacks` is there exactly in a chain project.
-    return rowSeams(row, rowExit(laidShown, row, graph), !!graph.stacks);
+    return rowSeams(laidShown, row, graph, !!graph.stacks);
   }, [laidShown, split, graph]);
 
   // The History panel's hover, as the per-card test DomChains reads — above the early returns, like every hook.

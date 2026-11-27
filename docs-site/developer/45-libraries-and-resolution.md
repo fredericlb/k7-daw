@@ -102,7 +102,7 @@ reaches the engine as a values-only diff.
 | Template schema (`label`, `inputs`, `outputs`, `params`) and instance record (`uses`, `members`) | `apps/k7-daw-wasm/song/src/assemblies/file.rs`, and the promoted-param writer `apps/k7-daw-wasm/song-edit/src/assembly_param.rs` |
 | Resolution to `GraphDoc.assemblies` | `apps/k7-daw-wasm/song/src/assemblies/mod.rs` |
 | `assembly new`, `delete`, `dissolve`, member renames | `apps/k7-daw-wasm/song-edit/src/assembly_edit.rs` |
-| Drawing | `apps/k7-daw-frontend/packages/ui-chains/src/assembly.ts` (`foldAssemblies`) |
+| Drawing | `apps/k7-daw-wasm/chains/src/assembly.rs` (`fold_assemblies`) |
 | Template editor | `apps/k7-daw-frontend/packages/ui-module-builder/src/AssemblyBuilder.tsx` |
 
 A template is a folder under a library's `assemblies/` holding `assembly.k7x` beside an
