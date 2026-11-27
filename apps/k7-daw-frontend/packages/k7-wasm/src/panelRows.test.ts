@@ -15,9 +15,9 @@ describe("the footer a folder gets", () => {
       "@mix",
       "@output-volume",
     ]);
-    expect(stageFor("_libraries/x/_modules/instruments/s/module.k7x", null)).toEqual([
-      "@output-volume",
-    ]);
+    expect(
+      stageFor("_libraries/x/_modules/instruments/s/module.k7x", null),
+    ).toEqual(["@output-volume"]);
     expect(stageFor("modules/audio/d/module.k7x", "in")).toEqual([]);
     expect(stageFor("modules/audiox/d/module.k7x", null)).toEqual([]);
   });
@@ -50,10 +50,20 @@ describe("the rows", () => {
     });
     const by = Object.fromEntries(rows.map((r) => [r.name, r]));
     expect(rows.map((r) => r.name).filter((n) => n === "Time")).toHaveLength(1);
-    expect(by.Time).toMatchObject({ bound: true, value: "0.5", meta: { min: 0, max: 2 } });
+    expect(by.Time).toMatchObject({
+      bound: true,
+      value: "0.5",
+      meta: { min: 0, max: 2 },
+    });
     expect(by.Wobble.meta).toEqual({ min: 0, max: 1 });
     // The footer an effect has, and a lane's intrinsics, are offered too.
-    for (const n of ["@mix", "@input-volume", "@output-volume", "@pan", "@mute"])
+    for (const n of [
+      "@mix",
+      "@input-volume",
+      "@output-volume",
+      "@pan",
+      "@mute",
+    ])
       expect(by[n]).toBeDefined();
     expect(by["@mix"].meta).toEqual({ min: 0, max: 1, def: 1 });
     // The built-in the file names knows its own params without any engine.
@@ -75,7 +85,10 @@ describe("the rows", () => {
     });
     const monitor = rows.find((r) => r.name === "@monitor");
     expect(monitor?.value).toBe("auto");
-    expect(rows.find((r) => r.name === "@gain")?.meta).toEqual({ min: -24, max: 24 });
+    expect(rows.find((r) => r.name === "@gain")?.meta).toEqual({
+      min: -24,
+      max: 24,
+    });
     expect(rows.find((r) => r.name === "@mix")).toBeUndefined();
   });
 });
