@@ -4,7 +4,6 @@
 // button that brings it up to level. Same waveform, same place, one view of one clip.
 
 import { arrayEq, useEngineState } from "@studio/engine-browser/store";
-import { DEFAULT_TRIM_DB, trimWindow } from "@studio/k7-wasm/media";
 import {
   anchorBars,
   barBeat,
@@ -15,6 +14,7 @@ import {
   warpLine,
   zoomBars,
 } from "@studio/k7-wasm/gesture";
+import { DEFAULT_TRIM_DB, trimWindow } from "@studio/k7-wasm/media";
 import { projectApi } from "@studio/project-shell/project";
 import { Button } from "@studio/ui/button";
 import { DockHeaderRow, DockHint, DockStatus } from "@studio/ui/editor-dock";
