@@ -69,8 +69,8 @@ async function pickOnCable(
 
   // Enter on the focused `+` is what a keyboard does, and needs no pointer on a cable drawn in SVG.
   const plus = cablePlus(page, "MIX", "OUT");
-  const picker = page.getByRole("menu", { name: "Modules", exact: true });
-  const search = picker.getByRole("searchbox", { name: "Search modules" });
+  const picker = page.getByRole("dialog", { name: "Modules", exact: true });
+  const search = picker.getByRole("combobox", { name: "Search modules" });
   // Before the module catalogue lands the `+` pre-writes the command instead (apps/k7-daw-frontend/src/shell/useGraphActions.ts): put it away and press again.
   await expect(async () => {
     await closeCommandBar(page);
@@ -80,7 +80,7 @@ async function pickOnCable(
   }).toPass({ timeout: 30_000 });
   await search.fill(EFFECT);
   await picker
-    .getByRole("menuitem", { name: EFFECT, exact: true })
+    .getByRole("option", { name: EFFECT, exact: true })
     .first()
     .click();
 
@@ -172,12 +172,12 @@ test("a factory preset from the node's dropdown switches the Surge node's base, 
   const dropdown = canvas(page).getByRole("button", { name: /^preset(: |$)/ });
   await zoomOnto(page, synth, dropdown);
   await dropdown.click();
-  const shelf = page.getByRole("menu", { name: "Presets", exact: true });
+  const shelf = page.getByRole("dialog", { name: "Presets", exact: true });
   await expect(
-    shelf.getByRole("searchbox", { name: "Search presets" }),
+    shelf.getByRole("combobox", { name: "Search presets" }),
   ).toBeVisible();
   await shelf
-    .getByRole("menuitem", { name: "Basses - Bass 2", exact: true })
+    .getByRole("option", { name: "Basses - Bass 2", exact: true })
     .click();
 
   const after = await expectFile(page, WS, SYNTH_NODE, (t) =>

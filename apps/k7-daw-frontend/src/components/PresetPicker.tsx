@@ -3,7 +3,7 @@
 // workspace or a library, and UPDATE the one last loaded — and, for a module with several engines, a
 // left bar to pick the ENGINE. Every action is a verb the caller runs. See apps/k7-daw-frontend/packages/song/docs/userPresets.md.
 
-import { fuzzyScore } from "@studio/k7-wasm/ui";
+import { fuzzyScores } from "@studio/k7-wasm/ui";
 import {
   type NodePresets,
   PRESET_NAME,
@@ -37,8 +37,12 @@ function searchPresets(
 ): TreeNode<PresetEntry>[] {
   const q = query.trim();
   if (!q) return [];
+  const scores = fuzzyScores(
+    q,
+    presets.map((p) => p.name),
+  );
   return presets
-    .map((p) => ({ p, score: fuzzyScore(q, p.name) }))
+    .map((p, i) => ({ p, score: scores[i] ?? -1 }))
     .filter((s) => s.score > 0)
     .sort((a, b) => b.score - a.score || byPeople(a.p.name, b.p.name))
     .slice(0, SEARCH_LIMIT)
