@@ -27,8 +27,8 @@ use crate::space::Declined;
 use crate::tree::Limits;
 
 /// The workspace the bench lives in and its one project (`BENCH_WORKSPACE`, `BENCH_PROJECT`).
-pub const WORKSPACE: &str = "Banc";
-pub const PROJECT: &str = "live.k7";
+pub const WORKSPACE: &str = song_schema::address::BENCH_WORKSPACE;
+pub const PROJECT: &str = song_schema::address::BENCH_PROJECT;
 
 /// The bench workspace's folder and the rig's folder in it.
 #[must_use]

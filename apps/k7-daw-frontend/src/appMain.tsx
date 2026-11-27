@@ -98,23 +98,26 @@ function dressPage(scope: Scope): void {
         : projectLabel(scope.at.project.split("/").pop() ?? "")
       : PAGE_TITLE;
 }
-dressPage(scopeOf(window.location.pathname, BASE));
+// The address is read by the Rust module, so what reads it waits for the module's compile to settle.
+wasmReady().finally(() => {
+  dressPage(scopeOf(window.location.pathname, BASE));
 
-/** …and the first screen's files start arriving now, while AuthGate asks who you are, not once it has its answer (docs/shell.md). */
-const first = scopeOf(window.location.pathname, BASE).kind;
-// A failure here is the lazy screen's to report when it asks again, not an unhandled rejection.
-if (first === "home") loadHomeRoutes().catch(() => {});
-else if (first === "project") {
-  loadEngineGate().catch(() => {});
-  // The editor is the longest download of any start: begun here, not once ProjectGate mounts after the sign-in check.
-  loadApp().catch(() => {});
-}
-// The file hub's hello needs the cookie, which /auth/me hands over: it asks once that answered (`@studio/engine-browser/access`).
-if (first === "home" || first === "project")
-  void api.getMe().then(
-    () => engines.hostedFiles(),
-    () => {},
-  );
+  /** …and the first screen's files start arriving now, while AuthGate asks who you are, not once it has its answer (docs/shell.md). */
+  const first = scopeOf(window.location.pathname, BASE).kind;
+  // A failure here is the lazy screen's to report when it asks again, not an unhandled rejection.
+  if (first === "home") loadHomeRoutes().catch(() => {});
+  else if (first === "project") {
+    loadEngineGate().catch(() => {});
+    // The editor is the longest download of any start: begun here, not once ProjectGate mounts after the sign-in check.
+    loadApp().catch(() => {});
+  }
+  // The file hub's hello needs the cookie, which /auth/me hands over: it asks once that answered (`@studio/engine-browser/access`).
+  if (first === "home" || first === "project")
+    void api.getMe().then(
+      () => engines.hostedFiles(),
+      () => {},
+    );
+});
 
 /** …and the worker that makes either an installable app — a SECOND opening, not offline; its scope is `/`, and each deploy replaces it (@studio/vite-config/register). */
 // Not in an app's view: its files are already on the machine, and the precache would serve the previous release's page after an update (docs/localApp.md).

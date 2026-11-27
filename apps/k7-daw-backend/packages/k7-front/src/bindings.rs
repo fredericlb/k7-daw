@@ -9,10 +9,68 @@ use ts_rs::TS;
 type Exports = fn(&Path) -> Result<(), ts_rs::ExportError>;
 
 /// A package and the roots whose types land in its `generated/` folder, each export walking its own dependencies.
-const PACKAGES: &[(&str, Exports)] = &[("graph-model", graph_model)];
+const PACKAGES: &[(&str, Exports)] =
+    &[("graph-model", graph_model), ("web-protocol", web_protocol)];
 
 fn graph_model(dir: &Path) -> Result<(), ts_rs::ExportError> {
     song::graph::view::web::WebGraph::export_all_to(dir)
+}
+
+/// Biome's order for two names: by letter, a capital before its lowercase where only the case differs.
+fn biome_order(a: &str, b: &str) -> std::cmp::Ordering {
+    for (x, y) in a.chars().zip(b.chars()) {
+        if x == y {
+            continue;
+        }
+        let (lx, ly) = (
+            x.to_lowercase().next().unwrap_or(x),
+            y.to_lowercase().next().unwrap_or(y),
+        );
+        return if lx == ly {
+            x.is_lowercase().cmp(&y.is_lowercase())
+        } else {
+            lx.cmp(&ly)
+        };
+    }
+    a.len().cmp(&b.len())
+}
+
+fn web_protocol(dir: &Path) -> Result<(), ts_rs::ExportError> {
+    use k7_file_service::wire as w;
+    use k7_front::camera_wire as c;
+    use song::views::catalogue::CatalogueModule;
+    use song::views::hints::Hints;
+    use song::views::io_ports::IoPort;
+    CatalogueModule::export_all_to(dir)?;
+    Hints::export_all_to(dir)?;
+    IoPort::export_all_to(dir)?;
+    c::CameraFrame::export_all_to(dir)?;
+    c::CameraTicket::export_all_to(dir)?;
+    c::RemoteCamera::export_all_to(dir)?;
+    w::FileNode::export_all_to(dir)?;
+    w::ForkedModule::export_all_to(dir)?;
+    w::ModuleUiFile::export_all_to(dir)?;
+    w::WorkspaceInfo::export_all_to(dir)?;
+    w::FileContent::export_all_to(dir)?;
+    w::HistoryState::export_all_to(dir)?;
+    w::HistoryListEntry::export_all_to(dir)?;
+    w::UndoResult::export_all_to(dir)?;
+    w::ProjectInfo::export_all_to(dir)?;
+    w::ModelDownloadJob::export_all_to(dir)?;
+    w::AccountLibrariesReply::export_all_to(dir)?;
+    w::ColdChainsReply::export_all_to(dir)?;
+    w::FrozenChain::export_all_to(dir)?;
+    w::LiveChain::export_all_to(dir)?;
+    w::WebPreferences::export_all_to(dir)?;
+    w::WorkspaceList::export_all_to(dir)?;
+    w::AccountWorkspaceList::export_all_to(dir)?;
+    w::SurfacedProjectList::export_all_to(dir)?;
+    w::ServedProjectReply::export_all_to(dir)?;
+    w::StemsReply::export_all_to(dir)?;
+    w::ModuleLibrary::export_all_to(dir)?;
+    w::PlaylistInfo::export_all_to(dir)?;
+    w::ProjectResource::export_all_to(dir)?;
+    Ok(())
 }
 
 fn write_package(
@@ -29,7 +87,7 @@ fn write_package(
     let mut names = fs::read_dir(&dir)?
         .map(|e| e.map(|e| e.file_name().to_string_lossy().into_owned()))
         .collect::<Result<Vec<_>, io::Error>>()?;
-    names.sort();
+    names.sort_by(|a, b| biome_order(a, b));
     let index: String = names
         .iter()
         .filter_map(|n| n.strip_suffix(".ts"))

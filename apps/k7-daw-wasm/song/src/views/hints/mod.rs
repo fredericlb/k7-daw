@@ -90,9 +90,9 @@ pub struct Hints {
     pub module_assets: IndexMap<String, Vec<String>>,
     #[cfg_attr(feature = "ts", ts(type = "Record<string, string[]>"))]
     pub params_by_base: IndexMap<String, Vec<String>>,
-    #[cfg_attr(feature = "ts", ts(type = "Record<string, Record<string, ParamRange>>"))]
+    #[cfg_attr(feature = "ts", ts(as = "crate::rec::Rec<crate::rec::Rec<ParamRange>>"))]
     pub param_meta_by_base: IndexMap<String, IndexMap<String, ParamRange>>,
-    #[cfg_attr(feature = "ts", ts(type = "Record<string, RackHint>"))]
+    #[cfg_attr(feature = "ts", ts(as = "crate::rec::Rec<RackHint>"))]
     pub racks: IndexMap<String, RackHint>,
     pub keywords: Vec<String>,
     #[cfg_attr(feature = "ts", ts(type = "Record<string, string[]>"))]

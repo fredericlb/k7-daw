@@ -12,84 +12,24 @@ export const CAMERAS_WS_PATH = "/api/cameras/ws";
 /** What a camera node's label starts with when it names a remote camera rather than a local lens. */
 export const REMOTE_CAMERA_PREFIX = "remote:";
 
-/** One camera of the account, as `GET /api/cameras` lists it; the hub names, orders and matches them (`k7-front`'s cameras). */
-export interface RemoteCamera {
-  name: string;
-  /** Epoch ms it came on. */
-  since: number;
-}
+import type { CameraFrame } from "./generated";
 
-/** The ticket route's answer: the socket's key, and the ICE servers this server was told to hand out. */
-export interface CameraTicket {
-  ticket: string;
-  iceServers: RTCIceServerLike[];
-}
-
-/** `RTCIceServer`, declared structurally so the backend needs no DOM types. */
-export interface RTCIceServerLike {
-  urls: string | string[];
-  username?: string;
-  credential?: string;
-}
-
-/** The hub to a camera, once: the name it is listed under, made unique within the account. */
-export interface CameraHello {
-  type: "hello";
-  name: string;
-}
-/** A viewer asking for a camera by label; the hub adds `from` on the way to the camera. */
-export interface CameraWant {
-  type: "want";
-  label: string;
-  from?: string;
-}
-export interface CameraOffer {
-  type: "offer";
-  sdp: { type: string; sdp?: string };
-  to?: string;
-  /** Why the camera a viewer gets is not the one it named — set by the hub, read by the viewer. */
-  problem?: string | null;
-}
-export interface CameraAnswer {
-  type: "answer";
-  sdp: { type: string; sdp?: string };
-  from?: string;
-}
-export interface CameraIce {
-  type: "ice";
-  candidate: {
-    candidate?: string;
-    sdpMid?: string | null;
-    sdpMLineIndex?: number | null;
-  };
-  to?: string;
-  from?: string;
-}
-export interface CameraProblem {
-  type: "problem";
-  text: string;
-  to?: string;
-}
-/** A viewer left: the camera drops its peer connection. */
-export interface CameraGone {
-  type: "gone";
-  from: string;
-}
-/** How many viewers a camera is serving, sent to it whenever that changes. */
-export interface CameraViewers {
-  type: "viewers";
-  count: number;
-}
-
-export type CameraFrame =
-  | CameraHello
-  | CameraWant
-  | CameraOffer
-  | CameraAnswer
-  | CameraIce
-  | CameraProblem
-  | CameraGone
-  | CameraViewers;
+export type {
+  CameraFrame,
+  CameraTicket,
+  IceCandidate,
+  RemoteCamera,
+  RTCIceServerLike,
+  SessionDescription,
+} from "./generated";
+export type CameraHello = Extract<CameraFrame, { type: "hello" }>;
+export type CameraWant = Extract<CameraFrame, { type: "want" }>;
+export type CameraOffer = Extract<CameraFrame, { type: "offer" }>;
+export type CameraAnswer = Extract<CameraFrame, { type: "answer" }>;
+export type CameraIce = Extract<CameraFrame, { type: "ice" }>;
+export type CameraProblem = Extract<CameraFrame, { type: "problem" }>;
+export type CameraGone = Extract<CameraFrame, { type: "gone" }>;
+export type CameraViewers = Extract<CameraFrame, { type: "viewers" }>;
 
 /** Read a frame, or null for anything that is not one. */
 export function readCameraFrame(data: unknown): CameraFrame | null {
