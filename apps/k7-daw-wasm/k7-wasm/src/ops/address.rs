@@ -142,7 +142,6 @@ pub fn dispatch(request: AddressRequest, out: &mut Vec<u8>) -> Result<(), WasmEr
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use crate::ops::Session;
 
     #[test]
