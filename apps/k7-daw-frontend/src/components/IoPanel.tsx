@@ -130,7 +130,7 @@ function Tuner({
       <span
         className={cn(
           "type-mono-value w-9 shrink-0 text-right",
-          inTune ? "text-ok" : "text-foreground",
+          inTune ? "text-ok" : "text-fg-1",
         )}
       >
         {note.name}
@@ -180,7 +180,7 @@ function PortRow({
   return (
     <div className="flex flex-col gap-1.5 px-3.5 py-2.5">
       <div className="flex items-center gap-3">
-        <span className="type-mono-value min-w-0 flex-1 truncate text-foreground">
+        <span className="type-mono-value min-w-0 flex-1 truncate text-fg-1">
           {name}
         </span>
         <span className="type-status shrink-0 text-fg-3">{detail}</span>

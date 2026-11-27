@@ -25,7 +25,7 @@ const WHEN_LABEL: Record<DraftWhen, () => string> = {
 };
 
 const FIELD = "flex items-center gap-3";
-const LABEL = "w-24 shrink-0 text-xs text-muted-foreground";
+const LABEL = "w-24 shrink-0 text-xs text-fg-2";
 
 export function CurveConditions({
   conditions,
@@ -40,10 +40,10 @@ export function CurveConditions({
   const patch = (i: number, p: Partial<DraftCondition>) =>
     onChange(conditions.map((c, j) => (j === i ? { ...c, ...p } : c)));
   return (
-    <div className="flex flex-col gap-2 rounded border border-border p-2">
+    <div className="flex flex-col gap-2 rounded border border-hairline p-2">
       <div className={FIELD}>
         <span className={LABEL}>{m["curve.conditions"]()}</span>
-        <span className="flex-1 text-xs text-muted-foreground">
+        <span className="flex-1 text-xs text-fg-2">
           {conditions.length
             ? m["curve.conditionsAny"]()
             : m["curve.conditionsNone"]()}
@@ -93,7 +93,7 @@ function ConditionRow({
       ? m["curve.noEvent"]()
       : null);
   return (
-    <div className="flex flex-col gap-2 border-t border-border pt-2">
+    <div className="flex flex-col gap-2 border-t border-hairline pt-2">
       <div className={FIELD}>
         <SelectField
           size="sm"
@@ -179,9 +179,7 @@ function ConditionRow({
           checked={c.retrigger}
           onChange={(e) => onPatch({ retrigger: e.target.checked })}
         />
-        <span className="text-xs text-muted-foreground">
-          {m["curve.retriggerHint"]()}
-        </span>
+        <span className="text-xs text-fg-2">{m["curve.retriggerHint"]()}</span>
       </label>
       {problem && <p className="text-xs text-red-500">{problem}</p>}
     </div>

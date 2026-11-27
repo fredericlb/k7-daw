@@ -38,9 +38,7 @@ export function DockProperty({
         )}
       >
         <span className="text-fg-2">{name}:</span>
-        <span className="type-mono-value text-foreground tabular-nums">
-          {value}
-        </span>
+        <span className="type-mono-value text-fg-1 tabular-nums">{value}</span>
       </PopoverPrimitive.Trigger>
       <PopoverPrimitive.Portal>
         <PopoverPrimitive.Content
@@ -49,7 +47,7 @@ export function DockProperty({
           sideOffset={8}
           aria-label={name}
           data-slot="dock-property-bubble"
-          className="menu z-(--k7-z-menu) flex min-w-16 flex-col items-center gap-2 rounded-(--k7-r-menu) p-3 text-popover-foreground outline-hidden data-[state=open]:animate-[k7-menu-in_var(--k7-dur-menu)_var(--k7-ease-spring)]"
+          className="menu z-(--k7-z-menu) flex min-w-16 flex-col items-center gap-2 rounded-(--k7-r-menu) p-3 text-fg-1 outline-hidden data-[state=open]:animate-[k7-menu-in_var(--k7-dur-menu)_var(--k7-ease-spring)]"
         >
           {children}
         </PopoverPrimitive.Content>

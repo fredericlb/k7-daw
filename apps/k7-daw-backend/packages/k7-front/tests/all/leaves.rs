@@ -169,21 +169,3 @@ async fn ai_settings_keep_the_key_and_show_only_its_hint() {
     .await;
     assert_eq!(s, 400);
 }
-
-#[tokio::test]
-async fn the_removed_organize_route_ends_in_the_last_routes() {
-    let f = front("ai-declined", &[]).await;
-    let c = cookie();
-    let (s, _, _) = call(
-        f.addr,
-        "POST",
-        "/api/ai/organize",
-        &[c.clone(), json_type()],
-        "{}",
-    )
-    .await;
-    assert_eq!(
-        s, 404,
-        "the whole-conversation route is no longer the front's"
-    );
-}

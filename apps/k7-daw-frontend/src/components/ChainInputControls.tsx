@@ -99,7 +99,7 @@ export function ChainInputMenu({
       trigger={
         <>
           <span className="text-fg-2">{m["chain.input"]()}:</span>
-          <span className="type-mono-value text-foreground">{current}</span>
+          <span className="type-mono-value text-fg-1">{current}</span>
         </>
       }
     />

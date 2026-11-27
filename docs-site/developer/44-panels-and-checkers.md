@@ -6,16 +6,16 @@ Panels page of the user guide.
 
 ## The format
 
-The reader is `Ui` in `apps/k7-daw-wasm/song/src/modules/ui.rs`, reached as `validatePanel` from `@studio/k7-wasm/validate`
+The reader is `Ui` in `apps/k7-daw-wasm/song/src/modules/ui/mod.rs`, reached as `validatePanel` from `@studio/k7-wasm/validate`
 (strict: an unknown key is an error). `WIDGET_TYPES` lists the fourteen widget kinds. The rules
 that cross widgets live elsewhere:
 
 | Rule | Where |
 |---|---|
 | Tab names 1 to 10 characters, unique; `vertical.tabs` match `tabs` by name and order | the schema |
-| Horizontal layout at most 4 rows; `vertical` at most 4 columns, required past 4 columns; both layouts offer the same binds per page | `twinIssues`, `apps/k7-daw-frontend/packages/panel-rules/src/layoutTwins.ts` |
-| In bounds, no overlap except a group framing a widget | `gridIssues`, same file, and `apps/k7-daw-frontend/packages/panel-rules/src/groupGeometry.ts` |
-| No knob, slider, fader or number on an `@` parameter; EQ bands as faders; no lone group | `atControlIssues`, `eqBandIssues`, `loneGroupIssues` in `apps/k7-daw-frontend/packages/panel-rules/src/aiOrganize.ts` |
+| Horizontal layout at most 4 rows; `vertical` at most 4 columns, required past 4 columns; both layouts offer the same binds per page | `twin_issues`, `apps/k7-daw-wasm/song/src/modules/ui/geometry.rs` |
+| In bounds, no overlap except a group framing a widget | `grid_issues` and `clash`, same file |
+| No knob, slider, fader or number on an `@` parameter; EQ bands as faders; no lone group | `at_control_issues`, `eq_band_issues`, `lone_group_issues` in `apps/k7-daw-wasm/song/src/modules/ui/ai_check.rs` |
 
 Panels inherited through `extends` merge their top-level `widgets` per id
 (`apps/k7-daw-wasm/song/src/resolve/extends.rs`); widgets marked `hidden` are dropped when the panel is
@@ -90,11 +90,11 @@ library panels, and after an AI organize run over many modules.
 ## Adding a widget kind
 
 1. Add it to `WIDGET_TYPES` and its fields to the widget in
-   `apps/k7-daw-wasm/song/src/modules/ui.rs`; `WebWidget` in
+   `apps/k7-daw-wasm/song/src/modules/ui/mod.rs`; `WebWidget` in
    `apps/k7-daw-frontend/packages/graph-model/generated/WebWidget.ts` follows from it.
 2. Draw it in `apps/k7-daw-frontend/packages/ui-chains-react/src/DomChains.tsx` and size it if needed in
    `apps/k7-daw-frontend/packages/ui-chains/src/graph.ts`.
 3. Offer it in the builder: `apps/k7-daw-frontend/packages/ui-module-builder/src/widgetKinds.ts` and the inspector's
    fields in `apps/k7-daw-frontend/packages/ui-module-builder/src/WidgetInspector.tsx`.
-4. Describe it in `WIDGET_DOCS` in `apps/k7-daw-frontend/packages/panel-rules/src/aiPrompt.ts`, so AI organize
-   knows it, and extend `checkAiResult` if it has rules.
+4. Describe it in `WIDGET_DOCS` in `apps/k7-daw-wasm/song/src/modules/ui/ai_prompt.rs`, so AI organize
+   knows it, and extend `check_ai_result` if it has rules.

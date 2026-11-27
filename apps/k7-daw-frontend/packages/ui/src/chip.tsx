@@ -10,11 +10,11 @@ const chipVariants = cva(
     variants: {
       variant: {
         anchor:
-          "type-mono-value h-[30px] rounded-[15px] border border-(--k7-hairline-strong) bg-(--k7-row) px-3 text-foreground",
+          "type-mono-value h-[30px] rounded-[15px] border border-(--k7-hairline-strong) bg-(--k7-row) px-3 text-fg-1",
         version:
-          "type-secondary h-[30px] rounded-[15px] border border-(--k7-hairline-strong) px-3 font-bold text-foreground",
+          "type-secondary h-[30px] rounded-[15px] border border-(--k7-hairline-strong) px-3 font-bold text-fg-1",
         filter:
-          "type-secondary h-8 cursor-pointer rounded-2xl glass px-3.5 font-bold text-foreground hover:brightness-125 aria-pressed:bg-on-fill aria-pressed:text-lavender aria-pressed:shadow-(--k7-highlight)",
+          "type-secondary h-8 cursor-pointer rounded-2xl glass px-3.5 font-bold text-fg-1 hover:brightness-125 aria-pressed:bg-on-fill aria-pressed:text-lavender aria-pressed:shadow-(--k7-highlight)",
         status:
           "type-badge h-6 rounded-xl border px-2.5 uppercase tracking-wide",
       },
@@ -61,7 +61,7 @@ export function Chip({
       "border-dashed border-(--k7-warn-line) bg-(--k7-warn-fill) text-warn",
     variant === "version" &&
       newest &&
-      "border-transparent bg-primary text-primary-foreground shadow-(--k7-highlight)",
+      "border-transparent bg-primary text-on-accent shadow-(--k7-highlight)",
     className,
   );
   if (variant === "filter")

@@ -129,7 +129,7 @@ export function MetronomeTempo({
             onKeyDown={(e) => e.key === "Enter" && commitMeter()}
             className="h-8 w-14 tabular-nums"
           />
-          <span className="text-muted-foreground">/</span>
+          <span className="text-fg-2">/</span>
           <SelectField
             size="sm"
             value={String(recInfo.beatUnit)}

@@ -39,7 +39,7 @@ export function LaneAlternative({
         "shrink-0 rounded-sm px-1 font-mono text-[11px] leading-none",
         away
           ? "bg-amber-400/20 text-amber-400 hover:bg-amber-400/30"
-          : "bg-muted/50 text-muted-foreground hover:bg-accent hover:text-foreground",
+          : "bg-row/50 text-fg-2 hover:bg-row hover:text-fg-1",
       )}
     >
       {current}

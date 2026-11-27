@@ -14,16 +14,16 @@ import { tags as t } from "@lezer/highlight";
 
 // The colours are the editor's own CSS variables, shared with the rest of the app.
 const yamlHighlight = HighlightStyle.define([
-  { tag: t.comment, color: "var(--sh-muted-foreground)", fontStyle: "italic" },
-  { tag: t.string, color: "var(--sh-green)" },
-  { tag: t.number, color: "var(--sh-amber)" },
-  { tag: t.bool, color: "var(--sh-amber)" },
-  { tag: t.null, color: "var(--sh-amber)" },
+  { tag: t.comment, color: "var(--k7-text-2)", fontStyle: "italic" },
+  { tag: t.string, color: "var(--k7-ok)" },
+  { tag: t.number, color: "var(--k7-warn)" },
+  { tag: t.bool, color: "var(--k7-warn)" },
+  { tag: t.null, color: "var(--k7-warn)" },
   // A mapping key is what you read a project file for — it gets the accent.
-  { tag: t.definition(t.propertyName), color: "var(--sh-primary)" },
-  { tag: t.propertyName, color: "var(--sh-primary)" },
-  { tag: t.punctuation, color: "var(--sh-muted-foreground)" },
-  { tag: t.meta, color: "var(--sh-muted-foreground)" },
+  { tag: t.definition(t.propertyName), color: "var(--k7-accent)" },
+  { tag: t.propertyName, color: "var(--k7-accent)" },
+  { tag: t.punctuation, color: "var(--k7-text-2)" },
+  { tag: t.meta, color: "var(--k7-text-2)" },
 ]);
 
 /** The language support for a project file. */

@@ -202,13 +202,13 @@ export function PlaylistEditor({
   return (
     <div
       className={cn(
-        "flex h-full min-h-0 flex-col text-foreground",
+        "flex h-full min-h-0 flex-col text-fg-1",
         // In the panel the glass shows through; only the full-screen editor brings its own ground.
-        !panel && "bg-background",
+        !panel && "bg-ground",
       )}
     >
       {panel ? null : (
-        <header className="flex items-center gap-3 border-b border-border px-3 py-2">
+        <header className="flex items-center gap-3 border-b border-hairline px-3 py-2">
           <Button variant="secondary" size="sm" onClick={onBack}>
             <ArrowLeft className="mr-1 h-4 w-4" /> Retour
           </Button>
@@ -216,16 +216,14 @@ export function PlaylistEditor({
             <div className="flex items-center gap-2 truncate text-sm font-semibold">
               <ListMusic className="h-4 w-4" /> Playlist · {name}
             </div>
-            <div className="truncate font-mono text-xs text-muted-foreground">
-              {path}
-            </div>
+            <div className="truncate font-mono text-xs text-fg-2">{path}</div>
           </div>
           {/* In place of a Save button: silent while saved, amber with the reason otherwise, in EditorTab's own two words. */}
           <span
             className={`ml-auto flex min-w-0 shrink-0 items-center gap-1 text-xs ${
               autosave.status === "held" || autosave.status === "error"
                 ? "text-amber-500"
-                : "text-muted-foreground"
+                : "text-fg-2"
             }`}
             title={autosave.reason ?? undefined}
           >
@@ -238,14 +236,14 @@ export function PlaylistEditor({
       )}
 
       {content == null ? (
-        <div className="flex flex-1 items-center justify-center text-sm text-muted-foreground">
+        <div className="flex flex-1 items-center justify-center text-sm text-fg-2">
           <Loading label={m["common.loading"]()} />
         </div>
       ) : (
         <div className="flex min-h-0 flex-1 flex-col md:flex-row">
           {/* Side by side when there is room, STACKED otherwise, and absent in the panel, where neither half fits — see `panel`. */}
           {panel ? null : (
-            <div className="h-1/2 min-h-0 shrink-0 border-b border-border md:h-auto md:w-1/2 md:border-r md:border-b-0">
+            <div className="h-1/2 min-h-0 shrink-0 border-b border-hairline md:h-auto md:w-1/2 md:border-r md:border-b-0">
               <YamlPane
                 path={path}
                 content={content}
@@ -273,7 +271,7 @@ export function PlaylistEditor({
         </div>
       )}
 
-      <footer className="flex shrink-0 items-center gap-3 border-t px-3 py-1 text-xs text-muted-foreground">
+      <footer className="flex shrink-0 items-center gap-3 border-t px-3 py-1 text-xs text-fg-2">
         {/* Said here and not over the list: text stops parsing on nearly every keystroke, and a pane emptying itself each time would flicker. */}
         {broken ? (
           <span className="text-error">{m["pls.brokenYaml"]()}</span>

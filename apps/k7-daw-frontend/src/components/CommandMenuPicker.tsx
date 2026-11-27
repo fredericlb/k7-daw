@@ -78,7 +78,7 @@ export function MenuEntityPicker({
           title={m["cmdMenu.buttonHint"]()}
           className={cn(
             "h-9 w-24 shrink-0 cursor-pointer truncate rounded-xl border border-(--k7-hairline-strong) px-2 type-secondary",
-            chosen ? "text-foreground" : "text-fg-2",
+            chosen ? "text-fg-1" : "text-fg-2",
           )}
         >
           {summary}

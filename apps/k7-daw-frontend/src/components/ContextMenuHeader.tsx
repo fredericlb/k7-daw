@@ -88,7 +88,7 @@ export function ContextMenuHeader({
   return (
     // With no title and no tabs, only a touch screen has something to show here: its close button.
     <div
-      className={`sticky top-0 z-10 -mt-1 mb-1 border-border border-b bg-popover ${
+      className={`sticky top-0 z-10 -mt-1 mb-1 border-hairline border-b bg-menu ${
         !target && tabs.length < 2 ? "hidden [@media(hover:none)]:block" : ""
       }`}
     >
@@ -98,9 +98,7 @@ export function ContextMenuHeader({
       >
         {target && (
           <span className="min-w-0 flex-1 truncate text-xs">
-            <span className="text-muted-foreground">
-              {NOUNS[target.entity]()}
-            </span>{" "}
+            <span className="text-fg-2">{NOUNS[target.entity]()}</span>{" "}
             <span className="font-medium">{target.name}</span>
           </span>
         )}
@@ -110,7 +108,7 @@ export function ContextMenuHeader({
           aria-label={m["menu.close"]()}
           title={m["menu.close"]()}
           onClick={onClose}
-          className="ml-auto hidden size-7 shrink-0 items-center justify-center rounded-sm text-muted-foreground hover:bg-accent [@media(hover:none)]:flex [@media(hover:none)]:size-11"
+          className="ml-auto hidden size-7 shrink-0 items-center justify-center rounded-sm text-fg-2 hover:bg-row [@media(hover:none)]:flex [@media(hover:none)]:size-11"
         >
           <X className="h-4 w-4" />
         </button>
@@ -138,8 +136,8 @@ export function ContextMenuHeader({
                 onClick={() => onTab(i)}
                 className={`flex h-7 min-w-8 items-center justify-center gap-1 rounded-t-sm px-2 text-xs ${
                   active
-                    ? "bg-accent text-accent-foreground"
-                    : "text-muted-foreground hover:bg-accent/50 hover:text-foreground"
+                    ? "bg-row text-fg-1"
+                    : "text-fg-2 hover:bg-row/50 hover:text-fg-1"
                 }`}
               >
                 <Icon className="h-4 w-4 shrink-0" />

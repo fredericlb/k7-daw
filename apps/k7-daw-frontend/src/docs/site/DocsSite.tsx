@@ -69,8 +69,8 @@ export function DocsSite({ homeUrl }: { homeUrl: string }) {
   }, [address]);
 
   return (
-    <div className="flex h-dvh flex-col bg-background text-foreground">
-      <header className="flex shrink-0 items-center gap-1 overflow-x-auto border-b border-border px-3 py-2">
+    <div className="flex h-dvh flex-col bg-ground text-fg-1">
+      <header className="flex shrink-0 items-center gap-1 overflow-x-auto border-b border-hairline px-3 py-2">
         <a href={hrefOf("/")} className="mr-3 shrink-0 text-sm font-semibold">
           k7 docs
         </a>
@@ -80,10 +80,8 @@ export function DocsSite({ homeUrl }: { homeUrl: string }) {
             href={hrefOf(`/${g.guide}`)}
             aria-current={page?.guide === g.guide ? "true" : undefined}
             className={[
-              "shrink-0 rounded px-2 py-1 text-xs hover:bg-accent hover:text-foreground",
-              page?.guide === g.guide
-                ? "bg-accent text-foreground"
-                : "text-muted-foreground",
+              "shrink-0 rounded px-2 py-1 text-xs hover:bg-row hover:text-fg-1",
+              page?.guide === g.guide ? "bg-row text-fg-1" : "text-fg-2",
             ].join(" ")}
           >
             {g.label}
@@ -100,12 +98,12 @@ export function DocsSite({ homeUrl }: { homeUrl: string }) {
         {nav.length > 0 && (
           <nav
             aria-label={GUIDES.find((g) => g.guide === page?.guide)?.label}
-            className="hidden w-64 shrink-0 flex-col gap-3 overflow-y-auto border-r border-border bg-card/40 p-2 md:flex"
+            className="hidden w-64 shrink-0 flex-col gap-3 overflow-y-auto border-r border-hairline bg-panel/40 p-2 md:flex"
           >
             {nav.map((group) => (
               <div key={group.label} className="flex flex-col">
                 {group.label && (
-                  <div className="px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-foreground/70">
+                  <div className="px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-fg-1/70">
                     {group.label}
                   </div>
                 )}
@@ -117,10 +115,10 @@ export function DocsSite({ homeUrl }: { homeUrl: string }) {
                       item.route === page?.route ? "page" : undefined
                     }
                     className={[
-                      "rounded px-2 py-1 pl-3 text-xs hover:bg-accent hover:text-foreground",
+                      "rounded px-2 py-1 pl-3 text-xs hover:bg-row hover:text-fg-1",
                       item.route === page?.route
-                        ? "bg-accent text-foreground"
-                        : "text-muted-foreground",
+                        ? "bg-row text-fg-1"
+                        : "text-fg-2",
                     ].join(" ")}
                   >
                     {item.label}
@@ -148,11 +146,11 @@ function Page({ page }: { page: SitePage }) {
       <h1 className="mb-4 text-2xl font-semibold">{page.title}</h1>
       <SiteMarkdown file={page.file} body={page.body} />
       {(prev || next) && (
-        <footer className="mt-12 flex gap-3 border-t border-border pt-4 text-sm">
+        <footer className="mt-12 flex gap-3 border-t border-hairline pt-4 text-sm">
           {prev && (
             <a
               href={hrefOf(prev.route)}
-              className="flex items-center gap-1 text-muted-foreground hover:text-foreground"
+              className="flex items-center gap-1 text-fg-2 hover:text-fg-1"
             >
               <ArrowLeft className="h-4 w-4" /> {prev.title}
             </a>
@@ -160,7 +158,7 @@ function Page({ page }: { page: SitePage }) {
           {next && (
             <a
               href={hrefOf(next.route)}
-              className="ml-auto flex items-center gap-1 text-right text-muted-foreground hover:text-foreground"
+              className="ml-auto flex items-center gap-1 text-right text-fg-2 hover:text-fg-1"
             >
               {next.title} <ArrowRight className="h-4 w-4" />
             </a>
@@ -177,7 +175,7 @@ function NotFound({ path }: { path: string }) {
       <h1 className="mb-4 text-2xl font-semibold">
         {m["docs.notFoundTitle"]()}
       </h1>
-      <p className="text-sm text-muted-foreground">
+      <p className="text-sm text-fg-2">
         {m["docs.notFoundBody"]({ path })}{" "}
         <a href={hrefOf("/")} className="underline decoration-dotted">
           {m["docs.notFoundHome"]()}

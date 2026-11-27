@@ -59,11 +59,11 @@ export function BarBody({
       className={
         row
           ? "flex min-w-0 flex-col gap-1 font-normal text-xs"
-          : "flex shrink-0 flex-col gap-1 border-b bg-muted/40 px-3 py-1 text-xs"
+          : "flex shrink-0 flex-col gap-1 border-b bg-row/40 px-3 py-1 text-xs"
       }
     >
       <div className="flex flex-wrap items-center gap-2">
-        <GitBranch className="h-3.5 w-3.5 text-muted-foreground" />
+        <GitBranch className="h-3.5 w-3.5 text-fg-2" />
         <span
           className={row ? "shrink-0" : "min-w-0 flex-1 truncate"}
           title={v.remote ? remoteName(v.remote) : undefined}
@@ -75,21 +75,21 @@ export function BarBody({
               : m["git.headlineLocal"]({ branch: v.branch })}
         </span>
         {v.toPull > 0 && (
-          <span className="tabular-nums text-muted-foreground">
+          <span className="tabular-nums text-fg-2">
             {(v.toPull === 1 ? m["git.toPull.one"] : m["git.toPull.other"])({
               n: v.toPull,
             })}
           </span>
         )}
         {v.toPush > 0 && (
-          <span className="tabular-nums text-muted-foreground">
+          <span className="tabular-nums text-fg-2">
             {(v.toPush === 1 ? m["git.toPush.one"] : m["git.toPush.other"])({
               n: v.toPush,
             })}
           </span>
         )}
         {v.changed > 0 && v.merge === null && (
-          <span className="tabular-nums text-muted-foreground">
+          <span className="tabular-nums text-fg-2">
             {(v.changed === 1 ? m["git.changed.one"] : m["git.changed.other"])({
               n: v.changed,
             })}
@@ -130,7 +130,7 @@ export function BarBody({
           </Button>
         )}
       </div>
-      {said && <p className="text-muted-foreground">{said}</p>}
+      {said && <p className="text-fg-2">{said}</p>}
       {v.fetchError && !failure && (
         <p className="text-error">
           {m["git.fetchFailed"]({ error: v.fetchError })}

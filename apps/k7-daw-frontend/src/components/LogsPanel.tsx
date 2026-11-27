@@ -29,7 +29,7 @@ export interface LogLine {
 }
 
 const KIND_CLASS: Record<LogLine["kind"], string> = {
-  cmd: "text-foreground",
+  cmd: "text-fg-1",
   engine: "text-fg-2",
   file: "text-fg-2",
   info: "text-fg-2",

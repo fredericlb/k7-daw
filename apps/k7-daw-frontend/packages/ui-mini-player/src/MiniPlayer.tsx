@@ -155,7 +155,7 @@ export function MiniPlayer({
     <section
       role="group"
       aria-label={labels.region}
-      className={`relative flex h-10 shrink-0 items-center gap-1.5 bg-card px-3 py-1 sm:gap-3 [@media(hover:none)]:h-[60px]${onClose ? ` [@media(hover:none)]:pr-12${trail || endShown ? " pr-9" : ""}` : ""}`}
+      className={`relative flex h-10 shrink-0 items-center gap-1.5 bg-panel px-3 py-1 sm:gap-3 [@media(hover:none)]:h-[60px]${onClose ? ` [@media(hover:none)]:pr-12${trail || endShown ? " pr-9" : ""}` : ""}`}
     >
       {/* Under everything, in its own layer: the row's own boxes are positioned, so the wave stays behind them. */}
       <MiniPlayerWave level={level} />
@@ -191,7 +191,7 @@ export function MiniPlayer({
             {titled && (
               <div className="flex min-w-0 max-w-[50%] shrink items-baseline gap-2">
                 {Icon && (
-                  <Icon className="h-3.5 w-3.5 shrink-0 self-center text-muted-foreground" />
+                  <Icon className="h-3.5 w-3.5 shrink-0 self-center text-fg-2" />
                 )}
                 <span className="min-w-0 truncate font-medium text-sm">
                   {title}
@@ -207,7 +207,7 @@ export function MiniPlayer({
               </div>
             ) : (
               <div className="flex min-w-0 flex-1 items-center gap-2">
-                <span className="w-10 shrink-0 text-right font-mono text-[11px] text-muted-foreground tabular-nums">
+                <span className="w-10 shrink-0 text-right font-mono text-[11px] text-fg-2 tabular-nums">
                   {clock(shown)}
                 </span>
                 {/* The track is drawn thin behind a taller range, so a finger finds it without the bar growing. */}
@@ -217,7 +217,7 @@ export function MiniPlayer({
                     className="pointer-events-none absolute inset-x-0 h-1 rounded"
                     style={{
                       // The design system's tokens are whole colours; the rest of the track is the muted text, faded.
-                      background: `linear-gradient(to right, var(--color-foreground) ${pct}%, color-mix(in oklab, var(--color-muted-foreground) 35%, transparent) ${pct}%)`,
+                      background: `linear-gradient(to right, var(--k7-text) ${pct}%, color-mix(in oklab, var(--k7-text-2) 35%, transparent) ${pct}%)`,
                     }}
                   />
                   {/* A range and not a div: dragging, the keyboard and the accessible name come with it. */}
@@ -236,10 +236,10 @@ export function MiniPlayer({
                     onKeyUp={scrub.commit}
                     onBlur={scrub.commit}
                     aria-label={labels.position}
-                    className="relative h-full w-full min-w-0 cursor-pointer appearance-none bg-transparent accent-foreground"
+                    className="relative h-full w-full min-w-0 cursor-pointer appearance-none bg-transparent accent-fg-1"
                   />
                 </div>
-                <span className="w-10 shrink-0 font-mono text-[11px] text-muted-foreground tabular-nums">
+                <span className="w-10 shrink-0 font-mono text-[11px] text-fg-2 tabular-nums">
                   {clock(duration)}
                 </span>
               </div>

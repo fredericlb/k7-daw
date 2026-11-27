@@ -587,7 +587,7 @@ export function PianoRoll({
 
   return (
     // min-w-0, as in the timeline: the fixed-width grid must not become this flex child's minimum.
-    <div className="flex h-full min-h-0 min-w-0 flex-col border-t-2 border-border">
+    <div className="flex h-full min-h-0 min-w-0 flex-col border-t-2 border-hairline">
       {/* Pad and Desk draw the tools in the dock's header; the phone sheet keeps them as the body's first row. */}
       {/* The first control: Fit centres the timeline on this clip (`ui fit` says so when the roll shows a file nothing places). */}
       <DockFitButton command={onCommand} />
@@ -656,14 +656,14 @@ export function PianoRoll({
             style={{ width: gutter + laneW, height: rulersH + gridH }}
           >
             {/* ONE ruler, sticky: the song's positions when the clip is placed, else the file's own bars. */}
-            <div className="sticky top-0 z-20 bg-background text-[11px] text-muted-foreground">
+            <div className="sticky top-0 z-20 bg-ground text-[11px] text-fg-2">
               <div className="flex" style={{ height: RULER_H }}>
                 <div
-                  className="sticky left-0 z-10 shrink-0 border-b border-r border-border bg-background"
+                  className="sticky left-0 z-10 shrink-0 border-b border-r border-hairline bg-ground"
                   style={{ width: gutter }}
                 />
                 <div
-                  className="relative overflow-hidden border-b border-border"
+                  className="relative overflow-hidden border-b border-hairline"
                   style={{ width: laneW }}
                 >
                   {placed ? (
@@ -736,14 +736,14 @@ export function PianoRoll({
                 {KEYS.filter(isBlack).map((k) => (
                   <div
                     key={`b${k}`}
-                    className="absolute left-0 right-0 bg-muted/15"
+                    className="absolute left-0 right-0 bg-row/15"
                     style={{ top: keyTop(k), height: rowH }}
                   />
                 ))}
                 {KEYS.filter((k) => pc(k) === 0).map((k) => (
                   <div
                     key={`o${k}`}
-                    className="absolute left-0 right-0 border-t border-border/30"
+                    className="absolute left-0 right-0 border-t border-hairline/30"
                     style={{ top: keyTop(k) }}
                   />
                 ))}

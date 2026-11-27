@@ -50,12 +50,12 @@ function ReaderCard({
   }, [reader.sourceFrom]);
 
   return (
-    <div className="flex w-64 shrink-0 flex-col gap-1 rounded-md border border-border bg-card/60 p-2">
+    <div className="flex w-64 shrink-0 flex-col gap-1 rounded-md border border-hairline bg-panel/60 p-2">
       <div className="flex items-center justify-between text-xs">
         <span className="truncate font-mono font-semibold" title={reader.ref}>
           {reader.ref}
         </span>
-        <span className="font-mono text-muted-foreground">{fmtTc(t)}</span>
+        <span className="font-mono text-fg-2">{fmtTc(t)}</span>
       </div>
       <video
         ref={ref}
@@ -76,7 +76,7 @@ function ReaderCard({
           }
         }}
       />
-      <div className="flex items-center gap-1 text-[11px] text-muted-foreground">
+      <div className="flex items-center gap-1 text-[11px] text-fg-2">
         <span className="font-mono">
           from {fmtTc(reader.sourceFrom)}
           {reader.length > 0
@@ -123,11 +123,11 @@ export function VideoReadersStrip({
   if (!readers.length) return null;
   return (
     <div className="flex h-full flex-col">
-      <div className="flex shrink-0 items-center justify-between border-b border-border px-2 py-1 text-xs text-muted-foreground">
+      <div className="flex shrink-0 items-center justify-between border-b border-hairline px-2 py-1 text-xs text-fg-2">
         <span>{m["video.readersHeader"]()}</span>
         <button
           type="button"
-          className="rounded px-1 text-muted-foreground hover:text-foreground"
+          className="rounded px-1 text-fg-2 hover:text-fg-1"
           onClick={onClose}
           title={m["video.hideReaders"]()}
         >

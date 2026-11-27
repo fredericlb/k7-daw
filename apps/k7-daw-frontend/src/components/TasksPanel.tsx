@@ -86,13 +86,13 @@ export function TasksPanel({
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      <p className="shrink-0 pb-2 font-mono text-[11px] text-muted-foreground">
+      <p className="shrink-0 pb-2 font-mono text-[11px] text-fg-2">
         {TASKS_FILE}
         {open > 0 ? ` · ${m["tasks.openCount"]({ n: open })}` : ""}
       </p>
 
       <form
-        className="flex flex-col gap-1.5 border-b border-border px-3 py-2"
+        className="flex flex-col gap-1.5 border-b border-hairline px-3 py-2"
         onSubmit={(e) => {
           e.preventDefault();
           void add();
@@ -131,7 +131,7 @@ export function TasksPanel({
       <div className="min-h-0 flex-1 overflow-auto px-1 py-1">
         {error && <p className="px-2 py-1 text-error text-xs">{error}</p>}
         {shown?.length === 0 && (
-          <p className="px-2 py-4 text-center text-xs text-muted-foreground">
+          <p className="px-2 py-4 text-center text-xs text-fg-2">
             {m["tasks.empty"]()}
           </p>
         )}
@@ -141,7 +141,7 @@ export function TasksPanel({
           return (
             <div
               key={`${t.line}:${t.text}`}
-              className="group flex items-start gap-2 rounded px-2 py-1.5 hover:bg-muted/50"
+              className="group flex items-start gap-2 rounded px-2 py-1.5 hover:bg-row/50"
             >
               {/* A 44px hit area round the 20px box. */}
               <span className="-m-2 flex size-11 shrink-0 items-center justify-center">
@@ -153,7 +153,7 @@ export function TasksPanel({
               </span>
               <div className="min-w-0 flex-1">
                 <div
-                  className={`break-words text-sm ${t.done ? "text-muted-foreground line-through" : ""}`}
+                  className={`break-words text-sm ${t.done ? "text-fg-2 line-through" : ""}`}
                 >
                   {t.text}
                 </div>

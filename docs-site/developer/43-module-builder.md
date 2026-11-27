@@ -60,15 +60,15 @@ project, a library module's parameters are best read from a project where its pl
 
 - `src/WidgetGridEditor.tsx`: the grid, the palette (`src/widgetKinds.ts`), drag, resize, drop
   binding, the right-click menu (`src/GridMenu.tsx`).
-- `apps/k7-daw-frontend/packages/panel-rules/src/groupGeometry.ts`: group membership is geometric (wholly inside the box), and the clash
+- `apps/k7-daw-wasm/song/src/modules/ui/geometry.rs`: group membership is geometric (wholly inside the box), and the clash
   rule.
 - `src/WidgetInspector.tsx`: per-type fields; `retype` drops fields the new type lacks.
-- `src/TabsColumn.tsx` and `src/panelTabs.ts`: tabs; one tab is never written.
-- `src/widgetClipboard.ts`: an in-memory clipboard for the session, groups copied with what they
+- `src/TabsColumn.tsx` and `apps/k7-daw-wasm/song/src/modules/ui/edit.rs`: tabs; one tab is never written.
+- `src/widgetClipboard.ts` holds the clip; `apps/k7-daw-wasm/song/src/modules/ui/edit.rs` cuts, copies and pastes: groups copied with what they
   frame, ids de-duplicated.
-- `apps/k7-daw-frontend/packages/panel-rules/src/layoutTwins.ts`: `LAYOUT_MAX = 4`; `twinIssues`, `gridIssues`, `reflowNarrow`,
-  `alignTabs`.
-- `src/autoLayout.ts`: Auto organize, local and deterministic: parameters sorted into families by
+- `apps/k7-daw-wasm/song/src/modules/ui/geometry.rs`: `LAYOUT_MAX = 4`; `twin_issues`, `grid_issues`, `reflow_narrow`,
+  `align_tabs`.
+- `apps/k7-daw-wasm/song/src/modules/ui/auto.rs`: Auto organize, local and deterministic: parameters sorted into families by
   name, one tab per family.
 
 ## AI organize
@@ -76,9 +76,9 @@ project, a library module's parameters are best read from a project where its pl
 | Piece | Where |
 |---|---|
 | Builder side | `src/useAiOrganize.ts` (dialogs, Reset/Update, Copy for Claude Code via `src/claudeCodePrompt.ts`) |
-| Request, prompt, checks | `apps/k7-daw-frontend/packages/panel-rules/src/aiOrganize.ts`, `apps/k7-daw-frontend/packages/panel-rules/src/aiPrompt.ts` (`checkAiResult`, `AI_RESULT_SCHEMA`) |
-| Loop | `apps/k7-daw-frontend/packages/panel-rules/src/aiLoop.ts`, run in the page: the request check, the prompts, the checks and the repair round |
-| Route | `apps/k7-daw-backend/packages/k7-front/src/routes/ai/turn.rs`, in k7's Rust front: `GET /api/ai/organize` says whether it is enabled and with which model, `POST /api/ai/organize/turn` makes one model turn |
+| Request, prompt, checks | `apps/k7-daw-wasm/song/src/modules/ui/ai_check.rs`, `apps/k7-daw-wasm/song/src/modules/ui/ai_prompt.rs` and `apps/k7-daw-wasm/song/src/modules/ui/ai_answer.rs` in the song crate (`check_ai_result`, `ai_result_schema`) |
+| Loop | `apps/k7-daw-backend/packages/k7-front/src/routes/ai/organize.rs`, on the host that holds the key: the request check, the prompts, the checks and the repair round |
+| Route | `apps/k7-daw-backend/packages/k7-front/src/routes/ai/turn.rs`, in k7's Rust front: `GET /api/ai/organize` says whether it is enabled and with which model, `POST /api/ai/organize` runs the conversation |
 | Settings | `apps/k7-daw-backend/packages/k7-front/src/routes/ai/mod.rs` (`GET`/`PUT /api/ai/settings`), `apps/k7-daw-frontend/src/settings/AiSection.tsx` |
 
 The front calls the Anthropic API with the account's own key (write-only: reads return a

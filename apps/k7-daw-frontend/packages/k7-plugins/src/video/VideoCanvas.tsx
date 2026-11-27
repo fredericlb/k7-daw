@@ -204,7 +204,7 @@ export function VideoCanvas({
       className="relative flex h-full w-full items-center justify-center overflow-hidden bg-black"
     >
       {failed ? (
-        <div className="max-w-sm p-4 text-center text-muted-foreground text-sm">
+        <div className="max-w-sm p-4 text-center text-fg-2 text-sm">
           {m["video.cannotDraw"]({ why: failed })}
         </div>
       ) : (

@@ -1,7 +1,7 @@
 // ShapeBar.tsx — the switch between a panel's two shapes, horizontal and its `vertical` twin, and
 // what the pair still breaks: the same check the library is held to. See docs/layouts.md.
 
-import { LAYOUT_MAX, twinIssues } from "@studio/panel-rules/layout-twins";
+import { LAYOUT_MAX, twinIssues } from "@studio/k7-wasm/panel";
 import type { ModuleUI } from "./moduleUi";
 
 /** The switch between the panel's two shapes, and what the pair still breaks — the same check the library is held to. */
@@ -25,16 +25,14 @@ export function ShapeBar({
       type="button"
       onClick={() => onShape(s)}
       className={`rounded px-2 py-0.5 text-xs ${
-        shape === s
-          ? "bg-accent text-accent-foreground"
-          : "text-muted-foreground hover:bg-accent/50"
+        shape === s ? "bg-row text-fg-1" : "text-fg-2 hover:bg-row/50"
       }`}
     >
       {label}
     </button>
   );
   return (
-    <div className="flex shrink-0 flex-col gap-1 border-b border-border px-2 py-1">
+    <div className="flex shrink-0 flex-col gap-1 border-b border-hairline px-2 py-1">
       <div className="flex items-center gap-1">
         {btn("horizontal", `Horizontal · ≤${LAYOUT_MAX} rows`)}
         {btn("vertical", `Vertical · ≤${LAYOUT_MAX} cols`)}
@@ -44,13 +42,13 @@ export function ShapeBar({
             type="button"
             disabled={disabled}
             onClick={onSeed}
-            className="ml-2 rounded border border-border px-2 py-0.5 text-xs hover:bg-accent disabled:opacity-50"
+            className="ml-2 rounded border border-hairline px-2 py-0.5 text-xs hover:bg-row disabled:opacity-50"
           >
             Create the vertical layout
           </button>
         )}
         {shape === "vertical" && fitsBoth && (
-          <span className="ml-2 text-muted-foreground text-xs">
+          <span className="ml-2 text-fg-2 text-xs">
             This panel is {LAYOUT_MAX} columns or fewer: it serves both shapes.
           </span>
         )}

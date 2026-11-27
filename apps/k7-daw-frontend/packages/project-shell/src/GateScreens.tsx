@@ -28,7 +28,7 @@ function GateCard({
   children: ReactNode;
 }) {
   return (
-    <div className="flex h-full items-center justify-center bg-background p-8 text-foreground">
+    <div className="flex h-full items-center justify-center bg-ground p-8 text-fg-1">
       <div
         className={`flex ${wide ? "w-full " : ""}max-w-md flex-col items-center gap-4 text-center`}
       >
@@ -202,7 +202,7 @@ export function GateSpinner({ label }: { label: string }) {
     <div
       role="status"
       aria-label={label}
-      className="flex h-full items-center justify-center bg-background text-fg-2"
+      className="flex h-full items-center justify-center bg-ground text-fg-2"
     >
       <Spinner inherit />
     </div>

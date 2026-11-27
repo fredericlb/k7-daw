@@ -2,8 +2,6 @@
 // it from the panel's widgets, removing back to one folds it away, and a name is ten characters at
 // most and never another tab's.
 
-import { describe, expect, it } from "vitest";
-import type { ModuleUI, Widget } from "./moduleUi";
 import {
   addTab,
   moveTab,
@@ -13,7 +11,9 @@ import {
   renameTab,
   widgetsAt,
   writeWidgetsAt,
-} from "./panelTabs";
+} from "@studio/k7-wasm/panel";
+import { describe, expect, it } from "vitest";
+import type { ModuleUI, Widget } from "./moduleUi";
 
 const knob = (col: number): Widget => ({
   type: "knob",
@@ -46,7 +46,7 @@ describe("which map the grid writes", () => {
     expect(Object.keys(widgetsAt(ui, 1))).toEqual(["f"]);
     const next = writeWidgetsAt(ui, 1, { g: knob(2) });
     expect(Object.keys(next.tabs?.[1].widgets ?? {})).toEqual(["g"]);
-    expect(next.tabs?.[0]).toBe(ui.tabs?.[0]);
+    expect(next.tabs?.[0]).toEqual(ui.tabs?.[0]);
     expect(writeWidgetsAt(ui, null, {}).widgets).toEqual({});
   });
 
@@ -83,8 +83,8 @@ describe("renaming and reordering", () => {
       "Oscillator",
     );
     const ui = tabbed();
-    expect(renameTab(ui, 0, "   ")).toBe(ui);
-    expect(renameTab(ui, 0, "Filter")).toBe(ui);
+    expect(renameTab(ui, 0, "   ")).toEqual(ui);
+    expect(renameTab(ui, 0, "Filter")).toEqual(ui);
   });
 
   it("moves a tab one place, and says where it went", () => {

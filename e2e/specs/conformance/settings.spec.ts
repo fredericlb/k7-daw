@@ -34,20 +34,20 @@ test("the AI settings answer the account only, and show its key as a hint", asyn
   expect(await same.json()).toEqual(view);
 });
 
-test("a model turn answers the account only, and is refused before Claude is asked", async ({
+test("an organize run answers the account only, and is refused before Claude is asked", async ({
   request,
   playwright,
 }) => {
   const anonymous = await playwright.request.newContext({ baseURL: base });
-  const turn = await anonymous.post("/api/ai/organize/turn", { data: {} });
+  const turn = await anonymous.post("/api/ai/organize", { data: {} });
   expect(turn.status()).toBe(401);
   await anonymous.dispose();
   const headers = cookieOf();
   const view = await (
     await request.get("/api/ai/settings", { headers })
   ).json();
-  // No key: nothing to spend. A key: a body that is no turn is refused before a request leaves.
-  const res = await request.post("/api/ai/organize/turn", {
+  // No key: nothing to spend. A key: a body that is no request is refused before a request leaves.
+  const res = await request.post("/api/ai/organize", {
     headers,
     data: {},
   });

@@ -48,19 +48,17 @@ export function ImportDialog({
           <DialogDescription>{m["import.body"]({ name })}</DialogDescription>
         </DialogHeader>
         {error && (
-          <code className="block max-w-full overflow-x-auto rounded bg-muted px-2 py-1 text-xs text-red-400">
+          <code className="block max-w-full overflow-x-auto rounded bg-row px-2 py-1 text-xs text-red-400">
             {error}
           </code>
         )}
         {done && (
-          <div className="max-h-60 overflow-y-auto rounded bg-muted px-2 py-1.5 font-mono text-xs">
+          <div className="max-h-60 overflow-y-auto rounded bg-row px-2 py-1.5 font-mono text-xs">
             {log.map((line, i) => (
               <div
                 key={i}
                 className={
-                  line.startsWith("warning:")
-                    ? "text-amber-500"
-                    : "text-muted-foreground"
+                  line.startsWith("warning:") ? "text-amber-500" : "text-fg-2"
                 }
               >
                 {line}

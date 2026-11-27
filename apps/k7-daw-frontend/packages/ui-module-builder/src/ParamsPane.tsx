@@ -63,13 +63,13 @@ export function ParamsPane({
 
   return (
     // A pane filling the column, with no border-t: nothing is above it to be separated from.
-    <div className="flex h-full min-h-0 flex-col bg-card/30">
-      <div className="flex shrink-0 items-center gap-2 border-b border-border px-2 py-1">
-        <SlidersHorizontal className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-        <span className="hidden text-[10px] text-muted-foreground sm:inline">
+    <div className="flex h-full min-h-0 flex-col bg-panel/30">
+      <div className="flex shrink-0 items-center gap-2 border-b border-hairline px-2 py-1">
+        <SlidersHorizontal className="h-3.5 w-3.5 shrink-0 text-fg-2" />
+        <span className="hidden text-[10px] text-fg-2 sm:inline">
           drag onto a widget, or onto empty grid
         </span>
-        <span className="text-xs text-muted-foreground">
+        <span className="text-xs text-fg-2">
           {needle ? `${shown.length}/${rows.length}` : rows.length}
         </span>
         <Input
@@ -140,13 +140,13 @@ export function ParamsPane({
         )}
       </div>
       {scanNote && (
-        <div className="shrink-0 border-b border-border px-2 py-1 text-[11px] text-muted-foreground">
+        <div className="shrink-0 border-b border-hairline px-2 py-1 text-[11px] text-fg-2">
           {scanNote}
         </div>
       )}
       <div className="min-h-0 flex-1 overflow-auto">
         {shown.length === 0 ? (
-          <div className="p-3 text-xs text-muted-foreground">
+          <div className="p-3 text-xs text-fg-2">
             {rows.length === 0
               ? onScan
                 ? "no parameters known — the project instantiates no plugin for this module. Ask the plugin itself with the button above."
@@ -171,11 +171,11 @@ export function ParamsPane({
               ]
                 .filter(Boolean)
                 .join("\n")}
-              className="flex cursor-grab items-baseline gap-2 px-2 py-0.5 font-mono text-xs odd:bg-muted/20 hover:bg-accent/40 active:cursor-grabbing"
+              className="flex cursor-grab items-baseline gap-2 px-2 py-0.5 font-mono text-xs odd:bg-row/20 hover:bg-row/40 active:cursor-grabbing"
             >
               {/* Dimmed when the file leaves the param at the plugin's own value. */}
               <span
-                className={`min-w-0 flex-1 truncate ${r.value === undefined ? "text-muted-foreground" : "text-foreground"}`}
+                className={`min-w-0 flex-1 truncate ${r.value === undefined ? "text-fg-2" : "text-fg-1"}`}
               >
                 {r.name}
               </span>
@@ -193,12 +193,12 @@ export function ParamsPane({
               {r.bound && (
                 <span
                   title="bound to a widget in the UI grid"
-                  className="shrink-0 text-[10px] uppercase tracking-wide text-muted-foreground"
+                  className="shrink-0 text-[10px] uppercase tracking-wide text-fg-2"
                 >
                   ui
                 </span>
               )}
-              <span className="shrink-0 tabular-nums text-muted-foreground">
+              <span className="shrink-0 tabular-nums text-fg-2">
                 {r.value === undefined ? "—" : shortValue(r.value)}
               </span>
             </div>

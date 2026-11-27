@@ -183,7 +183,7 @@ function Knob({
             cx="20"
             cy="20"
             r="15"
-            className="fill-muted stroke-border"
+            className="fill-row stroke-hairline"
             strokeWidth="1.5"
           />
           <line
@@ -191,7 +191,7 @@ function Knob({
             y1="3"
             x2="20"
             y2="6"
-            className="stroke-foreground/40"
+            className="stroke-fg-1/40"
             strokeWidth="1.5"
           />
           {/* The VALUE, as an arc from twelve o'clock, over a faint full travel — ../../docs/eq.md. */}
@@ -199,14 +199,14 @@ function Knob({
             d={`${arcPath(-SWEEP, 18)} ${arcPath(SWEEP, 18)}`}
             fill="none"
             strokeWidth="2"
-            className="stroke-border"
+            className="stroke-hairline"
           />
           <path
             d={arcPath(angle, 18)}
             fill="none"
             strokeWidth="2"
             strokeLinecap="butt"
-            className="stroke-foreground"
+            className="stroke-fg-1"
           />
           <line
             x1="20"
@@ -215,12 +215,12 @@ function Knob({
             y2="8"
             strokeWidth="2.5"
             strokeLinecap="round"
-            className={rest ? "stroke-foreground/60" : "stroke-foreground"}
+            className={rest ? "stroke-fg-1/60" : "stroke-fg-1"}
             transform={`rotate(${angle} 20 20)`}
           />
         </svg>
       </div>
-      <span className="flex items-center gap-[2px] font-mono text-[9px] text-muted-foreground leading-none">
+      <span className="flex items-center gap-[2px] font-mono text-[9px] text-fg-2 leading-none">
         {/* Sized to the LABEL's line so the block's height arithmetic is untouched — ../deskLayout.ts. */}
         {Icon ? (
           <Icon className="h-[9px] w-[9px] shrink-0" aria-hidden />
@@ -296,7 +296,7 @@ export function ChannelStrip({
         onChange={onTrim}
         disabled={!trimLive}
       />
-      <div className="h-px w-8 shrink-0 bg-border" />
+      <div className="h-px w-8 shrink-0 bg-hairline" />
       {EQ_BANDS.map((b) => (
         <Knob
           key={b.id}
@@ -313,7 +313,7 @@ export function ChannelStrip({
         />
       ))}
       {/* A rule, because the filter is not a fourth band but a different instrument on the same strip. */}
-      <div className="h-px w-8 shrink-0 bg-border" />
+      <div className="h-px w-8 shrink-0 bg-hairline" />
       <Knob
         label={m["strip.filter"]()}
         icon={Filter}
@@ -330,7 +330,7 @@ export function ChannelStrip({
           set, so there is nothing here to go and fix. Same rule as the stems — ../../docs/fx.md. */}
       {echoLive ? (
         <>
-          <div className="h-px w-8 shrink-0 bg-border" />
+          <div className="h-px w-8 shrink-0 bg-hairline" />
           <Knob
             label={m["strip.echo"]()}
             icon={Repeat}

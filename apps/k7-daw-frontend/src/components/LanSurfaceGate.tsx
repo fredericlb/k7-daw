@@ -91,7 +91,7 @@ export function LanSurfaceGate({ lan }: { lan: LanSurface }) {
   if (state.k === "loading") return <GateWait label={m["startup.opening"]()} />;
   if (state.k === "closed" || state.k === "gone")
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-3 bg-background p-6 text-center text-foreground">
+      <div className="flex h-full flex-col items-center justify-center gap-3 bg-ground p-6 text-center text-fg-1">
         <Unplug className="size-8 text-fg-3" aria-hidden="true" />
         <p className="max-w-sm text-sm">
           {state.k === "closed"

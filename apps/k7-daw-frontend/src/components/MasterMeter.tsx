@@ -187,7 +187,7 @@ export function MasterMeter({
     <div className={cn("flex items-center gap-1.5", className)}>
       {/* ONE lane: the meter is the fader's track, and the handle rides on the reading it sets (docs/masterMeter.md). */}
       <div className="relative h-1.5 w-24" title={reading}>
-        <div className="absolute inset-0 overflow-hidden rounded-full bg-foreground/15">
+        <div className="absolute inset-0 overflow-hidden rounded-full bg-fg-1/15">
           {/* SCALED from the left, not resized, and with no transition: a 20 Hz value lands, it does not chase (docs/meters.md). */}
           <div
             className={cn(
@@ -203,7 +203,7 @@ export function MasterMeter({
               className={cn(
                 "absolute inset-0 border-l-2",
                 meterZone(markDb) === "ok"
-                  ? "border-foreground/80"
+                  ? "border-fg-1/80"
                   : meterZone(markDb) === "hot"
                     ? "border-meter-hot"
                     : "border-meter-clip",
@@ -218,7 +218,7 @@ export function MasterMeter({
         {fader && (
           <span
             aria-hidden="true"
-            className="-translate-x-1/2 -translate-y-1/2 absolute top-1/2 h-2.5 w-px bg-foreground/40"
+            className="-translate-x-1/2 -translate-y-1/2 absolute top-1/2 h-2.5 w-px bg-fg-1/40"
             style={{ left: UNITY_LEFT }}
           />
         )}
@@ -240,9 +240,9 @@ export function MasterMeter({
             // A HANDLE and no track of its own, through per-browser pseudo-elements since there is no standard one — both written, or Firefox draws none.
             className={cn(
               "absolute inset-0 h-full w-full cursor-pointer appearance-none rounded-full bg-transparent",
-              "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
-              "[&::-webkit-slider-thumb]:h-2.5 [&::-webkit-slider-thumb]:w-1 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-[1px] [&::-webkit-slider-thumb]:bg-foreground [&::-webkit-slider-thumb]:shadow-[0_0_0_1px] [&::-webkit-slider-thumb]:shadow-background",
-              "[&::-moz-range-thumb]:h-2.5 [&::-moz-range-thumb]:w-1 [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-[1px] [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-foreground [&::-moz-range-thumb]:shadow-[0_0_0_1px] [&::-moz-range-thumb]:shadow-background",
+              "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus",
+              "[&::-webkit-slider-thumb]:h-2.5 [&::-webkit-slider-thumb]:w-1 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-[1px] [&::-webkit-slider-thumb]:bg-fg-1 [&::-webkit-slider-thumb]:shadow-[0_0_0_1px] [&::-webkit-slider-thumb]:shadow-ground",
+              "[&::-moz-range-thumb]:h-2.5 [&::-moz-range-thumb]:w-1 [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-[1px] [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-fg-1 [&::-moz-range-thumb]:shadow-[0_0_0_1px] [&::-moz-range-thumb]:shadow-ground",
             )}
           />
         )}
@@ -256,7 +256,7 @@ export function MasterMeter({
           // Lit is a larger square, unlit a small round dot: the shape says it as the colour does.
           clipped
             ? "h-2 w-2 rounded-[1px] bg-meter-clip shadow-[0_0_4px_1px] shadow-meter-clip/60"
-            : "h-1.5 w-1.5 rounded-full bg-foreground/20",
+            : "h-1.5 w-1.5 rounded-full bg-fg-1/20",
         )}
       />
       {/* …and unlike the light this one comes and goes: it is an offer to act, not a reading to be checked (docs/masterMeter.md). */}
@@ -275,7 +275,7 @@ export function MasterMeter({
       )}
       {/* The number, tabular so the row does not shuffle as the digits change under a drag. */}
       {fader && (
-        <span className="w-8 shrink-0 text-right font-mono text-[11px] text-muted-foreground tabular-nums">
+        <span className="w-8 shrink-0 text-right font-mono text-[11px] text-fg-2 tabular-nums">
           {level > 0 ? "+" : ""}
           {level.toFixed(1)}
         </span>

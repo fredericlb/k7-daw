@@ -82,7 +82,7 @@ export function SongBrowser({
 
         <div className="min-h-0 flex-1 overflow-auto">
           {!shown.length ? (
-            <p className="px-3 py-6 text-center text-sm text-muted-foreground">
+            <p className="px-3 py-6 text-center text-sm text-fg-2">
               {songs.length ? m["browser.noMatch"]() : m["browser.emptySet"]()}
             </p>
           ) : (
@@ -98,17 +98,17 @@ export function SongBrowser({
                         ? m["browser.load"]({ side })
                         : m["browser.notCached"]()
                     }
-                    className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-left hover:bg-accent/40 disabled:opacity-50 disabled:hover:bg-transparent"
+                    className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-left hover:bg-row/40 disabled:opacity-50 disabled:hover:bg-transparent"
                   >
                     {s.file ? (
-                      <Disc3 className="h-4 w-4 shrink-0 text-muted-foreground" />
+                      <Disc3 className="h-4 w-4 shrink-0 text-fg-2" />
                     ) : (
-                      <CloudDownload className="h-4 w-4 shrink-0 text-muted-foreground opacity-60" />
+                      <CloudDownload className="h-4 w-4 shrink-0 text-fg-2 opacity-60" />
                     )}
                     <span className="flex min-w-0 flex-col">
                       {/* The ARTIST first and smaller, since the list is sorted by artist. */}
                       {s.artist ? (
-                        <span className="truncate text-xs text-muted-foreground">
+                        <span className="truncate text-xs text-fg-2">
                           {s.artist}
                         </span>
                       ) : null}

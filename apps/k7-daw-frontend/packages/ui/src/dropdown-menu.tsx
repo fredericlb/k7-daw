@@ -17,7 +17,7 @@ const DropdownMenuContent = React.forwardRef<
       ref={ref}
       sideOffset={sideOffset}
       className={cn(
-        "menu z-(--k7-z-menu) min-w-[10rem] overflow-hidden rounded-(--k7-r-menu) p-1.5 text-popover-foreground",
+        "menu z-(--k7-z-menu) min-w-[10rem] overflow-hidden rounded-(--k7-r-menu) p-1.5 text-fg-1",
         "origin-(--radix-dropdown-menu-content-transform-origin) data-[state=open]:animate-[k7-menu-in_var(--k7-dur-menu)_var(--k7-ease-spring)] data-[state=closed]:animate-out data-[state=closed]:fade-out-0",
         className,
       )}
@@ -140,7 +140,7 @@ const DropdownMenuSubContent = React.forwardRef<
       ref={ref}
       sideOffset={sideOffset}
       className={cn(
-        "menu z-(--k7-z-menu) min-w-[10rem] overflow-hidden rounded-(--k7-r-menu) p-1.5 text-popover-foreground",
+        "menu z-(--k7-z-menu) min-w-[10rem] overflow-hidden rounded-(--k7-r-menu) p-1.5 text-fg-1",
         "origin-(--radix-dropdown-menu-content-transform-origin) data-[state=open]:animate-[k7-menu-in_var(--k7-dur-menu)_var(--k7-ease-spring)] data-[state=closed]:animate-out data-[state=closed]:fade-out-0",
         className,
       )}

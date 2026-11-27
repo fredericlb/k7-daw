@@ -173,11 +173,11 @@ export function AssemblyBuilder({
   const dirty = content != null && content !== saved;
 
   return (
-    <div className="flex h-full w-full flex-col bg-background text-foreground">
+    <div className="flex h-full w-full flex-col bg-ground text-fg-1">
       <header className="flex items-center gap-3 border-b px-4 py-2">
         <span className="font-medium">{path}</span>
         {readOnly ? (
-          <span className="text-muted-foreground text-xs">
+          <span className="text-fg-2 text-xs">
             read-only — this template is in the account's library
           </span>
         ) : null}
@@ -213,9 +213,7 @@ export function AssemblyBuilder({
         <p className="border-b px-4 py-1 text-amber-500 text-xs">{problem}</p>
       ) : null}
       {note ? (
-        <p className="border-b px-4 py-1 text-xs text-muted-foreground">
-          {note}
-        </p>
+        <p className="border-b px-4 py-1 text-xs text-fg-2">{note}</p>
       ) : null}
       {autosave.reason ? (
         <p className="border-b px-4 py-1 text-amber-500 text-xs">
@@ -226,8 +224,8 @@ export function AssemblyBuilder({
       <div className="flex min-h-0 flex-1">
         <section className="min-h-0 flex-1 overflow-auto border-r">
           <table className="w-full text-sm">
-            <thead className="sticky top-0 bg-background">
-              <tr className="text-left text-muted-foreground text-xs">
+            <thead className="sticky top-0 bg-ground">
+              <tr className="text-left text-fg-2 text-xs">
                 <th className="px-3 py-1">member</th>
                 <th className="px-3 py-1">param</th>
                 <th className="px-3 py-1">value</th>
@@ -237,7 +235,7 @@ export function AssemblyBuilder({
             <tbody>
               {rows.map((r) => (
                 <tr key={`${r.node}:${r.param}`} className="border-t">
-                  <td className="px-3 py-1 text-muted-foreground">{r.node}</td>
+                  <td className="px-3 py-1 text-fg-2">{r.node}</td>
                   <td className="px-3 py-1">{r.param}</td>
                   <td className="px-3 py-1 tabular-nums">
                     {String(r.value ?? "")}
@@ -250,7 +248,7 @@ export function AssemblyBuilder({
                         disabled={readOnly}
                         onChange={() => toggle(r)}
                       />
-                      <span className="text-muted-foreground text-xs">
+                      <span className="text-fg-2 text-xs">
                         {r.as ?? "promote"}
                       </span>
                     </label>
@@ -259,7 +257,7 @@ export function AssemblyBuilder({
               ))}
               {!rows.length ? (
                 <tr>
-                  <td className="px-3 py-3 text-muted-foreground" colSpan={4}>
+                  <td className="px-3 py-3 text-fg-2" colSpan={4}>
                     {graph
                       ? "this template's members declare no params"
                       : "reading the template's graph…"}

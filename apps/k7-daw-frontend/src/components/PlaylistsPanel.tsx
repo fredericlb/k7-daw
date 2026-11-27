@@ -101,7 +101,7 @@ export function PlaylistsPanel({
 
   if (expanded && open)
     return (
-      <div className="absolute inset-0 z-40 bg-background">
+      <div className="absolute inset-0 z-40 bg-ground">
         <PlaylistEditor
           path={open}
           name={current?.title || current?.name || open}
@@ -190,11 +190,11 @@ export function PlaylistsPanel({
       {/* The songs, under the dropdown: `PlaylistEditor` in panel mode, the same document and autosave with the text half left out. */}
       <div className="min-h-0 flex-1">
         {rows === null ? (
-          <div className="p-4 text-sm text-muted-foreground">
+          <div className="p-4 text-sm text-fg-2">
             <Loading label={m["pls.loading"]()} />
           </div>
         ) : rows.length === 0 ? (
-          <p className="p-3 text-sm text-muted-foreground">
+          <p className="p-3 text-sm text-fg-2">
             {parts((h) => m["pls.emptyRepo"](h), {
               dir: <span className="font-mono">_playlists/</span>,
             })}

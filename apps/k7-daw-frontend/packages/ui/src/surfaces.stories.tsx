@@ -24,11 +24,11 @@ const KINDS: [CardVariant, string][] = [
 /** Every surface of the canvas over the ground, with the decor behind to show what blurs. */
 export const All: Story = {
   render: () => (
-    <div className="relative grid grid-cols-2 gap-4 bg-background p-6">
+    <div className="relative grid grid-cols-2 gap-4 bg-ground p-6">
       <div className="pointer-events-none absolute -top-10 left-10 size-64 rounded-full bg-(--k7-blob-a) opacity-50 blur-[70px]" />
       {KINDS.map(([variant, text]) => (
         <Card key={variant} variant={variant} className="relative">
-          <p className="type-label text-foreground">{text}</p>
+          <p className="type-label text-fg-1">{text}</p>
         </Card>
       ))}
     </div>

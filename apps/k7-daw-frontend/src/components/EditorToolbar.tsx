@@ -85,7 +85,7 @@ export function EditorToolbar({
   autosave: { status: AutosaveStatus; reason: string | null };
 }) {
   return (
-    <div className="flex items-center gap-2 border-b border-border px-3 py-1.5">
+    <div className="flex items-center gap-2 border-b border-hairline px-3 py-1.5">
       <Breadcrumb
         tree={tree}
         path={file?.path ?? null}
@@ -161,9 +161,7 @@ export function EditorToolbar({
       <span
         className={cn(
           "flex min-w-0 shrink items-center gap-1 text-xs",
-          needsAttention(autosave.status)
-            ? "text-amber-500"
-            : "text-muted-foreground",
+          needsAttention(autosave.status) ? "text-amber-500" : "text-fg-2",
         )}
         title={autosave.reason ?? undefined}
       >

@@ -24,14 +24,14 @@ export function GateProgress({
     <div
       role="status"
       aria-live="polite"
-      className="pointer-events-none fixed inset-x-0 bottom-0 z-50 flex flex-col border-t border-border bg-background/95 text-xs backdrop-blur"
+      className="pointer-events-none fixed inset-x-0 bottom-0 z-50 flex flex-col border-t border-hairline bg-ground/95 text-xs backdrop-blur"
     >
       <div
         role="progressbar"
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={pct ?? undefined}
-        className="h-0.5 w-full overflow-hidden bg-muted"
+        className="h-0.5 w-full overflow-hidden bg-row"
       >
         <div
           className={
@@ -45,7 +45,7 @@ export function GateProgress({
         />
       </div>
       <div
-        className={`flex items-center gap-2 px-3 py-1 ${stuck ? "text-amber-500" : "text-muted-foreground"}`}
+        className={`flex items-center gap-2 px-3 py-1 ${stuck ? "text-amber-500" : "text-fg-2"}`}
       >
         {!stuck && <Spinner size="xs" inherit className="shrink-0" />}
         <span className="truncate">{label}</span>
@@ -61,7 +61,7 @@ export function GateProgress({
 export function GateWait(props: Parameters<typeof GateProgress>[0]) {
   useEffect(() => holdSplash(props.label), [props.label]);
   return (
-    <div className="h-full bg-background">
+    <div className="h-full bg-ground">
       <GateProgress {...props} />
     </div>
   );

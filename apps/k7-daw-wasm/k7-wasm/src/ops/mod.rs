@@ -15,6 +15,7 @@ pub mod k7x;
 pub mod k7x_edit;
 pub mod media;
 pub mod module;
+pub mod panel;
 pub mod picture;
 pub mod reads;
 pub mod records;
@@ -105,6 +106,7 @@ impl Session {
             "timecode" => timecode::dispatch(decode(input)?, out),
             "fields" => fields::dispatch(decode(input)?, out),
             "module" => module::dispatch(decode(input)?, out),
+            "panel" => panel::dispatch(decode(input)?, out),
             "picture" => picture::dispatch(decode(input)?, out),
             "reads" => reads::dispatch(decode(input)?, out),
             "records" => records::dispatch(decode(input)?, out),

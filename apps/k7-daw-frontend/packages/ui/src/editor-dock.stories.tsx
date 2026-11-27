@@ -36,7 +36,7 @@ export const Dock: Story = {
     const [height, setHeight] = React.useState(380);
     const [expanded, setExpanded] = React.useState(false);
     return (
-      <div className="relative h-[820px] bg-background">
+      <div className="relative h-[820px] bg-ground">
         <EditorDock
           {...args}
           icon={<Music />}
@@ -56,7 +56,7 @@ export const Sheet: Story = {
   render: (args) => {
     const [expanded, setExpanded] = React.useState(false);
     return (
-      <div className="relative h-[844px] bg-background">
+      <div className="relative h-[844px] bg-ground">
         <EditorSheet
           {...args}
           icon={<Music />}

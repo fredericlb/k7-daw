@@ -323,7 +323,7 @@ export function GraphPanel({
             onClick={() => void onModuleField("ui graph")}
             aria-label={m["mixer.inGraph"]()}
             title={m["mixer.inGraph"]()}
-            className="glass ml-auto grid size-9 shrink-0 cursor-pointer place-items-center rounded-full text-foreground focus-visible:shadow-(--k7-focus-ring) focus-visible:outline-none"
+            className="glass ml-auto grid size-9 shrink-0 cursor-pointer place-items-center rounded-full text-fg-1 focus-visible:shadow-(--k7-focus-ring) focus-visible:outline-none"
           >
             <Workflow className="size-4" />
           </button>

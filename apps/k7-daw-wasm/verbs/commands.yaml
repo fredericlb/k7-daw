@@ -24,6 +24,8 @@
 #             leading arguments, which is the derivation k7's right-click is built on — so
 #             write one only to NARROW it. An unknown word is reported at load and dropped.
 #             See apps/k7-daw-frontend/docs/contextMenu.md.
+#   quiet     true when the command's success shows in the graph itself: the page raises no
+#             success toast for it (a refusal still says why). See apps/k7-daw-frontend/packages/project-shell/docs/toast.md.
 #   args      trailing user args. Each may carry EITHER `complete:` — a named provider
 #             in src/complete/provider_info.rs, whose values come from the live project —
 #             OR `values: [...]`, a closed set fixed by the command itself. An unknown
@@ -1869,6 +1871,7 @@
 # (or a different `extends`) by editing the file afterwards.
 - command: "module new"
   sid: module.create
+  quiet: true
   readable:
     en: "Create a module"
     fr: "Créer un module"
@@ -1881,6 +1884,7 @@
     ]
 - command: "node new"
   sid: node.new
+  quiet: true
   readable:
     en: "Create a node of a module, in the graph"
     fr: "Créer un nœud d'un module, dans le graphe"
@@ -1919,6 +1923,7 @@
 # one, which leaves everything on disk and in the graph.
 - command: "node delete"
   sid: node.delete
+  quiet: true
   readable:
     en: "Delete a node, files and all"
     fr: "Supprimer un nœud, fichiers compris"
@@ -2017,6 +2022,7 @@
 # What described the old thing (`plugin`, `params`, `rack`) goes with it, and the log says so.
 - command: "node replace"
   sid: node.replace
+  quiet: true
   readable:
     en: "Point a node at another module"
     fr: "Pointer un nœud vers un autre module"
@@ -2152,6 +2158,7 @@
 # See apps/k7-daw-wasm/song/docs/userPresets.md.
 - command: "node preset apply"
   sid: node.preset.apply
+  quiet: true
   readable:
     en: "Load a preset onto a node"
     fr: "Charger un preset sur un nœud"
@@ -2968,6 +2975,7 @@
     ]
 - command: "node insert"
   sid: node.insert
+  quiet: true
   readable:
     en: "Splice a node into a chain"
     fr: "Insérer un nœud dans une chaîne"

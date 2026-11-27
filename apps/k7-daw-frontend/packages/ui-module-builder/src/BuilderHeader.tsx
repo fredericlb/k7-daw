@@ -106,7 +106,7 @@ export function BuilderHeader({
   saveLabel: (status: AutosaveStatus, reason: string | null) => string;
 }) {
   return (
-    <header className="flex items-center gap-3 border-b border-border px-3 py-2">
+    <header className="flex items-center gap-3 border-b border-hairline px-3 py-2">
       <Button variant="secondary" size="sm" onClick={() => void leave()}>
         <ArrowLeft className="mr-1 h-4 w-4" /> Back
       </Button>
@@ -115,9 +115,7 @@ export function BuilderHeader({
           Module editor — {kind === "base" ? "base module" : "module"} ·{" "}
           {moduleName}
         </div>
-        <div className="truncate font-mono text-xs text-muted-foreground">
-          {path}
-        </div>
+        <div className="truncate font-mono text-xs text-fg-2">{path}</div>
       </div>
       <div className="ml-auto flex items-center gap-2">
         {/* The plugin's FACTORY presets; a node's own are the graph's dropdown — apps/k7-daw-wasm/song/docs/userPresets.md. */}
@@ -148,7 +146,7 @@ export function BuilderHeader({
                         key={`${source}-${i}`}
                         onSelect={() => applyPreset(p)}
                       >
-                        <Icon className="h-4 w-4 text-muted-foreground" />
+                        <Icon className="h-4 w-4 text-fg-2" />
                         <span className="truncate">{p.name}</span>
                       </DropdownMenuItem>
                     ))}
@@ -161,7 +159,7 @@ export function BuilderHeader({
         {/* How the COMPLETIONS treat this module, in the header beside its name — ../docs/builder.md. */}
         {readOnly ? (
           moduleStatus !== "listed" && (
-            <span className="text-xs text-muted-foreground">
+            <span className="text-xs text-fg-2">
               {STATUS_LABEL[moduleStatus]}
             </span>
           )
@@ -188,7 +186,7 @@ export function BuilderHeader({
         )}
         {/* Read-only says so where the save badge would be, and the button beside it only ASKS the host. */}
         {readOnly && (
-          <span className="flex items-center gap-1 text-xs text-muted-foreground">
+          <span className="flex items-center gap-1 text-xs text-fg-2">
             <Lock className="h-3.5 w-3.5 shrink-0" />
             read-only
           </span>
@@ -231,7 +229,7 @@ export function BuilderHeader({
             "flex min-w-0 items-center gap-1 text-xs",
             saveState.status === "held" || saveState.status === "error"
               ? "text-amber-500"
-              : "text-muted-foreground",
+              : "text-fg-2",
           )}
           title={saveState.reason ?? undefined}
         >

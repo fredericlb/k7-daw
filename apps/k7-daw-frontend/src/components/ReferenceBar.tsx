@@ -108,7 +108,7 @@ export function ReferenceBar({
             onClose={onClose}
             meta={
               folder ? (
-                <span className="hidden min-w-0 truncate text-muted-foreground text-xs sm:inline">
+                <span className="hidden min-w-0 truncate text-fg-2 text-xs sm:inline">
                   {folder}
                 </span>
               ) : null
@@ -119,14 +119,14 @@ export function ReferenceBar({
                   {error}
                 </span>
               ) : done ? (
-                <span className="shrink-0 text-muted-foreground text-xs">
+                <span className="shrink-0 text-fg-2 text-xs">
                   {m["refs.ended"]()}
                 </span>
               ) : null
             }
           >
             {/* Said on the bar, because it is the one thing about this sound that surprises people. */}
-            <span className="min-w-0 truncate text-muted-foreground text-xs">
+            <span className="min-w-0 truncate text-fg-2 text-xs">
               {m["refs.throughBrowser"]()}
             </span>
           </MiniPlayer>,

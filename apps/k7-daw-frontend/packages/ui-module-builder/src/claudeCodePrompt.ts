@@ -4,11 +4,11 @@
 // The one thing a reader would get wrong: the paths name a REPOSITORY and a path in it, not a disk path.
 
 import {
-  type AiOrganizeRequest,
+  type AiRequest,
+  aiDesignBrief,
   aiUserPrompt,
   bindableNames,
-} from "@studio/panel-rules/ai-organize";
-import { aiDesignBrief } from "@studio/panel-rules/ai-prompt";
+} from "@studio/k7-wasm/panel";
 
 /** Where the builder reads a module's two files, workspace-relative as the file service answers them. */
 export interface PanelFiles {
@@ -29,10 +29,7 @@ export function whereIs(path: string): string {
 }
 
 /** The whole prompt to paste into Claude Code: brief, module, what to change, and the files to write. */
-export function claudeCodePrompt(
-  req: AiOrganizeRequest,
-  files: PanelFiles,
-): string {
+export function claudeCodePrompt(req: AiRequest, files: PanelFiles): string {
   const binds = bindableNames(req);
   return [
     aiDesignBrief(),

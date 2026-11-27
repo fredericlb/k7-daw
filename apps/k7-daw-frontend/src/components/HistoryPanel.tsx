@@ -217,8 +217,8 @@ const keptNotice = (kept: string[]) =>
 function ChangeView({ c }: { c: SyncChange }) {
   const side = (label: string, text: string | null) => (
     <div className="min-w-0 flex-1">
-      <div className="text-[11px] text-muted-foreground">{label}</div>
-      <pre className="max-h-40 overflow-auto whitespace-pre-wrap break-all rounded bg-muted/40 p-1 text-[11px]">
+      <div className="text-[11px] text-fg-2">{label}</div>
+      <pre className="max-h-40 overflow-auto whitespace-pre-wrap break-all rounded bg-row/40 p-1 text-[11px]">
         {text ?? "—"}
       </pre>
     </div>
@@ -227,7 +227,7 @@ function ChangeView({ c }: { c: SyncChange }) {
     <div className="px-3 py-1">
       <div className="truncate font-mono text-[11px]">{c.file}</div>
       {c.binary ? (
-        <div className="text-muted-foreground">{m["synchist.binary"]()}</div>
+        <div className="text-fg-2">{m["synchist.binary"]()}</div>
       ) : (
         <div className="flex gap-1">
           {side(m["synchist.before"](), c.before)}
@@ -383,13 +383,11 @@ function SyncHistorySection({
         )}
       </header>
       {!offers.write && (
-        <div className="shrink-0 px-3 py-1 text-muted-foreground">
+        <div className="shrink-0 px-3 py-1 text-fg-2">
           {m["synchist.readOnly"]()}
         </div>
       )}
-      {notice && (
-        <div className="shrink-0 px-3 py-1 text-muted-foreground">{notice}</div>
-      )}
+      {notice && <div className="shrink-0 px-3 py-1 text-fg-2">{notice}</div>}
       {readError && (
         <PanelError
           what={m["panel.what.history"]()}

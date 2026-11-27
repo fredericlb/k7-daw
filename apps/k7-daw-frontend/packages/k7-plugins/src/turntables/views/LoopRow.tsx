@@ -51,7 +51,7 @@ function Key({
       } ${
         on
           ? "border-amber-500 bg-amber-500 text-white"
-          : "border-border bg-background text-foreground"
+          : "border-hairline bg-ground text-fg-1"
       }`}
       // A roll is a gesture: the browser's long-press menu would land in the middle of one.
       onContextMenu={(e) => e.preventDefault()}

@@ -49,7 +49,7 @@ export function ParamDropField({
       {value ? (
         <div className="flex items-center gap-1">
           <span
-            className="min-w-0 flex-1 truncate rounded border border-border bg-muted/40 px-2 py-1 font-mono text-xs"
+            className="min-w-0 flex-1 truncate rounded border border-hairline bg-row/40 px-2 py-1 font-mono text-xs"
             title={value}
           >
             {value}
@@ -59,14 +59,14 @@ export function ParamDropField({
             disabled={disabled}
             onClick={onClear}
             // …except this one, which is a control and has to stay clickable.
-            className="pointer-events-auto shrink-0 rounded p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
+            className="pointer-events-auto shrink-0 rounded p-1 text-fg-2 hover:bg-row hover:text-fg-1"
             title={clearTitle}
           >
             <Trash2 className="h-3.5 w-3.5" />
           </button>
         </div>
       ) : (
-        <div className="rounded border border-dashed border-border px-2 py-1 text-xs text-muted-foreground">
+        <div className="rounded border border-dashed border-hairline px-2 py-1 text-xs text-fg-2">
           drag a parameter here
         </div>
       )}

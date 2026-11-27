@@ -36,9 +36,9 @@ export function PairRequestCard({
   request: PairRequest;
 }) {
   return (
-    <div className="float rounded-(--k7-r-toast) p-3.5 text-foreground">
+    <div className="float rounded-(--k7-r-toast) p-3.5 text-fg-1">
       <div className="type-label flex items-center gap-2">
-        <Smartphone className="h-4 w-4 shrink-0 text-muted-foreground" />
+        <Smartphone className="h-4 w-4 shrink-0 text-fg-2" />
         <span className="truncate">
           {m["pairing.requestTitle"]({ name: request.name })}
         </span>

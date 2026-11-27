@@ -66,7 +66,7 @@ const ADSR_KNOBS = [
 const NAME = /^[A-Za-z0-9_-]+$/;
 
 const FIELD = "flex items-center gap-3";
-const LABEL = "w-24 shrink-0 text-xs text-muted-foreground";
+const LABEL = "w-24 shrink-0 text-xs text-fg-2";
 
 export function CurveEditor({
   name: initialName,
@@ -203,9 +203,7 @@ export function CurveEditor({
                 </label>
               ))}
               <label className="ml-auto flex min-w-0 flex-1 items-center gap-2">
-                <span className="text-xs text-muted-foreground">
-                  {m["curve.cut"]()}
-                </span>
+                <span className="text-xs text-fg-2">{m["curve.cut"]()}</span>
                 <SelectField
                   size="sm"
                   value={draft.cut}
@@ -238,7 +236,7 @@ export function CurveEditor({
               />
               {/* How long it runs, a length: 0 is for ever (docs/curveEditor.md). */}
               <label
-                className="ml-2 text-xs text-muted-foreground"
+                className="ml-2 text-xs text-fg-2"
                 htmlFor={`${uid}-duration`}
               >
                 {m["curve.duration"]()}
@@ -286,7 +284,7 @@ export function CurveEditor({
             onPoints={(points) => set({ points })}
           />
           {isDrawnShape(draft.shape) && (
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-fg-2">
               {m["curve.drawHint"]()}
               {draft.shape === "onoff" && m["curve.onoffHint"]()}
             </p>
@@ -323,7 +321,7 @@ function LabelledSlider({
 }) {
   return (
     <label className="flex min-w-0 flex-1 items-center gap-2">
-      <span className="text-xs text-muted-foreground">{label}</span>
+      <span className="text-xs text-fg-2">{label}</span>
       <Slider
         min={0}
         max={1}

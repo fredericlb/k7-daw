@@ -76,7 +76,7 @@ export function ResourcesPanel({ reloadKey }: { reloadKey: number }) {
 
       <div className="min-h-0 flex-1 overflow-y-auto">
         {rows === null ? (
-          <div className="p-4 text-muted-foreground text-sm">
+          <div className="p-4 text-fg-2 text-sm">
             <Loading label={m["common.loading"]()} />
           </div>
         ) : shown.length === 0 ? (
@@ -93,7 +93,7 @@ export function ResourcesPanel({ reloadKey }: { reloadKey: number }) {
           </EmptyState>
         ) : (
           <>
-            <p className="px-3 pt-2 pb-1 text-muted-foreground text-xs">
+            <p className="px-3 pt-2 pb-1 text-fg-2 text-xs">
               {m["res.hint"]()}
             </p>
             <ul>
@@ -130,7 +130,7 @@ function ResourceRow({
     <li className="px-1">
       {/* biome-ignore lint/a11y/noStaticElementInteractions: a DRAG source; keyboard and touch place from the lane's menu (placeResource.ts). */}
       <div
-        className="flex cursor-grab items-center gap-1 rounded hover:bg-accent active:cursor-grabbing"
+        className="flex cursor-grab items-center gap-1 rounded hover:bg-row active:cursor-grabbing"
         draggable={!r.missing}
         title={r.source}
         onDragStart={(e) => {
@@ -153,7 +153,7 @@ function ResourceRow({
         >
           {open ? <Square className="h-3 w-3" /> : <Play className="h-3 w-3" />}
         </Button>
-        <Icon className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+        <Icon className="h-3.5 w-3.5 shrink-0 text-fg-2" />
         <span className="min-w-0 flex-1 truncate py-1 text-sm">{r.id}</span>
         {r.missing ? (
           <span
@@ -163,7 +163,7 @@ function ResourceRow({
             <TriangleAlert className="h-3 w-3" /> {m["res.missingShort"]()}
           </span>
         ) : (
-          <span className="shrink-0 pr-1 font-mono text-[11px] text-muted-foreground tabular-nums">
+          <span className="shrink-0 pr-1 font-mono text-[11px] text-fg-2 tabular-nums">
             {formatBytes(r.bytes)}
           </span>
         )}

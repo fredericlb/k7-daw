@@ -82,7 +82,7 @@ export function PanelHeading({
             tabIndex={-1}
             data-slot="panel-title"
             className={cn(
-              "truncate text-foreground outline-none",
+              "truncate text-fg-1 outline-none",
               sheet ? "type-sheet-title" : "type-headline",
             )}
           >

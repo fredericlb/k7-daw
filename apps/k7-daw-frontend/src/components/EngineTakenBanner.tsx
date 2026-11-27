@@ -35,11 +35,11 @@ export function EngineTakenBanner({
   return (
     <div
       role="status"
-      className="float fixed inset-x-4 top-2 z-(--k7-z-bar) mx-auto flex max-w-2xl flex-wrap items-start gap-3 rounded-(--k7-r-toast) border-(--k7-warn-toast-line) p-3.5 text-foreground"
+      className="float fixed inset-x-4 top-2 z-(--k7-z-bar) mx-auto flex max-w-2xl flex-wrap items-start gap-3 rounded-(--k7-r-toast) border-(--k7-warn-toast-line) p-3.5 text-fg-1"
     >
       <UserRoundX className="mt-0.5 size-[22px] shrink-0 text-warn" />
       <div className="min-w-0 flex-1 basis-60">
-        <p className="type-label text-foreground">{title}</p>
+        <p className="type-label text-fg-1">{title}</p>
         <p className="type-secondary text-fg-2">{body}</p>
       </div>
       <div className="flex shrink-0 flex-wrap items-center gap-2">

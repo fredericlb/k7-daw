@@ -246,8 +246,8 @@ export function EngineGate({
         />
       );
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-3 bg-background text-foreground">
-        <p className="text-muted-foreground text-sm">{m["engines.none"]()}</p>
+      <div className="flex h-full flex-col items-center justify-center gap-3 bg-ground text-fg-1">
+        <p className="text-fg-2 text-sm">{m["engines.none"]()}</p>
         <Button onClick={searchAgain}>{m["common.refresh"]()}</Button>
       </div>
     );

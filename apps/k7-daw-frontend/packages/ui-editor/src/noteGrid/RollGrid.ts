@@ -60,21 +60,21 @@ export function renderRollGrid(
   // Outer 2×2 grid: corner + ruler over gutter + body. The body's row/column are 1fr, so labels line up with it.
   const root = document.createElement("div");
   root.className = "td-roll";
-  root.style.cssText = `position:relative;height:100%;width:100%;display:grid;grid-template-columns:${GUTTER_W}px 1fr;grid-template-rows:${RULER_H}px 1fr;background:var(--sh-background,#111);font-size:10px;color:var(--sh-muted-foreground,#888);overflow:hidden`;
+  root.style.cssText = `position:relative;height:100%;width:100%;display:grid;grid-template-columns:${GUTTER_W}px 1fr;grid-template-rows:${RULER_H}px 1fr;background:var(--k7-ground,#111);font-size:10px;color:var(--k7-text-2,#888);overflow:hidden`;
 
   const corner = document.createElement("div");
   corner.style.cssText =
-    "border-right:1px solid var(--sh-border,#333);border-bottom:1px solid var(--sh-border,#333)";
+    "border-right:1px solid var(--k7-hairline,#333);border-bottom:1px solid var(--k7-hairline,#333)";
   root.appendChild(corner);
 
   // Top ruler — bar numbers, one per bar across the time axis.
   const ruler = document.createElement("div");
   ruler.style.cssText =
-    "position:relative;border-bottom:1px solid var(--sh-border,#333);overflow:hidden";
+    "position:relative;border-bottom:1px solid var(--k7-hairline,#333);overflow:hidden";
   for (let b = 0; b < bars; b++) {
     const lab = document.createElement("div");
     lab.textContent = String(b + 1);
-    lab.style.cssText = `position:absolute;top:0;bottom:0;left:${pctX(b * BEATS_PER_BAR)}%;padding-left:3px;display:flex;align-items:center;border-left:1px solid rgba(255,255,255,0.18);color:var(--sh-foreground,#ddd)`;
+    lab.style.cssText = `position:absolute;top:0;bottom:0;left:${pctX(b * BEATS_PER_BAR)}%;padding-left:3px;display:flex;align-items:center;border-left:1px solid rgba(255,255,255,0.18);color:var(--k7-text,#ddd)`;
     ruler.appendChild(lab);
   }
   root.appendChild(ruler);
@@ -82,11 +82,11 @@ export function renderRollGrid(
   // Left gutter: the name or symbol per pitch lane, C rows brighter and black keys shaded, mirroring the body.
   const gutter = document.createElement("div");
   gutter.style.cssText =
-    "position:relative;border-right:1px solid var(--sh-border,#333);overflow:hidden";
+    "position:relative;border-right:1px solid var(--k7-hairline,#333);overflow:hidden";
   for (let r = 0; r < rows; r++) {
     const k = hi - r;
     const key = document.createElement("div");
-    key.style.cssText = `position:absolute;left:0;right:0;top:${rowTop(k)}%;height:${rowH}%;box-sizing:border-box;display:flex;align-items:center;justify-content:flex-end;gap:3px;padding-right:4px;font-size:9px;line-height:1;overflow:hidden;white-space:nowrap;border-bottom:1px solid rgba(255,255,255,0.04);background:${isBlack(k) ? "rgba(255,255,255,0.04)" : "transparent"};color:${k % 12 === 0 ? "var(--sh-foreground,#ddd)" : "var(--sh-muted-foreground,#888)"}`;
+    key.style.cssText = `position:absolute;left:0;right:0;top:${rowTop(k)}%;height:${rowH}%;box-sizing:border-box;display:flex;align-items:center;justify-content:flex-end;gap:3px;padding-right:4px;font-size:9px;line-height:1;overflow:hidden;white-space:nowrap;border-bottom:1px solid rgba(255,255,255,0.04);background:${isBlack(k) ? "rgba(255,255,255,0.04)" : "transparent"};color:${k % 12 === 0 ? "var(--k7-text,#ddd)" : "var(--k7-text-2,#888)"}`;
     const sym = rack?.toSymbol.get(k);
     if (sym) {
       key.textContent = sym;
@@ -133,7 +133,7 @@ export function renderRollGrid(
   const renderNote = (n: Note) => {
     const el = document.createElement("div");
     const v = n.v ?? 1;
-    el.style.cssText = `position:absolute;top:${rowTop(n.k)}%;height:${rowH}%;left:${pctX(n.t)}%;width:${pctX(n.d)}%;box-sizing:border-box;border:1px solid var(--sh-background,#111);border-radius:2px;background:var(--sh-primary,#6ea8fe);opacity:${0.35 + 0.65 * v};overflow:hidden;color:var(--sh-background,#111);text-align:center;font-size:9px;line-height:1;display:flex;align-items:center;justify-content:center`;
+    el.style.cssText = `position:absolute;top:${rowTop(n.k)}%;height:${rowH}%;left:${pctX(n.t)}%;width:${pctX(n.d)}%;box-sizing:border-box;border:1px solid var(--k7-ground,#111);border-radius:2px;background:var(--k7-accent,#6ea8fe);opacity:${0.35 + 0.65 * v};overflow:hidden;color:var(--k7-ground,#111);text-align:center;font-size:9px;line-height:1;display:flex;align-items:center;justify-content:center`;
     const sym = rack?.toSymbol.get(n.k);
     if (sym) el.textContent = sym; // captions the bar with the rack symbol
     el.title = sym

@@ -257,7 +257,7 @@ export function ShellOverlays({
 
       {/* The documentation at #help — a PAGE, not a popin, so the reference reads as one ctrl-F-able document. */}
       {showHelp && (
-        <div className="fixed inset-0 z-50 bg-background">
+        <div className="fixed inset-0 z-50 bg-ground">
           <HelpPage onBack={() => setShowHelp(false)} prefs={commandPrefs} />
         </div>
       )}
@@ -288,7 +288,7 @@ export function ShellOverlays({
       <GitScreensHost transport={gitTransport} />
       {/* The command editor screen: the one full-screen slot, opened from Settings, Editor, Commands and shortcuts (docs/shell.md). */}
       {commandsPage && (
-        <div className="absolute inset-0 z-40 bg-background">
+        <div className="absolute inset-0 z-40 bg-ground">
           <CommandsSettings
             // The whole catalogue, both halves: a page that arranged only one would order a menu it does not draw.
             commands={allCommands}
@@ -301,7 +301,7 @@ export function ShellOverlays({
 
       {/* The shared module builder over the whole shell; it holds no engine link, so no factory banks and no live params (docs/moduleBuilder.md). */}
       {assemblyBuilder && (
-        <div className="absolute inset-0 z-30 bg-background">
+        <div className="absolute inset-0 z-30 bg-ground">
           <Suspense fallback={null}>
             <PaneBoundary
               name="assembly builder"

@@ -87,10 +87,10 @@ export const RulerTicks = memo(function RulerTicks({
           className={cn(
             "pointer-events-none absolute top-0 h-full border-l pl-1",
             t.level === 0
-              ? "border-border/50 text-muted-foreground"
+              ? "border-hairline/50 text-fg-2"
               : t.level === 1
-                ? "border-border/30 text-faint"
-                : "border-border/15",
+                ? "border-hairline/30 text-faint"
+                : "border-hairline/15",
           )}
           style={{ left: (t.beat - beatLo) * ppb }}
         >
@@ -155,13 +155,13 @@ export const Grid = memo(function Grid({
               // The ruler's three weights, one step fainter: down here they cross the material rather than sitting in a header of their own.
               t.level === 0
                 ? strongBars
-                  ? "border-foreground/45"
-                  : "border-border/40"
+                  ? "border-fg-1/45"
+                  : "border-hairline/40"
                 : t.level === 1
                   ? strongBars
-                    ? "border-foreground/25"
-                    : "border-border/25"
-                  : "border-border/10",
+                    ? "border-fg-1/25"
+                    : "border-hairline/25"
+                  : "border-hairline/10",
             )}
             style={{ left: left0 + left, top, height }}
           />

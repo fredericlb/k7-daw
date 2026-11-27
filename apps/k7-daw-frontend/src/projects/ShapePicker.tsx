@@ -34,7 +34,7 @@ export function ShapePicker({
               className={cn(
                 "flex min-w-0 cursor-pointer flex-col items-start gap-2 rounded-(--k7-r-rows) border p-3 transition-colors",
                 // The input is hidden, so its keyboard focus is drawn on the card it stands for.
-                "has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-ring has-[:focus-visible]:outline-offset-2",
+                "has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-focus has-[:focus-visible]:outline-offset-2",
                 on
                   ? "border-primary bg-on-fill"
                   : "border-(--k7-hairline-strong) hover:bg-on-fill",

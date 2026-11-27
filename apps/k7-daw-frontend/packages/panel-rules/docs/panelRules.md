@@ -1,30 +1,20 @@
-# The panel's rules, apart from the builder
+# The panel's rules live in Rust
 
-`@studio/panel-rules` holds what decides whether a module's panel is valid — a group frames what
-lies wholly inside its box (`src/groupGeometry.ts`), the horizontal and vertical layouts offer the
-same controls (`src/layoutTwins.ts`) — the one way a panel is printed as `ui.k7x`, a widget a line
-(`src/panelText.ts`), and AI organize's wire, answer, check and system prompt built on them
-(`src/aiOrganize.ts`, `src/aiAnswer.ts`, `src/aiPrompt.ts`). What the rules ARE is the builder's to explain:
+What decides whether a module's panel is valid, how it is laid out and printed, and how AI organize's answer is
+judged is the song crate's `modules/ui` (`apps/k7-daw-wasm/song/src/modules/ui`): groups framing what lies wholly
+inside their box (`geometry.rs`), the horizontal and vertical layouts offering the same controls (`geometry.rs`), the tabs
+and the clipboard (`edit.rs`), the proposal from a parameter list (`auto.rs`), a panel read from and written to its k7x text,
+a widget a line (`write.rs`), the union of a module's params (`rows.rs`), and AI organize's prompt, answer and check
+(`ai_prompt.rs`, `ai_answer.rs`, `ai_check.rs`). What the rules ARE is the builder's to explain:
 `apps/k7-daw-frontend/packages/ui-module-builder/docs/builder.md`, `layouts.md` and `aiOrganize.md` there.
 
-## Why a package of its own
+## The choices
 
-Two things apply these rules: the builder's grid, and AI organize's loop (`src/aiLoop.ts`), which checks a
-proposal from Claude in the page before it reaches the buffers. The builder is React, CodeMirror and Radix; a
-test or a server taking the check from it would carry all of that, for some 850 lines of pure functions.
-
-So the rules have no React and no DOM, and depend on the file format (`song-schema`,
-`@studio/k7-wasm/k7x`) and nothing above it. The builder imports them like any other host, and still answers
-`@studio/ui-module-builder/ai-organize` for the frontend that reaches AI organize's types
-through it.
-
-A rule the grid enforces belongs here when the AI check must enforce it too; one that only the
-editing gestures care about stays in the builder.
-
-## The loop
-
-`src/aiLoop.ts` is AI organize's conversation, run in the page (`apps/k7-daw-frontend/docs/aiOrganize.md`): it checks
-the request (`src/aiRequest.ts`), asks the host for a turn, reads the answer (`readAiAnswer`), checks it
-(`checkAiResult`) and hands the mistakes back once. The host's turn is a function the loop is given, so the
-vectors of `organize-vectors.json` drive it in a test (`src/aiLoop.test.ts`) with no server. A model's junk (text that
-is no JSON, JSON of the wrong shape, a script that does not compile) is a refused answer, never a crash.
+| choice | why |
+|---|---|
+| the rules are written once, in Rust, and the page reaches them through `@studio/k7-wasm/panel` | the grid, the library check and the host's AI loop must agree on every rule; three implementations would have to be kept equal by hand |
+| a panel travels as loose JSON, not as the loader's strict types | the grid holds widgets mid-edit (a fraction, a missing field), and a rule must still answer; `validate.panel` is the loader's reader and judges what is saved |
+| every call answers a new value and edits nothing in place | the page's state is React's; a rule never holds a panel between two calls |
+| the rows of a module's params come back unsorted | the page orders names with its own collator, which Rust has no copy of |
+| the one TypeScript file this package keeps reads the NDJSON stream of a run (`src/organizeStream.ts`) | a stream is a browser API; the events it reads are generated from the Rust enum |
+| the host reads a script's strings, comments and brackets, not its syntax | the host has no JavaScript engine; the page compiles the script for real where the panel lands (`apps/k7-daw-frontend/docs/aiOrganize.md`) |

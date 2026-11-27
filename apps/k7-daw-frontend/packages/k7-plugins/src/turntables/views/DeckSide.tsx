@@ -389,7 +389,7 @@ export function DeckSide({
           />
           {/* What is loaded, in words: it earns its line only where the record's label is absent. */}
           {layout.title ? (
-            <div className="w-full truncate text-center text-xs text-muted-foreground">
+            <div className="w-full truncate text-center text-xs text-fg-2">
               {load ? load.title : m["deck.nothingLoaded"]()}
             </div>
           ) : null}

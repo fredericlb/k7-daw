@@ -263,7 +263,7 @@ transparent texel), [passes.md](../../ui-eyes/docs/passes.md) (the second unifor
 
 ## Fade to black, and to which black
 
-The preview clears to the `--sh-background` token and the **render to true black**. The asymmetry
+The preview clears to the `--k7-ground` token and the **render to true black**. The asymmetry
 is deliberate: an empty frame already shows the application's background, so the preview stays
 consistent with itself, whereas an exported file that had baked the chrome's grey into its frames
 would be wrong for everybody. A `fadeOut` on an upper layer does not descend to black anyway but

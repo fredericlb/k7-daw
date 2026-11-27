@@ -268,7 +268,7 @@ function Toast({
       onFocus={() => setHeld(true)}
       onBlur={() => setHeld(false)}
       className={cx(
-        "float pointer-events-auto flex flex-col gap-2 rounded-(--k7-r-toast) py-2 pr-1 pl-3.5 text-foreground",
+        "float pointer-events-auto flex flex-col gap-2 rounded-(--k7-r-toast) py-2 pr-1 pl-3.5 text-fg-1",
         line,
         item.placement === "bottom-right"
           ? "animate-in fade-in slide-in-from-bottom-4 duration-300"
@@ -292,12 +292,12 @@ function Toast({
         )}
         <div className="min-w-0 flex-1 py-1">
           {item.title ? (
-            <p className="type-label text-foreground">{item.title}</p>
+            <p className="type-label text-fg-1">{item.title}</p>
           ) : null}
           <p
             className={cx(
               "type-secondary",
-              item.title ? "text-fg-2" : "text-foreground",
+              item.title ? "text-fg-2" : "text-fg-1",
             )}
           >
             {item.message}
@@ -319,7 +319,7 @@ function Toast({
             onClick={onDismiss}
             aria-label={dismissLabel}
             title={dismissLabel}
-            className="grid size-11 shrink-0 cursor-pointer desk:size-8 place-items-center rounded-full text-fg-2 outline-none transition-colors hover:bg-on-fill hover:text-foreground focus-visible:shadow-(--k7-focus-ring)"
+            className="grid size-11 shrink-0 cursor-pointer desk:size-8 place-items-center rounded-full text-fg-2 outline-none transition-colors hover:bg-on-fill hover:text-fg-1 focus-visible:shadow-(--k7-focus-ring)"
           >
             <X className="size-[18px]" strokeWidth={2.2} />
           </button>

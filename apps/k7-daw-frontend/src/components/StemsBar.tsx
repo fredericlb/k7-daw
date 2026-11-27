@@ -50,11 +50,11 @@ export function StemsBar({
     : 0;
 
   return (
-    <div className="flex shrink-0 flex-col gap-2 border-b bg-muted/30 px-3 py-2">
+    <div className="flex shrink-0 flex-col gap-2 border-b bg-row/30 px-3 py-2">
       <div className="flex items-center gap-2">
-        <Split className="h-4 w-4 shrink-0 text-muted-foreground" />
+        <Split className="h-4 w-4 shrink-0 text-fg-2" />
         {/* WHICH chain separates is one answer for the machine, set in k7's settings (or `system stems`) and only shown here (docs/playlists.md). */}
-        <span className="min-w-0 flex-1 truncate font-mono text-xs text-muted-foreground">
+        <span className="min-w-0 flex-1 truncate font-mono text-xs text-fg-2">
           {chain === undefined ? "…" : (chain ?? m["clip.noChain"]())}
         </span>
         <Button size="sm" disabled={startDisabled} onClick={onStart}>
@@ -73,7 +73,7 @@ export function StemsBar({
 
       {/* Told nothing yet: the one sentence that unblocks it, and the way there — not a picker, the machine being asked once. */}
       {chain === null ? (
-        <p className="text-xs text-muted-foreground">
+        <p className="text-xs text-fg-2">
           {parts((h) => m["pl.noChainYet"](h), {
             cmd: <span className="font-mono">system stems @k7-core/stems</span>,
           })}
@@ -92,9 +92,7 @@ export function StemsBar({
 
       {/* Before anything has been asked for: what this costs, said up front rather than found out by watching twelve songs run. */}
       {run || chain === null ? null : (
-        <p className="text-xs text-muted-foreground">
-          {m["pl.separateCost"]()}
-        </p>
+        <p className="text-xs text-fg-2">{m["pl.separateCost"]()}</p>
       )}
 
       {run ? (
@@ -105,14 +103,14 @@ export function StemsBar({
             aria-valuemin={0}
             aria-valuemax={run.total}
             aria-valuenow={run.done}
-            className="h-1 w-full overflow-hidden rounded bg-border"
+            className="h-1 w-full overflow-hidden rounded bg-hairline"
           >
             <div
-              className="h-full bg-foreground transition-[width] duration-300"
+              className="h-full bg-fg-1 transition-[width] duration-300"
               style={{ width: `${Math.round(at * 100)}%` }}
             />
           </div>
-          <p className="truncate text-xs text-muted-foreground">
+          <p className="truncate text-xs text-fg-2">
             {run.over
               ? m["pl.runDone"]({ done: run.done, total: run.total }) +
                 (run.skipped

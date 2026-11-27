@@ -127,7 +127,7 @@ export function MergeDialog({
             setConfirming(false);
           }
         }}
-        className="left-0 top-0 flex h-dvh max-h-none w-screen max-w-none translate-x-0 translate-y-0 flex-col gap-0 rounded-none bg-background p-0 text-foreground sm:max-w-none"
+        className="left-0 top-0 flex h-dvh max-h-none w-screen max-w-none translate-x-0 translate-y-0 flex-col gap-0 rounded-none bg-ground p-0 text-fg-1 sm:max-w-none"
       >
         <header className="flex flex-wrap items-center gap-3 border-b border-(--k7-hairline) px-4 py-3">
           <Button variant="ghost" disabled={busy} onClick={onClose}>

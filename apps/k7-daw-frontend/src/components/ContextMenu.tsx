@@ -100,14 +100,12 @@ export function ContextMenu({
         <span className="min-w-0 flex-1 truncate">{text}</span>
         {/* The verb, muted, whenever the row reads as something else: it is what you would type. */}
         {text !== it.label && (
-          <span className="max-w-[8rem] shrink-0 truncate font-mono text-[11px] text-muted-foreground">
+          <span className="max-w-[8rem] shrink-0 truncate font-mono text-[11px] text-fg-2">
             {it.label}
           </span>
         )}
         {/* Whether picking this RUNS it or only fills the bar with it — an action against a question, worth a character per row. */}
-        {!it.complete && (
-          <span className="shrink-0 text-muted-foreground">…</span>
-        )}
+        {!it.complete && <span className="shrink-0 text-fg-2">…</span>}
       </PointMenuItem>
     );
   };

@@ -6,7 +6,30 @@
 // the one every tab shows, or one tab's (TabsColumn.tsx, docs/pages.md). A group frames what lies
 // inside its box and moves it along (groupGeometry.ts); the inspector is WidgetInspector.tsx.
 
-import { clash, framedBy, groupOf } from "@studio/panel-rules/group-geometry";
+import {
+  type AutoParam,
+  autoOrganize,
+  boxBetween,
+  type Cell,
+  CORNERS,
+  type Corner,
+  clash,
+  clipIds,
+  copyWidgets,
+  cornerAnchor,
+  firstFree,
+  framedBy,
+  groupOf,
+  groupsFirst,
+  nextId,
+  type PageRef,
+  pageIn,
+  panelIds,
+  pasteWidgets,
+  span,
+  widgetsAt,
+  writeWidgetsAt,
+} from "@studio/k7-wasm/panel";
 import { askConfirm } from "@studio/project-shell/ask";
 import { Button } from "@studio/ui/button";
 import {
@@ -21,41 +44,16 @@ import { cn } from "@studio/ui/lib/utils";
 import { Spinner } from "@studio/ui/spinner";
 import { usePointerFollow } from "@studio/ui-timeline/drag";
 import { useCallback, useRef, useState } from "react";
-import { type AutoParam, autoOrganize } from "./autoLayout";
 import { GridMenu } from "./GridMenu";
-import {
-  boxBetween,
-  type Cell,
-  CORNERS,
-  type Corner,
-  cornerAnchor,
-  firstFree,
-  groupsFirst,
-  nextId,
-  span,
-} from "./gridCells";
 import type { ModuleUI, Widget, WidgetType } from "./moduleUi";
-import {
-  type PageRef,
-  pageIn,
-  panelIds,
-  widgetsAt,
-  writeWidgetsAt,
-} from "./panelTabs";
 import { isParamDrag, type ParamDrag, readParamDrag } from "./paramDrag";
 import { Stepper } from "./Stepper";
 import { TabsColumn } from "./TabsColumn";
 import { WidgetInspector } from "./WidgetInspector";
-import {
-  clipIds,
-  copyWidgets,
-  heldClip,
-  holdClip,
-  pasteWidgets,
-} from "./widgetClipboard";
+import { heldClip, holdClip } from "./widgetClipboard";
 import { bindable, GROUP_COLOR, ICON, ranged, TYPES } from "./widgetKinds";
 
-export { boxBetween, type Corner, cornerAnchor } from "./gridCells";
+export { boxBetween, type Corner, cornerAnchor } from "@studio/k7-wasm/panel";
 
 // Row height in px (columns are elastic), in one place so the pointer→cell maths and the CSS grid agree.
 const ROW_PX = 64;
@@ -420,10 +418,8 @@ export function WidgetGridEditor({
   return (
     <div className="flex h-full min-h-0 flex-col">
       {/* palette + grid size */}
-      <div className="flex flex-wrap items-center gap-2 border-b border-border p-2">
-        <span className="text-xs uppercase tracking-wide text-muted-foreground">
-          Add
-        </span>
+      <div className="flex flex-wrap items-center gap-2 border-b border-hairline p-2">
+        <span className="text-xs uppercase tracking-wide text-fg-2">Add</span>
         {TYPES.map((t) => (
           <Button
             key={t.type}
@@ -509,7 +505,7 @@ export function WidgetGridEditor({
         >
           <div
             ref={gridRef}
-            className="relative rounded-md border border-border bg-card/40"
+            className="relative rounded-md border border-hairline bg-panel/40"
             style={{
               display: "grid",
               gridTemplateColumns: `repeat(${ui.cols}, minmax(0, 1fr))`,
@@ -543,7 +539,7 @@ export function WidgetGridEditor({
                     createBound(col, row, p);
                   }}
                   className={cn(
-                    "border border-dashed border-border/40",
+                    "border border-dashed border-hairline/40",
                     dropTarget === key &&
                       "border-solid border-primary bg-primary/20",
                   )}
@@ -557,13 +553,13 @@ export function WidgetGridEditor({
               Object.entries(ui.widgets).map(([id, w]) => (
                 <div
                   key={`under:${id}`}
-                  className="pointer-events-none m-0.5 flex flex-col items-center justify-center overflow-hidden rounded border border-dashed border-border/50 bg-background/30 px-1 text-center opacity-40"
+                  className="pointer-events-none m-0.5 flex flex-col items-center justify-center overflow-hidden rounded border border-dashed border-hairline/50 bg-ground/30 px-1 text-center opacity-40"
                   style={{
                     gridColumn: `${w.col + 1} / span ${span(w.colSpan)}`,
                     gridRow: `${w.row + 1} / span ${span(w.rowSpan)}`,
                   }}
                 >
-                  <span className="max-w-full truncate text-[10px] leading-tight text-muted-foreground">
+                  <span className="max-w-full truncate text-[10px] leading-tight text-fg-2">
                     {w.type === "label"
                       ? w.text || "label"
                       : w.label || w.bind || w.type}
@@ -618,11 +614,11 @@ export function WidgetGridEditor({
                     "group relative m-0.5 flex flex-col overflow-hidden rounded border px-1",
                     isGroup
                       ? "items-start justify-start pt-0.5 text-left"
-                      : "items-center justify-center bg-background/80 text-center",
+                      : "items-center justify-center bg-ground/80 text-center",
                     disabled ? "cursor-default" : "cursor-move",
                     isSel
                       ? "border-primary ring-1 ring-primary"
-                      : "border-border hover:border-primary/60",
+                      : "border-hairline hover:border-primary/60",
                     dropTarget === id &&
                       "border-primary bg-primary/20 ring-2 ring-primary",
                     w.hidden && "opacity-40",
@@ -638,7 +634,7 @@ export function WidgetGridEditor({
                   {/* The glyph and the caption take no pointer, or they steal the tile's drag — ../docs/builder.md. */}
                   {isGroup ? (
                     // A group's name runs up its left edge, turned 90° counter-clockwise as on the card, under its switch when bound.
-                    <span className="pointer-events-none absolute bottom-0 left-0.5 top-0.5 z-10 flex flex-col items-center gap-0.5 overflow-hidden text-[10px] leading-none text-foreground">
+                    <span className="pointer-events-none absolute bottom-0 left-0.5 top-0.5 z-10 flex flex-col items-center gap-0.5 overflow-hidden text-[10px] leading-none text-fg-1">
                       {w.bind && (
                         <Power className="h-3 w-3 shrink-0 text-primary-text" />
                       )}
@@ -648,8 +644,8 @@ export function WidgetGridEditor({
                     </span>
                   ) : (
                     <>
-                      <Icon className="pointer-events-none h-4 w-4 text-muted-foreground" />
-                      <span className="pointer-events-none mt-0.5 max-w-full truncate text-[10px] leading-tight text-foreground">
+                      <Icon className="pointer-events-none h-4 w-4 text-fg-2" />
+                      <span className="pointer-events-none mt-0.5 max-w-full truncate text-[10px] leading-tight text-fg-1">
                         {w.type === "label"
                           ? w.text || "label"
                           : w.label || w.bind || w.type}
@@ -707,7 +703,7 @@ export function WidgetGridEditor({
             </p>
           )}
           {!disabled && !Object.keys(widgets).length && (
-            <p className="mt-3 text-xs text-muted-foreground">
+            <p className="mt-3 text-xs text-fg-2">
               {at !== null
                 ? `"${tabs[at]?.name}" is empty — add a widget above and it lands on this tab.`
                 : "Empty grid — add a widget above, then drag to place and resize it."}

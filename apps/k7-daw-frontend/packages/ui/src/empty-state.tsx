@@ -34,7 +34,7 @@ export function EmptyState({
       </span>
       <h3
         className={cn(
-          "font-bold text-foreground",
+          "font-bold text-fg-1",
           compact ? "text-[18px]" : "type-sheet-title",
         )}
       >

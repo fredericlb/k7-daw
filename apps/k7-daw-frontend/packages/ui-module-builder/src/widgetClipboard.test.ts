@@ -1,6 +1,6 @@
 import type { WebWidget as Widget } from "@studio/graph-model";
+import { clipIds, copyWidgets, pasteWidgets } from "@studio/k7-wasm/panel";
 import { describe, expect, it } from "vitest";
-import { clipIds, copyWidgets, pasteWidgets } from "./widgetClipboard";
 
 const knob = (col: number, row: number, bind: string): Widget => ({
   type: "knob",

@@ -88,7 +88,7 @@ export function Choice<T extends string>({
     />
   ) : null;
   const itemClass = cn(
-    "type-tab relative z-10 inline-flex h-8 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-2xl text-foreground outline-none transition-colors focus-visible:shadow-(--k7-focus-ring) disabled:cursor-default disabled:opacity-40 aria-checked:text-lavender aria-selected:text-lavender [&_svg]:size-4 [&_svg]:shrink-0",
+    "type-tab relative z-10 inline-flex h-8 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-2xl text-fg-1 outline-none transition-colors focus-visible:shadow-(--k7-focus-ring) disabled:cursor-default disabled:opacity-40 aria-checked:text-lavender aria-selected:text-lavender [&_svg]:size-4 [&_svg]:shrink-0",
     iconOnly ? "w-9 px-0" : "flex-1 px-3",
   );
   const body = (o: ChoiceOption<T>) => (

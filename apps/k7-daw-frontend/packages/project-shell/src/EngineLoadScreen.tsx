@@ -127,17 +127,17 @@ export function EngineLoadScreen({
         : s.warmingBody;
 
   return (
-    <div className="flex h-full items-center justify-center bg-background p-8 text-foreground">
+    <div className="flex h-full items-center justify-center bg-ground p-8 text-fg-1">
       <div className="flex w-full max-w-md flex-col items-center gap-4 text-center">
-        <HardDriveDownload className="h-10 w-10 text-muted-foreground" />
+        <HardDriveDownload className="h-10 w-10 text-fg-2" />
         <h1 className="text-lg font-semibold">{title}</h1>
-        <p className="text-sm text-muted-foreground">{body}</p>
+        <p className="text-sm text-fg-2">{body}</p>
         <div
           role="progressbar"
           aria-valuemin={0}
           aria-valuemax={100}
           aria-valuenow={pct ?? undefined}
-          className="h-1.5 w-full overflow-hidden rounded bg-muted"
+          className="h-1.5 w-full overflow-hidden rounded bg-row"
         >
           <div
             className={
@@ -149,7 +149,7 @@ export function EngineLoadScreen({
           />
         </div>
         {counted && (
-          <p className="text-xs tabular-nums text-muted-foreground">
+          <p className="text-xs tabular-nums text-fg-2">
             {(s.scanningCount ?? DEFAULTS.scanningCount)?.(
               scan.done,
               scan.total,
@@ -157,7 +157,7 @@ export function EngineLoadScreen({
           </p>
         )}
         {measured && (
-          <p className="text-xs tabular-nums text-muted-foreground">
+          <p className="text-xs tabular-nums text-fg-2">
             {sync.filesDone}/{sync.files} · {mb(sync.bytesDone)} /{" "}
             {mb(sync.bytes)}
           </p>

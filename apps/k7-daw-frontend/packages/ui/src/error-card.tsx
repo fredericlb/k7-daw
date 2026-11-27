@@ -25,7 +25,7 @@ export function ErrorCard({
         aria-hidden
       />
       <div className="min-w-0">
-        <p className="type-label text-foreground">{title}</p>
+        <p className="type-label text-fg-1">{title}</p>
         {children ? (
           <p className="type-secondary text-fg-2">{children}</p>
         ) : null}

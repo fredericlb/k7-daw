@@ -90,14 +90,14 @@ node might have merged.
 
 ## AI organize
 
-`POST /api/ai/organize/turn` (`apps/k7-daw-backend/packages/k7-front/src/routes/ai/turn.rs`) makes ONE model turn with the account's key
-and model; the AI settings and `GET /api/ai/organize` are the front's phase-3 routes. The conversation, the
-prompts and every check run in the page (`apps/k7-daw-frontend/docs/aiOrganize.md` holds those choices). The backend
+`POST /api/ai/organize` (`apps/k7-daw-backend/packages/k7-front/src/routes/ai/organize.rs`) runs the whole conversation with the account's key
+and model, one model turn at a time (`turn.rs`); the AI settings and `GET /api/ai/organize` are the front's phase-3 routes. The prompts and every
+check are the song crate's (`apps/k7-daw-frontend/docs/aiOrganize.md` holds those choices). The backend
 has no `/api/ai` route: a request the front hands it there meets its `/api` guard.
 
 | choice | why |
 |---|---|
-| the turn takes a prompt, the answer's schema and up to five messages that start and end with the user, and nothing else of the browser's body reaches Claude | the key, the model, `max_tokens` and the effort are the account's and the server's; the page decides what to ask |
+| the run takes the module's request, and nothing else of the browser's body reaches Claude | the key, the model, `max_tokens`, the effort and the prompt are the account's and the server's; the page decides which module |
 | the Messages API by hand over the front's hyper and rustls client (its roots, `front.md`), `ANTHROPIC_BASE_URL` read as the SDK reads it | no SDK crate is approved; the call is one streamed POST |
 | the request body is the SDK's byte for byte: `model`, `max_tokens`, `system`, `messages`, `output_config`, `stream`, compact, and a repair's assistant turn is the streamed blocks with their fields in the server's order | a cached system prompt and a repair that reasons from its own turn depend on what is sent; the vectors compare the bytes |
 | `@anthropic-ai/sdk` 0.128's defaults: two retries on a connection error, a timeout, 408, 409, 429 or 5xx, `x-should-retry`, `retry-after-ms` and `retry-after` obeyed, else 0.5 s doubled up to 8 s with up to 25 % jitter; the 600 s timeout runs until the headers only | the SDK's defaults are what the vectors were written with; once the answer streams, a cut is the route's error, as in the SDK |
@@ -116,7 +116,7 @@ has no `/api/ai` route: a request the front hands it there meets its `/api` guar
 
 ### The proofs
 
-`apps/k7-daw-frontend/packages/panel-rules/src/aiLoop.test.ts` drives the page's loop with recorded model replies. `apps/k7-daw-backend/packages/k7-front/tests/all/ai_turn.rs` runs the guards through a whole front.
+`apps/k7-daw-backend/packages/k7-front/tests/all/ai_vectors.rs` replays the recorded model replies through a whole front. `apps/k7-daw-backend/packages/k7-front/tests/all/ai_organize.rs` runs the guards, a repair and a refusal through it.
 
 Not proven: the abort on a closed tab (timing, read in the code); a timeout or a connection error (the messages are
 the SDK's constants); a real Claude answer.

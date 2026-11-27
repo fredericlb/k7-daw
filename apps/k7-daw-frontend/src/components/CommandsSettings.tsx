@@ -378,7 +378,7 @@ const CommandRow = memo(function CommandRow({
           <button
             type="button"
             title={m["cmds.pickIcon"]()}
-            className="flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-(--k7-hairline-strong) text-fg-2 hover:text-foreground"
+            className="flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-(--k7-hairline-strong) text-fg-2 hover:text-fg-1"
           >
             {Icon ? <Icon className="size-4" /> : "—"}
           </button>
@@ -412,7 +412,7 @@ const CommandRow = memo(function CommandRow({
           <span
             className={cn(
               "shrink-0 font-mono text-[11px] uppercase",
-              l === locale ? "text-foreground" : "text-faint",
+              l === locale ? "text-fg-1" : "text-faint",
             )}
           >
             {l}

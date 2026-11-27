@@ -49,6 +49,9 @@ pub struct Spec {
     pub menu: Option<Vec<String>>,
     #[serde(default)]
     pub confirm: bool,
+    /// Its success is seen in the graph itself, so the page shows no toast for it (a refusal still has one).
+    #[serde(default)]
+    pub quiet: bool,
     #[serde(default)]
     pub args: Vec<ArgSpec>,
 }

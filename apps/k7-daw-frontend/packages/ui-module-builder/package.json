@@ -23,7 +23,6 @@
     "@studio/ui": "*",
     "@studio/engine-protocol": "*",
     "@studio/graph-model": "*",
-    "@studio/panel-rules": "*",
     "@studio/project-shell": "*",
     "@studio/ui-editor": "*",
     "@studio/ui-timeline": "*",
