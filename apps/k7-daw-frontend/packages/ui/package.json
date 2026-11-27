@@ -41,6 +41,7 @@
     "./track-toggle": "./src/track-toggle.tsx",
     "./backdrop": "./src/backdrop.tsx",
     "./checkbox": "./src/checkbox.tsx",
+    "./locale-picker": "./src/locale-picker.tsx",
     "./modal-focus": "./src/modal-focus.ts"
   },
   "peerDependencies": {
