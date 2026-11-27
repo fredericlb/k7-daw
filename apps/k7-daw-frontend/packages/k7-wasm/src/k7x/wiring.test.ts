@@ -1,5 +1,5 @@
 // wiring.test.ts — the k7x facade reaches the module: a read, a print, a scoped edit with its change log, and a refusal as an error.
-// The rules (every exact text, header, scope and printer case) are the Rust crate's: k7x/tests/document_api.rs and the frozen vectors.
+// The rules (every exact text, header, scope and printer case) are the Rust crate's: k7x/tests/document_*.rs and read_print.rs and the frozen vectors.
 
 import { describe, expect, it } from "vitest";
 import { K7SyntaxError, parse, parseDocument, stringify } from "./index.ts";
