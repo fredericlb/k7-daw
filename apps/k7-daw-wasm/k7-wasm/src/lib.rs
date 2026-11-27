@@ -14,6 +14,7 @@ mod tests;
 mod tests_file;
 #[cfg(test)]
 mod tests_k7x;
+#[cfg(test)]
 mod tests_rules;
 #[cfg(test)]
 mod tests_text;
