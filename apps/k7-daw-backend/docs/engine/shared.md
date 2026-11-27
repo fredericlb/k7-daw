@@ -9,7 +9,7 @@ The editor and the other apps that drive an engine list their engines from it.
 
 The registry answers one question: *which engines can this browser reach?* Every app that drives
 an engine asks it — the editor for a song, a share's player for a visit — so
-an app without one to consult could only hardcode `127.0.0.1:8765` (`probeLocalEngine`).
+an app without one to consult could only hardcode `127.0.0.1:8765`.
 
 ## Why one, and why the BROWSER asks it
 

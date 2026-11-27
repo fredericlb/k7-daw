@@ -132,6 +132,57 @@ fn the_snapshots_are_the_fixtures_byte_for_byte() {
     assert_eq!(result_frame(9, false, "no").to_string(), fixture("result"));
 }
 
+/// The edges the two big fixtures leave out: a download with no error, a check with no message, a footswitch of none.
+fn edges() -> Vec<Snapshot> {
+    vec![
+        Snapshot {
+            status: "running".into(),
+            plugin_count: Some(0),
+            rendering: 3,
+            downloads: vec![Download {
+                name: "a".into(),
+                label: "é \"A\"".into(),
+                received: 0,
+                total: u64::from(u32::MAX) + 1,
+                phase: "queued".into(),
+                error: String::new(),
+            }],
+            slots: vec![SlotRow {
+                id: "s".into(),
+                protocol: -1,
+                ..SlotRow::default()
+            }],
+            pair_requests: vec![PairRequest {
+                since: -5,
+                ..PairRequest::default()
+            }],
+            instance_check: Some(InstanceCheck {
+                url: "u".into(),
+                state: "checking".into(),
+                message: "m".into(),
+            }),
+            ..Snapshot::default()
+        },
+        Snapshot {
+            safe_mode: Some(SafeMode::default()),
+            user_stopped: true,
+            enabled_slot: "x".into(),
+            ..Snapshot::default()
+        },
+    ]
+}
+
+#[test]
+fn the_edge_snapshots_keep_their_bytes() {
+    let got: String = edges()
+        .iter()
+        .map(|s| format!("{}\n", state_frame(s)))
+        .collect();
+    let dir = concat!(env!("CARGO_MANIFEST_DIR"), "/schema/fixtures");
+    let want = std::fs::read_to_string(format!("{dir}/state-edges.txt")).unwrap_or_default();
+    assert_eq!(got, want);
+}
+
 #[test]
 fn the_optional_keys_are_absent_and_a_frame_is_one_line() {
     let s = Snapshot {

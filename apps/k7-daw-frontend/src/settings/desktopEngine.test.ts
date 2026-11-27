@@ -22,12 +22,16 @@ const snapshot = {
       deviceType: "CoreAudio",
       current: true,
       currentInput: true,
+      inputs: 0,
+      outputs: 0,
     },
     {
       name: "Scarlett",
       deviceType: "CoreAudio",
       current: false,
       currentInput: false,
+      inputs: 0,
+      outputs: 0,
     },
   ],
   audioPriority: ["MOTU", "Built-in"],
@@ -66,12 +70,16 @@ describe("the audio interface choice", () => {
           deviceType: "ASIO",
           current: asioCurrent,
           currentInput: asioCurrent,
+          inputs: 0,
+          outputs: 0,
         },
         {
           name: "Speakers (Focusrite USB Audio)",
           deviceType: "Windows Audio",
           current: !asioCurrent,
           currentInput: !asioCurrent,
+          inputs: 0,
+          outputs: 0,
         },
       ],
     });
@@ -110,6 +118,7 @@ describe("the instruments", () => {
     downloads: [
       {
         name: "piano",
+        label: "Piano",
         received: 1e6,
         total: 748e6,
         phase: "downloading" as const,

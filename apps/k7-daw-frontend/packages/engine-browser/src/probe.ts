@@ -289,51 +289,6 @@ async function rank<E extends ProbeTarget>(
   };
 }
 
-/** Ask whatever is listening on loopback who it is, for a surface with no registry to consult; any id is accepted, since the TOKEN is what is trusted. */
-export function probeLocalEngine(
-  port = 8765,
-  timeoutMs = PROBE_TIMEOUT_MS,
-): Promise<{ id: string; token: string; wsUrl: string } | null> {
-  const wsUrl = `ws://127.0.0.1:${port}`;
-  return new Promise((resolve) => {
-    let ws: WebSocket;
-    let done = false;
-    const finish = (v: { id: string; token: string; wsUrl: string } | null) => {
-      if (done) return;
-      done = true;
-      clearTimeout(timer);
-      try {
-        ws.close();
-      } catch {
-        /* not open */
-      }
-      resolve(v);
-    };
-    const timer = setTimeout(() => finish(null), timeoutMs);
-    try {
-      ws = new WebSocket(wsUrl);
-    } catch {
-      return finish(null);
-    }
-    ws.onopen = () => ws.send(JSON.stringify({ type: "whoami" }));
-    ws.onmessage = (ev) => {
-      try {
-        const m = JSON.parse(String(ev.data)) as {
-          type?: string;
-          id?: string;
-          token?: string;
-        };
-        if (m.type === "whoami" && m.id)
-          finish({ id: m.id, token: m.token ?? "", wsUrl });
-      } catch {
-        /* ignore non-JSON frames */
-      }
-    };
-    ws.onerror = () => finish(null);
-    ws.onclose = () => finish(null);
-  });
-}
-
 // Measure every engine, LOWEST LATENCY first; the unreachable sink to the bottom, and assigned ones are measured too, so a caller can grey rather than hide.
 export async function probeEngines<E extends ProbeTarget>(
   engines: E[],

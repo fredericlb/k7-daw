@@ -7,6 +7,7 @@ use super::ctx::Ctx;
 use super::scan_board::Status;
 use crate::engine::plugins::PluginInfo;
 use crate::log::say;
+use crate::wire::frames::tagged;
 use serde_json::{Value, json};
 use std::panic::{AssertUnwindSafe, catch_unwind};
 use std::sync::atomic::Ordering;
@@ -22,20 +23,15 @@ pub enum When {
 }
 
 pub fn status_json(s: &Status) -> Value {
-    json!({"type": "plugin-scan", "scanning": s.scanning, "done": s.done, "total": s.total,
-           "current": s.current, "version": s.version})
+    tagged("plugin-scan", s)
 }
 
 /// The catalogue as a `plugins` reply carries it, narrowed by a format substring when `filter` names one.
 pub fn plugins_json(ctx: &Ctx, plugins: &[PluginInfo], filter: &str) -> Value {
     let want = filter.to_ascii_lowercase();
-    let list: Vec<Value> = plugins
+    let list: Vec<&PluginInfo> = plugins
         .iter()
         .filter(|p| want.is_empty() || p.format.to_ascii_lowercase().contains(&want))
-        .map(|p| {
-            json!({"name": p.name, "format": p.format, "manufacturer": p.manufacturer,
-                   "instrument": p.instrument, "role": p.role, "category": p.category, "id": p.id})
-        })
         .collect();
     // Whether a scan is running, so an asker knows this list is about to be replaced.
     json!({"type": "plugins", "plugins": list, "scanning": ctx.plugins.board.snapshot().scanning})

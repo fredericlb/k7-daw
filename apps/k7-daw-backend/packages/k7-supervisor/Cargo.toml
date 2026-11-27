@@ -45,7 +45,10 @@ k7-engine.workspace = true
 k7-local.workspace = true
 # EMFILE and ENFILE, the probe's third answer; getppid on Android.
 libc = "0.2"
+serde.workspace = true
 serde_json.workspace = true
+# The page's HostState type, generated from `protocol/wire.rs` (docs/ts-types.md).
+ts-rs = { workspace = true, optional = true }
 tokio = { workspace = true, features = ["rt-multi-thread", "time", "sync", "macros", "signal", "io-util", "io-std", "net", "fs"] }
 url.workspace = true
 # The cut's job id: a SHA-256 of the work.
@@ -74,6 +77,8 @@ rustls-native-certs.workspace = true
 tokio-rustls = { version = "0.26", default-features = false, features = ["ring"] }
 
 [features]
+# The TypeScript type of the `state` frame, written by k7-front's bindings binary.
+ts = ["dep:ts-rs"]
 # ONNX Runtime LOADED at the first cut, never linked (docs/rust-supervisor-plan.md, M7); off on iOS, where M9 links the xcframework.
 default = ["dynamic-ort"]
 dynamic-ort = ["ort/load-dynamic"]

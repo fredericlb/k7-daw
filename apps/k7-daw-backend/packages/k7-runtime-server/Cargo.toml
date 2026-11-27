@@ -11,7 +11,10 @@ crate-type = ["rlib", "staticlib"]
 path = "src/lib.rs"
 
 [dependencies]
+serde.workspace = true
 serde_json.workspace = true
+# The page's engine wire types, generated from the frame structs (docs/ts-types.md).
+ts-rs = { workspace = true, optional = true }
 # The keys and codes of a pairing: the OS's generator, as the C++ store used `random_device`.
 getrandom.workspace = true
 # A reply from the message thread (`Engine::call`'s one-shot channel), and the socket's runtime.
@@ -23,6 +26,10 @@ futures-util.workspace = true
 [target.'cfg(unix)'.dependencies]
 # `_exit`, for an executable leaving with detached work still running (`entry.rs`).
 libc = "0.2"
+
+[features]
+# The TypeScript types of the frames, written by k7-front's bindings binary.
+ts = ["dep:ts-rs"]
 
 [dev-dependencies]
 tokio = { workspace = true, features = ["sync", "rt-multi-thread", "net", "time", "macros"] }

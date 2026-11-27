@@ -1,8 +1,9 @@
 //! snapshot.rs — the whole of what an app draws, and its `state` frame in a fixed key order: a frame is
-//! sent only when its bytes change. The writer is by hand because the wire is not a
-//! derive's: `error` absent when empty, `downloads` and `rendering` absent at zero, `pluginCount` null.
+//! sent only when its bytes change. The wire is `wire.rs`'s structs, not these: `error` absent when empty,
+//! `downloads` and `rendering` absent at zero, `pluginCount` null.
 
-use serde_json::{Map, Value, json};
+use super::wire::HostState;
+use serde_json::Value;
 
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct AudioDevice {
@@ -186,141 +187,7 @@ impl Default for Snapshot {
     }
 }
 
-fn rows<T>(items: &[T], row: impl Fn(&T) -> Value) -> Value {
-    Value::Array(items.iter().map(row).collect())
-}
-
 /// The `state` frame for a snapshot, keys in the fixtures' order.
 pub fn state_frame(s: &Snapshot) -> Value {
-    let mut f = Map::new();
-    let mut put = |k: &str, v: Value| {
-        f.insert(k.to_string(), v);
-    };
-    put("t", json!("state"));
-    put("owns", json!({"engine": true, "engineQueries": true}));
-    put("status", json!(s.status));
-    if !s.error.is_empty() {
-        put("error", json!(s.error));
-    }
-    if let Some(m) = &s.safe_mode {
-        put(
-            "safeMode",
-            json!({"crashes": m.crashes, "suspect": m.suspect}),
-        );
-    }
-    put("ownsEngine", json!(s.owns_engine));
-    put("userStopped", json!(s.user_stopped));
-    put("engineId", json!(s.engine_id));
-    put("enginePort", json!(s.engine_port));
-    put("registryUrl", json!(s.registry_url));
-    put("lastHeartbeatOk", json!(s.last_heartbeat_ok));
-    put(
-        "pluginCount",
-        s.plugin_count.map_or(Value::Null, |n| json!(n)),
-    );
-    put(
-        "plugins",
-        rows(
-            &s.plugins,
-            |p| json!({"name": p.name, "format": p.format, "manufacturer": p.manufacturer, "role": p.role}),
-        ),
-    );
-    put("pluginsSig", json!(s.plugins_sig));
-    put(
-        "audioDevices",
-        rows(
-            &s.audio_devices,
-            |d| json!({"name": d.name, "deviceType": d.device_type, "current": d.current, "currentInput": d.current_input, "inputs": d.inputs, "outputs": d.outputs}),
-        ),
-    );
-    put("audioPriority", json!(s.audio_priority));
-    put("audioMenuSig", json!(s.audio_menu_sig));
-    put("lanOpen", json!(s.lan_open));
-    put(
-        "editPlugins",
-        rows(
-            &s.edit_plugins,
-            |e| json!({"session": e.session, "id": e.id, "name": e.name, "hasNativePluginUI": e.has_native_plugin_ui}),
-        ),
-    );
-    put("editPluginsSig", json!(s.edit_plugins_sig));
-    put(
-        "sessions",
-        rows(
-            &s.sessions,
-            |x| json!({"id": x.id, "project": x.project, "loaded": x.loaded, "playing": x.playing, "tracks": x.tracks, "listeners": x.listeners}),
-        ),
-    );
-    put("sessionsSig", json!(s.sessions_sig));
-    put(
-        "instances",
-        rows(
-            &s.instances,
-            |i| json!({"url": i.url, "removable": i.removable}),
-        ),
-    );
-    put(
-        "instanceCheck",
-        match &s.instance_check {
-            None => Value::Null,
-            Some(c) if c.message.is_empty() => json!({"url": c.url, "state": c.state}),
-            Some(c) => json!({"url": c.url, "state": c.state, "message": c.message}),
-        },
-    );
-    put(
-        "paths",
-        json!({"root": s.root_path, "mergedLog": s.merged_log_path}),
-    );
-    if s.rendering > 0 {
-        put("rendering", json!(s.rendering));
-    }
-    if !s.downloads.is_empty() {
-        put(
-            "downloads",
-            rows(&s.downloads, |d| {
-                let mut o = json!({"name": d.name, "label": d.label, "received": d.received, "total": d.total, "phase": d.phase});
-                if !d.error.is_empty() {
-                    o["error"] = json!(d.error);
-                }
-                o
-            }),
-        );
-    }
-    put(
-        "instruments",
-        rows(
-            &s.instruments,
-            |i| json!({"name": i.name, "label": i.label, "bytes": i.bytes, "wanted": i.wanted, "installed": i.installed}),
-        ),
-    );
-    put(
-        "pairRequests",
-        rows(
-            &s.pair_requests,
-            |r| json!({"requestId": r.request_id, "name": r.name, "ip": r.ip, "code": r.code, "since": r.since}),
-        ),
-    );
-    put(
-        "pairedDevices",
-        rows(
-            &s.paired_devices,
-            |d| json!({"deviceId": d.device_id, "name": d.name, "created": d.created, "lastSeen": d.last_seen}),
-        ),
-    );
-    put(
-        "slots",
-        rows(
-            &s.slots,
-            |x| json!({"id": x.id, "name": x.name, "chain": x.chain, "savedAt": x.saved_at, "protocol": x.protocol, "footswitch": x.footswitch}),
-        ),
-    );
-    put(
-        "enabledSlot",
-        if s.enabled_slot.is_empty() {
-            Value::Null
-        } else {
-            json!(s.enabled_slot)
-        },
-    );
-    Value::Object(f)
+    serde_json::to_value(HostState::from(s)).unwrap_or(Value::Null)
 }

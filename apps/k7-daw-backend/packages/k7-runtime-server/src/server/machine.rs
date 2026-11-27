@@ -9,6 +9,7 @@ use super::msg::Malformed;
 use crate::engine::Mt;
 use crate::engine::machine::AudioDevice;
 use crate::log::say;
+use crate::wire::frames::{IoLevelsFrame, tagged};
 use crate::wire::json;
 use serde_json::{Map, Value, json};
 use std::collections::{HashMap, HashSet};
@@ -40,10 +41,6 @@ pub fn add(t: &mut HandlerTable) {
     t.add(&["set-input-stereo"], set_input_stereo);
     t.add(&["set-audio-device"], set_audio_device);
     t.add(&["instrument-status"], instrument_status);
-}
-
-fn f(x: f32) -> Value {
-    json!(f64::from(x))
 }
 
 fn list_sessions(r: &Request) -> Result<(), Malformed> {
@@ -187,25 +184,18 @@ fn io_levels(r: &Request) -> Result<(), Malformed> {
     r.ctx.engine.post(move |mt: Mt<'_>| {
         ticket.started();
         let levels = mt.channel_levels_db(&sets);
-        let devices: Vec<Value> = mt
-            .input_devices()
-            .into_iter()
-            .map(|d| json!({"name": d.name, "channels": d.channels, "enabled": d.enabled}))
-            .collect();
+        let devices = mt.input_devices().into_iter().map(Into::into).collect();
         let pitches = mt.channel_pitches(&sets);
         // Stamped because "master" is this session's own output level.
-        ctx.broadcast_to(
-            &session,
-            json!({
-                "type": "io-levels",
-                "inputs": levels.iter().map(|l| f(l.db)).collect::<Vec<_>>(),
-                "found": levels.iter().map(|l| l.found).collect::<Vec<_>>(),
-                "pitches": pitches.iter().map(|p| f(p.hz)).collect::<Vec<_>>(),
-                "clarity": pitches.iter().map(|p| f(p.clarity)).collect::<Vec<_>>(),
-                "devices": devices,
-                "master": f(mt.master_level_db(&session)),
-            }),
-        );
+        let reply = IoLevelsFrame {
+            inputs: levels.iter().map(|l| f64::from(l.db)).collect(),
+            found: levels.iter().map(|l| l.found).collect(),
+            pitches: pitches.iter().map(|p| f64::from(p.hz)).collect(),
+            clarity: pitches.iter().map(|p| f64::from(p.clarity)).collect(),
+            devices,
+            master: f64::from(mt.master_level_db(&session)),
+        };
+        ctx.broadcast_to(&session, tagged("io-levels", &reply));
     });
     Ok(())
 }

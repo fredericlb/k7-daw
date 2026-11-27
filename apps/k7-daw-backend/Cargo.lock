@@ -2173,6 +2173,7 @@ dependencies = [
  "k7-mediatek",
  "k7-picture",
  "k7-roam",
+ "k7-runtime-server",
  "k7-supervisor",
  "k7-sync",
  "midly",
@@ -2351,9 +2352,11 @@ dependencies = [
  "futures-util",
  "getrandom 0.3.4",
  "libc",
+ "serde",
  "serde_json",
  "tokio",
  "tokio-tungstenite",
+ "ts-rs",
 ]
 
 [[package]]
@@ -2374,11 +2377,13 @@ dependencies = [
  "ort",
  "rustls",
  "rustls-native-certs",
+ "serde",
  "serde_json",
  "sha2 0.10.9",
  "tokio",
  "tokio-rustls",
  "tokio-tungstenite",
+ "ts-rs",
  "url",
  "waveform",
  "webpki-roots",
