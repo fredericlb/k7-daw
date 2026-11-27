@@ -296,7 +296,8 @@ export function defineAppConfig(options: AppConfigOptions): UserConfig {
                 // which nobody performs on a tablet. Off in a build for the reason above.
                 clientsClaim: !IS_BUILD,
                 skipWaiting: !IS_BUILD,
-                maximumFileSizeToCacheInBytes: 8 * 1024 * 1024,
+                // Room for k7-wasm's one module, which grows as the logic moves to Rust; it must stay precached offline.
+                maximumFileSizeToCacheInBytes: 16 * 1024 * 1024,
               },
               // On in dev, because with no worker there is no worker at all — and the browser
               // then never offers to install, while the manifest and icons make everything LOOK
