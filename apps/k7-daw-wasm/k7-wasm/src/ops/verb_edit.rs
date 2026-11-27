@@ -75,7 +75,7 @@ pub struct NodeNameArgs {
 
 #[derive(Clone, Debug, Deserialize)]
 #[cfg_attr(feature = "ts", derive(ts_rs::TS))]
-pub struct LineArgs {
+pub struct ClassLineArgs {
     pub line: String,
 }
 
@@ -89,7 +89,7 @@ pub struct CreateArgs {
 #[derive(Clone, Debug, Deserialize)]
 #[cfg_attr(feature = "ts", derive(ts_rs::TS))]
 #[serde(rename_all = "camelCase")]
-pub struct RefArgs {
+pub struct CatalogueRefArgs {
     #[serde(default)]
     #[cfg_attr(feature = "ts", ts(optional))]
     pub catalogue_ref: Option<String>,
@@ -174,11 +174,11 @@ pub enum EditRequest {
     #[serde(rename = "edit.node_name_for")]
     NodeNameFor(NodeNameArgs),
     #[serde(rename = "edit.chain_ref_from_create")]
-    ChainRefFromCreate(LineArgs),
+    ChainRefFromCreate(ClassLineArgs),
     #[serde(rename = "edit.create_for_graph_command")]
     CreateForGraphCommand(CreateArgs),
     #[serde(rename = "edit.node_new_ref_arg")]
-    NodeNewRefArg(RefArgs),
+    NodeNewRefArg(CatalogueRefArgs),
     #[serde(rename = "edit.wire_command")]
     WireCommand(WireArgs),
     #[serde(rename = "edit.filter_ops")]
@@ -192,7 +192,7 @@ pub enum EditRequest {
     #[serde(rename = "edit.playlist_values_at")]
     PlaylistValuesAt(PlaylistValuesArgs),
     #[serde(rename = "edit.class_of_line")]
-    ClassOfLine(LineArgs),
+    ClassOfLine(ClassLineArgs),
     #[serde(rename = "edit.classed_verbs")]
     ClassedVerbs,
 }

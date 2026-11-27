@@ -20,21 +20,38 @@ pub enum TrackFamily {
 /// A track with no prefix, or an unknown one, sorts after every named family.
 const UNKNOWN_RANK: usize = 8;
 
-/// The known instrument codes; a name spelling an `Object.prototype` key is a plain name (decision 357).
-const PREFIXES: [(&str, TrackFamily); 12] = [
-    ("vo", TrackFamily::Voice),
-    ("ch", TrackFamily::Choir),
-    ("da", TrackFamily::Drums),
-    ("ds", TrackFamily::Drums),
-    ("be", TrackFamily::Bass),
-    ("ba", TrackFamily::Bass),
-    ("bs", TrackFamily::Bass),
-    ("ge", TrackFamily::Guitar),
-    ("ga", TrackFamily::Guitar),
-    ("pi", TrackFamily::Piano),
-    ("sy", TrackFamily::Synth),
-    ("sx", TrackFamily::Sax),
+/// The known instrument codes with the family each means and the label a row's tooltip shows (decision 357: a plain name may spell an `Object.prototype` key).
+pub const TRACK_PREFIXES: [(&str, TrackFamily, &str); 12] = [
+    ("vo", TrackFamily::Voice, "voix"),
+    ("ch", TrackFamily::Choir, "choeurs"),
+    ("da", TrackFamily::Drums, "batterie acoustique"),
+    ("ds", TrackFamily::Drums, "batterie synthétique"),
+    ("be", TrackFamily::Bass, "basse électrique"),
+    ("ba", TrackFamily::Bass, "basse acoustique"),
+    ("bs", TrackFamily::Bass, "basse synth"),
+    ("ge", TrackFamily::Guitar, "guitare électrique"),
+    ("ga", TrackFamily::Guitar, "guitare acoustique"),
+    ("pi", TrackFamily::Piano, "piano"),
+    ("sy", TrackFamily::Synth, "synthé"),
+    ("sx", TrackFamily::Sax, "saxophone"),
 ];
+
+impl TrackFamily {
+    /// The family's name, as a row's data spells it.
+    #[must_use]
+    pub fn name(self) -> &'static str {
+        match self {
+            TrackFamily::Voice => "voice",
+            TrackFamily::Choir => "choir",
+            TrackFamily::Drums => "drums",
+            TrackFamily::Bass => "bass",
+            TrackFamily::Guitar => "guitar",
+            TrackFamily::Piano => "piano",
+            TrackFamily::Synth => "synth",
+            TrackFamily::Sax => "sax",
+        }
+    }
+}
 
 /// A track name taken apart: `[position.][prefix.]label`, both leading segments optional and independent.
 #[derive(Clone, Copy, Debug, PartialEq)]
@@ -67,9 +84,9 @@ pub fn parse_track_name(name: &str) -> ParsedName<'_> {
     if let Some(i) = rest.find('.')
         && i > 0
         && let Some(head) = rest.get(..i)
-        && let Some(found) = PREFIXES.iter().find(|(p, _)| head.eq_ignore_ascii_case(p))
+        && let Some(&(code, family, _)) = TRACK_PREFIXES.iter().find(|(p, _, _)| head.eq_ignore_ascii_case(p))
     {
-        prefix = Some(*found);
+        prefix = Some((code, family));
         rest = rest.get(i + 1..).unwrap_or("");
     }
     ParsedName {
@@ -77,6 +94,20 @@ pub fn parse_track_name(name: &str) -> ParsedName<'_> {
         prefix,
         label: rest,
     }
+}
+
+/// The prefix, family and label a track name declares, or None when it declares none.
+#[must_use]
+pub fn track_kind(name: &str) -> Option<(&'static str, TrackFamily, &'static str)> {
+    let (code, _) = parse_track_name(name).prefix?;
+    TRACK_PREFIXES.iter().find(|(p, _, _)| *p == code).copied()
+}
+
+/// The name with its metadata stripped, what a view SHOWS; the whole name when nothing would remain.
+#[must_use]
+pub fn track_label(name: &str) -> &str {
+    let label = parse_track_name(name).label;
+    if label.is_empty() { name } else { label }
 }
 
 /// A category's place among the families, for a name that declares no prefix; `other` has none.

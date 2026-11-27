@@ -8,7 +8,7 @@ use serde_json::{Map, Value};
 use std::collections::HashMap;
 use verbs::ui::fill::{self, CaretAim, EnterAction, FormArg, Offered};
 use verbs::ui::fuzzy;
-use verbs::ui::prefs::{self, Like, View};
+use verbs::ui::prefs::{self, Like, PrefsView};
 use verbs::ui::rank::{self, ArgOption, Completion, EmptyBar, EmptyRow, RankCommands, RankOptions};
 use verbs::ui::step::{self, Step, StepCommand};
 
@@ -51,7 +51,7 @@ pub struct FormArgs {
 
 #[derive(Clone, Debug, Deserialize)]
 #[cfg_attr(feature = "ts", derive(ts_rs::TS))]
-pub struct ValuesArgs {
+pub struct LineValuesArgs {
     pub values: Vec<String>,
 }
 
@@ -83,7 +83,7 @@ pub struct CaretArgs {
 
 #[derive(Clone, Debug, Deserialize)]
 #[cfg_attr(feature = "ts", derive(ts_rs::TS))]
-pub struct KindArgs {
+pub struct WantsKindArgs {
     pub args: Vec<FormArg>,
     #[cfg_attr(feature = "ts", ts(type = "number"))]
     pub active: i64,
@@ -230,7 +230,7 @@ pub enum UiRequest {
     #[serde(rename = "ui.can_run")]
     CanRun(FormArgs),
     #[serde(rename = "ui.line_args")]
-    LineArgs(ValuesArgs),
+    LineArgs(LineValuesArgs),
     #[serde(rename = "ui.next_field")]
     NextField(NextArgs),
     #[serde(rename = "ui.first_missing")]
@@ -240,7 +240,7 @@ pub enum UiRequest {
     #[serde(rename = "ui.caret_answers")]
     CaretAnswers(CaretArgs),
     #[serde(rename = "ui.wants_kind")]
-    WantsKind(KindArgs),
+    WantsKind(WantsKindArgs),
     #[serde(rename = "ui.enter_action")]
     EnterAction(EnterArgs),
     #[serde(rename = "ui.step_sentence")]
@@ -312,7 +312,7 @@ pub fn dispatch(request: UiRequest, out: &mut Vec<u8>) -> Result<(), WasmError> 
             write(out, &s)
         }
         UiRequest::PrefsView(a) => {
-            let v: View = prefs::view(&a.commands, &a.prefs, a.locale.as_deref().unwrap_or("en"));
+            let v: PrefsView = prefs::view(&a.commands, &a.prefs, a.locale.as_deref().unwrap_or("en"));
             write(out, &v)
         }
         UiRequest::OrderCommands(a) => write(

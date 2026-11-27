@@ -10,13 +10,23 @@ import {
   pendingClips,
   pendingSplitAt,
 } from "@studio/k7-wasm/edit";
+  moveOffset,
+  snapMode,
+  snapTo,
+  videoNatural,
+} from "@studio/k7-wasm/gesture";
+import {
+  contentBeats as contentBeatsOf,
+  crossfadeLen,
+  timelineLayout,
+} from "@studio/k7-wasm/gestureTimeline";
 import {
   beatsToDuration,
   beatsToPosition,
   parsePosition,
 } from "@studio/k7-wasm/timecode";
+import { trackLabel } from "@studio/k7-wasm/track";
 import type { Task } from "@studio/k7-wasm/types";
-import { trackLabel } from "@studio/song-schema/trackKind";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -112,7 +122,6 @@ import {
 } from "../rows";
 import { ToolMenu } from "../shell/ToolMenu";
 import type { EditFocus } from "../shellEquality";
-import { moveOffset, snapMode, snapTo } from "../snap";
 import {
   useReloadKey,
   useShell,
@@ -122,7 +131,6 @@ import {
 import type { DropLane, DropUpload, TimelineDropEvent } from "../timelineDrop";
 import { moveNudge, type TimelineMode, timelineMode } from "../timelineMode";
 import {
-  CROSSFADE_BEATS,
   crossfadePair,
   pictureToolLine,
   type Tool,
@@ -138,7 +146,7 @@ import type {
   WebVideoTrack,
 } from "../types";
 import { useIsMobile } from "../useIsMobile";
-import { DRAG_SLOP, V_NATURAL, type VideoEdit } from "../videoDrag";
+import { DRAG_SLOP, type VideoEdit } from "../videoDrag";
 import { ClipActivity } from "./ClipActivity";
 import { ClipContent } from "./ClipContent";
 import type { EditTarget } from "./ClipView";
@@ -699,13 +707,16 @@ function TimelineTabView({
   // A take's or a new sequence's lane, read off its generated id for the block's label (clipNames.ts).
   const laneName = useMemo(() => laneNamer(proj?.tracks ?? []), [proj?.tracks]);
   // The song's extent in whole bars (min 4) — what the caret moves within. Pattern lanes deliberately don't extend it.
-  const contentBeats = useMemo(() => {
-    // A timeline's view reaches at least its fixed end, where every placement of it is cut.
-    let end = Math.max(16, shownTimeline?.length ?? 0);
-    for (const t of proj?.tracks ?? [])
-      for (const c of t.clips) end = Math.max(end, clipEnd(c));
-    return Math.ceil((end + 1) / barBeats) * barBeats;
-  }, [proj, barBeats, shownTimeline]);
+  const contentBeats = useMemo(
+    () =>
+      // A timeline's view reaches at least its fixed end, where every placement of it is cut.
+      contentBeatsOf(
+        (proj?.tracks ?? []).flatMap((t) => t.clips.map((c) => clipEnd(c))),
+        shownTimeline?.length ?? 0,
+        barBeats,
+      ),
+    [proj, barBeats, shownTimeline],
+  );
 
   // --- the zoom: which rows and which beats the view is narrowed to ----------------
 
@@ -770,10 +781,16 @@ function TimelineTabView({
   usePanScroll(scrollRef, [proj]);
 
   // The beat range on screen, and the only bounds the caret and selection know: the song (or more, zoomed out), or the zoomed rectangle.
-  const beatLo = view ? view.beatStart : 0;
-  const beatHi = view
-    ? view.beatEnd
-    : Math.ceil(contentBeats / Math.min(1, zoomX)) - 1;
+  const layout = timelineLayout(
+    view,
+    contentBeats,
+    zoomX,
+    paneW,
+    GUTTER,
+    PX_PER_BEAT,
+    proj?.tempo ?? 0,
+  );
+  const { beatLo, beatHi } = layout;
 
   // Keep the scroll offset across a pane switch — a display:none box has no layout to hold it. See docs/timeline.md.
   const savedScroll = useRef({ left: 0, top: 0 });
@@ -1172,14 +1189,7 @@ function TimelineTabView({
             return void setStatus(m["status.timeline.noCrossfadePair"]());
           const x0 = e.clientX;
           const alt = e.altKey;
-          const lenAt = (x: number) => {
-            const dx = Math.abs(x - x0);
-            if (dx < 4) return CROSSFADE_BEATS;
-            return Math.max(
-              0.125,
-              Math.round((2 * dx) / ppbRef.current / 0.125) * 0.125,
-            );
-          };
+          const lenAt = (x: number) => crossfadeLen(x - x0, ppbRef.current);
           const move = (ev: PointerEvent) =>
             setStatus(
               m["status.timeline.crossfadeLength"]({
@@ -1203,7 +1213,7 @@ function TimelineTabView({
           });
           return;
         }
-        // A cut lands on the grid as a drag does, Shift freeing it (snap.ts).
+        // A cut lands on the grid as a drag does, Shift freeing it (apps/k7-daw-wasm/gesture/src/snap.rs).
         const snapped = e.shiftKey ? at : snapTo(at, unitRef.current);
         const act = toolLine(toolRef.current, {
           track: track.id,
@@ -1334,7 +1344,7 @@ function TimelineTabView({
         Math.abs(e.clientY - d.y) > DRAG_SLOP
       )
         d.moved = true;
-      /** On the RULER'S UNIT, read at the grab: the grid itself, Ctrl keeping the event's offset from it, Shift free (snap.ts). */
+      /** On the RULER'S UNIT, read at the grab: the grid itself, Ctrl keeping the event's offset from it, Shift free (apps/k7-daw-wasm/gesture/src/snap.rs). */
       const offset = moveOffset(
         e.clientX - d.x,
         d.ppb,
@@ -2130,18 +2140,10 @@ function TimelineTabView({
 
   // Drawing extent: the view's beat range fills the pane exactly, so it never scrolls. See docs/timeline.md.
   const availW = Math.max(0, paneW - GUTTER);
-  const spanBeats = beatHi - beatLo + 1; // contentBeats at rest and fit
-  // zoomX > 1 grows the lane past the pane so it can be panned; at or below 1 the lane is the pane and beatHi grew instead.
-  const zoomLane = Math.max(1, zoomX);
-  const ppb = availW > 0 ? (availW / spanBeats) * zoomLane : PX_PER_BEAT;
-  const laneW = availW > 0 ? availW * zoomLane : spanBeats * PX_PER_BEAT;
+  const { ppb, laneW, lastBeat, bps } = layout;
   // Where a beat sits. The ONE place the zoom offset is applied, so nothing positioned can drift out of step.
   ppbRef.current = ppb; // the drag reads this on pointerdown (see beginClipDrag)
   const x = (beat: number) => (beat - beatLo) * ppb;
-  // The last beat drawn: the zoom's end, or the song's rounded-up extent.
-  const lastBeat = view ? beatHi : beatHi + 1;
-  // Beats per second — the whole conversion between the song's unit and the picture's, exact because there is ONE tempo, clamped off zero.
-  const bps = Math.max(1e-6, proj.tempo / 60);
   // The ruler's scale, from the SHARED chooser (Ruler.tsx), so this ruler and the clip editors' cannot pick different ladders.
   const { unit, secStep, barStride } = rulerScale(
     rulerMode,
@@ -2952,7 +2954,7 @@ function TimelineTabView({
                           : `${c.name || c.id}${pace}${converting ? ` · ${m["tl.converting"]()}` : ""}`;
                         const w = Math.max(
                           ppb,
-                          toBeats(provisional ? V_NATURAL : length) * ppb,
+                          toBeats(provisional ? videoNatural() : length) * ppb,
                         );
                         // Off screen and not in hand: nothing to draw — see ClipWindow.
                         if (

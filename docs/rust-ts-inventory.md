@@ -58,7 +58,7 @@ milestone ends with `bash scripts/agent/gate.sh --milestone`; the hours are agen
 | **M1b** first ts-rs | `graph-model/types.ts` from `song/src/graph/view/web.rs` (already derives); the `ts` feature and a bindings binary for the backend crates; the app's mirrors (AuthUser, K7Prefs, LocalApp, ServiceProcess, sync history, the desktop engine snapshot, LanPeer) | 700 | k7-wasm bindings, k7-front, k7-lan, k7-sync, k7-supervisor | nothing (exports only from the song crate) | 8 |
 | **M1c** (built) Rust twins | textHash, compat, quality and choose, engineWarnings and engineMissing (classified by Rust, decision 4), performance (the page's scoring deleted; the supervisor scores); paths, clipEnvelope, engineSession, engineTaken and the five rows with no Rust function (lcdSounds, libraryTree, historyMarks, surfaceRows, paneInUse) stay, see below | 310 | song-schema `engine/` and `text_hash`, k7-wasm ops, k7-file-service, k7-supervisor | nothing | 10 |
 | **M2a** chains build | `ui-chains` build and measure steps (buildGraph, buildChains, buildContext, assembly, subgraph, bindings, geometry, moduleRow, rowSeams, gridFit, stackLayout, nodeUIs, widgetValue, flow, the logic of cables, curvePlacement...), `chainsModel`, `moduleField`, `widgetTarget`; graphNode generated; dagre stays in TS until M5b | 3,700 | new crate `apps/k7-daw-wasm/chains`, op `chains_build` | M1b | 16 |
-| **M2b** gesture arithmetic | snap, rollDrag, rollFit, gridCaret, barWindow, clipPlayhead, clipWarp, videoDrag, takeCounter, timelineTools, formatAt; the arithmetic inside TimelineTab, useRollGestures, PianoRoll, useEdgeDrags, useVideoDrag, AudioClipPanel; the ruler's tick ladder and `ui-timeline` ticks and anchored zoom | 1,900 | new crate `apps/k7-daw-wasm/gesture`, typed exports | decision 1 | 13 |
+| **M2b** (built) gesture arithmetic | snap, rollDrag, rollFit, gridCaret, barWindow, clipPlayhead, clipWarp, videoDrag, takeCounter, timelineTools, formatAt; the arithmetic inside TimelineTab, useRollGestures, PianoRoll, useEdgeDrags, useVideoDrag, AudioClipPanel; the ruler's tick ladder and `ui-timeline` ticks and anchored zoom; what stays, see below | 1,100 (1,800 of tests) | new crate `apps/k7-daw-wasm/gesture`, typed exports | decision 1 | 13 |
 | **M2c** tunnel stand-in (done) | the hub suites ported to Rust tests over the Rust supervisor; `e2e/src/standInEngine.ts` on the supervisor binary with a fake engine; `engine-tunnel` deleted with its 2,100 test lines | 2,500 | k7-supervisor, k7-hub tests | nothing | 10 |
 | **M3a** verbs catalogue (built, see below) | contextMenu, menuTabs, menuTitle, palette, argOptions, rankCommands, fuzzy, commandFill, commandPrefs, emptyBar, stepSentence, exportArgs, pendingEdits, nodeInsert, nodeMenu, clipOps, playlistVocabulary, reloadScope, verbWrites, homeCommands' catalogue and parse; `commandTypes.ts` generated | 2,500 | verbs crate | verbs branch merged; decisions 2, 6 | 14 |
 | **M3b** pictures and render tooling | take-render's verbs-only files deleted; engine-client and the render scripts relocated to `k7-runtime/scripts`; ui-eyes scene generated; its clip schedule, transitions and `.cube` reader; viewportRect; the camera name rules | 1,000 | verbs picture code, k7-front cameras | verbs branch merged; decision 7 | 8 |
@@ -116,6 +116,27 @@ against the Rust ops, then became a Rust test. What stays, and what moves it:
 | `commandPrefs.ts` (types), `reloadScope.ts` (type and hook), `clipOps.chainOps`, `nodeInsert.ts`, `playlistVocabulary.ts`, `menuTitle.ts`, `nodeMenu.ts`, `menuTabs.ts` | thin glue: the page's own types, the browser's collator, a namer callback, a message catalogue, or a re-export that keeps an import path |
 | the shell's command registry rows (`ui/commands`) | decision 11 asked for its sentences and arguments to become catalogue data; they are still read from the registry and handed to Rust (`buildPaletteCommands`), so that move is open |
 | `homeCommands.runHomeCommand`'s branches | they call the file service's acts and keep the order of their refusals |
+
+**M2b, as built.** Eleven modules and the rulers' ladder went (about 1,100 lines of logic, 1,800 of
+tests; the page keeps `timelineTools.ts` (the tool names, their labels and the words of a note),
+`videoDrag.ts` (the drag's state and `DRAG_SLOP`), `gridCaret.ts` (the shell's handle) and the
+re-exports of `ui-timeline/ticks.ts` and `panZoom.ts`). The crate has no dependency but `song-schema`
+(`round_beat`) and serde; every function answers what JavaScript's did, down to `Math.round`'s half-up,
+the sign of zero and `toFixed`'s ties (`js.rs`). Each TS test file first ran against the Rust calls
+(about 200 cases of the old suites, no failure but one assertion on object identity and one on a
+constant that is Rust's now), and each function then ran against the old code on 100,000 random inputs with
+no difference beyond one ulp of `exp` on a pinch's zoom factor and the sign of a zero that crosses
+a JSON op. Call costs (an idle Mac, Node, per call): a typed call about 25 ns (the old TypeScript 5
+to 15), a move of the clip drag (two calls) 57 ns, a picture drag move with 40 ticks 225 ns, a
+300-tick `nearestTick` 1 µs; the JSON ops 2 to 18 µs (`planGroupMove` 3.7 µs, `rulerTicks` 18 µs
+per scroll). What did not move:
+
+| left in TypeScript | why |
+|---|---|
+| the rest of `TimelineTab`'s inline `Math.*` (small clamps on beats and rows, the caret's step, the marquee) | each is two lines on React state; moved without its state it is a call per line |
+| `AudioClipPanel`'s `zoomTo`, the pinch baseline and the playhead's beat | a callback over a React updater, and per-frame drawing (decision 12) |
+| `useChainsCamera`'s wheel use of `panZoom` | `ui-chains-react` belongs to M2a; it still imports `isMouseWheel` and `isZoomWheel` from the re-exports |
+| `ClipActivity`, `clipLoop`, `playedZone` and the other reads on the doc | M4a |
 
 **M2c, as built.** `engine-tunnel` is gone (about 4,300 lines: 2,500 of tests and their harness, 1,800 of source); its four doc pages
 live in `apps/k7-daw-backend/docs/engine/` (`tunnel.md`, `tunnelJobs.md`, `backpressure.md`, `sockets.md`). The choices:

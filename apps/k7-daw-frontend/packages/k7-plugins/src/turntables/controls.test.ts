@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { denormalise, MIX_CONTROLS, mixControl, normalise } from "./controls";
+import { denormalise, mixControl, mixControls, normalise } from "./controls";
 import { BPM_RANGE, DECKS } from "./deckVocabulary";
 
 describe("the desk's controls", () => {
   it("has an id for every one of them, and no duplicates", () => {
-    const ids = MIX_CONTROLS.map((c) => c.id);
+    const ids = mixControls().map((c) => c.id);
     expect(new Set(ids).size).toBe(ids.length);
     // The list a binding may name, written out so adding a control is a deliberate edit here.
     expect(ids).toEqual([

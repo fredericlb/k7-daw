@@ -81,7 +81,7 @@ pub struct LocaleArgs {
 
 #[derive(Clone, Debug, Deserialize)]
 #[cfg_attr(feature = "ts", derive(ts_rs::TS))]
-pub struct LineArgs {
+pub struct HomeLineArgs {
     pub line: String,
 }
 
@@ -161,7 +161,7 @@ pub enum MenuRequest {
     #[serde(rename = "menu.home_catalogue")]
     HomeCatalogue(LocaleArgs),
     #[serde(rename = "menu.home_parse")]
-    HomeParse(LineArgs),
+    HomeParse(HomeLineArgs),
     #[serde(rename = "menu.home_resolve")]
     HomeResolve(HomeCtxArgs),
     #[serde(rename = "menu.home_find_project")]

@@ -6,7 +6,7 @@
 // rung, and that the four stems read as a square rather than as a list.
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { STEMS } from "@studio/song-schema/stems";
+import { STEMS } from "@studio/k7-wasm/stems";
 import { useState } from "react";
 import type { StripLayout } from "../deskLayout";
 import { ChannelStrip, StemStrip } from "./ChannelStrip";

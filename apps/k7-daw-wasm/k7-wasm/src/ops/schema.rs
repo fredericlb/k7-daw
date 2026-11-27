@@ -200,11 +200,11 @@ pub struct TimelineLane {
 }
 
 /// One line of a playlist: the song, and one of its variants when it names one.
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 #[cfg_attr(feature = "ts", derive(ts_rs::TS))]
 pub struct PlaylistItem {
     pub song: String,
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     #[cfg_attr(feature = "ts", ts(optional))]
     pub variant: Option<String>,
 }

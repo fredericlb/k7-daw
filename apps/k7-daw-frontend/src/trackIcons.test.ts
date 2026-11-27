@@ -1,4 +1,4 @@
-import { TRACK_PREFIXES } from "@studio/song-schema/trackKind";
+import { TRACK_PREFIXES } from "@studio/k7-wasm/consts";
 import { describe, expect, it } from "vitest";
 import { trackIcon } from "./trackIcons";
 

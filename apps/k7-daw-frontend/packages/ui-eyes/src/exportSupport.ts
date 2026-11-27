@@ -6,19 +6,16 @@
 // drawn, with a NotSupportedError that names no cause. The answer carries the codec names the
 // encoder is then handed, so the probe and the encoder cannot disagree. See docs/passes.md.
 
-import type {
-  ExportFormat,
-  VideoFormat,
-} from "@studio/song-schema/renderSettings";
+import type { ExportFormat, VideoFormat } from "@studio/k7-wasm/picture";
 import type { AudioCodec, VideoCodec } from "mediabunny";
 
-// The containers live in song-schema, so the server's command layer names them without this package (docs/passes.md).
+// The containers are the Rust crate's (`@studio/k7-wasm/picture`), so the server's command layer names them without this package (docs/passes.md).
 export {
   EXPORT_FORMATS,
   type ExportFormat,
   VIDEO_FORMATS,
   type VideoFormat,
-} from "@studio/song-schema/renderSettings";
+} from "@studio/k7-wasm/picture";
 
 /** What the button and the viewport's strip mean when no line names a container. */
 export const DEFAULT_VIDEO_FORMAT: VideoFormat = "webm";

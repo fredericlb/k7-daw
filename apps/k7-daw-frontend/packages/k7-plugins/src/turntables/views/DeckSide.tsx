@@ -4,12 +4,12 @@
 //
 // It DRAWS a deck and owns nothing about it: the document is `useDeckSet`, held above.
 
+import type { Stem } from "@studio/k7-wasm/stems";
 import {
   parseRecordDrag,
   RECORD_DRAG_TYPE,
   type RecordDrag,
 } from "@studio/song-schema/records";
-import type { Stem } from "@studio/song-schema/stems";
 import { Button } from "@studio/ui/button";
 import { Play, Square } from "@studio/ui/icons";
 import { type CSSProperties, useState } from "react";

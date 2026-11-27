@@ -87,7 +87,7 @@ renamed to `<track>_<bar.beat>_<stamp>.wav` (`fileStamp`),
 declared in `clips/<id>.k7x`, then either placed on the lane (`addTakeToTrack`) or added as a take of
 an event (`addTakeToEvent`) when the session is take-armed for that track. The count-in comes from
 `count_in` in the song's settings (default one bar); the frontend uses it only to skip the pre-roll
-when drawing the growing block (`apps/k7-daw-frontend/src/takeCounter.ts`, `recordingFrom`).
+when drawing the growing block (`apps/k7-daw-wasm/gesture/src/take_counter.rs`, `recordingFrom`).
 
 ## Takes and comps
 

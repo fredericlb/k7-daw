@@ -3,20 +3,30 @@
 
 mod consts;
 
+use gesture::roll_drag::GroupMove;
+use gesture::ruler::RulerTick;
+use gesture::tools::{FadePair, ToolAct};
 use k7_wasm::WasmError;
 use k7_wasm::ops::VersionAnswer;
 use k7_wasm::ops::curve::{CurveRequest, OpenAnswer};
 use k7_wasm::ops::engine::{BestAnswer, EngineRequest, WarningAnswer};
 use k7_wasm::ops::fields::FieldsRequest;
 use k7_wasm::ops::file::FileRequest;
+use k7_wasm::ops::gesture::GestureRequest;
 use k7_wasm::ops::k7x::{K7xRequest, ReadAnswer};
 use k7_wasm::ops::k7x_edit::EditAnswer;
+use k7_wasm::ops::module::ModuleRequest;
+use k7_wasm::ops::picture::{Aspect, PictureRequest};
+use k7_wasm::ops::records::{RecordsRequest, ResolvedRecord};
+use k7_wasm::ops::rules::{RulesRequest, SeqWindowDto, WindowSpan};
 use k7_wasm::ops::schema::{BuiltinPluginDto, EngineModule, PlaylistDto, SchemaRequest, TaskDto, TimelineLane};
+use k7_wasm::ops::stems::{StemLane, StemsRequest};
 use k7_wasm::ops::timecode::TimecodeRequest;
+use k7_wasm::ops::track::{TrackKind, TrackRequest};
 use song::files::Validity;
 use song::views::fields::FileKind;
 use song_schema::engine::{Choice, Compatibility, EngineLatency};
-use song_schema::{CurvePreview, CurveSpec};
+use song_schema::{CurvePreview, CurveSpec, ExportFormat, ExportQuality, ResolvedVideo, Stem, VideoSettings};
 use std::path::Path;
 use std::process::ExitCode;
 use std::{fs, io};
@@ -62,6 +72,24 @@ fn write_types(dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
     VersionAnswer::export_all_to(dir)?;
     FieldsRequest::export_all_to(dir)?;
     FileRequest::export_all_to(dir)?;
+    ModuleRequest::export_all_to(dir)?;
+    PictureRequest::export_all_to(dir)?;
+    Aspect::export_all_to(dir)?;
+    RecordsRequest::export_all_to(dir)?;
+    ResolvedRecord::export_all_to(dir)?;
+    RulesRequest::export_all_to(dir)?;
+    SeqWindowDto::export_all_to(dir)?;
+    WindowSpan::export_all_to(dir)?;
+    StemsRequest::export_all_to(dir)?;
+    StemLane::export_all_to(dir)?;
+    TrackRequest::export_all_to(dir)?;
+    TrackKind::export_all_to(dir)?;
+    VideoSettings::export_all_to(dir)?;
+    ResolvedVideo::export_all_to(dir)?;
+    ExportFormat::export_all_to(dir)?;
+    ExportQuality::export_all_to(dir)?;
+    Stem::export_all_to(dir)?;
+    GestureRequest::export_all_to(dir)?;
     FileKind::export_all_to(dir)?;
     Validity::export_all_to(dir)?;
     WasmError::export_all_to(dir)?;
@@ -75,6 +103,10 @@ fn write_types(dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
     WarningAnswer::export_all_to(dir)?;
     #[cfg(feature = "verbs")]
     export_ui(dir)?;
+    GroupMove::export_all_to(dir)?;
+    ToolAct::export_all_to(dir)?;
+    FadePair::export_all_to(dir)?;
+    RulerTick::export_all_to(dir)?;
     let mut names = fs::read_dir(dir)?
         .map(|e| e.map(|e| e.file_name().to_string_lossy().into_owned()))
         .collect::<Result<Vec<_>, io::Error>>()?;
@@ -98,7 +130,7 @@ fn write_types(dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
 fn export_ui(dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
     use k7_wasm::ops::verb_ui::{Indices, MenuChoiceAnswer, PrefsAnswer, Scores, UiRequest};
     use verbs::ui::fill::{EnterAction, Offered};
-    use verbs::ui::prefs::View;
+    use verbs::ui::prefs::PrefsView;
     use verbs::ui::rank::{ArgOption, EmptyRow};
     use verbs::ui::step::Step;
     UiRequest::export_all_to(dir)?;
@@ -110,7 +142,7 @@ fn export_ui(dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
     EnterAction::export_all_to(dir)?;
     ArgOption::export_all_to(dir)?;
     EmptyRow::export_all_to(dir)?;
-    View::export_all_to(dir)?;
+    PrefsView::export_all_to(dir)?;
     Step::export_all_to(dir)?;
     export_edit(dir)?;
     export_menu(dir)

@@ -3,7 +3,7 @@
 // a clip someone named is shown as named. The id stays the tooltip's — docs/timeline.md.
 
 import { materialRefOf } from "@studio/k7-wasm/schema";
-import { trackLabel } from "@studio/song-schema/trackKind";
+import { trackLabel } from "@studio/k7-wasm/track";
 
 /** A clip ref read as what a person recognises; `copy` is the `-n` a processed copy of a take carries. */
 export type ClipNameParts =

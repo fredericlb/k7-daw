@@ -14,6 +14,12 @@ mod tests;
 mod tests_file;
 #[cfg(test)]
 mod tests_k7x;
+#[cfg(test)]
+mod tests_rules;
+pub mod typed;
+pub mod typed_editors;
+pub mod typed_ticks;
+pub mod typed_timeline;
 
 pub use error::{ErrorCode, WasmError};
 pub use ops::Session;

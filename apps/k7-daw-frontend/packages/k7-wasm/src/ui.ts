@@ -16,7 +16,7 @@ import type {
   Scores,
   Step,
   StepCommand,
-  View,
+  PrefsView,
 } from "./types/index.ts";
 
 export {
@@ -35,7 +35,7 @@ export type {
   Offered,
   Step,
   StepCommand,
-  View,
+  PrefsView,
 };
 
 /** The page's per-command overrides, keyed by the canonical line (apps/k7-daw-frontend/src/commandPrefs docs). */
@@ -281,8 +281,8 @@ export const prefsView = (
   commands: readonly Like[],
   prefs: Prefs,
   locale: string,
-): View =>
-  call<View>({
+): PrefsView =>
+  call<PrefsView>({
     op: "ui.prefs_view",
     args: { commands: likes(commands), prefs, locale },
   });

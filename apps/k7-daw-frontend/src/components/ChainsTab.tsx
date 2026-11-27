@@ -5,7 +5,7 @@
 
 import type { PluginParamsStore } from "@studio/engine-browser/params";
 import { automationLanes, type WebAutomationLane } from "@studio/graph-model";
-import { ASPECTS, aspectOf } from "@studio/song-schema/aspect";
+import { ASPECTS, aspectOf } from "@studio/k7-wasm/picture";
 import { ChevronRight, List } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
 import { foldAssemblies } from "@studio/ui-chains/assembly";

@@ -5,9 +5,9 @@
 // open project's TAGS, written the same way through `project tag` / `project untag`.
 
 import { TASKS_FILE } from "@studio/k7-wasm/consts";
+import { projectTagsOf } from "@studio/k7-wasm/rules";
 import { parseTasks, type Task } from "@studio/k7-wasm/schema";
 import { askConfirm } from "@studio/project-shell/ask";
-import { projectTagsOf } from "@studio/song-schema/projectTags";
 import { Button } from "@studio/ui/button";
 import { Checkbox } from "@studio/ui/checkbox";
 import { Plus, Trash2, X } from "@studio/ui/icons";

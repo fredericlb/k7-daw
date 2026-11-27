@@ -85,13 +85,13 @@ pub struct RowView {
 /// The catalogue as this person sees it: each row's group and label, and every entity present in a stable order.
 #[derive(Clone, Debug, PartialEq, Serialize)]
 #[cfg_attr(feature = "ts", derive(ts_rs::TS))]
-pub struct View {
+pub struct PrefsView {
     pub rows: Vec<RowView>,
     pub entities: Vec<String>,
 }
 
 #[must_use]
-pub fn view(commands: &[Like], prefs: &Prefs, locale: &str) -> View {
+pub fn view(commands: &[Like], prefs: &Prefs, locale: &str) -> PrefsView {
     let heads = heads_of(commands);
     let rows: Vec<RowView> = commands
         .iter()
@@ -111,7 +111,7 @@ pub fn view(commands: &[Like], prefs: &Prefs, locale: &str) -> View {
         .into_iter()
         .collect();
     entities.sort_by(|a, b| locale_cmp(a, b));
-    View { rows, entities }
+    PrefsView { rows, entities }
 }
 
 /// Which entities a command is offered on as things stand: none meaning "wherever it fits", the default.

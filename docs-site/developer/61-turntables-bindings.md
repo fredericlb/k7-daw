@@ -71,7 +71,7 @@ Choices it encodes:
 - **Stem levels are the platter's own `Gain`** (`STEM_PARAM`), not a separate gain module.
 - `assemblyFiles` writes `assemblies/turntable{A,B}.k7x` using `TURNTABLE_REF = "@k7-core/turntable"`; they draw a deck's nodes as one box and change nothing in the compiled document.
 
-Node and control names are spelled once in `apps/k7-daw-frontend/packages/song-schema/src/stems.ts` (`stemLane`, `stemPlatter`, `deckPlatter`, `stemControl`, `turntableMembers`), because the scaffold and the desk must agree and the desk cannot import a scaffold.
+Node and control names are spelled once in `apps/k7-daw-wasm/song-schema/src/stems.rs` (`stem_lane`, `stem_platter`, `deck_platter`, `stem_control`), reached as `@studio/k7-wasm/stems`, because the scaffold and the desk must agree and the desk cannot import a scaffold.
 
 ## Adding a control, end to end
 

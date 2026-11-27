@@ -80,7 +80,7 @@ bytes.
 | `apps/k7-daw-frontend/packages/song-schema/src/moduleTypes.ts` | `RENDER`, `VIDEO_OUT`, `CAM`, the `shaders` / `shapes` / `video_transitions` / `video_effects` categories, `SHADER_PARAMS`, `DISSOLVE`, `OVER` |
 | `apps/k7-daw-frontend/packages/song-schema/src/keyframes.ts` | the `animate` schema and its evaluation |
 | `apps/k7-daw-wasm/song-edit/src/track_file.rs` | surgical writers for lane files |
-| `apps/k7-daw-frontend/packages/song-schema/src/aspect.ts` | the `16:9` / `9:16` shapes |
+| `apps/k7-daw-wasm/song-schema/src/aspect.rs` | the `16:9` / `9:16` shapes |
 | `apps/k7-daw-wasm/verbs/src/picture/` | the picture compile and its scene |
 | `apps/k7-daw-wasm/song-edit/src/video_outputs.rs` | writing the `RENDER → VIDEO_OUT` run into a project that lacks it |
 | `apps/k7-daw-wasm/song/src/pictures/sound.rs` | a picture lane's sound clips derived from its shots — its own `#audio` half, or a chain project's `video_source:` lane |

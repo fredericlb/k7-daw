@@ -7,7 +7,7 @@ import {
   resolveVideoSettings,
   type VideoFormat,
   type VideoSettings,
-} from "@studio/song-schema/renderSettings";
+} from "@studio/k7-wasm/picture";
 import type { VideoScene } from "@studio/ui-eyes/scene";
 import { useCallback, useState } from "react";
 import { api } from "../api";

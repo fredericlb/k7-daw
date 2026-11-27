@@ -72,7 +72,7 @@ Three things about how it gets there:
 
 - **It is read from the whole document, not from the notes array**, like `use_rack`: the
   pair sits outside the list. `seqWindowFromText` in
-  `@studio/song-schema` is the reader, called on every render, since editing `from`
+  `@studio/k7-wasm/rules` is the reader, called on every render, since editing `from`
   changes neither the notes nor the rack.
 - **The window joins the content span.** A `to` reaching past the last hit is a pad, and a
   grid that stopped at the notes would clip the very edge that explains the silence after
