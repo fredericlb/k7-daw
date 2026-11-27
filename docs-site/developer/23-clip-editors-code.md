@@ -46,7 +46,7 @@ onset means that onset.
 toggle and the ruler brace (`LoopBrace.tsx`) to `event loop` / `event loop points`
 (`apps/k7-daw-wasm/song-edit/src/event_loop.rs`: a looped event keeps its length and its pass count is
 recomputed); the trim gate to `event trim`, previewed in the browser with the same gate maths the
-verb uses (`apps/k7-daw-frontend/packages/audio-probe/src/trimGate.ts`); the operations menu to `clip process`
+verb uses (`apps/k7-daw-backend/packages/waveform/src/trim.rs`); the operations menu to `clip process`
 (`apps/k7-daw-frontend/src/clipOps.ts` builds the line).
 
 ## Windows live on the event

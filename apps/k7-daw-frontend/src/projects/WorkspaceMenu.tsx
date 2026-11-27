@@ -98,7 +98,11 @@ export function WorkspaceMenu({
       <DropdownMenuContent align="end" className="w-56">
         {gitMenuEntries(view, workspace === EXAMPLES_WORKSPACE).map((entry) =>
           entry === "connected" && view.connected ? (
-            <DropdownMenuItem key={entry} disabled title={view.remote}>
+            <DropdownMenuItem
+              key={entry}
+              disabled
+              title={view.remote ?? undefined}
+            >
               <GitBranch />
               <span className="truncate">
                 {m["git.menuConnected"]({ remote: view.remote })}

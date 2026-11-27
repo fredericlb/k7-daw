@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "The waveform canvas — one clip's envelope, its grid, markers and playhead, rasterised once and blitted. See docs/layers.md.",
+  "description": "The waveform canvas \u2014 one clip's envelope, its grid, markers and playhead, rasterised once and blitted. See docs/layers.md.",
   "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
@@ -15,6 +15,7 @@
     "react": "^19.2.7"
   },
   "dependencies": {
+    "@studio/k7-wasm": "*",
     "@studio/ui": "*",
     "@studio/ui-timeline": "*"
   },

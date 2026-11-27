@@ -14,7 +14,9 @@
     "./consts": "./src/consts.generated.ts",
     "./types": "./src/types/index.ts",
     "./boot": "./src/boot.ts",
-    "./engine": "./src/engine.ts"
+    "./engine": "./src/engine.ts",
+    "./git": "./src/git.ts",
+    "./media": "./src/media.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",

@@ -1,10 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
-  arrange,
   GITHUB_SCOPES,
-  type GithubRepo,
   hasRepoScope,
-  pushedAgo,
   signedIn,
   signInAfter,
   startingSignIn,
@@ -88,47 +85,5 @@ describe("the status", () => {
   it("asks one code for the person, the key and repo", () => {
     const granted = ["read:user", "write:public_key", "repo"];
     expect(GITHUB_SCOPES).toEqual(granted);
-  });
-});
-
-const repo = (fullName: string, pushedAt: string, k7 = false): GithubRepo => ({
-  fullName,
-  sshUrl: `git@github.com:${fullName}.git`,
-  private: true,
-  pushedAt,
-  k7,
-});
-
-describe("the picker's list", () => {
-  const all = [
-    repo("o/old", "2026-01-01T00:00:00Z"),
-    repo("o/song", "2026-03-01T00:00:00Z", true),
-    repo("o/new", "2026-05-01T00:00:00Z"),
-    repo("o/band", "2026-02-01T00:00:00Z", true),
-  ];
-
-  it("puts k7 workspaces under their own heading, each list most recently pushed first", () => {
-    const { k7, others } = arrange(all, "");
-    expect(k7.map((r) => r.fullName)).toEqual(["o/song", "o/band"]);
-    expect(others.map((r) => r.fullName)).toEqual(["o/new", "o/old"]);
-  });
-
-  it("filters on the full name without case, across both lists", () => {
-    const { k7, others } = arrange(all, " SO");
-    expect(k7.map((r) => r.fullName)).toEqual(["o/song"]);
-    expect(others).toEqual([]);
-  });
-});
-
-describe("how long ago", () => {
-  const now = Date.parse("2026-06-01T12:00:00Z");
-  const ago = (iso: string) => pushedAgo(iso, now);
-  it("takes the largest whole unit", () => {
-    expect(ago("2026-06-01T11:59:50Z")).toEqual({ unit: "now", n: 0 });
-    expect(ago("2026-06-01T11:15:00Z")).toEqual({ unit: "minutes", n: 45 });
-    expect(ago("2026-06-01T07:00:00Z")).toEqual({ unit: "hours", n: 5 });
-    expect(ago("2026-05-29T12:00:00Z")).toEqual({ unit: "days", n: 3 });
-    expect(ago("2026-03-01T12:00:00Z")).toEqual({ unit: "months", n: 3 });
-    expect(ago("2024-06-01T12:00:00Z")).toEqual({ unit: "years", n: 2 });
   });
 });

@@ -178,6 +178,9 @@ export const SHAPE_KINDS = ["square", "circle", "text"] as const;
 /** The four knobs every shader gets, numbered and 0..1. */
 export const SHADER_PARAMS = ["P1", "P2", "P3", "P4"] as const;
 
+/** The gate `event trim` cuts a take at, in dBFS. */
+export const DEFAULT_TRIM_DB = -40.0;
+
 /** The kind a bare `fade_in` means. */
 export const DISSOLVE = "dissolve";
 

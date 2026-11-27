@@ -13,6 +13,8 @@ mod tests;
 #[cfg(test)]
 mod tests_file;
 #[cfg(test)]
+mod tests_git;
+#[cfg(test)]
 mod tests_k7x;
 
 pub use error::{ErrorCode, WasmError};

@@ -1,19 +1,18 @@
 // githubState.ts — the rules of "Sign in with GitHub" as data: the device-flow screen's states, and how the picker orders,
 // filters and dates a list of repositories. What a reader gets wrong: nothing here holds a token, the backend keeps it.
 
+import {
+  type Ago,
+  arrange,
+  type GithubRepo,
+  pushedAgo,
+} from "@studio/k7-wasm/git";
 import type { ForgeStatus } from "./forgeState";
 
 /** What `GET /git/github` says: GitHub's account under the forge seam. */
 export type GithubStatus = ForgeStatus;
 
-export interface GithubRepo {
-  fullName: string;
-  sshUrl: string;
-  private: boolean;
-  pushedAt: string | null;
-  /** Carries the `k7-workspace` topic. */
-  k7: boolean;
-}
+export type { GithubRepo };
 
 export interface DeviceCode {
   userCode: string;
@@ -84,37 +83,5 @@ export function signInAfter(s: SignIn, e: SignInEvent): SignIn {
 export const shortName = (fullName: string): string =>
   fullName.slice(fullName.indexOf("/") + 1);
 
-/** The picker's two lists: k7 workspaces under their own heading, then the rest, each most recently pushed first. */
-export function arrange(
-  repos: GithubRepo[],
-  filter: string,
-): { k7: GithubRepo[]; others: GithubRepo[] } {
-  const q = filter.trim().toLowerCase();
-  const shown = repos.filter((r) => r.fullName.toLowerCase().includes(q));
-  const byPush = (a: GithubRepo, b: GithubRepo) =>
-    Date.parse(b.pushedAt ?? "") - Date.parse(a.pushedAt ?? "") || 0;
-  const sorted = [...shown].sort(byPush);
-  return {
-    k7: sorted.filter((r) => r.k7),
-    others: sorted.filter((r) => !r.k7),
-  };
-}
-
-export type Ago = {
-  unit: "now" | "minutes" | "hours" | "days" | "months" | "years";
-  n: number;
-};
-
-/** How long ago a push was, in the largest whole unit. */
-export function pushedAgo(iso: string | null, now: number): Ago {
-  const t = Date.parse(iso ?? "");
-  if (Number.isNaN(t)) return { unit: "years", n: 99 };
-  const min = Math.max(0, Math.floor((now - t) / 60_000));
-  if (min < 1) return { unit: "now", n: 0 };
-  if (min < 60) return { unit: "minutes", n: min };
-  if (min < 60 * 24) return { unit: "hours", n: Math.floor(min / 60) };
-  const days = Math.floor(min / (60 * 24));
-  if (days < 30) return { unit: "days", n: days };
-  if (days < 365) return { unit: "months", n: Math.floor(days / 30) };
-  return { unit: "years", n: Math.floor(days / 365) };
-}
+export type { Ago };
+export { arrange, pushedAgo };

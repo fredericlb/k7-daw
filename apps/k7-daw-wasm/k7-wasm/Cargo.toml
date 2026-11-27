@@ -16,7 +16,7 @@ path = "src/bin/bindings/main.rs"
 required-features = ["ts"]
 
 [features]
-ts = ["dep:ts-rs", "song-schema/ts", "song/ts"]
+ts = ["dep:ts-rs", "song-schema/ts", "song/ts", "git-rules/ts"]
 # The verbs over a native host's file system, and the verb.catalogue op: built into no browser module (docs/verbs-port.md).
 verbs = ["dep:verbs"]
 
@@ -26,6 +26,10 @@ song = { path = "../song", default-features = false }
 k7x = { path = "../k7x" }
 song-edit = { path = "../song-edit" }
 verbs = { path = "../verbs", optional = true }
+git-rules = { path = "../git-rules" }
+# The measure, the trim window and the WebM head patch, with no decoder or encoder (docs/analysis.md).
+waveform = { path = "../../k7-daw-backend/packages/waveform", default-features = false }
+base64 = "0.22"
 serde = { version = "1", features = ["derive"] }
 serde_json = { version = "1", features = ["float_roundtrip"] }
 ts-rs = { version = "11", optional = true }

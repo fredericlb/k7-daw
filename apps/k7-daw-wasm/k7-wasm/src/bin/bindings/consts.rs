@@ -154,6 +154,11 @@ fn plain() -> Vec<[String; 3]> {
             "SHADER_PARAMS",
             &json!(n::SHADER_PARAMS),
         ),
+        export(
+            "The gate `event trim` cuts a take at, in dBFS.",
+            "DEFAULT_TRIM_DB",
+            &json!(waveform::trim::DEFAULT_TRIM_DB),
+        ),
         export("The kind a bare `fade_in` means.", "DISSOLVE", &s(n::DISSOLVE)),
         export(
             "The kind a fade naming a `chain` and no `with` means.",

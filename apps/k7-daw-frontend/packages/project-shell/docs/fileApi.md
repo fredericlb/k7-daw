@@ -104,20 +104,12 @@ read is same-origin. A page that leaves never ends the wait, so it sends nothing
 guard's prompt answered Stay, sends its reads late. Writes are not held: a write asked at `beforeunload`
 is one the page wants out before it goes.
 
-### A write is refused at the shell's two choke points
+### A write refused over a waiting merge is the server's refusal
 
-Writes are refused in `fsend` and in `projectApi.command`, the two doors every write of these apps goes
-through — around twenty-five call sites in `project.ts` alone. Throwing `ReadOnlyDocument` there refuses
-everywhere, once, with a sentence, instead of neutering feature by feature and meeting the twenty-sixth one
-in production. Hiding buttons is never the alternative: a hidden button is still a keyboard shortcut, a
-command bar entry and a context menu away. `ReadOnlyDocument` has its own type so a caller can tell "this
-cannot be done here" from "the service refused", which as plain `Error`s read the same.
-
-A host that locks a workspace for a while (a merge waiting for choices) installs a second switch,
-`setWriteGate`: each door asks it with a `WriteAsk` (a file route, or a verb line) and a sentence
-back refuses the write. The gate decides what is a write; the shell only asks. It is off until set.
-A verb the Worker runs on its own (a project import) writes through routes of its own and never meets
-`fsend`, so such a caller asks `refusedWrite` itself before it starts.
+The shell holds no write gate. While a merge waits for choices the file service answers every write with
+a 423 (`merge-pending`), and `fsend` throws it as the server's one sentence with its status, like any other
+refusal. The editors are read-only meanwhile through the page's own `locked` flag (`docs/git.md`), which
+draws the state; it never stands in for the server's refusal, so there is one gate and it is the server's.
 
 ### The file service did not answer
 

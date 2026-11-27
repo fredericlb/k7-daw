@@ -19,7 +19,7 @@ is the one after.
 | Audio clip panel | `apps/k7-daw-frontend/src/components/AudioClipPanel.tsx`, `EventGainSlider.tsx`, `LoopBrace.tsx`, with `clipWarp.ts`, `clipOps.ts`, `barWindow.ts`, `waveMode.ts` |
 | Waveform drawing | `apps/k7-daw-frontend/packages/ui-waveform/src/Waveform.tsx`, `spectrum.ts`, `ticks.ts` |
 | Waveform data | `apps/k7-daw-backend/packages/k7-file-service/src/media/region.rs` (envelope slicing, beat grid), `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/media/waveform.rs` (serving it) |
-| Trim gate | `apps/k7-daw-frontend/packages/audio-probe/src/trimGate.ts` |
+| Trim gate | `apps/k7-daw-backend/packages/waveform/src/trim.rs` |
 | Note views | `apps/k7-daw-frontend/src/components/PianoRoll.tsx`, `apps/k7-daw-frontend/src/hooks/useRollGestures.ts`, `rollDrag.ts`, `rollMode.ts`; grid caret in `apps/k7-daw-frontend/src/hooks/useGridCaret.ts` + `gridCaret.ts` |
 | Curve editor | `apps/k7-daw-frontend/src/components/CurveEditor.tsx`, `CurvePlot.tsx`, `CurveKnob.tsx`, `CurveConditions.tsx`, `curveDraft.ts` |
 | MIDI | `apps/k7-daw-frontend/src/webmidi.ts`, `midiIn.ts`, `midiControl.ts`, `midiActivity.ts`, `apps/k7-daw-frontend/src/hooks/useMidiRecording.ts`, `apps/k7-daw-frontend/src/hooks/useMidiControl.ts`, `apps/k7-daw-frontend/src/components/MidiTakeRoll.tsx` |
