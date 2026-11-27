@@ -28,8 +28,15 @@ fn biome_order(a: &str, b: &str) -> std::cmp::Ordering {
         if x == y {
             continue;
         }
-        let (lx, ly) = (x.to_lowercase().next().unwrap_or(x), y.to_lowercase().next().unwrap_or(y));
-        return if lx == ly { x.is_lowercase().cmp(&y.is_lowercase()) } else { lx.cmp(&ly) };
+        let (lx, ly) = (
+            x.to_lowercase().next().unwrap_or(x),
+            y.to_lowercase().next().unwrap_or(y),
+        );
+        return if lx == ly {
+            x.is_lowercase().cmp(&y.is_lowercase())
+        } else {
+            lx.cmp(&ly)
+        };
     }
     a.len().cmp(&b.len())
 }
