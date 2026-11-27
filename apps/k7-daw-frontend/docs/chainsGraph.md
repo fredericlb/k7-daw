@@ -372,7 +372,7 @@ would drift. The track's name over its status, Arm and its chain controls are th
 The lane's mixer pinned at the row's right is drawn bare, with no ground behind it, like the row.
 A sound lane's input is not a card in that row: it is the title bar's. The **input** menu on the left
 lists the machine's audio sockets and MIDI devices (`ChainInputControls.tsx`); **monitor** and **width**
-sit among the properties on the right, read and set the way the waveform editor's gain and loop are. A
+follow it, read and set the way the waveform editor's gain and loop are. A
 row is the lane's signal path through its modules, and an input card at its head was a third of the
 pane spent on two dropdowns. A pick of the other kind is refused in words: changing an audio input into
 a MIDI one is a removal and an addition, which the menu does not do behind one click. A picture lane

@@ -1,5 +1,5 @@
 // ChainInputControls.tsx — a lane's input in the chain dock's title bar, in place of the input node: the
-// Input menu (the audio sockets and the MIDI devices), then "monitor" and "width" as properties, like the
+// Input menu (the audio sockets and the MIDI devices), then "monitor" and "width" beside it, like the
 // waveform editor's gain and loop. Each pick is one `node param` on the input's module (docs/chainsGraph.md).
 
 import { Capsule, CapsuleButton } from "@studio/ui/capsule";

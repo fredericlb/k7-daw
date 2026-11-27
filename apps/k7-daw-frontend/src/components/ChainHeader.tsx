@@ -1,4 +1,4 @@
-// ChainHeader.tsx — the chain dock's header row: the lane's input menu on the left; its monitor and width,
+// ChainHeader.tsx — the chain dock's header row: the lane's input menu, its monitor and width on the left;
 // Arm and the automation toggle on the right. Expand and Close are the dock's own, not drawn here.
 
 import { DockHeaderRow } from "@studio/ui/editor-dock";
@@ -24,7 +24,7 @@ export function ChainHeader({
   onArm?: () => void;
   /** The lane's input menu, first on the left (ChainInputControls.tsx). */
   inputMenu?: React.ReactNode;
-  /** …and its monitor and width, among the properties on the right. */
+  /** …and its monitor and width, right beside it. */
   inputProps?: React.ReactNode;
   showCurves: boolean;
   onToggleCurves?: () => void;
@@ -33,8 +33,8 @@ export function ChainHeader({
     <DockHeaderRow>
       <div className="flex min-w-0 flex-1 items-center gap-2">
         {inputMenu}
+        {inputProps}
         <div className="ml-auto flex shrink-0 items-center gap-2">
-          {inputProps}
           {onArm && (
             <TrackToggle
               kind="arm"
