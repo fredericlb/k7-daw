@@ -137,6 +137,7 @@ mod views_catalogue;
 mod views_errors;
 mod views_errors_list;
 mod views_fields;
+mod views_fields_order;
 mod views_hints;
 mod views_hostile;
 mod views_io;
