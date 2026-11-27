@@ -597,3 +597,12 @@ fn a_row_carries_a_name_a_sentence_a_line_the_verb_and_whether_it_is_finished_an
     // A line is finished exactly when it does not end in a space.
     assert!(m.iter().all(|i| i.complete == !i.command.ends_with(' ')));
 }
+
+#[test]
+fn an_automation_lane_offers_to_remove_its_automation_when_it_names_its_module() {
+    let with =
+        menu(json!({"kind": "curve-point", "curve": "sweep", "param": "Filter Freq", "tc": "1.1.1", "module": "amp"}));
+    assert!(lines(&with).contains(&"node automate amp Filter Freq none"));
+    let without = menu(json!({"kind": "curve-point", "curve": "sweep", "param": "Filter Freq", "tc": "1.1.1"}));
+    assert!(!lines(&without).iter().any(|l| l.starts_with("node automate")));
+}

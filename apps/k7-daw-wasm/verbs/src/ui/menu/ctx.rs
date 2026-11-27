@@ -102,6 +102,10 @@ pub enum MenuCtx {
         curve: String,
         param: String,
         tc: String,
+        /// The module whose param the lane automates: given, the menu can remove the automation too.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        #[cfg_attr(feature = "ts", ts(optional))]
+        module: Option<String>,
     },
     CurveCard {
         curve: String,

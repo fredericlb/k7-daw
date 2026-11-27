@@ -231,7 +231,7 @@ The timeline pane: tool strip, ruler with markers and task flags, timeline tabs,
 | 03.63 | Add / move / remove an automation point | click an automation row to add a point; drag a point; right-click for the point menu | ↑ / ↓ change the focused point; Delete removes it | tap the row to add a point; hold a point, then drag | T M D |
 | 03.64 | Put the caret on a lane cell | click the empty lane (clears the selection) | — | tap the empty lane | T M D |
 | 03.65 | Walk the caret | — | ←/`h`, →/`l` a beat; ↑/`k`, ↓/`j` a row | — | T D |
-| 03.93 | Remove an automation lane | click the automation lane's header → Remove this automation | Tab to the header, Enter → Remove this automation | tap the header → Remove this automation | T M D |
+| 03.93 | Remove an automation lane | right-click the automation lane (its header or its curve) → Remove automation | — | long-press the lane → Remove automation | T M D |
 
 ### Arrange · Clips
 

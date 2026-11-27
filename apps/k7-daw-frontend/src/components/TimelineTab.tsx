@@ -3161,6 +3161,7 @@ function TimelineTabView({
                           kind: "curve-point",
                           curve: row.lane.curve,
                           param: row.lane.param,
+                          module: row.lane.module,
                           tc: beatsToPosition(
                             nearestTick(bars, raw) ?? raw,
                             proj?.timeSigNumerator ?? 4,
@@ -3173,14 +3174,11 @@ function TimelineTabView({
                     }}
                   >
                     <AutomationHeader
-                      trackId={row.track.id}
                       module={lane.module}
                       param={lane.param}
                       curve={lane.curve}
-                      readOnly={readOnly}
                       width={GUTTER}
                       gutter={gutterProps(row)}
-                      run={(line) => void runCommand(line)}
                       className={cn(
                         "flex shrink-0 cursor-pointer select-none items-center gap-1 truncate border-r border-border px-2 text-[11px] text-muted-foreground",
                         GUTTER_STICKY,
@@ -3216,6 +3214,7 @@ function TimelineTabView({
                               kind: "curve-point",
                               curve: lane.curve,
                               param: lane.param,
+                              module: lane.module,
                               tc,
                             },
                             cx,
