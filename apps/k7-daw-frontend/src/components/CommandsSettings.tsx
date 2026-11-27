@@ -25,11 +25,11 @@ import {
   ArrowLeft,
   ArrowUp,
   Layers,
-  Loader2,
   RotateCcw,
 } from "@studio/ui/icons";
 import { Input } from "@studio/ui/input";
 import { cn } from "@studio/ui/lib/utils";
+import { Spinner } from "@studio/ui/spinner";
 import { useUnsavedGuard } from "@studio/ui-editor/unsaved";
 import {
   lazy,
@@ -390,7 +390,7 @@ const CommandRow = memo(function CommandRow({
           <Suspense
             fallback={
               <div className="flex h-24 w-72 items-center justify-center">
-                <Loader2 className="size-4 animate-spin" />
+                <Spinner size="sm" inherit />
               </div>
             }
           >

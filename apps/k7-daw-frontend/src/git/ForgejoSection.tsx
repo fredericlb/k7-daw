@@ -2,9 +2,10 @@
 // What a reader gets wrong: signing in again is the same flow as the first sign-in; the server's grant is per application.
 
 import { Button } from "@studio/ui/button";
+import { Row } from "@studio/ui/row-group";
 import { useMemo, useState } from "react";
 import { m } from "../paraglide/messages.js";
-import { Row, Section } from "../settings/Section";
+import { Section } from "../settings/Section";
 import { useAccountFiles } from "../settings/useAccountFiles";
 import { AddForgejoServer } from "./AddForgejoServer";
 import { ForgejoSignIn } from "./ForgejoSignIn";
@@ -59,10 +60,14 @@ export function ForgejoRows({
             onCancel={() => setAdding(false)}
           />
         ) : (
-          <Row label={m["git.fj.addLabel"]()}>
-            <Button size="sm" onClick={() => setAdding(true)}>
-              {m["git.fj.add"]()}
-            </Button>
+          <Row
+            trailing={
+              <Button size="sm" onClick={() => setAdding(true)}>
+                {m["git.fj.add"]()}
+              </Button>
+            }
+          >
+            {m["git.fj.addLabel"]()}
           </Row>
         )}
       </Section>
@@ -118,43 +123,61 @@ function ServerRows({
     return (
       <Section title={name}>
         <Row
-          label={m["git.fj.removeAsk"]({ server: name })}
           detail={
             account.synced
               ? m["git.fj.removeNoteSynced"]()
               : m["git.fj.removeNote"]()
           }
+          trailing={
+            <>
+              <Button
+                size="sm"
+                variant="destructive"
+                onClick={() => void remove()}
+              >
+                {m["git.fj.removeConfirm"]()}
+              </Button>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => setRemoving(false)}
+              >
+                {m["common.cancel"]()}
+              </Button>
+            </>
+          }
         >
-          <Button size="sm" variant="destructive" onClick={() => void remove()}>
-            {m["git.fj.removeConfirm"]()}
-          </Button>
-          <Button size="sm" variant="ghost" onClick={() => setRemoving(false)}>
-            {m["common.cancel"]()}
-          </Button>
+          {m["git.fj.removeAsk"]({ server: name })}
         </Row>
       </Section>
     );
   return (
     <Section title={name}>
       <Row
-        label={
-          inside
-            ? m["git.gh.signedAs"]({ login: account.login ?? "" })
-            : dropped
-              ? m["git.fj.signedOut"]()
-              : m["git.gh.notSignedIn"]()
-        }
         detail={note || account.url}
         error={error || undefined}
+        trailing={
+          <>
+            {!inside && (
+              <Button size="sm" onClick={() => setSigning(true)}>
+                {dropped ? m["git.fj.signInAgain"]() : m["git.fj.signIn"]()}
+              </Button>
+            )}
+            <Button
+              size="sm"
+              variant="secondary"
+              onClick={() => setRemoving(true)}
+            >
+              {m["git.fj.remove"]()}
+            </Button>
+          </>
+        }
       >
-        {!inside && (
-          <Button size="sm" onClick={() => setSigning(true)}>
-            {dropped ? m["git.fj.signInAgain"]() : m["git.fj.signIn"]()}
-          </Button>
-        )}
-        <Button size="sm" variant="secondary" onClick={() => setRemoving(true)}>
-          {m["git.fj.remove"]()}
-        </Button>
+        {inside
+          ? m["git.gh.signedAs"]({ login: account.login ?? "" })
+          : dropped
+            ? m["git.fj.signedOut"]()
+            : m["git.gh.notSignedIn"]()}
       </Row>
     </Section>
   );

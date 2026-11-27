@@ -94,7 +94,7 @@ const k7xHighlight = HighlightStyle.define([
   { tag: t.propertyName, color: "var(--sh-primary)" },
   {
     tag: t.invalid,
-    color: "var(--sh-destructive)",
+    color: "var(--k7-error)",
     textDecoration: "underline wavy",
   },
   { tag: t.bracket, color: "var(--sh-muted-foreground)" },

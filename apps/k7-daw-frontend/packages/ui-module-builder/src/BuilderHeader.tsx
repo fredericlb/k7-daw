@@ -19,7 +19,6 @@ import {
   ChevronDown,
   Folder,
   LayoutGrid,
-  Loader2,
   Lock,
   type LucideIcon,
   Pencil,
@@ -35,6 +34,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@studio/ui/select";
+import { Spinner } from "@studio/ui/spinner";
 import type { AutosaveStatus, loudest } from "@studio/ui-editor/autosave";
 import type { PresetInfo } from "@studio/web-protocol";
 
@@ -220,7 +220,7 @@ export function BuilderHeader({
             title="save the module's files — Ctrl+S"
           >
             {publishing || saveState.status === "saving" ? (
-              <Loader2 className="mr-1 h-4 w-4 animate-spin" />
+              <Spinner size="sm" inherit className="mr-1" />
             ) : (
               <Save className="mr-1 h-4 w-4" />
             )}
@@ -238,7 +238,7 @@ export function BuilderHeader({
           title={saveState.reason ?? undefined}
         >
           {saveState.status === "saving" && (
-            <Loader2 className="h-3 w-3 shrink-0 animate-spin" />
+            <Spinner size="xs" inherit className="shrink-0" />
           )}
           <span className="truncate">
             {saveState.status === "clean" || saveState.status === "pending"

@@ -2,9 +2,10 @@
 // It saves itself (debounced, and on blur), with a quiet note. One identity per device, shared with the Save act through ./identity (apps/k7-daw-backend/docs/files/git.md).
 
 import { Input } from "@studio/ui/input";
+import { Row } from "@studio/ui/row-group";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { m } from "../paraglide/messages.js";
-import { Row, Section } from "../settings/Section";
+import { Section } from "../settings/Section";
 import { useAccountFiles } from "../settings/useAccountFiles";
 import { explain, type GitTransport } from "./gitApi";
 import { saveIdentity, useIdentity } from "./identity";
@@ -87,38 +88,38 @@ export function IdentitySection() {
   return (
     <Section title={m["git.identityTitle"]()} hint={m["git.identityHint"]()}>
       <Row
-        label={m["git.identityName"]()}
         detail={
           said?.field === "name" && !said.error
             ? said.text
             : suggested(name, known?.name, known?.nameSource)
         }
         error={said?.field === "name" && said.error ? said.text : undefined}
-      >
-        <Input
+        trailing=<Input
           aria-label={m["git.identityName"]()}
           value={name}
           disabled={!ready}
           onChange={(e) => setName(e.target.value)}
           onBlur={() => void save()}
         />
+      >
+        {m["git.identityName"]()}
       </Row>
       <Row
-        label={m["git.identityEmail"]()}
         detail={
           said?.field === "email" && !said.error
             ? said.text
             : suggested(email, known?.email, known?.emailSource)
         }
         error={said?.field === "email" && said.error ? said.text : undefined}
-      >
-        <Input
+        trailing=<Input
           aria-label={m["git.identityEmail"]()}
           value={email}
           disabled={!ready}
           onChange={(e) => setEmail(e.target.value)}
           onBlur={() => void save()}
         />
+      >
+        {m["git.identityEmail"]()}
       </Row>
     </Section>
   );

@@ -15,6 +15,7 @@ import {
 import { Button } from "@studio/ui/button";
 import { Check } from "@studio/ui/icons";
 import { RowGroup } from "@studio/ui/row-group";
+import { SectionHeading } from "@studio/ui/section-heading";
 import type { AccountLibrary, AccountWorkspace } from "@studio/web-protocol";
 import { useCallback, useEffect, useState } from "react";
 import { m } from "../paraglide/messages.js";
@@ -103,7 +104,9 @@ export function LibraryPins({
         aria-label={m["libs.pinnedBy"]()}
         className="flex flex-col gap-2"
       >
-        <h2 className="type-caps px-1 text-fg-3">{m["libs.pinnedBy"]()}</h2>
+        <SectionHeading as="h2" className="px-1">
+          {m["libs.pinnedBy"]()}
+        </SectionHeading>
         <RowGroup>
           {rows.flatMap(({ ws, pins, unread }) =>
             unread !== null

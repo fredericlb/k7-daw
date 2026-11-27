@@ -12,12 +12,12 @@ import {
 import {
   FileText,
   LayoutGrid,
-  Loader2,
   Piano,
   TriangleAlert,
   Wand2,
 } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
+import { Spinner } from "@studio/ui/spinner";
 import type { AutosaveStatus } from "@studio/ui-editor/autosave";
 import { m } from "../paraglide/messages.js";
 import {
@@ -160,7 +160,7 @@ export function EditorToolbar({
               title={m["editor.runChain"]()}
             >
               {processing ? (
-                <Loader2 className="mr-1 h-4 w-4 animate-spin" />
+                <Spinner size="sm" inherit className="mr-1" />
               ) : (
                 <Wand2 className="mr-1 h-4 w-4" />
               )}
@@ -188,7 +188,7 @@ export function EditorToolbar({
         title={autosave.reason ?? undefined}
       >
         {autosave.status === "saving" && (
-          <Loader2 className="h-3 w-3 shrink-0 animate-spin" />
+          <Spinner size="xs" inherit className="shrink-0" />
         )}
         <span className="truncate">
           {saveLabel(autosave.status, autosave.reason)}

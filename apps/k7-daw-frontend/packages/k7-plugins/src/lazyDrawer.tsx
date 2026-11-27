@@ -4,7 +4,7 @@
 // a drawer arriving never hides the panes around it, and a mounted drawer never suspends again —
 // the pane invariant (mounted once, hidden, never unmounted) holds. See ../docs/plugins.md.
 
-import { Loader2 } from "@studio/ui/icons";
+import { Spinner } from "@studio/ui/spinner";
 import { type ComponentType, lazy, type ReactNode, Suspense } from "react";
 
 export function lazyDrawer<P extends object>(
@@ -17,7 +17,7 @@ export function lazyDrawer<P extends object>(
       <Suspense
         fallback={
           <div className="flex min-h-0 flex-1 items-center justify-center">
-            <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+            <Spinner className="text-muted-foreground" />
           </div>
         }
       >

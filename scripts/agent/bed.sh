@@ -13,9 +13,11 @@ if [ "${1:-}" = --dry-run ]; then dry=1; shift; fi
 
 tree=$(git rev-parse --show-toplevel)
 cd "$tree"
-# A worktree without node_modules resolves @studio/* into the main checkout, whose files the bed's Vite refuses to serve.
-if [ ! -e "$tree/node_modules" ] && [ "$(git rev-parse --git-common-dir)" != "$(git rev-parse --git-dir)" ]; then
-  echo "bed.sh: this worktree has no node_modules; linking it (worktree-init, no install)"
+# A worktree whose @studio/* resolve into the main checkout (no node_modules, or one linked to main's) gets files the bed's Vite refuses.
+wasm_pkg="$(realpath "$tree/node_modules/@studio/k7-wasm" 2>/dev/null || true)"
+if [ "$(git rev-parse --git-common-dir)" != "$(git rev-parse --git-dir)" ] && [ "${wasm_pkg#"$tree"/}" = "$wasm_pkg" ]; then
+  echo "bed.sh: @studio/* resolve outside this worktree (${wasm_pkg:-nowhere}); relinking (worktree-init, no install)"
+  [ -L "$tree/node_modules" ] && rm "$tree/node_modules"
   node scripts/agent/worktree-init.mjs
 fi
 suite=${E2E_SUITE:-web}

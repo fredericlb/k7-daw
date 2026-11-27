@@ -13,7 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@studio/ui/dialog";
-import { Loader2 } from "@studio/ui/icons";
+import { Spinner } from "@studio/ui/spinner";
 import { useState } from "react";
 import { m } from "../paraglide/messages.js";
 import { NameField } from "./NameForm";
@@ -130,7 +130,7 @@ export function ImportProject({
             <Button onClick={onOpen}>{m["importDrop.open"]()}</Button>
           ) : (
             <Button disabled={busy || !folder} onClick={submit}>
-              {busy && <Loader2 className="mr-1 size-5 animate-spin" />}
+              {busy && <Spinner inherit className="mr-1" />}
               {m["importDrop.run"]()}
             </Button>
           )}

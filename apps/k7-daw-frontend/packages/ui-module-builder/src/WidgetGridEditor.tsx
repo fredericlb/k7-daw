@@ -12,13 +12,13 @@ import { Button } from "@studio/ui/button";
 import {
   ClipboardPaste,
   Copy,
-  LoaderCircle,
   Power,
   Scissors,
   Sparkles,
   Wand2,
 } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
+import { Spinner } from "@studio/ui/spinner";
 import { usePointerFollow } from "@studio/ui-timeline/drag";
 import { useCallback, useRef, useState } from "react";
 import { type AutoParam, autoOrganize } from "./autoLayout";
@@ -467,7 +467,7 @@ export function WidgetGridEditor({
               }
             >
               {aiBusy ? (
-                <LoaderCircle className="mr-1 h-3.5 w-3.5 animate-spin" />
+                <Spinner size="xs" inherit className="mr-1" />
               ) : (
                 <Sparkles className="mr-1 h-3.5 w-3.5" />
               )}

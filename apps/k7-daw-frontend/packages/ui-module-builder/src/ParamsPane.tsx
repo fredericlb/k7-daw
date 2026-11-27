@@ -7,11 +7,11 @@ import { Button } from "@studio/ui/button";
 import {
   AppWindow,
   Camera,
-  Loader2,
   RefreshCw,
   SlidersHorizontal,
 } from "@studio/ui/icons";
 import { Input } from "@studio/ui/input";
+import { Spinner } from "@studio/ui/spinner";
 import { useState } from "react";
 import { setParamDrag } from "./paramDrag";
 
@@ -89,7 +89,7 @@ export function ParamsPane({
             title="Load this module's plugin and read its parameters — takes a few seconds"
           >
             {scanning ? (
-              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              <Spinner size="xs" inherit />
             ) : (
               <RefreshCw className="h-3.5 w-3.5" />
             )}
@@ -109,7 +109,7 @@ export function ParamsPane({
             title="Open the plugin's own window — a separate instance, on the engine's machine. Nothing touched in it is saved."
           >
             {openingUi ? (
-              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              <Spinner size="xs" inherit />
             ) : (
               <AppWindow className="h-3.5 w-3.5" />
             )}
@@ -129,7 +129,7 @@ export function ParamsPane({
             title="Keep the plugin's current state as a named base in the module's base/ folder — for plugins whose sound is not in their parameters"
           >
             {snapping ? (
-              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              <Spinner size="xs" inherit />
             ) : (
               <Camera className="h-3.5 w-3.5" />
             )}

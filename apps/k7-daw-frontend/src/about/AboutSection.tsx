@@ -4,10 +4,11 @@
 
 import { buttonVariants } from "@studio/ui/button";
 import { ExternalLink } from "@studio/ui/icons";
+import { Row } from "@studio/ui/row-group";
 import { lazy, Suspense, useState } from "react";
 import { useLocalApp } from "../localApp";
 import { m } from "../paraglide/messages.js";
-import { Action, Row, Section } from "../settings/Section";
+import { Action, Section } from "../settings/Section";
 import { VERSION } from "../version";
 import { LicenseText } from "./LicenseText";
 
@@ -32,24 +33,29 @@ export function AboutSection() {
   return (
     <section aria-label={m["about.title"]()} className="flex flex-col gap-4">
       <Section title="K7 DAW" hint={m["about.tagline"]()}>
+        {/* version.ts is the frontend's one version source, whatever feeds it (../../docs/about.md). */}
         <Row
-          // version.ts is the frontend's one version source, whatever feeds it (../../docs/about.md).
-          label={m["about.version"]({ version: VERSION })}
           detail={
             local?.engine
               ? m["settings.desktopVersion"]({ version: local.version })
               : undefined
           }
-        />
+        >
+          {m["about.version"]({ version: VERSION })}
+        </Row>
       </Section>
 
       <Section title={m["about.license.title"]()}>
-        <Row label={m["about.license.body"]()}>
-          <Action onClick={() => setShowLicense((s) => !s)}>
-            {showLicense
-              ? m["about.license.hide"]()
-              : m["about.license.show"]()}
-          </Action>
+        <Row
+          trailing={
+            <Action onClick={() => setShowLicense((s) => !s)}>
+              {showLicense
+                ? m["about.license.hide"]()
+                : m["about.license.show"]()}
+            </Action>
+          }
+        >
+          {m["about.license.body"]()}
         </Row>
         {showLicense && (
           <Suspense fallback={null}>
@@ -62,16 +68,20 @@ export function AboutSection() {
         title={m["about.source.title"]()}
         hint={m["about.source.hint"]()}
       >
-        <Row label={SOURCE_URL}>
-          <a
-            href={SOURCE_URL}
-            target="_blank"
-            rel="noreferrer"
-            className={buttonVariants({ variant: "glass", size: "sm" })}
-          >
-            <ExternalLink className="size-5" />
-            {m["about.source.open"]()}
-          </a>
+        <Row
+          trailing={
+            <a
+              href={SOURCE_URL}
+              target="_blank"
+              rel="noreferrer"
+              className={buttonVariants({ variant: "glass", size: "sm" })}
+            >
+              <ExternalLink className="size-5" />
+              {m["about.source.open"]()}
+            </a>
+          }
+        >
+          {SOURCE_URL}
         </Row>
       </Section>
 

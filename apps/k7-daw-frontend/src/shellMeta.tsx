@@ -9,7 +9,6 @@ import {
   AudioWaveform,
   Disc3,
   FileCode,
-  Loader2,
   type LucideIcon,
   MonitorPlay,
   Music,
@@ -20,6 +19,7 @@ import {
   Workflow,
 } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
+import { Spinner } from "@studio/ui/spinner";
 import { m } from "./paraglide/messages.js";
 import type { Pane, Panel } from "./routes";
 
@@ -185,7 +185,7 @@ export function MiniTransport({
         className="flex h-6 w-6 items-center justify-center rounded text-foreground hover:bg-accent disabled:opacity-50"
       >
         {waiting ? (
-          <Loader2 className="h-3.5 w-3.5 animate-spin" />
+          <Spinner size="xs" inherit />
         ) : playing ? (
           <Pause className="h-3.5 w-3.5" />
         ) : (

@@ -4,7 +4,8 @@
 import { showToast } from "@studio/project-shell/toast";
 import { Button } from "@studio/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@studio/ui/dialog";
-import { ChevronLeft, ChevronRight, Loader2 } from "@studio/ui/icons";
+import { ChevronLeft, ChevronRight } from "@studio/ui/icons";
+import { Spinner } from "@studio/ui/spinner";
 import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import { m } from "../paraglide/messages.js";
 import { ConflictCard } from "./ConflictCard";
@@ -154,7 +155,7 @@ export function MergeDialog({
             disabled={busy || !canFinish(s)}
             onClick={() => void finish()}
           >
-            {busy && <Loader2 className="mr-1 size-3 animate-spin" />}
+            {busy && <Spinner size="xs" inherit className="mr-1" />}
             {m["git.finish"]()}
           </Button>
         </header>
@@ -179,14 +180,14 @@ export function MergeDialog({
                 disabled={busy || !t}
                 onClick={() => void abort()}
               >
-                {busy && <Loader2 className="mr-1 size-3 animate-spin" />}
+                {busy && <Spinner size="xs" inherit className="mr-1" />}
                 {m["git.abort"]()}
               </Button>
             </div>
           </div>
         )}
         <div className="grid min-h-0 flex-1 grid-cols-1 gap-4 overflow-y-auto p-4 md:grid-cols-[minmax(240px,1fr)_2fr]">
-          {!loaded && <Loader2 className="size-4 animate-spin" />}
+          {!loaded && <Spinner size="sm" inherit />}
           {loaded && ordered.length === 0 && !error && (
             <p className="type-secondary text-fg-2">{m["git.mergeNone"]()}</p>
           )}

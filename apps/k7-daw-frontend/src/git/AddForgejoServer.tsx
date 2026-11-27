@@ -2,8 +2,9 @@
 // What a reader gets wrong: no client id is typed unless the server's admin turned off Forgejo's built-in clients (docs/git.md).
 
 import { Button } from "@studio/ui/button";
-import { Check, Copy, Loader2 } from "@studio/ui/icons";
+import { Check, Copy } from "@studio/ui/icons";
 import { Input } from "@studio/ui/input";
+import { Spinner } from "@studio/ui/spinner";
 import { type ReactNode, useReducer, useState } from "react";
 import { m } from "../paraglide/messages.js";
 import { copyText } from "./copyText";
@@ -133,7 +134,7 @@ export function AddForgejoServer({
           disabled={!url.trim() || busy}
         >
           {state.phase === "checking" && (
-            <Loader2 className="mr-1 size-3 animate-spin" />
+            <Spinner size="xs" inherit className="mr-1" />
           )}
           {state.phase === "checking"
             ? m["git.fj.checking"]()
@@ -193,7 +194,7 @@ export function AddForgejoServer({
             onClick={() => void add()}
           >
             {state.phase === "adding" && (
-              <Loader2 className="mr-1 size-3 animate-spin" />
+              <Spinner size="xs" inherit className="mr-1" />
             )}
             {state.phase === "adding"
               ? m["git.fj.adding"]()

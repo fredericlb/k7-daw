@@ -24,7 +24,6 @@ import {
   dropEntries,
   readDroppedFiles,
 } from "./lib/droppedEntries";
-import { useLongPress } from "./lib/longPress";
 import { cn } from "./lib/utils";
 
 export type { DroppedFile };
@@ -202,9 +201,6 @@ function Row<N extends TreeNode>(props: RowProps<N>) {
   const pad = { paddingLeft: 8 + depth * 12 };
   const disabled = isDisabled?.(node) ?? false;
   const withMenu = !!menuLabel && hasMenu(node);
-  const longPress = useLongPress(
-    withMenu ? (x, y) => onMenuAt(node, x, y) : null,
-  );
   // Shown on hover or focus where a pointer hovers, always where none does.
   const more = withMenu ? (
     <button
@@ -296,7 +292,6 @@ function Row<N extends TreeNode>(props: RowProps<N>) {
             pressable,
           )}
           style={pad}
-          {...longPress}
           onContextMenu={(e) => {
             e.stopPropagation();
             onContext(node, e);
@@ -382,7 +377,6 @@ function Row<N extends TreeNode>(props: RowProps<N>) {
         activePath === node.path && "bg-secondary",
         pressable,
       )}
-      {...longPress}
     >
       <button
         type="button"
@@ -603,11 +597,6 @@ export function FileTree<N extends TreeNode>({
     dir: true,
     root: true,
   };
-  const backgroundPress = useLongPress(
-    rowMenuLabel && offers(rootTarget)
-      ? (x, y) => openAt(rootTarget, x, y)
-      : null,
-  );
 
   // A lone top-level node is almost always a caller's own wrapping row — draw its children instead.
   const rootNodes: N[] =
@@ -625,11 +614,6 @@ export function FileTree<N extends TreeNode>({
           "ring-2 ring-inset ring-primary/60",
         className,
       )}
-      {...backgroundPress}
-      onPointerDown={(e) => {
-        // A press on a row is that row's long-press, not the background's.
-        if (e.target === e.currentTarget) backgroundPress.onPointerDown?.(e);
-      }}
       onContextMenu={(e) => {
         // The background only: a right-click on a row is that row's, and it stops propagating first.
         if (e.target !== e.currentTarget) return;

@@ -12,8 +12,8 @@ import {
   File,
   Folder,
   FolderOpen,
-  Loader2,
 } from "@studio/ui/icons";
+import { Spinner } from "@studio/ui/spinner";
 import type { AccountWorkspace, FileNode } from "@studio/web-protocol";
 import type { ProjectApp } from "@studio/web-protocol/projects";
 import { sortNodes } from "@studio/web-protocol/tree";
@@ -192,7 +192,7 @@ function FilesTree({
       <div className="max-h-[40vh] min-h-0 shrink-0 overflow-auto border-b py-2 md:max-h-none md:w-80 md:border-r md:border-b-0">
         {rows === null ? (
           <div className="flex items-center justify-center gap-2 p-8 text-sm text-muted-foreground">
-            <Loader2 className="h-4 w-4 animate-spin" />
+            <Spinner size="sm" inherit />
             {m["repos.reading"]()}
           </div>
         ) : rows.length === 0 ? (

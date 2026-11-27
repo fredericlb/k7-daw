@@ -12,8 +12,9 @@ import {
 import type { PlaylistItem } from "@studio/k7-wasm/types";
 import type { Validity } from "@studio/k7-wasm/validate";
 import { Button } from "@studio/ui/button";
-import { ArrowLeft, ListMusic, Loader2 } from "@studio/ui/icons";
+import { ArrowLeft, ListMusic } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
+import { Loading, Spinner } from "@studio/ui/spinner";
 import { recallBuffer, useAutosave } from "@studio/ui-editor/autosave";
 import { editTextBy } from "@studio/ui-editor/k7x/bufferEdit";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -229,7 +230,7 @@ export function PlaylistEditor({
             title={autosave.reason ?? undefined}
           >
             {autosave.status === "saving" && (
-              <Loader2 className="h-3 w-3 shrink-0 animate-spin" />
+              <Spinner size="xs" inherit className="shrink-0" />
             )}
             <span className="truncate">{saveLabel(autosave.status, null)}</span>
           </span>
@@ -238,7 +239,7 @@ export function PlaylistEditor({
 
       {content == null ? (
         <div className="flex flex-1 items-center justify-center text-sm text-muted-foreground">
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" /> chargement…
+          <Loading label={m["common.loading"]()} />
         </div>
       ) : (
         <div className="flex min-h-0 flex-1 flex-col md:flex-row">
@@ -275,10 +276,10 @@ export function PlaylistEditor({
       <footer className="flex shrink-0 items-center gap-3 border-t px-3 py-1 text-xs text-muted-foreground">
         {/* Said here and not over the list: text stops parsing on nearly every keystroke, and a pane emptying itself each time would flicker. */}
         {broken ? (
-          <span className="text-destructive">{m["pls.brokenYaml"]()}</span>
+          <span className="text-error">{m["pls.brokenYaml"]()}</span>
         ) : null}
         {filesError ? (
-          <span className="text-destructive">
+          <span className="text-error">
             {m["pls.files"]()} : {filesError}
           </span>
         ) : null}

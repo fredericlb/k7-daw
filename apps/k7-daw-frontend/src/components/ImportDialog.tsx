@@ -12,7 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@studio/ui/dialog";
-import { Loader2 } from "@studio/ui/icons";
+import { Spinner } from "@studio/ui/spinner";
 import { m } from "../paraglide/messages.js";
 
 export function ImportDialog({
@@ -76,7 +76,7 @@ export function ImportDialog({
             <Button onClick={onOpen}>{m["import.open"]()}</Button>
           ) : (
             <Button onClick={onConfirm} disabled={busy}>
-              {busy && <Loader2 className="mr-1 h-4 w-4 animate-spin" />}
+              {busy && <Spinner size="sm" inherit className="mr-1" />}
               {busy ? m["import.importing"]() : m["import.confirm"]()}
             </Button>
           )}

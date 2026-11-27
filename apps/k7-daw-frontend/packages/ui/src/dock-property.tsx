@@ -3,7 +3,8 @@
 // What a reader gets wrong: the bubble holds the control alone; a knob already shows its value, and the bar shows it too.
 
 import { Popover as PopoverPrimitive } from "radix-ui";
-import type * as React from "react";
+import * as React from "react";
+import { Knob } from "./knob";
 import { cn } from "./lib/utils";
 
 export function DockProperty({
@@ -54,5 +55,57 @@ export function DockProperty({
         </PopoverPrimitive.Content>
       </PopoverPrimitive.Portal>
     </PopoverPrimitive.Root>
+  );
+}
+
+/** A knob in a title-bar property: a draft while it turns, one `onCommit` on release, `defaultValue` on a double-click. */
+export function DockKnobProperty({
+  name,
+  value,
+  min,
+  max,
+  step,
+  defaultValue,
+  format,
+  onCommit,
+  title,
+  label,
+}: {
+  /** The setting's name as shown, lowercase; also the knob's accessible name. */
+  name: string;
+  value: number;
+  min: number;
+  max: number;
+  step: number;
+  defaultValue: number;
+  format: (v: number) => string;
+  onCommit: (v: number) => void;
+  /** A hint on the knob's bubble. */
+  title?: string;
+  /** The knob's accessible name when it differs from `name`. */
+  label?: string;
+}) {
+  const [draft, setDraft] = React.useState<number | null>(null);
+  const shown = draft ?? value;
+  return (
+    <DockProperty name={name} value={format(shown)}>
+      <div title={title}>
+        <Knob
+          value={shown}
+          min={min}
+          max={max}
+          step={step}
+          size={36}
+          label={label ?? name}
+          format={format}
+          defaultValue={defaultValue}
+          onValueChange={setDraft}
+          onValueCommit={(v) => {
+            setDraft(null);
+            if (Math.abs(v - value) > 1e-6) onCommit(v);
+          }}
+        />
+      </div>
+    </DockProperty>
   );
 }

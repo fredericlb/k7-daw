@@ -5,14 +5,8 @@
 import { Button } from "@studio/ui/button";
 import { Chip } from "@studio/ui/chip";
 import { EmptyState } from "@studio/ui/empty-state";
-import {
-  Film,
-  Loader2,
-  Music,
-  Play,
-  Square,
-  TriangleAlert,
-} from "@studio/ui/icons";
+import { Film, Music, Play, Square, TriangleAlert } from "@studio/ui/icons";
+import { Loading } from "@studio/ui/spinner";
 import { formatBytes } from "@studio/ui-chains-react/node-load";
 import type { ProjectResource } from "@studio/web-protocol/resources";
 import { sortForPeople } from "@studio/web-protocol/tree";
@@ -82,8 +76,8 @@ export function ResourcesPanel({ reloadKey }: { reloadKey: number }) {
 
       <div className="min-h-0 flex-1 overflow-y-auto">
         {rows === null ? (
-          <div className="flex items-center gap-2 p-4 text-muted-foreground text-sm">
-            <Loader2 className="h-4 w-4 animate-spin" /> {m["common.loading"]()}
+          <div className="p-4 text-muted-foreground text-sm">
+            <Loading label={m["common.loading"]()} />
           </div>
         ) : shown.length === 0 ? (
           <EmptyState
@@ -163,7 +157,7 @@ function ResourceRow({
         <span className="min-w-0 flex-1 truncate py-1 text-sm">{r.id}</span>
         {r.missing ? (
           <span
-            className="flex shrink-0 items-center gap-1 text-destructive text-xs"
+            className="flex shrink-0 items-center gap-1 text-error text-xs"
             title={m["res.missing"]()}
           >
             <TriangleAlert className="h-3 w-3" /> {m["res.missingShort"]()}

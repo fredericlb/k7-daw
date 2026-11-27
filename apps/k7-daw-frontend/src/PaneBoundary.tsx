@@ -74,8 +74,8 @@ export class PaneBoundary extends Component<Props, State> {
     if (!error) return this.props.children;
     return (
       <div className="flex h-full min-h-0 w-full items-center justify-center p-4">
-        <div className="max-w-md rounded border border-destructive/40 bg-destructive/10 p-3 text-sm">
-          <div className="font-medium text-destructive">
+        <div className="max-w-md rounded border border-error/40 bg-error/10 p-3 text-sm">
+          <div className="font-medium text-error">
             {m["pane.failed"]({ name: this.props.name })}
           </div>
           {/* The raw message is for a bug report, so it stays folded until asked for. */}

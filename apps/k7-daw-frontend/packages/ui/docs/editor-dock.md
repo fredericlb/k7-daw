@@ -27,6 +27,8 @@ time; the right panel (`side-panel`) is for the vertical lists.
   settings as text in the title bar ("gain: 0.0 dB", "loop: off"); a tap opens a bubble above it
   holding the control that changes it, a knob or a switch. Every editor shows its settings this one
   way, so the title bars read alike whatever the control behind them.
+  `DockKnobProperty` is the one with a knob: the knob moves a draft, one commit fires on release, and a
+  double-click restores its default, so a caller never writes a write per pixel.
 - **The header row wraps.** The slot is a wrapping flex row, so an editor with many options takes a
   second line instead of pushing them into its body (`apps/k7-daw-frontend/docs/editors.md`).
 - **A row may stay in the body on a phone.** `DockHeaderRow bodyOnPhone` draws its row in the header on Pad and Desk and in the sheet's body on a phone, where the header is a name over its counts (`useInSheet` tells an editor which frame it is in).
