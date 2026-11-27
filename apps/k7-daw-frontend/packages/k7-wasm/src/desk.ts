@@ -2,7 +2,7 @@
 // A reader would get wrong that an absent tempo or load is a missing key or null, never a made-up one: Rust reads both as "nothing there".
 
 import type { WebGraph } from "@studio/graph-model";
-import { call, trapped, typed } from "./abi.ts";
+import { call } from "./abi.ts";
 import { bindableGraph } from "./chains.ts";
 import type {
   BeatGrid,
@@ -30,21 +30,18 @@ export {
   CENSOR_RATE,
   DECKS,
   DEFAULT_LOOP_BEATS,
-  DOC_TEMPO,
   ECHO_RANGE,
   EQ_BANDS,
   EQ_DB,
   FILTER_RANGE,
   LEVEL_DB,
-  LIVE_WARP_BPM,
   LOOP_BEATS,
   MIX_CENTRE,
   PITCH_RANGE,
-  TEMPO_MODULE,
-  TEMPO_PARAM,
   TEMPO_SOURCE_PARAM,
   TRIM_DB,
 } from "./consts.generated.ts";
+export { scratchDelay } from "./gestureDesk.ts";
 export type {
   BeatGrid,
   DeckLoad,
@@ -215,24 +212,6 @@ export const crossfadeLevels = (mix: number): LevelDb[] =>
 /** Has any deck's tempo moved far enough since the last send to be worth another document? */
 export const worthARebuild = (sent: DeckTempos, now: DeckTempos): boolean =>
   ask("worth_a_rebuild", { sent, now });
-
-/** How long to hold this scratch, in milliseconds: 0 goes now; a release (null rate) never waits. */
-export function scratchDelay(
-  sinceLast: number,
-  rate: number | null,
-  every?: number,
-): number {
-  const x = typed();
-  try {
-    return x.k7_g_scratch_delay(
-      sinceLast,
-      rate ?? Number.NaN,
-      every ?? Number.NaN,
-    );
-  } catch (e) {
-    return trapped(e);
-  }
-}
 
 // bindings
 

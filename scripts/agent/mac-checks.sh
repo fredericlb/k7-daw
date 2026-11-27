@@ -55,6 +55,8 @@ if [[ " $areas " == *" browser "* ]]; then
   node apps/k7-daw-wasm/verbs/scripts/catalogue.mjs --check
   (cd apps/k7-daw-wasm/k7-wasm && tests --features verbs)
   (cd apps/k7-daw-wasm/verbs && cargo fmt --check && cargo clippy --locked --target-dir "$target" --all-targets -- -D warnings && tests)
+  # The put-on harness: its socket library stays out of the module's lock, so it is checked apart.
+  (cd apps/k7-daw-wasm/put-on && cargo fmt --check && cargo clippy --locked --target-dir "$target" --all-targets -- -D warnings)
   (cd apps/k7-daw-wasm/song && cargo clippy --locked --target wasm32-unknown-unknown --no-default-features --target-dir "$target" -- -D warnings && { [ -n "$clippy_only" ] || cargo build --locked --target wasm32-unknown-unknown --no-default-features --target-dir "$target"; })
 fi
 echo "mac-checks: passed"
