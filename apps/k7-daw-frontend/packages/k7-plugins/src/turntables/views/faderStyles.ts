@@ -13,22 +13,22 @@ export const notchAt = (fraction: number): string =>
 
 /** The crossfader: horizontal, transparent, its cap tall and narrow. */
 export const CROSSFADER_INPUT = [
-  "relative h-full w-full cursor-ew-resize appearance-none bg-transparent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-default",
-  "[&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-2.5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-[2px] [&::-webkit-slider-thumb]:bg-foreground [&::-webkit-slider-thumb]:shadow-[0_0_0_1px] [&::-webkit-slider-thumb]:shadow-background",
-  "[&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-2.5 [&::-moz-range-thumb]:rounded-[2px] [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-foreground [&::-moz-range-thumb]:shadow-[0_0_0_1px] [&::-moz-range-thumb]:shadow-background",
+  "relative h-full w-full cursor-ew-resize appearance-none bg-transparent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus disabled:cursor-default",
+  "[&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-2.5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-[2px] [&::-webkit-slider-thumb]:bg-fg-1 [&::-webkit-slider-thumb]:shadow-[0_0_0_1px] [&::-webkit-slider-thumb]:shadow-ground",
+  "[&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-2.5 [&::-moz-range-thumb]:rounded-[2px] [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-fg-1 [&::-moz-range-thumb]:shadow-[0_0_0_1px] [&::-moz-range-thumb]:shadow-ground",
 ].join(" ");
 
 /** A channel fader: upright by writing mode, transparent, its cap wide and short. */
 export const CHANNEL_INPUT = [
-  "relative h-full w-4 cursor-ns-resize appearance-none bg-transparent [direction:rtl] [writing-mode:vertical-lr] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-default",
-  "[&::-webkit-slider-thumb]:h-2.5 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-[2px] [&::-webkit-slider-thumb]:bg-foreground [&::-webkit-slider-thumb]:shadow-[0_0_0_1px] [&::-webkit-slider-thumb]:shadow-background",
-  "[&::-moz-range-thumb]:h-2.5 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:rounded-[2px] [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-foreground [&::-moz-range-thumb]:shadow-[0_0_0_1px] [&::-moz-range-thumb]:shadow-background",
+  "relative h-full w-4 cursor-ns-resize appearance-none bg-transparent [direction:rtl] [writing-mode:vertical-lr] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-focus disabled:cursor-default",
+  "[&::-webkit-slider-thumb]:h-2.5 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-[2px] [&::-webkit-slider-thumb]:bg-fg-1 [&::-webkit-slider-thumb]:shadow-[0_0_0_1px] [&::-webkit-slider-thumb]:shadow-ground",
+  "[&::-moz-range-thumb]:h-2.5 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:rounded-[2px] [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-fg-1 [&::-moz-range-thumb]:shadow-[0_0_0_1px] [&::-moz-range-thumb]:shadow-ground",
 ].join(" ");
 
 /** The rail behind a horizontal input. */
 export const RAIL_H =
-  "pointer-events-none absolute inset-x-0 top-1/2 h-1 -translate-y-1/2 rounded-full bg-foreground/15";
+  "pointer-events-none absolute inset-x-0 top-1/2 h-1 -translate-y-1/2 rounded-full bg-fg-1/15";
 
 /** …and behind an upright one. */
 export const RAIL_V =
-  "pointer-events-none absolute inset-y-0 left-1/2 w-1 -translate-x-1/2 rounded-full bg-foreground/15";
+  "pointer-events-none absolute inset-y-0 left-1/2 w-1 -translate-x-1/2 rounded-full bg-fg-1/15";

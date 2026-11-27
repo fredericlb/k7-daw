@@ -65,10 +65,10 @@ type Story = StoryObj<typeof meta>;
 export const EveryRung: Story = {
   args: { layout: RUNGS[0] },
   render: () => (
-    <div className="flex items-start gap-8 bg-background p-4 text-foreground">
+    <div className="flex items-start gap-8 bg-ground p-4 text-fg-1">
       {RUNGS.map((l) => (
         <div key={l.knob} className="flex flex-col items-center gap-2">
-          <span className="font-mono text-[10px] text-muted-foreground">
+          <span className="font-mono text-[10px] text-fg-2">
             {l.knob}px
           </span>
           <Both layout={l} />
@@ -82,7 +82,7 @@ export const EveryRung: Story = {
 export const NotSeparated: Story = {
   args: { layout: RUNGS[0] },
   render: () => (
-    <div className="bg-background p-4 text-foreground">
+    <div className="bg-ground p-4 text-fg-1">
       <StemStrip
         stems={Object.fromEntries(STEMS.map((s) => [s, 1]))}
         live

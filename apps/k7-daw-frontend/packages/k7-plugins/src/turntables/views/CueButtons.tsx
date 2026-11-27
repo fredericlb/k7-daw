@@ -72,8 +72,8 @@ function Cue({
         holding ? "scale-95" : ""
       } ${disabled ? "opacity-40" : ""} ${
         at === null
-          ? "border-muted-foreground/40 border-dashed bg-transparent text-muted-foreground"
-          : "text-background"
+          ? "border-fg-2/40 border-dashed bg-transparent text-fg-2"
+          : "text-ground"
       }`}
       style={
         at === null ? undefined : { background: colour, borderColor: colour }
