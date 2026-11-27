@@ -1,11 +1,13 @@
 // ops/text.rs — the text.* writers and readers: a file's k7x text in, the edited text out, as the page's editors ask for it.
 // A reader would get wrong that every writer answers the splices it made, not only the text: an editor applies them to a live buffer.
 
+use super::text_buffer::{
+    ClipWindowArgs, NotesWriteArgs, SliceWindowArgs, clip_window, notes_read, notes_write, slice_window,
+};
 use super::text_desk::{
     ApplyArgs, AssemblyArgs, AssemblyOp, ExpandArgs, MixArgs, MixOp, NameArgs, PinsArgs, PlaylistArgs, PlaylistOp,
     assembly_read, chain_read, mix_cues_read, mix_view_read, pins_of, pins_parsed, sugar_apply, sugar_expand,
 };
-use super::text_buffer::{ClipWindowArgs, NotesWriteArgs, SliceWindowArgs, clip_window, notes_read, notes_write, slice_window};
 use super::text_lane::{SequenceArgs, VideoArgs, VideoListArgs, sequence, sequence_data, video_list, video_step};
 use crate::error::WasmError;
 use crate::ops::k7x::K7xSyntax;

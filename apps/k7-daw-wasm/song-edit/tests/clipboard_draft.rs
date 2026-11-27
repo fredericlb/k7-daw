@@ -68,7 +68,14 @@ fn a_copy_takes_what_starts_inside_on_both_axes_and_keeps_a_length_whole() {
 
 #[test]
 fn a_velocity_of_one_is_the_default_and_is_dropped() {
-    let c = copy_notes(&[note(60.0, 0.0, 1.0, Some(1.0)), note(61.0, 0.0, 1.0, Some(0.4))], "r", 60.0, 61.0, 0.0, 4.0);
+    let c = copy_notes(
+        &[note(60.0, 0.0, 1.0, Some(1.0)), note(61.0, 0.0, 1.0, Some(0.4))],
+        "r",
+        60.0,
+        61.0,
+        0.0,
+        4.0,
+    );
     let n = notes_of(&c);
     assert_eq!(n.iter().find(|n| n.k == 1.0).and_then(|n| n.v), None);
     assert_eq!(n.iter().find(|n| n.k == 0.0).and_then(|n| n.v), Some(0.4));
@@ -76,7 +83,15 @@ fn a_velocity_of_one_is_the_default_and_is_dropped() {
 }
 
 fn riff() -> Clipboard {
-    copy_notes(&[note(60.0, 0.0, 1.0, None), note(62.0, 1.5, 2.0, Some(0.4))], "riff", 60.0, 67.0, 0.0, 4.0).unwrap()
+    copy_notes(
+        &[note(60.0, 0.0, 1.0, None), note(62.0, 1.5, 2.0, Some(0.4))],
+        "riff",
+        60.0,
+        67.0,
+        0.0,
+        4.0,
+    )
+    .unwrap()
 }
 
 #[test]
@@ -184,7 +199,10 @@ fn an_event_paste_lands_from_the_caret_down_and_drops_the_rows_with_no_lane() {
     let clip = copy_events(&[lane(&[("kick", 0.0, None)]), lane(&[("snare", 2.0, None)])], 0.0, 4.0).unwrap();
     let lanes = |v: &[&str]| v.iter().map(|s| (*s).to_owned()).collect::<Vec<_>>();
     let out = paste_events(&clip, &lanes(&["gtr", "bass"]), 16.0);
-    let got: Vec<_> = out.iter().map(|e| (e.track.as_str(), e.reference.as_str(), e.start)).collect();
+    let got: Vec<_> = out
+        .iter()
+        .map(|e| (e.track.as_str(), e.reference.as_str(), e.start))
+        .collect();
     assert_eq!(got, vec![("gtr", "kick", 16.0), ("bass", "snare", 18.0)]);
     let out = paste_events(&clip, &lanes(&["gtr"]), 0.0);
     assert_eq!(out.len(), 1);
@@ -243,8 +261,14 @@ fn the_fields_written_are_the_shapes_own() {
     .unwrap();
     let mut k = keys(&adsr);
     k.sort_unstable();
-    assert_eq!(k, vec!["amplitude", "attack", "decay", "level", "release", "sustain", "type"]);
-    assert_eq!(fields_of(&custom()).unwrap()["points"].as_array().map(Vec::len), Some(2));
+    assert_eq!(
+        k,
+        vec!["amplitude", "attack", "decay", "level", "release", "sustain", "type"]
+    );
+    assert_eq!(
+        fields_of(&custom()).unwrap()["points"].as_array().map(Vec::len),
+        Some(2)
+    );
 }
 
 #[test]
@@ -309,10 +333,16 @@ fn a_drawn_point_snaps_to_a_sixteenth_and_one_point_stays_per_moment() {
         value: v,
     };
     let times = |v: Vec<DraftPoint>| v.into_iter().map(|p| p.time).collect::<Vec<_>>();
-    assert_eq!(times(with_point(&pts, &at("2:1:1", 0.5), 4.0, 4.0, None).unwrap()), vec!["1:1:1", "2:1:1", "3:1:1"]);
+    assert_eq!(
+        times(with_point(&pts, &at("2:1:1", 0.5), 4.0, 4.0, None).unwrap()),
+        vec!["1:1:1", "2:1:1", "3:1:1"]
+    );
     // `1:1` is the moment `1:1:1` is, however it is spelt.
     assert_eq!(with_point(&pts, &at("1:1", 0.9), 4.0, 4.0, None).unwrap().len(), 2);
-    assert_eq!(times(with_point(&pts, &at("4:1:1", 1.0), 4.0, 4.0, Some("3:1:1")).unwrap()), vec!["1:1:1", "4:1:1"]);
+    assert_eq!(
+        times(with_point(&pts, &at("4:1:1", 1.0), 4.0, 4.0, Some("3:1:1")).unwrap()),
+        vec!["1:1:1", "4:1:1"]
+    );
     assert!(with_point(&pts, &at("1:", 0.0), 4.0, 4.0, None).is_err());
 }
 
@@ -350,7 +380,10 @@ fn written(cs: Vec<DraftCondition>) -> Option<serde_json::Value> {
 fn each_condition_kind_writes_only_its_own_moments_in_the_order_given() {
     assert_eq!(written(vec![]), None);
     let when = |w: DraftWhen| DraftCondition { when: w, ..cond() };
-    assert_eq!(written(vec![when(DraftWhen::Start)]), Some(serde_json::json!([{ "type": "start", "at": "3:1:1" }])));
+    assert_eq!(
+        written(vec![when(DraftWhen::Start)]),
+        Some(serde_json::json!([{ "type": "start", "at": "3:1:1" }]))
+    );
     let between = DraftCondition {
         retrigger: true,
         ..when(DraftWhen::Between)
@@ -359,7 +392,10 @@ fn each_condition_kind_writes_only_its_own_moments_in_the_order_given() {
         written(vec![between]),
         Some(serde_json::json!([{ "type": "between", "start": "3:1:1", "end": "7:1:1", "retrigger": true }]))
     );
-    assert_eq!(written(vec![when(DraftWhen::Event)]), Some(serde_json::json!([{ "type": "event", "event": "Note On" }])));
+    assert_eq!(
+        written(vec![when(DraftWhen::Event)]),
+        Some(serde_json::json!([{ "type": "event", "event": "Note On" }]))
+    );
     assert_eq!(
         written(vec![when(DraftWhen::End), when(DraftWhen::Start)]),
         Some(serde_json::json!([{ "type": "end", "at": "7:1:1" }, { "type": "start", "at": "3:1:1" }]))

@@ -72,7 +72,9 @@ pub(super) fn clip_window(a: &ClipWindowArgs) -> TextAnswer {
 }
 
 pub(super) fn slice_window(a: &SliceWindowArgs) -> TextAnswer {
-    run(&a.text, true, &[()], |d, ()| Ok(set_slice_window(d, &a.symbol, a.from, a.to)?))
+    run(&a.text, true, &[()], |d, ()| {
+        Ok(set_slice_window(d, &a.symbol, a.from, a.to)?)
+    })
 }
 
 fn finite(v: &Json) -> Option<f64> {
@@ -98,7 +100,10 @@ fn notes_of(list: &[Json]) -> Vec<GridNote> {
 pub(super) fn notes_read(a: &TextArgs) -> Option<SequenceRead> {
     let data = sequence_data(a).ok()?;
     let list = data.get("notes")?.as_array()?;
-    let rack = data.get("use_rack").and_then(Json::as_str).map(|s| k7x::edit::js_trim(s).to_owned());
+    let rack = data
+        .get("use_rack")
+        .and_then(Json::as_str)
+        .map(|s| k7x::edit::js_trim(s).to_owned());
     Some(SequenceRead {
         notes: notes_of(list),
         use_rack: rack.filter(|s| !s.is_empty()),

@@ -32,9 +32,9 @@ fn strip_tail_ci<'a>(s: &'a str, tail: &str) -> Option<&'a str> {
 
 /// Does `s` end in one of `names` as a whole segment (the whole string, or after a `/`)?
 fn ends_segment(s: &str, names: &[&str]) -> bool {
-    names.iter().any(|name| {
-        strip_tail_ci(s, name).is_some_and(|before| before.is_empty() || before.ends_with('/'))
-    })
+    names
+        .iter()
+        .any(|name| strip_tail_ci(s, name).is_some_and(|before| before.is_empty() || before.ends_with('/')))
 }
 
 /// The file name of `(^|/)<folder>/[^/]+<doc>$`, or None.
@@ -134,7 +134,12 @@ fn fold(c: char) -> char {
 /// The first file of `files` that IS `<folder>/<id>`, or None: a lookup and not a search, since `tracks/kick` and `clips/kick` both exist.
 #[must_use]
 pub fn entity_file(files: &[String], folder: &str, id: &str) -> Option<String> {
-    let needle: Vec<char> = folder.chars().chain(std::iter::once('/')).chain(id.chars()).map(fold).collect();
+    let needle: Vec<char> = folder
+        .chars()
+        .chain(std::iter::once('/'))
+        .chain(id.chars())
+        .map(fold)
+        .collect();
     files
         .iter()
         .find(|f| {
@@ -259,13 +264,23 @@ pub fn resolve_gutter_source(source: &str, file_path: &str, active_project: Opti
 
 /// The module FILE behind an instance's `extends:`: `base:` first, then `module:` for a local ref; None when it is the file itself.
 #[must_use]
-pub fn module_behind(content: &str, paths: &HashMap<String, String>, project_root: &str, own_path: Option<&str>) -> Option<String> {
+pub fn module_behind(
+    content: &str,
+    paths: &HashMap<String, String>,
+    project_root: &str,
+    own_path: Option<&str>,
+) -> Option<String> {
     let reference = scalar_field(content, "extends")?;
-    let rel = paths.get(&format!("base:{reference}")).or_else(|| paths.get(&format!("module:{reference}")))?;
+    let rel = paths
+        .get(&format!("base:{reference}"))
+        .or_else(|| paths.get(&format!("module:{reference}")))?;
     if rel.is_empty() {
         return None;
     }
-    let abs: Vec<&str> = std::iter::once(project_root).chain(rel.split('/')).filter(|s| !s.is_empty()).collect();
+    let abs: Vec<&str> = std::iter::once(project_root)
+        .chain(rel.split('/'))
+        .filter(|s| !s.is_empty())
+        .collect();
     let abs = abs.join("/");
     // The instance and its module can be one file, and the same buffer twice is not a comparison but a mirror.
     (own_path != Some(abs.as_str()) && own_path != Some(rel.as_str())).then_some(abs)
@@ -281,7 +296,9 @@ pub fn is_audio_clip_file(text: &str) -> bool {
 #[must_use]
 pub fn is_video_source(source: &str) -> bool {
     let lower = source.to_ascii_lowercase();
-    song::wire::VIDEO_EXTS.iter().any(|e| lower.strip_suffix(e).is_some_and(|h| h.ends_with('.')))
+    song::wire::VIDEO_EXTS
+        .iter()
+        .any(|e| lower.strip_suffix(e).is_some_and(|h| h.ends_with('.')))
 }
 
 /// The rack module a sequence names via `use_rack`, so a slice rack can dock its source waveform.

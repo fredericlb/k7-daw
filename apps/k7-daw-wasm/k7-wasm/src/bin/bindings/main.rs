@@ -162,7 +162,9 @@ fn write_types(dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
 
 /// The editor's buffer, paths, intake, kit, clipboard and curve-draft ops, and the types their answers carry.
 fn export_buffer(dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
-    use k7_wasm::ops::buffer::{BufferRequest, ClipWindow, K7xCursor, KeyToken, PreviewReq, PreviewTrigger, SliceSym, ValueToken};
+    use k7_wasm::ops::buffer::{
+        BufferRequest, ClipWindow, K7xCursor, KeyToken, PreviewReq, PreviewTrigger, SliceSym, ValueToken,
+    };
     use k7_wasm::ops::clipboard::ClipboardRequest;
     use k7_wasm::ops::draft::DraftRequest;
     use k7_wasm::ops::intake::{IntakeRequest, KitGrid};

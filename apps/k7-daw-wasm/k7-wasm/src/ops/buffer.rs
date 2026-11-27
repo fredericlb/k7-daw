@@ -8,7 +8,9 @@ use k7x::scan::scalar_field;
 use k7x::tokens::{PreviewReq as Req, key_tokens, preview_triggers, value_tokens};
 use k7x::{Bump, parse_tree};
 use serde::{Deserialize, Serialize};
-use song_edit::buffer_text::{BufferReads, ClipGrid, WindowBand, buffer_reads, clip_window_band, scan_clip_window, scan_slices};
+use song_edit::buffer_text::{
+    BufferReads, ClipGrid, WindowBand, buffer_reads, clip_window_band, scan_clip_window, scan_slices,
+};
 
 #[derive(Clone, Debug, Deserialize)]
 #[cfg_attr(feature = "ts", derive(ts_rs::TS))]

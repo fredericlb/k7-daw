@@ -73,34 +73,58 @@ mod tests {
 
     #[test]
     fn a_call_or_an_object_key_gives_its_string() {
-        assert_eq!(scalar_field("source(\"kick.wav\")\n", "source").as_deref(), Some("kick.wav"));
-        assert_eq!(scalar_field("x({ source: 'a b' })", "source").as_deref(), Some("a b"));
-        assert_eq!(scalar_field("source ( \"k\" )", "source").as_deref(), Some("k"));
+        assert_eq!(
+            scalar_field("source(\"kick.wav\")\n", "source").as_deref(),
+            Some("kick.wav")
+        );
+        assert_eq!(
+            scalar_field("x({ source: 'a b' })", "source").as_deref(),
+            Some("a b")
+        );
+        assert_eq!(
+            scalar_field("source ( \"k\" )", "source").as_deref(),
+            Some("k")
+        );
     }
 
     #[test]
     fn the_key_must_stand_alone() {
         assert_eq!(scalar_field("my_source(\"k\")", "source"), None);
         assert_eq!(scalar_field("a-source(\"k\")", "source"), None);
-        assert_eq!(scalar_field("x.source(\"k\")", "source").as_deref(), Some("k"));
+        assert_eq!(
+            scalar_field("x.source(\"k\")", "source").as_deref(),
+            Some("k")
+        );
     }
 
     #[test]
     fn a_half_typed_file_still_answers() {
-        assert_eq!(scalar_field("source(\"k\")\nnotes([\n", "source").as_deref(), Some("k"));
+        assert_eq!(
+            scalar_field("source(\"k\")\nnotes([\n", "source").as_deref(),
+            Some("k")
+        );
         assert_eq!(scalar_field("source(\"unclosed", "source"), None);
     }
 
     #[test]
     fn an_empty_value_is_none_and_the_first_candidate_decides() {
         assert_eq!(scalar_field("source(\"\")", "source"), None);
-        assert_eq!(scalar_field("source(1) source(\"b\")", "source").as_deref(), Some("b"));
+        assert_eq!(
+            scalar_field("source(1) source(\"b\")", "source").as_deref(),
+            Some("b")
+        );
         assert_eq!(scalar_field("source(\"\") source(\"b\")", "source"), None);
     }
 
     #[test]
     fn escapes_are_read_by_the_reader() {
-        assert_eq!(scalar_field("source(\"a\\\"b\")", "source").as_deref(), Some("a\"b"));
-        assert_eq!(scalar_field("source(\"a\\nb\")", "source").as_deref(), Some("a\nb"));
+        assert_eq!(
+            scalar_field("source(\"a\\\"b\")", "source").as_deref(),
+            Some("a\"b")
+        );
+        assert_eq!(
+            scalar_field("source(\"a\\nb\")", "source").as_deref(),
+            Some("a\nb")
+        );
     }
 }

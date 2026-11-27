@@ -86,7 +86,10 @@ pub enum ClipboardRequest {
 pub fn dispatch(request: ClipboardRequest, out: &mut Vec<u8>) -> Result<(), WasmError> {
     use ClipboardRequest as R;
     match request {
-        R::CopyNotes(a) => write(out, &copy_notes(&a.notes, &a.sequence, a.lo_key, a.hi_key, a.from, a.to)),
+        R::CopyNotes(a) => write(
+            out,
+            &copy_notes(&a.notes, &a.sequence, a.lo_key, a.hi_key, a.from, a.to),
+        ),
         R::PasteNotes(a) => write(out, &paste_notes(&a.clip, a.top_key, a.at)),
         R::CopyEvents(a) => write(out, &copy_events(&a.rows, a.from, a.to)),
         R::PasteEvents(a) => write(out, &paste_events(&a.clip, &a.lanes, a.at)),

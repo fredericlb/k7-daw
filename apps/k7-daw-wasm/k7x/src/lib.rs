@@ -6,9 +6,9 @@ pub mod cursor;
 pub mod edit;
 pub mod json;
 pub mod outline;
+mod parse;
 pub mod scan;
 pub mod tokens;
-mod parse;
 
 pub use ast::{Entry, ListForm, MapForm, MapNode, Node, PathSeg, Scalar};
 pub use bumpalo::Bump;

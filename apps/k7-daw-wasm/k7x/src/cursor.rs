@@ -18,11 +18,19 @@ pub struct Cursor {
 
 enum Frame {
     /// A mapping written as a chain, the file's root included: keys come first, after `.` or at a statement's start.
-    Chain { path: Vec<String>, root: bool, expect_key: bool },
+    Chain {
+        path: Vec<String>,
+        root: bool,
+        expect_key: bool,
+    },
     /// A call's arguments: the value of `key` in the mapping at `path`.
     Call { path: Vec<String>, key: String },
     /// `{ … }`: keys until `:`, then the value of that key.
-    Object { path: Vec<String>, key: Option<String>, after_colon: bool },
+    Object {
+        path: Vec<String>,
+        key: Option<String>,
+        after_colon: bool,
+    },
     /// `[ … ]`, the value of `key` in the mapping at `path`.
     List { path: Vec<String>, key: String },
 }
@@ -30,7 +38,10 @@ enum Frame {
 impl Frame {
     fn path(&self) -> &[String] {
         match self {
-            Frame::Chain { path, .. } | Frame::Call { path, .. } | Frame::Object { path, .. } | Frame::List { path, .. } => path,
+            Frame::Chain { path, .. }
+            | Frame::Call { path, .. }
+            | Frame::Object { path, .. }
+            | Frame::List { path, .. } => path,
         }
     }
 }
@@ -134,7 +145,10 @@ pub fn cursor(text: &str) -> Cursor {
             }
             if j >= t.len() {
                 in_string = true;
-                if let Some(Frame::Object { after_colon: false, .. }) = stack.last() {
+                if let Some(Frame::Object {
+                    after_colon: false, ..
+                }) = stack.last()
+                {
                     pending = None;
                 }
                 break;
@@ -142,7 +156,15 @@ pub fn cursor(text: &str) -> Cursor {
             let key: String = t[i + 1..j].iter().collect();
             let is_key = matches!(
                 stack.last(),
-                Some(Frame::Chain { expect_key: true, .. } | Frame::Object { after_colon: false, .. })
+                Some(
+                    Frame::Chain {
+                        expect_key: true,
+                        ..
+                    } | Frame::Object {
+                        after_colon: false,
+                        ..
+                    }
+                )
             );
             pending = is_key.then_some(key);
             i = j + 1;
@@ -182,7 +204,12 @@ pub fn cursor(text: &str) -> Cursor {
         match c {
             '(' => {
                 let key = pending.take();
-                let owner_path = stack.last().map(|f| (f.path().to_vec(), matches!(f, Frame::Chain { .. } | Frame::Object { .. })));
+                let owner_path = stack.last().map(|f| {
+                    (
+                        f.path().to_vec(),
+                        matches!(f, Frame::Chain { .. } | Frame::Object { .. }),
+                    )
+                });
                 match (key, owner_path) {
                     (Some(key), Some((path, true))) => stack.push(Frame::Call { path, key }),
                     _ => stack.push(Frame::Call {
@@ -206,7 +233,12 @@ pub fn cursor(text: &str) -> Cursor {
                 }
             }
             ';' => {
-                if let Some(Frame::Chain { root: true, expect_key, .. }) = stack.last_mut() {
+                if let Some(Frame::Chain {
+                    root: true,
+                    expect_key,
+                    ..
+                }) = stack.last_mut()
+                {
                     *expect_key = true;
                 }
             }
@@ -242,7 +274,10 @@ pub fn cursor(text: &str) -> Cursor {
                 reset_owner(&mut stack);
             }
             ':' => {
-                if let Some(Frame::Object { key, after_colon, .. }) = stack.last_mut() {
+                if let Some(Frame::Object {
+                    key, after_colon, ..
+                }) = stack.last_mut()
+                {
                     *key = pending.clone();
                     *after_colon = true;
                 }
@@ -252,7 +287,10 @@ pub fn cursor(text: &str) -> Cursor {
                 if matches!(stack.last(), Some(Frame::Chain { root: false, .. })) {
                     stack.pop();
                 }
-                if let Some(Frame::Object { key, after_colon, .. }) = stack.last_mut() {
+                if let Some(Frame::Object {
+                    key, after_colon, ..
+                }) = stack.last_mut()
+                {
                     *after_colon = false;
                     *key = None;
                 }
@@ -266,7 +304,10 @@ pub fn cursor(text: &str) -> Cursor {
 
 /// After a closing bracket, the frame below is a chain again: it expects a key only when it is the root.
 fn reset_owner(stack: &mut [Frame]) {
-    if let Some(Frame::Chain { root, expect_key, .. }) = stack.last_mut() {
+    if let Some(Frame::Chain {
+        root, expect_key, ..
+    }) = stack.last_mut()
+    {
         *expect_key = *root;
     }
 }
@@ -275,15 +316,23 @@ fn answer(stack: &[Frame], text: &str, in_string: bool, has_pending: bool) -> Cu
     let top = stack.last().expect("the root frame stays");
     // A word being typed sits on the stack as a pending key: the position is the one before it.
     let typing = !in_string && text.chars().next_back().is_some_and(is_ident_part);
-    let plain = |path: Vec<String>, in_key: bool, value_of: Option<String>, in_seq_item: bool| Cursor {
-        path,
-        in_key,
-        value_of,
-        in_seq_item,
-        in_string,
-    };
+    let plain =
+        |path: Vec<String>, in_key: bool, value_of: Option<String>, in_seq_item: bool| Cursor {
+            path,
+            in_key,
+            value_of,
+            in_seq_item,
+            in_string,
+        };
     match top {
-        Frame::Chain { path, expect_key, .. } => plain(path.clone(), *expect_key || (typing && has_pending), None, false),
+        Frame::Chain {
+            path, expect_key, ..
+        } => plain(
+            path.clone(),
+            *expect_key || (typing && has_pending),
+            None,
+            false,
+        ),
         Frame::Object {
             path,
             key,
@@ -300,7 +349,12 @@ fn answer(stack: &[Frame], text: &str, in_string: bool, has_pending: bool) -> Cu
             p.push(key.clone());
             plain(p, true, None, true)
         }
-        Frame::Call { path, key } => plain(path.clone(), false, (!key.is_empty()).then(|| key.clone()), false),
+        Frame::Call { path, key } => plain(
+            path.clone(),
+            false,
+            (!key.is_empty()).then(|| key.clone()),
+            false,
+        ),
     }
 }
 
@@ -329,7 +383,13 @@ mod tests {
 
     #[test]
     fn a_top_level_key_at_the_start_while_typing_and_after_a_statement() {
-        for text in ["", "ext", "extends(\"x\")\npar", "extends(\"x\")\n", "// a comment\n"] {
+        for text in [
+            "",
+            "ext",
+            "extends(\"x\")\npar",
+            "extends(\"x\")\n",
+            "// a comment\n",
+        ] {
             assert_eq!(cursor(text), key(&[]), "{text:?}");
         }
     }
@@ -344,8 +404,14 @@ mod tests {
     fn an_objects_keys_and_values_under_the_call_that_holds_it() {
         assert_eq!(cursor("project({ "), key(&["project"]));
         assert_eq!(cursor("project({ name: \"x\", tem"), key(&["project"]));
-        assert_eq!(cursor("project({ video: "), value(&["project"], "video", false));
-        assert_eq!(cursor("engines({ tracktion: { pa"), key(&["engines", "tracktion"]));
+        assert_eq!(
+            cursor("project({ video: "),
+            value(&["project"], "video", false)
+        );
+        assert_eq!(
+            cursor("engines({ tracktion: { pa"),
+            key(&["engines", "tracktion"])
+        );
     }
 
     #[test]
@@ -356,21 +422,39 @@ mod tests {
         };
         assert_eq!(cursor("steps([\n  "), item);
         assert_eq!(cursor("steps([\n  ext"), key(&["steps"]));
-        assert_eq!(cursor("steps([\n  extends(\"x\")\n    .eng"), key(&["steps"]));
-        assert_eq!(cursor("steps([\n  extends(\"x\").engine("), value(&["steps"], "engine", false));
-        assert_eq!(cursor("steps([\n  id(1),\n  extends("), value(&["steps"], "extends", false));
+        assert_eq!(
+            cursor("steps([\n  extends(\"x\")\n    .eng"),
+            key(&["steps"])
+        );
+        assert_eq!(
+            cursor("steps([\n  extends(\"x\").engine("),
+            value(&["steps"], "engine", false)
+        );
+        assert_eq!(
+            cursor("steps([\n  id(1),\n  extends("),
+            value(&["steps"], "extends", false)
+        );
     }
 
     #[test]
     fn what_was_closed_hands_the_cursor_back() {
-        assert_eq!(cursor("project({ name: \"x\", tempo: 120 })\nmar"), key(&[]));
+        assert_eq!(
+            cursor("project({ name: \"x\", tempo: 120 })\nmar"),
+            key(&[])
+        );
         assert_eq!(cursor("steps([id(1), to([chain(\"@out\")])])\n"), key(&[]));
         assert_eq!(cursor("params({ Level: -12, Gain: 1e5, "), key(&["params"]));
     }
 
     #[test]
     fn a_chain_written_as_a_calls_value_sits_under_that_calls_key() {
-        assert_eq!(cursor("engines(tracktion("), value(&["engines"], "tracktion", false));
-        assert_eq!(cursor("engines(tracktion(params({ Ra"), key(&["engines", "tracktion", "params"]));
+        assert_eq!(
+            cursor("engines(tracktion("),
+            value(&["engines"], "tracktion", false)
+        );
+        assert_eq!(
+            cursor("engines(tracktion(params({ Ra"),
+            key(&["engines", "tracktion", "params"])
+        );
     }
 }

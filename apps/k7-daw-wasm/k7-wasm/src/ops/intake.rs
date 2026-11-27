@@ -5,12 +5,12 @@ use crate::error::{ErrorCode, WasmError};
 use crate::ops::write;
 use serde::Deserialize;
 use song_edit::intake::{
-    DropLane, candidate_ids, clip_decl, declared_source, dropped_clip, dropped_kind, ext_for_mime, file_stamp, place_line, plan_drop,
-    take_id,
+    DropLane, candidate_ids, clip_decl, declared_source, dropped_clip, dropped_kind, ext_for_mime, file_stamp,
+    place_line, plan_drop, take_id,
 };
 use song_edit::kit::{
-    KIT_GRID, KitDestination, RackPad, build_kit_node, cells_in_note_order, default_symbol, kit_sample_ref, kit_upload_dir, pad_note,
-    rack_issues, rack_module_ref,
+    KIT_GRID, KitDestination, RackPad, build_kit_node, cells_in_note_order, default_symbol, kit_sample_ref,
+    kit_upload_dir, pad_note, rack_issues, rack_module_ref,
 };
 
 /// A dropped file's name beside the same name with its accents folded.
@@ -232,16 +232,16 @@ pub fn dispatch(request: IntakeRequest, out: &mut Vec<u8>) -> Result<(), WasmErr
             let names: Vec<(String, String)> = a.names.into_iter().map(|n| (n.name, n.folded)).collect();
             write(out, &plan_drop(&names, &a.lanes, &a.at))
         }
-        R::Decl(a) => write(out, &clip_decl(&a.upload).map_err(|e| WasmError::new(ErrorCode::BadK7x, e.to_string()))?),
+        R::Decl(a) => write(
+            out,
+            &clip_decl(&a.upload).map_err(|e| WasmError::new(ErrorCode::BadK7x, e.to_string()))?,
+        ),
         R::DeclaredSource(a) => write(out, &declared_source(&a.text)),
         R::Candidates(a) => write(out, &candidate_ids(&a.id, a.n)),
         R::ExtForMime(a) => write(out, ext_for_mime(a.mime.as_deref())),
         R::Stamp(a) => write(out, &file_stamp(a.year, a.month, a.day, a.hour, a.minute, a.second)),
         R::TakeId(a) => write(out, &take_id(&a.lane, &a.stamp)),
-        R::PlaceLine(a) => write(
-            out,
-            &place_line(&a.lane, &a.id, a.at_sec.get(), a.length_sec.get()),
-        ),
+        R::PlaceLine(a) => write(out, &place_line(&a.lane, &a.id, a.at_sec.get(), a.length_sec.get())),
         R::Grid {} => write(
             out,
             &KitGrid {
@@ -263,7 +263,8 @@ pub fn dispatch(request: IntakeRequest, out: &mut Vec<u8>) -> Result<(), WasmErr
         R::Issues(a) => write(out, &rack_issues(&a.name, &a.pads, &a.taken, a.has_rack)),
         R::Node(a) => write(
             out,
-            &build_kit_node(&a.name, &a.pads, &a.dest, &a.rack_ref).map_err(|e| WasmError::new(ErrorCode::BadK7x, e.to_string()))?,
+            &build_kit_node(&a.name, &a.pads, &a.dest, &a.rack_ref)
+                .map_err(|e| WasmError::new(ErrorCode::BadK7x, e.to_string()))?,
         ),
     }
 }

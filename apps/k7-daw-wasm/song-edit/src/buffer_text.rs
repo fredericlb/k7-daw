@@ -5,8 +5,8 @@ use crate::start_time::js_round;
 use k7x::edit::{Document, EditError, PathSeg, Value, WriteOptions, parse};
 use k7x::tokens::slices_of;
 use k7x::{Bump, parse_tree};
-use song::modules::types::{IO_MODULES, META_NS};
 use serde::{Deserialize, Serialize};
+use song::modules::types::{IO_MODULES, META_NS};
 use song_schema::{beats_to_position_on, parse_position_on};
 
 fn key(k: &str) -> PathSeg {
@@ -55,14 +55,34 @@ pub fn js_number_of(v: &Value) -> f64 {
             if t.is_empty() {
                 return 0.0;
             }
-            let radix = |p: &str, r: u32| t.strip_prefix(p).and_then(|d| u64::from_str_radix(d, r).ok()).map(|n| n as f64);
-            if let Some(n) = radix("0x", 16).or_else(|| radix("0X", 16)).or_else(|| radix("0o", 8)).or_else(|| radix("0b", 2)) {
+            let radix = |p: &str, r: u32| {
+                t.strip_prefix(p)
+                    .and_then(|d| u64::from_str_radix(d, r).ok())
+                    .map(|n| n as f64)
+            };
+            if let Some(n) = radix("0x", 16)
+                .or_else(|| radix("0X", 16))
+                .or_else(|| radix("0o", 8))
+                .or_else(|| radix("0b", 2))
+            {
                 return n;
             }
             let body = t.strip_prefix(['+', '-']).unwrap_or(t);
             let plain = body.starts_with(|c: char| c.is_ascii_digit() || c == '.')
-                && body.chars().all(|c| c.is_ascii_digit() || matches!(c, '.' | 'e' | 'E' | '+' | '-'));
-            if plain { t.parse().unwrap_or(f64::NAN) } else if body == "Infinity" { if t.starts_with('-') { f64::NEG_INFINITY } else { f64::INFINITY } } else { f64::NAN }
+                && body
+                    .chars()
+                    .all(|c| c.is_ascii_digit() || matches!(c, '.' | 'e' | 'E' | '+' | '-'));
+            if plain {
+                t.parse().unwrap_or(f64::NAN)
+            } else if body == "Infinity" {
+                if t.starts_with('-') {
+                    f64::NEG_INFINITY
+                } else {
+                    f64::INFINITY
+                }
+            } else {
+                f64::NAN
+            }
         }
         _ => f64::NAN,
     }
@@ -72,7 +92,11 @@ fn channel_of(doc: Option<&Document>) -> Option<Channels> {
     match doc?.get_in(&[key("channel")]).ok()?? {
         Value::Str(s) if !s.is_empty() => Some(Channels::Name(s)),
         Value::List(items) => {
-            let ns: Vec<f64> = items.iter().map(js_number_of).filter(|n| n.fract() == 0.0 && *n > 0.0 && n.is_finite()).collect();
+            let ns: Vec<f64> = items
+                .iter()
+                .map(js_number_of)
+                .filter(|n| n.fract() == 0.0 && *n > 0.0 && n.is_finite())
+                .collect();
             (!ns.is_empty()).then_some(Channels::List(ns))
         }
         _ => None,
@@ -99,7 +123,10 @@ fn io_of(doc: Option<&Document>, path: &str) -> Option<String> {
         return Some(io.to_owned());
     }
     let parts: Vec<&str> = path.split(['/', '\\']).collect();
-    parts.windows(2).find(|w| w[0] == "io" && io_module(w[1]).is_some()).and_then(|w| io_module(w[1]).map(str::to_owned))
+    parts
+        .windows(2)
+        .find(|w| w[0] == "io" && io_module(w[1]).is_some())
+        .and_then(|w| io_module(w[1]).map(str::to_owned))
 }
 
 /// The three reads, parsing at most once and only when the text can hold the keys a read looks for.
@@ -107,11 +134,17 @@ fn io_of(doc: Option<&Document>, path: &str) -> Option<String> {
 pub fn buffer_reads(text: &str, path: &str) -> BufferReads {
     let want_slices = text.contains("rack_type");
     let want_io = names_io_word(text) || text.contains("extends");
-    let doc = (want_slices || want_io).then(|| Document::new(text)).filter(|d| d.errors().is_empty());
+    let doc = (want_slices || want_io)
+        .then(|| Document::new(text))
+        .filter(|d| d.errors().is_empty());
     let slices = doc.is_some() && want_slices && scan_slices(text).is_some();
     // A path alone can make a file an input, so the io read runs even when nothing was parsed.
     let io = io_of(doc.as_ref(), path);
-    let channels = if io.as_deref() == Some("in") { channel_of(doc.as_ref()) } else { None };
+    let channels = if io.as_deref() == Some("in") {
+        channel_of(doc.as_ref())
+    } else {
+        None
+    };
     BufferReads { slices, io, channels }
 }
 
@@ -185,7 +218,9 @@ fn edge_seconds(raw: Option<&Edge>, g: ClipGrid) -> Option<f64> {
     match raw? {
         Edge::Timecode(s) if s.is_empty() => None,
         Edge::Seconds(n) => (*n >= 0.0).then_some(*n),
-        Edge::Timecode(s) => parse_position_on(s, g.num, g.den).ok().map(|beats| beats * 60.0 / g.tempo),
+        Edge::Timecode(s) => parse_position_on(s, g.num, g.den)
+            .ok()
+            .map(|beats| beats * 60.0 / g.tempo),
     }
 }
 
@@ -234,7 +269,11 @@ fn spell(seconds: f64, was: Option<&Edge>, g: ClipGrid) -> Value {
 pub fn set_clip_window(doc: &mut Document, from: f64, to: Option<f64>, g: ClipGrid) -> Result<(), EditError> {
     let (was_from, was_to) = scan_clip_window(doc.text());
     if from > 0.0 {
-        doc.set_in(&[key("from")], &spell(from, was_from.as_ref(), g), WriteOptions::default())?;
+        doc.set_in(
+            &[key("from")],
+            &spell(from, was_from.as_ref(), g),
+            WriteOptions::default(),
+        )?;
     } else {
         doc.delete_in(&[key("from")], false)?;
     }

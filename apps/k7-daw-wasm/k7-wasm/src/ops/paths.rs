@@ -225,7 +225,10 @@ pub fn dispatch(request: PathsRequest, out: &mut Vec<u8>) -> Result<(), WasmErro
         R::Base(a) => write(out, &p::base_name(&a.path)),
         R::HeadTokens(a) => write(out, &p::head_tokens(&a.rest, a.n)),
         R::Gutter(a) => write(out, &p::resolve_gutter_source(&a.source, &a.file, a.project.as_deref())),
-        R::ModuleBehind(a) => write(out, &p::module_behind(&a.content, &a.paths, &a.project_root, a.own.as_deref())),
+        R::ModuleBehind(a) => write(
+            out,
+            &p::module_behind(&a.content, &a.paths, &a.project_root, a.own.as_deref()),
+        ),
         R::AudioClip(a) => write(out, &p::is_audio_clip_file(&a.text)),
         R::UseRack(a) => write(out, &p::find_use_rack(&a.text)),
         R::TextFiles(a) => {

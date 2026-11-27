@@ -14,7 +14,8 @@ const G: ClipGrid = ClipGrid {
 // 110 BPM: one bar is 240/110 s, so "3:1" (8 beats) is 8*60/110 s.
 const BAR: f64 = 240.0 / 110.0;
 
-const FILE: &str = "// the break\nsource(\"clips/break.wav\")\nwarp({ algorithm: \"slice\", markers: [[0, 0], [4, 1.9]] })\n";
+const FILE: &str =
+    "// the break\nsource(\"clips/break.wav\")\nwarp({ algorithm: \"slice\", markers: [[0, 0], [4, 1.9]] })\n";
 
 fn get(text: &str, key: &str) -> Option<Value> {
     match parse(text).ok()? {
@@ -67,7 +68,10 @@ fn an_untrimmed_clip_offers_hollow_edges_when_the_buffer_can_be_edited() {
 #[test]
 fn a_dragged_edge_keeps_the_way_it_was_spelled() {
     let out = set_window(&format!("{FILE}from(1.32)\nto(4.36)\n"), 2.0, Some(5.0));
-    assert_eq!((get(&out, "from"), get(&out, "to")), (Some(Value::Num(2.0)), Some(Value::Num(5.0))));
+    assert_eq!(
+        (get(&out, "from"), get(&out, "to")),
+        (Some(Value::Num(2.0)), Some(Value::Num(5.0)))
+    );
     // Pinned to a bar and stays pinned to one.
     let out = set_window(&format!("{FILE}to(\"3:1\")\n"), 0.0, Some(3.0 * BAR));
     assert_eq!(get(&out, "to"), Some(Value::Str("4:1".into())));
@@ -91,9 +95,16 @@ fn an_edge_that_was_not_there_is_written_in_seconds_and_a_start_leaves_the_key_o
 fn a_write_touches_nothing_else_and_keeps_a_comment() {
     let out = set_window(&format!("{FILE}from(1.32)\nto(4.36)\n"), 2.0, Some(5.0));
     assert!(out.starts_with(FILE));
-    let out = set_window(&format!("{FILE}from(1.32) // the count-in\nto(4.36)\n"), 2.0, Some(4.36));
+    let out = set_window(
+        &format!("{FILE}from(1.32) // the count-in\nto(4.36)\n"),
+        2.0,
+        Some(4.36),
+    );
     assert!(out.contains("from(2) // the count-in"));
-    assert_eq!(get(&set_window(FILE, 0.0, Some(1.0 / 3.0)), "to"), Some(Value::Num(0.3333)));
+    assert_eq!(
+        get(&set_window(FILE, 0.0, Some(1.0 / 3.0)), "to"),
+        Some(Value::Num(0.3333))
+    );
 }
 
 #[test]
@@ -132,7 +143,9 @@ fn no_slices_for_a_samples_rack_a_module_with_no_rack_or_a_broken_file() {
 
 fn slice_window(text: &str, symbol: &str, from: f64, to: f64) -> Option<String> {
     let mut doc = Document::new(text);
-    set_slice_window(&mut doc, symbol, from, to).unwrap().then(|| doc.text().to_owned())
+    set_slice_window(&mut doc, symbol, from, to)
+        .unwrap()
+        .then(|| doc.text().to_owned())
 }
 
 #[test]
@@ -155,7 +168,13 @@ fn the_reads_parse_only_when_a_read_could_answer() {
     let r = buffer_reads("name(\"lead\")\nparams({ gain: 0.5 })\n", "nodes/x.k7x");
     assert_eq!((r.slices, r.io, r.channels), (false, None, None));
     assert_eq!(buffer_reads("version(2)\naudio(true)\n", "nodes/x.k7x").io, None);
-    let r = buffer_reads(&format!("extends(\"@k7-core/kit\")\n{}", "rack({ rack_type: \"slice\", source: \"b.wav\", symbols: { BD: { note: 36, from: 0, to: 0.5 } } })\n"), "n.k7x");
+    let r = buffer_reads(
+        &format!(
+            "extends(\"@k7-core/kit\")\n{}",
+            "rack({ rack_type: \"slice\", source: \"b.wav\", symbols: { BD: { note: 36, from: 0, to: 0.5 } } })\n"
+        ),
+        "n.k7x",
+    );
     assert!(r.slices);
     assert!(!buffer_reads("rack({ rack_type: \"slice\", symbols: [\n", "n.k7x").slices);
 }
@@ -163,13 +182,22 @@ fn the_reads_parse_only_when_a_read_could_answer() {
 #[test]
 fn an_inputs_io_and_channels_come_from_one_parse() {
     let r = buffer_reads("extends(\"@meta/IN\")\nchannel([3, 4])\n", "nodes/x.k7x");
-    assert_eq!((r.io.as_deref(), r.channels), (Some("in"), Some(Channels::List(vec![3.0, 4.0]))));
-    assert_eq!(buffer_reads("io(\"in\")\nchannel(\"Guitare\")\n", "x.k7x").channels, Some(Channels::Name("Guitare".into())));
+    assert_eq!(
+        (r.io.as_deref(), r.channels),
+        (Some("in"), Some(Channels::List(vec![3.0, 4.0])))
+    );
+    assert_eq!(
+        buffer_reads("io(\"in\")\nchannel(\"Guitare\")\n", "x.k7x").channels,
+        Some(Channels::Name("Guitare".into()))
+    );
     // A path alone can make a file an input.
     let r = buffer_reads("channel([1])\n", "_modules/io/IN/in-1.k7x");
     assert_eq!(r.io.as_deref(), Some("in"));
     assert_eq!(buffer_reads("io(\"out\")\nchannel([1])\n", "x.k7x").channels, None);
-    assert_eq!(buffer_reads("io(\"in\")\nchannel([0, 2.5, \"3\", -1])\n", "x.k7x").channels, Some(Channels::List(vec![3.0])));
+    assert_eq!(
+        buffer_reads("io(\"in\")\nchannel([0, 2.5, \"3\", -1])\n", "x.k7x").channels,
+        Some(Channels::List(vec![3.0]))
+    );
 }
 
 fn names(v: &[&str]) -> Vec<(String, String)> {
@@ -177,10 +205,15 @@ fn names(v: &[&str]) -> Vec<(String, String)> {
 }
 
 fn lanes() -> Vec<DropLane> {
-    [("gtr", DropKind::Audio), ("bass", DropKind::Audio), ("main", DropKind::Video), ("pip", DropKind::Video)]
-        .into_iter()
-        .map(|(id, kind)| DropLane { id: id.into(), kind })
-        .collect()
+    [
+        ("gtr", DropKind::Audio),
+        ("bass", DropKind::Audio),
+        ("main", DropKind::Video),
+        ("pip", DropKind::Video),
+    ]
+    .into_iter()
+    .map(|(id, kind)| DropLane { id: id.into(), kind })
+    .collect()
 }
 
 #[test]
@@ -198,8 +231,14 @@ fn a_dropped_file_is_read_by_its_extension_and_picture_wins_the_one_they_share()
 #[test]
 fn a_clip_keeps_the_files_own_name_and_folds_what_a_path_would_argue_about() {
     let c = dropped_clip("Prise été n°3.wav", "Prise ete n°3.wav").unwrap();
-    assert_eq!((c.id.as_str(), c.upload.as_str(), c.kind), ("Prise-ete-n-3", "Prise-ete-n-3.wav", DropKind::Audio));
-    assert_eq!(dropped_clip("takes/sub/kick.WAV", "takes/sub/kick.WAV").unwrap().upload, "kick.wav");
+    assert_eq!(
+        (c.id.as_str(), c.upload.as_str(), c.kind),
+        ("Prise-ete-n-3", "Prise-ete-n-3.wav", DropKind::Audio)
+    );
+    assert_eq!(
+        dropped_clip("takes/sub/kick.WAV", "takes/sub/kick.WAV").unwrap().upload,
+        "kick.wav"
+    );
     assert_eq!(dropped_clip("---.wav", "---.wav").unwrap().id, "clip");
     assert_eq!(clip_decl("kick.wav").unwrap(), "source(\"clips/kick.wav\")\n");
     assert_eq!(clip_decl("a \"b\".wav").unwrap(), "source(\"clips/a \\\"b\\\".wav\")\n");
@@ -211,16 +250,26 @@ fn a_drop_names_two_files_of_one_id_twice_and_walks_down_the_lanes_of_its_kind()
     let got: Vec<_> = p.declare.iter().map(|c| (c.id.as_str(), c.upload.as_str())).collect();
     assert_eq!(got, vec![("Kick-1", "Kick-1.wav"), ("Kick-1-2", "Kick-1-2.wav")]);
     let place = |names_: &[&str], at: &str| -> Vec<(String, String)> {
-        plan_drop(&names(names_), &lanes(), at).place.into_iter().map(|p| (p.id, p.lane)).collect()
+        plan_drop(&names(names_), &lanes(), at)
+            .place
+            .into_iter()
+            .map(|p| (p.id, p.lane))
+            .collect()
     };
     let pair = |a: &str, b: &str| (a.to_owned(), b.to_owned());
     assert_eq!(place(&["kick.wav"], "bass"), vec![pair("kick", "bass")]);
-    assert_eq!(place(&["a.wav", "b.wav"], "gtr"), vec![pair("a", "gtr"), pair("b", "bass")]);
+    assert_eq!(
+        place(&["a.wav", "b.wav"], "gtr"),
+        vec![pair("a", "gtr"), pair("b", "bass")]
+    );
     // What runs out of lanes is left, but still declared.
     let p = plan_drop(&names(&["a.wav", "b.wav", "c.wav"]), &lanes(), "bass");
     assert_eq!(p.place.len(), 1);
     assert_eq!(p.declare.len(), 3);
-    assert_eq!(place(&["a.mp4", "b.mp4"], "main"), vec![pair("a", "main"), pair("b", "main")]);
+    assert_eq!(
+        place(&["a.mp4", "b.mp4"], "main"),
+        vec![pair("a", "main"), pair("b", "main")]
+    );
     assert_eq!(place(&["a.mp4", "kick.wav"], "main"), vec![pair("a", "main")]);
     assert!(place(&["kick.wav"], "ghost").is_empty());
 }
@@ -237,8 +286,14 @@ fn a_file_of_the_other_kind_is_declared_unplaced_and_a_stranger_is_refused() {
 
 #[test]
 fn a_declaration_and_its_candidate_ids() {
-    assert_eq!(declared_source("source(\"clips/kick.wav\")\n").as_deref(), Some("clips/kick.wav"));
-    assert_eq!(declared_source("trim(1)\nsource('clips/a b.wav')\n").as_deref(), Some("clips/a b.wav"));
+    assert_eq!(
+        declared_source("source(\"clips/kick.wav\")\n").as_deref(),
+        Some("clips/kick.wav")
+    );
+    assert_eq!(
+        declared_source("trim(1)\nsource('clips/a b.wav')\n").as_deref(),
+        Some("clips/a b.wav")
+    );
     assert_eq!(declared_source("gain(-3)\n"), None);
     assert_eq!(declared_source("source(\"clips/kick.wav\"\n"), None);
     assert_eq!(candidate_ids("kick", 3), vec!["kick", "kick-2", "kick-3"]);
@@ -254,7 +309,10 @@ fn a_takes_container_name_id_and_line() {
     assert_eq!(take_id("A roll/2", "S"), "A-roll-2_S");
     assert_eq!(take_id("...", "S"), "lane_S");
     assert_eq!(file_stamp(2026, 7, 9, 4, 5, 6), "260809T040506");
-    assert_eq!(place_line("main", "main_S", 12.3456, 4.5), "picture add main main_S 12.346 4.5");
+    assert_eq!(
+        place_line("main", "main_S", 12.3456, 4.5),
+        "picture add main main_S 12.346 4.5"
+    );
     assert_eq!(place_line("main", "x", -1.0, -2.0), "picture add main x 0 0");
     assert_eq!(place_line("main", "x", f64::NAN, 1.0), "picture add main x NaN 1");
 }
@@ -296,15 +354,24 @@ fn what_stops_a_create() {
     assert!(rack_issues("drums", &ok, &[], true).is_empty());
     assert!(!rack_issues("", &ok, &[], true).is_empty());
     assert!(!rack_issues("a b", &ok, &[], true).is_empty());
-    assert_eq!(said(&rack_issues("drums", &ok[..1], &["drums".to_owned()], true)), vec!["rb.exists"]);
+    assert_eq!(
+        said(&rack_issues("drums", &ok[..1], &["drums".to_owned()], true)),
+        vec!["rb.exists"]
+    );
     let dup = [pad("BD", "BD.wav", 36.0), pad("BD", "bd2.wav", 37.0)];
     assert_eq!(said(&rack_issues("d", &dup, &[], true)), vec!["rb.dupSymbol"]);
     let same = [pad("BD", "x.wav", 36.0), pad("SN", "x.wav", 37.0)];
     assert_eq!(said(&rack_issues("d", &same, &[], true)), vec!["rb.samePad"]);
     assert_eq!(said(&rack_issues("d", &[], &[], true)), vec!["rb.noSample"]);
-    assert_eq!(said(&rack_issues("d", &[pad("B D", "x.wav", 36.0)], &[], true)), vec!["rb.badSymbol"]);
+    assert_eq!(
+        said(&rack_issues("d", &[pad("B D", "x.wav", 36.0)], &[], true)),
+        vec!["rb.badSymbol"]
+    );
     let none = rack_issues("d", &ok[..1], &[], false);
-    assert_eq!((none[0].key, none[0].params["module"].as_str()), ("rb.noRack", "instruments/k7-rack"));
+    assert_eq!(
+        (none[0].key, none[0].params["module"].as_str()),
+        ("rb.noRack", "instruments/k7-rack")
+    );
 }
 
 #[test]
@@ -314,7 +381,10 @@ fn a_kit_extends_a_librarys_sampler_and_never_a_workspace_copy() {
         rack_module_ref(&refs(&["@drums/instruments/k7-rack", "@k7-core/instruments/k7-rack"])).as_deref(),
         Some("@k7-core/instruments/k7-rack")
     );
-    assert_eq!(rack_module_ref(&refs(&["@drums/instruments/k7-rack"])).as_deref(), Some("@drums/instruments/k7-rack"));
+    assert_eq!(
+        rack_module_ref(&refs(&["@drums/instruments/k7-rack"])).as_deref(),
+        Some("@drums/instruments/k7-rack")
+    );
     assert_eq!(rack_module_ref(&refs(&["@workspace/instruments/k7-rack"])), None);
     assert_eq!(rack_module_ref(&refs(&["@engine/instruments/k7-rack"])), None);
     assert_eq!(rack_module_ref(&refs(&["@k7-core/instruments/rack"])), None);
@@ -330,21 +400,45 @@ fn the_kit_node_is_a_node_of_the_sampler_with_one_tap_per_pad() {
     assert!(text.contains("\n    BD: { note: 36, sample: "));
     assert_eq!(get(&text, "extends"), Some(Value::Str(rack.into())));
     assert_eq!(get(&text, "engine"), Some(Value::Str("samples".into())));
-    let Some(Value::Map(rack_map)) = get(&text, "rack") else { panic!("no rack") };
-    let Value::Map(symbols) = &rack_map[0].1 else { panic!("no symbols") };
-    assert_eq!(symbols.iter().map(|(k, _)| k.as_str()).collect::<Vec<_>>(), vec!["BD", "SN"]);
+    let Some(Value::Map(rack_map)) = get(&text, "rack") else {
+        panic!("no rack")
+    };
+    let Value::Map(symbols) = &rack_map[0].1 else {
+        panic!("no symbols")
+    };
+    assert_eq!(
+        symbols.iter().map(|(k, _)| k.as_str()).collect::<Vec<_>>(),
+        vec!["BD", "SN"]
+    );
     assert!(text.contains("@project/drums/snare 01.wav"));
-    let lib = build_kit_node("drums", &pads, &KitDestination::Library { library: "k7-core".into() }, rack).unwrap();
+    let lib = build_kit_node(
+        "drums",
+        &pads,
+        &KitDestination::Library {
+            library: "k7-core".into(),
+        },
+        rack,
+    )
+    .unwrap();
     assert!(lib.contains("@k7-core/drums/kick.wav"));
 }
 
 #[test]
 fn a_kits_samples_are_uploaded_into_the_samples_folder_its_name_points_at() {
     let project = KitDestination::Project(ProjectWord::Project);
-    assert_eq!(kit_upload_dir(&project, "drums", "songs/first.k7"), "songs/first.k7/samples/drums");
+    assert_eq!(
+        kit_upload_dir(&project, "drums", "songs/first.k7"),
+        "songs/first.k7/samples/drums"
+    );
     assert_eq!(kit_upload_dir(&project, "drums", "."), "samples/drums");
     assert_eq!(
-        kit_upload_dir(&KitDestination::Library { library: "k7-core".into() }, "drums", "songs/first.k7"),
+        kit_upload_dir(
+            &KitDestination::Library {
+                library: "k7-core".into()
+            },
+            "drums",
+            "songs/first.k7"
+        ),
         "_libraries/k7-core/samples/drums"
     );
 }

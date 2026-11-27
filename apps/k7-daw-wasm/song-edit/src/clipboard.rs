@@ -146,7 +146,14 @@ pub fn notes_in_region(notes: &[(f64, f64)], lo_key: f64, hi_key: f64, from: f64
 
 /// The notes inside the rectangle, relative to its corner; None for an empty rectangle.
 #[must_use]
-pub fn copy_notes(notes: &[RollNote], sequence: &str, lo_key: f64, hi_key: f64, from: f64, to: f64) -> Option<Clipboard> {
+pub fn copy_notes(
+    notes: &[RollNote],
+    sequence: &str,
+    lo_key: f64,
+    hi_key: f64,
+    from: f64,
+    to: f64,
+) -> Option<Clipboard> {
     let keys: Vec<(f64, f64)> = notes.iter().map(|n| (n.key, n.time)).collect();
     let inside = notes_in_region(&keys, lo_key, hi_key, from, to);
     if inside.is_empty() {

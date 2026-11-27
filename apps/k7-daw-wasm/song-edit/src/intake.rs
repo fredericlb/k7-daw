@@ -3,8 +3,8 @@
 
 use k7x::edit::{StringifyOptions, Value, js_number, parse, stringify};
 use serde::{Deserialize, Serialize};
-use song_schema::is_audio;
 use song::wire::{CAPTION_EXTS, IMAGE_EXTS, VIDEO_EXTS};
+use song_schema::is_audio;
 
 /// Audio or picture: the two kinds of material a lane holds, and the two verbs that place one.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
@@ -56,7 +56,8 @@ pub struct DropPlan {
 
 fn ends_in(name: &str, exts: &[&str]) -> bool {
     let lower = name.to_ascii_lowercase();
-    exts.iter().any(|e| lower.strip_suffix(e).is_some_and(|h| h.ends_with('.')))
+    exts.iter()
+        .any(|e| lower.strip_suffix(e).is_some_and(|h| h.ends_with('.')))
 }
 
 /// Which kind of material a dropped file is: the EXTENSION decides, as it does for the compiler; picture wins the ones both name.
@@ -87,7 +88,11 @@ fn safe_stem(s: &str) -> String {
         }
     }
     let trimmed = out.trim_matches(['-', '.']);
-    if trimmed.is_empty() { "clip".to_owned() } else { trimmed.to_owned() }
+    if trimmed.is_empty() {
+        "clip".to_owned()
+    } else {
+        trimmed.to_owned()
+    }
 }
 
 /// A dropped file as it will sit in `clips/`, or None when it is neither kind. `folded` is `name` with its accents taken off.
@@ -99,7 +104,9 @@ pub fn dropped_clip(name: &str, folded: &str) -> Option<DroppedClip> {
     let dot = base.rfind('.').filter(|&d| d > 0);
     let ext = dot.map_or_else(String::new, |d| base[d..].to_lowercase());
     let folded_base = last_segment(folded);
-    let stem = folded_base.strip_suffix(&base[dot.unwrap_or(base.len())..]).unwrap_or(folded_base);
+    let stem = folded_base
+        .strip_suffix(&base[dot.unwrap_or(base.len())..])
+        .unwrap_or(folded_base);
     let id = safe_stem(stem);
     Some(DroppedClip {
         upload: format!("{id}{ext}"),
@@ -114,7 +121,13 @@ pub fn dropped_clip(name: &str, folded: &str) -> Option<DroppedClip> {
 /// Never in practice: the one key is printable.
 pub fn clip_decl(upload: &str) -> Result<String, k7x::edit::EditError> {
     let value = Value::Map(vec![("source".to_owned(), Value::Str(format!("clips/{upload}")))]);
-    stringify(&value, &StringifyOptions { header: &[], inline: None })
+    stringify(
+        &value,
+        &StringifyOptions {
+            header: &[],
+            inline: None,
+        },
+    )
 }
 
 /// Resolves a drop: `at` names the lane under the pointer, and its kind decides which files can be placed.
@@ -135,7 +148,11 @@ pub fn plan_drop(names: &[(String, String)], lanes: &[DropLane], at: &str) -> Dr
             k += 1;
         }
         let upload = format!("{id}{}", &c.upload[c.id.len()..]);
-        declare.push(DroppedClip { id, upload, kind: c.kind });
+        declare.push(DroppedClip {
+            id,
+            upload,
+            kind: c.kind,
+        });
     }
     let Some(from) = lanes.iter().position(|l| l.id == at) else {
         return DropPlan {
@@ -162,7 +179,11 @@ pub fn plan_drop(names: &[(String, String)], lanes: &[DropLane], at: &str) -> Dr
             })
         })
         .collect();
-    DropPlan { declare, place, refused }
+    DropPlan {
+        declare,
+        place,
+        refused,
+    }
 }
 
 /// How many `-n` suffixes are tried before giving up: a project holding fifty files called `take` has another problem.
@@ -183,7 +204,15 @@ pub fn declared_source(text: &str) -> Option<String> {
 /// The candidate ids for `id`, in order: itself, then `id-2`, `id-3`…
 #[must_use]
 pub fn candidate_ids(id: &str, n: usize) -> Vec<String> {
-    (0..n).map(|i| if i == 0 { id.to_owned() } else { format!("{id}-{}", i + 1) }).collect()
+    (0..n)
+        .map(|i| {
+            if i == 0 {
+                id.to_owned()
+            } else {
+                format!("{id}-{}", i + 1)
+            }
+        })
+        .collect()
 }
 
 // ---- a recorded picture take ---------------------------------------------------------------------
@@ -191,13 +220,21 @@ pub fn candidate_ids(id: &str, n: usize) -> Vec<String> {
 /// The extension a container lands under: the compiler reads a clip's KIND off it, so it has to be one it knows.
 #[must_use]
 pub fn ext_for_mime(mime: Option<&str>) -> &'static str {
-    if mime.is_some_and(|m| m.starts_with("video/mp4")) { ".mp4" } else { ".webm" }
+    if mime.is_some_and(|m| m.starts_with("video/mp4")) {
+        ".mp4"
+    } else {
+        ".webm"
+    }
 }
 
 /// A wall-clock stamp for a filename (`260814T194357`), the shape a recorded audio take already uses; the month counts from 0.
 #[must_use]
 pub fn file_stamp(year: i32, month0: u32, day: u32, hour: u32, minute: u32, second: u32) -> String {
-    format!("{:02}{:02}{day:02}T{hour:02}{minute:02}{second:02}", year.rem_euclid(100), month0 + 1)
+    format!(
+        "{:02}{:02}{day:02}T{hour:02}{minute:02}{second:02}",
+        year.rem_euclid(100),
+        month0 + 1
+    )
 }
 
 /// A take's clip id: the lane it was recorded on and when, reduced to what a path and a k7x key hold.

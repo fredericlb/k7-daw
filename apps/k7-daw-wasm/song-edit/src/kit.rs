@@ -24,7 +24,10 @@ pub fn pad_note(row: usize, col: usize) -> f64 {
 /// Every cell in NOTE order, the order the symbols are WRITTEN in, so the hints and the colours read the grid as it plays.
 #[must_use]
 pub fn cells_in_note_order() -> Vec<(usize, usize)> {
-    (0..KIT_GRID).rev().flat_map(|row| (0..KIT_GRID).map(move |col| (row, col))).collect()
+    (0..KIT_GRID)
+        .rev()
+        .flat_map(|row| (0..KIT_GRID).map(move |col| (row, col)))
+        .collect()
 }
 
 /// A pad's default symbol: the file's stem, upper-cased and squeezed to the characters a symbol is addressed by. Empty in, `PAD` out.
@@ -44,7 +47,11 @@ pub fn default_symbol(file_name: &str) -> String {
         }
     }
     let clean = out.trim_matches('_');
-    if clean.is_empty() { "PAD".to_owned() } else { clean.to_owned() }
+    if clean.is_empty() {
+        "PAD".to_owned()
+    } else {
+        clean.to_owned()
+    }
 }
 
 #[derive(Clone, Debug, PartialEq, Deserialize)]
@@ -69,7 +76,11 @@ pub fn rack_module_ref(base_modules: &[String]) -> Option<String> {
                 .is_some_and(|lib| !lib.is_empty() && !lib.contains('/') && !matches!(lib, "workspace" | "engine"))
         })
         .collect();
-    found.iter().find(|r| r.starts_with("@k7-core/")).or(found.first()).map(|r| (*r).clone())
+    found
+        .iter()
+        .find(|r| r.starts_with("@k7-core/"))
+        .or(found.first())
+        .map(|r| (*r).clone())
 }
 
 /// Where a kit's samples land: the PROJECT's own `samples/`, or one of the account's libraries'.
@@ -95,7 +106,10 @@ pub fn kit_upload_dir(dest: &KitDestination, kit: &str, project: &str) -> String
     match dest {
         KitDestination::Project(_) => {
             let p = project_dir(Some(project));
-            format!("{}samples/{kit}", if p.is_empty() { String::new() } else { format!("{p}/") })
+            format!(
+                "{}samples/{kit}",
+                if p.is_empty() { String::new() } else { format!("{p}/") }
+            )
         }
         KitDestination::Library { library: lib } => format!("_libraries/{lib}/samples/{kit}"),
     }
@@ -142,7 +156,8 @@ pub fn rack_issues(name: &str, pads: &[RackPad], taken: &[String], has_rack: boo
     }
     let shape = |s: &str| {
         let mut cs = s.chars();
-        cs.next().is_some_and(|c| c.is_ascii_alphanumeric()) && cs.all(|c| c.is_ascii_alphanumeric() || c == '_' || c == '-')
+        cs.next().is_some_and(|c| c.is_ascii_alphanumeric())
+            && cs.all(|c| c.is_ascii_alphanumeric() || c == '_' || c == '-')
     };
     if name.is_empty() {
         out.push(issue("rb.noName"));
@@ -157,7 +172,10 @@ pub fn rack_issues(name: &str, pads: &[RackPad], taken: &[String], has_rack: boo
     }
     let mut seen: Vec<&str> = Vec::new();
     for p in pads {
-        let ok = !p.symbol.is_empty() && p.symbol.chars().all(|c| c.is_ascii_alphanumeric() || c == '_' || c == '-');
+        let ok = !p.symbol.is_empty()
+            && p.symbol
+                .chars()
+                .all(|c| c.is_ascii_alphanumeric() || c == '_' || c == '-');
         if !ok {
             out.push(with("rb.badSymbol", "symbol", &p.symbol));
         } else if seen.contains(&p.symbol.as_str()) {
@@ -179,13 +197,21 @@ pub fn rack_issues(name: &str, pads: &[RackPad], taken: &[String], has_rack: boo
 ///
 /// # Errors
 /// A pad number with no k7x spelling.
-pub fn build_kit_node(name: &str, pads: &[RackPad], dest: &KitDestination, rack_ref: &str) -> Result<String, EditError> {
+pub fn build_kit_node(
+    name: &str,
+    pads: &[RackPad],
+    dest: &KitDestination,
+    rack_ref: &str,
+) -> Result<String, EditError> {
     let symbols = Value::object(
         pads.iter()
             .map(|p| {
                 let tap = Value::Map(vec![
                     ("note".to_owned(), Value::Num(p.note)),
-                    ("sample".to_owned(), Value::Str(kit_sample_ref(dest, name, &p.file_name))),
+                    (
+                        "sample".to_owned(),
+                        Value::Str(kit_sample_ref(dest, name, &p.file_name)),
+                    ),
                 ]);
                 (p.symbol.clone(), tap)
             })
@@ -196,7 +222,9 @@ pub fn build_kit_node(name: &str, pads: &[RackPad], dest: &KitDestination, rack_
         ("engine".to_owned(), Value::Str(RACK_ENGINE.to_owned())),
         ("rack".to_owned(), Value::Map(vec![("symbols".to_owned(), symbols)])),
     ]);
-    let header = [format!("{name} — a kit, built with the rack builder: each tap a note and the sample it fires.")];
+    let header = [format!(
+        "{name} — a kit, built with the rack builder: each tap a note and the sample it fires."
+    )];
     // `BD: { note: 36, sample: … }`: a kit is read down, the way a drum map is.
     let inline = |path: &[PathSeg], _: &Value| {
         path.len() == 3 && path[0] == PathSeg::Key("rack".into()) && path[1] == PathSeg::Key("symbols".into())

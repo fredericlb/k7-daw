@@ -6,8 +6,8 @@ use crate::error::WasmError;
 use crate::ops::write;
 use serde::Deserialize;
 use song_edit::curve_draft::{
-    CurveDraft, DraftCondition, DraftPoint, ParamKind, SpecFile, conditions_problem, condition_problem, draft_of, duration_problem, fields_of,
-    new_condition, point_at, shapes_for, span_bars, spec_of, with_point,
+    CurveDraft, DraftCondition, DraftPoint, ParamKind, SpecFile, condition_problem, conditions_problem, draft_of,
+    duration_problem, fields_of, new_condition, point_at, shapes_for, span_bars, spec_of, with_point,
 };
 use song_schema::SchemaError;
 
@@ -134,7 +134,13 @@ pub fn dispatch(request: DraftRequest, out: &mut Vec<u8>) -> Result<(), WasmErro
         R::SpanBars(a) => write(out, &span_bars(&a.draft, a.num, a.den).map_err(bad)?),
         R::NewCondition(a) => write(out, &new_condition(&a.event)),
         R::ShapesFor(a) => write(out, &shapes_for(a.kind)),
-        R::PointAt(a) => write(out, &point_at(a.x, a.unit, a.span_beats, a.num, a.den, a.binary).map_err(bad)?),
-        R::WithPoint(a) => write(out, &with_point(&a.points, &a.point, a.num, a.den, a.replacing.as_deref()).map_err(bad)?),
+        R::PointAt(a) => write(
+            out,
+            &point_at(a.x, a.unit, a.span_beats, a.num, a.den, a.binary).map_err(bad)?,
+        ),
+        R::WithPoint(a) => write(
+            out,
+            &with_point(&a.points, &a.point, a.num, a.den, a.replacing.as_deref()).map_err(bad)?,
+        ),
     }
 }

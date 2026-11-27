@@ -315,8 +315,16 @@ mod tests {
     fn triggers(text: &str) -> Vec<(usize, PreviewReq)> {
         let bump = Bump::new();
         let root = parse_tree(text, &bump).unwrap();
-        let line = |from: usize| text[..text.char_indices().nth(from).map_or(text.len(), |(i, _)| i)].matches('\n').count() + 1;
-        let mut v: Vec<_> = preview_triggers(&root, text).into_iter().map(|t| (line(t.from), t.req)).collect();
+        let line = |from: usize| {
+            text[..text.char_indices().nth(from).map_or(text.len(), |(i, _)| i)]
+                .matches('\n')
+                .count()
+                + 1
+        };
+        let mut v: Vec<_> = preview_triggers(&root, text)
+            .into_iter()
+            .map(|t| (line(t.from), t.req))
+            .collect();
         v.sort_by_key(|(l, _)| *l);
         v
     }
@@ -327,7 +335,10 @@ mod tests {
 
     #[test]
     fn a_clips_own_source_earns_a_play_button() {
-        assert_eq!(triggers("source(\"kick.wav\")\n"), vec![(1, src("kick.wav"))]);
+        assert_eq!(
+            triggers("source(\"kick.wav\")\n"),
+            vec![(1, src("kick.wav"))]
+        );
         assert!(triggers("source(\"\")\n").is_empty());
     }
 
@@ -337,8 +348,18 @@ mod tests {
         assert_eq!(
             triggers(text),
             vec![
-                (4, PreviewReq::Clip { clip: "kick".into() }),
-                (5, PreviewReq::Clip { clip: "snare".into() })
+                (
+                    4,
+                    PreviewReq::Clip {
+                        clip: "kick".into()
+                    }
+                ),
+                (
+                    5,
+                    PreviewReq::Clip {
+                        clip: "snare".into()
+                    }
+                )
             ]
         );
     }
@@ -347,7 +368,14 @@ mod tests {
     fn a_slice_symbol_resolves_against_the_source_declared_after_it() {
         let text = "rack({\n  rack_type: \"slice\",\n  symbols: {\n    BD: { note: 36, from: 0, to: 0.5 },\n  },\n  source: \"break.wav\",\n})\n";
         let got = triggers(text);
-        assert!(got.contains(&(4, PreviewReq::Slice { source: "break.wav".into(), from: 0.0, to: 0.5 })));
+        assert!(got.contains(&(
+            4,
+            PreviewReq::Slice {
+                source: "break.wav".into(),
+                from: 0.0,
+                to: 0.5
+            }
+        )));
         assert!(got.contains(&(6, src("break.wav"))));
     }
 
@@ -363,7 +391,10 @@ mod tests {
         let bump = Bump::new();
         let root = parse_tree(text, &bump).unwrap();
         let v = value_tokens(&root, text);
-        let fields: Vec<_> = v.iter().map(|t| (t.value.as_str(), t.field.as_deref())).collect();
+        let fields: Vec<_> = v
+            .iter()
+            .map(|t| (t.value.as_str(), t.field.as_deref()))
+            .collect();
         assert!(fields.contains(&("melody", Some("in"))));
         assert!(fields.contains(&("pad", Some("in"))));
         assert!(fields.contains(&("x", Some("track"))));

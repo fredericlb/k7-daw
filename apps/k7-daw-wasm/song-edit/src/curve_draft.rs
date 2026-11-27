@@ -237,8 +237,19 @@ pub fn draft_of(file: Option<&SpecFile>) -> CurveDraft {
             ..common
         },
         CurveSpec::Custom(s) | CurveSpec::Onoff(s) => CurveDraft {
-            shape: if matches!(file.spec, CurveSpec::Custom(_)) { DraftShape::Custom } else { DraftShape::Onoff },
-            points: s.points.iter().map(|p| DraftPoint { time: p.time.clone(), value: p.value }).collect(),
+            shape: if matches!(file.spec, CurveSpec::Custom(_)) {
+                DraftShape::Custom
+            } else {
+                DraftShape::Onoff
+            },
+            points: s
+                .points
+                .iter()
+                .map(|p| DraftPoint {
+                    time: p.time.clone(),
+                    value: p.value,
+                })
+                .collect(),
             ..common
         },
         CurveSpec::Adsr(s) => CurveDraft {
@@ -256,7 +267,11 @@ pub fn draft_of(file: Option<&SpecFile>) -> CurveDraft {
 /// An oscillator's duration in beats, 0 for ever: and for a length that is not a timecode yet.
 fn duration_beats(tc: &str, num: f64, den: f64) -> Result<f64, SchemaError> {
     let t = js_trim(tc);
-    if is_timecode(t) { parse_duration_on(t, num, den) } else { Ok(0.0) }
+    if is_timecode(t) {
+        parse_duration_on(t, num, den)
+    } else {
+        Ok(0.0)
+    }
 }
 
 /// The draft as the curve it describes: what the preview samples.
@@ -271,7 +286,11 @@ pub fn spec_of(d: &CurveDraft) -> Result<CurveSpec, SchemaError> {
             .iter()
             .map(|p| PointSpec {
                 time: p.time.clone(),
-                value: if round { f64::from(u8::from(p.value >= 0.5)) } else { p.value },
+                value: if round {
+                    f64::from(u8::from(p.value >= 0.5))
+                } else {
+                    p.value
+                },
             })
             .collect::<Vec<_>>()
     };
@@ -347,7 +366,11 @@ fn condition_of(d: &DraftCondition) -> Condition {
 /// # Errors
 /// A duration too large to be a time.
 pub fn fields_of(d: &CurveDraft) -> Result<Map<String, Value>, SchemaError> {
-    let conditions: Vec<Value> = d.conditions.iter().filter_map(|c| serde_json::to_value(condition_of(c)).ok()).collect();
+    let conditions: Vec<Value> = d
+        .conditions
+        .iter()
+        .filter_map(|c| serde_json::to_value(condition_of(c)).ok())
+        .collect();
     let spec = spec_of(d)?;
     let mut fields = match serde_json::to_value(&spec) {
         Ok(Value::Object(m)) => m,
@@ -420,7 +443,14 @@ const SNAP_BEATS: f64 = 0.25;
 ///
 /// # Errors
 /// A time signature with no timecode.
-pub fn point_at(x: f64, unit: f64, span_beats: f64, num: f64, den: f64, binary: bool) -> Result<DraftPoint, SchemaError> {
+pub fn point_at(
+    x: f64,
+    unit: f64,
+    span_beats: f64,
+    num: f64,
+    den: f64,
+    binary: bool,
+) -> Result<DraftPoint, SchemaError> {
     let beat = 0.0_f64.max(js_round((x * span_beats) / SNAP_BEATS) * SNAP_BEATS);
     let clamped = 1.0_f64.min(0.0_f64.max(unit));
     let value = if binary {

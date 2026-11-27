@@ -12,7 +12,9 @@ fn s(v: &[&str]) -> Vec<String> {
 fn which_kind_of_file_a_path_is() {
     assert!(is_rack_module_file("modules/instruments/drum_1/module.k7x"));
     // What the file tree hands over on Windows in a multi-project workspace.
-    assert!(is_rack_module_file("LEMO - DANSE\\modules\\instruments\\drum_1\\module.k7x"));
+    assert!(is_rack_module_file(
+        "LEMO - DANSE\\modules\\instruments\\drum_1\\module.k7x"
+    ));
     // `bass.k7x` beside `module.k7x` is a node; only the generic file is the rack.
     assert!(!is_rack_module_file("modules/audio/amp/bass.k7x"));
     assert!(is_seq_file("sequences/lead.k7x"));
@@ -56,7 +58,10 @@ fn a_stem_loses_its_extension_and_keeps_a_dot_inside_the_name() {
 
 #[test]
 fn the_generic_module_file_beside_a_node() {
-    assert_eq!(module_file_of("modules/audio/amp/bass.k7x"), "modules/audio/amp/module.k7x");
+    assert_eq!(
+        module_file_of("modules/audio/amp/bass.k7x"),
+        "modules/audio/amp/module.k7x"
+    );
     assert_eq!(module_file_of("bass"), "bass");
     assert_eq!(module_file_of("a\\b\\c.k7x"), "a/b/module.k7x");
 }
@@ -76,10 +81,21 @@ fn the_builder_opens_both_module_trees() {
 
 #[test]
 fn an_entity_file_is_a_lookup_not_a_search() {
-    let files = s(&["tracks/kick.k7x", "clips/kick.k7x", "tracks/ge.lead.k7x", "video_tracks/cam1.k7x"]);
-    assert_eq!(entity_file(&files, "tracks", "kick").as_deref(), Some("tracks/kick.k7x"));
+    let files = s(&[
+        "tracks/kick.k7x",
+        "clips/kick.k7x",
+        "tracks/ge.lead.k7x",
+        "video_tracks/cam1.k7x",
+    ]);
+    assert_eq!(
+        entity_file(&files, "tracks", "kick").as_deref(),
+        Some("tracks/kick.k7x")
+    );
     assert_eq!(entity_file(&files, "clips", "kick").as_deref(), Some("clips/kick.k7x"));
-    assert_eq!(entity_file(&files, "tracks", "ge.lead").as_deref(), Some("tracks/ge.lead.k7x"));
+    assert_eq!(
+        entity_file(&files, "tracks", "ge.lead").as_deref(),
+        Some("tracks/ge.lead.k7x")
+    );
     assert_eq!(entity_file(&s(&["tracks/snare.yaml"]), "tracks", "snare"), None);
     assert_eq!(
         entity_file(&s(&["band/winter.k7/tracks/kick.k7x"]), "tracks", "kick").as_deref(),
@@ -89,15 +105,30 @@ fn an_entity_file_is_a_lookup_not_a_search() {
     assert_eq!(entity_file(&s(&["tracks/geXlead.k7x"]), "tracks", "ge.lead"), None);
     assert_eq!(entity_file(&files, "tracks", "snare"), None);
     // The `i` flag folds case, accents included.
-    assert_eq!(entity_file(&s(&["clips/Été.k7x"]), "clips", "été").as_deref(), Some("clips/Été.k7x"));
+    assert_eq!(
+        entity_file(&s(&["clips/Été.k7x"]), "clips", "été").as_deref(),
+        Some("clips/Été.k7x")
+    );
 }
 
 #[test]
 fn the_key_a_rack_files_under() {
-    assert_eq!(rack_key_of("modules/instruments/drum_1/module.k7x").as_deref(), Some("drum_1"));
-    assert_eq!(rack_key_of("song.k7/modules/instruments/drum_1/module.k7x").as_deref(), Some("drum_1"));
-    assert_eq!(rack_key_of("nodes/da_main-drum_1.k7x").as_deref(), Some("da_main-drum_1"));
-    assert_eq!(rack_key_of("song.k7/nodes/da_main-drum_1.k7x").as_deref(), Some("da_main-drum_1"));
+    assert_eq!(
+        rack_key_of("modules/instruments/drum_1/module.k7x").as_deref(),
+        Some("drum_1")
+    );
+    assert_eq!(
+        rack_key_of("song.k7/modules/instruments/drum_1/module.k7x").as_deref(),
+        Some("drum_1")
+    );
+    assert_eq!(
+        rack_key_of("nodes/da_main-drum_1.k7x").as_deref(),
+        Some("da_main-drum_1")
+    );
+    assert_eq!(
+        rack_key_of("song.k7/nodes/da_main-drum_1.k7x").as_deref(),
+        Some("da_main-drum_1")
+    );
     assert_eq!(rack_key_of("clips/kick.k7x"), None);
     assert_eq!(rack_key_of("chains/da.main.k7x"), None);
     assert_eq!(rack_key_of("modules/instruments/drum_1/panel.k7x"), None);
@@ -119,7 +150,10 @@ fn the_project_folder_and_the_paths_relative_to_it() {
     assert_eq!(project_dir(Some(".")), "");
     assert_eq!(project_dir(None), "");
     assert_eq!(to_project_relative("a.k7\\clips\\x.k7x", Some("a.k7")), "clips/x.k7x");
-    assert_eq!(to_project_relative("a.k7x/clips/x.k7x", Some("a.k7")), "a.k7x/clips/x.k7x");
+    assert_eq!(
+        to_project_relative("a.k7x/clips/x.k7x", Some("a.k7")),
+        "a.k7x/clips/x.k7x"
+    );
     assert_eq!(to_project_relative("clips/x.k7x", Some(".")), "clips/x.k7x");
     assert_eq!(to_project_relative("a.k7", Some("a.k7")), "");
 }
@@ -130,7 +164,10 @@ fn a_parent_a_base_name_and_the_head_of_a_line() {
     assert_eq!(parent_dir("kick.wav"), "");
     assert_eq!(base_name("clips/takes/kick.wav"), "kick.wav");
     assert_eq!(base_name("clips/takes/"), "takes");
-    assert_eq!(head_tokens("clips/kick.wav the loud one.wav", 2), s(&["clips/kick.wav", "the loud one.wav"]));
+    assert_eq!(
+        head_tokens("clips/kick.wav the loud one.wav", 2),
+        s(&["clips/kick.wav", "the loud one.wav"])
+    );
     assert_eq!(head_tokens("clips/kick.wav", 2), s(&["clips/kick.wav"]));
     assert!(head_tokens("   ", 2).is_empty());
     assert_eq!(head_tokens("a\u{a0}b c", 3), s(&["a", "b", "c"]));
@@ -139,12 +176,18 @@ fn a_parent_a_base_name_and_the_head_of_a_line() {
 #[test]
 fn a_gutter_source_resolves_where_the_compiler_puts_it() {
     let rack = "modules/instruments/drum_1/module.k7x";
-    assert_eq!(resolve_gutter_source("kick.wav", rack, None), "modules/instruments/drum_1/kick.wav");
+    assert_eq!(
+        resolve_gutter_source("kick.wav", rack, None),
+        "modules/instruments/drum_1/kick.wav"
+    );
     assert_eq!(resolve_gutter_source("kick.wav", "clips/a.k7x", None), "kick.wav");
     assert_eq!(resolve_gutter_source("/abs/kick.wav", rack, None), "/abs/kick.wav");
     assert_eq!(resolve_gutter_source("C:\\kick.wav", rack, None), "C:\\kick.wav");
     assert_eq!(resolve_gutter_source("", rack, None), "");
-    assert_eq!(resolve_gutter_source("k.wav", "song.k7/modules/a/b/module.k7x", Some("song.k7")), "modules/a/b/k.wav");
+    assert_eq!(
+        resolve_gutter_source("k.wav", "song.k7/modules/a/b/module.k7x", Some("song.k7")),
+        "modules/a/b/k.wav"
+    );
 }
 
 #[test]
@@ -163,10 +206,16 @@ fn the_module_beside_an_instance() {
         behind("extends(\"audio/amp\")\nparams({\n", None).as_deref(),
         Some("/root/song.k7/modules/amp/module.k7x")
     );
-    assert_eq!(behind("extends(\"eq_dj\")\n", None).as_deref(), Some("/root/song.k7/modules/eq_dj/module.k7x"));
+    assert_eq!(
+        behind("extends(\"eq_dj\")\n", None).as_deref(),
+        Some("/root/song.k7/modules/eq_dj/module.k7x")
+    );
     assert_eq!(behind("extends(\"@meta/track\")\n", None), None);
     assert_eq!(behind("source(\"kick.wav\")\n", None), None);
-    assert_eq!(behind("extends(\"audio/amp\")\n", Some("/root/song.k7/modules/amp/module.k7x")), None);
+    assert_eq!(
+        behind("extends(\"audio/amp\")\n", Some("/root/song.k7/modules/amp/module.k7x")),
+        None
+    );
     assert_eq!(behind("extends(\"audio/amp\")\n", Some("modules/amp/module.k7x")), None);
 }
 

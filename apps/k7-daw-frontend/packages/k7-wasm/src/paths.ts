@@ -29,7 +29,10 @@ export const isTrackFile = (path: string): boolean => is("track", path);
 export const isVideoTrackFile = (
   path: string,
   pictureLanes: readonly string[],
-): boolean => ask("is_video_track", { path, pictureLanes: [...pictureLanes] });
+): boolean =>
+  // A project with no picture lane has no picture lane's file, and the tree asks once per row.
+  pictureLanes.length > 0 &&
+  ask("is_video_track", { path, pictureLanes: [...pictureLanes] });
 
 /** A module file whose rack's `source:` names a file BESIDE it, rather than the project-relative path a clip's source is. */
 export const isRackModuleFile = (path: string): boolean =>
