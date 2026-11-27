@@ -111,3 +111,9 @@ pub mod scaffold_set;
 pub mod scaffold_set_files;
 pub mod scaffold_set_nodes;
 pub mod scaffold_set_sources;
+
+// M4a: the text writers the page reaches as `text.*` ops.
+pub mod assembly_param;
+pub mod library_pins;
+pub mod mix_cues;
+pub mod playlist_edit;

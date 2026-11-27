@@ -8,6 +8,7 @@
     "./curve": "./src/curve.ts",
     "./schema": "./src/schema.ts",
     "./timecode": "./src/timecode.ts",
+    "./text": "./src/text.ts",
     "./validate": "./src/validate.ts",
     "./fields": "./src/fields.ts",
     "./k7x": "./src/k7x/index.ts",

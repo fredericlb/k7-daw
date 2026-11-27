@@ -201,3 +201,34 @@ pub fn split_at(sc: &mut Scope, index: usize, cut: f64) -> Res<bool> {
     }
     Ok(true)
 }
+
+/// Sets one numeric field of the first placement whose `ref` is `reference`, by REF since a drag grabbed a strip; false with none.
+pub fn set_field_by_ref(sc: &mut Scope, reference: &str, field: &str, value: f64) -> Res<bool> {
+    let at = events_of(sc)
+        .unwrap_or_default()
+        .iter()
+        .position(|e| matches!(e.get("ref"), Some(Value::Str(s)) if s == reference));
+    match at {
+        Some(i) => set_field_at(sc, i, field, value),
+        None => Ok(false),
+    }
+}
+
+/// Renames the stretch each fade's `chain:` names, by `renames`; false when none matches.
+pub fn rename_fade_chains(sc: &mut Scope, renames: &[(String, String)]) -> Res<bool> {
+    let mut changed = false;
+    for (i, e) in events_of(sc).unwrap_or_default().iter().enumerate() {
+        for fade in ["fadeIn", "fadeOut"] {
+            let Some(Value::Str(was)) = e.get(fade).and_then(|f| f.get("chain")) else {
+                continue;
+            };
+            let Some((_, to)) = renames.iter().find(|(from, _)| from == was) else {
+                continue;
+            };
+            let at = path(&[key("events"), PathSeg::Index(i), key(fade), key("chain")]);
+            sc.set_in(&at, &Value::Str(to.clone()), WriteOptions::default())?;
+            changed = true;
+        }
+    }
+    Ok(changed)
+}
