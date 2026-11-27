@@ -3667,7 +3667,7 @@ function TimelineTabView({
                                 }}
                                 className={cn(
                                   // `isolate` keeps the activity layer's -z-10 inside this block; `group` is what the name reads.
-                                  "group absolute top-1 flex h-[calc(100%-8px)] cursor-grab overflow-hidden rounded-xl px-2 font-mono text-[11px] active:cursor-grabbing isolate select-none [-webkit-touch-callout:none]",
+                                  "group absolute top-1 flex h-[calc(100%-8px)] cursor-grab overflow-hidden rounded-[4px] px-2 font-mono text-[11px] active:cursor-grabbing isolate select-none [-webkit-touch-callout:none]",
                                   // Disabled: still placed, still readable, plainly off — an event you cannot see is a deleted one.
                                   c.disabled &&
                                     "opacity-40 saturate-0 outline-dashed outline-1 outline-muted-foreground",
