@@ -126,8 +126,7 @@ export function LogsPanel({
         onChange={(e) => setText(e.target.value)}
         placeholder={m["logs.filter"]()}
         aria-label={m["logs.filter"]()}
-        // flex-none: the kit's flex-1 would stretch it down this column instead of leaving it one row tall.
-        className="mb-2 flex-none"
+        className="mb-2 shrink-0"
       />
       <div
         className="min-h-0 flex-1 overflow-auto"
