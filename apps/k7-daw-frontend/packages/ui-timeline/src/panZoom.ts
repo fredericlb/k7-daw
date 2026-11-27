@@ -1,6 +1,6 @@
 // panZoom.ts — navigation for the media panes, which scale to FIT by default (so there is
 // nothing to scroll until you zoom). useHZoom scales horizontally, anchored so the point under
-// the cursor stays put — by trackpad pinch, by Cmd/Ctrl+wheel and by two fingers; a bare wheel
+// the cursor stays put — by trackpad pinch, by Cmd/Ctrl+wheel and by two fingers (usePinch); a bare wheel
 // or a trackpad slide is the browser's scroll (wheelZooms). The arithmetic is Rust's (@studio/k7-wasm/gestureTicks);
 // usePanScroll pans on a MIDDLE-mouse drag — not Space-drag, because Space is the transport
 // toggle in every app that mounts these.
@@ -23,6 +23,8 @@ import {
   useRef,
   useState,
 } from "react";
+import { useElementSize } from "./measure";
+import { usePinch } from "./pinch";
 
 export { isMouseWheel, isZoomWheel, wheelFactor, zoomCeiling };
 
@@ -32,14 +34,20 @@ export const wheelZooms = isZoomWheel;
 /** Horizontal zoom for a scroll container: 1 IS fit, `gutter` the non-scaling inset — docs/panZoom.md. */
 export function useHZoom(
   ref: RefObject<HTMLElement | null>,
-  opts: { gutter?: number; min?: number; max?: number } = {},
+  // `gutter` may be told the pane's width, for a column that grows with it.
+  opts: {
+    gutter?: number | ((paneW: number) => number);
+    min?: number;
+    max?: number;
+  } = {},
   // Values that gate the container's existence — a pane that renders "loading…" mounts its scroller only later.
   deps: unknown[] = [],
 ) {
-  const { gutter = 0, min = 1, max } = opts;
+  const { gutter: gutterOpt = 0, min = 1, max } = opts;
   const [zoom, setZoom] = useState(1);
   // The ceiling from the PANE, remeasured on resize: a narrower window can only zoom further.
-  const [paneW, setPaneW] = useState(0);
+  const paneW = useElementSize(ref, deps).w;
+  const gutter = typeof gutterOpt === "function" ? gutterOpt(paneW) : gutterOpt;
   const ceiling = max ?? zoomCeiling(Math.max(0, paneW - gutter));
   const zoomRef = useRef(zoom);
   // The scrollLeft to apply AFTER the width change renders: computed on the old width, correct on the new.
@@ -53,18 +61,6 @@ export function useHZoom(
       pendingLeft.current = null;
     }
   }, [zoom, ref]);
-
-  // Its own observer rather than a prop: a caller measuring again is a second answer to one question.
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const read = () => setPaneW(el.clientWidth);
-    read();
-    const ro = new ResizeObserver(read);
-    ro.observe(el);
-    return () => ro.disconnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ref, ...deps]);
 
   /** Zoom to `next`, keeping what is under `clientX` fixed — ONE implementation, both gestures; docs/panZoom.md. */
   const zoomAt = useCallback(
@@ -106,49 +102,29 @@ export function useHZoom(
     // Passive:false so preventDefault can stop the browser's page zoom on the pinch.
     el.addEventListener("wheel", onWheel, { passive: false });
 
-    /** Two fingers on a touchscreen: TOUCH events, measured from the gesture's start — docs/panZoom.md. */
-    let pinch: { dist: number; zoom: number } | null = null;
-    const spread = (t: TouchList) =>
-      Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
-    const centre = (t: TouchList) => (t[0].clientX + t[1].clientX) / 2;
-    const onTouchStart = (e: TouchEvent) => {
-      if (e.touches.length === 2)
-        pinch = { dist: spread(e.touches), zoom: zoomRef.current };
-    };
-    const onTouchMove = (e: TouchEvent) => {
-      if (!pinch || e.touches.length !== 2) return;
-      e.preventDefault();
-      const d = spread(e.touches);
-      if (d <= 0) return;
-      zoomAt(
-        pinchZoomTo(pinch.zoom, d, pinch.dist, min, ceiling),
-        centre(e.touches),
-      );
-    };
-    const onTouchEnd = (e: TouchEvent) => {
-      if (e.touches.length < 2) pinch = null;
-    };
-    el.addEventListener("touchstart", onTouchStart, { passive: true });
-    el.addEventListener("touchmove", onTouchMove, { passive: false });
-    el.addEventListener("touchend", onTouchEnd);
-    el.addEventListener("touchcancel", onTouchEnd);
-
     // Panning stays the browser's and the pinch is ours; set HERE, not in each caller's stylesheet.
     const hadTouchAction = el.style.touchAction;
     el.style.touchAction = "pan-x pan-y";
 
     return () => {
       el.removeEventListener("wheel", onWheel);
-      el.removeEventListener("touchstart", onTouchStart);
-      el.removeEventListener("touchmove", onTouchMove);
-      el.removeEventListener("touchend", onTouchEnd);
-      el.removeEventListener("touchcancel", onTouchEnd);
       el.style.touchAction = hadTouchAction;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ref, min, ceiling, zoomAt, ...deps]);
 
-  return [zoom, setZoom, zoomAt] as const;
+  // Two fingers: the zoom at the start times the spread's ratio, kept to the pane's own limits.
+  usePinch(
+    ref,
+    {
+      onStart: () => zoomRef.current,
+      onPinch: (z0, ratio, c) =>
+        zoomAt(pinchZoomTo(z0, ratio, 1, min, ceiling), c.x),
+    },
+    deps,
+  );
+
+  return [zoom, setZoom, zoomAt, paneW] as const;
 }
 
 /** Drag-to-pan with the MIDDLE button, on whichever axis overflows — see docs/panZoom.md. */

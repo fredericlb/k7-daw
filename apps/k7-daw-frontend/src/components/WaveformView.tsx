@@ -5,6 +5,7 @@
 // (peak and bands per column); the notes/grid come from the backend (/api/waveform).
 
 import { Play, Volume2, X } from "@studio/ui/icons";
+import { useElementSize } from "@studio/ui-timeline/measure";
 import { useHZoom, usePanScroll } from "@studio/ui-timeline/panZoom";
 import {
   type Envelope,
@@ -65,16 +66,7 @@ export function WaveformView({
   usePanScroll(scrollRef);
 
   // The waveform fills the pane's height; the width comes along because the loop marks ask what a pass is worth in pixels.
-  const [body, setBody] = useState({ w: 0, h: 0 });
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const measure = () => setBody({ w: el.clientWidth, h: el.clientHeight });
-    const ro = new ResizeObserver(measure);
-    ro.observe(el);
-    measure();
-    return () => ro.disconnect();
-  }, []);
+  const body = useElementSize(scrollRef);
   const bodyH = body.h;
 
   // --- slice-handle dragging -------------------------------------------------

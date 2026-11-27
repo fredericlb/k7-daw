@@ -22,6 +22,7 @@ import { DockProperty } from "@studio/ui/dock-property";
 import { DockHeaderRow, useInSheet } from "@studio/ui/editor-dock";
 import { cn } from "@studio/ui/lib/utils";
 import { Switch } from "@studio/ui/switch";
+import { useElementSize } from "@studio/ui-timeline/measure";
 import { useHZoom, usePanScroll } from "@studio/ui-timeline/panZoom";
 import {
   type RefObject,
@@ -252,16 +253,7 @@ export function PianoRoll({
 
   const bodyRef = useRef<HTMLDivElement>(null);
   const laneRef = useRef<HTMLDivElement>(null);
-  const [pane, setPane] = useState({ w: 0, h: 0 });
-  useEffect(() => {
-    const el = bodyRef.current;
-    if (!el) return;
-    const measure = () => setPane({ w: el.clientWidth, h: el.clientHeight });
-    const ro = new ResizeObserver(measure);
-    ro.observe(el);
-    measure();
-    return () => ro.disconnect();
-  }, []);
+  const pane = useElementSize(bodyRef);
 
   // Wheel zooms the time axis; middle-drag pans (both axes). Bound once the body mounts.
   const [zoomX, setZoomX] = useHZoom(bodyRef, { gutter });

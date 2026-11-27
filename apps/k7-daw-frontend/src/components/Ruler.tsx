@@ -10,8 +10,9 @@ import {
   rulerTicks,
 } from "@studio/k7-wasm/gestureTicks";
 import { cn } from "@studio/ui/lib/utils";
+import { useScrollBox } from "@studio/ui-timeline/measure";
 import { labelled, nearestTick } from "@studio/ui-timeline/ticks";
-import { memo, type RefObject, useEffect, useState } from "react";
+import { memo, type RefObject } from "react";
 import { m } from "../paraglide/messages.js";
 
 export { type RulerMode, type RulerTick, rulerScale, rulerTicks };
@@ -25,21 +26,9 @@ function useVisibleBeats(
   beatLo: number,
   ppb: number,
 ): { lo: number; hi: number } | undefined {
-  const [box, setBox] = useState<{ left: number; width: number } | null>(null);
-  useEffect(() => {
-    const el = scroller?.current;
-    if (!el) return;
-    const read = () => setBox({ left: el.scrollLeft, width: el.clientWidth });
-    read();
-    el.addEventListener("scroll", read, { passive: true });
-    const ro = new ResizeObserver(read);
-    ro.observe(el);
-    return () => {
-      el.removeEventListener("scroll", read);
-      ro.disconnect();
-    };
-  }, [scroller]);
-  if (!box || !(ppb > 0)) return undefined;
+  const box = useScrollBox(scroller);
+  // Width 0 is a scroller not measured yet (or hidden): draw everything rather than a degenerate range.
+  if (!(box.width > 0) || !(ppb > 0)) return undefined;
   return {
     lo: beatLo + (box.left - VIEW_MARGIN_PX) / ppb,
     hi: beatLo + (box.left + box.width + VIEW_MARGIN_PX) / ppb,

@@ -60,3 +60,21 @@ export function usePopin(open: boolean, close: () => void): void {
     return registerPopin(() => ref.current());
   }, [open]);
 }
+
+/**
+ * Escape's innermost rungs — a drawn selection, a move in hand, a take rolling — as layers on the ladder while `active`:
+ * the shell resolves the key to the topmost one (typing already stands the shell aside), and `status` is said as it closes.
+ */
+export function useEscapeLayer(
+  active: boolean,
+  onEscape: () => void,
+  opts: { status?: string; onStatus?: (s: string) => void } = {},
+): void {
+  const latest = useRef({ onEscape, ...opts });
+  latest.current = { onEscape, ...opts };
+  usePopin(active, () => {
+    const { onEscape: close, status, onStatus } = latest.current;
+    close();
+    if (status) onStatus?.(status);
+  });
+}
