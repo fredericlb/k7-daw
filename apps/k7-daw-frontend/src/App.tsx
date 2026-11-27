@@ -20,6 +20,7 @@ import {
 } from "@studio/k7-plugins/video";
 import type { MaybeClipboard } from "@studio/k7-wasm/clipboard";
 import { type PendingEdit, pendingOf } from "@studio/k7-wasm/edit";
+import { commandNameOf as nameOfLine } from "@studio/k7-wasm/menu";
 // The leaf with no `node:fs` in it — a browser may ask what a path names without dragging the loader in.
 import { moduleKeyFromPath } from "@studio/k7-wasm/module";
 import { resolveEditorFile } from "@studio/k7-wasm/paths";
@@ -1845,8 +1846,15 @@ export default function App({
           : m["status.ran"]({ line: s });
         if (refused) setRefusal(said);
         else setStatus(said);
-        // What a command said ("copied 1 event(s)") is a toast; the bare "Ran: …" echo is not worth one.
-        if (output.length)
+        // What a command said ("copied 1 event(s)") is a toast; the bare "Ran: …" echo is not worth one, nor a `quiet:` command's success.
+        const name = nameOfLine(
+          s,
+          cmdCatalogue.current.map((c) => c.command),
+        );
+        const quiet = cmdCatalogue.current.find(
+          (c) => c.command === name,
+        )?.quiet;
+        if (output.length && (refused || !quiet))
           showToast({
             message: said,
             variant: refused ? "warning" : "success",
@@ -3376,6 +3384,12 @@ export default function App({
   const shellVars: Record<string, string> | null = !isMobile
     ? {
         "--k7-float-bottom": floatBottom,
+        // The lanes' room under the last one: the floating row, lifted above an open dock (TimelineTab.tsx).
+        ...(dockUp && !dock.expanded
+          ? {
+              "--k7-lanes-bottom": `calc(${floatBottom} + var(--k7-float-h) + 8px)`,
+            }
+          : {}),
         "--k7-dock-top": "calc(16px + var(--k7-float-h))",
         // The unfolded rail: the right panel, the dock and the toasts keep clear of it (shell/PanelRail.tsx).
         ...(railShown
