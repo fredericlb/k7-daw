@@ -13,6 +13,9 @@ pub const VIDEO_OUT: &str = "VIDEO_OUT";
 pub const NODE_W: f64 = 160.0;
 pub const NODE_H: f64 = 70.0;
 pub const NODE_MIN_W: f64 = 72.0;
+/// What an OPEN box adds around the layout of its members: a title strip, and a margin.
+pub const FRAME_HEAD: f64 = 26.0;
+pub const FRAME_PAD: f64 = 14.0;
 pub const CELL: f64 = 36.0;
 pub const UI_PAD: f64 = 6.0;
 pub const UI_HEADER: f64 = 38.0;

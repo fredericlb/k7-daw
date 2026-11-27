@@ -9,9 +9,10 @@ use chains::build::{BuildOptions, build_graph};
 use chains::curve_placement::{self, Box2, Moved, PlaceEdge};
 use chains::flow::{self, FlowEdge, LaneSource, NodeFlow};
 use chains::geom::node_size;
+use chains::graph_layout::layout;
 use chains::graph::Graph;
 use chains::module_row::{RankNode, RowOptions, Spaced, align_ranks, module_row, space_modules};
-use chains::node::{Edge, EdgeInsert, Laid, Node};
+use chains::node::{AssemblyOf, Edge, EdgeInsert, Kind, Laid, Node, Pt, Signal};
 use chains::panel::Panel;
 use chains::row_seams::{SeamsAnswer, inserts_for, jack_ref, row_exit, row_seams};
 use chains::stack_layout::{StackAnswer, stack_layout};
@@ -327,6 +328,131 @@ pub fn graph_stack(a: StackArgsOp) -> StackAnswer {
     stack_layout(&a.nodes, &a.edges, &a.graph, &a.track_order)
 }
 
+/// The part of a card the layout reads: its size, its rank, and what ties it to a box.
+#[derive(Clone, Debug, Deserialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(optional_fields))]
+#[serde(rename_all = "camelCase")]
+pub struct LayoutNode {
+    pub id: String,
+    pub kind: Kind,
+    pub label: String,
+    pub w: f64,
+    pub h: f64,
+    pub rank: Option<f64>,
+    pub module: Option<String>,
+    pub assembly: Option<String>,
+    /// Whether the card is a box drawn open.
+    pub open: Option<bool>,
+}
+
+/// The part of a cable the layout reads: its ends, whether a curve drives with it, and its kind.
+#[derive(Clone, Debug, Deserialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(optional_fields))]
+pub struct LayoutEdge {
+    pub id: String,
+    pub source: String,
+    pub target: String,
+    pub automation: Option<bool>,
+    pub signal: Option<Signal>,
+}
+
+/// What a layout reads: the cards and cables, the file's pins by name, and where each card was drawn last.
+#[derive(Clone, Debug, Deserialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(optional_fields))]
+pub struct LayoutArgs {
+    pub nodes: Vec<LayoutNode>,
+    pub edges: Vec<LayoutEdge>,
+    #[cfg_attr(feature = "ts", ts(as = "Option<HashMap<String, Pt>>"))]
+    pub positions: Option<HashMap<String, Pt>>,
+    pub prev: Option<Vec<(String, Pt)>>,
+}
+
+/// Where a layout put a card, the size a box grew to, and where a pushed card belonged.
+#[derive(Clone, Debug, serde::Serialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(optional_fields))]
+pub struct Placed {
+    pub id: String,
+    pub x: f64,
+    pub y: f64,
+    pub w: f64,
+    pub h: f64,
+    pub assembly: Option<String>,
+    pub pushed: Option<Pt>,
+}
+
+/// A layout: the cards in drawing order, each cable's two ends, and the extent of the drawing.
+#[derive(Clone, Debug, serde::Serialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS))]
+pub struct Placement {
+    pub nodes: Vec<Placed>,
+    pub edges: Vec<(String, Vec<Pt>)>,
+    pub width: f64,
+    pub height: f64,
+    pub left: f64,
+    pub top: f64,
+}
+
+pub fn graph_layout(a: LayoutArgs) -> Placement {
+    let nodes = a
+        .nodes
+        .into_iter()
+        .map(|n| {
+            let mut c = Node::plain(&n.id, &n.label, n.kind);
+            c.w = n.w;
+            c.h = n.h;
+            c.rank = n.rank;
+            c.module = n.module;
+            c.assembly = n.assembly;
+            if let Some(open) = n.open {
+                c.assembly_of = Some(AssemblyOf {
+                    uses: String::new(),
+                    open,
+                    members: Vec::new(),
+                    plugs: IndexMap::new(),
+                    params: None,
+                    missing: None,
+                });
+            }
+            c
+        })
+        .collect();
+    let edges = a
+        .edges
+        .into_iter()
+        .map(|e| Edge {
+            automation: e.automation.unwrap_or(false).then(|| chains::node::EdgeAutomation {
+                param: String::new(),
+                widget: None,
+                depth: None,
+            }),
+            signal: e.signal,
+            ..Edge::new(&e.id, &e.source, &e.target)
+        })
+        .collect();
+    let prev: Option<HashMap<String, Pt>> = a.prev.map(|p| p.into_iter().collect());
+    let laid = layout(nodes, edges, a.positions.as_ref(), prev.as_ref());
+    Placement {
+        nodes: laid
+            .nodes
+            .into_iter()
+            .map(|n| Placed {
+                x: n.x.unwrap_or(0.0),
+                y: n.y.unwrap_or(0.0),
+                w: n.w,
+                h: n.h,
+                assembly: n.assembly,
+                pushed: n.pushed,
+                id: n.id,
+            })
+            .collect(),
+        edges: laid.edges.into_iter().map(|e| (e.id, e.points.unwrap_or_default())).collect(),
+        width: laid.width,
+        height: laid.height,
+        left: laid.left,
+        top: laid.top,
+    }
+}
+
 /// A panel and whether the card carries its bottom bar: what `graph.nodeSize` measures.
 #[derive(Clone, Debug, Deserialize)]
 #[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(optional_fields))]
@@ -410,6 +536,8 @@ pub enum ChainsRequest {
     GraphStack(StackArgsOp),
     #[serde(rename = "graph.nodeSize")]
     GraphNodeSize(NodeSizeArgs),
+    #[serde(rename = "graph.layout")]
+    GraphLayout(LayoutArgs),
 }
 
 pub fn dispatch(request: ChainsRequest, out: &mut Vec<u8>) -> Result<(), WasmError> {
@@ -442,5 +570,6 @@ pub fn dispatch(request: ChainsRequest, out: &mut Vec<u8>) -> Result<(), WasmErr
         R::GraphJackRef(a) => write(out, &graph_jack_ref(a)),
         R::GraphStack(a) => write(out, &graph_stack(a)),
         R::GraphNodeSize(a) => write(out, &graph_node_size(a)),
+        R::GraphLayout(a) => write(out, &graph_layout(a)),
     }
 }

@@ -142,7 +142,7 @@ describe("the sockets a built graph puts on its nodes", () => {
   });
 });
 
-// A cable ends in a PLUG, so both ends are moved off dagre's border points and onto the sockets.
+// A cable ends in a PLUG, so both ends are moved off the layout engine's border points and onto the sockets.
 describe("where a cable plugs in", () => {
   const node = (over: Partial<GraphNode>): GraphNode =>
     ({
@@ -233,7 +233,7 @@ describe("where a cable plugs in", () => {
       src,
       twoIn,
     );
-    // Both ends are the SOCKETS, not the border points dagre routed to.
+    // Both ends are the SOCKETS, not the border points the layout engine routed to.
     expect(path[0]).toEqual(jackPoint(src, "out", 0));
     expect(path[path.length - 1]).toEqual(jackPoint(twoIn, "in", 0));
     // …and between them it HANGS, the shape itself being hang.ts's and tested there.
@@ -242,7 +242,7 @@ describe("where a cable plugs in", () => {
     expect(Math.max(...path.map((p) => p.y))).toBeGreaterThan(sockets);
   });
 
-  it("drops dagre's waypoints — a patch bay's cables do not skirt anything", () => {
+  it("drops the layout engine's waypoints — a patch bay's cables do not skirt anything", () => {
     // Kept, they bend a send around the module it skips. See docs/graphBuild.md.
     const bend = { x: 20, y: 400 };
     const path = cablePath(
@@ -258,7 +258,7 @@ describe("where a cable plugs in", () => {
     expect(path).not.toContainEqual(bend);
   });
 
-  it("falls back to dagre's own end when a node is missing", () => {
+  it("falls back to the layout engine's own end when a node is missing", () => {
     const pts = [
       { x: 0, y: 0 },
       { x: 10, y: 10 },
