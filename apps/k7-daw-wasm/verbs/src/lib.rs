@@ -11,6 +11,7 @@ pub mod host_media;
 pub mod palette;
 pub mod picture;
 pub mod run;
+pub mod ui;
 mod verbs;
 
 pub use api::{Answer, Replay, VerbRequest, run_answered, run_in_env, run_replayed, run_request, run_request_cached};

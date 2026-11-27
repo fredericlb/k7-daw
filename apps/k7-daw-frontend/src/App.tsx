@@ -19,6 +19,7 @@ import {
   ViewportTab,
 } from "@studio/k7-plugins/video";
 import { beatsToPosition, parsePosition } from "@studio/k7-wasm/timecode";
+import { orderCommands, prefsView, stepSentence } from "@studio/k7-wasm/ui";
 import { askConfirm } from "@studio/project-shell/ask";
 import { projectsUrl } from "@studio/project-shell/launch";
 import type { CommandJournal } from "@studio/project-shell/project";
@@ -67,7 +68,7 @@ import { go } from "./appNav";
 import { DECK_ICONS, STUDIO_ICONS } from "./chainsIcons";
 import type { MaybeClipboard } from "./clipboard";
 import { shownNamers } from "./clipNameWords";
-import { type CommandPrefs, labelOf, orderCommands } from "./commandPrefs";
+import type { CommandPrefs } from "./commandPrefs";
 import type { AudioClipHandle } from "./components/AudioClipPanel";
 import { AudioClipPanel } from "./components/AudioClipPanel";
 import { BenchSaveButton } from "./components/BenchSaveButton";
@@ -190,7 +191,6 @@ import {
   sameMinimapItem,
 } from "./shellEquality";
 import { createStatusLine } from "./statusLine";
-import { stepSentence } from "./stepSentence";
 import { eventIdOf, takesEventOf } from "./takes";
 // The shell's BROWSER composition point: k7's builtin plugins register their pane drawers here (apps/k7-daw-frontend/packages/k7-sdk/docs/sdk.md).
 import "./plugins";
@@ -2116,7 +2116,7 @@ export default function App({
     },
     [setMenu, docRef, shell],
   );
-  // A journal step as a sentence and its subject, for the undo toast and the history panel (stepSentence.ts).
+  // A journal step as a sentence and its subject, for the undo toast and the history panel (`stepSentence` in `@studio/k7-wasm/ui`).
   const describeStep = useCallback(
     (label: string) =>
       stepSentence(
@@ -2550,14 +2550,14 @@ export default function App({
     [backendCmds, locale],
   );
   /** The catalogue AS THIS PERSON ARRANGED IT — renamed and reordered once, over the palette's built list (commandPrefs.ts). */
-  const allCommands = useMemo(
-    () =>
-      orderCommands(paletteCommands, commandPrefs).map((c) => ({
-        ...c,
-        readable: labelOf(c, commandPrefs, locale),
-      })),
-    [paletteCommands, commandPrefs, locale],
-  );
+  const allCommands = useMemo(() => {
+    const ordered = orderCommands(paletteCommands, commandPrefs);
+    const { rows } = prefsView(ordered, commandPrefs, locale);
+    return ordered.map((c, i) => ({
+      ...c,
+      readable: rows[i]?.label ?? c.readable,
+    }));
+  }, [paletteCommands, commandPrefs, locale]);
   paletteRef.current = allCommands;
   // Five getters, not one: the shell's own commands ask for vocabularies only the shell holds — files, paths, surfaces, languages, timelines.
   const listArg = useMemo(

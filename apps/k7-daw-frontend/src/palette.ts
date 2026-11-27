@@ -4,10 +4,10 @@
 // plus a `files()` getter, with no shell state. See docs/commandBar.md.
 
 import { stripDocExt } from "@studio/k7-wasm/schema";
+import { type ArgOption, optionsFromCompletions } from "@studio/k7-wasm/ui";
 import type { Completion } from "@studio/project-shell/project";
 import { docPattern } from "@studio/song-schema/docExt";
 import { api } from "./api";
-import { type ArgOption, optionsFromCompletions } from "./argOptions";
 import type { PaletteArg, PaletteCommand } from "./components/CommandBar";
 import { MIX_FORMATS, TIMELINE_FORMATS, VIDEO_FORMATS } from "./exportArgs";
 import { ROLL_MODES } from "./rollMode";
@@ -23,14 +23,6 @@ import { WAVE_MODES } from "./waveMode";
 const MODULE_FILE = docPattern("(^|/)module");
 const CURVE_FILE = docPattern("(^|/)curves/[^/]+");
 const CLIP_FILE = docPattern("(^|/)clips/[^/]+");
-
-export {
-  type ArgOption,
-  optionsFromCompletions,
-  rankOptions,
-  rankValues,
-  toOptions,
-} from "./argOptions";
 
 // The shell's own commands, their sentences and their arguments: one registry, ui/commands/.
 export {
@@ -82,8 +74,6 @@ export function buildPaletteCommands(
   ).map((c) => mk(c, LOCAL_ARGS[c] ?? [], LOCAL_READABLE[c]));
   return [...backend, ...locals];
 }
-
-export { rankCommands } from "./rankCommands";
 
 /** Which command a canonical LINE runs — the longest name that prefixes it, exactly as the dispatcher picks it. */
 export function commandNameOf(

@@ -331,6 +331,28 @@ fn plain() -> Vec<[String; 3]> {
     ]
 }
 
+/// The constants of the command bar and the menus.
+#[cfg(feature = "verbs")]
+fn ui_consts() -> Vec<[String; 3]> {
+    vec![
+        export(
+            "What a right-click can be on, as commands.yaml `menu:` names it.",
+            "MENU_ENTITIES",
+            &json!(verbs::palette::MENU_ENTITIES),
+        ),
+        export(
+            "How many commands the bar remembers: the recency bonus decays across them.",
+            "MAX_RECENT",
+            &json!(verbs::ui::rank::MAX_RECENT),
+        ),
+        export(
+            "How many recent commands the empty bar offers.",
+            "EMPTY_RECENT_MAX",
+            &json!(verbs::ui::rank::EMPTY_RECENT_MAX),
+        ),
+    ]
+}
+
 /// The whole file; biome formats it after it is written.
 pub fn text() -> String {
     let port = "{ name: string; type: \"audio\" | \"midi\" | \"video\"; mandatory?: boolean }";
@@ -359,5 +381,7 @@ pub fn text() -> String {
     ]
     .to_vec();
     lines.extend(plain().into_iter().flatten());
+    #[cfg(feature = "verbs")]
+    lines.extend(ui_consts().into_iter().flatten());
     lines.join("\n")
 }

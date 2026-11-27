@@ -2,13 +2,13 @@
 // them first. Kept in localStorage, per browser and NOT per project: it is a habit, and habits
 // travel between songs. See docs/commandBar.md.
 //
-// Storage only. What recency DOES to the ranking is `rankCommands` in palette.ts, which takes
+// Storage only. What recency DOES to the ranking is `rankCommands` in `@studio/k7-wasm/ui`, which takes
 // the list as an argument and stays pure — the half worth testing is the half without a disk.
 
 const KEY = "k7.recentCommands";
 
-/** How many are remembered: past a dozen the bonus is smaller than the noise, and a list that never forgets keeps promoting last month. */
-export const MAX_RECENT = 12;
+// How many are remembered is Rust's: the ranking's bonus decays across exactly that many places.
+import { MAX_RECENT } from "@studio/k7-wasm/ui";
 
 /** Most recent first, and silent about a storage that refuses to answer — Safari throws on READING it in some private modes. */
 export function recentCommands(): string[] {

@@ -16,7 +16,7 @@ path = "src/bin/bindings/main.rs"
 required-features = ["ts"]
 
 [features]
-ts = ["dep:ts-rs", "song-schema/ts", "song/ts"]
+ts = ["dep:ts-rs", "song-schema/ts", "song/ts", "verbs?/ts"]
 # The verbs over a native host's file system, and the verb.catalogue op: built into no browser module (docs/verbs-port.md).
 verbs = ["dep:verbs"]
 

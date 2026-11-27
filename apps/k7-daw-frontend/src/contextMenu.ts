@@ -5,7 +5,8 @@
 // word naming what was clicked beside it as the verb. See docs/contextMenu.md.
 
 import { timelineLaneOf } from "@studio/k7-wasm/schema";
-import { type CommandPrefs, inMenu } from "./commandPrefs";
+import { inMenu } from "@studio/k7-wasm/ui";
+import type { CommandPrefs } from "./commandPrefs";
 import type { ResourceDropEvent } from "./hooks/useTimelineDrop";
 import { m } from "./paraglide/messages.js";
 import type { ArgClass, ArgProvider, CommandInfo, MenuEntity } from "./types";

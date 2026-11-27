@@ -3,6 +3,7 @@
 // workspace or a library, and UPDATE the one last loaded — and, for a module with several engines, a
 // left bar to pick the ENGINE. Every action is a verb the caller runs. See apps/k7-daw-frontend/packages/song/docs/userPresets.md.
 
+import { fuzzyScore } from "@studio/k7-wasm/ui";
 import {
   type NodePresets,
   PRESET_NAME,
@@ -12,7 +13,6 @@ import { RefreshCw, Save } from "@studio/ui/icons";
 import type { NodeEngines } from "@studio/ui-chains-react";
 import { byPeople } from "@studio/web-protocol/tree";
 import { useState } from "react";
-import { fuzzyScore } from "../fuzzy";
 import { m } from "../paraglide/messages.js";
 import { type TreeNode, TreePicker } from "./TreePicker";
 

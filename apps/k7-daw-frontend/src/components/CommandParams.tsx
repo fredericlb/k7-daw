@@ -6,11 +6,10 @@
 // It holds NO state: CommandBar owns the command, the answers and the gesture inlets, and two
 // copies of that would be two commands. See docs/commandBar.md.
 
+import type { ArgOption, EnterAction } from "@studio/k7-wasm/ui";
 import { Button } from "@studio/ui/button";
 import { cn } from "@studio/ui/lib/utils";
 import { useId } from "react";
-import type { EnterAction } from "../commandFill";
-import type { ArgOption } from "../palette";
 import { m } from "../paraglide/messages.js";
 import type { ArgClass } from "../types";
 import type { PaletteArg, PaletteCommand } from "./CommandBar";

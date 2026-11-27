@@ -311,3 +311,29 @@ export const TASKS_FILE = "TODOS.md";
 
 /** The folder a workspace keeps its playlists in. */
 export const PLAYLISTS_DIR = "_playlists";
+
+/** What a right-click can be on, as commands.yaml `menu:` names it. */
+export const MENU_ENTITIES = [
+  "track",
+  "group",
+  "node",
+  "event",
+  "param",
+  "curve",
+  "ruler",
+  "marker",
+  "timeline",
+  "assembly",
+  "warp",
+  "shot",
+  "picture",
+  "note",
+  "tap",
+  "rack",
+] as const;
+
+/** How many commands the bar remembers: the recency bonus decays across them. */
+export const MAX_RECENT = 12;
+
+/** How many recent commands the empty bar offers. */
+export const EMPTY_RECENT_MAX = 5;

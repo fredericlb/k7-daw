@@ -1,7 +1,7 @@
 // `sequence edit roll <sequence>` — turning the name in it into a file of this project. The
 // grid it opens is the same one the popin editor tab mounts (@studio/ui-editor/note-grid/plugin).
 
-import { fuzzyScore } from "./fuzzy";
+import { fuzzyScore } from "@studio/k7-wasm/ui";
 import { isSeqFile } from "./projectPaths";
 
 /** The sequence file a typed name means — SEQUENCES FIRST, then the whole project; null is reported rather than opening an empty grid. */

@@ -334,6 +334,7 @@ dependencies = [
  "song",
  "song-edit",
  "song-schema",
+ "ts-rs",
 ]
 
 [[package]]
