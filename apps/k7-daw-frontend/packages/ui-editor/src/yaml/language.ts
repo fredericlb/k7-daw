@@ -20,8 +20,8 @@ const yamlHighlight = HighlightStyle.define([
   { tag: t.bool, color: "var(--k7-warn)" },
   { tag: t.null, color: "var(--k7-warn)" },
   // A mapping key is what you read a project file for — it gets the accent.
-  { tag: t.definition(t.propertyName), color: "var(--sh-primary)" },
-  { tag: t.propertyName, color: "var(--sh-primary)" },
+  { tag: t.definition(t.propertyName), color: "var(--k7-accent)" },
+  { tag: t.propertyName, color: "var(--k7-accent)" },
   { tag: t.punctuation, color: "var(--k7-text-2)" },
   { tag: t.meta, color: "var(--k7-text-2)" },
 ]);

@@ -1,7 +1,7 @@
 # Tokens and the kit
 
 `src/theme.css` is the one place the look is decided: the `--k7-*` tokens read from the design
-canvas, the `--sh-*` keys Tailwind's `bg-*` and `text-*` classes resolve through, and one `@utility`
+canvas, the `--color-*` names Tailwind's `bg-*` and `text-*` classes resolve through, and one `@utility`
 per surface and per type step. An app imports it once and owns no colour of its own beyond the
 meaning colours in its `index.css`.
 
@@ -28,9 +28,11 @@ meaning colours in its `index.css`.
   it read as the same thing.
 - **Surfaces are utilities**, not components: `glass`, `float`, `panel`, `panel-dialog`,
   `panel-sheet`, `menu`, `row-group`, `scrim`. `Card` takes a `variant` over the same names.
-- **The `--sh-*` keys stay**, pointing at the canvas, so code that has not been restyled keeps
-  compiling. `--color-secondary`, `muted` and `accent` are one translucent row fill; a hover is
-  `on-fill`.
+- **One name per colour, the canvas's.** `text-fg-1`, `fg-2`, `fg-3` are the three text levels,
+  `bg-ground`, `bg-panel`, `bg-menu` the surfaces, `bg-row` a row's fill (`hover:bg-on-fill` its
+  hover), `border-hairline` an edge, `ring-focus` the focus line, `text-on-accent` the ink on an
+  accent fill. No shadcn name (`muted`, `accent`, `border`, `foreground`, `card`, `popover`)
+  resolves: a class that uses one draws nothing.
 - **The tab lozenge slides.** A segmented control (`Tabs`, `Choice`) and the home `TabBar` draw
   one pill under the selected label, positioned from the label's box, instead of painting each
   tab. Under jsdom there is no box, so no lozenge draws.

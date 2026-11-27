@@ -133,7 +133,7 @@ export function renderRollGrid(
   const renderNote = (n: Note) => {
     const el = document.createElement("div");
     const v = n.v ?? 1;
-    el.style.cssText = `position:absolute;top:${rowTop(n.k)}%;height:${rowH}%;left:${pctX(n.t)}%;width:${pctX(n.d)}%;box-sizing:border-box;border:1px solid var(--k7-ground,#111);border-radius:2px;background:var(--sh-primary,#6ea8fe);opacity:${0.35 + 0.65 * v};overflow:hidden;color:var(--k7-ground,#111);text-align:center;font-size:9px;line-height:1;display:flex;align-items:center;justify-content:center`;
+    el.style.cssText = `position:absolute;top:${rowTop(n.k)}%;height:${rowH}%;left:${pctX(n.t)}%;width:${pctX(n.d)}%;box-sizing:border-box;border:1px solid var(--k7-ground,#111);border-radius:2px;background:var(--k7-accent,#6ea8fe);opacity:${0.35 + 0.65 * v};overflow:hidden;color:var(--k7-ground,#111);text-align:center;font-size:9px;line-height:1;display:flex;align-items:center;justify-content:center`;
     const sym = rack?.toSymbol.get(n.k);
     if (sym) el.textContent = sym; // captions the bar with the rack symbol
     el.title = sym

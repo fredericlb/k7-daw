@@ -91,7 +91,7 @@ const k7xHighlight = HighlightStyle.define([
   { tag: t.number, color: "var(--k7-warn)" },
   { tag: t.bool, color: "var(--k7-warn)" },
   { tag: t.null, color: "var(--k7-warn)" },
-  { tag: t.propertyName, color: "var(--sh-primary)" },
+  { tag: t.propertyName, color: "var(--k7-accent)" },
   {
     tag: t.invalid,
     color: "var(--k7-error)",

@@ -301,31 +301,9 @@
   * { animation: none !important; transition: none !important; }
 }
 
-
-/* The shadcn-style --sh-* names stay, now pointing at the canvas, so every `bg-*`/`text-*` class keeps compiling. */
+/* The corner radius the Tailwind `rounded-*` steps derive from. */
 :root {
-  --sh-background: var(--k7-ground);
-  --sh-foreground: var(--k7-text);
-  --sh-card: var(--k7-panel);
-  --sh-card-foreground: var(--k7-text);
-  --sh-popover: var(--k7-menu);
-  --sh-popover-foreground: var(--k7-text);
-  --sh-primary: var(--k7-accent);
-  --sh-primary-hover: color-mix(in srgb, var(--k7-accent) 88%, white);
-  --sh-primary-foreground: var(--k7-on-accent);
-  --sh-secondary: var(--k7-row);
-  --sh-secondary-hover: var(--k7-on-fill);
-  --sh-secondary-foreground: var(--k7-text);
-  --sh-muted: var(--k7-row);
-  --sh-muted-foreground: var(--k7-text-2);
-  --sh-accent: var(--k7-row);
-  --sh-accent-foreground: var(--k7-text);
-  --sh-border: var(--k7-hairline);
-  --sh-input: var(--k7-input-line);
-  --sh-ring: var(--k7-focus-line);
-  --sh-amber: var(--k7-warn);
-  --sh-green: var(--k7-ok);
-  --sh-radius: 10px;
+  --k7-radius: 10px;
 }
 
 /* `static` so both vars are always emitted: Tailwind tree-shakes unused theme vars, and legacy
@@ -338,32 +316,12 @@
 }
 
 @theme inline {
-  --color-background: var(--sh-background);
-  --color-foreground: var(--sh-foreground);
-  --color-card: var(--sh-card);
-  --color-card-foreground: var(--sh-card-foreground);
-  --color-popover: var(--sh-popover);
-  --color-popover-foreground: var(--sh-popover-foreground);
-  --color-primary: var(--sh-primary);
-  --color-primary-hover: var(--sh-primary-hover);
-  --color-primary-foreground: var(--sh-primary-foreground);
-  --color-secondary: var(--sh-secondary);
-  --color-secondary-hover: var(--sh-secondary-hover);
-  --color-secondary-foreground: var(--sh-secondary-foreground);
-  --color-muted: var(--sh-muted);
-  --color-muted-foreground: var(--sh-muted-foreground);
-  --color-accent: var(--sh-accent);
-  --color-accent-foreground: var(--sh-accent-foreground);
-  --color-border: var(--sh-border);
-  --color-input: var(--sh-input);
-  --color-ring: var(--sh-ring);
-  --color-amber: var(--sh-amber);
-  --color-green: var(--sh-green);
-  --radius-sm: calc(var(--sh-radius) - 4px);
-  --radius-md: calc(var(--sh-radius) - 2px);
-  --radius-lg: var(--sh-radius);
-  --radius-xl: calc(var(--sh-radius) + 2px);
+  --radius-sm: calc(var(--k7-radius) - 4px);
+  --radius-md: calc(var(--k7-radius) - 2px);
+  --radius-lg: var(--k7-radius);
+  --radius-xl: calc(var(--k7-radius) + 2px);
   /* The canvas's own names, for classes such as `text-fg-2`, `bg-on-fill`, `text-lavender`. */
+  --color-fg-1: var(--k7-text);
   --color-fg-2: var(--k7-text-2);
   --color-fg-3: var(--k7-text-3);
   --color-primary-text: var(--k7-accent-text);
@@ -376,6 +334,13 @@
   --color-ok: var(--k7-ok);
   --color-record: var(--k7-record);
   --color-hairline: var(--k7-hairline);
+  --color-ground: var(--k7-ground);
+  --color-panel: var(--k7-panel);
+  --color-menu: var(--k7-menu);
+  --color-on-accent: var(--k7-on-accent);
+  --color-focus: var(--k7-focus-line);
+  --color-primary: var(--k7-accent);
+  --color-primary-hover: color-mix(in srgb, var(--k7-accent) 88%, white);
 }
 
 /* Surfaces, one utility each (docs/tokens.md). */

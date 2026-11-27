@@ -39,7 +39,7 @@ export interface LayerBlend {
 }
 
 function readClearColor(el: HTMLElement): [number, number, number] {
-  const v = getComputedStyle(el).getPropertyValue("--sh-background").trim();
+  const v = getComputedStyle(el).getPropertyValue("--k7-ground").trim();
   const n = v.startsWith("#") ? parseInt(v.slice(1), 16) : NaN;
   if (Number.isNaN(n)) return [0.06, 0.07, 0.08]; // matches the token's dark default
   return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255];
