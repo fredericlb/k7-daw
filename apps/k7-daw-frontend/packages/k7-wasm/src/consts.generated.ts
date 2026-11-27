@@ -249,6 +249,12 @@ export const NODE_H = 70.0;
 /** node min w */
 export const NODE_MIN_W = 72.0;
 
+/** What an open box adds around its members: a title strip and a margin. */
+export const FRAME_HEAD = 26.0;
+
+/** frame pad */
+export const FRAME_PAD = 14.0;
+
 /** A grid cell, and the air around the grid, in graph units. */
 export const CELL = 36.0;
 
@@ -502,6 +508,183 @@ export const MEDIA_PAGE = "media";
 
 /** The foreign project files a drop may carry. */
 export const DROPPABLE_PROJECTS = [".dawproject", ".zip"] as const;
+
+/** The widget kinds a panel may use, in the order a picker lists them. */
+export const WIDGET_TYPES = [
+  "label",
+  "knob",
+  "slider",
+  "fader",
+  "number",
+  "toggle",
+  "button",
+  "meter",
+  "waveform",
+  "dropdown",
+  "filepicker",
+  "lcdscreen",
+  "tap",
+  "group",
+] as const;
+
+/** What a waveform widget draws: the live signal either side of its module. */
+export const WAVEFORM_SOURCES = ["input", "output"] as const;
+
+/** The longest a tab's name may be, in characters. */
+export const TAB_NAME_MAX = 10;
+
+/** The script beside `ui.k7x` that draws a panel's lcdscreen widgets. */
+export const WIDGETS_SCRIPT = "widgets.js";
+
+/** The bind prefix a rack pad carries: `@rack:BD` fires the sound `BD`. */
+export const RACK_BIND = "@rack:";
+
+/** The bind of a rack's last tap, which adds a sound rather than playing one. */
+export const RACK_ADD_BIND = "@rack+";
+
+/** How a module asks to be treated by the completions when its file says nothing. */
+export const DEFAULT_MODULE_STATUS = "listed";
+
+/** The recorder a project with no timeline gets on its master run, by plugin id: what its record button drives. */
+export const OUTPUT_RECORDER_ID = "MIX:@record";
+
+/** What a track the compile has not coloured yet is drawn in: the `other` category's one shade. */
+export const UNCOLOURED_SHADE = "#8b8f98";
+
+/** The oscillator shapes of a curve, in the order a picker lists them. */
+export const LFO_SHAPES = ["sine", "triangle", "saw", "square"] as const;
+
+/** The cuts a curve can take, the default first. */
+export const CURVE_CUTS = ["none", "positive", "negative"] as const;
+
+/** Where an ADSR's decay lands when the file does not say. */
+export const ADSR_DEFAULT_LEVEL = 0.5;
+
+/** The project format this k7 reads and writes: a root above it is refused. */
+export const FORMAT_LEVEL = 5;
+
+/** What this k7 can run: a library whose `requires` is above it is refused. */
+export const LIBRARY_LEVEL = 2;
+
+/** The file a workspace keeps its library pins in, at its root. */
+export const LIBRARY_PINS_FILE = "_library-pins.k7x";
+
+/** The version a library the pins do not name resolves to. */
+export const UNPINNED_VERSION = 1;
+
+/** The master fader's lowest level, in dB. */
+export const MASTER_MIN_DB = -100.0;
+
+/** The master fader's highest level, in dB. */
+export const MASTER_MAX_DB = 12.0;
+
+/** The project's graph file. */
+export const GRAPH_FILE = "graph.k7x";
+
+/** The folder a workspace keeps its reference tracks in. */
+export const REFERENCES_DIR = "_references";
+
+/** The extensions offered as reference tracks, without their dot. */
+export const REFERENCE_EXTS = [
+  "wav",
+  "flac",
+  "mp3",
+  "m4a",
+  "aac",
+  "ogg",
+  "opus",
+  "aif",
+  "aiff",
+  "webm",
+] as const;
+
+/** The archetypes a project is created as, in the order the new-project menu lists them. */
+export const PROJECT_SHAPES = [
+  "arrangement",
+  "mix",
+  "video",
+  "live",
+  "live-video",
+] as const;
+
+/** The extension a workspace document has, as pattern source for a regex. */
+export const DOC_EXT_SRC = ".k7x";
+
+/** The extensions a clip's `source` names as a picture, without their dot. */
+export const VIDEO_EXTS = ["mp4", "mov", "m4v", "webm", "mkv"] as const;
+
+/** The extensions a clip's `source` names as a still, without their dot. */
+export const IMAGE_EXTS = [
+  "png",
+  "jpg",
+  "jpeg",
+  "webp",
+  "gif",
+  "avif",
+] as const;
+
+/** The extensions a clip's `source` names as captions, without their dot. */
+export const CAPTION_EXTS = ["srt", "vtt"] as const;
+
+/** Which components each surface type has and what each wants, `[id, note]`, as `project surface new` lists them. */
+export const SURFACE_MAPPING_SKELETON = {
+  turntables: [
+    ["crossfade", "a crossfade module — its mix param"],
+    ["deckA.tempo", "a tempo module — deck A's stretch"],
+    ["deckA.trim", "a trim module — deck A's input gain"],
+    ["deckA.eqLow", "an eq module — deck A's lows"],
+    ["deckA.eqMid", "the SAME eq module — its mids"],
+    ["deckA.eqHigh", "the SAME eq module — its highs"],
+    ["deckA.filter", "a filter module — deck A's filter"],
+    ["deckA.level", "a level module — deck A's channel fader"],
+    ["deckA.echo", "an echo module — deck A's echo"],
+    ["deckA.stemDrums", "a stem module — deck A's drums"],
+    ["deckA.stemBass", "a stem module — deck A's bass"],
+    ["deckA.stemOther", "a stem module — deck A's other"],
+    ["deckA.stemVocals", "a stem module — deck A's vocals"],
+    ["deckB.tempo", "a tempo module — deck B's stretch"],
+    ["deckB.trim", "a trim module — deck B's input gain"],
+    ["deckB.eqLow", "an eq module — deck B's lows"],
+    ["deckB.eqMid", "the SAME eq module — its mids"],
+    ["deckB.eqHigh", "the SAME eq module — its highs"],
+    ["deckB.filter", "a filter module — deck B's filter"],
+    ["deckB.level", "a level module — deck B's channel fader"],
+    ["deckB.echo", "an echo module — deck B's echo"],
+    ["deckB.stemDrums", "a stem module — deck B's drums"],
+    ["deckB.stemBass", "a stem module — deck B's bass"],
+    ["deckB.stemOther", "a stem module — deck B's other"],
+    ["deckB.stemVocals", "a stem module — deck B's vocals"],
+  ],
+  timeline: [],
+  viewport: [],
+  mastering: [
+    [
+      "comp.lowCut",
+      "the quick-master module — its low cut on the mid, before it compresses",
+    ],
+    ["comp.low", "the SAME module — how much it compresses the lows"],
+    ["comp.mid", "the SAME module — how much on the mids"],
+    ["comp.high", "the SAME module — how much on the highs"],
+    ["comp.lowFreq", "the SAME module — the crossover between lows and mids"],
+    ["comp.highFreq", "the SAME module — the crossover between mids and highs"],
+    ["spread.width", "the SAME module — the stereo width"],
+    [
+      "spread.bassMono",
+      "the SAME module — the frequency below which the bass is brought to the centre",
+    ],
+    [
+      "limiter.hfLimit",
+      "the SAME module — its HF limit, what it takes off the fastest highs",
+    ],
+    ["limiter.drive", "the SAME module — the limiter's input gain"],
+    ["limiter.ceiling", "the SAME module — its ceiling"],
+    ["limiter.release", "the SAME module — its release time"],
+    [
+      "limiter.output",
+      "the SAME module — its output word length, float, 24-bit or 16-bit",
+    ],
+  ],
+} as const;
 
 /** What a right-click can be on, as commands.yaml `menu:` names it. */
 export const MENU_ENTITIES = [
