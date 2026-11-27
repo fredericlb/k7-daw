@@ -2,12 +2,8 @@
 // round-trips to the exact k7x the compiler reads back. A write changes only the notes that changed, a pad keeps
 // its effects, and a `notes("c4 d4")` short form stays while it still says the same thing. See docs/noteGrids.md.
 
-import { K7Document } from "@studio/k7-wasm/k7x";
+import { editSequence, sequenceData } from "@studio/k7-wasm/text";
 import { roundBeat } from "@studio/k7-wasm/timecode";
-import {
-  editSequence,
-  sequenceData,
-} from "@studio/song-schema/yaml/sequenceFile";
 
 export interface Note {
   t: number; // onset, beats (fractional = microtiming)
@@ -56,7 +52,7 @@ function notesOf(value: unknown): Note[] {
 export function readSequence(text: string): SequenceRead | null {
   let data: Data;
   try {
-    data = sequenceData(new K7Document(text).at([]));
+    data = sequenceData(text);
   } catch {
     return null;
   }
@@ -77,24 +73,22 @@ export function writeNotes(
   notes: readonly Note[],
 ): string | null {
   try {
-    return editSequence(text, (doc) => {
-      const was = sequenceData(doc).notes;
-      const effects = new Map<string, Data>();
-      for (const n of Array.isArray(was) ? was : [])
-        if (isRecord(n) && (n.repeat !== undefined || n.skip !== undefined))
-          effects.set(noteKey(Number(n.k), Number(n.t)), {
-            ...(n.repeat === undefined ? {} : { repeat: n.repeat }),
-            ...(n.skip === undefined ? {} : { skip: n.skip }),
-          });
-      const next = notes.map((n) => ({
-        t: roundBeat(n.t),
-        d: roundBeat(n.d),
-        k: Math.round(n.k),
-        ...(n.v === undefined ? {} : { v: roundBeat(n.v) }),
-        ...effects.get(noteKey(n.k, n.t)),
-      }));
-      doc.applyIn(["notes"], next);
-    }).text;
+    const was = sequenceData(text).notes;
+    const effects = new Map<string, Data>();
+    for (const n of Array.isArray(was) ? was : [])
+      if (isRecord(n) && (n.repeat !== undefined || n.skip !== undefined))
+        effects.set(noteKey(Number(n.k), Number(n.t)), {
+          ...(n.repeat === undefined ? {} : { repeat: n.repeat }),
+          ...(n.skip === undefined ? {} : { skip: n.skip }),
+        });
+    const next = notes.map((n) => ({
+      t: roundBeat(n.t),
+      d: roundBeat(n.d),
+      k: Math.round(n.k),
+      ...(n.v === undefined ? {} : { v: roundBeat(n.v) }),
+      ...effects.get(noteKey(n.k, n.t)),
+    }));
+    return editSequence(text, [{ op: "setNotes", notes: next }]).text;
   } catch {
     return null;
   }

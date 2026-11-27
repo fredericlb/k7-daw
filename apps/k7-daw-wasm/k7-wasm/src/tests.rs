@@ -320,6 +320,25 @@ fn answers_the_graph_ops_through_the_same_bytes() {
 }
 
 #[test]
+fn lays_a_graph_out_through_the_same_bytes() {
+    let mut s = Session::new();
+    let nodes = json!([
+        {"id": "a", "kind": "track", "label": "a", "w": 160, "h": 70, "rank": 0},
+        {"id": "b", "kind": "module", "label": "b", "w": 160, "h": 70, "rank": 1}
+    ]);
+    let edges = json!([{"id": "a>b", "source": "a", "target": "b"}]);
+    let args = json!({"nodes": nodes, "edges": edges, "prev": [["b", {"x": 5, "y": 900}]]});
+    let (status, v) = run(&mut s, &json!({"op": "graph.layout", "args": args}));
+    assert_eq!(status, OK);
+    assert_eq!(v["nodes"][1]["id"], json!("b"));
+    assert_eq!(
+        (v["nodes"][1]["x"].clone(), v["nodes"][1]["y"].clone()),
+        (json!(5.0), json!(900.0))
+    );
+    assert_eq!(v["edges"][0][1].as_array().map(Vec::len), Some(2));
+}
+
+#[test]
 fn the_layout_constants_the_page_reads_are_the_ones_the_crate_decides_with() {
     use chains::node_ui as ui;
     // The panels' binds are the file format's vocabulary, spelled once in song: a drift here would write a bind nothing reads.

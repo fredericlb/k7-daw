@@ -1,5 +1,5 @@
 // graph.ts — the Chains routing graph's one import site: model -> nodes/edges -> laid-out geometry. The build, the arrangements
-// and the widget maths are Rust's (`@studio/k7-wasm`); the drawing geometry and the layout (dagre) are here. Renderer-agnostic.
+// and the widget maths are Rust's (`@studio/k7-wasm`); the drawing geometry is here and the layout is Rust's (`layout.ts`). Renderer-agnostic.
 // Hosts import "./graph"; the split is internal.
 
 export {
@@ -71,12 +71,6 @@ export {
   VIDEO_OUT,
   widgetRect,
 } from "./geometry";
-export {
-  layout,
-  masterRunAside,
-  pushAsideFrames,
-  pushBelowInputs,
-} from "./graphLayout";
 export type {
   EdgeAutomation,
   EdgeInsert,
@@ -90,4 +84,5 @@ export type {
   RawNode,
   TrackControlValues,
 } from "./graphNode";
+export { layout } from "./layout";
 export { alignModuleRank, moduleRow, spaceModulesEvenly } from "./moduleRow";

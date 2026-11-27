@@ -3,13 +3,8 @@
 // is the picture compile's to refuse, since only it knows the lane is picture (song-video videoProject.test.ts).
 // See apps/k7-daw-wasm/verbs/docs/picture/transitions.md.
 
-import { K7Document } from "@studio/k7-wasm/k7x";
 import { describe, expect, it } from "vitest";
 import { ModuleSchema } from "./moduleSchema";
-import {
-  listVideoPlacements,
-  setVideoPlacementFieldAt,
-} from "./videoTrackFile";
 
 const lane = (events: unknown[]) =>
   ModuleSchema.safeParse({ extends: "@meta/picture-track", events });
@@ -80,15 +75,5 @@ describe("an event with no `ref` — an ACTIVATION", () => {
       expect(bad.map((i) => i.path)).toEqual([["events", 0, key]]);
       expect(bad[0].message).toContain("ACTIVATION");
     }
-  });
-
-  it("is still LISTED, so an index addresses the same line in the file", () => {
-    const text =
-      'extends("@meta/picture-track")\nevents([start(0).length(2), ref("a").start(4)])\n';
-    expect(listVideoPlacements(text).map((p) => p.ref)).toEqual(["", "a"]);
-    // Index 1 is the shot, whatever precedes it — the verbs and the drag both write this way.
-    const doc = new K7Document(text);
-    expect(setVideoPlacementFieldAt(doc.at([]), 1, "start", 6)).toBe(true);
-    expect(doc.toString()).toContain('ref("a").start(6)');
   });
 });

@@ -249,6 +249,12 @@ export const NODE_H = 70.0;
 /** node min w */
 export const NODE_MIN_W = 72.0;
 
+/** What an open box adds around its members: a title strip and a margin. */
+export const FRAME_HEAD = 26.0;
+
+/** frame pad */
+export const FRAME_PAD = 14.0;
+
 /** A grid cell, and the air around the grid, in graph units. */
 export const CELL = 36.0;
 

@@ -1,6 +1,6 @@
 # The playlist file
 
-The rationale behind `apps/k7-daw-frontend/packages/song-schema/src/playlist.ts` — where a workspace keeps its playlists,
+The rationale behind `apps/k7-daw-wasm/song-edit/src/playlist.rs` and `playlist_edit.rs` (reached as `text.playlist`) — where a workspace keeps its playlists,
 what one says, and how a line is added to one AS TEXT. What a playlist is FOR lives in
 `apps/k7-daw-frontend/packages/song/docs/playlists.md`; this page is the file's own rules.
 

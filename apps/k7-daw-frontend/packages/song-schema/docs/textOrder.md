@@ -27,4 +27,4 @@ before letters. Where it shows:
   reference tracks, the module and chain catalogues, the engine plugins and a node's presets come in this
   order; k7's views sort each again for people before drawing it (`apps/k7-daw-frontend/docs/listOrder.md`).
 - **files on disk**: nothing is written in a new order. The chain file writer sorts keys only to compare two
-  items (`apps/k7-daw-frontend/packages/song-schema/src/yaml/chainFile.ts`), and any total order compares them alike.
+  items (`apps/k7-daw-wasm/song-edit/src/format_chain.rs`), and any total order compares them alike.

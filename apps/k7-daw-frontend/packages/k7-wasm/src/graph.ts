@@ -9,6 +9,8 @@ import type {
   BuildOptions as GeneratedBuildOptions,
   RowOptions as GeneratedRowOptions,
   Laid,
+  Placement,
+  Pt,
   RawEdge,
   RawNode,
   SeamsAnswer,
@@ -17,7 +19,15 @@ import type {
   StackAnswer,
 } from "./types/index.ts";
 
-export type { Built, EdgeInsert, Laid, SeamsAnswer, Spaced, StackAnswer };
+export type {
+  Built,
+  EdgeInsert,
+  Laid,
+  Placement,
+  SeamsAnswer,
+  Spaced,
+  StackAnswer,
+};
 
 /** The generated options with every list readonly: a host holds its lists as state and must not be asked to copy them. */
 type Loose<T> = {
@@ -209,3 +219,36 @@ export const stackOp = (
 /** How big a card must be to hold a panel, and with `footer` the bottom bar under it. */
 export const nodeSizeOp = (ui?: PageModuleUI, footer = false): Size =>
   call<Size>({ op: "graph.nodeSize", args: { ui, footer } });
+
+/** Where the layout puts each card: only the fields it reads cross, the answer is places to merge back onto the page's own cards. */
+export const layoutOp = (
+  nodes: readonly RawNode[],
+  edges: readonly RawEdge[],
+  positions?: Readonly<Record<string, Pt>>,
+  prev?: ReadonlyMap<string, Pt>,
+): Placement =>
+  call<Placement>({
+    op: "graph.layout",
+    args: {
+      nodes: nodes.map((n) => ({
+        id: n.id,
+        kind: n.kind,
+        label: n.label,
+        w: n.w,
+        h: n.h,
+        rank: n.rank,
+        module: n.module,
+        assembly: n.assembly,
+        open: n.assemblyOf?.open,
+      })),
+      edges: edges.map((e) => ({
+        id: e.id,
+        source: e.source,
+        target: e.target,
+        automation: e.automation ? true : undefined,
+        signal: e.signal,
+      })),
+      positions,
+      prev: prev && [...prev],
+    },
+  });

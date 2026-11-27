@@ -12,20 +12,20 @@ import { dirname, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "@studio/k7-wasm/k7x";
 import { engineModuleOf } from "@studio/k7-wasm/schema";
+import { expandSugar } from "@studio/k7-wasm/text";
 import { builtinPluginFor } from "@studio/song-schema/builtinParams";
 import {
   FILE_PARAMS,
   LIBRARY_FILE_PARAMS,
 } from "@studio/song-schema/moduleTypes";
 import { byCodePoint } from "@studio/song-schema/textOrder";
-import { sugarFor } from "@studio/song-schema/yaml/sugar";
 
 const wsExists = (f: string): boolean => existsSync(f);
 
 /** A .k7x file's data, its short forms expanded by the kind its path names. */
 function wsData(f: string): Record<string, unknown> {
   const data = parse(readFileSync(f, "utf8"));
-  return sugarFor(f)?.expand(data) ?? data;
+  return expandSugar(f, data);
 }
 
 type Scanned = {
