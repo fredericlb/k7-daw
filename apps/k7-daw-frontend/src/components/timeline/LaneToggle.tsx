@@ -52,7 +52,7 @@ export function LaneToggle({
         touch &&
           "min-w-0 flex-1 after:absolute after:inset-x-0 after:-inset-y-2 after:content-['']",
         // A static ring stays when reduced motion stops the pulse: armed and recording must differ.
-        pulse && "animate-pulse ring-2 ring-foreground",
+        pulse && "animate-pulse ring-2 ring-fg-1",
         className,
       )}
     />

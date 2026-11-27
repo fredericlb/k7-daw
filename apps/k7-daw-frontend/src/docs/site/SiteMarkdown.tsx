@@ -51,23 +51,23 @@ export function SiteMarkdown({ file, body }: { file: string; body: string }) {
     // Prose styles scoped here, as in Markdown.tsx, one size up: this page is read, not glanced at beside an editor.
     <div
       className={[
-        "text-sm leading-relaxed text-muted-foreground",
-        "[&_h2]:mb-2 [&_h2]:mt-8 [&_h2]:scroll-mt-4 [&_h2]:border-b [&_h2]:border-border/60 [&_h2]:pb-1 [&_h2]:text-lg [&_h2]:font-semibold [&_h2]:text-foreground",
-        "[&_h3]:mb-1 [&_h3]:mt-6 [&_h3]:scroll-mt-4 [&_h3]:text-base [&_h3]:font-semibold [&_h3]:text-foreground",
-        "[&_h4]:mb-1 [&_h4]:mt-4 [&_h4]:scroll-mt-4 [&_h4]:font-semibold [&_h4]:text-foreground",
+        "text-sm leading-relaxed text-fg-2",
+        "[&_h2]:mb-2 [&_h2]:mt-8 [&_h2]:scroll-mt-4 [&_h2]:border-b [&_h2]:border-hairline/60 [&_h2]:pb-1 [&_h2]:text-lg [&_h2]:font-semibold [&_h2]:text-fg-1",
+        "[&_h3]:mb-1 [&_h3]:mt-6 [&_h3]:scroll-mt-4 [&_h3]:text-base [&_h3]:font-semibold [&_h3]:text-fg-1",
+        "[&_h4]:mb-1 [&_h4]:mt-4 [&_h4]:scroll-mt-4 [&_h4]:font-semibold [&_h4]:text-fg-1",
         "[&_p]:my-3",
-        "[&_strong]:font-semibold [&_strong]:text-foreground",
-        "[&_a]:text-foreground [&_a]:underline [&_a]:decoration-dotted [&_a]:underline-offset-2",
+        "[&_strong]:font-semibold [&_strong]:text-fg-1",
+        "[&_a]:text-fg-1 [&_a]:underline [&_a]:decoration-dotted [&_a]:underline-offset-2",
         "[&_ul]:my-3 [&_ul]:list-disc [&_ul]:pl-6",
         "[&_ol]:my-3 [&_ol]:list-decimal [&_ol]:pl-6",
         "[&_li]:my-1",
-        "[&_code]:rounded [&_code]:bg-muted/60 [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[12px] [&_code]:text-foreground",
-        "[&_pre]:my-3 [&_pre]:overflow-x-auto [&_pre]:rounded-md [&_pre]:border [&_pre]:border-border [&_pre]:bg-muted/40 [&_pre]:p-3",
+        "[&_code]:rounded [&_code]:bg-row/60 [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[12px] [&_code]:text-fg-1",
+        "[&_pre]:my-3 [&_pre]:overflow-x-auto [&_pre]:rounded-md [&_pre]:border [&_pre]:border-hairline [&_pre]:bg-row/40 [&_pre]:p-3",
         "[&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_pre_code]:text-[12px] [&_pre_code]:leading-snug",
         "[&_table]:my-3 [&_table]:block [&_table]:w-full [&_table]:overflow-x-auto [&_table]:border-collapse",
-        "[&_th]:border-b [&_th]:border-border [&_th]:py-1.5 [&_th]:pr-4 [&_th]:text-left [&_th]:font-medium [&_th]:text-foreground",
-        "[&_td]:border-b [&_td]:border-border/40 [&_td]:py-1.5 [&_td]:pr-4 [&_td]:align-top",
-        "[&_blockquote]:border-l-2 [&_blockquote]:border-border [&_blockquote]:pl-3 [&_blockquote]:italic",
+        "[&_th]:border-b [&_th]:border-hairline [&_th]:py-1.5 [&_th]:pr-4 [&_th]:text-left [&_th]:font-medium [&_th]:text-fg-1",
+        "[&_td]:border-b [&_td]:border-hairline/40 [&_td]:py-1.5 [&_td]:pr-4 [&_td]:align-top",
+        "[&_blockquote]:border-l-2 [&_blockquote]:border-hairline [&_blockquote]:pl-3 [&_blockquote]:italic",
       ].join(" ")}
       // biome-ignore lint/security/noDangerouslySetInnerHtml: build-time markdown from docs-site/, never user input — see the note at the top of this file.
       dangerouslySetInnerHTML={{ __html: html }}

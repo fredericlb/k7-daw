@@ -68,7 +68,7 @@ export function CommandParams({
       <button
         type="button"
         onClick={onRepick}
-        className="h-5 shrink-0 font-mono text-sm leading-5 text-foreground hover:text-primary-text pointer-coarse:h-11"
+        className="h-5 shrink-0 font-mono text-sm leading-5 text-fg-1 hover:text-primary-text pointer-coarse:h-11"
         title={m["commandBar.changeTitle"]({ readable: command.readable })}
         aria-label={m["commandBar.changeNamed"]({
           command: command.canonical,
@@ -107,10 +107,10 @@ export function CommandParams({
             autoComplete="off"
             className={cn(
               // h-5, the bar input's own line: a field any taller makes the whole strip jump when a command is picked.
-              "h-5 shrink-0 rounded border bg-background/60 px-1.5 py-0 font-mono text-xs leading-none outline-none focus:border-primary placeholder:text-faint pointer-coarse:h-11 pointer-coarse:px-3 pointer-coarse:text-[16px]",
+              "h-5 shrink-0 rounded border bg-ground/60 px-1.5 py-0 font-mono text-xs leading-none outline-none focus:border-primary placeholder:text-faint pointer-coarse:h-11 pointer-coarse:px-3 pointer-coarse:text-[16px]",
               i === active
                 ? `border-primary/60 ${argColor[a.kind]}`
-                : "border-border text-foreground/80",
+                : "border-hairline text-fg-1/80",
             )}
           />
         ))}
@@ -118,8 +118,8 @@ export function CommandParams({
       {/* What Enter does THIS press, which is not always "run" (see `enterAction`). */}
       <span
         className={cn(
-          "type-badge shrink-0 text-muted-foreground pointer-coarse:hidden",
-          enterDoes === "run" && "text-foreground",
+          "type-badge shrink-0 text-fg-2 pointer-coarse:hidden",
+          enterDoes === "run" && "text-fg-1",
         )}
       >
         {enterDoes === "take"
@@ -131,7 +131,7 @@ export function CommandParams({
 
       {/* Opens DOWNWARD, as the command list does: the sentence, the active field's hint, its values, then Back and Run. */}
       <div className="menu absolute top-full right-0 left-0 z-30 mt-2 flex flex-col rounded-(--k7-r-menu) py-1.5 text-xs">
-        <p className="truncate px-3 pt-1 font-bold type-secondary text-foreground">
+        <p className="truncate px-3 pt-1 font-bold type-secondary text-fg-1">
           {command.readable}
         </p>
         {arg?.hint && (
@@ -167,7 +167,7 @@ export function CommandParams({
                   onMouseEnter={() => onHover(i)}
                   className={cn(
                     "w-full cursor-pointer px-3 py-0.5 text-left font-mono pointer-coarse:flex pointer-coarse:min-h-11 pointer-coarse:items-center pointer-coarse:py-2",
-                    arg ? argColor[arg.kind] : "text-foreground",
+                    arg ? argColor[arg.kind] : "text-fg-1",
                     i === selected && "bg-on-fill",
                   )}
                 >

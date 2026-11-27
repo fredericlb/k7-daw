@@ -431,17 +431,17 @@ export function AudioClipPanel({
   return (
     /** `w-full min-w-0 flex-1` and not only `h-full`: this panel takes the GRAPH's place, which is a flex ROW, and the canvas sizes itself to its parent. */
     <section
-      className="flex h-full min-h-0 w-full min-w-0 flex-1 flex-col gap-1 bg-card/40 px-3 py-2"
+      className="flex h-full min-h-0 w-full min-w-0 flex-1 flex-col gap-1 bg-panel/40 px-3 py-2"
       aria-label={rolling ? m["clip.takeRolling"]() : `clip ${clip ?? ""}`}
     >
       {rolling && (
         <DockHeaderRow>
-          <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+          <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-3 gap-y-1 text-xs text-fg-2">
             <>
               {/* The pre-roll counts DOWN, then the take counts up in bar:beat from where THIS take started (docs/shell.md). */}
               {count.phase === "count-in" ? (
                 <>
-                  <span className="text-sm uppercase tracking-wider text-muted-foreground">
+                  <span className="text-sm uppercase tracking-wider text-fg-2">
                     {m["clip.countIn"]()}
                   </span>
                   <span className="font-mono text-2xl tabular-nums text-red-400">
@@ -678,7 +678,7 @@ export function AudioClipPanel({
                   height={18}
                   mode={rulerSeconds ? "seconds" : "bars"}
                   onSeek={onSeek}
-                  className="shrink-0 border-b border-border/50 font-mono text-[11px] text-muted-foreground"
+                  className="shrink-0 border-b border-hairline/50 font-mono text-[11px] text-fg-2"
                 />
                 {/* The loop's points on the FILE's seconds, the axis the event's window is written in. */}
                 {looped && loopAddr && (

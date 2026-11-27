@@ -267,7 +267,7 @@ export function RackBuilder({
           <DialogTitle className="flex items-center gap-1.5 text-primary-text">
             <Grip className="size-4" /> {m["rb.title"]()}
           </DialogTitle>
-          <span className="text-xs text-muted-foreground">
+          <span className="text-xs text-fg-2">
             {m["rb.hint"]()}
           </span>
         </DialogHeader>
@@ -278,9 +278,9 @@ export function RackBuilder({
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="drum_3"
-            className="w-48 rounded border border-border bg-card px-2 py-1 font-mono text-sm"
+            className="w-48 rounded border border-hairline bg-panel px-2 py-1 font-mono text-sm"
           />
-          <span className="truncate text-xs text-muted-foreground">
+          <span className="truncate text-xs text-fg-2">
             → nodes/{name.trim() || "…"}
           </span>
         </label>
@@ -293,7 +293,7 @@ export function RackBuilder({
             onChange={(e) =>
               setDest(e.target.value ? { library: e.target.value } : "project")
             }
-            className="rounded border border-border bg-card px-2 py-1 text-sm"
+            className="rounded border border-hairline bg-panel px-2 py-1 text-sm"
           >
             <option value="">{m["rb.toProject"]()}</option>
             {libraries.map((l) => (
@@ -302,7 +302,7 @@ export function RackBuilder({
               </option>
             ))}
           </select>
-          <span className="truncate font-mono text-xs text-muted-foreground">
+          <span className="truncate font-mono text-xs text-fg-2">
             {kitUploadDir(dest, name.trim() || "…", activeProject ?? "")}
           </span>
         </label>
@@ -324,10 +324,10 @@ export function RackBuilder({
                     "flex h-24 flex-col rounded-md border p-1.5",
                     pad
                       ? "border-emerald-500/60 bg-emerald-500/10"
-                      : "border-dashed border-border bg-card/40",
+                      : "border-dashed border-hairline bg-panel/40",
                   )}
                 >
-                  <div className="flex items-center gap-1 text-[11px] text-muted-foreground">
+                  <div className="flex items-center gap-1 text-[11px] text-fg-2">
                     <span className="tabular-nums">{padNote(row, col)}</span>
                     {pad && (
                       <>
@@ -343,7 +343,7 @@ export function RackBuilder({
                               ? audio.current?.pause()
                               : play(pad)
                           }
-                          className="ml-auto rounded p-0.5 hover:bg-accent hover:text-foreground"
+                          className="ml-auto rounded p-0.5 hover:bg-row hover:text-fg-1"
                         >
                           {sounding === pad.url ? (
                             <Pause className="h-3 w-3" />
@@ -378,11 +378,11 @@ export function RackBuilder({
                             return next;
                           })
                         }
-                        className="mt-1 w-full rounded border border-transparent bg-transparent font-mono text-xs font-semibold focus:border-border"
+                        className="mt-1 w-full rounded border border-transparent bg-transparent font-mono text-xs font-semibold focus:border-hairline"
                         aria-label={m["rb.padSymbol"]()}
                       />
                       <span
-                        className="mt-auto truncate text-[11px] text-muted-foreground"
+                        className="mt-auto truncate text-[11px] text-fg-2"
                         title={pad.file.name}
                       >
                         {pad.file.name}
@@ -402,13 +402,13 @@ export function RackBuilder({
         {/* Sixteen uploads deserve a count: which file, how far in, and how many are already on disk. */}
         {up && (
           <div className="flex flex-col gap-1">
-            <div className="flex items-baseline gap-2 text-xs text-muted-foreground">
+            <div className="flex items-baseline gap-2 text-xs text-fg-2">
               <span className="truncate">{up.name}</span>
               <span className="ml-auto shrink-0 tabular-nums">
                 {Math.min(up.done + 1, up.total)}/{up.total}
               </span>
             </div>
-            <div className="h-1 overflow-hidden rounded bg-muted">
+            <div className="h-1 overflow-hidden rounded bg-row">
               <div
                 className="h-full bg-primary transition-[width]"
                 style={{

@@ -102,15 +102,15 @@ export function Breadcrumb({
         );
       })}
       {!path && (
-        <span className="ml-2 truncate text-muted-foreground">
+        <span className="ml-2 truncate text-fg-2">
           {m["breadcrumb.noFile"]()}
         </span>
       )}
 
       {menu !== null && (
-        <div className="absolute left-0 top-full z-20 mt-1 max-h-72 min-w-48 overflow-auto rounded border border-border bg-popover p-1 shadow-lg">
+        <div className="absolute left-0 top-full z-20 mt-1 max-h-72 min-w-48 overflow-auto rounded border border-hairline bg-menu p-1 shadow-lg">
           {entries.length === 0 && (
-            <div className="px-2 py-1 text-muted-foreground">
+            <div className="px-2 py-1 text-fg-2">
               {m["breadcrumb.empty"]()}
             </div>
           )}
@@ -128,12 +128,12 @@ export function Breadcrumb({
                     }
                   }}
                   // Compared in the WORKSPACE's space, like `activeProject` below: both props arrive that way, and only the menu keys moved.
-                  className={`flex min-w-0 flex-1 items-center gap-1.5 truncate rounded px-2 py-1 text-left font-mono hover:bg-accent ${
-                    n.path === path ? "bg-accent" : ""
+                  className={`flex min-w-0 flex-1 items-center gap-1.5 truncate rounded px-2 py-1 text-left font-mono hover:bg-row ${
+                    n.path === path ? "bg-row" : ""
                   }`}
                 >
                   {n.dir ? (
-                    <ChevronRight className="h-3 w-3 shrink-0 text-muted-foreground" />
+                    <ChevronRight className="h-3 w-3 shrink-0 text-fg-2" />
                   ) : (
                     <span className="w-3 shrink-0" />
                   )}
@@ -154,7 +154,7 @@ export function Breadcrumb({
                     className={`shrink-0 rounded p-1 ${
                       isActiveProject
                         ? "text-emerald-500"
-                        : "text-faint hover:text-foreground"
+                        : "text-faint hover:text-fg-1"
                     }`}
                   >
                     <Play
@@ -187,9 +187,9 @@ function Segment({
     <button
       onClick={onClick}
       aria-expanded={open}
-      className={`flex min-w-0 items-center gap-0.5 rounded px-1.5 py-0.5 font-mono hover:bg-accent ${
-        file ? "text-foreground" : "text-muted-foreground"
-      } ${open ? "bg-accent" : ""}`}
+      className={`flex min-w-0 items-center gap-0.5 rounded px-1.5 py-0.5 font-mono hover:bg-row ${
+        file ? "text-fg-1" : "text-fg-2"
+      } ${open ? "bg-row" : ""}`}
     >
       <span className="truncate">{label}</span>
       <ChevronDown className="h-3 w-3 shrink-0 opacity-50" />

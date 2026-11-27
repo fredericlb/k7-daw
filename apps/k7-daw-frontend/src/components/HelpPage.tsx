@@ -107,9 +107,9 @@ function CommandRow({
       <code className="shrink-0 font-mono text-xs">
         {names.map((n, i) => (
           <span key={i}>
-            {i > 0 && <span className="text-muted-foreground">/</span>}
+            {i > 0 && <span className="text-fg-2">/</span>}
             <span
-              className={i === 0 ? "text-foreground" : "text-muted-foreground"}
+              className={i === 0 ? "text-fg-1" : "text-fg-2"}
             >
               {n}
             </span>
@@ -117,11 +117,11 @@ function CommandRow({
         ))}
       </code>
       {shortcut && (
-        <kbd className="shrink-0 rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-[11px] leading-none text-muted-foreground">
+        <kbd className="shrink-0 rounded border border-hairline bg-row px-1.5 py-0.5 font-mono text-[11px] leading-none text-fg-2">
           {shortcut}
         </kbd>
       )}
-      <span className="ml-auto text-right text-xs text-muted-foreground">
+      <span className="ml-auto text-right text-xs text-fg-2">
         {cmd.help}
       </span>
     </div>
@@ -140,7 +140,7 @@ function Section({
   return (
     // scroll-mt keeps the heading clear of the sticky header when the nav jumps here.
     <section id={id} className="scroll-mt-4">
-      <h3 className="mb-1.5 border-b border-border/60 pb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+      <h3 className="mb-1.5 border-b border-hairline/60 pb-1 text-xs font-semibold uppercase tracking-wide text-fg-2">
         {title}
       </h3>
       {children}
@@ -179,25 +179,25 @@ export function HelpPage({
   });
 
   return (
-    <div className="flex h-full flex-col bg-background text-foreground">
-      <header className="flex shrink-0 items-center gap-3 border-b border-border px-3 py-2">
+    <div className="flex h-full flex-col bg-ground text-fg-1">
+      <header className="flex shrink-0 items-center gap-3 border-b border-hairline px-3 py-2">
         <Button variant="secondary" size="sm" onClick={onBack}>
           <ArrowLeft className="mr-1 h-4 w-4" /> {m["common.back"]()}
         </Button>
         <div className="text-sm font-semibold">{m["help.title"]()}</div>
-        <div className="text-xs text-muted-foreground">
+        <div className="text-xs text-fg-2">
           {m["help.subtitle"]()}
         </div>
       </header>
 
       {/* A documentation LAYOUT — a fixed table of contents over one scrollable body; tabs would break ctrl-F and deep links. */}
       <div className="flex min-h-0 flex-1">
-        <nav className="hidden w-56 shrink-0 flex-col gap-3 overflow-y-auto border-r border-border bg-card/40 p-2 md:flex">
+        <nav className="hidden w-56 shrink-0 flex-col gap-3 overflow-y-auto border-r border-hairline bg-panel/40 p-2 md:flex">
           <Toc />
         </nav>
 
         <div className="min-h-0 flex-1 overflow-y-auto p-4">
-          <details className="mx-auto mb-4 flex max-w-3xl flex-col rounded border border-border bg-card/40 md:hidden">
+          <details className="mx-auto mb-4 flex max-w-3xl flex-col rounded border border-hairline bg-panel/40 md:hidden">
             <summary className="cursor-pointer px-3 py-2 text-sm font-semibold">
               {m["help.contents"]()}
             </summary>
@@ -219,7 +219,7 @@ export function HelpPage({
                       n: commands.length + VIEW_COMMANDS.length,
                     })}
                   >
-                    <div className="flex flex-col divide-y divide-border/60">
+                    <div className="flex flex-col divide-y divide-hairline/60">
                       {commands.map((c) => (
                         <CommandRow
                           key={c.command}
@@ -251,7 +251,7 @@ function Toc() {
     <>
       {DOC_PARTS.map((part) => (
         <div key={part.part} className="flex flex-col">
-          <div className="px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-foreground/70">
+          <div className="px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-fg-1/70">
             {part.label}
           </div>
           {part.part === "commands" && (
@@ -279,7 +279,7 @@ function NavLink({ id, label }: { id: string; label: string }) {
           .getElementById(id)
           ?.scrollIntoView({ behavior: "smooth", block: "start" });
       }}
-      className="truncate rounded px-2 py-1 pl-3 text-xs text-muted-foreground hover:bg-accent hover:text-foreground"
+      className="truncate rounded px-2 py-1 pl-3 text-xs text-fg-2 hover:bg-row hover:text-fg-1"
     >
       {label}
     </a>

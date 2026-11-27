@@ -57,7 +57,7 @@ export function AuthGate({ children }: { children: ReactNode }) {
       }
       className="text-center"
     >
-      <code className="mb-4 block max-w-full truncate rounded bg-muted px-2 py-1 text-xs text-muted-foreground">
+      <code className="mb-4 block max-w-full truncate rounded bg-row px-2 py-1 text-xs text-fg-2">
         {phase.detail}
       </code>
       <Button

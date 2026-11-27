@@ -10,7 +10,7 @@ import { TIMELINE_MIME } from "../../fileDrop";
 import { m } from "../../paraglide/messages.js";
 
 const TAB =
-  "flex items-center gap-1 rounded px-2 py-0.5 text-xs hover:bg-muted";
+  "flex items-center gap-1 rounded px-2 py-0.5 text-xs hover:bg-row";
 
 export function TimelineSwitch({
   timelines,
@@ -35,12 +35,12 @@ export function TimelineSwitch({
 }) {
   const current = timelines.find((t) => t.id === open);
   return (
-    <div className="flex shrink-0 items-center gap-1 overflow-x-auto border-b border-border px-1 py-0.5">
+    <div className="flex shrink-0 items-center gap-1 overflow-x-auto border-b border-hairline px-1 py-0.5">
       <button
         type="button"
         aria-pressed={!current}
         onClick={() => onOpen(null)}
-        className={cn(TAB, !current && "bg-muted font-medium")}
+        className={cn(TAB, !current && "bg-row font-medium")}
       >
         {m["tl.main"]()}
       </button>
@@ -61,7 +61,7 @@ export function TimelineSwitch({
             e.preventDefault();
             onContext(t.id, e.clientX, e.clientY);
           }}
-          className={cn(TAB, t.id === open && "bg-muted font-medium")}
+          className={cn(TAB, t.id === open && "bg-row font-medium")}
         >
           <Layers className="h-3 w-3 opacity-70" />
           {t.id}
@@ -72,14 +72,14 @@ export function TimelineSwitch({
           type="button"
           onClick={onNew}
           title={m["tl.newTimeline"]()}
-          className={cn(TAB, "text-muted-foreground")}
+          className={cn(TAB, "text-fg-2")}
         >
           <Plus className="h-3 w-3" />
           {m["tl.timeline"]()}
         </button>
       )}
       {current && (
-        <span className="ml-auto shrink-0 px-2 text-muted-foreground text-xs">
+        <span className="ml-auto shrink-0 px-2 text-fg-2 text-xs">
           {m["tl.timelineFixed"]({ length: lengthOf(current) })}
         </span>
       )}

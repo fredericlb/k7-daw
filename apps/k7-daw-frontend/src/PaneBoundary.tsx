@@ -79,7 +79,7 @@ export class PaneBoundary extends Component<Props, State> {
             {m["pane.failed"]({ name: this.props.name })}
           </div>
           {/* The raw message is for a bug report, so it stays folded until asked for. */}
-          <details className="mt-1 text-muted-foreground text-xs">
+          <details className="mt-1 text-fg-2 text-xs">
             <summary className="cursor-pointer select-none">
               {m["pane.details"]()}
             </summary>
@@ -87,7 +87,7 @@ export class PaneBoundary extends Component<Props, State> {
           </details>
           <button
             type="button"
-            className="mt-2 rounded border border-border px-2 py-0.5 text-xs hover:bg-accent"
+            className="mt-2 rounded border border-hairline px-2 py-0.5 text-xs hover:bg-row"
             onClick={() => this.setState({ error: null })}
           >
             {m["pane.retry"]()}

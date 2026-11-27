@@ -106,8 +106,8 @@ export const Minimap = memo(function Minimap({
         title={m["minimap.movePlayhead"]()}
         className={`absolute inset-x-0 bottom-0 z-30 cursor-pointer select-none overflow-hidden rounded-sm ${
           peeked
-            ? "border border-border bg-card shadow-lg"
-            : "bg-muted-foreground/10"
+            ? "border border-hairline bg-panel shadow-lg"
+            : "bg-fg-2/10"
         }`}
         style={{ height: h }}
       >
@@ -117,7 +117,7 @@ export const Minimap = memo(function Minimap({
             <div
               key={`group:${row.group.id}`}
               title={`${row.group.name} — a group; holds no clips of its own`}
-              className="absolute inset-x-0 bg-muted-foreground/25"
+              className="absolute inset-x-0 bg-fg-2/25"
               style={{ top: ri * rowH, height: rowH }}
             />
           ) : row.kind === "video" ? (
@@ -143,7 +143,7 @@ export const Minimap = memo(function Minimap({
             <div
               key={row.track.id}
               title={m["minimap.generated"]({ name: row.track.name })}
-              className="absolute inset-x-0 text-muted-foreground/30"
+              className="absolute inset-x-0 text-fg-2/30"
               style={{ top: ri * rowH, height: rowH, backgroundImage: HATCH }}
             />
           ) : (

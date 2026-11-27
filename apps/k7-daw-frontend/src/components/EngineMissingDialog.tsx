@@ -73,22 +73,22 @@ export function EngineMissingDialog({
           <DialogTitle>{m["engineMissing.title"]()}</DialogTitle>
           <DialogDescription>{m["engineMissing.body"]()}</DialogDescription>
         </DialogHeader>
-        <div className="max-h-60 overflow-y-auto rounded bg-muted px-2 py-1.5 text-xs">
+        <div className="max-h-60 overflow-y-auto rounded bg-row px-2 py-1.5 text-xs">
           {(items ?? []).slice(0, LISTED).map((i) => (
             <div key={missingKey(i)} className="truncate">
               <span className="font-mono text-red-400">{i.name}</span>{" "}
-              <span className="text-muted-foreground">
+              <span className="text-fg-2">
                 — {i.what}, {WHY[i.why]()}
               </span>
             </div>
           ))}
           {(items?.length ?? 0) > LISTED && (
-            <div className="text-muted-foreground">
+            <div className="text-fg-2">
               … +{(items?.length ?? 0) - LISTED}
             </div>
           )}
         </div>
-        <p className="text-xs text-muted-foreground">
+        <p className="text-xs text-fg-2">
           {m["engineMissing.logs"]()}
         </p>
         <DialogFooter>

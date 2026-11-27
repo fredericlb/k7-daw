@@ -279,7 +279,7 @@ export function ExternalSurface({
   );
   return (
     <EngineStoreProvider value={store}>
-      <div className="relative flex h-full min-h-0 flex-col bg-background text-foreground">
+      <div className="relative flex h-full min-h-0 flex-col bg-ground text-fg-1">
         {lan ? (
           // The one way out of a surface that cannot change: a hard navigation, since this app's router ends at the project.
           <Button
@@ -411,7 +411,7 @@ function Drawn({
   const drawer = deviceSurfaceDrawer(surface.surface.type);
   if (!drawer)
     return (
-      <div className="flex flex-1 items-center justify-center p-8 text-center text-sm text-muted-foreground">
+      <div className="flex flex-1 items-center justify-center p-8 text-center text-sm text-fg-2">
         {m["srf.drawnByShell"]({ type: surface.surface.type })}
       </div>
     );
@@ -444,7 +444,7 @@ function Back() {
     <a
       href={surfacesUrl(window.location.origin, "k7")}
       title={m["extsrf.allSurfaces"]()}
-      className="flex shrink-0 items-center gap-1 rounded px-1 py-0.5 text-xs text-muted-foreground hover:bg-accent"
+      className="flex shrink-0 items-center gap-1 rounded px-1 py-0.5 text-xs text-fg-2 hover:bg-row"
     >
       <ChevronLeft className="h-4 w-4" />
       Surfaces
@@ -455,7 +455,7 @@ function Back() {
 /** The one layout this screen has besides the surface: something centred, on its own. */
 function Centre({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex h-full flex-col items-center justify-center gap-3 bg-background p-6 text-muted-foreground">
+    <div className="flex h-full flex-col items-center justify-center gap-3 bg-ground p-6 text-fg-2">
       {children}
     </div>
   );

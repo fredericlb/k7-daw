@@ -24,8 +24,8 @@ const KIND = {
 
 const TONE = {
   edge: "bg-lavender/20 text-lavender",
-  onset: "bg-teal-400/20 text-foreground",
-  stretch: "bg-sky-400/20 text-foreground",
+  onset: "bg-teal-400/20 text-fg-1",
+  stretch: "bg-sky-400/20 text-fg-1",
 } as const;
 
 /** One value in seconds: a button while it reads, a field once tapped; Enter or leaving commits a changed, valid number. */

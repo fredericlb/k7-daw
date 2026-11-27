@@ -49,7 +49,7 @@ export function HomeFrame({ children }: { children: ReactNode }) {
         />
         {children}
         {help && (
-          <div className="fixed inset-0 z-50 bg-background">
+          <div className="fixed inset-0 z-50 bg-ground">
             <Suspense fallback={null}>
               <HelpPage onBack={() => setHelp(false)} />
             </Suspense>
@@ -167,7 +167,7 @@ export function HomeShell({ children }: { children: ReactNode }) {
   return (
     <div
       className={cn(
-        "flex h-full flex-col bg-background text-foreground",
+        "flex h-full flex-col bg-ground text-fg-1",
         !phone && "pl-[calc(var(--k7-sidebar-w)+32px)]",
       )}
     >

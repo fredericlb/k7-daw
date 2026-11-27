@@ -36,7 +36,7 @@ export function UndoFlash() {
           <p
             // biome-ignore lint/suspicious/noArrayIndexKey: two steps may say the same words; their place is the identity.
             key={i}
-            className="type-body rounded-2xl bg-(--k7-row) px-3 py-1 text-center text-foreground shadow-lg"
+            className="type-body rounded-2xl bg-(--k7-row) px-3 py-1 text-center text-fg-1 shadow-lg"
           >
             {msg}
           </p>

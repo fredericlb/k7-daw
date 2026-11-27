@@ -126,7 +126,7 @@ export function CurvePlot({
     <svg
       ref={svgRef}
       viewBox={`0 0 ${W} ${H}`}
-      className={`w-full rounded border border-border bg-background ${custom ? "cursor-crosshair touch-none" : ""}`}
+      className={`w-full rounded border border-hairline bg-ground ${custom ? "cursor-crosshair touch-none" : ""}`}
       onPointerDown={custom ? press.onPointerDown : undefined}
     >
       <title>
@@ -142,7 +142,7 @@ export function CurvePlot({
           x2={xOf(b.x)}
           y1={PAD}
           y2={H - PAD}
-          className="stroke-border"
+          className="stroke-hairline"
           strokeWidth={b.bar ? 1 : 0.5}
           strokeOpacity={b.bar ? 1 : 0.5}
         />
@@ -155,13 +155,13 @@ export function CurvePlot({
             x2={W - PAD}
             y1={yOf(v)}
             y2={yOf(v)}
-            className="stroke-muted-foreground"
+            className="stroke-fg-2"
             strokeOpacity={0.6}
           />
           <text
             x={PAD + 2}
             y={yOf(v) + (v > 0 ? 9 : -3)}
-            className="fill-muted-foreground"
+            className="fill-fg-2"
             fontSize={8}
           >
             {v}
@@ -173,7 +173,7 @@ export function CurvePlot({
         x2={W - PAD}
         y1={yOf(0)}
         y2={yOf(0)}
-        className="stroke-border"
+        className="stroke-hairline"
         strokeDasharray="3 3"
       />
       <polyline
@@ -199,7 +199,7 @@ export function CurvePlot({
             cx={xOf(spanBeats ? p.beat / spanBeats : 0)}
             cy={yOf(outOf(p.value))}
             r={R}
-            className="cursor-grab fill-background stroke-primary"
+            className="cursor-grab fill-ground stroke-primary"
             strokeWidth={2}
             onPointerDown={() => {
               picked.current = true;

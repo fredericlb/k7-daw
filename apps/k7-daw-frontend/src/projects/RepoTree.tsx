@@ -46,8 +46,8 @@ function Row(props: RowProps) {
     return (
       <button
         type="button"
-        className={`flex w-full items-center gap-2 py-0.5 pr-2 text-left text-sm text-muted-foreground hover:bg-accent/50 ${
-          key === selected ? "bg-accent" : ""
+        className={`flex w-full items-center gap-2 py-0.5 pr-2 text-left text-sm text-fg-2 hover:bg-row/50 ${
+          key === selected ? "bg-row" : ""
         }`}
         style={pad}
         onClick={() => onSelect(key)}
@@ -63,7 +63,7 @@ function Row(props: RowProps) {
       <div className="flex items-center gap-2 py-0.5 pr-2 text-sm" style={pad}>
         <button
           type="button"
-          className="flex min-w-0 flex-1 items-center gap-2 text-left hover:text-foreground"
+          className="flex min-w-0 flex-1 items-center gap-2 text-left hover:text-fg-1"
           onClick={() => onToggle(node.path)}
         >
           {isOpen ? (
@@ -191,12 +191,12 @@ function FilesTree({
     <div className="flex min-h-0 flex-1 flex-col md:flex-row">
       <div className="max-h-[40vh] min-h-0 shrink-0 overflow-auto border-b py-2 md:max-h-none md:w-80 md:border-r md:border-b-0">
         {rows === null ? (
-          <div className="flex items-center justify-center gap-2 p-8 text-sm text-muted-foreground">
+          <div className="flex items-center justify-center gap-2 p-8 text-sm text-fg-2">
             <Spinner size="sm" inherit />
             {m["repos.reading"]()}
           </div>
         ) : rows.length === 0 ? (
-          <div className="p-8 text-center text-sm text-muted-foreground">
+          <div className="p-8 text-center text-sm text-fg-2">
             {m["repos.emptyWorkspace"]()}
           </div>
         ) : (
@@ -218,7 +218,7 @@ function FilesTree({
         {selected && source ? (
           <FileViewer source={source} path={selected} />
         ) : (
-          <div className="p-8 text-center text-sm text-muted-foreground">
+          <div className="p-8 text-center text-sm text-fg-2">
             {m["repos.pickFile"]()}
           </div>
         )}

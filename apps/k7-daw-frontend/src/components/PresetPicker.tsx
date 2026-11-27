@@ -52,7 +52,7 @@ function searchPresets(
 }
 
 const BTN =
-  "inline-flex shrink-0 items-center gap-1 rounded border border-border px-1.5 py-0.5 text-xs hover:bg-accent disabled:pointer-events-none disabled:opacity-40";
+  "inline-flex shrink-0 items-center gap-1 rounded border border-hairline px-1.5 py-0.5 text-xs hover:bg-row disabled:pointer-events-none disabled:opacity-40";
 
 export function PresetPicker({
   x,
@@ -120,13 +120,13 @@ export function PresetPicker({
           title={taken ? m["preset.taken"]({ name: clean, scope }) : undefined}
           spellCheck={false}
           autoComplete="off"
-          className="min-w-0 flex-1 rounded border border-border bg-transparent px-1 py-0.5 font-mono text-xs outline-none focus:border-primary placeholder:text-faint"
+          className="min-w-0 flex-1 rounded border border-hairline bg-transparent px-1 py-0.5 font-mono text-xs outline-none focus:border-primary placeholder:text-faint"
         />
         <select
           value={scope}
           onChange={(e) => setScope(e.target.value)}
           title={m["preset.scopeHint"]()}
-          className="rounded border border-border bg-popover px-0.5 py-0.5 font-mono text-xs"
+          className="rounded border border-hairline bg-menu px-0.5 py-0.5 font-mono text-xs"
         >
           {data.scopes.map((s) => (
             <option key={s} value={s}>
@@ -166,11 +166,11 @@ export function PresetPicker({
 
   const aside = engines && (
     <div
-      className="mr-1 flex max-h-[min(28rem,80vh)] flex-col overflow-y-auto rounded-md border border-border bg-popover py-1 text-sm shadow-md"
+      className="mr-1 flex max-h-[min(28rem,80vh)] flex-col overflow-y-auto rounded-md border border-hairline bg-menu py-1 text-sm shadow-md"
       role="menu"
       aria-label={m["preset.engine"]()}
     >
-      <div className="px-3 pb-1 text-[11px] uppercase tracking-wide text-muted-foreground">
+      <div className="px-3 pb-1 text-[11px] uppercase tracking-wide text-fg-2">
         {m["preset.engine"]()}
       </div>
       {engines.names.map((name) => (
@@ -184,8 +184,8 @@ export function PresetPicker({
             setEngine(name);
             onEngine?.(name);
           }}
-          className={`px-3 py-1 text-left font-mono hover:bg-accent hover:text-accent-foreground ${
-            name === engine ? "bg-accent text-accent-foreground" : ""
+          className={`px-3 py-1 text-left font-mono hover:bg-row hover:text-fg-1 ${
+            name === engine ? "bg-row text-fg-1" : ""
           }`}
         >
           {name}

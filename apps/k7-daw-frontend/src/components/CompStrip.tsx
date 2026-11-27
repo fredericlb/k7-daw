@@ -27,7 +27,7 @@ export function CompStrip({
   const span = Math.max(1e-6, to - from);
   const pct = (b: number) => `${((b - from) / span) * 100}%`;
   return (
-    <div className="relative h-12 shrink-0 overflow-hidden rounded-sm bg-muted/30">
+    <div className="relative h-12 shrink-0 overflow-hidden rounded-sm bg-row/30">
       {ev.pieces.map((p) => {
         const take = takeOfPiece(p);
         const color = takeColor(ev, take);
@@ -43,7 +43,7 @@ export function CompStrip({
             className={cn(
               "absolute inset-y-0 overflow-hidden border-t-4 text-left",
               p.id === selected
-                ? "ring-2 ring-foreground ring-inset"
+                ? "ring-2 ring-fg-1 ring-inset"
                 : "opacity-80 hover:opacity-100",
             )}
             style={{

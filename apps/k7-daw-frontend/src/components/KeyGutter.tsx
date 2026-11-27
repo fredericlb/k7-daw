@@ -51,7 +51,7 @@ export function KeyGutter({
   );
   return (
     <div
-      className="sticky left-0 z-10 shrink-0 border-r border-border bg-background"
+      className="sticky left-0 z-10 shrink-0 border-r border-hairline bg-ground"
       style={{ width }}
     >
       {KEYS.map((k) => (
@@ -100,13 +100,13 @@ const KeyRow = memo(function KeyRow({
             ? noteName(k)
             : undefined
       }
-      className={`flex w-full items-center justify-end pr-1 text-[11px] text-muted-foreground cursor-pointer hover:bg-accent ${lit ? "bg-accent/70 text-foreground" : isBlack(k) ? "bg-muted/50" : ""}`}
+      className={`flex w-full items-center justify-end pr-1 text-[11px] text-fg-2 cursor-pointer hover:bg-row ${lit ? "bg-row/70 text-fg-1" : isBlack(k) ? "bg-row/50" : ""}`}
       style={{ height: rowH, lineHeight: `${rowH}px` }}
     >
       {!showLabels ? (
         ""
       ) : name !== undefined ? (
-        <span className="min-w-0 truncate text-foreground">{name}</span>
+        <span className="min-w-0 truncate text-fg-1">{name}</span>
       ) : named || lit ? (
         noteName(k)
       ) : pc(k) === 0 ? (

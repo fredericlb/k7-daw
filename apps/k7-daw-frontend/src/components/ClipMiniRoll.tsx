@@ -43,7 +43,7 @@ export const ClipMiniRoll = memo(function ClipMiniRoll({
   spanBeats,
   loopStart = 0,
   loopEnd = 0,
-  tone = "text-foreground",
+  tone = "text-fg-1",
 }: {
   notes: WebNote[];
   spanBeats: number;

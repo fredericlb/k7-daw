@@ -490,13 +490,13 @@ export function FileTree({
 
   // Pinned shortcuts — hoisted above the tree so a deep file is one click away.
   const header = shownPins.length > 0 && (
-    <div className="mb-1 border-b border-border/60 pb-1">
+    <div className="mb-1 border-b border-hairline/60 pb-1">
       {shownPins.map((p) => (
         <div
           key={p}
           className={cn(
             "group flex items-center pr-1",
-            activePath === p && "bg-secondary",
+            activePath === p && "bg-row",
           )}
           style={{ paddingLeft: 8 }}
         >
@@ -507,8 +507,8 @@ export function FileTree({
             className={cn(
               "flex min-w-0 flex-1 items-center gap-1 py-0.5 text-left text-sm",
               activePath === p
-                ? "text-foreground"
-                : "text-foreground/80 hover:text-foreground",
+                ? "text-fg-1"
+                : "text-fg-1/80 hover:text-fg-1",
             )}
           >
             <Pin className="h-3.5 w-3.5 shrink-0 text-primary-text" />
@@ -520,7 +520,7 @@ export function FileTree({
             onClick={() => togglePin(p)}
             title={m["tree.unpin"]()}
             aria-label={m["tree.unpinFile"]({ name: p.split("/").pop() ?? p })}
-            className="shrink-0 rounded p-0.5 text-faint opacity-0 hover:text-foreground focus-visible:opacity-100 group-hover:opacity-100 group-focus-within:opacity-100 [@media(hover:none)]:opacity-100"
+            className="shrink-0 rounded p-0.5 text-faint opacity-0 hover:text-fg-1 focus-visible:opacity-100 group-hover:opacity-100 group-focus-within:opacity-100 [@media(hover:none)]:opacity-100"
           >
             <X className="h-3.5 w-3.5" />
           </button>
@@ -576,7 +576,7 @@ export function FileTree({
       {tab === "libraries" ? (
         !lib ? (
           // Only reachable before the first answer has arrived: `@workspace` and `@engine` are always offered once it has.
-          <p className="p-2 text-xs text-muted-foreground">
+          <p className="p-2 text-xs text-fg-2">
             {m["tree.readingLibraries"]()}
           </p>
         ) : (
@@ -711,7 +711,7 @@ export function FileTree({
                   "shrink-0 rounded p-0.5",
                   activeProject === node.path
                     ? "text-emerald-500"
-                    : "text-faint hover:text-foreground",
+                    : "text-faint hover:text-fg-1",
                 )}
               >
                 <Play

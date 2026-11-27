@@ -74,16 +74,16 @@ export function TapChainEditor({
         <DialogHeader>
           <DialogTitle>{m["tapChain.title"]({ tap, node })}</DialogTitle>
         </DialogHeader>
-        <p className="text-xs text-muted-foreground">
+        <p className="text-xs text-fg-2">
           {modules.length ? m["tapChain.routed"]() : m["tapChain.empty"]()}
         </p>
         <ol className="flex flex-col gap-1">
           {modules.map((id, i) => (
             <li
               key={id}
-              className="flex items-center gap-2 rounded border border-border px-2 py-1 text-sm"
+              className="flex items-center gap-2 rounded border border-hairline px-2 py-1 text-sm"
             >
-              <span className="w-5 text-right text-xs tabular-nums text-muted-foreground">
+              <span className="w-5 text-right text-xs tabular-nums text-fg-2">
                 {i + 1}
               </span>
               <span className="flex-1 truncate">{labels[id]}</span>
@@ -134,7 +134,7 @@ export function TapChainEditor({
         </div>
         {/* The modules themselves, knobs and all: the same cards the graph draws, on the same stores. */}
         {modules.length > 0 && (
-          <div className="h-64 min-h-0 overflow-hidden rounded border border-border">
+          <div className="h-64 min-h-0 overflow-hidden rounded border border-hairline">
             {renderCards(modules)}
           </div>
         )}

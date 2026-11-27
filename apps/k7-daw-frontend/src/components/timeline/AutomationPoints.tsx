@@ -105,7 +105,7 @@ export function AutomationPoints({
           })}
           title={m["tl.autoPointHint"]()}
           className={cn(
-            "absolute z-10 size-3 -translate-x-1/2 -translate-y-1/2 rounded-full border border-background bg-(--k7-curve) after:absolute after:-inset-3.5 after:content-[''] focus-visible:shadow-(--k7-focus-ring) focus-visible:outline-none",
+            "absolute z-10 size-3 -translate-x-1/2 -translate-y-1/2 rounded-full border border-ground bg-(--k7-curve) after:absolute after:-inset-3.5 after:content-[''] focus-visible:shadow-(--k7-focus-ring) focus-visible:outline-none",
             !readOnly && "cursor-grab",
             drag?.i === i && drag.moved && "cursor-grabbing",
           )}

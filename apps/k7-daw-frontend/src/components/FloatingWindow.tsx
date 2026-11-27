@@ -97,7 +97,7 @@ export function FloatingWindow({
           <button
             type="button"
             onClick={onClose}
-            className="floating-window-cancel rounded p-0.5 hover:bg-accent hover:text-foreground"
+            className="floating-window-cancel rounded p-0.5 hover:bg-row hover:text-fg-1"
             aria-label={closeLabel ?? `Hide ${title.toLowerCase()}`}
             title={closeLabel ?? `Hide ${title.toLowerCase()}`}
           >

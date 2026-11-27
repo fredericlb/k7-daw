@@ -30,7 +30,7 @@ export function ExternalFooter({
   return (
     <div className={className}>
       <form
-        className="flex shrink-0 items-center gap-2 border-t border-border px-3 py-1"
+        className="flex shrink-0 items-center gap-2 border-t border-hairline px-3 py-1"
         onSubmit={(e) => {
           e.preventDefault();
           const l = line.trim();
@@ -39,7 +39,7 @@ export function ExternalFooter({
           onRun(l);
         }}
       >
-        <Terminal className="h-4 w-4 shrink-0 text-muted-foreground" />
+        <Terminal className="h-4 w-4 shrink-0 text-fg-2" />
         <input
           ref={lineRef}
           value={line}
@@ -48,13 +48,13 @@ export function ExternalFooter({
           spellCheck={false}
           autoCapitalize="off"
           autoCorrect="off"
-          className="min-w-0 flex-1 bg-transparent py-0.5 rounded-sm font-mono text-xs outline-none focus-visible:ring-1 focus-visible:ring-ring placeholder:text-muted-foreground"
+          className="min-w-0 flex-1 bg-transparent py-0.5 rounded-sm font-mono text-xs outline-none focus-visible:ring-1 focus-visible:ring-focus placeholder:text-fg-2"
         />
       </form>
-      <footer className="flex shrink-0 items-center gap-2 border-t border-border px-3 py-1">
+      <footer className="flex shrink-0 items-center gap-2 border-t border-hairline px-3 py-1">
         {back}
         {status ? (
-          <p className="min-w-0 flex-1 truncate text-xs text-muted-foreground">
+          <p className="min-w-0 flex-1 truncate text-xs text-fg-2">
             {status}
           </p>
         ) : null}
@@ -68,7 +68,7 @@ export function ExternalFooter({
                 ? m["extsrf.exitFullscreen"]()
                 : m["extsrf.fullscreen"]()
             }
-            className="ml-auto flex shrink-0 items-center rounded px-1 py-0.5 text-muted-foreground hover:bg-accent"
+            className="ml-auto flex shrink-0 items-center rounded px-1 py-0.5 text-fg-2 hover:bg-row"
           >
             {fullscreen.active ? (
               <Minimize className="h-4 w-4" />

@@ -35,18 +35,18 @@ function Leaf<T>({ n }: { n: TreeNode<T> }) {
     <>
       <span className="flex min-w-0 items-center gap-2">
         {n.badge ? (
-          <span className="w-10 shrink-0 rounded bg-muted px-1 text-center font-mono text-[11px] uppercase text-muted-foreground">
+          <span className="w-10 shrink-0 rounded bg-row px-1 text-center font-mono text-[11px] uppercase text-fg-2">
             {n.badge}
           </span>
         ) : null}
         <span
-          className={`truncate font-mono ${n.entry || n.children ? "" : "text-muted-foreground"}`}
+          className={`truncate font-mono ${n.entry || n.children ? "" : "text-fg-2"}`}
         >
           {n.label}
         </span>
       </span>
       {n.hint ? (
-        <span className="shrink-0 truncate font-mono text-xs text-muted-foreground">
+        <span className="shrink-0 truncate font-mono text-xs text-fg-2">
           {n.hint}
         </span>
       ) : null}
@@ -119,7 +119,7 @@ function Level<T>({
               ) : (
                 <>
                   <span className="truncate font-mono">{n.label}</span>
-                  <ChevronRight className="size-3.5 text-muted-foreground" />
+                  <ChevronRight className="size-3.5 text-fg-2" />
                 </>
               )}
             </button>

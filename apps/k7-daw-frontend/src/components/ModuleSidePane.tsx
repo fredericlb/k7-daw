@@ -149,13 +149,13 @@ export function ModuleSidePane({
   }, [rack]);
 
   return (
-    <div className="flex min-w-0 flex-1 flex-col border-l border-border">
+    <div className="flex min-w-0 flex-1 flex-col border-l border-hairline">
       <div
-        className="flex items-center gap-2 border-b border-border px-3 py-1 text-xs"
+        className="flex items-center gap-2 border-b border-hairline px-3 py-1 text-xs"
         title={m["mod.fileHint"]()}
       >
         <span className="font-semibold text-primary-text">module</span>
-        <span className="truncate text-foreground">{refName}</span>
+        <span className="truncate text-fg-1">{refName}</span>
         <span className="ml-auto truncate text-faint">
           {file?.path ?? path}
         </span>

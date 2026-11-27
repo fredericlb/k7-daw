@@ -218,15 +218,15 @@ export function ChainsBuilder({
   const fileError = fileGraph && "error" in fileGraph ? fileGraph.error : null;
 
   return (
-    <div className="absolute inset-0 z-10 flex bg-background">
+    <div className="absolute inset-0 z-10 flex bg-ground">
       {/* No chain LIST here: the file tree's Libraries tab is the navigation, and a second list would be two places to look. */}
-      <header className="absolute right-2 top-2 z-20 flex items-center gap-2 rounded border bg-background px-2 py-1">
+      <header className="absolute right-2 top-2 z-20 flex items-center gap-2 rounded border bg-ground px-2 py-1">
         <Workflow className="size-3.5" />
         <span className="text-xs font-medium">{open || "—"}</span>
         <button
           type="button"
           onClick={onClose}
-          className="text-xs text-muted-foreground hover:underline"
+          className="text-xs text-fg-2 hover:underline"
         >
           {m["common.closeLower"]()}
         </button>
@@ -242,9 +242,9 @@ export function ChainsBuilder({
                 type="button"
                 onClick={() => setOpenFile(f.path)}
                 className={cn(
-                  "rounded px-1.5 py-0.5 text-[11px] hover:bg-muted",
+                  "rounded px-1.5 py-0.5 text-[11px] hover:bg-row",
                   (openFile ?? files[0]?.path) === f.path &&
-                    "bg-muted font-medium",
+                    "bg-row font-medium",
                 )}
               >
                 {f.label}
@@ -273,7 +273,7 @@ export function ChainsBuilder({
                     if (name?.trim()) void command(`node new ${name.trim()}`);
                   });
                 }}
-                className="ml-auto rounded px-1.5 py-0.5 text-[11px] text-muted-foreground hover:bg-muted"
+                className="ml-auto rounded px-1.5 py-0.5 text-[11px] text-fg-2 hover:bg-row"
               >
                 + nœud
               </button>
@@ -296,7 +296,7 @@ export function ChainsBuilder({
               "shrink-0 truncate border-t px-2 py-1 text-[11px]",
               needsAttention(autosave.status)
                 ? "text-amber-500"
-                : "text-muted-foreground",
+                : "text-fg-2",
             )}
             title={autosave.reason ?? undefined}
           >
@@ -317,19 +317,19 @@ export function ChainsBuilder({
               onClick={() => setError(null)}
               aria-label={m["common.closeLower"]()}
               title={m["common.closeLower"]()}
-              className="shrink-0 rounded p-0.5 text-muted-foreground hover:text-foreground"
+              className="shrink-0 rounded p-0.5 text-fg-2 hover:text-fg-1"
             >
               <X className="size-3.5" />
             </button>
           </div>
         )}
         {!open ? (
-          <p className="grid h-full place-items-center text-sm text-muted-foreground">
+          <p className="grid h-full place-items-center text-sm text-fg-2">
             {m["cb.pickChain"]()}
           </p>
         ) : !drawn ? (
           <div className="grid h-full place-items-center">
-            <Spinner className="text-muted-foreground" />
+            <Spinner className="text-fg-2" />
           </div>
         ) : (
           <DomChains

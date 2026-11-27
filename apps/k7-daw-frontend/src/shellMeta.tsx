@@ -137,7 +137,7 @@ export function TransportClock({
         onToggle();
       }}
       className={cn(
-        "type-mono-timecode mx-1 whitespace-nowrap rounded-md px-1 text-foreground tabular-nums",
+        "type-mono-timecode mx-1 whitespace-nowrap rounded-md px-1 text-fg-1 tabular-nums",
         onToggle && "cursor-pointer hover:bg-on-fill",
       )}
     >
@@ -162,7 +162,7 @@ export function MiniTransport({
   onToggle: () => void;
 }) {
   return (
-    <div className="flex shrink-0 items-center gap-1 border-b border-border bg-popover px-2 py-1">
+    <div className="flex shrink-0 items-center gap-1 border-b border-hairline bg-menu px-2 py-1">
       <button
         type="button"
         disabled={waiting}
@@ -182,7 +182,7 @@ export function MiniTransport({
               : m["transport.play"]()
         }
         aria-busy={waiting}
-        className="flex h-6 w-6 items-center justify-center rounded text-foreground hover:bg-accent disabled:opacity-50"
+        className="flex h-6 w-6 items-center justify-center rounded text-fg-1 hover:bg-row disabled:opacity-50"
       >
         {waiting ? (
           <Spinner size="xs" inherit />

@@ -2153,7 +2153,7 @@ function TimelineTabView({
     );
   if (!proj)
     return (
-      <div className="p-4 text-sm text-muted-foreground">
+      <div className="p-4 text-sm text-fg-2">
         {m["common.loading"]()}
       </div>
     );
@@ -2458,13 +2458,13 @@ function TimelineTabView({
             </div>
             {/* ruler */}
             <div
-              className="sticky top-0 z-40 flex bg-background"
+              className="sticky top-0 z-40 flex bg-ground"
               style={{ height: ROW_H }}
             >
               {/* The corner: sticky BOTH ways, and needing no ground of its own since the ruler row is opaque across the full width. */}
               <div
                 style={{ width: GUTTER }}
-                className="sticky left-0 z-10 flex shrink-0 items-center border-r border-border bg-background px-1"
+                className="sticky left-0 z-10 flex shrink-0 items-center border-r border-hairline bg-ground px-1"
               >
                 {/* NEW TRACK, in the corner: the one place above the lanes that scrolls with neither axis, and `track new` like everything else. */}
                 {/* One button, two shapes: a song with no frame has one kind of lane, so a menu of one would be a click for nothing. */}
@@ -2715,7 +2715,7 @@ function TimelineTabView({
               {/* The hovered task's text, hung under the ruler: inside it, the ruler's own clipping would cut it off. */}
               {hoverTask && (
                 <div
-                  className="pointer-events-none absolute z-50 max-w-xs rounded border border-border bg-popover px-2 py-1 text-xs text-popover-foreground shadow"
+                  className="pointer-events-none absolute z-50 max-w-xs rounded border border-hairline bg-menu px-2 py-1 text-xs text-fg-1 shadow"
                   style={{ top: ROW_H, left: GUTTER + x(hoverTask.beat) }}
                 >
                   {hoverTask.text}
@@ -2761,7 +2761,7 @@ function TimelineTabView({
                       style={{ width: GUTTER }}
                       {...gutterProps(row)}
                       className={cn(
-                        "flex shrink-0 cursor-pointer select-none items-center gap-1 border-r border-border px-2",
+                        "flex shrink-0 cursor-pointer select-none items-center gap-1 border-r border-hairline px-2",
                         GUTTER_STICKY,
                         inSel && "bg-primary/20",
                         labelled && LABEL_SELECTED,
@@ -2786,7 +2786,7 @@ function TimelineTabView({
                     </div>
                     <div
                       className={cn(
-                        "relative overflow-hidden bg-muted/60",
+                        "relative overflow-hidden bg-row/60",
                         UNDER_NAMES,
                       )}
                       style={{ width: laneW }}
@@ -2827,7 +2827,7 @@ function TimelineTabView({
                         );
                       }}
                       className={cn(
-                        "flex shrink-0 cursor-pointer select-none border-r border-border",
+                        "flex shrink-0 cursor-pointer select-none border-r border-hairline",
                         msaLine
                           ? "flex-col justify-center gap-2 px-1"
                           : twoLine
@@ -3162,7 +3162,7 @@ function TimelineTabView({
                       width={GUTTER}
                       gutter={gutterProps(row)}
                       className={cn(
-                        "flex shrink-0 cursor-pointer select-none items-center gap-1 truncate border-r border-border px-2 text-[11px] text-muted-foreground",
+                        "flex shrink-0 cursor-pointer select-none items-center gap-1 truncate border-r border-hairline px-2 text-[11px] text-fg-2",
                         GUTTER_STICKY,
                         // Indented past its lane: the knob belongs to the lane above.
                         "pl-5",
@@ -3259,7 +3259,7 @@ function TimelineTabView({
                     {...gutterProps(row)}
                     className={cn(
                       // No `relative`: GUTTER_STICKY positions it, and two position classes would fight in `cn`.
-                      "flex shrink-0 cursor-pointer select-none overflow-hidden border-r border-border",
+                      "flex shrink-0 cursor-pointer select-none overflow-hidden border-r border-hairline",
                       msaLine
                         ? "flex-col justify-center gap-2 px-1"
                         : twoLine
@@ -3515,7 +3515,7 @@ function TimelineTabView({
                     {t.generated ? (
                       <div
                         title={m["tl.generatedTitle"]({ name: t.name })}
-                        className="pointer-events-none absolute inset-0 text-muted-foreground/30"
+                        className="pointer-events-none absolute inset-0 text-fg-2/30"
                         style={{ backgroundImage: HATCH }}
                       />
                     ) : (
@@ -3694,7 +3694,7 @@ function TimelineTabView({
                                   "group absolute top-1 flex h-[calc(100%-8px)] cursor-grab overflow-hidden rounded-[4px] px-2 font-mono text-[11px] active:cursor-grabbing isolate select-none [-webkit-touch-callout:none]",
                                   // Disabled: still placed, still readable, plainly off — an event you cannot see is a deleted one.
                                   c.disabled &&
-                                    "opacity-40 saturate-0 outline-dashed outline-1 outline-muted-foreground",
+                                    "opacity-40 saturate-0 outline-dashed outline-1 outline-fg-2",
                                   // A SIBLING of the one under the caret: light on purpose, so it does not compete with the clip you picked.
                                   kin &&
                                     "outline outline-1 -outline-offset-1 outline-primary/60 brightness-110",
@@ -3705,7 +3705,7 @@ function TimelineTabView({
                                     "outline outline-2 outline-amber-500",
                                   // A TIMELINE placed whole: dashed, its length fixed and its content drawn inside.
                                   c.timeline &&
-                                    "outline-dashed outline-1 -outline-offset-1 outline-foreground/50",
+                                    "outline-dashed outline-1 -outline-offset-1 outline-fg-1/50",
                                   // The clip Fit just framed: ringed a moment, so the eye finds it.
                                   (flash === `${t.id}/${c.id}` ||
                                     flash === `/${c.id}`) &&
@@ -3955,7 +3955,7 @@ function TimelineTabView({
                                 {/* A split sent and not yet answered: the cut drawn where the two halves will meet. */}
                                 {splitAt !== undefined && splitAt > c.start && (
                                   <div
-                                    className="pointer-events-none absolute inset-y-0 z-10 w-px bg-foreground/80"
+                                    className="pointer-events-none absolute inset-y-0 z-10 w-px bg-fg-1/80"
                                     style={{
                                       left: (splitAt - drawStart) * ppb,
                                     }}

@@ -90,14 +90,14 @@ function MasteringTabView({
   if (missing.length)
     return (
       <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-auto p-6 text-sm">
-        <p className="text-muted-foreground">
+        <p className="text-fg-2">
           {m["mst.portrait"]()}{" "}
           {missing.length === 1
             ? m["mst.oneUnmapped"]()
             : m["mst.someUnmapped"]({ n: missing.length })}{" "}
           — {m["mst.see"]()} <code className="font-mono">{surface.file}</code>.
         </p>
-        <ul className="list-inside list-disc text-muted-foreground">
+        <ul className="list-inside list-disc text-fg-2">
           {missing.map((c) => (
             <li key={c.id}>
               <code className="font-mono">{c.id}</code> — {c.wants}
@@ -110,7 +110,7 @@ function MasteringTabView({
   return (
     <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-3 overflow-auto p-4">
       {/* Which node this is a picture of, worth knowing first: every knob below is on that module (docs/mastering.md). */}
-      <p className="shrink-0 text-xs text-muted-foreground">
+      <p className="shrink-0 text-xs text-fg-2">
         {modules.length === 1 ? (
           <>
             {m["mst.module"]()} <code className="font-mono">{modules[0]}</code>

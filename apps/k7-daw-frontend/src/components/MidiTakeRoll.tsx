@@ -108,9 +108,9 @@ export function MidiTakeRoll({
     barLines.push(b);
 
   return (
-    <section className="flex h-full min-h-0 w-full min-w-0 flex-1 flex-col gap-1 bg-card/40 px-3 py-2">
+    <section className="flex h-full min-h-0 w-full min-w-0 flex-1 flex-col gap-1 bg-panel/40 px-3 py-2">
       <DockHeaderRow>
-        <div className="flex min-w-0 flex-1 items-center gap-3 text-xs text-muted-foreground">
+        <div className="flex min-w-0 flex-1 items-center gap-3 text-xs text-fg-2">
           {count.phase === "count-in" ? (
             <>
               <span className="text-sm uppercase tracking-wider">
@@ -150,7 +150,7 @@ export function MidiTakeRoll({
         </Button>
       </DockHeaderRow>
       <DockHint text={m["clip.takeHint"]()} />
-      <div className="relative flex min-h-0 flex-1 overflow-hidden rounded border border-border bg-background">
+      <div className="relative flex min-h-0 flex-1 overflow-hidden rounded border border-hairline bg-ground">
         {/* The keys: a C is named, a black key shaded, so a pitch reads without counting rows. */}
         <div className="relative h-full shrink-0" style={{ width: KEYS_W }}>
           {Array.from({ length: rows }, (_, i) => {
@@ -159,7 +159,7 @@ export function MidiTakeRoll({
             return (
               <div
                 key={k}
-                className={`absolute left-0 right-0 border-b border-border/40 pl-0.5 text-[11px] leading-none text-muted-foreground ${black ? "bg-muted" : ""}`}
+                className={`absolute left-0 right-0 border-b border-hairline/40 pl-0.5 text-[11px] leading-none text-fg-2 ${black ? "bg-row" : ""}`}
                 style={{ top: `${y(k)}%`, height: `${100 / rows}%` }}
               >
                 {k % 12 === 0 ? `C${Math.floor(k / 12) - 1}` : ""}
@@ -171,7 +171,7 @@ export function MidiTakeRoll({
           {barLines.map((b) => (
             <div
               key={b}
-              className="absolute top-0 h-full w-px bg-border"
+              className="absolute top-0 h-full w-px bg-hairline"
               style={{ left: `${x(b)}%` }}
             />
           ))}
@@ -198,7 +198,7 @@ export function MidiTakeRoll({
               className="absolute inset-0"
               style={{ transform: `translateX(${x(now)}%)` }}
             >
-              <div className="h-full w-px bg-foreground/70" />
+              <div className="h-full w-px bg-fg-1/70" />
             </div>
           </div>
         </div>
