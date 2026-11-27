@@ -22,6 +22,18 @@ use std::process::ExitCode;
 use std::{fs, io};
 use ts_rs::TS;
 
+/// Biome's order for two names: by letter, a capital before its lowercase where only the case differs.
+fn biome_order(a: &str, b: &str) -> std::cmp::Ordering {
+    for (x, y) in a.chars().zip(b.chars()) {
+        if x == y {
+            continue;
+        }
+        let (lx, ly) = (x.to_lowercase().next().unwrap_or(x), y.to_lowercase().next().unwrap_or(y));
+        return if lx == ly { x.is_lowercase().cmp(&y.is_lowercase()) } else { lx.cmp(&ly) };
+    }
+    a.len().cmp(&b.len())
+}
+
 fn write_types(dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
     if dir.exists() {
         fs::remove_dir_all(dir)?;
@@ -59,8 +71,8 @@ fn write_types(dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
     let mut names = fs::read_dir(dir)?
         .map(|e| e.map(|e| e.file_name().to_string_lossy().into_owned()))
         .collect::<Result<Vec<_>, io::Error>>()?;
-    // Biome's import order ignores case, so the index is sorted the same way.
-    names.sort_by_key(|n| (n.to_lowercase(), n.clone()));
+    // Biome's export order: letters compare ignoring case, but the first place two names differ only by case puts the capital first.
+    names.sort_by(|a, b| biome_order(a, b));
     let index: String = names
         .iter()
         .filter_map(|n| n.strip_suffix(".ts"))
