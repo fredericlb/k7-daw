@@ -1,6 +1,7 @@
 // MetronomeTempo.tsx — the bar's metronome with the bpm under its icon; a click opens a bubble above it holding the
 // tempo (with Tap), the time signature and the metronome's switch and level. Written through project tempo / meter.
 import { METRONOME_MIN } from "@studio/engine-protocol/build";
+import { tapTempo } from "@studio/k7-wasm/reads";
 import { Button } from "@studio/ui/button";
 import { CapsuleButton } from "@studio/ui/capsule";
 import { Input } from "@studio/ui/input";
@@ -12,7 +13,6 @@ import { useEffect, useRef, useState } from "react";
 import type { RecInfo } from "../hooks/useProjectDoc";
 import { m } from "../paraglide/messages.js";
 import { MetronomeIcon } from "../shellMeta";
-import { tapTempo } from "./tapTempo";
 
 const UNITS = [1, 2, 4, 8, 16, 32] as const;
 const tempoOk = (v: number) => Number.isFinite(v) && v >= 20 && v <= 400;

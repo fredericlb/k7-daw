@@ -105,6 +105,7 @@ import { useLatest } from "../hooks/useLatest";
 import type { ResourceDropEvent } from "../hooks/useTimelineDrop";
 import { useVideoDrag } from "../hooks/useVideoDrag";
 import { isTyping } from "../hooks/useWindowKey";
+import { laneMixOf } from "../laneMix";
 import { cursorOf } from "../modeIcons";
 import { m } from "../paraglide/messages.js";
 import { useEscapeLayer } from "../popins";
@@ -1042,36 +1043,11 @@ function TimelineTabView({
     [selectRow, pickRow, focusRow, beginRowDrag],
   );
 
-  /** …and how a PICTURE lane reads: hidden itself, or hidden because something else is soloed (pictureMix.ts). */
-  const pictureOff = useCallback(
-    (t: WebVideoTrack) =>
-      t.mute || (videoTracks.some((x) => x.solo) && !t.solo),
-    [videoTracks],
-  );
-
-  // How a lane READS: muted, its group muted, or soloed away — mirroring withGroupMix and the engine's solo rule.
-  const groupById = useMemo(
-    () => new Map((proj?.groups ?? []).map((g) => [g.id, g])),
-    [proj],
-  );
-  const effOf = useCallback(
-    (t: WebTrack) => {
-      const g = groupById.get(t.group);
-      return { mute: t.mute || !!g?.mute, solo: t.solo || !!g?.solo };
-    },
-    [groupById],
-  );
+  // How a lane READS: muted, its group muted, or soloed away — mirroring withGroupMix and the engine's solo rule (laneMix.ts).
   // Solo is mixer-wide, so the live pattern lanes count too: a soloed one silences the authored tracks.
-  const anySolo = useMemo(
-    () => allTracks.some((t) => effOf(t).solo),
-    [allTracks, effOf],
-  );
-  const silent = useCallback(
-    (t: WebTrack) => {
-      const e = effOf(t);
-      return e.mute || (anySolo && !e.solo);
-    },
-    [effOf, anySolo],
+  const { effOf, silent, pictureOff } = useMemo(
+    () => laneMixOf(allTracks, proj?.groups ?? [], videoTracks),
+    [allTracks, proj, videoTracks],
   );
 
   // One row up/down: every row when a label is selected, only clip-holding lanes otherwise. Stays put at the ends.

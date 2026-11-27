@@ -18,7 +18,10 @@ const RUST = join(
 );
 const TARGET = "wasm32-unknown-unknown";
 // A target folder is named with --target-dir, never CARGO_TARGET_DIR, which sccache hashes.
-const OUT = process.env.K7_WASM_TARGET_DIR;
+// A folder of its own under the shared one: waveform is a cdylib, whose unhashed rlib the two modules would overwrite.
+const OUT = process.env.K7_WASM_TARGET_DIR
+  ? join(process.env.K7_WASM_TARGET_DIR, "waveform")
+  : undefined;
 const dirArgs = OUT ? ["--target-dir", OUT] : [];
 
 execFileSync(

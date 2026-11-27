@@ -1,36 +1,12 @@
 // clipNames.ts — what a clip is CALLED on screen. A take's id (`gtr_9.1_261030T172747`) and a new
 // sequence's (`keys-seq-1`) are generated, so they read as their lane plus a take bar or a number;
-// a clip someone named is shown as named. The id stays the tooltip's — docs/timeline.md.
+// a clip someone named is shown as named. The id stays the tooltip's — docs/timeline.md. The split is Rust's (song/src/reads/misc.rs).
 
-import { materialRefOf } from "@studio/k7-wasm/schema";
+import { type ClipNameParts, clipNameParts } from "@studio/k7-wasm/reads";
 import { trackLabel } from "@studio/k7-wasm/track";
 
-/** A clip ref read as what a person recognises; `copy` is the `-n` a processed copy of a take carries. */
-export type ClipNameParts =
-  | { kind: "take"; lane: string; bar: number; copy?: number }
-  | { kind: "sequence"; lane: string; n: number }
-  | { kind: "named"; name: string };
-
-// `{lane}_{bar}.{beat}_{yymmdd}T{hhmmss}`, then `-n` per processed copy — take-render's recordTake.ts.
-const TAKE = /^(.+)_(\d+)\.\d+_\d{6}T\d{6}(?:-(\d+))?$/;
-// `{lane}-seq-{n}` — the sequence `sequence empty` makes on a lane.
-const SEQUENCE = /^(.+)-seq-(\d+)$/;
-
-/** Split a clip ref (or a placement id `ref@start`, nested or not) into the parts its shown name is made of. */
-export function clipNameParts(ref: string): ClipNameParts {
-  const material = materialRefOf(ref);
-  const take = TAKE.exec(material);
-  if (take)
-    return {
-      kind: "take",
-      lane: take[1],
-      bar: Number(take[2]),
-      ...(take[3] ? { copy: Number(take[3]) } : {}),
-    };
-  const seq = SEQUENCE.exec(material);
-  if (seq) return { kind: "sequence", lane: seq[1], n: Number(seq[2]) };
-  return { kind: "named", name: material };
-}
+export type { ClipNameParts };
+export { clipNameParts };
 
 /** The words a shown name is spelled with — the app's messages, passed in so this stays pure. */
 export interface ClipNameWords {

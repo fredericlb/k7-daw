@@ -14,7 +14,10 @@ const TYPES = join(PKG, "src", "types");
 const CONSTS = join(PKG, "src", "consts.generated.ts");
 const MODULE = join(PKG, "src", "k7Wasm.wasm");
 // A target folder is named with --target-dir, never CARGO_TARGET_DIR, which sccache hashes.
-const OUT = process.env.K7_WASM_TARGET_DIR;
+// A folder of its own under the shared one: waveform is a cdylib, whose unhashed rlib the two modules would overwrite.
+const OUT = process.env.K7_WASM_TARGET_DIR
+  ? join(process.env.K7_WASM_TARGET_DIR, "k7-wasm")
+  : undefined;
 const dirArgs = OUT ? ["--target-dir", OUT] : [];
 
 // The hash first, and set in the build, so the module answers the version it was built from (decision 756).

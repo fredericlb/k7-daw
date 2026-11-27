@@ -21,6 +21,7 @@ ours starts goes through it: the dev session's `k7-front` and desktop app (`dev-
 | outside Windows the port moved by `100 × (uid % 100)` (`userPort` in `apps/k7-daw-engine/scripts/sccache.mjs`), a `SCCACHE_SERVER_PORT` already set kept | a server writes its outputs as the user who started it: one account's builds through another's server fail on `Permission denied` |
 | 10 GB for the cache | the disk is shared with the engine's build folders |
 | a target folder named with `--target-dir`, never `CARGO_TARGET_DIR` | sccache puts every `CARGO_*` variable in its key: a per-branch `CARGO_TARGET_DIR` would make each branch miss what the others compiled |
+| the browser crates in their own target folder beside the backend's (`<target>-browser`, `scripts/agent/mac-checks.sh`) | `waveform` is a `cdylib` too, so Cargo names its rlib without a hash: the backend's build (`encode`) and `k7-wasm`'s (no feature) write the same file, and the last one wins |
 
 What sccache does not cache: a workspace crate built incrementally (every workspace member in a
 debug build), a `bin`, `cdylib` or `proc-macro` crate, and a compile whose paths changed. What it

@@ -18,6 +18,9 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },
+  "dependencies": {
+    "@studio/k7-wasm": "*"
+  },
   "devDependencies": {
     "vitest": "^4.1.10"
   }

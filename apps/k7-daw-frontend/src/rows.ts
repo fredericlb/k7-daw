@@ -1,10 +1,15 @@
 // rows.ts — the lane layout shared by the Timeline and the Minimap: a group isn't a track
 // (the compiled project keeps it in `groups` with a pointer on each member), so the
 // flattening into a header plus indented members lives here rather than in either
-// component. Both must be fed the same tracks — live Strudel lanes come from their own
+// component (the layout is Rust's, song/src/reads/rows.rs). Both must be fed the same tracks — live Strudel lanes come from their own
 // endpoint, so passing only `project.tracks` silently loses them and any group they fill.
 
 import { splitPort } from "@studio/graph-model";
+import {
+  projectRows as layout,
+  placementIndex,
+  trackPlacing as placing,
+} from "@studio/k7-wasm/reads";
 import { HATCH } from "@studio/ui-timeline/lanes";
 import type {
   WebAutomationLane,
@@ -40,75 +45,25 @@ export function projectRows(
   // `trackOrder` as stated, every lane — where each picture row goes among the sound rows (docs/picture.md).
   order?: readonly string[],
 ): Row[] {
-  const byId = new Map(project.groups.map((g) => [g.id, g]));
-  const members = new Map<string, { track: WebTrack; index: number }[]>();
-  tracks.forEach((track, index) => {
-    if (!byId.has(track.group)) return;
-    const list = members.get(track.group);
-    if (list) list.push({ track, index });
-    else members.set(track.group, [{ track, index }]);
+  const lanes = Object.fromEntries(
+    Object.entries(automation).map(([id, l]) => [id, l.length]),
+  );
+  return layout({
+    groups: project.groups.map((g) => g.id),
+    tracks: tracks.map((t) => ({ id: t.id, group: t.group })),
+    video: videoTracks.map((t) => t.id),
+    automation: lanes,
+    order,
+  }).map((r): Row => {
+    if (r.kind === "group")
+      return { kind: "group", group: project.groups[r.group] };
+    if (r.kind === "video")
+      return { kind: "video", track: videoTracks[r.track] };
+    const track = tracks[r.track];
+    return r.kind === "track"
+      ? { kind: "track", track, index: r.index, grouped: r.grouped }
+      : { kind: "automation", track, lane: automation[track.id][r.lane] };
   });
-
-  // The sound rows in UNITS — a lane with its automation, or a group with its members — since a picture row never splits one.
-  const units: { lanes: string[]; rows: Row[] }[] = [];
-  const done = new Set<string>();
-  const laneRows = (track: WebTrack, index: number, grouped: boolean) => [
-    { kind: "track" as const, track, index, grouped },
-    ...(automation[track.id] ?? []).map((lane) => ({
-      kind: "automation" as const,
-      track,
-      lane,
-    })),
-  ];
-  tracks.forEach((track, index) => {
-    const group = byId.get(track.group);
-    if (!group) {
-      units.push({
-        lanes: [laneOf(track.id)],
-        rows: laneRows(track, index, false),
-      });
-      return;
-    }
-    if (done.has(group.id)) return; // already emitted with its header
-    done.add(group.id);
-    const list = members.get(group.id) ?? [];
-    units.push({
-      lanes: [group.id, ...list.map((m) => laneOf(m.track.id))],
-      rows: [
-        { kind: "group", group },
-        ...list.flatMap((m) => laneRows(m.track, m.index, true)),
-      ],
-    });
-  });
-
-  // Picture rows top first — the document is bottom-first, and a row above another is IN FRONT of it (docs/picture.md).
-  const pictures: Row[] = [...videoTracks]
-    .reverse()
-    .map((track) => ({ kind: "video", track }));
-  // Each picture row after the last sound lane `trackOrder` lists before it; before them all, on top; unlisted, at the bottom.
-  const at = new Map((order ?? []).map((id, i) => [id, i]));
-  const sound = new Set(units.flatMap((u) => u.lanes));
-  const anchorOf = (id: string): string | null | undefined => {
-    const i = at.get(id);
-    if (i === undefined || !order) return undefined;
-    for (let k = i - 1; k >= 0; k--) if (sound.has(order[k])) return order[k];
-    return null;
-  };
-  const anchored = new Map<string | null, Row[]>();
-  const unlisted: Row[] = [];
-  for (const r of pictures) {
-    const a = r.kind === "video" ? anchorOf(r.track.id) : undefined;
-    if (a === undefined) unlisted.push(r);
-    else anchored.set(a, [...(anchored.get(a) ?? []), r]);
-  }
-  return [
-    ...(anchored.get(null) ?? []),
-    ...units.flatMap((u) => [
-      ...u.rows,
-      ...u.lanes.flatMap((l) => anchored.get(l) ?? []),
-    ]),
-    ...unlisted,
-  ];
 }
 
 // A row's identity, never its index, and PREFIXED by kind: a song may name an audio lane and a video lane the same thing.
@@ -202,17 +157,16 @@ export function trackPlacing(
   clip: string,
 ): string {
   if (!project || !clip) return "";
-  for (const t of project.tracks)
-    if (
-      t.clips?.some((c) => c.id === clip) ||
-      // A frozen lane's authored clips still sit on it, under the render.
-      t.frozenMaterial?.some((c) => c.id === clip)
-    )
-      return t.id;
-  return "";
+  return placing(
+    project.tracks.map((t) => ({
+      id: t.id,
+      clips: t.clips?.map((c) => ({ id: c.id })),
+      frozenMaterial: t.frozenMaterial?.map((c) => ({ id: c.id })),
+    })),
+    clip,
+  );
 }
 
-/** The beat `clip` is placed at on lane `track`, or null. */
 /** The placement on `track` playing material `ref` — a take is named by its material, its placement by `ref@start`. */
 export function placementOf(
   project: WebProject | null | undefined,
@@ -220,12 +174,14 @@ export function placementOf(
   ref: string,
 ): WebClip | null {
   const lane = project?.tracks.find((t) => t.id === track);
-  return (
-    lane?.clips.find(
-      (c) =>
-        c.id === ref ||
-        c.name === ref ||
-        !!c.pieces?.some((p) => p.name === ref),
-    ) ?? null
+  if (!lane) return null;
+  const at = placementIndex(
+    lane.clips.map((c) => ({
+      id: c.id,
+      name: c.name,
+      pieces: c.pieces?.map((p) => ({ name: p.name })),
+    })),
+    ref,
   );
+  return at === null ? null : lane.clips[at];
 }

@@ -42,7 +42,8 @@
     "./intake": "./src/intake.ts",
     "./kit": "./src/kit.ts",
     "./clipboard": "./src/clipboard.ts",
-    "./draft": "./src/draft.ts"
+    "./draft": "./src/draft.ts",
+    "./reads": "./src/reads.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",

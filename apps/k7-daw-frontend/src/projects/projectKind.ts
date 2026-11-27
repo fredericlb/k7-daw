@@ -1,21 +1,14 @@
 // projectKind.ts — what a home-page row says about a project beyond its name: the archetype its
 // declared surfaces amount to, and how long ago it last changed. Pure, so both are tested without
-// a page. See ../../docs/projects.md.
+// a page. The archetype rule is Rust's (song/src/reads/misc.rs). See ../../docs/projects.md.
 
+import { shapeOfSurfaces as shapeOf } from "@studio/k7-wasm/reads";
 import type { ProjectShape } from "@studio/k7-wasm/types";
 
 /** The archetype a project's surfaces read as, or null when the service is too old to say. */
-export function shapeOfSurfaces(
+export const shapeOfSurfaces = (
   surfaces: readonly string[] | undefined,
-): ProjectShape | null {
-  if (!surfaces) return null;
-  const has = (t: string) => surfaces.includes(t);
-  if (has("turntables")) return "mix";
-  if (has("timeline")) return has("viewport") ? "video" : "arrangement";
-  if (has("viewport")) return "live-video";
-  // No surface at all is a rig played through, which is what `live` writes; a mastering strip alone is one too.
-  return "live";
-}
+): ProjectShape | null => shapeOf(surfaces) as ProjectShape | null;
 
 const STEPS: [Intl.RelativeTimeFormatUnit, number][] = [
   ["minute", 60],

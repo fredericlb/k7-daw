@@ -1,18 +1,9 @@
-// mixerStrips.ts — which modules the Mixer panel draws, and in what order. Pure, and in a file
-// of its own so it can be tested without the app: the panel itself is a canvas, and this is the
-// only decision it makes.
+// mixerStrips.ts — which modules the Mixer panel draws, and in what order (song/src/reads/clip.rs).
+// A reader would get wrong that a shared bus strip is ONE card: modules are listed once, in TRACK order.
 
+import { mixerModules as read } from "@studio/k7-wasm/reads";
 import type { WebProject } from "./types";
 
 /** The mixer modules to draw, in TRACK order — a track with no mixer contributes nothing, and a shared bus strip is ONE card. */
-export function mixerModules(proj: WebProject | null): string[] {
-  const seen = new Set<string>();
-  const out: string[] = [];
-  for (const t of proj?.tracks ?? []) {
-    const name = t.mixer?.module;
-    if (!name || seen.has(name)) continue;
-    seen.add(name);
-    out.push(name);
-  }
-  return out;
-}
+export const mixerModules = (proj: WebProject | null): string[] =>
+  proj ? read(proj.tracks) : [];

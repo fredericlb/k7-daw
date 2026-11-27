@@ -2,74 +2,27 @@
 // picture (seconds), two documents read off one folder, and the compile's diagnostics.
 // Re-exported by types.ts, which is what every consumer imports.
 
+import type { EventDoc } from "@studio/k7-wasm/types";
+
 // --- Timeline: the compiled, flat project (mirrors the brain's ProjectDoc) ------
 
+// GENERATED from the Rust views (apps/k7-daw-wasm/song/src/views/web, ts-rs): the page's WebProject and the tracks, clips and notes in it.
+export type {
+  WebClip,
+  WebGroup,
+  WebMarker,
+  WebMixer,
+  WebNote,
+  WebPlugin,
+  WebProject,
+  WebTimeline,
+  WebTrack,
+} from "@studio/k7-wasm/types";
+
+/** A placement's own fields, as authored — the engine document's `EventDoc`. */
+export type WebEvent = EventDoc;
+
 // Compiled by the backend, so the Timeline knows nothing about chains or modules — see docs/document.md.
-
-export interface WebNote {
-  time: number; // beats, relative to the clip
-  duration: number; // beats
-  key: number; // MIDI note number
-  // 0..1 as the file states it (NoteSchema's `v`); ABSENT means the schema's default of 1, and dragging back to full clears the field.
-  vel?: number;
-  // A pad's two effects UNREALISED, drawn as an icon and expanded by the engine — see apps/k7-daw-wasm/song/docs/padEffects.md.
-  repeat?: number;
-  skip?: number;
-}
-export interface WebClip {
-  id: string;
-  type: "audio" | "midi";
-  name: string;
-  start: number; // beats
-  length: number; // beats (0 == natural)
-  /** WHICH part of the source this placement draws, all three optional — see docs/document.md. */
-  offset?: number; // audio: seconds into the source; midi: playStart (beats)
-  sourceFrom?: number;
-  sourceTo?: number;
-  // The audio file's NAME, never its path — enough to tell that a bounce repointed the clip; see docs/document.md.
-  sourceName?: string;
-  // A clip-relative loop [loopStart, loopEnd) in beats, repeated to fill `length`; absent or both 0 == no loop.
-  loopStart?: number;
-  loopEnd?: number;
-  // The clip is time-stretched: just the fact (markers stay engine-side), so the timeline can flag it.
-  warped?: boolean;
-  // …and THIS event declines that map (`event status warp`); both are sent, since `warped` alone cannot tell it from "never stretched".
-  warpOff?: boolean;
-  // Placed but silenced — the event-level `mute`. Still drawn dimmed; the ENGINE is what skips it.
-  disabled?: boolean;
-  /** How long this event fades in and out, IN BEATS; absent means no fade — see docs/document.md. */
-  fadeIn?: number;
-  fadeOut?: number;
-  /** This clip is a RENDER standing in for a frozen lane, and cannot be edited — see apps/k7-daw-wasm/song/docs/freeze.md. */
-  frozen?: boolean;
-  /** What the PLACEMENT itself said, unmerged — read by clipboard.ts and the takes view; see docs/document.md. */
-  event?: WebEvent;
-  /** A PIECE of a comped event: the event's own clip id, and the take it plays (@studio/song docs/takes.md). */
-  comp?: { of: string; take: string };
-  /** A COMPED event, drawn as one clip: the pieces it plays, each a clip of its own on the song's time. */
-  pieces?: WebClip[];
-  /** Which of its fades is half of a crossfade with a neighbour — drawn as one, heard as equal power. */
-  crossfade?: { in?: boolean; out?: boolean };
-  /** A TIMELINE placed as one event: which, and the clips it plays, drawn inside it. Its length is fixed (song docs/timelines.md). */
-  timeline?: { ref: string; clips: WebClip[] };
-  notes: WebNote[]; // midi only
-}
-
-/** A placement's own fields, as authored — mirrors `EventDoc` in @studio/engine-protocol. */
-export interface WebEvent {
-  from?: number | string;
-  to?: number | string;
-  fadeIn?: string;
-  fadeOut?: string;
-  loop?: number;
-  gain?: number; // dB, audio events only — the clip panel's slider
-  disabled?: boolean;
-  warp?: boolean;
-  /** The event's other performances and which plays where, song positions as the file writes them (song docs/takes.md). */
-  takes?: { ref: string; start: string }[];
-  comp?: { take: string; from: string; to: string }[];
-  crossfades?: { at: string; length: string }[];
-}
 
 // A downsampled waveform for one audio clip plus the bar/beat grid aligning it — for the audio-clip editor.
 export interface WebWaveformGrid {
@@ -122,51 +75,6 @@ export interface WaveformStatus {
   warming: boolean;
   done: number;
   total: number;
-}
-export interface WebPlugin {
-  id: string;
-  type: string; // xmlTypeName / format
-  name: string;
-  // An SFZ instrument's file as the module names it: an `@instruments/…` one is asked of the ENGINE, which alone knows if it is there.
-  sfzFile?: string;
-}
-// One track's strip, read off the mixer module at the end of its chain; the tone bands left it — see docs/document.md.
-export interface WebMixer {
-  module: string;
-  volume: number;
-  pan: number;
-}
-export interface WebTrack {
-  id: string;
-  name: string;
-  // The group track this belongs to ('' == none). A group holds no material, so it never appears as a track itself.
-  group: string;
-  // A lane a group's algo/ pattern streams onto: nothing can be authored there, `clips` is only the look-ahead.
-  generated: boolean;
-  // What the track HOLDS ("audio" | "notes" | "audio notes") — the timeline uses it to refuse an illegal clip drop.
-  contentType: string;
-  // Authored track colour ('' == none): a swatch on the label, and the fill of this track's clips.
-  color: string;
-  // The strip at the end of this track's chain; absent means NO strip — not "at unity" — see docs/document.md.
-  mixer?: WebMixer;
-  mute: boolean;
-  solo: boolean;
-  /** Highlighted from the mixer: heard 10 dB up, its fader untouched (apps/k7-daw-wasm/song/docs/highlight.md). */
-  highlight?: boolean;
-  disabled?: boolean; // true ⇒ track is ignored (filtered by the brain); absent when false
-  clips: WebClip[];
-  /** A FROZEN lane's authored clips, drawn over its render and opened from it — see apps/k7-daw-wasm/song/docs/freeze.md. */
-  frozenMaterial?: WebClip[];
-  plugins: WebPlugin[];
-  // `docs`/`todos`, `frozen`, `alternatives` and `alternative` all left this type — see docs/document.md.
-}
-// A group track (mirrors GroupDoc): clipless, drawn as a header with its member tracks indented under it.
-export interface WebGroup {
-  id: string;
-  name: string;
-  color: string;
-  mute: boolean;
-  solo: boolean;
 }
 // A video clip: every time here is SECONDS, picture being cut against the wall clock — apps/k7-daw-frontend/docs/picture.md.
 export interface WebVideoClip {
@@ -298,41 +206,6 @@ export interface WebVideoTrack {
   camera?: string;
   /** …and WHEN that lens opens: `off` never, `auto` while the lane is armed, `on` always. */
   cameraMonitor?: "off" | "auto" | "on";
-}
-
-// A named timeline marker: `beat` is its position, `tc` the timecode it is stored under (the delete key).
-export interface WebMarker {
-  beat: number;
-  name: string;
-  tc: string;
-}
-
-export interface WebProject {
-  name: string;
-  tempo: number;
-  timeSigNumerator: number;
-  timeSigDenominator: number;
-  // The song's OUTPUT level in dB, 0 unity and +6 the top of the fader — apps/k7-daw-wasm/song/docs/masterVolume.md.
-  masterVolume: number;
-  tracks: WebTrack[];
-  groups: WebGroup[];
-  // The metronome enable from settings.k7x — the header button's source of truth; toggling rewrites the file.
-  metronome: boolean;
-  // …and how loud it clicks, 0.2 … 1; never 0, because silence is the flag above (see METRONOME_MIN).
-  metronomeLevel: number;
-  // Count-in length in BARS from settings.k7x (0 == none); the engine applies the actual pre-roll.
-  countIn: number;
-  // Named timeline markers, sorted by beat. Empty when the song has none.
-  markers: WebMarker[];
-  /** The project's other timelines, each drawn by the timeline view in place of `tracks` when it is the one open. */
-  timelines?: WebTimeline[];
-}
-
-/** A timeline of timelines/: its fixed length and its lanes, addressed `<timeline>><lane>` by every event verb. */
-export interface WebTimeline {
-  id: string;
-  length: number; // beats
-  lanes: WebTrack[];
 }
 
 // --- PICTURE: the same folder, read again ----------------------------------------

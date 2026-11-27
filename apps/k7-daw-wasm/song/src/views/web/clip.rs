@@ -83,7 +83,7 @@ pub struct WebClip {
     #[cfg_attr(feature = "ts", ts(optional))]
     pub frozen: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[cfg_attr(feature = "ts", ts(optional, type = "WebEvent"))]
+    #[cfg_attr(feature = "ts", ts(optional, as = "Option<EventDoc>"))]
     pub event: Option<EventDoc>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[cfg_attr(feature = "ts", ts(optional, type = "{ of: string; take: string }"))]

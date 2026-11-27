@@ -1,18 +1,18 @@
-// headphonesHint.ts — when a live input becomes AUDIBLE (monitored, and given a channel), say once
-// per project that the speakers will feed it back: a laptop's own mic and speakers howl the moment
-// they meet. Said at the gesture or on opening such a project, never refused. See ../docs/shell.md.
+// headphonesHint.ts — when a live input becomes AUDIBLE (monitored, and given a channel), say once per project that the speakers feed it back.
+// Said at the gesture or on opening such a project, never refused; the two tests are Rust's (song/src/reads/graph.rs). See ../docs/shell.md.
 
 import type { WebGraph } from "@studio/graph-model";
+import {
+  hasAudibleInput as audible,
+  givesChannel as gives,
+} from "@studio/k7-wasm/reads";
 
 /** A line that hands a live input a channel — the node card's pick. */
-export const givesChannel = (line: string): boolean =>
-  /^node param \S+ @channel \S/.test(line.trim());
+export const givesChannel = (line: string): boolean => gives(line);
 
 /** Whether the graph holds an input that is monitored AND reaches a channel — the state that can feed back. */
 export const hasAudibleInput = (g: Pick<WebGraph, "chains">): boolean =>
-  Object.values(g.chains).some((c) =>
-    c.use.some((s) => s.monitor === "on" && !!s.channel?.length),
-  );
+  audible(g);
 
 const KEY = "k7.headphonesHint";
 

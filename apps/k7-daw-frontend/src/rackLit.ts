@@ -4,72 +4,23 @@
 // and nothing about a sampler's voices. But the browser holds the arrangement and the playhead at
 // the same time, so "which note is sounding" is a question it can answer itself. See
 // apps/k7-daw-wasm/song/docs/racks.md for what that costs — live MIDI and strudel lanes light nothing,
-// because their notes were never written down.
+// because their notes were never written down. The hits are Rust's (song/src/reads/rack.rs); the lit set per frame stays here.
 
 import { useEngineStoreOrNull } from "@studio/engine-browser/store";
+import { type Hit, rackHits as read } from "@studio/k7-wasm/reads";
 import type { RackLitStore } from "@studio/ui-chains-react";
 import { useEffect, useMemo } from "react";
-import { clipLoop } from "./clipLoop";
-import type { WebClip, WebGraph, WebNote, WebProject } from "./types";
+import type { WebGraph, WebProject } from "./types";
 
-/** One note reaching a rack, in ARRANGEMENT beats: when it starts, when it stops, which key. */
-export interface Hit {
-  from: number;
-  to: number;
-  key: number;
-}
-
-/** The shortest a pad stays lit, in beats — a floor on the DISPLAY, not on the note, so a thirty-second hit does not flicker. */
-export const MIN_FLASH_BEATS = 0.25;
-
-/** One clip's notes in arrangement beats — a LOOPED event tiles its window's notes across its placed length, as the engine plays them. */
-function clipHits(c: WebClip, out: Hit[]): void {
-  const hit = (at: number, nt: WebNote): void => {
-    out.push({
-      from: c.start + at,
-      to: c.start + at + Math.max(nt.duration, MIN_FLASH_BEATS),
-      key: nt.key,
-    });
-  };
-  const loop = clipLoop(c);
-  if (!loop) {
-    for (const nt of c.notes) hit(nt.time, nt);
-    return;
-  }
-  const win = c.notes.filter((n) => n.time >= loop.from && n.time < loop.to);
-  const span = c.length > 0 ? c.length : loop.win;
-  for (let k = 0; k < loop.passes; k++)
-    for (const nt of win) {
-      const at = nt.time - loop.from + k * loop.win;
-      // A pass cut short by the placed length plays only the notes that start inside it.
-      if (at < span) hit(at, nt);
-    }
-}
+export type { Hit };
 
 /** Every note reaching each rack node, keyed by module and computed once per project + graph — only MIDI material counts. */
 export function rackHits(
   project: WebProject | null,
   graph: WebGraph | null,
 ): Record<string, Hit[]> {
-  const out: Record<string, Hit[]> = {};
-  if (!project || !graph) return out;
-  const byLane = new Map(project.tracks.map((t) => [t.id, t]));
-  for (const [chainName, chain] of Object.entries(graph.chains)) {
-    const lane = chain.from ? byLane.get(chain.from) : undefined;
-    if (!lane) continue;
-    // Which modules of this chain are racks: a chain may hold several, and each hears the same lane.
-    const racks = chain.use.filter((s) => s.rack?.length);
-    if (!racks.length) continue;
-    const hits: Hit[] = [];
-    for (const c of lane.clips) clipHits(c, hits);
-    if (!hits.length) continue;
-    // Keyed by MODULE and not by chain: a pad knows which module it is drawn on, and one shared by two chains hears both.
-    void chainName;
-    for (const s of racks) out[s.module] = [...(out[s.module] ?? []), ...hits];
-  }
-  /** Sorted AFTER the merge: per-chain sorting left two sorted runs back to back, and `litAt` stopped at the end of the first. */
-  for (const hits of Object.values(out)) hits.sort((a, b) => a.from - b.from);
-  return out;
+  if (!project || !graph) return {};
+  return read(project.tracks, graph);
 }
 
 /** The longest a note sounds, per module — what bounds `litAt`'s scan. See its note. */

@@ -1,5 +1,5 @@
 // clips/doc.rs — the ClipDoc family of engine-protocol/project.ts: what a placement becomes, serialized as that file spells it.
-// A reader would get wrong that nothing here is a ts-rs twin: tests hold the JSON to project.ts (decision 301), and no twin is derived.
+// A reader would get wrong that project.ts is not written by hand: ts-rs generates it from these types (decision 301), so a doc comment here is the page's.
 
 use crate::files::{CompPiece, Crossfade, Take, WindowEdge};
 use indexmap::IndexMap;
@@ -7,6 +7,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(optional_fields, rename_all = "lowercase"))]
 pub enum ClipKind {
     Audio,
     Midi,
@@ -14,6 +15,7 @@ pub enum ClipKind {
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(optional_fields))]
 pub struct NoteDoc {
     pub time: f64,
     pub duration: f64,
@@ -22,14 +24,17 @@ pub struct NoteDoc {
     pub channel: u8,
     pub rel: f64,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "ts", ts(type = "number"))]
     pub repeat: Option<u64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "ts", ts(type = "number"))]
     pub skip: Option<u64>,
 }
 
 /// A stretch map: `[timeline beat, source second]` pairs.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(optional_fields))]
 pub struct WarpDoc {
     pub algorithm: String,
     pub markers: Vec<(f64, f64)>,
@@ -38,16 +43,20 @@ pub struct WarpDoc {
 /// A placement's own words as authored, unmerged.
 #[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(optional_fields, rename_all = "camelCase"))]
 pub struct EventDoc {
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "ts", ts(type = "number | string"))]
     pub from: Option<WindowEdge>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "ts", ts(type = "number | string"))]
     pub to: Option<WindowEdge>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub fade_in: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub fade_out: Option<String>,
     #[serde(default, rename = "loop", skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "ts", ts(rename = "loop", type = "number"))]
     pub loop_: Option<u64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub gain: Option<f64>,
@@ -56,10 +65,13 @@ pub struct EventDoc {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub warp: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "ts", ts(type = "{ ref: string; start: string }[]"))]
     pub takes: Option<Vec<Take>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "ts", ts(type = "{ take: string; from: string; to: string }[]"))]
     pub comp: Option<Vec<CompPiece>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "ts", ts(type = "{ at: string; length: string }[]"))]
     pub crossfades: Option<Vec<Crossfade>>,
 }
 
@@ -81,6 +93,7 @@ impl EventDoc {
 /// A piece of a comped event: the event's own clip id and the take this piece plays.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(optional_fields))]
 pub struct CompMark {
     pub of: String,
     pub take: String,
@@ -89,8 +102,10 @@ pub struct CompMark {
 /// Which of a clip's two fades is half of a crossfade; only ever true.
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(optional_fields))]
 pub struct CrossfadeMark {
     #[serde(default, rename = "in", skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "ts", ts(rename = "in"))]
     pub in_: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub out: Option<bool>,
@@ -99,9 +114,11 @@ pub struct CrossfadeMark {
 /// The timeline event a clip belongs to, the outermost one when timelines nest.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(optional_fields))]
 pub struct NestDoc {
     pub of: String,
     #[serde(rename = "ref")]
+    #[cfg_attr(feature = "ts", ts(rename = "ref"))]
     pub ref_: String,
     pub start: f64,
     pub length: f64,
@@ -111,9 +128,11 @@ pub struct NestDoc {
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(optional_fields, rename_all = "camelCase"))]
 pub struct ClipDoc {
     pub id: String,
     #[serde(rename = "type")]
+    #[cfg_attr(feature = "ts", ts(rename = "type"))]
     pub kind: ClipKind,
     pub name: String,
     pub source: String,
@@ -191,6 +210,7 @@ fn event_finite(e: &EventDoc) -> bool {
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(optional_fields))]
 pub struct TimelineLaneDoc {
     pub id: String,
     pub name: String,
@@ -202,6 +222,7 @@ pub struct TimelineLaneDoc {
 /// A timeline file compiled for the view that edits it; the engine plays only the tracks.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(optional_fields))]
 pub struct TimelineDoc {
     pub id: String,
     pub length: f64,
@@ -210,6 +231,7 @@ pub struct TimelineDoc {
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(optional_fields, rename_all = "lowercase"))]
 pub enum Plays {
     Notes,
     Samples,

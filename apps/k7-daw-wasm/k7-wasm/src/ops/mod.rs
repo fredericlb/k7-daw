@@ -22,6 +22,7 @@ pub mod module;
 pub mod panel;
 pub mod paths;
 pub mod picture;
+pub mod reads;
 pub mod records;
 pub mod rules;
 pub mod schema;
@@ -118,6 +119,7 @@ impl Session {
             "module" => module::dispatch(decode(input)?, out),
             "panel" => panel::dispatch(decode(input)?, out),
             "picture" => picture::dispatch(decode(input)?, out),
+            "reads" => reads::dispatch(decode(input)?, out),
             "records" => records::dispatch(decode(input)?, out),
             "rules" => rules::dispatch(decode(input)?, out),
             "stems" => stems::dispatch(decode(input)?, out),

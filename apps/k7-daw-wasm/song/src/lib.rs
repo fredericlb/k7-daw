@@ -24,6 +24,7 @@ pub mod lanes;
 pub mod modules;
 pub mod pictures;
 pub mod read;
+pub mod reads;
 pub mod readset;
 #[cfg(feature = "ts")]
 pub mod rec;
