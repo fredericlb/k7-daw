@@ -112,6 +112,11 @@ export function SearchList<T>({
   };
   const id = React.useId();
   const list = React.useRef<HTMLDivElement>(null);
+  const field = React.useRef<HTMLInputElement>(null);
+  // preventScroll: a scroll under a pointer menu is what dismisses it, and a plain focus() can cause one.
+  React.useEffect(() => {
+    if (autoFocus) field.current?.focus({ preventScroll: true });
+  }, [autoFocus]);
   const matched = React.useMemo(
     () =>
       rank === null || !text ? [...items] : rankItems(items, query, text, rank),
@@ -153,8 +158,7 @@ export function SearchList<T>({
           className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-fg-3"
         />
         <input
-          // biome-ignore lint/a11y/noAutofocus: a search list opens to be typed in; a field you must click first is a list that swallowed your click.
-          autoFocus={autoFocus}
+          ref={field}
           role="combobox"
           aria-expanded
           aria-controls={id}
