@@ -371,7 +371,8 @@ modules: three knobs beside the panel that holds them would be a second editor o
 would drift. The track's name over its status, Arm and its chain controls are the dock's header row (`ChainHeader.tsx`).
 The lane's mixer pinned at the row's right is drawn bare, with no ground behind it, like the row.
 A sound lane's input is not a card in that row: it is the title bar's. The **input** menu on the left
-lists the machine's audio sockets and MIDI devices (`ChainInputControls.tsx`); **monitor** and **width**
+is the app's search dropdown (`Picker`): the machine's audio sockets under the interface that carries
+them (the engine's `io-levels` names it), then the MIDI devices (`ChainInputControls.tsx`); **monitor** and **width**
 follow it, read and set the way the waveform editor's gain and loop are. A
 row is the lane's signal path through its modules, and an input card at its head was a third of the
 pane spent on two dropdowns. A pick of the other kind is refused in words: changing an audio input into
