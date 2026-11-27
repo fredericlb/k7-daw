@@ -1052,8 +1052,8 @@ so it is drawn as large as the pane allows; the width runs off the right and the
 it.
 
 **A sound lane's row is its modules alone.** The lane's own card and its input are the title bar's
-(`LaneMixControls.tsx`, `ChainInputControls.tsx`): M, S and A as the mixer's toggles, **vol** and **pan** as
-properties whose bubble holds a knob, committed once on release as a drag on the card was; the input menu,
+(`LaneMixControls.tsx`, `ChainInputControls.tsx`): **vol** and **pan** as properties whose bubble holds a
+knob, committed once on release as a drag on the card was, then M, S and A as the mixer's toggles; the input menu,
 **monitor** and **width** on the left. Two cards at the head of a row are a third of the pane spent on
 seven controls the title bar holds in one line, and the row is then the path the signal takes through the
 modules. A **picture lane** keeps both cards in the row (`moduleRow`'s `track` and `inputs`): its camera's

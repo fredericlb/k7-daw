@@ -1,5 +1,5 @@
-// LaneMixControls.tsx — a lane's own card in the chain dock's title bar, in place of the lane node: M, S and A as
-// the mixer's toggles, then "vol" and "pan" as properties whose bubble holds a knob, like the waveform's gain.
+// LaneMixControls.tsx — a lane's own card in the chain dock's title bar, in place of the lane node: "vol" and
+// "pan" as properties whose bubble holds a knob, like the waveform's gain, then M, S and A as the mixer's toggles.
 // A knob moves locally and COMMITS once, on release, the way a drag on the lane card did (docs/chainsGraph.md).
 
 import { DockProperty } from "@studio/ui/dock-property";
@@ -81,6 +81,24 @@ export function LaneMixControls({
 }) {
   return (
     <>
+      {onSet && (
+        <>
+          <KnobProperty
+            name={m["chain.vol"]()}
+            value={values.volume}
+            range={VOL}
+            format={volLabel}
+            onCommit={(v) => onSet("volume", v)}
+          />
+          <KnobProperty
+            name={m["chain.pan"]()}
+            value={values.pan}
+            range={PAN}
+            format={panLabel}
+            onCommit={(v) => onSet("pan", v)}
+          />
+        </>
+      )}
       <TrackToggle
         kind="mute"
         on={values.mute === 1}
@@ -102,24 +120,6 @@ export function LaneMixControls({
         title={m["chain.armInput"]({ name })}
         onClick={() => onToggle("arm")}
       />
-      {onSet && (
-        <>
-          <KnobProperty
-            name={m["chain.vol"]()}
-            value={values.volume}
-            range={VOL}
-            format={volLabel}
-            onCommit={(v) => onSet("volume", v)}
-          />
-          <KnobProperty
-            name={m["chain.pan"]()}
-            value={values.pan}
-            range={PAN}
-            format={panLabel}
-            onCommit={(v) => onSet("pan", v)}
-          />
-        </>
-      )}
     </>
   );
 }
