@@ -785,6 +785,8 @@
   "graph.stackName": "Stack view: a column per track, the mix last",
   "chain.lane.mute": "Mute {name}",
   "chain.lane.solo": "Solo {name}",
+  "chain.vol": "vol",
+  "chain.pan": "pan",
   "chain.lane.arm": "Arm {name}",
   "chain.armInput": "Record input: arm {name}",
   "chain.automation": "Automation",

@@ -785,6 +785,8 @@
   "graph.stackName": "Vue en pile : une colonne par piste, le mix en dernier",
   "chain.lane.mute": "Muet {name}",
   "chain.lane.solo": "Solo {name}",
+  "chain.vol": "vol",
+  "chain.pan": "pan",
   "chain.lane.arm": "Armer {name}",
   "chain.armInput": "Entrée d'enregistrement : armer {name}",
   "chain.automation": "Automation",
