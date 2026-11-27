@@ -4,7 +4,12 @@
 // for `pointerup` alone stayed armed after a cancel, and the next click anywhere committed it.
 // See docs/drag.md.
 
-import { useCallback, useEffect, useRef } from "react";
+import {
+  type PointerEvent as ReactPointerEvent,
+  useCallback,
+  useEffect,
+  useRef,
+} from "react";
 
 export interface DragHandlers {
   /** The pointer moved — only the one that pressed. */
@@ -82,4 +87,41 @@ export function usePointerFollow(): (
     live.current.add(abandon);
     return abandon;
   }, []);
+}
+
+/** What `usePointerDrag` calls: the press (return false to refuse it), the pressing pointer's moves, its release, and anything else. */
+export interface PointerDragHandlers {
+  onStart?: (e: ReactPointerEvent) => boolean | undefined;
+  onMove?: (ev: PointerEvent) => void;
+  onEnd?: (ev: PointerEvent) => void;
+  onCancel?: () => void;
+}
+
+/** One drag from an element's `onPointerDown`: followed by `followPointer`, so a cancel, a blur and an unmount end it; the latest handlers always run. */
+export function usePointerDrag(h: PointerDragHandlers): {
+  onPointerDown: (e: ReactPointerEvent) => void;
+} {
+  const follow = usePointerFollow();
+  const latest = useRef(h);
+  latest.current = h;
+  const live = useRef(false);
+  const onPointerDown = useCallback(
+    (e: ReactPointerEvent) => {
+      if (live.current || latest.current.onStart?.(e) === false) return;
+      live.current = true;
+      follow(e, {
+        move: (ev) => latest.current.onMove?.(ev),
+        end: (ev) => {
+          live.current = false;
+          latest.current.onEnd?.(ev);
+        },
+        cancel: () => {
+          live.current = false;
+          latest.current.onCancel?.();
+        },
+      });
+    },
+    [follow],
+  );
+  return { onPointerDown };
 }
