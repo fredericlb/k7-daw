@@ -2,8 +2,8 @@
 // timeline pane and by a timeline surface alone on a second device, which drag the same clips.
 // See ../../docs/picture.md.
 
+import { K7Document } from "@studio/k7-wasm/k7x";
 import { timelineLaneOf } from "@studio/k7-wasm/schema";
-import { K7Document } from "@studio/k7x/document";
 import {
   listVideoPlacements,
   setVideoPlacementFieldAt,

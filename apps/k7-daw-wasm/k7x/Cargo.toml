@@ -2,7 +2,7 @@
 name = "k7x"
 version = "0.1.0"
 edition = "2024"
-description = "k7x, parsed in Rust: the same grammar and spans as apps/k7-daw-frontend/packages/k7x/src/parse.ts, the tree in a bumpalo arena."
+description = "k7x, the text of a workspace's files: its reader (the tree in a bumpalo arena), its document editor and printer, and the editor's outline."
 publish = false
 
 [workspace]
@@ -12,8 +12,8 @@ bumpalo = { version = "3.20", features = ["collections"] }
 
 [lib]
 path = "src/lib.rs"
-# rlib for the bench, cdylib for WebAssembly.
-crate-type = ["rlib", "cdylib"]
+# rlib for the bench and the crates that link it.
+crate-type = ["rlib"]
 
 [[bin]]
 name = "k7x-bench"

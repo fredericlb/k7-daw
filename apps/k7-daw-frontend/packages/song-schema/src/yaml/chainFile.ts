@@ -2,10 +2,14 @@
 // the comment lines above it, found by its `id`, so a graph edit moves nodes rather than retyping them. Text in, text
 // out: nothing here touches the disk. See docs/chainFiles.md.
 
-import type { K7ListNode, K7Node, K7Path } from "@studio/k7x/ast";
-import { K7Document } from "@studio/k7x/document";
-import { lineCol } from "@studio/k7x/parse";
-import { fromJS, headerText, type PNode, printFile } from "@studio/k7x/print";
+import {
+  K7Document,
+  type K7ListNode,
+  type K7Node,
+  type K7Path,
+  lineCol,
+  stringify,
+} from "@studio/k7-wasm/k7x";
 import { byCodePoint } from "../textOrder";
 import {
   type ChainFile,
@@ -160,17 +164,6 @@ function canonical(v: unknown): string {
   );
 }
 
-/** The print node at a path of a fromJS tree. */
-function pnodeAt(root: PNode, path: K7Path): PNode | undefined {
-  let n: PNode | undefined = root;
-  for (const seg of path) {
-    if (n?.kind === "map") n = n.entries.find((e) => e.key === seg)?.value;
-    else if (n?.kind === "list") n = n.items[seg as number];
-    else return undefined;
-  }
-  return n;
-}
-
 /** A source moved from one column to another, its continuation lines shifted by as much. */
 function reindent(source: string, from: number, to: number): string {
   if (from === to || !source.includes("\n")) return source;
@@ -212,17 +205,19 @@ function chainData(chain: ChainFile): Record<string, unknown> {
 export function formatChain(chain: ChainFile, prevText = ""): string {
   const old = new K7Document(prevText);
   const kept = keptById(old);
-  const root = fromJS(chainData(chain), inlineAt);
   const reused: { path: K7Path; kept: Kept }[] = [];
   for (const { item, path } of itemSlots(chain)) {
     const prev = kept.get(item.id);
     if (!prev || canonical(prev.value) !== canonical(item)) continue;
     reused.push({ path, kept: prev });
-    const node = pnodeAt(root, path);
-    // The comments go in the print tree, so the printer gives the item a line of its own under them.
-    if (node && prev.lead.length) node.lead = prev.lead;
   }
-  const fresh = new K7Document(headerText(old.header) + printFile(root));
+  // The comments go to the printer, so it gives the item a line of its own under them.
+  const lead = reused
+    .filter((r) => r.kept.lead.length)
+    .map((r) => ({ path: r.path, lines: r.kept.lead }));
+  const fresh = new K7Document(
+    stringify(chainData(chain), { header: old.header, inline: inlineAt, lead }),
+  );
   for (const { path, kept: prev } of reused) {
     if (fresh.getSource(path) === prev.source) continue;
     const at = fresh.getNode(path) as K7Node;

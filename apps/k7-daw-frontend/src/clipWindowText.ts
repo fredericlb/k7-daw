@@ -2,8 +2,8 @@
 // A drag sets the two root values in place, through the buffer like a keystroke, and keeps how each edge was
 // spelled: a number is seconds, a timecode string follows the grid. See apps/k7-daw-frontend/docs/clipEditors.md.
 
+import { parse } from "@studio/k7-wasm/k7x";
 import { beatsToPosition, parsePosition } from "@studio/k7-wasm/timecode";
-import { parse } from "@studio/k7x/document";
 import { editK7xText } from "@studio/ui-editor/k7x/bufferEdit";
 
 /** The project grid a timecode edge needs, and the one a dragged edge is written back on. */

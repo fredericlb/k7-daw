@@ -4,8 +4,8 @@
 // reach — and because the naming rule is the one part a wrong answer puts on disk. See
 // docs/timeline.md.
 
+import { stringify } from "@studio/k7-wasm/k7x";
 import { isAudio } from "@studio/k7-wasm/schema";
-import { stringify } from "@studio/k7x/print";
 import {
   CAPTION_SOURCE,
   IMAGE_SOURCE,

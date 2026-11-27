@@ -180,7 +180,7 @@ through the per-file layer each reads only the edited file and costs ~330 ms, th
 time.
 
 A file reaches those readers as DATA: on a miss, `settledParse` hands `k7xData` (the file parsed by
-`@studio/k7x`, its short forms expanded) to the reader's data half — `parseModuleData`,
+the k7x crate, its short forms expanded) to the reader's data half — `parseModuleData`,
 `parseUiData`, or the data itself. A module or panel that does not validate goes through the text
 parser after all, since its issues are located on that text's lines.
 

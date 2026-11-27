@@ -64,11 +64,8 @@
     "apps/k7-daw-frontend/packages/audio-analysis": {
       "entry": ["scripts/*.mjs"]
     },
-    "apps/k7-daw-frontend/packages/k7x": {
-      "entry": ["bench/*.{ts,mjs}", "scripts/*.mjs"]
-    },
     "apps/k7-daw-frontend/packages/k7-wasm": {
-      "entry": ["scripts/*.mjs"]
+      "entry": ["scripts/*.{mjs,mts}"]
     },
     "apps/k7-daw-frontend/packages/ui-chains-react": {}
   }

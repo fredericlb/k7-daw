@@ -44,6 +44,8 @@ interface Abi {
   k7_curve_playhead(handle: number, beat: number): number;
   k7_scalars_ptr(): number;
   k7_round_beat(beats: number): number;
+  k7_cells_ptr(): number;
+  k7_cells_len(): number;
 }
 
 /** The module's address: Vite turns this into a hashed asset, node reads it as a file; read lazily, a bundle with no `import.meta.url` never gets here. */
@@ -225,4 +227,10 @@ export function roundBeatHot(beats: number): number {
     if (isTrap(e)) recover(e);
     throw e;
   }
+}
+
+/** The layout cells the last `k7x.outline` left: a view, read before the next call, which may grow the memory. */
+export function outlineCells(): Uint32Array {
+  const x = instance();
+  return new Uint32Array(x.memory.buffer, x.k7_cells_ptr(), x.k7_cells_len());
 }

@@ -3,7 +3,7 @@
 // every key order and every other line of the file exactly where they were.
 // See apps/k7-daw-frontend/packages/song/docs/assemblies.md.
 
-import { K7Document, type K7Scope } from "@studio/k7x/document";
+import { K7Document, type K7Scope } from "@studio/k7-wasm/k7x";
 import { describe, expect, it } from "vitest";
 import {
   dropAssemblyParam,

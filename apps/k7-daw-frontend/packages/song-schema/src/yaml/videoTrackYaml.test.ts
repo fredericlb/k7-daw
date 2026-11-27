@@ -3,7 +3,7 @@
 // is the picture compile's to refuse, since only it knows the lane is picture (song-video videoProject.test.ts).
 // See apps/k7-daw-wasm/verbs/docs/picture/transitions.md.
 
-import { K7Document } from "@studio/k7x/document";
+import { K7Document } from "@studio/k7-wasm/k7x";
 import { describe, expect, it } from "vitest";
 import { ModuleSchema } from "./moduleSchema";
 import {

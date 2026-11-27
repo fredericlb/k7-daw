@@ -1,5 +1,5 @@
-// corpus.rs — every .k7x file of demos/ and k7-core/ edited the way scripts/makeEditVectors.mts edits it, compared by hash.
-// What reads wrong: the op list is generated here as it is there (`opsFor`); a change to either side fails the hash on the first file.
+// corpus.rs — every .k7x file of demos/ and k7-core/ edited by the op list of `ops_for`, compared by hash to what the TypeScript editor did.
+// The vectors are frozen, as no generator writes them: a corpus file edited since is skipped, the rest still replay (docs/rustEdit.md).
 
 mod common;
 
@@ -190,14 +190,16 @@ fn every_corpus_file_edits_to_the_same_bytes() {
     let files = v.arr();
     assert!(files.len() > 1000, "{} files", files.len());
     let debug = std::env::var("K7X_VECTORS_DEBUG").ok();
+    let mut replayed = 0;
     for f in files {
         let name = f.get("file").unwrap().str();
-        let text = std::fs::read_to_string(root.join(name)).unwrap();
-        assert_eq!(
-            fnv(&text),
-            f.get("input").unwrap().str(),
-            "{name}: the file changed; regenerate the vectors"
-        );
+        let Ok(text) = std::fs::read_to_string(root.join(name)) else {
+            continue;
+        };
+        if fnv(&text) != f.get("input").unwrap().str() {
+            continue;
+        }
+        replayed += 1;
         let doc = Document::new(&text);
         let tree = doc.node_at(&[], |n| n.cloned()).unwrap().unwrap();
         let data = doc.to_js().unwrap();
@@ -227,6 +229,12 @@ fn every_corpus_file_edits_to_the_same_bytes() {
             "{name}: hash (K7X_VECTORS_DEBUG={name} prints each op)"
         );
     }
+    // Most of the corpus is still the one the vectors were frozen on.
+    assert!(
+        replayed * 10 > files.len() * 8,
+        "{replayed} of {} files replayed",
+        files.len()
+    );
     let _: Option<Json> = None;
     let _ = parse("a(1)");
 }
