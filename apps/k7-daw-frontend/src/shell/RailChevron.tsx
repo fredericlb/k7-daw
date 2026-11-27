@@ -4,7 +4,7 @@ import { Badge } from "@studio/ui/badge";
 import { Capsule, CapsuleButton } from "@studio/ui/capsule";
 import { ChevronDown, ChevronUp } from "@studio/ui/icons";
 import { m } from "../paraglide/messages.js";
-import { FLOAT_BUTTON, FLOAT_CAPSULE } from "./floatCapsule";
+import { FLOAT_CAPSULE } from "./floatCapsule";
 import { WarnBadge } from "./WarnBadge";
 
 export function RailChevron({
@@ -24,7 +24,8 @@ export function RailChevron({
   return (
     <Capsule className={className ?? FLOAT_CAPSULE}>
       <CapsuleButton
-        className={className ? "relative" : `relative ${FLOAT_BUTTON}`}
+        size={className ? "default" : "float"}
+        className="relative"
         aria-expanded={open}
         aria-label={label}
         title={label}

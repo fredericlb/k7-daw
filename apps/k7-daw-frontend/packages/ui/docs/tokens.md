@@ -51,7 +51,9 @@ Each has its own `exports` subpath and a story that shows every state `component
 
 | subpath | what it is |
 |---|---|
-| `capsule` | `Capsule`, `CapsuleButton` (pressed state), `CapsuleDivider` |
+| `capsule` | `Capsule`, `CapsuleButton` (pressed state; `size` "float" is the floating row's 32 px button with a 16 px glyph, "icon" the Button's icon square), `CapsuleDivider` |
+| `button` sizes | `icon` and `icon-sm` follow the device; `icon-md` is 36 px everywhere (a title-bar glyph), `icon-xs` 32, `icon-2xs` 24, `2xs` a 24 px text button, `bar` a 36 px text value |
+| `select` | the Radix parts, and `SelectField` for a flat list of options (an empty value is a legal "none") |
 | `row-group` | `RowGroup`, `Row`, `RowButton`: icon, label, detail, trailing, disclosure, selected, tall |
 | `side-panel` | `SidePanel` (400 px, floats over the panes) and `Sheet` (phone, with a transport slot) |
 | `editor-dock` | `EditorDock` (the bottom editor dock of Pad and Desk, resizable) and `EditorSheet` (phone), each with the Expand toggle |
@@ -59,8 +61,9 @@ Each has its own `exports` subpath and a story that shows every state `component
 | `spinner`, `progress` | `Spinner` (`size` xs, sm, md; `inherit` takes the text colour inside a button), `Loading` (a spinner and the caller's label) and the 6 px determinate bar |
 | `chip` | `Chip` with `variant` anchor (orphan), version (newest), filter, status (`tone`) |
 | `empty-state`, `error-card` | the dashed empty card and the stay-until-fixed failure |
-| `choice` | a radiogroup: segmented, or 44 px rows on a phone |
+| `choice` | a radiogroup or tablist: segmented (words or glyphs), or 44 px rows on a phone |
 | `picker` | a 56 px button and a searchable list under it |
+| `slider` | a native range with the one commit rule: `onValueCommit` fires on pointer up or cancel, key up or blur, once per change |
 | `knob` | the 270 degree arc knob with a peak chip; `onValueCommit` fires on release, `defaultValue` is what a double-click restores |
 | `track-toggle` | M, S and A: one component for the lane header and the mixer strip |
 | `backdrop` | the two blobs and the two wave strokes behind a screen |

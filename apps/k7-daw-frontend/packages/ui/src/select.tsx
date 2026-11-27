@@ -174,9 +174,60 @@ function SelectScrollDownButton({
   );
 }
 
+// Radix refuses an empty item value, so a "no choice" option travels under this one.
+const NONE = "__none__";
+
+/** The whole select for a flat list of options, the empty string being a legal "none". */
+function SelectField({
+  value,
+  onValueChange,
+  options,
+  label,
+  id,
+  disabled,
+  size,
+  className,
+}: {
+  value: string;
+  onValueChange: (v: string) => void;
+  options: { value: string; label: React.ReactNode }[];
+  /** The accessible name, where no <label> wraps it. */
+  label?: string;
+  id?: string;
+  disabled?: boolean;
+  size?: "sm" | "default";
+  className?: string;
+}) {
+  const wire = (v: string) => (v === "" ? NONE : v);
+  return (
+    <Select
+      value={wire(value)}
+      disabled={disabled}
+      onValueChange={(v) => onValueChange(v === NONE ? "" : v)}
+    >
+      <SelectTrigger
+        id={id}
+        size={size}
+        aria-label={label}
+        className={cn("min-w-0", className)}
+      >
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent position="popper">
+        {options.map((o) => (
+          <SelectItem key={o.value} value={wire(o.value)}>
+            {o.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
+}
+
 export {
   Select,
   SelectContent,
+  SelectField,
   SelectGroup,
   SelectItem,
   SelectLabel,

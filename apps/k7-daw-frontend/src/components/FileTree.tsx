@@ -11,6 +11,7 @@ import {
 import { docPattern, isLibraryFileOf } from "@studio/k7-wasm/schema";
 import { askConfirm, askText } from "@studio/project-shell/ask";
 import { showToast } from "@studio/project-shell/toast";
+import { Choice } from "@studio/ui/choice";
 import {
   type DroppedFile,
   FileTree as Tree,
@@ -53,7 +54,6 @@ import {
 } from "../libraryTree";
 import { m } from "../paraglide/messages.js";
 import { isVideoTrackFile } from "../projectPaths";
-import { radioKeyDown } from "../radioKeys";
 import { TrackIcon } from "../trackIcons";
 import type { FileNode } from "../types";
 
@@ -552,39 +552,24 @@ export function FileTree({
 
       {/* Two trees, one sidebar, drawn only for a shell that has libraries: one lonely tab is a control that decides nothing. */}
       {levels !== undefined && (
-        <div
-          role="radiogroup"
-          aria-label={m["tree.browse"]()}
-          className="glass mb-2 flex h-10 shrink-0 items-center gap-0.5 rounded-full p-[3px]"
-        >
-          {(
-            [
-              ["project", projectName ?? m["tree.projectTab"](), Folder],
-              ["libraries", m["tree.librariesTab"](), Library],
-            ] as const
-          ).map(([id, label, Icon]) => (
-            <button
-              key={id}
-              type="button"
-              role="radio"
-              aria-checked={tab === id}
-              tabIndex={tab === id ? 0 : -1}
-              onKeyDown={(e) =>
-                radioKeyDown(e, ["project", "libraries"] as const, tab, setTab)
-              }
-              onClick={() => setTab(id)}
-              className={cn(
-                "flex h-8 min-w-0 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full px-2 font-bold text-[13px]",
-                tab === id
-                  ? "bg-on-fill text-lavender"
-                  : "text-foreground/80 hover:bg-on-fill/60",
-              )}
-            >
-              <Icon className="h-3.5 w-3.5 shrink-0" />
-              <span className="max-w-28 truncate">{label}</span>
-            </button>
-          ))}
-        </div>
+        <Choice
+          label={m["tree.browse"]()}
+          className="mb-2 shrink-0"
+          value={tab}
+          onValueChange={setTab}
+          options={[
+            {
+              value: "project",
+              label: projectName ?? m["tree.projectTab"](),
+              icon: <Folder />,
+            },
+            {
+              value: "libraries",
+              label: m["tree.librariesTab"](),
+              icon: <Library />,
+            },
+          ]}
+        />
       )}
 
       {/* The LIBRARIES: read-only rows with no actions at all, since nothing here is this project's to rename or delete (docs/sharedModules.md). */}

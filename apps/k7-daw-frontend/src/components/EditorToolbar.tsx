@@ -4,6 +4,7 @@
 
 import { docPattern } from "@studio/k7-wasm/schema";
 import { Button } from "@studio/ui/button";
+import { Choice } from "@studio/ui/choice";
 import {
   FileText,
   LayoutGrid,
@@ -101,31 +102,19 @@ export function EditorToolbar({
       <div className="flex-1" />
       {/* A sequence in the POPIN gets its two views as tabs, the text and the roll as peers (docs/shell.md). */}
       {seqTabs && (
-        <div
-          role="tablist"
-          aria-label={m["seq.views"]()}
-          className="glass flex h-10 items-center gap-0.5 rounded-full p-[3px]"
-        >
-          {SEQ_TABS.map((t) => (
-            <button
-              key={t.id}
-              type="button"
-              role="tab"
-              aria-selected={tab === t.id}
-              title={t.title()}
-              className={cn(
-                "flex h-8 items-center gap-1 rounded-full px-3 font-bold text-[13px] transition-colors",
-                tab === t.id
-                  ? "bg-on-fill text-lavender"
-                  : "text-foreground/80 hover:bg-on-fill/60",
-              )}
-              onClick={() => onTab(t.id)}
-            >
-              <t.icon className="h-3.5 w-3.5" />
-              {t.label()}
-            </button>
-          ))}
-        </div>
+        <Choice
+          role="tab"
+          label={m["seq.views"]()}
+          className="shrink-0"
+          value={tab}
+          onValueChange={onTab}
+          options={SEQ_TABS.map((t) => ({
+            value: t.id,
+            label: t.label(),
+            title: t.title(),
+            icon: <t.icon />,
+          }))}
+        />
       )}
       {/* A BUTTON and not a redirected click: opening `module.k7x` must still open its text, the path a shared module forks through. */}
       {file && isModuleFile(file.path) && (

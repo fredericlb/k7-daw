@@ -4,6 +4,7 @@
 
 import { camelot, PITCH_CLASSES } from "@studio/audio-probe/key";
 import { Pencil } from "@studio/ui/icons";
+import { Slider } from "@studio/ui/slider";
 import { m } from "../../paraglide/messages.js";
 import { BPM_RANGE, PITCH_RANGE } from "../deckVocabulary";
 import { CHANNEL_INPUT, notchAt, RAIL_V } from "./faderStyles";
@@ -84,18 +85,16 @@ export function BpmFader({
           />
         ) : null}
 
-        <input
-          type="range"
+        <Slider
           min={lo}
           max={hi}
           step={0.1}
           value={has ? target : 0}
           disabled={!has}
           className={`${CHANNEL_INPUT} ${driven ? "opacity-60" : ""}`}
-          onChange={(e) => onChange(Number(e.target.value))}
-          // Wrapped, NOT passed through: an `onCommit` with an optional argument would get a PointerEvent.
-          onPointerUp={() => onCommit()}
-          onKeyUp={() => onCommit()}
+          onValueChange={onChange}
+          // Wrapped, NOT passed through: an `onCommit` with an optional argument would get the value.
+          onValueCommit={() => onCommit()}
           // Double-click returns the record to its own tempo, the one position a drag never lands on.
           onDoubleClick={() => {
             if (has) {
@@ -103,7 +102,7 @@ export function BpmFader({
               onCommit();
             }
           }}
-          aria-label={m["bpm.aria"]()}
+          label={m["bpm.aria"]()}
           title={
             !has
               ? m["bpm.none"]()

@@ -1,12 +1,11 @@
-// ClipToolBar.tsx — the clip editor's tool axis as a segmented radiogroup in the title bar: Range, Split, Stretch, List, Takes.
+// ClipToolBar.tsx — the clip editor's tool axis as the kit Choice in the title bar: Range, Split, Stretch, List, Takes.
 // The ids are the wave modes (waveMode.ts); only their words changed, so `ui wave <mode>` keeps meaning what it did.
 
+import { Choice } from "@studio/ui/choice";
 import { DockHeaderRow, useInSheet } from "@studio/ui/editor-dock";
 import { List } from "@studio/ui/icons";
-import { cn } from "@studio/ui/lib/utils";
 import { ModeIcon } from "../modeIcons";
 import { m } from "../paraglide/messages.js";
-import { radioKeyDown } from "../radioKeys";
 import { WAVE_PRESS, type WaveMode } from "../waveMode";
 
 const LABEL: Record<WaveMode, () => string> = {
@@ -31,39 +30,19 @@ export function ClipToolBar({
   const words = useInSheet();
   return (
     <DockHeaderRow bodyOnPhone>
-      <div
-        role="radiogroup"
-        aria-label={m["clip.viewLabel"]()}
-        className="glass flex h-10 shrink-0 items-center gap-0.5 rounded-full p-[3px]"
-      >
-        {modes.map((mode) => (
-          <button
-            key={mode}
-            type="button"
-            role="radio"
-            aria-checked={mode === current}
-            aria-label={LABEL[mode]()}
-            tabIndex={mode === current ? 0 : -1}
-            onKeyDown={(e) => radioKeyDown(e, modes, current, onPick)}
-            title={`${LABEL[mode]()} — ${WAVE_PRESS[mode]}`}
-            onClick={() => onPick(mode)}
-            className={cn(
-              "flex h-8 min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-full px-2 font-bold text-[13px] transition-colors focus-visible:shadow-(--k7-focus-ring) focus-visible:outline-none",
-              words ? "flex-1" : "w-9",
-              mode === current
-                ? "bg-on-fill text-lavender"
-                : "text-foreground/80 hover:bg-on-fill/60",
-            )}
-          >
-            {mode === "list" ? (
-              <List className="size-4 shrink-0" />
-            ) : (
-              <ModeIcon mode={mode} className="size-4 shrink-0" />
-            )}
-            {words && <span className="truncate">{LABEL[mode]()}</span>}
-          </button>
-        ))}
-      </div>
+      <Choice
+        label={m["clip.viewLabel"]()}
+        iconOnly={!words}
+        className="shrink-0"
+        value={current}
+        onValueChange={onPick}
+        options={modes.map((mode) => ({
+          value: mode,
+          label: LABEL[mode](),
+          title: `${LABEL[mode]()} — ${WAVE_PRESS[mode]}`,
+          icon: mode === "list" ? <List /> : <ModeIcon mode={mode} />,
+        }))}
+      />
     </DockHeaderRow>
   );
 }

@@ -31,6 +31,13 @@ const buttonVariants = cva(
         round: "size-11 desk:size-8",
         "icon-xs": "size-8",
         "icon-sm": "size-9 desk:size-8",
+        // A title-bar glyph button: 36 px on every device, as the bar around it is.
+        "icon-md": "size-9",
+        "icon-2xs": "size-6",
+        // A compact text button of a row that is 28 px tall (the timeline's corner).
+        "2xs": "h-6 gap-1 px-3 text-[11px]",
+        // A text value pressed in a bar (the tempo): 36 px on every device.
+        bar: "h-9 px-2",
         "icon-lg": "size-12",
       },
     },

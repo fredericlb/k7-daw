@@ -4,6 +4,7 @@
 
 import { Button } from "@studio/ui/button";
 import { Popover, PopoverAnchor, PopoverContent } from "@studio/ui/popover";
+import { Slider } from "@studio/ui/slider";
 import type * as React from "react";
 import { m } from "../paraglide/messages.js";
 
@@ -26,15 +27,14 @@ export function OnsetThreshold({
   return (
     <label className="flex items-center gap-2">
       {m["clip.threshold"]()}
-      <input
-        type="range"
+      <Slider
         min={SENS_MIN}
         max={SENS_MAX}
         step={0.25}
         value={value ?? 2}
-        onChange={(e) => onChange(Number(e.target.value))}
+        onValueChange={onChange}
         className="w-32"
-        aria-label={m["clip.sensitivityLabel"]()}
+        label={m["clip.sensitivityLabel"]()}
       />
       <span className="w-8 tabular-nums">{(value ?? 2).toFixed(2)}</span>
     </label>
@@ -77,15 +77,14 @@ export function TrimGate({
       >
         <div className="flex items-center gap-2 text-xs">
           {m["clip.threshold"]()}
-          <input
-            type="range"
+          <Slider
             min={GATE_MIN}
             max={GATE_MAX}
             step={1}
             value={gate}
-            onChange={(e) => onGate(Number(e.target.value))}
+            onValueChange={onGate}
             className="flex-1"
-            aria-label={m["clip.gateLabel"]()}
+            label={m["clip.gateLabel"]()}
           />
           <span className="w-14 tabular-nums">{gate} dB</span>
         </div>

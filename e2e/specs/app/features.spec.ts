@@ -111,7 +111,7 @@ const FEATURES: Record<string, { check: Check; bug?: string }> = {
       ).toHaveValue("3");
       await expect(
         page.getByRole("combobox", { name: "note value" }),
-      ).toHaveValue("4");
+      ).toHaveText("4");
       await page.keyboard.press("Escape");
     },
   },
