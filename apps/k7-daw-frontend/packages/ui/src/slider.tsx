@@ -2,6 +2,7 @@
 // It stays a native input so the keyboard and the accessible name come with it; `onValueCommit` fires once per change.
 
 import * as React from "react";
+import { rangeGesture } from "./lib/rangeGesture";
 import { cn } from "./lib/utils";
 
 export interface SliderProps
@@ -38,12 +39,11 @@ export function Slider({
   onBlur,
   ...rest
 }: SliderProps) {
-  const dirty = React.useRef(false);
-  const commit = (el: HTMLInputElement) => {
-    if (!dirty.current) return;
-    dirty.current = false;
-    onValueCommit?.(Number(el.value));
-  };
+  const commitRef = React.useRef(onValueCommit);
+  commitRef.current = onValueCommit;
+  const gesture = React.useRef<ReturnType<typeof rangeGesture> | null>(null);
+  gesture.current ??= rangeGesture((v) => commitRef.current?.(v));
+  const end = () => gesture.current?.end();
   return (
     <input
       type="range"
@@ -58,24 +58,25 @@ export function Slider({
         className,
       )}
       onChange={(e) => {
-        dirty.current = true;
-        onValueChange(Number(e.currentTarget.value));
+        const v = Number(e.currentTarget.value);
+        gesture.current?.change(v);
+        onValueChange(v);
       }}
       onPointerUp={(e) => {
         onPointerUp?.(e);
-        commit(e.currentTarget);
+        end();
       }}
       onPointerCancel={(e) => {
         onPointerCancel?.(e);
-        commit(e.currentTarget);
+        end();
       }}
       onKeyUp={(e) => {
         onKeyUp?.(e);
-        commit(e.currentTarget);
+        end();
       }}
       onBlur={(e) => {
         onBlur?.(e);
-        commit(e.currentTarget);
+        end();
       }}
       {...rest}
     />
