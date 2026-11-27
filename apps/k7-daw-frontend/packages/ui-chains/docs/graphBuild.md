@@ -561,8 +561,7 @@ its own.
 drops the engine's waypoints, so the nested pass has nothing useful to route — but the renderer skips an
 edge with fewer than two (`DomChains`' test for "the layout could not place this"), and an empty
 list draws **no cable at all** on a graph with a box open, the members' own included. It hands over
-the two node centres instead, and none only when an end is genuinely unplaced. `assembly.test.ts`
-pins it.
+the two node centres instead, and none only when an end is genuinely unplaced. `apps/k7-daw-wasm/chains/src/tests/assemblies.rs` pins it.
 
 ### What is the box's, and what merely crosses it
 

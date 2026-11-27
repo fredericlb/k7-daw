@@ -1,5 +1,5 @@
 // The core of the TypeScript buildGraph tests: the id scheme, the cables, the ranks, the curves, the sums, the boxes.
-// The whole file set (buildGraph, buildSums, buildLanes, jacks, assembly, moduleRow) also ran unchanged against these ops through the page's facade.
+// The cases beyond this core (sums, lanes, jacks, boxes, rows, stacks, layout) are the files of `src/tests/`.
 
 use super::*;
 use crate::assembly::fold_assemblies;

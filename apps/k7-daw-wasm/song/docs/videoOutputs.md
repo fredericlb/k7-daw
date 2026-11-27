@@ -148,7 +148,7 @@ must not lose its card in the meantime.
 
 ```bash
 cargo test -p song-edit
-npx vitest run apps/k7-daw-frontend/packages/ui-chains/src/buildSums.test.ts
+cargo test -p chains --manifest-path apps/k7-daw-wasm/chains/Cargo.toml tests::sums
 ```
 
 And by hand, the real test of the automatic add: take a project with a `viewport` and without the

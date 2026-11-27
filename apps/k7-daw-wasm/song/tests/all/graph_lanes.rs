@@ -17,7 +17,7 @@ fn clean(d: &Drawn) {
     assert!(bad.is_empty(), "{bad:?}");
 }
 
-// trackClips.test.ts: sorted by position, spelled by the meter, missing says so, absent for an empty lane, widths from the compile.
+// The chains crate holds the node side (src/tests/clips.rs): sorted by position, spelled by the meter, missing says so, absent for an empty lane, widths from the compile.
 #[test]
 fn a_lanes_clips_are_sorted_spelled_by_the_meter_and_sized_by_the_compile() {
     let l = lane(

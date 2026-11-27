@@ -1,4 +1,4 @@
-// The TypeScript tests of the built-in panels (inputUI.test.ts, camera.test.ts, renderCard.test.ts, a rack's in buildLanes.test.ts).
+// The built-in panels: the inputs, the camera, the render card and a rack's pads (the rack node itself: src/tests/lanes.rs).
 
 use super::*;
 

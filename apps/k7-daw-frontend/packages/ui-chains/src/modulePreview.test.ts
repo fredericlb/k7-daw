@@ -1,5 +1,7 @@
+// modulePreview.test.ts — one module as a graph: the source it hangs off, its type folder, the grid it draws, its bases.
+// How the build draws that graph (the bases dropdown, the card's size, the MIDI cable) is the `chains` crate's: src/tests/vertical.rs.
+
 import { describe, expect, it } from "vitest";
-import { buildGraph, layout } from "./graph";
 import {
   moduleCategoryOf,
   modulePreviewGraph,
@@ -39,11 +41,6 @@ describe("one module as a graph", () => {
     const arp = modulePreviewGraph("arp", "modules/transformers/arp", ui(), {});
     expect(arp.chains[PREVIEW_CHAIN].from).toBe(PREVIEW_MIDI_SOURCE);
     expect(arp.chains[PREVIEW_CHAIN].use[0].emits).toBe("midi");
-    const signals = buildGraph(synth).edges.map((e) => [e.source, e.signal]);
-    expect(signals).toEqual([
-      [`trk:${PREVIEW_MIDI_SOURCE}`, "midi"],
-      ["mod:jun", "audio"],
-    ]);
   });
 
   it("gives the node an engine address rather than leaving it decorative", () => {
@@ -69,48 +66,6 @@ describe("one module as a graph", () => {
       "warm",
     ]);
     expect(some.chains[PREVIEW_CHAIN].use[0].bases).toEqual(["warm"]);
-  });
-});
-
-describe("the base dropdown, which the panel cannot fill in itself", () => {
-  const withBaseWidget = (bases?: readonly string[]) =>
-    buildGraph(
-      modulePreviewGraph(
-        "fuzz",
-        "modules/audio/fuzz",
-        {
-          cols: 2,
-          rows: 1,
-          widgets: {
-            b: { type: "dropdown" as const, col: 0, row: 0, bind: "@base" },
-          },
-        },
-        {},
-        bases,
-      ),
-    ).nodes.find((n) => n.kind === "module");
-
-  it("lists the module's bases, with `none` first so a choice can be undone", () => {
-    // The author wrote `bind: @base` and nothing else; the entries are the FOLDER's, via the step.
-    const w = withBaseWidget(["warm", "bright"])?.ui?.widgets.b;
-    expect(w?.options?.map((o) => o.label)).toEqual(["none", "bright", "warm"]);
-  });
-
-  // The folder arrives in code points, capitals first; each row keeps its place in it as its value.
-  it("draws the names for people, each keeping its value", () => {
-    const w = withBaseWidget(["FM Bass", "WT Bass", "fingered"])?.ui?.widgets.b;
-    expect(w?.options?.map((o) => [o.label, o.value])).toEqual([
-      ["none", 0],
-      ["fingered", 3],
-      ["FM Bass", 1],
-      ["WT Bass", 2],
-    ]);
-  });
-
-  it("still draws `none` alone when nothing was passed", () => {
-    // The honest answer: a module with no bases has one entry, not none.
-    const w = withBaseWidget()?.ui?.widgets.b;
-    expect(w?.options?.map((o) => o.label)).toEqual(["none"]);
   });
 });
 
@@ -161,43 +116,5 @@ describe("reading a module's type folder", () => {
     expect(moduleCategoryOf("modules/whatever/thing")).toBe("audio");
     expect(moduleCategoryOf("nonsense")).toBe("audio");
     expect(moduleCategoryOf("")).toBe("audio");
-  });
-});
-
-describe("through the shared pipeline", () => {
-  it("lays out with real geometry", () => {
-    const { nodes, edges } = buildGraph(
-      modulePreviewGraph("fuzz", "modules/audio/fuzz", ui(), {}),
-    );
-    const laid = layout(nodes, edges);
-    expect(laid.nodes.length).toBeGreaterThan(0);
-    for (const n of laid.nodes) {
-      expect(Number.isFinite(n.x)).toBe(true);
-      expect(Number.isFinite(n.y)).toBe(true);
-    }
-  });
-
-  it("draws the source, the module and the sink", () => {
-    const { nodes } = buildGraph(
-      modulePreviewGraph("fuzz", "modules/audio/fuzz", ui(), {}),
-    );
-    const kinds = nodes.map((n) => n.kind);
-    expect(kinds).toContain("track");
-    expect(kinds).toContain("module");
-    expect(kinds).toContain("sink");
-  });
-
-  it("sizes the card from the grid rather than the default", () => {
-    // The card is NOT the grid: a panel that reads fine to edit can be another shape as a card.
-    const card = (cols: number, rows: number) =>
-      buildGraph(
-        modulePreviewGraph(
-          "fuzz",
-          "modules/audio/fuzz",
-          ui({ cols, rows }),
-          {},
-        ),
-      ).nodes.find((n) => n.kind === "module");
-    expect(card(8, 4)?.w).toBeGreaterThan(card(1, 1)?.w ?? 0);
   });
 });

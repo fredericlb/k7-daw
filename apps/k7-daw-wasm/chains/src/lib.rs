@@ -21,3 +21,6 @@ pub mod row_seams;
 pub mod stack_layout;
 pub mod subgraph;
 pub mod widget_value;
+
+#[cfg(test)]
+mod tests;
