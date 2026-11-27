@@ -47,7 +47,7 @@ for key and can be read side by side.
 
 `@studio/song` does not know what a `crossfade` is. The schema therefore accepts any key and
 **does not validate the ids**: whoever draws the panel checks them, against the list it
-actually has (the desk's is `apps/k7-daw-frontend/packages/k7-plugins/src/turntables/controls.ts`, listed in that package's
+actually has (the desk's is `apps/k7-daw-wasm/turntables/src/controls.rs`, listed in that package's
 `docs/controls.md`).
 A schema that guessed the vocabulary would go stale the day a control is added, and would have
 to be edited in a package that has no business knowing.

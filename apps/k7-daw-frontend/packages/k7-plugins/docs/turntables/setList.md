@@ -109,9 +109,9 @@ that fails silently reads as a bug in drag-and-drop.
 
 ## What plays, once the line is chosen
 
-The project's **compiled** document, into which `withDecks` places both decks' clips — so the
+The project's **compiled** document, into which `with_decks` places both decks' clips — so the
 set's real chains, crossfade included. A `jsdsp` module is a graph baked into the document by the
 compiler, which runs the module's source in a child process: the browser cannot produce one, and
-`deckDoc` is only a stand-in of one track per deck until the compile arrives. See
+`deck_doc` is only a stand-in of one track per deck until the compile arrives. See
 [mix.md](mix.md) and
 [apps/k7-daw-wasm/song/docs/setProject.md](../../../../../k7-daw-wasm/song/docs/setProject.md).

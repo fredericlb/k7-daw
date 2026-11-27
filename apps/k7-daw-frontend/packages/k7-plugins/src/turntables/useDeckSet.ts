@@ -13,26 +13,33 @@ import {
 } from "@studio/engine-browser/params";
 import type { ProjectDoc } from "@studio/engine-protocol/project";
 import type { WebGraph } from "@studio/graph-model";
+import {
+  alignSeek,
+  corrected,
+  crossfadeLevels,
+  type DeckPlaying,
+  deckDocument,
+  loopSpan,
+  metronomeDeck,
+  nudgedTempos,
+  offlinePublish,
+  platterKey,
+  platterRate,
+  plattersOf,
+  resolveBindings,
+  scratchDelay,
+  stretchTargets,
+  syncedTempos,
+  valueFor,
+  withKeylock,
+  worthARebuild,
+} from "@studio/k7-wasm/desk";
 import { STEMS, type Stem, stemControl } from "@studio/k7-wasm/stems";
 import type { MixView as MixViewFile } from "@studio/k7-wasm/text";
 import { editMix, mixCues } from "@studio/k7-wasm/text";
 import { projectApi as api } from "@studio/project-shell/project";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { m } from "../paraglide/messages.js";
-import { alignSeek } from "./beats";
-import {
-  type DeckPlaying,
-  deckRunning,
-  nudgedTempos,
-  platterKey,
-  platterRate,
-  plattersOf,
-  pushCrossfade,
-  scratchDelay,
-  sendDecks,
-  syncedTempos,
-  withKeylock,
-} from "./deck";
 import {
   CENSOR_RATE,
   DECKS,
@@ -48,9 +55,6 @@ import {
   TEMPO_SOURCE_PARAM,
 } from "./deckVocabulary";
 import type { Deck } from "./engine";
-import { corrected, type GridFix } from "./grid";
-import { loopSpan } from "./loop";
-import { metronomeDeck } from "./metronome";
 import {
   type BindingProblem,
   controlDriving,
@@ -58,11 +62,7 @@ import {
   enginePluginIds,
   hasPlugin,
   leavesByItsOwnPair,
-  offlinePublish,
-  resolveBindings,
   shownValue,
-  stretchTargets,
-  valueFor,
 } from "./mixBindings";
 import {
   MIX_FILE,
@@ -78,22 +78,12 @@ import { useDrawnNeedles } from "./useDrawnNeedles";
 /** How often a tempo may reach the engine while a control moves — a rate rides in the document, docs/bpm.md. */
 const LIVE_WARP_MS = 120;
 
-/** How far a tempo must move for the drag to send again — under this nobody hears it, docs/bpm.md. */
-const LIVE_WARP_BPM = 0.05;
-
 /** How long after the last tempo a gesture from the GRAPH is over — it reports no release, docs/deckSet.md. */
 const GRAPH_SETTLE_MS = 250;
 
-/** Has any deck's tempo moved far enough since the last send to be worth another document? */
-function worthARebuild(sent: DeckTempos, now: DeckTempos): boolean {
-  return DECKS.some((d) => {
-    const a = sent[d];
-    const b = now[d];
-    if (!a || !b) return a !== b; // a deck appearing or leaving is not a fader movement
-    return (
-      Math.abs(a.target - b.target) >= LIVE_WARP_BPM || a.natural !== b.natural
-    );
-  });
+/** A correction of a record's grid, held for the session. */
+export interface GridFix {
+  bpm?: number;
 }
 
 /** The desk, and its loop section — which is a hook of its own, see ./useDeckLoops.ts. */
@@ -338,7 +328,8 @@ export function useDeckSet(
   const running: DeckPlaying = useMemo(
     () =>
       Object.fromEntries(
-        DECKS.map((d) => [d, deckRunning(d, started, loads[d])]),
+        // Every loaded deck plays off platters, which the transport does not command; an empty one is not running.
+        DECKS.map((d) => [d, !!loads[d] && !!started[d]]),
       ),
     [started, loads],
   );
@@ -406,16 +397,16 @@ export function useDeckSet(
     (next: DeckTempos = latest.current, on: DeckLoads = loadsRef.current) => {
       // `deck.engine` is the readiness guard and not the route — `sendProject` is, see `Deck.sendProject`.
       if (deck.engine)
-        sendDecks(
-          deck.sendProject,
-          on,
-          mix,
-          undefined,
-          next,
-          compiled,
-          click,
-          // A PLATTER has no transport to read, so which decks turn rides in the document.
-          runningRef.current,
+        deck.sendProject(
+          deckDocument({
+            compiled,
+            loads: on,
+            mix,
+            tempos: next,
+            click,
+            // A PLATTER has no transport to read, so which decks turn rides in the document.
+            playing: runningRef.current,
+          }),
         );
     },
     [deck.engine, deck.sendProject, mix, compiled, click],
@@ -849,7 +840,7 @@ export function useDeckSet(
       // A corrected tempo wins over the analysis, applied once so the fader, sync, the grid and the click read one number (docs/grid.md).
       const merged = {
         ...fadersRef.current,
-        [deckId]: corrected(tempo, { bpm: loadsRef.current[deckId]?.bpm }),
+        [deckId]: corrected(tempo, loadsRef.current[deckId]?.bpm),
       };
       setFaders(merged);
       // Re-sent so the OTHER deck's stretch survives this load — mapped inline, `stretches` is a render late.
@@ -879,7 +870,7 @@ export function useDeckSet(
       setLoads(loads);
       const t = fadersRef.current[deckId];
       if (!t) return;
-      const merged = { ...fadersRef.current, [deckId]: corrected(t, { bpm }) };
+      const merged = { ...fadersRef.current, [deckId]: corrected(t, bpm) };
       setFaders(merged);
       const d = derived.current;
       commitRef.current(
@@ -925,7 +916,11 @@ export function useDeckSet(
       // THE DECLARED PATH: `views/mix.k7x` says this fader is the crossfade module's `Mix`.
       if (pushParam("crossfade", value)) return;
       // …and the stand-in, before the compile lands: no crossfade module, so the two decks' levels move.
-      if (!compiled) return pushCrossfade(deck.engine, value);
+      if (!compiled) {
+        for (const { id, db } of crossfadeLevels(value))
+          deck.engine.setPluginParam(id, "Volume", db);
+        return;
+      }
       // Compiled but bound to no loaded plugin — the stand-in's levels are not in THIS document.
       setDeskError(m["desk.xfadeUnbound"]({ file: MIX_VIEW_FILE }));
     },

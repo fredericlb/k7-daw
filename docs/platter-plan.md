@@ -65,7 +65,7 @@ pitch fader running backwards.
 The four parts share a position, a rate and a `Key`; `plattersOf(deck, load)` names them, and
 `place`, `scratch` and the needle all go through that list.
 
-The cost is loading, measured by `apps/k7-daw-frontend/packages/k7-plugins/scripts/turntables/put-on.ts`, which times the
+The cost is loading, measured by `apps/k7-daw-wasm/put-on/src/main.rs`, which times the
 `applied` response:
 
 | putting a record on a deck that already holds one | plain | separated | overhead |

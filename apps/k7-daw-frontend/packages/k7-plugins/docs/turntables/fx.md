@@ -88,7 +88,7 @@ Two consequences that fall out on their own and would otherwise be written by ha
 - **release hands the record back to what it was doing** — `rate === null` returns the platter to
   the speed the document would have sent, stretched tempo included.
 
-So it has no control in `controls.ts`, consistent with the rest: the scratch has none either. What
+So it has no control in `controls.rs`, consistent with the rest: the scratch has none either. What
 lives in `views/mix.k7x` is what **moves a module's parameter**; a gesture on the platter is
 performed by the desk itself.
 

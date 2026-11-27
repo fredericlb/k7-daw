@@ -45,7 +45,7 @@ fi
 if [[ " $areas " == *" browser "* ]]; then
   # Apart from the backend's: waveform is a cdylib, whose unhashed rlib the two feature sets would overwrite (docs/rust-builds.md).
   target="$target-browser"
-  for crate in apps/k7-daw-wasm/song-schema apps/k7-daw-wasm/chains apps/k7-daw-wasm/gesture apps/k7-daw-wasm/git-rules apps/k7-daw-wasm/k7-wasm apps/k7-daw-wasm/song; do
+  for crate in apps/k7-daw-wasm/song-schema apps/k7-daw-wasm/chains apps/k7-daw-wasm/turntables apps/k7-daw-wasm/gesture apps/k7-daw-wasm/git-rules apps/k7-daw-wasm/k7-wasm apps/k7-daw-wasm/song; do
     (cd "$crate" && cargo fmt --check && cargo clippy --locked --target-dir "$target" --all-targets --features ts -- -D warnings && tests)
   done
   (cd apps/k7-daw-wasm/k7x && cargo fmt --check && cargo clippy --locked --target-dir "$target" --all-targets -- -D warnings && tests)

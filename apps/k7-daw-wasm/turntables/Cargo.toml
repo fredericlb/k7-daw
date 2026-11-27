@@ -1,0 +1,27 @@
+[package]
+name = "turntables"
+version = "0.1.0"
+edition = "2024"
+description = "The DJ desk's logic in Rust: the two decks as one engine document, the click, the beat grid, loops, the controls and their bindings, the set list; after ../../k7-daw-frontend/packages/k7-plugins/src/turntables/."
+publish = false
+
+[lib]
+path = "src/lib.rs"
+crate-type = ["rlib"]
+
+[dependencies]
+song = { path = "../song", default-features = false }
+song-schema = { path = "../song-schema" }
+song-edit = { path = "../song-edit" }
+chains = { path = "../chains" }
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["preserve_order", "float_roundtrip"] }
+indexmap = { version = "2", features = ["serde"] }
+ts-rs = { version = "11", optional = true }
+
+[features]
+ts = ["dep:ts-rs", "song/ts", "chains/ts"]
+
+[dev-dependencies]
+# The scaffold's copy of the controls is held to the original (tests/set_list.rs).
+verbs = { path = "../verbs" }

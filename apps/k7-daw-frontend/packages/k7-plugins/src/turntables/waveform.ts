@@ -2,8 +2,26 @@
 // on screen, where a second lands in pixels, and where the beats are. No canvas, no React, so
 // the parts that decide what you SEE are testable. See docs/waveform.md.
 
+import { BEATS_PER_BAR, beatPhase } from "@studio/k7-wasm/desk";
 import { formatClock } from "@studio/ui-timeline/ticks";
-import { BEATS_PER_BAR, beatPhase, firstBeatAfter } from "./beats";
+
+/** The FIRST beat at or after `from` on a grid that starts at `phase`. */
+function firstBeatAfter(from: number, phase: number, period: number): number {
+  if (!(period > 0)) return from;
+  return phase + Math.ceil((from - phase) / period) * period;
+}
+
+const anchors = new WeakMap<Envelope, number>();
+
+/** Where this song's grid starts, measured once per envelope: a draw asks every frame. */
+function anchorOf(env: Envelope): number {
+  let phase = anchors.get(env);
+  if (phase === undefined) {
+    phase = beatPhase(env.transients, env.bpm).phase;
+    anchors.set(env, phase);
+  }
+  return phase;
+}
 
 /** What the file service hands back for one cached song: the whole-file envelope, in buckets. */
 export interface Envelope {
@@ -79,7 +97,7 @@ function gridIn(
   const period = (60 / env.bpm) * every;
   if (!(period > 0) || !Number.isFinite(period)) return [];
   // The grid the DECK aligns on, not this view's own guess — so what you see is what you hear.
-  const anchor = beatPhase(env.transients, env.bpm).phase;
+  const anchor = anchorOf(env);
   const out: number[] = [];
   for (
     let t = firstBeatAfter(from, anchor, period);

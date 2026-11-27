@@ -1,5 +1,5 @@
+import { BEATS_PER_BAR } from "@studio/k7-wasm/desk";
 import { describe, expect, it } from "vitest";
-import { BEATS_PER_BAR } from "./beats";
 import {
   barsIn,
   beatsIn,

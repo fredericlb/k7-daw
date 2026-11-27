@@ -5,12 +5,9 @@
 // the start first would open a loop from zero for a block, and the record would leave. See
 // ../docs/loop.md.
 
-import { useCallback, useRef, useState } from "react";
-import type { DeckId, DeckTempo } from "./deckVocabulary";
 import {
   beatSeconds,
   beatsBetween,
-  DEFAULT_LOOP_BEATS,
   type DeckLoop,
   canLoop as gridEnough,
   beatJump as jumpTo,
@@ -19,7 +16,13 @@ import {
   loopParams,
   resized,
   snapToBeat,
-} from "./loop";
+} from "@studio/k7-wasm/desk";
+import { useCallback, useRef, useState } from "react";
+import {
+  DEFAULT_LOOP_BEATS,
+  type DeckId,
+  type DeckTempo,
+} from "./deckVocabulary";
 
 /** What the loop section offers a view. Every deck answers, loaded or not. */
 export interface DeckLoops {

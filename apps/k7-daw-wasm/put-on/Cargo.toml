@@ -1,0 +1,19 @@
+[package]
+name = "put-on"
+version = "0.1.0"
+edition = "2024"
+description = "What it costs to put a record on a deck that already holds one: sends the desk's document to a running engine and times the `applied` answer (a manual harness)."
+publish = false
+
+[[bin]]
+name = "put-on"
+path = "src/main.rs"
+
+[dependencies]
+turntables = { path = "../turntables" }
+song = { path = "../song", default-features = false }
+song-schema = { path = "../song-schema" }
+indexmap = "2"
+serde_json = { version = "1", features = ["preserve_order", "float_roundtrip"] }
+# The socket the backend's own tokio-tungstenite is built on, here blocking: the harness is one thread and one answer at a time.
+tungstenite = "0.29"

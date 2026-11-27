@@ -11,6 +11,8 @@ mod schema_tests;
 #[cfg(test)]
 mod tests;
 #[cfg(test)]
+mod tests_desk;
+#[cfg(test)]
 mod tests_eyes;
 #[cfg(test)]
 mod tests_file;
@@ -23,6 +25,7 @@ mod tests_rules;
 #[cfg(test)]
 mod tests_text;
 pub mod typed;
+pub mod typed_desk;
 pub mod typed_editors;
 pub mod typed_ticks;
 pub mod typed_timeline;

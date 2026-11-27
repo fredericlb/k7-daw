@@ -319,8 +319,8 @@ summing sits at −34 dB (`apps/k7-daw-frontend/packages/k7-plugins/docs/turntab
 
 The number to read is not the cold apply — 441 ms against 267 is an apply **on an empty engine**,
 the page loading, once. The gesture that matters is putting a record
-on a deck that already holds one, and `apps/k7-daw-frontend/packages/k7-plugins/scripts/turntables/put-on.ts` measures exactly
-that, by timing the `applied` reply to the document `withDecks` produces:
+on a deck that already holds one, and `apps/k7-daw-wasm/put-on/src/main.rs` measures exactly
+that, by timing the `applied` reply to the document `with_decks` produces:
 
 | record | one platter | four platters | difference |
 |---|---|---|---|
@@ -337,7 +337,7 @@ of every gesture, and a separated record that scratches like any other.
 
 **And it is not a CPU problem.** Eight platters — both decks separated, both turning — cost about
 30 % of one core, and turning KEY on for all eight adds **3 points**, four SoundTouch instances per
-deck included: `put-on.ts --hold=45 [--key]`, with `Get-Process k7-runtime | Select CPU` read at
+deck included: `put-on --hold=45 [--key]`, with `Get-Process k7-runtime | Select CPU` read at
 each end of the hold.
 
 The one real cost is the one `bpm.md` already names: four parts stretched separately sum back less

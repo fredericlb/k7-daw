@@ -244,7 +244,7 @@ than to a module. `Source BPM` is measured by the pass; `Target BPM` is what the
 fader sets.
 
 The tempo stays on the RECORD's lane alone, and that is deliberate. It is realised by warping the
-clip, and the desk applies that same warp to all five clips of a deck (`withDecks`), so a tempo
+clip, and the desk applies that same warp to all five clips of a deck (`with_decks`), so a tempo
 node per stem lane would be four more nodes describing one fact. The binding resolves by TRACK
 for an offline module, and the track it names is the deck's.
 

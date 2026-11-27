@@ -269,7 +269,7 @@ different people.
 
 The check is a **gate** rather than a per-knob badge: the components required are the ones that make
 a desk a desk — a crossfade, three EQ bands and a filter per deck. A desk missing its crossfade is
-not a desk with one feature off. `unmappedControls` in `apps/k7-daw-frontend/packages/k7-plugins/src/turntables/mapping.ts` owns
+not a desk with one feature off. `unmappedControls` in `apps/k7-daw-wasm/turntables/src/bindings.rs` owns
 the list, because which components a type needs is the surface's own business and `@studio/song`
 does not know what a `crossfade` is. It is internal to the desk — the package publishes four
 subpaths, and this is not one of them.
@@ -424,15 +424,15 @@ concept invented for k7.
 
 ### One writer for one engine
 
-The desk drives the engine by **sending a whole `ProjectDoc`**: `sendDecks` takes the compiled
-project (`GET /engine-doc`), fills the decks' clips into it (`withDecks`) and plays the result.
+The desk drives the engine by **sending a whole `ProjectDoc`**: `deckDocument` takes the compiled
+project (`GET /engine-doc`), fills the decks' clips into it (`with_decks`) and plays the result.
 
 **The file service is the only writer**, because it is what loads k7's project into the engine in
 the first place. Two writers for one engine means whichever wrote last wins: a save during a set
 drops the decks' clips, a deck gesture undoes a change the service just applied. `Deck.sendProject`
 is the seam that keeps it to one — k7 posts to `POST /engine/project`, which the service forwards on
 its own link. Taking a `Deck` rather than an `EngineClient` is what makes this a parameter rather
-than a fork: `sendDecks` knows nothing about a socket.
+than a fork: `deckDocument` knows nothing about a socket.
 
 #### The ordering rule, in one place
 

@@ -105,18 +105,18 @@ written for an earlier desk keeps reading. The scaffold does not offer it.
 
 ## What must stay true
 
-- **A deck's five clips are sample-aligned.** Same `start`, same warp, same `slip` — `withDecks`
+- **A deck's five clips are sample-aligned.** Same `start`, same warp, same `slip` — `with_decks`
   fills them in one place for that. A one-sample drift does not make a quieter instrument: it
   makes a comb filter, and nothing on screen would say so.
 - **The record's lane is EMPTY when the song is separated.** The four parts *are* the record;
-  playing it as well would double it. The same `withDecks` decides both, both ways.
+  playing it as well would double it. The same `with_decks` decides both, both ways.
 - **An incomplete `stems/` folder does not count as separated.** `stemsComplete` demands all
   four: three parts out of four is not a half-successful separation, it is a song missing an
   instrument, and putting it on a deck would be audible with nothing to say so.
 - **The four parts are four PLATTERS**, as an unseparated record is one. They share a position, a
   rate and a `Key`; `plattersOf` names them, and one gesture — cue, scrub, scratch — reaches them
   all. That is what makes a separated record scratchable. The cost is measured:
-  `apps/k7-daw-frontend/packages/k7-plugins/scripts/turntables/put-on.ts`, and 157 ms more to put on a 4-minute song.
+  `apps/k7-daw-wasm/put-on/src/main.rs`, and 157 ms more to put on a 4-minute song.
 - **The tempo does not get in the way.** A sum requires no cancellation, so each part stretches on
   its own, keylock on or off ([bpm.md](bpm.md)).
 - **An unseparated song leaves its lanes EMPTY**, and its own lane plays it. Placing four clips on

@@ -1,6 +1,6 @@
 # Correcting the grid
 
-A track's grid is **inferred**: the engine measures a tempo, and [beats.ts](../../src/turntables/beats.ts)
+A track's grid is **inferred**: the engine measures a tempo, and `turntables`' `beats.rs`
 places the first beat on the circular mean of the transients, with a Rayleigh test saying whether
 that phase is a measurement or a shrug. It often works. When it does not —
 [bpm.md](bpm.md) shows a track (the Bashung) whose detected tempo is plain wrong — there has to be

@@ -155,11 +155,11 @@ Three things are needed for that, and without any one of them the node stays fro
 | `Source BPM` | `views/mix.k7x` binds one parameter per control, so only `Target BPM` is named there; the other is measured and has no writer in the file. The publication below is what writes it, or the display stays at 0 for every song. |
 | the gap | putting a record on **clears** the fader (`clearTempo`) and the measurement arrives a moment later. Skipping the publication during that gap leaves the node on the **outgoing** song's numbers — at the exact moment you are looking at it to see what you have just put on. |
 
-The last two rules live in `offlinePublish` (`mixBindings.ts`), beside the other reads of the same
+The last two rules live in `offline_publish` (`bindings.rs`), beside the other reads of the same
 file, so a test holds them. A deck with no tempo publishes **0**, which is the module's own
 "change nothing" — and not silence.
 
-`offlinePublish` answers only for **tempo** controls: its list is derived from the tempos and holds
+`offline_publish` answers only for **tempo** controls: its list is derived from the tempos and holds
 nothing else. A broader rule — "any binding with no plugin", publishing the deck's target — would
 make an `offline` module bound to something else, a stem cut, read its deck's BPM as its own value.
 
@@ -173,16 +173,16 @@ Two decks at 128 BPM whose downbeats are 200 ms apart are not synchronised, they
 sync does **two** things: give the slave its tempo, then align its grid on the master's.
 
 Aligning the phase needs no per-deck transport: the **transport** is never moved. What moves is the
-slave's **position** — `alignSeek`, which reads where both actually are. One case only: everything
+slave's **position** — `align_seek`, which reads where both actually are. One case only: everything
 plays through a platter, separated record included, and a separated record is four platters one
 seek reaches.
 
-A platter is pulled backwards as readily as forwards, so `alignSeek` takes **the shortest path** —
+A platter is pulled backwards as readily as forwards, so `align_seek` takes **the shortest path** —
 never more than half a beat.
 
 Two things to know how to measure for that:
 
-- **Where the grid starts.** `beats.ts` takes a **circular mean** of it: every transient is folded
+- **Where the grid starts.** `beats.rs` takes a **circular mean** of it: every transient is folded
   onto one beat period and becomes an angle, and the unit vectors are averaged. What lands on the
   beat adds up, the rest cancels. The length of the result says how much the attacks agree, which
   is what allows refusing to answer rather than inventing a phase out of noise. And not

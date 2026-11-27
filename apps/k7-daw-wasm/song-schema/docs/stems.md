@@ -118,7 +118,7 @@ would be two linear gains in series, and eight compiled DSP graphs per set for n
 ## What the assembly still requires
 
 - **The four parts must be laid down together.** Same `start`, same warp, same `slip`: four parts a
-  few milliseconds apart is a flam on every hit. `withDecks` fills them in one place for that, and a
+  few milliseconds apart is a flam on every hit. `with_decks` fills them in one place for that, and a
   test demands it.
 - **The record's lane is EMPTY when the song is separated.** The four parts *are* the record;
   playing it as well would double it.

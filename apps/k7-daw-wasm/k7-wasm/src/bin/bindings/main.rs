@@ -2,6 +2,7 @@
 // A reader would get wrong that it deletes the folder first: a type that no longer exists must not linger there.
 
 mod consts;
+mod desk_consts;
 
 use gesture::roll_drag::GroupMove;
 use gesture::ruler::RulerTick;
@@ -11,6 +12,7 @@ use k7_wasm::ops::VersionAnswer;
 use k7_wasm::ops::address::{AddressRequest, BenchRef};
 use k7_wasm::ops::chains::{ChainsRequest, Kept};
 use k7_wasm::ops::curve::{CurveRequest, OpenAnswer};
+use k7_wasm::ops::desk::DeskRequest;
 use k7_wasm::ops::engine::{BestAnswer, EngineRequest, WarningAnswer};
 use k7_wasm::ops::eyes::{CubeAnswer, EyesRequest};
 use k7_wasm::ops::fields::FieldsRequest;
@@ -193,6 +195,13 @@ fn write_types(dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
     song::reads::ClipNameParts::export_all_to(dir)?;
     song::reads::TapRun::export_all_to(dir)?;
     song::reads::FolderName::export_all_to(dir)?;
+    DeskRequest::export_all_to(dir)?;
+    turntables::beats::BeatGrid::export_all_to(dir)?;
+    turntables::loops::LoopSpan::export_all_to(dir)?;
+    turntables::deck::LevelDb::export_all_to(dir)?;
+    turntables::bindings::DeskBindings::export_all_to(dir)?;
+    turntables::bindings::Published::export_all_to(dir)?;
+    turntables::set_list::SetList::export_all_to(dir)?;
     EyesRequest::export_all_to(dir)?;
     CubeAnswer::export_all_to(dir)?;
     eyes::scene::VideoScene::export_all_to(dir)?;

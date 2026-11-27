@@ -131,7 +131,7 @@ public function wrapping them. Counted so the figure does not surprise the next 
 - `apps/k7-daw-wasm/song/scripts/` — run by hand, apart from `checkPanelBinds.ts`, which is `npm run lint:panels`.
   `projectFingerprint.ts` records what a
   real project compiles to, to diff before and after a refactor.
-- `apps/k7-daw-frontend/packages/k7-plugins/scripts/turntables/put-on.ts` — this one is **documented** and run by hand
+- `apps/k7-daw-wasm/put-on/src/main.rs` — this one is **documented** and run by hand
   (`../apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/hosting.md`); it measures a SOUND, which no unit test does.
 
 ## 3. Built ahead — not to be confused with an oversight

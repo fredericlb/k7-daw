@@ -197,6 +197,7 @@ dependencies = [
  "song-edit",
  "song-schema",
  "ts-rs",
+ "turntables",
  "verbs",
  "waveform",
 ]
@@ -435,6 +436,20 @@ dependencies = [
  "quote",
  "syn 2.0.119",
  "termcolor",
+]
+
+[[package]]
+name = "turntables"
+version = "0.1.0"
+dependencies = [
+ "chains",
+ "indexmap",
+ "serde",
+ "serde_json",
+ "song",
+ "song-edit",
+ "song-schema",
+ "ts-rs",
 ]
 
 [[package]]

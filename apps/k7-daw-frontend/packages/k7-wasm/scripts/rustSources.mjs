@@ -19,6 +19,7 @@ export const CRATES = [
   "apps/k7-daw-wasm/k7x",
   "apps/k7-daw-wasm/verbs",
   "apps/k7-daw-wasm/eyes",
+  "apps/k7-daw-wasm/turntables",
   "apps/k7-daw-wasm/git-rules",
   "apps/k7-daw-backend/packages/waveform",
 ];

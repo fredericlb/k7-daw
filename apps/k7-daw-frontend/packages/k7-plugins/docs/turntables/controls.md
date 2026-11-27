@@ -4,7 +4,7 @@ Nothing on this desk is hard-wired. Each control carries an identifier, and what
 written in the project — repointing one line of `views/mix.k7x` is enough to send the left fader
 to the right deck.
 
-`controls.ts` gives every control an identifier; the per-deck ones are DERIVED from the decks, so
+`controls.rs` (the `turntables` crate) gives every control an identifier; the per-deck ones are DERIVED from the decks, so
 a third deck cannot be silently impossible to bind.
 
 | id | what | range |

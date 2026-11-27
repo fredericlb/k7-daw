@@ -5,6 +5,7 @@
 pub mod address;
 pub mod chains;
 pub mod curve;
+pub mod desk;
 pub mod engine;
 pub mod eyes;
 pub mod fields;
@@ -119,6 +120,7 @@ impl Session {
             "media" => media::dispatch(decode(input)?, out),
             "song" => song::dispatch(&mut self.songs, decode(input)?, out),
             "k7x" => k7x::dispatch(&mut self.k7x, decode(input)?, out),
+            "desk" => desk::dispatch(decode(input)?, out),
             "eyes" => eyes::dispatch(&mut self.floats, decode(input)?, out),
             #[cfg(feature = "verbs")]
             "verb" => verb::dispatch(decode(input)?, out),

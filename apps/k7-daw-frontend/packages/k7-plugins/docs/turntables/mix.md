@@ -225,18 +225,18 @@ Direct consequence: the crossfader does not move two levels, it sets `Mix` on `d
 the `@k7-core` module library's, through the binding declared in `views/mix.k7x`. Nothing on that path is
 hard-wired.
 
-`withDecks` touches **only** the clips of tracks carrying a loaded deck. A plugin, a send, an
+`with_decks` touches **only** the clips of tracks carrying a loaded deck. A plugin, a send, an
 automation the project declares stay the project's; touching them would put the desk back in the
 business of deciding what a set sounds like.
 
 **A stand-in exists**, deliberately: until the compile arrives, or for a project that does not
-compile, `deckDoc` builds two tracks with one level each and the crossfader moves the levels. A deck
+compile, `deck_doc` builds two tracks with one level each and the crossfader moves the levels. A deck
 must be able to play before everything is ready; it is an imitation of the set, and it says so.
 
 The tempo goes through its module too, by the other path. `tempo` is `offline`: no plugin, so
 nothing to set a parameter on — but `offline` does not mean "does nothing", it means "rendered true
 outside the graph". What a binding to such a module designates is the TRACK whose material it
-treats, and the stretch is a warp on the clip `withDecks` fills there — which Tracktion does live.
+treats, and the stretch is a warp on the clip `with_decks` fills there — which Tracktion does live.
 See [bpm.md](bpm.md).
 
 ## One transport, and no button left for it

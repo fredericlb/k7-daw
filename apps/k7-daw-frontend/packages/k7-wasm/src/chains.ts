@@ -169,7 +169,7 @@ export const trackInputs = (graph: WebGraph, track: string): string[] =>
   });
 
 /** The graph a join reads: each step's module, plugin and track, and only the widgets some line binds to. */
-const bindable = (
+export const bindableGraph = (
   graph: WebGraph | null,
   mapping: Readonly<Record<string, SurfaceBinding | null>> | undefined,
 ): WebGraph | null => {
@@ -228,7 +228,7 @@ export function resolveMapping<C extends { id: string }>(
     op: "bindings.resolve",
     args: {
       mapping,
-      graph: bindable(graph, mapping),
+      graph: bindableGraph(graph, mapping),
       controls: [...byId.keys()],
       noun: opts.noun,
       plugless: opts.plugless,

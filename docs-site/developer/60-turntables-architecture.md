@@ -12,13 +12,14 @@ The DJ desk is the drawer of the `turntables` surface type. It is a builtin **pl
 | `apps/k7-daw-frontend/packages/k7-plugins/src/turntables/engine.ts` | The `Deck` seam: what the desk needs from an engine (types only). Exported as `@studio/k7-plugins/turntables/engine`. |
 | `apps/k7-daw-frontend/packages/k7-plugins/src/turntables/useDeckSet.ts` | The two decks as one state machine: loads, tempos, sync, cues, every gesture. |
 | `apps/k7-daw-frontend/packages/k7-plugins/src/turntables/useDeckLoops.ts` | The loop section, a hook of its own. |
-| `apps/k7-daw-frontend/packages/k7-plugins/src/turntables/deck.ts` | Building the `ProjectDoc` the engine plays: `withDecks`, platter params, sync arithmetic. |
-| `apps/k7-daw-frontend/packages/k7-plugins/src/turntables/deckVocabulary.ts` | Deck ids, `DeckLoad`, `DeckTempo`, and every control's range. |
-| `apps/k7-daw-frontend/packages/k7-plugins/src/turntables/controls.ts`, `mapping.ts`, `mixBindings.ts` | Control ids, required controls, binding resolution. |
-| `apps/k7-daw-frontend/packages/k7-plugins/src/turntables/beats.ts`, `grid.ts`, `loop.ts`, `metronome.ts`, `waveform.ts`, `shuttle.ts`, `dial.ts`, `deskLayout.ts` | Pure arithmetic, each with a test. |
+| `apps/k7-daw-wasm/turntables/src/deck_doc.rs`, `deck.rs` | Building the `ProjectDoc` the engine plays (`with_decks`, `deck_doc`), platter params, sync arithmetic: the `turntables` crate, reached as `@studio/k7-wasm/desk`. |
+| `apps/k7-daw-frontend/packages/k7-plugins/src/turntables/deckVocabulary.ts` | What the page reads of the vocabulary: the crate's constants and types re-exported, the cue colours drawn here. |
+| `apps/k7-daw-wasm/turntables/src/controls.rs`, `bindings.rs`; `apps/k7-daw-frontend/packages/k7-plugins/src/turntables/mixBindings.ts` | Control ids, required controls and binding resolution (Rust); the lookups against the engine's live state (TypeScript). |
+| `apps/k7-daw-wasm/turntables/src/beats.rs`, `grid.rs`, `loops.rs`, `metronome.rs`, `rebuild.rs` | The beat grid, a corrected tempo, loops, the click, when a tempo change is worth a document (Rust, each with a test). |
+| `apps/k7-daw-frontend/packages/k7-plugins/src/turntables/waveform.ts`, `shuttle.ts`, `dial.ts`, `deskLayout.ts` | Per-frame drawing arithmetic, with a test. |
 | `apps/k7-daw-frontend/packages/k7-plugins/src/turntables/setList.ts`, `prewarm.ts`, `service.ts`, `mixView.ts` | Data: the playlist resolved against the workspace's audio files, background analysis, the file-service calls, reading/writing `mix.k7x`. |
 | `apps/k7-daw-frontend/packages/k7-plugins/src/turntables/views/` | React components: `Turntables` (the mapping gate), `MixView` (the desk), `DeckSide`, `DeckButtons`, `ChannelStrip`, `MixerColumn`, `BpmFader`, `CueButtons`, `LoopRow`, `Vinyl`, `Waveform`, `SongBrowser`, `inSight.ts`. |
-| `apps/k7-daw-frontend/packages/k7-plugins/scripts/turntables/put-on.ts` | A measurement script against a running engine; see [Desk tests](./65-dj-tests.md). |
+| `apps/k7-daw-wasm/put-on/src/main.rs` | A measurement binary against a running engine; see [Desk tests](./65-dj-tests.md). |
 
 On k7's side:
 
@@ -52,16 +53,16 @@ The desk never obtains an engine. A host passes a `Deck` (`engine.ts`):
 
 ## The document
 
-The engine never parses song files. The desk takes the **compiled** project (`projectApi.engineDoc()`), and `withDecks` (`deck.ts`) fills in only what is live:
+The engine never parses song files. The desk takes the **compiled** project (`projectApi.engineDoc()`), and `with_decks` (`apps/k7-daw-wasm/turntables/src/deck_doc.rs`, reached as `deckDocument`) fills in only what is live:
 
 - For each deck track, and each of its four stem lanes, the declared **platter** plugin (`PLATTER_TYPE = "studio_turntable"`, node `@meta/audio/turntable`) gets `deckFile` (the absolute path on the engine's machine) plus `Rate` and `Key`.
-- An unseparated record plays on the deck's own lane and leaves the stem lanes empty; a separated one is the reverse (`load.stems`). Stem files are `stems/<stem>.wav` beside the record (`stemSource`).
+- An unseparated record plays on the deck's own lane and leaves the stem lanes empty; a separated one is the reverse (`load.stems`). Stem files are `stems/<stem>.wav` beside the record (`stem_source`).
 - `Seek` is **removed** from the declared params on every send. The node file declares `Seek: 0`, and the engine reads a changed seek as a needle drop; re-asserting it on each document (a tempo drag sends one every 120 ms) would be heard as crackle.
-- A metronome track is appended (`metronome.ts`), always present, with clips only when the click is on.
+- A metronome track is appended (`metronome.rs`), always present, with clips only when the click is on.
 
-Before the compile lands, `deckDoc` builds a stand-in document from nothing so a desk can play immediately.
+Before the compile lands, `deck_doc` builds a stand-in document from nothing so a desk can play immediately.
 
-`sendDecks` routes through `deck.sendProject`. The document is re-sent on: a load, a tempo drag (throttled, `LIVE_WARP_MS = 120`, skipped under `LIVE_WARP_BPM = 0.05`), a release, sync, keylock, metronome, a deck started or stopped, stems arriving.
+The page sends `deckDocument(…)` through `deck.sendProject`. The document is re-sent on: a load, a tempo drag (throttled, `LIVE_WARP_MS = 120`, skipped under `LIVE_WARP_BPM = 0.05`, which is `worth_a_rebuild`'s), a release, sync, keylock, metronome, a deck started or stopped, stems arriving.
 
 ### Two write paths
 

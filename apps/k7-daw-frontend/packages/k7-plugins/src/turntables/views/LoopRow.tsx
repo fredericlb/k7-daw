@@ -1,10 +1,10 @@
 // LoopRow.tsx — a deck's loop section: beat jump, manual in/out, three lengths, halve/double and
 // the roll. One row under the cues. See ../../docs/loop.md.
 
+import { LOOP_BEATS } from "@studio/k7-wasm/desk";
 import { ChevronLeft, ChevronRight, RotateCcw } from "@studio/ui/icons";
 import type { ReactNode } from "react";
 import { m } from "../../paraglide/messages.js";
-import { LOOP_BEATS } from "../loop";
 
 /** How a length reads on a button: `16`, and `1/2` rather than `0.5` once ÷2 has been past one. */
 export function lengthLabel(beats: number): string {

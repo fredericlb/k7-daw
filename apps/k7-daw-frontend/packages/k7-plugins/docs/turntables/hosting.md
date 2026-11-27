@@ -30,7 +30,7 @@ neither.
 
 The desk plays by handing over a whole `ProjectDoc`. **Who is allowed to hand one to an engine is
 the host's answer, not the desk's**: k7's file service loads k7's project itself and is the only
-writer to that engine. So `sendDecks` takes `Deck.sendProject` rather than an `EngineClient`, and
+writer to that engine. So the page sends `deckDocument(…)` through `Deck.sendProject` rather than an `EngineClient`, and
 k7 posts to its service.
 
 Getting this wrong is not subtle and it is not loud either: two writers push documents that are
@@ -100,21 +100,22 @@ no `surfaces/` to look in), and what the file MEANS is this package's.
 ## What one deck costs
 
 `DECKS` is a list, not a pair. A third deck is a third track and a second meeting point in the
-chains file; nothing here hardcodes two, and `controls.ts` derives the desk's controls from that
+chains file; nothing here hardcodes two, and `controls.rs` derives the desk's controls from that
 list precisely so adding one does not silently leave it unbindable.
 
 ## Verified how
 
-`npm run test --workspace @studio/ui-turntables` — pure logic: the deck document, the beat grid,
-the bindings join, the set list, the waveform buckets. **Nothing mounts.**
+`cargo test` in `apps/k7-daw-wasm/turntables` — the rules: the deck document, the beat grid, loops,
+the bindings join, the set list. `npm run test --workspace @studio/k7-plugins` — what the page draws
+and reads off the engine's live state: the waveform buckets, the lookups, the browser's sort. **Nothing mounts.**
 
-**One failure mode here is a SOUND**, and `scripts/put-on.ts` is the harness left for it: it
-points at a running engine, drives the real `deckDoc`, and times the `applied` answer to putting a
+**One failure mode here is a SOUND**, and the `put-on` binary (`apps/k7-daw-wasm/put-on`) is the harness left for it: it
+points at a running engine, drives the real `deck_doc`, and times the `applied` answer to putting a
 record on a deck that already holds one — the one gesture whose cost is paid in front of an
 audience (`docs/platter-plan.md`).
 
 ```
-npx tsx apps/k7-daw-frontend/packages/k7-plugins/scripts/turntables/put-on.ts [ws://127.0.0.1:8765]
+cargo run --manifest-path apps/k7-daw-wasm/put-on/Cargo.toml -- [ws://127.0.0.1:8765]
 ```
 
 Three others lived here and went with the clip they measured (`tempo-drag.ts`, `metronome.ts`,

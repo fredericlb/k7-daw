@@ -20,16 +20,9 @@ From the root, `npm run test` runs `scripts/workspaces.mjs test`, which runs the
 
 | Test | Holds |
 |---|---|
-| `beats.test.ts` | `beatPhase` (circular mean, Rayleigh confidence), `alignSeek` (shorter way round, never before 0). |
-| `grid.test.ts` | The session's tempo correction over the analysis; an untouched fader follows it, a moved one does not. |
-| `loop.test.ts` | Snap to nearest beat, length rounding, edges clamped into the record, **write order** of `Roll`/`LoopStart`/`LoopEnd`. |
-| `deck.test.ts` | `withDecks`: platter params, stems versus record lanes, `Seek` never re-sent, the stand-in document, sync tempos, scratch throttle. |
-| `metronome.test.ts` | Which deck the click follows, the bar clip. |
-| `controls.test.ts` | Ids unique and per deck, ranges equal the modules' own. |
-| `mapping.test.ts` | Required controls, and the schema's mapping skeleton matching the control list. |
-| `mixBindings.test.ts` | Binding resolution, `also`, `invert`, offline tempo, plugin liveness, the optimistic override. |
+| `mixBindings.test.ts` | The lookups against the engine's live state: the control behind a module's param, what a control shows, whether the engine has caught up, the cue's own pair. |
 | `cue.test.ts` | Eight cue colours, all distinct. |
-| `setList.test.ts` | Resolving a playlist against the machine's cache, the three failure states, search folding and sorting, drag lookup. |
+| `setList.test.ts` | Search folding and sorting, drag lookup, the words a playlist's trouble is told in. |
 | `prewarm.test.ts` | Sequential walk, failures counted, early stop. |
 | `service.test.ts` | Cache-relative and playable paths, Windows and POSIX roots. |
 | `waveform.test.ts`, `shuttle.test.ts`, `dial.test.ts` | What the waveform, the shuttle and the record draw. |
@@ -37,6 +30,15 @@ From the root, `npm run test` runs `scripts/workspaces.mjs test`, which runs the
 | `views/ChannelStrip.test.tsx` | Knob geometry (`angleOf`, `arcPath`) and icon tables — functions only. |
 
 `views/ChannelStrip.stories.tsx` is a story for looking at the strip, not a test.
+
+### `apps/k7-daw-wasm/turntables/tests/`
+
+| Test | Holds |
+|---|---|
+| `rules.rs` | `beat_phase` (circular mean, Rayleigh confidence), `align_seek` (shorter way round, never before 0), a corrected tempo, loops (snap, length rounding, edges clamped into the record, **write order** of `Roll`/`LoopStart`/`LoopEnd`), the crossfade law, sync, keylock, the scratch pace, when a tempo move is worth a document. |
+| `deck_doc.rs` | `with_decks` and `deck_doc`: platter params, stems versus record lanes, `Seek` never re-sent, the stand-in document, which deck the click follows and the click's bar. |
+| `bindings.rs` | Ids unique and per deck, ranges equal the modules' own, required controls, binding resolution, which track a fader stretches, what a control sends, offline tempo. |
+| `set_list.rs` | Resolving a playlist against the workspace's files, the three failure states, and the scaffold's control list held to the original. |
 
 ### Elsewhere
 
@@ -52,17 +54,13 @@ From the root, `npm run test` runs `scripts/workspaces.mjs test`, which runs the
 | `apps/k7-daw-wasm/verbs/tests/transcribe.rs` | `track transcribe`'s refusals and writes. |
 | The tests in `apps/k7-daw-frontend/packages/audio-analysis/src/` | Decode through a stand-in engine, envelope arithmetic on a synthetic click track, the sidecar. |
 
-## Measuring against an engine: `put-on.ts`
+## Measuring against an engine: `put-on`
 
-`apps/k7-daw-frontend/packages/k7-plugins/scripts/turntables/put-on.ts` measures what putting a record on an already loaded deck costs: it writes test WAVs, sends the documents `withDecks` builds to a running engine, and times the `applied` answer.
+`apps/k7-daw-wasm/put-on/src/main.rs` measures what putting a record on an already loaded deck costs: it writes test WAVs, sends the documents `with_decks` builds to a running engine, and times the `applied` answer.
 
 ```bash
-npx tsx apps/k7-daw-frontend/packages/k7-plugins/scripts/turntables/put-on.ts [ws://127.0.0.1:8765] [--minutes=2] [--runs=6]
-npx tsx apps/k7-daw-frontend/packages/k7-plugins/scripts/turntables/put-on.ts --hold=30 [--key]
+cargo run --manifest-path apps/k7-daw-wasm/put-on/Cargo.toml -- [ws://127.0.0.1:8765] [--minutes=2] [--runs=6]
+cargo run --manifest-path apps/k7-daw-wasm/put-on/Cargo.toml -- --hold=30 [--key]
 ```
 
-`--hold` loads two separated decks, starts them and holds, so the CPU of eight running platters (with or without keylock, `--key`) can be read from outside. The script's comments are in French.
-
-As written, it imports `../src/deck`, which resolves to a folder under `scripts/` that does not exist (the module is `apps/k7-daw-frontend/packages/k7-plugins/src/turntables/deck.ts`); the import needs fixing before the script runs.
-
-Never run it against an engine you are building at the same time.
+`--hold` loads two separated decks, starts them and holds, so the CPU of eight running platters (with or without keylock, `--key`) can be read from outside. Never run it against an engine you are building at the same time.

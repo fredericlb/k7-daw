@@ -13,7 +13,7 @@ cases:
 - **both synchronised**: the master's, since the sync put the other on it.
 
 That beat must also have been **measured**. A tempo says how often a beat arrives, not which
-instant is one, and `beats.ts` already refuses to publish a phase the onsets did not give (see
+instant is one, and `beats.rs` already refuses to publish a phase the onsets did not give (see
 [bpm.md](bpm.md), the Rayleigh test). A click on the wrong half of the beat is not a degraded
 metronome, it is a false one, and you would play to it. So: no phase, no click. Of the three
 songs in `example.k7` that rules out the Bashung, whose detected tempo is simply wrong.

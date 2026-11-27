@@ -66,7 +66,7 @@ milestone ends with `bash scripts/agent/gate.sh --milestone`; the hours are agen
 | **M4a** (built, see below) reads on the doc | takes, rackLit, noteSpans, videoSpans, activity, clipLoop, clipInstances, clipNames, rows, timelineView, mixerStrips, gainTrim, mastering, midiIn, laneInput, rackFor, graphNotes, templateGraph, headphonesHint; the hooks' and pickers' doc reads, one mute/solo rule, tapTempo, projectName, projectKind; `engine-protocol/project.ts` and `timelineTypes.ts` generated, `build.ts` moved | 2,800 | song crate, k7-file-service | rust-song-twins merged | 16 |
 | **M4b** buffer text and paths | bufferReads, clipWindowText, sliceSymbols, clipFiles, timelineDrop, rackBuilder, presetOrder, videoTake, editorPaths, projectPaths, localTargets, openInEditor, sequenceEdit, moduleBehind, scalarField, curveDraft, clipboard; the editor's cursor scan, entity values and preview triggers; noteGrid's notes | 1,500 | song-edit, song-schema, k7x | rust-song-twins merged | 10 |
 | **M4c** (built) panels and AI organize | layoutTwins, groupGeometry, autoLayout, gridCells, panelTabs, widgetClipboard, widgetKinds, useParamRows, moduleUi, panelWrite, panelText, checkLayouts; the AI loop to a backend route (see "M4c, as built") | 2,860 (415 of tests) | song `modules/ui`, k7-front `routes/ai` | rust-song-twins merged; decision 3 | 11 |
-| **M5a** DJ desk | deck, metronome, beats, grid, loop, mapping, controls, mixBindings, mixView, setList, useDeckSet's arithmetic, put-on; deckVocabulary generated | 2,100 | new crate `apps/k7-daw-wasm/turntables` | M2a (bindings), M4a | 11 |
+| **M5a** (built, see below) DJ desk | deck, metronome, beats, grid, loop, mapping, controls, mixBindings, setList, put-on; deckVocabulary generated; `mixView` and the lookups of `mixBindings` stay (see "M5a, as built") | 1,380 (1,800 of tests) | new crate `apps/k7-daw-wasm/turntables`, op family `desk` | M2a (bindings), M4a | 11 |
 | **M5b** (built) graph layout | graphLayout (the only dagre importer) in the `chains` crate, `graph.layout` op; `pendingNode`, `trackPanelLayout` and the screens' shaping stay (see "M5b, as built") | 440 | chains crate + rust-sugiyama (decision 2) | M2a | 5 |
 | **M5c** (done) web-protocol's rest | workspace, machine, playlists, resources and cameras types generated; the project address grammar of `projects.ts` | 1,100 | k7-file-service, k7-front | M1b | 8 |
 
@@ -198,6 +198,22 @@ rules ported from the old tests, one run of 1,000 random cyclic graphs under a w
 run unchanged through the facade, minus the numbers that were dagre's. Left in TypeScript: `pendingNode` (it splices the page's own laid-out
 cards with the drawing's `jackPoint`, and the laid graph would cross the ABI both ways for a spliced cable) and `trackPanelLayout`
 (a composition of three Rust ops), and ChainsTab's and GraphPanel's memo shaping (React state).
+
+**M5a, as built.** The desk's rules are the crate `apps/k7-daw-wasm/turntables` (about 1,160 lines of Rust, `desk` ops in `k7-wasm`, `@studio/k7-wasm/desk`
+for the page, `k7-plugins/docs/turntables/rust.md` for the choices). Gone from TypeScript: `beats`, `grid`, `loop`, `mapping`, `controls`, `metronome`,
+`deck`, and the parts of `deckVocabulary`, `mixBindings` and `setList` that left (1,140 lines in all), `put-on.ts` (238, now the binary `apps/k7-daw-wasm/put-on`), and about 1,800 lines of their tests (a trimmed
+`mixBindings.test.ts` and `setList.test.ts` stay for what stays). `deckVocabulary.ts` is 47 lines of re-exports and the cue colours: its numbers are printed
+into `consts.generated.ts` and its types are generated, `DeckModule` extending the generated `DeckModuleDoc`. `with_decks` and `deck_doc` build over `song`'s `ProjectDoc`;
+`setList` returns issue keys that the page puts in words. Not moved, and why: `mixView.ts` (file reads and the 404 rule, browser I/O), the five lookups of
+`mixBindings.ts` that read the engine's live state each render (`hasPlugin`, `shownValue`, `engineAgrees`, `controlDriving`, `leavesByItsOwnPair`), `browseSongs`
+(the browser's `fr` collator), `entryForDrag`; `normalise`, `denormalise` and `mixControl` were called by no page code and are deleted. `useDeckSet` kept almost no arithmetic
+of its own (two lines of `deckRunning` and `worthARebuild`, which moved), so the 400 lines the row counted were not there; `scratchDelay`, asked on every pointer move, is the typed
+export `k7_g_scratch_delay`. The proofs: the old TypeScript against the ops on 101,000 generated cases (3,000 beat grids and 3,000 alignments against a clustered, jittered
+and random onset mix; 6,000 each of the loop rules; 1,500 whole documents, half over a compiled project with stem lanes, `Seek`, extra clips and modules, deep-equal; 3,000 each of
+the platter, sync, keylock, nudge, click-deck, crossfade, scratch and rebuild rules; 1,500 random graphs and mappings resolved, stretched, published and scaled, 880 values
+through linear, log, stepped and mirrored widgets; 300 playlists), all equal. One difference is accepted: the grid's `cos`, `sin`, `atan2` and `hypot` are Rust's, not V8's;
+61 % of 20,000 random grids are bit-identical and the worst gap is 7e-16, so a `confident` flag could flip only on the exact edge of its threshold. 55 Rust tests in the crate
+(the old tests' cases, seconds in debug), 6 in `k7-wasm`.
 
 **M2b, as built.** Eleven modules and the rulers' ladder went (about 1,100 lines of logic, 1,800 of
 tests; the page keeps `timelineTools.ts` (the tool names, their labels and the words of a note),
@@ -557,20 +573,20 @@ are grouped by folder and extension, with the reasons they stay.
 
 | module | lines | verdict | target | note |
 |---|---:|---|---|---|
-| k7-plugins/scripts/turntables/put-on.ts | 238 | MOVE | Rust bin beside turntables crate (engine WebSocket) | manual harness; follows deck.ts |
-| k7-plugins/src/turntables/beats.ts | 83 | MOVE | new crate k7-daw-wasm/turntables (k7-wasm op), ProjectDoc from song doc/types.rs | beat grid start + phase offset |
-| k7-plugins/src/turntables/controls.ts | 174 | MOVE | new crate k7-daw-wasm/turntables (k7-wasm op), ProjectDoc from song doc/types.rs | desk control ids; TS list generated |
-| k7-plugins/src/turntables/deck.ts | 363 | MOVE | new crate k7-daw-wasm/turntables (k7-wasm op), ProjectDoc from song doc/types.rs | the deck ProjectDoc |
-| k7-plugins/src/turntables/deckVocabulary.ts | 111 | GENERATE | ts-rs/consts from turntables crate | names + ranges |
-| k7-plugins/src/turntables/grid.ts | 29 | MOVE | new crate k7-daw-wasm/turntables (k7-wasm op), ProjectDoc from song doc/types.rs |  |
-| k7-plugins/src/turntables/loop.ts | 145 | MOVE | new crate k7-daw-wasm/turntables (k7-wasm op), ProjectDoc from song doc/types.rs | loop edges |
-| k7-plugins/src/turntables/mapping.ts | 42 | MOVE | new crate k7-daw-wasm/turntables (k7-wasm op), ProjectDoc from song doc/types.rs |  |
-| k7-plugins/src/turntables/metronome.ts | 107 | MOVE | new crate k7-daw-wasm/turntables (k7-wasm op), ProjectDoc from song doc/types.rs | click track |
-| k7-plugins/src/turntables/mixBindings.ts | 178 | MOVE | new crate k7-daw-wasm/turntables (k7-wasm op), ProjectDoc from song doc/types.rs | with ui-chains bindings |
-| k7-plugins/src/turntables/mixView.ts | 67 | MOVE | new crate k7-daw-wasm/turntables (k7-wasm op), ProjectDoc from song doc/types.rs | views/mix.k7x read |
-| k7-plugins/src/turntables/setList.ts | 108 | MOVE | new crate k7-daw-wasm/turntables (k7-wasm op), ProjectDoc from song doc/types.rs | playlist resolve (song-schema playlist) |
-| k7-plugins/src/turntables/useDeckLoops.ts | 201 | STAY 150 / MOVE 51 |  | hook; loop param rules (51) MOVE |
-| k7-plugins/src/turntables/useDeckSet.ts | 1004 | STAY 604 / MOVE 400 |  | 1004-line hook; gesture arithmetic (sync, tempo, cue) ~400 MOVE |
+| k7-plugins/scripts/turntables/put-on.ts | 238 | MOVED |  | built in M5a: see "M5a, as built" |
+| k7-plugins/src/turntables/beats.ts | 83 | MOVED |  | built in M5a: see "M5a, as built" |
+| k7-plugins/src/turntables/controls.ts | 174 | MOVED |  | built in M5a: see "M5a, as built" |
+| k7-plugins/src/turntables/deck.ts | 363 | MOVED |  | built in M5a: see "M5a, as built" |
+| k7-plugins/src/turntables/deckVocabulary.ts | 111 | GENERATED |  | built in M5a: see "M5a, as built" |
+| k7-plugins/src/turntables/grid.ts | 29 | MOVED |  | built in M5a: see "M5a, as built" |
+| k7-plugins/src/turntables/loop.ts | 145 | MOVED |  | built in M5a: see "M5a, as built" |
+| k7-plugins/src/turntables/mapping.ts | 42 | MOVED |  | built in M5a: see "M5a, as built" |
+| k7-plugins/src/turntables/metronome.ts | 107 | MOVED |  | built in M5a: see "M5a, as built" |
+| k7-plugins/src/turntables/mixBindings.ts | 178 | MOVED 90 / STAY 88 |  | built in M5a: see "M5a, as built" |
+| k7-plugins/src/turntables/mixView.ts | 67 | STAY |  | built in M5a: see "M5a, as built" |
+| k7-plugins/src/turntables/setList.ts | 108 | MOVED |  | built in M5a: see "M5a, as built" |
+| k7-plugins/src/turntables/useDeckLoops.ts | 201 | MOVED |  | built in M5a: see "M5a, as built" |
+| k7-plugins/src/turntables/useDeckSet.ts | 1004 | STAY |  | built in M5a: see "M5a, as built" |
 | k7-plugins/src/video/viewportRect.ts | 162 | MOVE | song pictures (k7-wasm op) | grip arithmetic writes the rect; hit-test per pointer stays; OVERLAP worktree-agent-a073bfbdd607a7ec8 touches ... |
 | panel-rules/src/aiAnswer.ts | 173 | MOVE | backend k7-front routes/ai (whole loop server-side); checks in song crate modules/ui ... | answer parse + JSON schema |
 | panel-rules/src/aiLoop.ts | 93 | MOVE | backend k7-front routes/ai (whole loop server-side); checks in song crate modules/ui ... | loop runs on the host with the key |

@@ -750,6 +750,67 @@ export const SURFACE_MAPPING_SKELETON = {
   ],
 } as const;
 
+/** The two decks, named as the project names them. */
+export const DECKS = ["deckA", "deckB"] as const;
+
+/** The crossfader's middle, where a set starts. */
+export const MIX_CENTRE = 0.5;
+
+/** The tempo the timeline runs at; each deck warps its own clip. */
+export const DOC_TEMPO = 120.0;
+
+/** How far a tempo bends either way. */
+export const PITCH_RANGE = 0.16;
+
+/** The module a deck's tempo belongs to. */
+export const TEMPO_MODULE = "@k7-core/cold/tempo";
+
+/** The tempo module's target param. */
+export const TEMPO_PARAM = "Target BPM";
+
+/** The tempo module's measured param. */
+export const TEMPO_SOURCE_PARAM = "Source BPM";
+
+/** The ends of the tempo fader. */
+export const BPM_RANGE = [10.0, 300.0] as const;
+
+/** The ends of an EQ knob, in dB. */
+export const EQ_DB = [-20.0, 20.0] as const;
+
+/** The ends of a deck's filter knob. */
+export const FILTER_RANGE = [-100.0, 100.0] as const;
+
+/** The ends of the input trim, in dB. */
+export const TRIM_DB = [-12.0, 12.0] as const;
+
+/** The ends of the channel fader, in dB. */
+export const LEVEL_DB = [-60.0, 6.0] as const;
+
+/** The echo's amount, dry to fully wet. */
+export const ECHO_RANGE = [0.0, 1.0] as const;
+
+/** How fast a record runs backwards under the censor. */
+export const CENSOR_RATE = -1.0;
+
+/** The three bands a deck's EQ strip draws, low to high. */
+export const EQ_BANDS = [
+  { id: "eqLow" },
+  { id: "eqMid" },
+  { id: "eqHigh" },
+] as const;
+
+/** The metre everything on the desk assumes. */
+export const BEATS_PER_BAR = 4;
+
+/** How far a tempo must move for a drag to send again. */
+export const LIVE_WARP_BPM = 0.05;
+
+/** The lengths a loop button offers, in beats. */
+export const LOOP_BEATS = [4.0, 8.0, 16.0] as const;
+
+/** What a beat jump moves by before anybody has chosen a length. */
+export const DEFAULT_LOOP_BEATS = 4.0;
+
 /** What a right-click can be on, as commands.yaml `menu:` names it. */
 export const MENU_ENTITIES = [
   "track",

@@ -7,6 +7,7 @@
 // because this view is unmounted the moment somebody opens the graph and a set outlives that.
 
 import { PLAYLISTS_DIR } from "@studio/k7-wasm/consts";
+import { beatPhase, loopSpan } from "@studio/k7-wasm/desk";
 import { playlistPathOf } from "@studio/k7-wasm/schema";
 import { Button } from "@studio/ui/button";
 import { Card } from "@studio/ui/card";
@@ -15,11 +16,9 @@ import type { RecordDrag } from "@studio/ui/record-drag";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { CodeText } from "../../CodeText";
 import { m } from "../../paraglide/messages.js";
-import { beatPhase } from "../beats";
 import type { DeckId, DeckTempo } from "../deckVocabulary";
 import { deskLayout, recordRow } from "../deskLayout";
 import type { Deck } from "../engine";
-import { loopSpan } from "../loop";
 import { MIX_VIEW_FILE } from "../mixView";
 import { NO_PREWARM, type Prewarm, prewarming, prewarmSet } from "../prewarm";
 import { recordPath, service } from "../service";

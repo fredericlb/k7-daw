@@ -839,6 +839,7 @@ pub fn text() -> String {
     lines.extend(plain().into_iter().flatten());
     lines.extend(address_consts().into_iter().flatten());
     lines.extend(page_vocab().into_iter().flatten());
+    lines.extend(crate::desk_consts::desk().into_iter().flatten());
     #[cfg(feature = "verbs")]
     lines.extend(ui_consts().into_iter().flatten());
     lines.join("\n")

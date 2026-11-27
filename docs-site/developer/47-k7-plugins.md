@@ -41,7 +41,7 @@ covers only how they plug in.
 
 ### Scripts
 
-`apps/k7-daw-frontend/packages/k7-plugins/scripts/turntables/put-on.ts` is a WebSocket benchmark that measures what
+`apps/k7-daw-wasm/put-on/src/main.rs` is a WebSocket benchmark that measures what
 putting a record on a deck costs against a running engine (`npx tsx` with the engine's address,
 `--minutes`, `--runs`, `--hold`). It is a measuring tool, not part of any test run.
 
