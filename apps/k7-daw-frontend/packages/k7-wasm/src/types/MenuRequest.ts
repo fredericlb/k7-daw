@@ -6,8 +6,8 @@ import type { CtxArgs } from "./CtxArgs";
 import type { FindArgs } from "./FindArgs";
 import type { FocusArgs } from "./FocusArgs";
 import type { HomeCtxArgs } from "./HomeCtxArgs";
+import type { HomeLineArgs } from "./HomeLineArgs";
 import type { HomeValuesArgs } from "./HomeValuesArgs";
-import type { LineArgs } from "./LineArgs";
 import type { LocaleArgs } from "./LocaleArgs";
 import type { NameOfArgs } from "./NameOfArgs";
 import type { NodeMenuArgs } from "./NodeMenuArgs";
@@ -28,7 +28,7 @@ export type MenuRequest =
   | { op: "menu.command_name_of"; args: NameOfArgs }
   | { op: "menu.arg_source"; args: ArgSourceArgs }
   | { op: "menu.home_catalogue"; args: LocaleArgs }
-  | { op: "menu.home_parse"; args: LineArgs }
+  | { op: "menu.home_parse"; args: HomeLineArgs }
   | { op: "menu.home_resolve"; args: HomeCtxArgs }
   | { op: "menu.home_find_project"; args: FindArgs }
   | { op: "menu.home_gripe"; args: FindArgs }

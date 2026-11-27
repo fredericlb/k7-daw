@@ -312,6 +312,68 @@ export const TASKS_FILE = "TODOS.md";
 /** The folder a workspace keeps its playlists in. */
 export const PLAYLISTS_DIR = "_playlists";
 
+/** The four sources a separation produces, IN THE ORDER the model returns them. */
+export const STEMS = ["drums", "bass", "other", "vocals"] as const;
+
+/** Where a separation's outputs go: beside the file, never next to it. */
+export const STEMS_DIR = "stems";
+
+/** A stem knob's travel: 0 is the part gone, 1 is as recorded, 2 is twice as much. */
+export const STEM_RANGE = [0.0, 2.0] as const;
+
+/** The middle of that travel, and the record as it was cut. */
+export const STEM_NEUTRAL = 1.0;
+
+/** The frame shapes on offer, and the pixels each means. */
+export const ASPECTS = [
+  { name: "16:9", w: 1920.0, h: 1080.0 },
+  { name: "9:16", w: 1080.0, h: 1920.0 },
+] as const;
+
+/** The quality presets an export may ask for, lowest first. */
+export const EXPORT_QUALITIES = ["low", "medium", "high", "max"] as const;
+
+/** The containers an export leaves in, the default first. */
+export const EXPORT_FORMATS = ["webm", "mp4"] as const;
+
+/** The containers the picture leaves in, each one an export format. */
+export const VIDEO_FORMATS = ["webm", "mp4"] as const;
+
+/** The kinds of surface a project may declare. */
+export const SURFACE_TYPES = [
+  "turntables",
+  "timeline",
+  "viewport",
+  "mastering",
+] as const;
+
+/** The track categories, in the order their tracks are laid out. */
+export const TRACK_CATEGORIES = [
+  "vox",
+  "drums",
+  "bass",
+  "guitar",
+  "keys",
+  "synth",
+  "other",
+] as const;
+
+/** The instrument codes a track name may lead with: each one's family and the label a row shows. */
+export const TRACK_PREFIXES = {
+  vo: ["voice", "voix"],
+  ch: ["choir", "choeurs"],
+  da: ["drums", "batterie acoustique"],
+  ds: ["drums", "batterie synthétique"],
+  be: ["bass", "basse électrique"],
+  ba: ["bass", "basse acoustique"],
+  bs: ["bass", "basse synth"],
+  ge: ["guitar", "guitare électrique"],
+  ga: ["guitar", "guitare acoustique"],
+  pi: ["piano", "piano"],
+  sy: ["synth", "synthé"],
+  sx: ["sax", "saxophone"],
+} as const;
+
 /** What a right-click can be on, as commands.yaml `menu:` names it. */
 export const MENU_ENTITIES = [
   "track",
@@ -340,9 +402,6 @@ export const EMPTY_RECENT_MAX = 5;
 
 /** The mixdown formats the file service renders. */
 export const MIX_FORMATS = ["wav", "mp3"] as const;
-
-/** The containers the picture leaves in, the default first. */
-export const VIDEO_FORMATS = ["webm", "mp4"] as const;
 
 /** The cut handed to another editor: OpenTimelineIO, or a CMX 3600 EDL of one lane. */
 export const TIMELINE_FORMATS = ["otio", "edl"] as const;

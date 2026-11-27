@@ -6,7 +6,7 @@ import type { EnterArgs } from "./EnterArgs";
 import type { FormArgs } from "./FormArgs";
 import type { FuzzyArgs } from "./FuzzyArgs";
 import type { InMenuArgs } from "./InMenuArgs";
-import type { KindArgs } from "./KindArgs";
+import type { LineValuesArgs } from "./LineValuesArgs";
 import type { MenuChoiceArgs } from "./MenuChoiceArgs";
 import type { MoveArgs } from "./MoveArgs";
 import type { NextArgs } from "./NextArgs";
@@ -18,7 +18,7 @@ import type { SetLabelArgs } from "./SetLabelArgs";
 import type { SetMenuArgs } from "./SetMenuArgs";
 import type { SetPrefArgs } from "./SetPrefArgs";
 import type { StepArgs } from "./StepArgs";
-import type { ValuesArgs } from "./ValuesArgs";
+import type { WantsKindArgs } from "./WantsKindArgs";
 
 /**
  * The `ui.*` requests.
@@ -32,12 +32,12 @@ export type UiRequest =
   | { op: "ui.required_count"; args: FormArgs }
   | { op: "ui.empty_values"; args: FormArgs }
   | { op: "ui.can_run"; args: FormArgs }
-  | { op: "ui.line_args"; args: ValuesArgs }
+  | { op: "ui.line_args"; args: LineValuesArgs }
   | { op: "ui.next_field"; args: NextArgs }
   | { op: "ui.first_missing"; args: FormArgs }
   | { op: "ui.apply_offer"; args: OfferArgs }
   | { op: "ui.caret_answers"; args: CaretArgs }
-  | { op: "ui.wants_kind"; args: KindArgs }
+  | { op: "ui.wants_kind"; args: WantsKindArgs }
   | { op: "ui.enter_action"; args: EnterArgs }
   | { op: "ui.step_sentence"; args: StepArgs }
   | { op: "ui.prefs_view"; args: PrefsArgs }

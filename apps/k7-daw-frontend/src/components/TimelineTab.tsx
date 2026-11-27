@@ -10,6 +10,7 @@ import {
   pendingClips,
   pendingSplitAt,
 } from "@studio/k7-wasm/edit";
+import {
   moveOffset,
   snapMode,
   snapTo,

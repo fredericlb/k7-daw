@@ -4,8 +4,8 @@
 
 import { fetchScene } from "@studio/k7-plugins/video";
 import { EXPORT_USAGE, parseExportAsk } from "@studio/k7-wasm/edit";
+import type { VideoSettings } from "@studio/k7-wasm/picture";
 import { runRedo, runUndo } from "@studio/project-shell/undo";
-import type { VideoSettings } from "@studio/song-schema/renderSettings";
 import { exportHost } from "../../exportHost";
 import { resolveEntry } from "../../localTargets";
 import { m } from "../../paraglide/messages.js";

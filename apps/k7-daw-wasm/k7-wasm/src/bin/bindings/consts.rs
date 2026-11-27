@@ -426,11 +426,6 @@ fn ui_consts() -> Vec<[String; 3]> {
             &json!(verbs::ui::export::MIX_FORMATS),
         ),
         export(
-            "The containers the picture leaves in, the default first.",
-            "VIDEO_FORMATS",
-            &json!(verbs::ui::export::VIDEO_FORMATS),
-        ),
-        export(
             "The cut handed to another editor: OpenTimelineIO, or a CMX 3600 EDL of one lane.",
             "TIMELINE_FORMATS",
             &json!(verbs::ui::export::TIMELINE_FORMATS),
