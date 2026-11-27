@@ -142,7 +142,7 @@ export function TreeMenu<N extends TreeNode>({
                 className={cn(
                   "rounded px-2 py-0.5 text-xs",
                   prompting.danger
-                    ? "bg-destructive text-destructive-foreground"
+                    ? "bg-error"
                     : "bg-primary text-primary-foreground",
                 )}
               >
@@ -159,9 +159,7 @@ export function TreeMenu<N extends TreeNode>({
               onClick={() => start(action)}
               className={cn(
                 "block w-full px-3 py-1 text-left hover:bg-accent focus-visible:bg-accent focus-visible:outline-none",
-                action.danger
-                  ? "text-destructive"
-                  : "hover:text-accent-foreground",
+                action.danger ? "text-error" : "hover:text-accent-foreground",
                 "[@media(hover:none)]:py-2",
               )}
             >

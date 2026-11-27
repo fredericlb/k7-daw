@@ -6,10 +6,10 @@ import {
   FolderGit2,
   FolderSearch,
   LibraryBig,
-  Loader2,
   ServerCrash,
   UserRoundX,
 } from "@studio/ui/icons";
+import { Spinner } from "@studio/ui/spinner";
 import type { ReactNode } from "react";
 import type { ProjectGateStrings } from "./gateTypes.ts";
 
@@ -204,7 +204,7 @@ export function GateSpinner({ label }: { label: string }) {
       aria-label={label}
       className="flex h-full items-center justify-center bg-background text-fg-2"
     >
-      <Loader2 className="h-5 w-5 animate-spin" aria-hidden />
+      <Spinner inherit />
     </div>
   );
 }

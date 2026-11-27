@@ -12,7 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@studio/ui/dialog";
-import { Loader2 } from "@studio/ui/icons";
+import { Spinner } from "@studio/ui/spinner";
 import type { EngineSyncState } from "@studio/web-protocol";
 import { useEffect, useState } from "react";
 import { m } from "../paraglide/messages.js";
@@ -80,7 +80,7 @@ export function EngineSyncFailedDialog({
                 .catch(() => setReloading(false));
             }}
           >
-            {reloading && <Loader2 className="mr-1 h-4 w-4 animate-spin" />}
+            {reloading && <Spinner size="sm" inherit className="mr-1" />}
             {reloading ? m["engineSync.reloading"]() : m["engineSync.reload"]()}
           </Button>
         </DialogFooter>

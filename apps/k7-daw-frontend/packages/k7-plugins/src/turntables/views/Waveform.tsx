@@ -332,7 +332,7 @@ export function Waveform({
       {problem ? (
         // The reason, truncated to one line with the whole of it in the tooltip.
         <span
-          className="absolute inset-x-2 top-1/2 -translate-y-1/2 truncate text-center text-[11px] text-destructive"
+          className="absolute inset-x-2 top-1/2 -translate-y-1/2 truncate text-center text-[11px] text-error"
           title={problem}
         >
           {m["wave.none"]({ problem })}

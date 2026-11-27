@@ -10,7 +10,8 @@ import {
 } from "@studio/song-schema/reference";
 import { Button } from "@studio/ui/button";
 import { EmptyState } from "@studio/ui/empty-state";
-import { Loader2, Music, Pause, Play, Plus, Trash2 } from "@studio/ui/icons";
+import { Music, Pause, Play, Plus, Trash2 } from "@studio/ui/icons";
+import { Loading, Spinner } from "@studio/ui/spinner";
 import { formatBytes } from "@studio/ui-chains-react/node-load";
 import { byPeoplePath } from "@studio/web-protocol/tree";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -129,7 +130,7 @@ export function ReferencesPanel({
 
       {busy ? (
         <p className="flex shrink-0 items-center gap-2 border-b bg-muted/30 px-2 py-1.5 text-muted-foreground text-xs">
-          <Loader2 className="h-3 w-3 shrink-0 animate-spin" /> {busy}
+          <Spinner size="xs" inherit className="shrink-0" /> {busy}
         </p>
       ) : null}
 
@@ -142,7 +143,7 @@ export function ReferencesPanel({
       ) : null}
 
       {note ? (
-        <p className="shrink-0 border-b px-2 py-1.5 text-destructive text-xs">
+        <p className="shrink-0 border-b px-2 py-1.5 text-error text-xs">
           {note}
         </p>
       ) : null}
@@ -151,8 +152,8 @@ export function ReferencesPanel({
 
       <div className="min-h-0 flex-1 overflow-y-auto">
         {rows === null ? (
-          <div className="flex items-center gap-2 p-4 text-muted-foreground text-sm">
-            <Loader2 className="h-4 w-4 animate-spin" /> {m["common.loading"]()}
+          <div className="p-4 text-muted-foreground text-sm">
+            <Loading label={m["common.loading"]()} />
           </div>
         ) : rows.length === 0 ? (
           <EmptyState compact glyph={<Music />} title={m["refs.emptyTitle"]()}>

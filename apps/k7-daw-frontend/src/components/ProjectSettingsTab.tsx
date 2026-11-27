@@ -3,6 +3,7 @@
 // this tab write the same line. See apps/k7-daw-frontend/packages/song/docs/console.md.
 
 import { Picker } from "@studio/ui/picker";
+import { SectionHeading } from "@studio/ui/section-heading";
 import { sortForPeople } from "@studio/web-protocol/tree";
 import { useCallback, useEffect, useState } from "react";
 import { api } from "../api";
@@ -86,7 +87,7 @@ export function ProjectSettingsTab({
 
   return (
     <div className="flex flex-col gap-2">
-      <h3 className="type-caps text-fg-2">{m["settings.console"]()}</h3>
+      <SectionHeading>{m["settings.console"]()}</SectionHeading>
       <Picker
         items={items}
         value={current}

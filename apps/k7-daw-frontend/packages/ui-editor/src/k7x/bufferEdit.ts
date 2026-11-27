@@ -4,6 +4,7 @@
 
 import { ChangeSet } from "@codemirror/state";
 import { type K7Change, K7Document, type K7Scope } from "@studio/k7-wasm/k7x";
+import type { TextEdit } from "@studio/k7-wasm/text";
 
 interface Made {
   before: string;
@@ -33,6 +34,25 @@ export function editK7xText(
     if (recent.length > KEEP) recent.shift();
   }
   return after;
+}
+
+/** A Rust text writer run on `text`: the new text, or null when it refuses (a false result), throws or the text does not read. */
+export function editTextBy(
+  text: string,
+  run: (text: string) => TextEdit,
+): string | null {
+  let out: TextEdit;
+  try {
+    out = run(text);
+  } catch {
+    return null;
+  }
+  if (out.results.includes(false)) return null;
+  if (out.text !== text) {
+    recent.push({ before: text, after: out.text, changes: out.changes });
+    if (recent.length > KEEP) recent.shift();
+  }
+  return out.text;
 }
 
 /** The splices an edit made from `before` to `after`, as one change set; null when no edit here made that pair. */

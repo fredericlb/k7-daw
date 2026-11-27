@@ -320,7 +320,6 @@
   --sh-muted-foreground: var(--k7-text-2);
   --sh-accent: var(--k7-row);
   --sh-accent-foreground: var(--k7-text);
-  --sh-destructive: var(--k7-error);
   --sh-border: var(--k7-hairline);
   --sh-input: var(--k7-input-line);
   --sh-ring: var(--k7-focus-line);
@@ -355,7 +354,6 @@
   --color-muted-foreground: var(--sh-muted-foreground);
   --color-accent: var(--sh-accent);
   --color-accent-foreground: var(--sh-accent-foreground);
-  --color-destructive: var(--sh-destructive);
   --color-border: var(--sh-border);
   --color-input: var(--sh-input);
   --color-ring: var(--sh-ring);

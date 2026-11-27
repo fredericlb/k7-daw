@@ -5,6 +5,7 @@ import { Button } from "@studio/ui/button";
 import { Chip } from "@studio/ui/chip";
 import { File, FileCode, FileText, FileX } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
+import { SectionHeading } from "@studio/ui/section-heading";
 import { moveFocus } from "../menuTabs";
 import { m } from "../paraglide/messages.js";
 import { choiceLabel, whereOf } from "./ConflictCard";
@@ -35,13 +36,13 @@ export function MergeList({
   const n = conflicts.length;
   return (
     <div className="flex min-h-0 flex-col gap-2">
-      <h2 className="type-caps px-1 text-fg-3">
+      <SectionHeading as="h2" className="px-1">
         {(n === 1
           ? m["git.conflictsHeading.one"]
           : m["git.conflictsHeading.other"])({
           n,
         })}
-      </h2>
+      </SectionHeading>
       <div
         role="listbox"
         aria-label={m["git.conflictList"]()}

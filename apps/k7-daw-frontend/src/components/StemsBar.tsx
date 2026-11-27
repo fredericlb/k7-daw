@@ -123,7 +123,7 @@ export function StemsBar({
           </p>
           {/* Never swallowed: a song the machine has not pulled is exactly what somebody needs to see after an overnight run. */}
           {run.notes.map((n) => (
-            <p key={n} className="truncate text-xs text-destructive" title={n}>
+            <p key={n} className="truncate text-xs text-error" title={n}>
               {n}
             </p>
           ))}

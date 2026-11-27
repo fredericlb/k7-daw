@@ -12,6 +12,7 @@ import { EmptyState } from "@studio/ui/empty-state";
 import { ErrorCard } from "@studio/ui/error-card";
 import { Copy, Pencil, Plus, Radio, Snowflake, Trash2 } from "@studio/ui/icons";
 import { RowGroup } from "@studio/ui/row-group";
+import { SectionHeading } from "@studio/ui/section-heading";
 import { Spinner } from "@studio/ui/spinner";
 import type { FrozenChain } from "@studio/web-protocol";
 import { BENCH_REPO, benchProject } from "@studio/web-protocol/projects";
@@ -298,7 +299,9 @@ export function FrozenChainsSection({ files }: { files: AccountFiles | null }) {
           <p className="type-secondary text-fg-2">{m["frozen.summary"]()}</p>
           {error && <ErrorCard title={error} />}
           <section className="flex flex-col gap-2">
-            <h3 className="type-caps px-1 text-fg-3">{m["frozen.mine"]()}</h3>
+            <SectionHeading className="px-1">
+              {m["frozen.mine"]()}
+            </SectionHeading>
             {mine.length === 0 ? (
               <EmptyState
                 glyph={<Snowflake />}
@@ -331,7 +334,9 @@ export function FrozenChainsSection({ files }: { files: AccountFiles | null }) {
             </p>
           </section>
           <section className="flex flex-col gap-2">
-            <h3 className="type-caps px-1 text-fg-3">{m["frozen.cold"]()}</h3>
+            <SectionHeading className="px-1">
+              {m["frozen.cold"]()}
+            </SectionHeading>
             {cold.length === 0 ? (
               <p className="type-secondary px-1 text-fg-2">
                 {m["frozen.coldEmpty"]()}

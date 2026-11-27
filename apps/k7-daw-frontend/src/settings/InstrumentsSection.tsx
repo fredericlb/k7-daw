@@ -2,6 +2,7 @@
 // with its one action. Drawn by the desktop app's engine page and by the phone's engine section, which
 // differ only in how a command reaches their supervisor. See ../../docs/settings.md.
 
+import { Row } from "@studio/ui/row-group";
 import { m } from "../paraglide/messages.js";
 import {
   type DesktopEngineSnapshot,
@@ -10,7 +11,7 @@ import {
   instrumentRows,
   sizeOf,
 } from "./desktopEngine";
-import { Action, Row, Section } from "./Section";
+import { Action, Section } from "./Section";
 
 /** What an instrument's row says under its name. */
 function instrumentDetail(i: InstrumentRow): string {
@@ -38,14 +39,13 @@ export function InstrumentsSection({
       hint={m["engine.downloadsHint"]()}
     >
       {instruments.length === 0 ? (
-        <Row label={m["engine.noInstruments"]()} />
+        <Row>{m["engine.noInstruments"]()}</Row>
       ) : (
         instruments.map((i) => {
           const action = instrumentAction(i);
           return (
             <Row
               key={i.name}
-              label={i.label}
               detail={
                 i.phase === "downloading" ? (
                   <progress
@@ -57,15 +57,18 @@ export function InstrumentsSection({
                   instrumentDetail(i)
                 )
               }
+              trailing={
+                action && (
+                  <Action
+                    danger={action.label === "remove"}
+                    onClick={() => send(action.cmd, i.name)}
+                  >
+                    {m[`engine.instrument.${action.label}`]()}
+                  </Action>
+                )
+              }
             >
-              {action && (
-                <Action
-                  danger={action.label === "remove"}
-                  onClick={() => send(action.cmd, i.name)}
-                >
-                  {m[`engine.instrument.${action.label}`]()}
-                </Action>
-              )}
+              {i.label}
             </Row>
           );
         })

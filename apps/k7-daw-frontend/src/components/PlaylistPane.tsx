@@ -10,8 +10,8 @@ import {
   recordName,
   resolveRecords,
 } from "@studio/k7-wasm/records";
+import type { PlaylistItem } from "@studio/k7-wasm/types";
 import { mediaUrl } from "@studio/project-shell/fileApi";
-import type { PlaylistItem } from "@studio/song-schema/playlist";
 import { packRecordDrag, RECORD_DRAG_TYPE } from "@studio/song-schema/records";
 import { Button } from "@studio/ui/button";
 import {

@@ -9,8 +9,9 @@ import { askText } from "@studio/project-shell/ask";
 import { projectApi } from "@studio/project-shell/project";
 import { DEFAULT_LIBRARY } from "@studio/song-schema/moduleTypes";
 import { GRAPH_FILE } from "@studio/song-schema/yaml/graphSchema";
-import { Loader2, Workflow, X } from "@studio/ui/icons";
+import { Workflow, X } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
+import { Spinner } from "@studio/ui/spinner";
 import { buildGraph, layout } from "@studio/ui-chains/graph";
 import { DomChains } from "@studio/ui-chains-react";
 import { useAutosave } from "@studio/ui-editor/autosave";
@@ -308,7 +309,7 @@ export function ChainsBuilder({
         {(error ?? fileError) && (
           <div
             role="alert"
-            className="absolute inset-x-0 top-0 z-10 flex items-start gap-2 bg-destructive/10 p-2 text-xs"
+            className="absolute inset-x-0 top-0 z-10 flex items-start gap-2 bg-error/10 p-2 text-xs"
           >
             <p className="min-w-0 flex-1">{error ?? fileError}</p>
             {/* It covers the top of the drawing, so it has to be closable without running another verb. */}
@@ -329,7 +330,7 @@ export function ChainsBuilder({
           </p>
         ) : !drawn ? (
           <div className="grid h-full place-items-center">
-            <Loader2 className="size-5 animate-spin text-muted-foreground" />
+            <Spinner className="text-muted-foreground" />
           </div>
         ) : (
           <DomChains

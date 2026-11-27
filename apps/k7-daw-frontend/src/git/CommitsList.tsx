@@ -3,6 +3,7 @@
 
 import { Button } from "@studio/ui/button";
 import { ArrowUp, GitCommitHorizontal } from "@studio/ui/icons";
+import { SectionHeading } from "@studio/ui/section-heading";
 import { useCallback, useEffect, useReducer, useState } from "react";
 import { m } from "../paraglide/messages.js";
 import { getLocale } from "../paraglide/runtime.js";
@@ -123,14 +124,14 @@ export function CommitsList({
       )}
       {ahead > 0 && (
         <>
-          <h3 className="type-caps px-3 pt-1 text-fg-3">
+          <SectionHeading className="px-3 pt-1">
             {m["git.toPushGroup"]({ n: ahead })}
-          </h3>
+          </SectionHeading>
           <ul>{log.commits.slice(0, ahead).map((c) => row(c, true))}</ul>
         </>
       )}
       {pushed && log.commits.length > ahead && (
-        <h3 className="type-caps px-3 pt-2 text-fg-3">{pushed}</h3>
+        <SectionHeading className="px-3 pt-2">{pushed}</SectionHeading>
       )}
       <ul>{log.commits.slice(ahead).map((c) => row(c, false))}</ul>
       {!log.end && log.commits.length > 0 && (

@@ -7,8 +7,9 @@
 import { showToast } from "@studio/project-shell/toast";
 import { FIXED_NAMESPACES } from "@studio/song-schema/moduleTypes";
 import { Button } from "@studio/ui/button";
-import { Grip, Loader2, Pause, Play, X } from "@studio/ui/icons";
+import { Grip, Pause, Play, X } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
+import { Spinner } from "@studio/ui/spinner";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { api } from "../api";
 import { useLatest } from "../hooks/useLatest";
@@ -360,7 +361,7 @@ export function RackBuilder({
                           title={m["rb.clearPad"]({ name: pad.file.name })}
                           aria-label={m["rb.clearPad"]({ name: pad.file.name })}
                           onClick={() => clearPad(row, col)}
-                          className="rounded p-0.5 hover:bg-destructive/20 hover:text-destructive"
+                          className="rounded p-0.5 hover:bg-error/20 hover:text-error"
                         >
                           <X className="h-3 w-3" />
                         </button>
@@ -432,9 +433,7 @@ export function RackBuilder({
             disabled={busy || issues.length > 0}
             onClick={() => void create()}
           >
-            {busy ? (
-              <Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" />
-            ) : null}
+            {busy ? <Spinner size="xs" inherit className="mr-1" /> : null}
             {m["rb.create"]()}
           </Button>
         </div>

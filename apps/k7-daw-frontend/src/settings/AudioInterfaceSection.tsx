@@ -1,6 +1,7 @@
 // AudioInterfaceSection.tsx — App settings › Devices: the engine's primary audio interface and the one it falls back on.
 // Two selects send the whole `audio.priority` pair; the supervisor opens the first one that is plugged in.
 
+import { Row } from "@studio/ui/row-group";
 import {
   Select,
   SelectContent,
@@ -16,7 +17,7 @@ import {
   idleAsioDriver,
   priorityArg,
 } from "./desktopEngine";
-import { Action, Row, Section } from "./Section";
+import { Action, Section } from "./Section";
 
 /** Stands for "no fallback": Radix Select refuses an empty item value. */
 const NONE = "\u0000none";
@@ -89,11 +90,11 @@ export function AudioInterfaceSection({
   return (
     <Section title={m["engine.audioTitle"]()} hint={m["engine.audioHint"]()}>
       {options.length === 0 ? (
-        <Row label={m["engine.noDevices"]()} />
+        <Row>{m["engine.noDevices"]()}</Row>
       ) : (
         <>
-          <Row label={m["engine.primary"]()}>
-            <DeviceSelect
+          <Row
+            trailing=<DeviceSelect
               label={m["engine.primary"]()}
               value={primary ?? ""}
               options={options}
@@ -101,9 +102,11 @@ export function AudioInterfaceSection({
                 send(name, fallback === name ? null : fallback)
               }
             />
+          >
+            {m["engine.primary"]()}
           </Row>
-          <Row label={m["engine.fallback"]()}>
-            <DeviceSelect
+          <Row
+            trailing=<DeviceSelect
               label={m["engine.fallback"]()}
               value={fallback ?? NONE}
               options={options.filter((o) => o.name !== primary)}
@@ -112,10 +115,12 @@ export function AudioInterfaceSection({
                 send(primary ?? name, name === NONE ? null : name)
               }
             />
+          >
+            {m["engine.fallback"]()}
           </Row>
           {open && (
-            <Row
-              label={
+            <Row detail={open.deviceType}>
+              {
                 <span className="flex items-center gap-2">
                   <span className="truncate">{open.name}</span>
                   <DeviceBadge
@@ -125,23 +130,24 @@ export function AudioInterfaceSection({
                   />
                 </span>
               }
-              detail={open.deviceType}
-            />
+            </Row>
           )}
         </>
       )}
       {/* The engine on Windows' shared endpoint while the interface has its own driver: two channels a side, and the mixer's latency. */}
       {asio && (
         <Row
-          label={
+          trailing={
+            <Action onClick={() => send(asio, primary)}>
+              {m["engine.asioUse"]()}
+            </Action>
+          }
+        >
+          {
             <span className="text-warn">
               {m["engine.asioHint"]({ driver: asio })}
             </span>
           }
-        >
-          <Action onClick={() => send(asio, primary)}>
-            {m["engine.asioUse"]()}
-          </Action>
         </Row>
       )}
     </Section>

@@ -12,6 +12,7 @@ import {
   usePluginParamValue,
 } from "@studio/engine-browser/params";
 import type { ProjectSurface } from "@studio/song-schema/yaml/surfaceFile";
+import { SectionHeading } from "@studio/ui/section-heading";
 import {
   Select,
   SelectContent,
@@ -146,7 +147,7 @@ function MasteringTabView({
 
       {/* Lines naming something the project has not got, reported rather than dropped: they are typos about the person's own project. */}
       {problems.length > 0 && (
-        <ul className="shrink-0 list-inside list-disc text-xs text-destructive">
+        <ul className="shrink-0 list-inside list-disc text-xs text-error">
           {problems.map((p) => (
             <li key={p.control}>
               <code className="font-mono">{p.control}</code> — {p.message}
@@ -175,7 +176,7 @@ function Part({
       aria-label={PART_LABEL[part]()}
       className="flex min-w-0 flex-col gap-2 rounded-2xl bg-(--k7-row) p-3"
     >
-      <h3 className="type-caps text-fg-2">{PART_LABEL[part]()}</h3>
+      <SectionHeading>{PART_LABEL[part]()}</SectionHeading>
       {has ? (
         <div className="flex flex-col gap-2">{children}</div>
       ) : (

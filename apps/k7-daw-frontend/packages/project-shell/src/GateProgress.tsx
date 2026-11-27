@@ -2,7 +2,7 @@
 // a project is under way, in place of a full-screen wait. Drawn over whatever is behind it, so the
 // project shows the moment it can. See docs/launch.md, "Waits as a bar".
 
-import { Loader2 } from "@studio/ui/icons";
+import { Spinner } from "@studio/ui/spinner";
 import { useEffect } from "react";
 import { holdSplash } from "./splash.ts";
 
@@ -47,7 +47,7 @@ export function GateProgress({
       <div
         className={`flex items-center gap-2 px-3 py-1 ${stuck ? "text-amber-500" : "text-muted-foreground"}`}
       >
-        {!stuck && <Loader2 className="h-3 w-3 shrink-0 animate-spin" />}
+        {!stuck && <Spinner size="xs" inherit className="shrink-0" />}
         <span className="truncate">{label}</span>
         {pct !== null && !stuck && (
           <span className="ml-auto tabular-nums">{pct}%</span>

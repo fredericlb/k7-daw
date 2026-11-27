@@ -196,16 +196,14 @@ export function MixView({
           <div className="flex shrink-0 flex-col gap-2 px-4 pt-4">
             {/* This view's own trouble and the DESK's, one card each: they are different things to go and fix. */}
             {error ? (
-              <Card className="p-3 text-sm text-destructive">{error}</Card>
+              <Card className="p-3 text-sm text-error">{error}</Card>
             ) : null}
             {decks.deskError ? (
-              <Card className="p-3 text-sm text-destructive">
-                {decks.deskError}
-              </Card>
+              <Card className="p-3 text-sm text-error">{decks.deskError}</Card>
             ) : null}
             {/* A set list that will not read is the project's problem, so it is reported apart and names its file. */}
             {set?.issues.length ? (
-              <Card className="p-3 text-sm text-destructive">
+              <Card className="p-3 text-sm text-error">
                 <div className="font-semibold">
                   {playlist ? playlistPathOf(playlist) : PLAYLISTS_DIR}
                 </div>
@@ -224,7 +222,7 @@ export function MixView({
             ) : null}
             {/* A binding naming something the project has not got, reported by CONTROL: that is what looks broken. */}
             {decks.problems.length ? (
-              <Card className="p-3 text-sm text-destructive">
+              <Card className="p-3 text-sm text-error">
                 <div className="font-semibold">{MIX_VIEW_FILE}</div>
                 {decks.problems.map((p) => (
                   <div key={p.control} className="font-mono text-xs">
