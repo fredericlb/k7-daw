@@ -794,6 +794,8 @@
   "chain.inputAudio": "Audio",
   "chain.inputMidi": "MIDI",
   "chain.inputAnyDevice": "tout appareil",
+  "chain.inputSearch": "Chercher une entrée",
+  "chain.inputNoMatch": "Aucune entrée ne correspond",
   "chain.monitor": "écoute",
   "chain.monitorAuto": "auto",
   "chain.width": "largeur",

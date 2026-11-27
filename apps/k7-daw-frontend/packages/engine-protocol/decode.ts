@@ -36,6 +36,8 @@ export interface EngineInputDevice {
   name: string;
   channels: number[];
   enabled: boolean;
+  /** The audio interface carrying it, as the machine names it; absent from an engine that does not say. */
+  interface?: string;
 }
 
 /** Peak dB per channel set asked for, in order, plus the master output — the `io-levels` reply. */

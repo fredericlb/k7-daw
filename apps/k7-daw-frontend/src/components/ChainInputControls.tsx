@@ -4,14 +4,7 @@
 
 import { Capsule, CapsuleButton } from "@studio/ui/capsule";
 import { DockProperty } from "@studio/ui/dock-property";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@studio/ui/dropdown-menu";
+import { Picker, type PickerItem } from "@studio/ui/picker";
 import type { LaneInput } from "../laneInput";
 import { m } from "../paraglide/messages.js";
 
@@ -22,13 +15,20 @@ export interface InputPick {
   value: string;
 }
 
+/** One of the machine's audio inputs: its socket name, its 1-based channels, and the interface that carries it. */
+export interface AudioSet {
+  name: string;
+  channels: number[];
+  interface?: string;
+}
+
 const MONITORS = ["off", "auto", "on"] as const;
 
 // The trigger reads as a title-bar property ("input: In 1"), the shape DockProperty gives gain and loop.
 const TRIGGER =
   "type-secondary inline-flex h-8 shrink-0 cursor-pointer items-center gap-1 whitespace-nowrap rounded-2xl px-2.5 outline-none hover:bg-(--k7-row) focus-visible:shadow-(--k7-focus-ring) data-[state=open]:bg-(--k7-row)";
 
-/** The input menu, drawn at the left of the title bar. */
+/** The input menu, drawn at the left of the title bar: the app's search dropdown, audio sockets grouped by interface, then MIDI. */
 export function ChainInputMenu({
   input,
   audioSets,
@@ -37,7 +37,7 @@ export function ChainInputMenu({
   onReason,
 }: {
   input: LaneInput | null;
-  audioSets: readonly { name: string; channels: number[] }[];
+  audioSets: readonly AudioSet[];
   midiDevices: readonly string[];
   onPick: (pick: InputPick) => void;
   onReason?: (message: string) => void;
@@ -48,6 +48,31 @@ export function ChainInputMenu({
     input?.kind === "audio"
       ? audioSets.filter((d) => d.channels.length === (stereo ? 2 : 1))
       : audioSets;
+  const audioGroup = (d: AudioSet) => d.interface || m["chain.inputAudio"]();
+  // Sorted by interface so each one's sockets sit under one heading, in the order the engine lists them.
+  const order = [...new Set(sets.map(audioGroup))];
+  const items: PickerItem[] = [
+    ...order.flatMap((g) =>
+      sets
+        .filter((d) => audioGroup(d) === g)
+        .map((d) => ({
+          value: `audio:${d.channels.join(",")}`,
+          label: d.name,
+          group: g,
+        })),
+    ),
+    ...["any", ...midiDevices].map((d) => ({
+      value: `midi:${d}`,
+      label: d === "any" ? m["chain.inputAnyDevice"]() : d,
+      group: m["chain.inputMidi"](),
+    })),
+  ];
+  const value =
+    input?.kind === "audio"
+      ? `audio:${input.channel?.join(",")}`
+      : input?.kind === "midi"
+        ? `midi:${input.device || "any"}`
+        : null;
   const current =
     input?.kind === "audio"
       ? (audioSets.find(
@@ -58,49 +83,34 @@ export function ChainInputMenu({
         : input?.kind === "camera"
           ? input.module
           : m["chain.inputNone"]();
-  // A pick of the other kind would need this input removed first, so it says so instead of doing half of it.
-  const pick = (p: InputPick) =>
-    input && input.kind !== p.kind
-      ? onReason?.(m["chain.inputTaken"]())
-      : onPick(p);
-  const other = (kind: "audio" | "midi") =>
-    input && input.kind !== kind ? true : undefined;
+  const pick = (v: string) => {
+    const kind = v.startsWith("audio:") ? "audio" : "midi";
+    const rest = v.slice(kind.length + 1);
+    // A pick of the other kind would need this input removed first, so it says so instead of doing half of it.
+    if (input && input.kind !== kind) onReason?.(m["chain.inputTaken"]());
+    else
+      onPick({
+        kind,
+        field: kind === "audio" ? "channel" : "device",
+        value: rest,
+      });
+  };
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger className={TRIGGER}>
-        <span className="text-fg-2">{m["chain.input"]()}:</span>
-        <span className="type-mono-value text-foreground">{current}</span>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="start">
-        <DropdownMenuLabel>{m["chain.inputAudio"]()}</DropdownMenuLabel>
-        {sets.map((d) => (
-          <DropdownMenuItem
-            key={d.channels.join(",")}
-            aria-disabled={other("audio")}
-            onSelect={() =>
-              pick({
-                kind: "audio",
-                field: "channel",
-                value: d.channels.join(","),
-              })
-            }
-          >
-            {d.name}
-          </DropdownMenuItem>
-        ))}
-        <DropdownMenuSeparator />
-        <DropdownMenuLabel>{m["chain.inputMidi"]()}</DropdownMenuLabel>
-        {["any", ...midiDevices].map((d) => (
-          <DropdownMenuItem
-            key={d}
-            aria-disabled={other("midi")}
-            onSelect={() => pick({ kind: "midi", field: "device", value: d })}
-          >
-            {d === "any" ? m["chain.inputAnyDevice"]() : d}
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <Picker
+      items={items}
+      value={value}
+      onValueChange={pick}
+      label={m["chain.input"]()}
+      searchLabel={m["chain.inputSearch"]()}
+      emptyLabel={m["chain.inputNoMatch"]()}
+      className={TRIGGER}
+      trigger={
+        <>
+          <span className="text-fg-2">{m["chain.input"]()}:</span>
+          <span className="type-mono-value text-foreground">{current}</span>
+        </>
+      }
+    />
   );
 }
 
