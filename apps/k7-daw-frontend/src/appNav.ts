@@ -34,7 +34,6 @@ onLeave(() => {
   forgetBuffers();
   setBufferScope(currentScopeKey());
 });
-setBufferScope(currentScopeKey());
 onLeave(() => queryClient.clear());
 
 /** Hear the address cross into another scope — Root's re-render. */
@@ -51,6 +50,7 @@ let selfPop = false;
 let lastKey = "";
 wasmReady().finally(() => {
   lastKey = currentScopeKey();
+  setBufferScope(lastKey);
 });
 let lastHref = window.location.href;
 let lastState: unknown = window.history.state;
