@@ -63,6 +63,7 @@ import {
   type Lod,
   lodFor,
   sameLod,
+  settleCam,
 } from "./camera";
 import { cableColorFor, cableStrokeFor, MAUVE, useCss } from "./chainsCss";
 import { buildModel } from "./chainsModel";
@@ -270,6 +271,7 @@ function DomChainsBody({
   // Persist ONLY after a real fit: the identity camera is indistinguishable from one the user chose.
   const persist = () => {
     lcdZoom.set(cam.current.k);
+    settleCam(worldRef.current, cam.current);
     const store = camStoreRef.current;
     if (store && fitted.current) store.current = { ...cam.current };
   };
@@ -304,7 +306,7 @@ function DomChainsBody({
   // A camera restored from the store is never placed by a fit, so it needs this one write.
   useLayoutEffect(() => {
     holdRowRef.current(cam.current);
-    applyCam(worldRef.current, cam.current);
+    settleCam(worldRef.current, cam.current);
     paintRef.current();
   }, []);
   const [panning, setPanning] = useState(false);
