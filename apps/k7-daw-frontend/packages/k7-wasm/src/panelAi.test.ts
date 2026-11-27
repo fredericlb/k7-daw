@@ -25,7 +25,10 @@ const checkOther = (...a: Parameters<typeof checkAiResult>) => {
   return { ...r, issues: r.issues.filter((i) => !shape.has(i)) };
 };
 
-const result = (uiText: string, widgetsJs = ""): AiOrganizeResult => ({
+const result = (
+  uiText: string,
+  widgetsJs = "",
+): Omit<AiOrganizeResult, "issues"> => ({
   uiText,
   widgetsJs,
   notes: "",

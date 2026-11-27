@@ -273,7 +273,9 @@ export const paramValues = (content: string): Record<string, number> =>
   call<Record<string, number>>({ op: "panel.param_values", args: { content } });
 
 /** Every addressable param unioned from all the sources, in the order met: the page sorts them with its own collator. */
-export const paramRows = (sources: RowSources): ParamRowOut[] =>
+export const paramRows = (
+  sources: Partial<RowSources> & Pick<RowSources, "path">,
+): ParamRowOut[] =>
   call<ParamRowOut[]>({ op: "panel.param_rows", args: { sources } });
 
 /** The footer an effect or an instrument gets, by its folder. */
@@ -324,13 +326,17 @@ export const bindableNames = (req: {
 
 /** Why a proposal must not land, as sentences the MODEL can act on; empty means it may. */
 export const checkAiResult = (
-  result: AiResult,
+  result: Omit<AiResult, "issues"> & { issues?: readonly string[] },
   bindNames: readonly string[],
   ctx?: Partial<AiContext>,
 ): Checked =>
   call<Checked>({
     op: "panel.ai_check",
-    args: { result, bindNames: [...bindNames], ctx: ctx ?? {} },
+    args: {
+      result: { ...result, issues: [...(result.issues ?? [])] },
+      bindNames: [...bindNames],
+      ctx: ctx ?? {},
+    },
   });
 
 /** The model's raw answer read off its JSON text and printed as `ui.k7x`; null when it is not the promised shape. */
