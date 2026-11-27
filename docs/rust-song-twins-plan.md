@@ -183,7 +183,7 @@ The user accepted the five recommendations on 2026-11-26.
    deleted whole (M3c).
 3. **Where the song model's docs and data live.** M5 moves `song/docs`, `song-edit/docs` and
    `song-schema/docs` into `apps/k7-daw-wasm/<crate>/docs`, and `song/meta` and `song/samples` into
-   `apps/k7-daw-wasm/song/`, one mechanical commit with `lint:docs`.
+   `apps/k7-daw-wasm/song/`, one mechanical commit with `lint:docs`. **Chosen (2026-11-27): into the Rust crates.**
 4. **The `edit.call` door and its replays.** Removed in M2 with `host_fs`, the verbs' base64 module
    and `test:edit-replay`; song-edit's native replays stay, run by `scripts/check-vectors.sh` and the
    crate's tests.
