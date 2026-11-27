@@ -4,7 +4,8 @@
 // See ../../../../docs/library-versions-plan.md.
 
 import { Button } from "@studio/ui/button";
-import { Loader2, TriangleAlert } from "@studio/ui/icons";
+import { TriangleAlert } from "@studio/ui/icons";
+import { Spinner } from "@studio/ui/spinner";
 import type { ModuleLibrary } from "@studio/web-protocol";
 import { useState } from "react";
 import { m } from "../paraglide/messages.js";
@@ -54,9 +55,7 @@ export function SubstitutionLine({
         disabled={busy !== null}
         onClick={() => onPin(s)}
       >
-        {busy === s.library && (
-          <Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" />
-        )}
+        {busy === s.library && <Spinner size="xs" inherit className="mr-1" />}
         {m["libs.pinUsed"]({ name: s.library, used: s.used })}
       </Button>
     </div>
@@ -131,9 +130,7 @@ export function LibraryUpgrades({
               disabled={busy !== null}
               onClick={() => run(l.ns, to)}
             >
-              {busy === l.ns && (
-                <Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" />
-              )}
+              {busy === l.ns && <Spinner size="xs" inherit className="mr-1" />}
               {m["libs.upgrade"]()}
             </Button>
           </div>

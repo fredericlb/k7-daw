@@ -10,9 +10,10 @@
 
 import { playlistPathOf } from "@studio/k7-wasm/schema";
 import { Button } from "@studio/ui/button";
-import { Loader2, Maximize2, Plus, TriangleAlert } from "@studio/ui/icons";
+import { Maximize2, Plus, TriangleAlert } from "@studio/ui/icons";
 import { Input } from "@studio/ui/input";
 import { Picker } from "@studio/ui/picker";
+import { Loading } from "@studio/ui/spinner";
 import type { PlaylistInfo } from "@studio/web-protocol/playlists";
 import { sortForPeople } from "@studio/web-protocol/tree";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -189,8 +190,8 @@ export function PlaylistsPanel({
       {/* The songs, under the dropdown: `PlaylistEditor` in panel mode, the same document and autosave with the text half left out. */}
       <div className="min-h-0 flex-1">
         {rows === null ? (
-          <div className="flex items-center gap-2 p-4 text-sm text-muted-foreground">
-            <Loader2 className="h-4 w-4 animate-spin" /> {m["pls.loading"]()}
+          <div className="p-4 text-sm text-muted-foreground">
+            <Loading label={m["pls.loading"]()} />
           </div>
         ) : rows.length === 0 ? (
           <p className="p-3 text-sm text-muted-foreground">

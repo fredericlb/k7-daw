@@ -3,8 +3,9 @@
 
 import { Button } from "@studio/ui/button";
 import { Checkbox } from "@studio/ui/checkbox";
-import { Loader2, Lock, Plus } from "@studio/ui/icons";
+import { Lock, Plus } from "@studio/ui/icons";
 import { Input } from "@studio/ui/input";
+import { Spinner } from "@studio/ui/spinner";
 import { useEffect, useId, useState } from "react";
 import { m } from "../paraglide/messages.js";
 import { droppedSignIns, isSignout } from "./forgeState";
@@ -152,7 +153,7 @@ export function ForgePicker({
           <div className="flex max-h-72 flex-col gap-3 overflow-y-auto">
             {repos === null && !error && (
               <p className="text-fg-2 type-secondary" role="status">
-                <Loader2 className="mr-1 inline size-3 animate-spin" />
+                <Spinner size="xs" inherit className="mr-1 inline" />
                 {m["git.gh.loading"]()}
               </p>
             )}
@@ -233,7 +234,7 @@ function NewRepository({
           disabled={!name.trim() || busy || disabled}
           onClick={() => void make()}
         >
-          {busy && <Loader2 className="mr-1 size-3 animate-spin" />}
+          {busy && <Spinner size="xs" inherit className="mr-1" />}
           {busy ? m["git.gh.creating"]() : m["git.gh.create"]()}
         </Button>
         <Button

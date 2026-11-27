@@ -16,10 +16,10 @@ import {
   CloudUpload,
   Disc3,
   FolderDown,
-  Loader2,
   type LucideIcon,
 } from "@studio/ui/icons";
 import { Progress } from "@studio/ui/progress";
+import { Spinner } from "@studio/ui/spinner";
 import { useSyncExternalStore } from "react";
 import { m } from "../paraglide/messages.js";
 import { Action, Row, Section } from "./Section";
@@ -52,8 +52,7 @@ function said(d: Download): string {
 }
 
 function PhaseIcon({ phase }: { phase: Download["phase"] }) {
-  if (phase === "running")
-    return <Loader2 className="size-4 animate-spin text-fg-2" aria-hidden />;
+  if (phase === "running") return <Spinner size="sm" className="text-fg-2" />;
   if (phase === "queued")
     return <Clock className="size-4 text-fg-3" aria-hidden />;
   if (phase === "done") return <Check className="size-4 text-ok" aria-hidden />;

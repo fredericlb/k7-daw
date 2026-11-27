@@ -10,7 +10,8 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@studio/ui/dropdown-menu";
-import { Loader2, Zap } from "@studio/ui/icons";
+import { Zap } from "@studio/ui/icons";
+import { Spinner } from "@studio/ui/spinner";
 import { m } from "../paraglide/messages.js";
 import { ChainOpsList } from "./ChainOpsList";
 import { TrimGate } from "./ClipGateControls";
@@ -43,11 +44,7 @@ export function ClipOpsMenu(p: {
           aria-busy={working || undefined}
           className="glass grid size-9 shrink-0 cursor-pointer place-items-center rounded-full text-foreground outline-none focus-visible:shadow-(--k7-focus-ring) disabled:opacity-40"
         >
-          {working ? (
-            <Loader2 className="size-4 animate-spin" />
-          ) : (
-            <Zap className="size-4" />
-          )}
+          {working ? <Spinner size="sm" inherit /> : <Zap className="size-4" />}
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

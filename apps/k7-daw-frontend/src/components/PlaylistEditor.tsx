@@ -13,8 +13,9 @@ import {
   removePlaylistItem,
 } from "@studio/song-schema/playlist";
 import { Button } from "@studio/ui/button";
-import { ArrowLeft, ListMusic, Loader2 } from "@studio/ui/icons";
+import { ArrowLeft, ListMusic } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
+import { Loading, Spinner } from "@studio/ui/spinner";
 import { recallBuffer, useAutosave } from "@studio/ui-editor/autosave";
 import { editK7xText } from "@studio/ui-editor/k7x/bufferEdit";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -228,7 +229,7 @@ export function PlaylistEditor({
             title={autosave.reason ?? undefined}
           >
             {autosave.status === "saving" && (
-              <Loader2 className="h-3 w-3 shrink-0 animate-spin" />
+              <Spinner size="xs" inherit className="shrink-0" />
             )}
             <span className="truncate">{saveLabel(autosave.status, null)}</span>
           </span>
@@ -237,7 +238,7 @@ export function PlaylistEditor({
 
       {content == null ? (
         <div className="flex flex-1 items-center justify-center text-sm text-muted-foreground">
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" /> chargement…
+          <Loading label={m["common.loading"]()} />
         </div>
       ) : (
         <div className="flex min-h-0 flex-1 flex-col md:flex-row">

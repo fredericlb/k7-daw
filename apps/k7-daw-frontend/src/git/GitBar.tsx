@@ -10,10 +10,10 @@ import {
   ArrowDownToLine,
   GitBranch,
   GitMerge,
-  Loader2,
   RefreshCw,
   Save,
 } from "@studio/ui/icons";
+import { Spinner } from "@studio/ui/spinner";
 import { useEffect, useState } from "react";
 import { m } from "../paraglide/messages.js";
 import { getLocale } from "../paraglide/runtime.js";
@@ -51,7 +51,7 @@ export function BarBody({
   const v: BarView = barView(state);
   if (!state || !v.show) return null;
   const spin = (a: GitAct) =>
-    busy === a ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : null;
+    busy === a ? <Spinner size="xs" inherit /> : null;
   const said = pulledSentence(pulled);
   return (
     <section
@@ -334,7 +334,7 @@ export function CardGitPills({
           }
         >
           {pulling ? (
-            <Loader2 className="size-5 animate-spin" />
+            <Spinner inherit />
           ) : (
             <ArrowDownToLine className="size-5" />
           )}
@@ -364,11 +364,7 @@ export function CardGitPills({
           }}
           className={pulling || !pushable ? "opacity-45" : undefined}
         >
-          {saving ? (
-            <Loader2 className="size-5 animate-spin" />
-          ) : (
-            <Save className="size-5" />
-          )}
+          {saving ? <Spinner inherit /> : <Save className="size-5" />}
           <span className="max-sm:hidden">{m["git.save.label"]()}</span>
           {v.changed > 0 && <Badge variant="count">{v.changed}</Badge>}
         </Button>

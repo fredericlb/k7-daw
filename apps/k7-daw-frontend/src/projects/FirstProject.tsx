@@ -7,7 +7,8 @@
 import { projectApi } from "@studio/project-shell/project";
 import type { ProjectShape } from "@studio/song-schema/yaml/projectSchema";
 import { Button } from "@studio/ui/button";
-import { FolderPlus, Loader2 } from "@studio/ui/icons";
+import { FolderPlus } from "@studio/ui/icons";
+import { Spinner } from "@studio/ui/spinner";
 import { useState } from "react";
 import { m } from "../paraglide/messages.js";
 import { NameField } from "./NameForm";
@@ -97,7 +98,7 @@ export function FirstProject({
             <Button onClick={onCreated}>{m["common.continue"]()}</Button>
           ) : (
             <Button disabled={busy || !folder} onClick={submit}>
-              {busy && <Loader2 className="mr-1 size-5 animate-spin" />}
+              {busy && <Spinner inherit className="mr-1" />}
               {m["common.create"]()}
             </Button>
           )}
