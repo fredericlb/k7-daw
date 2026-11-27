@@ -3398,6 +3398,8 @@ export default function App({
           : {}),
         // The toasts and a right panel end above the row; an expanded dock leaves the row its top.
         "--toast-bottom": dock.expanded && dockUp ? "96px" : aboveRow,
+        // Under the running spinner, which holds the top-right corner while something runs (shell/RunningBubble.tsx).
+        "--toast-top": "calc(16px + var(--k7-float-h) + 8px)",
         ...(dock.expanded && dockUp
           ? {}
           : { "--k7-panel-bottom-open": aboveRow }),
