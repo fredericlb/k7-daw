@@ -57,15 +57,24 @@ pub fn midi_in_played(g: &RGraph) -> Vec<PlayedTarget> {
     let lanes: HashSet<&str> = g.tracks.iter().flatten().map(String::as_str).collect();
     let mut out = Vec::new();
     for c in g.chains.values() {
-        let Some(step) = c.r#use.iter().find(|s| s.device.is_some()) else { continue };
+        let Some(step) = c.r#use.iter().find(|s| s.device.is_some()) else {
+            continue;
+        };
         for o in c.out.iter().flatten() {
             let to = node_of(&o.to);
             if lanes.contains(to) {
                 continue;
             }
             // The engine runs that instrument as the track of the run it starts, named after that run.
-            let run = g.chains.iter().find(|(_, r)| r.r#use.first().is_some_and(|s| s.module == to)).map(|(k, _)| k.as_str());
-            out.push(PlayedTarget { track: run.unwrap_or(to).to_owned(), device: step.device.clone().unwrap_or_default() });
+            let run = g
+                .chains
+                .iter()
+                .find(|(_, r)| r.r#use.first().is_some_and(|s| s.module == to))
+                .map(|(k, _)| k.as_str());
+            out.push(PlayedTarget {
+                track: run.unwrap_or(to).to_owned(),
+                device: step.device.clone().unwrap_or_default(),
+            });
         }
     }
     out
@@ -131,8 +140,12 @@ pub fn rack_for(g: &RGraph, track: &str) -> Option<Vec<RRack>> {
     if track.is_empty() {
         return None;
     }
-    let mut queue: std::collections::VecDeque<&str> =
-        g.chains.iter().filter(|(_, c)| c.from.as_deref() == Some(track)).map(|(k, _)| k.as_str()).collect();
+    let mut queue: std::collections::VecDeque<&str> = g
+        .chains
+        .iter()
+        .filter(|(_, c)| c.from.as_deref() == Some(track))
+        .map(|(k, _)| k.as_str())
+        .collect();
     let mut seen: HashSet<&str> = queue.iter().copied().collect();
     while let Some(name) = queue.pop_front() {
         let Some(chain) = g.chains.get(name) else { continue };
@@ -158,10 +171,14 @@ pub fn rack_for(g: &RGraph, track: &str) -> Option<Vec<RRack>> {
 pub fn rack_key_names(rack: &[RRack]) -> Vec<(f64, String)> {
     let mut names: Vec<(f64, String)> = Vec::new();
     for s in rack {
-        let file = s.sample.as_deref().and_then(|p| p.rsplit('/').next()).map(|f| match f.rfind('.') {
-            Some(i) if i + 1 < f.len() => &f[..i],
-            _ => f,
-        });
+        let file = s
+            .sample
+            .as_deref()
+            .and_then(|p| p.rsplit('/').next())
+            .map(|f| match f.rfind('.') {
+                Some(i) if i + 1 < f.len() => &f[..i],
+                _ => f,
+            });
         let name = file
             .filter(|f| !f.is_empty())
             .or(s.clip.as_deref().filter(|c| !c.is_empty()))
@@ -187,13 +204,19 @@ pub fn without_notes(mut graph: Value, notes: &HashSet<String>) -> Value {
     if notes.is_empty() {
         return graph;
     }
-    let Some(chains) = graph.get_mut("chains").and_then(Value::as_object_mut) else { return graph };
+    let Some(chains) = graph.get_mut("chains").and_then(Value::as_object_mut) else {
+        return graph;
+    };
     for chain in chains.values_mut() {
         let Some(c) = chain.as_object_mut() else { continue };
         let uses: Vec<Value> = match c.get("use") {
             Some(Value::Array(a)) => a
                 .iter()
-                .filter(|s| !s.get("module").and_then(Value::as_str).is_some_and(|m| notes.contains(m)))
+                .filter(|s| {
+                    !s.get("module")
+                        .and_then(Value::as_str)
+                        .is_some_and(|m| notes.contains(m))
+                })
                 .cloned()
                 .collect(),
             _ => Vec::new(),
@@ -201,7 +224,11 @@ pub fn without_notes(mut graph: Value, notes: &HashSet<String>) -> Value {
         let outs: Vec<Value> = match c.get("out") {
             Some(Value::Array(a)) => a
                 .iter()
-                .filter(|o| !o.get("to").and_then(Value::as_str).is_some_and(|t| notes.contains(node_without_port(t))))
+                .filter(|o| {
+                    !o.get("to")
+                        .and_then(Value::as_str)
+                        .is_some_and(|t| notes.contains(node_without_port(t)))
+                })
                 .cloned()
                 .collect(),
             _ => Vec::new(),
@@ -214,17 +241,26 @@ pub fn without_notes(mut graph: Value, notes: &HashSet<String>) -> Value {
 
 /// A line that hands a live input a channel: the node card's pick.
 pub fn gives_channel(line: &str) -> bool {
-    let Some(rest) = line.trim().strip_prefix("node param ") else { return false };
-    let Some(end) = rest.find(char::is_whitespace) else { return false };
+    let Some(rest) = line.trim().strip_prefix("node param ") else {
+        return false;
+    };
+    let Some(end) = rest.find(char::is_whitespace) else {
+        return false;
+    };
     if end == 0 {
         return false;
     }
-    rest[end..].strip_prefix(" @channel ").and_then(|t| t.chars().next()).is_some_and(|c| !c.is_whitespace())
+    rest[end..]
+        .strip_prefix(" @channel ")
+        .and_then(|t| t.chars().next())
+        .is_some_and(|c| !c.is_whitespace())
 }
 
 /// Whether the graph holds an input that is monitored and reaches a channel: the state that can feed back.
 pub fn has_audible_input(g: &RGraph) -> bool {
-    g.chains
-        .values()
-        .any(|c| c.r#use.iter().any(|s| s.monitor.as_deref() == Some("on") && s.channel.as_ref().is_some_and(|c| !c.is_empty())))
+    g.chains.values().any(|c| {
+        c.r#use
+            .iter()
+            .any(|s| s.monitor.as_deref() == Some("on") && s.channel.as_ref().is_some_and(|c| !c.is_empty()))
+    })
 }

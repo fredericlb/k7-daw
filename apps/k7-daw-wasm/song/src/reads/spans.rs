@@ -2,8 +2,8 @@
 // A reader would get wrong that an open end is `None` here: JSON cannot carry an infinity, and the page reads null as one.
 
 use super::model::{RTrack, RVideoTrack};
-use serde::Serialize;
 use indexmap::IndexMap;
+use serde::Serialize;
 
 /// The schema's default when a note states no velocity.
 const FULL: f64 = 1.0;
@@ -51,7 +51,11 @@ pub fn note_spans(tracks: &[RTrack], tempo: Option<f64>) -> IndexMap<String, Lan
                 let from = c.start + n.time;
                 // A zero-length note still sounds: it gets an instant.
                 let to = from + if n.duration > 0.0 { n.duration } else { 0.125 };
-                spans.push(NoteSpan { from: from * per_beat, to: to * per_beat, vel: n.vel.unwrap_or(FULL) });
+                spans.push(NoteSpan {
+                    from: from * per_beat,
+                    to: to * per_beat,
+                    vel: n.vel.unwrap_or(FULL),
+                });
             }
         }
         if spans.is_empty() {
@@ -85,7 +89,11 @@ pub fn video_spans(tracks: &[RVideoTrack]) -> IndexMap<String, Vec<LaneSpan>> {
             continue;
         }
         let spans: Vec<LaneSpan> = if t.clips.is_empty() {
-            if t.shapes.is_empty() { Vec::new() } else { vec![LaneSpan { from: 0.0, to: None }] }
+            if t.shapes.is_empty() {
+                Vec::new()
+            } else {
+                vec![LaneSpan { from: 0.0, to: None }]
+            }
         } else {
             t.clips
                 .iter()

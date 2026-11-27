@@ -22,8 +22,8 @@ pub use placement::{
     AnimKey, Animate, Animated, CompPiece, Crossfade, Ease, Fade, FadeMap, Gain, Pitch, Placement, Take,
 };
 pub use project::{
-    DEFAULT_METRONOME_LEVEL, METRONOME_MIN, FORMAT_LEVEL, Layers, Marker, Markers, ProjectFile, ProjectSettings, RootFile, Settings, SettingsDoc, TooNew,
-    Viewport, markers_of, time_sig_of,
+    DEFAULT_METRONOME_LEVEL, FORMAT_LEVEL, Layers, METRONOME_MIN, Marker, Markers, ProjectFile, ProjectSettings,
+    RootFile, Settings, SettingsDoc, TooNew, Viewport, markers_of, time_sig_of,
 };
 pub use scalar::{WindowEdge, has_ext};
 pub use timeline::{Timeline, TimelineLane};

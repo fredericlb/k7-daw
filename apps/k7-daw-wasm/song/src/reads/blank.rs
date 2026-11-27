@@ -20,7 +20,11 @@ pub fn blanks() -> Blanks {
     let mut doc = ProjectDoc::empty();
     doc.name = String::new();
     // A project that never authored a setting counts no bars in, unlike a compiled one, whose own default is one.
-    doc.settings = SettingsDoc { metronome: false, metronome_level: DEFAULT_METRONOME_LEVEL, count_in: 0 };
+    doc.settings = SettingsDoc {
+        metronome: false,
+        metronome_level: DEFAULT_METRONOME_LEVEL,
+        count_in: 0,
+    };
     Blanks {
         doc,
         track: TrackDoc::new(""),

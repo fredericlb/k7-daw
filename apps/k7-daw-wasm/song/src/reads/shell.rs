@@ -66,7 +66,13 @@ pub fn shell_view(tempo: f64, num: Option<f64>, den: Option<f64>, count_in: f64,
     let mut seq_by_track = IndexMap::new();
     for t in tracks {
         if let Some(seq) = t.clips.iter().find(|c| c.kind == "midi") {
-            seq_by_track.insert(t.id.clone(), SeqRef { seq_id: seq.id.clone(), start: seq.start });
+            seq_by_track.insert(
+                t.id.clone(),
+                SeqRef {
+                    seq_id: seq.id.clone(),
+                    start: seq.start,
+                },
+            );
         }
     }
     ShellView {
@@ -114,12 +120,25 @@ pub fn lane_mix(tracks: &[RTrack], groups: &[RGroup], video: &[RVideoTrack]) -> 
         .iter()
         .map(|t| {
             let g = group_of(&t.group);
-            (t.mute == Some(true) || g.is_some_and(|g| g.mute == Some(true)), t.solo == Some(true) || g.is_some_and(|g| g.solo == Some(true)))
+            (
+                t.mute == Some(true) || g.is_some_and(|g| g.mute == Some(true)),
+                t.solo == Some(true) || g.is_some_and(|g| g.solo == Some(true)),
+            )
         })
         .collect();
     let any_solo = eff.iter().any(|e| e.1);
-    let lanes = eff.iter().map(|&(mute, solo)| LaneMix { mute, solo, silent: mute || (any_solo && !solo) }).collect();
+    let lanes = eff
+        .iter()
+        .map(|&(mute, solo)| LaneMix {
+            mute,
+            solo,
+            silent: mute || (any_solo && !solo),
+        })
+        .collect();
     let any_video = video.iter().any(|v| v.solo == Some(true));
-    let pictures = video.iter().map(|v| v.mute == Some(true) || (any_video && v.solo != Some(true))).collect();
+    let pictures = video
+        .iter()
+        .map(|v| v.mute == Some(true) || (any_video && v.solo != Some(true)))
+        .collect();
     (lanes, pictures)
 }

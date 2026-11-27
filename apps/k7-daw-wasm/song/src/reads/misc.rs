@@ -65,19 +65,29 @@ pub fn clip_name_parts(ref_: &str) -> ClipNameParts {
     let with_copy = material.rfind('-').and_then(|i| {
         let n = &material[i + 1..];
         let ok = !n.is_empty() && n.bytes().all(|c| c.is_ascii_digit());
-        ok.then(|| take_tail(&material[..i]).map(|(lane, bar)| (lane, bar, Some(number(n))))).flatten()
+        ok.then(|| take_tail(&material[..i]).map(|(lane, bar)| (lane, bar, Some(number(n)))))
+            .flatten()
     });
     if let Some((lane, bar, copy)) = with_copy.or_else(|| take_tail(material).map(|(l, b)| (l, b, None))) {
-        return ClipNameParts::Take { lane: lane.to_owned(), bar: number(bar), copy };
+        return ClipNameParts::Take {
+            lane: lane.to_owned(),
+            bar: number(bar),
+            copy,
+        };
     }
     let d = digits_end(material);
     if d > 0 {
         let head = &material[..material.len() - d];
         if let Some(lane) = head.strip_suffix("-seq-").filter(|l| !l.is_empty()) {
-            return ClipNameParts::Sequence { lane: lane.to_owned(), n: number(&material[material.len() - d..]) };
+            return ClipNameParts::Sequence {
+                lane: lane.to_owned(),
+                n: number(&material[material.len() - d..]),
+            };
         }
     }
-    ClipNameParts::Named { name: material.to_owned() }
+    ClipNameParts::Named {
+        name: material.to_owned(),
+    }
 }
 
 /// A strip's Volume range in dB: the floor and the top of the fader.
@@ -111,7 +121,9 @@ pub struct TapRun {
 }
 
 pub fn tap_tempo(taps: &[f64], now: f64) -> TapRun {
-    let continues = taps.last().is_some_and(|&last| now - last <= TAP_RESET_MS && now > last);
+    let continues = taps
+        .last()
+        .is_some_and(|&last| now - last <= TAP_RESET_MS && now > last);
     let run: Vec<f64> = if continues {
         let mut all = taps.to_vec();
         all.push(now);
@@ -124,7 +136,10 @@ pub fn tap_tempo(taps: &[f64], now: f64) -> TapRun {
     }
     let mean = (run[run.len() - 1] - run[0]) / (run.len() - 1) as f64;
     let bpm = (60000.0 / mean + 0.5).floor();
-    TapRun { taps: run, bpm: Some(bpm) }
+    TapRun {
+        taps: run,
+        bpm: Some(bpm),
+    }
 }
 
 /// The folder a name makes: the stem, or the key of what is wrong with it.
@@ -137,7 +152,10 @@ pub struct FolderName {
 
 /// The name rules shared by every dialog: separators are refused rather than replaced, a leading dot hides, a typed suffix is stripped.
 pub fn folder_name(raw: &str, suffixes: &[String]) -> FolderName {
-    let bad = |key: &str| FolderName { folder: String::new(), error: key.to_owned() };
+    let bad = |key: &str| FolderName {
+        folder: String::new(),
+        error: key.to_owned(),
+    };
     let name = raw.trim();
     if name.is_empty() {
         return bad("required");
@@ -158,7 +176,10 @@ pub fn folder_name(raw: &str, suffixes: &[String]) -> FolderName {
     if stem.is_empty() {
         return bad("required");
     }
-    FolderName { folder: stem.to_owned(), error: String::new() }
+    FolderName {
+        folder: stem.to_owned(),
+        error: String::new(),
+    }
 }
 
 /// The open timeline once the ids changed: kept, or followed when it alone vanished as one alone appeared.

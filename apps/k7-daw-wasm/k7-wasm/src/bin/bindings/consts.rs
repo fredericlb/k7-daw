@@ -593,11 +593,31 @@ fn page_vocab() -> Vec<[String; 3]> {
             "METRONOME_MIN",
             &json!(song::files::METRONOME_MIN),
         ),
-        export("The module type whose DSP is the dsp.k7x beside it.", "DSP_TYPE", &json!(song::modules::types::DSP_TYPE)),
-        export("The DSP source a dsp module carries.", "DSP_FILE", &json!(song::modules::types::DSP_FILE)),
-        export("The older module type whose DSP is the jsdsp.ts beside it.", "JSDSP_TYPE", &json!(song::modules::types::JSDSP_TYPE)),
-        export("The DSP source a jsdsp module carries.", "JSDSP_FILE", &json!(song::modules::types::JSDSP_FILE)),
-        export("The plugin type a mixer module instantiates.", "MIXER_PLUGIN", &json!(song::resolve::MIXER_PLUGIN)),
+        export(
+            "The module type whose DSP is the dsp.k7x beside it.",
+            "DSP_TYPE",
+            &json!(song::modules::types::DSP_TYPE),
+        ),
+        export(
+            "The DSP source a dsp module carries.",
+            "DSP_FILE",
+            &json!(song::modules::types::DSP_FILE),
+        ),
+        export(
+            "The older module type whose DSP is the jsdsp.ts beside it.",
+            "JSDSP_TYPE",
+            &json!(song::modules::types::JSDSP_TYPE),
+        ),
+        export(
+            "The DSP source a jsdsp module carries.",
+            "JSDSP_FILE",
+            &json!(song::modules::types::JSDSP_FILE),
+        ),
+        export(
+            "The plugin type a mixer module instantiates.",
+            "MIXER_PLUGIN",
+            &json!(song::resolve::MIXER_PLUGIN),
+        ),
         export(
             "What a strip's Volume means: decibels, floor to +6, 0 at unity.",
             "VOLUME_DB",

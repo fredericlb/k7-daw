@@ -12,13 +12,24 @@ use std::collections::{HashMap, HashSet};
 #[serde(tag = "kind", rename_all = "camelCase")]
 #[cfg_attr(feature = "ts", ts(tag = "kind", rename_all = "camelCase"))]
 pub enum LayoutRow {
-    Group { group: usize },
+    Group {
+        group: usize,
+    },
     /// `index` is the track's position in the original array: clustering reorders the display, not the engine's levels.
-    Track { track: usize, index: usize, grouped: bool },
+    Track {
+        track: usize,
+        index: usize,
+        grouped: bool,
+    },
     /// A picture lane has no engine index: `track` is its place among the picture lanes.
-    Video { track: usize },
+    Video {
+        track: usize,
+    },
     /// An automation lane of a track: `lane` is its place among that track's.
-    Automation { track: usize, lane: usize },
+    Automation {
+        track: usize,
+        lane: usize,
+    },
 }
 
 struct Unit {
@@ -42,7 +53,11 @@ pub fn project_rows(
         }
     }
     let lane_rows = |i: usize, grouped: bool| -> Vec<LayoutRow> {
-        let mut v = vec![LayoutRow::Track { track: i, index: i, grouped }];
+        let mut v = vec![LayoutRow::Track {
+            track: i,
+            index: i,
+            grouped,
+        }];
         for lane in 0..automation.get(&tracks[i].id).copied().unwrap_or(0) {
             v.push(LayoutRow::Automation { track: i, lane });
         }
@@ -52,7 +67,10 @@ pub fn project_rows(
     let mut done: HashSet<&str> = HashSet::new();
     for (i, t) in tracks.iter().enumerate() {
         let Some(&g) = group_at.get(t.group.as_str()) else {
-            units.push(Unit { lanes: vec![node_without_port(&t.id).to_owned()], rows: lane_rows(i, false) });
+            units.push(Unit {
+                lanes: vec![node_without_port(&t.id).to_owned()],
+                rows: lane_rows(i, false),
+            });
             continue;
         };
         if !done.insert(t.group.as_str()) {
@@ -69,7 +87,12 @@ pub fn project_rows(
     }
     // Picture rows top first: the document is bottom-first, and a row above another is in front of it.
     let pictures: Vec<usize> = (0..video.len()).rev().collect();
-    let at: HashMap<&str, usize> = order.unwrap_or(&[]).iter().enumerate().map(|(i, id)| (id.as_str(), i)).collect();
+    let at: HashMap<&str, usize> = order
+        .unwrap_or(&[])
+        .iter()
+        .enumerate()
+        .map(|(i, id)| (id.as_str(), i))
+        .collect();
     let sound: HashSet<&str> = units.iter().flat_map(|u| u.lanes.iter().map(String::as_str)).collect();
     // Some(None) is "before every sound lane", None is "unlisted".
     let anchor_of = |id: &str| -> Option<Option<&str>> {
@@ -116,5 +139,7 @@ pub fn track_placing(tracks: &[RTrack], clip: &str) -> String {
 
 /// The index of the placement on a lane playing material `ref_`: a take is named by its material, its placement by `ref@start`.
 pub fn placement_of(clips: &[RClip], ref_: &str) -> Option<usize> {
-    clips.iter().position(|c| c.id == ref_ || c.name == ref_ || c.pieces.iter().flatten().any(|p| p.name == ref_))
+    clips
+        .iter()
+        .position(|c| c.id == ref_ || c.name == ref_ || c.pieces.iter().flatten().any(|p| p.name == ref_))
 }

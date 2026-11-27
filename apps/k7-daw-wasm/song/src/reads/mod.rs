@@ -22,8 +22,8 @@ pub use graph::{
     midi_in_played, rack_for, rack_key_names, without_notes,
 };
 pub use misc::{
-    ClipNameParts, FIX_TARGET_DB, FolderName, VOLUME_DB_MAX, VOLUME_DB_MIN, clip_name_parts, fixed_master, folder_name, follow_rename, shape_of_surfaces, tap_tempo,
-    trim_for, TapRun,
+    ClipNameParts, FIX_TARGET_DB, FolderName, TapRun, VOLUME_DB_MAX, VOLUME_DB_MIN, clip_name_parts, fixed_master,
+    folder_name, follow_rename, shape_of_surfaces, tap_tempo, trim_for,
 };
 pub use model::{RChain, RClip, RGraph, RGroup, RNote, RRack, RStep, RTrack, RVideoClip, RVideoTrack};
 pub use rack::{Hit, rack_hits};

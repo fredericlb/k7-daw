@@ -21,7 +21,11 @@ pub struct Hit {
 /// One clip's notes in arrangement beats: a looped event tiles its window's notes across its placed length.
 fn clip_hits(c: &RClip, out: &mut Vec<Hit>) {
     let mut hit = |at: f64, duration: f64, key: f64| {
-        out.push(Hit { from: c.start + at, to: c.start + at + duration.max(MIN_FLASH_BEATS), key });
+        out.push(Hit {
+            from: c.start + at,
+            to: c.start + at + duration.max(MIN_FLASH_BEATS),
+            key,
+        });
     };
     let Some(l) = clip_loop(&c.kind, c.length, c.loop_start, c.loop_end) else {
         for n in &c.notes {
@@ -47,9 +51,19 @@ fn clip_hits(c: &RClip, out: &mut Vec<Hit>) {
 pub fn rack_hits(tracks: &[RTrack], graph: &RGraph) -> IndexMap<String, Vec<Hit>> {
     let mut out: IndexMap<String, Vec<Hit>> = IndexMap::new();
     for chain in graph.chains.values() {
-        let Some(lane) = chain.from.as_deref().and_then(|f| tracks.iter().rev().find(|t| t.id == f)) else { continue };
-        let racks: Vec<&str> =
-            chain.r#use.iter().filter(|s| s.rack.as_ref().is_some_and(|r| !r.is_empty())).map(|s| s.module.as_str()).collect();
+        let Some(lane) = chain
+            .from
+            .as_deref()
+            .and_then(|f| tracks.iter().rev().find(|t| t.id == f))
+        else {
+            continue;
+        };
+        let racks: Vec<&str> = chain
+            .r#use
+            .iter()
+            .filter(|s| s.rack.as_ref().is_some_and(|r| !r.is_empty()))
+            .map(|s| s.module.as_str())
+            .collect();
         if racks.is_empty() {
             continue;
         }

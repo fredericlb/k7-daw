@@ -390,7 +390,11 @@ fn template_graph(a: &TemplateArgs) -> Value {
             .iter()
             .map(|i| {
                 let line = i.line.filter(|l| *l > 0).map(|l| format!("{l}: ")).unwrap_or_default();
-                let path = if i.path.is_empty() { String::new() } else { format!("{}: ", i.path) };
+                let path = if i.path.is_empty() {
+                    String::new()
+                } else {
+                    format!("{}: ", i.path)
+                };
                 format!("{line}{path}{}", i.message)
             })
             .collect();
@@ -424,7 +428,8 @@ pub fn dispatch(request: ReadsRequest, out: &mut Vec<u8>) -> Result<(), WasmErro
         R::ClipLoop(a) => write(out, &reads::clip_loop(&a.kind, a.length, a.loop_start, a.loop_end)),
         R::PlayedZone(a) => write(
             out,
-            &reads::played_zone(&a.kind, a.length, a.loop_start, a.loop_end).map(|(from, to)| json!({ "from": from, "to": to })),
+            &reads::played_zone(&a.kind, a.length, a.loop_start, a.loop_end)
+                .map(|(from, to)| json!({ "from": from, "to": to })),
         ),
         R::MaterialInstances(a) => write(out, &reads::material_instances(&a.tracks)),
         R::MixerModules(a) => write(out, &reads::mixer_modules(&a.tracks)),
@@ -432,26 +437,60 @@ pub fn dispatch(request: ReadsRequest, out: &mut Vec<u8>) -> Result<(), WasmErro
         R::VideoSpans(a) => write(out, &reads::video_spans(&a.tracks)),
         R::ToAlphas(a) => write(out, &reads::to_alphas(&a.raw)),
         R::AudioActivity(a) => write(out, &reads::audio_activity(&a.peak, a.buckets)),
-        R::MidiActivity(a) => write(out, &reads::midi_activity(&a.notes, a.span_beats, a.buckets, a.loop_start, a.loop_end)),
+        R::MidiActivity(a) => write(
+            out,
+            &reads::midi_activity(&a.notes, a.span_beats, a.buckets, a.loop_start, a.loop_end),
+        ),
         R::ActivityMask(a) => write(out, &reads::activity_mask(&a.alphas)),
-        R::TakesEvent(a) => write(out, &reads::takes_event_of(&a.track, &a.event_id, &a.clips, a.num, a.den).map_err(bad)?),
+        R::TakesEvent(a) => write(
+            out,
+            &reads::takes_event_of(&a.track, &a.event_id, &a.clips, a.num, a.den).map_err(bad)?,
+        ),
         R::HeardSpans(a) => {
             let comp: Vec<(String, f64, f64)> = a.comp.into_iter().map(|s| (s.take, s.from, s.to)).collect();
-            write(out, &reads::heard_spans(&comp, a.own, &a.ref_, a.start, a.row_end).into_iter().map(|(from, to)| json!({ "from": from, "to": to })).collect::<Vec<_>>())
+            write(
+                out,
+                &reads::heard_spans(&comp, a.own, &a.ref_, a.start, a.row_end)
+                    .into_iter()
+                    .map(|(from, to)| json!({ "from": from, "to": to }))
+                    .collect::<Vec<_>>(),
+            )
         }
         R::CompSeams(a) => {
             let comp: Vec<(f64, f64)> = a.comp.into_iter().map(|s| (s.from, s.to)).collect();
             write(out, &reads::comp_seams(a.start, a.to, &comp))
         }
-        R::CompLine(a) => write(out, &reads::comp_line(&a.track, &a.at, &a.ref_, a.from, a.to, a.meter.num, a.meter.den).map_err(bad)?),
-        R::ArmLine(a) => write(out, &reads::arm_line(&a.track, &a.at, a.from, a.to, a.meter.num, a.meter.den).map_err(bad)?),
-        R::CompFadeLine(a) => write(out, &reads::comp_fade_line(&a.track, &a.at, a.seam, a.beats, a.meter.num, a.meter.den).map_err(bad)?),
+        R::CompLine(a) => write(
+            out,
+            &reads::comp_line(&a.track, &a.at, &a.ref_, a.from, a.to, a.meter.num, a.meter.den).map_err(bad)?,
+        ),
+        R::ArmLine(a) => write(
+            out,
+            &reads::arm_line(&a.track, &a.at, a.from, a.to, a.meter.num, a.meter.den).map_err(bad)?,
+        ),
+        R::CompFadeLine(a) => write(
+            out,
+            &reads::comp_fade_line(&a.track, &a.at, a.seam, a.beats, a.meter.num, a.meter.den).map_err(bad)?,
+        ),
         R::PieceEdgeLines(a) => write(
             out,
-            &reads::piece_edge_lines(&a.track, &a.at, &a.ref_, &a.pieces, &a.piece_id, a.from, a.to, a.meter.num, a.meter.den)
-                .map_err(bad)?,
+            &reads::piece_edge_lines(
+                &a.track,
+                &a.at,
+                &a.ref_,
+                &a.pieces,
+                &a.piece_id,
+                a.from,
+                a.to,
+                a.meter.num,
+                a.meter.den,
+            )
+            .map_err(bad)?,
         ),
-        R::Rows(a) => write(out, &reads::project_rows(&a.groups, &a.tracks, &a.video, &a.automation, a.order.as_deref())),
+        R::Rows(a) => write(
+            out,
+            &reads::project_rows(&a.groups, &a.tracks, &a.video, &a.automation, a.order.as_deref()),
+        ),
         R::TrackPlacing(a) => write(out, &reads::track_placing(&a.tracks, &a.clip)),
         R::PlacementOf(a) => write(out, &reads::placement_of(&a.clips, &a.ref_)),
         R::MidiInDeviceFor(a) => write(out, &reads::midi_in_device_for(&a.graph, &a.track)),
@@ -469,7 +508,15 @@ pub fn dispatch(request: ReadsRequest, out: &mut Vec<u8>) -> Result<(), WasmErro
         R::HasAudibleInput(a) => write(out, &reads::has_audible_input(&a.graph)),
         R::RackHits(a) => write(out, &reads::rack_hits(&a.tracks, &a.graph)),
         R::ClipNameParts(a) => write(out, &reads::clip_name_parts(&a.ref_)),
-        R::FixedMaster(a) => write(out, &reads::fixed_master(a.master_db, a.peak_db.unwrap_or(f64::NEG_INFINITY), MASTER_MIN_DB, MASTER_MAX_DB)),
+        R::FixedMaster(a) => write(
+            out,
+            &reads::fixed_master(
+                a.master_db,
+                a.peak_db.unwrap_or(f64::NEG_INFINITY),
+                MASTER_MIN_DB,
+                MASTER_MAX_DB,
+            ),
+        ),
         R::ShellView(a) => write(out, &reads::shell_view(a.tempo, a.num, a.den, a.count_in, &a.tracks)),
         R::LaneMix(a) => {
             let (lanes, pictures) = reads::lane_mix(&a.tracks, &a.groups, &a.video);
@@ -477,7 +524,11 @@ pub fn dispatch(request: ReadsRequest, out: &mut Vec<u8>) -> Result<(), WasmErro
         }
         R::Blanks => write(out, &reads::blanks()),
         R::EnginePlugin(a) => {
-            let plugin = song::modules::Plugin { plugin_type: a.kind, name: a.name, ..Default::default() };
+            let plugin = song::modules::Plugin {
+                plugin_type: a.kind,
+                name: a.name,
+                ..Default::default()
+            };
             let (kind, name) = song::console::engine_plugin(Some(&plugin), &a.fallback, a.emits.as_deref());
             write(out, &json!({ "type": kind, "name": name }))
         }

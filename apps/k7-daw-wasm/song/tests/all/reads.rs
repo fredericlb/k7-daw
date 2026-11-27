@@ -29,8 +29,14 @@ fn a_midi_loop_is_in_the_notes_beats_and_an_audio_one_in_the_sources() {
 
 #[test]
 fn a_cut_off_pass_is_a_pass_and_the_marks_are_capped() {
-    assert_eq!(clip_loop("midi", 5.0, Some(0.0), Some(4.0)).map(|l| l.passes), Some(1.0));
-    assert_eq!(clip_loop("midi", 6.0, Some(0.0), Some(4.0)).map(|l| l.passes), Some(2.0));
+    assert_eq!(
+        clip_loop("midi", 5.0, Some(0.0), Some(4.0)).map(|l| l.passes),
+        Some(1.0)
+    );
+    assert_eq!(
+        clip_loop("midi", 6.0, Some(0.0), Some(4.0)).map(|l| l.passes),
+        Some(2.0)
+    );
     let long = clip_loop("midi", 100000.0, Some(0.0), Some(1.0)).expect("a loop");
     assert_eq!(long.repeats.len(), 256);
     assert_eq!(played_zone("midi", 8.0, None, None), Some((0.0, 8.0)));
@@ -73,7 +79,10 @@ fn note_spans_leave_out_muted_lanes_and_give_a_zero_length_note_an_instant() {
     let got = note_spans(&t, Some(120.0));
     assert_eq!(got.keys().map(String::as_str).collect::<Vec<_>>(), vec!["on"]);
     let lane = &got["on"];
-    assert_eq!((lane.spans[0].from, lane.spans[0].to, lane.spans[0].vel), (2.0, 2.0625, 1.0));
+    assert_eq!(
+        (lane.spans[0].from, lane.spans[0].to, lane.spans[0].vel),
+        (2.0, 2.0625, 1.0)
+    );
     assert_eq!(lane.spans[1].vel, 0.5);
     assert_eq!(lane.peak, 1.0);
     assert_eq!(note_spans(&t, Some(0.0))["on"].spans[0].from, 2.0);
@@ -89,7 +98,10 @@ fn a_picture_lane_shows_by_three_rules() {
     ]))
     .expect("lanes");
     let got = video_spans(&t);
-    assert_eq!(got.keys().map(String::as_str).collect::<Vec<_>>(), vec!["shape", "shots"]);
+    assert_eq!(
+        got.keys().map(String::as_str).collect::<Vec<_>>(),
+        vec!["shape", "shots"]
+    );
     assert_eq!(got["shape"][0].to, None);
     let ends: Vec<Option<f64>> = got["shots"].iter().map(|s| s.to).collect();
     assert_eq!(ends, vec![Some(2.0), Some(9.0), None]);
@@ -99,15 +111,27 @@ fn a_picture_lane_shows_by_three_rules() {
 fn activity_is_half_at_least_and_one_at_the_loudest() {
     assert_eq!(to_alphas(&[0.0, 0.0]), vec![0.5, 0.5]);
     assert_eq!(to_alphas(&[1.0, 2.0, 0.0]), vec![0.75, 1.0, 0.5]);
-    assert_eq!(audio_activity(&[0.1, 0.9, 0.2, 0.3], 2), vec![1.0, 0.5 + 0.5 * (0.3 / 0.9)]);
+    assert_eq!(
+        audio_activity(&[0.1, 0.9, 0.2, 0.3], 2),
+        vec![1.0, 0.5 + 0.5 * (0.3 / 0.9)]
+    );
     assert!(audio_activity(&[], 4).is_empty());
-    let notes: Vec<RNote> = serde_json::from_value(json!([{ "time": 0, "duration": 1, "key": 60 }, { "time": 1, "duration": 1, "key": 62, "vel": 0.5 }])).expect("notes");
+    let notes: Vec<RNote> = serde_json::from_value(
+        json!([{ "time": 0, "duration": 1, "key": 60 }, { "time": 1, "duration": 1, "key": 62, "vel": 0.5 }]),
+    )
+    .expect("notes");
     assert_eq!(midi_activity(&notes, 4.0, 4, 0.0, 0.0), vec![1.0, 0.75, 0.5, 0.5]);
     // A loop of the first beat tiles its window across the span.
     assert_eq!(midi_activity(&notes, 4.0, 4, 0.0, 1.0), vec![1.0, 1.0, 1.0, 1.0]);
     assert_eq!(activity_mask(&[]), "");
-    assert_eq!(activity_mask(&[0.5]), "linear-gradient(rgb(0 0 0 / 0.5), rgb(0 0 0 / 0.5))");
-    assert_eq!(activity_mask(&[0.5, 1.0]), "linear-gradient(to right, rgb(0 0 0 / 0.5) 25%, rgb(0 0 0 / 1) 75%)");
+    assert_eq!(
+        activity_mask(&[0.5]),
+        "linear-gradient(rgb(0 0 0 / 0.5), rgb(0 0 0 / 0.5))"
+    );
+    assert_eq!(
+        activity_mask(&[0.5, 1.0]),
+        "linear-gradient(to right, rgb(0 0 0 / 0.5) 25%, rgb(0 0 0 / 1) 75%)"
+    );
 }
 
 fn comped() -> Vec<RClip> {
@@ -121,7 +145,9 @@ fn comped() -> Vec<RClip> {
 
 #[test]
 fn an_event_is_found_from_any_of_its_pieces() {
-    let ev = takes_event_of("keys", "riff@4", &comped(), 4.0, 4.0).expect("reads").expect("an event");
+    let ev = takes_event_of("keys", "riff@4", &comped(), 4.0, 4.0)
+        .expect("reads")
+        .expect("an event");
     assert_eq!((ev.ref_.as_str(), ev.at.as_str(), ev.start), ("riff", "2:1", 4.0));
     assert_eq!(ev.rows.len(), 2);
     assert!(ev.rows[0].own && !ev.rows[1].own);
@@ -129,9 +155,26 @@ fn an_event_is_found_from_any_of_its_pieces() {
     assert_eq!(ev.pieces, vec![0, 1]);
     assert_eq!((ev.from, ev.to), (4.0, 8.0));
     assert_eq!(ev.crossfades.len(), 1);
-    assert!(takes_event_of("keys", "nothing@9", &comped(), 4.0, 4.0).expect("reads").is_none());
-    assert!(takes_event_of("keys", "riff@4", &comped(), 4.0, 4.0).expect("reads").is_some());
-    assert!(takes_event_of("keys", "riff@4", &clips(json!([{ "id": "riff@4", "event": { "takes": [{ "ref": "t", "start": "x" }] } }])), 4.0, 4.0).is_err());
+    assert!(
+        takes_event_of("keys", "nothing@9", &comped(), 4.0, 4.0)
+            .expect("reads")
+            .is_none()
+    );
+    assert!(
+        takes_event_of("keys", "riff@4", &comped(), 4.0, 4.0)
+            .expect("reads")
+            .is_some()
+    );
+    assert!(
+        takes_event_of(
+            "keys",
+            "riff@4",
+            &clips(json!([{ "id": "riff@4", "event": { "takes": [{ "ref": "t", "start": "x" }] } }])),
+            4.0,
+            4.0
+        )
+        .is_err()
+    );
 }
 
 #[test]
@@ -144,10 +187,22 @@ fn the_comp_is_heard_where_a_span_says_and_the_own_row_where_none_does() {
 
 #[test]
 fn a_pick_and_an_arm_are_one_line_each() {
-    assert_eq!(comp_line("keys", "2:1", "t2", 6.0, 7.0, 4.0, 4.0).as_deref(), Ok("event comp keys 2:1 t2 2:3 2:4"));
-    assert_eq!(arm_line("keys", "2:1", 6.0, None, 4.0, 4.0).as_deref(), Ok("event take arm keys 2:1 2:3"));
-    assert_eq!(arm_line("keys", "2:1", 6.0, Some(7.0), 4.0, 4.0).as_deref(), Ok("event take arm keys 2:1 2:3 2:4"));
-    assert_eq!(comp_fade_line("keys", "2:1", 6.0, 0.0, 4.0, 4.0).as_deref(), Ok("event comp fade keys 2:1 2:3 0"));
+    assert_eq!(
+        comp_line("keys", "2:1", "t2", 6.0, 7.0, 4.0, 4.0).as_deref(),
+        Ok("event comp keys 2:1 t2 2:3 2:4")
+    );
+    assert_eq!(
+        arm_line("keys", "2:1", 6.0, None, 4.0, 4.0).as_deref(),
+        Ok("event take arm keys 2:1 2:3")
+    );
+    assert_eq!(
+        arm_line("keys", "2:1", 6.0, Some(7.0), 4.0, 4.0).as_deref(),
+        Ok("event take arm keys 2:1 2:3 2:4")
+    );
+    assert_eq!(
+        comp_fade_line("keys", "2:1", 6.0, 0.0, 4.0, 4.0).as_deref(),
+        Ok("event comp fade keys 2:1 2:3 0")
+    );
 }
 
 #[test]
@@ -157,12 +212,18 @@ fn a_grown_piece_takes_the_span_and_a_shrunk_one_gives_it_back() {
     assert_eq!(grown, vec!["event comp keys 2:1 t2 2:2 3:1"]);
     let shrunk = piece_edge_lines("keys", "2:1", "riff", &pieces[..2], "t2@6", 6.0, 7.0, 4.0, 4.0).expect("lines");
     assert_eq!(shrunk, vec!["event comp keys 2:1 riff 2:4 3:1"]);
-    assert!(piece_edge_lines("keys", "2:1", "riff", &pieces[..2], "gone", 6.0, 7.0, 4.0, 4.0).expect("lines").is_empty());
+    assert!(
+        piece_edge_lines("keys", "2:1", "riff", &pieces[..2], "gone", 6.0, 7.0, 4.0, 4.0)
+            .expect("lines")
+            .is_empty()
+    );
 }
 
 #[test]
 fn a_group_is_a_header_over_its_members_at_the_first_and_a_picture_goes_after_its_anchor() {
-    let t = tracks(json!([{ "id": "a", "group": "" }, { "id": "k", "group": "drums" }, { "id": "b#midi", "group": "" }, { "id": "s", "group": "drums" }]));
+    let t = tracks(
+        json!([{ "id": "a", "group": "" }, { "id": "k", "group": "drums" }, { "id": "b#midi", "group": "" }, { "id": "s", "group": "drums" }]),
+    );
     let rows = project_rows(&["drums".to_owned()], &t, &[], &Default::default(), None);
     let shape: Vec<String> = rows
         .iter()
@@ -175,7 +236,13 @@ fn a_group_is_a_header_over_its_members_at_the_first_and_a_picture_goes_after_it
         .collect();
     assert_eq!(shape, vec!["t0", "g0", "t1+", "t3+", "t2"]);
     let order: Vec<String> = ["v0", "a", "b", "drums", "v1"].map(String::from).to_vec();
-    let with = project_rows(&["drums".to_owned()], &t, &["v0".to_owned(), "v1".to_owned()], &Default::default(), Some(&order));
+    let with = project_rows(
+        &["drums".to_owned()],
+        &t,
+        &["v0".to_owned(), "v1".to_owned()],
+        &Default::default(),
+        Some(&order),
+    );
     // `v0` leads the order, so it sits on top; `v1` follows the group's last member, and `b` comes after it.
     assert!(matches!(with[0], LayoutRow::Video { track: 0 }));
     let n = with.len();
@@ -185,7 +252,9 @@ fn a_group_is_a_header_over_its_members_at_the_first_and_a_picture_goes_after_it
 
 #[test]
 fn a_clip_is_placed_by_the_first_lane_that_holds_it_and_a_frozen_lane_still_holds_its_material() {
-    let t = tracks(json!([{ "id": "a", "clips": [{ "id": "c1" }] }, { "id": "b", "clips": [{ "id": "c1" }], "frozenMaterial": [{ "id": "m" }] }]));
+    let t = tracks(
+        json!([{ "id": "a", "clips": [{ "id": "c1" }] }, { "id": "b", "clips": [{ "id": "c1" }], "frozenMaterial": [{ "id": "m" }] }]),
+    );
     assert_eq!(track_placing(&t, "c1"), "a");
     assert_eq!(track_placing(&t, "m"), "b");
     assert_eq!(track_placing(&t, ""), "");
@@ -223,7 +292,10 @@ fn a_midi_in_node_is_a_device_even_when_its_label_is_empty() {
 fn an_input_behind_a_preamp_still_feeds_the_lane() {
     let g = rig();
     let found = lane_input(&g, "gtr").expect("an input");
-    assert_eq!((found.module.as_str(), found.kind.as_str(), found.monitor.as_deref()), ("mic", "audio", Some("on")));
+    assert_eq!(
+        (found.module.as_str(), found.kind.as_str(), found.monitor.as_deref()),
+        ("mic", "audio", Some("on"))
+    );
     assert_eq!(lane_input(&g, "keys").map(|i| i.kind), Some("midi".to_owned()));
     assert!(lane_input(&g, "nobody").is_none());
     assert!(has_audible_input(&g));
@@ -251,21 +323,52 @@ fn notes_leave_the_graph_by_node_and_by_port() {
 
 #[test]
 fn a_looped_clip_tiles_its_window_into_the_racks_hits() {
-    let t = tracks(json!([{ "id": "keys", "clips": [{ "type": "midi", "start": 8, "length": 4, "loopStart": 0, "loopEnd": 2,
-        "notes": [{ "time": 0, "duration": 0.1, "key": 36 }, { "time": 3, "duration": 1, "key": 40 }] }] }]));
+    let t = tracks(
+        json!([{ "id": "keys", "clips": [{ "type": "midi", "start": 8, "length": 4, "loopStart": 0, "loopEnd": 2,
+        "notes": [{ "time": 0, "duration": 0.1, "key": 36 }, { "time": 3, "duration": 1, "key": 40 }] }] }]),
+    );
     let hits = rack_hits(&t, &rig());
     let kit = &hits["kit"];
-    assert_eq!(kit.iter().map(|h| (h.from, h.key)).collect::<Vec<_>>(), vec![(8.0, 36.0), (10.0, 36.0)]);
+    assert_eq!(
+        kit.iter().map(|h| (h.from, h.key)).collect::<Vec<_>>(),
+        vec![(8.0, 36.0), (10.0, 36.0)]
+    );
     assert_eq!(kit[0].to, 8.25);
 }
 
 #[test]
 fn a_clip_ref_reads_as_a_take_a_sequence_or_a_name() {
     use ClipNameParts::*;
-    assert_eq!(clip_name_parts("gtr_9.1_261030T172747"), Take { lane: "gtr".into(), bar: 9.0, copy: None });
-    assert_eq!(clip_name_parts("gtr_9.1_261030T172747-2@4"), Take { lane: "gtr".into(), bar: 9.0, copy: Some(2.0) });
-    assert_eq!(clip_name_parts("keys-seq-3"), Sequence { lane: "keys".into(), n: 3.0 });
-    assert_eq!(clip_name_parts("a-seq-1-seq-2"), Sequence { lane: "a-seq-1".into(), n: 2.0 });
+    assert_eq!(
+        clip_name_parts("gtr_9.1_261030T172747"),
+        Take {
+            lane: "gtr".into(),
+            bar: 9.0,
+            copy: None
+        }
+    );
+    assert_eq!(
+        clip_name_parts("gtr_9.1_261030T172747-2@4"),
+        Take {
+            lane: "gtr".into(),
+            bar: 9.0,
+            copy: Some(2.0)
+        }
+    );
+    assert_eq!(
+        clip_name_parts("keys-seq-3"),
+        Sequence {
+            lane: "keys".into(),
+            n: 3.0
+        }
+    );
+    assert_eq!(
+        clip_name_parts("a-seq-1-seq-2"),
+        Sequence {
+            lane: "a-seq-1".into(),
+            n: 2.0
+        }
+    );
     assert_eq!(clip_name_parts("riff"), Named { name: "riff".into() });
     assert_eq!(clip_name_parts("-seq-3"), Named { name: "-seq-3".into() });
 }
@@ -306,8 +409,14 @@ fn a_folder_name_refuses_separators_dots_and_nothing_and_strips_a_typed_suffix()
 #[test]
 fn a_renamed_timeline_is_followed_only_when_one_vanished_and_one_appeared() {
     let ids = |v: &[&str]| v.iter().map(|s| (*s).to_owned()).collect::<Vec<_>>();
-    assert_eq!(follow_rename(Some("a"), &ids(&["a", "b"]), &ids(&["a", "b"])).as_deref(), Some("a"));
-    assert_eq!(follow_rename(Some("a"), &ids(&["a", "b"]), &ids(&["c", "b"])).as_deref(), Some("c"));
+    assert_eq!(
+        follow_rename(Some("a"), &ids(&["a", "b"]), &ids(&["a", "b"])).as_deref(),
+        Some("a")
+    );
+    assert_eq!(
+        follow_rename(Some("a"), &ids(&["a", "b"]), &ids(&["c", "b"])).as_deref(),
+        Some("c")
+    );
     assert_eq!(follow_rename(Some("a"), &ids(&["a", "b"]), &ids(&["b"])), None);
     assert_eq!(follow_rename(None, &ids(&["a"]), &ids(&["b"])), None);
 }
@@ -315,9 +424,15 @@ fn a_renamed_timeline_is_followed_only_when_one_vanished_and_one_appeared() {
 #[test]
 fn surfaces_read_as_an_archetype() {
     let s = |v: &[&str]| Some(v.iter().map(|x| (*x).to_owned()).collect::<Vec<_>>());
-    assert_eq!(shape_of_surfaces(s(&["turntables", "timeline"]).as_deref()), Some("mix"));
+    assert_eq!(
+        shape_of_surfaces(s(&["turntables", "timeline"]).as_deref()),
+        Some("mix")
+    );
     assert_eq!(shape_of_surfaces(s(&["timeline"]).as_deref()), Some("arrangement"));
-    assert_eq!(shape_of_surfaces(s(&["timeline", "viewport"]).as_deref()), Some("video"));
+    assert_eq!(
+        shape_of_surfaces(s(&["timeline", "viewport"]).as_deref()),
+        Some("video")
+    );
     assert_eq!(shape_of_surfaces(s(&["viewport"]).as_deref()), Some("live-video"));
     assert_eq!(shape_of_surfaces(s(&[]).as_deref()), Some("live"));
     assert_eq!(shape_of_surfaces(None), None);

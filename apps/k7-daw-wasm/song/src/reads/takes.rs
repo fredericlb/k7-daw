@@ -71,7 +71,11 @@ fn js_max(a: f64, b: f64) -> f64 {
 }
 
 fn by_start(clips: &[RClip], idx: &mut [usize]) {
-    idx.sort_by(|&a, &b| (clips[a].start - clips[b].start).partial_cmp(&0.0).unwrap_or(Ordering::Equal));
+    idx.sort_by(|&a, &b| {
+        (clips[a].start - clips[b].start)
+            .partial_cmp(&0.0)
+            .unwrap_or(Ordering::Equal)
+    });
 }
 
 /// The event `event_id` among a lane's `clips`, with its takes and comp; none when no clip of it is there. A timecode that does not read is an error.
@@ -86,19 +90,33 @@ pub fn takes_event_of(
         .filter(|&i| clips[i].id == event_id || clips[i].comp.as_ref().is_some_and(|c| c.of == event_id))
         .collect();
     let Some(&first) = pieces.first() else { return Ok(None) };
-    let Some(start) = placement_start_of(event_id).filter(|s| s.is_finite()) else { return Ok(None) };
+    let Some(start) = placement_start_of(event_id).filter(|s| s.is_finite()) else {
+        return Ok(None);
+    };
     let ref_ = material_ref_of(event_id).to_owned();
     let pos = |tc: &str| parse_position_on(tc, num, den).map_err(|e| e.to_string());
     let ev = pieces.iter().find_map(|&i| clips[i].event.as_ref());
-    let mut rows = vec![TakeRow { ref_: ref_.clone(), start, own: true }];
+    let mut rows = vec![TakeRow {
+        ref_: ref_.clone(),
+        start,
+        own: true,
+    }];
     let mut comp = Vec::new();
     let mut crossfades = Vec::new();
     if let Some(ev) = ev {
         for t in &ev.takes {
-            rows.push(TakeRow { ref_: t.ref_.clone(), start: pos(&t.start)?, own: false });
+            rows.push(TakeRow {
+                ref_: t.ref_.clone(),
+                start: pos(&t.start)?,
+                own: false,
+            });
         }
         for s in &ev.comp {
-            comp.push(CompBeats { take: s.take.clone(), from: pos(&s.from)?, to: pos(&s.to)? });
+            comp.push(CompBeats {
+                take: s.take.clone(),
+                from: pos(&s.from)?,
+                to: pos(&s.to)?,
+            });
         }
         for x in &ev.crossfades {
             crossfades.push(Crossfade {
@@ -182,7 +200,11 @@ fn pos(b: f64, num: f64, den: f64) -> Result<String, String> {
 
 /// The line that plays `ref_` over a span.
 pub fn comp_line(track: &str, at: &str, ref_: &str, from: f64, to: f64, num: f64, den: f64) -> Result<String, String> {
-    Ok(format!("event comp {track} {at} {ref_} {} {}", pos(from, num, den)?, pos(to, num, den)?))
+    Ok(format!(
+        "event comp {track} {at} {ref_} {} {}",
+        pos(from, num, den)?,
+        pos(to, num, den)?
+    ))
 }
 
 /// The line that arms the next take: punched into the selection, or from the playhead to the stop.
@@ -196,7 +218,11 @@ pub fn arm_line(track: &str, at: &str, from: f64, to: Option<f64>, num: f64, den
 
 /// The line that crossfades the seam over `beats`; 0 removes it.
 pub fn comp_fade_line(track: &str, at: &str, seam: f64, beats: f64, num: f64, den: f64) -> Result<String, String> {
-    let len = if beats > 0.0 { beats_to_duration_on(beats, num, den).map_err(|e| e.to_string())? } else { "0".to_owned() };
+    let len = if beats > 0.0 {
+        beats_to_duration_on(beats, num, den).map_err(|e| e.to_string())?
+    } else {
+        "0".to_owned()
+    };
     Ok(format!("event comp fade {track} {at} {} {len}", pos(seam, num, den)?))
 }
 
@@ -220,7 +246,9 @@ pub fn piece_edge_lines(
     num: f64,
     den: f64,
 ) -> Result<Vec<String>, String> {
-    let Some(piece) = pieces.iter().position(|p| p.id == piece_id) else { return Ok(Vec::new()) };
+    let Some(piece) = pieces.iter().position(|p| p.id == piece_id) else {
+        return Ok(Vec::new());
+    };
     if to <= from {
         return Ok(Vec::new());
     }

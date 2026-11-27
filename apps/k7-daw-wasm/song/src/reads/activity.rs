@@ -20,7 +20,15 @@ pub fn to_alphas(raw: &[f64]) -> Vec<f64> {
             m = v;
         }
     }
-    raw.iter().map(|&v| if m > 0.0 { QUIET + (1.0 - QUIET) * (v / m) } else { QUIET }).collect()
+    raw.iter()
+        .map(|&v| {
+            if m > 0.0 {
+                QUIET + (1.0 - QUIET) * (v / m)
+            } else {
+                QUIET
+            }
+        })
+        .collect()
 }
 
 /// An envelope's peaks max-pooled into at most `buckets` alphas.
@@ -44,9 +52,16 @@ pub fn midi_activity(notes: &[RNote], span_beats: f64, buckets: usize, loop_star
     if notes.is_empty() || !(span_beats > 0.0) || buckets == 0 {
         return Vec::new();
     }
-    let loop_len = if loop_end > loop_start { loop_end - loop_start } else { 0.0 };
+    let loop_len = if loop_end > loop_start {
+        loop_end - loop_start
+    } else {
+        0.0
+    };
     let placed: Vec<(f64, f64, f64)> = if loop_len > 0.0 {
-        let win: Vec<&RNote> = notes.iter().filter(|n| n.time >= loop_start && n.time < loop_end).collect();
+        let win: Vec<&RNote> = notes
+            .iter()
+            .filter(|n| n.time >= loop_start && n.time < loop_end)
+            .collect();
         let mut out = Vec::new();
         let mut k = 0.0;
         while k * loop_len < span_beats {
@@ -57,7 +72,10 @@ pub fn midi_activity(notes: &[RNote], span_beats: f64, buckets: usize, loop_star
         }
         out
     } else {
-        notes.iter().map(|n| (n.time, n.duration, n.vel.unwrap_or(1.0))).collect()
+        notes
+            .iter()
+            .map(|n| (n.time, n.duration, n.vel.unwrap_or(1.0)))
+            .collect()
     };
     let w = span_beats / buckets as f64;
     let last = buckets - 1;
@@ -80,7 +98,9 @@ pub fn midi_activity(notes: &[RNote], span_beats: f64, buckets: usize, loop_star
 
 /// The alphas as a CSS mask gradient: a mask rather than a painted gradient, so the block's fill stays what it was.
 pub fn activity_mask(alphas: &[f64]) -> String {
-    let Some(&first) = alphas.first() else { return String::new() };
+    let Some(&first) = alphas.first() else {
+        return String::new();
+    };
     let one = |a: f64| format!("rgb(0 0 0 / {})", js_number(js_round(a * 1000.0) / 1000.0));
     if alphas.len() == 1 {
         return format!("linear-gradient({}, {})", one(first), one(first));
@@ -89,7 +109,13 @@ pub fn activity_mask(alphas: &[f64]) -> String {
     let stops: Vec<String> = alphas
         .iter()
         .enumerate()
-        .map(|(i, &a)| format!("{} {}%", one(a), js_number(js_round((i as f64 + 0.5) / n * 10000.0) / 100.0)))
+        .map(|(i, &a)| {
+            format!(
+                "{} {}%",
+                one(a),
+                js_number(js_round((i as f64 + 0.5) / n * 10000.0) / 100.0)
+            )
+        })
         .collect();
     format!("linear-gradient(to right, {})", stops.join(", "))
 }

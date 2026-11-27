@@ -45,7 +45,13 @@ pub fn clip_loop(kind: &str, length: f64, loop_start: Option<f64>, loop_end: Opt
         repeats.push(from + k as f64 * win);
         k += 1;
     }
-    Some(ClipLoop { from, to, win, passes, repeats })
+    Some(ClipLoop {
+        from,
+        to,
+        win,
+        passes,
+        repeats,
+    })
 }
 
 /// What a MIDI event actually plays, on the roll's axis: the window it states, else the placement's extent; none when unplaced.
@@ -83,7 +89,14 @@ pub fn material_instances(tracks: &[RTrack]) -> Vec<(String, Instances)> {
             match at.get(m) {
                 None => {
                     at.insert(m.to_owned(), out.len());
-                    out.push((m.to_owned(), Instances { n: 1, track: t.id.clone(), start: c.start }));
+                    out.push((
+                        m.to_owned(),
+                        Instances {
+                            n: 1,
+                            track: t.id.clone(),
+                            start: c.start,
+                        },
+                    ));
                 }
                 Some(&i) => {
                     let found = &mut out[i].1;
@@ -105,7 +118,12 @@ pub fn mixer_modules(tracks: &[RTrack]) -> Vec<String> {
     let mut seen = HashSet::new();
     let mut out = Vec::new();
     for t in tracks {
-        let Some(name) = t.mixer.as_ref().and_then(|m| m.module.as_deref()).filter(|m| !m.is_empty()) else {
+        let Some(name) = t
+            .mixer
+            .as_ref()
+            .and_then(|m| m.module.as_deref())
+            .filter(|m| !m.is_empty())
+        else {
             continue;
         };
         if seen.insert(name.to_owned()) {
