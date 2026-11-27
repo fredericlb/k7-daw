@@ -159,9 +159,7 @@ export function TreeMenu<N extends TreeNode>({
               onClick={() => start(action)}
               className={cn(
                 "block w-full px-3 py-1 text-left hover:bg-accent focus-visible:bg-accent focus-visible:outline-none",
-                action.danger
-                  ? "text-error"
-                  : "hover:text-accent-foreground",
+                action.danger ? "text-error" : "hover:text-accent-foreground",
                 "[@media(hover:none)]:py-2",
               )}
             >

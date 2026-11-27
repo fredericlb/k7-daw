@@ -199,9 +199,7 @@ export function MixView({
               <Card className="p-3 text-sm text-error">{error}</Card>
             ) : null}
             {decks.deskError ? (
-              <Card className="p-3 text-sm text-error">
-                {decks.deskError}
-              </Card>
+              <Card className="p-3 text-sm text-error">{decks.deskError}</Card>
             ) : null}
             {/* A set list that will not read is the project's problem, so it is reported apart and names its file. */}
             {set?.issues.length ? (
