@@ -18,6 +18,7 @@
 | The arrangements read a few fields of each card and answer only what changes: ranks, x positions, the seams, where a stack puts each card | the page already holds the nodes; sending a panel there and back would cost more than the arrangement |
 | A card's panel keeps the shape the page reads: the step's own `ui` rides through untouched, and a folder dropdown lists `none` and the names in the folder's order | the `Intl.Collator` that orders them for people is the page's; the module has no ICU, so `buildGraph.ts` sorts those lists after the call |
 | `insertFor` answers every cable at once (`graph.inserts`), and `jackRef` and `nodeSize` stay one call each, `nodeSize` kept per panel object | a model rebuild asks about hundreds of cables, a jack click about one, and a panel is measured once however often it is drawn |
+| The layout is one op, `graph.layout`, which reads a few fields of each card and answers places the page merges back onto its own cards | the rows, pins and pushes need no panel, and rust-sugiyama (decision 2 of the inventory) takes sizes and cables only |
 | The layout constants (`NODE_W`, `CELL`, `TAB_COL_W`, ...) and the binds the build writes are generated into `consts.generated.ts` from the crate | the build that decides a card's size and the drawing that places its widgets read one number |
 
 ## What it costs
@@ -42,5 +43,5 @@ on the large graph. One `graph.inserts` call answers 1,901 cables in 2.8 ms; a `
   `autoTarget` (it reads a widget's rect to find where an arrow stops); they run for every cable on every frame, or on every pointer move.
 - `liveVideoLanes` and `seedsEq`, read on every meter frame.
 - `widgetTarget` and `moduleFieldValue`: they run once per widget on every render over the page's own node, and a call per widget would cost more than the rule.
-- `graphLayout.ts` and dagre, until rust-sugiyama replaces them (M5b); `withOpenTabs`, a map over nodes the page holds.
+- `withOpenTabs`, a map over nodes the page holds; `pendingNode` and `trackPanelLayout`, which splice the page's own laid-out cards with the drawing's `jackPoint` and compose the facades above.
 - `chainsModel.ts`: it assembles the cable geometry above; only its `insertFor` call went to Rust.

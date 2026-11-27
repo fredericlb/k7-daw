@@ -12,6 +12,8 @@ export {
   CLIP_LIST_MAX,
   COL_GAP,
   FOOTER_H,
+  FRAME_HEAD,
+  FRAME_PAD,
   MAIN_OUT,
   MIX_OUT,
   NODE_H,
@@ -152,10 +154,6 @@ export function cablePath(
 
 /** The id an assembly's card has, in the family of the `mod:` / `trk:` / `snk:` ids the build mints. */
 export const assemblyId = (name: string): string => `asm:${name}`;
-
-/** What an OPEN box adds around the layout of its members: a title strip, and a margin. */
-export const FRAME_HEAD = 26;
-export const FRAME_PAD = 14;
 
 /** The height `rows` rows take on a card, the gaps between them included. */
 export const rowsHeight = (rows: number): number =>
