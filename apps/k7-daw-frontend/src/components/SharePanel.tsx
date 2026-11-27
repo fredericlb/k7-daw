@@ -1,16 +1,21 @@
-// SharePanel.tsx — the Export panel: the person picks WHAT leaves (an MP3/WAV, each track's audio in a zip, a
+// SharePanel.tsx — the Export panel: git's Save and Update first, then the person picks WHAT leaves (an MP3/WAV, each track's audio in a zip, a
 // video); pressing a row opens the system's folder picker at once and the export runs; the result names the folder.
 // A PANEL docked beside the panes, an export taking a minute and saying where the file went. See ../docs/export.md.
 // The chosen entry is a COMMAND LINE the shell dispatches (`project export`), not a call of its own: that keeps
 // this and the palette saying the same. The running card reads the page's process list (../processes.ts).
 
+import { tracksLine } from "@studio/k7-wasm/edit";
 import { Button } from "@studio/ui/button";
 import { Chip } from "@studio/ui/chip";
 import { Download, FileArchive } from "@studio/ui/icons";
 import { Progress } from "@studio/ui/progress";
 import { RowButton, RowGroup } from "@studio/ui/row-group";
-import { useEffect, useState, useSyncExternalStore } from "react";
-import { tracksLine } from "../exportArgs";
+import {
+  type ReactNode,
+  useEffect,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import type { ExportHost, Saved } from "../exportHost";
 import { m } from "../paraglide/messages.js";
 import { elapsedOf, processesSnapshot, subscribeProcesses } from "../processes";
@@ -76,6 +81,7 @@ export function SharePanel({
   onReveal,
   onShare,
   onRun,
+  sync,
 }: {
   /** A render is already running — the rows grey out rather than starting a second. */
   busy: boolean;
@@ -91,6 +97,8 @@ export function SharePanel({
   onReveal?: () => void;
   onShare?: () => void;
   onRun: (command: string) => void;
+  /** Git's Save and Update, first in the panel; absent outside a git workspace (HeaderGit.tsx's GitShareRows). */
+  sync?: ReactNode;
 }) {
   // Which timeline the mixdown renders; one that has gone since is Main again.
   const [timeline, setTimeline] = useState("");
@@ -115,6 +123,13 @@ export function SharePanel({
       {busy ? <RunningCard timeline={chosen} /> : null}
 
       <div className="min-h-0 flex-1 overflow-y-auto">
+        {sync ? (
+          <>
+            <h3 className="type-caps pb-2 text-fg-2">{m["share.sync"]()}</h3>
+            {sync}
+            <div className="pt-4" />
+          </>
+        ) : null}
         <h3 className="type-caps pb-2 text-fg-2">{m["share.mixdown"]()}</h3>
         {/* Only once there is a choice, as the timeline pane's tabs are. */}
         {timelines.length ? (

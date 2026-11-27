@@ -376,3 +376,42 @@ export const TRACK_PREFIXES = {
   sy: ["synth", "synthé"],
   sx: ["sax", "saxophone"],
 } as const;
+
+/** What a right-click can be on, as commands.yaml `menu:` names it. */
+export const MENU_ENTITIES = [
+  "track",
+  "group",
+  "node",
+  "event",
+  "param",
+  "curve",
+  "ruler",
+  "marker",
+  "timeline",
+  "assembly",
+  "warp",
+  "shot",
+  "picture",
+  "note",
+  "tap",
+  "rack",
+] as const;
+
+/** How many commands the bar remembers: the recency bonus decays across them. */
+export const MAX_RECENT = 12;
+
+/** How many recent commands the empty bar offers. */
+export const EMPTY_RECENT_MAX = 5;
+
+/** The mixdown formats the file service renders. */
+export const MIX_FORMATS = ["wav", "mp3"] as const;
+
+/** The cut handed to another editor: OpenTimelineIO, or a CMX 3600 EDL of one lane. */
+export const TIMELINE_FORMATS = ["otio", "edl"] as const;
+
+/** What the audio of an exported video is rendered from when the line names none. */
+export const DEFAULT_VIDEO_AUDIO = "wav";
+
+/** The usage line of `project export`, built from the vocabularies above. */
+export const EXPORT_USAGE =
+  "project export audio <wav|mp3> [timeline] · project export video <webm|mp4> [<wav|mp3>|none] [size=720p|1280x720] [quality=low|medium|high|max] [from=<t>] [to=<t>] · project export timeline <otio|edl> [lane] · project export tracks [timeline]";

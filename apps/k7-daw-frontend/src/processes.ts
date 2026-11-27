@@ -16,14 +16,10 @@ let service: readonly ServiceProcess[] = [];
 let local: readonly ShownProcess[] = [];
 let merged: readonly ShownProcess[] = [];
 let counter = 0;
-/** Ended service processes the person cleared: the service keeps listing them, this page stops. */
-const dismissed = new Set<string>();
 const listeners = new Set<() => void>();
 
 function commit(): void {
-  merged = [...service.filter((p) => !dismissed.has(p.id)), ...local].sort(
-    (a, b) => a.startedAt - b.startedAt,
-  );
+  merged = [...service, ...local].sort((a, b) => a.startedAt - b.startedAt);
   for (const l of listeners) l();
 }
 
@@ -82,11 +78,19 @@ export function trackProcess(label: string): {
   };
 }
 
-/** Drops every ended process from the list; the running ones stay. */
-export function clearEndedProcesses(): void {
-  for (const p of service) if (p.state !== "running") dismissed.add(p.id);
-  local = local.filter((p) => p.state === "running");
-  commit();
+/** Calls `onEnd` once for each process seen RUNNING that has since ended; one already ended when first seen is not news. */
+export function watchProcessEnds(onEnd: (p: ShownProcess) => void): () => void {
+  let seen = new Set(
+    merged.filter((p) => p.state === "running").map((p) => p.id),
+  );
+  return subscribeProcesses(() => {
+    const now = new Set<string>();
+    for (const p of merged) {
+      if (p.state === "running") now.add(p.id);
+      else if (seen.has(p.id)) onEnd(p);
+    }
+    seen = now;
+  });
 }
 
 /** How many are running: the badge on the bar's button. */

@@ -86,6 +86,11 @@ export const PANEL_COMMANDS: LocalCommand[] = [
     en: "Open or close this song's undo steps and commits",
     fr: "Ouvrir ou fermer l'historique de ce morceau",
   }),
+  // The open project's tags, the third tab of Tasks & history (docs/tasks.md).
+  toggle("tags", {
+    en: "Open or close this project's tags",
+    fr: "Ouvrir ou fermer les étiquettes de ce projet",
+  }),
   // `ui` because the PANEL is a view; every verb inside it is a `project` one and writes.
   toggle("export", {
     en: "Open or close the Export panel",

@@ -9,7 +9,7 @@
 // (apps/k7-daw-frontend/packages/song/docs/moduleAssets.md).
 
 import { assetsForParam } from "@studio/k7-wasm/module";
-import { fuzzyScore } from "../fuzzy";
+import { fuzzyScore } from "@studio/k7-wasm/ui";
 import { type TreeNode, TreePicker } from "./TreePicker";
 
 const SEARCH_LIMIT = 40;

@@ -4,6 +4,14 @@
 // own layer over it (commandPrefs.ts + keys.ts's effectiveKeys) and travels with their account.
 // It edits a DRAFT and saves on a button — docs/shell.md says why this page is the exception.
 
+import {
+  moveCommand,
+  orderCommands,
+  prefsView,
+  setCommandLabel,
+  setCommandPref,
+  setMenuEntities,
+} from "@studio/k7-wasm/ui";
 import { askConfirm } from "@studio/project-shell/ask";
 import { Button } from "@studio/ui/button";
 import { Chip } from "@studio/ui/chip";
@@ -33,21 +41,7 @@ import {
   useState,
 } from "react";
 import { entityName } from "../commandEntityNames";
-import {
-  type CommandPref,
-  type CommandPrefs,
-  commandHeads,
-  entitiesOf,
-  entityGroup,
-  isPluralCommand,
-  labelIn,
-  labelOf,
-  moveCommand,
-  orderCommands,
-  setCommandLabel,
-  setCommandPref,
-  setMenuEntities,
-} from "../commandPrefs";
+import { type CommandPref, type CommandPrefs, labelIn } from "../commandPrefs";
 import { useWindowKey } from "../hooks/useWindowKey";
 import { useLocale } from "../i18n";
 import {
@@ -89,9 +83,11 @@ export function CommandsSettings({
   const { locale, locales } = useLocale();
   // Shared with the context menus, so this page and they resolve a name the same way; null for the first frames.
   const icons = useIcons();
-  const entities = useMemo(() => entitiesOf(commands), [commands]);
-  // Every head the catalogue uses, so a PLURAL verb lists under its singular — see entityGroup.
-  const heads = useMemo(() => commandHeads(commands), [commands]);
+  // Every entity the catalogue has, a plural verb listed under its singular.
+  const entities = useMemo(
+    () => prefsView(commands, {}, "en").entities,
+    [commands],
+  );
 
   /** The edits, held HERE until the Save button — a write-through is a PATCH and a whole-shell re-render per character (docs/shell.md). */
   const [draft, setDraft] = useState<CommandPrefs>(prefs);
@@ -137,13 +133,24 @@ export function CommandsSettings({
     [commands, draft],
   );
   const needle = q.trim().toLowerCase();
-  const shown = ordered.filter(
-    (c) =>
-      (!entity || entityGroup(c.canonical, heads) === entity) &&
+  // Each ordered row's group, plural flag and label: one call for the page.
+  const rowViews = useMemo(
+    () => prefsView(ordered, draft, locale).rows,
+    [ordered, draft, locale],
+  );
+  const viewOf = useMemo(
+    () => new Map(ordered.map((c, i) => [c.canonical, rowViews[i]])),
+    [ordered, rowViews],
+  );
+  const shown = ordered.filter((c, i) => {
+    const row = rowViews[i];
+    return (
+      (!entity || row?.group === entity) &&
       (!needle ||
         c.canonical.toLowerCase().includes(needle) ||
-        labelOf(c, draft, locale).toLowerCase().includes(needle)),
-  );
+        (row?.label ?? "").toLowerCase().includes(needle))
+    );
+  });
 
   /** The shortcut each row shows, resolved ONCE for the whole page: per row it rebuilt the entire effective map, two hundred times a keystroke. */
   const keyByCommand = useMemo(() => {
@@ -296,7 +303,7 @@ export function CommandsSettings({
             icons={icons}
             locale={locale}
             locales={locales}
-            plural={isPluralCommand(c.canonical, heads)}
+            plural={viewOf.get(c.canonical)?.plural ?? false}
             keyText={keyByCommand[c.canonical] ?? null}
             capturing={capturing === c.canonical}
             onCapture={setCapturing}

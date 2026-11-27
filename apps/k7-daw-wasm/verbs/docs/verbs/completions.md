@@ -168,11 +168,11 @@ The dispatch rule is **longest prefix**, in `completions` exactly as in `runComm
 completion offers arguments for the command that will actually run. No command name prefixes
 another today, so the rule is guarded rather than exercised.
 
-## The wire carries the same two lists
+## The wire's words are generated from the crate
 
-`apps/k7-daw-frontend/packages/web-protocol/commandTypes.ts` writes `ArgClass` and `ArgProvider` out for the browser, which
-cannot import the crate. A test of the crate (`palette.rs`) compares both unions to the
-sources there, because the two failures are silent:
+`ArgClass`, `ArgProvider` and `MenuEntity` (`src/ui/wire.rs`) are Rust enums, and ts-rs writes them out for the browser, which
+cannot import the crate (`apps/k7-daw-frontend/packages/k7-wasm/src/types/`). A test of the crate holds each enum to its table
+(`provider_info.rs`, `palette.rs`), because the two failures are silent:
 
 - a **class** added here and not there ships a kind the palette has no colour for;
 - a **provider** added here and not there is one k7's right-click menu can never see. A class says

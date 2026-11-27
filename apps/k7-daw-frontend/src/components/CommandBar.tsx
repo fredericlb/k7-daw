@@ -8,6 +8,23 @@
 // track" has to find `track mute`. Commands you have run lately are nudged up the list
 // (recentCommands.ts). Empty, it offers a few recents and starters instead of the catalogue (emptyBar.ts).
 
+import {
+  type ArgOption,
+  applyOffer,
+  type CaretAim,
+  canRun,
+  caretAnswers,
+  emptyBarRows,
+  emptyValues,
+  enterAction,
+  firstMissing,
+  lineArgs,
+  nextField,
+  rankCommands,
+  rankOptions,
+  toOptions,
+  wantsKind,
+} from "@studio/k7-wasm/ui";
 import { History, Lightbulb, SquareTerminal } from "@studio/ui/icons";
 import {
   forwardRef,
@@ -18,22 +35,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { type ArgOption, rankOptions, toOptions } from "../argOptions";
-import {
-  applyOffer,
-  type CaretAim,
-  canRun,
-  caretAnswers,
-  emptyValues,
-  enterAction,
-  firstMissing,
-  lineArgs,
-  nextField,
-  wantsKind,
-} from "../commandFill";
-import { emptyBarRows } from "../emptyBar";
 import { m } from "../paraglide/messages.js";
-import { rankCommands } from "../rankCommands";
 import { recentCommands } from "../recentCommands";
 import type { ArgClass, MenuEntity } from "../types";
 import { CommandParams } from "./CommandParams";

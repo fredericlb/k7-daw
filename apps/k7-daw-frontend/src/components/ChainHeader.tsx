@@ -1,9 +1,8 @@
-// ChainHeader.tsx — the chain dock's header row: the lane's input menu on the left; its monitor and width,
-// Arm and the automation toggle on the right. Expand and Close are the dock's own, not drawn here.
+// ChainHeader.tsx — the chain dock's header row: the lane's input menu, its monitor and width on the left;
+// its M, S, A, vol and pan and the automation toggle on the right. Expand and Close are the dock's own, not drawn here.
 
 import { DockHeaderRow } from "@studio/ui/editor-dock";
 import { Spline } from "@studio/ui/icons";
-import { TrackToggle } from "@studio/ui/track-toggle";
 import { m } from "../paraglide/messages.js";
 
 // A 36 px glass chip, the shape the kit gives a toggle inside a panel.
@@ -11,20 +10,17 @@ const CHIP =
   "glass grid h-9 min-w-9 cursor-pointer place-items-center rounded-full px-2 text-foreground focus-visible:shadow-(--k7-focus-ring) focus-visible:outline-none";
 
 export function ChainHeader({
-  name,
-  armed,
-  onArm,
+  mix,
   inputMenu,
   inputProps,
   showCurves,
   onToggleCurves,
 }: {
-  name: string;
-  armed?: boolean;
-  onArm?: () => void;
+  /** The lane's M, S, A, vol and pan, at the right (LaneMixControls.tsx). */
+  mix?: React.ReactNode;
   /** The lane's input menu, first on the left (ChainInputControls.tsx). */
   inputMenu?: React.ReactNode;
-  /** …and its monitor and width, among the properties on the right. */
+  /** …and its monitor and width, right beside it. */
   inputProps?: React.ReactNode;
   showCurves: boolean;
   onToggleCurves?: () => void;
@@ -33,17 +29,9 @@ export function ChainHeader({
     <DockHeaderRow>
       <div className="flex min-w-0 flex-1 items-center gap-2">
         {inputMenu}
+        {inputProps}
         <div className="ml-auto flex shrink-0 items-center gap-2">
-          {inputProps}
-          {onArm && (
-            <TrackToggle
-              kind="arm"
-              on={armed}
-              aria-label={m["chain.armInput"]({ name })}
-              title={m["chain.armInput"]({ name })}
-              onClick={onArm}
-            />
-          )}
+          {mix}
           {onToggleCurves && (
             <button
               type="button"

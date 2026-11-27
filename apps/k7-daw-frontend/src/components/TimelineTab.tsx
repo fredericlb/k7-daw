@@ -6,6 +6,11 @@
 
 import { arrayEq, useEngineState } from "@studio/engine-browser/store";
 import {
+  type PendingEdit,
+  pendingClips,
+  pendingSplitAt,
+} from "@studio/k7-wasm/edit";
+import {
   moveOffset,
   snapMode,
   snapTo,
@@ -98,11 +103,6 @@ import { useVideoDrag } from "../hooks/useVideoDrag";
 import { isTyping } from "../hooks/useWindowKey";
 import { cursorOf } from "../modeIcons";
 import { m } from "../paraglide/messages.js";
-import {
-  type PendingEdit,
-  pendingClips,
-  pendingSplitAt,
-} from "../pendingEdits";
 import { usePaneProjectDoc } from "../queries/projectDoc";
 import {
   dropLaneOf,
@@ -266,6 +266,10 @@ const LABEL_SELECTED =
   "bg-primary/25 outline outline-1 -outline-offset-1 outline-primary";
 
 /** What holds the NAME COLUMN still while the lanes pan under it: `sticky left-0` on every cell, transparent, at z-30; the lanes clip themselves under it (docs/timeline.md). */
+// The gap an event keeps from each of its own edges, so neighbours that touch stay apart.
+const EVENT_INSET = 1;
+// The narrowest an event is drawn, still a block to grab: a beat wide covered the start of the next one.
+const MIN_EVENT_PX = 6;
 const GUTTER_STICKY = "sticky left-0 z-30";
 /** A lane-space layer hides what has panned under the name column: --tl-clip is the scroller's scrollLeft. */
 const UNDER_NAMES = "[clip-path:inset(0_0_0_var(--tl-clip,0px))]";
@@ -291,9 +295,17 @@ interface Cell {
 interface Selection {
   anchor: Cell;
   head: Cell;
-  /** Set by a CLICK on a clip: copy and delete act on that placement alone, never on a neighbour sharing its beats. */
-  clip?: { trackId: string; start: number; length: number };
+  /** Set by CLICKS on events: they are the selection, drawn on the events themselves; copy and delete act on them alone. */
+  clips?: Picked[];
 }
+/** A placement picked by a click, pinned by its lane and start since an id can sit at several beats. */
+interface Picked {
+  trackId: string;
+  start: number;
+  length: number;
+}
+const samePick = (a: Picked, trackId: string, start: number) =>
+  a.trackId === trackId && Math.abs(a.start - start) < 1e-6;
 
 // Move mode: a clip picked up with `m`, pinned by track + ORIGINAL start, nudged by the keys until enter commits.
 interface Move {
@@ -899,19 +911,28 @@ function TimelineTabView({
       ) ?? null
     );
   }, [caretRow, caret.beat]);
+  // A single picked event is what the Editor panel edits; with none picked, the caret's.
+  const focus = useMemo(() => {
+    const one = sel?.clips?.length === 1 ? sel.clips[0] : null;
+    if (!one)
+      return clipUnderCaret && caretRow?.kind === "track"
+        ? { clip: clipUnderCaret, track: caretRow.track.id }
+        : null;
+    const r = findRow(visRows, `track:${one.trackId}`);
+    const c =
+      r?.kind === "track"
+        ? r.track.clips.find((x) => samePick(one, one.trackId, x.start))
+        : undefined;
+    return c ? { clip: c, track: one.trackId } : null;
+  }, [sel, visRows, clipUnderCaret, caretRow]);
   useEffect(() => {
     if (!active) return;
     onEditTarget(
-      proj && clipUnderCaret
-        ? {
-            kind: "clip",
-            project: proj,
-            clip: clipUnderCaret,
-            track: caretRow?.kind === "track" ? caretRow.track.id : undefined,
-          }
+      proj && focus
+        ? { kind: "clip", project: proj, clip: focus.clip, track: focus.track }
         : null,
     );
-  }, [active, proj, clipUnderCaret, onEditTarget]);
+  }, [active, proj, focus, onEditTarget]);
 
   // Which materials are placed more than once, and where each one's first placement is — one pass per compile.
   const instances = useMemo(
@@ -920,10 +941,10 @@ function TimelineTabView({
   );
   /** The material the caret is parked on when it has copies elsewhere — null when it is placed only once. */
   const kinOfCaret = useMemo(() => {
-    if (!clipUnderCaret) return null;
-    const ref = materialOf(clipUnderCaret);
+    if (!focus) return null;
+    const ref = materialOf(focus.clip);
     return (instances.get(ref)?.n ?? 0) > 1 ? ref : null;
-  }, [clipUnderCaret, instances]);
+  }, [focus, instances]);
 
   // What m/s aim at from here — a lane's track, a header's group, a pattern lane's GROUP. See docs/timeline.md.
   const caretTrackId = useMemo(() => {
@@ -1099,8 +1120,8 @@ function TimelineTabView({
         s
           ? {
               ...s,
-              // Reshaped by hand: a rectangle now, no longer the one clip that was clicked.
-              clip: undefined,
+              // Reshaped by hand: a rectangle now, no longer the events that were picked.
+              clips: undefined,
               head: clampCell({
                 row: dRow
                   ? stepRow(rowsRef.current, s.head.row, dRow)
@@ -1158,7 +1179,9 @@ function TimelineTabView({
   }, []);
 
   // The tap of a finger covers the clip with the caret, as a click does; `coverClip` is built further down.
-  const coverClipRef = useRef<(m: Move) => void>(() => {});
+  const coverClipRef = useRef<
+    (m: Pick<Move, "trackId" | "origStart" | "length">, add?: boolean) => void
+  >(() => {});
 
   const beginClipDrag = useCallback(
     (
@@ -1168,9 +1191,15 @@ function TimelineTabView({
     ) => {
       // LEFT button, the one you already have on the clip.
       if (e.button !== 0) return;
-      // Shifted, it is a selection press, not a grab: bubble to the lane, which grows the rectangle.
-      if (e.shiftKey) return;
       e.stopPropagation();
+      // Shift or Cmd adds the event to the picked ones, or takes it back out, and grabs nothing.
+      if (e.shiftKey || e.metaKey || e.ctrlKey) {
+        coverClipRef.current(
+          { trackId: track.id, origStart: c.start, length: c.length },
+          true,
+        );
+        return;
+      }
       // A tool other than the pointer answers the press itself and the grab never starts — with the grab's own three guards (docs/timeline.md).
       if (toolRef.current !== "pointer" && onToolLine) {
         e.preventDefault();
@@ -1378,28 +1407,22 @@ function TimelineTabView({
 
   /** Put the caret ON the event that was clicked, covering it — the same `v` rectangle the keyboard builds, clamped to the zoomed view. */
   const coverClip = useCallback(
-    (m: Move) => {
+    (m: Pick<Move, "trackId" | "origStart" | "length">, add = false) => {
       const row: RowKey = `track:${m.trackId}`;
       const len = m.length > 0 ? m.length : NATURAL;
-      const lo = clampCell({ row, beat: Math.floor(m.origStart) });
-      const hi = clampCell({
-        row,
-        beat: Math.max(lo.beat, Math.ceil(m.origStart + len) - 1),
-      });
-      // The caret inside the clicked clip, so what it reports is that clip and not one starting earlier in the beat.
-      setCaret(
-        clampCaret({
-          row,
-          beat: Math.min(Math.ceil(m.origStart), m.origStart + len - 1e-6),
-        }),
-      );
-      setSel({
-        anchor: lo,
-        head: hi,
-        clip: { trackId: m.trackId, start: m.origStart, length: len },
+      const at = clampCell({ row, beat: Math.floor(m.origStart) });
+      const pick = { trackId: m.trackId, start: m.origStart, length: len };
+      // The event itself is selected, not the caret: a plain click picks it alone, Shift or Cmd adds or removes it.
+      setSel((prev) => {
+        const had = add ? (prev?.clips ?? []) : [];
+        const there = had.some((p) => samePick(p, m.trackId, m.origStart));
+        const clips = there
+          ? had.filter((p) => !samePick(p, m.trackId, m.origStart))
+          : [...had, pick];
+        return clips.length ? { anchor: at, head: at, clips } : null;
       });
     },
-    [clampCell, clampCaret],
+    [clampCell],
   );
 
   coverClipRef.current = coverClip;
@@ -1664,19 +1687,21 @@ function TimelineTabView({
           const len = c.length > 0 ? c.length : NATURAL;
           return copyEvents([laneEvents(caretRow)], c.start, c.start + len);
         }
-        // A CLICKED clip: that placement alone, the rectangle around it only drawn.
-        if (s.clip) {
-          const { trackId, start } = s.clip;
-          const r = visRows.find(
-            (x) => x.kind === "track" && x.track.id === trackId,
-          );
-          if (r?.kind !== "track" || r.track.generated) return null;
-          const lane = laneEvents(r);
-          const one = {
-            ...lane,
-            events: lane.events.filter((e) => Math.abs(e.start - start) < 1e-6),
-          };
-          return copyEvents([one], start, start + s.clip.length);
+        // PICKED events: those placements alone, each lane's in row order, the copy's corner at the earliest.
+        if (s.clips) {
+          const picks = s.clips;
+          const lanes = visRows.flatMap((r) => {
+            if (r.kind !== "track" || r.track.generated) return [];
+            const lane = laneEvents(r);
+            const events = lane.events.filter((e) =>
+              picks.some((p) => samePick(p, r.track.id, e.start)),
+            );
+            return events.length ? [{ ...lane, events }] : [];
+          });
+          if (!lanes.length) return null;
+          const lo = Math.min(...picks.map((p) => p.start));
+          const hi = Math.max(...picks.map((p) => p.start + p.length));
+          return copyEvents(lanes, lo, hi);
         }
         const a = rowIndexOf(visRows, s.anchor.row);
         const b = rowIndexOf(visRows, s.head.row);
@@ -1836,13 +1861,22 @@ function TimelineTabView({
             note: m["tl.sel.eventDeleted"](),
           };
         }
-        // A CLICKED clip: that placement and nothing else, whatever else starts in its beats.
-        if (s.clip) {
+        // PICKED events: those placements and nothing else, whatever else starts in their beats — one `events remove`, one Ctrl+Z.
+        if (s.clips) {
           setSel(null);
-          return {
-            line: `event remove ${s.clip.trackId} ${beatsToPosition(s.clip.start, num, den)}`,
-            note: m["tl.sel.eventDeleted"](),
-          };
+          const hits = s.clips.map((p) => ({
+            track: p.trackId,
+            start: beatsToPosition(p.start, num, den),
+          }));
+          return hits.length === 1
+            ? {
+                line: `event remove ${hits[0].track} ${hits[0].start}`,
+                note: m["tl.sel.eventDeleted"](),
+              }
+            : {
+                line: `events remove ${JSON.stringify(hits)}`,
+                note: m["tl.sel.eventsDeleted"]({ n: hits.length }),
+              };
         }
         const a = rowIndexOf(visRows, s.anchor.row);
         const b = rowIndexOf(visRows, s.head.row);
@@ -1967,6 +2001,8 @@ function TimelineTabView({
 
   // The rectangle in on-screen rows, normalised so anchor-first and head-first draw the same box.
   const selBox = useMemo(() => {
+    // Picked events are drawn on the events: no rectangle, and no range for the range verbs.
+    if (sel?.clips) return null;
     if (!sel) return null;
     const a = rowIndexOf(visRows, sel.anchor.row);
     const b = rowIndexOf(visRows, sel.head.row);
@@ -1982,7 +2018,7 @@ function TimelineTabView({
   /** The lanes a rectangle covers that can actually hold events, comma-joined, and its span — null rather than an empty string. */
   const selRange = useMemo(() => {
     // A clicked clip is no RANGE: the range verbs would take in whatever else starts in its beats.
-    if (!selBox || !proj || sel?.clip) return null;
+    if (!selBox || !proj) return null;
     const ids = visRows
       .slice(selBox.rowLo, selBox.rowHi + 1)
       .flatMap((r) =>
@@ -1996,7 +2032,7 @@ function TimelineTabView({
       from: beatsToPosition(selBox.beatLo, num, den),
       to: beatsToPosition(selBox.beatHi, num, den),
     };
-  }, [selBox, visRows, proj, sel?.clip]);
+  }, [selBox, visRows, proj]);
 
   // The caret, whole: where it is, what it is over, and what it has selected — one payload, because one gesture moves all three.
   useEffect(() => {
@@ -2920,7 +2956,7 @@ function TimelineTabView({
                             key={`${c.timeline}@${c.start}:${c.id}`}
                             clip={c}
                             left={x(c.start * bps)}
-                            width={Math.max(ppb, c.length * bps * ppb)}
+                            width={Math.max(MIN_EVENT_PX, c.length * bps * ppb)}
                             onOpen={setOpenTimeline}
                           />
                         ) : null,
@@ -3586,7 +3622,7 @@ function TimelineTabView({
                             const kin =
                               !!kinOfCaret &&
                               materialOf(c) === kinOfCaret &&
-                              c !== clipUnderCaret;
+                              c !== focus?.clip;
                             // Is THIS placement the one being moved? Pinned by track + original start, since an id can sit at several beats.
                             const moving =
                               !!move &&
@@ -3614,7 +3650,10 @@ function TimelineTabView({
                               !resizing &&
                               !(
                                 rowNear(ri, rowH) &&
-                                xNear(x(drawStart), Math.max(ppb, drawW))
+                                xNear(
+                                  x(drawStart),
+                                  Math.max(MIN_EVENT_PX, drawW),
+                                )
                               )
                             )
                               return null;
@@ -3659,7 +3698,7 @@ function TimelineTabView({
                                         proj.timeSigDenominator,
                                       ),
                                       // …and the RECTANGLE, when one is drawn: a range verb takes a span, and the placement only says where it starts.
-                                      sel: selRange,
+                                      sel: selRange ?? undefined,
                                     },
                                     e.clientX,
                                     e.clientY,
@@ -3667,7 +3706,7 @@ function TimelineTabView({
                                 }}
                                 className={cn(
                                   // `isolate` keeps the activity layer's -z-10 inside this block; `group` is what the name reads.
-                                  "group absolute top-1 flex h-[calc(100%-8px)] cursor-grab overflow-hidden rounded-xl px-2 font-mono text-[11px] active:cursor-grabbing isolate select-none [-webkit-touch-callout:none]",
+                                  "group absolute top-1 flex h-[calc(100%-8px)] cursor-grab overflow-hidden rounded-[4px] px-2 font-mono text-[11px] active:cursor-grabbing isolate select-none [-webkit-touch-callout:none]",
                                   // Disabled: still placed, still readable, plainly off — an event you cannot see is a deleted one.
                                   c.disabled &&
                                     "opacity-40 saturate-0 outline-dashed outline-1 outline-muted-foreground",
@@ -3686,6 +3725,11 @@ function TimelineTabView({
                                   (flash === `${t.id}/${c.id}` ||
                                     flash === `/${c.id}`) &&
                                     "z-10 animate-pulse outline outline-2 outline-primary",
+                                  // A PICKED event: the selection is drawn on the event itself.
+                                  sel?.clips?.some((p) =>
+                                    samePick(p, t.id, c.start),
+                                  ) &&
+                                    "z-10 outline outline-2 -outline-offset-2 outline-primary brightness-125",
                                   // The clip in hand: ring it and lift it over its ghost.
                                   (moving || resizing) &&
                                     "z-10 outline outline-2 outline-primary",
@@ -3694,9 +3738,12 @@ function TimelineTabView({
                                     move?.dragging &&
                                     "pointer-events-none",
                                 )}
+                                // 1 px of air on each side: two events that touch read as two, not as one over the other.
                                 style={{
-                                  left: x(drawStart),
-                                  width: Math.max(ppb, drawW),
+                                  left: x(drawStart) + EVENT_INSET,
+                                  width:
+                                    Math.max(MIN_EVENT_PX, drawW) -
+                                    2 * EVENT_INSET,
                                 }}
                               >
                                 {/* The fill, with the content's activity running through it: 50% opaque where quiet, 100% where loud (docs/timeline.md). */}

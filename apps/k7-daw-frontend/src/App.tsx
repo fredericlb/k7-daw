@@ -18,9 +18,11 @@ import {
   preloadOutputPicture,
   ViewportTab,
 } from "@studio/k7-plugins/video";
+import { type PendingEdit, pendingOf } from "@studio/k7-wasm/edit";
 // The leaf with no `node:fs` in it — a browser may ask what a path names without dragging the loader in.
 import { moduleKeyFromPath } from "@studio/k7-wasm/module";
 import { beatsToPosition, parsePosition } from "@studio/k7-wasm/timecode";
+import { orderCommands, prefsView, stepSentence } from "@studio/k7-wasm/ui";
 import { askConfirm } from "@studio/project-shell/ask";
 import { projectsUrl } from "@studio/project-shell/launch";
 import type { CommandJournal } from "@studio/project-shell/project";
@@ -67,7 +69,7 @@ import { go } from "./appNav";
 import { DECK_ICONS, STUDIO_ICONS } from "./chainsIcons";
 import type { MaybeClipboard } from "./clipboard";
 import { shownNamers } from "./clipNameWords";
-import { type CommandPrefs, labelOf, orderCommands } from "./commandPrefs";
+import type { CommandPrefs } from "./commandPrefs";
 import type { AudioClipHandle } from "./components/AudioClipPanel";
 import { AudioClipPanel } from "./components/AudioClipPanel";
 import { BenchSaveButton } from "./components/BenchSaveButton";
@@ -105,6 +107,7 @@ import { SETTINGS_TABS, SettingsPanel } from "./components/SettingsPanel";
 import { SharePanel } from "./components/SharePanel";
 import { projectLoading, StartupBar } from "./components/StartupBar";
 import { SurfaceTab } from "./components/SurfaceTab";
+import { TagsPanel } from "./components/TagsPanel";
 import type { PanelTakes } from "./components/TakesView";
 import { TasksPanel } from "./components/TasksPanel";
 import { type TimelineHandle, TimelineTab } from "./components/TimelineTab";
@@ -171,16 +174,16 @@ import { libraryModuleRef } from "./libraryTree";
 import { confirmMenuItem } from "./menuConfirm";
 import { menuTarget } from "./menuTitle";
 import { midiInDeviceFor, midiInLanes, midiInPlayed } from "./midiIn";
+import { MultiTap } from "./multiTap";
 import { chainRefFromCreate, wireCommand } from "./nodeInsert";
 import { noteSpans } from "./noteSpans";
 import { resolveEditorFile } from "./openInEditor";
 import { buildPaletteCommands, commandNameOf, makeListArg } from "./palette";
 import { PaneVisible } from "./paneVisible";
 import { m } from "./paraglide/messages.js";
-import { type PendingEdit, pendingOf } from "./pendingEdits";
 import type { PendingNode } from "./pendingNode";
 import { resourceRows } from "./placeResource";
-import { setServiceProcesses } from "./processes";
+import { setServiceProcesses, watchProcessEnds } from "./processes";
 import { ENGINE_SETTINGS_ROUTE } from "./projects/api";
 import {
   type EditFocus,
@@ -190,7 +193,6 @@ import {
   sameMinimapItem,
 } from "./shellEquality";
 import { createStatusLine } from "./statusLine";
-import { stepSentence } from "./stepSentence";
 import { eventIdOf, takesEventOf } from "./takes";
 // The shell's BROWSER composition point: k7's builtin plugins register their pane drawers here (apps/k7-daw-frontend/packages/k7-sdk/docs/sdk.md).
 import "./plugins";
@@ -226,12 +228,7 @@ import { pictureRowId, placementOf, type RowKey, type RowTarget } from "./rows";
 import { saveLabel } from "./saveLabel";
 import { useEngineLostToast, useProgressToast } from "./shell/engineToasts";
 import { FloatingBar } from "./shell/FloatingBar";
-import {
-  GitRailPull,
-  GitRailSave,
-  HeaderGit,
-  unsavedCount,
-} from "./shell/HeaderGit";
+import { GitShareRows, HeaderGit, unsavedCount } from "./shell/HeaderGit";
 import { PanelRail, type RailView } from "./shell/PanelRail";
 import {
   type HeaderPane,
@@ -2112,7 +2109,7 @@ export default function App({
     },
     [setMenu, docRef, shell],
   );
-  // A journal step as a sentence and its subject, for the undo toast and the history panel (stepSentence.ts).
+  // A journal step as a sentence and its subject, for the undo toast and the history panel (`stepSentence` in `@studio/k7-wasm/ui`).
   const describeStep = useCallback(
     (label: string) =>
       stepSentence(
@@ -2443,6 +2440,53 @@ export default function App({
     return () => window.removeEventListener("keydown", onKey, true);
   }, [commandsPage, historyDeps, undoConfirm]);
 
+  // A process this page saw running says how it ended, once, as a toast: no list keeps ended work (docs/processes.md).
+  useEffect(
+    () =>
+      watchProcessEnds((p) =>
+        showToast(
+          p.state === "failed"
+            ? {
+                message: p.detail
+                  ? m["processes.toastFailedWhy"]({
+                      label: p.label,
+                      why: p.detail,
+                    })
+                  : m["processes.toastFailed"]({ label: p.label }),
+                variant: "error",
+              }
+            : { message: m["processes.toastDone"]({ label: p.label }) },
+        ),
+      ),
+    [],
+  );
+
+  // Two fingers double-tapped: undo; three: redo — the touch shell's Ctrl+Z and Ctrl+Y, on the same journal (multiTap.ts).
+  useEffect(() => {
+    const g = new MultiTap((fingers) => {
+      if (commandsPage || undoConfirm) return;
+      void (fingers === 3 ? runRedo(historyDeps) : runUndo(historyDeps));
+    });
+    const pts = (l: TouchList) =>
+      Array.from(l, (t) => ({ id: t.identifier, x: t.clientX, y: t.clientY }));
+    const start = (e: TouchEvent) =>
+      g.down(pts(e.changedTouches), e.touches.length);
+    const move = (e: TouchEvent) => g.move(pts(e.changedTouches));
+    const end = (e: TouchEvent) => g.up(e.touches.length);
+    const cancel = () => g.cancel();
+    const opts = { passive: true, capture: true } as const;
+    window.addEventListener("touchstart", start, opts);
+    window.addEventListener("touchmove", move, opts);
+    window.addEventListener("touchend", end, opts);
+    window.addEventListener("touchcancel", cancel, opts);
+    return () => {
+      window.removeEventListener("touchstart", start, opts);
+      window.removeEventListener("touchmove", move, opts);
+      window.removeEventListener("touchend", end, opts);
+      window.removeEventListener("touchcancel", cancel, opts);
+    };
+  }, [commandsPage, historyDeps, undoConfirm]);
+
   // Record pressed with NOTHING armed arms a track rather than leaving Play dead: the caret's, else the song's only one.
   const armForRecord = useCallback((): boolean => {
     if (armed.length || midiArmed || videoArmed) return true;
@@ -2546,14 +2590,14 @@ export default function App({
     [backendCmds, locale],
   );
   /** The catalogue AS THIS PERSON ARRANGED IT — renamed and reordered once, over the palette's built list (commandPrefs.ts). */
-  const allCommands = useMemo(
-    () =>
-      orderCommands(paletteCommands, commandPrefs).map((c) => ({
-        ...c,
-        readable: labelOf(c, commandPrefs, locale),
-      })),
-    [paletteCommands, commandPrefs, locale],
-  );
+  const allCommands = useMemo(() => {
+    const ordered = orderCommands(paletteCommands, commandPrefs);
+    const { rows } = prefsView(ordered, commandPrefs, locale);
+    return ordered.map((c, i) => ({
+      ...c,
+      readable: rows[i]?.label ?? c.readable,
+    }));
+  }, [paletteCommands, commandPrefs, locale]);
   paletteRef.current = allCommands;
   // Five getters, not one: the shell's own commands ask for vocabularies only the shell holds — files, paths, surfaces, languages, timelines.
   const listArg = useMemo(
@@ -2987,7 +3031,6 @@ export default function App({
       statusStore={statusStore}
       engine={engine ? (connected ? "up" : "down") : "none"}
       problems={problemCount}
-      onProcesses={() => setRightPanel("tasks")}
       extra={<BenchSaveButton size="icon" runCommand={runCommand} />}
       git={
         gitWorkspace ? (
@@ -3168,12 +3211,12 @@ export default function App({
 
   // Resources and References, Tasks and History: one panel each, with a segment between the two bodies.
   const segment = (
-    id: "resources" | "references" | "tasks" | "history",
+    id: "resources" | "references" | "tasks" | "history" | "tags",
   ): ReactNode => {
     const pair =
       id === "resources" || id === "references"
         ? (["resources", "references"] as const)
-        : (["tasks", "history"] as const);
+        : (["tasks", "history", "tags"] as const);
     const label = (p: string) =>
       m[`shell.segment.${p}` as "shell.segment.resources"]();
     return (
@@ -3261,6 +3304,18 @@ export default function App({
             </PaneBoundary>
           </>
         );
+      case "tags":
+        return (
+          <>
+            {segment("tags")}
+            <PaneBoundary name="tags" resetKey={reloadKey} onError={paneError}>
+              <TagsPanel
+                project={locked ? null : (ws?.activeProject ?? null)}
+                onRun={runCommand}
+              />
+            </PaneBoundary>
+          </>
+        );
       case "history":
         return (
           <>
@@ -3290,6 +3345,15 @@ export default function App({
             hasPicture={!!videoDoc}
             timelines={(projectDoc?.timelines ?? []).map((t) => t.id)}
             onRun={(c) => void runCommand(c)}
+            sync={
+              gitWorkspace ? (
+                <GitShareRows
+                  git={gitHandle}
+                  transport={gitTransport}
+                  workspace={gitWorkspace}
+                />
+              ) : undefined
+            }
           />
         );
       case "logs":
@@ -3392,32 +3456,15 @@ export default function App({
                 }
                 onCommandBar={isMobile || portrait ? summonBar : undefined}
                 bottom={isMobile ? 12 + stripH + 8 : undefined}
-                save={(className) =>
-                  gitWorkspace ? (
-                    <>
-                      <GitRailPull
-                        git={gitHandle}
-                        workspace={gitWorkspace}
-                        className={className}
-                      />
-                      <GitRailSave
-                        git={gitHandle}
-                        transport={gitTransport}
-                        workspace={gitWorkspace}
-                        className={className}
-                      />
-                    </>
-                  ) : null
-                }
+                share={headerPanels.find((p) => p.id === "export")}
+                unsaved={gitWorkspace ? unsavedCount(gitHandle) : 0}
                 closeHref={projectsUrl(window.location.href)}
                 panes={switcherPanes}
                 pane={full}
                 onPane={(id) => void runCommand(`ui ${id}`)}
-                panels={
-                  isMobile
-                    ? headerPanels
-                    : headerPanels.filter((p) => p.id !== "mixer")
-                }
+                panels={headerPanels.filter(
+                  (p) => p.id !== "export" && (isMobile || p.id !== "mixer"),
+                )}
                 settingsPressed={shownId === "settings"}
                 onSettings={() =>
                   shownId === "settings"

@@ -27,6 +27,7 @@ pub struct ArgSpec {
 
 /// The palette's sentence, in the two languages a surface can be asked for.
 #[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS))]
 pub struct Readable {
     pub en: String,
     pub fr: String,

@@ -1,11 +1,11 @@
 // HeaderGit.tsx — git among the floating controls: only the Resolve button while a merge waits, and the toasts a pull or a
-// failure says; Save and Pull with their counts are the rail's (GitRailSave, GitRailPull).
+// failure says; Save and Pull with their counts are the Export panel's rows (GitShareRows).
 // While a merge waits it is one accent "Resolve N conflicts" button. It decides no rule: gitState.ts's barView does.
 import { showToast } from "@studio/project-shell/toast";
 import { Badge } from "@studio/ui/badge";
 import { Button } from "@studio/ui/button";
-import { CapsuleButton } from "@studio/ui/capsule";
 import { ArrowDownToLine, GitMerge, Loader2, Save } from "@studio/ui/icons";
+import { RowButton, RowGroup } from "@studio/ui/row-group";
 import { useEffect } from "react";
 import type { GitTransport } from "../git/gitApi";
 import { openConflict } from "../git/gitScreens";
@@ -83,17 +83,15 @@ export function unsavedCount(g: GitHandle): number {
   return v.show && v.merge === null ? v.changed : 0;
 }
 
-// The rail's Save: the count of changed files on its corner, the last auto-save in its tooltip; none while a merge waits (the header's Resolve stands).
-export function GitRailSave({
+// The Export panel's git rows: Save (commit and push) with its count and last auto-save, then Update (pull) with what waits.
+export function GitShareRows({
   git: g,
   transport,
   workspace,
-  className,
 }: {
   git: GitHandle;
   transport: GitTransport | null;
   workspace: string;
-  className: string;
 }) {
   const v = barView(g.state);
   const saving = useSaving(workspace);
@@ -106,72 +104,45 @@ export function GitRailSave({
         ? m["git.save.label"]()
         : m["git.save.nothing"]();
   const autosaved = autosaveLine(v);
+  const blocked =
+    v.pullBlocked === "commitFirst" ? m["git.commitFirst"]() : null;
   return (
-    <CapsuleButton
-      aria-label={name}
-      title={autosaved ? `${name}\n${autosaved}` : name}
-      disabled={!(v.commit || v.push) || busy}
-      onClick={() => {
-        if (!transport || busy) return;
-        void save(transport, workspace, { onPull: () => void g.act("pull") });
-      }}
-      className={`relative ${className}`}
-    >
-      {saving ? <Loader2 className="animate-spin" /> : <Save />}
-      {/* The tooltip's auto-save line, readable without a hover (the suite reads it here). */}
-      {autosaved && (
-        <span className="sr-only" data-testid="git-autosaved">
-          {autosaved}
-        </span>
-      )}
-      {v.changed > 0 && (
-        <Badge
-          variant="count-sm"
-          aria-hidden
-          className="pointer-events-none absolute -top-1.5 -right-1.5"
-        >
-          {v.changed}
-        </Badge>
-      )}
-    </CapsuleButton>
-  );
-}
-
-// The rail's Pull, under Save: the count of commits to fetch on its corner; dimmed with its reason while saves wait.
-export function GitRailPull({
-  git: g,
-  workspace,
-  className,
-}: {
-  git: GitHandle;
-  workspace: string;
-  className: string;
-}) {
-  const v = barView(g.state);
-  const saving = useSaving(workspace);
-  if (!v.show || resolveLabel(v) !== null) return null;
-  const label = m["git.pull"]();
-  return (
-    <CapsuleButton
-      aria-label={label}
-      title={label}
-      disabled={!!g.busy || saving || !v.pull}
-      disabledReason={
-        v.pullBlocked === "commitFirst" ? m["git.commitFirst"]() : undefined
-      }
-      onClick={() => void g.act("pull")}
-      className={`relative ${className}`}
-    >
-      <ArrowDownToLine />
-      {v.toPull > 0 && (
-        <Badge
-          variant="count-sm"
-          aria-hidden
-          className="pointer-events-none absolute -top-1.5 -right-1.5"
-        >
-          {v.toPull}
-        </Badge>
-      )}
-    </CapsuleButton>
+    <RowGroup>
+      <RowButton
+        tall
+        icon={saving ? <Loader2 className="animate-spin" /> : <Save />}
+        aria-label={name}
+        detail={
+          autosaved ? (
+            <span data-testid="git-autosaved">{autosaved}</span>
+          ) : undefined
+        }
+        disabled={!(v.commit || v.push) || busy}
+        onClick={() => {
+          if (!transport || busy) return;
+          void save(transport, workspace, { onPull: () => void g.act("pull") });
+        }}
+      >
+        {name}
+      </RowButton>
+      <RowButton
+        tall
+        icon={<ArrowDownToLine />}
+        aria-label={m["git.pull"]()}
+        detail={
+          blocked ??
+          (v.toPull > 0 ? m["git.toPull"]({ n: v.toPull }) : undefined)
+        }
+        trailing={
+          v.toPull > 0 ? (
+            <Badge variant="count-sm">{v.toPull}</Badge>
+          ) : undefined
+        }
+        disabled={!!g.busy || saving || !v.pull}
+        onClick={() => void g.act("pull")}
+      >
+        {m["git.pull"]()}
+      </RowButton>
+    </RowGroup>
   );
 }

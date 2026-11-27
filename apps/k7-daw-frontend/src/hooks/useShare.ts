@@ -2,18 +2,17 @@
 // and put the file where the person chose (exportHost.ts). Held here rather than in `SharePanel` so the panel and
 // the command bar run one implementation — `project export` is those same entries. The folder is asked BEFORE the work.
 
-import { resolveVideoSettings } from "@studio/k7-wasm/picture";
+import type { MixFormat, TimelineFormat } from "@studio/k7-wasm/edit";
+import {
+  resolveVideoSettings,
+  type VideoFormat,
+  type VideoSettings,
+} from "@studio/k7-wasm/picture";
 import type { VideoScene } from "@studio/ui-eyes/scene";
 import { useCallback, useState } from "react";
 import { api } from "../api";
 import { downloadLink } from "../downloadBlob";
 import { awaitStart, newToken } from "../downloadSignal";
-import type {
-  MixFormat,
-  TimelineFormat,
-  VideoFormat,
-  VideoSettings,
-} from "../exportArgs";
 import {
   type ExportHost,
   exportHost,

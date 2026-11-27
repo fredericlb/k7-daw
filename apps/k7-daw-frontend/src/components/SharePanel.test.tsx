@@ -1,8 +1,8 @@
 // The Export panel: the tracks zip row greyed while a render runs, the folder step (a row's press), and the result's actions.
 
+import { parseExportAsk, tracksLine } from "@studio/k7-wasm/edit";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import { parseExportAsk, tracksLine } from "../exportArgs";
 import { SharePanel } from "./SharePanel";
 
 const render = (busy: boolean) =>

@@ -5,13 +5,13 @@ use super::picture_shared::picture_lane_ids;
 use super::shared::{Done, split_words};
 use crate::host::Host;
 use crate::picture::Use;
+use crate::ui::export::parse_video_settings;
 use serde_json::json;
 use song_edit::js_text::js_trim;
 
 /// The front's route that renders a scene in the background, asked once the line has landed.
 const PICTURE: &str = "POST /verb-host/picture";
 const FORMATS: [&str; 2] = ["webm", "mp4"];
-const QUALITIES: [&str; 4] = ["low", "medium", "high", "max"];
 
 /// `into=<folder>` or `into="<folder with spaces>"`, taken out of the line before the other words are read.
 fn take_into(line: &str) -> (Option<String>, String) {
@@ -47,64 +47,6 @@ fn take_into(line: &str) -> (Option<String>, String) {
     (None, line.to_owned())
 }
 
-fn clock(s: &str) -> Option<f64> {
-    let (m, sec) = match s.split_once(':') {
-        Some((m, rest)) => (Some(m), rest),
-        None => (None, s),
-    };
-    let digits = |x: &str| !x.is_empty() && x.bytes().all(|b| b.is_ascii_digit());
-    let decimal = |x: &str| match x.split_once('.') {
-        Some((a, b)) => digits(a) && digits(b),
-        None => digits(x),
-    };
-    if !decimal(sec) || m.is_some_and(|m| !digits(m)) {
-        return None;
-    }
-    Some(sec.parse::<f64>().ok()? + m.map_or(0.0, |m| m.parse::<f64>().unwrap_or(0.0) * 60.0))
-}
-
-/// The render's own settings `words` say, as the JSON the caller reads, or None when one is not understood or the range runs backwards.
-fn parse_settings(words: &[String]) -> Option<serde_json::Map<String, serde_json::Value>> {
-    let mut out = serde_json::Map::new();
-    let (mut from, mut to) = (None, None);
-    for w in words {
-        let (k, v) = w.split_once('=').map_or((w.as_str(), ""), |(k, v)| (k, v));
-        match k {
-            "size" => {
-                let num = |x: &str| {
-                    (!x.is_empty() && x.bytes().all(|b| b.is_ascii_digit()))
-                        .then(|| x.parse::<u64>().ok())
-                        .flatten()
-                };
-                if let Some(h) = v.strip_suffix('p').and_then(num) {
-                    out.insert("size".to_owned(), json!({ "height": h }));
-                } else if let Some((a, b)) = v.split_once('x')
-                    && let (Some(a), Some(b)) = (num(a), num(b))
-                {
-                    out.insert("size".to_owned(), json!({ "width": a, "height": b }));
-                } else {
-                    return None;
-                }
-            }
-            "quality" if QUALITIES.contains(&v) => {
-                out.insert("quality".to_owned(), json!(v));
-            }
-            "from" | "to" => {
-                let t = clock(v)?;
-                out.insert(k.to_owned(), json!(t));
-                if k == "from" { from = Some(t) } else { to = Some(t) }
-            }
-            _ => return None,
-        }
-    }
-    if let (Some(f), Some(t)) = (from, to)
-        && t <= f
-    {
-        return None;
-    }
-    Some(out)
-}
-
 fn absolute(p: &str) -> bool {
     p.starts_with('/')
         || (p.len() >= 3 && p.as_bytes()[0].is_ascii_alphabetic() && &p[1..2] == ":" && matches!(&p[2..3], "\\" | "/"))
@@ -130,7 +72,7 @@ pub fn picture_render(a: &str, h: &mut Host) -> Done {
         }
         _ => true,
     };
-    let Some(settings) = parse_settings(&words) else {
+    let Some(settings) = parse_video_settings(&words) else {
         h.refuse(["usage: picture render [webm|mp4] [wav|none] [size=720p|1280x720] [quality=low|medium|high|max] [from=<t>] [to=<t>] into=<folder>".to_owned()]);
         return Ok(());
     };
@@ -168,13 +110,5 @@ mod tests {
         assert_eq!(take_into("mp4 into=/a/b size=720p").0.as_deref(), Some("/a/b"));
         assert_eq!(take_into("into=\"/a b/c\" mp4").0.as_deref(), Some("/a b/c"));
         assert_eq!(take_into("mp4").0, None);
-    }
-
-    #[test]
-    fn a_range_that_runs_backwards_is_no_setting() {
-        let w = |l: &[&str]| l.iter().map(|s| (*s).to_owned()).collect::<Vec<_>>();
-        assert!(parse_settings(&w(&["from=10", "to=5"])).is_none());
-        assert!(parse_settings(&w(&["quality=max", "from=1:30", "size=1280x720"])).is_some());
-        assert!(parse_settings(&w(&["fast"])).is_none());
     }
 }

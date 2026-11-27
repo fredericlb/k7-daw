@@ -1,23 +1,18 @@
-// ProjectHeader.tsx — no header row: the floating controls. A desk's spinner, views, command bar, Mixer and rail's chevron sit at
-// the bottom right; a phone's spinner and Resolve at its top right. Panes, panels, Close and git are PanelRail.tsx's.
+// ProjectHeader.tsx — no header row: the floating controls. A desk's views, command bar, Mixer and rail's chevron sit at
+// the bottom right, its running spinner at the top right; a phone's spinner and Resolve at its top right. Panes, panels, Close and git are PanelRail.tsx's.
 // The engine's state is only a data attribute here (e2e reads it): the person is told by toasts, never by a light.
 import { Capsule, CapsuleButton } from "@studio/ui/capsule";
 import { type LucideIcon, SquareTerminal } from "@studio/ui/icons";
-import { Spinner } from "@studio/ui/spinner";
-import { type ReactNode, useSyncExternalStore } from "react";
+import type { ReactNode } from "react";
 import { StatusText } from "../components/StatusText";
 import { m } from "../paraglide/messages.js";
-import {
-  processesSnapshot,
-  runningCount,
-  subscribeProcesses,
-} from "../processes";
 import type { createStatusLine } from "../statusLine";
 import type { ShellLayout } from "../useIsMobile";
 import { FLOAT_BUTTON, FLOAT_CAPSULE } from "./floatCapsule";
 import { summonChord } from "./modKey";
 import { PANEL_DEFS, type PanelId } from "./panels";
 import { RailChevron } from "./RailChevron";
+import { RunningBubble } from "./RunningBubble";
 
 export interface HeaderPane {
   id: string;
@@ -44,7 +39,6 @@ export function ProjectHeader({
   statusStore,
   engine,
   problems,
-  onProcesses,
   extra,
   git,
   panels,
@@ -57,7 +51,6 @@ export function ProjectHeader({
   statusStore: ReturnType<typeof createStatusLine>;
   engine: "up" | "down" | "none";
   problems: number;
-  onProcesses: () => void;
   /** Small controls after the title, such as the bench's Save. */
   extra?: ReactNode;
   git: ReactNode;
@@ -73,8 +66,6 @@ export function ProjectHeader({
   lockBanner?: string | null;
 }) {
   const phone = layout === "phone";
-  const all = useSyncExternalStore(subscribeProcesses, processesSnapshot);
-  const running = runningCount(all);
   // A desk or a pad has no header row: its controls float at the bottom right, above the dock when it is open.
   // No header row anywhere: the controls float. A desk's sit at the bottom right; a phone's bar holds its chevron, so the
   // spinner and Resolve float at its top right instead.
@@ -91,17 +82,7 @@ export function ProjectHeader({
             : "pointer-events-none absolute right-4 bottom-(--k7-float-bottom) z-(--k7-z-bar) flex h-(--k7-float-h) items-center gap-2 transition-[bottom] duration-(--k7-dur-panel) *:pointer-events-auto"
         }
       >
-        {running > 0 && (
-          <button
-            type="button"
-            aria-label={m["shell.processes"]({ n: running })}
-            title={m["shell.processes"]({ n: running })}
-            onClick={onProcesses}
-            className="grid size-8 shrink-0 cursor-pointer place-items-center rounded-full outline-none focus-visible:shadow-(--k7-focus-ring)"
-          >
-            <Spinner />
-          </button>
-        )}
+        {phone && <RunningBubble />}
         {extra}
         {git}
         {!phone && views}
@@ -155,6 +136,12 @@ export function ProjectHeader({
           />
         )}
       </div>
+      {/* What runs, at the app's top right on a desk and a pad: a phone's sits in its own top-right group above. */}
+      {!phone && (
+        <div className="absolute top-4 right-4 z-(--k7-z-bar)">
+          <RunningBubble />
+        </div>
+      )}
       {/* A desk draws no status line: it is read out, not shown (docs/shell.md). */}
       <p className="sr-only">
         <StatusText store={statusStore} />

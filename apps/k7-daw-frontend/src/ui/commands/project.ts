@@ -3,8 +3,9 @@
 // fix, the mixdown and the cut, the k7 publish and the share link, an import.
 
 import { fetchScene } from "@studio/k7-plugins/video";
+import { EXPORT_USAGE, parseExportAsk } from "@studio/k7-wasm/edit";
+import type { VideoSettings } from "@studio/k7-wasm/picture";
 import { runRedo, runUndo } from "@studio/project-shell/undo";
-import { EXPORT_USAGE, parseExportAsk } from "../../exportArgs";
 import { exportHost } from "../../exportHost";
 import { resolveEntry } from "../../localTargets";
 import { m } from "../../paraglide/messages.js";
@@ -143,7 +144,7 @@ export const PROJECT_COMMANDS: LocalCommand[] = [
             // The sound is what RENDER's audio input carries; an older backend says nothing and means the mix.
             silent ? null : ask.audio,
             name ?? "video",
-            ask.settings,
+            ask.settings as VideoSettings,
           ),
         );
       }
