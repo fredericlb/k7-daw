@@ -5,7 +5,7 @@ chain's input and output map to its first and last module (or to a pass-through 
 has no modules), and that is what `from`/`out` connect to.
 
 The code is deliberately **renderer-agnostic** — plain numbers, no Pixi, no DOM — the seam that lets
-dagre own layout and lets the same geometry serve the hit areas and the drawing by construction.
+the layout engine own layout and lets the same geometry serve the hit areas and the drawing by construction.
 
 `graph.ts` is the one import site. The build is Rust's (`apps/k7-daw-wasm/chains`, reached through
 `@studio/k7-wasm/graph`): `build.rs` holds a run's maps and writers, the socket and rank passes and the
@@ -13,7 +13,14 @@ narrow and fold passes; `build_chains.rs` the steps that add cards; `node_ui.rs`
 `geom.rs` the measurements; `grid_fit.rs`, `assembly.rs`, `module_row.rs`, `row_seams.rs` and `stack_layout.rs`
 the post-passes and arrangements. Here, `graphNode.ts` holds the generated shapes, `geometry.ts` the
 DRAWING geometry (where a socket sits, the cable between two), `buildGraph.ts` and the other facades ask
-Rust and put the answer in the page's shapes, and `graphLayout.ts` places the result with dagre. Hosts
+Rust and put the answer in the page's shapes, and the `chains` crate's `graph_layout` places the result with rust-sugiyama (`src/layout.ts` is the page's door to it).
+
+The engine is rust-sugiyama over petgraph, and what it does not do is done here: it takes no edge weights and no
+rank hints, separate pieces of the graph come back as separate layouts that `graph_layout` sets side by side, a cable's
+route is its two centres, and self-loops and repeated cables are not shown to it. Kept on top of its answer: the rank
+rows and the collision sweep, the master run, the pins and the held places, the curve cards beside their targets,
+the push below inputs and the nested frames. The height it is given is the card's plus the difference between the rank gap
+and the sibling gap, since it has one spacing for both. Hosts
 import `./graph` alone, so the split stays internal.
 
 ## What a node carries from its step
@@ -74,7 +81,7 @@ A row that is only the mixer, or that ends on anything else, is left whole.
 ## Node geometry
 
 A node with no UI is a fixed size; one with a widget grid is sized BY that grid (`nodeSize`), and
-dagre is told the real size so it reserves the space and routes edges around it. A size it was not
+the layout engine is told the real size so it reserves the space and routes edges around it. A size it was not
 told is a node its neighbours overlap.
 
 `NODE_W` is the no-panel size only, and **not** a floor under panelled nodes: as a floor it parks
@@ -130,7 +137,7 @@ is a smudge and an ellipsis is honester.
 
 ### A NOTE is sized by its text
 
-A doc module draws its `content` as written, and `noteSize` measures the box dagre has to reserve
+A doc module draws its `content` as written, and `noteSize` measures the box the layout engine has to reserve
 for it — a note that overlaps the chain it is about says nothing. Wrapped at `NOTE_MAX_W` rather
 than widened without limit: one long paragraph would push every rank of the graph sideways to make
 room for prose. The height follows the WRAPPED line count. `noteOf` decides a module IS a note by
@@ -402,7 +409,7 @@ may name a clip at bar 9 before one at bar 3.
 needs the project's meter, and a renderer dividing by four would be right for every song in 4/4 and
 wrong for every waltz.
 
-`CLIP_ROW_H` and `CLIP_LIST_PAD` have to track the CSS in `DomChains`: dagre is told the height here
+`CLIP_ROW_H` and `CLIP_LIST_PAD` have to track the CSS in `DomChains`: the layout engine is told the height here
 and draws nothing, so a row taller than the constant reserves too little and the last clip spills
 out of the card.
 
@@ -411,7 +418,7 @@ Three rules, each paying for itself:
 - **A lane with no clips gets nothing** — no empty list, no heading. A node that has grown to say
   "0 clips" has grown to tell you nothing. Groups and strudel lanes hold no placements at all, so
   they never get one either.
-- **The height is computed before layout** (`clipsOf`, added to `nodeSize`'s), because dagre is told
+- **The height is computed before layout** (`clipsOf`, added to `nodeSize`'s), because the layout engine is told
   the size and reserves the space. The **width is untouched**: a card is as wide as its mixer grid,
   and a long clip name is ellipsed rather than allowed to push a whole rank sideways.
 - **Past `CLIP_LIST_MAX` (6) the rest is counted, not listed** (`+4`). A lane with sixty clips would
@@ -541,7 +548,7 @@ card is measured by. Its rank is the LOWEST of its members': the box replaces th
 `pushBelowInputs` corrects whatever that gets wrong.
 
 **Open**, the members stay, tagged `assembly`, and the box becomes a frame. `layout` is where the
-nesting happens, because layout is dagre's and only dagre's: the members are laid out by a RECURSIVE
+nesting happens, because layout is the engine's and only the engine's: the members are laid out by a RECURSIVE
 `layoutFlat` call, the outer graph is given one node the size of that result, and the members are
 offset by where it landed. So the outer graph stays flat and the rank rows, the master column and
 the pins are untouched.
@@ -551,7 +558,7 @@ one, which is truer than a plug on the frame plus a lead to the member — and n
 its own.
 
 **Every edge comes back with TWO points.** `cablePath` recomputes both ends off the sockets and
-drops dagre's waypoints, so the nested pass has nothing useful to route — but the renderer skips an
+drops the engine's waypoints, so the nested pass has nothing useful to route — but the renderer skips an
 edge with fewer than two (`DomChains`' test for "the layout could not place this"), and an empty
 list draws **no cable at all** on a graph with a box open, the members' own included. It hands over
 the two node centres instead, and none only when an end is genuinely unplaced. `assembly.test.ts`
@@ -584,7 +591,7 @@ box needs none of it: the members' cards are back, and the walk finds them itsel
 ### Making room, and giving it back
 
 An open frame is the size of a whole signal path, and it appears where a card was. On a graph nobody
-has touched dagre lays the rest out around it — but a **pin outranks the layout**, and a project
+has touched the layout engine lays the rest out around it — but a **pin outranks the layout**, and a project
 that has drawn itself once has pinned every node it has, so opening a box grows one card straight
 through its neighbours.
 
@@ -759,7 +766,7 @@ Three things differ, and only three:
 - neither name is ever typed by hand. A project with a viewport gains the run when the surface is
   created and, failing that, when it is opened.
 
-A cable **plugs in**, and runs **straight**. dagre routes to the node's border, which is the right
+A cable **plugs in**, and runs **straight**. The layout routes to the node's border, which is the right
 target for a cable ending in an arrowhead pointing at a card; `cablePath` moves both ends onto the
 sockets instead — the one the destination NAMES (`crossfade#b`) on the target side, and the one the
 edge left from (`sourcePort`) on the source side, falling back to the first output when the chains
@@ -768,7 +775,7 @@ file names none.
 Its waypoints are **dropped**. Kept, they bend a send around the module it skips — the right answer
 for a flow chart and the wrong one for a patch bay. A rack's cables run straight between plugs and
 cross where they cross, and reading one is following its ANGLE out of a socket, which a bend
-destroys. dagre still places the nodes; only the routing is ours.
+destroys. The layout engine still places the nodes; only the routing is ours.
 
 There is **no arrowhead** on a signal cable. The plug is the socket it disappears into — the nodes
 paint over the cable layer, so the last few pixels are hidden by the plate and the cable reads as
@@ -855,7 +862,7 @@ from an instance — one free card per curve, one bound card per binding.
 ### Curve cards
 
 A bound card sits **at the left of the node it drives, under its top** (`curve_placement.rs` of the chains crate),
-on the side its events leave from. Several curves on one node stack downward. dagre sees an automation edge as one more edge and would put the card
+on the side its events leave from. Several curves on one node stack downward. The layout engine sees an automation edge as one more edge and would put the card
 anywhere on its row, so its spot is dropped: the card goes just left of its target, and the row
 sweep sorts it immediately before that target, so the sweep parts them by making room rather than by
 pushing a neighbour between them. Neither the automation edge nor the event one counts in
@@ -922,41 +929,41 @@ pipeline is still respected.
   ever ends up above its own strip. It is the same rule the mixer view applies with
   `alignModuleRank`, reached here by the ranking itself.
 
-**Every rank ends up on its own row**, and that is `layout`'s doing rather than dagre's, which
-treats the rank as a hint: its `longest-path` ranker pushes a node as LATE as it can, hugging the
-sink below it, so on a fifteen-track song rank 1 spreads over SIX lines, from y=16 to y=1380 — a
-first-in-chain module sitting on the mixer line, at the bottom of a column it belongs at the top of.
+**Every rank ends up on its own row**, and that is `layout`'s doing rather than the engine's, which
+never reads the rank: it layers by cable length, so a node lands as near what feeds it as it can, and
+on a fifteen-track song rank 1 would spread over several lines — a first-in-chain module sitting on
+the mixer line, at the bottom of a column it belongs at the top of.
 `snapToRankRows` makes the rank mean what it says: one row per rank, in order, each as high as the
-highest thing dagre put there and never overlapping the row above. The input row, the track row
+highest thing the layout engine put there and never overlapping the row above. The input row, the track row
 and the fader row all fall out of that same rule.
 
 Two things follow, both found by measuring:
 
-- **The rows are swept for collisions.** dagre places x assuming its own y, so two nodes it put on
+- **The rows are swept for collisions.** The layout engine places x assuming its own y, so two nodes it put on
   different lines may share a column, and collapsing them onto one row is what makes them overlap.
-- **The extent is measured on the nodes**, not read off dagre, whose figure describes the picture
+- **The extent is measured on the nodes**, not read off the layout engine, whose figure describes the picture
   before the rows move: 488px short on that same song, which is the bottom of the graph missing from
   every camera fit.
 
-The extent has a second end, `left`/`top`, for the same reason. dagre lays out from
-`marginx`/`marginy` down and right, so both are 0 for a graph nobody touched — but a **pin** can sit
+The extent has a second end, `left`/`top`, for the same reason. The layout engine lays out from
+its margin down and right, so both are 0 for a graph nobody touched — but a **pin** can sit
 anywhere, including above the first track, and `width × height` measured from the origin says
 nothing about that. A camera framing the extent alone would cut off exactly the cards somebody
 dragged up there, or force the drop to clamp to `0,0` instead. Both are floored at 0 (never
 positive), so the box a fit reads — `width - left` by `height - top` — is the extent unchanged for
 every graph that begins at the origin.
 
-Only the y is legislated, and one column's x. The rest of the x stays dagre's, so the gap along a
+Only the y is legislated, and one column's x. The rest of the x stays the engine's, so the gap along a
 row varies with what hangs under each column — right for tracks and modules, which are the tops and
 middles of chains of different widths. The mixer row asks for even spacing separately
 (`spaceModulesEvenly`), because a rank of channel strips is the one place it is wanted.
 
-Layout is **top→bottom** layered. dagre returns node centres; we store top-left (what a renderer
-wants), and an edge keeps its two ends only so a renderer can still draw something for a node it
+Layout is **top→bottom** layered. The layout engine returns node centres; we store top-left (what a renderer
+wants), and an edge is its two centres only so a renderer can still draw something for a node it
 cannot find.
 
-The direction is a `rankdir`, and three things follow it: `nodesep` and `ranksep` swap axes
-(siblings side by side, stages one under the next, and the numbers swap with them), `jackPoint` puts
+The direction is top to bottom, and three things follow it: the gap between siblings and the gap between stages
+are two numbers on two axes (`NODE_SEP`, `RANK_SEP`), `jackPoint` puts
 inputs on a card's TOP edge and outputs on its bottom, spread across the width, and `cablePath`'s
 straight leads run on Y. Those three have to agree with the plate positions the renderer sets inline
 — the socket and the cable's end are one place drawn twice, and a disagreement reads as a cable that
@@ -971,11 +978,11 @@ nodes out and never calls `layout`, because a row of mixer strips is a row and n
 card both wins over the rows and still counts toward the graph's measured size.
 
 `positions` is what somebody PINNED — `chains.k7x`'s `positions:`, keyed by chains name — and it
-wins over everything the ranker decided except the one rule below; dagre only ever places what has
+wins over everything the ranker decided except the one rule below; the layout engine only ever places what has
 no entry, so a module dragged once stays put and a new one still arrives laid out. `prev` is where
 each node was DRAWN last time, keyed by node id: the host's session memory, so an edit never
 reorganizes the picture. Pins outrank the session because the file outranks it — another tab may
-have written one. `graph organize` empties both and lets dagre speak. The name resolution is
+have written one. `graph organize` empties both and lets the layout engine speak. The name resolution is
 `cables.ts`'s `jackRef`, inlined here because `cables.ts` imports this file.
 
 ### The master run is the last column, its sum on the track row
@@ -994,7 +1001,7 @@ row, up among the tracks.
 
 `masterRunAside` then moves the block to the RIGHT of everything — one `nodesep` past the rightmost
 thing not on it, so the sum is always the last column — and UP so the sum stands on the TRACK row,
-level with the lanes it sums. Both are POSITIONS and not minimums, so a run dagre left miles out is
+level with the lanes it sums. Both are POSITIONS and not minimums, so a run the layout engine left miles out is
 pulled back in. It shifts as a **block**, keeping the shape the ranks gave it, which is what keeps
 `MIX -> OUT` short: the ranking put `OUT` one rank under the run's last module, and the shift moves
 the two together. A graph with no lane has no track row to join, and its run goes below everything.
@@ -1017,7 +1024,7 @@ an order for them is a decision this cannot make on its own.
 to climb is a cable drawn backwards, and one drawn sideways between two cards on the same line reads
 as a cable going nowhere.
 
-dagre gives this for free — `rankdir: "TB"` is exactly that statement — and `snapToRankRows` keeps
+the layout engine gives this for free (it layers top to bottom) and `snapToRankRows` keeps
 it, since a rank's row is never above the row before. **A pin does not.** Dragging a compressor
 above the track feeding it, or writing a `positions:` entry by hand, would produce a picture whose
 cables run the wrong way with nothing to say so.
@@ -1047,7 +1054,7 @@ carry a rank computed before this ran; the two SUMS are exempt, being drawn as s
 where a source does. It returns a new array, so the plain layout stays available to anything drawing
 the same graph beside this one.
 
-`spaceModulesEvenly` then gives the row one rhythm. dagre spaces a rank by what is above it — a
+`spaceModulesEvenly` then gives the row one rhythm. The layout engine spaces a rank by what is above it — a
 track with a wide chain pushes its mixer away from its neighbour — so a shared rank alone still
 reads as a scattered line rather than a console. Equal GAP and not equal pitch, because the cards
 are not all the same width and it is the space between them the eye reads as regular. What it costs
@@ -1067,7 +1074,7 @@ lane one alone. The `MIX` heads the LAST column, always: the master run under it
 other module, as wide as its column. The sum is where every column ends up, so it closes the row
 rather than standing among the lanes.
 
-It is read top to bottom, so dagre is not used: the order is the song's, and a layout engine would
+It is read top to bottom, so the layout engine is not used: the order is the song's, and a layout engine would
 be free to choose another. Like the mixer row it is an arrangement and not a place — nothing in it is
 pinned, remembered, or written to `positions:`. Cards keep their height; a socket plate is dropped,
 since it hangs off a card's edge onto the one stacked against it, and a cable meets the middle of the
@@ -1082,7 +1089,7 @@ of a column one lane further out (`sidePath`). And a card with more than one cab
 its OUTPUT sockets — the one exception to the dropped plates — so its cables visibly leave from
 sockets rather than from one point. A cable between columns needs neither: it is already in the open. An input is drawn as a solid bar (`.dgx-node.bar`), the edge's tint made opaque.
 
-`moduleRow` is the standalone surface: the named modules side by side, dagre deliberately not used —
+`moduleRow` is the standalone surface: the named modules side by side, the layout engine deliberately not used —
 there are no cables between channel strips to route, and the ORDER is the caller's (the song's track
 order), which a layout engine should not be allowed to choose. The cards come from `buildGraph`, so
 each is the same card the full graph draws, live values and all; only the position is ours. Seven
@@ -1136,7 +1143,7 @@ rules:
 
 ### The -Infinity extent
 
-dagre reports `-Infinity` for a graph with no nodes — it maxes over an empty set. That is not null,
+A maximum over no nodes is `-Infinity`, so an empty graph's extent is set to 0 by hand. That is not null,
 so `?? 0` never catches it, and not falsy, so a caller's `if (!width)` guard passes. Framing a
 camera to that extent yields an Infinity translation and the graph is invisible for good, the view
 believing it has already framed itself. A layout with nothing in it has no extent: report 0 and let

@@ -15,7 +15,7 @@ const graph = (
 });
 
 describe("buildGraph", () => {
-  // Every page load starts empty, and dagre reports -Infinity for that — see docs/graphBuild.md.
+  // Every page load starts empty, and an empty layout reports -Infinity for that — see docs/graphBuild.md.
   it("reports zero extent for an empty layout, never -Infinity", () => {
     const { nodes, width, height } = layout([], []);
     expect(nodes).toHaveLength(0);
