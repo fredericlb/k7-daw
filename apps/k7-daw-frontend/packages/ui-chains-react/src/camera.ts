@@ -113,7 +113,9 @@ export function applyCam(el: HTMLElement | null, c: Cam): void {
   if (!el) return;
   // The world is laid out at its settled zoom (settleCam); the transform carries only what the gesture adds.
   const z = Number(el.style.zoom) || 1;
-  el.style.transform = `translate(${c.x / z}px,${c.y / z}px) scale(${c.k / z})`;
+  // The browser keeps the zoom to six digits, so a ratio within that rounding is exactly 1.
+  const r = Math.abs(c.k / z - 1) < 1e-4 ? 1 : c.k / z;
+  el.style.transform = `translate(${c.x / z}px,${c.y / z}px) scale(${r})`;
   // The zoom for CSS too, which caps what it draws on SCREEN (chainsCss.ts); set only when it moves, a pan costing no restyle.
   const k = String(c.k);
   if (el.style.getPropertyValue("--dgx-k") !== k)
