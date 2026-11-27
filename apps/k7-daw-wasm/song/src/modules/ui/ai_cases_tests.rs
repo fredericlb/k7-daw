@@ -54,8 +54,14 @@ fn the_prompt_quotes_every_param_name_exactly_and_the_authors_direction_trimmed(
     .unwrap();
     let text = ai_user_prompt(&req);
     assert!(text.contains("- \"Cutoff\": range 20..20000, value 440"), "{text}");
-    assert!(text.contains("\"Mode\": states: [{\"label\":\"LP\",\"value\":0}]"), "{text}");
-    assert!(text.contains("## What the author asks for\nmake the screen big"), "{text}");
+    assert!(
+        text.contains("\"Mode\": states: [{\"label\":\"LP\",\"value\":0}]"),
+        "{text}"
+    );
+    assert!(
+        text.contains("## What the author asks for\nmake the screen big"),
+        "{text}"
+    );
 }
 
 #[test]
@@ -101,7 +107,9 @@ fn the_tabs_and_the_vertical_twins_lists_become_maps_too() {
         json!({}),
     ))
     .unwrap();
-    let ui = check_ai_result(&r, &names(&["Cutoff"]), &AiContext::default()).ui.unwrap();
+    let ui = check_ai_result(&r, &names(&["Cutoff"]), &AiContext::default())
+        .ui
+        .unwrap();
     assert_eq!(ui["tabs"][0]["widgets"]["cut"]["bind"], json!("Cutoff"));
     assert_eq!(ui["vertical"]["widgets"]["cut"]["type"], json!("knob"));
 }
@@ -111,7 +119,11 @@ fn an_id_used_twice_in_one_list_is_reported_rather_than_losing_a_widget_silently
     let w = json!({ "id": "cut", "type": "knob", "col": 0, "row": 0, "bind": "Cutoff" });
     let mut again = w.clone();
     again["col"] = json!(2);
-    let r = read_ai_answer(&answer(json!({ "cols": 4, "rows": 2, "widgets": [w, again] }), json!({}))).unwrap();
+    let r = read_ai_answer(&answer(
+        json!({ "cols": 4, "rows": 2, "widgets": [w, again] }),
+        json!({}),
+    ))
+    .unwrap();
     assert_eq!(r.issues, ["panel: widget id `cut` is used twice"]);
     let got = check_ai_result(&r, &names(&["Cutoff"]), &AiContext::default());
     assert!(got.issues.contains(&"panel: widget id `cut` is used twice".to_owned()));
@@ -128,7 +140,12 @@ fn an_answer_that_is_not_the_promised_shape_is_none() {
 fn a_sound_panel_with_a_drawn_screen_passes_keeping_its_widget_order() {
     let c = checked(&good_ui(""), GOOD_JS, &PARAMS, &AiContext::default());
     assert!(c.issues.is_empty(), "{:?}", c.issues);
-    let order: Vec<&str> = c.ui.as_ref().unwrap()["widgets"].as_object().unwrap().keys().map(String::as_str).collect();
+    let order: Vec<&str> = c.ui.as_ref().unwrap()["widgets"]
+        .as_object()
+        .unwrap()
+        .keys()
+        .map(String::as_str)
+        .collect();
     assert_eq!(order, ["screen", "cutoff", "res"]);
 }
 
@@ -149,10 +166,19 @@ fn with(ui: &str, js: &str, ctx: &AiContext) -> Vec<String> {
 #[test]
 fn an_interactive_screen_nobody_asked_for_is_refused_and_one_that_was_asked_for_taken() {
     let ui = good_ui("");
-    let refused = ["widgets_js gives a screen a `pointer` handler, and the author did not ask for an interactive screen: make every screen a plain draw function"];
+    let refused = [
+        "widgets_js gives a screen a `pointer` handler, and the author did not ask for an interactive screen: make every screen a plain draw function",
+    ];
     assert_eq!(with(&ui, TOUCH, &asked("tidy it", AiMode::Reset, "")), refused);
     assert_eq!(other(&ui, TOUCH).len(), 1);
-    assert!(with(&ui, TOUCH, &asked("let me drag the cutoff on the screen", AiMode::Reset, "")).is_empty());
+    assert!(
+        with(
+            &ui,
+            TOUCH,
+            &asked("let me drag the cutoff on the screen", AiMode::Reset, "")
+        )
+        .is_empty()
+    );
     // An update keeps an interactive screen that already was one.
     assert!(with(&ui, TOUCH, &asked("bigger knobs", AiMode::Update, TOUCH)).is_empty());
 }
@@ -165,26 +191,45 @@ fn a_script_that_does_not_compile_is_named() {
 
 #[test]
 fn overlaps_and_widgets_outside_the_grid_are_named() {
-    let bad = good_ui("").replace("col: 2, row: 2", "col: 1, row: 2").replace("rows(5)", "rows(3)");
+    let bad = good_ui("")
+        .replace("col: 2, row: 2", "col: 1, row: 2")
+        .replace("rows(5)", "rows(3)");
     let issues = other(&bad, GOOD_JS);
-    assert!(issues.contains(&"panel: `cutoff` runs outside the 8×3 grid".to_owned()), "{issues:?}");
-    assert!(issues.contains(&"panel: `cutoff` overlaps `res`".to_owned()), "{issues:?}");
+    assert!(
+        issues.contains(&"panel: `cutoff` runs outside the 8×3 grid".to_owned()),
+        "{issues:?}"
+    );
+    assert!(
+        issues.contains(&"panel: `cutoff` overlaps `res`".to_owned()),
+        "{issues:?}"
+    );
 }
 
 #[test]
 fn each_tab_is_checked_together_with_the_panel_level_widgets_drawn_over_it() {
     let tabs = "cols(8)\nrows(6)\nwidgets({\n  screen: { type: \"lcdscreen\", col: 0, row: 4, colSpan: 8, rowSpan: 2 },\n})\ntabs([\n  name(\"Main\").widgets({\n    cutoff: { type: \"knob\", col: 0, row: 0, colSpan: 2, rowSpan: 2, bind: \"Cutoff\", min: 0, max: 1 },\n  }),\n  name(\"Env\").widgets({\n    attack: { type: \"knob\", col: 0, row: 3, colSpan: 2, rowSpan: 2, bind: \"Attack\", min: 0, max: 1 },\n    cutoff: { type: \"knob\", col: 2, row: 0, bind: \"Cutoff\", min: 0, max: 1 },\n  }),\n])\n";
     let issues = other(tabs, GOOD_JS);
-    assert!(issues.contains(&"tab Env: `screen` overlaps `attack`".to_owned()), "{issues:?}");
-    assert!(issues.contains(&"widget id `cutoff` is used twice".to_owned()), "{issues:?}");
+    assert!(
+        issues.contains(&"tab Env: `screen` overlaps `attack`".to_owned()),
+        "{issues:?}"
+    );
+    assert!(
+        issues.contains(&"widget id `cutoff` is used twice".to_owned()),
+        "{issues:?}"
+    );
     assert!(!issues.iter().any(|i| i.starts_with("tab Main")), "{issues:?}");
 }
 
 #[test]
 fn a_group_frames_the_widgets_wholly_inside_it_and_a_straddling_one_is_named() {
-    let grouped = good_ui("  filt: { type: \"group\", col: 0, row: 2, colSpan: 4, rowSpan: 2, label: \"FILTER\", color: \"#3d7dff26\" },\n");
+    let grouped = good_ui(
+        "  filt: { type: \"group\", col: 0, row: 2, colSpan: 4, rowSpan: 2, label: \"FILTER\", color: \"#3d7dff26\" },\n",
+    );
     assert!(other(&grouped, GOOD_JS).is_empty());
-    let straddling = grouped.replace("colSpan: 4, rowSpan: 2, label: \"FILTER\"", "colSpan: 3, rowSpan: 2, label: \"FILTER\"");
+    let straddling = grouped.replace(
+        "colSpan: 4, rowSpan: 2, label: \"FILTER\"",
+        "colSpan: 3, rowSpan: 2, label: \"FILTER\"",
+    );
     assert!(other(&straddling, GOOD_JS).contains(
         &"panel: `res` and `filt` cross — a widget lies wholly inside a group or wholly outside it, and groups never overlap".to_owned()
     ));
@@ -192,9 +237,16 @@ fn a_group_frames_the_widgets_wholly_inside_it_and_a_straddling_one_is_named() {
 
 #[test]
 fn a_crossfade_knob_takes_a_dry_and_a_wet_param_and_a_pair_that_is_not_a_parameter_is_named() {
-    let xf = |pair: &str| good_ui(&format!("  mix: {{ type: \"knob\", col: 4, row: 2, label: \"MIX\", bind: \"Attack\", pair: \"{pair}\" }},\n"));
+    let xf = |pair: &str| {
+        good_ui(&format!(
+            "  mix: {{ type: \"knob\", col: 4, row: 2, label: \"MIX\", bind: \"Attack\", pair: \"{pair}\" }},\n"
+        ))
+    };
     assert!(other(&xf("Mode"), GOOD_JS).is_empty());
-    assert_eq!(other(&xf("Dry"), GOOD_JS), ["`mix` pairs `Dry`, which is not a parameter"]);
+    assert_eq!(
+        other(&xf("Dry"), GOOD_JS),
+        ["`mix` pairs `Dry`, which is not a parameter"]
+    );
 }
 
 #[test]
@@ -210,7 +262,11 @@ fn a_colour_anywhere_but_on_a_group_is_refused_and_a_groups_on_off_bind_taken() 
     let bad = good_ui("").replace("label: \"Res\",", "label: \"Res\", color: \"#fff\",");
     assert!(other(&bad, GOOD_JS)[0].starts_with("panel widgets.res.color"));
     let bound = good_ui("  g: { type: \"group\", col: 4, row: 2, bind: \"Cutoff\" },\n");
-    assert!(!other(&bound, GOOD_JS).iter().any(|i| i.starts_with("panel widgets.g.bind")));
+    assert!(
+        !other(&bound, GOOD_JS)
+            .iter()
+            .any(|i| i.starts_with("panel widgets.g.bind"))
+    );
 }
 
 #[test]
@@ -248,7 +304,10 @@ fn a_rack_module_may_bind_the_sounds_its_rack_declares_and_the_add_tap() {
 fn a_tap_on_a_sound_the_rack_does_not_have_is_named() {
     let binds = bindable_names(&volume(), KIT);
     let bad = KIT_UI.replace("\"@rack:SN\"", "\"@rack:HH\"");
-    assert_eq!(rack_check(&bad, &binds), ["tap `sn` binds `@rack:HH`, which is not a sound of this module's rack"]);
+    assert_eq!(
+        rack_check(&bad, &binds),
+        ["tap `sn` binds `@rack:HH`, which is not a sound of this module's rack"]
+    );
 }
 
 #[test]
@@ -256,8 +315,14 @@ fn pads_stay_on_taps_and_taps_on_pads() {
     let binds = bindable_names(&volume(), KIT);
     let knob_on_pad = KIT_UI.replace("bind: \"Volume\"", "bind: \"@rack:BD\"");
     let tap_on_param = KIT_UI.replace("\"@rack:SN\"", "\"Volume\"");
-    assert_eq!(rack_check(&knob_on_pad, &binds), ["`vol` binds a rack sound, which only a tap may"]);
-    assert_eq!(rack_check(&tap_on_param, &binds), ["tap `sn` must bind a rack sound or `@rack+`"]);
+    assert_eq!(
+        rack_check(&knob_on_pad, &binds),
+        ["`vol` binds a rack sound, which only a tap may"]
+    );
+    assert_eq!(
+        rack_check(&tap_on_param, &binds),
+        ["tap `sn` must bind a rack sound or `@rack+`"]
+    );
 }
 
 #[test]
@@ -325,8 +390,14 @@ fn a_group_around_one_widget_is_checked_inside_a_tab_as_well() {
 fn the_engines_blend_is_what_the_check_applies_wherever_mix_is_offered() {
     let ui = "cols(4)\nrows(2)\nwidgets({\n  d: { type: \"knob\", col: 0, row: 0, bind: \"Dry Level\" },\n  w: { type: \"knob\", col: 1, row: 0, bind: \"Wet Level\" },\n})\n";
     let issues = checked(ui, "", &["Dry Level", "Wet Level", "@mix"], &AiContext::default()).issues;
-    assert!(issues.iter().any(|i| i.contains("the blend is the engine's")), "{issues:?}");
-    assert!(!issues.iter().any(|i| i.contains("crossfade knob — `bind")), "{issues:?}");
+    assert!(
+        issues.iter().any(|i| i.contains("the blend is the engine's")),
+        "{issues:?}"
+    );
+    assert!(
+        !issues.iter().any(|i| i.contains("crossfade knob — `bind")),
+        "{issues:?}"
+    );
 }
 
 const KNOBS: &str = "    cutoff: { type: \"knob\", col: 0, row: 0, colSpan: 2, rowSpan: 2, label: \"Cutoff\", bind: \"Cutoff\", min: 20, max: 20000, curve: \"log\" },\n    res: { type: \"knob\", col: 2, row: 0, colSpan: 2, rowSpan: 2, label: \"Res\", bind: \"Resonance\", min: 0, max: 1 },\n";
@@ -344,12 +415,22 @@ fn a_panel_wider_than_four_columns_is_asked_for_a_vertical_layout() {
 
 #[test]
 fn a_vertical_layout_offering_the_same_controls_is_taken_and_one_that_drops_a_control_named() {
-    let twin = format!("{}vertical({{\n  cols: 4,\n  rows: 4,\n  widgets: {{\n{KNOBS}  }},\n}})\n", wide());
+    let twin = format!(
+        "{}vertical({{\n  cols: 4,\n  rows: 4,\n  widgets: {{\n{KNOBS}  }},\n}})\n",
+        wide()
+    );
     let ctx = AiContext::default();
-    assert_eq!(check_ai_result(&proposal(&twin, ""), &names(&PARAMS), &ctx).issues, Vec::<String>::new());
+    assert_eq!(
+        check_ai_result(&proposal(&twin, ""), &names(&PARAMS), &ctx).issues,
+        Vec::<String>::new()
+    );
     let res_line = twin.rfind("    res: ").unwrap();
     let end = twin[res_line..].find('\n').unwrap() + res_line + 1;
     let short = format!("{}{}", &twin[..res_line], &twin[end..]);
     let c = check_ai_result(&proposal(&short, ""), &names(&PARAMS), &ctx);
-    assert!(c.issues.join(" ").contains("does not offer the same controls"), "{:?}", c.issues);
+    assert!(
+        c.issues.join(" ").contains("does not offer the same controls"),
+        "{:?}",
+        c.issues
+    );
 }

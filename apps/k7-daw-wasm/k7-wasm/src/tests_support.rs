@@ -38,7 +38,12 @@ pub fn edited(op: &str, args: Value) -> Result<(String, Vec<bool>), String> {
     if let Some(e) = v.get("error") {
         return Err(e["message"].as_str().unwrap().to_owned());
     }
-    let results = v["results"].as_array().unwrap().iter().map(|b| b.as_bool().unwrap()).collect();
+    let results = v["results"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .map(|b| b.as_bool().unwrap())
+        .collect();
     Ok((v["text"].as_str().unwrap().to_owned(), results))
 }
 

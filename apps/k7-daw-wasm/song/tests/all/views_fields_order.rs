@@ -8,11 +8,51 @@ fn the_module_fields_come_in_the_order_the_schema_declares_them() {
     assert_eq!(
         fields_at(FileKind::Module, &[]),
         [
-            "extends", "plugin", "io", "inputs", "outputs", "type", "shader", "shape", "font", "align", "background",
-            "shadow", "params", "rack", "tap_outs", "kit", "cold", "model_url", "channel", "camera", "device", "frame",
-            "source", "monitor", "gain", "mix", "input_volume", "output_volume", "base", "ui", "automations", "content",
-            "events", "color", "disabled", "tracks", "strudel", "video_source", "lut", "frozen", "engine", "engines",
-            "alternatives", "alternative", "status",
+            "extends",
+            "plugin",
+            "io",
+            "inputs",
+            "outputs",
+            "type",
+            "shader",
+            "shape",
+            "font",
+            "align",
+            "background",
+            "shadow",
+            "params",
+            "rack",
+            "tap_outs",
+            "kit",
+            "cold",
+            "model_url",
+            "channel",
+            "camera",
+            "device",
+            "frame",
+            "source",
+            "monitor",
+            "gain",
+            "mix",
+            "input_volume",
+            "output_volume",
+            "base",
+            "ui",
+            "automations",
+            "content",
+            "events",
+            "color",
+            "disabled",
+            "tracks",
+            "strudel",
+            "video_source",
+            "lut",
+            "frozen",
+            "engine",
+            "engines",
+            "alternatives",
+            "alternative",
+            "status",
         ]
     );
 }
@@ -37,8 +77,25 @@ fn a_placement_lists_its_words_in_order() {
     assert_eq!(
         fields_at(FileKind::Module, &["events"]),
         [
-            "ref", "start", "from", "to", "fadeIn", "fadeOut", "loop", "gain", "disabled", "warp", "takes", "comp",
-            "crossfades", "length", "animate", "speed", "effect", "silent", "pitch",
+            "ref",
+            "start",
+            "from",
+            "to",
+            "fadeIn",
+            "fadeOut",
+            "loop",
+            "gain",
+            "disabled",
+            "warp",
+            "takes",
+            "comp",
+            "crossfades",
+            "length",
+            "animate",
+            "speed",
+            "effect",
+            "silent",
+            "pitch",
         ]
     );
 }
@@ -72,5 +129,8 @@ fn the_chains_files_sections_and_the_curve_types_come_in_order() {
         ["modules", "bypassed", "bus_only", "tap_feeds", "positions"]
     );
     assert!(fields_at(FileKind::Chains, &["modules"]).is_empty());
-    assert_eq!(values_at(FileKind::Curve, &[], "type"), ["lfo", "custom", "adsr", "onoff"]);
+    assert_eq!(
+        values_at(FileKind::Curve, &[], "type"),
+        ["lfo", "custom", "adsr", "onoff"]
+    );
 }

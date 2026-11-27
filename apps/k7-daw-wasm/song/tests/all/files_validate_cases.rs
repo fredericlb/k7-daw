@@ -3,7 +3,8 @@
 
 use song::files::{ValidityDepth, validate_file};
 
-const MODULE: &str = "// a node\nextends(\"@workspace/instruments/synth\")\nparams({\n  \"Filter Freq\": 40,\n  Level: -12,\n})\n";
+const MODULE: &str =
+    "// a node\nextends(\"@workspace/instruments/synth\")\nparams({\n  \"Filter Freq\": 40,\n  Level: -12,\n})\n";
 
 #[test]
 fn a_buffer_the_compiler_could_read_passes_at_schema_depth() {
@@ -32,7 +33,10 @@ fn a_schema_finding_is_on_the_line_of_the_key_it_is_about() {
 
 #[test]
 fn a_nested_finding_is_placed_inside_its_object() {
-    let v = validate_file("song/project.k7x", "project({\n  name: \"demo\",\n  tempo: \"fast\",\n})\n");
+    let v = validate_file(
+        "song/project.k7x",
+        "project({\n  name: \"demo\",\n  tempo: \"fast\",\n})\n",
+    );
     assert!(!v.ok);
     let i = &v.issues[0];
     assert_eq!((i.path.as_str(), i.line, i.col), ("project.tempo", Some(3), Some(3)));
@@ -53,7 +57,10 @@ fn a_lanes_node_file_is_checked_as_a_module_file_at_schema_depth() {
 }
 
 fn root(layers: &str) -> song::files::Validity {
-    validate_file("project.k7x", &format!("project({{ name: \"s\", tempo: 120, layers: {layers} }})\n"))
+    validate_file(
+        "project.k7x",
+        &format!("project({{ name: \"s\", tempo: 120, layers: {layers} }})\n"),
+    )
 }
 
 #[test]
@@ -65,11 +72,18 @@ fn project_layers_is_accepted_empty_and_refused_naming_what_draws_the_picture_no
 }
 
 fn lane(event: &str) -> song::files::Validity {
-    validate_file("nodes/lane.k7x", &format!("extends(\"@meta/picture-track\")\nevents([{event}])\n"))
+    validate_file(
+        "nodes/lane.k7x",
+        &format!("extends(\"@meta/picture-track\")\nevents([{event}])\n"),
+    )
 }
 
 fn message(event: &str) -> String {
-    lane(event).issues.first().map(|i| i.message.clone()).unwrap_or_default()
+    lane(event)
+        .issues
+        .first()
+        .map(|i| i.message.clone())
+        .unwrap_or_default()
 }
 
 #[test]

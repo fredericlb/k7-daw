@@ -23,7 +23,12 @@ fn listed(text: &str, at: Value) -> Value {
 }
 
 fn refs(text: &str, at: Value) -> Vec<Value> {
-    listed(text, at).as_array().unwrap().iter().map(|p| p["ref"].clone()).collect()
+    listed(text, at)
+        .as_array()
+        .unwrap()
+        .iter()
+        .map(|p| p["ref"].clone())
+        .collect()
 }
 
 const LANE: &str = "// the A-roll\nextends(\"@meta/picture-track\")\nevents([\n  ref(\"a\").start(2).length(6).from(1).fadeIn(0.5).fadeOut({ over: 1, with: \"wipe\" }),\n  ref(\"b\").start(10).length(0),\n])\n";
@@ -63,7 +68,10 @@ fn a_length_0_tail_stays_open_running_to_the_next_start_as_the_shot_did() {
 #[test]
 fn an_activation_is_split_without_inventing_a_source_to_trim() {
     let (text, _) = split("events([start(0).length(4)])\n", 0, 1.0);
-    assert_eq!(events(&text), json!([{"start": 0, "length": 1}, {"start": 1, "length": 3}]));
+    assert_eq!(
+        events(&text),
+        json!([{"start": 0, "length": 1}, {"start": 1, "length": 3}])
+    );
 }
 
 #[test]
@@ -127,7 +135,10 @@ fn a_fades_chain_is_renamed_and_only_a_fades() {
 
 #[test]
 fn the_lanes_rect_is_written_as_frame_all_four_values_in_whole_pixels() {
-    let (out, _) = edit(LANE, json!({"op": "setLaneRect", "x": 10.4, "y": 20, "w": 320, "h": 180.6}));
+    let (out, _) = edit(
+        LANE,
+        json!({"op": "setLaneRect", "x": 10.4, "y": 20, "w": 320, "h": 180.6}),
+    );
     assert_eq!(data(&out)["frame"], json!([10, 20, 320, 181]));
     assert!(out.contains("// the A-roll"));
 }
@@ -148,7 +159,10 @@ fn speed_silence_and_removal_are_set_by_index_the_defaults_leaving_no_key() {
     assert!(!back.contains("speed"));
     let (hushed, _) = edit(text, json!({"op": "setSilentAt", "index": 1, "silent": true}));
     assert_eq!(listed(&hushed, json!([]))[1]["silent"], json!(true));
-    assert_eq!(edit(&hushed, json!({"op": "setSilentAt", "index": 1, "silent": false})).0, text);
+    assert_eq!(
+        edit(&hushed, json!({"op": "setSilentAt", "index": 1, "silent": false})).0,
+        text
+    );
     assert!(!edit(text, json!({"op": "removeAt", "index": 7})).1);
     let (left, _) = edit(text, json!({"op": "removeAt", "index": 0}));
     assert_eq!(listed(&left, json!([])).as_array().unwrap().len(), 1);
@@ -159,7 +173,11 @@ fn a_timeline_files_lane_is_addressed_at_its_own_key_path() {
     let text = "pictures([\n  { lane: \"a\", events: [ref(\"x\").start(0).length(2)] },\n  { lane: \"b\", events: [ref(\"y\").start(1).length(3)] },\n])\n";
     let at = json!(["pictures", 1]);
     assert_eq!(refs(text, at.clone()), [json!("y")]);
-    let (out, done) = edit_at(text, json!({"op": "setFieldAt", "index": 0, "field": "start", "value": 4.00004}), at);
+    let (out, done) = edit_at(
+        text,
+        json!({"op": "setFieldAt", "index": 0, "field": "start", "value": 4.00004}),
+        at,
+    );
     assert!(done);
     // Rounded to the millisecond, one line changed.
     assert_eq!(out, text.replace("start(1)", "start(4)"));
@@ -169,7 +187,10 @@ fn a_timeline_files_lane_is_addressed_at_its_own_key_path() {
 fn a_placement_without_a_ref_is_still_listed_so_an_index_addresses_the_same_line() {
     let text = "extends(\"@meta/picture-track\")\nevents([start(0).length(2), ref(\"a\").start(4)])\n";
     assert_eq!(refs(text, json!([])), [json!(""), json!("a")]);
-    let (out, done) = edit(text, json!({"op": "setFieldAt", "index": 1, "field": "start", "value": 6}));
+    let (out, done) = edit(
+        text,
+        json!({"op": "setFieldAt", "index": 1, "field": "start", "value": 6}),
+    );
     assert!(done);
     assert!(out.contains("ref(\"a\").start(6)"));
 }
@@ -177,7 +198,16 @@ fn a_placement_without_a_ref_is_still_listed_so_an_index_addresses_the_same_line
 #[test]
 fn a_field_is_set_by_ref_on_the_first_placement_naming_it() {
     let text = "events([ref(\"a\").start(0).from(1), ref(\"a\").start(5)])\n";
-    let (out, _) = edit(text, json!({"op": "setFieldByRef", "ref": "a", "field": "from", "value": 2.5}));
+    let (out, _) = edit(
+        text,
+        json!({"op": "setFieldByRef", "ref": "a", "field": "from", "value": 2.5}),
+    );
     assert_eq!(out, text.replace("from(1)", "from(2.5)"));
-    assert!(!edit(text, json!({"op": "setFieldByRef", "ref": "z", "field": "from", "value": 1})).1);
+    assert!(
+        !edit(
+            text,
+            json!({"op": "setFieldByRef", "ref": "z", "field": "from", "value": 1})
+        )
+        .1
+    );
 }

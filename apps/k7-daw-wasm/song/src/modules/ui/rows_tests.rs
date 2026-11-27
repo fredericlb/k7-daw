@@ -26,7 +26,10 @@ fn the_files_own_params_read_as_the_text_they_are_written_in_and_as_numbers_wher
         Value::Object(read),
         json!({"Time": "0.5", "Wet Level": "-3.0", "Mode": "ping"})
     );
-    assert_eq!(Value::Object(param_values(MODULE)), json!({"Time": 0.5, "Wet Level": -3}));
+    assert_eq!(
+        Value::Object(param_values(MODULE)),
+        json!({"Time": 0.5, "Wet Level": -3})
+    );
 }
 
 fn row<'a>(rows: &'a [ParamRowOut], name: &str) -> Option<&'a ParamRowOut> {
@@ -58,7 +61,10 @@ fn the_rows_union_every_source_once_the_most_specific_range_winning_the_engines_
     for n in ["@mix", "@input-volume", "@output-volume", "@pan", "@mute"] {
         assert!(row(&rows, n).is_some(), "{n}");
     }
-    assert_eq!(row(&rows, "@mix").unwrap().meta, Some(json!({"min": 0, "max": 1, "def": 1})));
+    assert_eq!(
+        row(&rows, "@mix").unwrap().meta,
+        Some(json!({"min": 0, "max": 1, "def": 1}))
+    );
     // The built-in the file names knows its own params without any engine.
     assert!(rows.len() > 8);
 }

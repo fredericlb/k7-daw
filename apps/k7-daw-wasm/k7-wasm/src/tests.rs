@@ -365,14 +365,20 @@ fn a_spec_with_fields_the_module_does_not_know_previews_as_without_them() {
     let mut s = Session::new();
     let mut extra = saw();
     extra["conditions"] = json!([{"type": "start", "at": "1:1"}]);
-    let preview = |s: &mut Session, spec: Value| run(s, &json!({"op": "curve.preview", "args": {"spec": spec, "num": 4, "den": 4}}));
+    let preview = |s: &mut Session, spec: Value| {
+        run(
+            s,
+            &json!({"op": "curve.preview", "args": {"spec": spec, "num": 4, "den": 4}}),
+        )
+    };
     assert_eq!(preview(&mut s, extra), preview(&mut s, saw()));
 }
 
 #[test]
 fn a_custom_curve_with_a_bad_timecode_is_refused_on_open_and_on_preview_with_the_parsers_sentence() {
     let mut s = Session::new();
-    let bad = json!({"type": "custom", "polarity": "unipolar", "amplitude": 1, "points": [{"time": "1:a", "value": 1}]});
+    let bad =
+        json!({"type": "custom", "polarity": "unipolar", "amplitude": 1, "points": [{"time": "1:a", "value": 1}]});
     for op in ["curve.preview", "curve.open"] {
         let (status, v) = run(&mut s, &json!({"op": op, "args": {"spec": bad, "num": 4, "den": 4}}));
         assert_eq!((status, &v["code"]), (ERROR, &json!("bad_timecode")), "{op}");
@@ -389,13 +395,24 @@ fn every_shape_and_cut_the_vocabulary_lists_is_accepted_by_the_module() {
     for shape in song_schema::LFO_SHAPES {
         let mut spec = saw();
         spec["shape"] = json!(shape);
-        let (status, v) = run(&mut s, &json!({"op": "curve.preview", "args": {"spec": spec, "num": 4, "den": 4}}));
+        let (status, v) = run(
+            &mut s,
+            &json!({"op": "curve.preview", "args": {"spec": spec, "num": 4, "den": 4}}),
+        );
         assert_eq!(status, OK, "{shape}");
         assert!(!v["solid"].as_array().unwrap().is_empty());
     }
     for cut in song_schema::CURVE_CUTS {
         let mut spec = saw();
         spec["cut"] = json!(cut);
-        assert_eq!(run(&mut s, &json!({"op": "curve.preview", "args": {"spec": spec, "num": 4, "den": 4}})).0, OK, "{cut}");
+        assert_eq!(
+            run(
+                &mut s,
+                &json!({"op": "curve.preview", "args": {"spec": spec, "num": 4, "den": 4}})
+            )
+            .0,
+            OK,
+            "{cut}"
+        );
     }
 }

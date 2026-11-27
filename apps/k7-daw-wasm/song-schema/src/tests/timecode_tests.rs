@@ -196,7 +196,13 @@ fn a_remainder_that_rounds_up_never_overflows_a_level() {
     // Rounding the sub-beat remainder on its own once wrote `32:3:3`.
     for b in [0.9999, 3.9999, 126.999755859375, 0.4999, 0.2499] {
         let tc = beats_to_position(b, sig(4, 4)).unwrap();
-        let f: Vec<u32> = tc.split('.').next().unwrap().split(':').map(|n| n.parse().unwrap()).collect();
+        let f: Vec<u32> = tc
+            .split('.')
+            .next()
+            .unwrap()
+            .split(':')
+            .map(|n| n.parse().unwrap())
+            .collect();
         assert!(f[1] <= 4, "{tc}");
         if let Some(q) = f.get(2) {
             assert!(*q <= 2, "{tc}");
@@ -214,7 +220,11 @@ fn every_time_it_can_write_reads_back_within_half_a_tick_and_a_triplet_is_exact(
         near(parse_position(&tc, sig(4, 4)).unwrap(), beats, 1e-3);
     }
     let third = 1.0 / 3.0;
-    near(parse_position(&beats_to_position(third, sig(4, 4)).unwrap(), sig(4, 4)).unwrap(), third, 1e-6);
+    near(
+        parse_position(&beats_to_position(third, sig(4, 4)).unwrap(), sig(4, 4)).unwrap(),
+        third,
+        1e-6,
+    );
 }
 
 #[test]
@@ -225,7 +235,10 @@ fn the_shape_matches_exactly_where_the_parser_reads_a_timecode() {
     }
     for tc in ["", "a:b", "1:1.", ".5", "1:1.2.3", ":1", "1:"] {
         assert!(!is_timecode(tc), "{tc}");
-        assert!(matches!(parse_position(tc, sig(4, 4)), Err(SchemaError::BadTimecode(_))), "{tc}");
+        assert!(
+            matches!(parse_position(tc, sig(4, 4)), Err(SchemaError::BadTimecode(_))),
+            "{tc}"
+        );
     }
 }
 
