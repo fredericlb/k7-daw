@@ -952,9 +952,10 @@ moved or removed, **Add module…** through the ordinary module picker, and the 
   (`moduleRow`'s `lead`, in `apps/k7-daw-frontend/packages/ui-chains/src/graph.ts`).
 - **The picker hands back a ref** rather than placing a node (`onRef` on its state): the chain is
   written by the verb, not by `node new` and a splice. This project's own modules leave as `@workspace/…`.
-- **Not a modal dialog.** It is a hand-rolled overlay at `z-40`, under the pickers' `z-50`, as the rack
+- **A non-modal kit `Dialog`** on the `panel` layer (`z-50`), under the menus and pickers (`z-60`), as the rack
   builder is: a modal dialog makes everything outside it unclickable — the module picker it opens
-  included — and closes on the click that reaches it. Escape still backs out one layer (`usePopin`).
+  included — and closes on the click that reaches it. The scrim is drawn by the content (`nonModal`), a
+  press outside the content is ignored, and Escape still backs out one layer (`usePopin`).
 
 ### The GRAPH SLOT — what takes the graph's place
 

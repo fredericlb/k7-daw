@@ -6,7 +6,9 @@
 import { menuChoice } from "@studio/k7-wasm/ui";
 import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
@@ -84,32 +86,27 @@ export function MenuEntityPicker({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="p-1">
         <DropdownMenuLabel>{m["cmdMenu.label"]()}</DropdownMenuLabel>
-        {/* Plain labels rather than menu items: a DropdownMenuItem closes on click, and choosing several takes several clicks. */}
+        {/* Checkbox items: arrows reach them, and a pick leaves the menu open so several can be chosen. */}
         {MENU_ENTITIES.map((e) => (
-          <label
+          <DropdownMenuCheckboxItem
             key={e}
-            className="flex cursor-pointer items-center gap-2 rounded-lg px-2 py-2 type-secondary hover:bg-on-fill"
+            checked={on.includes(e)}
+            onCheckedChange={() => toggle(e)}
           >
-            <input
-              type="checkbox"
-              checked={on.includes(e)}
-              onChange={() => toggle(e)}
-            />
             <span className="flex-1">{ENTITY_LABEL[e]()}</span>
             <code className="type-badge text-fg-2">{e}</code>
-          </label>
+          </DropdownMenuCheckboxItem>
         ))}
         <DropdownMenuSeparator />
-        <button
-          type="button"
+        <DropdownMenuItem
           disabled={!chosen}
-          className="w-full rounded-lg px-2 py-2 text-left type-secondary text-fg-2 hover:bg-on-fill disabled:opacity-40"
-          onClick={() => onMenu(c.canonical, c.menu, c.menu ?? MENU_ENTITIES)}
+          onSelect={() => onMenu(c.canonical, c.menu, c.menu ?? MENU_ENTITIES)}
+          className="type-secondary text-fg-2"
         >
           {m["cmdMenu.giveBack"]({
             what: c.menu ? c.menu.join(", ") : m["cmdMenu.everywhere"](),
           })}
-        </button>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
