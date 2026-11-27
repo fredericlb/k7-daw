@@ -3,8 +3,7 @@
 // place so the conventions can't drift apart between features. Matched with `(^|\/)` rather
 // than an anchored `^`, since a path may carry a project-folder prefix in a workspace.
 
-import { stripDocExt } from "@studio/k7-wasm/schema";
-import { docPattern } from "@studio/song-schema/docExt";
+import { docPattern, stripDocExt } from "@studio/k7-wasm/schema";
 
 const kind = (folder: string): RegExp => docPattern(`(^|/)${folder}/[^/]+`);
 

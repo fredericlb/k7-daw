@@ -3,10 +3,7 @@
 // would be wrong silently — the size of the trim — can be pinned without an engine.
 // See apps/k7-daw-frontend/docs/masterMeter.md.
 
-import {
-  MASTER_MAX_DB,
-  MASTER_MIN_DB,
-} from "@studio/song-schema/yaml/projectSchema";
+import { MASTER_MAX_DB, MASTER_MIN_DB } from "@studio/k7-wasm/consts";
 
 /** Where a fixed mix should peak: -6 dB gives the headroom back, and is where the meter already turns amber (`HOT_DB`). */
 export const TARGET_DB = -6;

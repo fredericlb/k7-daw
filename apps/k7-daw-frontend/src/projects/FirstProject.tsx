@@ -4,8 +4,8 @@
 // Not a dialog either — there is nothing behind it to dismiss it onto.
 // See ../../docs/projects.md and apps/k7-daw-frontend/packages/project-shell/docs/launch.md.
 
+import type { ProjectShape } from "@studio/k7-wasm/types";
 import { projectApi } from "@studio/project-shell/project";
-import type { ProjectShape } from "@studio/song-schema/yaml/projectSchema";
 import { Button } from "@studio/ui/button";
 import { FolderPlus } from "@studio/ui/icons";
 import { Spinner } from "@studio/ui/spinner";

@@ -129,3 +129,15 @@ fn a_repeated_comp_numbers_its_pieces_and_their_event_alike() {
     );
     assert_eq!(twin_warnings(&c).len(), 1);
 }
+
+// placementId.test.ts, "a placement id": the start read back, a repeat's `#n` aside.
+#[test]
+fn a_placement_id_names_its_start() {
+    use song::clips::placement_start_of;
+    assert_eq!(placement_start_of("riff@16.5"), Some(16.5));
+    assert_eq!(placement_start_of("verse@8>kick@0#3"), Some(0.0));
+    assert_eq!(placement_start_of("riff"), None);
+    assert_eq!(placement_start_of("@4"), None);
+    assert_eq!(placement_start_of("riff@"), None);
+    assert_eq!(without_repeat("#2"), "#2");
+}

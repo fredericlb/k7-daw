@@ -10,15 +10,14 @@ import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
+import { FILE_PARAMS, LIBRARY_FILE_PARAMS } from "@studio/k7-wasm/consts";
 import { parse } from "@studio/k7-wasm/k7x";
-import { engineModuleOf } from "@studio/k7-wasm/schema";
+import { builtinPluginFor, engineModuleOf } from "@studio/k7-wasm/schema";
 import { expandSugar } from "@studio/k7-wasm/text";
-import { builtinPluginFor } from "@studio/song-schema/builtinParams";
-import {
-  FILE_PARAMS,
-  LIBRARY_FILE_PARAMS,
-} from "@studio/song-schema/moduleTypes";
-import { byCodePoint } from "@studio/song-schema/textOrder";
+
+/** Unicode code point order, which UTF-8 byte order is. */
+const byCodePoint = (a: string, b: string): number =>
+  Buffer.compare(Buffer.from(a), Buffer.from(b));
 
 const wsExists = (f: string): boolean => existsSync(f);
 

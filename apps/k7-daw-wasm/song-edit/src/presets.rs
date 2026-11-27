@@ -36,20 +36,7 @@ pub struct PresetFile {
     pub rack: Option<Vec<(String, PresetTap)>>,
 }
 
-/// One preset as a listing names it.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct PresetEntry {
-    pub scope: String,
-    pub name: String,
-}
-
-/// What a node offers: the module ref its presets are keyed by, those presets, and where a new one may go.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct NodePresets {
-    pub reference: Option<String>,
-    pub presets: Vec<PresetEntry>,
-    pub scopes: Vec<String>,
-}
+pub use song::wire::{NodePresets, PresetEntry};
 
 /// `^[A-Za-z0-9][A-Za-z0-9 _-]{0,63}$`.
 #[must_use]

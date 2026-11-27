@@ -3,6 +3,7 @@
 // project, no engine session and no file open, so `LOCAL_COMMANDS` would be a catalogue of
 // things that cannot be done here. Pure but for the acts it is handed. See ../../docs/projects.md.
 
+import { PROJECT_SHAPES } from "@studio/k7-wasm/consts";
 import {
   homeCatalogue,
   homeFindProject,
@@ -11,10 +12,7 @@ import {
   homeResolve,
   homeArgValues as valuesOf,
 } from "@studio/k7-wasm/menu";
-import {
-  PROJECT_SHAPES,
-  type ProjectShape,
-} from "@studio/song-schema/projectShapes";
+import type { ProjectShape } from "@studio/k7-wasm/types";
 import type { AccountWorkspace, RepoProject } from "@studio/web-protocol";
 import type { PaletteCommand } from "../components/CommandBar";
 import { words } from "../menuWords";

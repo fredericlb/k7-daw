@@ -5,7 +5,7 @@
 // See docs/mix.md.
 
 import type { WebModuleCategory } from "@studio/graph-model";
-import { seriesColor } from "@studio/song-schema/seriesColors";
+import { seriesColor } from "@studio/ui/series-colors";
 
 /** A module the deck runs, as the desk holds it: a library module ref plus what it plays as. */
 export interface DeckModule {

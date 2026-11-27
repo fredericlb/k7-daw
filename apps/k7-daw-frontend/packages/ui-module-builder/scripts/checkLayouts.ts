@@ -6,18 +6,18 @@
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
+import type {
+  WebModuleUI as ModuleUI,
+  WebWidget as Widget,
+} from "@studio/graph-model";
 import { parse } from "@studio/k7-wasm/k7x";
+import { validatePanel } from "@studio/k7-wasm/validate";
 import {
   atControlIssues,
   eqBandIssues,
   loneGroupIssues,
 } from "@studio/panel-rules/ai-organize";
 import { gridIssues, twinIssues } from "@studio/panel-rules/layout-twins";
-import {
-  type ModuleUI,
-  UiFileSchema,
-  type Widget,
-} from "@studio/song-schema/yaml/moduleSchema";
 
 const LIBRARY = resolve(import.meta.dirname, "../../../../../k7-core");
 
@@ -66,8 +66,7 @@ function committed(file: string): ModuleUI | null {
       ["-C", LIBRARY, "show", `HEAD:${relative(LIBRARY, file)}`],
       { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] },
     );
-    const r = UiFileSchema.safeParse(parse(text));
-    return r.success ? r.data : null;
+    return validatePanel(text).ok ? (parse(text) as ModuleUI) : null;
   } catch {
     return null;
   }
@@ -104,12 +103,10 @@ function check(file: string): string[] {
   } catch (e) {
     return [`unreadable: ${(e as Error).message}`];
   }
-  const r = UiFileSchema.safeParse(raw);
-  if (!r.success)
-    return r.error.issues.map(
-      (i) => `${i.path.join(".") || "(root)"}: ${i.message}`,
-    );
-  const ui = r.data;
+  const verdict = validatePanel(readFileSync(file, "utf8"));
+  if (!verdict.ok)
+    return verdict.issues.map((i) => `${i.path || "(root)"}: ${i.message}`);
+  const ui = raw as ModuleUI;
   const issues = [...twinIssues(ui)];
   for (const [where, ws] of pagesOf(ui))
     issues.push(...gridIssues(ui, where, ws));

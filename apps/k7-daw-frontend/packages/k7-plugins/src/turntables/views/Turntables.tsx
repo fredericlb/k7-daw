@@ -2,7 +2,7 @@
 // the mapping first and draws the missing wiring instead of a desk whose knobs go nowhere.
 // See apps/k7-daw-frontend/packages/song/docs/surfaces.md and ../../docs/hosting.md.
 
-import type { MixView as Mapping } from "@studio/song-schema/yaml/mixViewSchema";
+import type { MixView as Mapping } from "@studio/k7-wasm/text";
 import { Unplug } from "@studio/ui/icons";
 import { CodeText } from "../../CodeText";
 import { m } from "../../paraglide/messages.js";

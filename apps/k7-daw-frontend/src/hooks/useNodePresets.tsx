@@ -4,7 +4,7 @@
 // file says what its values are, not which preset they came from. See apps/k7-daw-frontend/packages/song/docs/userPresets.md.
 
 import type { WebGraph } from "@studio/graph-model";
-import type { NodePresets, PresetEntry } from "@studio/song-schema/presets";
+import type { NodePresets, PresetEntry } from "@studio/k7-wasm/types";
 import { shownNames } from "@studio/ui-chains/shownName";
 import type { NodeEngines } from "@studio/ui-chains-react";
 import { useCallback, useMemo, useState } from "react";

@@ -22,13 +22,13 @@ import { type PendingEdit, pendingOf } from "@studio/k7-wasm/edit";
 // The leaf with no `node:fs` in it — a browser may ask what a path names without dragging the loader in.
 import { moduleKeyFromPath } from "@studio/k7-wasm/module";
 import { beatsToPosition, parsePosition } from "@studio/k7-wasm/timecode";
+import type { ReferenceTrack } from "@studio/k7-wasm/types";
 import { orderCommands, prefsView, stepSentence } from "@studio/k7-wasm/ui";
 import { askConfirm } from "@studio/project-shell/ask";
 import { projectsUrl } from "@studio/project-shell/launch";
 import type { CommandJournal } from "@studio/project-shell/project";
 import { onToast, showToast } from "@studio/project-shell/toast";
 import { type HistoryDeps, runRedo, runUndo } from "@studio/project-shell/undo";
-import type { ReferenceTrack } from "@studio/song-schema/reference";
 import { Choice } from "@studio/ui/choice";
 import { DockHint, DockStatus } from "@studio/ui/editor-dock";
 import {
@@ -2178,7 +2178,7 @@ export default function App({
   /** Find the open project's node of the builder's module and watch its plugin — `watchPluginParams` is what makes the values LIVE. */
   useEffect(() => {
     if (!builder) return void setBuilderPlugin(null);
-    // The key a chain would write — `amps/neural-amp-modeler`, or `@k7-core/audio/amps/nam` for a library module (@studio/song-schema/moduleTypes).
+    // The key a chain would write — `amps/neural-amp-modeler`, or `@k7-core/audio/amps/nam` for a library module (`@studio/k7-wasm/consts`).
     const module =
       libraryModuleRef(builder.path) ?? moduleKeyFromPath(builder.path);
     if (!module) return void setBuilderPlugin(null);

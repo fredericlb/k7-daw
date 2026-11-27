@@ -5,7 +5,7 @@
 import type { ProjectDoc } from "@studio/engine-protocol/project";
 import type { WebGraph } from "@studio/graph-model";
 // The wire shape only, type-only, so nothing of the parser that walks a disk ships here.
-import type { ProjectSurfaces } from "@studio/song-schema/yaml/surfaceFile";
+import type { ProjectSurfaces } from "@studio/k7-wasm/types";
 import type {
   CatalogueModule,
   Hints,

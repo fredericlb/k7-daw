@@ -3,7 +3,7 @@
 // The one thing a reader would get wrong: a panel with ONE tab writes no `tabs:` at all — the second
 // tab is what creates the list, and removing back to one folds it away (docs/pages.md).
 
-import { TAB_NAME_MAX } from "@studio/song-schema/yaml/moduleSchema";
+import { TAB_NAME_MAX } from "@studio/k7-wasm/consts";
 import type { ModuleUI, Widget } from "./moduleUi";
 
 /** Which widget map the grid edits: the widgets every tab shows (`null`), or one tab by position. */

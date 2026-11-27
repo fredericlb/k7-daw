@@ -7,7 +7,7 @@
 // control of this surface" on a file the tool itself wrote. Neither shows up in a type error —
 // `@studio/song` accepts any key, deliberately (apps/k7-daw-frontend/packages/song/docs/viewBindings.md).
 
-import { SURFACE_MAPPING_SKELETON } from "@studio/song-schema/yaml/surfaceSchema";
+import { SURFACE_MAPPING_SKELETON } from "@studio/k7-wasm/consts";
 import { describe, expect, it } from "vitest";
 import {
   MASTER_CONTROLS,

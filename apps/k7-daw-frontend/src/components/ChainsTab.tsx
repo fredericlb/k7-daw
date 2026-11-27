@@ -212,7 +212,7 @@ function ChainsTabView({
   // The song's output level, for the fader on the OUT card: a project setting, so the shell hands it over.
   masterVolume?: number;
   /** The FRAME's pixel size, so the RENDER card can tick the shape it is — absent for a project
-   *  with no picture, whose card carries no dropdown at all (@studio/song-schema's aspect.ts). */
+   *  with no picture, whose card carries no dropdown at all (song-schema's aspect.rs). */
   viewport?: readonly [number, number];
   /** Where the shell reaches MIDI learn from — the runtime lives HERE, this being the one component that always holds the graph. */
   midiRef?: React.RefObject<MidiControlApi | null>;

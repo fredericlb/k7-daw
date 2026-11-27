@@ -187,7 +187,7 @@ export function TrackModulesPane({
   );
   // The tab each card has open: a folded card is as wide as the page it shows, so a switch reflows the row (ui-chains' `tabW`).
   const [openTabs, setOpenTabs] = useState<Record<string, number>>({});
-  // The phone's narrow card, its tabs a menu: the panel's `vertical` layout (song-schema's LayoutSchema).
+  // The phone's narrow card, its tabs a menu: the panel's `vertical` layout (the song crate's `Layout`).
   const mobile = useIsMobile();
   const onOpenTab = useCallback(
     (id: string, tab: number) =>

@@ -31,7 +31,6 @@
     "@studio/ui": "*",
     "@studio/engine-protocol": "*",
     "@studio/graph-model": "*",
-    "@studio/song-schema": "*",
     "@types/react": "^19.2.17",
     "typescript": "^7.0.2",
     "vitest": "^4.1.10"

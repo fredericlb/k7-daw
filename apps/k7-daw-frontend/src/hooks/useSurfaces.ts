@@ -2,7 +2,7 @@
 // special view the PROJECT asks for, so the shell cannot know its list until the project is
 // open. See apps/k7-daw-frontend/packages/song/docs/surfaces.md.
 
-import type { ProjectSurface } from "@studio/song-schema/yaml/surfaceFile";
+import type { ProjectSurface } from "@studio/k7-wasm/types";
 import { useMemo } from "react";
 import { api } from "../api";
 import { useDocument } from "./useDocument";

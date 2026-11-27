@@ -1,6 +1,6 @@
 // validate.test.ts — the editor's check answered by the Rust readers, held to the cases the TypeScript router was tested on.
 
-import { FORMAT_LEVEL } from "@studio/song-schema/formatLevel";
+import { FORMAT_LEVEL } from "@studio/k7-wasm/consts";
 import { describe, expect, it } from "vitest";
 import { firstIssue, validateFile } from "./validate.ts";
 

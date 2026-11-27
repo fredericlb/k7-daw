@@ -2,7 +2,7 @@
 // is unfolded. It holds the async for the two presentational views beside it. Which one is open
 // comes from the address (Home.tsx), not from local state. See ../../docs/projects.md.
 
-import type { ProjectShape } from "@studio/song-schema/yaml/projectSchema";
+import type { ProjectShape } from "@studio/k7-wasm/types";
 import type {
   AccountLibrary,
   AccountWorkspace,

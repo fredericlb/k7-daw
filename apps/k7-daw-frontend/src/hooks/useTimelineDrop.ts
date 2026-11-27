@@ -4,7 +4,7 @@
 // order that works — nothing is placed before everything it names is on disk. See
 // ../../docs/timeline.md.
 
-import { IMAGE_SOURCE } from "@studio/song-schema/yaml/entitySchemas";
+import { IMAGE_SOURCE } from "@studio/k7-wasm/schema";
 import { MAX_UPLOAD_BYTES } from "@studio/web-protocol";
 import { useCallback, useState } from "react";
 import { fileClip } from "../clipFiles";

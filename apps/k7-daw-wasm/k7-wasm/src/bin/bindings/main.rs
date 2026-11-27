@@ -81,6 +81,10 @@ fn write_types(dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
     k7_wasm::ops::text_desk::MixCues::export_all_to(dir)?;
     k7_wasm::ops::text_desk::MixViewRead::export_all_to(dir)?;
     song::views::surfaces::ViewBinding::export_all_to(dir)?;
+    song::views::surfaces::ProjectSurfaces::export_all_to(dir)?;
+    song::wire::ProjectShape::export_all_to(dir)?;
+    song::wire::NodePresets::export_all_to(dir)?;
+    song::wire::ReferenceTrack::export_all_to(dir)?;
     k7_wasm::ops::text_desk::AssemblyRead::export_all_to(dir)?;
     k7_wasm::ops::text_desk::ChainRead::export_all_to(dir)?;
     k7_wasm::ops::text_desk::LibraryPins::export_all_to(dir)?;

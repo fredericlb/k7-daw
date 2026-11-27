@@ -48,6 +48,7 @@ mod picture_sound;
 mod playlist;
 mod project;
 pub(crate) mod project_more;
+pub use project_more::surface_skeleton;
 mod routes;
 mod sequence;
 pub(crate) use song_edit::sequence_file;

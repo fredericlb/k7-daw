@@ -1,6 +1,6 @@
 // presetOrder.test.ts — the scopes keep the service's order; the names inside one read as a person reads them.
 
-import type { PresetEntry } from "@studio/song-schema/presets";
+import type { PresetEntry } from "@studio/k7-wasm/types";
 import { describe, expect, it } from "vitest";
 import { presetsForPeople } from "./presetOrder";
 

@@ -12,7 +12,7 @@ const fields = (kind: keyof typeof PATHS, at: string[]) =>
 const values = (kind: keyof typeof PATHS, at: string[], field: string) =>
   valuesAt(PATHS[kind], at, field);
 
-// These tests pin the completions the editor derives from the Rust readers — see apps/k7-daw-frontend/packages/song-schema/docs/fields.md.
+// These tests pin the completions the editor derives from the Rust readers — see apps/k7-daw-wasm/song-schema/docs/fields.md.
 
 describe("derived module fields", () => {
   it("matches the hand-kept table, plus the field the table was missing", () => {

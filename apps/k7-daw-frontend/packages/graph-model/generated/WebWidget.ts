@@ -14,6 +14,7 @@ export type WebWidget = {
   colSpan?: number;
   rowSpan?: number;
   label?: string;
+  hidden?: boolean;
   text?: string;
   bind?: string;
   min?: number;

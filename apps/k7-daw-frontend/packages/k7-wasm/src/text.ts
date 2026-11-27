@@ -33,6 +33,9 @@ export type {
   VideoPlacement,
 } from "./types/index.ts";
 
+/** What `views/mix.k7x` binds as the page holds it: control id to what it drives, `null` for one not wired yet. */
+export type MixView = NonNullable<MixViewRead["value"]>;
+
 /** What a writer left: the new text, the splices that made it, and each op's own answer (false for a refused edit). */
 export interface TextEdit {
   text: string;

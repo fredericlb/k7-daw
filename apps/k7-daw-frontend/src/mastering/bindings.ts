@@ -5,7 +5,7 @@
 
 import type { WebGraph, WebWidget } from "@studio/graph-model";
 import { type BindingProblem, resolveMapping } from "@studio/k7-wasm/chains";
-import type { MixView } from "@studio/song-schema/yaml/mixViewSchema";
+import type { MixView } from "@studio/k7-wasm/text";
 import { MASTER_CONTROLS, type MasterControl } from "./controls";
 
 // The graph half of the join is `@studio/k7-wasm/chains`, shared with the DJ desk, in Rust (@studio/k7-wasm/chains). What stays

@@ -2,10 +2,10 @@
 // hook that owns the decks both need it, and neither should have to import the other.
 
 import { playlistPathOf } from "@studio/k7-wasm/schema";
+import type { MixView } from "@studio/k7-wasm/text";
 import { readMixView as readMixViewText } from "@studio/k7-wasm/text";
 // The shared file routes, direct — an app-level re-export would be a seam over something already shared.
 import { projectApi as api } from "@studio/project-shell/project";
-import type { MixView } from "@studio/song-schema/yaml/mixViewSchema";
 
 /** Absent is a 404 and nothing else: a blip read as "empty" is how a cue sheet gets written over. */
 const absent = (e: unknown): boolean =>

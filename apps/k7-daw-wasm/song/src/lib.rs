@@ -36,6 +36,7 @@ pub mod session;
 pub mod source;
 pub mod templates;
 pub mod views;
+pub mod wire;
 
 pub use cache::{Cache, FileValue, Read};
 pub use files::{

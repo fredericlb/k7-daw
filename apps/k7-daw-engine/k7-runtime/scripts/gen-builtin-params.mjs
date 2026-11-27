@@ -16,10 +16,10 @@ const OUT = join(
   moteur,
   "..",
   "..",
-  "k7-daw-frontend",
-  "packages",
-  "song-schema",
+  "k7-daw-wasm",
+  "song",
   "src",
+  "modules",
   "builtinParams.generated.json",
 );
 

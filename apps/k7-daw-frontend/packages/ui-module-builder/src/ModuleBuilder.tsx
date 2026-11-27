@@ -6,8 +6,8 @@
 // files are useModuleFiles.ts, what the machine is asked is usePluginProbe.ts.
 
 import type { ParamMeta } from "@studio/engine-protocol";
+import { FILE_PARAMS } from "@studio/k7-wasm/consts";
 import { alignTabs, reflowNarrow } from "@studio/panel-rules/layout-twins";
-import { FILE_PARAMS } from "@studio/song-schema/moduleTypes";
 import { cn } from "@studio/ui/lib/utils";
 import { Loading } from "@studio/ui/spinner";
 import type { AutosaveStatus } from "@studio/ui-editor/autosave";

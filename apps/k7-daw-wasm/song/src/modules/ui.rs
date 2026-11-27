@@ -11,6 +11,27 @@ use serde::{Deserialize, Serialize};
 /// The longest a tab's name may be, in UTF-16 units: it is drawn in a fixed column.
 pub const TAB_NAME_MAX: usize = 10;
 
+/// Every widget type, spelled as a file spells it, in the order a picker lists them.
+pub const WIDGET_TYPES: [&str; 14] = [
+    "label",
+    "knob",
+    "slider",
+    "fader",
+    "number",
+    "toggle",
+    "button",
+    "meter",
+    "waveform",
+    "dropdown",
+    "filepicker",
+    "lcdscreen",
+    "tap",
+    "group",
+];
+
+/// What a waveform widget draws: the live signal either side of its module.
+pub const WAVEFORM_SOURCES: [&str; 2] = ["input", "output"];
+
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[cfg_attr(feature = "ts", derive(ts_rs::TS))]
 #[serde(rename_all = "lowercase")]
@@ -74,7 +95,6 @@ pub struct Widget {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub label: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[cfg_attr(feature = "ts", ts(skip))]
     pub hidden: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub text: Option<String>,

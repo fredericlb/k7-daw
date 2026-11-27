@@ -1,6 +1,6 @@
 // timecode.ts — "bar:beat:eighth:sixteenth.ticks" timecodes <-> beats, answered by the Rust crate (song-schema's timecode.rs).
 // A reader would get wrong that these wait for the module: they are sync, and throw `unavailable` before wasmReady() resolves.
-// POSITIONS ("1:1:1:1") are 1-based, DURATIONS ("1:0:0:0") 0-based (apps/k7-daw-frontend/packages/song-schema/docs/timecode.md).
+// POSITIONS ("1:1:1:1") are 1-based, DURATIONS ("1:0:0:0") 0-based (apps/k7-daw-wasm/song-schema/docs/timecode.md).
 
 import { call, roundBeatHot } from "./abi.ts";
 

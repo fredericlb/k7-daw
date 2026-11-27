@@ -4,8 +4,8 @@
 // library's `k7-rack` on its `samples` engine, placed with its taps. Notes run 36 upward, bottom-left first —
 // the drum-machine reading rackBuilder.ts pins. Opened by `module create rack` (apps/k7-daw-frontend/packages/song/docs/racks.md).
 
+import { FIXED_NAMESPACES } from "@studio/k7-wasm/consts";
 import { showToast } from "@studio/project-shell/toast";
-import { FIXED_NAMESPACES } from "@studio/song-schema/moduleTypes";
 import { Button } from "@studio/ui/button";
 import { Grip, Pause, Play, X } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";

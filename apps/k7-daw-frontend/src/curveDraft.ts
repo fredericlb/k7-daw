@@ -9,6 +9,7 @@ import type {
   CurveSpec,
   LfoShape,
 } from "@studio/graph-model";
+import { ADSR_DEFAULT_LEVEL, LFO_SHAPES } from "@studio/k7-wasm/consts";
 import { curvePreview, K7WasmError } from "@studio/k7-wasm/curve";
 import {
   beatsToPosition,
@@ -17,7 +18,6 @@ import {
   TIMECODE,
 } from "@studio/k7-wasm/timecode";
 import type { CurvePreview } from "@studio/k7-wasm/types";
-import { ADSR_DEFAULT_LEVEL, LFO_SHAPES } from "@studio/song-schema/curveVocab";
 
 /** What the shape select offers: the four oscillators, the envelope, the drawn curve, and a boolean's on/off. */
 export type DraftShape = LfoShape | "adsr" | "custom" | "onoff";

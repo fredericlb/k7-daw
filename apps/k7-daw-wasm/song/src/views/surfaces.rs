@@ -114,7 +114,7 @@ pub struct SurfaceFile {
     #[cfg_attr(feature = "ts", ts(optional))]
     pub stems: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[cfg_attr(feature = "ts", ts(optional, type = "{ [key in string]: ViewBinding | null }"))]
+    #[cfg_attr(feature = "ts", ts(optional, type = "{ [key in string]: import(\"./ViewBinding\").ViewBinding | null }"))]
     pub mapping: Option<IndexMap<String, Nullable<ViewBinding>>>,
 }
 

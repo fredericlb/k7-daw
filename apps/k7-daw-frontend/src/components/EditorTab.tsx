@@ -8,11 +8,11 @@
 import { redo, redoDepth, undo, undoDepth } from "@codemirror/commands";
 import { Transaction } from "@codemirror/state";
 import type { EditorView } from "@codemirror/view";
+import { LIBRARIES_DIR } from "@studio/k7-wasm/consts";
 import { editVideo, listVideoPlacements } from "@studio/k7-wasm/text";
 import { askConfirm } from "@studio/project-shell/ask";
 import { isStaleWrite } from "@studio/project-shell/files";
 import { showToast } from "@studio/project-shell/toast";
-import { LIBRARIES_DIR } from "@studio/song-schema/moduleTypes";
 import type { DroppedFile } from "@studio/ui/file-tree";
 import { FolderTree, X } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";

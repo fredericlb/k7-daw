@@ -357,3 +357,26 @@ fn an_unknown_schema_op_is_a_bad_request() {
     assert_eq!(status, ERROR);
     assert_eq!(serde_json::from_slice::<Value>(&out).unwrap()["code"], "bad_request");
 }
+
+// builtinParams.ts' `builtinPluginFor`, placementId.ts' `placementStartOf` and presets.ts' PRESET_NAME.
+#[test]
+fn a_module_plugin_is_a_builtin_only_when_it_is_internal_and_named_by_any_spelling() {
+    let by = |kind: Value, name: &str| ask("builtin_for_plugin", json!({ "type": kind, "name": name }));
+    assert!(by(json!("internal"), "4OSC")["params"].as_array().is_some_and(|p| !p.is_empty()));
+    assert_eq!(by(json!("internal"), "4osc"), by(json!("internal"), "4OSC"));
+    assert!(by(json!("vst3"), "4OSC").is_null());
+    assert!(by(json!(null), "4OSC").is_null());
+    assert!(by(json!("internal"), "No Such Plugin").is_null());
+}
+
+#[test]
+fn a_placement_id_names_its_start_and_a_preset_name_what_every_filesystem_agrees_on() {
+    let start = |id: &str| ask("placement_start_of", json!({ "id": id }));
+    assert_eq!(start("riff@16.5"), json!(16.5));
+    assert_eq!(start("verse@8>kick@0#3"), json!(0.0));
+    assert!(start("riff").is_null());
+    assert!(truth("is_preset_name", "name", "Warm pad 2"));
+    for bad in ["", "-lead", "a/b", &"a".repeat(65)] {
+        assert!(!truth("is_preset_name", "name", bad), "{bad:?}");
+    }
+}

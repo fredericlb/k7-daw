@@ -2,7 +2,7 @@
 // empty canvas (the module picker, then ONE creating line), a file param's asset browser, a
 // rack tap's edit, a node's alternative and engine. Every one ends in a command line.
 
-import { TAP_SAMPLE } from "@studio/song-schema/moduleTypes";
+import { TAP_SAMPLE } from "@studio/k7-wasm/consts";
 import type { TapAction } from "@studio/ui-chains-react";
 import { type RefObject, useCallback, useEffect, useState } from "react";
 import { api } from "../api";

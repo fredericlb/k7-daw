@@ -11,7 +11,7 @@ import {
   type PluginParamsStore,
   usePluginParamValue,
 } from "@studio/engine-browser/params";
-import type { ProjectSurface } from "@studio/song-schema/yaml/surfaceFile";
+import type { ProjectSurface } from "@studio/k7-wasm/types";
 import { SectionHeading } from "@studio/ui/section-heading";
 import {
   Select,

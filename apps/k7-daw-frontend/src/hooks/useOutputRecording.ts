@@ -5,8 +5,8 @@
 // See apps/k7-daw-frontend/packages/song/docs/outputRecording.md.
 
 import { type EngineStore, useStoreState } from "@studio/engine-browser/store";
+import { OUTPUT_RECORDER_ID } from "@studio/k7-wasm/consts";
 import { mediaUrl } from "@studio/project-shell/fileApi";
-import { OUTPUT_RECORDER_ID } from "@studio/song-schema/moduleTypes";
 import { useUnsavedGuard } from "@studio/ui-editor/unsaved";
 import type { RealtimeDriver } from "@studio/ui-eyes/realtime";
 import { useCallback, useEffect, useRef, useState } from "react";

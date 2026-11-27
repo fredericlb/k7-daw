@@ -3,12 +3,11 @@
 // project's own graph uses — with its gestures for a folder chain, read-only for a chain file,
 // which the server's verbs do not reach yet. See docs/chainsBuilder.md.
 
+import { DEFAULT_LIBRARY, GRAPH_FILE } from "@studio/k7-wasm/consts";
 import { libraryRef } from "@studio/k7-wasm/module";
 import { stripDocExt } from "@studio/k7-wasm/schema";
 import { askText } from "@studio/project-shell/ask";
 import { projectApi } from "@studio/project-shell/project";
-import { DEFAULT_LIBRARY } from "@studio/song-schema/moduleTypes";
-import { GRAPH_FILE } from "@studio/song-schema/yaml/graphSchema";
 import { Workflow, X } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
 import { Spinner } from "@studio/ui/spinner";

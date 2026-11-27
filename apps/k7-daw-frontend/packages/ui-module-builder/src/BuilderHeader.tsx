@@ -2,10 +2,7 @@
 // factory presets, the module's `status:`, and the one Save button with what the files say beside
 // it. It owns nothing; every action is the screen's. See docs/builder.md.
 
-import {
-  MODULE_STATUSES,
-  type ModuleStatus,
-} from "@studio/song-schema/moduleTypes";
+import { MODULE_STATUSES } from "@studio/k7-wasm/consts";
 import { Button } from "@studio/ui/button";
 import {
   DropdownMenu,
@@ -37,6 +34,7 @@ import {
 import { Spinner } from "@studio/ui/spinner";
 import type { AutosaveStatus, loudest } from "@studio/ui-editor/autosave";
 import type { PresetInfo } from "@studio/web-protocol";
+import type { ModuleStatus } from "./moduleUi";
 
 /** What each `status:` is CALLED on screen — a label, not a second spelling; apps/k7-daw-frontend/packages/song/docs/moduleStatus.md. */
 const STATUS_LABEL: Record<ModuleStatus, string> = {

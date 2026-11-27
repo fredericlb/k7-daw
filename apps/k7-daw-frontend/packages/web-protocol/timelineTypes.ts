@@ -381,7 +381,7 @@ export interface Diagnostic {
   message: string;
   severity?: "error" | "warning"; // "error" (default) draws red; "warning" amber
 }
-/** A project root written by a newer k7: the levels the "update k7" message names (song-schema docs/formatLevel.md). */
+/** A project root written by a newer k7: the levels the "update k7" message names (apps/k7-daw-wasm/song-schema/docs/formatLevel.md). */
 export interface FormatTooNew {
   fileLevel: number;
   buildLevel: number;

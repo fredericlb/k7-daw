@@ -6,7 +6,7 @@ use crate::files::{Check, DeError, Finding, decode_with, from_map};
 use k7x::{MapNode, Node, Scalar};
 use serde::de::{self, Deserialize, Deserializer, IgnoredAny};
 use serde::{Deserialize as Derive, Serialize};
-use song_schema::{AdsrSpec, CurveSpec, Cut, LfoSpec, PointSpec, PointsSpec, Polarity, Shape, TimeSig, parse_duration};
+use song_schema::{ADSR_DEFAULT_LEVEL, AdsrSpec, CurveSpec, Cut, LfoSpec, PointSpec, PointsSpec, Polarity, Shape, TimeSig, parse_duration};
 
 /// A curve file as `parseCurve` answers it: the pilot's spec, and the conditions when there are any.
 #[derive(Clone, Debug, PartialEq, Serialize)]
@@ -177,9 +177,6 @@ struct EventIn {
 
 const CURVE_KINDS: &[&str] = &["lfo", "custom", "adsr", "onoff"];
 const CONDITION_KINDS: &[&str] = &["start", "end", "between", "event"];
-
-/// Where an `adsr` level lands when the file does not say.
-const ADSR_DEFAULT_LEVEL: f64 = 0.5;
 
 fn err(message: &str, at: usize) -> DeError {
     DeError {

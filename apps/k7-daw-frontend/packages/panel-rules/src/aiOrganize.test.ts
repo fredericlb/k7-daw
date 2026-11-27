@@ -2,10 +2,8 @@
 // the CHECK is: every way a proposal can break the panel must come back as a sentence the model
 // can fix, and a good proposal must pass untouched.
 
-import {
-  WIDGET_TYPES,
-  type Widget,
-} from "@studio/song-schema/yaml/moduleSchema";
+import type { WebWidget as Widget } from "@studio/graph-model";
+import { WIDGET_TYPES } from "@studio/k7-wasm/consts";
 import { describe, expect, it } from "vitest";
 import {
   type AiOrganizeResult,

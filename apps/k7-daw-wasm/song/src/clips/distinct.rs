@@ -23,6 +23,17 @@ pub fn without_repeat(id: &str) -> &str {
     }
 }
 
+/// The start in beats a placement id names (`<material>@<start>`, after any `lane>`), its repeat's `#n` aside; None when it names none.
+pub fn placement_start_of(id: &str) -> Option<f64> {
+    let tail = id.rsplit_once('>').map_or(id, |(_, rest)| rest);
+    let clip = without_repeat(tail);
+    let (head, start) = clip.rsplit_once('@')?;
+    if head.is_empty() {
+        return None;
+    }
+    start.trim().parse::<f64>().ok().filter(|v| v.is_finite())
+}
+
 /// The first `key#n`, from 2, that `seen` does not hold.
 fn next_free(seen: &HashSet<String>, key: &str) -> String {
     (2usize..)

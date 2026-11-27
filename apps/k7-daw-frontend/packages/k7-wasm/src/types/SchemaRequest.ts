@@ -7,6 +7,7 @@ import type { IdArgs } from "./IdArgs";
 import type { InstanceNameArgs } from "./InstanceNameArgs";
 import type { LibraryFileArgs } from "./LibraryFileArgs";
 import type { NameArgs } from "./NameArgs";
+import type { PluginArgs } from "./PluginArgs";
 import type { RefArgs } from "./RefArgs";
 import type { SetCompSpanArgs } from "./SetCompSpanArgs";
 import type { SourcesAtBeatsArgs } from "./SourcesAtBeatsArgs";
@@ -28,6 +29,9 @@ export type SchemaRequest =
   | { op: "schema.own_mix_side"; args: NameArgs }
   | { op: "schema.engine_module_of"; args: EngineModuleArgs }
   | { op: "schema.builtin_for_ref"; args: RefArgs }
+  | { op: "schema.builtin_for_plugin"; args: PluginArgs }
+  | { op: "schema.is_preset_name"; args: NameArgs }
+  | { op: "schema.placement_start_of"; args: IdArgs }
   | { op: "schema.is_doc_file"; args: NameArgs }
   | { op: "schema.strip_doc_ext"; args: NameArgs }
   | { op: "schema.is_audio"; args: NameArgs }
