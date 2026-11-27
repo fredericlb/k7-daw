@@ -323,8 +323,8 @@ out from under the cursor instead of growing around it.
 A wheel notch reports a delta in the hundreds, and `0.001` turns that into ~10% a notch. A
 trackpad pinch arrives as Ctrl+wheel with small continuous deltas, where that same coefficient
 gives a fraction of a percent each — the "very slow" of two fingers on a trackpad. It gets ten
-times the coefficient (`wheelZoomFactor` in `@studio/ui-chains/zoomGesture`, tested there), which
-leaves the wheel untouched.
+times the coefficient (the panes' own `wheelFactor`, reached through `wheelFactor` in
+`ui-chains-react/src/camera.ts`, tested there), which leaves the wheel untouched.
 
 ### A wheel and a trackpad send the same event and mean opposite things
 

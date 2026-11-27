@@ -22,6 +22,7 @@ import { DockProperty } from "@studio/ui/dock-property";
 import { DockHeaderRow, useInSheet } from "@studio/ui/editor-dock";
 import { cn } from "@studio/ui/lib/utils";
 import { Switch } from "@studio/ui/switch";
+import { useElementSize } from "@studio/ui-timeline/measure";
 import { useHZoom, usePanScroll } from "@studio/ui-timeline/panZoom";
 import {
   type RefObject,
@@ -252,16 +253,7 @@ export function PianoRoll({
 
   const bodyRef = useRef<HTMLDivElement>(null);
   const laneRef = useRef<HTMLDivElement>(null);
-  const [pane, setPane] = useState({ w: 0, h: 0 });
-  useEffect(() => {
-    const el = bodyRef.current;
-    if (!el) return;
-    const measure = () => setPane({ w: el.clientWidth, h: el.clientHeight });
-    const ro = new ResizeObserver(measure);
-    ro.observe(el);
-    measure();
-    return () => ro.disconnect();
-  }, []);
+  const pane = useElementSize(bodyRef);
 
   // Wheel zooms the time axis; middle-drag pans (both axes). Bound once the body mounts.
   const [zoomX, setZoomX] = useHZoom(bodyRef, { gutter });
@@ -513,8 +505,6 @@ export function PianoRoll({
     onLanePointerDown,
     onNoteMenu,
     onNotePointerDown,
-    onNotePointerMove,
-    endVDrag,
   } = useRollGestures({
     mode,
     grid,
@@ -577,24 +567,12 @@ export function PianoRoll({
     [canVel, canRange, canPitch],
   );
   // Stable handlers over the gestures' latest closures, so a memoised note is not re-rendered by a new function.
-  const gestures = useRef({
-    onNotePointerDown,
-    onNoteMenu,
-    onNotePointerMove,
-    endVDrag,
-  });
-  gestures.current = {
-    onNotePointerDown,
-    onNoteMenu,
-    onNotePointerMove,
-    endVDrag,
-  };
+  const gestures = useRef({ onNotePointerDown, onNoteMenu });
+  gestures.current = { onNotePointerDown, onNoteMenu };
   const noteHandlers = useMemo<RollNoteHandlers>(
     () => ({
       down: (e, n, grip) => gestures.current.onNotePointerDown(e, n, grip),
       menu: (e, n) => gestures.current.onNoteMenu(e, n),
-      move: (e, top) => gestures.current.onNotePointerMove(e, top),
-      end: () => gestures.current.endVDrag(),
     }),
     [],
   );

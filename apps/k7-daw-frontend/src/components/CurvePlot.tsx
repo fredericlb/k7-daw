@@ -4,6 +4,7 @@
 // through the inverse of the amplitude and polarity. See docs/curveEditor.md.
 
 import { parsePosition } from "@studio/k7-wasm/timecode";
+import { usePointerDrag } from "@studio/ui-timeline/drag";
 import { useRef } from "react";
 import {
   type CurveDraft,
@@ -21,6 +22,9 @@ function beatOrNull(time: string, num: number, den: number): number | null {
     return null;
   }
 }
+
+/** A pointer's place, from a React event or a native one. */
+type Where = { clientX: number; clientY: number };
 
 const W = 480;
 const H = 160;
@@ -40,6 +44,9 @@ export function CurvePlot({
 }) {
   const svgRef = useRef<SVGSVGElement>(null);
   const dragging = useRef<string | null>(null);
+  // A point took the press: the svg's drag then moves it instead of adding one.
+  const picked = useRef(false);
+  const before = useRef(draft.points);
   // An on/off curve is unipolar at full height whatever the draft held for the other shapes.
   const binary = draft.shape === "onoff";
   const bipolar = !binary && draft.polarity === "bipolar";
@@ -64,7 +71,7 @@ export function CurvePlot({
   const grid = picture.beats;
 
   // Plot coordinates → a point: x across the span, the output inverted back to the unit value a file holds.
-  const pointFrom = (e: React.PointerEvent) => {
+  const pointFrom = (e: Where) => {
     const r = svgRef.current?.getBoundingClientRect();
     if (!r) return null;
     const x = ((e.clientX - r.left) / r.width) * W;
@@ -74,7 +81,7 @@ export function CurvePlot({
     const unit = bipolar ? (out / amp + 1) / 2 : out / amp;
     return pointAt(fx, unit, spanBeats, num, den, binary);
   };
-  const place = (e: React.PointerEvent) => {
+  const place = (e: Where) => {
     const p = pointFrom(e);
     if (!p) return;
     onPoints(
@@ -92,24 +99,35 @@ export function CurvePlot({
     : [];
   const outOf = (unit: number) => (bipolar ? unit * 2 - 1 : unit) * amplitude;
 
+  const press = usePointerDrag({
+    onStart: (e) => {
+      before.current = draft.points;
+      if (picked.current) picked.current = false;
+      else {
+        dragging.current = null;
+        place(e);
+      }
+      return undefined;
+    },
+    onMove: (ev) => dragging.current && place(ev),
+    onEnd: () => {
+      dragging.current = null;
+      picked.current = false;
+    },
+    // A cancelled gesture puts the points back as the press found them.
+    onCancel: () => {
+      dragging.current = null;
+      picked.current = false;
+      onPoints(before.current);
+    },
+  });
+
   return (
     <svg
       ref={svgRef}
       viewBox={`0 0 ${W} ${H}`}
       className={`w-full rounded border border-border bg-background ${custom ? "cursor-crosshair touch-none" : ""}`}
-      onPointerDown={
-        custom
-          ? (e) => {
-              e.currentTarget.setPointerCapture(e.pointerId);
-              dragging.current = null;
-              place(e);
-            }
-          : undefined
-      }
-      onPointerMove={custom ? (e) => dragging.current && place(e) : undefined}
-      onPointerUp={() => {
-        dragging.current = null;
-      }}
+      onPointerDown={custom ? press.onPointerDown : undefined}
     >
       <title>
         {custom
@@ -183,9 +201,8 @@ export function CurvePlot({
             r={R}
             className="cursor-grab fill-background stroke-primary"
             strokeWidth={2}
-            onPointerDown={(e) => {
-              e.stopPropagation();
-              svgRef.current?.setPointerCapture(e.pointerId);
+            onPointerDown={() => {
+              picked.current = true;
               dragging.current = draft.points[i].time;
             }}
             onDoubleClick={(e) => {

@@ -19,8 +19,6 @@ export interface RollNoteHandlers {
     grip?: "line" | "start" | "end",
   ) => void;
   menu: (e: React.MouseEvent, n: RollNote) => void;
-  move: (e: React.PointerEvent, top: number) => void;
-  end: () => void;
 }
 
 /** What the note can be asked: which of the edit callbacks the roll was given. */
@@ -95,9 +93,6 @@ export const RollNoteBox = memo(function RollNoteBox({
       role="img"
       onPointerDown={plays ? (e) => on.down(e, n) : undefined}
       onContextMenu={plays ? (e) => on.menu(e, n) : undefined}
-      onPointerMove={plays ? (e) => on.move(e, top) : undefined}
-      onPointerUp={plays ? on.end : undefined}
-      onLostPointerCapture={plays ? on.end : undefined}
       className={cn(
         "absolute overflow-hidden rounded-[1px] touch-none",
         !plays && "pointer-events-none opacity-30",
@@ -130,9 +125,6 @@ export const RollNoteBox = memo(function RollNoteBox({
       {h >= 4 && (
         <div
           onPointerDown={(e) => on.down(e, n, "line")}
-          onPointerMove={(e) => on.move(e, top)}
-          onPointerUp={on.end}
-          onLostPointerCapture={on.end}
           className={cn(
             "absolute left-1/4 w-1/2",
             caps.vel && "cursor-ns-resize",
@@ -151,17 +143,11 @@ export const RollNoteBox = memo(function RollNoteBox({
         <>
           <div
             onPointerDown={(e) => on.down(e, n, "start")}
-            onPointerMove={(e) => on.move(e, top)}
-            onPointerUp={on.end}
-            onLostPointerCapture={on.end}
             className="absolute inset-y-0 left-0 cursor-ew-resize"
             style={{ width: edgePx }}
           />
           <div
             onPointerDown={(e) => on.down(e, n, "end")}
-            onPointerMove={(e) => on.move(e, top)}
-            onPointerUp={on.end}
-            onLostPointerCapture={on.end}
             className="absolute inset-y-0 right-0 cursor-ew-resize"
             style={{ width: edgePx }}
           />

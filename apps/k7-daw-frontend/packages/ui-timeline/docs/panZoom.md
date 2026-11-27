@@ -106,6 +106,10 @@ the listener is `passive: false`; a plain wheel returns before that and scrolls 
 
 ## Two fingers on a touchscreen
 
+`usePinch(ref, { onStart, onPinch(start, ratio, centre) })` is the one hook for it: `onStart` takes the
+baseline (a zoom, a camera, a bar count) or refuses the gesture, `onPinch` gets the spread's ratio
+against the start. The pane zoom, the take panel and the chains camera each bring their own clamp.
+
 Touch events rather than pointer events, deliberately: this container SCROLLS, and the browser
 claims a pointer the moment it decides a drag is a scroll — a pinch woven into the pointer flow dies
 to a `pointercancel` half-way through. A non-passive `touchmove` that `preventDefault`s for the
@@ -133,14 +137,15 @@ Both listeners are on the **capture** phase: a bubble listener never fires if a 
 propagation, and it loses the autoscroll race on Firefox. Non-middle buttons return early WITHOUT
 stopping the event, so child clicks still work.
 
-## Written twice, on purpose
+## The graph shares the rule and the pinch
 
-The chains graph holds the same three signals in `apps/k7-daw-frontend/packages/ui-chains-react/src/camera.ts`. It
-answers the wheel-vs-trackpad question the same way, and keeps its own zoom factor in
-`apps/k7-daw-frontend/packages/ui-chains/src/zoomGesture.ts` because its NOTCH branch differs — it scales by the delta
-where this one takes a step — and an arrangement package importing the graph's would be the wrong
-way round.
+The chains graph (`apps/k7-daw-frontend/packages/ui-chains-react/src/camera.ts`) answers the
+wheel-vs-trackpad question the same way and takes its pinch from `wheelFactor` and `usePinch` here.
+It keeps its own NOTCH rate — a detent scales by its delta there, where a pane takes a step — and
+its own camera arithmetic, because a pane here scrolls and the graph translates. The rule is
+recorded in `docs/inventaire.md` and tested on both sides so it cannot drift in silence.
 
-Neither package may depend on the other: a pane here scrolls and that one translates, so the rule is
-shared but not the code. It is recorded in `docs/inventaire.md`, and tested on both sides so it
-cannot drift in silence.
+## One wheel for every pane
+
+A bare wheel scrolls, in every pane that draws a window rather than a scroller too: the take panel
+(`AudioClipPanel`) slides its bar window under a bare wheel and zooms only on a pinch or Cmd/Ctrl.

@@ -9,7 +9,9 @@
     "./panZoom": "./src/panZoom.ts",
     "./ticks": "./src/ticks.ts",
     "./lanes": "./src/lanes.ts",
-    "./drag": "./src/drag.ts"
+    "./drag": "./src/drag.ts",
+    "./pinch": "./src/pinch.ts",
+    "./measure": "./src/measure.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",
@@ -17,7 +19,8 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@studio/k7-wasm": "*"
+    "@studio/k7-wasm": "*",
+    "@studio/ui": "*"
   },
   "devDependencies": {
     "@studio/tsconfig": "*",
