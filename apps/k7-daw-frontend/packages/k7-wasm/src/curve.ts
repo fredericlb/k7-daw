@@ -6,25 +6,6 @@ import type { CurvePreview, CurveSpec, XY } from "./types/index.ts";
 
 export { K7WasmError };
 
-/** The optional knobs of a picture: samples across it (default 160, at most 4096) and a playhead beat. */
-export interface PreviewOptions {
-  n?: number;
-  playhead?: number;
-}
-
-/** A curve's whole picture in one call, resolved against the time signature `num`/`den`. */
-export function curvePreview(
-  spec: CurveSpec,
-  num: number,
-  den: number,
-  opts: PreviewOptions = {},
-): CurvePreview {
-  return call<CurvePreview>({
-    op: "curve.preview",
-    args: { spec, num, den, n: opts.n, playhead: opts.playhead },
-  });
-}
-
 /** A curve held open in the module: its picture once, and its playhead every frame without resolving it again. */
 export class CurveHandle {
   #handle: number | null = null;
