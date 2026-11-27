@@ -600,9 +600,13 @@ fn a_row_carries_a_name_a_sentence_a_line_the_verb_and_whether_it_is_finished_an
 
 #[test]
 fn an_automation_lane_offers_to_remove_its_automation_when_it_names_its_module() {
-    let with =
-        menu(json!({"kind": "curve-point", "curve": "sweep", "param": "Filter Freq", "tc": "1.1.1", "module": "amp"}));
-    assert!(lines(&with).contains(&"node automate amp Filter Freq none"));
-    let without = menu(json!({"kind": "curve-point", "curve": "sweep", "param": "Filter Freq", "tc": "1.1.1"}));
+    // Placed as the catalogue places it, in a PARAM's menu: the lane must answer as that param too.
+    let list = json!([{ "command": "node automate", "help": "bind a curve", "menu": ["param"],
+        "args": [arg("node", "module", Some("nodes")), arg("param", "text", None), arg("curve", "text", None)] }]);
+    let commands: Vec<CommandInfo> = serde_json::from_value(list).unwrap();
+    let on = |ctx: Value| open(ctx, &commands, json!({}), "en");
+    let with = on(json!({"kind": "curve-point", "curve": "sweep", "param": "Mix", "tc": "1.1.1", "module": "chorus"}));
+    assert!(lines(&with).contains(&"node automate chorus Mix none"));
+    let without = on(json!({"kind": "curve-point", "curve": "sweep", "param": "Mix", "tc": "1.1.1"}));
     assert!(!lines(&without).iter().any(|l| l.starts_with("node automate")));
 }

@@ -75,6 +75,8 @@ pub(super) fn menu(ctx: &MenuCtx, commands: &[CommandInfo], prefs: &Prefs, local
     let from = |slots: &[Slot]| from_catalogue(commands, slots);
     let also: &[&str] = match ctx {
         MenuCtx::Module { rack: Some(true), .. } => &["rack"],
+        // An automation lane that names its module also answers as the param it drives: Remove automation is a param's row.
+        MenuCtx::CurvePoint { module: Some(_), .. } => &["param"],
         _ => &[],
     };
     // Bound once, so no case can forget the prefs or the head, which would ignore what someone turned off.
