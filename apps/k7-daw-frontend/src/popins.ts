@@ -61,10 +61,7 @@ export function usePopin(open: boolean, close: () => void): void {
   }, [open]);
 }
 
-/**
- * Escape's innermost rungs — a drawn selection, a move in hand, a take rolling — as layers on the ladder while `active`:
- * the shell resolves the key to the topmost one (typing already stands the shell aside), and `status` is said as it closes.
- */
+/** Escape's innermost rungs (a selection, a clip in hand, a rolling take) as ladder layers while `active`; `status` is said as one closes. */
 export function useEscapeLayer(
   active: boolean,
   onEscape: () => void,
