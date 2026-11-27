@@ -4,8 +4,7 @@
 // See docs/shell.md.
 
 import type { PluginParamsStore } from "@studio/engine-browser/params";
-import { DockHint, DockStatus } from "@studio/ui/editor-dock";
-import { cn } from "@studio/ui/lib/utils";
+import { DockStatus } from "@studio/ui/editor-dock";
 import { splitTrailingMixer } from "@studio/ui-chains/anchorRight";
 import type { EdgeInsert, TrackControlValues } from "@studio/ui-chains/graph";
 import { moduleRow, trackInputs, trackModules } from "@studio/ui-chains/graph";
@@ -13,7 +12,6 @@ import type { GridFit } from "@studio/ui-chains/gridFit";
 import { rowExit, rowSeams } from "@studio/ui-chains/rowSeams";
 import {
   DomChains,
-  graphMenuCtx,
   type NodeEngines,
   type TapAction,
 } from "@studio/ui-chains-react";
@@ -36,7 +34,6 @@ import type { WebProject } from "../types";
 import { useIsMobile } from "../useIsMobile";
 import { ChainHeader } from "./ChainHeader";
 import { GraphSlotPane } from "./GraphSlotPane";
-import { ModuleCards } from "./ModuleCards";
 
 /** A card here is HORIZONTAL on a desktop, at most 4 rows, and VERTICAL on a phone, at most 4 columns — a panel without that shape is folded to it. */
 const TRACK_ROW_FIT: GridFit = { axis: "rows", max: 4 };
@@ -303,20 +300,8 @@ export function TrackModulesPane({
   const marked = useMemo(() => nodePredicate(mark), [mark]);
   const trackName =
     project?.tracks.find((t) => t.id === trackId)?.name || trackId;
-  // The lane's modules draw their own panels; "Controls" off swaps them for the summary cards (docs/chainsGraph.md).
+  // The lane's modules draw their own panels, the only face the dock shows (docs/chainsGraph.md).
   const cards = !nodes;
-  const [controls, setControls] = useState(true);
-  const cardNodes = useMemo(
-    () =>
-      (glued?.graph.nodes ?? [])
-        .filter((n) => n.kind === "module")
-        .sort((a, b) => a.x - b.x || a.y - b.y),
-    [glued],
-  );
-  const cardSeams = useMemo(
-    () => [...(glued?.seams ?? [])].sort((a, b) => a.x - b.x),
-    [glued],
-  );
 
   // No bar: the row IS the view, the lane's own card names it; the dock's Close is the only one.
   // Every state keeps the frame, so the ✕ is reachable even with nothing to draw — a view you cannot close is worse than an empty one.
@@ -390,7 +375,7 @@ export function TrackModulesPane({
         aspectRatio: `${mixer.width - mixer.left} / ${mixer.height - mixer.top}`,
       }}
     >
-      <DomChains {...shared} graph={mixer} fixed />
+      <DomChains {...shared} graph={mixer} fixed bare />
     </div>
   );
 
@@ -400,15 +385,12 @@ export function TrackModulesPane({
       {(onToggleCurves || onInput || cards) && (
         <ChainHeader
           name={trackName}
-          moduleCount={cards ? cardNodes.length : undefined}
           armed={trackControls?.[trackId]?.arm === 1}
           onArm={
             cards && onTrackToggle && trackControls?.[trackId]
               ? () => onTrackToggle(trackId, "arm")
               : undefined
           }
-          controls={controls}
-          onControls={cards ? () => setControls((v) => !v) : undefined}
           hasInput={hasInput}
           onInput={onInput}
           onReason={onStatus}
@@ -416,45 +398,7 @@ export function TrackModulesPane({
           onToggleCurves={onToggleCurves}
         />
       )}
-      {cards && glued && !controls && (
-        <ModuleCards
-          className="min-h-0 flex-1"
-          nodes={cardNodes}
-          seams={cardSeams}
-          presetNames={presetNames}
-          onBypass={bypassModule}
-          onPresetStep={onPresetStep}
-          onPresets={onPresets && ((module, x, y) => onPresets(module, x, y))}
-          onInsert={
-            edgeInsert ? (insert, x, y) => edgeInsert(insert, x, y) : undefined
-          }
-          lane={{
-            id: trackId,
-            name: trackName,
-            values: trackControls?.[trackId],
-            onToggle: onTrackToggle,
-            onSet: onTrackSet,
-          }}
-          warningOf={(n) =>
-            n.pluginId ? engineWarnings?.[n.pluginId] : undefined
-          }
-          onProblems={onProblems}
-          paramsStore={pluginParamsStore}
-          onParam={setPluginParam}
-          onNativeUI={(module) => void command(`node external-ui ${module}`)}
-          onMenu={(n, x, y) => {
-            const ctx = graphMenuCtx(n);
-            if (ctx) onContextMenu?.(ctx, x, y);
-          }}
-        />
-      )}
-      {cards && glued && !controls && <DockHint text={m["chain.saveHint"]()} />}
-      <div
-        className={cn(
-          "relative min-h-0 min-w-0 flex-1",
-          cards && !controls && "hidden",
-        )}
-      >
+      <div className="relative min-h-0 min-w-0 flex-1">
         <DomChains
           {...shared}
           bare
@@ -464,7 +408,6 @@ export function TrackModulesPane({
         />
       </div>
     </div>,
-    // The lane's own card carries its fader and pan: the pinned mixer is the full row's alone.
-    cards && !controls ? undefined : aside,
+    aside,
   );
 }

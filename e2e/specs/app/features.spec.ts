@@ -81,14 +81,10 @@ const FEATURES: Record<string, { check: Check; bug?: string }> = {
       await lane("drums")(page);
       // A double-click on the lane's name opens its chain in the dock (apps/k7-daw-frontend/docs/chainsGraph.md).
       await page.getByTitle(/^drums( —|$)/).dblclick();
-      // The panel's sixth knob, which the cards' three-knob summary never draws.
+      // The panel's sixth knob: the dock draws each module's own panel.
       await expect(
         page.getByRole("slider", { name: "SC gain", exact: true }),
       ).toBeVisible();
-      await expect(button(page, "Controls")).toHaveAttribute(
-        "aria-pressed",
-        "true",
-      );
     },
   },
   "mastering.k7": {

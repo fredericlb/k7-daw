@@ -21,11 +21,8 @@ const DISABLED = "aria-disabled:cursor-not-allowed aria-disabled:opacity-40";
 
 export function ChainHeader({
   name,
-  moduleCount,
   armed,
   onArm,
-  controls,
-  onControls,
   hasInput,
   onInput,
   onReason,
@@ -33,13 +30,8 @@ export function ChainHeader({
   onToggleCurves,
 }: {
   name: string;
-  /** Set on the lane's own pane; absent for a popin's cards, which wear no name. */
-  moduleCount?: number;
   armed?: boolean;
   onArm?: () => void;
-  /** The Controls chip's pressed state and toggle; absent without cards. */
-  controls?: boolean;
-  onControls?: () => void;
   hasInput: boolean;
   onInput?: (kind: "audio" | "midi") => void;
   /** Where the reason a taken input chip does nothing goes when it is pressed (the status line). */
@@ -47,21 +39,9 @@ export function ChainHeader({
   showCurves: boolean;
   onToggleCurves?: () => void;
 }) {
-  const cards = moduleCount !== undefined;
   return (
     <DockHeaderRow>
       <div className="flex min-w-0 flex-1 items-center gap-2">
-        {/* The view switch on the left (cards or the modules' panels), every other control on the right. */}
-        {cards && onControls && (
-          <button
-            type="button"
-            aria-pressed={controls}
-            onClick={onControls}
-            className={`${CHIP} type-label aria-pressed:bg-on-fill aria-pressed:text-lavender`}
-          >
-            {m["chain.controls"]()}
-          </button>
-        )}
         <div className="ml-auto flex shrink-0 items-center gap-2">
           {onArm && (
             <TrackToggle
