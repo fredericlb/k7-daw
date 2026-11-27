@@ -52,9 +52,9 @@ If a gesture would need the verb N times, write the bulk verb instead (`events a
   through `apps/k7-daw-frontend/src/snap.ts`, nothing written when it ends where it started, the pointer
   followed with `usePointerFollow` so a cancel abandons cleanly.
 - **A one-shot line that should show before the reload**: teach `pendingOf` in
-  `apps/k7-daw-frontend/src/pendingEdits.ts` what it does to the lanes, and test it.
+  `apps/k7-daw-wasm/verbs/src/ui/pending.rs` what it does to the lanes, and test it.
 - **A pre-filled form**: when the caret or rectangle can answer some of a verb's arguments, add the
-  verb to `CARET_ANSWERS` in `apps/k7-daw-frontend/src/commandFill.ts`. That list is explicit on
+  verb to `CARET_ANSWERS` in `apps/k7-daw-wasm/verbs/src/ui/fill.rs`. That list is explicit on
   purpose: a caret that pre-answered every destructive verb would make them one keystroke away.
 
 A behaviour only a browser can have (it touches no file, or the data exists only in the page) is a

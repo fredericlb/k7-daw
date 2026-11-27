@@ -93,6 +93,22 @@ fn export_ui(dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
     EmptyRow::export_all_to(dir)?;
     View::export_all_to(dir)?;
     Step::export_all_to(dir)?;
+    export_edit(dir)
+}
+
+/// The `edit.*` requests and answers, and the verbs types their answers carry.
+#[cfg(feature = "verbs")]
+fn export_edit(dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
+    use k7_wasm::ops::verb_edit::{ClipPatches, EditRequest, MaybeLine};
+    use verbs::ui::export::ExportAsk;
+    use verbs::ui::pending::PendingEdit;
+    use verbs::ui::writes::VerbClass;
+    EditRequest::export_all_to(dir)?;
+    ClipPatches::export_all_to(dir)?;
+    MaybeLine::export_all_to(dir)?;
+    ExportAsk::export_all_to(dir)?;
+    PendingEdit::export_all_to(dir)?;
+    VerbClass::export_all_to(dir)?;
     Ok(())
 }
 

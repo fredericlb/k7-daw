@@ -6,6 +6,11 @@
 
 import { arrayEq, useEngineState } from "@studio/engine-browser/store";
 import {
+  type PendingEdit,
+  pendingClips,
+  pendingSplitAt,
+} from "@studio/k7-wasm/edit";
+import {
   beatsToDuration,
   beatsToPosition,
   parsePosition,
@@ -87,11 +92,6 @@ import { useVideoDrag } from "../hooks/useVideoDrag";
 import { isTyping } from "../hooks/useWindowKey";
 import { cursorOf } from "../modeIcons";
 import { m } from "../paraglide/messages.js";
-import {
-  type PendingEdit,
-  pendingClips,
-  pendingSplitAt,
-} from "../pendingEdits";
 import { usePaneProjectDoc } from "../queries/projectDoc";
 import {
   dropLaneOf,

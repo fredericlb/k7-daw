@@ -3,13 +3,17 @@
 // Apart from the shell because everything here is a pure function of the backend's catalogue
 // plus a `files()` getter, with no shell state. See docs/commandBar.md.
 
+import {
+  MIX_FORMATS,
+  TIMELINE_FORMATS,
+  VIDEO_FORMATS,
+} from "@studio/k7-wasm/edit";
 import { stripDocExt } from "@studio/k7-wasm/schema";
 import { type ArgOption, optionsFromCompletions } from "@studio/k7-wasm/ui";
 import type { Completion } from "@studio/project-shell/project";
 import { docPattern } from "@studio/song-schema/docExt";
 import { api } from "./api";
 import type { PaletteArg, PaletteCommand } from "./components/CommandBar";
-import { MIX_FORMATS, TIMELINE_FORMATS, VIDEO_FORMATS } from "./exportArgs";
 import { ROLL_MODES } from "./rollMode";
 import { TOOLS } from "./timelineTools";
 import type { CommandInfo, MenuEntity } from "./types";

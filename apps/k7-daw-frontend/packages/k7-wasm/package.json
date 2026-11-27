@@ -15,7 +15,8 @@
     "./types": "./src/types/index.ts",
     "./boot": "./src/boot.ts",
     "./engine": "./src/engine.ts",
-    "./ui": "./src/ui.ts"
+    "./ui": "./src/ui.ts",
+    "./edit": "./src/edit.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",

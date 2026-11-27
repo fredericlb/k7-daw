@@ -4,13 +4,13 @@
 // The chosen entry is a COMMAND LINE the shell dispatches (`project export`), not a call of its own: that keeps
 // this and the palette saying the same. The running card reads the page's process list (../processes.ts).
 
+import { tracksLine } from "@studio/k7-wasm/edit";
 import { Button } from "@studio/ui/button";
 import { Chip } from "@studio/ui/chip";
 import { Download, FileArchive } from "@studio/ui/icons";
 import { Progress } from "@studio/ui/progress";
 import { RowButton, RowGroup } from "@studio/ui/row-group";
 import { useEffect, useState, useSyncExternalStore } from "react";
-import { tracksLine } from "../exportArgs";
 import type { ExportHost, Saved } from "../exportHost";
 import { m } from "../paraglide/messages.js";
 import { elapsedOf, processesSnapshot, subscribeProcesses } from "../processes";

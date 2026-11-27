@@ -18,6 +18,7 @@ import {
   preloadOutputPicture,
   ViewportTab,
 } from "@studio/k7-plugins/video";
+import { type PendingEdit, pendingOf } from "@studio/k7-wasm/edit";
 import { beatsToPosition, parsePosition } from "@studio/k7-wasm/timecode";
 import { orderCommands, prefsView, stepSentence } from "@studio/k7-wasm/ui";
 import { askConfirm } from "@studio/project-shell/ask";
@@ -178,7 +179,6 @@ import { resolveEditorFile } from "./openInEditor";
 import { buildPaletteCommands, commandNameOf, makeListArg } from "./palette";
 import { PaneVisible } from "./paneVisible";
 import { m } from "./paraglide/messages.js";
-import { type PendingEdit, pendingOf } from "./pendingEdits";
 import type { PendingNode } from "./pendingNode";
 import { resourceRows } from "./placeResource";
 import { setServiceProcesses } from "./processes";

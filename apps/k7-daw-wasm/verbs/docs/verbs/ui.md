@@ -2,7 +2,7 @@
 
 What the page asks of the `verbs` crate besides running a line: how the bar ranks and fills, how a
 right-click is derived, what a sent line is expected to do. The page reaches it through `k7-wasm`'s
-`ui.*` ops (`packages/k7-wasm/src/ui.ts`).
+`ui.*` ops (`apps/k7-daw-frontend/packages/k7-wasm/src/ui.ts`).
 
 ## Choices
 

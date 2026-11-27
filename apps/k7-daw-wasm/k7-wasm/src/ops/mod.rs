@@ -14,6 +14,8 @@ pub mod timecode;
 #[cfg(feature = "verbs")]
 pub mod verb;
 #[cfg(feature = "verbs")]
+pub mod verb_edit;
+#[cfg(feature = "verbs")]
 pub mod verb_ui;
 
 use crate::error::WasmError;
@@ -85,6 +87,8 @@ impl Session {
             "verb" => verb::dispatch(decode(input)?, out),
             #[cfg(feature = "verbs")]
             "ui" => verb_ui::dispatch(decode(input)?, out),
+            #[cfg(feature = "verbs")]
+            "edit" => verb_edit::dispatch(decode(input)?, out),
             "version" => write(
                 out,
                 &VersionAnswer {

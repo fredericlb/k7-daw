@@ -350,6 +350,31 @@ fn ui_consts() -> Vec<[String; 3]> {
             "EMPTY_RECENT_MAX",
             &json!(verbs::ui::rank::EMPTY_RECENT_MAX),
         ),
+        export(
+            "The mixdown formats the file service renders.",
+            "MIX_FORMATS",
+            &json!(verbs::ui::export::MIX_FORMATS),
+        ),
+        export(
+            "The containers the picture leaves in, the default first.",
+            "VIDEO_FORMATS",
+            &json!(verbs::ui::export::VIDEO_FORMATS),
+        ),
+        export(
+            "The cut handed to another editor: OpenTimelineIO, or a CMX 3600 EDL of one lane.",
+            "TIMELINE_FORMATS",
+            &json!(verbs::ui::export::TIMELINE_FORMATS),
+        ),
+        export(
+            "What the audio of an exported video is rendered from when the line names none.",
+            "DEFAULT_VIDEO_AUDIO",
+            &json!(verbs::ui::export::DEFAULT_VIDEO_AUDIO),
+        ),
+        export(
+            "The usage line of `project export`, built from the vocabularies above.",
+            "EXPORT_USAGE",
+            &json!(verbs::ui::export::usage()),
+        ),
     ]
 }
 
