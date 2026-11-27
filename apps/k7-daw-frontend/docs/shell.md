@@ -1052,8 +1052,8 @@ so it is drawn as large as the pane allows; the width runs off the right and the
 it.
 
 **The LANE leads its own row** (`moduleRow`'s `track`), without the colour band its card wears on the
-graph: the whole row is about that lane, so the band would say nothing the row does not. Its cards draw no top or bottom
-border either (`.dgx-node.across`): the row reads as one strip, divided only where two modules meet. The signal starts there and its fader is the
+graph: the whole row is about that lane, so the band would say nothing the row does not. Its cards keep their full
+border, top and bottom included, like every card. The signal starts there and its fader is the
 first thing in the path, so a row that began at the first plugin was a path with its head cut off — and
 the cable out of the lane, the one that says which lane this is, had nothing to leave from. It is the
 same card the graph draws, matched on the node's KIND rather than its name, since `trk:` exists precisely

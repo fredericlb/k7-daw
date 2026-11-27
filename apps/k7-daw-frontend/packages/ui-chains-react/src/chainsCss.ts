@@ -134,8 +134,6 @@ const CSS = `
 .dgx-node { border-color:color-mix(in srgb, var(--accent) 42%, var(--line)); }
 /* A stack-view BAR — the inputs above every column, the outputs below: the edge's ground made solid. */
 .dgx-node.bar { background:color-mix(in srgb, ${EDGE} 30%, var(--card)); border-color:color-mix(in srgb, ${EDGE} 70%, var(--line)); }
-/* A lane's row reads as one strip: its cards keep only the borders they share, at the sides. */
-.dgx-node.across { border-top-width:0; border-bottom-width:0; }
 .dgx-node.sel { box-shadow:0 0 0 2px ${RING}, 0 12px 30px -10px rgba(0,0,0,.66); }
 /* Lit by the host (k7's History panel): amber, so it never reads as the selection's violet. */
 .dgx-node.marked { box-shadow:0 0 0 3px ${MARK}, 0 0 18px 2px color-mix(in srgb, ${MARK} 45%, transparent); }
