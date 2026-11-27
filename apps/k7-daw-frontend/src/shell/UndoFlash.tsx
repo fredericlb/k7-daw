@@ -11,17 +11,18 @@ export function UndoFlash() {
   if (!f) return null;
   const Icon = f.kind === "undo" ? Undo2 : Redo2;
   return (
-    <div
-      aria-hidden
-      className="pointer-events-none fixed inset-0 z-(--k7-z-menu) flex flex-col items-center justify-center gap-4"
-    >
+    <div className="pointer-events-none fixed inset-0 z-(--k7-z-menu) flex flex-col items-center justify-center gap-4">
       <Icon
         key={f.seq}
+        aria-hidden
         className="h-[50vh] w-[50vw] animate-[k7-undo-flash_1400ms_ease-out_forwards] text-lavender drop-shadow-[0_0_24px_var(--color-lavender)]"
         strokeWidth={1.5}
       />
+      {/* The sentences are announced, as the toast they replace was: the glyph is only seen. */}
       <div
         key={`m${f.seq}`}
+        role="status"
+        aria-live="polite"
         className="flex max-w-[80vw] animate-[k7-undo-flash_1400ms_ease-out_forwards] flex-col items-center gap-1"
       >
         {f.messages.map((msg, i) => (
