@@ -132,6 +132,23 @@ fn write_types(dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
     chains::flow::NodeFlow::export_all_to(dir)?;
     #[cfg(feature = "verbs")]
     export_ui(dir)?;
+    song::doc::ProjectDoc::export_all_to(dir)?;
+    song::views::web::WebProject::export_all_to(dir)?;
+    song::reads::Blanks::export_all_to(dir)?;
+    song::reads::ShellView::export_all_to(dir)?;
+    song::reads::LaneMix::export_all_to(dir)?;
+    song::reads::ClipLoop::export_all_to(dir)?;
+    song::reads::Instances::export_all_to(dir)?;
+    song::reads::TakesEvent::export_all_to(dir)?;
+    song::reads::LayoutRow::export_all_to(dir)?;
+    song::reads::LaneNotes::export_all_to(dir)?;
+    song::reads::LaneSpan::export_all_to(dir)?;
+    song::reads::Hit::export_all_to(dir)?;
+    song::reads::LaneInput::export_all_to(dir)?;
+    song::reads::PlayedTarget::export_all_to(dir)?;
+    song::reads::ClipNameParts::export_all_to(dir)?;
+    song::reads::TapRun::export_all_to(dir)?;
+    song::reads::FolderName::export_all_to(dir)?;
     EyesRequest::export_all_to(dir)?;
     CubeAnswer::export_all_to(dir)?;
     eyes::scene::VideoScene::export_all_to(dir)?;

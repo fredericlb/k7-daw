@@ -3,16 +3,13 @@
 // only part of the feature a test can reach without a browser.
 
 import { describe, expect, it, vi } from "vitest";
-import {
-  LiveRackLit,
-  litAt,
-  MIN_FLASH_BEATS,
-  maxSpans,
-  rackHits,
-} from "./rackLit";
+import { LiveRackLit, litAt, maxSpans, rackHits } from "./rackLit";
 import type { WebGraph, WebProject } from "./types";
 
 /** A lane holding one MIDI clip, and a chain running it through a rack. */
+// The floor Rust holds (song/src/reads/rack.rs).
+const MIN_FLASH_BEATS = 0.25;
+
 const project = (
   notes: { time: number; duration: number; key: number }[],
   clipStart = 0,

@@ -3,15 +3,17 @@
 // reaches 1 (normalisation is per event, not per song), velocities ADD (a chord beats its
 // loudest note), and a loop's activity repeats where the repeats play.
 
-import { describe, expect, it } from "vitest";
 import {
   activityMask,
   audioActivity,
   midiActivity,
-  QUIET,
   toAlphas,
-} from "./activity";
+} from "@studio/k7-wasm/reads";
+import { describe, expect, it } from "vitest";
 import type { WebNote } from "./types";
+
+// The floor Rust holds (song/src/reads/activity.rs).
+const QUIET = 0.5;
 
 const note = (time: number, duration: number, vel?: number): WebNote => ({
   time,

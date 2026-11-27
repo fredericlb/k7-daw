@@ -15,8 +15,10 @@ use std::fmt;
 pub const FORMAT_LEVEL: u64 = 5;
 
 /// The click's default level and the bars of count-in, which the TypeScript keeps in engine-protocol and project.ts.
-const DEFAULT_METRONOME_LEVEL: f64 = 0.6;
-const METRONOME_MIN: f64 = 0.2;
+/// The click's level when `settings.k7x` names none: Tracktion's own default.
+pub const DEFAULT_METRONOME_LEVEL: f64 = 0.6;
+/// The quietest click there is, so the schema, the command and the slider all stop in the same place.
+pub const METRONOME_MIN: f64 = 0.2;
 const DEFAULT_COUNT_IN: u32 = 1;
 
 /// A marker's key: a musical timecode.

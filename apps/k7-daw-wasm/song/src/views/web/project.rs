@@ -54,6 +54,10 @@ pub struct WebTrack {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[cfg_attr(feature = "ts", ts(optional))]
     pub highlight: Option<bool>,
+    /// Ignored by the brain; never written here, and read by the page where a client marks a lane so.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "ts", ts(optional))]
+    pub disabled: Option<bool>,
     pub clips: Vec<WebClip>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[cfg_attr(feature = "ts", ts(optional))]
@@ -201,6 +205,7 @@ fn web_track(t: &TrackView<'_>, tempo: f64, m: &mut dyn Measure) -> Result<WebTr
         mute: t.mute,
         solo: t.solo,
         highlight: t.highlight.then_some(true),
+        disabled: None,
         clips,
         frozen_material,
         plugins: t.plugins.iter().map(web_plugin).collect(),

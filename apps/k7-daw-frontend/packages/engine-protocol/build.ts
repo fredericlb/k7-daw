@@ -1,170 +1,45 @@
-// build.ts — constructors for the documents in ./project, so an app with no song folder
-// can still drive the engine. The ONLY runtime module in this package: `.` and `./project`
-// are types and erase to nothing, this one emits code.
-//
-// It exists because a ProjectDoc has ~15 required fields and a TrackDoc ~17, most of which
-// any given caller does not care about. Hand-written literals of those duplicate across every
-// test file and every app that builds a document.
+// build.ts — constructors for the documents in ./project, so an app with no song folder can still drive the engine.
+// The ONLY runtime module in this package: `.` and `./project` are types and erase to nothing, this one reaches the Rust module.
+// The defaults and the names are Rust's (song/src/reads/blank.rs and the generated consts); a ProjectDoc has ~15 required fields.
 
-import type {
-  ClipDoc,
-  PluginDoc,
-  ProjectDoc,
-  SettingsDoc,
-  TrackDoc,
-} from "./project";
+import { blanks, enginePlugin } from "@studio/k7-wasm/reads";
+import type { ClipDoc, PluginDoc, ProjectDoc, TrackDoc } from "./project";
 
-/** The click's level when `settings.k7x` names none — Tracktion's own default, here because `DEFAULT_SETTINGS` below needs it. */
-export const DEFAULT_METRONOME_LEVEL = 0.6;
-
-/** The quietest click there is — Tracktion's floor; stated once so the schema, the command and the slider all stop in the same place. */
-export const METRONOME_MIN = 0.2;
-
-/** Project settings the engine is happy with when nothing has been authored. */
-export const DEFAULT_SETTINGS: SettingsDoc = {
-  metronome: false,
-  // Tracktion's own default, so a project that never mentions one sounds like the engine's idea of a metronome.
-  metronomeLevel: DEFAULT_METRONOME_LEVEL,
-  countIn: 0,
-};
+export {
+  DEFAULT_METRONOME_LEVEL,
+  DSP_FILE,
+  DSP_TYPE,
+  JSDSP_FILE,
+  JSDSP_TYPE,
+  METRONOME_MIN,
+  MIXER_PLUGIN,
+  VOLUME_DB,
+} from "@studio/k7-wasm/consts";
+export { enginePlugin };
 
 /** A valid, empty project; `recordDir: ""` is a REFUSAL rather than a blank, so pass a real directory to record anything. */
-export function emptyDoc(over: Partial<ProjectDoc> = {}): ProjectDoc {
-  return {
-    name: "",
-    tempo: 120,
-    sampleRate: 48000,
-    timeSigNumerator: 4,
-    timeSigDenominator: 4,
-    masterVolume: 0, // unity — the fader after everything else
-    masterPlugins: [], // no master chain: MIX reaches OUT as one wire
-    recordDir: "",
-    tracks: [],
-    groups: [],
-    markers: [],
-    settings: DEFAULT_SETTINGS,
-    ...over,
-  };
-}
+export const emptyDoc = (over: Partial<ProjectDoc> = {}): ProjectDoc => ({
+  ...blanks().doc,
+  ...over,
+});
 
 /** A track. `id` is the one thing nothing can guess — everything else has a sane default. */
-export function trackDoc(id: string, over: Partial<TrackDoc> = {}): TrackDoc {
-  return {
-    id,
-    name: id,
-    role: "regular",
-    contentType: "audio",
-    group: "",
-    generated: false,
-    color: "",
-    mute: false,
-    solo: false,
-    disabled: false,
-    inputChannels: [],
-    outputChannels: [], // empty is the mixer's sum, which is where all but a CUE bus goes
-    monitor: "auto",
-    inputGain: 0, // dB, 0 == unity
-    clips: [],
-    plugins: [],
-    sends: [],
-    automation: [],
-    ...over,
-  };
-}
+export const trackDoc = (
+  id: string,
+  over: Partial<TrackDoc> = {},
+): TrackDoc => ({
+  ...blanks().track,
+  id,
+  name: id,
+  ...over,
+});
 
 /** A clip. `type` decides which half of the shape matters, so it is required alongside `id`. */
-export function clipDoc(
+export const clipDoc = (
   over: Partial<ClipDoc> & Pick<ClipDoc, "id" | "type">,
-): ClipDoc {
-  return {
-    name: "",
-    source: "",
-    start: 0,
-    length: 0, // 0 == the source's natural length
-    offset: 0,
-    fadeIn: 0,
-    fadeOut: 0,
-    loopStart: 0,
-    loopEnd: 0,
-    notes: [],
-    ...over,
-  };
-}
-
-/** Formats loaded from disk via the scan cache, as opposed to a built-in named by its xmlTypeName; mirrors the engine's isExternalFormat. */
-export const EXTERNAL_PLUGIN_FORMATS = new Set([
-  "vst3",
-  "vst",
-  "vst2",
-  "au",
-  "audiounit",
-  "clap",
-  "lv2",
-  "ladspa",
-  "aax",
-]);
-
-/** What an author writes for a module whose DSP is the `dsp.k7x` beside it: data the song crate decodes, never run. */
-export const DSP_TYPE = "dsp";
-/** The DSP source a `dsp` module carries, a fixed NAME for the reason JSDSP_FILE is. */
-export const DSP_FILE = "dsp.k7x";
-
-/** The older type, for a module whose DSP is the `jsdsp.ts` beside it: its committed `jsdsp.json` plays and nothing builds it. */
-export const JSDSP_TYPE = "jsdsp";
-/** …and the built-in the engine actually loads for one: a host for a graph it is handed. */
-export const DSP_GRAPH_PLUGIN = "DSP Graph";
-/** Its twin over the NOTE stream. Tracktion routes the two differently, so a plugin cannot be both. */
-export const MIDI_GRAPH_PLUGIN = "MIDI Graph";
-
-/** The DSP source a `jsdsp` module carries: a fixed NAME, so a module stays a folder you can copy without rewriting anything inside it. */
-export const JSDSP_FILE = "jsdsp.ts";
-
-/** The plugin type a mixer module instantiates — an internal plugin reaches the engine under its DISPLAY name, so this is what a PluginDoc carries. */
-export const MIXER_PLUGIN = "Mixer";
-
-/** …and a RECORDER node's, spelled the same way and for the same reason — engine docs/recorder.md. */
-export const RECORDER_PLUGIN = "Recorder";
-
-/** The five knobs a strip has, in the order a strip reads them. Also the param names in the module file. */
-export const MIXER_PARAMS = ["Volume", "Pan", "Low", "Mid", "High"] as const;
-
-/** What a strip's `Volume` MEANS: decibels, floor to +6, 0 at unity — never 0..1, which would look like it worked and send +0.5 dB for half. */
-export const VOLUME_DB = { min: -60, max: 6, unity: 0 } as const;
-
-/** Map an authored `plugin: {type, name}` onto the engine's older wire form, `fallback` being the module name — @studio/song's docs/enginePlugin.md. */
-export function enginePlugin(
-  plugin: { type?: unknown; name?: unknown } | undefined,
-  fallback: string,
-  // What the module EMITS. A jsdsp graph has two hosts and this is what picks between them: the
-  // module's type folder already says which, so nothing new is authored — docs/enginePlugin.md.
-  emits?: string,
-): { type: string; name: string } {
-  const type = String(plugin?.type ?? "");
-  const name = plugin?.name != null ? String(plugin.name) : "";
-  // `jsdsp` is what the AUTHOR writes; the engine has no such plugin, so it loads the graph host and is handed the compiled graph.
-  if (type === JSDSP_TYPE || type === DSP_TYPE)
-    return {
-      type: emits === "midi" ? MIDI_GRAPH_PLUGIN : DSP_GRAPH_PLUGIN,
-      name: fallback,
-    };
-  if (type === "internal") return { type: name, name: fallback };
-  if (EXTERNAL_PLUGIN_FORMATS.has(type.toLowerCase()))
-    return { type, name: name || fallback };
-  return { type, name: name || fallback }; // legacy: `type` is the xmlTypeName itself
-}
+): ClipDoc => ({ ...blanks().clip, ...over });
 
 /** A plugin instance. `id` is the engine's `chain:module` address — nothing else can supply it. */
-export function pluginDoc(
+export const pluginDoc = (
   over: Partial<PluginDoc> & Pick<PluginDoc, "id">,
-): PluginDoc {
-  return {
-    type: "",
-    name: "",
-    path: "",
-    presetSave: "",
-    role: "audioFX",
-    enabled: true,
-    params: {},
-    ...over,
-  };
-}
+): PluginDoc => ({ ...blanks().plugin, ...over });

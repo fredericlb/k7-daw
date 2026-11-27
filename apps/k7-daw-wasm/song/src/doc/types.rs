@@ -1,5 +1,5 @@
 // doc/types.rs — the ProjectDoc of engine-protocol/project.ts, field for field: the document the engine plays.
-// A reader would get wrong that nothing here is a ts-rs twin: `tests/doc_twin.rs` holds the keys to project.ts (decision 301).
+// A reader would get wrong that project.ts is not written by hand: ts-rs generates it from these types (decision 301), so a doc comment here is the page's.
 
 use crate::clips::{ClipDoc, Plays, TimelineDoc};
 use crate::files::{Marker, SettingsDoc};
@@ -9,6 +9,7 @@ use serde::{Deserialize, Serialize};
 /// One rack sound: a note playing a whole clip (samples) or a window of the shared source (slice).
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(optional_fields))]
 pub struct RackSoundDoc {
     pub symbol: String,
     pub note: u8,
@@ -20,6 +21,7 @@ pub struct RackSoundDoc {
 /// A tap that leaves by an output pair of its own, pair 0 being the main one.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(optional_fields))]
 pub struct TapOutDoc {
     pub note: u8,
     pub pair: u32,
@@ -28,6 +30,7 @@ pub struct TapOutDoc {
 /// The output pair of a multi-output instrument that feeds a track.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(optional_fields))]
 pub struct InputFromDoc {
     pub plugin: String,
     pub pair: u32,
@@ -35,9 +38,11 @@ pub struct InputFromDoc {
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(optional_fields, rename_all = "camelCase"))]
 pub struct PluginDoc {
     pub id: String,
     #[serde(rename = "type")]
+    #[cfg_attr(feature = "ts", ts(rename = "type"))]
     pub plugin_type: String,
     pub name: String,
     pub path: String,
@@ -72,6 +77,7 @@ pub struct PluginDoc {
     pub preset_save: String,
     pub role: String,
     pub enabled: bool,
+    #[cfg_attr(feature = "ts", ts(type = "Record<string, number>"))]
     pub params: IndexMap<String, f64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub rack: Option<Vec<RackSoundDoc>>,
@@ -81,6 +87,7 @@ pub struct PluginDoc {
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(optional_fields))]
 pub struct SendDoc {
     pub to: String,
     pub level: f64,
@@ -90,6 +97,7 @@ pub struct SendDoc {
 /// A baked automation lane: `points` are `[beat, output]` in the curve's range.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(optional_fields, rename_all = "camelCase"))]
 pub struct AutomationDoc {
     pub param: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -101,6 +109,7 @@ pub struct AutomationDoc {
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(optional_fields, rename_all = "camelCase"))]
 pub struct TrackDoc {
     pub id: String,
     pub name: String,
@@ -131,6 +140,7 @@ pub struct TrackDoc {
 /// A group track: it holds no material, surfaces draw it over its members.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(optional_fields))]
 pub struct GroupDoc {
     pub id: String,
     pub name: String,
@@ -141,6 +151,7 @@ pub struct GroupDoc {
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(optional_fields, rename_all = "camelCase"))]
 pub struct ProjectDoc {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub uuid: Option<String>,

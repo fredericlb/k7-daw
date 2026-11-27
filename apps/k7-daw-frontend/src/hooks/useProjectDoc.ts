@@ -4,34 +4,20 @@
 // recording overlay's fields. Apart from App.tsx, which only wires it.
 
 import { DEFAULT_METRONOME_LEVEL } from "@studio/engine-protocol/build";
+import {
+  type DocTrack,
+  type RecInfo,
+  type SeqRef,
+  shellView,
+} from "@studio/k7-wasm/reads";
 import { useEffect, useMemo, useRef } from "react";
-import { mixerModules } from "../mixerStrips";
 import { useProjectDocQuery } from "../queries/projectDoc";
 import { isAnswer } from "../readFailure";
 import { sameJson } from "../shellEquality";
 import type { WebProject } from "../types";
 import { useLatest } from "./useLatest";
 
-export interface RecInfo {
-  tempo: number;
-  beatsPerBar: number;
-  /** The signature's lower number — carried alongside `beatsPerBar` so the footer can print `4/4`. */
-  beatUnit: number;
-  countIn: number;
-  names: Record<string, string>;
-}
-
-export interface DocTrack {
-  id: string;
-  volume: number;
-  pan: number;
-  mute: boolean;
-  solo: boolean;
-  /** Heard 10 dB up from the mixer (apps/k7-daw-wasm/song/docs/highlight.md). */
-  highlight: boolean;
-  /** The mixer NODE the level and pan live on — empty when the track has no strip, which is not 'at unity' but nowhere to put a level. */
-  mixer: string;
-}
+export type { DocTrack, RecInfo };
 
 export interface ProjectDocState {
   trackOrder: string[];
@@ -59,37 +45,19 @@ const NO_REC_INFO: RecInfo = {
 const NO_IDS: string[] = [];
 const NO_TRACKS: DocTrack[] = [];
 
-/** Everything the shell projects out of one document, built once per document. */
-function project(p: WebProject) {
-  // An instrument track's sequence is its first midi clip; a track with none can't be MIDI-armed.
-  const seqByTrack: Record<string, { seqId: string; start: number }> = {};
-  for (const t of p.tracks) {
-    const seq = t.clips.find((c) => c.type === "midi");
-    if (seq) seqByTrack[t.id] = { seqId: seq.id, start: seq.start };
-  }
-  return {
-    trackOrder: p.tracks.map((t) => t.id),
-    recInfo: {
-      tempo: p.tempo,
-      beatsPerBar: p.timeSigNumerator || 4,
-      beatUnit: p.timeSigDenominator || 4,
-      countIn: p.countIn,
-      names: Object.fromEntries(p.tracks.map((t) => [t.id, t.name])),
-    },
-    seqByTrack,
-    mixerStrips: mixerModules(p),
-    docTracks: p.tracks.map((t) => ({
-      id: t.id,
-      // The graph node's fader is in dB and its pan 0..1, read off the track's mixer module; no mixer means no strip, so unity is honest.
-      volume: t.mixer?.volume ?? 0,
-      pan: ((t.mixer?.pan ?? 0) + 1) / 2,
-      mixer: t.mixer?.module ?? "",
-      mute: t.mute,
-      solo: t.solo,
-      highlight: !!t.highlight,
+/** Everything the shell projects out of one document, built once per document — the projection is Rust's (song/src/reads/shell.rs). */
+const project = (p: WebProject) =>
+  shellView({
+    tempo: p.tempo,
+    num: p.timeSigNumerator,
+    den: p.timeSigDenominator,
+    countIn: p.countIn,
+    // The projection reads each clip's kind, id and start only: the notes stay here.
+    tracks: p.tracks.map((t) => ({
+      ...t,
+      clips: t.clips.map((c) => ({ type: c.type, id: c.id, start: c.start })),
     })),
-  };
-}
+  });
 
 export function useProjectDoc(
   /** Which reload counter `reloadKey` counts — the cache's namespace (queries/projectDoc.ts). */
@@ -117,8 +85,10 @@ export function useProjectDoc(
 
   useEffect(() => {
     if (!derived) return;
-    midiSeqRef.current = derived.seqByTrack;
-    optsRef.current.onMidiSeqs(derived.seqByTrack);
+    // Every key the map holds has a value: the generated map type only says a key may be absent.
+    const seqs = derived.seqByTrack as Record<string, SeqRef>;
+    midiSeqRef.current = seqs;
+    optsRef.current.onMidiSeqs(seqs);
   }, [derived]);
   // No doc — a project that does not compile — empties what is derived from it; a blip keeps the strips.
   const broken = !!failure && isAnswer(failure);

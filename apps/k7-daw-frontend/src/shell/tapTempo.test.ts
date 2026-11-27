@@ -1,5 +1,8 @@
+import { tapTempo } from "@studio/k7-wasm/reads";
 import { describe, expect, it } from "vitest";
-import { TAP_RESET_MS, tapTempo } from "./tapTempo";
+
+// The gap Rust starts a new run after (song/src/reads/misc.rs).
+const TAP_RESET_MS = 2000;
 
 const tapAll = (times: number[]) =>
   times.reduce<{ taps: number[]; bpm: number | null }>(

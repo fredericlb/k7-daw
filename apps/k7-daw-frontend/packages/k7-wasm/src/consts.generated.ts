@@ -533,6 +533,33 @@ export const MASTER_MIN_DB = -100.0;
 /** The master fader's highest level, in dB. */
 export const MASTER_MAX_DB = 12.0;
 
+/** The click's level when settings.k7x names none. */
+export const DEFAULT_METRONOME_LEVEL = 0.6;
+
+/** The quietest click there is. */
+export const METRONOME_MIN = 0.2;
+
+/** The module type whose DSP is the dsp.k7x beside it. */
+export const DSP_TYPE = "dsp";
+
+/** The DSP source a dsp module carries. */
+export const DSP_FILE = "dsp.k7x";
+
+/** The older module type whose DSP is the jsdsp.ts beside it. */
+export const JSDSP_TYPE = "jsdsp";
+
+/** The DSP source a jsdsp module carries. */
+export const JSDSP_FILE = "jsdsp.ts";
+
+/** The plugin type a mixer module instantiates. */
+export const MIXER_PLUGIN = "Mixer";
+
+/** What a strip's Volume means: decibels, floor to +6, 0 at unity. */
+export const VOLUME_DB = { min: -60.0, max: 6.0, unity: 0 } as const;
+
+/** Where the header meter's Fix button lands a clipped pass's peak, in dB. */
+export const FIX_TARGET_DB = -6.0;
+
 /** The project's graph file. */
 export const GRAPH_FILE = "graph.k7x";
 

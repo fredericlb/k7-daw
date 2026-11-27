@@ -1,9 +1,10 @@
 // TempoMeter.tsx — the project's tempo and meter, each number editing itself on a click.
 // The floating bar draws it, inside the Transport group.
+
+import { tapTempo } from "@studio/k7-wasm/reads";
 import { askText } from "@studio/project-shell/ask";
 import type { RecInfo } from "../hooks/useProjectDoc";
 import { m } from "../paraglide/messages.js";
-import { tapTempo } from "./tapTempo";
 
 /** The bpm question, with a Tap button (and Space) that fills the field from the taps' tempo. */
 function askTempo(initial: number): Promise<string | null> {

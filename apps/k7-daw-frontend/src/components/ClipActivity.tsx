@@ -4,9 +4,13 @@
 // needs and paints. It replaces the block's flat background, masked or (no data yet) at 70%.
 
 import { UNCOLOURED_SHADE } from "@studio/k7-wasm/consts";
+import {
+  activityMask,
+  audioActivity,
+  midiActivity,
+} from "@studio/k7-wasm/reads";
 import { cn } from "@studio/ui/lib/utils";
 import { memo, useMemo } from "react";
-import { activityMask, audioActivity, midiActivity } from "../activity";
 import type { EnvelopeProject } from "../clipEnvelope";
 import type { WebClip } from "../types";
 import { useClipWaveform } from "./ClipContent";

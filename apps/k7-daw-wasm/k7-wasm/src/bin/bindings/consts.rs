@@ -579,6 +579,31 @@ fn page_vocab() -> Vec<[String; 3]> {
             &json!(song_edit::project_root::MASTER_MAX_DB),
         ),
         export(
+            "The click's level when settings.k7x names none.",
+            "DEFAULT_METRONOME_LEVEL",
+            &json!(song::files::DEFAULT_METRONOME_LEVEL),
+        ),
+        export(
+            "The quietest click there is.",
+            "METRONOME_MIN",
+            &json!(song::files::METRONOME_MIN),
+        ),
+        export("The module type whose DSP is the dsp.k7x beside it.", "DSP_TYPE", &json!(song::modules::types::DSP_TYPE)),
+        export("The DSP source a dsp module carries.", "DSP_FILE", &json!(song::modules::types::DSP_FILE)),
+        export("The older module type whose DSP is the jsdsp.ts beside it.", "JSDSP_TYPE", &json!(song::modules::types::JSDSP_TYPE)),
+        export("The DSP source a jsdsp module carries.", "JSDSP_FILE", &json!(song::modules::types::JSDSP_FILE)),
+        export("The plugin type a mixer module instantiates.", "MIXER_PLUGIN", &json!(song::resolve::MIXER_PLUGIN)),
+        export(
+            "What a strip's Volume means: decibels, floor to +6, 0 at unity.",
+            "VOLUME_DB",
+            &json!({ "min": song::reads::VOLUME_DB_MIN, "max": song::reads::VOLUME_DB_MAX, "unity": 0 }),
+        ),
+        export(
+            "Where the header meter's Fix button lands a clipped pass's peak, in dB.",
+            "FIX_TARGET_DB",
+            &json!(song::reads::FIX_TARGET_DB),
+        ),
+        export(
             "The project's graph file.",
             "GRAPH_FILE",
             &json!(song_edit::graph_schema::GRAPH_FILE),
