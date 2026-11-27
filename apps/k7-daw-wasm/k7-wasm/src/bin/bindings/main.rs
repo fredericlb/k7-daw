@@ -8,6 +8,7 @@ use gesture::ruler::RulerTick;
 use gesture::tools::{FadePair, ToolAct};
 use k7_wasm::WasmError;
 use k7_wasm::ops::VersionAnswer;
+use k7_wasm::ops::address::{AddressRequest, BenchRef};
 use k7_wasm::ops::chains::{ChainsRequest, Kept};
 use k7_wasm::ops::curve::{CurveRequest, OpenAnswer};
 use k7_wasm::ops::engine::{BestAnswer, EngineRequest, WarningAnswer};
@@ -64,6 +65,11 @@ fn write_types(dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
     // Each export walks the types its own type depends on, so these roots reach every file.
     CurveRequest::export_all_to(dir)?;
     TimecodeRequest::export_all_to(dir)?;
+    AddressRequest::export_all_to(dir)?;
+    BenchRef::export_all_to(dir)?;
+    song_schema::address::Launch::export_all_to(dir)?;
+    song_schema::address::LanSurface::export_all_to(dir)?;
+    song_schema::address::LocalTarget::export_all_to(dir)?;
     EngineRequest::export_all_to(dir)?;
     SchemaRequest::export_all_to(dir)?;
     BuiltinPluginDto::export_all_to(dir)?;

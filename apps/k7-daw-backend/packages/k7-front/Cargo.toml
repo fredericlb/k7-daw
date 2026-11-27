@@ -80,7 +80,7 @@ tokio = { workspace = true, features = ["test-util"] }
 
 [features]
 # The TypeScript types of the wire structs, written by the `bindings` binary (docs/ts-types.md).
-ts = ["dep:ts-rs", "song/ts"]
+ts = ["dep:ts-rs", "song/ts", "k7-file-service/ts"]
 # The engine testbed's clock and stubs, for the TypeScript suites run against Rust (docs/engine.md).
 test-hooks = ["k7-engine/test-hooks"]
 

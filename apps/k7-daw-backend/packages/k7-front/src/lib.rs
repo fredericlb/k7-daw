@@ -13,6 +13,8 @@ mod listen;
 mod peer;
 mod prefs_schema;
 mod routes;
+/// The camera hub's wire structs, which the bindings binary writes the page's types from.
+pub use routes::cameras::wire as camera_wire;
 /// The host's folder picker, installed before the front starts (`docs/export.md`).
 pub use routes::local::export;
 mod session;

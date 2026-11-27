@@ -2,6 +2,7 @@
 // A reader would get wrong that one enum lists every op: each family declares its own, so a new family touches one match arm here.
 // A second reader mistake: an answer is the operation's value itself; only an error has a wrapper, and the status says which.
 
+pub mod address;
 pub mod chains;
 pub mod curve;
 pub mod engine;
@@ -94,6 +95,7 @@ impl Session {
         let Op { op } = decode(input)?;
         let family = op.split_once('.').map_or(op.as_str(), |(f, _)| f);
         match family {
+            "address" => address::dispatch(decode(input)?, out),
             "curve" => curve::dispatch(&mut self.curves, decode(input)?, out),
             "engine" => engine::dispatch(decode(input)?, out),
             "text" if op == "text.hash" => engine::dispatch(decode(input)?, out),
