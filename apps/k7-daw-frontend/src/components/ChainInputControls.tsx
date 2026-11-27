@@ -15,11 +15,10 @@ export interface InputPick {
   value: string;
 }
 
-/** One of the machine's audio inputs: its socket name, its 1-based channels, and the interface that carries it. */
+/** One of the machine's audio inputs: its socket name and its 1-based channels. */
 export interface AudioSet {
   name: string;
   channels: number[];
-  interface?: string;
 }
 
 const MONITORS = ["off", "auto", "on"] as const;
@@ -28,7 +27,7 @@ const MONITORS = ["off", "auto", "on"] as const;
 const TRIGGER =
   "type-secondary inline-flex h-8 shrink-0 cursor-pointer items-center gap-1 whitespace-nowrap rounded-2xl px-2.5 outline-none hover:bg-(--k7-row) focus-visible:shadow-(--k7-focus-ring) data-[state=open]:bg-(--k7-row)";
 
-/** The input menu, drawn at the left of the title bar: the app's search dropdown, audio sockets grouped by interface, then MIDI. */
+/** The input menu, drawn at the left of the title bar: the app's search dropdown, the audio sockets, then MIDI. */
 export function ChainInputMenu({
   input,
   audioSets,
@@ -48,19 +47,12 @@ export function ChainInputMenu({
     input?.kind === "audio"
       ? audioSets.filter((d) => d.channels.length === (stereo ? 2 : 1))
       : audioSets;
-  const audioGroup = (d: AudioSet) => d.interface || m["chain.inputAudio"]();
-  // Sorted by interface so each one's sockets sit under one heading, in the order the engine lists them.
-  const order = [...new Set(sets.map(audioGroup))];
   const items: PickerItem[] = [
-    ...order.flatMap((g) =>
-      sets
-        .filter((d) => audioGroup(d) === g)
-        .map((d) => ({
-          value: `audio:${d.channels.join(",")}`,
-          label: d.name,
-          group: g,
-        })),
-    ),
+    ...sets.map((d) => ({
+      value: `audio:${d.channels.join(",")}`,
+      label: d.name,
+      group: m["chain.inputAudio"](),
+    })),
     ...["any", ...midiDevices].map((d) => ({
       value: `midi:${d}`,
       label: d === "any" ? m["chain.inputAnyDevice"]() : d,
