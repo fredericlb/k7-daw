@@ -11,7 +11,7 @@ crate-type = ["rlib"]
 
 [features]
 # The TypeScript types of the page-facing structs, written by k7-wasm's bindings binary.
-ts = ["dep:ts-rs"]
+ts = ["dep:ts-rs", "eyes/ts"]
 
 [dependencies]
 ts-rs = { version = "11", optional = true }

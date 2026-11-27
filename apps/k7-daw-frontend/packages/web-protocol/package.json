@@ -13,7 +13,6 @@
     "./performance": "./performance.ts",
     "./playlists": "./playlists.ts",
     "./resources": "./resources.ts",
-    "./paths": "./paths.ts",
     "./cameras": "./cameras.ts"
   },
   "scripts": {

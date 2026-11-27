@@ -27,6 +27,7 @@ const FRESH: Duration = Duration::from_secs(2);
 
 #[derive(Clone, Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(rename = "LanPeer"))]
 pub struct PeerView {
     pub engine_id: String,
     pub name: String,

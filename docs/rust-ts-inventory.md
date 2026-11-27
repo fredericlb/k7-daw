@@ -163,7 +163,6 @@ can depend on. What stays, and what each needs:
 
 | module | why it stays | what moves it |
 |---|---|---|
-| `web-protocol/paths.ts` | its callers are the song twins | their deletion (rust-song-twins); then it is unused |
 | `clipEnvelope.ts` | not a twin of `wfSig`: it keys what the page holds, `wfSig` what the service holds | the service sending its signature with the waveform |
 | `engineSession.ts` | address parsing around a one-line slug; `session_of` takes a workspace root, not an address | M5c's project address grammar |
 | `engineTaken.ts` | a three-flag decision over React state, called on render | stays |
@@ -740,7 +739,6 @@ are grouped by folder and extension, with the reasons they stay.
 | web-protocol/compat.ts | 50 | MOVE | backend route /project-compat (k7-front files/service/routes.rs) already scores; page ... | score is computed in Rust already; TS twin |
 | web-protocol/engineAccess.ts | 146 | STAY 116 / MOVE 30 | constants of the wire; backoff (~20) MOVE optional | header names/budgets could be generated as consts; low value |
 | web-protocol/machineTypes.ts | 122 | GENERATE | ts-rs on k7-file-service listings + k7-supervisor stem jobs | 13 types |
-| web-protocol/paths.ts | 56 | MOVE | k7-file-service/src/paths.rs (exists) -> k7-wasm op or drop browser use | lexical confinement; Rust side exists |
 | web-protocol/performance.ts | 93 | MOVE | k7-supervisor/src/performance.rs: send the score on the heartbeat | the format/describe strings (~20) STAY (i18n) |
 | web-protocol/playlists.ts | 13 | GENERATE | ts-rs on k7-file-service playlists reply |  |
 | web-protocol/projects.ts | 355 | MOVE | new address module in k7-front (or k7-wasm op): launch/address grammar | contract between backend and page; ~55 lines of page-path constants STAY |
@@ -788,3 +786,5 @@ are grouped by folder and extension, with the reasons they stay.
 
 **M4a, as built.** The reads moved into `apps/k7-daw-wasm/song/src/reads` (`apps/k7-daw-wasm/song/docs/reads.md`), the ops `reads.*` of k7-wasm and `@studio/k7-wasm/reads`. The page's modules keep their paths and exports as thin wrappers (`takes`, `rows`, `rackLit`, `noteSpans`, `videoSpans`, `clipLoop`, `clipInstances`, `clipNames`, `mixerStrips`, `gainTrim`, `midiIn`, `laneInput`, `rackFor`, `graphNotes`, `templateGraph`, `headphonesHint`, `timelineView`'s `followRename`, `projectName`, `projectKind`); `activity.ts` and `tapTempo.ts` are gone. The shell's projection (`useProjectDoc`) and the mute/solo rule of `TimelineTab` (`laneMix.ts`) are Rust's. `engine-protocol/project.ts` is generated (decision 301 superseded), the Web* types of `timelineTypes.ts` are generated from `views/web`, and `build.ts` reads its defaults from `reads.blanks`. Each moved function ran against the old TypeScript on the 172 golden documents and on generated inputs (about 700,000 comparisons, no difference; the run caught `countIn` of a blank document, 1 in the compiler's default and 0 in `emptyDoc`, which `blanks` keeps at 0). What stayed in TypeScript and why: the table in `reads.md`; `mastering/` (a control table of labels and per-frame agreement), `hooks/useTrackControls` (React state and a command line), `rowKey` and the row lookups (they act on the page's row objects), `timelineView` (an object spread over React state), and `templateGraph`'s caller. Not done: the other types of `timelineTypes.ts` (waveform, picture, diagnostics) have no Rust twin.
 
+
+**W6a, as built.** `web-protocol/paths.ts` and its test are gone (its rules are `k7-file-service/src/paths.rs`), and so are the unused exports of `services.ts` (the table of ports, their parser and the loopback test; `PORTS_GLOBAL` and `serviceUrl` stay). The picture's `WebVideo*` types and `WebShape` are generated from `apps/k7-daw-wasm/verbs/src/picture/doc.rs` (ts-rs, with the eyes scene types for fades, keys, transitions and shapes), `Diagnostic` is the generated one, and `LanPeer` is the front's `PeerView`. What stays by hand: `K7Prefs`, `AuthUser`, `LocalApp`, `LanHello` and the `syncHistory` shapes, whose routes build their answers with `json!` and so have no struct to derive from. About 290 lines of TypeScript and 117 of tests out, 35 lines of Rust in.

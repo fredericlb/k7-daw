@@ -1,7 +1,7 @@
 // Every service resolves on the origin it is given: the host and port of a page are k7's own.
 
-import { afterEach, describe, expect, it } from "vitest";
-import { parsePorts, servicePorts, serviceUrl } from "./services.ts";
+import { describe, expect, it } from "vitest";
+import { serviceUrl } from "./services.ts";
 
 describe("serviceUrl", () => {
   it("echoes the origin it is given, path dropped", () => {
@@ -24,31 +24,5 @@ describe("serviceUrl", () => {
     expect(serviceUrl("http://localhost:5223", "k7")).toBe(
       "http://localhost:5223",
     );
-  });
-});
-
-describe("moved loopback ports", () => {
-  afterEach(() => {
-    delete process.env.STUDIO_PORTS;
-    delete (globalThis as Record<string, unknown>).__STUDIO_PORTS__;
-  });
-
-  it("reads a host's table from the environment, for node", () => {
-    process.env.STUDIO_PORTS = "k7=18789";
-    expect(servicePorts().k7).toBe(18789);
-  });
-
-  it("prefers the page's global, which a preload sets", () => {
-    process.env.STUDIO_PORTS = "k7=1";
-    (globalThis as Record<string, unknown>).__STUDIO_PORTS__ = "k7=18789";
-    expect(servicePorts().k7).toBe(18789);
-  });
-
-  it("drops what it cannot read and keeps the rest of the table", () => {
-    expect(parsePorts("pl8=18795, nope=1, k7=70000, k7=18789")).toEqual({
-      k7: 18789,
-    });
-    process.env.STUDIO_PORTS = "pl8=18787";
-    expect(servicePorts().k7).toBe(8789);
   });
 });

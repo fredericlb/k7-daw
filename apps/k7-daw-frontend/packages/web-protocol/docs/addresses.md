@@ -25,16 +25,15 @@ workspaces, the libraries and the deploy key are the file service's.
 
 ### The ports are the other half of the same table
 
-A SERVER calling another studio service uses `SERVICE_PORTS` rather than the public URL, and the
+A SERVER calling another studio service uses its loopback port rather than the public URL, and the
 reason is not performance: in a checkout everything is behind a private CA, whose local CA node
 does not trust, so `https://app.priv.k7.rocks` fails with `UNABLE_TO_GET_ISSUER_CERT` from
 a backend while working perfectly in the browser beside it.
 
-On a loopback host the same table is what a PAGE uses too, and a host may move it:
-`STUDIO_PORTS=k7=18789` (the desktop app publishing the port `apps/k7-daw-backend/standalone.json` fixes) in the environment of the front and the supervisor, whose
-`Url.cpp` reads the same variable — or `globalThis.__STUDIO_PORTS__` for a page, set before its
-scripts run (`servicePorts`). `pl8` and `k7` have no port of their own: they are k7's. The desktop app's port is apart from the dev session's, so the two run side by side
-(`apps/k7-daw-desktop/docs/app.md`). Unset, the table is `SERVICE_PORTS`.
+A host may move the port: `STUDIO_PORTS=k7=18789` (the desktop app publishing the port `apps/k7-daw-backend/standalone.json` fixes) in the environment of the front and the supervisor, whose
+`Url.cpp` reads the same variable — or `globalThis.__STUDIO_PORTS__` (`PORTS_GLOBAL`) for a page, set before its
+scripts run. The desktop app's port is apart from the dev session's, so the two run side by side
+(`apps/k7-daw-desktop/docs/app.md`).
 
 ## One suffix, and every shape inside it
 

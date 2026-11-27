@@ -119,7 +119,7 @@ path, a device name, anything of the engine's machine is left alone because no r
 or space-only segment, no control character, `\` or `:`, no Windows device name, and on Windows no
 trailing dot or space. The hub refuses the same table on its side, because a path an agent would open is a
 path the server could aim at the machine.
-It starts from the tree's own segment rule, `isPlainSegment` (`apps/k7-daw-frontend/packages/web-protocol/docs/paths.md`),
+It starts from the tree's own segment rule, plain-segment rule (`apps/k7-daw-backend/packages/k7-file-service/src/paths.rs`),
 and refuses more: the rest of the table is what an engine's machine would mis-open.
 
 **A path under a root is spelt `<root>/<segment>/…` by the SERVER, whatever its separator**, and the

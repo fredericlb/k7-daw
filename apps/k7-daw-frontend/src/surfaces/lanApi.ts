@@ -1,23 +1,13 @@
 // lanApi.ts — this device's own front, asked about the other devices on the network. Every call is to loopback:
 // the front relays to a peer's door and holds its token, which the page never sees (apps/k7-daw-backend/docs/lan.md).
 
+import type { LanPeer } from "@studio/web-protocol";
+
 /** The door's version this build speaks; raised with the backend's `API` whenever a file route a surface uses changes shape. */
 export const LAN_API = 1;
 
-/** A device found on the network, as the relay resolved it. */
-export interface LanPeer {
-  engineId: string;
-  name: string;
-  host: string;
-  door: number;
-  engine: number;
-  api: number;
-  proto: number;
-  /** Its engine answered. */
-  reached: boolean;
-  /** It handed this device its token: the door answers. */
-  trusted: boolean;
-}
+/** A device found on the network, as the relay resolved it: GENERATED from the Rust `PeerView`. */
+export type { LanPeer };
 
 /** What a device's door says of itself: its project, the surfaces that declares, and the screens other devices show. */
 export interface LanHello {

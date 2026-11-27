@@ -5,7 +5,7 @@
 
 mod confine;
 mod door;
-mod peers;
+pub mod peers;
 mod relay;
 mod screens;
 #[cfg(test)]

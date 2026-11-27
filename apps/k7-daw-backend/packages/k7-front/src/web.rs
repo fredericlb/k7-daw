@@ -98,7 +98,7 @@ pub fn error(status: StatusCode, message: &str) -> Response {
     (status, Json(serde_json::json!({ "error": message }))).into_response()
 }
 
-/// `localhost`, `127.x.x.x` or `[::1]`, as `isLoopbackHost` in `@studio/web-protocol/services` reads a hostname.
+/// `localhost`, `127.x.x.x` or `[::1]`.
 pub fn is_loopback_hostname(host: &str) -> bool {
     if host == "localhost" || host == "[::1]" {
         return true;

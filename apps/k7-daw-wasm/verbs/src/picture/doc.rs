@@ -9,11 +9,18 @@ fn no(b: &bool) -> bool {
     !*b
 }
 
+/// The type of a still shot's flag: only `true` is ever written.
+#[cfg(feature = "ts")]
+#[derive(ts_rs::TS)]
+#[ts(type = "true", rename = "WebVideoStill")]
+struct Still;
+
 pub use eyes::{CaptionStyle, Captions, Fade, Key, Transition};
 
 /// One shot; `src` is empty on an activation and on a shot whose file is not there.
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(rename = "WebVideoClip", optional_fields))]
 pub struct Clip {
     pub id: String,
     pub name: String,
@@ -23,6 +30,7 @@ pub struct Clip {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub proxy: Option<String>,
     #[serde(skip_serializing_if = "no")]
+    #[cfg_attr(feature = "ts", ts(as = "Option<Still>"))]
     pub still: bool,
     pub start: f64,
     pub length: f64,
@@ -32,6 +40,7 @@ pub struct Clip {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fade_out: Option<Fade>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "ts", ts(as = "Option<std::collections::HashMap<String, Vec<Key>>>"))]
     pub animate: Option<IndexMap<String, Vec<Key>>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub speed: Option<f64>,
@@ -45,6 +54,7 @@ pub struct Clip {
 
 /// A shader's two stages, read off its folder.
 #[derive(Clone, Debug, PartialEq, Serialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(rename = "WebVideoGlsl"))]
 pub struct Glsl {
     pub name: String,
     pub vertex: String,
@@ -54,12 +64,15 @@ pub struct Glsl {
 /// One pass over the picture: a shader with its GLSL inline, or a named video effect.
 #[derive(Clone, Debug, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(rename = "WebVideoPlugin", optional_fields))]
 pub struct Plugin {
     pub id: String,
     #[serde(rename = "type")]
+    #[cfg_attr(feature = "ts", ts(type = "\"video_effect\" | \"shader\""))]
     pub kind: &'static str,
     pub name: String,
     pub enabled: bool,
+    #[cfg_attr(feature = "ts", ts(type = "Record<string, number>"))]
     pub params: IndexMap<String, f64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub shader: Option<Glsl>,
@@ -72,6 +85,7 @@ pub struct Plugin {
 /// A picture lane in draw order: its rect, its shots, its shapes, its run and its lens.
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(rename = "WebVideoTrack", optional_fields))]
 pub struct Track {
     pub id: String,
     pub name: String,
@@ -81,18 +95,22 @@ pub struct Track {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub camera: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "ts", ts(type = "\"off\" | \"auto\" | \"on\"", optional))]
     pub camera_monitor: Option<String>,
     pub x: f64,
     pub y: f64,
     pub w: f64,
     pub h: f64,
     pub clips: Vec<Clip>,
+    #[cfg_attr(feature = "ts", ts(as = "Vec<eyes::scene::SceneShape>"))]
     pub shapes: Vec<Json>,
     #[serde(skip_serializing_if = "Vec::is_empty")]
+    #[cfg_attr(feature = "ts", ts(as = "Option<Vec<Plugin>>"))]
     pub plugins: Vec<Plugin>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(rename = "WebVideoMarker"))]
 pub struct Marker {
     pub sec: f64,
     pub name: String,
@@ -102,20 +120,26 @@ pub struct Marker {
 /// The picture of a project, as `POST /picture` answers it once its paths are made workspace-relative.
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(rename = "WebVideoProject", optional_fields))]
 pub struct Doc {
     pub name: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub row_order: Option<Vec<String>>,
+    #[cfg_attr(feature = "ts", ts(as = "(f64, f64)"))]
     pub viewport: [f64; 2],
     pub fps: f64,
     pub duration: f64,
     pub markers: Vec<Marker>,
     pub video_tracks: Vec<Track>,
     pub frame_plugins: Vec<Plugin>,
+    #[cfg_attr(feature = "ts", ts(type = "\"mix\" | null"))]
     pub sound: Option<&'static str>,
+    #[cfg_attr(feature = "ts", ts(type = "Record<string, import(\"./SceneTransition\").SceneTransition>"))]
     pub transitions: IndexMap<String, Transition>,
+    #[cfg_attr(feature = "ts", ts(type = "Record<string, Array<import(\"./WebVideoPlugin\").WebVideoPlugin>>"))]
     pub stretches: IndexMap<String, Vec<Plugin>>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "ts", ts(type = "Record<string, Array<import(\"./WebVideoTrack\").WebVideoTrack>>", optional))]
     pub timelines: Option<IndexMap<String, Vec<Track>>>,
 }
 
