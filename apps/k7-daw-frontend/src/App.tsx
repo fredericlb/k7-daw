@@ -3487,7 +3487,7 @@ export default function App({
                 {/* The popin's backdrop: a click outside is the reliable way out, Escape belonging to the editor's vim. */}
                 {editorPopin && (
                   <div
-                    className="fixed inset-0 z-40 bg-black/40"
+                    className="scrim fixed inset-0 z-(--k7-z-bar)"
                     onPointerDown={() => setEditorPopin(false)}
                   />
                 )}

@@ -6,11 +6,6 @@ import { docPattern } from "@studio/song-schema/docExt";
 import { Button } from "@studio/ui/button";
 import { Choice } from "@studio/ui/choice";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@studio/ui/dropdown-menu";
-import {
   FileText,
   LayoutGrid,
   Piano,
@@ -30,7 +25,7 @@ import {
 import { needsAttention, saveLabel } from "../saveLabel";
 import type { FileContent, FileNode } from "../types";
 import { Breadcrumb } from "./Breadcrumb";
-import { ChainOpsList } from "./ChainOpsList";
+import { ChainOpsPopover } from "./ChainOpsList";
 
 const UI_FILE = docPattern("ui");
 
@@ -140,8 +135,8 @@ export function EditorToolbar({
       )}
       {/* The waveform panel's "operations" menu on the clip's TEXT (../clipOps.ts); the reload keeps the buffer off the repointed `source:`. */}
       {file && isClipFile(file.path) && (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+        <ChainOpsPopover
+          trigger={
             <Button
               size="sm"
               variant="secondary"
@@ -155,16 +150,12 @@ export function EditorToolbar({
               )}
               Process
             </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" className="w-64 p-1">
-            <ChainOpsList
-              search={opSearch}
-              onSearch={onOpSearch}
-              ops={clipOps}
-              onPick={onProcess}
-            />
-          </DropdownMenuContent>
-        </DropdownMenu>
+          }
+          search={opSearch}
+          onSearch={onOpSearch}
+          ops={clipOps}
+          onPick={onProcess}
+        />
       )}
       {/* In place of a Save button: silent while the file is saved, amber with the reason for as long as it is not. */}
       <span

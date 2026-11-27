@@ -170,7 +170,7 @@ ID,Screen,Interaction,Mouse / trackpad,Keyboard,Touch,Devices,Not drawn,Area,Not
 05.24,05,Abort a knob drag,release outside the window,—,pointer cancel,T M D,FALSE,Chain graph and builders · Canvas and cards,
 05.25,05,"Toggle a button, trigger a rack pad",click,Enter,tap,T M D,FALSE,Chain graph and builders · Canvas and cards,
 05.26,05,Pick from a dropdown widget,"click, choose",native select keys,native picker,T M D,FALSE,Chain graph and builders · Canvas and cards,
-05.27,05,Pick a file for a filepicker widget,click the file button → asset tree,—,tap,T M D,FALSE,Chain graph and builders · Canvas and cards,
+05.27,05,Pick a file for a filepicker widget,click the file button → asset tree (a branch opens on click as on hover),—,tap; a tap opens a branch,T M D,FALSE,Chain graph and builders · Canvas and cards,
 05.28,05,Switch a group on / off,click the group's dot,—,tap,T M D,FALSE,Chain graph and builders · Canvas and cards,
 05.29,05,Play an interactive LCD screen,"press, drag, release on it",modifiers reach the script,drag,T M D,FALSE,Chain graph and builders · Canvas and cards,
 05.30,05,Bypass / enable a module,click the icon bubble,Enter,tap,T M D,FALSE,Chain graph and builders · Canvas and cards,
@@ -217,9 +217,9 @@ ID,Screen,Interaction,Mouse / trackpad,Keyboard,Touch,Devices,Not drawn,Area,Not
 06.17,06,Open a project from the workspace level,click its row,Enter,tap,T M D,FALSE,Source editor and file tree · File tree,
 06.18,06,Switch Project / Libraries,click a tab,—,tap,T M D,FALSE,Source editor and file tree · File tree,
 06.19,06,"Pin / unpin a file, open a pinned file",menu Pin / Unpin; click a pinned row; its ✕,Enter,tap; long-press for the menu,T M D,FALSE,Source editor and file tree · File tree,
-06.20,06,Row menu entries,"right-click a row or click ⋯ (on hover) → Upload files / folder, New file / folder / module / node, Clone module, Pin, Copy path, Rename, Delete",—,long-press or tap ⋯,T M D,FALSE,Source editor and file tree · File tree,
-06.21,06,Background menu entries,right-click empty space → root actions,—,long-press empty space,T M D,FALSE,Source editor and file tree · File tree,
-06.22,06,"Name a new, renamed or cloned item",type in the inline prompt,"Enter commits, Esc closes",on-screen keyboard,T M D,FALSE,Source editor and file tree · File tree,
+06.20,06,Row menu entries,"right-click a row or click ⋯ (on hover) → Upload files / folder, New file / folder / module / node, Clone module, Pin, Copy path, Rename, Delete",—,long-press or tap ⋯,T M D,FALSE,Source editor and file tree · File tree,"the shared pointer menu: 44 px rows on touch, the same keys and dismissal as every right-click menu"
+06.21,06,Background menu entries,right-click empty space → root actions,—,long-press empty space,T M D,FALSE,Source editor and file tree · File tree,"the shared pointer menu, as the row menu"
+06.22,06,"Name a new, renamed or cloned item",type in the name dialog (a delete asks in the same dialog),"Enter confirms, Esc cancels",on-screen keyboard,T M D,FALSE,Source editor and file tree · File tree,
 06.23,06,Delete an item,"menu Delete, confirm",—,same,T M D,FALSE,Source editor and file tree · File tree,
 06.24,06,Move a file or folder into a folder,drag a row onto a folder,—,—,D,FALSE,Source editor and file tree · File tree,
 06.25,06,Upload by dropping,drop OS files or folders on a folder row or the background,—,from Files on iPad; none on phone,T D,FALSE,Source editor and file tree · File tree,

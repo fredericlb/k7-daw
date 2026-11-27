@@ -4,8 +4,12 @@
 // instance lives in App; both surfaces open it through openContextMenu. Dismisses on Escape, an
 // outside click, a scroll, losing focus or its close button. Rows are split into TABS (menuTabs.ts).
 
-import { useModalFocus } from "@studio/ui/modal-focus";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import {
+  PointMenu,
+  PointMenuItem,
+  PointMenuSeparator,
+} from "@studio/ui/point-menu";
+import { useEffect, useMemo, useState } from "react";
 import { type CommandPrefs, labelIn } from "../commandPrefs";
 import type { MenuItem } from "../contextMenu";
 import { useLocale } from "../i18n";
@@ -45,10 +49,6 @@ export function ContextMenu({
   const { locale } = useLocale();
   // The key each command answers to, read off the person's own table so a row never advertises a key nothing binds.
   const keys = useMemo(() => shortcutsByCommand(prefs), [prefs]);
-  const ref = useRef<HTMLDivElement>(null);
-  useModalFocus(ref, { trap: false });
-  // Start at the click, then clamp into the viewport once we can measure the menu.
-  const [pos, setPos] = useState({ x, y });
   // The rows by tab, and the tab on show: the first, which is the thing you clicked, on every new menu.
   const tabs = useMemo(() => menuTabs(items), [items]);
   const [tab, setTab] = useState(0);
@@ -56,84 +56,18 @@ export function ContextMenu({
   useEffect(() => setTab(0), [items]);
   const on = Math.min(tab, tabs.length - 1);
   const { safe, danger } = dangerLast(tabs[on]?.items ?? []);
-
-  // Clamped into the viewport on opening, and again on a tab switch: another tab is another height.
-  // biome-ignore lint/correctness/useExhaustiveDependencies: `tab` is a trigger — the new rows are measured from the DOM.
-  useLayoutEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const r = el.getBoundingClientRect();
-    setPos({
-      x: Math.max(8, Math.min(x, window.innerWidth - r.width - 8)),
-      y: Math.max(8, Math.min(y, window.innerHeight - r.height - 8)),
+  // Another tab is another height and another first row: the kit re-clamps and refocuses on a new key.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: `items` and `on` ARE the trigger.
+  const refresh = useMemo(() => ({}), [items, on]);
+  // Left and right walk the tabs, as they do in any tab strip.
+  const walkTabs = (e: KeyboardEvent) => {
+    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return false;
+    setTab((t) => {
+      const n = tabs.length;
+      return n ? (t + (e.key === "ArrowLeft" ? n - 1 : 1)) % n : 0;
     });
-  }, [x, y, tab]);
-
-  // The keyboard lands on the first row on opening and on every tab switch, so the arrows have somewhere to start.
-  // biome-ignore lint/correctness/useExhaustiveDependencies: `tab` and `items` are triggers — the rows are read from the DOM.
-  useEffect(() => {
-    ref.current
-      ?.querySelector<HTMLElement>('[role="menuitem"]')
-      ?.focus({ preventScroll: true });
-  }, [tab, items]);
-
-  useEffect(() => {
-    // Capture, so an outside click dismisses before it acts; a pointerdown inside is left to the button's onClick.
-    const down = (e: PointerEvent) => {
-      if (!ref.current?.contains(e.target as Node)) onClose();
-    };
-    const key = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        e.stopPropagation();
-        onClose();
-        return;
-      }
-      // Left and right walk the tabs, as they do in any tab strip.
-      if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
-        e.stopPropagation();
-        e.preventDefault();
-        setTab((t) => {
-          const n = tabCount.current;
-          return n ? (t + (e.key === "ArrowLeft" ? n - 1 : 1)) % n : 0;
-        });
-        return;
-      }
-      const rows = [
-        ...(ref.current?.querySelectorAll<HTMLElement>('[role="menuitem"]') ??
-          []),
-      ];
-      const at = rows.indexOf(document.activeElement as HTMLElement);
-      // Enter picks the focused row here, before any shell key handler can read it as its own.
-      if (e.key === "Enter" && at >= 0) {
-        e.stopPropagation();
-        e.preventDefault();
-        rows[at].click();
-        return;
-      }
-      const next = moveFocus(e.key, at, rows.length);
-      if (next === null) return;
-      e.stopPropagation();
-      e.preventDefault();
-      rows[next]?.focus();
-    };
-    window.addEventListener("pointerdown", down, true);
-    window.addEventListener("keydown", key, true);
-    window.addEventListener("blur", onClose);
-    // The menu's own overflow scroll must not close it.
-    const scrolled = (e: Event) => {
-      if (!ref.current?.contains(e.target as Node)) onClose();
-    };
-    window.addEventListener("scroll", scrolled, true);
-    return () => {
-      window.removeEventListener("pointerdown", down, true);
-      window.removeEventListener("keydown", key, true);
-      window.removeEventListener("blur", onClose);
-      window.removeEventListener("scroll", scrolled, true);
-    };
-  }, [onClose]);
-  // Read by the key handler, which is bound once.
-  const tabCount = useRef(tabs.length);
-  tabCount.current = tabs.length;
+    return true;
+  };
 
   // The menu going takes its line with it, or the last thing hovered would read as something the app just did.
   useEffect(() => () => onHint?.(""), [onHint]);
@@ -145,34 +79,24 @@ export function ContextMenu({
     const Icon = pref?.icon ? icons?.[pref.icon] : undefined;
     // The person's name in THIS language, else the catalogue's sentence, else the entry's name (docs/contextMenu.md).
     const text = labelIn(pref?.label, locale).trim() || it.sentence || it.label;
-    const key = keys[it.verb];
     return (
-      <button
+      <PointMenuItem
         key={it.command}
-        type="button"
-        role="menuitem"
+        danger={destructive}
+        icon={Icon}
+        // The icon gutter is held whether or not this row has one, so the texts line up.
+        gutter
+        shortcut={keys[it.verb]}
         title={
           it.complete
             ? m["menu.runs"]({ command: it.command })
             : m["menu.fills"]({ command: it.command })
         }
-        onClick={() => {
-          onPick(it);
-          onClose();
-        }}
+        onSelect={() => onPick(it)}
         // The status line follows the pointer, and the KEYBOARD too — walking the menu is a way of reading it.
         onPointerEnter={() => onHint?.(it.description)}
         onFocus={() => onHint?.(it.description)}
-        className={`type-label flex min-h-11 w-full cursor-pointer desk:min-h-8 items-center gap-2 rounded-2xl px-3 text-left outline-none hover:bg-on-fill focus-visible:bg-on-fill ${
-          destructive
-            ? "text-error"
-            : "hover:text-accent-foreground focus-visible:text-accent-foreground"
-        }`}
       >
-        {/* The icon gutter is held whether or not this row has one, so the texts line up. */}
-        <span className="flex h-4 w-4 shrink-0 items-center justify-center">
-          {Icon ? <Icon className="h-4 w-4" /> : null}
-        </span>
         <span className="min-w-0 flex-1 truncate">{text}</span>
         {/* The verb, muted, whenever the row reads as something else: it is what you would type. */}
         {text !== it.label && (
@@ -184,23 +108,19 @@ export function ContextMenu({
         {!it.complete && (
           <span className="shrink-0 text-muted-foreground">…</span>
         )}
-        {key && (
-          <kbd className="shrink-0 rounded border border-border px-1 font-mono text-[11px] text-muted-foreground">
-            {key}
-          </kbd>
-        )}
-      </button>
+      </PointMenuItem>
     );
   };
 
   return (
-    <div
-      ref={ref}
-      style={{ left: pos.x, top: pos.y }}
-      // Bounded and scrollable: a track offers sixteen rows, and a menu that runs off the bottom of the screen hides its own tail.
-      className="menu fixed z-(--k7-z-menu) max-h-[70vh] min-w-[12rem] max-w-[min(26rem,calc(100vw-16px))] overflow-y-auto rounded-[20px] p-1.5 text-sm"
-      role="menu"
-      aria-label={target?.name}
+    <PointMenu
+      x={x}
+      y={y}
+      onClose={onClose}
+      label={target?.name}
+      refreshKey={refresh}
+      moveFocus={moveFocus}
+      onKey={walkTabs}
       // One handler for the whole list: leaving the menu by the gap between two rows should clear the line, and only the container sees that.
       onPointerLeave={() => onHint?.("")}
     >
@@ -212,10 +132,8 @@ export function ContextMenu({
         onClose={onClose}
       />
       {safe.map((it) => row(it, false))}
-      {safe.length > 0 && danger.length > 0 && (
-        <hr className="my-1 border-(--k7-hairline-row)" />
-      )}
+      {safe.length > 0 && danger.length > 0 && <PointMenuSeparator />}
       {danger.map((it) => row(it, true))}
-    </div>
+    </PointMenu>
   );
 }

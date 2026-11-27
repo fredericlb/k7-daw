@@ -1,6 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { FileTree, type TreeAction, type TreeNode } from "./file-tree";
+import {
+  FileTree,
+  type TreeAction,
+  type TreeAsk,
+  type TreeNode,
+} from "./file-tree";
 
 const meta = {
   title: "UI/FileTree",
@@ -30,6 +35,11 @@ const nodes: TreeNode[] = [
   { name: "Courses", path: "courses" },
   { name: "Recettes", path: "recettes" },
 ];
+
+const ask: TreeAsk = {
+  confirm: async () => true,
+  text: async (q) => q.initial ?? "",
+};
 
 const actions: TreeAction<TreeNode>[] = [
   {
@@ -81,7 +91,7 @@ export const Default: Story = {
           activePath={active}
           reveal={active}
           actions={actions}
-          cancelLabel="Annuler"
+          ask={ask}
           onOpen={(node) => setActive(node.path)}
           onMove={() => undefined}
         />
@@ -101,7 +111,7 @@ export const WithRowMenuButton: Story = {
           activePath={active}
           reveal={active}
           actions={actions}
-          cancelLabel="Annuler"
+          ask={ask}
           rowMenuLabel="Plus d’actions"
           onOpen={(node) => setActive(node.path)}
         />
@@ -127,7 +137,7 @@ export const WithUploads: Story = {
             rootPath="."
             rootLabel="notes"
             actions={actions}
-            cancelLabel="Annuler"
+            ask={ask}
             onMove={(from, to) => say(`move ${from} → ${to}/`)}
             onDropFiles={(dir, files) =>
               say(`upload ${files.length} file(s) → ${dir}/`)
@@ -151,7 +161,7 @@ export const WithUploads: Story = {
 export const ReadOnly: Story = {
   render: () => (
     <div className="h-96 w-64 border border-border bg-card/40">
-      <FileTree nodes={nodes} activePath="courses" />
+      <FileTree nodes={nodes} activePath="courses" ask={ask} />
     </div>
   ),
 };
@@ -163,6 +173,7 @@ export const WithCollapsedRoot: Story = {
       <FileTree
         nodes={[{ name: "NOTES", path: "", dir: true, children: nodes }]}
         collapseSingleRoot
+        ask={ask}
       />
     </div>
   ),

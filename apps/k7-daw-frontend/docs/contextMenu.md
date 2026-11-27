@@ -282,7 +282,7 @@ day it is written; a delete one row below `process`, in the same tone, is one sl
 
 The menu is `role="menu"`, so it behaves as one: the first row has the focus on opening and on
 every tab switch, Up and Down walk the rows (wrapping), Home and End jump to either end, Enter picks,
-Left and Right walk the tabs, Escape closes.
+Left and Right walk the tabs, Escape closes. Dismissal, the edge clamp and the other keys are the kit's `PointMenu` (`apps/k7-daw-frontend/packages/ui/docs/radix.md`), shared with the builder grid's and the file tree's menus.
 
 ## The title row
 

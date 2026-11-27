@@ -110,7 +110,7 @@ export function ContextMenuHeader({
           aria-label={m["menu.close"]()}
           title={m["menu.close"]()}
           onClick={onClose}
-          className="ml-auto hidden h-7 w-7 shrink-0 items-center justify-center rounded-sm text-muted-foreground hover:bg-accent [@media(hover:none)]:flex"
+          className="ml-auto hidden size-7 shrink-0 items-center justify-center rounded-sm text-muted-foreground hover:bg-accent [@media(hover:none)]:flex [@media(hover:none)]:size-11"
         >
           <X className="h-4 w-4" />
         </button>

@@ -45,7 +45,10 @@
     "./checkbox": "./src/checkbox.tsx",
     "./locale-picker": "./src/locale-picker.tsx",
     "./section-heading": "./src/section-heading.tsx",
-    "./modal-focus": "./src/modal-focus.ts"
+    "./modal-focus": "./src/modal-focus.ts",
+    "./point-menu": "./src/point-menu.tsx",
+    "./search-list": "./src/search-list.tsx",
+    "./empty-row": "./src/empty-row.tsx"
   },
   "peerDependencies": {
     "react": "^19.2.7",
