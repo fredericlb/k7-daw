@@ -24,7 +24,7 @@ import {
   stemLane,
   stemLaneOf,
   stemPlatter,
-} from "@studio/song-schema/stems";
+} from "@studio/k7-wasm/stems";
 import {
   DECKS,
   type DeckId,

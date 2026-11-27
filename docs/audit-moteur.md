@@ -120,9 +120,9 @@ The trust code's lifecycle is covered on real sockets, the suites driving the Ru
 its minute, its engine, its process, its reuse within the minute, and the account it names whoever
 presents it. The WebSocket half of the relay (`relaySocket.test.ts`): either end's close, an engine
 re-registering elsewhere, an engine gone from the registry, the frame cap, and frame order through the
-dial and the claim. The tunnel hub (`engine-tunnel/hubLifecycle.test.ts`): a drop and the agent's redial,
+dial and the claim. The tunnel hub (`k7-front/tests/tunnel/hub_lifecycle.rs`): a drop and the agent's redial,
 two tunnels for one engine, a refused newcomer, and the local paths' 503 and 403. What each pins is
-listed in `apps/k7-daw-backend/docs/engine/proxy.md`, `apps/k7-daw-frontend/packages/engine-tunnel/docs/tunnel.md` and
+listed in `apps/k7-daw-backend/docs/engine/proxy.md`, `apps/k7-daw-backend/docs/engine/tunnel.md` and
 `apps/k7-daw-frontend/packages/engine-browser/docs/lease.md`, including the engine's frames held to the relay's cap and a
 claim granted after `holdEngine`'s goodbye released at once.
 

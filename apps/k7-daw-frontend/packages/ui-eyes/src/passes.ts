@@ -4,38 +4,38 @@
 // goes where — and this is the part that runs somebody else's code.
 // Full rationale: @studio/song's docs/shaders.md, and docs/passes.md here.
 
-import {
-  SHADER_PARAMS,
-  shaderUniformFor,
-} from "@studio/song-schema/moduleTypes";
+import { SHADER_PARAMS } from "@studio/k7-wasm/consts";
+import { shaderUniformFor } from "@studio/k7-wasm/module";
 import type { ScenePass, SceneTransition } from "./scene";
 
-/** Each numbered knob beside the uniform it lands on, from song-schema's one rule. */
-const PARAM_UNIFORMS = SHADER_PARAMS.map(
-  (p) => [p, shaderUniformFor(p)] as const,
-);
+// Asked once the module is ready, never at import: the rule is the Rust crate's (`module.shader_uniform`).
+let knobs: (readonly [string, string])[] | undefined;
+
+/** Each numbered knob beside the uniform it lands on. */
+const paramUniforms = (): readonly (readonly [string, string])[] =>
+  (knobs ??= SHADER_PARAMS.map((p) => [p, shaderUniformFor(p)] as const));
 
 /** The uniforms a shader may rely on — a CONTRACT, since GL cannot tell an unknown name from an unused one. See docs/passes.md. */
-const PASS_UNIFORMS = [
+const passUniforms = (): string[] => [
   "uTex", // sampler2D — the picture coming in
   "uAudio", // float 0..1 — the live level of the lane wired to the audio port, 0 with none
   "uTime", // float seconds — the transport's position, so an effect can move with the song
   "uResolution", // vec2 px — the viewport, for anything working in pixels rather than in UV
   "uPresence", // float 0..1 — how much of the shot is on screen: rises over a stretch's fade-in, falls over its fade-out, 1 elsewhere
-  ...PARAM_UNIFORMS.map(([, u]) => u), // float 0..1 each — the module's four numbered knobs
+  ...paramUniforms().map(([, u]) => u), // float 0..1 each — the module's four numbered knobs
   "uLut", // sampler3D — the node's `.cube` LUT, on unit 2; read only when uLutSize is above 0
   "uLutSize", // float — the LUT's edge, 0 while it loads or when the node names none (docs/luts.md)
 ];
 
 /** The uniforms a TRANSITION may rely on — its OWN contract, two inputs being a different shape. */
 // Deliberately not `uTex`: a shader fragment pasted in here fails loudly instead of sampling nothing.
-const TRANSITION_UNIFORMS = [
+const transitionUniforms = (): string[] => [
   "uFrom", // sampler2D — the picture on its way OUT; a transparent texel when there is none
   "uTo", // sampler2D — …and the one coming in; transparent for a fade-out
   "uProgress", // float 0..1 — 0 is uFrom alone, 1 is uTo alone
   "uTime", // float seconds — the transport's position, as everywhere else
   "uResolution", // vec2 px — the viewport
-  ...PARAM_UNIFORMS.map(([, u]) => u), // the four knobs, as for a pass
+  ...paramUniforms().map(([, u]) => u), // the four knobs, as for a pass
 ];
 
 /** The unit quad every pass draws, in the attribute `aUnit` — the same two triangles the compositor's own program uses. */
@@ -133,7 +133,7 @@ export function compilePass(
     pass.name,
     pass.vertex,
     pass.fragment,
-    PASS_UNIFORMS,
+    passUniforms(),
   );
   return built ? { id: pass.id, prog: built.prog, loc: built.loc } : null;
 }
@@ -148,7 +148,7 @@ export function compileTransition(
     t.name,
     t.vertex,
     t.fragment,
-    TRANSITION_UNIFORMS,
+    transitionUniforms(),
   );
   return built
     ? { name: t.name, prog: built.prog, loc: built.loc, params: t.params }
@@ -175,7 +175,7 @@ export function drawPass(
   if (p.loc.uTime != null) gl.uniform1f(p.loc.uTime, timeSec);
   if (p.loc.uResolution != null)
     gl.uniform2f(p.loc.uResolution, resolution[0], resolution[1]);
-  for (const [k, u] of PARAM_UNIFORMS)
+  for (const [k, u] of paramUniforms())
     if (p.loc[u] != null) gl.uniform1f(p.loc[u], pass.params[k] ?? 0);
   if (p.loc.uLutSize != null) gl.uniform1f(p.loc.uLutSize, lut ? lut.size : 0);
   if (lut && p.loc.uLut != null) {
@@ -203,7 +203,7 @@ export function drawTransition(
   if (p.loc.uTime != null) gl.uniform1f(p.loc.uTime, timeSec);
   if (p.loc.uResolution != null)
     gl.uniform2f(p.loc.uResolution, resolution[0], resolution[1]);
-  for (const [k, u] of PARAM_UNIFORMS)
+  for (const [k, u] of paramUniforms())
     if (p.loc[u] != null) gl.uniform1f(p.loc[u], p.params[k] ?? 0);
   gl.drawArrays(gl.TRIANGLES, 0, 6);
 }

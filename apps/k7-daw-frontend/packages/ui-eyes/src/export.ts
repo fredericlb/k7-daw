@@ -4,10 +4,7 @@
 // mix and is handed in decoded — see `ExportOptions.audio`. The codecs are the ones
 // `exportSupport.ts` blessed, rather than ones inferred from WebCodecs being present.
 
-import type {
-  ExportFormat,
-  ExportQuality,
-} from "@studio/song-schema/renderSettings";
+import type { ExportFormat, ExportQuality } from "@studio/k7-wasm/picture";
 import {
   AudioBufferSource,
   BufferTarget,

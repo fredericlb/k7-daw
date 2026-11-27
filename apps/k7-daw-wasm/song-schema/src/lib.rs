@@ -4,6 +4,7 @@
 
 #![cfg_attr(not(test), deny(clippy::unwrap_used, clippy::expect_used, clippy::panic))]
 
+mod aspect;
 mod audio_files;
 mod curve;
 mod curve_spec;
@@ -11,18 +12,29 @@ pub mod engine;
 mod error;
 mod keyframes;
 mod preview;
+mod render_settings;
+mod stems;
 #[cfg(test)]
 mod tests;
 mod text_hash;
 mod timecode;
 mod warp;
 
+pub use aspect::{ASPECTS, Aspect, aspect_of};
 pub use audio_files::{ext_of, is_audio};
 pub use curve::{Adsr, Curve, Cut, Kind, Point, Points, Polarity, Shape, cut_output};
 pub use curve_spec::{AdsrSpec, CurveSpec, LfoSpec, PointSpec, PointsSpec};
 pub use error::SchemaError;
 pub use keyframes::{Ease, Key, value_at};
 pub use preview::{BeatLine, CurvePreview, Span, XY, playhead, preview};
+pub use render_settings::{
+    EXPORT_FORMATS, EXPORT_QUALITIES, ExportFormat, ExportQuality, RenderScene, ResolvedVideo, VideoSettings,
+    VideoSize, parse_video_settings, resolve_video_settings,
+};
+pub use stems::{
+    STEM_NEUTRAL, STEM_RANGE, STEMS, STEMS_DIR, Stem, deck_platter, stem_control, stem_file, stem_lane, stem_lane_of,
+    stem_platter,
+};
 pub use text_hash::text_hash;
 pub use timecode::{
     TICKS_PER_QUARTER, TIMECODE_PATTERN, TimeSig, beats_to_duration, beats_to_duration_on, beats_to_position,

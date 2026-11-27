@@ -5,7 +5,7 @@
 
 import { unmappedControls as unmapped } from "@studio/k7-wasm/chains";
 import type { MixView } from "@studio/song-schema/yaml/mixViewSchema";
-import { MIX_CONTROLS, type MixControl } from "./controls";
+import { type MixControl, mixControls } from "./controls";
 import { DECKS } from "./deckVocabulary";
 
 /** Must name a module: the ones driving a PARAM, minus `cue`, optional like the stems (../docs/cue.md).
@@ -24,13 +24,14 @@ const WIRED_PER_DECK = [
 ] as const;
 
 /** Every control a turntables surface needs wired, DERIVED from `DECKS` so a third deck is not skipped. */
-export const REQUIRED_CONTROLS: readonly MixControl[] = MIX_CONTROLS.filter(
-  (c) =>
-    c.id === "crossfade" ||
-    DECKS.some((d) =>
-      WIRED_PER_DECK.some((suffix) => c.id === `${d}.${suffix}`),
-    ),
-);
+export const requiredControls = (): readonly MixControl[] =>
+  mixControls().filter(
+    (c) =>
+      c.id === "crossfade" ||
+      DECKS.some((d) =>
+        WIRED_PER_DECK.some((suffix) => c.id === `${d}.${suffix}`),
+      ),
+  );
 
 /** The required controls this mapping does not NAME — a line pointing at nothing is `resolveBindings`'.
  *
@@ -38,5 +39,5 @@ export const REQUIRED_CONTROLS: readonly MixControl[] = MIX_CONTROLS.filter(
 export function unmappedControls(
   mapping: MixView | undefined,
 ): readonly MixControl[] {
-  return unmapped(REQUIRED_CONTROLS, mapping);
+  return unmapped(requiredControls(), mapping);
 }

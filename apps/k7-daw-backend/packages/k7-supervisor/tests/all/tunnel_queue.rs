@@ -6,10 +6,12 @@ use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 
+use k7_supervisor::tunnel::link::Link;
 use k7_supervisor::tunnel::queue::SerialQueue;
 use k7_supervisor::tunnel::shed::{
     DROP_ABOVE_BYTES, FrameShedder, SHED_REPORT_EVERY, droppable_engine_frame,
 };
+use k7_supervisor::tunnel::wire::HIGH_WATER_BYTES;
 use serde_json::json;
 use tokio::sync::Notify;
 
@@ -135,6 +137,40 @@ fn a_frame_is_dropped_only_past_the_mark_and_the_count_waits_for_the_peer() {
     assert_eq!(shed.take_shed(), 0);
     assert!(shed.admit(state().as_bytes(), false, 0));
     assert_eq!((shed.take_shed(), shed.take_shed()), (2, 0));
+}
+
+#[tokio::test]
+async fn a_sender_goes_through_at_the_mark_and_waits_above_it_until_the_buffer_drains() {
+    let link = Arc::new(Link::default());
+    let (tx, _rx) = tokio::sync::mpsc::unbounded_channel();
+    link.attach(tx);
+    assert_eq!(HIGH_WATER_BYTES, 1024 * 1024);
+    link.send_binary(vec![0; HIGH_WATER_BYTES]);
+    link.wait_below(HIGH_WATER_BYTES).await;
+    link.send_binary(vec![0]);
+    let done = Arc::new(AtomicUsize::new(0));
+    let waiting = {
+        let (link, done) = (link.clone(), done.clone());
+        tokio::spawn(async move {
+            link.wait_below(HIGH_WATER_BYTES).await;
+            done.store(1, Ordering::SeqCst);
+        })
+    };
+    tokio::time::sleep(MS(120)).await;
+    assert_eq!(done.load(Ordering::SeqCst), 0);
+    link.written(HIGH_WATER_BYTES + 1);
+    waiting.await.unwrap();
+    assert_eq!(done.load(Ordering::SeqCst), 1);
+}
+
+#[tokio::test]
+async fn a_sender_stops_waiting_on_a_link_that_went_down() {
+    let link = Link::default();
+    let (tx, _rx) = tokio::sync::mpsc::unbounded_channel();
+    link.attach(tx);
+    link.send_binary(vec![0; 2 * HIGH_WATER_BYTES]);
+    link.detach();
+    link.wait_below(HIGH_WATER_BYTES).await;
 }
 
 #[test]

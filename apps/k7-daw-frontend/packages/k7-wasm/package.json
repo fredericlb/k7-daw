@@ -10,18 +10,30 @@
     "./timecode": "./src/timecode.ts",
     "./validate": "./src/validate.ts",
     "./fields": "./src/fields.ts",
+    "./module": "./src/module.ts",
+    "./picture": "./src/picture.ts",
+    "./records": "./src/records.ts",
+    "./rules": "./src/rules.ts",
+    "./stems": "./src/stems.ts",
+    "./track": "./src/track.ts",
+    "./k7x": "./src/k7x/index.ts",
     "./consts": "./src/consts.generated.ts",
     "./types": "./src/types/index.ts",
     "./boot": "./src/boot.ts",
+    "./module.wasm": "./src/k7Wasm.wasm",
     "./chains": "./src/chains.ts",
     "./graph": "./src/graph.ts",
-    "./engine": "./src/engine.ts"
+    "./engine": "./src/engine.ts",
+    "./gesture": "./src/gesture.ts",
+    "./gestureTicks": "./src/gestureTicks.ts",
+    "./gestureTimeline": "./src/gestureTimeline.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "build:wasm": "node scripts/buildWasm.mjs"
+    "build:wasm": "node scripts/buildWasm.mjs",
+    "bench:outline": "tsx scripts/benchOutline.mts"
   },
   "engines": {
     "node": ">=22.3"

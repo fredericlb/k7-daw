@@ -3,9 +3,9 @@
 // is in the same space as a clip's: the copy to the engine's machine and the tunnel's mapping carry both.
 // See ../docs/hosting.md.
 
+import { audioFilesOf } from "@studio/k7-wasm/records";
 import { fget } from "@studio/project-shell/fileApi";
 import { fileRoutes } from "@studio/project-shell/files";
-import { audioFilesOf } from "@studio/song-schema/records";
 import type { Envelope } from "./waveform";
 
 export const service = {

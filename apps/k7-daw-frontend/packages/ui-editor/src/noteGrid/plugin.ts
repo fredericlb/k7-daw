@@ -6,7 +6,7 @@ import {
   seqWindowFromText,
   type WindowSpan,
   windowSpan,
-} from "@studio/song-schema/seqWindow";
+} from "@studio/k7-wasm/rules";
 import { type Note, type RackInfo, readSequence, writeNotes } from "./notes";
 import { renderRollGrid } from "./RollGrid";
 

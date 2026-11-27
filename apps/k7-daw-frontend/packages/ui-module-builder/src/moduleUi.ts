@@ -5,8 +5,8 @@
 // the file would be refused for. Writes edit the document value by value (panelWrite.ts).
 
 import { panelWidgets } from "@studio/graph-model/panel";
+import { K7Document, type K7Scope } from "@studio/k7-wasm/k7x";
 import { moduleStatusOf } from "@studio/k7-wasm/schema";
-import { K7Document, type K7Scope } from "@studio/k7x/document";
 import {
   DEFAULT_MODULE_STATUS,
   IO_MODULES,
@@ -48,7 +48,7 @@ export function parseModuleDoc(fileText: string): ModuleDoc | null {
 
 function docOf(fileText: string): ModuleDoc | null {
   const doc = new K7Document(fileText);
-  return doc.contents ? doc : null;
+  return doc.errors.length ? null : doc;
 }
 
 /** Runs a writer on a buffer's document; a buffer that does not parse is handed back unchanged. */

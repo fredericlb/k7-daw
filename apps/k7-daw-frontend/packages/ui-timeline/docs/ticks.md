@@ -1,5 +1,7 @@
 # Choosing a ruler's unit
 
+The arithmetic is the `gesture` crate's (`apps/k7-daw-wasm/gesture/src/ticks.rs`), reached through `@studio/k7-wasm/gestureTicks`; `src/ticks.ts` re-exports it where the surfaces already import it, and its tests are Rust's.
+
 `chooseTick` takes the candidate steps a scale is allowed to subdivide to, and returns the
 **coarsest** one whose ticks are at least `minPx` apart at the current zoom.
 

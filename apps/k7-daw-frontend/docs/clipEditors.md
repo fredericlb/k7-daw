@@ -126,7 +126,7 @@ pair of drawn tabs on every note in a dense roll would be all you could see.
 
 `tSpan` answers where a drag has taken the note, and **the ghost and the commit both read it** —
 two copies of that arithmetic is a preview that lands somewhere else than the write. It lives in
-`src/rollDrag.ts` with `drawSpan` and `velAt`, the three answers that decide what a gesture
+`apps/k7-daw-wasm/gesture/src/roll_drag.rs` with `drawSpan` and `velAt`, the three answers that decide what a gesture
 writes, pulled out of the component for the reason `rollFit`, `snap` and `stepGrid` were: nothing
 here mounts a component, so arithmetic left inline in one is arithmetic no test can reach.
 
@@ -192,7 +192,7 @@ beats and semitones — the same snapped offset, the same keys — and commits t
 and a note outside the rectangle is dragged alone, as before. The OFFSET is clamped, not each
 note: the group stops when its top or bottom note reaches the keyboard's end, or its earliest
 reaches beat 0, so a chord dragged against an edge keeps its shape rather than folding onto one
-key (`groupOffset` in `rollDrag.ts`). A drop where a note that stays already starts is refused
+key (`groupOffset` in `apps/k7-daw-wasm/gesture/src/roll_drag.rs`). A drop where a note that stays already starts is refused
 before anything is painted, the writer's own rule asked of the roll first (`planGroupMove`); a
 note leaving makes room for another arriving. The rectangle follows the notes.
 
@@ -226,7 +226,7 @@ them. A finer position is reached by opening the view, or by a key.
 **Moving and stretching a note take the timeline's keys** (`snapMode`, `timeline.md`): nothing
 held, the moved start or the stretched end lands ON the grid; **Ctrl** moves it by whole steps, so a
 note played in by hand at 2.43 keeps that phase when you move it a beat; **Shift** frees it. The
-rule and its arithmetic are `src/snap.ts`, so the two surfaces cannot come to mean different
+rule and its arithmetic are `apps/k7-daw-wasm/gesture/src/snap.rs`, so the two surfaces cannot come to mean different
 things. The keys are read live, off each pointer event, so a note can be begun on the grid and
 finished off it.
 
@@ -528,8 +528,8 @@ you have to be able to see. What they draw instead is one shape, twice:
 
 | | the reach | the act |
 |---|---|---|
-| the **roll** (`src/rollFit.ts`) | the whole sequence, rounded up to a bar | the clip's window in beats (`clipLoop`) |
-| the **audio clip panel** (`AudioClipPanel`, `src/barWindow.ts`) | the whole file | the EVENT's window in seconds |
+| the **roll** (`apps/k7-daw-wasm/gesture/src/roll_fit.rs`) | the whole sequence, rounded up to a bar | the clip's window in beats (`clipLoop`) |
+| the **audio clip panel** (`AudioClipPanel`, `apps/k7-daw-wasm/gesture/src/bar_window.rs`) | the whole file | the EVENT's window in seconds |
 
 Each opens **framed** on its act — the window plus a margin either side, a fifth of it on the roll
 and a bar on the panel — and the wheel reaches the rest. The act is drawn as ground, a colourless
@@ -553,7 +553,7 @@ the `from`/`to` handles live.
 
 ## What the roll OPENS on, without a window
 
-`src/rollFit.ts`, and both axes work the same way: frame what is **used**, with a 20% margin, and
+`apps/k7-daw-wasm/gesture/src/roll_fit.rs`, and both axes work the same way: frame what is **used**, with a 20% margin, and
 let the canvas run to the placed extent — the later passes are there to be scrolled to. On the
 pitch axis that is the used range ±20%, clamped to the 128 keys that exist; on the time axis it is
 the span the notes occupy, not `[0, clip.length]`, which on 16 beats of notes placed 35 long would

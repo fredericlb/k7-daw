@@ -7,7 +7,7 @@ import {
   STEMS,
   type Stem,
   stemControl,
-} from "@studio/song-schema/stems";
+} from "@studio/k7-wasm/stems";
 import {
   BPM_RANGE,
   DECKS,
@@ -135,30 +135,32 @@ const perDeck = (deck: string, letter: string): MixControl[] => [
   })),
 ];
 
-/** Every control, DERIVED from the decks rather than listed, so a third deck is not unbindable. */
-export const MIX_CONTROLS: readonly MixControl[] = [
-  {
-    id: "crossfade",
-    label: "Crossfade",
-    kind: "fader",
-    range: [0, 1],
-    home: MIX_CENTRE,
-    wants: "crossfade",
-  },
-  ...DECKS.flatMap((d, i) => perDeck(d, String.fromCharCode(65 + i))),
-  {
-    id: "transport",
-    label: "Play / stop",
-    kind: "button",
-    range: [0, 1],
-    home: 0,
-  },
-];
+let built: readonly MixControl[] | undefined;
 
-const BY_ID = new Map(MIX_CONTROLS.map((c) => [c.id, c]));
+/** Every control, DERIVED from the decks so a third deck is not unbindable; built on first ask, a stem's id being the Rust crate's. */
+export const mixControls = (): readonly MixControl[] =>
+  (built ??= [
+    {
+      id: "crossfade",
+      label: "Crossfade",
+      kind: "fader",
+      range: [0, 1],
+      home: MIX_CENTRE,
+      wants: "crossfade",
+    },
+    ...DECKS.flatMap((d, i) => perDeck(d, String.fromCharCode(65 + i))),
+    {
+      id: "transport",
+      label: "Play / stop",
+      kind: "button",
+      range: [0, 1],
+      home: 0,
+    },
+  ]);
 
 /** The control an id names, or undefined — an unknown id is a typo, and the caller reports it. */
-export const mixControl = (id: string): MixControl | undefined => BY_ID.get(id);
+export const mixControl = (id: string): MixControl | undefined =>
+  mixControls().find((c) => c.id === id);
 
 /** A control's position as 0..1 — clamped, or a param would go past the ends of the widget drawing it. */
 export function normalise(control: MixControl, value: number): number {

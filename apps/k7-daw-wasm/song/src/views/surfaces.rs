@@ -39,6 +39,9 @@ pub enum SurfaceLayout {
     Floating,
 }
 
+/// The kinds of surface there are, by name: one nothing can draw is a blank screen.
+pub const SURFACE_TYPES: [&str; 4] = ["turntables", "timeline", "viewport", "mastering"];
+
 impl SurfaceType {
     fn name(self) -> &'static str {
         match self {

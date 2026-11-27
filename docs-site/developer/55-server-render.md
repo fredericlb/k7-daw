@@ -20,7 +20,7 @@ a server has no GPU, so WebGL runs on SwiftShader (`--use-angle=swiftshader
 | `apps/k7-daw-backend/packages/k7-picture/src/lib.rs` | the render: scene, mixdown, Chromium over the DevTools protocol, `find_chromium` (`apps/k7-daw-backend/packages/k7-file-service/src/shares/picture.rs`) |
 | `apps/k7-daw-wasm/verbs/src/picture/scene.rs` | builds the scene `picture render` asks the job with, `Use::Export`, its files by path; the route makes them the job's `media/` URLs |
 | `apps/k7-daw-frontend/packages/ui-eyes/src/renderPage.ts` | the page Chromium loads: fetches the job, decodes the mixdown, calls `exportScene`, posts the result |
-| `apps/k7-daw-frontend/packages/song-schema/src/renderSettings.ts` | the one parser of `size=`, `quality=`, `from=`, `to=`, shared with `project export video` |
+| `apps/k7-daw-wasm/song-schema/src/render_settings.rs` | the one parser of `size=`, `quality=`, `from=`, `to=`, shared with `project export video` |
 
 ## The job
 

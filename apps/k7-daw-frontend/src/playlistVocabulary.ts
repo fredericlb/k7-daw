@@ -2,8 +2,8 @@
 // actually holds. Its own adapter and not `schemaVocabulary`, which answers for a k7 PROJECT
 // and rightly says nothing about a playlist. Pure. See ../docs/completion.md.
 
-import { recordPathOf } from "@studio/song-schema/records";
-import { STEMS_DIR } from "@studio/song-schema/stems";
+import { recordPathOf } from "@studio/k7-wasm/records";
+import { STEMS_DIR } from "@studio/k7-wasm/stems";
 import type { YamlVocabulary } from "@studio/ui-editor/yaml/completions";
 
 /** The two fields `parsePlaylist` reads at the top level, and the one an item carries. */

@@ -109,7 +109,7 @@ is picked, so the panel carries no base dropdown: two pickers for one choice, on
 old patch's values and one of which dropped them, would be two answers to the same click. The compile sends a `.fxp` base as
 `surgePatch` rather than as the `.vstpreset` path, an absolute path — which is what lets a remote engine
 have it: the tunnel copies every file a document names under a shared root
-(`apps/k7-daw-frontend/packages/engine-tunnel/docs/tunnel.md`).
+(`apps/k7-daw-backend/docs/engine/tunnel.md`).
 
 **A new patch is a new synth.** It is built and loaded on the message thread and swapped in under a
 lock the audio thread only tries, as SfzPlugin swaps instruments. Loading into the live synth would

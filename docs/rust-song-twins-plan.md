@@ -12,7 +12,7 @@ replacement: no TypeScript stands behind a Rust call, and a minor bug is fixed f
 | `@studio/song` | 0 | M1 deleted its code; `docs/`, `meta/` and `samples/` stay where the backend and the crates read them |
 | `@studio/song-edit` | 0 | M1 deleted its code; `docs/` stays |
 | `@studio/song-schema` | 6.1k + 4.4k lines | 212 names imported by the page and its packages (below) less the timecode's, the 24 M3a moved and the validation's; its module-type tables and name constants come from Rust since M2 and M3a, its check and completions since M3b |
-| `@studio/k7x` | 1.9k + 1.5k lines, 11 files | the editor's tree and value-by-value edits; generator of the k7x crate's vectors |
+| `@studio/k7x` | 0 | M3c deleted it: the page reads and edits k7x through `@studio/k7-wasm/k7x` over the `k7x.*` ops; its vectors are frozen in the crate |
 
 M1 found that nothing in production reached `@studio/song` or `@studio/song-edit` once the verbs
 moved to Rust: their only importers were take-render's material cut, wav length and freeze bounce
@@ -38,6 +38,16 @@ M3b added `file.validate`, `fields.kind`, `fields.at` and `fields.values` (famil
 `@studio/song-schema` is below.
 
 A user does not notice the mount delay, on the phone either, so the module stays whole (decision 1).
+
+M3c moved k7x over. The editor's tree is held to the TypeScript parse it replaced, measured on the
+largest library file before the switch (`apps/k7-daw-wasm/k7x/docs/outline.md`); the module grew to
+3.63 MB raw, the k7x editor and printer now linked.
+
+| M3c measure | `surge-xt/ui.k7x` (302 KB) | the corpus (1,356 files) |
+|---|---|---|
+| the TypeScript `parseTree` (the budget) | 3.6–3.8 ms | 16.4–17.7 ms |
+| `k7x.outline` and its nodes | 3.3–3.5 ms | 17.5–18.1 ms |
+| the same outline as JSON numbers, not kept | 4.9–7.7 ms | 25–37 ms |
 The browser pane refused the measurement page on a loopback port, so no figure comes from a
 browser with its CPU throttled: the phone line is an estimate from V8's own figures.
 
@@ -47,8 +57,17 @@ M3a moved 24 names (`moduleTypes` predicates but `splitPort`, `docExt`, `audioFi
 `@studio/k7-wasm/schema`, and generated the name constants of the module vocabulary (`consts.generated.ts`,
 from `song::modules::names`). The module is 3.55 MB raw, 1.09 MB gzip, 0.77 MB brotli. A call costs
 about a microsecond (`isDocFile` 0.8 µs, `valueAt` 1.2 µs, a thousand `beatsAtSources` over 40 markers 0.08 ms,
-desktop under load). Group (b) still holds `renderSettings`, `trackKind`, `fields` and `sugar`
-(M3b, M4b), and the `k7x` names (M3c).
+desktop under load). Group (b) still holds `fields` and `sugar` (M3b) and the `k7x` names (M3c).
+
+M4b moved the readers and rules of group (c) that are not writers: `records`, `stems`, `trackKind` (its label and kind),
+`aspect`, `renderSettings`, `seqWindow`, `projectTags`, `assetsForParam`, `moduleKeyFromPath`, `libraryRef` and
+`shaderUniformFor`, as six op families of `apps/k7-daw-wasm/k7-wasm/src/ops/` (`track`, `stems`, `records`, `picture`,
+`rules`, `module`), reached as `@studio/k7-wasm/track`, `/stems`, `/records`, `/picture`, `/rules` and `/module`. Their
+vocabularies (`STEMS`, `ASPECTS`, the export formats and qualities, `SURFACE_TYPES`, `TRACK_CATEGORIES`, `TRACK_PREFIXES`)
+are generated constants. The surface registry left whole: nothing registered a type, so the page reads `SURFACE_TYPES`.
+What no caller used left with its file (`aspectSize`, `normalizeTag`, `withTag`, `withoutTag`, `stemsComplete`, the
+turntable member table, the separation outputs, `orderTracks`, `trackCategory`, `reorderTracks`, `orderPosition`: Rust has
+each in `song::doc` and `verbs`). The module is 3.93 MB raw, 1.20 MB gzip, 0.83 MB brotli (3.73 and 1.15 before).
 
 ## Inventory
 
@@ -72,13 +91,13 @@ Target: `@studio/k7-wasm/timecode`, sync functions over the existing ops (M2, bu
 - `song-schema/yaml/sugar`: `sugarFor`† — `song_edit::sugar`
 - `song-schema/docExt`: `isDocFile`, `stripDocExt`; `audioFiles`: `isAudio`; `builtinParams`: `builtinPluginForRef`; `instanceName`: `instanceName`; `keyframes`: `valueAt`; `placementId`: `materialRefOf`; `playlist`: `parsePlaylist`, `playlistPathOf`; `renderSettings`: `resolveVideoSettings`; `takes`: `setCompSpan`; `tasks`: `parseTasks`; `timelineLane`: `timelineLaneOf`; `trackKind`: `orderPosition`†; `warpPoints`: `beatAtSource`, `sourceAtBeat` — in `song`, `song-edit`, `verbs` or the backend's `k7-file-service`; a twin in the backend or in `verbs` moves down into `song-schema` or `song` so the module can link it
 
-Target: one op family per crate area (`k7x.*`, `schema.*`, `fields.*`), M2 to M3c.
+Target: one op family per crate area (`k7x.*`, `schema.*`, `fields.*`), M2 to M3c. M3c built the k7x group: `K7Document`, `parse`, `parseTree`, `walk` and `stringify` are `@studio/k7-wasm/k7x` over `k7x.edit`, `k7x.data`, `k7x.outline` and `k7x.print`.
 
 ### (c) TypeScript only, no Rust twin: 57
 
 - `song-schema/yaml/validate`: `validateFile`, `firstIssue` — the router over the per-file schemas, zod inside (M3b, built: `@studio/k7-wasm/validate`)
 - writers of a file's text: `yaml/videoTrackFile` (`listVideoPlacements`, `setVideoPlacementField`, `setVideoPlacementFieldAt`, `shiftVideoAnimationAt`), `yaml/assemblyFile` (`dropAssemblyParam`, `parseAssemblyTemplate`, `setAssemblyParam`), `yaml/sequenceFile` (`editSequence`, `sequenceData`), `yaml/mixFile` (`cueMarkers`, `parseMix`, `withMarkers`), `yaml/mixViewFile` (`parseMixView`), `yaml/chainFile` (`parseChain`), `yaml/chainSchema` (`isEndStep`, `itemsOf`), `yaml/moduleSchema` (`rackAddBind`, `rackAddBindAt`, `rackBindSymbol`), `playlist` (`appendPlaylistItem`, `movePlaylistItem`, `playlistStub`, `removePlaylistItem`), `libraryVersions` (`parseLibraryPins`, `pinnedVersion`, `stringifyLibraryPins`)
-- readers and rules: `records` (`audioFilesOf`, `recordFolder`, `recordMatches`, `recordName`, `recordPathOf`, `resolveRecords`), `stems` (`deckPlatter`, `stemControl`, `stemFile`, `stemLane`, `stemLaneOf`, `stemPlatter`), `seqWindow` (`seqWindowFromText`, `windowSpan`), `trackKind` (`trackKind`, `trackLabel`, `reorderTracks`†), `moduleTypes` (`assetsForParam`, `libraryRef`, `moduleKeyFromPath`, `shaderUniformFor`), `aspect` (`aspectOf`), `builtinParams` (`builtinPluginFor`), `placementId` (`placementStartOf`), `projectTags` (`projectTagsOf`), `renderSettings` (`parseVideoSettings`), `surfaceRegistry` (`allSurfaceTypes`, `surfaceTypeOf`†), `docExt` (`docPattern`)
+- readers and rules (M4b, built: everything but `builtinParams`, `placementId` and `docExt`'s, which the M3a ops answer; the writers are M4a): `records` (`audioFilesOf`, `recordFolder`, `recordMatches`, `recordName`, `recordPathOf`, `resolveRecords`), `stems` (`deckPlatter`, `stemControl`, `stemFile`, `stemLane`, `stemLaneOf`, `stemPlatter`), `seqWindow` (`seqWindowFromText`, `windowSpan`), `trackKind` (`trackKind`, `trackLabel`, `reorderTracks`†), `moduleTypes` (`assetsForParam`, `libraryRef`, `moduleKeyFromPath`, `shaderUniformFor`), `aspect` (`aspectOf`), `builtinParams` (`builtinPluginFor`), `placementId` (`placementStartOf`), `projectTags` (`projectTagsOf`), `renderSettings` (`parseVideoSettings`), `surfaceRegistry` (`allSurfaceTypes`, `surfaceTypeOf`†), `docExt` (`docPattern`)
 
 Target: written in Rust (`song-schema` for rules, `song-edit` for text-in, text-out writers), then
 reached as wasm ops (M3b, M4a, M4b).
@@ -112,8 +131,8 @@ They move into the page's own packages with M5, since no Rust side shares them.
 | zod leaves with `validateFile`: a schema is the Rust decoder that reads the file for the compile | the editor asks a buffer exactly what the loader asks a file on disk, from one implementation |
 | validation answers the compile's own decoder's FIRST finding, placed on the key it is about, its dotted path derived from the tree | the decoder stops where it cannot read; zod listed every issue, and a union left `Invalid input` with no line, which the Rust decoders answer with a sentence and a place |
 | a kind the compile never reads (the cue sheet, the desk's bindings, a preset, a module folder's config) has a small decoder in `song::files` | the editor's router must not keep a TypeScript schema for them; they cost 200 lines of Rust and a test each |
-| `k7x` edits cross as one batch per gesture: `k7x.edit {text, ops}` answers the new text and its `K7Change`s in UTF-16 units | `K7Document` is held across a gesture's edits; the crate's `Document` is a byte-for-byte port held to the same vectors (`apps/k7-daw-frontend/packages/k7x/docs/rustEdit.md`) |
-| the editor's tree is a `k7x.outline` op: what CodeMirror reads (paths, kinds, UTF-16 spans of keys and values), never the full tree | the full tree of the corpus is 13.9 MB of JSON and parses slower than the TypeScript parse (`apps/k7-daw-frontend/packages/k7x/docs/rust.md`) |
+| `k7x` edits cross as one batch per gesture: `k7x.edit {text, ops}` answers the new text and its `K7Change`s in UTF-16 units | `K7Document` is held across a gesture's edits; the crate's `Document` is a byte-for-byte port held to the same vectors (`apps/k7-daw-wasm/k7x/docs/rustEdit.md`) |
+| the editor's tree is a `k7x.outline` op: what CodeMirror reads (paths, kinds, UTF-16 spans of keys and values), never the full tree | the full tree of the corpus is 13.9 MB of JSON and parses slower than the TypeScript parse (`apps/k7-daw-wasm/k7x/docs/rust.md`) |
 | when `@studio/k7x` goes, its vectors freeze, as song-edit's are | the TypeScript generator is what is being deleted; the Rust tests replay the frozen vectors |
 | the constants are Rust's: the `bindings` binary writes `consts.generated.ts`, and `genModuleTypes.mts` stops writing Rust from TypeScript | one source per table; ts-rs emits types, not values |
 | a TypeScript test ported to Rust where it proves arithmetic or a format; kept as a TypeScript test over the module where it proves what the page sees | the existing tests are the oracle for what each function answers |
@@ -137,9 +156,9 @@ They move into the page's own packages with M5, since no Rust side shares them.
 | M2 | the seam: dispatch split per family; the module built with `song` (decoders, views) and `k7x`, as a hashed asset; `consts.generated.ts`; `@studio/k7-wasm/timecode` replaces `song-schema/timecode` (group a, `roundBeat`, `TIMECODE`); `edit.call`, `host_fs` and the `song`-feature TS module removed (decision 4); size measured | M1 | built | 5 |
 | M3a | the schema rules of group (b): `moduleTypes` predicates, `docExt`, `playlist` reads, `tasks`, `warpPoints`, `keyframes`, `placementId`, `timelineLane`, `instanceName`, `audioFiles`, `builtinParams`, `takes`; `moduleTypes.ts`'s tables generated from Rust | M2 | built | 4 |
 | M3b | validation and completion: `file.validate`, `fields.at`, `fields.values`; the router ported to Rust over `song::files`; `validate.ts`, `fields.ts` and the schemas only they read leave song-schema; `zod` stays there until M4a/M4b move the readers that still use it | M2 | built | 6 |
-| M3c | k7x: `k7x.edit`, `k7x.data`, `k7x.print`, `k7x.outline`; ui-editor, ui-module-builder, panel-rules and the page move over; `@studio/k7x` deleted, its vectors frozen | M2 | A | 6 |
+| M3c | k7x: `k7x.edit`, `k7x.data`, `k7x.print`, `k7x.outline`; ui-editor, ui-module-builder, panel-rules and the page move over; `@studio/k7x` deleted, its vectors frozen | M2 | built | 6 |
 | M4a | the text writers of group (c) in `song-edit` (video track, assembly, sequence, mix markers, playlist edits, library pins, chain reads), reached as `text.*` ops | M3a, M3c | B | 6 |
-| M4b | the readers and rules of group (c): `records`, `stems`, `seqWindow`, `trackKind`, `aspect`, `renderSettings`, `projectTags`, `surfaceRegistry`, the rest of `moduleTypes` | M3a | B | 4 |
+| M4b | the readers and rules of group (c): `records`, `stems`, `seqWindow`, `trackKind`, `aspect`, `renderSettings`, `projectTags`, `surfaceRegistry`, the rest of `moduleTypes` | M3a | B | 4, built |
 | M5 | `@studio/song-schema` deleted (group e moves into the page's packages); `song/docs`, `song/meta`, `song/samples`, `song-edit/docs`, `song-schema/docs` move into their crates if decision 3 says so | M4a, M4b | alone | 3 |
 
 Group A runs three builders on disjoint files once M2 has split the dispatch: M3a owns

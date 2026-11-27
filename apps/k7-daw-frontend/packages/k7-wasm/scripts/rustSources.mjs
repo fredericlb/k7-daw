@@ -13,6 +13,7 @@ export const CRATES = [
   "apps/k7-daw-wasm/k7-wasm",
   "apps/k7-daw-wasm/song-schema",
   "apps/k7-daw-wasm/chains",
+  "apps/k7-daw-wasm/gesture",
   "apps/k7-daw-wasm/song",
   "apps/k7-daw-wasm/song-edit",
   "apps/k7-daw-wasm/k7x",

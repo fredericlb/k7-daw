@@ -339,7 +339,7 @@ same way.
 
 `project.viewport` is a size in pixels and nothing else — everything that reads it reads pixels.
 What is chosen is a RATIO: 16:9 or 9:16 for now, and 1920×1080 / 1080×1920 is what that means
-([aspect.ts](../packages/song-schema/src/aspect.ts)).
+(`aspect.rs`, in `apps/k7-daw-wasm/song-schema/src/aspect.rs`).
 
 The RENDER node's card carries the list. Three things hold it together:
 

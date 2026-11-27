@@ -1,6 +1,6 @@
 # Registry and tunnel
 
-The registry, which knows which engines exist and who holds them, and the tunnel hub, which reaches them, are k7's Rust front: the crate `apps/k7-daw-backend/packages/k7-engine`, routed by `apps/k7-daw-backend/packages/k7-front/src/routes/engine/`, once for the whole origin (`apps/k7-daw-backend/docs/engine.md`). What stays TypeScript is the client side: `@studio/engine-tunnel` the tunnel's wire, its reference agent and the jobs client.
+The registry, which knows which engines exist and who holds them, and the tunnel hub, which reaches them, are k7's Rust front: the crate `apps/k7-daw-backend/packages/k7-engine`, routed by `apps/k7-daw-backend/packages/k7-front/src/routes/engine/`, once for the whole origin (`apps/k7-daw-backend/docs/engine.md`). The machine's end is the supervisor's agent (`apps/k7-daw-backend/packages/k7-supervisor/src/tunnel/`).
 
 ## The registry
 
@@ -50,15 +50,7 @@ An `https:` page may not open `ws://` to a LAN host, so a browser on another net
 
 ## The tunnel
 
-The server end is `apps/k7-daw-backend/packages/k7-engine/src/tunnel/` (`hub.rs`, `hub_tunnel.rs`, `files/`, `put.rs`, `uploads.rs`): it accepts supervisors on `/api/engine-tunnel`, opens channels and serves files. The rest of the wire's TypeScript is `apps/k7-daw-frontend/packages/engine-tunnel/`:
-
-| File | Subpath | What |
-|---|---|---|
-| `agent.ts`, `agentFiles.ts`, `pathMap.ts` | `./agent` | The TypeScript reference agent (the supervisor's Rust agent is the one that ships) |
-| `channel.ts` | `./channel` | `TunnelChannel`: one virtual connection, shaped like a `ws` WebSocket |
-| `frames.ts` | `./frames` | The wire, with validators for every message |
-| `jobsClient.ts` | `./jobs-client` | `requestJob`: one request over a jobs channel |
-| `drain.ts` | | Backpressure: wait while more than 1 MiB is unsent |
+The server end is `apps/k7-daw-backend/packages/k7-engine/src/tunnel/` (`hub.rs`, `hub_tunnel.rs`, `files/`, `put.rs`, `uploads.rs`): it accepts supervisors on `/api/engine-tunnel`, opens channels and serves files. The machine's end is `apps/k7-daw-backend/packages/k7-supervisor/src/tunnel/`, which reads the hub's own frame code (`apps/k7-daw-backend/packages/k7-engine/src/tunnel/frames/`); senders stop at 1 MiB unsent.
 
 ### The wire
 
@@ -105,14 +97,12 @@ A `synced` channel (the server copied every file already) is only rewritten. The
 
 The machine side of each job is in [82](./82-k7-supervisor.md#tunnels-and-jobs). The file service learns which jobs path belongs to its bound engine through `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/jobs/machine.rs`.
 
-To add a job: add a handler to `machineJobs()` in `apps/k7-daw-backend/packages/k7-supervisor/src/parts/tunnel/table.rs` (and to the reference agent's tests if the TypeScript agent should answer it), confine any input path to the machine's copies of the server's folders, and call it with `requestJob` from the server side.
+To add a job: add a handler to `machineJobs()` in `apps/k7-daw-backend/packages/k7-supervisor/src/parts/tunnel/table.rs`, confine any input path to the machine's copies of the server's folders, and call it with `requestJob` from the server side.
 
 ## Tests
 
 ```sh
-cargo build --manifest-path apps/k7-daw-backend/Cargo.toml -p k7-front --features test-hooks --bin k7-engine-testbed
-ENGINE_CORE_BIN=<that binary> npm test --workspace @studio/engine-registry
-ENGINE_CORE_BIN=<that binary> npm test --workspace @studio/engine-tunnel
+cd apps/k7-daw-backend && cargo test -p k7-front --test tunnel
 ```
 
-The registry suites cover heartbeat cleaning, claims, the relay and its gate, and trust bindings; they run against the Rust core, started per test from `ENGINE_CORE_BIN` (`apps/k7-daw-backend/docs/engine.md`, "The testbed"), and skip without it unless `ENGINE_CORE_REQUIRED=1`, as CI sets. The tunnel suites (`tunnel.test.ts`, `jobs.test.ts`, `hubConfinement.test.ts`, `pathMap.test.ts`, `rtc.test.ts`, `renderKey.test.ts`, `frames.test.ts`, `jobsClient.test.ts`, `drain.test.ts`) run that hub against the agents listed in `testAgents.ts`: the TypeScript agent always, and the native supervisor's `tunnel_harness` when a build of it exists, so both agents are held to one wire. The native agent is skipped, not failed, when it is not built.
+The suite is `apps/k7-daw-backend/packages/k7-front/tests/tunnel`: one process of the front with the engine core and its test hooks (`k7-engine-testbed`, `apps/k7-daw-backend/docs/engine.md`, "The testbed") per test, the supervisor's real agent dialling it as a library, a fake engine behind the agent and clients on bound paths. It holds the tunnel's contract (files before the frame naming them, confinement, uploads, drains, protocol refusals, the lifecycle of a drop and a redial, jobs channels). The registry's, the relay's and the wire's unit tests are `k7-engine`'s own.

@@ -44,7 +44,7 @@ From the root, `npm run test` runs `scripts/workspaces.mjs test`, which runs the
 |---|---|
 | `apps/k7-daw-frontend/packages/song-schema/src/playlist.test.ts` | Parsing and the text edits (append, remove, move), every refused shape. |
 | `apps/k7-daw-frontend/packages/song-schema/src/reference.test.ts` | Reference file rules and paths. |
-| `apps/k7-daw-frontend/packages/song-schema/src/stems.test.ts` | Stem names and node naming. |
+| `apps/k7-daw-wasm/song-schema/src/stems.rs` | Stem names and node naming. |
 | `apps/k7-daw-frontend/packages/song-schema/src/yaml/mixMarkers.test.ts`, `mixYaml.test.ts` | The cue sheet: reading, and writing markers into the text. |
 | `apps/k7-daw-wasm/song-edit/tests/replay_lane/main.rs` | The mix and live scaffolds compile and wire what they say. |
 | `apps/k7-daw-wasm/song/tests/all/assemblies.rs` | The deck assembly; migrations giving old sets a new set's files. |

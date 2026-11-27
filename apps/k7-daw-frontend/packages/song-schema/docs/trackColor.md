@@ -1,4 +1,4 @@
-# A track's category, and its colour (`src/trackColor.ts`, `trackCategory` in `src/trackKind.ts`)
+# A track's category, and its colour (`src/trackColor.ts`, `track_category` in the Rust crate `song`, `doc/category.rs`)
 
 Seven categories, in the order a song is laid out and each with one hue:
 

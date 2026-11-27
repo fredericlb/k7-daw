@@ -41,7 +41,7 @@ if [[ " $areas " == *" backend "* ]]; then
   (cd apps/k7-daw-backend && cargo clippy --locked --target-dir "$target" $crates --all-targets -- -D warnings && tests $crates)
 fi
 if [[ " $areas " == *" browser "* ]]; then
-  for crate in apps/k7-daw-wasm/song-schema apps/k7-daw-wasm/chains apps/k7-daw-wasm/k7-wasm apps/k7-daw-wasm/song; do
+  for crate in apps/k7-daw-wasm/song-schema apps/k7-daw-wasm/chains apps/k7-daw-wasm/gesture apps/k7-daw-wasm/k7-wasm apps/k7-daw-wasm/song; do
     (cd "$crate" && cargo fmt --check && cargo clippy --locked --target-dir "$target" --all-targets --features ts -- -D warnings && tests)
   done
   (cd apps/k7-daw-wasm/k7x && cargo fmt --check && cargo clippy --locked --target-dir "$target" --all-targets -- -D warnings && tests)

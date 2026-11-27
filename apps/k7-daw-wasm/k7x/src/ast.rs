@@ -1,4 +1,4 @@
-// ast.rs — the tree a k7x file parses to, field for field the one of ../src/ast.ts, held in a bumpalo arena.
+// ast.rs — the tree a k7x file parses to, held in a bumpalo arena, the shape the page's nodes are built in.
 // A reader would get wrong that a chain and an object are different data: both are maps, the form is only how it was written.
 
 #[derive(Debug, Clone, Copy, PartialEq)]

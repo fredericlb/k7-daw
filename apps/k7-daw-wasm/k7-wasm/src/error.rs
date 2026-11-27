@@ -14,6 +14,8 @@ pub enum ErrorCode {
     BadTimecode,
     BadCurve,
     UnknownHandle,
+    /// A k7x value with no spelling, or a print that is not a map at its root.
+    BadK7x,
     /// The instance trapped and was replaced.
     Panic,
     /// No WebAssembly in this runtime.
