@@ -7,8 +7,8 @@
 //   npx tsx apps/k7-daw-engine/k7-runtime/scripts/master-chain.ts
 // See apps/k7-daw-frontend/packages/song/docs/masterChain.md and docs/masterVolume.md.
 
-import { findEngineBinary } from "../../../k7-daw-frontend/packages/engine-client/src/engineBinary.ts";
-import { renderProject } from "../../../k7-daw-frontend/packages/take-render/src/renderProject.ts";
+import { findEngineBinary } from "./lib/engine-client/engineBinary.ts";
+import { renderProject } from "./lib/take-render/renderProject.ts";
 import { peakOf } from "./wav.ts";
 
 /** Two seconds of a 4OSC note — loud, and identical in both renders. */

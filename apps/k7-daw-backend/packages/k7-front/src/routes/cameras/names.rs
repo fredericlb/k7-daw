@@ -1,6 +1,5 @@
-//! names.rs — `@studio/web-protocol/cameras`' pure helpers as the hub runs them: a device name cleaned and made
-//! unique, the camera a label names, a frame read, and `K7_CAMERA_ICE_SERVERS` parsed. The browser keeps the
-//! TypeScript copies, so both read `fixtures/camera-vectors.json` (`apps/k7-daw-backend/docs/routes.md`).
+//! names.rs — the hub's name rules: a device name cleaned and made unique, the camera a label names, a frame read, and
+//! `K7_CAMERA_ICE_SERVERS` parsed. The one copy: the page keeps no TypeScript twin, and `fixtures/camera-vectors.json` pins it.
 
 use serde_json::{Map, Value, json};
 

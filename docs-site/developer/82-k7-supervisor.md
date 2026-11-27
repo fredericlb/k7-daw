@@ -1,6 +1,6 @@
 # The supervisor (`apps/k7-daw-backend/packages/k7-supervisor`)
 
-The supervisor is the engine machine's resident program, in Rust, a crate of the backend's workspace. It owns the state folder, starts or adopts the engine and relaunches it when it dies, keeps the engine listed at every studio by heartbeat, holds one tunnel per studio, answers the jobs a server sends through those tunnels, and takes commands from the app that runs it. Its file formats and fingerprint match the TypeScript helpers in `apps/k7-daw-frontend/packages/engine-client`, so both sides read one state folder.
+The supervisor is the engine machine's resident program, in Rust, a crate of the backend's workspace. It owns the state folder, starts or adopts the engine and relaunches it when it dies, keeps the engine listed at every studio by heartbeat, holds one tunnel per studio, answers the jobs a server sends through those tunnels, and takes commands from the app that runs it. Its file formats and fingerprint match the TypeScript helpers in `apps/k7-daw-engine/k7-runtime/scripts/lib/engine-client`, so both sides read one state folder.
 
 ## Source layout
 
@@ -87,7 +87,7 @@ U+001F (`kUnitSep`) joins multi-part arguments because no device name contains i
 
 ## The state folder
 
-`src/paths.rs` and `apps/k7-daw-frontend/packages/engine-client/src/paths.ts` must spell every name the same way; a wrong path reads as an empty file rather than throwing.
+`src/paths.rs` and `apps/k7-daw-engine/k7-runtime/scripts/lib/engine-client/paths.ts` must spell every name the same way; a wrong path reads as an empty file rather than throwing.
 
 | Path under `$STUDIO_HOME` (default `~/.k7`) | Owner |
 |---|---|

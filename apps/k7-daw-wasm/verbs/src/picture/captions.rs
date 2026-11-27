@@ -1,15 +1,7 @@
 // captions.rs — a subtitle file, `.srt` or WebVTT, read into timed cues in seconds from the file's own zero.
 // A reader would get wrong that a block that does not read stops the file: it is a problem said, and the rest still draws.
 
-use serde::Serialize;
-
-/// One cue: when it shows and when it goes, in seconds of the file, and its lines.
-#[derive(Clone, Debug, PartialEq, Serialize)]
-pub struct Cue {
-    pub start: f64,
-    pub end: f64,
-    pub text: String,
-}
+pub use eyes::Cue;
 
 /// `01:02:03,456`, `02:03.456` or `02:03`: hours optional, a comma or a point before at most three digits.
 fn seconds(s: &str) -> Option<f64> {

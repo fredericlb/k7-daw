@@ -5,12 +5,12 @@
 //   npx tsx apps/k7-daw-engine/k7-runtime/scripts/list-sessions.ts 8765 --peek  (LOOK at a live one, change nothing)
 
 import { once } from "node:events";
-import { EngineClient } from "@studio/engine-client/engineClient";
+import { EngineClient } from "./lib/engine-client/engineClient.ts";
 import {
   type EditPluginInfo,
   EngineControl,
   type SessionInfo,
-} from "@studio/engine-client/engineControl";
+} from "./lib/engine-client/engineControl.ts";
 import type { ProjectDoc } from "@studio/engine-protocol/project";
 
 const doc = (name: string): ProjectDoc =>

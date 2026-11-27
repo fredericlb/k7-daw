@@ -321,7 +321,7 @@ is a wrapper holding this app's wording and what to render once the project is o
 `<state>/workspace/<you>/` is the wrong level to offer a choice at. The home page lists
 WORKSPACES, which belong to a person, and the gate resolves an address INTO one.
 
-Identity is the local user, which names the engine SESSION rather than a folder — the workspaces are `<state>/workspace/<workspace>` with nobody underneath (`apps/k7-daw-frontend/packages/engine-client/docs/paths.md`) — and the active
+Identity is the local user, which names the engine SESSION rather than a folder — the workspaces are `<state>/workspace/<workspace>` with nobody underneath (`apps/k7-daw-engine/k7-runtime/docs/enginePaths.md`) — and the active
 project is remembered per-workspace in an active-project marker. There is **no global session
 file**; the workspace is the scope.
 

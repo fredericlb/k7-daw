@@ -4,7 +4,7 @@ Two packages speak the [engine protocol](./83-engine-protocol.md): `@studio/engi
 
 ## `@studio/engine-client` (Node)
 
-`apps/k7-daw-frontend/packages/engine-client/src/`, consumed as source through its `exports`:
+`apps/k7-daw-engine/k7-runtime/scripts/lib/engine-client/`, consumed as source through its `exports`:
 
 | Subpath | What |
 |---|---|

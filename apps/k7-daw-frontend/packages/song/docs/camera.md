@@ -49,8 +49,8 @@ be: an id is **salted per browser and per origin**, and it rotates — on a seco
 second browser, after a profile reset. A project that named one would draw a black rectangle with
 nothing to explain it, on a file that is correct.
 
-So the file names the camera the way a person does, and the browser matches it (`matchCamera` in
-`@studio/ui-eyes`): exact, then case-insensitively, then by containment either way — a browser
+So the file names the camera the way a person does, and the browser matches it (`match_camera` in
+`apps/k7-daw-wasm/eyes/src/cameras.rs`, called as `matchCamera`): exact, then case-insensitively, then by containment either way — a browser
 dresses a label up (`"Logitech BRIO (046d:085e)"`) and nobody copies the vendor ids by hand.
 
 This is the rule `channel:` already follows for audio, for the same reason: *a preferences label

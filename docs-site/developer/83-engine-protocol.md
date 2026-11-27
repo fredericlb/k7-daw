@@ -100,7 +100,7 @@ A socket that sends `broadcast {on: true}` receives the session's master output 
 1. Add a handler with `t.add(&["my-verb"], …)` in the `src/server/` module for its concern, and the verb to `CLIENT_VERBS` in `apps/k7-daw-backend/packages/k7-runtime-server/src/wire/catalogue.rs`. Do engine work in a job posted to the message thread (`Engine::post`), never on the socket's task, and reply with `Ctx::broadcast_to(session, …)` for per-session news or `client.send` for the asker alone. A function the host must provide goes into the C ABI's area for it (`apps/k7-daw-backend/packages/k7-runtime-server/docs/abi.md`).
 2. If it is a read-only probe that clients poll, add it to `PROBE_QUERIES` in the same `catalogue.rs` so it neither logs a connection nor creates a session.
 3. Put any shared payload type in `apps/k7-daw-frontend/packages/engine-protocol/types.ts`.
-4. Add the sender to `apps/k7-daw-frontend/packages/engine-browser/src/engine.ts` and, if a Node service needs it, `apps/k7-daw-frontend/packages/engine-client/src/engineControl.ts`. Methods that do not need a `ProjectDoc` belong in `EngineControl`, so they do not drag the compiler in.
+4. Add the sender to `apps/k7-daw-frontend/packages/engine-browser/src/engine.ts` and, if a Node service needs it, `apps/k7-daw-engine/k7-runtime/scripts/lib/engine-client/engineControl.ts`. Methods that do not need a `ProjectDoc` belong in `EngineControl`, so they do not drag the compiler in.
 5. If the reply is machine-wide, add it to `ENGINE_GLOBAL_REPLIES` in `apps/k7-daw-frontend/packages/engine-protocol/sessions.ts`.
 
 Nothing type-checks across the wire: run the engine and exercise the verb.

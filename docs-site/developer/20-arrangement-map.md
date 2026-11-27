@@ -28,7 +28,7 @@ is the one after.
 | Master meter | `apps/k7-daw-frontend/src/components/MasterMeter.tsx`, `gainTrim.ts`, `apps/k7-daw-frontend/packages/engine-browser/src/meter.ts` |
 | Mastering surface | `apps/k7-daw-frontend/src/components/MasteringTab.tsx`, `apps/k7-daw-frontend/src/mastering/controls.ts`, `apps/k7-daw-frontend/src/mastering/bindings.ts` |
 | Export | `apps/k7-daw-frontend/src/exportArgs.ts`, `apps/k7-daw-frontend/src/hooks/useShare.ts`, `apps/k7-daw-frontend/src/components/SharePanel.tsx`; `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/shares/export.rs` |
-| Offline renders | `apps/k7-daw-frontend/packages/take-render/src/` (renderer, material split/consolidate, recorded takes) |
+| Offline renders | `apps/k7-daw-engine/k7-runtime/scripts/lib/take-render/` (renderer, material split/consolidate, recorded takes) |
 | Bouncing through a chain | `apps/k7-daw-wasm/verbs/src/verbs/bounce.rs`, `peakPass.ts`, `coldPass.ts` |
 | Import | `apps/k7-daw-backend/packages/k7-import/src/` (`dawproject.rs`, `ableton.rs`, `als_zip.rs`, `emit.rs`), run by `POST /import` (`apps/k7-daw-backend/packages/k7-file-service/src/edits/import.rs`) |
 | Undo journal | `apps/k7-daw-backend/packages/k7-file-service/src/journal/` (server), `apps/k7-daw-frontend/packages/project-shell/src/undo.ts` (client), `apps/k7-daw-frontend/src/components/HistoryPanel.tsx` |
