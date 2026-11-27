@@ -4,6 +4,7 @@
 
 #![cfg_attr(not(test), deny(clippy::unwrap_used, clippy::expect_used, clippy::panic))]
 
+pub mod address;
 mod aspect;
 mod audio_files;
 mod curve;

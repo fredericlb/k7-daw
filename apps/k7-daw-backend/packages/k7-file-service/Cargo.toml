@@ -9,6 +9,7 @@ publish.workspace = true
 # Pins are k7x files; the same parser the bundle reads through (apps/k7-daw-wasm/k7x/docs/rust.md).
 indexmap.workspace = true
 k7x = { path = "../../../k7-daw-wasm/k7x" }
+serde.workspace = true
 serde_json.workspace = true
 # The store's folder name is a SHA-256 of the project's path (1723); the gate is tokio's RwLock, no runtime (1734).
 sha2.workspace = true
@@ -32,10 +33,15 @@ notify.workspace = true
 unicode-normalization.workspace = true
 # A job's id is 128 random bits (verb_host/jobs.rs).
 getrandom.workspace = true
+ts-rs = { workspace = true, optional = true }
 
 # Already the workspace's: the flags of a non-blocking, link-refusing open.
 [target.'cfg(unix)'.dependencies]
 libc = "0.2"
+
+[features]
+# The TypeScript types of the wire structs, written by k7-front's bindings binary (docs/ts-types.md).
+ts = ["dep:ts-rs", "song/ts"]
 
 [dev-dependencies]
 tokio = { workspace = true, features = ["rt", "rt-multi-thread", "macros", "time"] }
