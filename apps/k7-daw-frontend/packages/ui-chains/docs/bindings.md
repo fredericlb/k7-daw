@@ -8,7 +8,7 @@ mapping({ "deckA.eqLow": { module: "eqA", param: "Low-shelf gain" } })
 ```
 
 Turning that into "put this parameter on this plugin" needs three questions answered, and
-`bindings.ts` holds **two**. The third belongs to the surface, which is the whole point of this
+the `bindings` module of the `chains` crate (`apps/k7-daw-wasm/chains`, reached through `@studio/k7-wasm/chains`) holds **two**. The third belongs to the surface, which is the whole point of this
 page.
 
 | question | who answers |
@@ -17,11 +17,11 @@ page.
 | which widget draws this parameter, and so what is its range? | **here** (`widgetFor`) |
 | how do you turn "where the control is" into "what the parameter is worth"? | **the surface** |
 
-## Why in this package
+## Why in the chains crate
 
-Because it is the **graph** half of the join, and reading a graph is this package's job.
-`widgetDenorm` — the other half, which unrolls a 0..1 into a widget's range — is already in
-`widgetValue.ts`, next door. Both consumers depend on it already, so nothing new enters a
+Because it is the **graph** half of the join, and reading a graph is the chains crate's job.
+`widgetDenorm` — the other half, which unrolls a 0..1 into a widget's range — is in the same
+crate's `widget_value` module. Both consumers depend on the facade already, so nothing new enters a
 `package.json`.
 
 The input type is **structural** (`SurfaceMapping`) rather than imported from

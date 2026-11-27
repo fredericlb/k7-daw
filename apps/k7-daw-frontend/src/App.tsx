@@ -185,6 +185,8 @@ import type { PendingNode } from "./pendingNode";
 import { resourceRows } from "./placeResource";
 import { setServiceProcesses, watchProcessEnds } from "./processes";
 import { ENGINE_SETTINGS_ROUTE } from "./projects/api";
+import { UndoFlash } from "./shell/UndoFlash";
+import { flashStep } from "./shell/undoFlashStore";
 import {
   type EditFocus,
   keepIfEqual,
@@ -731,6 +733,9 @@ export default function App({
       currentFile: () => editorRef.current?.currentFile() ?? null,
       onApplied: bumpReload,
       flush: flushAutosaves,
+      // A step is shown big at the centre, stacking with the next of its kind (shell/UndoFlash.tsx).
+      onStep: (redo, message, nothing) =>
+        flashStep(nothing ? "nothing" : redo ? "redo" : "undo", message),
       strings: {
         undone: (what) => m["undo.undone"]({ what: stepText.current(what) }),
         redone: (what) => m["undo.redone"]({ what: stepText.current(what) }),
@@ -3441,6 +3446,7 @@ export default function App({
             className="relative flex h-full flex-col overflow-hidden bg-background text-foreground"
           >
             <Backdrop />
+            <UndoFlash />
             {header}
             {/* The panes and the right panels' buttons, as a vertical toolbar on the right edge (shell/PanelRail.tsx); a phone has its menu. */}
             {railShown && (

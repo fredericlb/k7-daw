@@ -266,3 +266,70 @@ fn a_song_op_reaches_the_song_family() {
     let (status, v) = run(&mut s, &json!({"op": "song.close", "args": {"handle": 9}}));
     assert_eq!((status, &v["code"]), (ERROR, &json!("unknown_handle")));
 }
+
+#[test]
+fn answers_the_chains_ops_through_the_same_bytes() {
+    let mut s = Session::new();
+    let w = json!({"min": 0, "max": 100, "step": 1});
+    let (status, v) = run(
+        &mut s,
+        &json!({"op": "widget.denorm", "args": {"widget": w, "value": 0.57}}),
+    );
+    assert_eq!((status, v), (OK, json!(57.0)));
+    let (_, v) = run(
+        &mut s,
+        &json!({"op": "widget.text", "args": {"widget": w, "value": null}}),
+    );
+    assert_eq!(v, json!("–"));
+    let flow = json!({"edges": [{"id": "a", "source": "trk:m", "target": "x"}], "seeds": [["m", {"audio": 0.5, "midi": 0, "video": 0}]]});
+    let (_, v) = run(&mut s, &json!({"op": "flow.compute", "args": flow}));
+    assert_eq!(v, json!([["a", 0.5]]));
+    let graph = json!({"chains": {"a": {"from": "vox", "use": [{"module": "comp"}], "out": []}}});
+    let (_, v) = run(
+        &mut s,
+        &json!({"op": "lane.modules", "args": {"graph": graph, "track": "vox"}}),
+    );
+    assert_eq!(v, json!(["comp"]));
+    let bind = json!({"mapping": {"k": {"module": "gone", "param": "p"}}, "graph": null, "controls": ["k"], "noun": "x", "plugless": "track", "withAlso": false});
+    let (_, v) = run(&mut s, &json!({"op": "bindings.resolve", "args": bind}));
+    assert!(v["problems"][0]["message"].as_str().unwrap().contains("no module"));
+    let (status, _) = run(&mut s, &json!({"op": "widget.norm", "args": {"widget": {}}}));
+    assert_eq!(status, ERROR);
+}
+
+#[test]
+fn answers_the_graph_ops_through_the_same_bytes() {
+    let mut s = Session::new();
+    let graph = json!({"chains": {"a": {"from": "t", "use": [{"module": "amp"}], "out": [{"to": "OUT", "gain": 1}]}}, "tracks": ["t"]});
+    let (status, v) = run(
+        &mut s,
+        &json!({"op": "graph.build", "args": {"graph": graph, "opts": {}}}),
+    );
+    assert_eq!(status, OK);
+    assert_eq!(v["edges"][0]["id"], json!("trk:t->mod:amp"));
+    let (_, v) = run(&mut s, &json!({"op": "graph.nodeSize", "args": {"footer": true}}));
+    assert_eq!(v, json!({"w": 160.0, "h": 90.0}));
+    let node = json!({"id": "mod:amp", "kind": "module", "label": "amp", "module": "amp"});
+    let (_, v) = run(
+        &mut s,
+        &json!({"op": "graph.jackRef", "args": {"node": node, "port": "b"}}),
+    );
+    assert_eq!(v, json!("amp#b"));
+    let (status, v) = run(&mut s, &json!({"op": "graph.build", "args": {"graph": 7}}));
+    assert_eq!((status, &v["code"]), (ERROR, &json!("bad_request")));
+}
+
+#[test]
+fn the_layout_constants_the_page_reads_are_the_ones_the_crate_decides_with() {
+    use chains::node_ui as ui;
+    // The panels' binds are the file format's vocabulary, spelled once in song: a drift here would write a bind nothing reads.
+    assert_eq!(ui::RACK_BIND, "@rack:");
+    assert_eq!(ui::OUTPUT_VOLUME_PARAM, song::modules::names::OUTPUT_VOLUME_PARAM);
+    assert_eq!(
+        ui::VOLUME_RANGE,
+        (
+            song::modules::names::VOLUME_RANGE.0,
+            song::modules::names::VOLUME_RANGE.1
+        )
+    );
+}

@@ -6,9 +6,9 @@
 import type { PluginParamsStore } from "@studio/engine-browser/params";
 import { automationLanes, type WebAutomationLane } from "@studio/graph-model";
 import { ASPECTS, aspectOf } from "@studio/k7-wasm/picture";
+import type { GridFit } from "@studio/k7-wasm/types";
 import { ChevronRight, List } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
-import { foldAssemblies } from "@studio/ui-chains/assembly";
 import type { LaneSpan } from "@studio/ui-chains/cables";
 import type { GraphNode, TrackControlValues } from "@studio/ui-chains/graph";
 import {
@@ -17,7 +17,6 @@ import {
   subgraphForTrack,
   withOpenTabs,
 } from "@studio/ui-chains/graph";
-import type { GridFit } from "@studio/ui-chains/gridFit";
 import type { LaneNotes } from "@studio/ui-chains/noteLoad";
 import { shownNames } from "@studio/ui-chains/shownName";
 import { stackLayout } from "@studio/ui-chains/stackLayout";
@@ -223,7 +222,7 @@ function ChainsTabView({
   const labels = useChainsWords();
   // How many notes there are, reported to the store — the toggle's button is in the footer.
   const onDocCount = useShell((s) => s.setDocCount);
-  // The STACK view: a column per lane, the MIX's last — @studio/ui-chains's stackLayout.ts.
+  // The STACK view: a column per lane, the MIX's last — @studio/ui-chains's stackLayout.ts (the `chains` crate's `stack_layout.rs`).
   const stack = useShell((s) => s.stackView);
   // What a hovered History row touched, lit here — read from the store so a hover re-renders no one else (historyMarks.ts).
   const mark = useShell((s) => s.historyMark);
@@ -377,19 +376,22 @@ function ChainsTabView({
   const laid = useMemo(() => {
     if (!drawn) return null;
     // The OUT card IS drawn, and it costs one node — plus the two things not in the graph document: the inputs, and the song's output level.
-    const built = buildGraph(drawn, {
-      drawMainOut: true,
-      inputDevices,
-      cameras,
-      midiDevices,
-      mainOutVolume: masterVolume,
-      aspect: aspectRow,
-      // The graph spreads in both directions, so a card is drawn NARROW: its vertical layout, tabs as a menu.
-      layout: "vertical",
-      fit: GRAPH_FIT,
-    });
-    // …then the assemblies are folded in: a box instead of its members, unless it is open — apps/k7-daw-frontend/packages/song/docs/assemblies.md.
-    const { nodes, edges } = foldAssemblies(drawn, built, openAssemblies);
+    // …with the assemblies folded in: a box instead of its members, unless it is open — apps/k7-daw-frontend/packages/song/docs/assemblies.md.
+    const { nodes, edges } = buildGraph(
+      drawn,
+      {
+        drawMainOut: true,
+        inputDevices,
+        cameras,
+        midiDevices,
+        mainOutVolume: masterVolume,
+        aspect: aspectRow,
+        // The graph spreads in both directions, so a card is drawn NARROW: its vertical layout, tabs as a menu.
+        layout: "vertical",
+        fit: GRAPH_FIT,
+      },
+      [...openAssemblies],
+    );
     // The STACK view is an arrangement too, but a whole one: no pins, no held positions, no dagre.
     if (stack) return stackLayout(nodes, edges, drawn, trackOrder);
     // `graph organize` ran: forget the session's positions AND ignore the old pins this once, since the reload may not have landed.

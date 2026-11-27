@@ -40,7 +40,7 @@ in the corpus or a unit test, so the gate's allow list stays empty. Each is name
 | 412 | `disabled` is sorted by `str`'s `Ord`; a chain or lane whose name is integer-like is met in file order | decisions 165, 256 |
 | 413 | a `GraphModule` borrows its `Resolved` and normalises only what validate and the view ask: `kind`, `inputs`, `outputs`, `emits`, `channel`, `monitor`, `automations` | `toModule` copied every field per module |
 | 414 | a step carries `base` when the resolved module names one; the TypeScript on this branch does the same (`ts: true`) | the panel shows the current base |
-| 415 | an automation carries its `trigger` when the file states one (`ts: true`) | `buildChains.ts` reads `a.trigger ?? s.module` for the cable |
+| 415 | an automation carries its `trigger` when the file states one (`ts: true`) | the `chains` crate's `build_chains.rs` reads `a.trigger ?? s.module` for the cable |
 | 416 | `moduleAssetMissing` for `ir` reads the resolved `LoadedModule.ir` (`ts: true`) | an `ir` that resolved is not missing |
 | 417 | DEPARTS. A placement whose start is not finite is left out of `placements` with one warning finding named by the lane's file; a start `beats_to_position` refuses keeps its place and has `tc: ""` | JSON writes `null`; a position of `1e300` beats has no spelling |
 | 418 | placements are read on a meter that defaults each half of `timeSignature` apart, as `buildGraph` does (`parseInt`, then `n \|\| 4`; a half past `u32` stays a float); a clip's `tc` is spelled on the header when it is `digits/digits` with no zero half, else on 4/4 (454); the tempo is the file's or 120 | `num \|\| 4` and `den \|\| 4`, and `graphDoc`'s own regex for the spelling |

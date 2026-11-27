@@ -28,7 +28,16 @@ export type MenuCtx =
       cc?: Cc;
       automated?: boolean;
     }
-  | { kind: "curve-point"; curve: string; param: string; tc: string }
+  | {
+      kind: "curve-point";
+      curve: string;
+      param: string;
+      tc: string;
+      /**
+       * The module whose param the lane automates: given, the menu can remove the automation too.
+       */
+      module?: string;
+    }
   | { kind: "curve-card"; curve: string; module?: string; param?: string }
   | { kind: "chain"; id: string }
   | { kind: "sink"; id: string }

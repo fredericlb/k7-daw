@@ -17,7 +17,7 @@ An interaction is `<screen number>.<nn>` (`03.05`), one id shared by every devic
 |---|---|---|---|---|
 | 01 Home | 01T (41) | 01M (37) | 01D (43) | Artboard-hb0q, HomePhone, HomeDesk, HomeEmptyRemotePad, HomeEmptyRemotePhone |
 | 02 Tasks | 02T (4) | 02M (4) | 02D (4) | TasksPad, TasksPhone, TasksDesk |
-| 03 Arrangement · Audio | 03T (81) | 03M (70) | 03D (90) | ArrangePad, ArrangePhone, ArrangeDesk |
+| 03 Arrangement · Audio | 03T (82) | 03M (71) | 03D (91) | ArrangePad, ArrangePhone, ArrangeDesk |
 | 04 Arrangement · Video | 04T (8) | 04M (8) | 04D (9) | ArrangeVideoPad, ArrangeVideoPhone, ArrangeVideoDesk |
 | 05 Graph | 05T (50) | 05M (48) | 05D (53) | GraphPad, GraphPhone, GraphDesk |
 | 06 Source | 06T (23) | 06M (20) | 06D (25) | SourcePad, SourcePhone, SourceDesk |
@@ -231,6 +231,7 @@ The timeline pane: tool strip, ruler with markers and task flags, timeline tabs,
 | 03.63 | Add / move / remove an automation point | click an automation row to add a point; drag a point; right-click for the point menu | ↑ / ↓ change the focused point; Delete removes it | tap the row to add a point; hold a point, then drag | T M D |
 | 03.64 | Put the caret on a lane cell | click the empty lane (clears the selection) | — | tap the empty lane | T M D |
 | 03.65 | Walk the caret | — | ←/`h`, →/`l` a beat; ↑/`k`, ↓/`j` a row | — | T D |
+| 03.93 | Remove an automation lane | right-click the automation lane (its header or its curve) → Remove automation | — | long-press the lane → Remove automation | T M D |
 
 ### Arrange · Clips
 

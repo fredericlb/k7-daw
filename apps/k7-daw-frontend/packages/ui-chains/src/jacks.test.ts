@@ -16,7 +16,6 @@ import {
   cablePath,
   type GraphNode,
   jackPoint,
-  jacksFor,
   layout,
   PORT_PLATE,
 } from "./graph";
@@ -28,83 +27,6 @@ const CROSSFADE = [
   { name: "a", type: AUDIO },
   { name: "b", type: AUDIO, mandatory: false },
 ];
-
-const fed = (...ports: string[]) => new Set(ports);
-
-describe("jacksFor", () => {
-  it("gives a module that declares nothing the one socket every module has", () => {
-    // Unnamed on purpose: calling it "in" would be noise on every node in the song.
-    expect(jacksFor(undefined, fed(), "midi", true)).toEqual([
-      { type: "midi", free: true },
-    ]);
-    expect(jacksFor([], fed(""), undefined, true)).toEqual([
-      { type: "audio", free: false },
-    ]);
-  });
-
-  it("shows the mandatory port alone until something is wired to it", () => {
-    // Nothing connected: the offer is the mandatory one, `b` being a second input nobody asked for.
-    expect(jacksFor(CROSSFADE, fed(), AUDIO, true)).toEqual([
-      { name: "a", type: AUDIO, free: true },
-    ]);
-  });
-
-  it("reveals the next one as soon as the flow arrives", () => {
-    // A bare cable feeds the FIRST port, which is what `""` means.
-    expect(jacksFor(CROSSFADE, fed(""), AUDIO, true)).toEqual([
-      { name: "a", type: AUDIO, free: false },
-      { name: "b", type: AUDIO, free: true },
-    ]);
-  });
-
-  it("stops at what the module declares", () => {
-    // Both fed: an invented third would promise an input no cable could ever land on.
-    expect(jacksFor(CROSSFADE, fed("", "b"), AUDIO, true)).toEqual([
-      { name: "a", type: AUDIO, free: false },
-      { name: "b", type: AUDIO, free: false },
-    ]);
-  });
-
-  it("keeps a lower port visible when only a higher one is wired", () => {
-    // One past the LAST occupied port: fed only on `b`, a module still has to show `a`.
-    const three = [...CROSSFADE, { name: "c", type: AUDIO, mandatory: false }];
-    expect(jacksFor(three, fed("b"), AUDIO, true)).toEqual([
-      { name: "a", type: AUDIO, free: true },
-      { name: "b", type: AUDIO, free: false },
-      { name: "c", type: AUDIO, free: true },
-    ]);
-  });
-
-  it("draws every mandatory port at once, however many there are", () => {
-    const both = [
-      { name: "a", type: AUDIO },
-      { name: "b", type: AUDIO },
-    ];
-    expect(jacksFor(both, fed(), AUDIO, true).map((j) => j.name)).toEqual([
-      "a",
-      "b",
-    ]);
-  });
-
-  it("shows all the outputs from the start, since none of them is progressive", () => {
-    const outs = [
-      { name: "main", type: AUDIO },
-      { name: "cue", type: AUDIO },
-    ];
-    // A cable naming no port is the FIRST output, so `cue` stays free — occupancy is per socket.
-    expect(jacksFor(outs, fed(""), AUDIO, false)).toEqual([
-      { name: "main", type: AUDIO, free: false },
-      { name: "cue", type: AUDIO, free: true },
-    ]);
-    // A cable that names one occupies that one, and only it.
-    expect(jacksFor(outs, fed("cue"), AUDIO, false)).toEqual([
-      { name: "main", type: AUDIO, free: true },
-      { name: "cue", type: AUDIO, free: false },
-    ]);
-    // …and with nothing leaving the module, they read as unplugged rather than as connected.
-    expect(jacksFor(outs, fed(), AUDIO, false).every((j) => j.free)).toBe(true);
-  });
-});
 
 describe("the sockets a built graph puts on its nodes", () => {
   // deckA flows into the crossfade, deckB lands on its `b` — demos/crossfade-demo.k7.
@@ -382,15 +304,5 @@ describe("several cables into one port-less node", () => {
     const { edges } = buildGraph(meeting);
     const into = edges.filter((e) => e.target === "mod:eqA");
     expect(into.map((e) => e.targetSlot)).toEqual([0, 1, 2, 3]);
-  });
-
-  it("leaves a node fed ONCE exactly as it was", () => {
-    // The common case must not grow a socket: one cable, one hole, and `free` still says whether it is taken.
-    expect(
-      jacksFor(undefined, fed(""), AUDIO, true, false, undefined, 1),
-    ).toEqual([{ type: AUDIO, free: false }]);
-    expect(
-      jacksFor(undefined, fed(), AUDIO, true, false, undefined, 0),
-    ).toEqual([{ type: AUDIO, free: true }]);
   });
 });

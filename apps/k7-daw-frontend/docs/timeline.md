@@ -932,6 +932,14 @@ by group afterwards. So dragging within a group does what it looks like, and dra
 the middle of another group moves it in the file and then draws it back outside — its `group:` is
 a different fact, and a drag does not change it.
 
+## An automation lane is removed from its right-click menu
+
+A right-click on an automation lane, its header or its curve, offers **Remove automation** beside the
+point verbs (the curve-point menu, which names the lane's module). It runs `node automate <module>
+<param> none`, the row the graph's curve card offers: the BINDING goes, the curve file stays, since
+another knob may read it. The menu is where a lane's other acts already are; a click on the header
+selects the lane, as on every other row.
+
 ## The corner button makes a lane — of which KIND, when there are two
 
 The `＋ piste` button over the name column dispatches `track new`, like every other button here.

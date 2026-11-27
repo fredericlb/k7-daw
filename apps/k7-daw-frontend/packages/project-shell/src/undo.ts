@@ -16,6 +16,7 @@ export interface HistoryDeps {
   onApplied?: () => void; // let the app refetch after a change (bump reloadKey / poke a poll)
   strings?: HistoryStrings; // the app's wording; English when absent
   flush?: () => Promise<unknown>; // write every pane's pending text first: a pending autosave would land over the step
+  onStep?: (redo: boolean, message: string, nothing?: boolean) => void; // show a landed step, or that there was none, instead of a toast
 }
 
 /** What the toasts say: the ACTION undone, since a file path tells nobody what came back. */
@@ -32,6 +33,14 @@ const ENGLISH: HistoryStrings = {
   nothingToUndo: "Nothing to undo",
   nothingToRedo: "Nothing to redo",
 };
+
+/** A step's sentence, where the app shows steps: its own flash, else a toast. */
+const say = (
+  deps: HistoryDeps,
+  redo: boolean,
+  message: string,
+  nothing = false,
+) => (deps.onStep ? deps.onStep(redo, message, nothing) : deps.notify(message));
 
 async function run(
   call: (confirm?: boolean) => Promise<UndoResult>,
@@ -50,14 +59,14 @@ async function run(
     }
     // Said rather than silent: a key that does nothing reads as a key that is broken.
     if (!r.applied && !r.needsConfirm)
-      return deps.notify(redo ? s.nothingToRedo : s.nothingToUndo);
+      return say(deps, redo, redo ? s.nothingToRedo : s.nothingToUndo, true);
     if (!r.applied) return;
     const files = r.files ?? [];
     const first = files[0];
     if (first && deps.currentFile?.() !== first) deps.openFile(first);
     deps.onApplied?.();
     const what = r.label || first || "";
-    deps.notify(redo ? s.redone(what) : s.undone(what));
+    say(deps, redo, redo ? s.redone(what) : s.undone(what));
   } catch (e) {
     deps.notify((e as Error).message, "error");
   }

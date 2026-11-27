@@ -21,6 +21,8 @@
     "./types": "./src/types/index.ts",
     "./boot": "./src/boot.ts",
     "./module.wasm": "./src/k7Wasm.wasm",
+    "./chains": "./src/chains.ts",
+    "./graph": "./src/graph.ts",
     "./engine": "./src/engine.ts",
     "./ui": "./src/ui.ts",
     "./edit": "./src/edit.ts",

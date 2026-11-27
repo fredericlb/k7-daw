@@ -4,19 +4,17 @@
 // See ../../docs/controls.md.
 
 import type { WebGraph } from "@studio/graph-model";
-import type { MixView } from "@studio/song-schema/yaml/mixViewSchema";
 import {
   type BindingProblem,
   type ResolvedTarget,
   resolveMapping,
-  resolveTarget,
-  stepsByModule,
-} from "@studio/ui-chains/bindings";
+} from "@studio/k7-wasm/chains";
+import type { MixView } from "@studio/song-schema/yaml/mixViewSchema";
 import { widgetDenorm } from "@studio/ui-chains/graph";
-import { type MixControl, mixControl } from "./controls";
+import { type MixControl, mixControls } from "./controls";
 import type { DeckId, DeckTempos } from "./deckVocabulary";
 
-// The graph half of the join is `@studio/ui-chains/bindings`, shared with k7's mastering strip.
+// The graph half of the join is `@studio/k7-wasm/chains`, shared with k7's mastering strip.
 // What stays here is what is the DESK's: the `also:` mirror, and the SCALE (`valueFor`).
 export type { BindingProblem };
 
@@ -40,31 +38,16 @@ export function resolveBindings(
   // `track` and not `refuse`: an `offline` module compiles to no plugin, and a tempo fader binds
   // it by the track its chain draws from. That policy is the desk's — see docs/controls.md.
   const { rows, problems } = resolveMapping(view, graph, {
-    control: mixControl,
+    controls: mixControls(),
     noun: "of the desk",
     plugless: "track",
+    withAlso: true,
   });
-
-  const steps = stepsByModule(graph);
-  const bindings: ResolvedBinding[] = [];
-  for (const { control, target, binding } of rows) {
-    // The SECOND target, resolved the same way; an unresolvable one is reported, never dropped.
-    let also: ResolvedTarget | undefined;
-    if (binding.also) {
-      const second = resolveTarget(
-        steps.get(binding.also.module),
-        binding.also,
-        "track",
-      );
-      if (typeof second === "string")
-        problems.push({
-          control: control.id,
-          message: `the second module “${binding.also.module}” has neither a plugin nor a track to move`,
-        });
-      else also = second;
-    }
-    bindings.push({ ...target, control, ...(also ? { also } : {}) });
-  }
+  const bindings: ResolvedBinding[] = rows.map(({ control, target, also }) => ({
+    ...target,
+    control,
+    ...(also ? { also } : {}),
+  }));
   return { bindings, problems };
 }
 

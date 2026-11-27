@@ -57,7 +57,7 @@ milestone ends with `bash scripts/agent/gate.sh --milestone`; the hours are agen
 | **M1a** quick deletes (done) | the DELETE rows below that need no branch: barTint, PairThisDevice (then `requestPairing`), RemoteSlotsSection, menuAccount, the EngineSyncProgress component, ModeStrip, the `aiOrganize` re-export, `audio-probe/src/waveform.ts`; WebRTC end to end: rtcSocket (keeping a 25-line socket wrapper), rtcFrames, `engine-tunnel/rtc.ts`, `node-datachannel`, the backend's `/rtc` route and `rtc` flag | 1,100 | none | nothing | 3 |
 | **M1b** first ts-rs | `graph-model/types.ts` from `song/src/graph/view/web.rs` (already derives); the `ts` feature and a bindings binary for the backend crates; the app's mirrors (AuthUser, K7Prefs, LocalApp, ServiceProcess, sync history, the desktop engine snapshot, LanPeer) | 700 | k7-wasm bindings, k7-front, k7-lan, k7-sync, k7-supervisor | nothing (exports only from the song crate) | 8 |
 | **M1c** (built) Rust twins | textHash, compat, quality and choose, engineWarnings and engineMissing (classified by Rust, decision 4), performance (the page's scoring deleted; the supervisor scores); paths, clipEnvelope, engineSession, engineTaken and the five rows with no Rust function (lcdSounds, libraryTree, historyMarks, surfaceRows, paneInUse) stay, see below | 310 | song-schema `engine/` and `text_hash`, k7-wasm ops, k7-file-service, k7-supervisor | nothing | 10 |
-| **M2a** chains build | `ui-chains` build and measure steps (buildGraph, buildChains, buildContext, assembly, subgraph, bindings, geometry, moduleRow, rowSeams, gridFit, stackLayout, nodeUIs, widgetValue, flow, the logic of cables, curvePlacement...), `chainsModel`, `moduleField`, `widgetTarget`; graphNode generated; dagre stays in TS until M5b | 3,700 | new crate `apps/k7-daw-wasm/chains`, op `chains_build` | M1b | 16 |
+| **M2a** (built) chains build | `ui-chains` build and measure steps (buildGraph, buildChains, buildContext, assembly, subgraph, bindings, geometry, moduleRow, rowSeams, gridFit, stackLayout, nodeUIs, widgetValue, flow, the logic of cables, curvePlacement...), `chainsModel`, `moduleField`, `widgetTarget`; graphNode generated; dagre stays in TS until M5b | 3,700 | new crate `apps/k7-daw-wasm/chains`, op `chains_build` | M1b | 16 |
 | **M2b** (built) gesture arithmetic | snap, rollDrag, rollFit, gridCaret, barWindow, clipPlayhead, clipWarp, videoDrag, takeCounter, timelineTools, formatAt; the arithmetic inside TimelineTab, useRollGestures, PianoRoll, useEdgeDrags, useVideoDrag, AudioClipPanel; the ruler's tick ladder and `ui-timeline` ticks and anchored zoom; what stays, see below | 1,100 (1,800 of tests) | new crate `apps/k7-daw-wasm/gesture`, typed exports | decision 1 | 13 |
 | **M2c** tunnel stand-in (done) | the hub suites ported to Rust tests over the Rust supervisor; `e2e/src/standInEngine.ts` on the supervisor binary with a fake engine; `engine-tunnel` deleted with its 2,100 test lines | 2,500 | k7-supervisor, k7-hub tests | nothing | 10 |
 | **M3a** verbs catalogue (built, see below) | contextMenu, menuTabs, menuTitle, palette, argOptions, rankCommands, fuzzy, commandFill, commandPrefs, emptyBar, stepSentence, exportArgs, pendingEdits, nodeInsert, nodeMenu, clipOps, playlistVocabulary, reloadScope, verbWrites, homeCommands' catalogue and parse; `commandTypes.ts` generated | 2,500 | verbs crate | verbs branch merged; decisions 2, 6 | 14 |
@@ -108,6 +108,33 @@ a real grade. The old TypeScript tests became `eyes/tests/*.rs` with their input
 verbs branch merges, M3c meanwhile (it waits on nothing but decision 5). Wave 4: M4a, M4b, M4c
 once the song twins merge. Wave 5: M5a, M5b, M5c. About 155 agent-hours of building, five waves,
 plus one review per milestone.
+
+**M2a, first part as built.** The crate `apps/k7-daw-wasm/chains` (no dependency but serde, serde_json and
+indexmap) and `@studio/k7-wasm/chains` carry `widgetValue`, `subgraph`, `bindings` (with `stepsByModule`,
+`widgetFor` and `resolveTarget`, now inside the Rust join), `flow` and `computeFlow` of `cables`, and `curvePlacement`:
+about 650 lines of TypeScript left (`widgetValue`, `subgraph`, `flow`, `bindings`, `curvePlacement` and the `computeFlow` block
+of `cables`) and 1,000 lines of their tests, replaced by 1,770 lines of Rust (half of them tests) with 44 Rust tests and a 150-line facade test. The old tests ran
+against the Rust ops first (56 cases through the facade), and 40,000 generated widgets and values over six
+functions showed no difference with the old widget maths but a NaN: a typed text that was NaN is now "no number". One
+behaviour differs on purpose: a track's module row puts its own chains first and keeps each group in reach order (the
+TypeScript comparator was not a total order). A call costs 1 microsecond for a widget, 40 for a 64-lane seed, 0.27 ms for the
+flow of 500 cables, 0.26 ms for a lane read and 1 ms for a 20-line binding join on a 1,200-step graph, the graph being sent slimmed
+(`k7-wasm/docs/chains.md`).
+
+**M2a, second part as built.** The build core moved into the same crate: `build`, `build_chains`, `node_ui`, `geom`, `grid_fit`,
+`assembly`, `module_row`, `row_seams`, `stack_layout`, with the ops `graph.build` (the assemblies folded in the same call),
+`graph.row`, `graph.align`, `graph.space`, `graph.seams`, `graph.inserts`, `graph.jackRef`, `graph.stack` and `graph.nodeSize`.
+The TypeScript twins `buildChains`, `buildContext`, `gridFit`, `nodeUIs` and `assembly` are gone, `buildGraph`, `moduleRow`,
+`rowSeams`, `stackLayout` and `graphNode` are facades of a few dozen lines each (`graphNode`'s shapes are generated), `geometry`
+keeps only its drawing half, `insertFor` and `jackRef` and the node-size rule are Rust's. Parity: the old tests ran unchanged against
+the ops through the facades (about 1,000 cases), and a differential over the 174 golden graphs and 220 random ones, each built under
+nine option sets and also folded, rowed, stacked and seamed against the frozen twins, compared 32,308 nodes, 24,106 cables, 168 boxes,
+263 per-tab widths, 3,393 clip lists, 249 rows, 590 seams and 45 side cables with no difference. The pure tests (the fold, the sockets,
+the built-in panels, `insertFor`, `jackRef`, `chainExit`) were ported to 43 Rust tests, beside 12 build tests (99 in the crate, and two dispatch tests in `k7-wasm`).
+Costs are in `k7-wasm/docs/chains.md`: the build is slower than its twin (0.7 ms against 0.3 on a real project, 27 ms against 10 on
+1,300 steps), `stackLayout` 16 times faster. What stays in TypeScript, and why, is the last section of that page: the cables'
+drawing, `widgetTarget` and `moduleField` (per widget per render), `autoTarget`, the layout. A folder dropdown's names are sorted by
+the page's collator after the call. About 1,500 lines of TypeScript went with their files and 2,100 more with the facades' bodies and tests.
 
 **M1c, as built.** Seven twins went (about 310 lines, 560 of tests): `textHash`, `compat`, `quality`,
 `choose`, the classification in `engineWarnings` and `engineMissing`, and `performance`'s scoring, with

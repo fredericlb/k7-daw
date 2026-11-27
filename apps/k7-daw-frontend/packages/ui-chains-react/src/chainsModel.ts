@@ -2,13 +2,13 @@
 // eligibility, the automation cables, and the edges the ripple walks. Pure, and memoised by
 // DomChains on the graph alone — docs/liveCables.md.
 
+import { insertsFor } from "@studio/k7-wasm/graph";
 import { WOBBLE_MAX_SAMPLES, WOBBLE_STEP } from "@studio/ui-chains/cableCanvas";
 import {
   type AutoTarget,
   autoTarget,
   buildCableGeom,
   type CableGeom,
-  insertFor,
 } from "@studio/ui-chains/cables";
 import {
   cablePath,
@@ -34,6 +34,15 @@ export function buildModel(graph: LaidOutGraph) {
   const auto: AutoTarget[] = [];
   // An automation cable is a CABLE: only its param LABEL stays in the SVG, off the AutoTarget list.
   const autoGeom: ({ id: string } & CableGeom)[] = [];
+  // What each drawn cable would splice into, asked of Rust once for all of them.
+  const drawn = graph.edges.filter(
+    (e) => !e.automation && !e.glued && e.points.length >= 2,
+  );
+  const inserts = insertsFor(
+    graph.nodes,
+    drawn.map((e) => [e.source, e.target]),
+  );
+  let next = 0;
   for (const e of graph.edges) {
     if (e.automation) {
       const a = autoTarget(e, byId);
@@ -67,7 +76,7 @@ export function buildModel(graph: LaidOutGraph) {
       label: e.label,
       signal: e.signal,
       faded: anyOpen && !e.assembly,
-      insert: insertFor(e.source, e.target, byId),
+      insert: inserts[next++],
     });
   }
   // What the ripple walks: every signal edge, drawn or glued.
