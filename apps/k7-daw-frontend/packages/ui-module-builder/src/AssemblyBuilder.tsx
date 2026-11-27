@@ -213,9 +213,7 @@ export function AssemblyBuilder({
         <p className="border-b px-4 py-1 text-amber-500 text-xs">{problem}</p>
       ) : null}
       {note ? (
-        <p className="border-b px-4 py-1 text-xs text-fg-2">
-          {note}
-        </p>
+        <p className="border-b px-4 py-1 text-xs text-fg-2">{note}</p>
       ) : null}
       {autosave.reason ? (
         <p className="border-b px-4 py-1 text-amber-500 text-xs">

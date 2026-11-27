@@ -144,10 +144,7 @@ export const WithUploads: Story = {
             }
           />
         </div>
-        <ul
-          data-testid="drop-log"
-          className="mt-2 text-xs text-fg-2"
-        >
+        <ul data-testid="drop-log" className="mt-2 text-xs text-fg-2">
           {log.map((l) => (
             <li key={l}>{l}</li>
           ))}

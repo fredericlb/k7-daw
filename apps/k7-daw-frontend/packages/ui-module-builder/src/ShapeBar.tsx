@@ -25,9 +25,7 @@ export function ShapeBar({
       type="button"
       onClick={() => onShape(s)}
       className={`rounded px-2 py-0.5 text-xs ${
-        shape === s
-          ? "bg-row text-fg-1"
-          : "text-fg-2 hover:bg-row/50"
+        shape === s ? "bg-row text-fg-1" : "text-fg-2 hover:bg-row/50"
       }`}
     >
       {label}

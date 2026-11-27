@@ -105,9 +105,7 @@ export function ContextMenu({
           </span>
         )}
         {/* Whether picking this RUNS it or only fills the bar with it — an action against a question, worth a character per row. */}
-        {!it.complete && (
-          <span className="shrink-0 text-fg-2">…</span>
-        )}
+        {!it.complete && <span className="shrink-0 text-fg-2">…</span>}
       </PointMenuItem>
     );
   };

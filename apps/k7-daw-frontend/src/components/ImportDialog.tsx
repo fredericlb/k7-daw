@@ -58,9 +58,7 @@ export function ImportDialog({
               <div
                 key={i}
                 className={
-                  line.startsWith("warning:")
-                    ? "text-amber-500"
-                    : "text-fg-2"
+                  line.startsWith("warning:") ? "text-amber-500" : "text-fg-2"
                 }
               >
                 {line}

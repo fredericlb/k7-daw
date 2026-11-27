@@ -203,9 +203,7 @@ export function CurveEditor({
                 </label>
               ))}
               <label className="ml-auto flex min-w-0 flex-1 items-center gap-2">
-                <span className="text-xs text-fg-2">
-                  {m["curve.cut"]()}
-                </span>
+                <span className="text-xs text-fg-2">{m["curve.cut"]()}</span>
                 <SelectField
                   size="sm"
                   value={draft.cut}

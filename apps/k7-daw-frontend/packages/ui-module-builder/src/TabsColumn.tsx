@@ -73,9 +73,7 @@ export function TabsColumn({
           title="Widgets drawn on every tab"
           className={cn(
             "rounded px-2 py-1 text-left italic",
-            at === null
-              ? "bg-row text-fg-1"
-              : "text-fg-2 hover:text-fg-1",
+            at === null ? "bg-row text-fg-1" : "text-fg-2 hover:text-fg-1",
           )}
         >
           Every tab

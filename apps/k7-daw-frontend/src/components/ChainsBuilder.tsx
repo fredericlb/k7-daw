@@ -294,9 +294,7 @@ export function ChainsBuilder({
           <p
             className={cn(
               "shrink-0 truncate border-t px-2 py-1 text-[11px]",
-              needsAttention(autosave.status)
-                ? "text-amber-500"
-                : "text-fg-2",
+              needsAttention(autosave.status) ? "text-amber-500" : "text-fg-2",
             )}
             title={autosave.reason ?? undefined}
           >

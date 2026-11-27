@@ -9,8 +9,7 @@ import type { WebTimeline } from "@studio/web-protocol";
 import { TIMELINE_MIME } from "../../fileDrop";
 import { m } from "../../paraglide/messages.js";
 
-const TAB =
-  "flex items-center gap-1 rounded px-2 py-0.5 text-xs hover:bg-row";
+const TAB = "flex items-center gap-1 rounded px-2 py-0.5 text-xs hover:bg-row";
 
 export function TimelineSwitch({
   timelines,

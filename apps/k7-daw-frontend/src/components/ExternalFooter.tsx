@@ -54,9 +54,7 @@ export function ExternalFooter({
       <footer className="flex shrink-0 items-center gap-2 border-t border-hairline px-3 py-1">
         {back}
         {status ? (
-          <p className="min-w-0 flex-1 truncate text-xs text-fg-2">
-            {status}
-          </p>
+          <p className="min-w-0 flex-1 truncate text-xs text-fg-2">{status}</p>
         ) : null}
         {/* The other half of "an app" on a device that could not install one — ../docs/external.md. */}
         {fullscreen.available ? (

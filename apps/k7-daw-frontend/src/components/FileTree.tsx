@@ -506,9 +506,7 @@ export function FileTree({
             title={p}
             className={cn(
               "flex min-w-0 flex-1 items-center gap-1 py-0.5 text-left text-sm",
-              activePath === p
-                ? "text-fg-1"
-                : "text-fg-1/80 hover:text-fg-1",
+              activePath === p ? "text-fg-1" : "text-fg-1/80 hover:text-fg-1",
             )}
           >
             <Pin className="h-3.5 w-3.5 shrink-0 text-primary-text" />

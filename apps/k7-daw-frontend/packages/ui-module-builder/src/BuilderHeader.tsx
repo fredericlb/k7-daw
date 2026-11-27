@@ -115,9 +115,7 @@ export function BuilderHeader({
           Module editor — {kind === "base" ? "base module" : "module"} ·{" "}
           {moduleName}
         </div>
-        <div className="truncate font-mono text-xs text-fg-2">
-          {path}
-        </div>
+        <div className="truncate font-mono text-xs text-fg-2">{path}</div>
       </div>
       <div className="ml-auto flex items-center gap-2">
         {/* The plugin's FACTORY presets; a node's own are the graph's dropdown — apps/k7-daw-wasm/song/docs/userPresets.md. */}

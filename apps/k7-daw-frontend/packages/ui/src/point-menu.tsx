@@ -213,9 +213,7 @@ export function PointMenuItem({
       }}
       className={cn(
         "type-label flex min-h-11 w-full cursor-pointer items-center gap-2 rounded-2xl px-3 text-left outline-none hover:bg-on-fill focus-visible:bg-on-fill desk:min-h-8 disabled:cursor-default disabled:opacity-40 aria-disabled:opacity-40",
-        danger
-          ? "text-error"
-          : "hover:text-fg-1 focus-visible:text-fg-1",
+        danger ? "text-error" : "hover:text-fg-1 focus-visible:text-fg-1",
         className,
       )}
     >

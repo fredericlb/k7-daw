@@ -110,9 +110,7 @@ export function Breadcrumb({
       {menu !== null && (
         <div className="absolute left-0 top-full z-20 mt-1 max-h-72 min-w-48 overflow-auto rounded border border-hairline bg-menu p-1 shadow-lg">
           {entries.length === 0 && (
-            <div className="px-2 py-1 text-fg-2">
-              {m["breadcrumb.empty"]()}
-            </div>
+            <div className="px-2 py-1 text-fg-2">{m["breadcrumb.empty"]()}</div>
           )}
           {entries.map((n) => {
             const isActiveProject = n.project && activeProject === n.path;

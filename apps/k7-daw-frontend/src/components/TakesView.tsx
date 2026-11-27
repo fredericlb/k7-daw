@@ -347,11 +347,7 @@ export function TakesView({
                 className="flex min-h-10 flex-1 basis-0 [@media(pointer:coarse)]:min-h-11"
               >
                 <div className="flex w-28 shrink-0 items-center gap-1 px-1 text-xs [@media(pointer:coarse)]:w-40 [@media(pointer:coarse)]:gap-2">
-                  <span
-                    className={
-                      heard.length ? "text-fg-1" : "text-fg-2"
-                    }
-                  >
+                  <span className={heard.length ? "text-fg-1" : "text-fg-2"}>
                     {label}
                   </span>
                   <Button

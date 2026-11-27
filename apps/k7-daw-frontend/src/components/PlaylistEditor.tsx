@@ -216,9 +216,7 @@ export function PlaylistEditor({
             <div className="flex items-center gap-2 truncate text-sm font-semibold">
               <ListMusic className="h-4 w-4" /> Playlist · {name}
             </div>
-            <div className="truncate font-mono text-xs text-fg-2">
-              {path}
-            </div>
+            <div className="truncate font-mono text-xs text-fg-2">{path}</div>
           </div>
           {/* In place of a Save button: silent while saved, amber with the reason otherwise, in EditorTab's own two words. */}
           <span

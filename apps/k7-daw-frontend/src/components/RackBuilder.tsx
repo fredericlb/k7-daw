@@ -267,9 +267,7 @@ export function RackBuilder({
           <DialogTitle className="flex items-center gap-1.5 text-primary-text">
             <Grip className="size-4" /> {m["rb.title"]()}
           </DialogTitle>
-          <span className="text-xs text-fg-2">
-            {m["rb.hint"]()}
-          </span>
+          <span className="text-xs text-fg-2">{m["rb.hint"]()}</span>
         </DialogHeader>
 
         <label className="flex items-center gap-2 text-sm">

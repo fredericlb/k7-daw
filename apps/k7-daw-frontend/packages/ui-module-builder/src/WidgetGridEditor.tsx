@@ -421,9 +421,7 @@ export function WidgetGridEditor({
     <div className="flex h-full min-h-0 flex-col">
       {/* palette + grid size */}
       <div className="flex flex-wrap items-center gap-2 border-b border-hairline p-2">
-        <span className="text-xs uppercase tracking-wide text-fg-2">
-          Add
-        </span>
+        <span className="text-xs uppercase tracking-wide text-fg-2">Add</span>
         {TYPES.map((t) => (
           <Button
             key={t.type}

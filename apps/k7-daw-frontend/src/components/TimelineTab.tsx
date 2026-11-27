@@ -2152,11 +2152,7 @@ function TimelineTabView({
       </div>
     );
   if (!proj)
-    return (
-      <div className="p-4 text-sm text-fg-2">
-        {m["common.loading"]()}
-      </div>
-    );
+    return <div className="p-4 text-sm text-fg-2">{m["common.loading"]()}</div>;
 
   // Drawing extent: the view's beat range fills the pane exactly, so it never scrolls. See docs/timeline.md.
   const availW = Math.max(0, paneW - GUTTER);

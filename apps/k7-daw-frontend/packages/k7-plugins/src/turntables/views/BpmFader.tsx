@@ -146,9 +146,7 @@ export function BpmFader({
             disabled={!act}
             onClick={act}
             className={`h-5 flex-1 rounded font-mono text-[9px] leading-none ${
-              act
-                ? "bg-row text-fg-2 hover:bg-row"
-                : "bg-row/40 text-fg-2/40"
+              act ? "bg-row text-fg-2 hover:bg-row" : "bg-row/40 text-fg-2/40"
             }`}
             title={act ? why : m["bpm.noTempo"]()}
           >

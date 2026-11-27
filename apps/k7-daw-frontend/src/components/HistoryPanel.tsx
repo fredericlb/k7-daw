@@ -387,9 +387,7 @@ function SyncHistorySection({
           {m["synchist.readOnly"]()}
         </div>
       )}
-      {notice && (
-        <div className="shrink-0 px-3 py-1 text-fg-2">{notice}</div>
-      )}
+      {notice && <div className="shrink-0 px-3 py-1 text-fg-2">{notice}</div>}
       {readError && (
         <PanelError
           what={m["panel.what.history"]()}

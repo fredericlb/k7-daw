@@ -108,11 +108,7 @@ function CommandRow({
         {names.map((n, i) => (
           <span key={i}>
             {i > 0 && <span className="text-fg-2">/</span>}
-            <span
-              className={i === 0 ? "text-fg-1" : "text-fg-2"}
-            >
-              {n}
-            </span>
+            <span className={i === 0 ? "text-fg-1" : "text-fg-2"}>{n}</span>
           </span>
         ))}
       </code>
@@ -121,9 +117,7 @@ function CommandRow({
           {shortcut}
         </kbd>
       )}
-      <span className="ml-auto text-right text-xs text-fg-2">
-        {cmd.help}
-      </span>
+      <span className="ml-auto text-right text-xs text-fg-2">{cmd.help}</span>
     </div>
   );
 }
@@ -185,9 +179,7 @@ export function HelpPage({
           <ArrowLeft className="mr-1 h-4 w-4" /> {m["common.back"]()}
         </Button>
         <div className="text-sm font-semibold">{m["help.title"]()}</div>
-        <div className="text-xs text-fg-2">
-          {m["help.subtitle"]()}
-        </div>
+        <div className="text-xs text-fg-2">{m["help.subtitle"]()}</div>
       </header>
 
       {/* A documentation LAYOUT — a fixed table of contents over one scrollable body; tabs would break ctrl-F and deep links. */}

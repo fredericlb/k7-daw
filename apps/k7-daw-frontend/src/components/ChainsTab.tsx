@@ -642,11 +642,7 @@ function ChainsTabView({
       </div>
     );
   if (!graph || !laid)
-    return (
-      <div className="p-4 text-sm text-fg-2">
-        {m["common.loading"]()}
-      </div>
-    );
+    return <div className="p-4 text-sm text-fg-2">{m["common.loading"]()}</div>;
 
   // Past the guard `laid` is real; the fallback never fires and is only how the narrowing reaches a memo computed above.
   const shown = withPending ?? laid;

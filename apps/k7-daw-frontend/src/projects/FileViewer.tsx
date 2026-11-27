@@ -63,9 +63,7 @@ export function FileViewer({
         ) : shown.kind === "error" ? (
           <div className="p-4 text-error">{shown.message}</div>
         ) : shown.kind === "binary" ? (
-          <div className="p-4 text-fg-2">
-            {m["repos.binaryFile"]()}
-          </div>
+          <div className="p-4 text-fg-2">{m["repos.binaryFile"]()}</div>
         ) : (
           shown.lines.map((l, i) => (
             // biome-ignore lint/suspicious/noArrayIndexKey: a line's index is its identity in a read-only file.

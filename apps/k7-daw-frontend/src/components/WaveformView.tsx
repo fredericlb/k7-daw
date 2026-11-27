@@ -235,9 +235,7 @@ export function WaveformView({
             {m["wave.unavailable"]({ error })}
           </div>
         ) : !wf ? (
-          <div className="p-3 text-sm text-fg-2">
-            {m["wave.decoding"]()}
-          </div>
+          <div className="p-3 text-sm text-fg-2">{m["wave.decoding"]()}</div>
         ) : (
           // A relative wrapper so windows overlay by time-fraction; its width scales with zoom and the container scrolls.
           <div

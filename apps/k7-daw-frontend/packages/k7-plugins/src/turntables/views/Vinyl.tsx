@@ -281,9 +281,7 @@ export function Vinyl({
           onClick={onPick}
           title={loaded ? m["vinyl.change"]() : m["vinyl.choose"]()}
           className={`pointer-events-auto flex aspect-square w-[46%] cursor-pointer flex-col items-center justify-center rounded-full px-3 text-center transition-shadow hover:ring-2 hover:ring-fg-1/30 ${
-            loaded
-              ? "bg-row text-fg-1"
-              : "bg-row text-fg-2"
+            loaded ? "bg-row text-fg-1" : "bg-row text-fg-2"
           }`}
         >
           {loaded ? (

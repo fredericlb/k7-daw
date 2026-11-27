@@ -63,9 +63,7 @@ export function InputChannelBar({
             onClick={() => setWant(n)}
             className={cn(
               "px-2 py-0.5 text-[11px]",
-              width === n
-                ? "bg-row text-fg-1"
-                : "text-fg-2 hover:text-fg-1",
+              width === n ? "bg-row text-fg-1" : "text-fg-2 hover:text-fg-1",
               readOnly && "opacity-50",
             )}
           >

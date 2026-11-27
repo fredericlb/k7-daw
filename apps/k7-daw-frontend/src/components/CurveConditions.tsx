@@ -179,9 +179,7 @@ function ConditionRow({
           checked={c.retrigger}
           onChange={(e) => onPatch({ retrigger: e.target.checked })}
         />
-        <span className="text-xs text-fg-2">
-          {m["curve.retriggerHint"]()}
-        </span>
+        <span className="text-xs text-fg-2">{m["curve.retriggerHint"]()}</span>
       </label>
       {problem && <p className="text-xs text-red-500">{problem}</p>}
     </div>

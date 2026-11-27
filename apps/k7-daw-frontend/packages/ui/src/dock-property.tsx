@@ -38,9 +38,7 @@ export function DockProperty({
         )}
       >
         <span className="text-fg-2">{name}:</span>
-        <span className="type-mono-value text-fg-1 tabular-nums">
-          {value}
-        </span>
+        <span className="type-mono-value text-fg-1 tabular-nums">{value}</span>
       </PopoverPrimitive.Trigger>
       <PopoverPrimitive.Portal>
         <PopoverPrimitive.Content

@@ -161,9 +161,7 @@ export function EditorToolbar({
       <span
         className={cn(
           "flex min-w-0 shrink items-center gap-1 text-xs",
-          needsAttention(autosave.status)
-            ? "text-amber-500"
-            : "text-fg-2",
+          needsAttention(autosave.status) ? "text-amber-500" : "text-fg-2",
         )}
         title={autosave.reason ?? undefined}
       >

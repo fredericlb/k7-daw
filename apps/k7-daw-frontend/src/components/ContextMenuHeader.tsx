@@ -98,9 +98,7 @@ export function ContextMenuHeader({
       >
         {target && (
           <span className="min-w-0 flex-1 truncate text-xs">
-            <span className="text-fg-2">
-              {NOUNS[target.entity]()}
-            </span>{" "}
+            <span className="text-fg-2">{NOUNS[target.entity]()}</span>{" "}
             <span className="font-medium">{target.name}</span>
           </span>
         )}

@@ -81,9 +81,7 @@ export function DocsSite({ homeUrl }: { homeUrl: string }) {
             aria-current={page?.guide === g.guide ? "true" : undefined}
             className={[
               "shrink-0 rounded px-2 py-1 text-xs hover:bg-row hover:text-fg-1",
-              page?.guide === g.guide
-                ? "bg-row text-fg-1"
-                : "text-fg-2",
+              page?.guide === g.guide ? "bg-row text-fg-1" : "text-fg-2",
             ].join(" ")}
           >
             {g.label}

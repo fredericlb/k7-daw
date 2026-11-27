@@ -68,9 +68,7 @@ export const EveryRung: Story = {
     <div className="flex items-start gap-8 bg-ground p-4 text-fg-1">
       {RUNGS.map((l) => (
         <div key={l.knob} className="flex flex-col items-center gap-2">
-          <span className="font-mono text-[10px] text-fg-2">
-            {l.knob}px
-          </span>
+          <span className="font-mono text-[10px] text-fg-2">{l.knob}px</span>
           <Both layout={l} />
         </div>
       ))}

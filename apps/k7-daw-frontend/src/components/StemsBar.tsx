@@ -92,9 +92,7 @@ export function StemsBar({
 
       {/* Before anything has been asked for: what this costs, said up front rather than found out by watching twelve songs run. */}
       {run || chain === null ? null : (
-        <p className="text-xs text-fg-2">
-          {m["pl.separateCost"]()}
-        </p>
+        <p className="text-xs text-fg-2">{m["pl.separateCost"]()}</p>
       )}
 
       {run ? (

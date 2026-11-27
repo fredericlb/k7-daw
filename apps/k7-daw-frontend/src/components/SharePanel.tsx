@@ -207,9 +207,7 @@ export function SharePanel({
             aria-label={m["share.savedIn"]({ folder: last.folder.name })}
             className="mb-3 rounded-2xl border border-(--k7-ok-line) bg-(--k7-ok-fill) p-3.5"
           >
-            <p className="type-mono-value truncate text-fg-1">
-              {last.name}
-            </p>
+            <p className="type-mono-value truncate text-fg-1">{last.name}</p>
             <p className="type-body pt-1">
               {m["share.savedIn"]({ folder: last.folder.name })}
             </p>

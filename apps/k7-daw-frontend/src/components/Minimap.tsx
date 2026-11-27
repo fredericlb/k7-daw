@@ -105,9 +105,7 @@ export const Minimap = memo(function Minimap({
         }
         title={m["minimap.movePlayhead"]()}
         className={`absolute inset-x-0 bottom-0 z-30 cursor-pointer select-none overflow-hidden rounded-sm ${
-          peeked
-            ? "border border-hairline bg-panel shadow-lg"
-            : "bg-fg-2/10"
+          peeked ? "border border-hairline bg-panel shadow-lg" : "bg-fg-2/10"
         }`}
         style={{ height: h }}
       >

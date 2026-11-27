@@ -66,9 +66,7 @@ export function ModuleBuilder(props: Props) {
       }
       className={cn(
         "rounded px-2 py-0.5 text-xs",
-        on === id
-          ? "bg-row text-fg-1"
-          : "text-fg-2 hover:text-fg-1",
+        on === id ? "bg-row text-fg-1" : "text-fg-2 hover:text-fg-1",
         dirty && on !== id && "opacity-50",
       )}
     >

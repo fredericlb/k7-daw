@@ -83,14 +83,10 @@ export function EngineMissingDialog({
             </div>
           ))}
           {(items?.length ?? 0) > LISTED && (
-            <div className="text-fg-2">
-              … +{(items?.length ?? 0) - LISTED}
-            </div>
+            <div className="text-fg-2">… +{(items?.length ?? 0) - LISTED}</div>
           )}
         </div>
-        <p className="text-xs text-fg-2">
-          {m["engineMissing.logs"]()}
-        </p>
+        <p className="text-xs text-fg-2">{m["engineMissing.logs"]()}</p>
         <DialogFooter>
           <Button onClick={dismiss}>{m["common.dismiss"]()}</Button>
         </DialogFooter>
