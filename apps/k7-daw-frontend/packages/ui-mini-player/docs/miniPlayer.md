@@ -101,11 +101,11 @@ controls use.
 ## The play button's menu
 
 `playMenu` puts the host's items behind the play button (`src/PlayButton.tsx`): a right-click, the
-keyboard's menu key or a finger held still for half a second opens them, and a plain press only
+keyboard's menu key or a finger held still (the app-wide long press, `src/longPress.ts`) opens them, and a plain press only
 plays or pauses. The play button is where the eye already is for what plays, and the row has no
 room for one more button on a phone. The menu is anchored on an inert span over the button rather
-than on the button itself, since a menu trigger opens on every press; the click that ends a long
-press is swallowed, or lifting the finger would also toggle the transport.
+than on the button itself, since a menu trigger opens on every press; the app-wide long press swallows the click that ends it, or lifting the finger would also toggle the
+transport.
 
 `fill` replaces both the title block and the position row with one node, filling the row right of
 the play button: a file's waveform, with the title and the clocks laid over it. Beside a
