@@ -12,7 +12,7 @@ export interface WebNote {
   key: number; // MIDI note number
   // 0..1 as the file states it (NoteSchema's `v`); ABSENT means the schema's default of 1, and dragging back to full clears the field.
   vel?: number;
-  // A pad's two effects UNREALISED, drawn as an icon and expanded by the engine — see apps/k7-daw-frontend/packages/song/docs/padEffects.md.
+  // A pad's two effects UNREALISED, drawn as an icon and expanded by the engine — see apps/k7-daw-wasm/song/docs/padEffects.md.
   repeat?: number;
   skip?: number;
 }
@@ -40,7 +40,7 @@ export interface WebClip {
   /** How long this event fades in and out, IN BEATS; absent means no fade — see docs/document.md. */
   fadeIn?: number;
   fadeOut?: number;
-  /** This clip is a RENDER standing in for a frozen lane, and cannot be edited — see apps/k7-daw-frontend/packages/song/docs/freeze.md. */
+  /** This clip is a RENDER standing in for a frozen lane, and cannot be edited — see apps/k7-daw-wasm/song/docs/freeze.md. */
   frozen?: boolean;
   /** What the PLACEMENT itself said, unmerged — read by clipboard.ts and the takes view; see docs/document.md. */
   event?: WebEvent;
@@ -151,11 +151,11 @@ export interface WebTrack {
   mixer?: WebMixer;
   mute: boolean;
   solo: boolean;
-  /** Highlighted from the mixer: heard 10 dB up, its fader untouched (apps/k7-daw-frontend/packages/song/docs/highlight.md). */
+  /** Highlighted from the mixer: heard 10 dB up, its fader untouched (apps/k7-daw-wasm/song/docs/highlight.md). */
   highlight?: boolean;
   disabled?: boolean; // true ⇒ track is ignored (filtered by the brain); absent when false
   clips: WebClip[];
-  /** A FROZEN lane's authored clips, drawn over its render and opened from it — see apps/k7-daw-frontend/packages/song/docs/freeze.md. */
+  /** A FROZEN lane's authored clips, drawn over its render and opened from it — see apps/k7-daw-wasm/song/docs/freeze.md. */
   frozenMaterial?: WebClip[];
   plugins: WebPlugin[];
   // `docs`/`todos`, `frozen`, `alternatives` and `alternative` all left this type — see docs/document.md.
@@ -294,7 +294,7 @@ export interface WebVideoTrack {
   shapes: WebShape[];
   // This lane's own run, applied to the layer BEFORE it is composited; absent on a lane no run starts at.
   plugins?: WebVideoPlugin[];
-  /** The camera LABEL feeding this lane instead of its placements, "" for the machine's default — apps/k7-daw-frontend/packages/song/docs/camera.md. */
+  /** The camera LABEL feeding this lane instead of its placements, "" for the machine's default — apps/k7-daw-wasm/song/docs/camera.md. */
   camera?: string;
   /** …and WHEN that lens opens: `off` never, `auto` while the lane is armed, `on` always. */
   cameraMonitor?: "off" | "auto" | "on";
@@ -312,7 +312,7 @@ export interface WebProject {
   tempo: number;
   timeSigNumerator: number;
   timeSigDenominator: number;
-  // The song's OUTPUT level in dB, 0 unity and +6 the top of the fader — apps/k7-daw-frontend/packages/song/docs/masterVolume.md.
+  // The song's OUTPUT level in dB, 0 unity and +6 the top of the fader — apps/k7-daw-wasm/song/docs/masterVolume.md.
   masterVolume: number;
   tracks: WebTrack[];
   groups: WebGroup[];

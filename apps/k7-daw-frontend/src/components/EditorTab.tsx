@@ -771,7 +771,7 @@ function EditorTabView({
           newName,
         );
         await afterLibraryChange();
-        // A module's ref is its path: the songs naming it were repointed too (apps/k7-daw-frontend/packages/song/docs/moduleMove.md).
+        // A module's ref is its path: the songs naming it were repointed too (apps/k7-daw-wasm/song/docs/moduleMove.md).
         if (repointed?.length) {
           await refresh();
           onChanged();

@@ -162,7 +162,7 @@ scripts/               Node harnesses that drive a running engine, not build ste
   gen-surge-widgets.mjs  …its widgets.js, the screens' draw functions, as a template the panel generator fills
   sfz-to-rack.ts         turn an SFZ drum kit into a RACK kit: each piece rendered through the SFZ player at one
                          velocity, mics mixed, trimmed, written into a library's samples/ with a rack preset —
-                         what the library's naked_drums samples are (apps/k7-daw-frontend/packages/song/docs/racks.md)
+                         what the library's naked_drums samples are (apps/k7-daw-wasm/song/docs/racks.md)
   warp-points.ts         a clip's INTERIOR warp points move the sound — rendered and measured,
                          since this is timing no TypeScript test can see (docs/warp.md)
   pad-effects.ts         a sequencer pad's `repeat` and `skip` reach the sound — same kind of

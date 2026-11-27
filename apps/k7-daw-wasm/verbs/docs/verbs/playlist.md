@@ -5,7 +5,7 @@ never on `songPath`: a playlist belongs to the workspace and stays the same what
 open. They are the only verbs in the catalogue that work **without a project** — except
 `playlist stems`, which needs one to resolve its chain and says so.
 
-Where a playlist lives and what shape it has is `apps/k7-daw-frontend/packages/song/docs/playlists.md`; what the screen
+Where a playlist lives and what shape it has is `apps/k7-daw-wasm/song/docs/playlists.md`; what the screen
 does with one is `apps/k7-daw-frontend/docs/playlists.md`.
 
 ## Where a name lands — `playlistFile`
@@ -79,7 +79,7 @@ not there.
 
 Separate every song of a set list, before the evening. This is the preparation half of cutting a
 stem live: a deck plays a separated record as its four parts and doses each one
-(`apps/k7-daw-frontend/packages/song-schema/docs/stems.md`), and it can only do that over files that already exist. Minutes per song, so it is a command you run the
+(`apps/k7-daw-wasm/song-schema/docs/stems.md`), and it can only do that over files that already exist. Minutes per song, so it is a command you run the
 night before rather than mid-set.
 
 **The chain is optional** and defaults to the machine's, `system stems`. Which module separates and
@@ -121,7 +121,7 @@ where a `@k7-core/…` ref becomes a module and a model becomes a path on this m
 and it says so rather than throwing.
 
 The records are the workspace's files, because a deck opens file paths and what matters is what is
-on this disk. The stems go into `stems/` beside each record (`apps/k7-daw-frontend/packages/song-schema/docs/stems.md`),
+on this disk. The stems go into `stems/` beside each record (`apps/k7-daw-wasm/song-schema/docs/stems.md`),
 which nothing else writes.
 
 **Sequential and resumable**, and both halves matter for thirty songs on one machine:

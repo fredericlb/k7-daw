@@ -60,7 +60,7 @@ export function nodeTags({
           !
         </span>
       )}
-      {/* FROZEN: its own tag rather than a shade of `dim`, which means the opposite — see apps/k7-daw-frontend/packages/song/docs/freeze.md. */}
+      {/* FROZEN: its own tag rather than a shade of `dim`, which means the opposite — see apps/k7-daw-wasm/song/docs/freeze.md. */}
       {n.frozen && (
         <span
           className="dgx-fbtn"
@@ -71,7 +71,7 @@ export function nodeTags({
           <Snowflake />
         </span>
       )}
-      {/* AUTOMATICALLY frozen: the same snowflake, saying it gives way to a touch — apps/k7-daw-frontend/packages/song/docs/autoFreeze.md. */}
+      {/* AUTOMATICALLY frozen: the same snowflake, saying it gives way to a touch — apps/k7-daw-wasm/song/docs/autoFreeze.md. */}
       {!n.frozen && n.autoFrozen && (
         <span
           className="dgx-fbtn auto"

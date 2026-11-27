@@ -23,4 +23,4 @@ params({
 // En un paragraphe : fait monter et descendre le volume, en boucle. `Rate` est la vitesse en hertz,
 // `Depth` l'ampleur — à 0 le module ne fait rien du tout, à 1 le son coupe à chaque creux.
 //
-// (La description d'un module est son en-tête, ici — voir apps/k7-daw-frontend/packages/song/docs/docModules.md.)
+// (La description d'un module est son en-tête, ici — voir apps/k7-daw-wasm/song/docs/docModules.md.)

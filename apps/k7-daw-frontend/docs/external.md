@@ -201,7 +201,7 @@ on ANOTHER device is opened from the Surfaces tab, never by an address carried a
 The page on a device is `http://127.0.0.1:…`, a secure context, so the wake lock and the camera work on the remote as on the main
 device. A lane that names the main machine's lens draws nothing on a remote, since a camera is matched against the browser it
 opens in; a `remote:` camera, a device of the account in camera mode, arrives over a peer connection and draws
-(`apps/k7-daw-frontend/packages/song/docs/camera.md`).
+(`apps/k7-daw-wasm/song/docs/camera.md`).
 
 ## What this is not
 

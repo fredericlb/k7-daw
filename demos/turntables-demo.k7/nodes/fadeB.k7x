@@ -12,7 +12,7 @@
 // surfaces/desk.k7x states rather than either module knowing about the other.
 //
 // The module is NOT copied into this project: pl8 owns the only editable catalogue, so a
-// copy here would be a second Fade nobody maintains — apps/k7-daw-frontend/packages/song/docs/nodes.md.
+// copy here would be a second Fade nobody maintains — apps/k7-daw-wasm/song/docs/nodes.md.
 extends("@workspace/audio/turntables/fade")
 params({
   // Centred, like the fader that drives it: both decks at half, which is where a set starts.

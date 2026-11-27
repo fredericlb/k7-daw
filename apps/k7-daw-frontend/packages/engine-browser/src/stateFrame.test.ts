@@ -2,7 +2,7 @@
 //
 // It exists for one failure only, and that failure is silent: a field the engine sends, the
 // protocol declares, and this client forgets to copy. `recorders` was dropped exactly that way —
-// the engine wrote the takes and nothing lit (apps/k7-daw-frontend/packages/song/docs/outputRecording.md).
+// the engine wrote the takes and nothing lit (apps/k7-daw-wasm/song/docs/outputRecording.md).
 
 import type { EngineState } from "@studio/engine-protocol";
 import { describe, expect, it } from "vitest";

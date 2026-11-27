@@ -22,7 +22,7 @@ LODs answering differently would be two cards.
 A lane's strip wears its LANE's name, spelt without its instrument code, which the glyph beside it
 already says; the TRACK node keeps its id, being addressed by it. A step with no module and no plugin
 plays nothing and says so — "empty step" — its place kept for the tooltip
-(`apps/k7-daw-frontend/packages/song/docs/chainFiles.md`).
+(`apps/k7-daw-wasm/song/docs/chainFiles.md`).
 
 **A curve card draws the curve editor's picture, and only that**: the same samples, split the same way
 (one `CurveHandle` per spec from `@studio/k7-wasm`, at the editor's resolution), on the same -1..1 frame with 0 dashed and the same beat and bar lines, an
@@ -131,7 +131,7 @@ the plugin failed to load, first because a fault outranks a state; the snowflake
 and its cost are in the bottom bar's centre. A card with no bottom bar — a strip — keeps them beside
 its name, each a set width (`FREEZE_TAG_W` for both discs) counted in the width `headerNameW` leaves
 the name, and the cost on the header's bottom border. The second line is what the ENGINE does with the node — ONE dropdown (`PresetButton`) saying what it
-runs as (`apps/k7-daw-frontend/packages/song/docs/engines.md`) and with which preset, opening one list the host draws: the
+runs as (`apps/k7-daw-wasm/song/docs/engines.md`) and with which preset, opening one list the host draws: the
 presets, and a left bar of the engines when there is a choice. Two dropdowns side by side were two
 places to look for "how is this module set up", and the engine bar beside the presets keeps the pick
 and what it changes in one popup. The button's LEAST width is set, `presetButtonW` — the preset's
@@ -189,7 +189,7 @@ a window on — and, for the same reason, no on/off block in its header. Its fre
 
 ## The alternatives are badges, not a bubble
 
-A module's attribute sets (`apps/k7-daw-frontend/packages/song/docs/alternatives.md`) are drawn as a row of badges at the
+A module's attribute sets (`apps/k7-daw-wasm/song/docs/alternatives.md`) are drawn as a row of badges at the
 right of the card's bottom bar: one per set, the one playing lit, and a `+` last. Out of the header,
 they take no width from the name. They
 are not in `cornerButtons`, because they are not one control each module might have — they are a
@@ -293,7 +293,7 @@ wins over this ground: a state beats an identity, which is the right order — k
 render matters more than recognising it as an edge.
 
 **An automatically frozen node is frosted too, and gives way.** `n.autoFrozen` (a VST's automatic
-render, `apps/k7-daw-frontend/packages/song/docs/autoFreeze.md`) takes the same wash and snowflake, but where `frozen`
+render, `apps/k7-daw-wasm/song/docs/autoFreeze.md`) takes the same wash and snowflake, but where `frozen`
 refuses a drag and hides the plugin bubble and the on/off block, `autoFrozen` keeps them: a drag or the
 plugin bubble first calls the host's `onThawAutoFreeze` with the VST the render was taken at, so the
 edit reaches a live plugin.

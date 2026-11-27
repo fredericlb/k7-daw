@@ -172,7 +172,7 @@ waveforms, video; an app that needs no more uses it as it stands.
   filled into the project's own compile. It goes through the file service rather than out of the
   app's socket so that ONE thing writes to the engine: the service already loads k7's project
   itself, and a second writer meant whichever pushed last would win
-  (`apps/k7-daw-frontend/packages/song/docs/surfaces.md`).
+  (`apps/k7-daw-wasm/song/docs/surfaces.md`).
 - **The derived views** — `projectDoc`, `engineDoc`, `videoDoc`, `graph`, `surfaces`,
   `projectErrors` — are expensive. `revision()` is the cheap token that changes when the sources
   do: poll THAT, not these.

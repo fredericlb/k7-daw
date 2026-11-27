@@ -1,4 +1,4 @@
-// serviceGolden.spec.ts — the corpus as a smoke test (apps/k7-daw-frontend/packages/song/docs/rustCompilerHost.md, 900 to 910): each archetype,
+// serviceGolden.spec.ts — the corpus as a smoke test (apps/k7-daw-wasm/song/docs/rustCompilerHost.md, 900 to 910): each archetype,
 // demo and e2e fixture compiled by the running service, rendered through the engine, and the sound judged. It reads no
 // committed fixture. What a reader gets wrong: "sounds" is a table per project, asserted both ways, so one that starts
 // to sound fails as surely as one that stops; the fixtures carry no table, only the floors of the last test.

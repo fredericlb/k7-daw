@@ -149,7 +149,7 @@ five.
 Consequence worth knowing: the trim is what **names the chain**, so a strip's plugins are addressed
 `trimA:eqA` and not `eqA:eqA`, and `bus_only:` names `trimA`. Naming the EQ there would point at a
 STEP instead of a head, and the dry path would come back
-([busOnly.md](../../../song/docs/busOnly.md)).
+([busOnly.md](../../../../../k7-daw-wasm/song/docs/busOnly.md)).
 
 What it is for: **nothing here normalises loudness**. Two records cut ten years apart do not arrive
 at the same level, and the trim is what makes them agree so that 0 dB on both channel faders means

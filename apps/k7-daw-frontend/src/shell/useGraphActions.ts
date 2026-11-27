@@ -45,7 +45,7 @@ export function useGraphActions({
   /** The host's shell store — passed, since the host is the one component not under its own provider. */
   shell: ShellStore;
 }) {
-  /** A node's alternative badge on the graph: switch to that set, or copy the one on — apps/k7-daw-frontend/packages/song/docs/alternatives.md. */
+  /** A node's alternative badge on the graph: switch to that set, or copy the one on — apps/k7-daw-wasm/song/docs/alternatives.md. */
   const runAlternative = useCallback(
     (module: string, name: string | null) =>
       void runCommand(
@@ -55,7 +55,7 @@ export function useGraphActions({
       ),
     [runCommand],
   );
-  /** A node's engine dropdown on the graph: run the module as that engine — apps/k7-daw-frontend/packages/song/docs/engines.md. */
+  /** A node's engine dropdown on the graph: run the module as that engine — apps/k7-daw-wasm/song/docs/engines.md. */
   const runEngine = useCallback(
     (module: string, name: string) =>
       void runCommand(`node engine ${module} ${name}`),
@@ -99,7 +99,7 @@ export function useGraphActions({
         );
       else if (a.kind === "remove")
         void runCommand(`node tap remove ${q(module)} ${q(a.symbol)}`);
-      // A kit's pad is muted on the SFZ player, a rack's on its tap — apps/k7-daw-frontend/packages/song/docs/racks.md.
+      // A kit's pad is muted on the SFZ player, a rack's on its tap — apps/k7-daw-wasm/song/docs/racks.md.
       else if (a.kind === "mute")
         void runCommand(
           a.kit

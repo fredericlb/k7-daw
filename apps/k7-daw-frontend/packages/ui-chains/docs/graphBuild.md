@@ -214,7 +214,7 @@ in `@studio/song`).
 A **picture lane** gets the picture's mute and solo — mute means hidden — and no record arm, gain or
 pan: a full strip there would be controls that do nothing to a picture. Its card has two outputs, its
 picture and its shots' sound; the sound's fader, mute and solo are its `#audio` half's strip, which a
-cable leaving that output feeds (`apps/k7-daw-frontend/packages/song/docs/videoSound.md`).
+cable leaving that output feeds (`apps/k7-daw-wasm/song/docs/videoSound.md`).
 
 ## A RACK carries one too — a grid of pads
 
@@ -608,7 +608,7 @@ changed for any of this: a cable dropped on `turntableA#mix` writes `graph chain
 `graph move` address, which is why `layout`'s pin lookup reads `module` for an assembly as it does
 for a module.
 
-See `apps/k7-daw-frontend/packages/song/docs/assemblies.md`.
+See `apps/k7-daw-wasm/song/docs/assemblies.md`.
 
 ## Cables
 
@@ -901,7 +901,7 @@ audio.
 `isLane` — either kind — is what decides three things: whether a chain's source is drawn as a lane,
 whether its signal is followed or read off the lane, and whether a run's DESTINATION is an existing
 card or a sink to invent. Reading `graph.tracks` alone for that third one makes a lens wired to a
-picture lane (`apps/k7-daw-frontend/packages/song/docs/camera.md`) resolve to an unknown destination and get a **sink
+picture lane (`apps/k7-daw-wasm/song/docs/camera.md`) resolve to an unknown destination and get a **sink
 card of its own**, named after the lane — an output node nobody asked for, sitting beside the real
 lane with the camera cabled to the wrong one. A lane is never a sink: it is already on the canvas.
 

@@ -4,7 +4,7 @@
 > choices as dropdowns, built by `inputUI` in `@studio/ui-chains` and written by
 > `node param <node> @channel …`. There the socket is a PARAMETER of the node exactly as
 > `@monitor` is — one verb for every control a module has, the `@` saying it is the module's
-> own field rather than a plugin's (`apps/k7-daw-frontend/packages/song/docs/intrinsics.md`) — which is what lets a
+> own field rather than a plugin's (`apps/k7-daw-wasm/song/docs/intrinsics.md`) — which is what lets a
 > built-in module carry its own panel; see that package's `docs/graphBuild.md`. This page is
 > about the strip in the editor and the builder, which edit the file's text directly.
 

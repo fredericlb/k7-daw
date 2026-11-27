@@ -1,7 +1,7 @@
 // useNodePresets.tsx — the graph's one dropdown, host side: fetch a node's presets when it opens, run
 // the `node preset` verb a pick or a header button asks for — and `node engine` for its engine bar —
 // and remember per node which preset was last loaded. That memory is SESSION state, like an open assembly: a node
-// file says what its values are, not which preset they came from. See apps/k7-daw-frontend/packages/song/docs/userPresets.md.
+// file says what its values are, not which preset they came from. See apps/k7-daw-wasm/song/docs/userPresets.md.
 
 import type { WebGraph } from "@studio/graph-model";
 import type { NodePresets, PresetEntry } from "@studio/k7-wasm/types";

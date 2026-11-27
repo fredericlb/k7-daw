@@ -1,4 +1,4 @@
-// k7-rack — a drum RACK, one module for every kit, each an ENGINE under engines/ (studio: apps/k7-daw-frontend/packages/song/docs/racks.md).
+// k7-rack — a drum RACK, one module for every kit, each an ENGINE under engines/ (studio: apps/k7-daw-wasm/song/docs/racks.md).
 // `samples` is the sampler: the node's own `rack:` taps, a library sample per note. Every other engine is an SFZ kit:
 // its .sfz under `params: sfz:` and its pads under `kit:` — name: note — velocity layers, round-robins and hi-hat
 // choke included, the pads being the kit's own notes. A node picks one with `engine:`; the acoustic kit is the default.

@@ -17,7 +17,7 @@ npx tsx apps/k7-daw-engine/k7-runtime/scripts/quick-master.ts
 
 What follows is the measurement method, which is the hard part. The subject matter itself lives
 elsewhere: [warp.md](warp.md), [quickMaster.md](quickMaster.md), and
-`apps/k7-daw-frontend/packages/song/docs/padEffects.md`.
+`apps/k7-daw-wasm/song/docs/padEffects.md`.
 
 ## Measure what the process does not smear
 

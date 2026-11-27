@@ -10,8 +10,8 @@ const repo = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 
 /** What the native pieces read at the root; switch.rs names what a code root must hold. */
 export const CODE_ROOT = [
-  "apps/k7-daw-frontend/packages/song/meta",
-  "apps/k7-daw-frontend/packages/song/samples/video/sample.mp4",
+  "apps/k7-daw-wasm/song/meta",
+  "apps/k7-daw-wasm/song/samples/video/sample.mp4",
   "apps/k7-daw-wasm/verbs/commands.yaml",
   "demos",
 ];

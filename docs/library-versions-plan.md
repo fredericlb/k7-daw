@@ -1,7 +1,7 @@
 # Library versions: upgrade a library without reinstalling k7
 
 The decisions of the library-versions work, in one place. What is built is described by
-`../apps/k7-daw-frontend/packages/song/docs/sharedFolders.md` and `apps/k7-daw-backend/docs/files/hub.md`; this page
+`../apps/k7-daw-wasm/song/docs/sharedFolders.md` and `apps/k7-daw-backend/docs/files/hub.md`; this page
 says the whole design and which lots remain.
 
 ## The goal

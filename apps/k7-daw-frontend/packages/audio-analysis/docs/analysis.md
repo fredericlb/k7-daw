@@ -218,7 +218,7 @@ that belongs to the module.
 
 `extractSound` (`src/extract.ts`) writes a file's first audio stream to a 32-bit float WAV at its
 own rate and channel count, for the engine to play a shot's sound from
-(`apps/k7-daw-frontend/packages/song/docs/videoSound.md`). It decodes as every other reader here does — the
+(`apps/k7-daw-wasm/song/docs/videoSound.md`). It decodes as every other reader here does — the
 WebAssembly module, then ffmpeg for a file it cannot open — but asks the engine LAST, never first,
 because what it reads is video: the engine opens a container only through the platform's decoder,
 which reads no WebM on any platform and nothing at all on Linux. The engine is the fallback for a

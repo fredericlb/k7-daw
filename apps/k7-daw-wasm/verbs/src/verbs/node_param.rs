@@ -190,7 +190,7 @@ fn builtin_out(h: &mut Host, node: &str, param: &str, value: f64) -> Done {
             js_number(MASTER_MAX_DB)
         )];
         if value > MASTER_MAX_DB {
-            why.push("a mix that needs more than +12 on its output has its headroom in the STRIPS — see apps/k7-daw-frontend/packages/song/docs/masterVolume.md".to_owned());
+            why.push("a mix that needs more than +12 on its output has its headroom in the STRIPS — see apps/k7-daw-wasm/song/docs/masterVolume.md".to_owned());
         }
         h.refuse(why);
         return Ok(());

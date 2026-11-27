@@ -35,7 +35,7 @@ export const rackKeyOf = (path: string): string | null => {
   const p = norm(path);
   if (isRackModuleFile(p))
     return p.replace(MODULE_TAIL, "").split("/").pop() ?? null;
-  // A chain project's file holds many nodes, keyed by uuid, so its path names none (apps/k7-daw-frontend/packages/song/docs/chainFiles.md).
+  // A chain project's file holds many nodes, keyed by uuid, so its path names none (apps/k7-daw-wasm/song/docs/chainFiles.md).
   const m = NODE_FILE.exec(p);
   return m ? m[2] : null;
 };

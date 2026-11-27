@@ -67,7 +67,7 @@ them. Then one reload, so the fader catches up with the number just written unde
 > strip needs deduplicating to avoid a race between two absolute writes, and a strip already near
 > the floor cannot take the full trim — so the balance the trim promised to preserve shifts anyway.
 > The output has none of those shapes. See
-> `@studio/song`'s [`docs/masterVolume.md`](../packages/song/docs/masterVolume.md)
+> `@studio/song`'s [`docs/masterVolume.md`](../../k7-daw-wasm/song/docs/masterVolume.md)
 > for why the level sits on the node.
 
 `gainTrim.ts` is the arithmetic, pure and tested. Three decisions live in it:
@@ -143,7 +143,7 @@ fall back on and "nothing to fix" has to be said out loud.
 ## The fader ON it
 
 The bar says how loud the mix IS; the handle riding on it says how loud it should be — the song's own
-output level (`@studio/song`'s [`docs/masterVolume.md`](../packages/song/docs/masterVolume.md)).
+output level (`@studio/song`'s [`docs/masterVolume.md`](../../k7-daw-wasm/song/docs/masterVolume.md)).
 **One lane, not two controls**: they are the same subject read in two directions, and the level the
 handle sets is half the reason the bar reads where it does. The meter IS the fader's track.
 
@@ -194,7 +194,7 @@ are looking at.
 ## What the meter DOES include
 
 The **output level is upstream of it** (`@studio/song`'s
-[`docs/masterVolume.md`](../packages/song/docs/masterVolume.md)). The bar, the clip light
+[`docs/masterVolume.md`](../../k7-daw-wasm/song/docs/masterVolume.md)). The bar, the clip light
 and the peak the Fix button spends all read the mix *with* the handle's own level applied.
 
 That is what makes the two halves of this component one control. The button writes the fader's own
@@ -208,7 +208,7 @@ will tell you when it stops fitting — at the price that the bar cannot separat
 not tell you how loud the mix was before the fader.
 
 The master **chain** is upstream of all of it (`@studio/song`'s
-[`docs/masterChain.md`](../packages/song/docs/masterChain.md)), so a limiter there is
+[`docs/masterChain.md`](../../k7-daw-wasm/song/docs/masterChain.md)), so a limiter there is
 something the clip light cannot see past.
 
 ## The engine's memory, beside its name

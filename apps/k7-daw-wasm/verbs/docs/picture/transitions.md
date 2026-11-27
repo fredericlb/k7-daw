@@ -148,7 +148,7 @@ stretch is drawn on the graph as cards with knobs, can be bypassed step by step,
 kind of file.
 
 In a CHAIN project — the main layout — a stretch is a **subchain of the lane's chain file**, and a
-fade names it by its id: `chain: iris` (`apps/k7-daw-frontend/packages/song/docs/chainFiles.md`). The file is the scope,
+fade names it by its id: `chain: iris` (`apps/k7-daw-wasm/song/docs/chainFiles.md`). The file is the scope,
 so a fade can reach only its own lane's stretches. Read into segments, that subchain IS the cable
 from its last node into the lane, so everything downstream sees the same graph either way, and the
 compile turns the id into the node the run starts at.

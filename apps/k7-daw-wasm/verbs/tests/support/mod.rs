@@ -87,7 +87,7 @@ impl Project {
         };
         add(r.join(format!("e2e/fixtures/{name}.k7")), &format!("{WS}/{name}"));
         add(r.join("e2e/fixtures/_modules"), &format!("{WS}/_modules"));
-        add(r.join("apps/k7-daw-frontend/packages/song/meta"), META);
+        add(r.join("apps/k7-daw-wasm/song/meta"), META);
         Project {
             fs: MemFs::from_tree("", files),
             dir: format!("{WS}/{name}"),
@@ -110,7 +110,7 @@ impl Project {
             &format!("{WS}/{name}"),
         );
         add(r.join("e2e/fixtures/_modules"), &format!("{WS}/_modules"));
-        add(r.join("apps/k7-daw-frontend/packages/song/meta"), META);
+        add(r.join("apps/k7-daw-wasm/song/meta"), META);
         Project {
             fs: MemFs::from_tree("", files),
             dir: format!("{WS}/{name}"),

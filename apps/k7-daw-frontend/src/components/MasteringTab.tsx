@@ -5,7 +5,7 @@
 // Drawn by the shell rather than by `SurfaceTab` because what it needs is the ENGINE LINK —
 // `setPluginParam`, `watchPluginParams` and the params store — and that lives up in `App`.
 // A control is live while it moves and written to the module's file once, on release.
-// See ../../docs/mastering.md and apps/k7-daw-frontend/packages/song/docs/surfaces.md.
+// See ../../docs/mastering.md and apps/k7-daw-wasm/song/docs/surfaces.md.
 
 import {
   type PluginParamsStore,

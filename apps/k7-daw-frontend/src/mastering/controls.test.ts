@@ -5,7 +5,7 @@
 // resolves the file against `MASTER_CONTROLS`. A control added here and not there is a knob no
 // scaffolded project offers; one added there and not here is a line the strip reports as "not a
 // control of this surface" on a file the tool itself wrote. Neither shows up in a type error —
-// `@studio/song` accepts any key, deliberately (apps/k7-daw-frontend/packages/song/docs/viewBindings.md).
+// `@studio/song` accepts any key, deliberately (apps/k7-daw-wasm/song/docs/viewBindings.md).
 
 import { SURFACE_MAPPING_SKELETON } from "@studio/k7-wasm/consts";
 import { describe, expect, it } from "vitest";

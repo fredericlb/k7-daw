@@ -1,6 +1,6 @@
 // ProjectSettingsTab.tsx — the settings panel's PROJECT tab: what the open song says about its
 // whole mix, today its summing console. Every change is the `project …` verb, so the palette and
-// this tab write the same line. See apps/k7-daw-frontend/packages/song/docs/console.md.
+// this tab write the same line. See apps/k7-daw-wasm/song/docs/console.md.
 
 import { Picker } from "@studio/ui/picker";
 import { SectionHeading } from "@studio/ui/section-heading";

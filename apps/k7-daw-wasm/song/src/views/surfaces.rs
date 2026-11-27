@@ -319,13 +319,13 @@ pub fn surface_issues(source: &dyn Source, inputs: &Inputs, s: &ProjectSurfaces)
     if material && !declares(SurfaceType::Timeline) {
         out.push(missing_surface(
             "this project is an arrangement and declares no timeline, so nothing draws its lanes — \
-             run `project surface new timeline` (apps/k7-daw-frontend/packages/song/docs/surfaces.md)",
+             run `project surface new timeline` (apps/k7-daw-wasm/song/docs/surfaces.md)",
         ));
     }
     if video && !declares(SurfaceType::Viewport) {
         out.push(missing_surface(
             "this project has video lanes and declares no viewport, so nothing composites them — \
-             run `project surface new viewport` (apps/k7-daw-frontend/packages/song/docs/surfaces.md)",
+             run `project surface new viewport` (apps/k7-daw-wasm/song/docs/surfaces.md)",
         ));
     }
     Ok(out)

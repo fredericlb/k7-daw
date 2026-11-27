@@ -229,7 +229,7 @@ export function libraryModuleRef(file: string): string | null {
 const refOf = (ns: string, segs: string[]): string | null =>
   segs.length >= 2 ? `${nsLabel(ns)}/${segs.join("/")}` : null;
 
-/** Is this workspace path inside one of the ACCOUNT's libraries? Only `_libraries/…`; a `@workspace` module forks instead (apps/k7-daw-frontend/packages/song/docs/moduleFork.md). */
+/** Is this workspace path inside one of the ACCOUNT's libraries? Only `_libraries/…`; a `@workspace` module forks instead (apps/k7-daw-wasm/song/docs/moduleFork.md). */
 export const isLibraryPath = (path: string): boolean =>
   path.split("/").includes(LIBRARIES_DIR);
 

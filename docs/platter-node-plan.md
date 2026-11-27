@@ -72,7 +72,7 @@ The metronome stays too: a whole track built in code, and another subject.
 
 ## The nodes
 
-The `@meta/audio/turntable` module, shipped with k7 (`apps/k7-daw-frontend/packages/song/docs/metaModules.md`) — `module.k7x` and `ui.k7x`, no jsdsp: the engine
+The `@meta/audio/turntable` module, shipped with k7 (`apps/k7-daw-wasm/song/docs/metaModules.md`) — `module.k7x` and `ui.k7x`, no jsdsp: the engine
 already hosts the platter, and `type: internal` names it the way the EQ's `tracktion` engine names the equaliser. The
 ranges come from `TurntablePlugin.cpp`:
 

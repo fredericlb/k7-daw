@@ -71,14 +71,14 @@ pub const MODULE_TYPES: [TypeMeta; 13] = [
         inputs: &[("midi", Midi, None)],
         outputs: &[("out", Midi, None)],
     },
-    // Audio in, audio out, run over a whole file before playback (apps/k7-daw-frontend/packages/song/docs/coldModules.md).
+    // Audio in, audio out, run over a whole file before playback (apps/k7-daw-wasm/song/docs/coldModules.md).
     TypeMeta {
         name: "cold",
         kind: ModuleKind::Plugin,
         inputs: &[("in", Audio, None)],
         outputs: &[("out", Audio, None)],
     },
-    // One half of a summing console: placed by the compile from `project.console`, never wired by hand (apps/k7-daw-frontend/packages/song/docs/console.md).
+    // One half of a summing console: placed by the compile from `project.console`, never wired by hand (apps/k7-daw-wasm/song/docs/console.md).
     TypeMeta {
         name: "console",
         kind: ModuleKind::Plugin,

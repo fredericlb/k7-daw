@@ -20,4 +20,4 @@ params({
 // la voie — avant l'EQ, et donc avant que les cinq lanes d'une platine séparée se rejoignent — il
 // met deux disques au même niveau pour que le reste de la tranche parte d'une référence commune.
 //
-// (La description d'un module est son en-tête, ici — voir apps/k7-daw-frontend/packages/song/docs/docModules.md.)
+// (La description d'un module est son en-tête, ici — voir apps/k7-daw-wasm/song/docs/docModules.md.)

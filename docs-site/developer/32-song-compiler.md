@@ -41,7 +41,7 @@ surface with a `mapping` binds node params — which is why a `mix` set stays in
 ## The compile
 
 The compile is the Rust song crate's, and the one compiler: `apps/k7-daw-wasm/song/src/doc/` builds the `ProjectDoc`,
-`views/` the pages' answers. Its pages are `apps/k7-daw-frontend/packages/song/docs/rustCompiler.md` and the sub-step pages beside it. What
+`views/` the pages' answers. Its pages are `apps/k7-daw-wasm/song/docs/rustCompiler.md` and the sub-step pages beside it. What
 the TypeScript here keeps is the read side the verbs and the pages call: the module vocabulary and its inheritance
 (below), the lanes, the derived chain graph and the timelines' lengths.
 

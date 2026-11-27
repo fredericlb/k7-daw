@@ -123,7 +123,7 @@ pub fn project_master(a: &str, h: &mut Host) -> Done {
             js_number(MASTER_MAX_DB)
         )];
         if db > MASTER_MAX_DB {
-            lines.push("a mix that needs more than +12 on its output has its headroom in the STRIPS — see apps/k7-daw-frontend/packages/song/docs/masterVolume.md".to_owned());
+            lines.push("a mix that needs more than +12 on its output has its headroom in the STRIPS — see apps/k7-daw-wasm/song/docs/masterVolume.md".to_owned());
         }
         h.refuse(lines);
         return Ok(());

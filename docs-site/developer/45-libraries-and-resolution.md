@@ -11,7 +11,7 @@ shares it):
 | Namespace | Resolves to |
 |---|---|
 | `@engine/<slug>` | The engine's plugin scan, `<STUDIO_HOME>/exts.json`, read by `apps/k7-daw-wasm/song/src/modules/scan.rs`. No folder; the slug is `slugifyPluginName(name)` and the type folder follows the plugin's role (`categoryForRole`). |
-| `@meta/...` | k7's built-ins: modules under `apps/k7-daw-frontend/packages/song/meta/` and synthesised ones (`@meta/track`, `@meta/doc`, inputs and outputs). |
+| `@meta/...` | k7's built-ins: modules under `apps/k7-daw-wasm/song/meta/` and synthesised ones (`@meta/track`, `@meta/doc`, inputs and outputs). |
 | `@workspace/...` | The workspace's `_modules/` folder (`SHARED_MODULES_PATH = "../_modules"` from a project). |
 | `@account/...` | The account's own library, never versioned, always writable by the account. |
 | `@<library>/...` | A named library. Names follow `/^[a-z0-9][a-z0-9-]{0,39}$/` and exclude the fixed namespaces. |
@@ -24,7 +24,7 @@ what it emits. A new type folder starts there.
 `apps/k7-daw-wasm/song-edit/src/loader.rs` builds the ref map: the built-ins first (doc modules, lanes, io,
 the engine catalogue), then each module root in order: the project's `../_modules`, then
 `libraryFamilyRoots("modules", dir)` (the account library first, then every library by name),
-then `apps/k7-daw-frontend/packages/song/meta`. A root's namespace comes from where it is, never from anything the
+then `apps/k7-daw-wasm/song/meta`. A root's namespace comes from where it is, never from anything the
 root declares.
 
 `extends` is folded by `apps/k7-daw-wasm/song/src/resolve/extends.rs`, parent under child, deepest first,

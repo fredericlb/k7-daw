@@ -53,7 +53,7 @@ pub fn land(project: &str, written: &Written) -> Landed {
         walk(&from, "", &mut found);
         files.extend(found.into_iter().map(|(rel, b)| (format!("{to}/{rel}"), b)));
     };
-    add(r.join("apps/k7-daw-frontend/packages/song/meta"), META);
+    add(r.join("apps/k7-daw-wasm/song/meta"), META);
     let lib = format!("{HOME}/libraries/k7-core");
     add(
         r.join("k7-core/modules/instruments/k7-rack"),

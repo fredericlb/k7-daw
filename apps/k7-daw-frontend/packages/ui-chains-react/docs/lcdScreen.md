@@ -150,7 +150,7 @@ else. The page half is `apps/k7-daw-frontend/packages/ui-chains/src/widgetSandbo
 `apps/k7-daw-frontend/packages/ui-chains/src/widgetRuntime.ts`, and `src/widgetScript.ts` here is React's reading of it.
 
 **Why not the page.** A library is ORIGIN-WIDE: every account reads it, and an admin edits it live
-(`apps/k7-daw-frontend/packages/song/docs/sharedFolders.md`); AI organize writes these scripts too. Code run in the page
+(`apps/k7-daw-wasm/song/docs/sharedFolders.md`); AI organize writes these scripts too. Code run in the page
 runs with the page's session: it can call every API as the user and read the engine pairing kept in
 `localStorage`. One compromised admin, or one untrusted seed, would be code in every user's
 session. In the sandbox the script has an opaque origin: no cookie, no storage, no reach into the

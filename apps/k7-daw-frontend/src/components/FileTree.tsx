@@ -599,7 +599,7 @@ export function FileTree({
             reveal={lib.tree[0]?.path ?? null}
             // A read-only level's rows are greyed: they name a plugin the engine reports, with no file behind them to open.
             isDisabled={(n) => isBinary(n) || frozen.has(n.path)}
-            // A MODULE row drags onto another folder of its library: a move, its refs following it (apps/k7-daw-frontend/packages/song/docs/moduleMove.md).
+            // A MODULE row drags onto another folder of its library: a move, its refs following it (apps/k7-daw-wasm/song/docs/moduleMove.md).
             onMove={onMoveLibraryModule}
             canMove={(n) =>
               lib.modules.has(n.path) &&

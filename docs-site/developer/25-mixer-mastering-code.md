@@ -3,8 +3,8 @@
 ## A lane's level is a module
 
 There is no mixer object in k7. Every lane's chain ends in a **Mixer** module — the built-in
-`apps/k7-daw-frontend/packages/song/meta/audio/mixer/module.k7x` (an internal plugin) with its panel in
-`apps/k7-daw-frontend/packages/song/meta/audio/mixer/ui.k7x`: Volume fader −60..+6 dB, Pan −1..1, High/Mid/Low −18..18
+`apps/k7-daw-wasm/song/meta/audio/mixer/module.k7x` (an internal plugin) with its panel in
+`apps/k7-daw-wasm/song/meta/audio/mixer/ui.k7x`: Volume fader −60..+6 dB, Pan −1..1, High/Mid/Low −18..18
 dB, and a `@highlight` button. `track new` writes the strip with the lane because a lane without one
 has nowhere to put a level. Because the strip is a module, its values follow alternatives and presets
 like any other module's, and the chains graph is what draws it.

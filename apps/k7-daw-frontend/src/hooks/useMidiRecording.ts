@@ -3,7 +3,7 @@
 // 20 Hz frames with performance.now(), so onsets aren't quantised to the frame rate. On stop
 // the take becomes a new clip on the armed lane, placed where it was played (`sequence record`).
 // WHICH device is the MIDI-IN node wired to the armed lane — its card's dropdown — and no node
-// means no MIDI is recorded there (apps/k7-daw-frontend/packages/song/docs/midiIn.md). Access and list are asked here.
+// means no MIDI is recorded there (apps/k7-daw-wasm/song/docs/midiIn.md). Access and list are asked here.
 
 import type { EngineStore } from "@studio/engine-browser/store";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -161,7 +161,7 @@ export function useMidiRecording(opts: {
         const lane = armedRef.current;
         if (lane) onLiveMidiRef.current?.(lane, [...data]);
       },
-      // A keyboard wired straight to an instrument plays it, each by its own node's label (apps/k7-daw-frontend/packages/song/docs/midiIn.md).
+      // A keyboard wired straight to an instrument plays it, each by its own node's label (apps/k7-daw-wasm/song/docs/midiIn.md).
       onPlayed: (device, data) => {
         for (const t of playedRef.current)
           if (

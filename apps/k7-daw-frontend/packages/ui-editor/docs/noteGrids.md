@@ -84,7 +84,7 @@ Three things about how it gets there:
 ## A pad's effects survive a grid edit
 
 `notes.ts`'s own `Note` is `{ t, d, k, v? }`. A sequence's schema has two fields more —
-`repeat` and `skip`, a pad's effects (`apps/k7-daw-frontend/packages/song/docs/padEffects.md`) — and since these
+`repeat` and `skip`, a pad's effects (`apps/k7-daw-wasm/song/docs/padEffects.md`) — and since these
 grids call back with the WHOLE list, a write that took the list as given would strip them from
 every pad on the first click.
 

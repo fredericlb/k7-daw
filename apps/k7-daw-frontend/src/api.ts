@@ -137,7 +137,7 @@ export const api = {
   // The shared half, spread rather than re-listed, so this app and @studio/project-shell cannot drift on a route name.
   ...projectApi,
 
-  // --- The workspace's playlists (`_playlists/`, see apps/k7-daw-frontend/packages/song/docs/playlists.md) ---
+  // --- The workspace's playlists (`_playlists/`, see apps/k7-daw-wasm/song/docs/playlists.md) ---
 
   // Only the LISTING is its own route: `read`/`write` above already serve any workspace path, and `playlist new` is a command.
   playlists: () => fget<{ playlists: PlaylistInfo[] }>("/playlists"),
@@ -154,7 +154,7 @@ export const api = {
 
   // Copy the project to the engine's machine again after a copy failed — apps/k7-daw-backend/docs/file-engine.md.
   retryEngineSync: () => fsend<{ ok: true }>("POST", "/engine/sync/retry", {}),
-  // Leave an automatically frozen VST live while it is edited — apps/k7-daw-frontend/packages/song/docs/autoFreeze.md.
+  // Leave an automatically frozen VST live while it is edited — apps/k7-daw-wasm/song/docs/autoFreeze.md.
   thawAutoFreeze: (module: string, on = true) =>
     fsend<{ ok: true }>("POST", "/auto-freeze/thaw", { module, on }),
   // --- A node's model, fetched onto this machine (the right-click's "Download model") ---
@@ -311,7 +311,7 @@ export const api = {
       ref,
     }),
 
-  // A node's presets, files under a presets tree; applying and saving are `node preset` verbs — apps/k7-daw-frontend/packages/song/docs/userPresets.md.
+  // A node's presets, files under a presets tree; applying and saving are `node preset` verbs — apps/k7-daw-wasm/song/docs/userPresets.md.
   nodePresets: (node: string) =>
     fget<NodePresets>(`/presets?node=${encodeURIComponent(node)}`),
 };

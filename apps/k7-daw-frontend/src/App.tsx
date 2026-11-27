@@ -1354,7 +1354,7 @@ export default function App({
     [],
   );
 
-  // The lenses this browser can see — the camera cards' dropdown, apps/k7-daw-frontend/packages/song/docs/camera.md.
+  // The lenses this browser can see — the camera cards' dropdown, apps/k7-daw-wasm/song/docs/camera.md.
   const cameras = useCameras();
 
   // The interface's inputs and the act that regroups them, asked once per connection.
@@ -1415,7 +1415,7 @@ export default function App({
     [shellGraph],
   );
   midiLanesRef.current = midiLanes;
-  // The armed lane's MIDI device: the midi-in node wired to it, read off the graph — apps/k7-daw-frontend/packages/song/docs/midiIn.md.
+  // The armed lane's MIDI device: the midi-in node wired to it, read off the graph — apps/k7-daw-wasm/song/docs/midiIn.md.
   const midiInAny = useMemo(
     () =>
       !!shellGraph &&
@@ -1424,7 +1424,7 @@ export default function App({
         .some((st) => st.device !== undefined),
     [shellGraph],
   );
-  // The instruments a keyboard is wired straight into, played live with no lane armed (apps/k7-daw-frontend/packages/song/docs/midiIn.md).
+  // The instruments a keyboard is wired straight into, played live with no lane armed (apps/k7-daw-wasm/song/docs/midiIn.md).
   const midiPlayed = useMemo(
     () => (shellGraph ? midiInPlayed(shellGraph) : []),
     [shellGraph],
@@ -1501,7 +1501,7 @@ export default function App({
       bumpReload();
     },
   });
-  // A project with a midi-in node asks for MIDI access at once, and again on each press of a dropdown — apps/k7-daw-frontend/packages/song/docs/midiIn.md.
+  // A project with a midi-in node asks for MIDI access at once, and again on each press of a dropdown — apps/k7-daw-wasm/song/docs/midiIn.md.
   useEffect(() => {
     if (!midiIn.any) return;
     void openMidiInputs();
@@ -1897,7 +1897,7 @@ export default function App({
     [pushLog, runLocalCommand, warnHeadphones, queryClient],
   );
   runCommandRef.current = runCommand;
-  // A node's preset dropdown: the list, the save and the update, each a `node preset` verb — apps/k7-daw-frontend/packages/song/docs/userPresets.md.
+  // A node's preset dropdown: the list, the save and the update, each a `node preset` verb — apps/k7-daw-wasm/song/docs/userPresets.md.
   const {
     presetNames,
     openPresets,
@@ -2029,7 +2029,7 @@ export default function App({
   const openInEditorRef = useLatest(openInEditor);
   const focusRowInPanes = useCallback(
     (target: RowTarget) => {
-      // Named, not fuzzy-matched: a lane lives in `nodes/`, or in a chain project's `tracks/` (apps/k7-daw-frontend/packages/song/docs/chainFiles.md).
+      // Named, not fuzzy-matched: a lane lives in `nodes/`, or in a chain project's `tracks/` (apps/k7-daw-wasm/song/docs/chainFiles.md).
       const files = editorRef.current?.files() ?? [];
       const file =
         entityFile(files, "nodes", target.id) ??

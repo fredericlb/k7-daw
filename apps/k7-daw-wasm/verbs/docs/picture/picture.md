@@ -165,7 +165,7 @@ A picture lane draws its placements. Wire an `io: camera` node to it in `graph.k
 it draws a live picture instead — the same lane, the same rect, the same `mute`, the same passes
 over it. That is the one thing in the picture model that comes off `graph.k7x`'s SOURCES rather
 than out of the lane's events, and it is why it costs no new road: everything a live layer needs, a
-lane already had. See [apps/k7-daw-frontend/packages/song/docs/camera.md](../../song/docs/camera.md).
+lane already had. See [apps/k7-daw-wasm/song/docs/camera.md](../../song/docs/camera.md).
 
 An export leaves such a layer out: a lens has no frame at *t*, and a render walks a timeline.
 

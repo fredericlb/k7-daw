@@ -35,7 +35,7 @@ changes as fast as the playhead moves, and a prop would re-render every node in 
 frame. The pad holds its own subscription and reads a BOOLEAN, so React's own `Object.is` ends
 the render there. The graph does not know how the answer is arrived at — k7 derives it from the
 arrangement and the playhead, which is why it lights for a SEQUENCE and not for live MIDI or a
-strudel lane, whose notes the browser never sees (`apps/k7-daw-frontend/packages/song/docs/racks.md`).
+strudel lane, whose notes the browser never sees (`apps/k7-daw-wasm/song/docs/racks.md`).
 
 A pad also draws BARE. The grid is the picture, and sixteen three-letter symbols in a card this
 size is a wall of text where a drum machine's face should be. The symbol is still the widget's
@@ -191,7 +191,7 @@ name needs is visibly the name's. Turned rather than stacked letter
 by letter, because a word stays a word: stacked capitals spell themselves out one at a time and
 take a letter's full height each. The group is inert: `pointer-events: none`, so a click on its bare part
 falls through to the card as a click on empty grid does. It draws none of the controls it frames.
-They are the panel's own widgets, laid on top of it (`apps/k7-daw-frontend/packages/song-schema/docs/moduleFile.md`).
+They are the panel's own widgets, laid on top of it (`apps/k7-daw-wasm/song-schema/docs/moduleFile.md`).
 
 A widget in a named or switched group's FIRST column is drawn 12 px in from its left edge
 (`apps/k7-daw-frontend/packages/ui-chains/src/groupEdge.ts`), so the name and the dot have that strip to themselves.
@@ -373,5 +373,5 @@ the same browsing popup the `+` on an arrow uses.
 
 `dropdown` + `library` is the older spelling of the same widget, from when the files came from a
 shared library instead of the module's own `assets/`. It is read as a filepicker so every panel
-already written keeps working — `apps/k7-daw-frontend/packages/song/docs/filePicker.md`. Either way the param is the
+already written keeps working — `apps/k7-daw-wasm/song/docs/filePicker.md`. Either way the param is the
 widget's BIND: an older panel's `library:` names a folder (`nam`), not a param.

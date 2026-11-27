@@ -34,7 +34,7 @@ Three files, and they are the whole surface:
 
 Everything else `surfaces/` declares draws something the PROJECT *is*: its lanes, its picture, its
 decks. This draws one module's parameters — and a module's NAME is the project's to choose
-(`apps/k7-daw-frontend/packages/song/docs/nodes.md`), so nothing but the file can say which node this strip is a
+(`apps/k7-daw-wasm/song/docs/nodes.md`), so nothing but the file can say which node this strip is a
 picture of. That is the same reason the desk has a mapping, arrived at from the other end.
 
 It is also why the gate asks for **all ten** — `unmappedControls` filters the required controls,
@@ -52,7 +52,7 @@ instead of drawing itself.
 ## No normalisation, anywhere
 
 This is the one place the surface deliberately departs from
-[viewBindings.md](../packages/song/docs/viewBindings.md).
+[viewBindings.md](../../k7-daw-wasm/song/docs/viewBindings.md).
 
 There, a control declares a range of its own, the position is normalised to 0..1 by it, and the
 widget's `min`/`max` expand it again. That is right for a desk: a crossfader is a *gesture*, and
@@ -150,7 +150,7 @@ It has no pane, no number key and no pane-ring entry: the Mixer button reaches i
   A node with no surface is drawn perfectly well — its panel is on the graph, where every other
   module's is. This strip is a convenience, not a missing half.
 
-See `apps/k7-daw-frontend/packages/song/docs/surfaces.md` for the format and `apps/k7-daw-engine/k7-runtime/docs/quickMaster.md` for
+See `apps/k7-daw-wasm/song/docs/surfaces.md` for the format and `apps/k7-daw-engine/k7-runtime/docs/quickMaster.md` for
 what the node actually does to the sound.
 
 ## The strips it sits under

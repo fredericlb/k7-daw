@@ -7,10 +7,10 @@ same reason — the capture is a side effect, not a detour the signal takes.
 
 It is **free-running**. Press record and it captures; press again and it stops. The transport is
 never consulted, and that is the whole point: a `live` rig has no arrangement and never presses
-play (`apps/k7-daw-frontend/packages/song/docs/liveProject.md`). This is what track-and-transport recording
+play (`apps/k7-daw-wasm/song/docs/liveProject.md`). This is what track-and-transport recording
 (`Recording.cpp`) has no answer for.
 
-The browser half is `apps/k7-daw-frontend/packages/song/docs/outputRecording.md`; this page is the engine's.
+The browser half is `apps/k7-daw-wasm/song/docs/outputRecording.md`; this page is the engine's.
 
 ## Where the audio is copied, and by whom
 

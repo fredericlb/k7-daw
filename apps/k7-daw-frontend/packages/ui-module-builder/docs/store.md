@@ -78,7 +78,7 @@ the file or has no engine.
 
 `snapshotBase` keeps the plugin's CURRENT state as a named base in the module's own `base/` folder.
 A base is an opaque `.vstpreset` blob, for the plugins whose sound is not in their automatable
-parameters — which a preset cannot hold, being named numbers (`apps/k7-daw-frontend/packages/song/docs/userPresets.md`). Snapshotting reads the instance
+parameters — which a preset cannot hold, being named numbers (`apps/k7-daw-wasm/song/docs/userPresets.md`). Snapshotting reads the instance
 behind the Native UI window, so what is kept is what somebody dialled in by hand.
 
 It is on this interface rather than an `on…` prop, even though half of it is an engine call,
@@ -160,7 +160,7 @@ without one; they are just less well informed.
 
 One control on this screen changes nothing about the module's sound: **`status:`** — whether the
 completions list it, list it first, or leave it out. The rule and its rationale are
-`@studio/song`'s [`docs/moduleStatus.md`](../../song/docs/moduleStatus.md); what belongs here is
+`@studio/song`'s [`docs/moduleStatus.md`](../../../../k7-daw-wasm/song/docs/moduleStatus.md); what belongs here is
 why it is drawn where it is and how it is written.
 
 **In the header**, beside the module's name and its path. That is the altitude of the thing it is

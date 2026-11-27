@@ -81,7 +81,7 @@
         "line": 1,
         "col": 1,
         "severity": "warning",
-        "message": "this project is an arrangement and declares no timeline, so nothing draws its lanes — run `project surface new timeline` (apps/k7-daw-frontend/packages/song/docs/surfaces.md)"
+        "message": "this project is an arrangement and declares no timeline, so nothing draws its lanes — run `project surface new timeline` (apps/k7-daw-wasm/song/docs/surfaces.md)"
       }
     ]
   },

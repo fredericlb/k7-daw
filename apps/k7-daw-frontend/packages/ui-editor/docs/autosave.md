@@ -16,7 +16,7 @@ and the engine is handed a document that does not compile. The editor would spen
 life publishing broken states.
 
 So the buffer is judged before it is written. `file.validate` (`@studio/k7-wasm/validate`) answers the
-question — see [that page](../../song/docs/validate.md) — and the answer is the same
+question — see [that page](../../../../k7-daw-wasm/song/docs/validate.md) — and the answer is the same
 one the loader gives, because it is the same decoders.
 
 ## The three answers

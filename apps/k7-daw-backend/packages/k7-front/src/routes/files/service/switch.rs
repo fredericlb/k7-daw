@@ -14,7 +14,7 @@ fn setting(env: &BTreeMap<String, String>, key: &str) -> Option<String> {
 /// What a code root must hold: the files the native pieces read at its root (`scripts/stageCodeRoot.mjs` lists them all).
 const MARKS: [&str; 3] = [
     "apps/k7-daw-wasm/verbs/commands.yaml",
-    "apps/k7-daw-frontend/packages/song/meta",
+    "apps/k7-daw-wasm/song/meta",
     "demos",
 ];
 
@@ -63,7 +63,7 @@ mod tests {
         assert!(!is_code_root(&dir));
         assert_ne!(code_root(&env).as_deref(), Some(dir.as_path()));
         std::fs::write(dir.join("apps/k7-daw-wasm/verbs/commands.yaml"), "").unwrap();
-        std::fs::create_dir_all(dir.join("apps/k7-daw-frontend/packages/song/meta")).unwrap();
+        std::fs::create_dir_all(dir.join("apps/k7-daw-wasm/song/meta")).unwrap();
         std::fs::create_dir_all(dir.join("demos")).unwrap();
         assert_eq!(code_root(&env).as_deref(), Some(dir.as_path()));
         std::fs::remove_dir_all(&dir).unwrap();

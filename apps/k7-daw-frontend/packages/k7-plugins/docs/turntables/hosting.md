@@ -1,7 +1,7 @@
 # What a host owes the desk
 
 Two turntables meeting at a crossfade, their channel strips, the waveforms, the cues and the
-set list. k7 draws it as a `surfaces/` view (`apps/k7-daw-frontend/packages/song/docs/surfaces.md`).
+set list. k7 draws it as a `surfaces/` view (`apps/k7-daw-wasm/song/docs/surfaces.md`).
 
 ## The seam is the ENGINE, and only the engine
 
@@ -34,7 +34,7 @@ writer to that engine. So `sendDecks` takes `Deck.sendProject` rather than an `E
 k7 posts to its service.
 
 Getting this wrong is not subtle and it is not loud either: two writers push documents that are
-each correct, and the last one wins. See `apps/k7-daw-frontend/packages/song/docs/surfaces.md` for the ordering rule
+each correct, and the last one wins. See `apps/k7-daw-wasm/song/docs/surfaces.md` for the ordering rule
 the file service owns.
 
 `engine` stays on the seam for everything that is NOT a document — the transport, a seek, a param.

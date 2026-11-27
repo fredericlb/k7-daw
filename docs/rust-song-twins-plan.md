@@ -123,7 +123,7 @@ They move into the page's own packages with M5, since no Rust side shares them.
 
 | choice | why |
 |---|---|
-| ONE browser module carries `song-schema`, `k7x`, and the `song` crate's file decoders and views; `song-edit`'s pure text writers join it in M4a | a page loads one memory and one allocator (`apps/k7-daw-frontend/packages/song-schema/docs/wasmBoundary.md`); a second module would ship serde twice |
+| ONE browser module carries `song-schema`, `k7x`, and the `song` crate's file decoders and views; `song-edit`'s pure text writers join it in M4a | a page loads one memory and one allocator (`apps/k7-daw-wasm/song-schema/docs/wasmBoundary.md`); a second module would ship serde twice |
 | the page's module is a `.wasm` asset that Vite hashes, streamed with `WebAssembly.instantiateStreaming`; node hosts (tests, scripts) read the same file from disk | a 2-3 MB module as base64 inside a JS chunk is a third larger and is parsed as JavaScript before it compiles |
 | `appMain.tsx` keeps awaiting `wasmReady()` before it mounts, and every call after it is sync | React reads a value during render; a call made before the module is ready throws `unavailable` rather than waiting, so a top-level call at import time is a bug a test catches |
 | the calls stay coarse: one call per gesture, per validation, per completion request | each call copies JSON both ways; a per-keystroke or per-frame call is designed as a hot ABI call (the curve playhead) or not made |
