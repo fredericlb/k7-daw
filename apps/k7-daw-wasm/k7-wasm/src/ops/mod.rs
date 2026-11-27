@@ -9,8 +9,10 @@ pub mod eyes;
 pub mod fields;
 pub mod file;
 pub mod gesture;
+pub mod git;
 pub mod k7x;
 pub mod k7x_edit;
+pub mod media;
 pub mod module;
 pub mod picture;
 pub mod reads;
@@ -109,6 +111,8 @@ impl Session {
             "track" => track::dispatch(decode(input)?, out),
             "gesture" => gesture::dispatch(decode(input)?, out),
             "file" => file::dispatch(decode(input)?, out),
+            "git" => git::dispatch(decode(input)?, out),
+            "media" => media::dispatch(decode(input)?, out),
             "song" => song::dispatch(&mut self.songs, decode(input)?, out),
             "k7x" => k7x::dispatch(&mut self.k7x, decode(input)?, out),
             "eyes" => eyes::dispatch(&mut self.floats, decode(input)?, out),

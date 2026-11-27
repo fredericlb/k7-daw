@@ -17,6 +17,9 @@ panic = "abort"
 strip = true
 
 [features]
+# The C ABI of the waveform module; a crate that only wants the arithmetic leaves it off.
+default = ["ffi"]
+ffi = []
 # The decoder, for a host with no ffmpeg and no engine: only the WebAssembly build turns it on (docs/analysis.md).
 decode = ["dep:symphonia", "dep:opus-rs"]
 # The encoders — Opus in WebM, FLAC, WAV — with the resampler and the loudness meter they need (docs/transcode.md).

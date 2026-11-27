@@ -3,9 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Measuring decoded audio, and nothing else: where a take really starts and stops (trim gate), and the Camelot wheel. No node:, no filesystem, no process, which is why a BROWSER may have it. Consumed as source.",
+  "description": "The Camelot wheel, and nothing else of the key detector: no node:, no filesystem, no process, which is why a BROWSER may have it. The trim gate is Rust (the waveform crate's trim.rs). Consumed as source.",
   "exports": {
-    "./trim-gate": "./src/trimGate.ts",
     "./key": "./src/key.ts"
   },
   "scripts": {

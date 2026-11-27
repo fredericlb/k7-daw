@@ -4,10 +4,11 @@
 //! never answered nor logged.
 
 use axum::response::Response;
+use git_rules::{ForgeAccount, ForgeKind, ForgeStatus, GithubRepo, PollAnswer, PollState};
 use hyper::Method;
 use serde_json::{Value, json};
 
-use super::git::{Ctx, bad, field};
+use super::git::{Ctx, bad, field, typed};
 use super::git_forge::{
     Forge, Saved, Step, Tokens, accounts, drop_token, fail, find, repo_of, saved, sign_in_again,
 };
@@ -92,22 +93,35 @@ fn synced(ctx: &Ctx, f: &Forge) -> bool {
     list || ctx.secrets.is_synced(&e.host, e.user)
 }
 
-fn status_of(ctx: &Ctx, f: &Forge) -> Value {
-    let synced = synced(ctx, f);
+fn status_of(ctx: &Ctx, f: &Forge) -> ForgeStatus {
+    let synced = Some(synced(ctx, f));
     if !f.available() {
-        return json!({ "available": false, "scopes": [], "synced": synced });
+        return ForgeStatus {
+            available: false,
+            login: None,
+            scopes: Vec::new(),
+            synced,
+        };
     }
     match saved(ctx, f) {
-        Some(s) => {
-            json!({ "available": true, "login": s.login, "scopes": s.scopes, "synced": synced })
-        }
-        None => json!({ "available": true, "scopes": [], "synced": synced }),
+        Some(s) => ForgeStatus {
+            available: true,
+            login: Some(s.login),
+            scopes: s.scopes,
+            synced,
+        },
+        None => ForgeStatus {
+            available: true,
+            login: None,
+            scopes: Vec::new(),
+            synced,
+        },
     }
 }
 
 /// `GET /git/forges/<id>`: whether the sign-in is offered and who is signed in; no network call.
 pub(super) fn status(ctx: &Ctx, f: &Forge) -> Response {
-    json_answer(200, &status_of(ctx, f))
+    typed(200, &status_of(ctx, f))
 }
 
 /// `GET /git/forges`: every account this device offers, each with its status; no network call is waited on.
@@ -115,18 +129,25 @@ pub(super) fn list(ctx: &Ctx) -> Response {
     let all = accounts(ctx);
     ensure_keys_later(ctx, &all);
     super::git_author::refresh_later(ctx, &all);
-    let forges: Vec<Value> = all
+    let forges: Vec<ForgeAccount> = all
         .iter()
         .map(|f| {
             let p = f.profile();
-            let mut v = status_of(ctx, f);
-            v["id"] = json!(p.id);
-            v["kind"] = json!(p.kind);
-            v["name"] = json!(p.name);
-            if let (Some(m), Some(x)) = (v.as_object_mut(), f.extra().as_object()) {
-                m.extend(x.clone());
+            ForgeAccount {
+                status: status_of(ctx, f),
+                id: p.id.to_string(),
+                kind: if p.kind == "forgejo" {
+                    ForgeKind::Forgejo
+                } else {
+                    ForgeKind::Github
+                },
+                name: p.name.to_string(),
+                url: f
+                    .extra()
+                    .get("url")
+                    .and_then(Value::as_str)
+                    .map(str::to_string),
             }
-            v
         })
         .collect();
     json_answer(200, &json!({ "forges": forges }))
@@ -144,11 +165,13 @@ pub(super) async fn poll(ctx: &Ctx, f: &Forge) -> Response {
 async fn signed_in(ctx: &Ctx, f: &Forge, t: Tokens) -> Response {
     match finish(ctx, f, t).await {
         Ok(d) => {
-            let mut out = json!({ "state": "ok", "login": d.login, "scopes": d.scopes });
-            if let Some(n) = d.note {
-                out["keyNote"] = json!(n);
-            }
-            json_answer(200, &out)
+            let out = PollAnswer {
+                login: Some(d.login),
+                scopes: Some(d.scopes),
+                key_note: d.note,
+                ..PollAnswer::state(PollState::Ok)
+            };
+            typed(200, &out)
         }
         Err((status, code, said)) => fail(status, &code, &said),
     }
@@ -231,7 +254,7 @@ pub(super) async fn repos(ctx: &Ctx, f: &Forge) -> Response {
     json_answer(200, &json!({ "repos": list }))
 }
 
-fn row(r: &Value) -> Option<Value> {
+fn row(r: &Value) -> Option<GithubRepo> {
     let topics: Vec<&str> = r
         .get("topics")
         .and_then(Value::as_array)
@@ -240,11 +263,13 @@ fn row(r: &Value) -> Option<Value> {
         .filter_map(Value::as_str)
         .collect();
     let pushed = r.get("pushed_at").or_else(|| r.get("updated_at"));
-    Some(json!({
-        "fullName": r.get("full_name")?, "sshUrl": r.get("ssh_url")?,
-        "private": r.get("private").and_then(Value::as_bool).unwrap_or(false),
-        "pushedAt": pushed, "k7": topics.contains(&super::git_forge::TOPIC),
-    }))
+    Some(GithubRepo {
+        full_name: r.get("full_name")?.as_str()?.to_string(),
+        ssh_url: r.get("ssh_url")?.as_str()?.to_string(),
+        private: r.get("private").and_then(Value::as_bool).unwrap_or(false),
+        pushed_at: pushed.and_then(Value::as_str).map(str::to_string),
+        k7: topics.contains(&super::git_forge::TOPIC),
+    })
 }
 
 /// `POST /git/forges/<id>/repos { name, private }`: a new repository, marked as a k7 workspace.

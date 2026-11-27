@@ -13,6 +13,7 @@
     "react": "^19.2.7"
   },
   "dependencies": {
+    "@studio/k7-wasm": "*",
     "fix-webm-duration": "^1.0.5"
   },
   "scripts": {
