@@ -2,7 +2,7 @@
 // other fingers are ignored, a release commits, and anything else — the browser cancelling the
 // gesture, the window losing focus, the component going away — abandons it. A drag that listened
 // for `pointerup` alone stayed armed after a cancel, and the next click anywhere committed it.
-// See packages/ui-timeline/docs/drag.md.
+// See apps/k7-daw-frontend/packages/ui-timeline/docs/drag.md.
 
 import {
   type PointerEvent as ReactPointerEvent,
