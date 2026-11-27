@@ -2,14 +2,16 @@
 // grid, a take's review, a module or an assembly in its builder, a curve, a tap's chain. Those
 // under `ui` only open; the bare ones open an editor that writes to what they name.
 
+import type { ParamKind } from "@studio/k7-wasm/draft";
+import { resolveModuleFile, resolveSequence } from "@studio/k7-wasm/paths";
 import { api } from "../../api";
-import { newCurveName, type ParamKind } from "../../curveDraft";
-import { resolveModuleFile } from "../../localTargets";
 import { describeDownload, followDownload } from "../../modelDownload";
 import { m } from "../../paraglide/messages.js";
 import { trackPlacing } from "../../rows";
-import { resolveSequence } from "../../sequenceEdit";
 import type { LocalCommand } from "./context";
+
+/** A fresh curve's name: a uuid, valid as a file name and never taken. */
+const newCurveName = (): string => crypto.randomUUID();
 
 /** `<node> <param>`, the param quoted when it holds a space. */
 const NODE_PARAM = /^(\S+)\s+(?:"([^"]*)"|(.+))$/;

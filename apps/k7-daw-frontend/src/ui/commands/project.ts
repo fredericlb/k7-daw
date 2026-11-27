@@ -4,10 +4,10 @@
 
 import { fetchScene } from "@studio/k7-plugins/video";
 import { EXPORT_USAGE, parseExportAsk } from "@studio/k7-wasm/edit";
+import { resolveEntry } from "@studio/k7-wasm/paths";
 import type { VideoSettings } from "@studio/k7-wasm/picture";
 import { runRedo, runUndo } from "@studio/project-shell/undo";
 import { exportHost } from "../../exportHost";
-import { resolveEntry } from "../../localTargets";
 import { m } from "../../paraglide/messages.js";
 import type { LocalCommand, LocalCtx } from "./context";
 import { refuseWhileLocked } from "./locked";

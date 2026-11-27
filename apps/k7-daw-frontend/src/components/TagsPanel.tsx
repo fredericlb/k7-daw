@@ -2,6 +2,7 @@
 // to add one. It writes nothing itself — each change is `project tag` / `project untag`, then a re-read of
 // project.k7x, since the FILE is the truth (../docs/tasks.md).
 
+import { projectDir } from "@studio/k7-wasm/paths";
 import { projectTagsOf } from "@studio/k7-wasm/rules";
 import { X } from "@studio/ui/icons";
 import { Input } from "@studio/ui/input";
@@ -9,7 +10,6 @@ import { useCallback, useEffect, useState } from "react";
 import { api } from "../api";
 import { useRevision } from "../hooks/useRevision";
 import { m } from "../paraglide/messages.js";
-import { projectDir } from "../projectPaths";
 
 export function TagsPanel({
   project,

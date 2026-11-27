@@ -8,6 +8,7 @@ import {
   LIBRARY_FILE_FAMILIES,
   MODULE_SOURCES_DIR,
 } from "@studio/k7-wasm/consts";
+import { isVideoTrackFile } from "@studio/k7-wasm/paths";
 import { docPattern, isLibraryFileOf } from "@studio/k7-wasm/schema";
 import { askConfirm, askText } from "@studio/project-shell/ask";
 import { showToast } from "@studio/project-shell/toast";
@@ -52,7 +53,6 @@ import {
   rootOf,
 } from "../libraryTree";
 import { m } from "../paraglide/messages.js";
-import { isVideoTrackFile } from "../projectPaths";
 import { radioKeyDown } from "../radioKeys";
 import { TrackIcon } from "../trackIcons";
 import type { FileNode } from "../types";

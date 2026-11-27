@@ -134,7 +134,7 @@ payload).
 
 ## The clipboard
 
-`apps/k7-daw-frontend/src/clipboard.ts` holds one slot, either notes or events, in coordinates relative
+`apps/k7-daw-wasm/song-edit/src/clipboard.rs` (`@studio/k7-wasm/clipboard`) holds one slot, either notes or events, in coordinates relative
 to the rectangle's corner. An item is in a rectangle when it **starts** inside (`notesInRegion`,
 `copyEvents`), and deletion uses the same rule so copy and delete cannot disagree. Pasting carries
 the placement's own fields (`from`, `to`, fades, loop, disabled, warp) rebuilt key by key — a

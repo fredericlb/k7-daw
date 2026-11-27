@@ -4,7 +4,7 @@
 // MIDI its notes; both are fetched here, since a take is not in the compiled project until comped.
 
 import { seqWindowFromText, windowSpan } from "@studio/k7-wasm/rules";
-import { readSequence } from "@studio/ui-editor/note-grid/notes";
+import { readSequenceNotes } from "@studio/k7-wasm/text";
 import { memo, useEffect, useId, useMemo, useState } from "react";
 import { api } from "../api";
 import { envelopePath, type TakeRow as Row } from "../takes";
@@ -61,7 +61,7 @@ function useMaterial(
       void api
         .read(`${prefix}sequences/${row.ref}.k7x`)
         .then(({ content }) => {
-          const read = readSequence(content);
+          const read = readSequenceNotes(content);
           if (!read) return retry(loadMidi);
           const notes = read.notes;
           const extent = notes.reduce((m, n) => Math.max(m, n.t + n.d), 0);

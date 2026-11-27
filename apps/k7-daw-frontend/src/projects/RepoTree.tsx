@@ -2,6 +2,7 @@
 // every folder that is a project, and the file a click picks drawn read-only beside it.
 // Read-only: what is written in a project is written once it is open. See ../../docs/projects.md.
 
+import { norm } from "@studio/k7-wasm/paths";
 import { Button } from "@studio/ui/button";
 import { ErrorCard } from "@studio/ui/error-card";
 import {
@@ -21,7 +22,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { WorkspaceGitBar } from "../git/GitBar";
 import { useGitTransport } from "../git/GitContext";
 import { m } from "../paraglide/messages.js";
-import { norm } from "../projectPaths";
 import type { AccountFiles } from "./api";
 import { FileViewer } from "./FileViewer";
 import { type TreeSource, workspaceSource } from "./workspaceFiles";

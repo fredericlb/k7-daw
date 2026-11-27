@@ -321,6 +321,11 @@ fn plain() -> Vec<[String; 3]> {
             &s(chains::node_ui::DEVICE_BIND),
         ),
         export(
+            "The rack builder's grid side: four by four, sixteen pads.",
+            "KIT_GRID",
+            &json!(song_edit::kit::KIT_GRID),
+        ),
+        export(
             "A rack's first pad note: C1, General MIDI's kick.",
             "RACK_FIRST_NOTE",
             &json!(n::RACK_FIRST_NOTE),

@@ -114,7 +114,7 @@ module's `automations: [{param, curve}]`, keyed by param. Verbs:
   creates the curve flat at the knob's current value so binding changes nothing, and refuses when it
   cannot read that value.
 
-**The editor.** `apps/k7-daw-frontend/src/components/CurveEditor.tsx` edits a draft (`apps/k7-daw-frontend/src/curveDraft.ts`)
+**The editor.** `apps/k7-daw-frontend/src/components/CurveEditor.tsx` edits a draft (`apps/k7-daw-wasm/song-edit/src/curve_draft.rs`, through `@studio/k7-wasm/draft`)
 and writes nothing until Save, which is one `curve set`. The draft is computed with
 `@studio/k7-wasm`, the same Rust arithmetic the bake uses (`apps/k7-daw-wasm/song-schema/src/curve.rs`).
 `CurvePlot.tsx` draws it and edits a custom curve's points; the kit `Knob` the ADSR knobs;

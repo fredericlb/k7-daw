@@ -3,6 +3,7 @@
 // See ../../docs/picture.md.
 
 import { parse } from "@studio/k7-wasm/k7x";
+import { projectDir } from "@studio/k7-wasm/paths";
 import { timelineLaneOf } from "@studio/k7-wasm/schema";
 import {
   editVideo,
@@ -11,7 +12,6 @@ import {
 } from "@studio/k7-wasm/text";
 import { useCallback } from "react";
 import { api } from "../api";
-import { projectDir } from "../projectPaths";
 import type { VideoEdit } from "../videoDrag";
 import type { SetStatus } from "./useLogs";
 

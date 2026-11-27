@@ -6,6 +6,13 @@
 
 import { arrayEq, useEngineState } from "@studio/engine-browser/store";
 import {
+  type Clipboard,
+  copyEvents,
+  droppedCount,
+  type MaybeClipboard,
+  pasteEvents,
+} from "@studio/k7-wasm/clipboard";
+import {
   type PendingEdit,
   pendingClips,
   pendingSplitAt,
@@ -21,6 +28,7 @@ import {
   crossfadeLen,
   timelineLayout,
 } from "@studio/k7-wasm/gestureTimeline";
+import type { DropLane } from "@studio/k7-wasm/intake";
 import {
   beatsToDuration,
   beatsToPosition,
@@ -74,13 +82,6 @@ import {
 import { mediaUrl } from "../api";
 import { caretKeyDelta } from "../caretKeys";
 import {
-  type Clipboard,
-  copyEvents,
-  droppedCount,
-  type MaybeClipboard,
-  pasteEvents,
-} from "../clipboard";
-import {
   isFirstPlacement,
   materialInstances,
   materialOf,
@@ -132,7 +133,7 @@ import {
   useShellStore,
   useVerbs,
 } from "../state/shellStore";
-import type { DropLane, DropUpload, TimelineDropEvent } from "../timelineDrop";
+import type { DropUpload, TimelineDropEvent } from "../timelineDrop";
 import { moveNudge, type TimelineMode, timelineMode } from "../timelineMode";
 import {
   crossfadePair,

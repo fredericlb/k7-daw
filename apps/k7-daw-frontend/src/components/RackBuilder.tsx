@@ -5,6 +5,21 @@
 // the drum-machine reading rackBuilder.ts pins. Opened by `module create rack` (apps/k7-daw-wasm/song/docs/racks.md).
 
 import { FIXED_NAMESPACES } from "@studio/k7-wasm/consts";
+import {
+  buildKitNode,
+  cellsInNoteOrder,
+  defaultSymbol,
+  GRID,
+  type KitDestination,
+  kitSampleRef,
+  kitUploadDir,
+  padNote,
+  type RackIssue,
+  type RackPad,
+  rackIssues,
+  rackModuleRef,
+} from "@studio/k7-wasm/kit";
+import { projectDir } from "@studio/k7-wasm/paths";
 import { showToast } from "@studio/project-shell/toast";
 import { Button } from "@studio/ui/button";
 import {
@@ -20,20 +35,29 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { api } from "../api";
 import { useLatest } from "../hooks/useLatest";
 import { m } from "../paraglide/messages.js";
-import { projectDir } from "../projectPaths";
-import {
-  buildKitNode,
-  cellsInNoteOrder,
-  defaultSymbol,
-  GRID,
-  type KitDestination,
-  kitSampleRef,
-  kitUploadDir,
-  padNote,
-  type RackPad,
-  rackIssues,
-  rackModuleRef,
-} from "../rackBuilder";
+
+/** What stops a CREATE, in words: Rust answers a message key and its parameters. */
+function sentence({ key, params }: RackIssue): string {
+  const p = params as Record<string, string>;
+  switch (key) {
+    case "rb.noRack":
+      return m["rb.noRack"]({ module: p.module });
+    case "rb.noName":
+      return m["rb.noName"]();
+    case "rb.nameShape":
+      return m["rb.nameShape"]();
+    case "rb.exists":
+      return m["rb.exists"]({ name: p.name });
+    case "rb.noSample":
+      return m["rb.noSample"]();
+    case "rb.badSymbol":
+      return m["rb.badSymbol"]({ symbol: p.symbol });
+    case "rb.dupSymbol":
+      return m["rb.dupSymbol"]({ symbol: p.symbol });
+    default:
+      return m["rb.samePad"]({ file: p.file });
+  }
+}
 
 interface Pad {
   file: File;
@@ -179,7 +203,9 @@ export function RackBuilder({
         })),
     [pads],
   );
-  const issues = rackIssues(name.trim(), rackPads, taken, !!rackRef);
+  const issues = rackIssues(name.trim(), rackPads, taken, !!rackRef).map(
+    sentence,
+  );
 
   const create = async () => {
     if (busy || issues.length || !rackRef) return;

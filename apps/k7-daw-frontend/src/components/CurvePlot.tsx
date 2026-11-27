@@ -3,16 +3,16 @@
 // drag to move it, double-click to take it out. A point sits where the curve passes, so it is placed
 // through the inverse of the amplitude and polarity. See docs/curveEditor.md.
 
-import { parsePosition } from "@studio/k7-wasm/timecode";
-import { usePointerDrag } from "@studio/ui-timeline/drag";
-import { useRef } from "react";
 import {
   type CurveDraft,
   draftPreviewOrEmpty,
   isDrawnShape,
   pointAt,
   withPoint,
-} from "../curveDraft";
+} from "@studio/k7-wasm/draft";
+import { parsePosition } from "@studio/k7-wasm/timecode";
+import { usePointerDrag } from "@studio/ui-timeline/drag";
+import { useRef } from "react";
 
 /** A point's beat, none while its time is half typed. */
 function beatOrNull(time: string, num: number, den: number): number | null {

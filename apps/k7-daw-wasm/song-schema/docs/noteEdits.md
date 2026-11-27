@@ -79,7 +79,7 @@ then undo a fifth of the way back, which is worse than either doing it or refusi
 document pass also means one parse and one serialise, where N calls re-read the file N times.
 
 A note is in when it **starts** inside, the rule the roll's rectangle already copies by
-(`apps/k7-daw-frontend/src/clipboard.ts`). Taking them by overlap would put the same note in two
+(`apps/k7-daw-wasm/song-edit/src/clipboard.rs`). Taking them by overlap would put the same note in two
 adjacent boxes. `repeat` and `skip` are never touched, so a pad crossed by a transposition keeps
 its effects, and a line the parse cannot read as a note is left alone rather than rewritten.
 

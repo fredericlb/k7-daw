@@ -330,6 +330,9 @@ export const CAMERA_BIND = "@camera";
 /** The intrinsic a MIDI device's dropdown writes. */
 export const DEVICE_BIND = "@device";
 
+/** The rack builder's grid side: four by four, sixteen pads. */
+export const KIT_GRID = 4;
+
 /** A rack's first pad note: C1, General MIDI's kick. */
 export const RACK_FIRST_NOTE = 36;
 

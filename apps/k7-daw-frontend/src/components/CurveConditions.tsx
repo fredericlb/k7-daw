@@ -2,17 +2,17 @@
 // holds, and none meaning always. Each row keeps every moment it was given, so switching its kind
 // loses nothing. See docs/curveEditor.md.
 
-import { Button } from "@studio/ui/button";
-import { Plus, X } from "@studio/ui/icons";
-import { Input } from "@studio/ui/input";
-import { useId } from "react";
 import {
   conditionProblem,
   DRAFT_WHENS,
   type DraftCondition,
   type DraftWhen,
   newCondition,
-} from "../curveDraft";
+} from "@studio/k7-wasm/draft";
+import { Button } from "@studio/ui/button";
+import { Plus, X } from "@studio/ui/icons";
+import { Input } from "@studio/ui/input";
+import { useId } from "react";
 import { m } from "../paraglide/messages.js";
 
 /** What each condition reads as in its select. */

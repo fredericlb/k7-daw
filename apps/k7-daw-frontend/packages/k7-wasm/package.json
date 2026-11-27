@@ -32,7 +32,13 @@
     "./gestureTicks": "./src/gestureTicks.ts",
     "./gestureTimeline": "./src/gestureTimeline.ts",
     "./eyes": "./src/eyes.ts",
-    "./rack-binds": "./src/rackBinds.ts"
+    "./rack-binds": "./src/rackBinds.ts",
+    "./paths": "./src/paths.ts",
+    "./buffer": "./src/buffer.ts",
+    "./intake": "./src/intake.ts",
+    "./kit": "./src/kit.ts",
+    "./clipboard": "./src/clipboard.ts",
+    "./draft": "./src/draft.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",

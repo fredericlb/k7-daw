@@ -28,12 +28,12 @@ token (`hooks/useDocPerRevision.ts`), and the effect re-runs once when a save la
 Beyond its text, the editor reads three things off the open buffer: whether it is a slice rack
 (the docked slicer's drags write into it), whether it is an input, and on which channels. Read
 one by one, each is a `parseDocument` of its own on every keystroke of every file.
-`src/bufferReads.ts` answers the three from ONE parse, and parses nothing when the text cannot hold
+`readBuffer` (`@studio/k7-wasm/buffer`, `apps/k7-daw-wasm/song-edit/src/buffer_text.rs`) answers the three from ONE parse, and parses nothing when the text cannot hold
 the keys a read looks for (`rack_type`, the word `io`, `extends`) — gates that are exact, since a
 key the parser would find is spelled in the text. The reads run on a `useDeferredValue` of the open
 file, so they trail the keystroke rather than delay it; the picture lane's placements read the same
 deferred file, and only on a picture lane's file (`isVideoTrackFile`). The slice colouring that runs
-inside CodeMirror on every project file takes the same `rack_type` gate (`sliceSymbols.ts`).
+inside CodeMirror on every project file takes the same `rack_type` gate (`scanSlices`).
 
 A poll that answers what it answered before keeps the old object (`keepIfSame`,
 `src/shellEquality.ts`): the editor's `hints`, from which every CodeMirror extension is rebuilt, its

@@ -6,6 +6,17 @@
 
 import type { CurveCut, CurveSpec } from "@studio/graph-model";
 import { CURVE_CUTS } from "@studio/k7-wasm/consts";
+import {
+  type CurveDraft,
+  conditionsProblem,
+  type DraftShape,
+  draftOf,
+  durationProblem,
+  fieldsOf,
+  isDrawnShape,
+  type ParamKind,
+  shapesFor,
+} from "@studio/k7-wasm/draft";
 import { Button } from "@studio/ui/button";
 import {
   Dialog,
@@ -17,17 +28,6 @@ import {
 import { Input } from "@studio/ui/input";
 import { Knob } from "@studio/ui/knob";
 import { useId, useState } from "react";
-import {
-  type CurveDraft,
-  conditionsProblem,
-  type DraftShape,
-  draftOf,
-  durationProblem,
-  fieldsOf,
-  isDrawnShape,
-  type ParamKind,
-  shapesFor,
-} from "../curveDraft";
 import { m } from "../paraglide/messages.js";
 import { usePopin } from "../popins";
 import { CurveConditions } from "./CurveConditions";

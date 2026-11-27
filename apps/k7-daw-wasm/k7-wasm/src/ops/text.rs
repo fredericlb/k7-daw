@@ -5,6 +5,7 @@ use super::text_desk::{
     ApplyArgs, AssemblyArgs, AssemblyOp, ExpandArgs, MixArgs, MixOp, NameArgs, PinsArgs, PlaylistArgs, PlaylistOp,
     assembly_read, chain_read, mix_cues_read, mix_view_read, pins_of, pins_parsed, sugar_apply, sugar_expand,
 };
+use super::text_buffer::{ClipWindowArgs, NotesWriteArgs, SliceWindowArgs, clip_window, notes_read, notes_write, slice_window};
 use super::text_lane::{SequenceArgs, VideoArgs, VideoListArgs, sequence, sequence_data, video_list, video_step};
 use crate::error::WasmError;
 use crate::ops::k7x::K7xSyntax;
@@ -151,6 +152,14 @@ pub enum TextRequest {
     SugarExpand(ExpandArgs),
     #[serde(rename = "text.sugar_apply")]
     SugarApply(ApplyArgs),
+    #[serde(rename = "text.clip_window")]
+    ClipWindow(ClipWindowArgs),
+    #[serde(rename = "text.slice_window")]
+    SliceWindow(SliceWindowArgs),
+    #[serde(rename = "text.notes_read")]
+    NotesRead(TextArgs),
+    #[serde(rename = "text.notes_write")]
+    NotesWrite(NotesWriteArgs),
 }
 
 pub fn dispatch(request: TextRequest, out: &mut Vec<u8>) -> Result<(), WasmError> {
@@ -206,5 +215,9 @@ pub fn dispatch(request: TextRequest, out: &mut Vec<u8>) -> Result<(), WasmError
         TextRequest::ChainRead(a) => write(out, &chain_read(&a)),
         TextRequest::SugarExpand(a) => write(out, &sugar_expand(&a)?),
         TextRequest::SugarApply(a) => write(out, &sugar_apply(&a)),
+        TextRequest::ClipWindow(a) => write(out, &clip_window(&a)),
+        TextRequest::SliceWindow(a) => write(out, &slice_window(&a)),
+        TextRequest::NotesRead(a) => write(out, &notes_read(&a)),
+        TextRequest::NotesWrite(a) => write(out, &notes_write(&a)),
     }
 }

@@ -2,9 +2,12 @@
 // Spans are BYTE offsets into the UTF-8 text; whatever crosses to the page counts UTF-16 units (docs/rust.md).
 
 pub mod ast;
+pub mod cursor;
 pub mod edit;
 pub mod json;
 pub mod outline;
+pub mod scan;
+pub mod tokens;
 mod parse;
 
 pub use ast::{Entry, ListForm, MapForm, MapNode, Node, PathSeg, Scalar};

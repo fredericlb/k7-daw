@@ -11,7 +11,7 @@ is the one after.
 | Concern | Where |
 |---|---|
 | Timeline pane | `apps/k7-daw-frontend/src/components/TimelineTab.tsx` |
-| Its pure helpers | `apps/k7-daw-frontend/src/rows.ts` (row model), `timelineTools.ts`, `timelineMode.ts`, `clipboard.ts`, `pendingEdits.ts`, `timelineDrop.ts`, `fileDrop.ts`, `clipLoop.ts`, `clipInstances.ts`, `historyMarks.ts` — all under `apps/k7-daw-frontend/src/`; the gestures' arithmetic (the grid snap, the roll's drags, the window, the ticks) is the Rust crate `apps/k7-daw-wasm/gesture`, reached through `@studio/k7-wasm/gesture` |
+| Its pure helpers | `apps/k7-daw-frontend/src/rows.ts` (row model), `timelineTools.ts`, `timelineMode.ts`, `pendingEdits.ts`, `timelineDrop.ts`, `fileDrop.ts`, `clipLoop.ts`, `clipInstances.ts`, `historyMarks.ts` — all under `apps/k7-daw-frontend/src/`; the gestures' arithmetic (the grid snap, the roll's drags, the window, the ticks) is the Rust crate `apps/k7-daw-wasm/gesture`, reached through `@studio/k7-wasm/gesture` |
 | Ruler, grid, ticks | `apps/k7-daw-frontend/src/components/Ruler.tsx`, `apps/k7-daw-frontend/packages/ui-timeline/src/ticks.ts` |
 | Zoom, pan, drag, lane geometry | `apps/k7-daw-frontend/packages/ui-timeline/src/panZoom.ts`, `drag.ts`, `lanes.ts` |
 | Minimap | `apps/k7-daw-frontend/src/components/Minimap.tsx` |
@@ -21,7 +21,7 @@ is the one after.
 | Waveform data | `apps/k7-daw-backend/packages/k7-file-service/src/media/region.rs` (envelope slicing, beat grid), `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/media/waveform.rs` (serving it) |
 | Trim gate | `apps/k7-daw-frontend/packages/audio-probe/src/trimGate.ts` |
 | Note views | `apps/k7-daw-frontend/src/components/PianoRoll.tsx`, `apps/k7-daw-frontend/src/hooks/useRollGestures.ts`, `apps/k7-daw-wasm/gesture/src/roll_drag.rs`, `rollMode.ts`; grid caret in `apps/k7-daw-frontend/src/hooks/useGridCaret.ts` + `gridCaret.ts` |
-| Curve editor | `apps/k7-daw-frontend/src/components/CurveEditor.tsx`, `CurvePlot.tsx`, `CurveConditions.tsx`, `curveDraft.ts` |
+| Curve editor | `apps/k7-daw-frontend/src/components/CurveEditor.tsx`, `CurvePlot.tsx`, `CurveConditions.tsx`; the draft is `@studio/k7-wasm/draft` |
 | MIDI | `apps/k7-daw-frontend/src/webmidi.ts`, `midiIn.ts`, `midiControl.ts`, `midiActivity.ts`, `apps/k7-daw-frontend/src/hooks/useMidiRecording.ts`, `apps/k7-daw-frontend/src/hooks/useMidiControl.ts`, `apps/k7-daw-frontend/src/components/MidiTakeRoll.tsx` |
 | Takes | `apps/k7-daw-frontend/src/takes.ts`, `apps/k7-daw-wasm/gesture/src/take_counter.rs`, `apps/k7-daw-frontend/src/hooks/useTakeRecording.ts`, `apps/k7-daw-frontend/src/components/TakesView.tsx`, `TakeRow.tsx`, `CompStrip.tsx`; server side `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/engine/queue.rs` (the arm) |
 | Mixer state | `apps/k7-daw-frontend/src/hooks/useTrackControls.ts`, `mixerStrips.ts`; strips drawn by `apps/k7-daw-frontend/packages/ui-chains-react/src/DomChains.tsx` |
@@ -52,8 +52,7 @@ lanes, MIDI arm and the clipboard live in React state and are never written. Loo
 arm live in the engine's session. Everything else is a file.
 
 **Nothing mounts a component in a test.** The frontend's tests cover pure modules only, which is
-why so much logic sits in small files beside the components (`clipboard.ts`,
-`timelineTools.ts`, `pendingEdits.ts`…): what decides what lands in a file is kept where a test can
+why so much logic sits in small files beside the components (`timelineTools.ts`, `pendingEdits.ts`…): what decides what lands in a file is kept where a test can
 reach it. See [Testing](./28-arrangement-tests.md).
 
 ## Pages in this range

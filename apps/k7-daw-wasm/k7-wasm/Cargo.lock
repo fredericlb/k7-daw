@@ -308,10 +308,12 @@ version = "0.1.0"
 dependencies = [
  "indexmap",
  "k7x",
+ "serde",
  "serde_json",
  "sha2",
  "song",
  "song-schema",
+ "ts-rs",
 ]
 
 [[package]]

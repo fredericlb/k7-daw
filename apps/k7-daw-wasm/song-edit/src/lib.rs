@@ -10,6 +10,7 @@ pub mod alternative_file;
 pub mod alternative_switch;
 pub mod assembly_edit;
 pub mod base_preset;
+pub mod buffer_text;
 pub mod chain_create;
 pub mod chain_data;
 pub mod chain_graph_edit;
@@ -19,9 +20,11 @@ pub mod chain_project;
 pub mod chain_segments;
 pub mod chain_stack;
 pub mod clip_edit;
+pub mod clipboard;
 pub mod clip_resize;
 pub mod confine;
 pub mod crossfade;
+pub mod curve_draft;
 pub mod curve_file;
 pub mod doc_names;
 pub mod engine_switch;
@@ -43,6 +46,7 @@ pub mod js_text;
 pub mod lane_files;
 pub mod lane_strip;
 pub mod lane_strip_plan;
+pub mod kit;
 pub mod library_forks;
 pub mod list_files;
 pub mod loader;
@@ -104,7 +108,9 @@ pub use mem_fs::MemFs;
 
 // 3j: the server's own edits, in one block so a merge with 3g2's additions is a clean one.
 pub mod instance_name;
+pub mod intake;
 pub mod project_files;
+pub mod project_paths;
 pub mod record_take;
 pub mod records;
 // 3j M5: the bench's rig.

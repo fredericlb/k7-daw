@@ -36,7 +36,7 @@ is over in `loopStart`/`loopEnd`, and the repeat count is multiplied into `lengt
 can DRAW an event from the rest of the object and cannot WRITE one back — without `event` a
 copy/paste on the timeline drops the trim, the fades and the passes.
 
-`apps/k7-daw-frontend/src/clipboard.ts` reads it, and nothing else does. It is deliberately *beside*
+`apps/k7-daw-wasm/song-edit/src/clipboard.rs` reads it, and nothing else does. It is deliberately *beside*
 the resolved numbers rather than instead of them: those stay the drawing's single source.
 
 ## The fades

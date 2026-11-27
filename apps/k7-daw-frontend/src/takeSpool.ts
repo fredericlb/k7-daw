@@ -5,7 +5,8 @@
 // Both video takes, a picture lane's and the output's, record through `recordToSpool` here.
 // See docs/picture.md, "Five things the recording has to get right".
 
-import { extForMime, pickVideoMime } from "./videoTake";
+import { extForMime } from "@studio/k7-wasm/intake";
+import { pickVideoMime } from "./videoTake";
 
 /** The prefix every spooled take's file carries, which is how a leftover is recognised. */
 const PREFIX = "k7-take-";
