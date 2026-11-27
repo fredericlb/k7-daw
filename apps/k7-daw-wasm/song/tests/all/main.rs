@@ -58,6 +58,7 @@ mod dsp_literal;
 mod dsp_literal_hostile;
 mod families;
 mod files_validate;
+mod files_validate_cases;
 mod freeze_auto;
 mod freeze_cut;
 mod freeze_fingerprint;

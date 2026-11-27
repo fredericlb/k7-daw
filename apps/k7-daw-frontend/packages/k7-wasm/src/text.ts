@@ -5,7 +5,6 @@ import { call } from "./abi.ts";
 import type {
   AssemblyOp,
   AssemblyRead,
-  ChainRead,
   ClipGrid,
   GridNote,
   K7Change,
@@ -14,7 +13,6 @@ import type {
   MixOp,
   MixViewRead,
   PlaylistOp,
-  SequenceOp,
   SequenceRead,
   TextAnswer,
   VideoOp,
@@ -24,15 +22,12 @@ import type {
 export type {
   AssemblyOp,
   AssemblyRead,
-  ChainItem,
-  ChainRead,
   GridNote,
   LibraryPins,
   MixCues,
   MixOp,
   MixViewRead,
   PlaylistOp,
-  SequenceOp,
   SequenceRead,
   VideoOp,
   VideoPlacement,
@@ -72,14 +67,6 @@ export const editVideo = (
   at: Seg[] = [],
 ): TextEdit => edited(ask("video", { text, at, ops }));
 
-/** A sequence's data with its short form expanded; throws when the text does not read or the short form does not. */
-export const sequenceData = (text: string): Record<string, unknown> =>
-  ask("sequence_data", { text });
-
-/** Runs note writers on a sequence's EXPANDED notes, the short form kept while it holds; throws what a writer refuses with. */
-export const editSequence = (text: string, ops: SequenceOp[]): TextEdit =>
-  edited(ask("sequence", { text, ops }));
-
 /** The cue points `mix.k7x` holds by song ref; none, with the issues, when the sheet does not read. */
 export const mixCues = (text: string): MixCues => ask("mix_cues", { text });
 
@@ -115,20 +102,9 @@ export const readAssemblyTemplate = (text: string): AssemblyRead =>
 export const editAssembly = (text: string, ops: AssemblyOp[]): TextEdit =>
   edited(ask("assembly", { text, ops }));
 
-/** The items of a chain file's steps, or why it does not read. */
-export const readChain = (text: string): ChainRead =>
-  ask("chain_read", { text });
-
 /** Data read at `path` with its short forms expanded: a sequence's `notes("c4 d4")`, a graph's `runs`. */
 export const expandSugar = <T = unknown>(path: string, data: T): T =>
   ask("sugar_expand", { path, data });
-
-/** The text of `path` made to hold `after` (its expanded data), each short form kept while its expansion is unchanged. */
-export const applySugared = (
-  path: string,
-  text: string,
-  after: unknown,
-): TextEdit => edited(ask("sugar_apply", { path, text, after }));
 
 /** Sets a clip file's `from` and `to` in the buffer, each edge spelled as it was; `from` 0 and a `to` of null leave their key out. */
 export const editClipWindow = (
