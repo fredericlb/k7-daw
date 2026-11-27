@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "type": "module",
   "private": true,
-  "description": "The browser's WebSocket link to the C++ engine, and the React store over its ~20 Hz state push. The counterpart of @studio/engine-client (Node) \u2014 and the only browser implementation there is, deliberately.",
+  "description": "The browser's WebSocket link to the C++ engine, and the React store over its ~20 Hz state push. The counterpart of the bench scripts' Node client (k7-runtime/scripts/lib/engine-client) \u2014 and the only browser implementation there is, deliberately.",
   "types": "./src/engine.ts",
   "exports": {
     ".": "./src/engine.ts",

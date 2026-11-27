@@ -69,6 +69,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "00d174d5400e5e8fd687ad1049e2f578285fa914201b1af7e8b112a4546bd826"
 
 [[package]]
+name = "eyes"
+version = "0.1.0"
+dependencies = [
+ "indexmap",
+ "serde",
+ "serde_json",
+ "ts-rs",
+]
+
+[[package]]
 name = "foldhash"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -122,6 +132,7 @@ name = "k7-wasm"
 version = "0.1.0"
 dependencies = [
  "chains",
+ "eyes",
  "gesture",
  "indexmap",
  "k7x",
@@ -349,6 +360,7 @@ checksum = "a2c754d6c33795a1c324727428e5a7dedb5b06195f9890bdbcba760d3e246563"
 name = "verbs"
 version = "0.1.0"
 dependencies = [
+ "eyes",
  "indexmap",
  "k7x",
  "serde",

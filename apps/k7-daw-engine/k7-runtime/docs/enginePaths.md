@@ -2,7 +2,7 @@
 
 One directory holds everything k7 keeps on a musician's machine: the engine's identity, the
 supervisor's settings, the plugin scan cache, the SSH keys, the merged log
-and the **workspaces**. `apps/k7-daw-frontend/packages/engine-client/src/paths.ts` is the TypeScript definition of what
+and the **workspaces**. `apps/k7-daw-engine/k7-runtime/scripts/lib/engine-client/paths.ts` is the TypeScript definition of what
 is in it, for the entries a TypeScript process reads, and its `studioDir` is where it is.
 
 Throughout the docs it is written `<state>`.
@@ -15,7 +15,7 @@ gets a directory of its own.
 ## One path, because two languages compute it
 
 The per-platform location each OS prefers would be the tidier answer if one program owned this
-directory. Three do, in three languages: `apps/k7-daw-frontend/packages/engine-client/src/paths.ts`,
+directory. Three do, in three languages: `apps/k7-daw-engine/k7-runtime/scripts/lib/engine-client/paths.ts`,
 `apps/k7-daw-backend/packages/k7-supervisor/src/paths.rs`, and `apps/k7-daw-engine/k7-runtime/engine/PluginScan.cpp`.
 
 Each language's idea of "where application data goes" is subtly its own, and they do not line up:

@@ -5,7 +5,7 @@
 //   npx tsx apps/k7-daw-engine/k7-runtime/scripts/pad-effects.ts
 
 import { rmSync } from "node:fs";
-import { renderProject } from "../../../k7-daw-frontend/packages/take-render/src/renderProject.ts";
+import { renderProject } from "./lib/take-render/renderProject.ts";
 import { channelOf, readWav } from "./wav.ts";
 
 const RATE = 48000;

@@ -1,7 +1,6 @@
 // doc.rs — the picture document the page reads (web-protocol's `WebVideoProject`), every path absolute until a caller maps it.
 // A reader would get wrong which fields are absent and which are empty: the page tells "no fade" from a zero one by absence.
 
-use super::captions::Cue;
 use indexmap::IndexMap;
 use serde::Serialize;
 use serde_json::Value as Json;
@@ -10,48 +9,7 @@ fn no(b: &bool) -> bool {
     !*b
 }
 
-/// How a shot arrives or leaves: how long, which program draws it, and the stretch it runs through.
-#[derive(Clone, Debug, PartialEq, Serialize)]
-pub struct Fade {
-    pub over: f64,
-    #[serde(rename = "with")]
-    pub with_: String,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub chain: Option<String>,
-}
-
-/// One keyframe, `ease` shaping the segment leaving it.
-#[derive(Clone, Debug, PartialEq, Serialize)]
-pub struct Key {
-    pub t: f64,
-    pub v: f64,
-    pub ease: String,
-}
-
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct CaptionStyle {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub font: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub font_size: Option<f64>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub color: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub background: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub align: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub position: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub margin: Option<f64>,
-}
-
-#[derive(Clone, Debug, Default, PartialEq, Serialize)]
-pub struct Captions {
-    pub cues: Vec<Cue>,
-    pub style: CaptionStyle,
-}
+pub use eyes::{CaptionStyle, Captions, Fade, Key, Transition};
 
 /// One shot; `src` is empty on an activation and on a shot whose file is not there.
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -109,15 +67,6 @@ pub struct Plugin {
     pub audio_from: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lut: Option<String>,
-}
-
-/// A named transition's two stages and its four knobs.
-#[derive(Clone, Debug, PartialEq, Serialize)]
-pub struct Transition {
-    pub name: String,
-    pub vertex: String,
-    pub fragment: String,
-    pub params: IndexMap<String, f64>,
 }
 
 /// A picture lane in draw order: its rect, its shots, its shapes, its run and its lens.

@@ -246,9 +246,10 @@ rather than being silently ignored.
 
 ## The render, in one function
 
-Everything the compositor, the realtime driver and the export need fits in `layerFrameAt`
-(`apps/k7-daw-frontend/packages/ui-eyes/src/timeline.ts`): pure, no GL and no DOM, so it is **the only place the rule
-lives** and realtime and frame-by-frame rendering cannot read it two ways.
+Everything the compositor, the realtime driver and the export need is a lookup in a layer's schedule,
+which Rust works out once per scene (`apps/k7-daw-wasm/eyes/src/schedule.rs`) and `layerFrameAt`
+(`apps/k7-daw-frontend/packages/ui-eyes/src/timeline.ts`) reads: no GL, no DOM, so the rule has **one
+place** and realtime and frame-by-frame rendering cannot read it two ways.
 
 It returns at most two shots, and the **last in file order wins**. Without that a cross-dissolve
 would finish and then **snap back** to the outgoing shot for the rest of the overlap. So "a cut
@@ -291,9 +292,9 @@ to **the layer below**.
 | on the wire | `apps/k7-daw-frontend/packages/web-protocol/timelineTypes.ts` — `WebVideoFade`, `WebVideoTransition`, `WebVideoProject.stretches` |
 | served | `POST /picture` and `POST /picture/scene`, the scene built by `apps/k7-daw-wasm/verbs/src/picture/scene.rs` |
 | asked | `apps/k7-daw-frontend/packages/k7-plugins/src/video/scene.ts`, typed by `apps/k7-daw-frontend/packages/ui-eyes/src/scene.ts` |
-| decided | `apps/k7-daw-frontend/packages/ui-eyes/src/timeline.ts` — `layerFrameAt`, the only rule |
+| decided | `apps/k7-daw-wasm/eyes/src/schedule.rs` — the only rule; `apps/k7-daw-frontend/packages/ui-eyes/src/timeline.ts` — `layerFrameAt`, its lookup |
 | decoded | `apps/k7-daw-frontend/packages/ui-eyes/src/realtime.ts` and `apps/k7-daw-frontend/packages/ui-eyes/src/export.ts` |
-| drawn | `apps/k7-daw-frontend/packages/ui-eyes/src/compositor.ts` + `apps/k7-daw-frontend/packages/ui-eyes/src/passes.ts` + `apps/k7-daw-frontend/packages/ui-eyes/src/stretches.ts`, the built-in `dissolve` and `over` in `apps/k7-daw-frontend/packages/ui-eyes/src/transitions.ts` |
+| drawn | `apps/k7-daw-frontend/packages/ui-eyes/src/compositor.ts` + `apps/k7-daw-frontend/packages/ui-eyes/src/passes.ts` + `apps/k7-daw-frontend/packages/ui-eyes/src/stretches.ts`, the built-in `dissolve` and `over` in `apps/k7-daw-wasm/eyes/src/transitions.rs`, which every scene carries |
 | completed | `apps/k7-daw-wasm/song/src/views/fields.rs` — the two words of a fade's map |
 
 ## Checking it
@@ -301,7 +302,7 @@ to **the layer below**.
 ```bash
 cargo test --manifest-path apps/k7-daw-wasm/verbs/Cargo.toml --test picture
 npx vitest run apps/k7-daw-frontend/packages/song-schema/src/yaml/videoTrackYaml.test.ts
-npx vitest run apps/k7-daw-frontend/packages/ui-eyes/src/timeline.test.ts apps/k7-daw-frontend/packages/ui-eyes/src/compositor.test.ts
+cargo test --manifest-path apps/k7-daw-wasm/eyes/Cargo.toml schedule && npx vitest run apps/k7-daw-frontend/packages/ui-eyes/src/timeline.test.ts apps/k7-daw-frontend/packages/ui-eyes/src/compositor.test.ts
 ```
 
 The first proves the folder read, the ancestry, the two refusals and the knob clamping, then that the

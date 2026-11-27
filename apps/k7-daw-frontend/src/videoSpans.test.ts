@@ -3,6 +3,8 @@
 // than restated here. A shape lane is the one case activeAt cannot answer (it has no clips) and
 // is checked against the driver's own rule: it draws while unhidden.
 
+import { layerSchedule } from "@studio/k7-wasm/eyes";
+import type { SceneClip } from "@studio/ui-eyes/scene";
 import { activeAt, shapesVisibleAt } from "@studio/ui-eyes/timeline";
 import type { WebVideoProject, WebVideoTrack } from "@studio/web-protocol";
 import { describe, expect, it } from "vitest";
@@ -44,6 +46,7 @@ const layer = (t: WebVideoTrack) => ({
   w: t.w,
   h: t.h,
   clips: t.clips,
+  schedule: layerSchedule(t.clips as unknown as SceneClip[]),
 });
 
 const live = (

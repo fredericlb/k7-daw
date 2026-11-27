@@ -450,7 +450,7 @@ computes the count-in duration from the punch-in `SyncPoint` and mutes at the en
 the mute is session state applied at capture — `Session::punchMuted`, the clips it muted and only
 those — and undone by `restorePunchMute` at every end of the roll: stop, record off, panic;
 it never reaches a file — the brain's writer places only the new clip and does no overlap
-arithmetic (`apps/k7-daw-frontend/packages/take-render/docs/rendering.md`).
+arithmetic (`apps/k7-daw-engine/k7-runtime/docs/rendering.md`).
 
 That mute is a TIMER, and a timer outlives the roll it was set for: stopped during the count-in, the
 roll is over before the mute fires, and an unguarded one silences the armed track through the next

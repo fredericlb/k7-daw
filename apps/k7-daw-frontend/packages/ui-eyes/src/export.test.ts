@@ -4,6 +4,7 @@
 import { describe, expect, it } from "vitest";
 import { decodedSources } from "./export";
 import type { SceneClip, VideoLayer, VideoScene } from "./scene";
+import { layerOf, sceneOf } from "./sceneFixture";
 
 const clip = (src: string, extra: Partial<SceneClip> = {}): SceneClip => ({
   id: src,
@@ -14,22 +15,11 @@ const clip = (src: string, extra: Partial<SceneClip> = {}): SceneClip => ({
   ...extra,
 });
 
-const layer = (id: string, clips: SceneClip[]): VideoLayer => ({
-  id,
-  hidden: false,
-  x: 0,
-  y: 0,
-  w: 720,
-  h: 1280,
-  clips,
-});
+const layer = (id: string, clips: SceneClip[]): VideoLayer =>
+  layerOf({ id, x: 0, y: 0, w: 720, h: 1280, clips });
 
-const scene = (layers: VideoLayer[]): VideoScene => ({
-  viewport: [720, 1280],
-  fps: 30,
-  layers,
-  durationSec: 10,
-});
+const scene = (layers: VideoLayer[]): VideoScene =>
+  sceneOf({ viewport: [720, 1280], fps: 30, layers, durationSec: 10 });
 
 describe("decodedSources", () => {
   it("probes each video once, under the first lane placing it", () => {

@@ -54,7 +54,6 @@ apps/k7-daw-wasm/                      the Rust crates built for the browser as 
 apps/k7-daw-frontend/                  the web editor (this folder)
   packages/                k7-daw's shared tier (consumed as raw TS source):
     song/                    @studio/song            — song model + compiler + Strudel patterns
-    engine-client/           @studio/engine-client   — drives the engine over the WebSocket protocol
     engine-protocol/         @studio/engine-protocol — the JSON wire shapes shared with the C++ engine
     ui-chains/               @studio/ui-chains       — routing-graph engine: dagre layout (drawn by the web app as DOM nodes + SVG cables)
     ui-editor/               @studio/ui-editor       — CodeMirror k7x language + note-grid roll (web UI)

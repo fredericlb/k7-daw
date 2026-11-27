@@ -26,7 +26,8 @@
     "./engine": "./src/engine.ts",
     "./gesture": "./src/gesture.ts",
     "./gestureTicks": "./src/gestureTicks.ts",
-    "./gestureTimeline": "./src/gestureTimeline.ts"
+    "./gestureTimeline": "./src/gestureTimeline.ts",
+    "./eyes": "./src/eyes.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",

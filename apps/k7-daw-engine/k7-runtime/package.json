@@ -12,14 +12,22 @@
     "gen:builtin-params": "node scripts/gen-builtin-params.mjs",
     "gen:strudel-bundle": "node scripts/gen-strudel-bundle.mjs",
     "gen:surge-panel": "node scripts/gen-surge-panel.mjs",
-    "test": "node scripts/run-tests.mjs",
+    "test": "npm run test:scripts && node scripts/run-tests.mjs",
     "test:settings-dir": "node scripts/settings-dir-proof.mjs",
-    "test:all": "node scripts/run-tests.mjs --all"
+    "test:all": "node scripts/run-tests.mjs --all",
+    "typecheck": "tsc --noEmit -p scripts",
+    "test:scripts": "vitest run --root scripts"
   },
   "devDependencies": {
-    "@studio/engine-client": "*",
     "@studio/engine-protocol": "*",
     "@studio/k7-wasm": "*",
-    "@studio/song-schema": "*"
+    "@studio/song-schema": "*",
+    "@studio/web-protocol": "*",
+    "@types/node": "^22.10.0",
+    "@types/ws": "^8.5.10",
+    "tsx": "^4.16.0",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10",
+    "ws": "^8.18.0"
   }
 }

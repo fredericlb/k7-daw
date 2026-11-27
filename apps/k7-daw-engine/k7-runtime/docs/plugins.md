@@ -211,7 +211,7 @@ path reaches the child's argv intact.
 `~/Library/Application Support` on macOS), so a per-platform rule would have these two halves
 computing different directories on two of the three. A wrong path here does not throw — the engine
 reads its own cache and logs "N from cache" while the TypeScript finds nothing and draws every
-`@engine/…` module unresolved. See apps/k7-daw-frontend/packages/engine-client/docs/paths.md.
+`@engine/…` module unresolved. See apps/k7-daw-engine/k7-runtime/docs/enginePaths.md.
 
 The cache is `<state>/exts.json` (in `$K7_SETTINGS_DIR` instead when one is set, `docs/settingsDir.md`), keyed by identifier and carrying the file's mtime. An entry is
 reused only when the file is unchanged **and** it already holds a full `PluginDescription` as XML

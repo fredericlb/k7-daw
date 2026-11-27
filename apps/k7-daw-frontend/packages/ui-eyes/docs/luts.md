@@ -1,7 +1,7 @@
 # LUTs — a `.cube` file as a 3D texture
 
 What a look is for is [../../song-video/docs/effects.md](../../song-video/docs/effects.md). This
-page covers how the renderer gets one onto the GPU: `cube.ts` parses, `luts.ts` uploads, and a
+page covers how the renderer gets one onto the GPU: Rust parses (`apps/k7-daw-wasm/eyes/src/cube.rs`, asked through `@studio/k7-wasm/eyes`), `luts.ts` uploads, and a
 pass reads it as `uLut` beside `uLutSize`.
 
 ## Once per file, however many passes read it
