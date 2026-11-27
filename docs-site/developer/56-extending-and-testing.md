@@ -64,7 +64,7 @@ are split out precisely so they can be tested.
 
 | area | tests |
 |---|---|
-| schemas and writers | `apps/k7-daw-frontend/packages/k7-wasm/src/textVideo.test.ts`, `apps/k7-daw-frontend/packages/k7-wasm/src/validateModule.test.ts`, the tests in `apps/k7-daw-wasm/song-schema/src/aspect.rs` |
+| schemas and writers | `apps/k7-daw-wasm/k7-wasm/src/tests_text_video.rs`, `apps/k7-daw-wasm/song/tests/all/files_validate_cases.rs`, the tests in `apps/k7-daw-wasm/song-schema/src/aspect.rs` |
 | the compile and the scene | `apps/k7-daw-wasm/verbs/tests/picture.rs`, over `e2e/fixtures/video-lane.k7` and the crate's `tests/fixtures/picture-rig.k7` |
 | interchange | `apps/k7-daw-wasm/verbs/tests/pictures_media.rs` (writers, readers, round trips) |
 | song side | `apps/k7-daw-wasm/song/tests/all/pictures_sound.rs`, `pictures_doc.rs` |
