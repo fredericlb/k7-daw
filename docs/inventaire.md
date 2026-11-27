@@ -91,13 +91,12 @@ unreachable if you look only at `exports`.
 
 ## 1. Published surface with no external consumer
 
-**3 subpaths** have no importer outside their own package. That is a finding about the
-`exports` map, not about the code: all 3 are **alive inside** their package, reached by relative
+**1 subpath** has no importer outside its own package. That is a finding about the
+`exports` map, not about the code: it is **alive inside** its package, reached by relative
 import.
 
 | package | subpath |
 |---|---|
-| `engine-tunnel` | `/rtc` |
 | `project-shell` | `/files` |
 
 Shrinking the map deletes nothing: it documents the real surface.

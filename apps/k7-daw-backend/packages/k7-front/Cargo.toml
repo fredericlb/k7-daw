@@ -68,6 +68,10 @@ zip.workspace = true
 ts-rs = { workspace = true, optional = true }
 
 [dev-dependencies]
+# The machine's tunnel agent, which the hub's suite (`tests/tunnel`) dials the real hub with (`docs/engine.md`, "The testbed").
+k7-supervisor.workspace = true
+# The testbed's hooks on in every test build, so `cargo test` builds the testbed binary the hub's suite spawns.
+k7-front = { path = ".", features = ["test-hooks"] }
 git2.workspace = true
 sha2.workspace = true
 # `tokio::time::pause` and `advance`, for the freezer's 3 s timer test.

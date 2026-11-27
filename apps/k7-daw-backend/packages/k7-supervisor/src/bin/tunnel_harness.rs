@@ -1,17 +1,13 @@
-//! tunnel_harness.rs — the tunnel agent alone, for `engine-tunnel`'s suites to drive against the real hub:
-//! `tunnel_harness <registryUrl> <id> <token> <enginePort> <cacheDir>`. It answers the two test jobs the
-//! TypeScript suite gives its own agent (`where`, `upper`) and exits when stdin closes, the test's way of stopping it.
+//! tunnel_harness.rs — the tunnel agent alone, for the conformance suite's stand-in engine (`e2e/src/standInEngine.ts`):
+//! `tunnel_harness <registryUrl> <id> <token> <enginePort> <cacheDir>`. The agent's log goes to stderr as `tunnel | …`,
+//! each `prefetch` job as one `prefetch [files]` line, and the process exits when stdin closes, the suite's way of stopping it.
 
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 use std::sync::Arc;
 
 use k7_supervisor::tunnel::{Options, TunnelAgent};
 use serde_json::{Value, json};
 use tokio::io::{AsyncBufReadExt, BufReader};
-
-fn text(req: &Value, key: &str) -> String {
-    req[key].as_str().unwrap_or("").to_string()
-}
 
 #[tokio::main]
 async fn main() {
@@ -24,28 +20,11 @@ async fn main() {
     let mut o = Options::new(&args[1], &args[2], &args[3], PathBuf::from(&args[5]));
     o.engine_port = Arc::new(move || port);
     o.log = Arc::new(|m| eprintln!("tunnel | {m}"));
-    // Answers the same path twice: once mapped back to the server's, once under `raw` as the machine's.
-    o.jobs.add("where", |req, emit, _| async move {
-        let source = text(&req, "source");
-        emit.send(json!({"type": "where", "path": source, "raw": {"path": source}}));
-        Ok(())
-    });
-    // Reads the source it was handed, writes one "stem" beside it, reporting progress first.
-    o.jobs.add("upper", |req, emit, _| async move {
-        let (source, out_dir) = (text(&req, "source"), text(&req, "outDir"));
-        let upper = std::fs::read_to_string(&source)
-            .map_err(|e| e.to_string())?
-            .to_uppercase();
-        emit.send(json!({"type": "progress", "percent": 50}));
-        std::fs::create_dir_all(&out_dir).map_err(|e| e.to_string())?;
-        let name = Path::new(&source)
-            .file_name()
-            .unwrap_or_default()
-            .to_string_lossy()
-            .into_owned();
-        let out = Path::new(&out_dir).join(format!("{name}.up"));
-        std::fs::write(&out, upper).map_err(|e| e.to_string())?;
-        emit.send(json!({"type": "done", "files": [out.to_string_lossy()]}));
+    // Says the file list it was asked for on stderr and answers `prefetched`, as a machine that has them all does.
+    o.jobs.add("prefetch", |req, emit, _| async move {
+        let files = req["files"].as_array().cloned().unwrap_or_default();
+        eprintln!("prefetch {}", Value::Array(files.clone()));
+        emit.send(json!({"type": "prefetched", "count": files.len()}));
         Ok(())
     });
     let agent = TunnelAgent::start(o);

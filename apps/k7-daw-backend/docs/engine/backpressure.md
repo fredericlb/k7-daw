@@ -6,8 +6,8 @@ tunnel channel, in the front's hub (`apps/k7-daw-backend/packages/k7-engine/src/
 queue in the server's memory, without bound. A tab left in the background, a phone on a dying
 network, a stuck supervisor would each grow the server until it fell over.
 
-So every forwarded frame goes through one rule — `sendBounded` (`../backpressure.ts`) in the agent,
-`admit` (`apps/k7-daw-backend/packages/k7-engine/src/tunnel/backpressure.rs`) in the hub — which reads the
+So every forwarded frame goes through one rule — `admit`
+(`apps/k7-daw-backend/packages/k7-engine/src/tunnel/backpressure.rs`) in the hub — which reads the
 peer's unsent bytes (`bufferedAmount`) and decides:
 
 - below **8 MiB**, it is sent;
@@ -30,7 +30,7 @@ One tunnel carries every channel of its engine over one socket, so the socket's 
 from the moment it hands them to the socket until the socket's write callback says they left, and
 that count is the channel's `bufferedAmount`. A channel past the hard limit is closed **alone**;
 the tunnel and its other channels stay up. File chunks (a `get`) keep their own rule, the 1 MB
-`drained` wait of `../drain.ts`, since they are no channel's.
+`wait_below` of the agent's link (`apps/k7-daw-backend/packages/k7-supervisor/src/tunnel/link.rs`), since they are no channel's.
 
 ## What waits for a connection is bounded too
 

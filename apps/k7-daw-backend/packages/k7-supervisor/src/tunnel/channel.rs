@@ -1,6 +1,6 @@
 //! channel.rs — one virtual channel the hub opened: its two queues (a frame waiting on a download is never
 //! overtaken by the next), its path map, and, on an engine channel, the real socket to the local engine. A
-//! close is delivered AFTER the frames queued before it, within a bound (`docs/tunnel.md` of engine-tunnel).
+//! close is delivered AFTER the frames queued before it, within a bound (`apps/k7-daw-backend/docs/engine/tunnel.md`).
 //! What a reader gets wrong: `shut` is the only way a channel ends, and it never waits for anything.
 
 use std::sync::atomic::{AtomicUsize, Ordering};

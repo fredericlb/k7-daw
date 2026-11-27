@@ -1,7 +1,7 @@
 //! tunnel_agent.rs — the agent against a hub and an engine on 127.0.0.1: what its handshake says, how an engine
 //! channel pipes frames, how a close follows the frames before it, how it redials, what it refuses, and the
-//! frames' files moved before the frame naming them. `engine-tunnel`'s suites judge the same wire against the
-//! real hub (`tunnel_harness`); these hold the agent's own behaviours where a failure names the line.
+//! frames' files moved before the frame naming them. `k7-front`'s `tests/tunnel` judge the same wire against
+//! the real hub; these hold the agent's own behaviours where a failure names the line.
 
 use std::sync::{Arc, Mutex};
 use std::time::Duration;

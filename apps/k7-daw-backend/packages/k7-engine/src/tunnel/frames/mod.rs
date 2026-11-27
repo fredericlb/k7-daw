@@ -1,6 +1,6 @@
 //! frames.rs — the tunnel's wire, `frames.ts` to the byte: JSON control messages as TEXT frames, and bytes
 //! (a file chunk, a binary engine frame) as BINARY frames led by a 4-byte big-endian header length and a
-//! JSON header. Nothing off the network is trusted for shape (`apps/k7-daw-frontend/packages/engine-tunnel/docs/tunnel.md`).
+//! JSON header. Nothing off the network is trusted for shape (`apps/k7-daw-backend/docs/engine/tunnel.md`).
 
 use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value, json};

@@ -1,7 +1,7 @@
 // serviceEngine.spec.ts — the file service's engine link as an engine hears it: an open held until the engine holds
 // the project after a silent dry run, a write and a verb sent again with no dry run, a verb's transport, a take turned
 // into a clip, a node frozen through the engine binary, and the project let go on delete. The engine is the suite's
-// own stand-in behind the reference tunnel agent (`src/standInEngine.ts`), claimed by an account of its own.
+// own stand-in behind the supervisor's tunnel agent (`src/standInEngine.ts`), claimed by an account of its own.
 import { existsSync, rmSync } from "node:fs";
 import { join } from "node:path";
 import { expect, test } from "@playwright/test";

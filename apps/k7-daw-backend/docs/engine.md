@@ -5,7 +5,7 @@ front (`apps/k7-daw-backend/packages/k7-engine`, routed by `apps/k7-daw-backend/
 `engine/`: who has which project (`engine/claim.md`), a heartbeat read (`engine/heartbeat.md`), which
 engines the device's account may use (`engine/ownership.md`), the relay (`engine/proxy.md`), one registry per origin
 (`engine/shared.md`) and an engine's credentials (`engine/token.md`); the tunnel's pages are
-`apps/k7-daw-frontend/packages/engine-tunnel/docs/`. This page is how the front holds it.
+`engine/tunnel.md`, `engine/tunnelJobs.md`, `engine/backpressure.md` and `engine/sockets.md`. This page is how the front holds it.
 
 ## The switch
 
@@ -31,16 +31,15 @@ needs the auth folder, as every session route does (`front.md`), and stays off w
 |---|---|
 | a crate of its own, `k7-engine`, with no HTTP framework in it | the trust decisions are tested alone, by their own unit tests and vectors; the front only reads requests and writes answers |
 | `tokio-tungstenite` over upgrades the front accepts itself, not axum's `ws` | one message type for the sockets the hub and the relay accept and the one the relay dials to an engine; the frame cap is `MAX_FRAME_BYTES` (16 MiB) on all of them |
-| every socket has a reader task and a writer task, the writer's queue counted in bytes | backpressure reads a peer's unsent bytes (`bufferedAmount`); a tunnel counts each channel's apart, so a stalled reader's channel closes alone (`apps/k7-daw-frontend/packages/engine-tunnel/docs/backpressure.md`) |
+| every socket has a reader task and a writer task, the writer's queue counted in bytes | backpressure reads a peer's unsent bytes (`bufferedAmount`); a tunnel counts each channel's apart, so a stalled reader's channel closes alone (`apps/k7-daw-backend/docs/engine/backpressure.md`) |
 | the registry's state behind one lock, never held across an await | the claims and the bindings change together; nothing in them waits on a socket |
 | `indexmap` for every map whose order shows (a crate serde_json already brought) | the listing's order and the bytes of `engine-bindings.json` are insertion order, as the previous release reads and writes them |
 
 ## The testbed
 
-The suites of `apps/k7-daw-frontend/packages/engine-tunnel` — the relay's, the hub's, the two-agent suite — run against the core
-when `ENGINE_CORE_BIN` names `k7-engine-testbed` (`apps/k7-daw-frontend/packages/engine-tunnel/testCore.ts`): one process per test, its
-routes and sockets the front's own. Without it they skip; `ENGINE_CORE_REQUIRED=1`, as CI sets it, makes
-them fail instead.
+The hub's suite, `packages/k7-front/tests/tunnel`, runs against the core as `k7-engine-testbed` runs it: one process per
+test, its routes and sockets the front's own, the machine's real agent (`k7-supervisor`) dialling it as a library. The
+testbed is built by `cargo test -p k7-front`, whose dev-dependencies turn the `test-hooks` feature on.
 
 | choice | why |
 |---|---|
@@ -69,15 +68,15 @@ against the testbed (above).
 |---|---|---|
 | the heartbeat is open, so what it may grow is bounded: an id is 1–128 of `[A-Za-z0-9._-]`, a token at most 256, 1000 engines, 30 new ids per address and minute | `read_heartbeat`, `State::admit` | `heartbeat.test.ts`, `trust.test.ts` (caps); `tests/vectors.rs` |
 | an id is bound to its first tunnel secret, kept as sha256 in a 0600 file in a 0700 folder and set aside when unreadable; another secret, or none, never lists, tunnels or deregisters it | `registry/bindings.rs`, `state_file.rs` | `trust.test.ts`; a real supervisor run (below) |
-| a tunnel opens only for a listed id, its token and its bound secret, checked before the incumbent is touched; below the protocol minimum a 426 | `Hub::check_tunnel` | `trust.test.ts`, `hubLifecycle.test.ts`, `protocol.test.ts`, with both agents |
+| a tunnel opens only for a listed id, its token and its bound secret, checked before the incumbent is touched; below the protocol minimum a 426 | `Hub::check_tunnel` | `trust.test.ts`, `tests/tunnel/hub_lifecycle.rs`, `hub_protocol.rs` |
 | the relay dials only where the heartbeat came FROM, through the engine's tunnel first | `hosts_for`, `relay::dial` | `registry/tests.rs`, `relaySocket.test.ts` |
 | a ticket is HMAC-SHA256 under a per-process secret, names one engine and one account, lives a minute; the account it names is the one that drives | `registry/ticket.rs` | `ticket.test.ts`; `ticket.rs` unit tests |
 | before a claim only the probe crosses the relay; the rest waits 10 s, 256 frames or 8 MiB, then 4403; the claim is asked on every browser frame and reused 250 ms for the engine's; the token leaves a `whoami` for an engine the account may not use | `relay/gate` | `relayGate.test.ts`; `gate/tests.rs` |
 | which engine may be claimed is ownership's (it runs on this machine); the claim rules arbitrate the rest | `registry/claims.rs`, `Registry::may_use` | `registry.test.ts`, `registry/tests.rs` |
-| a bound loopback path's key is 24 random bytes, refused off loopback (the socket's peer at the front) and once unbound; a key named by its caller comes through the gated seam alone, 32 characters at least | `Hub::check_local`, `routes/engine/internal.rs` | `hubLifecycle.test.ts`, `seamCore.test.ts`; `tests/all/engine.rs` |
+| a bound loopback path's key is 24 random bytes, refused off loopback (the socket's peer at the front) and once unbound; a key named by its caller comes through the gated seam alone, 32 characters at least | `Hub::check_local`, `routes/engine/internal.rs` | `tests/tunnel/hub_lifecycle.rs`, `seamCore.test.ts`; `tests/all/engine.rs` |
 | the seam answers loopback peers holding `K7_FRONT_SECRET`, compared in constant time | `routes/engine/internal.rs` | `seamCore.test.ts`; `tests/all/engine.rs` |
-| a file crosses only when its path is plain, under a root, every segment below it a safe name (no device name, no `:`, no trailing dot on Windows), and its REAL path inside the root or its library clone | `tunnel/files` | `hubConfinement.test.ts`, the cases of `PathMap_test.cpp` and `segments.test.ts`; `files/tests.rs` |
-| an upload lands only in a writable root, through an exclusive random `.part` renamed when complete, bounded per tunnel (16 open, 2 GiB, 20 GiB an hour, 60 s idle) | `tunnel/put.rs`, `uploads.rs` | `hubConfinement.test.ts` |
+| a file crosses only when its path is plain, under a root, every segment below it a safe name (no device name, no `:`, no trailing dot on Windows), and its REAL path inside the root or its library clone | `tunnel/files` | `tests/tunnel/hub_confinement.rs`, the cases of `PathMap_test.cpp` and the supervisor's `tests/all/tunnel_paths.rs`; `files/tests.rs` |
+| an upload lands only in a writable root, through an exclusive random `.part` renamed when complete, bounded per tunnel (16 open, 2 GiB, 20 GiB an hour, 60 s idle) | `tunnel/put.rs`, `uploads.rs` | `tests/tunnel/hub_uploads.rs`, `hub_confinement.rs` |
 | a slow peer loses only what a newer frame replaces, and is closed past 64 MiB | `tunnel/backpressure.rs` | `registry/tests.rs`, vectors |
 | nothing off a socket is trusted for shape, and nothing read can stop the process | `parse_agent_message`, `decode_binary`; no input reaches a panic | `frames/tests.rs` |
 

@@ -21,7 +21,7 @@ path = "src/bin/ws_engine.rs"
 test = false
 doc = false
 
-# The tunnel agent alone, which `engine-tunnel`'s suites drive against the real hub (`testAgents.ts`).
+# The tunnel agent alone, which the conformance suite's stand-in engine runs beside its fake engine (`e2e/src/standInEngine.ts`).
 [[bin]]
 name = "tunnel_harness"
 path = "src/bin/tunnel_harness.rs"
