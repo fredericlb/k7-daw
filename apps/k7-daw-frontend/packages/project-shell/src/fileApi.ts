@@ -248,28 +248,6 @@ async function getOnce(
   return text;
 }
 
-/** Thrown instead of writing when the host's gate refuses; its own type, docs/fileApi.md. */
-export class ReadOnlyDocument extends Error {}
-
-/** What a host is asked before a write leaves: a file route, or a verb line. */
-export type WriteAsk =
-  | { kind: "file"; method: string; path: string }
-  | { kind: "command"; line: string };
-
-let writeGate: ((ask: WriteAsk) => string | null) | null = null;
-
-/** A host's own refusal of writes for now (a lock): the sentence to say, or null to let it through. Off until set. */
-export function setWriteGate(
-  gate: ((ask: WriteAsk) => string | null) | null,
-): void {
-  writeGate = gate;
-}
-
-/** The sentence a write is refused with by the host's gate, or null; the same check every write path makes. */
-export function refusedWrite(ask: WriteAsk): string | null {
-  return writeGate?.(ask) ?? null;
-}
-
 export async function fsend<T>(
   method: string,
   path: string,
@@ -279,9 +257,6 @@ export async function fsend<T>(
 ): Promise<T> {
   const fence = options.fence !== false;
   const { timeoutMs } = options;
-  // THE choke point: every write in every app that mounts this shell — see docs/fileApi.md.
-  const locked = refusedWrite({ kind: "file", method, path });
-  if (locked) throw new ReadOnlyDocument(locked);
   // Both edges, and both matter — see docs/fileApi.md.
   if (fence) epoch++;
   const post = () =>

@@ -5,7 +5,7 @@
 // stay the default), the empty list (a caller saying no), and a folder other than the song.
 
 import { beforeEach, describe, expect, it } from "vitest";
-import { configureFileApi, setWriteGate } from "./fileApi.ts";
+import { configureFileApi } from "./fileApi.ts";
 import { projectApi } from "./project.ts";
 import { setVerbsHost, type VerbRunOptions } from "./verbsHost.ts";
 
@@ -106,19 +106,5 @@ describe("projectApi.videoDoc", () => {
       message: "project.viewport is required",
       status: 400,
     });
-  });
-});
-
-describe("projectApi.command under a host's write gate", () => {
-  it("refuses a line the gate refuses, and never reaches the host", async () => {
-    setWriteGate((ask) => (ask.kind === "command" ? "held by ana" : null));
-    try {
-      await expect(projectApi.command("track add gtr")).rejects.toThrow(
-        "held by ana",
-      );
-      expect(runs).toEqual([]);
-    } finally {
-      setWriteGate(null);
-    }
   });
 });

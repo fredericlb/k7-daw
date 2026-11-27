@@ -2,27 +2,15 @@
 // this device offers to clone. What a reader gets wrong: only an entry with a remote can come here, since git is the only
 // way a workspace's files travel; the rest of the list is kept for the day it is connected.
 
-/** One workspace of the list, as `GET /git/roam` answers it. */
-export interface RoamEntry {
-  id: string;
-  name: string;
-  /** The git ssh address, or null for a workspace that is not connected. */
-  remote: string | null;
-  addedAt: number;
-}
+import {
+  cloneName,
+  type RoamAnswer,
+  type RoamEntry,
+  type RoamState,
+  roamOffered,
+} from "@studio/k7-wasm/git";
 
-/** `available` is false on a host with no list store (anything but iOS); `here` holds this device's ids. */
-export interface RoamAnswer {
-  available: boolean;
-  entries: RoamEntry[];
-  here: string[];
-}
-
-export interface RoamState {
-  answer: RoamAnswer | null;
-  /** Entries cloned from this section, hidden until a read says they are here. */
-  cloned: readonly string[];
-}
+export type { RoamAnswer, RoamEntry, RoamState };
 
 export type RoamEvent =
   | { type: "loaded"; answer: RoamAnswer }
@@ -49,22 +37,10 @@ export function roamAfter(s: RoamState, e: RoamEvent): RoamState {
   }
 }
 
-/** The entries to offer: connected, not on this device, not just cloned, by name. */
-export function offered(s: RoamState): RoamEntry[] {
-  const a = s.answer;
-  if (!a?.available) return [];
-  return a.entries
-    .filter(
-      (e) =>
-        e.remote !== null && !a.here.includes(e.id) && !s.cloned.includes(e.id),
-    )
-    .sort((x, y) => x.name.localeCompare(y.name) || x.id.localeCompare(y.id));
-}
+/** The entries to offer: connected, not on this device, not just cloned, by name (the browser's collation). */
+export const offered = (s: RoamState): RoamEntry[] =>
+  roamOffered(s).sort(
+    (x, y) => x.name.localeCompare(y.name) || x.id.localeCompare(y.id),
+  );
 
-/** The name a clone starts with: the workspace's own, and the next free `name 2` when this device has one of that name. */
-export function cloneName(name: string, taken: readonly string[]): string {
-  const has = (n: string) =>
-    taken.some((t) => t.toLowerCase() === n.toLowerCase());
-  if (!has(name)) return name;
-  for (let i = 2; ; i += 1) if (!has(`${name} ${i}`)) return `${name} ${i}`;
-}
+export { cloneName };

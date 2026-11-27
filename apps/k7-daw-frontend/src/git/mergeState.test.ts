@@ -6,7 +6,6 @@ import {
   choicesAfter,
   emptyChoices,
   nextOpen,
-  offered,
   remaining,
   resolveChoices,
 } from "./mergeState";
@@ -25,26 +24,6 @@ const c = (id: string, over: Partial<Conflict> = {}): Conflict => ({
 
 const loaded = (cs: Conflict[]) =>
   choicesAfter(emptyChoices, { type: "load", conflicts: cs });
-
-describe("what a conflict offers", () => {
-  it("offers both only where the route says so", () => {
-    expect(offered(c("a"))).toEqual(["mine", "theirs"]);
-    expect(offered(c("a", { both: true }))).toEqual(["mine", "theirs", "both"]);
-  });
-
-  it("offers keep or remove for a removed file, never a side", () => {
-    expect(offered(c("a", { kind: "presence" }))).toEqual(["keep", "remove"]);
-  });
-
-  it("refuses a choice the conflict does not offer", () => {
-    const s = loaded([c("a"), c("p", { kind: "presence" })]);
-    expect(choicesAfter(s, { type: "pick", id: "a", choice: "both" })).toBe(s);
-    expect(choicesAfter(s, { type: "pick", id: "p", choice: "mine" })).toBe(s);
-    expect(
-      choicesAfter(s, { type: "pick", id: "p", choice: "keep" }).chosen.p,
-    ).toBe("keep");
-  });
-});
 
 describe("finishing the merge", () => {
   it("waits for every conflict", () => {
@@ -102,5 +81,16 @@ describe("finishing the merge", () => {
     expect(nextOpen(s, "d")).toBe("a");
     s = choicesAfter(s, { type: "pickAll", choice: "theirs" });
     expect(nextOpen(s, "a")).toBeNull();
+  });
+});
+
+describe("what a conflict offers, through the reducer", () => {
+  it("refuses a choice the conflict does not offer", () => {
+    const s = loaded([c("a"), c("p", { kind: "presence" })]);
+    expect(choicesAfter(s, { type: "pick", id: "a", choice: "both" })).toBe(s);
+    expect(choicesAfter(s, { type: "pick", id: "p", choice: "mine" })).toBe(s);
+    expect(
+      choicesAfter(s, { type: "pick", id: "p", choice: "keep" }).chosen.p,
+    ).toBe("keep");
   });
 });

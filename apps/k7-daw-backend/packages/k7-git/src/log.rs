@@ -3,21 +3,10 @@
 //! are read against its first parent.
 
 use git2::Sort;
-use serde::Serialize;
 
 use crate::{Error, Repo, Result};
 
-#[derive(Clone, Debug, PartialEq, Eq, Serialize)]
-pub struct LogEntry {
-    pub id: String,
-    pub subject: String,
-    pub author: String,
-    /// Seconds since the epoch.
-    pub time: i64,
-    /// The `K7-Device:` trailer, when the commit has one.
-    pub device: Option<String>,
-    pub files_changed: usize,
-}
+pub use git_rules::LogEntry;
 
 fn device_of(message: &str) -> Option<String> {
     let last = message.trim_end().rsplit("\n\n").next()?;
