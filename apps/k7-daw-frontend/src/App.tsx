@@ -3376,6 +3376,12 @@ export default function App({
   const shellVars: Record<string, string> | null = !isMobile
     ? {
         "--k7-float-bottom": floatBottom,
+        // The lanes' room under the last one: the floating row, lifted above an open dock (TimelineTab.tsx).
+        ...(dockUp && !dock.expanded
+          ? {
+              "--k7-lanes-bottom": `calc(${floatBottom} + var(--k7-float-h) + 8px)`,
+            }
+          : {}),
         "--k7-dock-top": "calc(16px + var(--k7-float-h))",
         // The unfolded rail: the right panel, the dock and the toasts keep clear of it (shell/PanelRail.tsx).
         ...(railShown
