@@ -23,4 +23,4 @@ params({
 // En un paragraphe : tient l'accord qu'on joue et le fait sonner note par note, sur la grille du
 // morceau. La cadence, le nombre d'octaves, le sens — ou un motif dessiné sur la grille (Custom) :
 // ce qui sort suit le tempo du projet, et la première note part au moment où le doigt tombe.
-// (La description d'un module est son en-tête, ici — voir apps/k7-daw-frontend/packages/song/docs/docModules.md.)
+// (La description d'un module est son en-tête, ici — voir apps/k7-daw-wasm/song/docs/docModules.md.)

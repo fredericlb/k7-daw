@@ -19,6 +19,9 @@ pub mod rules;
 pub mod schema;
 pub mod song;
 pub mod stems;
+pub mod text;
+pub mod text_desk;
+pub mod text_lane;
 pub mod timecode;
 pub mod track;
 #[cfg(feature = "verbs")]
@@ -91,7 +94,9 @@ impl Session {
         match family {
             "address" => address::dispatch(decode(input)?, out),
             "curve" => curve::dispatch(&mut self.curves, decode(input)?, out),
-            "engine" | "text" => engine::dispatch(decode(input)?, out),
+            "engine" => engine::dispatch(decode(input)?, out),
+            "text" if op == "text.hash" => engine::dispatch(decode(input)?, out),
+            "text" => text::dispatch(decode(input)?, out),
             "widget" | "flow" | "lane" | "bindings" | "place" | "graph" => chains::dispatch(decode(input)?, out),
             "schema" => schema::dispatch(decode(input)?, out),
             "timecode" => timecode::dispatch(decode(input)?, out),

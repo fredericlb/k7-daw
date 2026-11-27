@@ -8,7 +8,7 @@ import type { PluginParamsStore } from "@studio/engine-browser/params";
 import type { EngineStore } from "@studio/engine-browser/store";
 import type { Deck } from "@studio/k7-plugins/turntables/engine";
 import { SURFACE_TYPES } from "@studio/k7-wasm/consts";
-import type { ProjectSurface } from "@studio/song-schema/yaml/surfaceFile";
+import type { ProjectSurface } from "@studio/k7-wasm/types";
 import type { WebVideoProject } from "@studio/web-protocol";
 import type { ReactNode } from "react";
 import type { CommandPrefs } from "./commandPrefs";

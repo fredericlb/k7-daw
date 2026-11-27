@@ -56,14 +56,16 @@ Each has its own `exports` subpath and a story that shows every state `component
 | `side-panel` | `SidePanel` (400 px, floats over the panes) and `Sheet` (phone, with a transport slot) |
 | `editor-dock` | `EditorDock` (the bottom editor dock of Pad and Desk, resizable) and `EditorSheet` (phone), each with the Expand toggle |
 | `tab-bar` | `TabBar` (a phone's bar), `TabSidebar` (the sidebar elsewhere), `TabBarItem` (a link with `href`, else a button; `row` in the sidebar), `TabBarRound` |
-| `spinner`, `progress` | the running glyph and the 6 px determinate bar |
+| `spinner`, `progress` | `Spinner` (`size` xs, sm, md; `inherit` takes the text colour inside a button), `Loading` (a spinner and the caller's label) and the 6 px determinate bar |
 | `chip` | `Chip` with `variant` anchor (orphan), version (newest), filter, status (`tone`) |
 | `empty-state`, `error-card` | the dashed empty card and the stay-until-fixed failure |
 | `choice` | a radiogroup: segmented, or 44 px rows on a phone |
 | `picker` | a 56 px button and a searchable list under it |
-| `knob` | the 270 degree arc knob with a peak chip |
+| `knob` | the 270 degree arc knob with a peak chip; `onValueCommit` fires on release, `defaultValue` is what a double-click restores |
 | `track-toggle` | M, S and A: one component for the lane header and the mixer strip |
 | `backdrop` | the two blobs and the two wave strokes behind a screen |
+
+**Danger is `error`**: `text-error`, `bg-error`, `border-error`; there is no second name for it.
 
 A page decides the device layout (`Choice layout`, `SidePanel` against `Sheet`); the kit never
 reads the viewport, because the shell already knows whether it is folded.

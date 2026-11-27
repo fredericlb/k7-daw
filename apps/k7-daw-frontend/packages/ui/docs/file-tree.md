@@ -41,8 +41,8 @@ component, so the two behave identically instead of drifting.
   root of exactly one stays the reliable way to reach for this: a library
   that happens to hold a single real top-level folder would otherwise lose it
   the same way.
-- **The right-click menu**, including the inline follow-up some entries need:
-  a typed `prompt` (rename, new file) or a yes/no `confirm` — mutually
+- **The right-click menu**, on the kit's `PointMenu`, including the follow-up some entries need:
+  a typed `prompt` (rename, new file) or a yes/no `confirm`, both asked through `ask` — mutually
   exclusive, and an entry with neither runs the moment it is picked. `confirm`
   exists for an action too destructive for one click but with nothing to type
   (deleting a folder that is not the one thing selected, so there is no name
@@ -111,7 +111,7 @@ the tree at all.
 ## The menu without a right-click
 
 A phone has no right-click, and iOS Safari fires no `contextmenu` on a
-long-press, so a menu reached only that way is a set of actions a touch user
+long-press of its own, so a menu reached only that way is a set of actions a touch user
 cannot reach at all. `rowMenuLabel` adds two more ways to the same menu:
 
 - **A ⋮ button at the end of every row that has something to offer**, named
@@ -121,12 +121,10 @@ cannot reach at all. `rowMenuLabel` adds two more ways to the same menu:
   only hovering reveals does not exist on a touch screen. It is a real button,
   so the menu is reachable from the keyboard too, and the menu focuses its
   first entry when it opens.
-- **A long-press** (`lib/longPress.ts`, 500 ms, touch or pen only) on a row,
-  or on the empty background for the root's menu. A finger that moves more
-  than 10 px is a scroll and cancels it; the click that ends a press which
-  fired is swallowed, or lifting the finger would also open the row. The row
-  turns off text selection and the iOS callout, which would otherwise answer
-  the same hold.
+- **A long-press** (touch or pen, 500 ms) on a row, or on the empty background for the root's
+  menu. The app's own long press (`apps/k7-daw-frontend/src/longPress.ts`) turns it into a
+  `contextmenu` the tree already answers, so the tree has no press timer of its own. The row
+  turns off text selection and the iOS callout, which would otherwise answer the same hold.
 
 Opt-in, because the ⋮ takes room at the end of a row that a tree with no
 menu, or one whose app has its own touch path, does not want to give up. The
@@ -141,8 +139,8 @@ and the component is generic over anything extending it, so lanes keeps
 `isDisabled` and every action.
 
 Nor the strings: actions carry their own labels, already translated by the app.
-The single exception is the prompts' Cancel button (`cancelLabel`), which
-belongs to machinery no app renders itself.
+The prompts and confirms are not drawn here at all: the tree is handed `ask`
+(`TreeAsk`), the app's own question dialog, so their buttons, Escape and language are the app's.
 
 ## `dragover` and `preventDefault`
 

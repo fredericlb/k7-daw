@@ -1,10 +1,10 @@
 // mapping.ts — which controls a `turntables` surface must have wired before it can be drawn,
 // and which of them a given `mapping` is missing. The desk's own vocabulary: @studio/song
 // validates the SHAPE of a mapping and deliberately not its ids.
-// See apps/k7-daw-frontend/packages/song/docs/surfaces.md.
+// See apps/k7-daw-wasm/song/docs/surfaces.md.
 
 import { unmappedControls as unmapped } from "@studio/k7-wasm/chains";
-import type { MixView } from "@studio/song-schema/yaml/mixViewSchema";
+import type { MixView } from "@studio/k7-wasm/text";
 import { type MixControl, mixControls } from "./controls";
 import { DECKS } from "./deckVocabulary";
 

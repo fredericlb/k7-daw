@@ -114,7 +114,10 @@ pub struct SurfaceFile {
     #[cfg_attr(feature = "ts", ts(optional))]
     pub stems: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[cfg_attr(feature = "ts", ts(optional, type = "{ [key in string]: ViewBinding | null }"))]
+    #[cfg_attr(
+        feature = "ts",
+        ts(optional, type = "{ [key in string]: import(\"./ViewBinding\").ViewBinding | null }")
+    )]
     pub mapping: Option<IndexMap<String, Nullable<ViewBinding>>>,
 }
 
@@ -319,13 +322,13 @@ pub fn surface_issues(source: &dyn Source, inputs: &Inputs, s: &ProjectSurfaces)
     if material && !declares(SurfaceType::Timeline) {
         out.push(missing_surface(
             "this project is an arrangement and declares no timeline, so nothing draws its lanes — \
-             run `project surface new timeline` (apps/k7-daw-frontend/packages/song/docs/surfaces.md)",
+             run `project surface new timeline` (apps/k7-daw-wasm/song/docs/surfaces.md)",
         ));
     }
     if video && !declares(SurfaceType::Viewport) {
         out.push(missing_surface(
             "this project has video lanes and declares no viewport, so nothing composites them — \
-             run `project surface new viewport` (apps/k7-daw-frontend/packages/song/docs/surfaces.md)",
+             run `project surface new viewport` (apps/k7-daw-wasm/song/docs/surfaces.md)",
         ));
     }
     Ok(out)

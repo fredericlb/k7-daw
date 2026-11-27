@@ -13,7 +13,7 @@ a module.
 
 That module is **cold**, `plugin: {type: offline}`: it compiles into no engine plugin. What it
 brings is the DECLARATION that this deck has a tempo — which is what lets a desk control name it.
-See `apps/k7-daw-frontend/packages/song/docs/coldModules.md`.
+See `apps/k7-daw-wasm/song/docs/coldModules.md`.
 
 Concretely: the binding gives not a `pluginId` (there is none) but the **track** whose material the
 module treats, and it is that track's platter that changes speed. Re-point `deckA.tempo` at `tempoB`
@@ -48,7 +48,7 @@ Measured, the eight of a full desk cost **3 points of CPU** — the price is not
 
 **The default is not just taste.** A constant-pitch stretcher is non-linear: it picks its frames
 from the signal, so four parts stretched separately no longer sum as the record would. That is what
-broke the subtracting version of `stemcut` (`apps/k7-daw-frontend/packages/song-schema/docs/stems.md`), and it stays true
+broke the subtracting version of `stemcut` (`apps/k7-daw-wasm/song-schema/docs/stems.md`), and it stays true
 of the sum, more discreetly: with keylock on, the four parts glue back together less well.
 Resampling is linear — the same combination of samples for all four files — and costs nothing on
 that side.

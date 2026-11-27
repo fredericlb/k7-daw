@@ -22,13 +22,13 @@ import { type PendingEdit, pendingOf } from "@studio/k7-wasm/edit";
 // The leaf with no `node:fs` in it — a browser may ask what a path names without dragging the loader in.
 import { moduleKeyFromPath } from "@studio/k7-wasm/module";
 import { beatsToPosition, parsePosition } from "@studio/k7-wasm/timecode";
+import type { ReferenceTrack } from "@studio/k7-wasm/types";
 import { orderCommands, prefsView, stepSentence } from "@studio/k7-wasm/ui";
 import { askConfirm } from "@studio/project-shell/ask";
 import { projectsUrl } from "@studio/project-shell/launch";
 import type { CommandJournal } from "@studio/project-shell/project";
 import { onToast, showToast } from "@studio/project-shell/toast";
 import { type HistoryDeps, runRedo, runUndo } from "@studio/project-shell/undo";
-import type { ReferenceTrack } from "@studio/song-schema/reference";
 import { Choice } from "@studio/ui/choice";
 import { DockHint, DockStatus } from "@studio/ui/editor-dock";
 import {
@@ -49,6 +49,7 @@ import { LcdSoundsContext, SongClockProvider } from "@studio/ui-chains-react";
 import { ModulePreview } from "@studio/ui-chains-react/module-preview";
 import { flushAutosaves } from "@studio/ui-editor/autosave-buffers";
 import type { BuilderPane } from "@studio/ui-module-builder";
+import { useElementSize } from "@studio/ui-timeline/measure";
 import { setUpdateBusy } from "@studio/vite-config/register";
 import { useQueryClient } from "@tanstack/react-query";
 import {
@@ -1020,18 +1021,7 @@ export default function App({
 
   /** How tall the floating bar is, so the popin can stop ABOVE it — measured, since the bar's row depends on what it holds. */
   const stripRef = useRef<HTMLDivElement | null>(null);
-  const [stripH, setStripH] = useState(0);
-  useEffect(() => {
-    const el = stripRef.current;
-    if (!el) {
-      setStripH(0);
-      return;
-    }
-    const ro = new ResizeObserver(() => setStripH(el.offsetHeight));
-    ro.observe(el);
-    setStripH(el.offsetHeight);
-    return () => ro.disconnect();
-  }, [barFloating]);
+  const stripH = useElementSize(stripRef, [barFloating]).h;
 
   const focusOn = useCallback(
     (p: Pane) => {
@@ -1354,7 +1344,7 @@ export default function App({
     [],
   );
 
-  // The lenses this browser can see — the camera cards' dropdown, apps/k7-daw-frontend/packages/song/docs/camera.md.
+  // The lenses this browser can see — the camera cards' dropdown, apps/k7-daw-wasm/song/docs/camera.md.
   const cameras = useCameras();
 
   // The interface's inputs and the act that regroups them, asked once per connection.
@@ -1415,7 +1405,7 @@ export default function App({
     [shellGraph],
   );
   midiLanesRef.current = midiLanes;
-  // The armed lane's MIDI device: the midi-in node wired to it, read off the graph — apps/k7-daw-frontend/packages/song/docs/midiIn.md.
+  // The armed lane's MIDI device: the midi-in node wired to it, read off the graph — apps/k7-daw-wasm/song/docs/midiIn.md.
   const midiInAny = useMemo(
     () =>
       !!shellGraph &&
@@ -1424,7 +1414,7 @@ export default function App({
         .some((st) => st.device !== undefined),
     [shellGraph],
   );
-  // The instruments a keyboard is wired straight into, played live with no lane armed (apps/k7-daw-frontend/packages/song/docs/midiIn.md).
+  // The instruments a keyboard is wired straight into, played live with no lane armed (apps/k7-daw-wasm/song/docs/midiIn.md).
   const midiPlayed = useMemo(
     () => (shellGraph ? midiInPlayed(shellGraph) : []),
     [shellGraph],
@@ -1501,7 +1491,7 @@ export default function App({
       bumpReload();
     },
   });
-  // A project with a midi-in node asks for MIDI access at once, and again on each press of a dropdown — apps/k7-daw-frontend/packages/song/docs/midiIn.md.
+  // A project with a midi-in node asks for MIDI access at once, and again on each press of a dropdown — apps/k7-daw-wasm/song/docs/midiIn.md.
   useEffect(() => {
     if (!midiIn.any) return;
     void openMidiInputs();
@@ -1897,7 +1887,7 @@ export default function App({
     [pushLog, runLocalCommand, warnHeadphones, queryClient],
   );
   runCommandRef.current = runCommand;
-  // A node's preset dropdown: the list, the save and the update, each a `node preset` verb — apps/k7-daw-frontend/packages/song/docs/userPresets.md.
+  // A node's preset dropdown: the list, the save and the update, each a `node preset` verb — apps/k7-daw-wasm/song/docs/userPresets.md.
   const {
     presetNames,
     openPresets,
@@ -2029,7 +2019,7 @@ export default function App({
   const openInEditorRef = useLatest(openInEditor);
   const focusRowInPanes = useCallback(
     (target: RowTarget) => {
-      // Named, not fuzzy-matched: a lane lives in `nodes/`, or in a chain project's `tracks/` (apps/k7-daw-frontend/packages/song/docs/chainFiles.md).
+      // Named, not fuzzy-matched: a lane lives in `nodes/`, or in a chain project's `tracks/` (apps/k7-daw-wasm/song/docs/chainFiles.md).
       const files = editorRef.current?.files() ?? [];
       const file =
         entityFile(files, "nodes", target.id) ??
@@ -2178,7 +2168,7 @@ export default function App({
   /** Find the open project's node of the builder's module and watch its plugin — `watchPluginParams` is what makes the values LIVE. */
   useEffect(() => {
     if (!builder) return void setBuilderPlugin(null);
-    // The key a chain would write — `amps/neural-amp-modeler`, or `@k7-core/audio/amps/nam` for a library module (@studio/song-schema/moduleTypes).
+    // The key a chain would write — `amps/neural-amp-modeler`, or `@k7-core/audio/amps/nam` for a library module (`@studio/k7-wasm/consts`).
     const module =
       libraryModuleRef(builder.path) ?? moduleKeyFromPath(builder.path);
     if (!module) return void setBuilderPlugin(null);
@@ -3408,6 +3398,8 @@ export default function App({
           : {}),
         // The toasts and a right panel end above the row; an expanded dock leaves the row its top.
         "--toast-bottom": dock.expanded && dockUp ? "96px" : aboveRow,
+        // Under the running spinner, which holds the top-right corner while something runs (shell/RunningBubble.tsx).
+        "--toast-top": "calc(16px + var(--k7-float-h) + 8px)",
         ...(dock.expanded && dockUp
           ? {}
           : { "--k7-panel-bottom-open": aboveRow }),
@@ -3495,7 +3487,7 @@ export default function App({
                 {/* The popin's backdrop: a click outside is the reliable way out, Escape belonging to the editor's vim. */}
                 {editorPopin && (
                   <div
-                    className="fixed inset-0 z-40 bg-black/40"
+                    className="scrim fixed inset-0 z-(--k7-z-bar)"
                     onPointerDown={() => setEditorPopin(false)}
                   />
                 )}

@@ -4,14 +4,14 @@ A desk control moves a module parameter that the **project** names. Nothing abou
 
 ## The surface file
 
-Schema: `apps/k7-daw-frontend/packages/song-schema/src/yaml/surfaceSchema.ts`; reader: `apps/k7-daw-frontend/packages/song-schema/src/yaml/surfaceFile.ts`; project-side listing and creation: `apps/k7-daw-wasm/song/src/views/surfaces.rs`.
+Reader, listing and creation: `apps/k7-daw-wasm/song/src/views/surfaces.rs`; the skeleton `project surface new` writes: `apps/k7-daw-wasm/verbs/src/verbs/project_more.rs`.
 
-- `type: turntables` must have `layout: split` (`SURFACE_LAYOUTS_BY_TYPE`).
-- `playlist` is refused on any other type (`superRefine`), rather than ignored.
-- `mapping` is `MixViewSchema` itself (`apps/k7-daw-frontend/packages/song-schema/src/yaml/mixViewSchema.ts`): a record of control id to `{ module, param, invert?, also? }` or `null`. Reusing the schema keeps the desk's older `views/mix.k7x` and the surface from drifting.
-- `SURFACE_MAPPING_SKELETON.turntables` is what `project surface new turntables` writes, every control as `null` with a comment. It is a copy of the control list kept honest by `apps/k7-daw-frontend/packages/k7-plugins/src/turntables/mapping.test.ts`.
+- `type: turntables` must have `layout: split` (the surface reader's type and layout pair).
+- `playlist` is refused on any other type, rather than ignored.
+- `mapping` is `MixView` itself (`apps/k7-daw-wasm/song/src/files/desk.rs`): a record of control id to `{ module, param, invert?, also? }` or `null`. Reusing the type keeps the desk's older `views/mix.k7x` and the surface from drifting.
+- `SURFACE_MAPPING_SKELETON.turntables` is what `project surface new turntables` writes, every control as `null` with a comment. It is the Rust list, which the desk's control list is held to by `apps/k7-daw-frontend/packages/k7-plugins/src/turntables/mapping.test.ts`.
 
-`apps/k7-daw-frontend/packages/song` validates the mapping's **shape** and deliberately not its ids; the desk owns its vocabulary.
+`apps/k7-daw-wasm/song` validates the mapping's **shape** and deliberately not its ids; the desk owns its vocabulary.
 
 ## Control vocabulary
 

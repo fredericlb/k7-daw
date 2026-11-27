@@ -48,6 +48,35 @@ pub fn ws_data(fs: &dyn Fs, path: &str) -> Res<Value> {
     k7x_data(path, &ws_text(fs, path)?)
 }
 
+/// Runs `edit` on `doc` as the file at `path` is edited: on its short forms expanded, put back by the one rule unless `raw`.
+///
+/// # Errors
+/// A document that does not read, a short form that does not expand, or what `edit` fails with.
+pub fn edit_sugared(doc: &mut Document, path: &str, raw: bool, edit: impl FnOnce(&mut Document) -> Res<()>) -> Res<()> {
+    let sugar = if raw { None } else { sugar_for(path) };
+    let data = doc.to_js()?;
+    match sugar.filter(|s| k7x::edit::Sugar::parts(s).iter().any(|p| (p.present)(&data))) {
+        // A file with no short form in it, or an edit that keeps them itself, edits the document as written.
+        None => edit(doc)?,
+        Some(sugar) => {
+            // The edit sees the expanded data; what it leaves is put back over the short forms by the one rule.
+            let header = doc.header();
+            let expanded = sugar.try_expand(&data)?;
+            let mut scratch = Document::new(&stringify(
+                &expanded,
+                &StringifyOptions {
+                    header: &header,
+                    inline: None,
+                },
+            )?);
+            edit(&mut scratch)?;
+            apply_sugared(doc, &scratch.to_js()?, Some(&sugar))?;
+            doc.set_header(&scratch.header())?;
+        }
+    }
+    Ok(())
+}
+
 /// Runs `edit` on the file as a document and writes it when its text changed; says whether it wrote.
 ///
 /// # Errors
@@ -60,27 +89,7 @@ pub fn ws_edit(fs: &mut dyn Fs, path: &str, opts: EditOpts, edit: impl FnOnce(&m
     }
     let before = if exists { ws_read(fs, path)? } else { String::new() };
     let mut doc = Document::new(&before);
-    let sugar = if opts.raw { None } else { sugar_for(path) };
-    let raw = doc.to_js()?;
-    match sugar.filter(|s| k7x::edit::Sugar::parts(s).iter().any(|p| (p.present)(&raw))) {
-        // A file with no short form in it, or an edit that keeps them itself, edits the document as written.
-        None => edit(&mut doc)?,
-        Some(sugar) => {
-            // The edit sees the expanded data; what it leaves is put back over the short forms by the one rule.
-            let header = doc.header();
-            let expanded = sugar.try_expand(&raw)?;
-            let mut scratch = Document::new(&stringify(
-                &expanded,
-                &StringifyOptions {
-                    header: &header,
-                    inline: None,
-                },
-            )?);
-            edit(&mut scratch)?;
-            apply_sugared(&mut doc, &scratch.to_js()?, Some(&sugar))?;
-            doc.set_header(&scratch.header())?;
-        }
-    }
+    edit_sugared(&mut doc, path, opts.raw, edit)?;
     let after = doc.text();
     if after == before {
         return Ok(false);

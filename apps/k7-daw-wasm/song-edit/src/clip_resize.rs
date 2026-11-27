@@ -71,7 +71,7 @@ fn to_beats(units: f64, kind: MaterialKind, tempo: f64) -> f64 {
     }
 }
 
-/// The EVENT's window and count spanning `start_beats..end_beats`, clamped inside `bounds` (apps/k7-daw-frontend/packages/song/docs/clipResize.md).
+/// The EVENT's window and count spanning `start_beats..end_beats`, clamped inside `bounds` (apps/k7-daw-wasm/song/docs/clipResize.md).
 #[must_use]
 pub fn resize_to_window(before: &ResizeBefore, to: &ResizeTo) -> ResizeResult {
     let (kind, loops, tempo) = (before.kind, before.loops, to.tempo);

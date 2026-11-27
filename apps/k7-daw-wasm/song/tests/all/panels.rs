@@ -397,3 +397,15 @@ fn a_hits_bundle_equals_a_misss() {
     assert!(miss.files.contains_key(&t.at("home/models/cached.nam")));
     assert!(cache.vocabulary_hits() >= 1);
 }
+
+#[test]
+fn the_widget_vocabulary_lists_are_the_enums_spelled_as_a_file_spells_them() {
+    use song::modules::{WAVEFORM_SOURCES, WIDGET_TYPES, WidgetType};
+    for name in WIDGET_TYPES {
+        let t: WidgetType = serde_json::from_value(serde_json::json!(name)).expect(name);
+        assert_eq!(serde_json::to_value(t).unwrap(), serde_json::json!(name));
+    }
+    let distinct: std::collections::HashSet<_> = WIDGET_TYPES.iter().collect();
+    assert_eq!(distinct.len(), 14);
+    assert_eq!(WAVEFORM_SOURCES, ["input", "output"]);
+}

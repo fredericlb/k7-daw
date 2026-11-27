@@ -5,7 +5,7 @@
 // See docs/curveEditor.md.
 
 import type { CurveCut, CurveSpec } from "@studio/graph-model";
-import { CURVE_CUTS } from "@studio/song-schema/curveVocab";
+import { CURVE_CUTS } from "@studio/k7-wasm/consts";
 import { Button } from "@studio/ui/button";
 import {
   Dialog,
@@ -15,6 +15,7 @@ import {
   DialogTitle,
 } from "@studio/ui/dialog";
 import { Input } from "@studio/ui/input";
+import { Knob } from "@studio/ui/knob";
 import { useId, useState } from "react";
 import {
   type CurveDraft,
@@ -30,7 +31,6 @@ import {
 import { m } from "../paraglide/messages.js";
 import { usePopin } from "../popins";
 import { CurveConditions } from "./CurveConditions";
-import { CurveKnob } from "./CurveKnob";
 import { CurvePlot } from "./CurvePlot";
 
 /** What each shape reads as in the select. */
@@ -260,14 +260,18 @@ export function CurveEditor({
           {draft.shape === "adsr" && (
             <div className="flex justify-around py-1">
               {ADSR_KNOBS.map((k) => (
-                <CurveKnob
+                <Knob
                   key={k.key}
                   label={k.label}
+                  caption={k.label}
+                  size={44}
                   value={draft[k.key]}
                   min={0}
                   max={k.max}
+                  step={Math.max(1, k.max / 100)}
+                  snap={1}
                   unit=" ms"
-                  onChange={(v) => set({ [k.key]: v })}
+                  onValueChange={(v) => set({ [k.key]: v })}
                 />
               ))}
             </div>

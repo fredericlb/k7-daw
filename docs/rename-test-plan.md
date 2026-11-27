@@ -46,7 +46,7 @@ down in advance.
 A rename touching an identifier **written into a user's file** is not of the same order as the
 others: the repo can be green and that person's projects broken. Those need a migration and a
 readable failure signature — see
-[apps/k7-daw-frontend/packages/song/docs/moduleNamespaces.md](../apps/k7-daw-frontend/packages/song/docs/moduleNamespaces.md) for the module
+[apps/k7-daw-wasm/song/docs/moduleNamespaces.md](../apps/k7-daw-wasm/song/docs/moduleNamespaces.md) for the module
 level, the only one of this family.
 
 The corollary: an identifier nobody types and that never leaves the machine renames without a

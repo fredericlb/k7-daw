@@ -5,6 +5,15 @@ use crate::preview::Span;
 use crate::timecode::TimeSig;
 use serde::{Deserialize, Serialize};
 
+/// The oscillator shapes, in the order a picker lists them: the `Shape` variants spelled as a file spells them.
+pub const LFO_SHAPES: [&str; 4] = ["sine", "triangle", "saw", "square"];
+
+/// The cuts a curve can take, the default first: the `Cut` variants spelled as a file spells them.
+pub const CURVE_CUTS: [&str; 3] = ["none", "positive", "negative"];
+
+/// Where an `adsr` level lands when the file does not say: half up, the least opinionated envelope.
+pub const ADSR_DEFAULT_LEVEL: f64 = 0.5;
+
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[cfg_attr(feature = "ts", derive(ts_rs::TS))]
 #[serde(rename_all = "lowercase")]

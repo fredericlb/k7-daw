@@ -77,7 +77,7 @@ the account has a runtime and re-established when the tunnel hub restarts.
 
 A device's bound engine sees exactly five roots of the account: its `workspace/` folder, writable, so a take
 comes back; its render cache `.renders/`, writable, so an automatic VST render comes back
-(`apps/k7-daw-frontend/packages/song/docs/autoFreeze.md`); its undo cache `.history/`, writable, since the machine KEEPS
+(`apps/k7-daw-wasm/song/docs/autoFreeze.md`); its undo cache `.history/`, writable, since the machine KEEPS
 an undo's audio and sends it back up for an undo (`files/history.md`); its
 `models/`, read-only; and the instance's data folder, read-only.
 **Never the rest of `$STUDIO_HOME`**, which holds the

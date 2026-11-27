@@ -7,10 +7,10 @@
 // module and leaving its real input unnoticed.
 //
 // The decks are in `modules:` like everything else: a lane is a module too, and a run is named
-// after the lane that starts it (apps/k7-daw-frontend/packages/song/docs/trackModules.md).
+// after the lane that starts it (apps/k7-daw-wasm/song/docs/trackModules.md).
 //
 // There is no chain called `crossfade`: it has one flow feeder, so it is a step inside deckA's
-// run rather than a meeting point. See apps/k7-daw-frontend/packages/song/docs/ports.md.
+// run rather than a meeting point. See apps/k7-daw-wasm/song/docs/ports.md.
 
 // `MIX` is the mixer's sum and `OUT` is the interface; the run between them is the MASTER
 // CHAIN, and `OUT` carries the song's output level as its `Volume`. Name a module on that

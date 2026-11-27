@@ -38,7 +38,7 @@ The three EQ bands are in **decibels**, the filter in percent of travel, and all
 that neutral falls in the middle: see [eq.md](eq.md) and [filter.md](filter.md).
 
 The bindings themselves are in the **project**: `views/mix.k7x`, described in
-[apps/k7-daw-frontend/packages/song/docs/viewBindings.md](../../../song/docs/viewBindings.md).
+[apps/k7-daw-wasm/song/docs/viewBindings.md](../../../../../k7-daw-wasm/song/docs/viewBindings.md).
 
 ## Why not the module's `controller.k7x`
 

@@ -19,7 +19,7 @@ camera("remote:Stage left")
 
 So everything a camera already is applies unchanged: it feeds a picture lane or draws a layer of its
 own, `monitor:` opens and shuts it, an armed lane records it, `validate()` refuses the same cables
-(`apps/k7-daw-frontend/packages/song/docs/camera.md`). A second `io` type would have meant teaching the schema, the
+(`apps/k7-daw-wasm/song/docs/camera.md`). A second `io` type would have meant teaching the schema, the
 compiler, the graph and the recorder a word that means the same thing as the one they know.
 
 The label is resolved by the browser drawing the lane, like a local one: `VideoCanvas` hands a

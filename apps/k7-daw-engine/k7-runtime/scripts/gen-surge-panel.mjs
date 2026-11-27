@@ -15,7 +15,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const moteur = join(here, "..");
 const LIBRARY = join(moteur, "..", "..", "..", "k7-core");
 const OUT = join(LIBRARY, "modules", "instruments", "synth", "surge-xt");
-// The library's preset shelf for that module: what the graph's preset dropdown lists (apps/k7-daw-frontend/packages/song/docs/userPresets.md).
+// The library's preset shelf for that module: what the graph's preset dropdown lists (apps/k7-daw-wasm/song/docs/userPresets.md).
 const PRESETS = join(LIBRARY, "presets", "k7-core", "instruments", "synth", "surge-xt");
 
 /** Wherever the current platform's preset put the binary. First one that exists wins. */

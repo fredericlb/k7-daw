@@ -4,17 +4,18 @@
 // pinned files, the "open project" button, and the module-folder actions.
 // Why the second tab exists: apps/k7-daw-frontend/docs/sharedModules.md.
 
-import { isLibraryFileOf } from "@studio/k7-wasm/schema";
-import { showToast } from "@studio/project-shell/toast";
-import { docPattern } from "@studio/song-schema/docExt";
 import {
   LIBRARY_FILE_FAMILIES,
   MODULE_SOURCES_DIR,
-} from "@studio/song-schema/moduleTypes";
+} from "@studio/k7-wasm/consts";
+import { docPattern, isLibraryFileOf } from "@studio/k7-wasm/schema";
+import { askConfirm, askText } from "@studio/project-shell/ask";
+import { showToast } from "@studio/project-shell/toast";
 import {
   type DroppedFile,
   FileTree as Tree,
   type TreeAction,
+  type TreeAsk,
   type TreeTarget,
 } from "@studio/ui/file-tree";
 import {
@@ -111,6 +112,9 @@ const isShared = (path: string): boolean =>
 
 // A .wav can't open in the editor, but it still wants Rename/Delete.
 const isBinary = (node: FileNode): boolean => node.kind === "binary";
+
+// The tree's prompts and confirms go through the shell's one question dialog.
+const ASK: TreeAsk = { confirm: askConfirm, text: askText };
 
 export function FileTree({
   tree,
@@ -596,11 +600,12 @@ export function FileTree({
             activePath={activePath}
             /* The one thing this tab writes, on the NAMESPACE row only, in one shape `<type>/<name>` (docs/sharedModules.md). */
             actions={libraryActions}
+            ask={ASK}
             // The NEAREST namespace row, open on arrival: a tab of closed folders says nothing about what is behind them.
             reveal={lib.tree[0]?.path ?? null}
             // A read-only level's rows are greyed: they name a plugin the engine reports, with no file behind them to open.
             isDisabled={(n) => isBinary(n) || frozen.has(n.path)}
-            // A MODULE row drags onto another folder of its library: a move, its refs following it (apps/k7-daw-frontend/packages/song/docs/moduleMove.md).
+            // A MODULE row drags onto another folder of its library: a move, its refs following it (apps/k7-daw-wasm/song/docs/moduleMove.md).
             onMove={onMoveLibraryModule}
             canMove={(n) =>
               lib.modules.has(n.path) &&
@@ -676,6 +681,7 @@ export function FileTree({
           rootLabel={projectName ?? rootDir}
           header={header}
           actions={actions}
+          ask={ASK}
           acceptsFileDrop={dragHasFiles}
           isDisabled={isBinary}
           // A module opens the BUILDER, on the panel — the screen that edits all three of its files; everything else opens as text.

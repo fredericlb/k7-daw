@@ -5,7 +5,7 @@
 // document, and the C++ suite proves the diff, but neither proves the plugin ended up on the
 // master bus, nor that an offline render applies the OUT node's level at all.
 //   npx tsx apps/k7-daw-engine/k7-runtime/scripts/master-chain.ts
-// See apps/k7-daw-frontend/packages/song/docs/masterChain.md and docs/masterVolume.md.
+// See apps/k7-daw-wasm/song/docs/masterChain.md and docs/masterVolume.md.
 
 import { findEngineBinary } from "./lib/engine-client/engineBinary.ts";
 import { renderProject } from "./lib/take-render/renderProject.ts";

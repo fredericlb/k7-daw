@@ -7,7 +7,7 @@ wrote it; hard left it disappears, right it goes up to double.
 What it really does is a **sum**: a separated song is no longer played by its own lane, it is
 played by its four parts and each knob doses one. That is what every commercial stem deck does.
 The reasoning is in
-[`apps/k7-daw-frontend/packages/song-schema/docs/stems.md`](../../../song-schema/docs/stems.md). At rest the output is
+[`apps/k7-daw-wasm/song-schema/docs/stems.md`](../../../../../k7-daw-wasm/song-schema/docs/stems.md). At rest the output is
 the record to within **34 dB** — the model's reconstruction residue, measured and stable.
 
 ## The block, and why it is not mirrored

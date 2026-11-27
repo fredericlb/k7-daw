@@ -11,6 +11,10 @@ use crate::workspace_doc::{ws_data, ws_text};
 use k7x::edit::{Value, js_number};
 use song_schema::is_timecode;
 
+/// The master fader's range in dB, so the page's fader and `project master` cannot disagree.
+pub const MASTER_MIN_DB: f64 = -100.0;
+pub const MASTER_MAX_DB: f64 = 12.0;
+
 /// The root's data: an empty map when there is no file, or when it does not match the schema and nobody asked to validate.
 #[derive(Clone, Debug, PartialEq)]
 pub struct ProjectRoot {

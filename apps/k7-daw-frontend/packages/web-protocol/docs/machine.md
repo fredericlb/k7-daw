@@ -66,7 +66,7 @@ of the two is fixed by adding a module.
 `readOnly` is true for `@engine` and only for it. A scanned plugin is a module the engine merely
 REPORTS: it has no folder, so there is nothing to write into and nothing to open — the rows are a
 vocabulary you can name in a chain, not files. Giving one a folder is `module own <ref>`, which is
-a different act; see `apps/k7-daw-frontend/packages/song/docs/moduleFork.md`.
+a different act; see `apps/k7-daw-wasm/song/docs/moduleFork.md`.
 
 ## Reaching an engine, and staying reached
 

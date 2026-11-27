@@ -60,7 +60,7 @@ export function cornerButtons(n: GraphNode): CornerButton[] {
   // Not on a baked module: no live plugin, so no window to open.
   const baked = !!n.frozen && n.kind === "module";
   if (n.hasNativePluginUI && n.module && !baked) out.push("plugin");
-  // The only way into a box, and the only way back out of one — see apps/k7-daw-frontend/packages/song/docs/assemblies.md.
+  // The only way into a box, and the only way back out of one — see apps/k7-daw-wasm/song/docs/assemblies.md.
   if (n.assemblyOf && n.module) out.push("open");
   return out;
 }

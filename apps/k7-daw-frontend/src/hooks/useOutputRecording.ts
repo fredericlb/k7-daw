@@ -2,11 +2,11 @@
 // recorder the compile puts on the master run, and what RENDER draws, captured off an off-screen copy of the frame.
 // Stopping files them — joined into one video when there are both — in the project's record folder.
 // What reads wrong: the engine's take is cleared only once filed, so a refused save loses nothing.
-// See apps/k7-daw-frontend/packages/song/docs/outputRecording.md.
+// See apps/k7-daw-wasm/song/docs/outputRecording.md.
 
 import { type EngineStore, useStoreState } from "@studio/engine-browser/store";
+import { OUTPUT_RECORDER_ID } from "@studio/k7-wasm/consts";
 import { mediaUrl } from "@studio/project-shell/fileApi";
-import { OUTPUT_RECORDER_ID } from "@studio/song-schema/moduleTypes";
 import { useUnsavedGuard } from "@studio/ui-editor/unsaved";
 import type { RealtimeDriver } from "@studio/ui-eyes/realtime";
 import { useCallback, useEffect, useRef, useState } from "react";

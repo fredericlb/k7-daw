@@ -309,7 +309,6 @@ export function useRollGestures({
       return;
     }
     if (!onSetVelocity && !onSetNoteRange) return;
-    e.currentTarget.setPointerCapture(e.pointerId);
     pressAt.current = { x: e.clientX, y: e.clientY };
     // Claimed on the PRESS: a grip is a place, not a direction, so none of them waits to see which way the hand goes.
     const t: RollDrag = {
@@ -353,9 +352,16 @@ export function useRollGestures({
       };
       setGroupDraw(group);
     }
+    // The note's own row, which the velocity gesture reads against; the pointer is followed on the window and a cancel drops it.
+    const top = (127 - n.key) * rowH;
+    follow(e, {
+      move: (ev) => live.current.move(ev, top),
+      end: () => live.current.end(true),
+      cancel: () => live.current.end(false),
+    });
   };
 
-  const onNotePointerMove = (e: React.PointerEvent, top: number) => {
+  const onNotePointerMove = (e: PointerEvent, top: number) => {
     if (!gesture.current) return;
     const from = pressAt.current;
     if (gesture.current === "vel") {
@@ -397,7 +403,8 @@ export function useRollGestures({
     setTDraw(next);
   };
 
-  const endVDrag = () => {
+  /** The release (`keep`) writes what the gesture drew; a cancel drops it. */
+  const endVDrag = (keep: boolean) => {
     const g = gesture.current;
     const v = vDrag.current;
     const t = tDrag.current;
@@ -410,6 +417,7 @@ export function useRollGestures({
     setVDraw(null);
     setTDraw(null);
     setGroupDraw(null);
+    if (!keep) return;
     // A dragged SELECTION: one command for every note, each painted where it lands, the rectangle following.
     if (g === "time" && t && held && onMoveNotes) {
       const plan = planGroupMove(held.group, held.others, t.dBeats, t.dKeys);
@@ -473,6 +481,9 @@ export function useRollGestures({
     }
   };
 
+  const live = useRef({ move: onNotePointerMove, end: endVDrag });
+  live.current = { move: onNotePointerMove, end: endVDrag };
+
   return {
     draft,
     tDraw,
@@ -483,7 +494,5 @@ export function useRollGestures({
     onLanePointerDown,
     onNoteMenu,
     onNotePointerDown,
-    onNotePointerMove,
-    endVDrag,
   };
 }

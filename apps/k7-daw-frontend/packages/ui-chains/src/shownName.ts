@@ -1,6 +1,6 @@
 // shownName.ts — what a person reads for a chain node: `<module> · <chain> · step n` when it is
 // unnamed, its own name otherwise. The name itself (a uuid in a chain project) stays what commands,
-// the wire and the files carry; this is only ever SHOWN. apps/k7-daw-frontend/packages/song/docs/chainFiles.md.
+// the wire and the files carry; this is only ever SHOWN. apps/k7-daw-wasm/song/docs/chainFiles.md.
 
 import {
   splitPort,

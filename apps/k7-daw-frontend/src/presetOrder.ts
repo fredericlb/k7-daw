@@ -2,7 +2,7 @@
 // through: each scope where the service put it (workspace first), its names for people.
 // One function, so the list and the arrows cannot disagree — ../docs/listOrder.md.
 
-import type { PresetEntry } from "@studio/song-schema/presets";
+import type { PresetEntry } from "@studio/k7-wasm/types";
 import { byPeople } from "@studio/web-protocol/tree";
 
 /** The presets in a NEW array: scopes in the order they arrived, names within each for people. */

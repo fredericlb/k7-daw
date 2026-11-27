@@ -1,7 +1,7 @@
 // modelDownload.ts — following a model download to its end, for the two places that start one: a
 // project node's right-click ("Download model") and a cold chain in the settings. The file service
 // runs the download as a job (a model is 166 MB); this polls it and says how far it is.
-// See apps/k7-daw-frontend/packages/song/docs/moduleAssets.md.
+// See apps/k7-daw-wasm/song/docs/moduleAssets.md.
 
 import { trackDownload } from "@studio/http-client/downloads";
 import type { ModelDownloadJob } from "@studio/web-protocol";

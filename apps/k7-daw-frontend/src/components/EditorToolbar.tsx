@@ -2,22 +2,17 @@
 // popin, the module builder's door, a clip's Process menu, and the save state in place of a Save
 // button — and the bar that says the open file moved on disk under an edit. See ../../docs/shell.md.
 
-import { docPattern } from "@studio/song-schema/docExt";
+import { docPattern } from "@studio/k7-wasm/schema";
 import { Button } from "@studio/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@studio/ui/dropdown-menu";
 import {
   FileText,
   LayoutGrid,
-  Loader2,
   Piano,
   TriangleAlert,
   Wand2,
 } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
+import { Spinner } from "@studio/ui/spinner";
 import type { AutosaveStatus } from "@studio/ui-editor/autosave";
 import { m } from "../paraglide/messages.js";
 import {
@@ -29,7 +24,7 @@ import {
 import { needsAttention, saveLabel } from "../saveLabel";
 import type { FileContent, FileNode } from "../types";
 import { Breadcrumb } from "./Breadcrumb";
-import { ChainOpsList } from "./ChainOpsList";
+import { ChainOpsPopover } from "./ChainOpsList";
 
 const UI_FILE = docPattern("ui");
 
@@ -151,8 +146,8 @@ export function EditorToolbar({
       )}
       {/* The waveform panel's "operations" menu on the clip's TEXT (../clipOps.ts); the reload keeps the buffer off the repointed `source:`. */}
       {file && isClipFile(file.path) && (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+        <ChainOpsPopover
+          trigger={
             <Button
               size="sm"
               variant="secondary"
@@ -160,22 +155,18 @@ export function EditorToolbar({
               title={m["editor.runChain"]()}
             >
               {processing ? (
-                <Loader2 className="mr-1 h-4 w-4 animate-spin" />
+                <Spinner size="sm" inherit className="mr-1" />
               ) : (
                 <Wand2 className="mr-1 h-4 w-4" />
               )}
               Process
             </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" className="w-64 p-1">
-            <ChainOpsList
-              search={opSearch}
-              onSearch={onOpSearch}
-              ops={clipOps}
-              onPick={onProcess}
-            />
-          </DropdownMenuContent>
-        </DropdownMenu>
+          }
+          search={opSearch}
+          onSearch={onOpSearch}
+          ops={clipOps}
+          onPick={onProcess}
+        />
       )}
       {/* In place of a Save button: silent while the file is saved, amber with the reason for as long as it is not. */}
       <span
@@ -188,7 +179,7 @@ export function EditorToolbar({
         title={autosave.reason ?? undefined}
       >
         {autosave.status === "saving" && (
-          <Loader2 className="h-3 w-3 shrink-0 animate-spin" />
+          <Spinner size="xs" inherit className="shrink-0" />
         )}
         <span className="truncate">
           {saveLabel(autosave.status, autosave.reason)}

@@ -4,7 +4,7 @@
 // order that works — nothing is placed before everything it names is on disk. See
 // ../../docs/timeline.md.
 
-import { IMAGE_SOURCE } from "@studio/song-schema/yaml/entitySchemas";
+import { IMAGE_SOURCE } from "@studio/k7-wasm/schema";
 import { MAX_UPLOAD_BYTES } from "@studio/web-protocol";
 import { useCallback, useState } from "react";
 import { fileClip } from "../clipFiles";
@@ -163,7 +163,7 @@ export function useTimelineDrop(
         // A length the browser could not read: the next one starts a still's worth later rather than on top.
         at += length ?? STILL_SECONDS;
       }
-      // 4. …and a shot's SOUND, which the engine plays from an audio lane (apps/k7-daw-frontend/packages/song/docs/videoSound.md).
+      // 4. …and a shot's SOUND, which the engine plays from an audio lane (apps/k7-daw-wasm/song/docs/videoSound.md).
       const pictured = plan.place
         .filter((p) => kindOf.get(p.id) === "video")
         .map((p) => p.lane);

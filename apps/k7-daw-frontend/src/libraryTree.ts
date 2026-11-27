@@ -4,15 +4,18 @@
 // LOADER resolves against — they sit outside the active project, so the file tree does not and
 // must not contain them. Why the tab exists: apps/k7-daw-frontend/docs/sharedModules.md.
 
-import { isDocFile, isLibraryName } from "@studio/k7-wasm/schema";
 import {
   FIXED_NAMESPACES,
   LIBRARIES_DIR,
-  type LibraryFileFamily,
+  type LIBRARY_FILE_FAMILIES,
   SHARED_MODULES_DIR,
-} from "@studio/song-schema/moduleTypes";
+} from "@studio/k7-wasm/consts";
+import { isDocFile, isLibraryName } from "@studio/k7-wasm/schema";
 import type { FileNode, ModuleLibrary } from "@studio/web-protocol";
 import { byPeople, byPeoplePath, sortNodes } from "@studio/web-protocol/tree";
+
+/** The family folders a library holds, as the file params name them. */
+type LibraryFileFamily = keyof typeof LIBRARY_FILE_FAMILIES;
 
 /** How a level is written wherever a person reads one: in a ref, and on a tree row. */
 const nsLabel = (ns: string): string => `@${ns}`;
@@ -226,7 +229,7 @@ export function libraryModuleRef(file: string): string | null {
 const refOf = (ns: string, segs: string[]): string | null =>
   segs.length >= 2 ? `${nsLabel(ns)}/${segs.join("/")}` : null;
 
-/** Is this workspace path inside one of the ACCOUNT's libraries? Only `_libraries/…`; a `@workspace` module forks instead (apps/k7-daw-frontend/packages/song/docs/moduleFork.md). */
+/** Is this workspace path inside one of the ACCOUNT's libraries? Only `_libraries/…`; a `@workspace` module forks instead (apps/k7-daw-wasm/song/docs/moduleFork.md). */
 export const isLibraryPath = (path: string): boolean =>
   path.split("/").includes(LIBRARIES_DIR);
 

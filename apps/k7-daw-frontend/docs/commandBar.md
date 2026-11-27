@@ -320,7 +320,7 @@ under the row the same way.
 
 Opened by the `+` on a graph arrow, before the command bar sees anything. The pick RUNS, like
 `ContextMenu`'s entries and unlike everything else here: a node names itself
-(`<lane>_<module>_<n>`, see `apps/k7-daw-frontend/packages/song/docs/nodes.md`), so nothing is left for a person to
+(`<lane>_<module>_<n>`, see `apps/k7-daw-wasm/song/docs/nodes.md`), so nothing is left for a person to
 supply and stopping at the bar would be asking them to press Enter on a line they did not write.
 
 Two picks pre-write instead, and for the mirror reason — there is a name left to supply. A **new

@@ -2,13 +2,20 @@
 // it, name each pad (its tap) and the kit, choose where the samples go — this project's samples/
 // or a library's — then CREATE: the samples are uploaded there, and the kit becomes a NODE of the
 // library's `k7-rack` on its `samples` engine, placed with its taps. Notes run 36 upward, bottom-left first —
-// the drum-machine reading rackBuilder.ts pins. Opened by `module create rack` (apps/k7-daw-frontend/packages/song/docs/racks.md).
+// the drum-machine reading rackBuilder.ts pins. Opened by `module create rack` (apps/k7-daw-wasm/song/docs/racks.md).
 
+import { FIXED_NAMESPACES } from "@studio/k7-wasm/consts";
 import { showToast } from "@studio/project-shell/toast";
-import { FIXED_NAMESPACES } from "@studio/song-schema/moduleTypes";
 import { Button } from "@studio/ui/button";
-import { Grip, Loader2, Pause, Play, X } from "@studio/ui/icons";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@studio/ui/dialog";
+import { Grip, Pause, Play, X } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
+import { Spinner } from "@studio/ui/spinner";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { api } from "../api";
 import { useLatest } from "../hooks/useLatest";
@@ -208,7 +215,7 @@ export function RackBuilder({
         want: [],
       });
       if (made.refused) throw new Error(made.output.join(" · "));
-      // A chain project names the node by a uuid, inside a chain file: the one name that just appeared (apps/k7-daw-frontend/packages/song/docs/chainFiles.md).
+      // A chain project names the node by a uuid, inside a chain file: the one name that just appeared (apps/k7-daw-wasm/song/docs/chainFiles.md).
       const fresh = (await api.hints()).modules.filter(
         (n) => !taken.includes(n),
       );
@@ -248,32 +255,22 @@ export function RackBuilder({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* The backdrop closes, like every popin's. */}
-      <button
-        type="button"
-        aria-label={m["common.closeLower"]()}
-        className="absolute inset-0 bg-black/50"
-        onClick={onClose}
-      />
-      <div className="relative flex max-h-[90vh] w-[min(34rem,92vw)] flex-col gap-3 overflow-auto rounded-lg border border-border bg-background p-4 shadow-xl">
-        <div className="flex items-center gap-2">
-          <span className="font-semibold text-primary-text">
-            <Grip className="h-4 w-4" /> {m["rb.title"]()}
-          </span>
+    // Not modal: an upload failure raises a toast, which a modal's pointer lock would leave unreachable.
+    <Dialog modal={false} open onOpenChange={(o) => !o && onClose()}>
+      <DialogContent
+        nonModal
+        layer="panel"
+        aria-describedby={undefined}
+        className="flex max-h-[90vh] w-[min(34rem,92vw)] max-w-none flex-col gap-3 overflow-auto sm:max-w-none"
+      >
+        <DialogHeader className="flex-row flex-wrap items-center gap-2">
+          <DialogTitle className="flex items-center gap-1.5 text-primary-text">
+            <Grip className="size-4" /> {m["rb.title"]()}
+          </DialogTitle>
           <span className="text-xs text-muted-foreground">
             {m["rb.hint"]()}
           </span>
-          <Button
-            size="icon-xs"
-            variant="ghost"
-            className="ml-auto"
-            onClick={onClose}
-            aria-label={m["common.closeLower"]()}
-          >
-            <X className="h-3.5 w-3.5" />
-          </Button>
-        </div>
+        </DialogHeader>
 
         <label className="flex items-center gap-2 text-sm">
           nom
@@ -360,7 +357,7 @@ export function RackBuilder({
                           title={m["rb.clearPad"]({ name: pad.file.name })}
                           aria-label={m["rb.clearPad"]({ name: pad.file.name })}
                           onClick={() => clearPad(row, col)}
-                          className="rounded p-0.5 hover:bg-destructive/20 hover:text-destructive"
+                          className="rounded p-0.5 hover:bg-error/20 hover:text-error"
                         >
                           <X className="h-3 w-3" />
                         </button>
@@ -432,13 +429,11 @@ export function RackBuilder({
             disabled={busy || issues.length > 0}
             onClick={() => void create()}
           >
-            {busy ? (
-              <Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" />
-            ) : null}
+            {busy ? <Spinner size="xs" inherit className="mr-1" /> : null}
             {m["rb.create"]()}
           </Button>
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

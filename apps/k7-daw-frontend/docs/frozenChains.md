@@ -24,7 +24,7 @@ a name of the account's (`POST /account/frozen-chains/<name>/copy`).
 ## Kept in the account's library, as an ordinary chain
 
 A saved chain is `@account/chains/<name>.k7x`, the account's own library
-(`apps/k7-daw-frontend/packages/song/docs/sharedFolders.md`): always the account's to write, synced like the rest of it,
+(`apps/k7-daw-wasm/song/docs/sharedFolders.md`): always the account's to write, synced like the rest of it,
 and walked FIRST by every chain reader. So nothing had to learn about frozen chains: the process
 verbs, the recorder's live list and the bench find one the moment it is written. An origin library
 stays an admin's to write, which is why the libraries' chains are copied rather than edited.

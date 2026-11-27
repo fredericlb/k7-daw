@@ -4,18 +4,10 @@
 // that ignores the app's Escape ladder, its focus and its language. Render <AskHost/> once beside
 // <Toaster/>. See docs/ask.md.
 
+import { Button } from "@studio/ui/button";
+import { Input } from "@studio/ui/input";
 import { useModalFocus } from "@studio/ui/modal-focus";
 import { useEffect, useRef, useState } from "react";
-
-const cx = (...parts: (string | false | undefined)[]): string =>
-  parts.filter(Boolean).join(" ");
-
-// The dialog's buttons are 44 px pills: glass for the secondary, accent for the primary, error-red for the one that does not come back.
-const PILL =
-  "type-label inline-flex h-11 cursor-pointer desk:h-8 items-center justify-center rounded-full px-[18px] outline-none transition-colors focus-visible:shadow-(--k7-focus-ring) disabled:pointer-events-none disabled:opacity-40";
-const SECONDARY = `${PILL} glass text-foreground hover:brightness-125`;
-const PRIMARY = `${PILL} bg-primary text-primary-foreground shadow-(--k7-highlight) hover:bg-primary-hover`;
-const DANGER = `${PILL} bg-error text-ink hover:brightness-95`;
 
 interface Common {
   title: string;
@@ -233,12 +225,11 @@ function AskDialog({
         ) : null}
         {text ? (
           <div className="flex flex-col gap-1">
-            <input
+            <Input
               ref={field}
               value={value}
               placeholder={text.placeholder}
               onChange={(e) => setValue(e.target.value)}
-              className="type-body h-11 rounded-[14px] desk:h-8 border border-(--k7-input-line) bg-(--k7-input-fill) px-3.5 text-foreground outline-none focus:border-(--k7-focus-line) focus:bg-(--k7-input-fill-focus) focus:shadow-(--k7-focus-ring)"
             />
             {invalid ? (
               <span className="type-status text-error">{invalid}</span>
@@ -247,57 +238,60 @@ function AskDialog({
         ) : null}
         <div className="flex items-center justify-end gap-2">
           {tool ? (
-            <button
+            <Button
               type="button"
+              variant="secondary"
               // Focus stays in the field, so Enter after tapping still answers rather than pressing the tool again.
               onMouseDown={(e) => e.preventDefault()}
               onClick={pressTool}
-              className={cx(SECONDARY, "mr-auto")}
+              className="mr-auto"
             >
               {tool.label}
-            </button>
+            </Button>
           ) : null}
           {pending.kind === "confirm" && pending.notice ? null : (
-            <button type="button" onClick={cancel} className={SECONDARY}>
+            <Button type="button" variant="secondary" onClick={cancel}>
               {pending.cancelLabel ?? ENGLISH.cancel}
-            </button>
+            </Button>
           )}
           {text?.actions?.map((a) => (
-            <button
+            <Button
               key={a.key}
               type="button"
               disabled={!!invalid}
               onClick={() => onDone(answer(a.key))}
-              className={SECONDARY}
+              variant="secondary"
             >
               {a.label}
-            </button>
+            </Button>
           ))}
           {choice ? (
             // Every answer a button; the last one is the primary, as Enter takes it.
             choice.choices.map((c, i) => (
-              <button
+              <Button
                 key={c.key}
                 type="button"
                 onClick={() => onDone(c.key)}
-                className={
-                  i === choice.choices.length - 1 ? PRIMARY : SECONDARY
+                variant={
+                  i === choice.choices.length - 1 ? "default" : "secondary"
                 }
               >
                 {c.label}
-              </button>
+              </Button>
             ))
           ) : (
-            <button
+            <Button
               type="button"
               disabled={!!invalid}
               onClick={accept}
-              className={
-                pending.kind === "confirm" && pending.danger ? DANGER : PRIMARY
+              variant={
+                pending.kind === "confirm" && pending.danger
+                  ? "destructive"
+                  : "default"
               }
             >
               {pending.confirmLabel ?? ENGLISH.confirm}
-            </button>
+            </Button>
           )}
         </div>
       </div>

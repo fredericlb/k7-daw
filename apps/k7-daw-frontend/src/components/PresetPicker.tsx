@@ -1,14 +1,11 @@
 // PresetPicker.tsx — "which preset?", asked by a node's one dropdown on the graph. The same popup as
 // the module and asset pickers, with a header of its own — SAVE the node as a new preset, kept in the
 // workspace or a library, and UPDATE the one last loaded — and, for a module with several engines, a
-// left bar to pick the ENGINE. Every action is a verb the caller runs. See apps/k7-daw-frontend/packages/song/docs/userPresets.md.
+// left bar to pick the ENGINE. Every action is a verb the caller runs. See apps/k7-daw-wasm/song/docs/userPresets.md.
 
-import { fuzzyScore } from "@studio/k7-wasm/ui";
-import {
-  type NodePresets,
-  PRESET_NAME,
-  type PresetEntry,
-} from "@studio/song-schema/presets";
+import { isPresetName } from "@studio/k7-wasm/schema";
+import type { NodePresets, PresetEntry } from "@studio/k7-wasm/types";
+import { fuzzyScores } from "@studio/k7-wasm/ui";
 import { RefreshCw, Save } from "@studio/ui/icons";
 import type { NodeEngines } from "@studio/ui-chains-react";
 import { byPeople } from "@studio/web-protocol/tree";
@@ -37,8 +34,12 @@ function searchPresets(
 ): TreeNode<PresetEntry>[] {
   const q = query.trim();
   if (!q) return [];
+  const scores = fuzzyScores(
+    q,
+    presets.map((p) => p.name),
+  );
   return presets
-    .map((p) => ({ p, score: fuzzyScore(q, p.name) }))
+    .map((p, i) => ({ p, score: scores[i] ?? -1 }))
     .filter((s) => s.score > 0)
     .sort((a, b) => b.score - a.score || byPeople(a.p.name, b.p.name))
     .slice(0, SEARCH_LIMIT)
@@ -87,7 +88,7 @@ export function PresetPicker({
   const [scope, setScope] = useState(data.scopes[0] ?? "workspace");
   const clean = name.trim();
   const taken = data.presets.some((p) => p.scope === scope && p.name === clean);
-  const canSave = PRESET_NAME.test(clean) && !taken;
+  const canSave = isPresetName(clean) && !taken;
   const save = () => {
     if (!canSave) return;
     onSave(clean, scope);

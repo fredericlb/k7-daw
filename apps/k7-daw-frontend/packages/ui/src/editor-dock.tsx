@@ -66,15 +66,19 @@ export function DockHint({ text }: { text: string }) {
 export function DockStatus({
   children,
   tone = "muted",
+  title,
 }: {
   children: React.ReactNode;
   tone?: "muted" | "error";
+  /** The tooltip: the raw detail a person is not meant to read inline. */
+  title?: string;
 }) {
   return (
     <DockHeaderRow>
       <p
         role="status"
         data-slot="dock-status"
+        title={title}
         className={cn(
           "type-secondary min-w-0 flex-1 truncate",
           tone === "error" ? "text-(--k7-error)" : "text-fg-2",

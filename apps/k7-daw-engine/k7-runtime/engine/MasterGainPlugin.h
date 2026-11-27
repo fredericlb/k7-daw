@@ -6,7 +6,7 @@
 // is a limitation rather than a shape, since a mix built with headroom is asked for +12 routinely.
 //
 // So this one does not borrow the curve at all — dB straight to a linear gain, no mapping and no clamp.
-// See apps/k7-daw-frontend/packages/song/docs/masterVolume.md.
+// See apps/k7-daw-wasm/song/docs/masterVolume.md.
 
 #pragma once
 

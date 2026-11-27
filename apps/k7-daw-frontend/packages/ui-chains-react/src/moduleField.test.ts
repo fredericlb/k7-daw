@@ -56,7 +56,7 @@ describe("the camera dropdown", () => {
   });
 
   it('shows "default" for the empty string, which is a lens too', () => {
-    // "" means whichever camera this machine calls default — see apps/k7-daw-frontend/packages/song/docs/camera.md.
+    // "" means whichever camera this machine calls default — see apps/k7-daw-wasm/song/docs/camera.md.
     expect(shown(node({ camera: "" }), camWidget(), "camera")).toBe("default");
   });
 

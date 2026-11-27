@@ -2,15 +2,13 @@
 // `_references/`, a ＋ that uploads into it, and a row you click to hear. It plays nothing
 // itself — the player (ReferenceBar) does, drawing its card in this panel's slot (../docs/references.md).
 
+import { REFERENCE_EXTS, REFERENCES_DIR } from "@studio/k7-wasm/consts";
+import type { ReferenceTrack } from "@studio/k7-wasm/types";
 import { askConfirm } from "@studio/project-shell/ask";
-import {
-  REFERENCE_ACCEPT,
-  REFERENCES_DIR,
-  type ReferenceTrack,
-} from "@studio/song-schema/reference";
 import { Button } from "@studio/ui/button";
 import { EmptyState } from "@studio/ui/empty-state";
-import { Loader2, Music, Pause, Play, Plus, Trash2 } from "@studio/ui/icons";
+import { Music, Pause, Play, Plus, Trash2 } from "@studio/ui/icons";
+import { Loading, Spinner } from "@studio/ui/spinner";
 import { formatBytes } from "@studio/ui-chains-react/node-load";
 import { byPeoplePath } from "@studio/web-protocol/tree";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -18,6 +16,9 @@ import { api } from "../api";
 import { parts } from "../i18nParts";
 import { m } from "../paraglide/messages.js";
 import { PanelError } from "./PanelError";
+
+/** The extensions a file picker offers, as one `accept` string. */
+const REFERENCE_ACCEPT = REFERENCE_EXTS.map((e) => `.${e}`).join(",");
 
 export function ReferencesPanel({
   playing,
@@ -129,7 +130,7 @@ export function ReferencesPanel({
 
       {busy ? (
         <p className="flex shrink-0 items-center gap-2 border-b bg-muted/30 px-2 py-1.5 text-muted-foreground text-xs">
-          <Loader2 className="h-3 w-3 shrink-0 animate-spin" /> {busy}
+          <Spinner size="xs" inherit className="shrink-0" /> {busy}
         </p>
       ) : null}
 
@@ -142,7 +143,7 @@ export function ReferencesPanel({
       ) : null}
 
       {note ? (
-        <p className="shrink-0 border-b px-2 py-1.5 text-destructive text-xs">
+        <p className="shrink-0 border-b px-2 py-1.5 text-error text-xs">
           {note}
         </p>
       ) : null}
@@ -151,8 +152,8 @@ export function ReferencesPanel({
 
       <div className="min-h-0 flex-1 overflow-y-auto">
         {rows === null ? (
-          <div className="flex items-center gap-2 p-4 text-muted-foreground text-sm">
-            <Loader2 className="h-4 w-4 animate-spin" /> {m["common.loading"]()}
+          <div className="p-4 text-muted-foreground text-sm">
+            <Loading label={m["common.loading"]()} />
           </div>
         ) : rows.length === 0 ? (
           <EmptyState compact glyph={<Music />} title={m["refs.emptyTitle"]()}>

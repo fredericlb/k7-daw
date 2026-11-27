@@ -17,7 +17,7 @@ npx tsx apps/k7-daw-engine/k7-runtime/scripts/quick-master.ts
 
 What follows is the measurement method, which is the hard part. The subject matter itself lives
 elsewhere: [warp.md](warp.md), [quickMaster.md](quickMaster.md), and
-`apps/k7-daw-frontend/packages/song/docs/padEffects.md`.
+`apps/k7-daw-wasm/song/docs/padEffects.md`.
 
 ## Measure what the process does not smear
 
@@ -120,7 +120,7 @@ that check is a MARGIN rather than exact silence: the fader's own curve decides 
 question being asked is only whether the plugin ran at all.
 
 The parameter is `Volume`, capitalised, which is the name the plugin publishes
-(`apps/k7-daw-frontend/packages/song-schema/src/builtinParams.generated.json`). A lowercase key matches nothing and
+(`apps/k7-daw-wasm/song/src/modules/builtinParams.generated.json`). A lowercase key matches nothing and
 changes nothing, silently, which is the failure this case is shaped to catch.
 
 The trim case is the opposite. `MasterGainPlugin` takes dB straight to a linear factor with no

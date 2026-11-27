@@ -15,7 +15,7 @@ const SKIP_TMP: &str = "a folder the harvest scrubbed to $TMP";
 pub fn env() -> Env {
     let mut e = Env::at(
         &format!("{}/home", tmp()),
-        &format!("{}/apps/k7-daw-frontend/packages/song/meta", repo()),
+        &format!("{}/apps/k7-daw-wasm/song/meta", repo()),
     );
     e.models_root = format!("{}/home/models", tmp());
     e

@@ -5,14 +5,17 @@ import { HttpError } from "@studio/http-client/call";
 import {
   LIBRARY_LEVEL,
   LIBRARY_PINS_FILE,
+  UNPINNED_VERSION,
+} from "@studio/k7-wasm/consts";
+import {
   type LibraryPins as Pins,
   parseLibraryPins,
-  pinnedVersion,
   stringifyLibraryPins,
-} from "@studio/song-schema/libraryVersions";
+} from "@studio/k7-wasm/text";
 import { Button } from "@studio/ui/button";
 import { Check } from "@studio/ui/icons";
 import { RowGroup } from "@studio/ui/row-group";
+import { SectionHeading } from "@studio/ui/section-heading";
 import type { AccountLibrary, AccountWorkspace } from "@studio/web-protocol";
 import { useCallback, useEffect, useState } from "react";
 import { m } from "../paraglide/messages.js";
@@ -101,7 +104,9 @@ export function LibraryPins({
         aria-label={m["libs.pinnedBy"]()}
         className="flex flex-col gap-2"
       >
-        <h2 className="type-caps px-1 text-fg-3">{m["libs.pinnedBy"]()}</h2>
+        <SectionHeading as="h2" className="px-1">
+          {m["libs.pinnedBy"]()}
+        </SectionHeading>
         <RowGroup>
           {rows.flatMap(({ ws, pins, unread }) =>
             unread !== null
@@ -119,7 +124,7 @@ export function LibraryPins({
                   </p>,
                 ]
               : versioned.map((l) => {
-                  const pinned = pinnedVersion(pins, l.name);
+                  const pinned = pins[l.name] ?? UNPINNED_VERSION;
                   const newest = newestRunnable(l);
                   const behind =
                     typeof pinned === "number" &&

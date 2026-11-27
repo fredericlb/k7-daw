@@ -10,22 +10,21 @@ import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
+import { FILE_PARAMS, LIBRARY_FILE_PARAMS } from "@studio/k7-wasm/consts";
 import { parse } from "@studio/k7-wasm/k7x";
-import { engineModuleOf } from "@studio/k7-wasm/schema";
-import { builtinPluginFor } from "@studio/song-schema/builtinParams";
-import {
-  FILE_PARAMS,
-  LIBRARY_FILE_PARAMS,
-} from "@studio/song-schema/moduleTypes";
-import { byCodePoint } from "@studio/song-schema/textOrder";
-import { sugarFor } from "@studio/song-schema/yaml/sugar";
+import { builtinPluginFor, engineModuleOf } from "@studio/k7-wasm/schema";
+import { expandSugar } from "@studio/k7-wasm/text";
+
+/** Unicode code point order, which UTF-8 byte order is. */
+const byCodePoint = (a: string, b: string): number =>
+  Buffer.compare(Buffer.from(a), Buffer.from(b));
 
 const wsExists = (f: string): boolean => existsSync(f);
 
 /** A .k7x file's data, its short forms expanded by the kind its path names. */
 function wsData(f: string): Record<string, unknown> {
   const data = parse(readFileSync(f, "utf8"));
-  return sugarFor(f)?.expand(data) ?? data;
+  return expandSugar(f, data);
 }
 
 type Scanned = {

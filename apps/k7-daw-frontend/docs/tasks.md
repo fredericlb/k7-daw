@@ -24,7 +24,7 @@ in the app:
 A task is a `- [ ]` line (`* [ ]` too), done when `[x]`. The backticked tail is its anchor: the
 project as the workspace names it, and a timecode in it. The project is part of the anchor because one
 file serves every song; a timecode alone would not say which. The parser and every edit are
-`@studio/song-schema`'s `tasks.ts`, browser-safe, so the panel reads the file with the rules the
+`song-edit`'s `tasks.rs`, reached as `@studio/k7-wasm/schema`, so the panel reads the file with the rules the
 commands write it with.
 
 **An edit rewrites one line and nothing else.** A heading, prose and blank lines a person wrote around

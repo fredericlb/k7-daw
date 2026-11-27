@@ -42,7 +42,7 @@ scripts run (`servicePorts`). `pl8` and `k7` have no port of their own: they are
 can BE is a shape *inside* `.k7` rather than a folder kind of its own: a song carries
 picture lanes and a `viewport` surface, a set carries `songs.k7x` and a `turntables` surface
 (`PROJECT_SHAPES` in `@studio/song`). See `apps/k7-daw-wasm/verbs/docs/picture/picture.md` and
-`apps/k7-daw-frontend/packages/song/docs/setProject.md`. It stays a `Record<ProjectApp, string>`, so an app added to
+`apps/k7-daw-wasm/song/docs/setProject.md`. It stays a `Record<ProjectApp, string>`, so an app added to
 `ProjectApp` fails to compile until its suffix is stated.
 
 `projectApp` reads the NAME, not the contents, and the two are different questions: "who opens

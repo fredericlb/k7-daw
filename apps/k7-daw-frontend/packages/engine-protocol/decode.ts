@@ -98,7 +98,7 @@ export function decodeState(m: StateFrame): EngineState {
     masterClipped: !!m.masterClipped,
     waveform: m.waveform ?? {},
     platters: m.platters ?? {},
-    // Dropped here, the bar's record button never knows the output is recording — apps/k7-daw-frontend/packages/song/docs/outputRecording.md.
+    // Dropped here, the bar's record button never knows the output is recording — apps/k7-daw-wasm/song/docs/outputRecording.md.
     recorders: m.recorders ?? {},
     // Left absent when the frame carries none: a store keeps the last one.
     ...(m.load ? { load: m.load } : {}),

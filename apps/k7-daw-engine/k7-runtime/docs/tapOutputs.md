@@ -1,6 +1,6 @@
 # tapOutputs.md — an instrument whose taps leave by outputs of their own
 
-A rack's tap or a kit's pad can be routed to a subchain of its own (`apps/k7-daw-frontend/packages/song/docs/racks.md`):
+A rack's tap or a kit's pad can be routed to a subchain of its own (`apps/k7-daw-wasm/song/docs/racks.md`):
 the snare through a reverb the kick never hears. In the document that is two fields:
 `PluginDoc.tapOuts`, `{ note, pair }` per routed tap, and `TrackDoc.inputFrom`, `{ plugin, pair }`
 on the track that pair feeds. Pair 0 is the instrument's main output, which every unrouted tap

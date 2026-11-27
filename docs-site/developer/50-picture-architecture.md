@@ -64,7 +64,7 @@ and carries the source in the document: the browser cannot open a module folder.
 and its arm state is per browser. The engine never hears about a camera.
 
 **Files are edited surgically.** Lane files carry comments; every writer in
-`apps/k7-daw-frontend/packages/song-schema/src/yaml/videoTrackFile.ts` changes values in place rather than
+`apps/k7-daw-wasm/song-edit/src/picture_file.rs` changes values in place rather than
 re-serialising the file, and rounds times to the millisecond so a drag and a verb leave the same
 bytes.
 
@@ -72,13 +72,13 @@ bytes.
 
 | path | role |
 |---|---|
-| `apps/k7-daw-frontend/packages/song-schema/src/yaml/entitySchemas.ts` | `VideoClipSchema`, `CaptionClipSchema` |
-| `apps/k7-daw-frontend/packages/song-schema/src/yaml/placementSchema.ts` | `PlacementSchema` (one event, a sound event or a shot), `FadeSchema`, `SHOT_KEYS` |
+| `apps/k7-daw-wasm/song/src/files/entity.rs` | the clip file: a picture, a still and captions by the extension of `source` |
+| `apps/k7-daw-wasm/song/src/files/placement.rs` | `Placement` (one event, a sound event or a shot), the fade's spellings |
 | `apps/k7-daw-wasm/verbs/src/picture/lanes.rs` | which lanes are picture lanes (`@meta/picture-track`), and each one's file |
-| `apps/k7-daw-frontend/packages/song-schema/src/yaml/projectSchema.ts` | `viewport` (draw order is `trackOrder`'s picture rows, top in front), the `video` and `live-video` archetypes |
-| `apps/k7-daw-frontend/packages/song-schema/src/yaml/moduleSchema.ts` | the picture module fields: `shader`, `shape`, `font`, `align`, `background`, `shadow`, `camera`, `frame`, `lut`, `video_source` |
-| `apps/k7-daw-frontend/packages/song-schema/src/moduleTypes.ts` | `RENDER`, `VIDEO_OUT`, `CAM`, the `shaders` / `shapes` / `video_transitions` / `video_effects` categories, `SHADER_PARAMS`, `DISSOLVE`, `OVER` |
-| `apps/k7-daw-frontend/packages/song-schema/src/keyframes.ts` | the `animate` schema and its evaluation |
+| `apps/k7-daw-wasm/song/src/files/project.rs` | `viewport` (draw order is `trackOrder`'s picture rows, top in front), the `video` and `live-video` archetypes |
+| `apps/k7-daw-wasm/song/src/modules/schema.rs` | the picture module fields: `shader`, `shape`, `font`, `align`, `background`, `shadow`, `camera`, `frame`, `lut`, `video_source` |
+| `apps/k7-daw-wasm/song/src/modules/names.rs` | `RENDER`, `VIDEO_OUT`, `CAM`, the `shaders` / `shapes` / `video_transitions` / `video_effects` categories, `SHADER_PARAMS`, `DISSOLVE`, `OVER` |
+| `apps/k7-daw-wasm/song-schema/src/keyframes.rs` | the `animate` keys and their evaluation |
 | `apps/k7-daw-wasm/song-edit/src/track_file.rs` | surgical writers for lane files |
 | `apps/k7-daw-wasm/song-schema/src/aspect.rs` | the `16:9` / `9:16` shapes |
 | `apps/k7-daw-wasm/verbs/src/picture/` | the picture compile and its scene |

@@ -7,17 +7,17 @@ touch and what forgetting it costs.
 
 Take, as an example, a new optional number on a lane's event.
 
-1. **Schema.** Add it to the zod schema in `apps/k7-daw-frontend/packages/song-schema`: here `PlacementSchema` in
-   `apps/k7-daw-frontend/packages/song-schema/src/yaml/placementSchema.ts`. Module, node and lane fields go in
-   `MODULE_FIELDS` in `apps/k7-daw-frontend/packages/song-schema/src/yaml/moduleSchema.ts` (shared by modules and their
+1. **Schema.** Add it to the Rust reader: here `Placement` in
+   `apps/k7-daw-wasm/song/src/files/placement.rs`. Module, node and lane fields go in
+   `Module` in `apps/k7-daw-wasm/song/src/modules/schema.rs` (shared by modules and their
    alternatives); project fields in `ProjectSettings` of `apps/k7-daw-wasm/song/src/files/project.rs`; clips,
    sequences and curves in `apps/k7-daw-wasm/song/src/files/entity.rs` and `apps/k7-daw-wasm/song/src/curves/file.rs`.
    The Rust readers are strict: until this step, the field is refused with `unknown key`.
    Give it bounds and a message that names the expected spelling; the message is what the user reads.
 2. **Completion comes for free.** `apps/k7-daw-wasm/song/src/views/fields.rs` reads the keys the decoder's derive names, so
    the editor offers the field. Only a widget field must be added by hand to `WIDGET_FIELDS` there.
-3. **Timecodes.** If the value is a timecode, add its key to `TIMECODE_KEYS` in
-   `apps/k7-daw-frontend/packages/song-schema/src/yaml/placementSchema.ts`, so every writer quotes it.
+3. **Timecodes.** If the value is a timecode, type it `Timecode` in
+   `apps/k7-daw-wasm/song/src/files/scalar.rs`, so the reader takes a position or a duration.
 4. **Keyed lists.** If the field is a list whose items should sync as items, give it key fields in
    `LIST_KEYS` (`apps/k7-daw-backend/packages/k7-sync/src/k7x/locate.rs`); otherwise a concurrent edit to one item replaces
    the whole list.
@@ -32,8 +32,8 @@ Take, as an example, a new optional number on a lane's event.
    checks of the song crate (`apps/k7-daw-wasm/song/src/lanes/references.rs`) and report with a message naming the lane and the target. If it names a
    path, pass it through `confineTo`/`projectRoots` (`apps/k7-daw-wasm/song-edit/src/confine.rs`): every file
    service runs as the same OS user, so a `../` is another account's file.
-8. **Writer.** If k7 changes the field, write a text transform in the kind's `*File.ts`
-   (`apps/k7-daw-frontend/packages/song-schema/src/yaml/`) or a writer in `apps/k7-daw-frontend/packages/song-edit/src/`, delete the key when it
+8. **Writer.** If k7 changes the field, write a text transform in the kind's writer
+   in `apps/k7-daw-wasm/song-edit/src/`, delete the key when it
    returns to its default, and expose it as a verb in `apps/k7-daw-wasm/verbs`. Never re-serialise a whole
    document: comments and other values must stay byte for byte, or the history falls back to whole-text
    operations.
@@ -45,15 +45,15 @@ Take, as an example, a new optional number on a lane's event.
 ## Adding a file kind
 
 1. **Folder and schema.** Name the folder (a constant beside the schema, as `CHAINS_DIR` or
-   `ASSEMBLIES_DIR`) and write its schema in `apps/k7-daw-frontend/packages/song-schema/src/yaml/`. A file is named by its id;
+   `ASSEMBLIES_DIR`) and write its reader in `apps/k7-daw-wasm/song/src/files/`. A file is named by its id;
    never add an `id:` field inside it.
 2. **Validation.** Route it in `family_of` (`apps/k7-daw-wasm/song/src/files/route.rs`) and give it an arm in
    `judge` (`apps/k7-daw-wasm/song/src/files/validate.rs`). Order matters: the router tests folders first,
    then basenames. Without this the editor checks syntax only.
 3. **Completion.** Add a kind to `file_kind_for` and `fields_at` in
    `apps/k7-daw-wasm/song/src/views/fields.rs`.
-4. **k7x short form**, if one is wanted: a `SugarPart` in `apps/k7-daw-frontend/packages/song-schema/src/yaml/sugar.ts`,
-   returned by `sugarFor(path)`. It must expand to plain data the schema already accepts.
+4. **k7x short form**, if one is wanted: a `SugarPart` in `apps/k7-daw-wasm/song-edit/src/sugar.rs`,
+   returned by `sugar_for(path)`. It must expand to plain data the schema already accepts.
 5. **Loader.** Read it in `apps/k7-daw-wasm/song-edit/src/loader.rs` — a flat folder of entities can be added to
    `ENTITY_SCHEMAS` and read through `readYamlEntities`/`exportSub`; an optional folder with its own
    reader follows `apps/k7-daw-wasm/song/src/views/surfaces.rs` or `apps/k7-daw-wasm/song/src/assemblies/mod.rs`. Always go through
@@ -73,8 +73,8 @@ Take, as an example, a new optional number on a lane's event.
 ## Running the checks
 
 ```bash
-npm test --workspace @studio/song-schema
-npm test --workspace @studio/song
-npm test --workspace @studio/song-edit
+cargo test --manifest-path apps/k7-daw-wasm/song-schema/Cargo.toml
+cargo test --manifest-path apps/k7-daw-wasm/song/Cargo.toml
+cargo test --manifest-path apps/k7-daw-wasm/song-edit/Cargo.toml
 npm run lint
 ```

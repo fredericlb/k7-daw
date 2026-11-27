@@ -11,7 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@studio/ui/dialog";
-import { Loader2 } from "@studio/ui/icons";
+import { Spinner } from "@studio/ui/spinner";
 import { useState } from "react";
 import { m } from "../paraglide/messages.js";
 
@@ -62,7 +62,7 @@ export function DeleteProject({
 
         {step && (
           <p className="type-secondary text-fg-2">
-            <Loader2 className="mr-1 inline h-3 w-3 animate-spin" />
+            <Spinner size="xs" inherit className="mr-1 inline" />
             {step}
           </p>
         )}
@@ -77,7 +77,7 @@ export function DeleteProject({
             {m["common.cancel"]()}
           </Button>
           <Button variant="destructive" disabled={busy} onClick={submit}>
-            {busy && <Loader2 className="mr-1 size-5 animate-spin" />}
+            {busy && <Spinner inherit className="mr-1" />}
             {m["project.delete"]()}
           </Button>
         </DialogFooter>

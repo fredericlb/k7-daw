@@ -135,6 +135,11 @@ fn issue(text: &str, f: &Finding, path: Option<&str>) -> ModuleIssue {
     }
 }
 
+/// A finding of a decoder run outside the router, as the issue the editor draws.
+pub fn finding_issue(text: &str, f: &Finding) -> ModuleIssue {
+    issue(text, f, None)
+}
+
 /// The reader of one family over a text; a project root answers its refusal as a finding too.
 fn judge(family: Family, path: &str, text: &str) -> Result<(), Finding> {
     match family {

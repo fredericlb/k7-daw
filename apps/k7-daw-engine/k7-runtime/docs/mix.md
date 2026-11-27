@@ -20,7 +20,7 @@ Blending on top of a plugin that still blends inside would stack two dry/wets: a
 a third wet reads 100 % on the MIX knob and plays a third. So once the engine owns a module's blend,
 the plugin's own is held where it cannot fight it — every param whose name holds *wet* or *mix* at
 its maximum, one holding only *dry* at its minimum (`holdOwnMix`). A live set of one of them is
-refused with a warning. The names are the ones `ownMixSide` reads in `@studio/song-schema`, so the
+refused with a warning. The names are the ones `ownMixSide` reads in `song-schema`, so the
 compile and the engine agree on which params these are.
 
 WHICH modules own their blend is the compile's decision (the song crate's `stage_of`, `apps/k7-daw-wasm/song/src/`): an EFFECT

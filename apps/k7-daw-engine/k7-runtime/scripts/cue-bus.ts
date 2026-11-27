@@ -6,7 +6,7 @@
 // 2. Does `outputChannels` really take a track OFF the mixer's sum? An offline render opens no
 //    interface, so a cue bus must come out SILENT rather than folded into the master.
 //   npx tsx apps/k7-daw-engine/k7-runtime/scripts/cue-bus.ts
-// See apps/k7-daw-frontend/packages/song/docs/cue.md.
+// See apps/k7-daw-wasm/song/docs/cue.md.
 
 import { findEngineBinary } from "./lib/engine-client/engineBinary.ts";
 import { renderProject } from "./lib/take-render/renderProject.ts";

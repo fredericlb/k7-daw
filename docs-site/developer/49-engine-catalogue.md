@@ -27,7 +27,7 @@ file:
 
 - `apps/k7-daw-wasm/song/src/modules/scan.rs` turns each entry into an `@engine/<slug>` module
   (`slugifyPluginName`), filed under `instruments`, `transformers` or `audio` by
-  `categoryForRole` (`apps/k7-daw-frontend/packages/song-schema/src/moduleTypes.ts`). No wrapper file mirrors the scan:
+  `category_for_role` (`apps/k7-daw-wasm/song/src/modules/types.rs`). No wrapper file mirrors the scan:
   a folder exists only for what someone authored (`module own` creates one).
 - `apps/k7-daw-wasm/song/src/modules/scan.rs` (`is_plugin_scanned`) is what
   the graph route (`apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/docs.rs`) asks to mark a node whose plugin is absent.
@@ -64,8 +64,8 @@ the `@mix` split and blend pair, and the master gain.
 
 Panels, the builder and `lint:panels` need parameter names and ranges with no engine running.
 For built-ins, `apps/k7-daw-engine/k7-runtime/scripts/gen-builtin-params.mjs` instantiates each one and
-writes `apps/k7-daw-frontend/packages/song-schema/src/builtinParams.generated.json`; `builtinPluginFor` in
-`apps/k7-daw-frontend/packages/song-schema/src/builtinParams.ts` reads it. Regenerate it when a built-in's parameters
+writes `apps/k7-daw-wasm/song/src/modules/builtinParams.generated.json`; `builtinPluginFor` in
+`apps/k7-daw-frontend/packages/k7-wasm/src/schema.ts` asks `apps/k7-daw-wasm/song/src/modules/builtin.rs`, which reads it. Regenerate it when a built-in's parameters
 change. External plugins are only known by instantiating them, which the engine binary does for
 `lint:panels` (`--dump-params-ext`) and for the builder's "read parameters" button.
 
@@ -73,7 +73,7 @@ change. External plugins are only known by instantiating them, which the engine 
 
 Every module gets three engine-side parameters whatever it hosts: `@input-volume` and `@mix`
 (audio effects) and `@output-volume` (everything), constants `INPUT_VOLUME_PARAM`, `MIX_PARAM`,
-`OUTPUT_VOLUME_PARAM` and `VOLUME_RANGE` in `apps/k7-daw-frontend/packages/song-schema/src/moduleTypes.ts`. When the
+`OUTPUT_VOLUME_PARAM` and `VOLUME_RANGE` in `@studio/k7-wasm/consts`. When the
 engine owns the blend or the levels, the plugin's own dry/wet and level parameters are held
 (`ownMixSide`, `ownLevelSide`), and panels must not show them; the builder's auto layout and AI
 checks drop them for that reason.

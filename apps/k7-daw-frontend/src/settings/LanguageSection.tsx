@@ -2,9 +2,10 @@
 // machine anything: it is the BROWSER's, kept in its own localStorage and travelling with nothing.
 // See ../../docs/settings.md.
 
+import { Row } from "@studio/ui/row-group";
 import { useLocale } from "../i18n";
 import { m } from "../paraglide/messages.js";
-import { Action, Row, Section } from "./Section";
+import { Action, Section } from "./Section";
 
 /** Each locale named in ITS OWN language: a list you pick from has to read in the language you want. */
 const NAMES: Record<string, string> = { en: "English", fr: "Français" };
@@ -14,8 +15,9 @@ export function LanguageSection() {
   const { locale, locales, setLocale } = useLocale();
   return (
     <Section title={m["lang.title"]()} hint={m["lang.hint"]()}>
-      <Row label={nameOf(locale)} detail={m["lang.detail"]()}>
-        {locales.map((l) => (
+      <Row
+        detail={m["lang.detail"]()}
+        trailing={locales.map((l) => (
           <Action
             key={l}
             onClick={() => l !== locale && setLocale(l)}
@@ -30,6 +32,8 @@ export function LanguageSection() {
             {nameOf(l)}
           </Action>
         ))}
+      >
+        {nameOf(locale)}
       </Row>
     </Section>
   );

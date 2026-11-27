@@ -30,6 +30,7 @@ import { api, engines } from "./api";
 import { currentScopeKey, subscribeAddress, useScopeWatch } from "./appNav";
 import { AuthGate } from "./components/AuthGate";
 import "./disabledReasonToast";
+import "./searchRank";
 
 /** The four screens that are NOT the home page, split out of the entry — see docs/shell.md.
  *  Only one address is ever taken, so only one of these is ever fetched. */

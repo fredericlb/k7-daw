@@ -23,7 +23,9 @@ mod warp;
 
 pub use aspect::{ASPECTS, Aspect, aspect_of};
 pub use audio_files::{ext_of, is_audio};
-pub use curve::{Adsr, Curve, Cut, Kind, Point, Points, Polarity, Shape, cut_output};
+pub use curve::{
+    ADSR_DEFAULT_LEVEL, Adsr, CURVE_CUTS, Curve, Cut, Kind, LFO_SHAPES, Point, Points, Polarity, Shape, cut_output,
+};
 pub use curve_spec::{AdsrSpec, CurveSpec, LfoSpec, PointSpec, PointsSpec};
 pub use error::SchemaError;
 pub use keyframes::{Ease, Key, value_at};

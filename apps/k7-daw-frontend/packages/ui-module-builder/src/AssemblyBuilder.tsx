@@ -6,27 +6,16 @@
 // The param list comes from the template's own GRAPH: an assembly folder is a graph folder, so
 // `GET /graph?at=<path>` resolves every member through its `extends` and hands back what it runs
 // with. That is the same road the chains builder takes, and it costs no new route.
-// Full rationale: docs/builder.md, and apps/k7-daw-frontend/packages/song/docs/assemblies.md.
+// Full rationale: docs/builder.md, and apps/k7-daw-wasm/song/docs/assemblies.md.
 
 import type { WebGraph } from "@studio/graph-model";
-import { K7Document, type K7Scope } from "@studio/k7-wasm/k7x";
-import {
-  dropAssemblyParam,
-  parseAssemblyTemplate,
-  setAssemblyParam,
-} from "@studio/song-schema/yaml/assemblyFile";
+import { readAssemblyTemplate } from "@studio/k7-wasm/text";
 import { useAutosave } from "@studio/ui-editor/autosave";
 import { YamlPane } from "@studio/ui-editor/yaml-pane";
 import type { Hints } from "@studio/web-protocol";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { assemblyProblem, editedAssembly } from "./assemblyEdit";
 import type { ModuleStore } from "./store";
-
-/** A writer run on the template's text, which comes back edited. */
-function edited(text: string, write: (doc: K7Scope) => unknown): string {
-  const doc = new K7Document(text);
-  write(doc.at([]));
-  return doc.toString();
-}
 
 /** One promotable row: a member, one of its params, and whether the box already wears it. */
 interface Row {
@@ -115,10 +104,14 @@ export function AssemblyBuilder({
   }, [store, path]);
 
   const parsed = useMemo(
-    () => (content == null ? null : parseAssemblyTemplate(content)),
+    () => (content == null ? null : readAssemblyTemplate(content)),
     [content],
   );
-  const promoted = parsed?.value?.params ?? {};
+  const problem = useMemo(
+    () => (content == null ? null : assemblyProblem(content)),
+    [content],
+  );
+  const promoted = parsed?.params ?? {};
   const rows = useMemo(() => rowsOf(graph, promoted), [graph, promoted]);
 
   const autosave = useAutosave({
@@ -135,8 +128,9 @@ export function AssemblyBuilder({
     },
   });
 
-  const edit = useCallback((next: string) => {
-    setContent(next);
+  const edit = useCallback((next: { text: string; error: string | null }) => {
+    setContent(next.text);
+    setNote(next.error);
   }, []);
 
   const toggle = useCallback(
@@ -144,14 +138,17 @@ export function AssemblyBuilder({
       if (content == null || readOnly) return;
       if (row.as) {
         const as = row.as;
-        edit(edited(content, (doc) => dropAssemblyParam(doc, as)));
+        edit(editedAssembly(content, { op: "dropParam", name: as }));
         return;
       }
       const name = freeName(row.param, new Set(Object.keys(promoted)));
       edit(
-        edited(content, (doc) =>
-          setAssemblyParam(doc, name, { node: row.node, param: row.param }),
-        ),
+        editedAssembly(content, {
+          op: "setParam",
+          name,
+          node: row.node,
+          param: row.param,
+        }),
       );
     },
     [content, readOnly, promoted, edit],
@@ -212,6 +209,9 @@ export function AssemblyBuilder({
         </span>
       </header>
 
+      {problem ? (
+        <p className="border-b px-4 py-1 text-amber-500 text-xs">{problem}</p>
+      ) : null}
       {note ? (
         <p className="border-b px-4 py-1 text-xs text-muted-foreground">
           {note}
@@ -278,7 +278,7 @@ export function AssemblyBuilder({
               hints={hints}
               vimMode={vimMode}
               readOnly={readOnly}
-              onChange={edit}
+              onChange={(text) => edit({ text, error: null })}
               onSave={save}
             />
           )}

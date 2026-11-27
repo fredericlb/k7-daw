@@ -24,7 +24,6 @@ import {
   dropEntries,
   readDroppedFiles,
 } from "./lib/droppedEntries";
-import { useLongPress } from "./lib/longPress";
 import { cn } from "./lib/utils";
 
 export type { DroppedFile };
@@ -53,14 +52,14 @@ export interface TreePrompt<N extends TreeNode> {
   initial?: (target: TreeTarget<N>) => string;
   /** The confirm button's label. */
   submit: string;
-  /** A line above the field, e.g. showing what the value will produce. */
-  hint?: (target: TreeTarget<N>, value: string) => ReactNode;
+  /** A line above the field, e.g. showing what the value will produce — read once, with the prefill. */
+  hint?: (target: TreeTarget<N>, value: string) => string;
 }
 
 /** A yes/no gate before it runs, no typing — mutually exclusive with `prompt`. */
 export interface TreeConfirm<N extends TreeNode> {
   /** What is asked, e.g. "Delete Nirvana and everything under it?" */
-  message: (target: TreeTarget<N>) => ReactNode;
+  message: (target: TreeTarget<N>) => string;
   /** The affirmative button's label. */
   submit: string;
 }
@@ -77,6 +76,23 @@ export interface TreeAction<N extends TreeNode> {
   confirm?: TreeConfirm<N>;
   /** `value` is the prompt's answer, "" for `confirm` or a plain action. */
   run: (target: TreeTarget<N>, value: string) => void;
+}
+
+/** The app's own question dialog, which the menu's prompts and confirms go through — the kit has none. */
+export interface TreeAsk {
+  confirm: (q: {
+    title: string;
+    body?: string;
+    confirmLabel: string;
+    danger?: boolean;
+  }) => Promise<boolean>;
+  text: (q: {
+    title: string;
+    body?: string;
+    initial?: string;
+    placeholder?: string;
+    confirmLabel: string;
+  }) => Promise<string | null>;
 }
 
 /** MIME of an internal row drag — what onMove listens for. */
@@ -202,9 +218,6 @@ function Row<N extends TreeNode>(props: RowProps<N>) {
   const pad = { paddingLeft: 8 + depth * 12 };
   const disabled = isDisabled?.(node) ?? false;
   const withMenu = !!menuLabel && hasMenu(node);
-  const longPress = useLongPress(
-    withMenu ? (x, y) => onMenuAt(node, x, y) : null,
-  );
   // Shown on hover or focus where a pointer hovers, always where none does.
   const more = withMenu ? (
     <button
@@ -296,7 +309,6 @@ function Row<N extends TreeNode>(props: RowProps<N>) {
             pressable,
           )}
           style={pad}
-          {...longPress}
           onContextMenu={(e) => {
             e.stopPropagation();
             onContext(node, e);
@@ -382,7 +394,6 @@ function Row<N extends TreeNode>(props: RowProps<N>) {
         activePath === node.path && "bg-secondary",
         pressable,
       )}
-      {...longPress}
     >
       <button
         type="button"
@@ -468,8 +479,8 @@ export interface FileTreeProps<N extends TreeNode> {
   isDisabled?: (node: N) => boolean;
   /** The app's own file-drag test, when "does this carry files" isn't enough. */
   acceptsFileDrop?: (e: React.DragEvent) => boolean;
-  /** The prompts' cancel button — the one string this package can't get from the app's catalogue. */
-  cancelLabel?: string;
+  /** Where the menu's prompts and confirms are asked; required, since an action that asks needs somewhere to. */
+  ask: TreeAsk;
   /** Given, a row with actions also shows a ⋮ button named this, and a touch long-press opens its menu. */
   rowMenuLabel?: string;
   className?: string;
@@ -498,7 +509,7 @@ export function FileTree<N extends TreeNode>({
   icon,
   isDisabled,
   acceptsFileDrop,
-  cancelLabel = "Cancel",
+  ask,
   rowMenuLabel,
   className,
 }: FileTreeProps<N>) {
@@ -560,7 +571,7 @@ export function FileTree<N extends TreeNode>({
   const toggle = (path: string) =>
     applyOpen((o) => ({ ...o, [path]: !o[path] }));
 
-  // The open menu: its target and where to draw it; the prompt state lives in TreeMenu.
+  // The open menu: its target and where to draw it; the questions go through `ask`.
   const [menu, setMenu] = useState<{
     target: TreeTarget<N>;
     x: number;
@@ -603,11 +614,6 @@ export function FileTree<N extends TreeNode>({
     dir: true,
     root: true,
   };
-  const backgroundPress = useLongPress(
-    rowMenuLabel && offers(rootTarget)
-      ? (x, y) => openAt(rootTarget, x, y)
-      : null,
-  );
 
   // A lone top-level node is almost always a caller's own wrapping row — draw its children instead.
   const rootNodes: N[] =
@@ -625,11 +631,6 @@ export function FileTree<N extends TreeNode>({
           "ring-2 ring-inset ring-primary/60",
         className,
       )}
-      {...backgroundPress}
-      onPointerDown={(e) => {
-        // A press on a row is that row's long-press, not the background's.
-        if (e.target === e.currentTarget) backgroundPress.onPointerDown?.(e);
-      }}
       onContextMenu={(e) => {
         // The background only: a right-click on a row is that row's, and it stops propagating first.
         if (e.target !== e.currentTarget) return;
@@ -710,7 +711,7 @@ export function FileTree<N extends TreeNode>({
           x={menu.x}
           y={menu.y}
           actions={actions}
-          cancelLabel={cancelLabel}
+          ask={ask}
           onClose={closeMenu}
         />
       )}

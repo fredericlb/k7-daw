@@ -6,7 +6,9 @@ use crate::ops::write;
 use serde::{Deserialize, Serialize};
 use song::doc::{LevelSide, MixSide, own_level_side, own_mix_side};
 use song::modules::types::{is_engine_ref, is_library_name, is_picture_pass, module_emits, module_status_of};
-use song::modules::{Port, PortType, builtin_plugin_for_ref, engine_module_of, files::is_library_file_of};
+use song::modules::{
+    BuiltinPlugin, Port, PortType, builtin_plugin, builtin_plugin_for_ref, engine_module_of, files::is_library_file_of,
+};
 use song_edit::playlist::{Playlist, parse_playlist, playlist_path_of};
 use song_edit::sugar::{is_doc_file, strip_doc_ext};
 use song_edit::takes::{CompSpan, set_comp_span};
@@ -77,6 +79,18 @@ pub struct RefArgs {
     #[serde(rename = "ref")]
     #[cfg_attr(feature = "ts", ts(rename = "ref"))]
     pub reference: String,
+}
+
+/// A module's `plugin:` as the builtin table reads it: its type and its name.
+#[derive(Clone, Debug, Deserialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS))]
+pub struct PluginArgs {
+    #[serde(rename = "type", default)]
+    #[cfg_attr(feature = "ts", ts(rename = "type", optional))]
+    pub kind: Option<String>,
+    #[serde(default)]
+    #[cfg_attr(feature = "ts", ts(optional))]
+    pub name: Option<String>,
 }
 
 #[derive(Clone, Debug, Deserialize)]
@@ -304,6 +318,12 @@ pub enum SchemaRequest {
     EngineModuleOf(EngineModuleArgs),
     #[serde(rename = "schema.builtin_for_ref")]
     BuiltinForRef(RefArgs),
+    #[serde(rename = "schema.builtin_for_plugin")]
+    BuiltinForPlugin(PluginArgs),
+    #[serde(rename = "schema.is_preset_name")]
+    IsPresetName(NameArgs),
+    #[serde(rename = "schema.placement_start_of")]
+    PlacementStartOf(IdArgs),
     #[serde(rename = "schema.is_doc_file")]
     IsDocFile(NameArgs),
     #[serde(rename = "schema.strip_doc_ext")]
@@ -357,8 +377,11 @@ fn engine_module(a: &EngineModuleArgs) -> Option<EngineModule> {
 }
 
 fn builtin_for_ref(reference: &str) -> Option<BuiltinPluginDto> {
-    let p = builtin_plugin_for_ref(reference)?;
-    Some(BuiltinPluginDto {
+    builtin_plugin_for_ref(reference).map(builtin_dto)
+}
+
+fn builtin_dto(p: &BuiltinPlugin) -> BuiltinPluginDto {
+    BuiltinPluginDto {
         name: p.name.clone(),
         role: p.role.clone(),
         params: p
@@ -380,7 +403,7 @@ fn builtin_for_ref(reference: &str) -> Option<BuiltinPluginDto> {
                 automatable: q.automatable,
             })
             .collect(),
-    })
+    }
 }
 
 fn playlist(p: Playlist) -> PlaylistDto {
@@ -447,6 +470,12 @@ pub fn dispatch(request: SchemaRequest, out: &mut Vec<u8>) -> Result<(), WasmErr
         ),
         R::EngineModuleOf(a) => write(out, &engine_module(&a)),
         R::BuiltinForRef(a) => write(out, &builtin_for_ref(&a.reference)),
+        R::BuiltinForPlugin(a) => write(
+            out,
+            &builtin_plugin(a.kind.as_deref(), a.name.as_deref()).map(builtin_dto),
+        ),
+        R::IsPresetName(a) => write(out, &song_edit::presets::is_preset_name(&a.name)),
+        R::PlacementStartOf(a) => write(out, &song::clips::placement_start_of(&a.id)),
         R::IsDocFile(a) => write(out, &is_doc_file(&a.name)),
         R::StripDocExt(a) => write(out, strip_doc_ext(&a.name)),
         R::IsAudio(a) => write(out, &is_audio(&a.name)),

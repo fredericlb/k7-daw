@@ -9,6 +9,7 @@
     "./curve": "./src/curve.ts",
     "./schema": "./src/schema.ts",
     "./timecode": "./src/timecode.ts",
+    "./text": "./src/text.ts",
     "./validate": "./src/validate.ts",
     "./fields": "./src/fields.ts",
     "./module": "./src/module.ts",
@@ -31,7 +32,8 @@
     "./gesture": "./src/gesture.ts",
     "./gestureTicks": "./src/gestureTicks.ts",
     "./gestureTimeline": "./src/gestureTimeline.ts",
-    "./eyes": "./src/eyes.ts"
+    "./eyes": "./src/eyes.ts",
+    "./rack-binds": "./src/rackBinds.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",
@@ -45,7 +47,6 @@
   },
   "devDependencies": {
     "@studio/graph-model": "*",
-    "@studio/song-schema": "*",
     "@types/node": "^22.10.0",
     "typescript": "^7.0.2",
     "vitest": "^4.1.10"

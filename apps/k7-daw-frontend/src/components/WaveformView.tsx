@@ -5,6 +5,8 @@
 // (peak and bands per column); the notes/grid come from the backend (/api/waveform).
 
 import { Play, Volume2, X } from "@studio/ui/icons";
+import { usePointerFollow } from "@studio/ui-timeline/drag";
+import { useElementSize } from "@studio/ui-timeline/measure";
 import { useHZoom, usePanScroll } from "@studio/ui-timeline/panZoom";
 import {
   type Envelope,
@@ -65,16 +67,7 @@ export function WaveformView({
   usePanScroll(scrollRef);
 
   // The waveform fills the pane's height; the width comes along because the loop marks ask what a pass is worth in pixels.
-  const [body, setBody] = useState({ w: 0, h: 0 });
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const measure = () => setBody({ w: el.clientWidth, h: el.clientHeight });
-    const ro = new ResizeObserver(measure);
-    ro.observe(el);
-    measure();
-    return () => ro.disconnect();
-  }, []);
+  const body = useElementSize(scrollRef);
   const bodyH = body.h;
 
   // --- slice-handle dragging -------------------------------------------------
@@ -104,7 +97,8 @@ export function WaveformView({
     return Math.max(0, Math.min(wf.seconds, frac * wf.seconds));
   };
 
-  // POINTER CAPTURE on the handle: every move/up fires on it, so there is no listener race and the grab is instant.
+  // The pointer is followed on the window (@studio/ui-timeline/drag): a release writes the slice, a cancel puts the edge back.
+  const follow = usePointerFollow();
   const onHandleDown = (
     r: { symbol: string; from: number; to: number },
     edge: "from" | "to",
@@ -113,29 +107,33 @@ export function WaveformView({
     if (!onSliceEdit) return;
     e.preventDefault();
     e.stopPropagation(); // don't start a pan/scrub on the waveform below
-    e.currentTarget.setPointerCapture(e.pointerId);
     const d = { symbol: r.symbol, edge, from: r.from, to: r.to };
     dragRef.current = d;
     setDrag(d);
-  };
-  const onHandleMove = (e: React.PointerEvent) => {
-    const d = dragRef.current;
-    if (!d) return;
-    const sec = secAt(e.clientX);
-    if (sec == null) return;
-    const nd =
-      d.edge === "from"
-        ? { ...d, from: Math.min(sec, d.to - MIN) }
-        : { ...d, to: Math.max(sec, d.from + MIN) };
-    dragRef.current = nd;
-    setDrag(nd);
-  };
-  const endHandleDrag = () => {
-    const d = dragRef.current;
-    if (d && onSliceEdit)
-      onSliceEdit(d.symbol, roundSec(d.from), roundSec(d.to));
-    dragRef.current = null;
-    setDrag(null);
+    const stop = () => {
+      dragRef.current = null;
+      setDrag(null);
+    };
+    follow(e, {
+      move: (ev) => {
+        const cur = dragRef.current;
+        const sec = secAt(ev.clientX);
+        if (!cur || sec == null) return;
+        const nd =
+          cur.edge === "from"
+            ? { ...cur, from: Math.min(sec, cur.to - MIN) }
+            : { ...cur, to: Math.max(sec, cur.from + MIN) };
+        dragRef.current = nd;
+        setDrag(nd);
+      },
+      end: () => {
+        const cur = dragRef.current;
+        if (cur && onSliceEdit)
+          onSliceEdit(cur.symbol, roundSec(cur.from), roundSec(cur.to));
+        stop();
+      },
+      cancel: stop,
+    });
   };
 
   // The MATERIAL's identity, not the clip's: `clip trim` rewrites the window and leaves the id alone (src/clipEnvelope.ts).
@@ -234,11 +232,11 @@ export function WaveformView({
       >
         {error ? (
           <div className="p-3 text-sm text-red-400">
-            waveform unavailable — {error}
+            {m["wave.unavailable"]({ error })}
           </div>
         ) : !wf ? (
           <div className="p-3 text-sm text-muted-foreground">
-            decoding audio…
+            {m["wave.decoding"]()}
           </div>
         ) : (
           // A relative wrapper so windows overlay by time-fraction; its width scales with zoom and the container scrolls.
@@ -309,13 +307,10 @@ export function WaveformView({
                       )}
                       {onSliceEdit && (
                         <>
-                          {/* Edge handles for from/to, in a 12px grab zone straddling the border, with pointer CAPTURE holding the drag. */}
+                          {/* Edge handles for from/to, in a 12px grab zone straddling the border. */}
                           <div
                             title={`${r.symbol} — drag to set 'from'`}
                             onPointerDown={(e) => onHandleDown(r, "from", e)}
-                            onPointerMove={onHandleMove}
-                            onPointerUp={endHandleDrag}
-                            onLostPointerCapture={endHandleDrag}
                             className={`pointer-events-auto absolute inset-y-0 left-0 -ml-1.5 w-3 cursor-ew-resize touch-none border-l-2 ${r.color ? "" : "border-primary/80 hover:bg-primary/30"} ${active && drag?.edge === "from" && !r.color ? "bg-primary/30" : ""}`}
                             style={
                               r.color ? { borderColor: r.color } : undefined
@@ -324,9 +319,6 @@ export function WaveformView({
                           <div
                             title={`${r.symbol} — drag to set 'to'`}
                             onPointerDown={(e) => onHandleDown(r, "to", e)}
-                            onPointerMove={onHandleMove}
-                            onPointerUp={endHandleDrag}
-                            onLostPointerCapture={endHandleDrag}
                             className={`pointer-events-auto absolute inset-y-0 right-0 -mr-1.5 w-3 cursor-ew-resize touch-none border-r-2 ${r.color ? "" : "border-primary/80 hover:bg-primary/30"} ${active && drag?.edge === "to" && !r.color ? "bg-primary/30" : ""}`}
                             style={
                               r.color ? { borderColor: r.color } : undefined

@@ -1,5 +1,5 @@
 import type { WebGraph, WebWidget } from "@studio/graph-model";
-import type { MixView } from "@studio/song-schema/yaml/mixViewSchema";
+import type { MixView } from "@studio/k7-wasm/text";
 import { describe, expect, it } from "vitest";
 import { mixControl } from "./controls";
 import {

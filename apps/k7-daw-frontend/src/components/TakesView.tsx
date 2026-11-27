@@ -2,7 +2,7 @@
 // event, its own material first, on one song-time axis. A drag selects a span; a click on a row
 // with a span picks that take for it (`event comp`), without one it moves the playhead. A MIDI
 // event has no spans: a click picks a WHOLE take. Its record button records the next take INTO
-// the event, from its start or punched into the span. See apps/k7-daw-frontend/packages/song/docs/takes.md.
+// the event, from its start or punched into the span. See apps/k7-daw-wasm/song/docs/takes.md.
 
 import { setCompSpan } from "@studio/k7-wasm/schema";
 import { beatsToPosition } from "@studio/k7-wasm/timecode";
@@ -12,9 +12,9 @@ import { Check, Circle, Square, Trash2, X } from "@studio/ui/icons";
 import { usePointerFollow } from "@studio/ui-timeline/drag";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { usePlayheadFrames } from "../hooks/usePlayheadFrames";
-import { useWindowKey } from "../hooks/useWindowKey";
 import { ModeIcon } from "../modeIcons";
 import { m } from "../paraglide/messages.js";
+import { useEscapeLayer } from "../popins";
 import {
   compFadeLine,
   compLine,
@@ -204,15 +204,8 @@ export function TakesView({
     follow(e, { move, end: up, cancel: () => setDrag(null) });
   };
 
-  // Escape lets the span go — caught first, so the panel behind the view is not closed by the same key.
-  useWindowKey(
-    (e) => {
-      if (e.key !== "Escape") return;
-      e.stopPropagation();
-      setSel(null);
-    },
-    { enabled: !!sel, capture: true },
-  );
+  // Escape lets the span go — a ladder layer, so the panel behind the view is not closed by the same key.
+  useEscapeLayer(!!sel, () => setSel(null));
 
   // The keyboard's span: Shift+arrows grow or shrink it from the event's start, arrows alone slide it, a grid step each.
   const onSpanKey = (e: React.KeyboardEvent) => {

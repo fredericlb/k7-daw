@@ -2,9 +2,10 @@
 // What a reader gets wrong: this is the only place k7 signs in to GitHub; Connect and Clone only read the result.
 
 import { Button } from "@studio/ui/button";
+import { Row } from "@studio/ui/row-group";
 import { useMemo, useState } from "react";
 import { m } from "../paraglide/messages.js";
-import { Row, Section } from "../settings/Section";
+import { Section } from "../settings/Section";
 import { useAccountFiles } from "../settings/useAccountFiles";
 import { DeviceFlow } from "./DeviceFlow";
 import { explain, type GitTransport, git } from "./gitApi";
@@ -47,7 +48,7 @@ export function GitHubRows({
   if (!status.available)
     return (
       <Section title={title}>
-        <Row label={m["git.gh.unavailable"]()} />
+        <Row>{m["git.gh.unavailable"]()}</Row>
       </Section>
     );
   const inside = signedIn(status);
@@ -73,10 +74,14 @@ export function GitHubRows({
   if (!inside)
     return (
       <Section title={title} hint={m["git.gh.intro"]()}>
-        <Row label={m["git.gh.notSignedIn"]()}>
-          <Button size="sm" onClick={() => setSigning(true)}>
-            {m["git.gh.signIn"]()}
-          </Button>
+        <Row
+          trailing={
+            <Button size="sm" onClick={() => setSigning(true)}>
+              {m["git.gh.signIn"]()}
+            </Button>
+          }
+        >
+          {m["git.gh.notSignedIn"]()}
         </Row>
       </Section>
     );
@@ -99,26 +104,30 @@ export function GitHubRows({
       }
     >
       <Row
-        label={m["git.gh.accountLogin"]({ login: status.login ?? "" })}
         detail={note || (repos ? undefined : m["git.gh.repoWhy"]())}
         error={error || undefined}
+        trailing={
+          <>
+            <a
+              href={KEYS_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="type-status self-center text-fg-3 underline"
+            >
+              {m["git.gh.manageKeys"]()}
+            </a>
+            {!repos && (
+              <Button size="sm" onClick={() => setSigning(true)}>
+                {m["git.gh.allowRepos"]()}
+              </Button>
+            )}
+            <Button size="sm" variant="secondary" onClick={() => void out()}>
+              {m["git.gh.signOut"]()}
+            </Button>
+          </>
+        }
       >
-        <a
-          href={KEYS_URL}
-          target="_blank"
-          rel="noreferrer"
-          className="type-status self-center text-fg-3 underline"
-        >
-          {m["git.gh.manageKeys"]()}
-        </a>
-        {!repos && (
-          <Button size="sm" onClick={() => setSigning(true)}>
-            {m["git.gh.allowRepos"]()}
-          </Button>
-        )}
-        <Button size="sm" variant="secondary" onClick={() => void out()}>
-          {m["git.gh.signOut"]()}
-        </Button>
+        {m["git.gh.accountLogin"]({ login: status.login ?? "" })}
       </Row>
     </Section>
   );

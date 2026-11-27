@@ -38,7 +38,7 @@ clip paths are strings under a shared root like any other, so they are downloade
 runs. It comes in two shapes:
 
 - `{ doc, out }`, the mix alone to one server path, answered `{ type: "rendered", file: out }`. The
-  automatic VST freeze sends it (`apps/k7-daw-frontend/packages/song/docs/autoFreeze.md`), since only that machine has
+  automatic VST freeze sends it (`apps/k7-daw-wasm/song/docs/autoFreeze.md`), since only that machine has
   the plugins.
 - `{ doc, outDir, stems }`, every file of the manifest into a server folder, answered
   `{ type: "rendered", mix, stems: [{ name, file }] }` with every file named whole. Any render a

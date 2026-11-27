@@ -5,13 +5,12 @@ what freezes them to the app's seed, and how assemblies are recorded.
 
 ## Refs and namespaces
 
-The vocabulary is in `apps/k7-daw-frontend/packages/song-schema/src/moduleTypes.ts` (no `node:fs`, so the browser
-shares it):
+The vocabulary is in `apps/k7-daw-wasm/song/src/modules/types.rs` (the browser reads it as `@studio/k7-wasm/consts`):
 
 | Namespace | Resolves to |
 |---|---|
 | `@engine/<slug>` | The engine's plugin scan, `<STUDIO_HOME>/exts.json`, read by `apps/k7-daw-wasm/song/src/modules/scan.rs`. No folder; the slug is `slugifyPluginName(name)` and the type folder follows the plugin's role (`categoryForRole`). |
-| `@meta/...` | k7's built-ins: modules under `apps/k7-daw-frontend/packages/song/meta/` and synthesised ones (`@meta/track`, `@meta/doc`, inputs and outputs). |
+| `@meta/...` | k7's built-ins: modules under `apps/k7-daw-wasm/song/meta/` and synthesised ones (`@meta/track`, `@meta/doc`, inputs and outputs). |
 | `@workspace/...` | The workspace's `_modules/` folder (`SHARED_MODULES_PATH = "../_modules"` from a project). |
 | `@account/...` | The account's own library, never versioned, always writable by the account. |
 | `@<library>/...` | A named library. Names follow `/^[a-z0-9][a-z0-9-]{0,39}$/` and exclude the fixed namespaces. |
@@ -24,7 +23,7 @@ what it emits. A new type folder starts there.
 `apps/k7-daw-wasm/song-edit/src/loader.rs` builds the ref map: the built-ins first (doc modules, lanes, io,
 the engine catalogue), then each module root in order: the project's `../_modules`, then
 `libraryFamilyRoots("modules", dir)` (the account library first, then every library by name),
-then `apps/k7-daw-frontend/packages/song/meta`. A root's namespace comes from where it is, never from anything the
+then `apps/k7-daw-wasm/song/meta`. A root's namespace comes from where it is, never from anything the
 root declares.
 
 `extends` is folded by `apps/k7-daw-wasm/song/src/resolve/extends.rs`, parent under child, deepest first,
@@ -40,7 +39,7 @@ the library one and repoints the project at it.
 | Concern | Where |
 |---|---|
 | Library home, versions, pins, the root a name resolves to | `apps/k7-daw-wasm/song-edit/src/shared_folders.rs` |
-| Version manifest (`library.k7x`: `name`, `version`, `requires`, `notes`) and `LIBRARY_LEVEL` | `apps/k7-daw-frontend/packages/song-schema/src/libraryVersions.ts` |
+| Version manifest (`library.k7x`: `name`, `version`, `requires`, `notes`) and `LIBRARY_LEVEL` | `apps/k7-daw-wasm/song-edit/src/shared_folders.rs` |
 | The workspace's pins (`_library-pins.k7x`), written once | `apps/k7-daw-backend/packages/k7-file-service/src/pins.rs` |
 | `library versions`, `library upgrade` | `apps/k7-daw-wasm/verbs/src/verbs/library.rs` |
 | The device's list, seeding, versions | `apps/k7-daw-backend/packages/k7-libraries/src/store.rs` |
@@ -91,7 +90,7 @@ content raises it. A module and the engine code it relies on change in one commi
 
 Presets are files in a tree beside the modules: `_presets/` in the workspace, `presets/` in a
 library, at `<root>/<namespace>/<module path>/<name>.k7x`. Vocabulary and schema:
-`apps/k7-daw-frontend/packages/song-schema/src/presets.ts`; reading and writing: `apps/k7-daw-wasm/song-edit/src/presets.rs`;
+`apps/k7-daw-wasm/song/src/files/preset_file.rs`, `apps/k7-daw-wasm/song/src/wire.rs`; reading and writing: `apps/k7-daw-wasm/song-edit/src/presets.rs`;
 verbs: `apps/k7-daw-wasm/verbs/src/verbs/node_preset.rs`. Applying a preset writes into the node's file and
 reaches the engine as a values-only diff.
 
@@ -99,7 +98,7 @@ reaches the engine as a values-only diff.
 
 | Piece | Where |
 |---|---|
-| Template schema (`label`, `inputs`, `outputs`, `params`) and instance record (`uses`, `members`) | `apps/k7-daw-frontend/packages/song-schema/src/yaml/assemblySchema.ts`, `apps/k7-daw-frontend/packages/song-schema/src/yaml/assemblyFile.ts` |
+| Template schema (`label`, `inputs`, `outputs`, `params`) and instance record (`uses`, `members`) | `apps/k7-daw-wasm/song/src/assemblies/file.rs`, and the promoted-param writer `apps/k7-daw-wasm/song-edit/src/assembly_param.rs` |
 | Resolution to `GraphDoc.assemblies` | `apps/k7-daw-wasm/song/src/assemblies/mod.rs` |
 | `assembly new`, `delete`, `dissolve`, member renames | `apps/k7-daw-wasm/song-edit/src/assembly_edit.rs` |
 | Drawing | `apps/k7-daw-wasm/chains/src/assembly.rs` (`fold_assemblies`) |
@@ -117,4 +116,4 @@ The reference template is `k7-core/assemblies/turntable/`.
 
 `npm test -w @studio/song` covers the loader, `moduleResolve`, assemblies
 (`apps/k7-daw-wasm/song/tests/all/assemblies.rs`) and the library folders;
-`npm test -w @studio/song-schema` covers refs and schemas (`moduleTypes.test.ts`).
+`cargo test --manifest-path apps/k7-daw-wasm/song-schema/Cargo.toml` covers the value rules, and `npm test -w @studio/k7-wasm` what the page sees of the module vocabulary.

@@ -3,8 +3,8 @@
 // person types the short name they can see rather than the workspace-relative path. Pure, so
 // the resolution is tested in a repo where nothing mounts a component.
 
+import { docPattern } from "@studio/k7-wasm/schema";
 import { fuzzyScore } from "@studio/k7-wasm/ui";
-import { docPattern } from "@studio/song-schema/docExt";
 import { norm } from "./projectPaths";
 
 /** The best fuzzy match in a pool, or null. Exported for the resolvers below and for tests. */

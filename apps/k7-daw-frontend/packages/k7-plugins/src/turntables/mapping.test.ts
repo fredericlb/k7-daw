@@ -1,12 +1,9 @@
 // Which components a turntables surface must have wired, and which a given mapping is missing.
-// The desk's own vocabulary — @studio/song validates the SHAPE of a mapping and not its ids.
+// The desk's own vocabulary — the surface reader validates the SHAPE of a mapping and not its ids.
 
-import {
-  type MixView,
-  MixViewSchema,
-} from "@studio/song-schema/yaml/mixViewSchema";
-// The BROWSER-SAFE half of @studio/song: `./surfaces` would drag `node:fs` into a screen package.
-import { SURFACE_MAPPING_SKELETON } from "@studio/song-schema/yaml/surfaceSchema";
+import { SURFACE_MAPPING_SKELETON } from "@studio/k7-wasm/consts";
+import type { MixView } from "@studio/k7-wasm/text";
+import { validateFile } from "@studio/k7-wasm/validate";
 import { describe, expect, it } from "vitest";
 import { mixControl } from "./controls";
 import { DECKS } from "./deckVocabulary";
@@ -126,7 +123,8 @@ describe("the scaffold offers every control that must be wired", () => {
   it("scaffolds a mapping the schema accepts", () => {
     // The nulls are the point: a key that is THERE is validated the moment it is filled in.
     const mapping = Object.fromEntries(skeleton.map((id) => [id, null]));
-    expect(MixViewSchema.safeParse(mapping).success).toBe(true);
+    const text = `type("turntables")\nlayout("split")\nmapping(${JSON.stringify(mapping)})\n`;
+    expect(validateFile("surfaces/desk.k7x", text).ok).toBe(true);
     // …and an unwired one is reported by the gate, exactly as an absent one is.
     expect(ids(unmappedControls(mapping))).toEqual(ids(requiredControls()));
   });

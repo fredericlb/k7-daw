@@ -89,7 +89,7 @@ Two things about it are synthesised, and it is worth knowing which:
 - **The level's own row.** It has no folder, so its label stands in for a path.
 
 Giving a scanned plugin a folder is a different act, and a deliberate one: `module own <ref>`
-(`apps/k7-daw-frontend/packages/song/docs/moduleFork.md`). A plugin has no panel until it has somewhere to
+(`apps/k7-daw-wasm/song/docs/moduleFork.md`). A plugin has no panel until it has somewhere to
 keep one, and this tab does not pretend otherwise.
 
 An `@engine` with nothing in it is not drawn: a machine that has never scanned has no
@@ -112,7 +112,7 @@ no type folder — `audio/reverb` is the shortest thing the loader will key.
 
 `@engine` gets neither: `rootOf` refuses a read-only level, so the menu does not open there at
 all rather than opening with everything greyed out. A scanned plugin has no folder, so there is
-nothing to make one in (`apps/k7-daw-frontend/packages/song/docs/moduleNamespaces.md`).
+nothing to make one in (`apps/k7-daw-wasm/song/docs/moduleNamespaces.md`).
 
 Note the two shapes: a workspace library holds its type folders **directly**, where each of the
 origin's libraries holds three FAMILIES and `modules` is one of them. That difference is why the
@@ -170,7 +170,7 @@ a library belongs with that library rather than with whichever project was open.
 
 A rename changes a module's REF, and a folder's rename changes the ref of every module inside it.
 So it repoints them as a move does, in the library and in this workspace's projects; other
-workspaces keep the old ref (`apps/k7-daw-frontend/packages/song/docs/moduleMove.md`). An engine's folder cannot be
+workspaces keep the old ref (`apps/k7-daw-wasm/song/docs/moduleMove.md`). An engine's folder cannot be
 renamed: nodes pick an engine by that name.
 
 ## Moving a module — drag it
@@ -180,7 +180,7 @@ category below it. Only module rows drag; a folder, a chain and anything at the 
 `@engine` level do not. Unlike a rename, a move **takes its refs with it**: every `extends:` naming
 the old ref, in the library and in this workspace's projects, is repointed; the library's part is
 live at once. What the move cannot reach is any other workspace. The rules and the reasons are in
-`apps/k7-daw-frontend/packages/song/docs/moduleMove.md`.
+`apps/k7-daw-wasm/song/docs/moduleMove.md`.
 
 ## Editable at once — Save writes, and the write is the publication
 
@@ -197,7 +197,7 @@ time it is opened. Its history is the library's k7fs log, which the file hub kee
 
 A module's presets are not in its folder at all: they are files of a presets tree, saved from a
 graph node into the workspace or into a library, so keeping one never edits the module every song
-reads (`apps/k7-daw-frontend/packages/song/docs/userPresets.md`). The `@engine` level stays read-only, since a scanned
+reads (`apps/k7-daw-wasm/song/docs/userPresets.md`). The `@engine` level stays read-only, since a scanned
 plugin has no folder to write into.
 
 ## The loaded plugin comes free
@@ -254,7 +254,7 @@ pane you happen to be looking at. The machinery underneath is the ordinary one: 
 `manual` mode keeps the validation and the held-back buffers and only turns the timer off
 (`apps/k7-daw-frontend/packages/ui-editor/docs/autosave.md`). A Save writes with `PUT /file`, the route a project file
 takes, and nothing else: nothing in the song changes, since the version a song hears is its
-workspace's pin, not a field of the song (`apps/k7-daw-frontend/packages/song/docs/sharedFolders.md`).
+workspace's pin, not a field of the song (`apps/k7-daw-wasm/song/docs/sharedFolders.md`).
 
 ## The bench is not where a library is edited
 

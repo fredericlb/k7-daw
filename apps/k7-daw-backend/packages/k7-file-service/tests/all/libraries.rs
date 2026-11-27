@@ -12,12 +12,8 @@ use support::Scratch;
 
 const BOUND: Duration = Duration::from_secs(if cfg!(target_env = "musl") { 60 } else { 15 });
 
-fn ts(rel: &str) -> String {
-    std::fs::read_to_string(format!("{}/../../../../{rel}", env!("CARGO_MANIFEST_DIR"))).unwrap()
-}
-
 #[test]
-fn knows_the_names_and_versions_the_typescript_does() {
+fn knows_the_names_and_versions_the_song_crates_do() {
     // The name rule lives in the song crate since the schema moved to Rust (M3a); the two copies are held equal.
     assert_eq!(song::modules::names::ACCOUNT_LIBRARY, ACCOUNT_LIBRARY);
     assert_eq!(
@@ -59,15 +55,7 @@ fn knows_the_names_and_versions_the_typescript_does() {
             "mediatek"
         ]
     );
-    let versions = ts("apps/k7-daw-frontend/packages/song-schema/src/libraryVersions.ts");
-    assert!(
-        versions.contains(&format!("const VERSION_DIR = /{VERSION_PATTERN}/;")),
-        "the version rule"
-    );
-    assert!(
-        versions.contains("DRAFT_VERSION = \"draft\"")
-            && versions.contains("LIBRARY_PINS_FILE = \"_library-pins.k7x\"")
-    );
+    assert_eq!(PINS_FILE, song_edit::shared_folders::LIBRARY_PINS_FILE);
 }
 
 #[test]

@@ -12,8 +12,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@studio/ui/dialog";
-import { Loader2 } from "@studio/ui/icons";
 import { Input } from "@studio/ui/input";
+import { Spinner } from "@studio/ui/spinner";
 import { type ReactNode, useState } from "react";
 import { m } from "../paraglide/messages.js";
 
@@ -98,7 +98,7 @@ export function NameField({
       {note}
       {step && (
         <p className="type-secondary text-fg-2">
-          <Loader2 className="mr-1 inline h-3 w-3 animate-spin" />
+          <Spinner size="xs" inherit className="mr-1 inline" />
           {step}
         </p>
       )}
@@ -153,7 +153,7 @@ export function NameFormDialog({
             {m["common.cancel"]()}
           </Button>
           <Button disabled={field.busy || !canSubmit} onClick={field.onSubmit}>
-            {field.busy && <Loader2 className="mr-1 size-5 animate-spin" />}
+            {field.busy && <Spinner inherit className="mr-1" />}
             {submit}
           </Button>
         </DialogFooter>

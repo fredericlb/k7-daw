@@ -24,14 +24,14 @@ fn project_text(name: &str, picture: bool) -> String {
             " — and SEEN through it.\n",
             "// It declares ONE surface, the viewport, and only because a picture has nowhere else to\n\
 // go: an arrangement left undrawn is still on disk, a frame nothing composites is not\n\
-// shown at all. No timeline and no desk. See apps/k7-daw-frontend/packages/song/docs/liveProject.md.\n",
+// shown at all. No timeline and no desk. See apps/k7-daw-wasm/song/docs/liveProject.md.\n",
         )
     } else {
         (
             ".\n",
             "// It declares no `surfaces/` — no timeline, no viewport, no desk — and that is the whole\n\
 // of what makes it this shape rather than another. A project draws what it DECLARES, so\n\
-// this one opens on its graph and nothing else. See apps/k7-daw-frontend/packages/song/docs/liveProject.md.\n",
+// this one opens on its graph and nothing else. See apps/k7-daw-wasm/song/docs/liveProject.md.\n",
         )
     };
     let frame = if picture {
@@ -51,7 +51,7 @@ project({{\n  name: {},\n  // Kept although nothing is arranged: the metronome c
 fn graph_text(picture: bool) -> String {
     let lens = if picture {
         format!(
-            "  // …and the picture's half: the lens composites into the frame, as the fader lands on\n  // the sum. It needs NO video lane — a camera reaching none draws a layer of its own,\n  // the whole frame (apps/k7-daw-frontend/packages/song/docs/camera.md).\n  {LIVE_CAMERA}: [{}],\n  {RENDER_NODE}: [{}],\n",
+            "  // …and the picture's half: the lens composites into the frame, as the fader lands on\n  // the sum. It needs NO video lane — a camera reaching none draws a layer of its own,\n  // the whole frame (apps/k7-daw-wasm/song/docs/camera.md).\n  {LIVE_CAMERA}: [{}],\n  {RENDER_NODE}: [{}],\n",
             quote(RENDER_NODE),
             quote(VIDEO_OUT_NODE)
         )
@@ -63,11 +63,11 @@ fn graph_text(picture: bool) -> String {
 //\n\
 // There is NO LANE here, and no `nodes/` track file: a run carrying a live input and\n\
 // landing on no lane materialises its own track, the way a bus does. So this is the whole\n\
-// rig — input, fader, out. See apps/k7-daw-frontend/packages/song/docs/liveProject.md.\n\
+// rig — input, fader, out. See apps/k7-daw-wasm/song/docs/liveProject.md.\n\
 //\n\
 // Put a module between the two and you have an effects chain, which is what this shape is\n\
 // for: `{LIVE_INPUT}: [\"amp\"]`, `amp: [\"{LIVE_FADER}\"]`.\n\
-modules({{\n  // The input runs into the fader…\n  {LIVE_INPUT}: [{}],\n  // …and the fader into the mixer's sum, where every run in every project lands. Not\n  // straight to OUT: the engine sums a track into the master either way, so OUT would\n  // DRAW a bypass of the master run below that does not exist.\n  {LIVE_FADER}: [\"MIX\"],\n  // The master run, which every project has: what the bar's record button captures is\n  // what reaches OUT, the whole mix (apps/k7-daw-frontend/packages/song/docs/outputRecording.md).\n  MIX: [\"OUT\"],\n{lens}}})\n",
+modules({{\n  // The input runs into the fader…\n  {LIVE_INPUT}: [{}],\n  // …and the fader into the mixer's sum, where every run in every project lands. Not\n  // straight to OUT: the engine sums a track into the master either way, so OUT would\n  // DRAW a bypass of the master run below that does not exist.\n  {LIVE_FADER}: [\"MIX\"],\n  // The master run, which every project has: what the bar's record button captures is\n  // what reaches OUT, the whole mix (apps/k7-daw-wasm/song/docs/outputRecording.md).\n  MIX: [\"OUT\"],\n{lens}}})\n",
         quote(LIVE_FADER)
     )
 }

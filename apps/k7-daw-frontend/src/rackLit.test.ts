@@ -1,5 +1,5 @@
 // Which rack sound is firing, derived from the arrangement and the playhead. The engine reports
-// no notes (see apps/k7-daw-frontend/packages/song/docs/racks.md), so this is the whole of what lights a pad — and the
+// no notes (see apps/k7-daw-wasm/song/docs/racks.md), so this is the whole of what lights a pad — and the
 // only part of the feature a test can reach without a browser.
 
 import { describe, expect, it, vi } from "vitest";

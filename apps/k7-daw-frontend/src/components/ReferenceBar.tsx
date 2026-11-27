@@ -3,7 +3,7 @@
 // plays over a live rig or a running arrangement without asking either of them.
 // See ../docs/references.md.
 
-import type { ReferenceTrack } from "@studio/song-schema/reference";
+import type { ReferenceTrack } from "@studio/k7-wasm/types";
 import { Headphones } from "@studio/ui/icons";
 import { MiniPlayer } from "@studio/ui-mini-player";
 import { useEffect, useRef, useState } from "react";
@@ -115,7 +115,7 @@ export function ReferenceBar({
             }
             status={
               error ? (
-                <span className="min-w-0 truncate text-destructive text-xs">
+                <span className="min-w-0 truncate text-error text-xs">
                   {error}
                 </span>
               ) : done ? (

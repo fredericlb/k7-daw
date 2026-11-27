@@ -1,7 +1,7 @@
 // OutputPicture.tsx — the picture RENDER sends out, drawn off screen while the output is recorded: the viewport's
 // own scene on a driver that never parks, whose canvas the recording captures. Mounted only while a take rolls, so
 // it costs a GL context only then. What reads wrong: it is not the viewport — that one may be hidden, and a hidden
-// viewport stops drawing. See apps/k7-daw-frontend/packages/song/docs/outputRecording.md.
+// viewport stops drawing. See apps/k7-daw-wasm/song/docs/outputRecording.md.
 
 import type { RealtimeDriver } from "@studio/ui-eyes/realtime";
 import type { WebVideoProject } from "@studio/web-protocol";

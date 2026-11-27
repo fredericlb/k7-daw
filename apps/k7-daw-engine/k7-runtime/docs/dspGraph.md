@@ -167,7 +167,7 @@ The dry snapshot is taken **before** any audio node, for the same reason. Whethe
 
 ## The input ports
 
-`ain` names a **module port** (`apps/k7-daw-frontend/packages/song/docs/ports.md`). Port n is the stereo pair of channels
+`ain` names a **module port** (`apps/k7-daw-wasm/song/docs/ports.md`). Port n is the stereo pair of channels
 2n / 2n+1: the chain's stream is 0/1, the first side input 2/3. Absent, the port is the first; a
 port past the fourth is read as the fourth, since the sample phase indexes eight channels at most.
 

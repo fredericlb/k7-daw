@@ -2,10 +2,7 @@
 // factory presets, the module's `status:`, and the one Save button with what the files say beside
 // it. It owns nothing; every action is the screen's. See docs/builder.md.
 
-import {
-  MODULE_STATUSES,
-  type ModuleStatus,
-} from "@studio/song-schema/moduleTypes";
+import { MODULE_STATUSES } from "@studio/k7-wasm/consts";
 import { Button } from "@studio/ui/button";
 import {
   DropdownMenu,
@@ -19,7 +16,6 @@ import {
   ChevronDown,
   Folder,
   LayoutGrid,
-  Loader2,
   Lock,
   type LucideIcon,
   Pencil,
@@ -35,10 +31,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@studio/ui/select";
+import { Spinner } from "@studio/ui/spinner";
 import type { AutosaveStatus, loudest } from "@studio/ui-editor/autosave";
 import type { PresetInfo } from "@studio/web-protocol";
+import type { ModuleStatus } from "./moduleUi";
 
-/** What each `status:` is CALLED on screen — a label, not a second spelling; apps/k7-daw-frontend/packages/song/docs/moduleStatus.md. */
+/** What each `status:` is CALLED on screen — a label, not a second spelling; apps/k7-daw-wasm/song/docs/moduleStatus.md. */
 const STATUS_LABEL: Record<ModuleStatus, string> = {
   listed: "listed",
   favorite: "first",
@@ -122,7 +120,7 @@ export function BuilderHeader({
         </div>
       </div>
       <div className="ml-auto flex items-center gap-2">
-        {/* The plugin's FACTORY presets; a node's own are the graph's dropdown — apps/k7-daw-frontend/packages/song/docs/userPresets.md. */}
+        {/* The plugin's FACTORY presets; a node's own are the graph's dropdown — apps/k7-daw-wasm/song/docs/userPresets.md. */}
         {presets.length > 0 && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -220,7 +218,7 @@ export function BuilderHeader({
             title="save the module's files — Ctrl+S"
           >
             {publishing || saveState.status === "saving" ? (
-              <Loader2 className="mr-1 h-4 w-4 animate-spin" />
+              <Spinner size="sm" inherit className="mr-1" />
             ) : (
               <Save className="mr-1 h-4 w-4" />
             )}
@@ -238,7 +236,7 @@ export function BuilderHeader({
           title={saveState.reason ?? undefined}
         >
           {saveState.status === "saving" && (
-            <Loader2 className="h-3 w-3 shrink-0 animate-spin" />
+            <Spinner size="xs" inherit className="shrink-0" />
           )}
           <span className="truncate">
             {saveState.status === "clean" || saveState.status === "pending"

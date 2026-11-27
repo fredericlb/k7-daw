@@ -21,7 +21,9 @@ import { DockHeaderRow, DockHint, DockStatus } from "@studio/ui/editor-dock";
 import { Square } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
 import { followPointer } from "@studio/ui-timeline/drag";
-import { wheelFactor } from "@studio/ui-timeline/panZoom";
+import { useElementSize } from "@studio/ui-timeline/measure";
+import { wheelFactor, wheelZooms } from "@studio/ui-timeline/panZoom";
+import { usePinch } from "@studio/ui-timeline/pinch";
 import {
   type RefObject,
   useCallback,
@@ -36,9 +38,9 @@ import { clamp } from "../clamp";
 import { chainOps, filterOps, processLine } from "../clipOps";
 import { useLatest } from "../hooks/useLatest";
 import { useLiveEnvelope } from "../hooks/useLiveEnvelope";
-import { isTyping, useWindowKey } from "../hooks/useWindowKey";
 import { cursorOf } from "../modeIcons";
 import { m } from "../paraglide/messages.js";
+import { useEscapeLayer } from "../popins";
 import { useReloadKey, useShell, useVerbs } from "../state/shellStore";
 import { pieceEdgeLines } from "../takes";
 import type { WebWaveform } from "../types";
@@ -211,29 +213,10 @@ export function AudioClipPanel({
   }, [view, rolling, setStatus]);
   // The box the waveform fills, measured (see MIN_WAVE_H); the width came along for the arrangement ruler.
   const waveBox = useRef<HTMLDivElement>(null);
-  const [waveH, setWaveH] = useState(MIN_WAVE_H);
-  const [waveW, setWaveW] = useState(0);
-  useEffect(() => {
-    const el = waveBox.current;
-    if (!el) return;
-    const ro = new ResizeObserver((e) => {
-      setWaveH(Math.max(MIN_WAVE_H, Math.floor(e[0].contentRect.height)));
-      setWaveW(Math.floor(e[0].contentRect.width));
-    });
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
-  // Esc stops the take, captured so it reads as 'leave the take' wherever the pointer went, and only while one is ROLLING.
-  useWindowKey(
-    (e) => {
-      if (e.key === "Escape" && !isTyping(e)) {
-        e.preventDefault();
-        e.stopPropagation();
-        onStop?.();
-      }
-    },
-    { enabled: rolling, capture: true },
-  );
+  const { w: waveW, h: boxH } = useElementSize(waveBox);
+  const waveH = Math.max(MIN_WAVE_H, boxH);
+  // Esc stops the take, as a ladder layer so it reads as 'leave the take' wherever the pointer went, and only while one is ROLLING.
+  useEscapeLayer(rolling, () => onStop?.());
   // `arrayEq`: `armed` is a new array every frame, and without it the panel re-rendered at frame rate.
   const armed = useEngineState((s) => s.armed, arrayEq);
   const armedNames = armed.map((id) => trackNames[id] ?? id);
@@ -432,40 +415,18 @@ export function AudioClipPanel({
     };
   }, [rolling, wf]);
 
-  /** Two fingers on the wave, bound natively because React's touch listeners are passive — the same arithmetic as `useHZoom`'s pinch. */
-  useEffect(() => {
-    const el = waveBox.current;
-    if (!el || rolling || !wf) return;
-    let pinch: { dist: number; bars: number } | null = null;
-    const spread = (t: TouchList) =>
-      Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
-    const onTouchStart = (e: TouchEvent) => {
-      if (e.touches.length === 2)
-        pinch = { dist: spread(e.touches), bars: shownRef.current };
-    };
-    const onTouchMove = (e: TouchEvent) => {
-      if (!pinch || e.touches.length !== 2) return;
-      e.preventDefault();
-      const d = spread(e.touches);
-      if (d <= 0) return;
-      const p = pinch;
-      const centre = (e.touches[0].clientX + e.touches[1].clientX) / 2;
-      zoomTo(() => p.bars * (p.dist / d), centre, el);
-    };
-    const onTouchEnd = (e: TouchEvent) => {
-      if (e.touches.length < 2) pinch = null;
-    };
-    el.addEventListener("touchstart", onTouchStart, { passive: true });
-    el.addEventListener("touchmove", onTouchMove, { passive: false });
-    el.addEventListener("touchend", onTouchEnd);
-    el.addEventListener("touchcancel", onTouchEnd);
-    return () => {
-      el.removeEventListener("touchstart", onTouchStart);
-      el.removeEventListener("touchmove", onTouchMove);
-      el.removeEventListener("touchend", onTouchEnd);
-      el.removeEventListener("touchcancel", onTouchEnd);
-    };
-  }, [rolling, wf, zoomTo]);
+  // Two fingers on the wave: the bars shown at the start over the spread's ratio, anchored at their midpoint.
+  usePinch(
+    waveBox,
+    {
+      onStart: () => (rolling || !wf ? false : shownRef.current),
+      onPinch: (bars, ratio, c) => {
+        const el = waveBox.current;
+        if (el) zoomTo(() => bars / ratio, c.x, el);
+      },
+    },
+    [rolling, wf],
+  );
 
   return (
     /** `w-full min-w-0 flex-1` and not only `h-full`: this panel takes the GRAPH's place, which is a flex ROW, and the canvas sizes itself to its parent. */
@@ -512,7 +473,7 @@ export function AudioClipPanel({
                 onClick={onStop}
                 title={m["clip.stopTake"]()}
               >
-                <Square className="mr-1 h-3 w-3" /> Stop
+                <Square className="mr-1 h-3 w-3" /> {m["transport.stop"]()}
               </Button>
             </>
           </div>
@@ -759,14 +720,27 @@ export function AudioClipPanel({
               if (rolling || !wf) return;
               e.preventDefault();
               const box = e.currentTarget;
-              zoomTo(
-                (cur) =>
-                  e.ctrlKey
-                    ? cur.bars / wheelFactor(e.deltaY, true)
-                    : zoomBars(cur.bars, e.deltaY, cur.allBars),
-                e.clientX,
-                box,
-              );
+              // The rule of every pane (panZoom.ts): only a pinch or Cmd/Ctrl zooms, a bare wheel slides the window.
+              if (wheelZooms(e.nativeEvent)) {
+                const dy = e.deltaY || e.deltaX;
+                zoomTo(
+                  (cur) =>
+                    e.ctrlKey
+                      ? cur.bars / wheelFactor(dy, true)
+                      : zoomBars(cur.bars, dy, cur.allBars),
+                  e.clientX,
+                  box,
+                );
+                return;
+              }
+              const w = box.getBoundingClientRect().width;
+              const { start, bars } = atRef.current;
+              if (w <= 0 || bars <= 0) return;
+              const px =
+                (Math.abs(e.deltaX) > Math.abs(e.deltaY)
+                  ? e.deltaX
+                  : e.deltaY) * (e.deltaMode === 1 ? 16 : 1);
+              setAsked((a) => ({ ...a, start: start + px / (w / bars) }));
             }}
           >
             {/* Nothing is drawn while the pre-roll counts: the title bar is already counting it down. */}
@@ -873,7 +847,7 @@ export function AudioClipPanel({
                 }
                 // The EVENT's window, lit as ground with its edges picked out, and passed only when it actually cuts something.
                 sourceWindow={framed ? act : null}
-                /** …and its two edges DRAG, which is how an event's window is set — an `event …` verb, only where there is one to address (apps/k7-daw-frontend/packages/song/docs/materialCut.md). */
+                /** …and its two edges DRAG, which is how an event's window is set — an `event …` verb, only where there is one to address (apps/k7-daw-wasm/song/docs/materialCut.md). */
                 onWindowMove={
                   piece && takes
                     ? (w) => {

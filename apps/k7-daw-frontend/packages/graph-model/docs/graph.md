@@ -42,7 +42,7 @@ as a `GraphWarningCode` with its names and that same sentence. The code is what 
 a warning in its reader's language, which a sentence cannot be turned back into; the sentence
 stays because not every warning has a code, and a client older than a code still has something to
 show. The two are matched by sentence, not by position, since other warnings sit between them
-(`apps/k7-daw-frontend/packages/song/docs/graphModel.md`).
+(`apps/k7-daw-wasm/song/docs/graphModel.md`).
 
 ## A node's name is not its module's
 
@@ -56,7 +56,7 @@ It is absent on a node that IS a module (a `modules/…/module.k7x` names itself
 which has no module at all. That absence is what the header reads as "one name here".
 
 `WebChainStep.place` stands in for the node's own name where that name is a uuid — a chain
-project's unnamed node, `chain · step n` (`apps/k7-daw-frontend/packages/song/docs/chainFiles.md`). Only ever SHOWN:
+project's unnamed node, `chain · step n` (`apps/k7-daw-wasm/song/docs/chainFiles.md`). Only ever SHOWN:
 `module` stays the identity every verb is sent, and a step without `place` shows `module`.
 
 ## Ports: what is sent, and when
@@ -65,7 +65,7 @@ project's unnamed node, `chain · step n` (`apps/k7-daw-frontend/packages/song/d
 single flow input, which is every module drawn before ports existed. `mandatory` rides along
 because it decides how many sockets show before anything is wired: a port that must be fed is
 drawn from the start, an optional one appears as the free jack past the last occupied one. Absent
-means mandatory, matching the module schema. See `apps/k7-daw-frontend/packages/song/docs/ports.md`.
+means mandatory, matching the module schema. See `apps/k7-daw-wasm/song/docs/ports.md`.
 
 `outputs` is on the same terms, sent only when there is more than one. All of them are shown at
 once: an output is offered rather than required, so there is nothing to reveal progressively.
@@ -78,7 +78,7 @@ none, which is most.
 (`sep#vocals: [ reverb ]`); absent on the single output most modules have. `WebChain.fromPort`
 does the same one level up: a lane offers both audio and midi and is not typed by what it carries,
 so two runs may start at one lane and this is what tells them apart, without anything having to be
-looked up. See `apps/k7-daw-frontend/packages/song/docs/trackModules.md`.
+looked up. See `apps/k7-daw-wasm/song/docs/trackModules.md`.
 
 ### `TRACK_OUTPUTS` order is load-bearing
 
@@ -112,7 +112,7 @@ resolves to nothing.
 
 `WebWidget.library` is the historical spelling of a filepicker, from when the files came from a
 shared library. It is still read as one, so panels already written keep working — see
-`apps/k7-daw-frontend/packages/song/docs/filePicker.md`.
+`apps/k7-daw-wasm/song/docs/filePicker.md`.
 
 `WebWidget.options[].arg` is what a module FIELD is SET to when that differs from what the entry
 is called. A field is written by a command naming a state, and for most of them the state is the
@@ -133,7 +133,7 @@ every node of it, exactly as the panel is. It is keyed by the widget's `bind` st
 `alternatives` is sent only when there is a CHOICE — one entry is the module's own fields, which
 is not a menu, and a node with nothing to pick from should grow no button. `params` and `ui` are
 already the CHOSEN set; these say what could be chosen instead. See
-`apps/k7-daw-frontend/packages/song/docs/alternatives.md`.
+`apps/k7-daw-wasm/song/docs/alternatives.md`.
 
 `monitor` and `channel` are module FIELDS rather than params, which is why a widget bound to one
 needs a target of its own (`widgetTarget`'s "module" kind). For `channel`, only the numeric form
@@ -205,13 +205,13 @@ point the render was taken at, `"inside"` a node the render already contains —
 than a boolean because they mean opposite things about what a click does: the point can be
 unfrozen, and everything inside it can only be reached by unfreezing that point. Absent when the
 project has no freeze in force; a `frozen:` whose render is not on disk is not one. See
-`apps/k7-daw-frontend/packages/song/docs/freeze.md`.
+`apps/k7-daw-wasm/song/docs/freeze.md`.
 
 `modules` carries the note text of doc modules only, so it is empty for almost every project. It
 is optional because the layout-only subgraphs feeding dagre carry geometry, not notes. It was
 `{docs, todos}` on every module, for a bottom panel that listed everybody's notes in one place; a
 note is its own node now — a node of `@meta/doc`, wired from what it is about — so the text is
-read where you are already looking. See `apps/k7-daw-frontend/packages/song/docs/docModules.md`.
+read where you are already looking. See `apps/k7-daw-wasm/song/docs/docModules.md`.
 
 ## `WebTrackClip`: a trim, deliberately
 

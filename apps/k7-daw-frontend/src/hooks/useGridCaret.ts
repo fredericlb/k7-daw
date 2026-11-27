@@ -1,5 +1,5 @@
 // useGridCaret.ts — the timeline's caret behaviour on a clip editor's grid: hjkl/arrows move it,
-// `v` grows it into a rectangle, Escape drops that, shift+drag draws one with the pointer. The
+// `v` grows it into a rectangle, Escape (a ladder layer) drops that, shift+drag draws one with the pointer. The
 // arithmetic is gesture's grid_caret.rs; what is here is the state, the key listener and the drag.
 // See apps/k7-daw-frontend/docs/clipEditors.md.
 
@@ -13,6 +13,9 @@ import {
   selBox,
 } from "@studio/k7-wasm/gesture";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { caretKeyDelta } from "../caretKeys";
+import { m } from "../paraglide/messages.js";
+import { useEscapeLayer } from "../popins";
 import { useLatest } from "./useLatest";
 import { isTyping } from "./useWindowKey";
 
@@ -123,40 +126,33 @@ export function useGridCaret({
     setSel({ anchor, head: clampCell({ row, col: b.cols - 1 }, b) });
   }, []);
 
-  /** The keys, and ONLY the continuous ones — every discrete action is a command; Escape is swallowed hard, or one press would do two things. */
+  // Escape drops the rectangle, as the ladder's innermost rung — the shell's `esc` binding reaches it (docs/shell.md).
+  useEscapeLayer(active && sel !== null, clearSelect, {
+    status: m["grid.selectionCancelled"](),
+    onStatus,
+  });
+
+  /** The keys, and ONLY the continuous ones — every discrete action is a command. */
   useEffect(() => {
     if (!active) return;
     const onKey = (e: KeyboardEvent) => {
       if (isTyping(e)) return;
-      const selecting = !!selRef.current;
-      if (selecting && e.key === "Escape") {
-        clearSelect();
-        onStatus?.("selection cancelled");
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        return;
-      }
-      let dRow = 0;
-      let dCol = 0;
-      if (e.key === "ArrowLeft" || e.key === "h") dCol = -1;
-      else if (e.key === "ArrowRight" || e.key === "l") dCol = 1;
-      else if (e.key === "ArrowUp" || e.key === "k") dRow = -1;
-      else if (e.key === "ArrowDown" || e.key === "j") dRow = 1;
-      else return;
-      if (selecting)
+      const d = caretKeyDelta(e);
+      if (!d) return;
+      if (selRef.current)
         setSel(
           (s) =>
             s && {
               ...s,
-              head: moveCell(s.head, dRow, dCol, boundsRef.current),
+              head: moveCell(s.head, d.dRow, d.dCol, boundsRef.current),
             },
         );
-      else setCaret((c) => moveCell(c, dRow, dCol, boundsRef.current));
+      else setCaret((c) => moveCell(c, d.dRow, d.dCol, boundsRef.current));
       e.preventDefault();
     };
     window.addEventListener("keydown", onKey, true);
     return () => window.removeEventListener("keydown", onKey, true);
-  }, [active, clearSelect, onStatus]);
+  }, [active]);
 
   const shiftSelect = useCallback((dRow: number, dCol: number) => {
     const by = (c: GridCell) =>

@@ -3,7 +3,8 @@
 // reaches the page; only the short user code does.
 
 import { Button, buttonVariants } from "@studio/ui/button";
-import { Check, Copy, ExternalLink, Loader2 } from "@studio/ui/icons";
+import { Check, Copy, ExternalLink } from "@studio/ui/icons";
+import { Spinner } from "@studio/ui/spinner";
 import { useEffect, useReducer, useRef, useState } from "react";
 import { m } from "../paraglide/messages.js";
 import { copyText } from "./copyText";
@@ -140,7 +141,7 @@ export function DeviceFlow({
             </a>
           </div>
           <p className="text-fg-2 type-secondary" role="status">
-            <Loader2 className="mr-1 inline size-3 animate-spin" />
+            <Spinner size="xs" inherit className="mr-1 inline" />
             {m["git.gh.waiting"]()}
           </p>
           <Button
@@ -154,7 +155,7 @@ export function DeviceFlow({
         </>
       ) : (
         <p className="text-fg-2 type-secondary" role="status">
-          <Loader2 className="mr-1 inline size-3 animate-spin" />
+          <Spinner size="xs" inherit className="mr-1 inline" />
           {m["git.gh.starting"]()}
         </p>
       )}

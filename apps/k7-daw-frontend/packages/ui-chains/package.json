@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "k7's routing-graph engine — compiles a project graph to a dagre layout the web app draws as HTML nodes + SVG cables. Framework-agnostic; consumed as source.",
+  "description": "k7's routing-graph engine — compiles a project graph to a layout the web app draws as HTML nodes + SVG cables. Framework-agnostic; consumed as source.",
   "exports": {
     "./anchorRight": "./src/anchorRight.ts",
     "./cableCanvas": "./src/cableCanvas.ts",
@@ -20,8 +20,7 @@
     "./noteLoad": "./src/noteLoad.ts",
     "./patchGesture": "./src/patchGesture.ts",
     "./rowSeams": "./src/rowSeams.ts",
-    "./shownName": "./src/shownName.ts",
-    "./zoomGesture": "./src/zoomGesture.ts"
+    "./shownName": "./src/shownName.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",
@@ -33,10 +32,8 @@
     "node": ">=18"
   },
   "dependencies": {
-    "@dagrejs/dagre": "^1.1.8",
     "@studio/graph-model": "*",
     "@studio/k7-wasm": "*",
-    "@studio/song-schema": "*",
     "@studio/web-protocol": "*"
   },
   "devDependencies": {

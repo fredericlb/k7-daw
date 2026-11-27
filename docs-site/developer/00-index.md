@@ -51,7 +51,7 @@ edit path in [The edit path](./21-edit-path.md).
 
 - [The song pipeline](./30-song-pipeline.md)
 - [song-schema: the file format](./31-song-schema.md)
-- [The compiler: apps/k7-daw-frontend/packages/song](./32-song-compiler.md)
+- [The compiler: apps/k7-daw-wasm/song](./32-song-compiler.md)
 - [song-edit: surgical writes](./33-song-edit.md)
 - [k7x: the text format](./34-k7x.md)
 - [song-strudel: pattern lanes](./35-song-strudel.md)

@@ -10,6 +10,7 @@ import { Chip } from "@studio/ui/chip";
 import { Download, FileArchive } from "@studio/ui/icons";
 import { Progress } from "@studio/ui/progress";
 import { RowButton, RowGroup } from "@studio/ui/row-group";
+import { SectionHeading } from "@studio/ui/section-heading";
 import {
   type ReactNode,
   useEffect,
@@ -125,12 +126,14 @@ export function SharePanel({
       <div className="min-h-0 flex-1 overflow-y-auto">
         {sync ? (
           <>
-            <h3 className="type-caps pb-2 text-fg-2">{m["share.sync"]()}</h3>
+            <SectionHeading className="pb-2">
+              {m["share.sync"]()}
+            </SectionHeading>
             {sync}
             <div className="pt-4" />
           </>
         ) : null}
-        <h3 className="type-caps pb-2 text-fg-2">{m["share.mixdown"]()}</h3>
+        <SectionHeading className="pb-2">{m["share.mixdown"]()}</SectionHeading>
         {/* Only once there is a choice, as the timeline pane's tabs are. */}
         {timelines.length ? (
           <div
@@ -187,9 +190,9 @@ export function SharePanel({
         {/* …and the PICTURE, on a project that draws one. */}
         {hasPicture ? (
           <>
-            <h3 className="type-caps pt-4 pb-2 text-fg-2">
+            <SectionHeading className="pt-4 pb-2">
               {m["share.video"]()}
-            </h3>
+            </SectionHeading>
             <RowGroup>
               <VideoExportRow busy={busy} chosen={line} onChoose={choose} />
             </RowGroup>

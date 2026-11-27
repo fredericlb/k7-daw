@@ -1,6 +1,6 @@
-# The compiler: apps/k7-daw-frontend/packages/song
+# The compiler: apps/k7-daw-wasm/song
 
-`apps/k7-daw-frontend/packages/song` reads a project folder: the files, the module vocabulary, the lanes and the graph the pages and the verbs read. The compile into the `ProjectDoc` the engine plays is the Rust `song` crate (`apps/k7-daw-wasm/song`), run natively by the front and as WebAssembly in the verbs' Worker. The package also owns everything that walks a disk around a project: the shared `_modules/` folder, the
+`apps/k7-daw-wasm/song` reads a project folder: the files, the module vocabulary, the lanes and the graph the pages and the verbs read. The compile into the `ProjectDoc` the engine plays is the Rust `song` crate (`apps/k7-daw-wasm/song`), run natively by the front and as WebAssembly in the verbs' Worker. The package also owns everything that walks a disk around a project: the shared `_modules/` folder, the
 account's libraries, surfaces, assemblies, the archetype scaffolds, and the migrations between file
 layouts. It reads; changing a project is `@studio/song-edit`'s job ([song-edit](./33-song-edit.md)).
 
@@ -41,7 +41,7 @@ surface with a `mapping` binds node params — which is why a `mix` set stays in
 ## The compile
 
 The compile is the Rust song crate's, and the one compiler: `apps/k7-daw-wasm/song/src/doc/` builds the `ProjectDoc`,
-`views/` the pages' answers. Its pages are `apps/k7-daw-frontend/packages/song/docs/rustCompiler.md` and the sub-step pages beside it. What
+`views/` the pages' answers. Its pages are `apps/k7-daw-wasm/song/docs/rustCompiler.md` and the sub-step pages beside it. What
 the TypeScript here keeps is the read side the verbs and the pages call: the module vocabulary and its inheritance
 (below), the lanes, the derived chain graph and the timelines' lengths.
 

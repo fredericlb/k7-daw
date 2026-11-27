@@ -86,18 +86,9 @@ code, never a guess at the person's.
 caller for ever, and "no" is the safe half of every question asked here — the destructive ones
 don't run, and the text ones return null.
 
-## Why it is not `@studio/ui/ask`
+## One module, one host
 
-`apps/k7-daw-frontend/packages/ui/src/ask.tsx` is the same design with the same `AskConfirm`/`AskText` shapes,
-and this file is a superset of it: `askChoice`, `askTextAction`, the `tool`, a host that
-takes its labels, and English rather than French when it has none.
-
-Two modules mean two hosts with two listeners, and a question reaches only the host of the module
-it was asked through. So **every studio package asks through this one**. A studio import of `@studio/ui/ask`
-is a question that answers no in every k7 page.
-
-The types this file shares with `@studio/ui/ask` keep its names and fields, so a caller
-moved from one to the other needs no change: a field added there is added here under the same name.
+A question reaches only the host of the module it was asked through, so **every studio package asks through this one**: two modules would mean two hosts with two listeners.
 
 ## What it is not
 

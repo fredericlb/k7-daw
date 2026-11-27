@@ -6,8 +6,8 @@
 // full set, which is why this file is only ever reached through React.lazy — the settings page pays
 // it when it opens, and nobody else pays it at all.
 
-import { Input } from "@studio/ui/input";
-import { useMemo, useState } from "react";
+import { SearchList } from "@studio/ui/search-list";
+import { useMemo } from "react";
 import { useIcons } from "../lucideIcons";
 import { m } from "../paraglide/messages.js";
 
@@ -18,60 +18,38 @@ export default function IconPicker({
   value?: string;
   onPick: (name: string | undefined) => void;
 }) {
-  const [q, setQ] = useState("");
   const set = useIcons();
   const icons = useMemo(() => Object.entries(set ?? {}), [set]);
-  const needle = q.trim().toLowerCase();
-  // Capped: two hundred rows is more than anyone scans, and rendering fifteen hundred SVGs into a popover pauses on every keystroke.
-  const shown = useMemo(
-    () =>
-      (needle
-        ? icons.filter(([n]) => n.toLowerCase().includes(needle))
-        : icons
-      ).slice(0, 200),
-    [icons, needle],
-  );
 
   return (
     <div className="w-72">
-      <Input
+      <SearchList
+        items={icons}
+        text={([name]) => name}
+        onPick={([name]) => onPick(name)}
+        isSelected={([name]) => name === value}
+        itemLabel={([name]) => name}
+        renderRow={([, Icon]) => <Icon className="size-4" />}
+        emptyLabel={m["icons.noMatch"]()}
+        pending={!set}
+        searchLabel={m["icons.search"]()}
+        // Two hundred rows is more than anyone scans, and fifteen hundred SVGs in a popover pause on every keystroke.
+        limit={200}
+        columns={8}
         autoFocus
-        value={q}
-        onChange={(e) => setQ(e.target.value)}
-        placeholder={m["icons.search"]()}
-        className="mb-2 h-7 text-xs"
-      />
-      <div className="grid max-h-56 grid-cols-8 gap-1 overflow-y-auto">
-        {/* "none" first, so taking an icon back is as easy as choosing one. */}
-        <button
-          type="button"
-          title={m["icons.none"]()}
-          onClick={() => onPick(undefined)}
-          className="flex h-7 w-7 items-center justify-center rounded text-muted-foreground hover:bg-accent"
-        >
-          —
-        </button>
-        {shown.map(([name, Icon]) => (
+        listClassName="grid max-h-56 grid-cols-8 gap-1"
+        rowClassName="min-h-9 w-auto justify-center rounded-lg px-0 desk:min-h-8"
+        // "None" first, so taking an icon back is as easy as choosing one.
+        before={
           <button
             type="button"
-            key={name}
-            title={name}
-            onClick={() => onPick(name)}
-            className={
-              name === value
-                ? "flex h-7 w-7 items-center justify-center rounded bg-secondary"
-                : "flex h-7 w-7 items-center justify-center rounded hover:bg-accent"
-            }
+            onClick={() => onPick(undefined)}
+            className="type-secondary min-h-9 cursor-pointer rounded-lg px-3 text-left text-fg-2 outline-none hover:bg-on-fill focus-visible:bg-on-fill desk:min-h-8"
           >
-            <Icon className="h-4 w-4" />
+            {m["icons.none"]()}
           </button>
-        ))}
-      </div>
-      {shown.length === 0 && (
-        <p className="py-2 text-center text-xs text-muted-foreground">
-          {m["icons.noMatch"]()}
-        </p>
-      )}
+        }
+      />
     </div>
   );
 }

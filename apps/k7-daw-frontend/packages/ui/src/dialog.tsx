@@ -6,6 +6,12 @@ import { cn } from "./lib/utils";
 /** The close button's spoken name: the kit has no catalogue, so the app provides it above its dialogs. */
 const DialogCloseLabel = React.createContext("Close");
 
+/** Where a dialog stacks: `panel` sits under every menu and picker, so one opened from inside it shows above it. */
+const LAYER = {
+  dialog: "z-(--k7-z-dialog)",
+  panel: "z-(--k7-z-panel)",
+} as const;
+
 const Dialog = DialogPrimitive.Root;
 const DialogTrigger = DialogPrimitive.Trigger;
 const DialogPortal = DialogPrimitive.Portal;
@@ -30,32 +36,64 @@ const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
     showCloseButton?: boolean;
+    layer?: keyof typeof LAYER;
+    /** For a `modal={false}` root, which Radix gives no overlay: the scrim is drawn here, and a press on it closes. */
+    nonModal?: boolean;
   }
->(({ className, children, showCloseButton = true, ...props }, ref) => {
-  const closeLabel = React.useContext(DialogCloseLabel);
-  return (
-    <DialogPortal>
-      <DialogOverlay />
-      <DialogPrimitive.Content
-        ref={ref}
-        className={cn(
-          "panel-dialog fixed left-1/2 top-1/2 z-(--k7-z-dialog) grid max-h-[calc(100dvh-2rem)] w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-3.5 overflow-y-auto rounded-(--k7-r-dialog) p-[22px] text-popover-foreground outline-none sm:max-w-(--k7-dialog-w)",
-          "data-[state=open]:animate-[k7-dialog-in_var(--k7-dur-dialog)_var(--k7-ease-spring)] data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
-          className,
-        )}
-        {...props}
-      >
-        {children}
-        {showCloseButton && (
-          <DialogPrimitive.Close className="absolute right-3 top-3 grid size-11 cursor-pointer desk:size-8 place-items-center rounded-full text-fg-2 outline-none transition-colors hover:bg-on-fill focus-visible:shadow-(--k7-focus-ring)">
-            <XIcon className="size-5" strokeWidth={2.2} />
-            <span className="sr-only">{closeLabel}</span>
+>(
+  (
+    {
+      className,
+      children,
+      showCloseButton = true,
+      layer = "dialog",
+      nonModal,
+      ...props
+    },
+    ref,
+  ) => {
+    const closeLabel = React.useContext(DialogCloseLabel);
+    return (
+      <DialogPortal>
+        {nonModal ? (
+          <DialogPrimitive.Close asChild>
+            <button
+              type="button"
+              tabIndex={-1}
+              aria-label={closeLabel}
+              className={cn(
+                "scrim fixed inset-0 animate-[k7-fade-in_var(--k7-dur-fade)_ease-out]",
+                LAYER[layer],
+              )}
+            />
           </DialogPrimitive.Close>
+        ) : (
+          <DialogOverlay className={LAYER[layer]} />
         )}
-      </DialogPrimitive.Content>
-    </DialogPortal>
-  );
-});
+        <DialogPrimitive.Content
+          ref={ref}
+          // A menu or picker opened from inside a non-modal dialog is outside it, and must not close it.
+          onInteractOutside={nonModal ? (e) => e.preventDefault() : undefined}
+          className={cn(
+            "panel-dialog fixed left-1/2 top-1/2 grid max-h-[calc(100dvh-2rem)] w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-3.5 overflow-y-auto rounded-(--k7-r-dialog) p-[22px] text-popover-foreground outline-none sm:max-w-(--k7-dialog-w)",
+            LAYER[layer],
+            "data-[state=open]:animate-[k7-dialog-in_var(--k7-dur-dialog)_var(--k7-ease-spring)] data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
+            className,
+          )}
+          {...props}
+        >
+          {children}
+          {showCloseButton && (
+            <DialogPrimitive.Close className="absolute right-3 top-3 grid size-11 cursor-pointer desk:size-8 place-items-center rounded-full text-fg-2 outline-none transition-colors hover:bg-on-fill focus-visible:shadow-(--k7-focus-ring)">
+              <XIcon className="size-5" strokeWidth={2.2} />
+              <span className="sr-only">{closeLabel}</span>
+            </DialogPrimitive.Close>
+          )}
+        </DialogPrimitive.Content>
+      </DialogPortal>
+    );
+  },
+);
 DialogContent.displayName = DialogPrimitive.Content.displayName;
 
 const DialogHeader = ({

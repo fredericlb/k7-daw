@@ -5,13 +5,13 @@
 // It DRAWS a deck and owns nothing about it: the document is `useDeckSet`, held above.
 
 import type { Stem } from "@studio/k7-wasm/stems";
+import { Button } from "@studio/ui/button";
+import { Play, Square } from "@studio/ui/icons";
 import {
   parseRecordDrag,
   RECORD_DRAG_TYPE,
   type RecordDrag,
-} from "@studio/song-schema/records";
-import { Button } from "@studio/ui/button";
-import { Play, Square } from "@studio/ui/icons";
+} from "@studio/ui/record-drag";
 import { type CSSProperties, useState } from "react";
 import { m } from "../../paraglide/messages.js";
 import type { DeckId, DeckLoads, DeckTempo } from "../deckVocabulary";

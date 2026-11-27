@@ -54,7 +54,7 @@ every other time on this document — a surface measures in the unit it draws in
 `WebClip.frozen` says this clip is a RENDER, not a placement: the lane is frozen and this stands
 in for it. That matters to anything that would edit it. There is no `clips:` entry for a move to
 rewrite, and a bar-1 render sitting over a real placement at bar 1 means a drag would move
-material the lane is not even showing. See `apps/k7-daw-frontend/packages/song/docs/freeze.md`.
+material the lane is not even showing. See `apps/k7-daw-wasm/song/docs/freeze.md`.
 
 `warpOff` is the same kind of distinction one level down: `warped` alone cannot tell "never
 stretched" from "stretched, switched off here", so both are sent and the timeline draws the second
@@ -118,9 +118,9 @@ level, which is a thing to say rather than a dead fader to draw.
 Three other groups left `WebTrack` outright and did not come back:
 
 - `docs` / `todos`, for the Docs panel, gone with it — a note is a doc module on the graph now
-  (`@meta/doc`); see `apps/k7-daw-frontend/packages/song/docs/docModules.md`.
+  (`@meta/doc`); see `apps/k7-daw-wasm/song/docs/docModules.md`.
 - `frozen`, `alternatives` and `alternative`, for the lane header, gone with the fields they came
-  from; see `apps/k7-daw-frontend/packages/song/docs/trackModules.md`.
+  from; see `apps/k7-daw-wasm/song/docs/trackModules.md`.
 
 Both are facts about the module a lane *is*, so the timeline's gutter reads them off `WebGraph`
 (`trackAlternatives`, `frozen`) rather than off a second copy on this document. Putting them back
@@ -153,7 +153,7 @@ providers are worth a word:
 
 - **`nodes`** is one of this project's *uses* of a module, which is what the `node …` verbs
   address. Separate from `modules` because a `@ref` names a shared definition, and those are
-  edited in the builder rather than by a verb — see `apps/k7-daw-frontend/packages/song/docs/nodes.md`.
+  edited in the builder rather than by a verb — see `apps/k7-daw-wasm/song/docs/nodes.md`.
 - **`playlists`** is a set list of the REPOSITORY, `_playlists/<name>.k7x` with subfolders kept.
   The one provider that reads nothing of the open project.
 - **`surfaceTypes`** is a closed set of words rather than something read off the project: the file

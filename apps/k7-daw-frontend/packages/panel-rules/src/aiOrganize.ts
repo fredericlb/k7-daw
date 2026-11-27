@@ -5,21 +5,23 @@
 // apps/k7-daw-frontend/packages/ui-module-builder/docs/aiOrganize.md.
 
 import type { ParamMeta } from "@studio/engine-protocol";
-import { parse } from "@studio/k7-wasm/k7x";
-import { ownLevelSide } from "@studio/k7-wasm/schema";
+import type {
+  WebModuleUI as ModuleUI,
+  WebWidget as Widget,
+} from "@studio/graph-model";
 import {
   INPUT_VOLUME_PARAM,
   MIX_PARAM,
   OUTPUT_VOLUME_PARAM,
-} from "@studio/song-schema/moduleTypes";
+} from "@studio/k7-wasm/consts";
+import { parse } from "@studio/k7-wasm/k7x";
 import {
-  type ModuleUI,
   RACK_ADD_BIND,
   RACK_BIND,
   rackBindSymbol,
-  UiFileSchema,
-  type Widget,
-} from "@studio/song-schema/yaml/moduleSchema";
+} from "@studio/k7-wasm/rack-binds";
+import { ownLevelSide } from "@studio/k7-wasm/schema";
+import { validatePanel } from "@studio/k7-wasm/validate";
 import type { AiOrganizeResult } from "./aiAnswer";
 import { clash, framedBy } from "./groupGeometry";
 import { twinIssues } from "./layoutTwins";
@@ -374,15 +376,15 @@ export function checkAiResult(
       issues: [`the panel does not read as k7x: ${(e as Error).message}`],
     };
   }
-  const parsed = UiFileSchema.safeParse(raw);
-  if (!parsed.success)
+  const verdict = validatePanel(res.uiText);
+  if (!verdict.ok)
     return {
       ui: null,
-      issues: parsed.error.issues.map(
-        (i) => `panel ${i.path.join(".") || "(root)"}: ${i.message}`,
+      issues: verdict.issues.map(
+        (i) => `panel ${i.path || "(root)"}: ${i.message}`,
       ),
     };
-  const ui = parsed.data;
+  const ui = raw as ModuleUI;
   const issues: string[] = [...(res.issues ?? [])];
   const known = new Set(bindNames);
   const top = Object.entries(ui.widgets);

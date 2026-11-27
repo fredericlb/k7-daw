@@ -54,6 +54,7 @@ import {
   mobileGutter,
   ROW_H,
 } from "@studio/ui-timeline/lanes";
+import { useElementWatch } from "@studio/ui-timeline/measure";
 import {
   useHZoom,
   usePanScroll,
@@ -71,6 +72,7 @@ import {
   useState,
 } from "react";
 import { mediaUrl } from "../api";
+import { caretKeyDelta } from "../caretKeys";
 import {
   type Clipboard,
   copyEvents,
@@ -103,6 +105,7 @@ import { useVideoDrag } from "../hooks/useVideoDrag";
 import { isTyping } from "../hooks/useWindowKey";
 import { cursorOf } from "../modeIcons";
 import { m } from "../paraglide/messages.js";
+import { useEscapeLayer } from "../popins";
 import { usePaneProjectDoc } from "../queries/projectDoc";
 import {
   dropLaneOf,
@@ -495,14 +498,14 @@ function TimelineTabView({
   trackWarnings?: Record<string, string[]>;
   /** The warning icon was clicked: open the problems list. */
   onProblems?: () => void;
-  /** What the graph knows about each lane's NODE, by lane id — the same maps the chains pane draws from (apps/k7-daw-frontend/packages/song/docs/alternatives.md). */
+  /** What the graph knows about each lane's NODE, by lane id — the same maps the chains pane draws from (apps/k7-daw-wasm/song/docs/alternatives.md). */
   laneNodes?: {
     alternatives?: Record<
       string,
       { alternatives: string[]; alternative: string }
     >;
     frozen?: Record<string, "at" | "inside">;
-    /** A lane inside an automatic VST freeze, → the VST: the engine lacks it and plays the render (apps/k7-daw-frontend/packages/song/docs/autoFreeze.md). */
+    /** A lane inside an automatic VST freeze, → the VST: the engine lacks it and plays the render (apps/k7-daw-wasm/song/docs/autoFreeze.md). */
     autoFrozen?: Record<string, string>;
     /** …the same, with no render made yet: the lane plays without the VST until one is. */
     autoFreezeWaiting?: Record<string, string>;
@@ -769,25 +772,17 @@ function TimelineTabView({
   const scrollRef = useRef<HTMLDivElement>(null);
   // Shadows the module constants below, so layout, zoom maths and playhead offset all follow one value.
   const isMobile = useIsMobile();
-  const [paneW, setPaneW] = useState(0);
-  // A phone's column grows with the pane, so a landscape phone or a tablet shows whole names (lanes.ts).
-  const GUTTER = isMobile ? mobileGutter(paneW) : GUTTER_WIDE;
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const ro = new ResizeObserver(() => setPaneW(el.clientWidth));
-    ro.observe(el);
-    setPaneW(el.clientWidth);
-    return () => ro.disconnect();
-  }, [proj]);
-
-  // Wheel zooms past fit and middle-drag pans; the gutter is the fixed name column and does not scale.
+  // Wheel zooms past fit and middle-drag pans; the gutter is the fixed name column and does not scale. It reads the pane's width (a phone's column grows with it, lanes.ts), which useHZoom measures.
   // Below 1 the song is drawn past its end — only at rest, since a zoomed rectangle IS its range; see docs/timeline.md.
-  const [zoomX, setZoomX, zoomAtX] = useHZoom(
+  const [zoomX, setZoomX, zoomAtX, paneW] = useHZoom(
     scrollRef,
-    { gutter: GUTTER, min: view ? 1 : MIN_ZOOM_OUT },
+    {
+      gutter: (w) => (isMobile ? mobileGutter(w) : GUTTER_WIDE),
+      min: view ? 1 : MIN_ZOOM_OUT,
+    },
     [proj],
   );
+  const GUTTER = isMobile ? mobileGutter(paneW) : GUTTER_WIDE;
   // Narrowing to a rectangle leaves the zoomed-out scale behind, or the wheel would wake up below fit.
   useEffect(() => {
     if (view) setZoomX((z) => Math.max(1, z));
@@ -822,20 +817,22 @@ function TimelineTabView({
     };
     el.addEventListener("scroll", remember, { passive: true });
     el.style.setProperty("--tl-clip", `${el.scrollLeft}px`);
-    const ro = new ResizeObserver(() => {
+    return () => el.removeEventListener("scroll", remember);
+  }, [loaded]);
+  // A pane shown again lays out at 0,0: put the offset it had back.
+  useElementWatch(
+    scrollRef,
+    (el) => {
       const { left, top } = savedScroll.current;
       if (!el.clientWidth || (!left && !top)) return;
       if (el.scrollLeft === 0 && el.scrollTop === 0) {
         el.scrollLeft = left;
         el.scrollTop = top;
       }
-    });
-    ro.observe(el);
-    return () => {
-      el.removeEventListener("scroll", remember);
-      ro.disconnect();
-    };
-  }, [loaded]);
+    },
+    {},
+    [loaded],
+  );
 
   // The viewport plus a screen each way, snapped to half-screens so a scroll re-renders only when it crosses one.
   const [clipWin, setClipWin] = useState<ClipWindow>(WHOLE);
@@ -857,18 +854,7 @@ function TimelineTabView({
         : next,
     );
   }, []);
-  // biome-ignore lint/correctness/useExhaustiveDependencies: `proj` gates the scroller's existence.
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    el.addEventListener("scroll", readClipWin, { passive: true });
-    const ro = new ResizeObserver(readClipWin);
-    ro.observe(el);
-    return () => {
-      el.removeEventListener("scroll", readClipWin);
-      ro.disconnect();
-    };
-  }, [proj, readClipWin]);
+  useElementWatch(scrollRef, readClipWin, { scroll: true }, [proj]);
   // Before paint, after useHZoom's own layout effect has moved scrollLeft: a zoom must not draw one frame of missing clips.
   // biome-ignore lint/correctness/useExhaustiveDependencies: these are the triggers, the reading is off the DOM.
   useLayoutEffect(readClipWin, [zoomX, paneW, beatLo, beatHi, readClipWin]);
@@ -1262,7 +1248,7 @@ function TimelineTabView({
       }
       const el = e.currentTarget as HTMLElement;
       const grab = { pointerId: e.pointerId, x: e.clientX, y: e.clientY };
-      // No MOVE on a generated, frozen or read-only lane — there is a clip to look at and nothing to write (apps/k7-daw-frontend/packages/song/docs/freeze.md).
+      // No MOVE on a generated, frozen or read-only lane — there is a clip to look at and nothing to write (apps/k7-daw-wasm/song/docs/freeze.md).
       const movable = !(readOnly || track.generated || c.frozen);
       const mv: Move = {
         trackId: track.id,
@@ -1384,7 +1370,7 @@ function TimelineTabView({
         snapMode(e),
       );
       const lane = laneAtPoint(e.clientX, e.clientY);
-      // Where the event may LAND: a lane takes it when its matching output is wired, which `contentType` says in one word (apps/k7-daw-frontend/packages/song/docs/trackModules.md).
+      // Where the event may LAND: a lane takes it when its matching output is wired, which `contentType` says in one word (apps/k7-daw-wasm/song/docs/trackModules.md).
       const src = projRef.current?.tracks.find((t) => t.id === m.trackId);
       const takes =
         src?.clips.find((c) => c.id === m.clipId)?.type === "midi"
@@ -1524,62 +1510,55 @@ function TimelineTabView({
   }, [proj, onMoveEvent, setStatus]);
   commitMoveRef.current = commitMove;
 
+  // Escape backs out of a move in hand or a drawn selection — the ladder's innermost rungs, so the shell never also leaves the fullscreen pane.
+  useEscapeLayer(active && mode !== "normal", () => {
+    if (modeRef.current === "move") {
+      setMove(null);
+      setStatus(m["status.timeline.moveCancelled"]());
+      return;
+    }
+    const s = selRef.current;
+    setSel(null);
+    if (s) setCaret(clampCaret(s.head)); // the caret lands where the selection ended
+    setStatus(m["status.timeline.selectionCancelled"]());
+  });
+
   // Caret movement and growing the selection, and only that — every discrete action is a command bound in keys.ts.
   useEffect(() => {
     if (!active) return;
     const onKey = (e: KeyboardEvent) => {
-      if (isTyping(e)) return;
+      if (isTyping(e) || e.key === "Escape") return;
       // One block per MODE, and the mode is derived from the state this used to read directly (timelineMode.ts).
       if (modeRef.current === "move") {
         // Move swallows keys HARD, the ones it answers and every other: a nudge must not also scroll the pane.
         const d = moveNudge(e.key);
         if (d) nudgeMove(d);
         else if (e.key === "Enter") commitMove();
-        else if (e.key === "Escape") {
-          setMove(null);
-          setStatus(m["status.timeline.moveCancelled"]());
-        }
         e.preventDefault();
         e.stopImmediatePropagation();
         return;
       }
       const selecting = modeRef.current === "select";
-      // Escape drops the selection and stops there, or the shell would also throw you out of the fullscreen pane.
-      if (selecting && e.key === "Escape") {
-        const s = selRef.current;
-        setSel(null);
-        if (s) setCaret(clampCaret(s.head)); // the caret lands where the selection ended
-        setStatus(m["status.timeline.selectionCancelled"]());
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        return;
-      }
       // hjkl and the arrows walk in both remaining modes; WHAT they walk is the difference between them.
-      let handled = true;
+      const d = caretKeyDelta(e);
+      if (!d) return;
       // Left off beat 1 selects the label; right returns to the lane, unless the row has none (clampCaret pins it).
-      if (e.key === "ArrowLeft" || e.key === "h")
-        if (selecting) moveHead(-1, 0);
-        else
-          setCaret((c) =>
-            clampCaret({ ...c, beat: Math.max(LABEL, c.beat - 1) }),
-          );
-      else if (e.key === "ArrowRight" || e.key === "l")
-        if (selecting) moveHead(1, 0);
-        else setCaret((c) => clampCaret({ ...c, beat: c.beat + 1 }));
+      if (selecting) moveHead(d.dCol, d.dRow);
+      else if (d.dCol)
+        setCaret((c) =>
+          clampCaret({
+            ...c,
+            beat: d.dCol < 0 ? Math.max(LABEL, c.beat - 1) : c.beat + 1,
+          }),
+        );
       // Up/down walk the rows: all of them with a label selected, only beat-holding lanes when in the lane.
-      else if (e.key === "ArrowUp" || e.key === "k")
-        if (selecting) moveHead(0, -1);
-        else setCaret((c) => step(c, -1));
-      else if (e.key === "ArrowDown" || e.key === "j")
-        if (selecting) moveHead(0, 1);
-        else setCaret((c) => step(c, 1));
-      else handled = false;
-      if (handled) e.preventDefault();
+      else setCaret((c) => step(c, d.dRow));
+      e.preventDefault();
     };
-    // Capture phase, so move mode's enter/esc are intercepted before the shell's bubble-phase listener sees them.
+    // Capture phase, so move mode's enter is intercepted before the shell's bubble-phase listener sees it.
     window.addEventListener("keydown", onKey, true);
     return () => window.removeEventListener("keydown", onKey, true);
-  }, [active, clampCaret, step, moveHead, nudgeMove, commitMove, setStatus]);
+  }, [active, clampCaret, step, moveHead, nudgeMove, commitMove]);
 
   // --- what the shell's select/zoom commands drive ---------------------------------
 
@@ -3348,7 +3327,7 @@ function TimelineTabView({
                             onOpen={(at) =>
                               onNodeMenu(
                                 {
-                                  // A lane IS a module node, so it is addressable as one (apps/k7-daw-frontend/packages/song/docs/trackModules.md).
+                                  // A lane IS a module node, so it is addressable as one (apps/k7-daw-wasm/song/docs/trackModules.md).
                                   module: t.id,
                                   alternatives: alt.alternatives,
                                   alternative: alt.alternative,

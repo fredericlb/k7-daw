@@ -1,9 +1,10 @@
 // Knob.tsx — a knob dial as an SVG arc, its reading in the middle and a curve's span inside the
 // value's ring — docs/widgets.md.
 
+import { arcPath } from "@studio/ui/knob";
 import { MAUVE, SAND } from "../chainsCss";
 
-// A knob dial as an SVG arc, 0..1, with `text` read in its middle — docs/widgets.md.
+// A knob dial as an SVG arc (the kit's arcPath), 0..1, with `text` read in its middle — docs/widgets.md.
 export function Knob({
   t,
   known,
@@ -23,14 +24,10 @@ export function Knob({
   const c = size / 2;
   const R = c - 2.5;
   const pt = (a: number) => [c + Math.cos(a) * R, c + Math.sin(a) * R];
-  const arc = (a0: number, a1: number, r = R) => {
-    const [x0, y0] = [c + Math.cos(a0) * r, c + Math.sin(a0) * r];
-    const [x1, y1] = [c + Math.cos(a1) * r, c + Math.sin(a1) * r];
-    return `M ${x0} ${y0} A ${r} ${r} 0 ${a1 - a0 > Math.PI ? 1 : 0} 1 ${x1} ${y1}`;
-  };
   // The depth gauge rides just inside the value's ring, so both read at once.
   const depthR = R - 3;
-  const a = START + SWEEP * Math.max(0, Math.min(1, t));
+  const tt = Math.max(0, Math.min(1, t));
+  const a = START + SWEEP * tt;
   const [ix, iy] = pt(a);
   // The pointer starts here rather than at the centre, leaving the middle to the reading.
   const tickR = R * 0.72;
@@ -42,7 +39,7 @@ export function Knob({
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
       <circle cx={c} cy={c} r={c - 1} fill="#0e0e12" stroke="#26262d" />
       <path
-        d={arc(START, START + SWEEP)}
+        d={arcPath(R, 0, 1, c)}
         fill="none"
         stroke="#2f2f36"
         strokeWidth="2.2"
@@ -50,7 +47,7 @@ export function Knob({
       />
       {span && span[1] > span[0] && (
         <path
-          d={arc(START + SWEEP * span[0], START + SWEEP * span[1], depthR)}
+          d={arcPath(depthR, span[0], span[1], c)}
           fill="none"
           stroke={MAUVE}
           strokeWidth="2"
@@ -60,7 +57,7 @@ export function Knob({
       {known && (
         <>
           <path
-            d={arc(START, a)}
+            d={arcPath(R, 0, tt, c)}
             fill="none"
             stroke={SAND}
             strokeWidth="2.2"

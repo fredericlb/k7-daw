@@ -4,6 +4,7 @@
 // Full screen and Quit are Android's alone: an iOS app never ends itself (App Store review).
 // See ../../docs/settings.md, apps/k7-daw-engine/k7-runtime/docs/android.md and docs/ios.md.
 
+import { Row } from "@studio/ui/row-group";
 import { Switch } from "@studio/ui/switch";
 import { useEffect, useState } from "react";
 import { m } from "../paraglide/messages.js";
@@ -15,7 +16,7 @@ import {
   useEngineSnapshot,
 } from "./androidEngine";
 import { InstrumentsSection } from "./InstrumentsSection";
-import { Action, Row, Section } from "./Section";
+import { Action, Section } from "./Section";
 
 export function AndroidEngineSection() {
   const snapshot = useEngineSnapshot();
@@ -34,12 +35,16 @@ export function AndroidEngineSection() {
   return (
     <>
       <Section title={m["android.title"]()} hint={m["android.hint"]()}>
-        <Row label={engineLine(snapshot, lan)}>
-          {!onIos && (
-            <Action danger onClick={() => void engineCall("quit")}>
-              {m["android.quit"]()}
-            </Action>
-          )}
+        <Row
+          trailing={
+            !onIos && (
+              <Action danger onClick={() => void engineCall("quit")}>
+                {m["android.quit"]()}
+              </Action>
+            )
+          }
+        >
+          {engineLine(snapshot, lan)}
         </Row>
       </Section>
 
@@ -47,12 +52,10 @@ export function AndroidEngineSection() {
 
       <Section title={m["engine.lanTitle"]()} hint={m["engine.lanHint"]()}>
         <Row
-          label={m["engine.lanOpen"]()}
           detail={
             state?.lanOpen ? m["engine.lanOpenOn"]() : m["engine.lanOpenOff"]()
           }
-        >
-          <Switch
+          trailing=<Switch
             checked={state?.lanOpen ?? false}
             disabled={!state}
             onCheckedChange={(on) =>
@@ -63,6 +66,8 @@ export function AndroidEngineSection() {
             }
             aria-label={m["engine.lanOpen"]()}
           />
+        >
+          {m["engine.lanOpen"]()}
         </Row>
       </Section>
 
@@ -112,15 +117,15 @@ function FullScreenSection() {
       hint={m["android.screenHint"]()}
     >
       <Row
-        label={m["android.fullScreen"]()}
         detail={on ? m["android.fullScreenOn"]() : m["android.fullScreenOff"]()}
-      >
-        <Switch
+        trailing=<Switch
           checked={on ?? false}
           disabled={on === null}
           onCheckedChange={toggle}
           aria-label={m["android.fullScreen"]()}
         />
+      >
+        {m["android.fullScreen"]()}
       </Row>
     </Section>
   );
@@ -158,30 +163,32 @@ function PrivateCaSection() {
       hint={onIos ? m["android.caHintIos"]() : m["android.caHint"]()}
     >
       <Row
-        label={
-          count == null || count === 0
-            ? onIos
-              ? m["android.caSystemIos"]()
-              : m["android.caSystem"]()
-            : onIos
-              ? m["android.caYoursIos"]({ count })
-              : m["android.caYours"]({ count })
-        }
         detail={said ?? undefined}
+        trailing={
+          <>
+            <Action
+              disabled={busy}
+              onClick={() => void run("importCa", m["android.caAdding"]())}
+            >
+              {m["android.caTrust"]()}
+            </Action>
+            <Action
+              danger
+              disabled={busy || !count}
+              onClick={() => void run("forgetCas", m["android.caForgetting"]())}
+            >
+              {m["android.caForget"]()}
+            </Action>
+          </>
+        }
       >
-        <Action
-          disabled={busy}
-          onClick={() => void run("importCa", m["android.caAdding"]())}
-        >
-          {m["android.caTrust"]()}
-        </Action>
-        <Action
-          danger
-          disabled={busy || !count}
-          onClick={() => void run("forgetCas", m["android.caForgetting"]())}
-        >
-          {m["android.caForget"]()}
-        </Action>
+        {count == null || count === 0
+          ? onIos
+            ? m["android.caSystemIos"]()
+            : m["android.caSystem"]()
+          : onIos
+            ? m["android.caYoursIos"]({ count })
+            : m["android.caYours"]({ count })}
       </Row>
     </Section>
   );

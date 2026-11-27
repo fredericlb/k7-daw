@@ -61,6 +61,8 @@ pub mod notes;
 pub mod onsets;
 pub mod open_repairs;
 pub mod paths;
+pub mod picture_animate;
+pub mod picture_file;
 pub mod placement_move;
 pub mod playlist;
 pub mod preferences;
@@ -73,6 +75,7 @@ pub mod rack_taps;
 pub mod scaffold;
 pub mod scaffold_files;
 pub mod seq_window;
+pub mod sequence_file;
 pub mod sequence_loops;
 pub mod shared_folders;
 pub mod song_tempo;
@@ -111,3 +114,9 @@ pub mod scaffold_set;
 pub mod scaffold_set_files;
 pub mod scaffold_set_nodes;
 pub mod scaffold_set_sources;
+
+// M4a: the text writers the page reaches as `text.*` ops.
+pub mod assembly_param;
+pub mod library_pins;
+pub mod mix_cues;
+pub mod playlist_edit;

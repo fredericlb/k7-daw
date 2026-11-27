@@ -4,10 +4,10 @@
 
 ### A new field on a shot
 
-1. Add it to `PlacementSchema` in `apps/k7-daw-frontend/packages/song-schema/src/yaml/placementSchema.ts`, the one event
-   schema sound and shots share. The schema is `.strict()`, so an unknown key is refused on its
-   line; a shot-only field goes in `SHOT_KEYS` (refused on sound), and a field that needs a source
-   in the list the `superRefine` refuses on an activation.
+1. Add it to `Placement` in `apps/k7-daw-wasm/song/src/files/placement.rs`, the one event
+   reader sound and shots share. The reader refuses an unknown key on its
+   line; a shot-only field is refused on sound, and a field that needs a source
+   is refused on an activation.
 2. Carry it in the document's `Clip` (`apps/k7-daw-wasm/verbs/src/picture/doc.rs`) and read it in
    `clip_of` (`apps/k7-daw-wasm/verbs/src/picture/lanes.rs`). Keep "absent stays absent".
 3. Mirror it in `WebVideoProject` (`apps/k7-daw-frontend/packages/web-protocol/timelineTypes.ts`), in `SceneClip`
@@ -18,7 +18,7 @@
    `apps/k7-daw-wasm/song/src/pictures/sound.rs` (does the sound follow it), and
    `apps/k7-daw-wasm/verbs/src/verbs/picture_interchange.rs` (carried, or listed as left out).
 6. If it is editable by command, add a verb (below) and a writer in
-   `apps/k7-daw-frontend/packages/song-schema/src/yaml/videoTrackFile.ts` that edits by index and rounds as the others do.
+   `apps/k7-daw-wasm/song-edit/src/picture_file.rs` that edits by index and rounds as the others do.
 
 ### A new `picture …` verb
 
@@ -37,7 +37,7 @@ shader author reads, so keep its comment the one-line definition of the value.
 
 ### A new shape kind
 
-Add the kind to `SHAPE_KINDS` in `apps/k7-daw-frontend/packages/song-schema/src/moduleTypes.ts`, a branch in `shape_of`
+Add the kind to `SHAPE_KINDS` in `apps/k7-daw-wasm/song/src/modules/names.rs`, a branch in `shape_of`
 (`apps/k7-daw-wasm/verbs/src/picture/chains.rs`), the matching `SceneShape`, and its drawing in
 `apps/k7-daw-frontend/packages/ui-eyes/src/rasterize.ts`. Geometry belongs in `params`, as for the existing kinds.
 
@@ -64,7 +64,7 @@ are split out precisely so they can be tested.
 
 | area | tests |
 |---|---|
-| schemas and writers | `apps/k7-daw-frontend/packages/song-schema/src/yaml/videoTrackFile.test.ts`, `videoTrackYaml.test.ts`, `videoKeys.test.ts`, `videoSpeed.test.ts`, the tests in `apps/k7-daw-wasm/song-schema/src/aspect.rs` |
+| schemas and writers | `apps/k7-daw-frontend/packages/k7-wasm/src/textVideo.test.ts`, `apps/k7-daw-frontend/packages/k7-wasm/src/validateModule.test.ts`, the tests in `apps/k7-daw-wasm/song-schema/src/aspect.rs` |
 | the compile and the scene | `apps/k7-daw-wasm/verbs/tests/picture.rs`, over `e2e/fixtures/video-lane.k7` and the crate's `tests/fixtures/picture-rig.k7` |
 | interchange | `apps/k7-daw-wasm/verbs/tests/pictures_media.rs` (writers, readers, round trips) |
 | song side | `apps/k7-daw-wasm/song/tests/all/pictures_sound.rs`, `pictures_doc.rs` |

@@ -101,7 +101,7 @@ pub fn song_roots(input: &Input<'_>, probe: &dyn Probe) -> Result<Roots, Decline
             }
         }
     }
-    let meta = join(&[&code, "apps", "k7-daw-frontend", "packages", "song", "meta"]);
+    let meta = join(&[&code, "apps", "k7-daw-wasm", "song", "meta"]);
     let shared = resolve_all(&[&project, "../_modules"]);
     let namespace = if shared == meta {
         "meta".to_owned()

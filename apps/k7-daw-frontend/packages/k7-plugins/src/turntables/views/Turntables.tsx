@@ -1,8 +1,8 @@
 // Turntables.tsx — the desk AS A SURFACE: what a host mounts for `type: turntables`. It checks
 // the mapping first and draws the missing wiring instead of a desk whose knobs go nowhere.
-// See apps/k7-daw-frontend/packages/song/docs/surfaces.md and ../../docs/hosting.md.
+// See apps/k7-daw-wasm/song/docs/surfaces.md and ../../docs/hosting.md.
 
-import type { MixView as Mapping } from "@studio/song-schema/yaml/mixViewSchema";
+import type { MixView as Mapping } from "@studio/k7-wasm/text";
 import { Unplug } from "@studio/ui/icons";
 import { CodeText } from "../../CodeText";
 import { m } from "../../paraglide/messages.js";
@@ -36,7 +36,7 @@ export function Turntables({
           {missing.map((c) => (
             <li
               key={c.id}
-              className="rounded border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+              className="rounded border border-error/40 bg-error/10 px-3 py-2 text-sm text-error"
             >
               {m["gate.unmapped"]({ id: c.id })}
             </li>

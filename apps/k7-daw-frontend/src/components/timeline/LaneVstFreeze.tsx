@@ -1,6 +1,6 @@
 // LaneVstFreeze.tsx — the gutter snowflake on a lane whose VST the engine does not have: solid when
 // the lane plays its automatic render, faded while no render is made yet and the lane plays without
-// the VST. Says only; thawing is the chains pane's (apps/k7-daw-frontend/packages/song/docs/autoFreeze.md).
+// the VST. Says only; thawing is the chains pane's (apps/k7-daw-wasm/song/docs/autoFreeze.md).
 
 import { Snowflake } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";

@@ -10,6 +10,10 @@ export type { ModuleIssue, Validity };
 export const validateFile = (path: string, text: string): Validity =>
   call<Validity>({ op: "file.validate", args: { path, text } });
 
+/** Can the compiler read this text as a module's panel file, a `ui.k7x` beside its module? */
+export const validatePanel = (text: string): Validity =>
+  validateFile("modules/audio/x/ui.k7x", text);
+
 /** The first thing wrong, phrased for a status line. Null when nothing is. */
 export function firstIssue(v: Validity): string | null {
   const i = v.issues[0];

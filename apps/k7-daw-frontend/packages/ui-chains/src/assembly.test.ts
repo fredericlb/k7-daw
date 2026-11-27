@@ -179,7 +179,7 @@ describe("which cables are the box's", () => {
 
 describe("making room for an open box", () => {
   /** Every card PINNED, which is the case that needs this: a pin outranks the layout, so opening a
-   *  box grows one node and dagre is not allowed to move anything out of its way. */
+   *  box grows one node and the layout engine is not allowed to move anything out of its way. */
   const pins = { gtr: { x: 0, y: 0 }, OUT: { x: 40, y: 900 } };
   const laidWith = (open: string[]) => {
     const f = fold(open);

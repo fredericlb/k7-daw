@@ -44,7 +44,6 @@
     "@lezer/highlight": "^1.2.0",
     "@replit/codemirror-vim": "^6.3.0",
     "@studio/k7-wasm": "*",
-    "@studio/song-schema": "*",
     "@studio/web-protocol": "*",
     "@uiw/react-codemirror": "^4.23.0"
   },

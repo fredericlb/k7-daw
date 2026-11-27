@@ -28,7 +28,7 @@ pub fn call(
     } else {
         Env::at(
             &format!("{}/home", tmp()),
-            &format!("{}/apps/k7-daw-frontend/packages/song/meta", repo()),
+            &format!("{}/apps/k7-daw-wasm/song/meta", repo()),
         )
     };
     if names_tmp(a) {

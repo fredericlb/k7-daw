@@ -1,5 +1,5 @@
 // A chain project's unnamed node: its card keeps the uuid as its identity and carries where it sits,
-// which is what the card SHOWS. See apps/k7-daw-frontend/packages/song/docs/chainFiles.md.
+// which is what the card SHOWS. See apps/k7-daw-wasm/song/docs/chainFiles.md.
 
 import { describe, expect, it } from "vitest";
 import { buildGraph } from "./graph";

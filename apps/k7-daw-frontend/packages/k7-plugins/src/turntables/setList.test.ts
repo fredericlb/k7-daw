@@ -19,7 +19,7 @@ const FILES = new Set([
   "records/aube.wav",
 ]);
 
-/** A playlist naming these refs, in this order. The format is @studio/song-schema/playlist's. */
+/** A playlist naming these refs, in this order. The format is song-edit's playlist writer (@studio/k7-wasm/text). */
 const playlist = (...refs: string[]) =>
   stringify({ title: "Set", items: refs });
 

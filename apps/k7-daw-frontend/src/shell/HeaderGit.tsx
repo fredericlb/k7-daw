@@ -1,11 +1,13 @@
 // HeaderGit.tsx — git among the floating controls: only the Resolve button while a merge waits, and the toasts a pull or a
 // failure says; Save and Pull with their counts are the Export panel's rows (GitShareRows).
 // While a merge waits it is one accent "Resolve N conflicts" button. It decides no rule: gitState.ts's barView does.
+
 import { showToast } from "@studio/project-shell/toast";
 import { Badge } from "@studio/ui/badge";
 import { Button } from "@studio/ui/button";
-import { ArrowDownToLine, GitMerge, Loader2, Save } from "@studio/ui/icons";
+import { ArrowDownToLine, GitMerge, Save } from "@studio/ui/icons";
 import { RowButton, RowGroup } from "@studio/ui/row-group";
+import { Spinner } from "@studio/ui/spinner";
 import { useEffect } from "react";
 import type { GitTransport } from "../git/gitApi";
 import { openConflict } from "../git/gitScreens";
@@ -110,7 +112,7 @@ export function GitShareRows({
     <RowGroup>
       <RowButton
         tall
-        icon={saving ? <Loader2 className="animate-spin" /> : <Save />}
+        icon={saving ? <Spinner inherit /> : <Save />}
         aria-label={name}
         detail={
           autosaved ? (

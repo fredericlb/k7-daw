@@ -1,5 +1,5 @@
 // effects.spec.ts — library effects, note transformers and a cold pass reach the engine as the plugins they compile to, and one of them plays.
-// The engine document is the proof a module was sent; a cold module's measuring pass runs only under `clip process` (apps/k7-daw-frontend/packages/song/docs/coldModules.md).
+// The engine document is the proof a module was sent; a cold module's measuring pass runs only under `clip process` (apps/k7-daw-wasm/song/docs/coldModules.md).
 import { FIXTURES_WORKSPACE } from "../../src/fixtures.ts";
 import { expect, type K7, TARGET, test } from "../../src/target.ts";
 import { engineUp, play, rolls, transportBar } from "../../src/transport.ts";

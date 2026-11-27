@@ -152,7 +152,7 @@ scripts/               Node harnesses that drive a running engine, not build ste
                          the script PatternPlugin runs. A GENERATOR, output committed: run it after
                          touching events.ts or engineEntry.ts. `npm run gen:strudel-bundle --workspace k7-runtime`.
   gen-builtin-params.mjs ask a real instance of every built-in what its parameters are, and write
-                         apps/k7-daw-frontend/packages/song-schema/src/builtinParams.generated.json. A GENERATOR, like the one
+                         apps/k7-daw-wasm/song/src/modules/builtinParams.generated.json. A GENERATOR, like the one
                          above: run it after bumping Tracktion or adding a built-in, and commit
                          its output. `npm run gen:builtin-params --workspace k7-runtime`. docs/builtinParams.md.
   gen-surge-panel.mjs    write the Surge XT module's panel (ui.k7x + widgets.js in k7-core) from
@@ -162,7 +162,7 @@ scripts/               Node harnesses that drive a running engine, not build ste
   gen-surge-widgets.mjs  …its widgets.js, the screens' draw functions, as a template the panel generator fills
   sfz-to-rack.ts         turn an SFZ drum kit into a RACK kit: each piece rendered through the SFZ player at one
                          velocity, mics mixed, trimmed, written into a library's samples/ with a rack preset —
-                         what the library's naked_drums samples are (apps/k7-daw-frontend/packages/song/docs/racks.md)
+                         what the library's naked_drums samples are (apps/k7-daw-wasm/song/docs/racks.md)
   warp-points.ts         a clip's INTERIOR warp points move the sound — rendered and measured,
                          since this is timing no TypeScript test can see (docs/warp.md)
   pad-effects.ts         a sequencer pad's `repeat` and `skip` reach the sound — same kind of
