@@ -2,6 +2,7 @@
 // as a playable list on the right. Two panes on purpose — you edit the file while hearing what
 // it describes. See ../docs/playlists.md.
 
+import { audioFilesOf } from "@studio/k7-wasm/records";
 import { parsePlaylist, stripDocExt } from "@studio/k7-wasm/schema";
 import type { Validity } from "@studio/k7-wasm/validate";
 import {
@@ -11,7 +12,6 @@ import {
   playlistStub,
   removePlaylistItem,
 } from "@studio/song-schema/playlist";
-import { audioFilesOf } from "@studio/song-schema/records";
 import { Button } from "@studio/ui/button";
 import { ArrowLeft, ListMusic, Loader2 } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";

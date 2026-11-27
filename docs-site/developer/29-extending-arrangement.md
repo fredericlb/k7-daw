@@ -49,7 +49,7 @@ If a gesture would need the verb N times, write the bulk verb instead (`events a
   produces in `timelineTools.test.ts`.
 - **A drag**: keep it in the component that owns the pointer, reported upward by a callback prop;
   `App.tsx` turns it into the line. Follow the existing drags: grab state with `pending`, snapping
-  through `apps/k7-daw-frontend/src/snap.ts`, nothing written when it ends where it started, the pointer
+  through `apps/k7-daw-wasm/gesture/src/snap.rs`, nothing written when it ends where it started, the pointer
   followed with `usePointerFollow` so a cancel abandons cleanly.
 - **A one-shot line that should show before the reload**: teach `pendingOf` in
   `apps/k7-daw-frontend/src/pendingEdits.ts` what it does to the lanes, and test it.

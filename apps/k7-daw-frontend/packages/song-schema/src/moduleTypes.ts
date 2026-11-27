@@ -109,9 +109,6 @@ const BUILTIN_OUTPUTS = [
 export const isBuiltinOutput = (id: string): boolean =>
   (BUILTIN_OUTPUTS as readonly string[]).includes(id);
 
-/** The uniform each shader knob lands on — one rule, so a panel and a shader cannot disagree. */
-export const shaderUniformFor = (param: string): string => `u${param}`;
-
 /** The type folders whose modules ARE their behaviour (GLSL, a shape's params), so an empty `plugin:` is no hole. */
 const PLUGINLESS_CATEGORIES = [
   SHADER_CATEGORY,
@@ -208,7 +205,3 @@ export function libraryRefParts(
     ? { library: m[1], rest: m[2] }
     : null;
 }
-
-/** The ref a library gives the thing at `rest` inside it: `@k7-core/audio/reverb`. */
-export const libraryRef = (library: string, rest: string): string =>
-  `@${library}/${rest}`;

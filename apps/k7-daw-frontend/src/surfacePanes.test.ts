@@ -1,7 +1,4 @@
-import {
-  allSurfaceTypes,
-  surfaceTypeOf,
-} from "@studio/song-schema/yaml/surfaceRegistry";
+import { SURFACE_TYPES } from "@studio/k7-wasm/consts";
 import { describe, expect, it } from "vitest";
 import "./plugins";
 import {
@@ -16,7 +13,7 @@ import {
 
 describe("the pane registry", () => {
   it("answers every declared surface type with a device drawer", () => {
-    for (const type of allSurfaceTypes())
+    for (const type of SURFACE_TYPES)
       expect(deviceSurfaceDrawer(type), type).toBeTruthy();
   });
 
@@ -31,7 +28,6 @@ describe("the pane registry", () => {
     ).toThrow(/already has a pane/);
     expect(() =>
       registerSurfacePane({ type: "waveform-ghost", device: () => null }),
-    ).toThrow(/not registered/);
-    expect(surfaceTypeOf("waveform-ghost")).toBeUndefined();
+    ).toThrow(/can declare/);
   });
 });

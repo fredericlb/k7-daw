@@ -1,22 +1,20 @@
 // useVideoDrag.ts — a picture placement dragged on the timeline: the three drags a shot takes, told
 // apart by where the press landed, and the tools that answer the press instead. The arithmetic is
-// ../videoDrag.ts; this is the gesture around it. See ../../docs/picture.md.
+// apps/k7-daw-wasm/gesture/src/video_drag.rs; this is the gesture around it. See ../../docs/picture.md.
 
-import { nearestTick } from "@studio/ui-timeline/ticks";
+import {
+  snapMode,
+  snapTo,
+  videoDragEdits,
+  videoDragIsStill,
+  videoDragMove,
+} from "@studio/k7-wasm/gesture";
 import { type RefObject, useCallback, useEffect, useState } from "react";
 import { holdToArm } from "../holdDrag";
 import { m } from "../paraglide/messages.js";
-import { snapMode, snapTo } from "../snap";
 import { pictureToolLine, type Tool } from "../timelineTools";
 import type { WebVideoTrack } from "../types";
-import {
-  DRAG_SLOP,
-  type VDrag,
-  type VideoEdit,
-  videoDragEdits,
-  videoDragIsStill,
-  videoDragTo,
-} from "../videoDrag";
+import { DRAG_SLOP, type VDrag, type VideoEdit } from "../videoDrag";
 import { useLatest } from "./useLatest";
 
 export function useVideoDrag({
@@ -122,21 +120,14 @@ export function useVideoDrag({
     (e: React.PointerEvent) => {
       const v = vdragRef.current;
       if (!v || v.pending) return;
-      // Measured from the GRAB and not from the last frame: a re-applied offset makes the edge run away from the cursor.
-      const raw = (e.clientX - v.x) / v.pxPerSec;
       if (Math.abs(e.clientX - v.x) > DRAG_SLOP) v.moved = true;
-      // The ruler's own ticks; Ctrl moves by whole steps of its unit instead, keeping the shot's offset; Shift is free (snap.ts).
-      const mode = snapMode(e);
-      const d =
-        mode === "relative"
-          ? snapTo(raw, unitRef.current / bpsRef.current)
-          : raw;
-      const snapSec = (sec: number): number => {
-        if (mode !== "grid") return Math.max(0, sec);
-        const t = nearestTick(ticksRef.current, sec * bpsRef.current);
-        return t === null ? Math.max(0, sec) : Math.max(0, t / bpsRef.current);
-      };
-      const next = videoDragTo(v, d, snapSec);
+      // Measured from the GRAB, on the ruler's own ticks; Ctrl moves by whole steps of its unit instead, keeping the shot's offset; Shift is free.
+      const next = videoDragMove(v, e.clientX - v.x, v.pxPerSec, {
+        mode: snapMode(e),
+        unit: unitRef.current,
+        bps: bpsRef.current,
+        ticks: ticksRef.current,
+      });
       if (next.start !== v.start || next.length !== v.length)
         setVDrag({ ...v, ...next });
     },

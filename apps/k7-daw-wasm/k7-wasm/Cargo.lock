@@ -85,6 +85,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "gesture"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "song-schema",
+ "ts-rs",
+]
+
+[[package]]
 name = "hashbrown"
 version = "0.17.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -113,6 +122,7 @@ name = "k7-wasm"
 version = "0.1.0"
 dependencies = [
  "eyes",
+ "gesture",
  "k7x",
  "serde",
  "serde_json",

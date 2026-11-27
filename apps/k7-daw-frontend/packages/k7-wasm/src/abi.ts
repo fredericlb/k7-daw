@@ -1,4 +1,4 @@
-// abi.ts — loads the WebAssembly module and speaks its C ABI: JSON in, JSON out, two hot calls returning numbers.
+// abi.ts — loads the WebAssembly module and speaks its C ABI: JSON in, JSON out, two hot calls returning numbers, and the typed gesture calls (gesture.ts).
 // A reader would get wrong that a view of the module's memory dies at the next call: any call may grow it.
 // The module is a file beside this one (k7Wasm.wasm): a page streams the hashed asset, node reads it from disk at once.
 // There is no TypeScript fallback: without WebAssembly every call throws `unavailable`.
@@ -44,6 +44,10 @@ interface Abi {
   k7_curve_playhead(handle: number, beat: number): number;
   k7_scalars_ptr(): number;
   k7_round_beat(beats: number): number;
+  k7_f64_in(len: number): number;
+  k7_f64_out_ptr(): number;
+  /** The gestures' typed calls: numbers in, a number or a status back (docs/gesture.md). */
+  [typedCall: `k7_g_${string}`]: (...args: number[]) => number;
   k7_cells_ptr(): number;
   k7_cells_len(): number;
   k7_drag_rect(
@@ -58,6 +62,9 @@ interface Abi {
   k7_floats_ptr(): number;
   k7_floats_len(): number;
 }
+
+/** What gesture.ts calls: the instance, its memory and its typed exports. */
+export type TypedAbi = Abi;
 
 /** The module's address: Vite turns this into a hashed asset, node reads it as a file; read lazily, a bundle with no `import.meta.url` never gets here. */
 const urlOfModule = () => new URL("./k7Wasm.wasm", import.meta.url);
@@ -238,6 +245,17 @@ export function roundBeatHot(beats: number): number {
     if (isTrap(e)) recover(e);
     throw e;
   }
+}
+
+/** The live instance for a typed call; it throws `unavailable` like every call made before the module is ready. */
+export function typed(): TypedAbi {
+  return abi ?? instance();
+}
+
+/** Throws a trap away as `call` does, and rethrows anything else: a typed call's catch hands its error here. */
+export function trapped(e: unknown): never {
+  if (isTrap(e)) recover(e);
+  throw e;
 }
 
 /** The layout cells the last `k7x.outline` left: a view, read before the next call, which may grow the memory. */

@@ -5,6 +5,7 @@ import {
   cpSync,
   mkdirSync,
   mkdtempSync,
+  readdirSync,
   readFileSync,
   rmSync,
   statSync,
@@ -28,6 +29,8 @@ const EXPORTS = [
   "k7_cells_ptr",
   "k7_curve_playhead",
   "k7_drag_rect",
+  "k7_f64_in",
+  "k7_f64_out_ptr",
   "k7_floats_len",
   "k7_floats_ptr",
   "k7_input",
@@ -124,7 +127,15 @@ describe("the WebAssembly module", () => {
     const names = WebAssembly.Module.exports(new WebAssembly.Module(bin)).map(
       (e) => e.name,
     );
-    expect(names.filter((n) => n.startsWith("k7_")).sort()).toEqual(EXPORTS);
+    const ours = names.filter((n) => n.startsWith("k7_")).sort();
+    expect(ours.filter((n) => !n.startsWith("k7_g_"))).toEqual(EXPORTS);
+    // The typed gesture calls are exactly the ones the page's bridge names: none unused, none missing.
+    const bridge = readdirSync(join(import.meta.dirname))
+      .filter((f) => /^gesture.*\.ts$/.test(f) && !f.endsWith(".test.ts"))
+      .map((f) => readFileSync(join(import.meta.dirname, f), "utf8"))
+      .join("\n");
+    const called = [...new Set(bridge.match(/k7_g_[a-z0-9_]+/g))].sort();
+    expect(ours.filter((n) => n.startsWith("k7_g_"))).toEqual(called);
     expect(names).toContain("memory");
   });
 

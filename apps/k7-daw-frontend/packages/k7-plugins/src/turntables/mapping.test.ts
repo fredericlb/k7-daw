@@ -10,20 +10,20 @@ import { SURFACE_MAPPING_SKELETON } from "@studio/song-schema/yaml/surfaceSchema
 import { describe, expect, it } from "vitest";
 import { mixControl } from "./controls";
 import { DECKS } from "./deckVocabulary";
-import { REQUIRED_CONTROLS, unmappedControls } from "./mapping";
+import { requiredControls, unmappedControls } from "./mapping";
 
 const ids = (cs: readonly { id: string }[]) => cs.map((c) => c.id).sort();
 
 /** Everything required, wired to anything — the shape is the schema's problem, not ours. */
 const full = (): MixView =>
   Object.fromEntries(
-    REQUIRED_CONTROLS.map((c) => [c.id, { module: "m", param: "p" }]),
+    requiredControls().map((c) => [c.id, { module: "m", param: "p" }]),
   );
 
-describe("REQUIRED_CONTROLS", () => {
+describe("requiredControls", () => {
   it("is the crossfade plus seven per deck", () => {
-    expect(REQUIRED_CONTROLS).toHaveLength(1 + DECKS.length * 7);
-    expect(ids(REQUIRED_CONTROLS)).toContain("crossfade");
+    expect(requiredControls()).toHaveLength(1 + DECKS.length * 7);
+    expect(ids(requiredControls())).toContain("crossfade");
     for (const d of DECKS)
       for (const s of [
         "tempo",
@@ -35,18 +35,18 @@ describe("REQUIRED_CONTROLS", () => {
         "trim",
         "level",
       ])
-        expect(ids(REQUIRED_CONTROLS)).toContain(`${d}.${s}`);
+        expect(ids(requiredControls())).toContain(`${d}.${s}`);
   });
 
   it("does NOT require the echo, which is optional wiring like the cue", () => {
     // A desk with no effect past the filter is a complete desk — ../docs/fx.md.
     for (const d of DECKS)
-      expect(ids(REQUIRED_CONTROLS)).not.toContain(`${d}.echo`);
+      expect(ids(requiredControls())).not.toContain(`${d}.echo`);
   });
 
   it("does NOT require the buttons that name no module param", () => {
     // `transport` and `sync` are actions of the app: requiring one is an uncleanable error.
-    const required = ids(REQUIRED_CONTROLS);
+    const required = ids(requiredControls());
     expect(required).not.toContain("transport");
     for (const d of DECKS) expect(required).not.toContain(`${d}.sync`);
   });
@@ -54,7 +54,7 @@ describe("REQUIRED_CONTROLS", () => {
   it("grows with the decks rather than being listed", () => {
     // A hardcoded pair would leave a third deck's knobs unrequired, which reads as "already fine".
     for (const d of DECKS)
-      expect(REQUIRED_CONTROLS.some((c) => c.id.startsWith(`${d}.`))).toBe(
+      expect(requiredControls().some((c) => c.id.startsWith(`${d}.`))).toBe(
         true,
       );
   });
@@ -62,8 +62,8 @@ describe("REQUIRED_CONTROLS", () => {
 
 describe("unmappedControls", () => {
   it("is everything when there is no mapping at all", () => {
-    expect(ids(unmappedControls(undefined))).toEqual(ids(REQUIRED_CONTROLS));
-    expect(ids(unmappedControls({}))).toEqual(ids(REQUIRED_CONTROLS));
+    expect(ids(unmappedControls(undefined))).toEqual(ids(requiredControls()));
+    expect(ids(unmappedControls({}))).toEqual(ids(requiredControls()));
   });
 
   it("is empty once every required control names a module", () => {
@@ -84,7 +84,7 @@ describe("unmappedControls", () => {
   it("does NOT check that the module exists", () => {
     // "Not wired" and "wired to something absent" are different fixes — `resolveBindings` says the second.
     const m = Object.fromEntries(
-      REQUIRED_CONTROLS.map((c) => [c.id, { module: "nope", param: "nope" }]),
+      requiredControls().map((c) => [c.id, { module: "nope", param: "nope" }]),
     );
     expect(unmappedControls(m)).toEqual([]);
   });
@@ -96,7 +96,7 @@ describe("the scaffold offers every control that must be wired", () => {
 
   it("offers every control that must be wired", () => {
     // One missing from the skeleton is a component somebody has to find out about from the docs.
-    for (const id of ids(REQUIRED_CONTROLS)) expect(skeleton).toContain(id);
+    for (const id of ids(requiredControls())) expect(skeleton).toContain(id);
   });
 
   it("offers nothing that is not a control of this desk", () => {
@@ -115,7 +115,7 @@ describe("the scaffold offers every control that must be wired", () => {
   });
 
   it("says what each one wants, from the control's own `wants`", () => {
-    // Read off MIX_CONTROLS, so a changed expectation takes the scaffold's note with it.
+    // Read off the controls, so a changed expectation takes the scaffold's note with it.
     for (const [id, note] of SURFACE_MAPPING_SKELETON.turntables) {
       const wants = mixControl(id)?.wants;
       expect(wants, id).toBeTruthy();
@@ -128,6 +128,6 @@ describe("the scaffold offers every control that must be wired", () => {
     const mapping = Object.fromEntries(skeleton.map((id) => [id, null]));
     expect(MixViewSchema.safeParse(mapping).success).toBe(true);
     // …and an unwired one is reported by the gate, exactly as an absent one is.
-    expect(ids(unmappedControls(mapping))).toEqual(ids(REQUIRED_CONTROLS));
+    expect(ids(unmappedControls(mapping))).toEqual(ids(requiredControls()));
   });
 });

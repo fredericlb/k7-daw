@@ -12,7 +12,8 @@ npm test                                   # every workspace, from the repo root
 cd apps/k7-daw-frontend && npx vitest run      # the frontend's pure modules
 cargo test --manifest-path apps/k7-daw-wasm/verbs/Cargo.toml     # the verbs
 cd apps/k7-daw-frontend/packages/song-edit && npx vitest run    # the k7x writers
-npx vitest run src/snap.test.ts            # one file, from inside its package
+npx vitest run src/clipLoop.test.ts       # one file, from inside its package
+cargo test --manifest-path apps/k7-daw-wasm/gesture/Cargo.toml   # the gestures' arithmetic
 ```
 
 Lint must pass on any TypeScript you touch: `npm run lint` (biome). `npm run lint:docs` refuses a
@@ -24,20 +25,27 @@ source comment or a Markdown page naming a file that is not there.
 
 | Test | Pins |
 |---|---|
-| `snap.test.ts` | Grid, relative (Ctrl) and free (Shift) snapping; the song-start floor. |
-| `timelineTools.test.ts` | Each tool's line, and the refusals at an event's head and tail. |
 | `timelineMode.test.ts` | The derived mode, and that a pending move does not own the keys. |
 | `clipboard.test.ts` | Copy by start, relative coordinates, paste offsets, dropped rows, carried placement fields. |
 | `pendingEdits.test.ts` | What each one-shot line predicts on the lanes. |
 | `timelineDrop.test.ts`, `fileDrop.test.ts` | Kind by extension, clip id, lane walking, the report; accepting a file drag. |
-| `rows.test.ts`, `rulerTicks.test.ts` | The row model; the ruler's ladders and labels. |
-| `videoDrag.test.ts` | Picture drags in seconds. |
+| `rows.test.ts` | The row model. |
 | `historyMarks.test.ts` | Which lanes, clips and nodes a journal step lights. |
 | `keys.test.ts`, `commandFill.test.ts`, `contextMenu.test.ts` | Key resolution, caret answers for a command's form, menus derived from the catalogue. |
-| `clipLoop.test.ts`, `clipInstances.test.ts`, `clipEnvelope.test.ts`, `barWindow.test.ts`, `clipWarp.test.ts`, `clipOps.test.ts` | Loop marks, repeated material, the activity envelope, the waveform's bar window, file/beat conversion for warp points, process lines. |
-| `rollDrag.test.ts`, `gridCaret.test.ts`, `curveDraft.test.ts` | Note gestures, the grid caret, curve drafts. |
-| `takes.test.ts`, `takeCounter.test.ts`, `midiTake.test.ts`, `midiIn.test.ts`, `webmidi.test.ts`, `laneInput.test.ts`, `transportPanic.test.ts` | Comp lines and spans, the take counter, MIDI take trimming, device matching, inputs, the double-stop panic. |
+| `clipLoop.test.ts`, `clipInstances.test.ts`, `clipEnvelope.test.ts`, `clipOps.test.ts` | Loop marks, repeated material, the activity envelope, process lines. |
+| `curveDraft.test.ts` | Curve drafts. |
+| `takes.test.ts`, `midiTake.test.ts`, `midiIn.test.ts`, `webmidi.test.ts`, `laneInput.test.ts`, `transportPanic.test.ts` | Comp lines and spans, the take counter, MIDI take trimming, device matching, inputs, the double-stop panic. |
 | `exportArgs.test.ts`, `gainTrim.test.ts`, `mixerStrips.test.ts`, `apps/k7-daw-frontend/src/mastering/controls.test.ts` | Export syntax, the Fix trim, strip order, the mastering control list. |
+
+### Gestures (`apps/k7-daw-wasm/gesture/src/`)
+
+The arithmetic of the page's gestures is Rust, and its tests are Rust `#[test]`s beside each module:
+`snap.rs` (grid, relative and free snapping, the song-start floor), `roll_drag.rs` and `roll_fit.rs`
+(note gestures, what the roll opens on), `grid_caret.rs`, `bar_window.rs`, `clip_playhead.rs`,
+`clip_warp.rs`, `take_counter.rs`, `video_drag.rs` (picture drags in seconds), `tools.rs` (each tool's
+line and the refusals at an event's head and tail), `ticks.rs` and `ruler.rs` (the ladders and labels),
+`pan_zoom.rs`, `edge_drag.rs` and `layout.rs`. `@studio/k7-wasm`'s `gesture.test.ts` holds how each
+call crosses the ABI and what a pointer move costs.
 
 ### Verbs (`apps/k7-daw-wasm/verbs/src/`)
 

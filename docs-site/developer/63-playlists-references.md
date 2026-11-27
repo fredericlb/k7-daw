@@ -14,7 +14,7 @@ Both are **workspace** folders at the root, beside `_modules`: `_playlists/` and
 | `playlistStub(name)` | What `playlist new` writes: a comment, `title`, `items([])`. It parses, unlike an empty file. |
 | `appendPlaylistItem`, `removePlaylistItem`, `movePlaylistItem` | Edits on a `K7Scope`, preserving comments and layout. Each returns false when `items` is in a shape it cannot safely edit, and the caller refuses with "change the line by hand". |
 
-Resolving a line against the workspace's audio files is `apps/k7-daw-frontend/packages/song-schema/src/records.ts`: `recordPathOf` (a line to its workspace path), `resolveRecords` (keeps unresolved lines, since a dropped row hides a typo; a record's stems are `stems/` beside it), `recordName`, `recordFolder`, and the drag payload (`RECORD_DRAG_TYPE`, `packRecordDrag`). What travels in a drag is the **line**, so a deck resolves it exactly as its own set list does.
+Resolving a line against the workspace's audio files is `apps/k7-daw-wasm/song-edit/src/records.rs`, reached as `@studio/k7-wasm/records`: `recordPathOf` (a line to its workspace path), `resolveRecords` (keeps unresolved lines, since a dropped row hides a typo; a record's stems are `stems/` beside it), `recordName`, `recordFolder`, and, in `apps/k7-daw-frontend/packages/song-schema/src/records.ts`, the drag payload (`RECORD_DRAG_TYPE`, `packRecordDrag`). What travels in a drag is the **line**, so a deck resolves it exactly as its own set list does.
 
 ## Commands
 

@@ -6,12 +6,12 @@
 // It makes NOISE, deliberately: that is the load being measured. Numbers in docs/constat.md.
 //
 // TypeScript rather than .mjs since the platters became NODES: their ids are `<lane>:<module>` and
-// the names belong to `@studio/song-schema/stems`, which the desk and the scaffold both read. It
+// the names belong to `@studio/k7-wasm/stems`, which the desk and the scaffold both read. It
 // used to spell `stemDrumsA:platter` by hand, and when the rename landed it went on measuring —
 // driving four addresses the engine did not have, reporting a scratch that never happened.
 // See ../../../../docs/platter-node-plan.md.
 
-import { STEMS, stemLane, stemPlatter } from "@studio/song-schema/stems";
+import { STEMS, stemLane, stemPlatter } from "@studio/k7-wasm/stems";
 import WebSocket from "ws";
 
 const session = "k7:fred_parapluie_org";

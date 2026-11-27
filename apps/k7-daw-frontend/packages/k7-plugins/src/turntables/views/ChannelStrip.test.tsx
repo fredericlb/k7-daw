@@ -1,4 +1,4 @@
-import { STEMS } from "@studio/song-schema/stems";
+import { STEMS } from "@studio/k7-wasm/stems";
 import { describe, expect, it } from "vitest";
 import { EQ_BANDS as BANDS, EQ_DB, FILTER_RANGE } from "../deckVocabulary";
 import {

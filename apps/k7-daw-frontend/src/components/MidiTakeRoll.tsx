@@ -3,6 +3,7 @@
 // was played. Read-only and transient: the moment the take lands it gives way to the clip's own
 // piano roll. Not PianoRoll itself, which fits its view ONCE per clip — a take outgrows that fit.
 
+import { barBeat, takeCounter } from "@studio/k7-wasm/gesture";
 import { Button } from "@studio/ui/button";
 import { DockHeaderRow, DockHint } from "@studio/ui/editor-dock";
 import { Square } from "@studio/ui/icons";
@@ -10,7 +11,6 @@ import { useEffect, useRef, useState } from "react";
 import type { LiveMidiTake } from "../hooks/useMidiRecording";
 import { isBlack } from "../noteNames";
 import { m } from "../paraglide/messages.js";
-import { barBeat, takeCounter } from "../takeCounter";
 import type { CapturedNote } from "../webmidi";
 
 // How many bars the window shows, and the fewest semitones it spans.

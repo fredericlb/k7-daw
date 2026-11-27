@@ -18,7 +18,7 @@ pub struct ScheduleArgs {
 
 #[derive(Clone, Debug, Deserialize)]
 #[cfg_attr(feature = "ts", derive(ts_rs::TS))]
-pub struct MatchArgs {
+pub struct LensArgs {
     pub label: String,
     pub devices: Vec<Device>,
 }
@@ -49,7 +49,7 @@ pub enum EyesRequest {
     Builtins {},
     /// Which lens a label names among the machine's devices, and why a fallback was taken.
     #[serde(rename = "eyes.match_camera")]
-    MatchCamera(MatchArgs),
+    MatchCamera(LensArgs),
     /// A `.cube` file read into a 3D texture's floats.
     #[serde(rename = "eyes.cube")]
     Cube(CubeArgs),
