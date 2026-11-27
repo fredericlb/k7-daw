@@ -1,5 +1,5 @@
 // value.rs — a plain value and the JavaScript spellings the printer must match: numbers, strings, whitespace, UTF-16 widths.
-// A reader would get wrong that a width is bytes: the TypeScript counts UTF-16 units, so every width here goes through `u16len`.
+// A reader would get wrong that a width is bytes: JS counts UTF-16 units, so every width here goes through `u16len`.
 
 use crate::ast::PathSeg;
 

@@ -3,7 +3,7 @@
 // and the one it belongs to may sit further down the file.
 
 import type { EditorState } from "@codemirror/state";
-import { type K7MapNode, walk } from "@studio/k7x/ast";
+import { type K7MapNode, walk } from "@studio/k7-wasm/k7x";
 import type { PreviewReq } from "@studio/web-protocol";
 import { mapSpan, treeOf } from "./tree";
 

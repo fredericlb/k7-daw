@@ -8,8 +8,8 @@ import {
   MapMode,
   StateField,
 } from "@codemirror/state";
-import type { K7MapNode } from "@studio/k7x/ast";
-import { parseTree } from "@studio/k7x/parse";
+import type { K7MapNode } from "@studio/k7-wasm/k7x";
+import { parseTree } from "@studio/k7-wasm/k7x";
 
 export interface K7xTree {
   root: K7MapNode | null;

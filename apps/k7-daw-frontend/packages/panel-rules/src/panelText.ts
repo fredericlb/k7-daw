@@ -1,8 +1,8 @@
 // panelText.ts — a module's panel as the k7x text of its `ui.k7x`, each widget on ONE line.
 // The one-line widget is what keeps moving a knob a one-line diff, so every writer of a panel prints through here.
 
-import type { K7Path } from "@studio/k7x/ast";
-import { stringify } from "@studio/k7x/print";
+import type { K7Path } from "@studio/k7-wasm/k7x";
+import { stringify } from "@studio/k7-wasm/k7x";
 
 const isRecord = (v: unknown): v is Record<string, unknown> =>
   v !== null && typeof v === "object" && !Array.isArray(v);

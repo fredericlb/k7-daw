@@ -24,6 +24,7 @@ verbs = ["dep:verbs"]
 song-schema = { path = "../song-schema" }
 gesture = { path = "../gesture" }
 song = { path = "../song", default-features = false }
+k7x = { path = "../k7x" }
 song-edit = { path = "../song-edit" }
 verbs = { path = "../verbs", optional = true }
 serde = { version = "1", features = ["derive"] }

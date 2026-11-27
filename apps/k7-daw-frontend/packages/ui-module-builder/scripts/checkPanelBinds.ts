@@ -10,8 +10,8 @@ import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
+import { parse } from "@studio/k7-wasm/k7x";
 import { engineModuleOf } from "@studio/k7-wasm/schema";
-import { parse } from "@studio/k7x/document";
 import { builtinPluginFor } from "@studio/song-schema/builtinParams";
 import {
   FILE_PARAMS,

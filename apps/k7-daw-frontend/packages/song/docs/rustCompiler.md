@@ -106,7 +106,7 @@ The crate's `Cache` is one value per workspace, owned by the host, passed to eve
 | a compile records every stat, listing and read it made; reuse re-stats that set and nothing else | the read set is exactly what the answer depends on, where a revision token walks a fixed list of folders and the module stamp another |
 | the cache holds owned, immutable values handed out as `Arc` | the two rules of `docs/moduleCache.md` (a cached read never leaves the loader mutable) hold by the type |
 | bounded: four answers per workspace, the least recently used dropped; the parse cache dropped whole when it passes 64 MB | a long-lived process would otherwise grow with every project opened |
-| no disk cache | the native parse is fast enough that a restart re-reads (`apps/k7-daw-frontend/packages/k7x/docs/rust.md`'s measurements), and a disk cache is a write |
+| no disk cache | the native parse is fast enough that a restart re-reads (`apps/k7-daw-wasm/k7x/docs/rust.md`'s measurements), and a disk cache is a write |
 
 ## The API
 

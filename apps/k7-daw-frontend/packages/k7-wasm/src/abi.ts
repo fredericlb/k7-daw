@@ -48,6 +48,8 @@ interface Abi {
   k7_f64_out_ptr(): number;
   /** The gestures' typed calls: numbers in, a number or a status back (docs/gesture.md). */
   [typedCall: `k7_g_${string}`]: (...args: number[]) => number;
+  k7_cells_ptr(): number;
+  k7_cells_len(): number;
 }
 
 /** What gesture.ts calls: the instance, its memory and its typed exports. */
@@ -232,4 +234,10 @@ export function typed(): TypedAbi {
 export function trapped(e: unknown): never {
   if (isTrap(e)) recover(e);
   throw e;
+}
+
+/** The layout cells the last `k7x.outline` left: a view, read before the next call, which may grow the memory. */
+export function outlineCells(): Uint32Array {
+  const x = instance();
+  return new Uint32Array(x.memory.buffer, x.k7_cells_ptr(), x.k7_cells_len());
 }

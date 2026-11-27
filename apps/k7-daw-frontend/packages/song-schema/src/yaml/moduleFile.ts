@@ -1,7 +1,7 @@
 // moduleFile.ts — EDITING a module file, as k7x. Reading it is the Rust reader's, asked through `file.validate`.
 // The writers edit a K7Scope in place, so a knob drag is a one-line diff and every comment stays (docs/moduleFile.md).
 
-import type { K7Scope } from "@studio/k7x/document";
+import type { K7Scope } from "@studio/k7-wasm/k7x";
 import { currentAlternative } from "../alternatives";
 
 export type { ModuleIssue } from "@studio/k7-wasm/types";

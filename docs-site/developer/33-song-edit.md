@@ -19,7 +19,7 @@ the timeline, the mixer, the chains view — goes through.
 |---|---|---|
 | One value in one file | `apps/k7-daw-wasm/song-edit/src/yaml_edit.rs` | `setFileValue(file, path, value)`, `deleteFileValue`: one key path set or removed on the file's k7x document, so the rest of it is reproduced byte for byte; an inline list stays inline. |
 | Writers per file kind | the `*File.ts` modules of `apps/k7-daw-frontend/packages/song-schema/src/yaml/` | Functions over a `K7Scope`: `trackFile` (events), `sequenceFile` (notes), `videoTrackFile`, `takeFile`, `curveFile`, `graphFile` (segments), `chainFile`, `moduleFile`. Browser-safe, because editor panes apply them to unsaved buffers too. |
-| The k7x document | `apps/k7-daw-frontend/packages/k7x/src/edit.ts` | `K7Document` with `setIn`/`deleteIn`/`applyIn` on key paths, rewriting only the span of the value. |
+| The k7x document | `apps/k7-daw-frontend/packages/k7-wasm/src/k7x/document.ts` | `K7Document` with `setIn`/`deleteIn`/`applyIn` on key paths, rewriting only the span of the value. |
 | The door | `apps/k7-daw-wasm/song-edit/src/workspace_doc.rs` | `wsEdit(path, edit)` runs a writer on the file's document and writes it back atomically, skipping a write that changes nothing (`apps/k7-daw-frontend/packages/song/docs/k7xFiles.md`). |
 
 ## Modules

@@ -16,6 +16,8 @@ pub mod typed;
 pub mod typed_editors;
 pub mod typed_ticks;
 pub mod typed_timeline;
+#[cfg(test)]
+mod tests_k7x;
 
 pub use error::{ErrorCode, WasmError};
 pub use ops::Session;

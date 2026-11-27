@@ -1,5 +1,5 @@
 //! k7x — a .k7x file's change as values set or deleted at key paths, and the replay of them, native (`k7xOps.ts`).
-//! The diff, the locate rule, the replay and the settle share one tree reader and the document editor of `apps/k7-daw-frontend/packages/k7x`.
+//! The diff, the locate rule, the replay and the settle share one tree reader and the document editor of `apps/k7-daw-wasm/k7x`.
 //! What a reader gets wrong: the TypeScript's answers are vectors (`fixtures/settle-vectors.json`) are the referee.
 
 mod apply;

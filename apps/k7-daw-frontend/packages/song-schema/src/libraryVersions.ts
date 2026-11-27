@@ -2,8 +2,7 @@
 // `library.k7x` says, and the pins a workspace keeps in `_library-pins.k7x`. No `node:fs`, so
 // the file service and the browser read them by the same rules. Rationale: docs/library-versions-plan.md.
 
-import { parse } from "@studio/k7x/document";
-import { stringify } from "@studio/k7x/print";
+import { parse, stringify } from "@studio/k7-wasm/k7x";
 
 /** What this k7 can run: a library whose `requires` is above it is refused — raise it when a library may use something new. */
 export const LIBRARY_LEVEL = 2;

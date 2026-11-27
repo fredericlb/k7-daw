@@ -210,7 +210,7 @@ the widget falls back to its own min.
 
 ## Reading and writing the files (`src/moduleUi.ts`)
 
-Every read here goes through `@studio/k7x/document` and every write is value by value, so the
+Every read here goes through `@studio/k7-wasm/k7x`'s document and every write is value by value, so the
 comments and the key order of a file somebody hand-wrote survive it — inside the `ui(…)` block of a
 module file too (`src/panelWrite.ts`). A widget that is there is edited field by field, a new one is
 added on a line of its own, and only a structure that cannot take an edit in place — a widget map

@@ -2,7 +2,7 @@
 
 Every file of a workspace is a `.k7x` file: data written in a syntax that reads like Strudel and is
 never evaluated. The language and why it is shaped that way:
-[apps/k7-daw-frontend/packages/k7x/docs/language.md](../apps/k7-daw-frontend/packages/k7x/docs/language.md).
+[apps/k7-daw-wasm/k7x/docs/language.md](../apps/k7-daw-wasm/k7x/docs/language.md).
 
 ## What "every text file" covers
 
@@ -27,9 +27,9 @@ each for its own reason:
 
 ## Phases
 
-1. **The core** — `@studio/k7x`: grammar, span-carrying tree, canonical printer, a document whose
+1. **The core** — the `k7x` crate (`apps/k7-daw-wasm/k7x`): grammar, span-carrying tree, canonical printer, a document whose
    edits keep every other byte. Proven on the whole corpus against the Rust reader, a print/parse
-   round trip and the comment lines every edit must keep (`apps/k7-daw-frontend/packages/k7x/src/corpus.test.ts`). Done.
+   round trip and the comment lines every edit must keep (`apps/k7-daw-wasm/k7x/tests/corpus.rs`). Done.
 2. **One door for reading and writing a file** — `apps/k7-daw-wasm/song-edit/src/workspace_doc.rs`: a file is
    read as k7x text or data, edited as a k7x document by key path, or written whole from data. A
    writer takes a document scope and changes values in it, so a knob drag is a one-line diff and an

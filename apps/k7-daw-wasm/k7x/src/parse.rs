@@ -1,4 +1,4 @@
-// parse.rs — k7x text → the span-carrying tree of ast.rs, decision for decision the parser of ../src/parse.ts.
+// parse.rs — k7x text → the span-carrying tree of ast.rs; the grammar and its reasons are docs/language.md.
 // A reader would get wrong where the tree lives: in the caller's Bump, so dropping it is one arena reset (docs/rust.md).
 
 mod lex;

@@ -112,6 +112,7 @@ name = "k7-wasm"
 version = "0.1.0"
 dependencies = [
  "gesture",
+ "k7x",
  "serde",
  "serde_json",
  "song",
