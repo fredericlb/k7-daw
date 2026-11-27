@@ -301,7 +301,7 @@ to **the layer below**.
 
 ```bash
 cargo test --manifest-path apps/k7-daw-wasm/verbs/Cargo.toml --test picture
-npx vitest run apps/k7-daw-frontend/packages/k7-wasm/src/validateModule.test.ts
+cargo test --manifest-path apps/k7-daw-wasm/song/Cargo.toml --test all files_validate
 cargo test --manifest-path apps/k7-daw-wasm/eyes/Cargo.toml schedule && npx vitest run apps/k7-daw-frontend/packages/ui-eyes/src/timeline.test.ts apps/k7-daw-frontend/packages/ui-eyes/src/compositor.test.ts
 ```
 

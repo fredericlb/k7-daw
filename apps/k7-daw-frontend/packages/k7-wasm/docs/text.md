@@ -19,7 +19,7 @@ How the page edits a file's text: `apps/k7-daw-frontend/packages/k7-wasm/src/tex
 
 ## Tests
 
-The writers are tested twice: the exact text they leave, in Rust (`apps/k7-daw-wasm/song-edit/tests/text_writers.rs`,
-`apps/k7-daw-wasm/k7-wasm/src/tests_text.rs`), and what the page sees through the module, in
-`apps/k7-daw-frontend/packages/k7-wasm/src/textVideo.test.ts`, `textSequence.test.ts` and `textDesk.test.ts`, which are the old
-TypeScript tests of the writers pointed at the ops.
+The writers are tested where their rules are: the exact text they leave, in Rust
+(`apps/k7-daw-wasm/song-edit/tests/text_writers.rs`, and through the ops `apps/k7-daw-wasm/k7-wasm/src/tests_text.rs`,
+`tests_text_video.rs`, `tests_text_sequence.rs` and `tests_text_desk.rs`). The page's own test,
+`apps/k7-daw-frontend/packages/k7-wasm/src/text.test.ts`, only proves that a call reaches the module and answers its shape.
