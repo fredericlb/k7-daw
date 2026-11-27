@@ -25,6 +25,8 @@ export function Knob({
   max = 1,
   step,
   onValueChange,
+  onValueCommit,
+  defaultValue,
   label,
   size = 40,
   format,
@@ -38,6 +40,10 @@ export function Knob({
   /** Keyboard step; a hundredth of the range when omitted. */
   step?: number;
   onValueChange: (v: number) => void;
+  /** Fires once with the last value a gesture reached, on release (pointer up or cancel, key up). */
+  onValueCommit?: (v: number) => void;
+  /** Where a double-click puts the knob back; no reset without it. */
+  defaultValue?: number;
   /** The accessible name. */
   label: string;
   /** 36 to 44. */
@@ -53,7 +59,17 @@ export function Knob({
   const range = max - min;
   const t = range === 0 ? 0 : Math.min(1, Math.max(0, (value - min) / range));
   const inc = step ?? range / 100;
-  const set = (v: number) => onValueChange(Math.min(max, Math.max(min, v)));
+  const pending = React.useRef<number | null>(null);
+  const set = (v: number) => {
+    const c = Math.min(max, Math.max(min, v));
+    pending.current = c;
+    onValueChange(c);
+  };
+  const release = () => {
+    const v = pending.current;
+    pending.current = null;
+    if (v !== null) onValueCommit?.(v);
+  };
   const drag = React.useRef<{ y: number; v: number } | null>(null);
 
   return (
@@ -78,6 +94,17 @@ export function Knob({
         }}
         onPointerUp={() => {
           drag.current = null;
+          release();
+        }}
+        onPointerCancel={() => {
+          drag.current = null;
+          release();
+        }}
+        onKeyUp={release}
+        onDoubleClick={() => {
+          if (defaultValue === undefined) return;
+          set(defaultValue);
+          release();
         }}
         onKeyDown={(e) => {
           const k = e.key;
