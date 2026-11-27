@@ -807,6 +807,16 @@ catalogue command with a sentence — `edit <file>`, a shell verb — is shown a
 Ctrl+S anywhere but the text pane — which flushes its own buffer — answers that k7 saves by
 itself, instead of letting the browser offer to save the page.
 
+### Two fingers double-tapped undo, three redo
+
+On a phone or a tablet there is no Ctrl+Z, so the journal's two verbs are a gesture: **two fingers
+tapped twice** run `project undo`, **three fingers tapped twice** run `project redo` (`multiTap.ts`,
+listened to on the whole window). A tap is every finger down and up again within 300 ms, none moving
+more than 12 px, and the second tap comes within 400 ms of the first with the same count. That keeps a
+pinch, a two-finger scroll and a slow press out of it: each moves or lasts, and losing an edit to a
+zoom would be worse than having no gesture. It goes straight to the journal, as Ctrl+Z off the text
+pane does, and waits while the commands page or the undo confirmation is open, as the keys do.
+
 ### Headphones, said when a live input becomes audible
 
 A live rig monitors its input on purpose (`apps/k7-daw-frontend/packages/song/docs/liveProject.md`), so the moment the

@@ -171,6 +171,7 @@ import { libraryModuleRef } from "./libraryTree";
 import { confirmMenuItem } from "./menuConfirm";
 import { menuTarget } from "./menuTitle";
 import { midiInDeviceFor, midiInLanes, midiInPlayed } from "./midiIn";
+import { MultiTap } from "./multiTap";
 import { chainRefFromCreate, wireCommand } from "./nodeInsert";
 import { noteSpans } from "./noteSpans";
 import { resolveEditorFile } from "./openInEditor";
@@ -2445,6 +2446,32 @@ export default function App({
     };
     window.addEventListener("keydown", onKey, true);
     return () => window.removeEventListener("keydown", onKey, true);
+  }, [commandsPage, historyDeps, undoConfirm]);
+
+  // Two fingers double-tapped: undo; three: redo — the touch shell's Ctrl+Z and Ctrl+Y, on the same journal (multiTap.ts).
+  useEffect(() => {
+    const g = new MultiTap((fingers) => {
+      if (commandsPage || undoConfirm) return;
+      void (fingers === 3 ? runRedo(historyDeps) : runUndo(historyDeps));
+    });
+    const pts = (l: TouchList) =>
+      Array.from(l, (t) => ({ id: t.identifier, x: t.clientX, y: t.clientY }));
+    const start = (e: TouchEvent) =>
+      g.down(pts(e.changedTouches), e.touches.length);
+    const move = (e: TouchEvent) => g.move(pts(e.changedTouches));
+    const end = (e: TouchEvent) => g.up(e.touches.length);
+    const cancel = () => g.cancel();
+    const opts = { passive: true, capture: true } as const;
+    window.addEventListener("touchstart", start, opts);
+    window.addEventListener("touchmove", move, opts);
+    window.addEventListener("touchend", end, opts);
+    window.addEventListener("touchcancel", cancel, opts);
+    return () => {
+      window.removeEventListener("touchstart", start, opts);
+      window.removeEventListener("touchmove", move, opts);
+      window.removeEventListener("touchend", end, opts);
+      window.removeEventListener("touchcancel", cancel, opts);
+    };
   }, [commandsPage, historyDeps, undoConfirm]);
 
   // Record pressed with NOTHING armed arms a track rather than leaving Play dead: the caret's, else the song's only one.
