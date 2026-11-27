@@ -442,7 +442,7 @@ The imported clips list.
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
-| 08.01 | Show running background processes | click the processes button (read-only popover) | Enter/Space on the button | tap | T M D |
+| 08.01 | Show running background processes | click the spinner at the app's top right, there only while something runs (a read-only bubble: each process with how far it is and for how long) | Enter/Space on the button | tap | T M D |
 
 ### Tasks & history
 

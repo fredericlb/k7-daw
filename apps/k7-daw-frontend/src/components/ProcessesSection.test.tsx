@@ -1,15 +1,13 @@
-// ProcessesSection.test.tsx — a failed process is listed with its failure text, which the header spinner never shows.
+// ProcessesSection.test.tsx — a failed process is listed with its failure text, which the running spinner never shows.
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { setServiceProcesses } from "../processes";
 import { ProcessesSection } from "./ProcessesSection";
 
 describe("the processes section", () => {
-  it("says nothing runs when nothing is listed", () => {
+  it("draws nothing when nothing has ended", () => {
     setServiceProcesses([]);
-    expect(renderToStaticMarkup(<ProcessesSection />)).toContain(
-      "Nothing running",
-    );
+    expect(renderToStaticMarkup(<ProcessesSection />)).toBe("");
   });
 
   it("names a failed process and says why", () => {

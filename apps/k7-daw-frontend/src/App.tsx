@@ -3013,7 +3013,6 @@ export default function App({
       statusStore={statusStore}
       engine={engine ? (connected ? "up" : "down") : "none"}
       problems={problemCount}
-      onProcesses={() => setRightPanel("tasks")}
       extra={<BenchSaveButton size="icon" runCommand={runCommand} />}
       git={
         gitWorkspace ? (
