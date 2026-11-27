@@ -51,7 +51,9 @@ Each has its own `exports` subpath and a story that shows every state `component
 
 | subpath | what it is |
 |---|---|
-| `capsule` | `Capsule`, `CapsuleButton` (pressed state), `CapsuleDivider` |
+| `capsule` | `Capsule`, `CapsuleButton` (pressed state; `size` "float" is the floating row's 32 px button with a 16 px glyph, "icon" the Button's icon square), `CapsuleDivider` |
+| `button` sizes | `icon` and `icon-sm` follow the device; `icon-md` is 36 px everywhere (a title-bar glyph), `icon-xs` 32, `icon-2xs` 24, `2xs` a 24 px text button, `bar` a 36 px text value |
+| `select` | the Radix parts, and `SelectField` for a flat list of options (an empty value is a legal "none") |
 | `row-group` | `RowGroup`, `Row`, `RowButton`: icon, label, detail, trailing, disclosure, selected, tall |
 | `side-panel` | `SidePanel` (400 px, floats over the panes) and `Sheet` (phone, with a transport slot) |
 | `editor-dock` | `EditorDock` (the bottom editor dock of Pad and Desk, resizable) and `EditorSheet` (phone), each with the Expand toggle |

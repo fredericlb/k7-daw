@@ -1,6 +1,7 @@
 // ClipOpsMenu.tsx — the waveform's operations behind one lightning button, as the roll's: Trim, and Transformations,
 // every chain the project and the libraries offer run over this clip. Trim opens its gate as a popover from this button.
 
+import { Button } from "@studio/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -36,16 +37,17 @@ export function ClipOpsMenu(p: {
   const button = (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button
-          type="button"
+        <Button
+          variant="glass"
+          size="icon-md"
+          className="shrink-0"
           disabled={p.disabled}
           aria-label={m["clip.operations"]()}
           title={m["clip.operations"]()}
           aria-busy={working || undefined}
-          className="glass grid size-9 shrink-0 cursor-pointer place-items-center rounded-full text-foreground outline-none focus-visible:shadow-(--k7-focus-ring) disabled:opacity-40"
         >
           {working ? <Spinner size="sm" inherit /> : <Zap className="size-4" />}
-        </button>
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onSelect={() => p.onGateOpen(true)}>

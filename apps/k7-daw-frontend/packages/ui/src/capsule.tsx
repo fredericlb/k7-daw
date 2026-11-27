@@ -24,33 +24,51 @@ export const CapsuleButton = React.forwardRef<
   HTMLButtonElement,
   React.ButtonHTMLAttributes<HTMLButtonElement> & {
     pressed?: boolean;
+    /** "float" is the floating row's 32 px button with a 16 px glyph; "icon" the kit Button's icon square (44 px, 32 on a desk). */
+    size?: "default" | "float" | "icon";
     /** Why it is disabled: it then stays pressable and a press shows this in a toast. */
     disabledReason?: string;
   }
->(({ className, pressed, type = "button", disabledReason, ...props }, ref) => {
-  // A disabled button with a reason stays pressable (aria-disabled) and shows the reason on press.
-  const reason = reasonOf(props.disabled, disabledReason);
-  const { disabled: _d, onClick: _c, ...rest } = props;
-  return (
-    <button
-      ref={ref}
-      type={type}
-      aria-pressed={pressed}
-      className={cn(
-        "type-label inline-flex h-9 min-w-11 cursor-pointer desk:h-6 desk:min-w-8 desk:rounded-xl items-center justify-center gap-1.5 rounded-[18px] px-2.5 text-foreground outline-none transition-colors hover:bg-on-fill focus-visible:shadow-(--k7-focus-ring) disabled:pointer-events-none disabled:opacity-40 aria-disabled:opacity-40 aria-pressed:bg-on-fill aria-pressed:text-lavender aria-pressed:shadow-(--k7-highlight) [&_svg]:size-5 desk:[&_svg]:size-[18px] [&_svg]:shrink-0",
-        className,
-      )}
-      {...(reason
-        ? {
-            ...rest,
-            title: props.title ?? reason,
-            "aria-disabled": true,
-            onClick: reasonPress(reason),
-          }
-        : props)}
-    />
-  );
-});
+>(
+  (
+    {
+      className,
+      pressed,
+      size = "default",
+      type = "button",
+      disabledReason,
+      ...props
+    },
+    ref,
+  ) => {
+    // A disabled button with a reason stays pressable (aria-disabled) and shows the reason on press.
+    const reason = reasonOf(props.disabled, disabledReason);
+    const { disabled: _d, onClick: _c, ...rest } = props;
+    return (
+      <button
+        ref={ref}
+        type={type}
+        aria-pressed={pressed}
+        className={cn(
+          "type-label inline-flex h-9 min-w-11 cursor-pointer desk:h-6 desk:min-w-8 desk:rounded-xl items-center justify-center gap-1.5 rounded-[18px] px-2.5 text-foreground outline-none transition-colors hover:bg-on-fill focus-visible:shadow-(--k7-focus-ring) disabled:pointer-events-none disabled:opacity-40 aria-disabled:opacity-40 aria-pressed:bg-on-fill aria-pressed:text-lavender aria-pressed:shadow-(--k7-highlight) [&_svg]:size-5 desk:[&_svg]:size-[18px] [&_svg]:shrink-0",
+          size === "float" &&
+            "h-8 min-w-8 rounded-full px-1.5 desk:h-8 desk:min-w-8 desk:rounded-full [&_svg]:size-4 desk:[&_svg]:size-4",
+          size === "icon" &&
+            "size-11 min-w-0 rounded-full px-0 desk:size-8 desk:min-w-0 desk:rounded-full",
+          className,
+        )}
+        {...(reason
+          ? {
+              ...rest,
+              title: props.title ?? reason,
+              "aria-disabled": true,
+              onClick: reasonPress(reason),
+            }
+          : props)}
+      />
+    );
+  },
+);
 CapsuleButton.displayName = "CapsuleButton";
 
 // A hairline between two groups of a capsule.
