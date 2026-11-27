@@ -61,6 +61,7 @@ Each has its own `exports` subpath and a story that shows every state `component
 | `empty-state`, `error-card` | the dashed empty card and the stay-until-fixed failure |
 | `choice` | a radiogroup or tablist: segmented (words or glyphs), or 44 px rows on a phone |
 | `picker` | a 56 px button and a searchable list under it |
+| `slider` | a native range with the one commit rule: `onValueCommit` fires on pointer up or cancel, key up or blur, once per change |
 | `knob` | the 270 degree arc knob with a peak chip; `onValueCommit` fires on release, `defaultValue` is what a double-click restores |
 | `track-toggle` | M, S and A: one component for the lane header and the mixer strip |
 | `backdrop` | the two blobs and the two wave strokes behind a screen |

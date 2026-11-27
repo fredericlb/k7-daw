@@ -36,6 +36,7 @@
     "./empty-state": "./src/empty-state.tsx",
     "./error-card": "./src/error-card.tsx",
     "./choice": "./src/choice.tsx",
+    "./slider": "./src/slider.tsx",
     "./picker": "./src/picker.tsx",
     "./knob": "./src/knob.tsx",
     "./track-toggle": "./src/track-toggle.tsx",

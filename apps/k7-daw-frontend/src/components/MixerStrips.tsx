@@ -10,6 +10,7 @@ import {
 import { useEngineState } from "@studio/engine-browser/store";
 import { Knob } from "@studio/ui/knob";
 import { cn } from "@studio/ui/lib/utils";
+import { Slider } from "@studio/ui/slider";
 import { TrackToggle } from "@studio/ui/track-toggle";
 import type { TrackControlValues } from "@studio/ui-chains/graph";
 import { useRef } from "react";
@@ -72,16 +73,15 @@ function Fader({
 }) {
   return (
     <div className="flex w-full flex-col items-center gap-1">
-      <input
-        type="range"
+      <Slider
         min={-60}
         max={6}
         step={0.5}
         value={value}
-        aria-label={label}
-        aria-valuetext={`${value.toFixed(1)} dB`}
-        onChange={(e) => onValueChange(Number(e.target.value))}
-        className="h-5 w-full cursor-pointer accent-(--k7-accent-text)"
+        label={label}
+        format={(v) => `${v.toFixed(1)} dB`}
+        onValueChange={onValueChange}
+        className="w-full"
       />
       <span className="type-mono-value text-fg-2">{value.toFixed(1)} dB</span>
     </div>

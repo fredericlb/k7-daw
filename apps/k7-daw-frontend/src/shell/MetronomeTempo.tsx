@@ -5,6 +5,7 @@ import { Button } from "@studio/ui/button";
 import { CapsuleButton } from "@studio/ui/capsule";
 import { Input } from "@studio/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@studio/ui/popover";
+import { Slider } from "@studio/ui/slider";
 import { Switch } from "@studio/ui/switch";
 import { useEffect, useRef, useState } from "react";
 import type { RecInfo } from "../hooks/useProjectDoc";
@@ -147,18 +148,15 @@ export function MetronomeTempo({
         </label>
         <label className="flex items-center gap-2 text-xs">
           <span className="type-label w-20">{m["metro.volume"]()}</span>
-          <input
-            type="range"
+          <Slider
             min={METRONOME_MIN}
             max={1}
             step={0.05}
             value={shownLevel}
-            onChange={(e) => setDragging(Number(e.target.value))}
-            onPointerUp={commitLevel}
-            onKeyUp={commitLevel}
-            onBlur={commitLevel}
+            onValueChange={setDragging}
+            onValueCommit={commitLevel}
             className="flex-1"
-            aria-label={m["metro.volumeLabel"]()}
+            label={m["metro.volumeLabel"]()}
           />
           <span className="w-8 text-right tabular-nums">
             {Math.round(shownLevel * 100)}%

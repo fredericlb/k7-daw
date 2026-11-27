@@ -15,6 +15,7 @@ import {
   DialogTitle,
 } from "@studio/ui/dialog";
 import { Input } from "@studio/ui/input";
+import { Slider } from "@studio/ui/slider";
 import { useId, useState } from "react";
 import {
   type CurveDraft,
@@ -173,13 +174,13 @@ export function CurveEditor({
           {/* Depth and, for an oscillator, where it starts — one row, the two sliders side by side. */}
           {draft.shape !== "onoff" && (
             <div className={FIELD}>
-              <Slider
+              <LabelledSlider
                 label={m["curve.amplitude"]()}
                 value={draft.amplitude}
                 onChange={(amplitude) => set({ amplitude })}
               />
               {oscillator && (
-                <Slider
+                <LabelledSlider
                   label={m["curve.phase"]()}
                   value={draft.phase}
                   onChange={(phase) => set({ phase })}
@@ -311,7 +312,7 @@ export function CurveEditor({
 }
 
 /** A 0..1 slider with its name before it and its value after — half a row when it shares one. */
-function Slider({
+function LabelledSlider({
   label,
   value,
   onChange,
@@ -323,13 +324,12 @@ function Slider({
   return (
     <label className="flex min-w-0 flex-1 items-center gap-2">
       <span className="text-xs text-muted-foreground">{label}</span>
-      <input
-        type="range"
+      <Slider
         min={0}
         max={1}
         step={0.01}
         value={value}
-        onChange={(e) => onChange(Number(e.target.value))}
+        onValueChange={onChange}
         className="min-w-0 flex-1"
       />
       <span className="w-8 text-right font-mono text-xs tabular-nums">
