@@ -277,3 +277,7 @@ mod tests {
         assert_eq!(js_number("inf"), None);
     }
 }
+
+#[cfg(test)]
+#[path = "rows_tests.rs"]
+mod cases_tests;
