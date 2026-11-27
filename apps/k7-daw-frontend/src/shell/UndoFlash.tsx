@@ -2,14 +2,17 @@
 // step's message under it, stacked while the same key is pressed again. It takes no pointer and fades on its own.
 // What it shows is undoFlashStore.ts's; the reason it exists is in docs/shell.md ("Undo and redo answer at the centre").
 
-import { Redo2, Undo2 } from "@studio/ui/icons";
+import { CircleMinus, Redo2, Undo2 } from "@studio/ui/icons";
 import { useSyncExternalStore } from "react";
 import { flashSnapshot, subscribeFlash } from "./undoFlashStore";
 
 export function UndoFlash() {
   const f = useSyncExternalStore(subscribeFlash, flashSnapshot, () => null);
   if (!f) return null;
-  const Icon = f.kind === "undo" ? Undo2 : Redo2;
+  const Icon =
+    f.kind === "undo" ? Undo2 : f.kind === "redo" ? Redo2 : CircleMinus;
+  // Nothing to undo is the glyph alone: the sentence is still announced, never drawn.
+  const silent = f.kind === "nothing";
   return (
     <div className="pointer-events-none fixed inset-0 z-(--k7-z-menu) flex flex-col items-center justify-center gap-4">
       <Icon
@@ -23,7 +26,11 @@ export function UndoFlash() {
         key={`m${f.seq}`}
         role="status"
         aria-live="polite"
-        className="flex max-w-[80vw] animate-[k7-undo-flash_1400ms_ease-out_forwards] flex-col items-center gap-1"
+        className={
+          silent
+            ? "sr-only"
+            : "flex max-w-[80vw] animate-[k7-undo-flash_1400ms_ease-out_forwards] flex-col items-center gap-1"
+        }
       >
         {f.messages.map((msg, i) => (
           <p

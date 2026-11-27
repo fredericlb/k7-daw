@@ -738,7 +738,8 @@ export default function App({
       onApplied: bumpReload,
       flush: flushAutosaves,
       // A step is shown big at the centre, stacking with the next of its kind (shell/UndoFlash.tsx).
-      onStep: (redo, message) => flashStep(redo ? "redo" : "undo", message),
+      onStep: (redo, message, nothing) =>
+        flashStep(nothing ? "nothing" : redo ? "redo" : "undo", message),
       strings: {
         undone: (what) => m["undo.undone"]({ what: stepText.current(what) }),
         redone: (what) => m["undo.redone"]({ what: stepText.current(what) }),

@@ -809,11 +809,12 @@ itself, instead of letting the browser offer to save the page.
 
 ### Undo and redo answer at the centre
 
-A landed step, or "nothing to undo", is the undo or redo glyph at the centre of the screen, half its
+A landed step is the undo or redo glyph at the centre of the screen, half its
 width and half its height, glowing, with the step's sentence under it (`shell/UndoFlash.tsx`). Pressing
 the same key again stacks the next sentence under the first, so a run of undos reads as the list of what
 came back; the other key starts a fresh stack. It takes no pointer and fades about a second and a half
-after the last step. A toast in a corner was read after the fact, if at all, while undo is the one act
+after the last step. With no step that way, it is a glowing no-entry glyph and no sentence: the
+glyph says it at a glance, and the words are only announced. A toast in a corner was read after the fact, if at all, while undo is the one act
 whose answer the person is waiting for, eyes on the work; an error still toasts, since it is not a step.
 
 ### Two fingers double-tapped undo, three redo

@@ -19,6 +19,9 @@ describe("the undo flash", () => {
       kind: "redo",
       messages: ["Redone: a clip"],
     });
+    flashStep("nothing", "Nothing to undo");
+    flashStep("nothing", "Nothing to undo");
+    expect(flashSnapshot()?.messages).toEqual(["Nothing to undo"]);
     vi.advanceTimersByTime(FLASH_MS + 1);
     expect(flashSnapshot()).toBeNull();
   });
