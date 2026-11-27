@@ -9,7 +9,6 @@ import { describe, expect, it } from "vitest";
 import {
   buildHomePalette,
   findProject,
-  HOME_COMMANDS,
   type HomeActs,
   homeArgValues,
   resolveWorkspace,
@@ -103,9 +102,9 @@ function harness(
 
 describe("the catalogue", () => {
   it("says what every command DOES, in both languages", () => {
-    for (const c of HOME_COMMANDS) {
+    for (const c of buildHomePalette("en")) {
       for (const lang of ["en", "fr"] as const) {
-        const s = c.readable[lang];
+        const s = c.readableBy?.[lang] ?? "";
         expect(s.trim(), c.canonical).not.toBe("");
         // A description that merely echoes the name teaches nothing and matches the same letters.
         expect(s.toLowerCase(), c.canonical).not.toBe(c.canonical);
@@ -117,7 +116,7 @@ describe("the catalogue", () => {
   });
 
   it("tells you what every argument accepts", () => {
-    const mute = HOME_COMMANDS.flatMap((c) =>
+    const mute = buildHomePalette("en").flatMap((c) =>
       c.args
         .filter((a) => !a.hint.trim())
         .map((a) => `${c.canonical} <${a.name}>`),

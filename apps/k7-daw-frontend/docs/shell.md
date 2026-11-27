@@ -807,6 +807,16 @@ catalogue command with a sentence — `edit <file>`, a shell verb — is shown a
 Ctrl+S anywhere but the text pane — which flushes its own buffer — answers that k7 saves by
 itself, instead of letting the browser offer to save the page.
 
+### Two fingers double-tapped undo, three redo
+
+On a phone or a tablet there is no Ctrl+Z, so the journal's two verbs are a gesture: **two fingers
+tapped twice** run `project undo`, **three fingers tapped twice** run `project redo` (`multiTap.ts`,
+listened to on the whole window). A tap is every finger down and up again within 300 ms, none moving
+more than 12 px, and the second tap comes within 400 ms of the first with the same count. That keeps a
+pinch, a two-finger scroll and a slow press out of it: each moves or lasts, and losing an edit to a
+zoom would be worse than having no gesture. It goes straight to the journal, as Ctrl+Z off the text
+pane does, and waits while the commands page or the undo confirmation is open, as the keys do.
+
 ### Headphones, said when a live input becomes audible
 
 A live rig monitors its input on purpose (`apps/k7-daw-frontend/packages/song/docs/liveProject.md`), so the moment the
@@ -1051,19 +1061,14 @@ is the pane's height less 4 px top and bottom, so the cards' borders show (`fitA
 so it is drawn as large as the pane allows; the width runs off the right and the wheel walks along
 it.
 
-**The LANE leads its own row** (`moduleRow`'s `track`), without the colour band its card wears on the
-graph: the whole row is about that lane, so the band would say nothing the row does not. Its cards keep their full
-border, top and bottom included, like every card. The signal starts there and its fader is the
-first thing in the path, so a row that began at the first plugin was a path with its head cut off — and
-the cable out of the lane, the one that says which lane this is, had nothing to leave from. It is the
-same card the graph draws, matched on the node's KIND rather than its name, since `trk:` exists precisely
-so a lane and a module may share one — clip list included, as the graph draws it. It stands taller
-than the plugin cards, and that costs them nothing: no card is stretched to its height, and the zoom
-cap keeps a tall row from shrinking or growing the rest. **What feeds the lane comes before it**
-(`moduleRow`'s `inputs`): an input, and whatever stands between it and the lane, since that is where
-the signal really starts — and the seam between input and lane takes a `+` like any other, which is
-how a preamp goes in. A lane that reaches no module and no input leads nothing: the row stays empty and
-the pane says so, a single card with no cable not being a signal path.
+**A sound lane's row is its modules alone.** The lane's own card and its input are the title bar's
+(`LaneMixControls.tsx`, `ChainInputControls.tsx`): **vol** and **pan** as properties whose bubble holds a
+knob, committed once on release as a drag on the card was, then M, S and A as the mixer's toggles; the input menu,
+**monitor** and **width** on the left. Two cards at the head of a row are a third of the pane spent on
+seven controls the title bar holds in one line, and the row is then the path the signal takes through the
+modules. A **picture lane** keeps both cards in the row (`moduleRow`'s `track` and `inputs`): its camera's
+lens dropdown is the only place a lens is chosen, and the lane's card holds its clip list. A lane that
+reaches no module leads nothing: the row stays empty and the pane says so.
 
 **A `+` waits on each seam**, shown while the pointer is on it, and **one stands past the last card**,
 always shown (`@studio/ui-chains`'s `rowSeams.ts`, drawn by `ui-chains-react`'s `Seams.tsx`). Both ask

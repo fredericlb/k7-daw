@@ -39,6 +39,7 @@ import {
   type InputPick,
 } from "./ChainInputControls";
 import { GraphSlotPane } from "./GraphSlotPane";
+import { LaneMixControls } from "./LaneMixControls";
 
 /** A card here is HORIZONTAL on a desktop, at most 4 rows, and VERTICAL on a phone, at most 4 columns — a panel without that shape is folded to it. */
 const TRACK_ROW_FIT: GridFit = { axis: "rows", max: 4 };
@@ -178,13 +179,11 @@ export function TrackModulesPane({
     () => nodes ?? (graph ? trackModules(graph, trackId) : []),
     [graph, trackId, nodes],
   );
-  // A sound lane's input is the title bar's (ChainInputControls.tsx); only a picture lane's camera is drawn ahead of it.
+  // A picture lane keeps its own card and its camera's in the row: a sound lane's are the title bar's.
+  const video = !!graph?.videoTracks?.includes(trackId);
   const inputs = useMemo(
-    () =>
-      graph && !nodes && graph.videoTracks?.includes(trackId)
-        ? trackInputs(graph, trackId)
-        : [],
-    [graph, trackId, nodes],
+    () => (graph && !nodes && video ? trackInputs(graph, trackId) : []),
+    [graph, trackId, nodes, video],
   );
   // The tab each card has open: a folded card is as wide as the page it shows, so a switch reflows the row (ui-chains' `tabW`).
   const [openTabs, setOpenTabs] = useState<Record<string, number>>({});
@@ -206,8 +205,8 @@ export function TrackModulesPane({
             devices: { cameras, inputDevices, midiDevices },
             // The cables ARE the subject here: one lane's signal path, met on the SIDES because the row is read across.
             links: true,
-            // …and the lane leads it: the signal starts on the lane, and its fader is the first thing in the path.
-            ...(nodes ? {} : { track: trackId }),
+            // A sound lane's own card is the title bar's (LaneMixControls.tsx); a picture lane's still leads, its camera before it.
+            ...(nodes || !video ? {} : { track: trackId }),
             // …spaced: each card stands apart, 20 px from the next, the cable between them drawn.
             gap: 20,
             // …and a STACK — a subchain run in place — one column, its cards one under another.
@@ -236,6 +235,7 @@ export function TrackModulesPane({
       nodes,
       openTabs,
       mobile,
+      video,
     ],
   );
 
@@ -414,12 +414,17 @@ export function TrackModulesPane({
       {/* The track's name and status, Arm, what the row SHOWS and the inputs it may take: the dock's header row (docs/shell.md). */}
       {(onToggleCurves || onInput || cards) && (
         <ChainHeader
-          name={trackName}
-          armed={trackControls?.[trackId]?.arm === 1}
-          onArm={
-            cards && onTrackToggle && trackControls?.[trackId]
-              ? () => onTrackToggle(trackId, "arm")
-              : undefined
+          mix={
+            cards &&
+            onTrackToggle &&
+            trackControls?.[trackId] && (
+              <LaneMixControls
+                name={trackName}
+                values={trackControls[trackId]}
+                onToggle={(c) => onTrackToggle(trackId, c)}
+                onSet={onTrackSet && ((c, v) => onTrackSet(trackId, c, v))}
+              />
+            )
           }
           inputMenu={
             onInput && (

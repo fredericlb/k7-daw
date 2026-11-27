@@ -5,9 +5,9 @@
 // docs/commandBar.md.
 
 import { isEngineRef } from "@studio/k7-wasm/schema";
+import { fuzzyScore } from "@studio/k7-wasm/ui";
 import { REMOTE_CAMERA_PREFIX } from "@studio/web-protocol/cameras";
 import { byPeople } from "@studio/web-protocol/tree";
-import { fuzzyScore } from "../fuzzy";
 import { m as msg } from "../paraglide/messages.js";
 import type { PanelSize } from "../pendingNode";
 import { type TreeNode, TreePicker } from "./TreePicker";

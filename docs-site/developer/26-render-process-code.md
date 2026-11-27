@@ -27,7 +27,7 @@ and refuses by name when there is none ("no engine to render with — …"). Tha
 
 ## The mixdown
 
-`project export audio wav|mp3` is a shell-local verb (`apps/k7-daw-frontend/src/exportArgs.ts` parses it;
+`project export audio wav|mp3` is a shell-local verb (`apps/k7-daw-wasm/verbs/src/ui/export.rs` parses it;
 `apps/k7-daw-frontend/src/hooks/useShare.ts` runs it). It calls `GET /export?format=` on the file service
 (`apps/k7-daw-backend/packages/k7-front/src/routes/files/service/routes.rs`), which exports through `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/shares/export.rs`: render the cached compiled document into a temporary folder,
 transcode to MP3 with the account's ffmpeg when asked

@@ -21,7 +21,16 @@ const dirArgs = OUT ? ["--target-dir", OUT] : [];
 const sources = rustSourceHash();
 execFileSync(
   "cargo",
-  ["build", "--release", "--lib", "--target", TARGET, ...dirArgs],
+  [
+    "build",
+    "--release",
+    "--lib",
+    "--target",
+    TARGET,
+    "--features",
+    "verbs",
+    ...dirArgs,
+  ],
   {
     cwd: RUST,
     stdio: "inherit",
@@ -37,7 +46,7 @@ execFileSync(
   [
     "run",
     "--features",
-    "ts",
+    "ts,verbs",
     "--bin",
     "bindings",
     ...dirArgs,

@@ -1,13 +1,9 @@
-import { readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
 import { describe, expect, it, vi } from "vitest";
 import {
   mergeGate,
   refusesFileWhileLocked,
   refusesWhileLocked,
 } from "./gitLock";
-import { CLASSED_VERBS } from "./verbWrites";
 
 vi.mock("../paraglide/messages.js", () => ({
   m: new Proxy({}, { get: (_t, k) => () => String(k) }),
@@ -32,23 +28,8 @@ describe("the command gate", () => {
   });
 });
 
+// Every verb of the catalogue being classed is a Rust test (`verbs::ui::writes`).
 describe("the verb table follows the registry", () => {
-  const registry = (
-    JSON.parse(
-      readFileSync(
-        join(
-          dirname(fileURLToPath(import.meta.url)),
-          "../../../k7-daw-wasm/verbs/commands.json",
-        ),
-        "utf8",
-      ),
-    ) as { command: string }[]
-  ).map((c) => c.command);
-  it("classes every verb of commands.yaml, and none that is not there", () => {
-    expect(registry.filter((c) => !CLASSED_VERBS.includes(c))).toEqual([]);
-    expect(CLASSED_VERBS.filter((c) => !registry.includes(c))).toEqual([]);
-    expect(registry.length).toBeGreaterThan(150);
-  });
   it("lets a locked workspace keep every read and its own device's settings", () => {
     for (const line of [
       "sequence list",

@@ -3,7 +3,7 @@
 // holds; opening it, and revealing the pane, are the shell's.
 
 import { materialRefOf } from "@studio/k7-wasm/schema";
-import { fuzzyScore } from "./fuzzy";
+import { fuzzyScore } from "@studio/k7-wasm/ui";
 
 /** The file `arg` names, or null: an exact path, then the best fuzzy match, then the MATERIAL behind a placement — and null rather than `arg`. */
 export function resolveEditorFile(arg: string, files: string[]): string | null {

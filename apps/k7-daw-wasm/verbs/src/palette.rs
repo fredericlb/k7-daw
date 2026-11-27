@@ -3,10 +3,12 @@
 
 use crate::catalogue::{ArgSpec, Readable, Spec, specs};
 use crate::complete::provider_info::{class_hint, is_provider, provider_class, provider_hint, provider_names};
-use serde::Serialize;
+#[cfg(feature = "ts")]
+use crate::ui::wire::{ArgClass, ArgProvider, MenuEntity};
+use serde::{Deserialize, Serialize};
 use std::sync::OnceLock;
 
-/// Where a right-click may offer a command, mirrored on the wire as `MENU_ENTITIES` in `web-protocol/commandTypes.ts`.
+/// Where a right-click may offer a command, written out for the page as `MenuEntity` (`ui/wire.rs`).
 pub const MENU_ENTITIES: [&str; 16] = [
     "track", "group", "node", "event", "param", "curve", "ruler", "marker", "timeline", "assembly", "warp", "shot",
     "picture", "note", "tap", "rack",
@@ -16,29 +18,38 @@ pub const MENU_ENTITIES: [&str; 16] = [
 const ARG_KINDS: [&str; 3] = ["timecode", "number", "note"];
 
 /// One argument as the palette shows it.
-#[derive(Clone, Debug, PartialEq, Serialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS))]
 pub struct CommandArg {
     pub name: String,
+    #[cfg_attr(feature = "ts", ts(as = "ArgClass"))]
     pub kind: String,
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "ts", ts(as = "Option<ArgProvider>", optional))]
     pub provider: Option<String>,
     pub hint: String,
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "ts", ts(optional))]
     pub optional: Option<bool>,
 }
 
-/// One command as `GET /verb/catalogue` serves it, the shape of `CommandInfo` in `web-protocol/commandTypes.ts`.
-#[derive(Clone, Debug, PartialEq, Serialize)]
+/// One command as `GET /verb/catalogue` serves it, the shape of the generated `CommandInfo`.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS))]
 pub struct CommandInfo {
     pub command: String,
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "ts", ts(optional))]
     pub help: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "ts", ts(optional))]
     pub readable: Option<Readable>,
     pub args: Vec<CommandArg>,
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "ts", ts(as = "Option<Vec<MenuEntity>>", optional))]
     pub menu: Option<Vec<String>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "ts", ts(optional))]
     pub confirm: Option<bool>,
 }
 
@@ -153,7 +164,6 @@ mod tests {
     use crate::complete::provider_info::ARG_CLASSES;
     use serde_json::json;
 
-    const WIRE: &str = include_str!("../../../k7-daw-frontend/packages/web-protocol/commandTypes.ts");
     const PROVIDERS_SRC: &str = include_str!("complete/providers.rs");
 
     fn specs_of(v: serde_json::Value) -> Vec<Spec> {
@@ -279,19 +289,6 @@ mod tests {
                 "{name} has no provider"
             );
             assert!(ARG_CLASSES.contains(&provider_class(name).unwrap()));
-        }
-    }
-
-    #[test]
-    fn the_wire_names_the_same_classes_and_entities() {
-        for class in ARG_CLASSES {
-            assert!(WIRE.contains(&format!("| \"{class}\"")), "{class} is not on the wire");
-        }
-        for entity in MENU_ENTITIES {
-            assert!(WIRE.contains(&format!("\"{entity}\",")), "{entity} is not on the wire");
-        }
-        for name in provider_names() {
-            assert!(WIRE.contains(&format!("| \"{name}\"")), "{name} is not a wire provider");
         }
     }
 }

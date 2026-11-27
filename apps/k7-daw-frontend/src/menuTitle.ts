@@ -1,9 +1,7 @@
-// menuTitle.ts — the row at the top of a right-click menu naming what it is ON: the entity, as
-// `commands.yaml`'s `menu:` calls it, and the thing's shown name — a lane by its label, a clip by
-// its shown name, never a generated id when a name exists. Pure: the namers are passed in.
-// See docs/contextMenu.md, "The title row".
+// menuTitle.ts — the row at the top of a right-click menu naming what it is ON: Rust says the entity and how the name is made, the page's namers make it.
+// A reader would get wrong who names a lane or a clip: the host does (a lane by its label, a clip by its shown name), and absent, an id reads as itself.
 
-import { CTX_ENTITY, type MenuCtx } from "./contextMenu";
+import { type MenuCtx, menuTargetOf } from "@studio/k7-wasm/menu";
 import { noteName } from "./noteNames";
 import type { MenuEntity } from "./types";
 
@@ -13,7 +11,7 @@ export interface MenuTarget {
   name: string;
 }
 
-/** How ids read as names — the host's lanes and clips; absent, an id reads as itself. */
+/** How ids read as names: the host's lanes and clips; absent, an id reads as itself. */
 export interface MenuNamers {
   lane?: (id: string) => string;
   clip?: (ref: string) => string;
@@ -24,39 +22,18 @@ export function menuTarget(
   ctx: MenuCtx,
   names: MenuNamers = {},
 ): MenuTarget | null {
-  const entity = CTX_ENTITY[ctx.kind];
-  if (!entity) return null;
+  const t = menuTargetOf(ctx);
+  if (!t) return null;
   const lane = names.lane ?? ((id: string) => id);
   const clip = names.clip ?? ((ref: string) => ref);
-  const name = ((): string => {
-    switch (ctx.kind) {
-      case "track":
-        return lane(ctx.id);
-      case "clip":
-        return clip(ctx.id);
-      case "param":
-        return ctx.label || ctx.param;
-      case "curve-point":
-        return ctx.param || ctx.curve;
-      case "curve-card":
-        return ctx.param ?? ctx.curve;
-      case "marker-add":
-        return ctx.tc;
-      case "marker":
-        return ctx.name;
-      case "warp-point":
-        return ctx.src;
-      case "picture-shot":
-        return ctx.name || ctx.at;
-      case "picture-lane":
-        return lane(ctx.lane);
-      case "note":
-        return `${noteName(ctx.note)} · ${clip(ctx.sequence)}`;
-      case "tap":
-        return `${ctx.symbol} · ${ctx.id}`;
-      default:
-        return "id" in ctx ? ctx.id : "";
-    }
-  })();
-  return { entity, name };
+  const n = t.name;
+  const name =
+    n.kind === "lane"
+      ? lane(n.id)
+      : n.kind === "clip"
+        ? clip(n.id)
+        : n.kind === "note"
+          ? `${noteName(n.note)} · ${clip(n.sequence)}`
+          : n.text;
+  return { entity: t.entity as MenuEntity, name };
 }

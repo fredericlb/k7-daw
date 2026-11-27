@@ -72,7 +72,7 @@ are split out precisely so they can be tested.
 | plugin | `viewportRect.test.ts`, `shaderAudio.test.ts` in `apps/k7-daw-frontend/packages/k7-plugins/src/video/` |
 | verbs | `apps/k7-daw-wasm/verbs/tests/pictures.rs`, `pictureSpeed.test.ts`, `pictureSound.test.ts`, `pictureMedia.test.ts`, `pictureInterchange.test.ts`, `pictureImport.test.ts`, `pictureRender.test.ts`, `projectAspect.test.ts` |
 | media preparation | `apps/k7-daw-wasm/verbs/src/verbs/picture_media.rs`, `transcode.test.ts` (the ffmpeg arguments, not a run) |
-| frontend | `apps/k7-daw-frontend/src/exportArgs.test.ts`, `videoDrag.test.ts`, `videoSpans.test.ts`, `videoTake.test.ts`, `timelineDrop.test.ts` |
+| frontend | `videoDrag.test.ts`, `videoSpans.test.ts`, `videoTake.test.ts`, `timelineDrop.test.ts` |
 
 Two tests pin rules that live in two places: `apps/k7-daw-frontend/src/videoSpans.test.ts` holds the
 graph's "lane is on screen" spans against the compositor's `activeAt`, and

@@ -146,12 +146,8 @@ for (const project of BROKEN) {
     const page = await openProject(k7, project);
     const watch = watchPage(page);
     await expect(page.getByText(/timeline unavailable/)).toBeVisible();
-    await expect(
-      page
-        .getByText(/\d+ errors?/)
-        .or(page.getByRole("button", { name: /^\d+ problems? reported/ }))
-        .first(),
-    ).toBeVisible();
+    // The count is the badge on the rail's chevron (and on Logs, once the rail is open).
+    await expect(page.getByTestId("problem-count").first()).toHaveText(/^\d+$/);
     watch.assertClean();
   });
 }

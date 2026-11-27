@@ -1,7 +1,7 @@
 // provider_info.rs — what the palette shows of each completion provider: its display class and the clue beside the field.
 // A reader would get wrong that a class is a type: it only picks the colour, so a clip target and an audio path are both `file`.
 
-/// The display classes of an argument, mirrored on the wire as `ArgClass` in `web-protocol/commandTypes.ts`.
+/// The display classes of an argument, written out for the page as `ArgClass` (`ui/wire.rs`).
 pub const ARG_CLASSES: [&str; 9] = [
     "track", "module", "file", "marker", "choice", "timecode", "number", "note", "text",
 ];

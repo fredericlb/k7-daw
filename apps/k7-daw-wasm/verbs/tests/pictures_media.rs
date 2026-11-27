@@ -358,7 +358,7 @@ fn a_render_is_asked_for_in_the_background_with_its_words_checked_here() {
     );
     assert_eq!(
         args["settings"],
-        json!({ "size": { "height": 720 }, "quality": "high", "from": 90.0 })
+        json!({ "size": { "height": 720 }, "quality": "high", "from": 90 })
     );
     assert_eq!(args["scene"]["viewport"], json!([1280.0, 720.0]));
     assert_eq!(

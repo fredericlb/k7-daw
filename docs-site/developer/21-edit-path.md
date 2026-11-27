@@ -120,7 +120,7 @@ Between the send and the reload, two mechanisms keep the lanes from flickering:
 - **Drags hold their result.** A committed move, resize, fade or picture drag is kept in the
   component as `pending: true` and drawn where it was dropped until the next document arrives, which
   replaces it whether the command succeeded or not.
-- **One-shot lines are predicted.** `pendingOf` in `apps/k7-daw-frontend/src/pendingEdits.ts` reads a
+- **One-shot lines are predicted.** `pending_of` in `apps/k7-daw-wasm/verbs/src/ui/pending.rs` reads a
   sent line (`event remove`, `events remove`, `event status mute|warp`, `event split`,
   `event crossfade`, `events move`) and returns what it will do; the lanes draw it at once
   (`pendingClips`, `pendingSplitAt`). A refusal drops the prediction; the next document makes it

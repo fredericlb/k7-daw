@@ -35,12 +35,14 @@ the tasks survive the app, and the app adds a heading only to a file it creates.
 Every action on it is a `task` command — `task add <text>`, `task mark <timecode> <text>` (the same,
 pinned to the open project), `task done <n>` (ticks or unticks), `task remove <n>` —
 (`apps/k7-daw-wasm/verbs/src/verbs/tasks.rs`), as every action in this shell is. A task is addressed by its
-NUMBER, its place in the list as the panel shows it, which is also what a person reading the panel
-would type. After each one the panel reads the file again rather than patching its own list: the file
+NUMBER, its place in `TODOS.md`, the whole file's list: the panel shows only part of it (below), so
+it counts each row's number in the file rather than in what it draws. After each one the panel reads the file again rather than patching its own list: the file
 is the truth, and it re-reads on the workspace's revision too, so an edit made elsewhere shows up.
 
-A task pinned to the OPEN project shows its timecode as a link that puts the playhead there; one pinned
-to another song shows where, and does nothing. **Attach timecode** is greyed with no song open.
+**The panel lists the open project's tasks and the workspace-wide ones**: a task pinned to another
+song is hidden, since it is that song's work and a list of everyone's pins buries the ones that are
+here. A task pinned to the open project shows its timecode as a link that puts the playhead there.
+**Attach timecode** is greyed with no song open.
 
 **The timeline flags them too.** Each task pinned to the open project is a small flag at the foot of
 the ruler, on its timecode — amber while open, faded once done — and hovering one (or tabbing to it)
@@ -49,14 +51,15 @@ hangs its text under the ruler, outside the ruler's own clipping. The flags are 
 panel moves the ruler with it. A click falls through to the ruler, which seeks there, as on any tick: a
 flag says where something is to be done, and the place is what a click on the ruler is for.
 
-## The open project's tags sit above the tasks
+## The open project's tags are the panel's third tab
 
-The panel's top row holds the OPEN project's tags, `project.tags` in its project.k7x, which the home
+**Tags**, after Tasks and History (`TagsPanel.tsx`, `ui tags`), holds the OPEN project's tags, `project.tags` in its project.k7x, which the home
 page shows beside the project. They are written by `project tag <tag>` and `project untag <tag>`
 (`apps/k7-daw-wasm/verbs/src/verbs/project_more.rs`), never by the panel, for the same reason as the tasks.
-They sit here because this panel is where a project gets organised, and a tag sorts projects much as a
-task list sorts work. The project's own file holds them, not TODOS.md, because a tag belongs to one song
-and travels with it when the song is copied. With no project open the row is not drawn.
+They sit in this panel because it is where a project gets organised, and a tag sorts projects much as a
+task list sorts work; a tab of their own, because a row of chips above the list pushed the tasks down
+for something set once and rarely read. The project's own file holds them, not TODOS.md, because a tag
+belongs to one song and travels with it when the song is copied. With no project open the tab says so.
 
 ## Every workspace at once: `/tasks`
 
@@ -78,8 +81,8 @@ The panel's first segment switches Tasks and History; History has its own three,
 journal), Workspace (the sync history) and Commits (git's list, offered only under git). One
 segment shows one list, since two stacked lists leave each half a panel high.
 
-## Processes sit above the tasks
+## Processes are not tasks
 
-A running process, and a failed one, are listed first in the Tasks segment (`ProcessesSection.tsx`),
-one kit row each with its state and its failure text. The header's spinner counts only what runs, so
-a process that failed is seen here and nowhere else.
+The panel lists no process. What runs is the spinner's bubble at the app's top right
+(`RunningBubble.tsx`), and an ending is a toast (docs/processes.md): a list of ended work is read once
+and then only grows, where a toast says it at the moment it matters and goes.
