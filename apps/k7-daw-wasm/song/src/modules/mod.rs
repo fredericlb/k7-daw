@@ -6,6 +6,7 @@ mod builtin;
 mod chain_nodes;
 pub mod decorate;
 pub mod files;
+pub mod keys;
 mod merge;
 pub mod names;
 mod nodes;

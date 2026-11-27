@@ -5,10 +5,7 @@
 
 import { provideWasmBytes, wasmReady } from "@studio/k7-wasm/boot";
 import wasmBytes from "@studio/k7-wasm/module.wasm";
-import type {
-  ExportFormat,
-  ExportQuality,
-} from "@studio/song-schema/renderSettings";
+import type { ExportFormat, ExportQuality } from "@studio/k7-wasm/picture";
 import { exportScene } from "./export";
 import type { VideoScene } from "./scene";
 

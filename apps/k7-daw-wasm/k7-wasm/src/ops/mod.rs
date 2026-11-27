@@ -11,9 +11,15 @@ pub mod git;
 pub mod k7x;
 pub mod k7x_edit;
 pub mod media;
+pub mod module;
+pub mod picture;
+pub mod records;
+pub mod rules;
 pub mod schema;
 pub mod song;
+pub mod stems;
 pub mod timecode;
+pub mod track;
 #[cfg(feature = "verbs")]
 pub mod verb;
 
@@ -79,6 +85,12 @@ impl Session {
             "schema" => schema::dispatch(decode(input)?, out),
             "timecode" => timecode::dispatch(decode(input)?, out),
             "fields" => fields::dispatch(decode(input)?, out),
+            "module" => module::dispatch(decode(input)?, out),
+            "picture" => picture::dispatch(decode(input)?, out),
+            "records" => records::dispatch(decode(input)?, out),
+            "rules" => rules::dispatch(decode(input)?, out),
+            "stems" => stems::dispatch(decode(input)?, out),
+            "track" => track::dispatch(decode(input)?, out),
             "gesture" => gesture::dispatch(decode(input)?, out),
             "file" => file::dispatch(decode(input)?, out),
             "git" => git::dispatch(decode(input)?, out),

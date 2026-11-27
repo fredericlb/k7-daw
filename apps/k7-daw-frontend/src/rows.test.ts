@@ -1,4 +1,3 @@
-import { orderPosition, reorderTracks } from "@studio/song-schema/trackKind";
 import { describe, expect, it } from "vitest";
 import {
   dropLaneOf,
@@ -288,13 +287,8 @@ describe("a picture lane dragged to the top row", () => {
     const rows = projectRows({ groups: [] }, [], layers.map(videoTrack));
     // The top row is what a person drops onto to mean "put it over everything".
     const onto = dropLaneOf(rows, rowKey(rows[0]), "video");
+    // The order that follows (`main` ends up last) is the verb's, tested in verbs' track_lane.rs.
     expect(onto).toBe("box");
-    const at = orderPosition(layers, onto as string);
-    expect(reorderTracks(layers, "main", at as number)).toEqual([
-      "pip",
-      "box",
-      "main",
-    ]);
   });
 });
 

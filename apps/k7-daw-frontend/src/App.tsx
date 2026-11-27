@@ -18,14 +18,14 @@ import {
   preloadOutputPicture,
   ViewportTab,
 } from "@studio/k7-plugins/video";
+// The leaf with no `node:fs` in it — a browser may ask what a path names without dragging the loader in.
+import { moduleKeyFromPath } from "@studio/k7-wasm/module";
 import { beatsToPosition, parsePosition } from "@studio/k7-wasm/timecode";
 import { askConfirm } from "@studio/project-shell/ask";
 import { projectsUrl } from "@studio/project-shell/launch";
 import type { CommandJournal } from "@studio/project-shell/project";
 import { onToast, showToast } from "@studio/project-shell/toast";
 import { type HistoryDeps, runRedo, runUndo } from "@studio/project-shell/undo";
-// The leaf with no `node:fs` in it — a browser may ask what a path names without dragging the loader in.
-import { moduleKeyFromPath } from "@studio/song-schema/moduleTypes";
 import type { ReferenceTrack } from "@studio/song-schema/reference";
 import { Choice } from "@studio/ui/choice";
 import { DockHint, DockStatus } from "@studio/ui/editor-dock";

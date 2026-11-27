@@ -2,10 +2,15 @@
 // A reader would get wrong that ts-rs writes these: it emits types only, so each table is printed here from the Rust constant.
 
 use serde_json::{Value, json};
+use song::doc::{TRACK_CATEGORIES, TRACK_PREFIXES};
 use song::modules::MODULE_TYPES;
 use song::modules::names as n;
 use song::modules::types::{IO_MODULES, IO_SOURCES};
-use song_schema::{TICKS_PER_QUARTER, TIMECODE_PATTERN};
+use song::views::surfaces::SURFACE_TYPES;
+use song_schema::{
+    ASPECTS, EXPORT_FORMATS, EXPORT_QUALITIES, STEM_NEUTRAL, STEM_RANGE, STEMS, STEMS_DIR, Stem, TICKS_PER_QUARTER,
+    TIMECODE_PATTERN,
+};
 
 /// A value as a TypeScript literal: JSON is one.
 fn lit(v: &Value) -> String {
@@ -332,6 +337,71 @@ fn plain() -> Vec<[String; 3]> {
             "The folder a workspace keeps its playlists in.",
             "PLAYLISTS_DIR",
             &s(song_edit::playlist::PLAYLISTS_DIR),
+        ),
+        export(
+            "The four sources a separation produces, IN THE ORDER the model returns them.",
+            "STEMS",
+            &json!(STEMS.map(Stem::word)),
+        ),
+        export(
+            "Where a separation's outputs go: beside the file, never next to it.",
+            "STEMS_DIR",
+            &s(STEMS_DIR),
+        ),
+        export(
+            "A stem knob's travel: 0 is the part gone, 1 is as recorded, 2 is twice as much.",
+            "STEM_RANGE",
+            &json!(STEM_RANGE),
+        ),
+        export(
+            "The middle of that travel, and the record as it was cut.",
+            "STEM_NEUTRAL",
+            &json!(STEM_NEUTRAL),
+        ),
+        export(
+            "The frame shapes on offer, and the pixels each means.",
+            "ASPECTS",
+            &Value::Array(
+                ASPECTS
+                    .iter()
+                    .map(|a| json!({ "name": a.name, "w": a.w, "h": a.h }))
+                    .collect(),
+            ),
+        ),
+        export(
+            "The quality presets an export may ask for, lowest first.",
+            "EXPORT_QUALITIES",
+            &json!(EXPORT_QUALITIES),
+        ),
+        export(
+            "The containers an export leaves in, the default first.",
+            "EXPORT_FORMATS",
+            &json!(EXPORT_FORMATS),
+        ),
+        export(
+            "The containers the picture leaves in, each one an export format.",
+            "VIDEO_FORMATS",
+            &json!(EXPORT_FORMATS),
+        ),
+        export(
+            "The kinds of surface a project may declare.",
+            "SURFACE_TYPES",
+            &json!(SURFACE_TYPES),
+        ),
+        export(
+            "The track categories, in the order their tracks are laid out.",
+            "TRACK_CATEGORIES",
+            &json!(TRACK_CATEGORIES),
+        ),
+        export(
+            "The instrument codes a track name may lead with: each one's family and the label a row shows.",
+            "TRACK_PREFIXES",
+            &Value::Object(
+                TRACK_PREFIXES
+                    .iter()
+                    .map(|(p, f, l)| ((*p).to_owned(), json!([f.name(), l])))
+                    .collect(),
+            ),
         ),
     ]
 }

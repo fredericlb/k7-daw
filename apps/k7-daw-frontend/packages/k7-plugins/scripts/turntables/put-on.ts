@@ -19,7 +19,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { trackDoc } from "@studio/engine-protocol/build";
 import type { ProjectDoc } from "@studio/engine-protocol/project";
-import { STEMS, stemLane } from "@studio/song-schema/stems";
+import { STEMS, stemLane } from "@studio/k7-wasm/stems";
 import WebSocket from "ws";
 import { deckDoc, withDecks } from "../../src/turntables/deck";
 import {

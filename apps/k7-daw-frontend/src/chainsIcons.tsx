@@ -6,7 +6,7 @@
 // importing one. ModuleIcon does NOT — it is keyed on WebModuleCategory, the graph's own
 // vocabulary, so it belongs to the graph package and every host gets it from there.
 
-import { trackLabel } from "@studio/song-schema/trackKind";
+import { trackLabel } from "@studio/k7-wasm/track";
 import type { ChainsIcons } from "@studio/ui-chains-react";
 import { ModuleIcon, moduleGlyph } from "@studio/ui-chains-react/module-icons";
 import { PANE_META } from "./shellMeta";

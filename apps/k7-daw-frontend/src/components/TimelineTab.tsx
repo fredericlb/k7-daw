@@ -21,8 +21,8 @@ import {
   beatsToPosition,
   parsePosition,
 } from "@studio/k7-wasm/timecode";
+import { trackLabel } from "@studio/k7-wasm/track";
 import type { Task } from "@studio/k7-wasm/types";
-import { trackLabel } from "@studio/song-schema/trackKind";
 import {
   DropdownMenu,
   DropdownMenuContent,

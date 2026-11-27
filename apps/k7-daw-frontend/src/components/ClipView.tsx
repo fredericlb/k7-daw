@@ -5,8 +5,8 @@
 // reaches it: `WaveformView` draws the same picture and can act on none of it.
 
 import { DEFAULT_METRONOME_LEVEL } from "@studio/engine-protocol/build";
+import { seqWindowFromText, windowSpan } from "@studio/k7-wasm/rules";
 import { beatsToPosition } from "@studio/k7-wasm/timecode";
-import { seqWindowFromText, windowSpan } from "@studio/song-schema/seqWindow";
 import { DockStatus } from "@studio/ui/editor-dock";
 import { readSequence } from "@studio/ui-editor/note-grid/notes";
 import { type ComponentProps, type RefObject, useMemo } from "react";

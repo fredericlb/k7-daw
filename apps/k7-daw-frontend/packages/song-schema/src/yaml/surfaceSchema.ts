@@ -3,16 +3,13 @@
 // wired to. The wiring reuses `views/mix.k7x`'s binding, being the same question.
 // Full rationale: docs/surfaces.md.
 
+import { SURFACE_TYPES } from "@studio/k7-wasm/consts";
 import { z } from "zod";
 import { MixViewSchema } from "./mixViewSchema";
 
+export { SURFACE_TYPES };
+
 /** The kinds of surface there are — an ENUM, since one nothing can draw is a blank screen (docs/surfaceFiles.md). */
-export const SURFACE_TYPES = [
-  "turntables",
-  "timeline",
-  "viewport",
-  "mastering",
-] as const;
 export type SurfaceType = (typeof SURFACE_TYPES)[number];
 
 /** Is this word one of them? So the narrowing happens once instead of as a cast wherever a typed string arrives. */
