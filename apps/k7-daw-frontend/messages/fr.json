@@ -1533,6 +1533,7 @@
   "takes.useOverSpan": "jouer cette prise sur la plage",
   "takes.useWhole": "jouer cette prise partout où elle a été enregistrée",
   "takes.use": "utiliser {label}",
+  "curve.when": "Jouer quand",
   "curve.whenStart": "commencer à",
   "curve.whenEnd": "finir à",
   "curve.whenBetween": "entre",

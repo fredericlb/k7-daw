@@ -15,6 +15,7 @@ import {
   DialogTitle,
 } from "@studio/ui/dialog";
 import { Input } from "@studio/ui/input";
+import { SelectField } from "@studio/ui/select";
 import { Slider } from "@studio/ui/slider";
 import { useId, useState } from "react";
 import {
@@ -157,19 +158,15 @@ export function CurveEditor({
           </label>
           <label className={FIELD}>
             <span className={LABEL}>{m["curve.shape"]()}</span>
-            <select
+            <SelectField
+              size="sm"
               value={draft.shape}
-              onChange={(e) => set({ shape: e.target.value as DraftShape })}
+              onValueChange={(shape) => set({ shape: shape as DraftShape })}
               // A boolean has one shape to follow: shown, so it is clear what the curve is, and not a choice.
               disabled={shapes.length < 2}
-              className="min-w-0 flex-1 rounded border border-border bg-background px-2 py-1 text-sm"
-            >
-              {shapes.map((s) => (
-                <option key={s} value={s}>
-                  {shapeLabel(s)}
-                </option>
-              ))}
-            </select>
+              options={shapes.map((s) => ({ value: s, label: shapeLabel(s) }))}
+              className="flex-1"
+            />
           </label>
           {/* Depth and, for an oscillator, where it starts — one row, the two sliders side by side. */}
           {draft.shape !== "onoff" && (
@@ -209,17 +206,16 @@ export function CurveEditor({
                 <span className="text-xs text-muted-foreground">
                   {m["curve.cut"]()}
                 </span>
-                <select
+                <SelectField
+                  size="sm"
                   value={draft.cut}
-                  onChange={(e) => set({ cut: e.target.value as CurveCut })}
-                  className="min-w-0 flex-1 rounded border border-border bg-background px-2 py-1 text-sm"
-                >
-                  {CURVE_CUTS.map((c) => (
-                    <option key={c} value={c}>
-                      {cutLabel(c)}
-                    </option>
-                  ))}
-                </select>
+                  onValueChange={(cut) => set({ cut: cut as CurveCut })}
+                  options={CURVE_CUTS.map((c) => ({
+                    value: c,
+                    label: cutLabel(c),
+                  }))}
+                  className="flex-1"
+                />
               </label>
             </div>
           )}

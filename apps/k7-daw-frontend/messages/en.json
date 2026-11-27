@@ -1533,6 +1533,7 @@
   "takes.useOverSpan": "play this take over the span",
   "takes.useWhole": "play this take wherever it was recorded",
   "takes.use": "use {label}",
+  "curve.when": "Run when",
   "curve.whenStart": "start at",
   "curve.whenEnd": "end at",
   "curve.whenBetween": "between",

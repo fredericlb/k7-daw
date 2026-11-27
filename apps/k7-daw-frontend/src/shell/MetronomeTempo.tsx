@@ -5,6 +5,7 @@ import { Button } from "@studio/ui/button";
 import { CapsuleButton } from "@studio/ui/capsule";
 import { Input } from "@studio/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@studio/ui/popover";
+import { SelectField } from "@studio/ui/select";
 import { Slider } from "@studio/ui/slider";
 import { Switch } from "@studio/ui/switch";
 import { useEffect, useRef, useState } from "react";
@@ -129,18 +130,14 @@ export function MetronomeTempo({
             className="h-8 w-14 tabular-nums"
           />
           <span className="text-muted-foreground">/</span>
-          <select
-            value={recInfo.beatUnit}
-            aria-label={m["metro.bubble.unit"]()}
-            onChange={(e) => commitMeter(beats, Number(e.target.value))}
-            className="h-8 rounded-md border border-border bg-transparent px-2 tabular-nums"
-          >
-            {UNITS.map((u) => (
-              <option key={u} value={u}>
-                {u}
-              </option>
-            ))}
-          </select>
+          <SelectField
+            size="sm"
+            value={String(recInfo.beatUnit)}
+            label={m["metro.bubble.unit"]()}
+            onValueChange={(u) => commitMeter(beats, Number(u))}
+            options={UNITS.map((u) => ({ value: String(u), label: String(u) }))}
+            className="tabular-nums"
+          />
         </div>
         <label className="flex items-center gap-2">
           <span className="type-label w-20">{m["transport.metronome"]()}</span>
