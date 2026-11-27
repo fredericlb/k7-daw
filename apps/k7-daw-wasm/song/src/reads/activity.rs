@@ -49,7 +49,7 @@ pub fn audio_activity(peak: &[f64], buckets: usize) -> Vec<f64> {
 
 /// A sequence's activity: each bucket sums the velocities of the notes sounding in it, a looping clip tiling its window's notes.
 pub fn midi_activity(notes: &[RNote], span_beats: f64, buckets: usize, loop_start: f64, loop_end: f64) -> Vec<f64> {
-    if notes.is_empty() || !(span_beats > 0.0) || buckets == 0 {
+    if notes.is_empty() || span_beats.is_nan() || span_beats <= 0.0 || buckets == 0 {
         return Vec::new();
     }
     let loop_len = if loop_end > loop_start {

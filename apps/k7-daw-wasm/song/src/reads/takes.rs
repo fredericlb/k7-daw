@@ -235,6 +235,8 @@ fn take_of_piece(p: &RClip) -> &str {
 }
 
 /// A piece's edges dragged to `from..to` (song beats), as comp lines.
+// One line per datum of the op's request: bundling them would only move the list.
+#[allow(clippy::too_many_arguments)]
 pub fn piece_edge_lines(
     track: &str,
     at: &str,
