@@ -3,7 +3,7 @@
 /**
  * How a subtitle clip's cues are set; every word optional.
  */
-export type SceneCaptionStyle = {
+export type SceneCaptionsStyle = {
   font?: string;
   fontSize?: number;
   color?: string;

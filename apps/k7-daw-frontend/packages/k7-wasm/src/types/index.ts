@@ -77,7 +77,7 @@ export type * from "./Quality";
 export type * from "./ReadAnswer";
 export type * from "./RefArgs";
 export type * from "./SceneCaptions";
-export type * from "./SceneCaptionStyle";
+export type * from "./SceneCaptionsStyle";
 export type * from "./SceneClip";
 export type * from "./SceneCue";
 export type * from "./SceneFade";

@@ -39,7 +39,11 @@ pub struct Cue {
 /// How a subtitle clip's cues are set; every word optional.
 #[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-#[cfg_attr(feature = "ts", derive(ts_rs::TS), ts(rename = "SceneCaptionStyle", optional_fields))]
+#[cfg_attr(
+    feature = "ts",
+    derive(ts_rs::TS),
+    ts(rename = "SceneCaptionsStyle", optional_fields)
+)]
 pub struct CaptionStyle {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub font: Option<String>,
