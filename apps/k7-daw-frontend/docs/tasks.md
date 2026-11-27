@@ -51,14 +51,15 @@ hangs its text under the ruler, outside the ruler's own clipping. The flags are 
 panel moves the ruler with it. A click falls through to the ruler, which seeks there, as on any tick: a
 flag says where something is to be done, and the place is what a click on the ruler is for.
 
-## The open project's tags sit above the tasks
+## The open project's tags are the panel's third tab
 
-The panel's top row holds the OPEN project's tags, `project.tags` in its project.k7x, which the home
+**Tags**, after Tasks and History (`TagsPanel.tsx`, `ui tags`), holds the OPEN project's tags, `project.tags` in its project.k7x, which the home
 page shows beside the project. They are written by `project tag <tag>` and `project untag <tag>`
 (`apps/k7-daw-wasm/verbs/src/verbs/project_more.rs`), never by the panel, for the same reason as the tasks.
-They sit here because this panel is where a project gets organised, and a tag sorts projects much as a
-task list sorts work. The project's own file holds them, not TODOS.md, because a tag belongs to one song
-and travels with it when the song is copied. With no project open the row is not drawn.
+They sit in this panel because it is where a project gets organised, and a tag sorts projects much as a
+task list sorts work; a tab of their own, because a row of chips above the list pushed the tasks down
+for something set once and rarely read. The project's own file holds them, not TODOS.md, because a tag
+belongs to one song and travels with it when the song is copied. With no project open the tab says so.
 
 ## Every workspace at once: `/tasks`
 

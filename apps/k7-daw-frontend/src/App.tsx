@@ -105,6 +105,7 @@ import { SETTINGS_TABS, SettingsPanel } from "./components/SettingsPanel";
 import { SharePanel } from "./components/SharePanel";
 import { projectLoading, StartupBar } from "./components/StartupBar";
 import { SurfaceTab } from "./components/SurfaceTab";
+import { TagsPanel } from "./components/TagsPanel";
 import type { PanelTakes } from "./components/TakesView";
 import { TasksPanel } from "./components/TasksPanel";
 import { type TimelineHandle, TimelineTab } from "./components/TimelineTab";
@@ -3214,12 +3215,12 @@ export default function App({
 
   // Resources and References, Tasks and History: one panel each, with a segment between the two bodies.
   const segment = (
-    id: "resources" | "references" | "tasks" | "history",
+    id: "resources" | "references" | "tasks" | "history" | "tags",
   ): ReactNode => {
     const pair =
       id === "resources" || id === "references"
         ? (["resources", "references"] as const)
-        : (["tasks", "history"] as const);
+        : (["tasks", "history", "tags"] as const);
     const label = (p: string) =>
       m[`shell.segment.${p}` as "shell.segment.resources"]();
     return (
@@ -3302,6 +3303,18 @@ export default function App({
                       recInfo.tempo,
                   )
                 }
+                onRun={runCommand}
+              />
+            </PaneBoundary>
+          </>
+        );
+      case "tags":
+        return (
+          <>
+            {segment("tags")}
+            <PaneBoundary name="tags" resetKey={reloadKey} onError={paneError}>
+              <TagsPanel
+                project={locked ? null : (ws?.activeProject ?? null)}
                 onRun={runCommand}
               />
             </PaneBoundary>

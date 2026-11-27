@@ -455,8 +455,8 @@ The task list with project tags, the edit journal, the Saves list, the sync hist
 | 08.04 | Tick / untick a task | click its checkbox | Space | tap | T M D |
 | 08.05 | Delete a task | click the bin (on hover; always on touch), confirm | Enter | tap | T M D |
 | 08.06 | Seek to a task's timecode | click the timecode (same project) | — | tap | T M D |
-| 08.07 | Add a project tag | type, Enter | Enter | on-screen keyboard | T M D |
-| 08.08 | Remove a project tag | click ✕ on the chip | — | tap | T M D |
+| 08.07 | Add a project tag | in the Tags tab (third, after Tasks and History): type, Enter | Enter | on-screen keyboard | T M D |
+| 08.08 | Remove a project tag | in the Tags tab: click ✕ on the chip | — | tap | T M D |
 | 08.09 | Light what an undo step touched | hover a journal row | — | — | D |
 | 08.10 | Switch Edits / Workspace / Saves | click a toggle (Saves only when the workspace is under git) | — | tap | T M D |
 

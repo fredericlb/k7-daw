@@ -1919,6 +1919,8 @@
   "shell.segment.references": "Références",
   "shell.segment.tasks": "Tâches",
   "shell.segment.history": "Historique",
+  "shell.segment.tags": "Étiquettes",
+  "tags.noProject": "Ouvrez un projet pour l'étiqueter.",
   "shell.git.more": "Plus d'actions git",
   "shell.git.commits": "Sauvegardes",
   "shell.git.phoneName": "Git : {commit}, {pull} à recevoir",

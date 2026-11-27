@@ -1919,6 +1919,8 @@
   "shell.segment.references": "References",
   "shell.segment.tasks": "Tasks",
   "shell.segment.history": "History",
+  "shell.segment.tags": "Tags",
+  "tags.noProject": "Open a project to tag it.",
   "shell.git.more": "More git actions",
   "shell.git.commits": "Saves",
   "shell.git.phoneName": "Git: {commit}, {pull} to update",
