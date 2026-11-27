@@ -286,7 +286,7 @@ The kit's [editor dock](../packages/ui/docs/editor-dock.md) page has the dock's 
   (`event`, `mix`, `graph`) while the dock is open. `?panel=mix` and `?panel=graph` open the dock
   on the Mixer and the Chain.
 - **A right panel opened beside the dock ends 12 px above it** (`--k7-panel-bottom-open`), and the
-  toasts sit above the dock (`--toast-bottom`): the dock never covers what it must not.
+  toasts sit at the top right, under the running spinner (`--toast-top`): the dock and the bar never cover them.
 - **Expand is `ui expand`** (`ui editor` is the source pane's, key `1`). Escape leaves the expanded
   state before it closes the dock, through the popin ladder and through `ui close` alike.
 - **The dock's height is the person's, for the session**, not stored: a height stored across sessions

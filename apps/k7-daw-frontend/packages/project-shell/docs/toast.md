@@ -19,10 +19,11 @@
 
 ## Placement
 
-- **bottom-right** sits above the floating bar, clear of the right panel's bottom edge
-  (`--toast-bottom`), and moves left of an open panel through `--toast-right` (428 px).
-- **top-right** is for what must not be missed behind the bar; the wide top stacks start under the
-  header (`--k7-header-h` plus 8 px), `--toast-top` and `--toast-top-centre` override it.
+- **top-right** is the default: the top of the screen has nothing floating over it, while the bottom
+  holds the transport, the rail and the dock. k7 starts the stack under the running spinner's corner
+  (`--toast-top`, set by the app), and it moves left of an open panel through `--toast-right` (428 px).
+- **bottom-right** is still offered, above the floating bar and clear of the right panel's bottom edge
+  (`--toast-bottom`); `--toast-top-centre` places the top-centre stack.
 - **top-centre** is the plugin-scan toast: above every other layer, sliding down from above, and
   leaving by itself when the code dismisses it.
 
