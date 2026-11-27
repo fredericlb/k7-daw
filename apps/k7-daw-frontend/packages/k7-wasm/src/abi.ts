@@ -55,8 +55,16 @@ interface Abi {
 /** What gesture.ts calls: the instance, its memory and its typed exports. */
 export type TypedAbi = Abi;
 
-/** The module's address: Vite turns this into a hashed asset, node reads it as a file. */
-const URL_OF_MODULE = new URL("./k7Wasm.wasm", import.meta.url);
+/** The module's address: Vite turns this into a hashed asset, node reads it as a file; read lazily, a bundle with no `import.meta.url` never gets here. */
+const urlOfModule = () => new URL("./k7Wasm.wasm", import.meta.url);
+
+/** The bytes a host with no asset to fetch hands over (the server's render page bundles them). */
+let given: Uint8Array | null = null;
+
+/** Gives the module's bytes before the first call, for a bundle that carries them; see apps/k7-daw-backend/docs/service.md, Picture render. */
+export function provideWasmBytes(bytes: Uint8Array): void {
+  given = bytes;
+}
 
 /** node's file reader, reached without an import a page's bundle would try to resolve. */
 const nodeFs = (
@@ -89,7 +97,7 @@ function start(module: object): Abi {
 
 /** The page's load: streamed while it downloads, or compiled from the whole body where the server's type refuses streaming. */
 async function fetched(api: WasmApi): Promise<Compiled> {
-  const response = fetch(URL_OF_MODULE);
+  const response = fetch(urlOfModule());
   if (api.instantiateStreaming) {
     try {
       return await api.instantiateStreaming(response);
@@ -104,9 +112,12 @@ async function fetched(api: WasmApi): Promise<Compiled> {
 function load(): void {
   if (!wasm || started) return;
   started = true;
-  if (nodeFs) {
+  if (given || nodeFs) {
     try {
-      compiled = new wasm.Module(nodeFs.readFileSync(URL_OF_MODULE));
+      compiled = new wasm.Module(
+        given ??
+          (nodeFs as NonNullable<typeof nodeFs>).readFileSync(urlOfModule()),
+      );
       abi = start(compiled);
     } catch {
       failed = true;
