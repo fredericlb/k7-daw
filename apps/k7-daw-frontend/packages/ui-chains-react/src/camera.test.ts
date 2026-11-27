@@ -56,6 +56,16 @@ describe("wheelFactor", () => {
     expect(inF * outF).toBeCloseTo(1, 10);
     expect(inF).toBeGreaterThan(1);
   });
+
+  it("gives a notch ~10% and a pinch ten times the notch's coefficient, clamped", () => {
+    expect(wheelFactor(-100, 0, 800)).toBeCloseTo(1.105, 2);
+    expect(wheelFactor(-5, 0, 800, true)).toBeCloseTo(1.051, 2);
+    expect(wheelFactor(-5, 0, 800)).toBeCloseTo(1.005, 2);
+    // A browser reporting a pinch in hundreds must not jump a decade in one event.
+    expect(wheelFactor(-5000, 0, 800, true)).toBeLessThan(1.7);
+    expect(wheelFactor(5000, 0, 800, true)).toBeGreaterThan(0.6);
+    expect(wheelFactor(0, 0, 800, true)).toBe(1);
+  });
 });
 
 describe("zoomAbout", () => {

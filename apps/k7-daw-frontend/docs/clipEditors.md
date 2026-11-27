@@ -292,7 +292,7 @@ of them on every pointer move is what makes a phone's WebView stutter.
 The roll mounts the notes inside the viewport plus one viewport of margin on every side
 (`src/hooks/useRollWindow.ts`), the window moving by half a viewport at a time so a scroll
 re-renders the roll a few times per screen rather than per pixel. A note in hand is always
-mounted, whatever the window, since it holds the pointer capture. Each note is a memoised
+mounted, whatever the window, since it holds the pointer. Each note is a memoised
 `RollNoteBox` keyed by its address, its handlers held stable by the roll, so a drag step
 re-renders the notes being dragged and no other.
 
@@ -319,8 +319,9 @@ Two smaller rules, both the timeline's:
 
 - **A press moves the caret**, before anything else the press does. That is what makes `v`, `t`
   and ⇧L mean the cell you just pointed at rather than one you last walked to.
-- **Escape is swallowed hard** (capture phase, `stopImmediatePropagation`). Bubbling, it would
-  drop the rectangle *and* be read by the shell as "close the pane" — one press doing two things.
+- **Escape is a layer on the popin ladder** (`useEscapeLayer`, `src/popins.ts`) while a rectangle is
+  up, so the shell's `esc` binding drops the rectangle and stops there; read as "close the pane" it
+  would be one press doing two things.
 
 ### Copying a rectangle, and pasting it at the caret
 

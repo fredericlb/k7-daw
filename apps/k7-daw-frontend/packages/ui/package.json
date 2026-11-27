@@ -23,6 +23,7 @@
     "./dev-perf": "./src/dev-perf.ts",
     "./dropdown-menu": "./src/dropdown-menu.tsx",
     "./lib/utils": "./src/lib/utils.ts",
+    "./lib/pointer": "./src/lib/pointer.ts",
     "./capsule": "./src/capsule.tsx",
     "./disabled-reason": "./src/disabled-reason.ts",
     "./row-group": "./src/row-group.tsx",

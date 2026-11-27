@@ -3,7 +3,7 @@
 // back from all that. useChainsCamera.ts owns the frame loop; this owns the numbers,
 // which is the half worth pinning down — see docs/camera.md.
 
-import { wheelZoomFactor } from "@studio/ui-chains/zoomGesture";
+import { wheelFactor as pinchFactor } from "@studio/ui-timeline/panZoom";
 
 export interface Cam {
   x: number;
@@ -36,14 +36,18 @@ export function wheelPixels(
   return delta;
 }
 
-/** One wheel event as a zoom FACTOR: normalise the units here, decide the rate elsewhere — docs/camera.md. */
+/** A mouse notch's zoom per pixel of delta: ~10% a detent. A pinch has its own rate, the panes' (`wheelFactor` of panZoom) — docs/camera.md. */
+const NOTCH_RATE = 0.001;
+
+/** One wheel event as a zoom FACTOR: normalise the units here, then a notch scales by its delta and a pinch takes the panes' rate — docs/camera.md. */
 export function wheelFactor(
   deltaY: number,
   deltaMode: number,
   viewportPx: number,
   pinch = false,
 ): number {
-  return wheelZoomFactor(wheelPixels(deltaY, deltaMode, viewportPx), pinch);
+  const px = wheelPixels(deltaY, deltaMode, viewportPx);
+  return pinch ? pinchFactor(px, true) : Math.exp(-px * NOTCH_RATE);
 }
 
 /** Where a frame's content starts across the pane: centred, or hard LEFT when it spills — docs/camera.md. */

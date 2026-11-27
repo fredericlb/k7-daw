@@ -71,7 +71,6 @@ most of their constants):
 | `groupEdge.ts` | Insets for widgets sharing a group's labelled edge. |
 | `modulePreview.ts` | One module as a minimal `WebGraph` (source, module, sink), for the builder's preview. |
 | `decimate.ts` | A take's waveform reduced to the pixels available. |
-| `zoomGesture.ts` | How much one wheel event zooms; a trackpad pinch has its own rate. |
 | `lcdScreen.ts` | The contract a `widgets.js` is written against (draw frame, pointer frame, `visible`), and the rolling history of audio taps. |
 | `widgetSandbox.ts` | The page side of the widget sandbox (see below). |
 | `widgetRuntime.ts` | What runs inside the sandbox: compiles each `widgets.js`, answers `visible`, draws screens on an `OffscreenCanvas`. |

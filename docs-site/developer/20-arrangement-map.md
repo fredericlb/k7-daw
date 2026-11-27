@@ -21,7 +21,7 @@ is the one after.
 | Waveform data | `apps/k7-daw-backend/packages/k7-file-service/src/media/region.rs` (envelope slicing, beat grid), `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/media/waveform.rs` (serving it) |
 | Trim gate | `apps/k7-daw-frontend/packages/audio-probe/src/trimGate.ts` |
 | Note views | `apps/k7-daw-frontend/src/components/PianoRoll.tsx`, `apps/k7-daw-frontend/src/hooks/useRollGestures.ts`, `apps/k7-daw-wasm/gesture/src/roll_drag.rs`, `rollMode.ts`; grid caret in `apps/k7-daw-frontend/src/hooks/useGridCaret.ts` + `gridCaret.ts` |
-| Curve editor | `apps/k7-daw-frontend/src/components/CurveEditor.tsx`, `CurvePlot.tsx`, `CurveKnob.tsx`, `CurveConditions.tsx`, `curveDraft.ts` |
+| Curve editor | `apps/k7-daw-frontend/src/components/CurveEditor.tsx`, `CurvePlot.tsx`, `CurveConditions.tsx`, `curveDraft.ts` |
 | MIDI | `apps/k7-daw-frontend/src/webmidi.ts`, `midiIn.ts`, `midiControl.ts`, `midiActivity.ts`, `apps/k7-daw-frontend/src/hooks/useMidiRecording.ts`, `apps/k7-daw-frontend/src/hooks/useMidiControl.ts`, `apps/k7-daw-frontend/src/components/MidiTakeRoll.tsx` |
 | Takes | `apps/k7-daw-frontend/src/takes.ts`, `apps/k7-daw-wasm/gesture/src/take_counter.rs`, `apps/k7-daw-frontend/src/hooks/useTakeRecording.ts`, `apps/k7-daw-frontend/src/components/TakesView.tsx`, `TakeRow.tsx`, `CompStrip.tsx`; server side `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/engine/queue.rs` (the arm) |
 | Mixer state | `apps/k7-daw-frontend/src/hooks/useTrackControls.ts`, `mixerStrips.ts`; strips drawn by `apps/k7-daw-frontend/packages/ui-chains-react/src/DomChains.tsx` |

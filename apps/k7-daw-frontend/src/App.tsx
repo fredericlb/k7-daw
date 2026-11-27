@@ -49,6 +49,7 @@ import { LcdSoundsContext, SongClockProvider } from "@studio/ui-chains-react";
 import { ModulePreview } from "@studio/ui-chains-react/module-preview";
 import { flushAutosaves } from "@studio/ui-editor/autosave-buffers";
 import type { BuilderPane } from "@studio/ui-module-builder";
+import { useElementSize } from "@studio/ui-timeline/measure";
 import { setUpdateBusy } from "@studio/vite-config/register";
 import { useQueryClient } from "@tanstack/react-query";
 import {
@@ -1020,18 +1021,7 @@ export default function App({
 
   /** How tall the floating bar is, so the popin can stop ABOVE it — measured, since the bar's row depends on what it holds. */
   const stripRef = useRef<HTMLDivElement | null>(null);
-  const [stripH, setStripH] = useState(0);
-  useEffect(() => {
-    const el = stripRef.current;
-    if (!el) {
-      setStripH(0);
-      return;
-    }
-    const ro = new ResizeObserver(() => setStripH(el.offsetHeight));
-    ro.observe(el);
-    setStripH(el.offsetHeight);
-    return () => ro.disconnect();
-  }, [barFloating]);
+  const stripH = useElementSize(stripRef, [barFloating]).h;
 
   const focusOn = useCallback(
     (p: Pane) => {
@@ -3408,6 +3398,8 @@ export default function App({
           : {}),
         // The toasts and a right panel end above the row; an expanded dock leaves the row its top.
         "--toast-bottom": dock.expanded && dockUp ? "96px" : aboveRow,
+        // Under the running spinner, which holds the top-right corner while something runs (shell/RunningBubble.tsx).
+        "--toast-top": "calc(16px + var(--k7-float-h) + 8px)",
         ...(dock.expanded && dockUp
           ? {}
           : { "--k7-panel-bottom-open": aboveRow }),

@@ -142,7 +142,7 @@ The git bar (workspace tree, Home row; in a project, Save and Update on the righ
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
-| 03.01 | Back out one layer (Esc ladder) | — | Esc: pending MIDI learn, popin, graph slot, armed roll tool, waveform mode, held tool, fullscreen, then closes the editor dock | — | T D |
+| 03.01 | Back out one layer (Esc ladder) | — | Esc: pending MIDI learn, popin, graph slot, armed roll tool, waveform mode, held tool, fullscreen, a drawn selection, a clip in hand, a takes span, a rolling take, then closes the editor dock | — | T D |
 | 03.02 | Undo / redo the project journal | — | ⌘/Ctrl+Z undo; ⌘/Ctrl+Y or ⌘/Ctrl+⇧Z redo (the text editor spends its own history first) | — | T D |
 | 03.03 | Save (shows the "saved automatically" notice) | — | ⌘/Ctrl+S outside the text editor | — | T D |
 | 03.04 | Focus a pane (keys follow it) | click anywhere in a pane | `F6` / `⇧F6` | tap in a pane | T M D |
@@ -170,7 +170,7 @@ No header row on any device: every control floats over the panes. At the bottom 
 | 03.20 | Edit the meter | click the metronome → in its bubble, the beats per bar and the note value | Enter on the beats; the note value applies at once | tap the metronome → the same bubble | T M D |
 | 03.21 | Toggle the metronome | the switch in the metronome's bubble | Enter/Space on the switch | the switch in the metronome's bubble | T M D |
 | 03.22 | Set the metronome volume | the level slider in the metronome's bubble (written on release) | arrows on the focused slider (written on key up) | the level slider in the metronome's bubble | T M D |
-| 03.23 | Set the song's output level | drag the master volume in the floating bar (written on release); a tablet in portrait draws it as a knob: drag up or down, double-click for 0 dB, its arc the level heard, red when it clipped | arrows on the focused fader or knob (0.5 dB, written on key up) | drag the master knob up or down in the bar (a phone draws it as a knob) | T M D |
+| 03.23 | Set the song's output level | drag the master volume in the floating bar (written on release; a cancelled drag puts it back); a tablet in portrait draws it as a knob: drag up or down, Shift for a fine drag, double-click for 0 dB, its arc the level heard, red when it clipped | arrows on the focused fader or knob (0.5 dB, written on key up) | drag the master knob up or down in the bar (a phone draws it as a knob) | T M D |
 | 03.24 | Fix a clipped mix | click "fix" next to the clip light | — | — | D |
 | 03.25† | Show / hide the graph notes | click the notes button | — | tap | T M D |
 | 03.26 | Open the Mixer or the Events dock | click the Mixer icon among the floating controls at the bottom right; opening a clip, a take or a roll opens Events | the key bound to `ui mixer` | tap Mixer on the rail | T M D |
@@ -241,10 +241,10 @@ The timeline pane: tool strip, ruler with markers and task flags, timeline tabs,
 | 03.67 | Open a clip in the Events dock (a placed timeline opens that timeline; a frozen render opens its notes) | double-click it | `e` on the caret's clip | double-tap | T M D |
 | 03.68 | Move a clip along its lane | drag it | — | hold it, then drag | T M D |
 | 03.69 | Move a clip to another lane | drag it onto a lane of the same material (lights up) | — | hold it, then drag onto a lane of the same material | T M D |
-| 03.70 | Grab, nudge and drop a clip | — | `g` grabs; `h`/← `l`/→ nudge a beat; Enter drops; Esc cancels | — | T D |
+| 03.70 | Grab, nudge and drop a clip | — | `g` grabs; `h`/← `l`/→ nudge a beat; Enter drops; Esc cancels (through the Esc ladder) | — | T D |
 | 03.71 | Resize a clip by an edge | drag the strip at its start or end (wider on the selected clip, which shows a grip) | — | hold the edge, then drag | T M D |
 | 03.72 | Fade a clip in / out | drag the corner square (whole beats; ⌘/Ctrl or ⇧ frees) | — | hold the corner square, then drag | T M D |
-| 03.73 | Cancel a move, resize or fade | release where it started | Esc during a keyboard move | — | T D |
+| 03.73 | Cancel a move, resize or fade | release where it started; a drag the system takes away (a palm, a swipe) puts it back, roll notes and slices included | Esc during a keyboard move | — | T D |
 | 03.74 | Pick the tool (arrow, blade, eraser, mute, crossfade) | click the tool button in the timeline's corner, left of + lane → its menu | `a`, `b`, `d`, `x` (mute has none); Esc back to arrow | tap the tool button | T M D |
 | 03.75 | Cut a clip | click it with the blade (refused at head or tail) | ⌘/Ctrl+B at the playhead on the caret's lane | tap with the blade | T M D |
 | 03.76 | Erase a clip | click it with the eraser | Backspace / Delete on the caret's clip or the rectangle | tap with the eraser | T M D |
@@ -504,8 +504,8 @@ The `/settings` page (General, Devices, Services, Downloads, About), the engine 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
 | 11.03 | Switch the waveform view (standard / onsets / warp / takes) | pick in the view select, or click a mode strip button | `a` standard, `o` onsets, `w` warp; Esc back to standard; takes only via `ui wave takes` | tap a mode strip button | T M D |
-| 11.04 | Zoom the bar window | bare wheel zooms about the cursor; ⌘/Ctrl+wheel or trackpad pinch zooms smoothly | — | two-finger pinch | T M D |
-| 11.07 | Set the event's gain | click "gain: 0.0 dB" in the title bar, drag the knob in the bubble above it (written on release) | Tab, Enter opens the bubble; arrows on the knob (written on key up) | tap gain, drag the knob | T M D |
+| 11.04 | Zoom the bar window | ⌘/Ctrl+wheel or trackpad pinch zooms about the cursor; a bare wheel slides the window | — | two-finger pinch | T M D |
+| 11.07 | Set the event's gain | click "gain: 0.0 dB" in the title bar, drag the knob in the bubble above it (written on release; Shift for a fine drag; a cancelled drag puts it back) | Tab, Enter opens the bubble; arrows on the knob (written on key up) | tap gain, drag the knob | T M D |
 | 11.08 | Reset the gain to 0 dB | double-click the knob in the gain bubble | — | double-tap the knob | T M D |
 | 11.09 | Toggle the event's loop (also in the roll header) | click "loop: off" in the title bar, then the switch in its bubble (the roll header keeps its Loop button) | Tab, Enter opens the bubble; Space toggles the switch | tap loop, tap the switch | T M D |
 | 11.10 | Move the loop's start or end | drag a brace handle on the bars ruler (free) | — | drag | T M D |
