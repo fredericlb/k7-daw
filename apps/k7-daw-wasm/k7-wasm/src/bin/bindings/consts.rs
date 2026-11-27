@@ -486,6 +486,7 @@ fn plain() -> Vec<[String; 3]> {
 /// The vocabulary the page's panels, pickers and drops read: widget kinds, rack binds, levels, folders and extensions.
 fn page_vocab() -> Vec<[String; 3]> {
     let list = |v: &[&str]| json!(v);
+    #[cfg_attr(not(feature = "verbs"), allow(unused_mut))]
     let mut out = vec![
         export(
             "The widget kinds a panel may use, in the order a picker lists them.",
