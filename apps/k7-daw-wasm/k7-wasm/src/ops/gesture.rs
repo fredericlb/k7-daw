@@ -1,14 +1,14 @@
 // ops/gesture.rs — the gesture.* operations: the gestures' calls that answer a structure, as JSON ops over the gesture crate: the ones that run once per release, click or scroll.
 // A reader would get wrong that the hot calls are not here: those are ../typed.rs, numbers in and numbers out.
 
+use crate::error::WasmError;
+use crate::ops::write;
 use gesture::clip_warp::{SourceMap, WarpPoint, warp_line};
 use gesture::roll_drag::{GroupMove, GroupNote, plan_group_move};
 use gesture::ruler::{RulerTick, TickSpec, ruler_ticks};
 use gesture::tools::{
     ClipTarget, FadeClip, FadePair, ShotTarget, Tool, ToolAct, crossfade_pair, picture_tool_line, tool_line,
 };
-use crate::error::WasmError;
-use crate::ops::write;
 use serde::Deserialize;
 
 #[derive(Clone, Debug, Deserialize)]
