@@ -75,6 +75,8 @@ pub(super) fn menu(ctx: &MenuCtx, commands: &[CommandInfo], prefs: &Prefs, local
     let from = |slots: &[Slot]| from_catalogue(commands, slots);
     let also: &[&str] = match ctx {
         MenuCtx::Module { rack: Some(true), .. } => &["rack"],
+        // An automation lane that names its module also answers as the param it drives: Remove automation is a param's row.
+        MenuCtx::CurvePoint { module: Some(_), .. } => &["param"],
         _ => &[],
     };
     // Bound once, so no case can forget the prefs or the head, which would ignore what someone turned off.
@@ -242,13 +244,28 @@ pub(super) fn menu(ctx: &MenuCtx, commands: &[CommandInfo], prefs: &Prefs, local
             }
             offer(entries)
         }
-        MenuCtx::CurvePoint { curve, tc, .. } => {
+        MenuCtx::CurvePoint {
+            curve,
+            param,
+            tc,
+            module,
+        } => {
             let at = format!("{curve} {tc}");
-            offer(vec![
+            let mut entries = vec![
                 Entry::new("curve point add").arg(&at).more(),
                 Entry::new("curve point move").arg(&at).more(),
                 Entry::new("curve point remove").arg(&at),
-            ])
+            ];
+            // An automation lane names its module: the lane itself can go, as the curve card's menu offers.
+            if let Some(module) = module.as_deref().filter(|m| !m.is_empty()) {
+                entries.push(
+                    Entry::new("node automate")
+                        .arg(format!("{module} {param} none"))
+                        .named(msg("ctx.removeAutomation"))
+                        .help(msg("ctx.removeAutomationCurveHelp")),
+                );
+            }
+            offer(entries)
         }
         MenuCtx::CurveCard { curve, module, param } => {
             // A free card has no param to automate: its one row opens the curve itself.

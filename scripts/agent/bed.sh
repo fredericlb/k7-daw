@@ -13,6 +13,11 @@ if [ "${1:-}" = --dry-run ]; then dry=1; shift; fi
 
 tree=$(git rev-parse --show-toplevel)
 cd "$tree"
+# A worktree without node_modules resolves @studio/* into the main checkout, whose files the bed's Vite refuses to serve.
+if [ ! -e "$tree/node_modules" ] && [ "$(git rev-parse --git-common-dir)" != "$(git rev-parse --git-dir)" ]; then
+  echo "bed.sh: this worktree has no node_modules; linking it (worktree-init, no install)"
+  node scripts/agent/worktree-init.mjs
+fi
 suite=${E2E_SUITE:-web}
 dest=${K7_BED_OUT:-$HOME/.cache/k7-bed/$(basename "$tree")}/mac
 case "$suite" in web | conformance | both) ;; *) echo "E2E_SUITE: web, conformance or both, not '$suite'"; exit 2 ;; esac
