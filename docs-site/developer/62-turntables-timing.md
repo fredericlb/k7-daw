@@ -61,7 +61,7 @@ Two buttons, one choice: `master` is the leading deck or null.
 
 ## Cues
 
-Cues live in the project's `mix.k7x` (schema `apps/k7-daw-frontend/packages/song-schema/src/yaml/mixSchema.ts`, reader/editor `apps/k7-daw-frontend/packages/song-schema/src/yaml/mixFile.ts`): `cues:` entries keyed by the record's workspace path, `markers` positional (`MARKER_SLOTS = 8`) in **source seconds**.
+Cues live in the project's `mix.k7x` (reader `apps/k7-daw-wasm/song/src/files/desk.rs`, writer `apps/k7-daw-wasm/song-edit/src/mix_cues.rs`): `cues:` entries keyed by the record's workspace path, `markers` positional (`MARKER_SLOTS = 8`) in **source seconds**.
 
 - `CueButtons.tsx`: a press captures the needle on `pointerdown`; after `HOLD_MS = 1000` it sets the cue at that captured position, otherwise a release jumps.
 - `useDeckSet.setCue` edits the **text** with `withMarkers` and writes it back, so the file's comments survive. It refuses to write a sheet it has not read for this project (`mixReadFor`), so a failed read cannot erase it.

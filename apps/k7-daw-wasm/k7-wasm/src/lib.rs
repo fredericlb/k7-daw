@@ -18,6 +18,8 @@ mod tests_file;
 mod tests_k7x;
 #[cfg(test)]
 mod tests_rules;
+#[cfg(test)]
+mod tests_text;
 pub mod typed;
 pub mod typed_editors;
 pub mod typed_ticks;

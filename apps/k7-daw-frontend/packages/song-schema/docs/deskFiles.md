@@ -1,8 +1,8 @@
 # The desk's two files
 
-The rationale behind `apps/k7-daw-frontend/packages/song-schema/src/yaml/mixSchema.ts`,
-`apps/k7-daw-frontend/packages/song-schema/src/yaml/mixFile.ts`, `apps/k7-daw-frontend/packages/song-schema/src/yaml/mixViewSchema.ts` and
-`apps/k7-daw-frontend/packages/song-schema/src/yaml/mixViewFile.ts`. What a set project IS lives in
+The rationale behind the desk's two readers, `apps/k7-daw-wasm/song/src/files/desk.rs`
+(reached as `text.mix_cues` and `text.mix_view`), the cue writer `apps/k7-daw-wasm/song-edit/src/mix_cues.rs`
+(`text.mix`) and the zod shape `apps/k7-daw-frontend/packages/song-schema/src/yaml/mixViewSchema.ts` a surface's mapping reuses. What a set project IS lives in
 `apps/k7-daw-frontend/packages/song/docs/mixFile.md` and `apps/k7-daw-frontend/packages/song/docs/viewBindings.md`; this page is the file
 shapes and the reader/writer rules.
 

@@ -64,7 +64,7 @@ and carries the source in the document: the browser cannot open a module folder.
 and its arm state is per browser. The engine never hears about a camera.
 
 **Files are edited surgically.** Lane files carry comments; every writer in
-`apps/k7-daw-frontend/packages/song-schema/src/yaml/videoTrackFile.ts` changes values in place rather than
+`apps/k7-daw-wasm/song-edit/src/picture_file.rs` changes values in place rather than
 re-serialising the file, and rounds times to the millisecond so a drag and a verb leave the same
 bytes.
 
