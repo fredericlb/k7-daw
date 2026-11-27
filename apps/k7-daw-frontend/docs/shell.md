@@ -851,7 +851,7 @@ popin follows that answer; revealed first, a name that resolves to nothing leave
 over your work with no file in it and no tree beside it to say so — a command that reports success and
 does nothing being the one failure this shell says everywhere else it will not have.
 
-What it resolves is in `src/openInEditor.ts`, whose third pass is the one worth knowing: **half the
+What it resolves is `resolveEditorFile` in `@studio/k7-wasm/paths`, whose third pass is the one worth knowing: **half the
 callers name a PLACEMENT, not a file.** The right-click on an event offers `ui file` with a clip's id —
 `audio_14_0@98.5` (`@studio/song/placementId`) — wanting `clips/audio_14_0.k7x`, and that `@98.5` is a
 subsequence of no path, so the fuzzy pass scores −1 on every file in the project. The material behind
@@ -884,7 +884,7 @@ the **module on the right, both editable**. The module side is a small self-cont
 history must stay its own), and its writes follow the same fork rule as any save: a shared `_modules`
 file becomes a project copy, and the pane moves onto it.
 
-The resolution is `moduleBehind.ts` — the same answer a ctrl-click on the extends value gives (`base:`
+The resolution is `moduleBehind` in `@studio/k7-wasm/paths` — the same answer a ctrl-click on the extends value gives (`base:`
 then `module:` in `hints.paths`) — read from the BUFFER, so retyping the extends line swaps the pane. A
 base with no file to edit (`@engine/…`, the `@meta/…` track bases) resolves to nothing and the popin
 stays one pane. Popin only: the full-screen editor has the tree, and a second file there is one click
@@ -893,10 +893,10 @@ away rather than a question.
 **Each pane carries its own widgets**, and a picture both would carry is drawn ONCE. A slice rack docks
 THE SLICER at the bottom — one picture with coloured windows, rather than an inline waveform under every
 symbol line: the source waveform with every symbol's window in its own colour, the symbol names in the
-text painted to match (`sliceSymbols.ts`), and the gutter ▶s auditioning each line. The windows grow
+text painted to match (`src/sliceSymbols.ts`), and the gutter ▶s auditioning each line. The windows grow
 draggable edges only in the pane whose BUFFER holds the symbols, so in the split the slicer sits under
 the MODULE pane alone and the instance side stands down rather than showing the identical picture
-read-only. `rackKeyOf` (projectPaths.ts) is what lets one map answer for both spellings of "this file is
+read-only. `rackKeyOf` (`@studio/k7-wasm/paths`) is what lets one map answer for both spellings of "this file is
 a rack": a module's folder name, a node's stem.
 
 #### The RACK BUILDER popin
@@ -913,7 +913,7 @@ holding none is said on the popin before any upload runs. A kit is the node's an
 sample lives in a samples/ folder, never in a module (`apps/k7-daw-wasm/song/docs/racks.md`), so the builder no
 longer writes a module at all. Auditioning is a local object-URL, with no server round trip.
 
-The notes are the drum-machine page, pinned in `rackBuilder.ts`: bottom-left is 36, rightward, then the
+The notes are the drum-machine page, pinned in `apps/k7-daw-wasm/song-edit/src/kit.rs`: bottom-left is 36, rightward, then the
 row above — so the grid READS the way it plays, and the symbols are written in that order, which every
 other surface then walks.
 
@@ -1527,7 +1527,7 @@ of a module, never a schema, a parser or a package's whole index for one constan
 |---|---|---|
 | `@studio/ui-editor/autosave-buffers` (`appNav`) | `autosave` | its validator: the song schema, `yaml`, the k7x printer |
 | `@studio/k7-wasm/consts`, `projectShapes`, `timecode` | `yaml/moduleSchema`, `yaml/projectSchema`, `yaml/placementSchema` | zod and every schema |
-| `scalarField.ts`, only from the editor | `projectPaths.ts` carrying it | the k7x parser |
+| `@studio/k7-wasm/buffer`, only from the editor | `@studio/k7-wasm/paths` carrying it | the k7x scans |
 | `rankCommands.ts` (`CommandBar`) | `palette.ts` | the editor's command registry, every command's sentences in both languages |
 
 A schema re-exports what its light half holds, so a caller that already loads the schema need not know.

@@ -64,7 +64,7 @@ milestone ends with `bash scripts/agent/gate.sh --milestone`; the hours are agen
 | **M3b** pictures and render tooling (done) | take-render's verbs-only files deleted; engine-client and the render scripts relocated to `k7-runtime/scripts/lib`; ui-eyes scene generated; its clip schedule, transitions and `.cube` reader; the grip drag of `viewportRect`; the camera name rules | 1,000 | new crate `apps/k7-daw-wasm/eyes`, op family `eyes` | verbs branch merged; decision 7 | 8 |
 | **M3c** (done) git rules and media bytes | gitState, commitState, connectState, forgejoState, gitLock, gitPageTabs, mergeState, saveAct, githubState and roamState rules; serde structs for the git routes, then their types generated; webmDuration, trimGate, spectrumColour | 1,000 | git-rules (new, `apps/k7-daw-wasm`), k7-git, k7-front, waveform, k7-wasm | decision 5 | 11 |
 | **M4a** (built, see below) reads on the doc | takes, rackLit, noteSpans, videoSpans, activity, clipLoop, clipInstances, clipNames, rows, timelineView, mixerStrips, gainTrim, mastering, midiIn, laneInput, rackFor, graphNotes, templateGraph, headphonesHint; the hooks' and pickers' doc reads, one mute/solo rule, tapTempo, projectName, projectKind; `engine-protocol/project.ts` and `timelineTypes.ts` generated, `build.ts` moved | 2,800 | song crate, k7-file-service | rust-song-twins merged | 16 |
-| **M4b** buffer text and paths | bufferReads, clipWindowText, sliceSymbols, clipFiles, timelineDrop, rackBuilder, presetOrder, videoTake, editorPaths, projectPaths, localTargets, openInEditor, sequenceEdit, moduleBehind, scalarField, curveDraft, clipboard; the editor's cursor scan, entity values and preview triggers; noteGrid's notes | 1,500 | song-edit, song-schema, k7x | rust-song-twins merged | 10 |
+| **M4b** (built) buffer text and paths | bufferReads, clipWindowText, sliceSymbols, clipFiles, timelineDrop, rackBuilder, presetOrder, videoTake, editorPaths, projectPaths, localTargets, openInEditor, sequenceEdit, moduleBehind, scalarField, curveDraft, clipboard; the editor's cursor scan, entity values and preview triggers; noteGrid's notes | 1,500 | song-edit, song-schema, k7x | rust-song-twins merged | 10 |
 | **M4c** (built) panels and AI organize | layoutTwins, groupGeometry, autoLayout, gridCells, panelTabs, widgetClipboard, widgetKinds, useParamRows, moduleUi, panelWrite, panelText, checkLayouts; the AI loop to a backend route (see "M4c, as built") | 2,860 (415 of tests) | song `modules/ui`, k7-front `routes/ai` | rust-song-twins merged; decision 3 | 11 |
 | **M5a** (built, see below) DJ desk | deck, metronome, beats, grid, loop, mapping, controls, mixBindings, setList, put-on; deckVocabulary generated; `mixView` and the lookups of `mixBindings` stay (see "M5a, as built") | 1,380 (1,800 of tests) | new crate `apps/k7-daw-wasm/turntables`, op family `desk` | M2a (bindings), M4a | 11 |
 | **M5b** (built) graph layout | graphLayout (the only dagre importer) in the `chains` crate, `graph.layout` op; `pendingNode`, `trackPanelLayout` and the screens' shaping stay (see "M5b, as built") | 440 | chains crate + rust-sugiyama (decision 2) | M2a | 5 |
@@ -270,6 +270,36 @@ media modules are Rust, reached through `@studio/k7-wasm/git` and `@studio/k7-wa
 | the Rust WebM patcher refuses a head whose sizes run past its end, where the old one patched it with a NaN scale | a refused head falls back to the whole-file fix; garbage in no longer yields garbage out |
 | `waveform` gains a default `ffi` feature, which `k7-wasm` turns off | linking the arithmetic must not add the sidecar module's exports to the page's module |
 | a duplicate of `trim_window` remains in `apps/k7-daw-wasm/verbs/src/verbs/event_render.rs` | the verbs crate is another milestone's; it takes `waveform::trim` when that merges |
+
+**M4b, as built.** About 1,000 lines of page TypeScript went net (1,930 deleted, 930 of facades and glue written; 1,630 lines of
+tests went with them), replaced by 3,900 lines of Rust and 1,140 of Rust tests. The rules live in `song-edit` (`project_paths`, `buffer_text`,
+`intake`, `kit`, `clipboard`, `curve_draft`) and `k7x` (`cursor`, `scan`, `tokens`), reached by six op families (`paths.*`, `buffer.*`,
+`intake.*` with `kit.*`, `clipboard.*`, `draft.*`, and the buffer's writers under `text.*`) and the facades
+`@studio/k7-wasm/{paths,buffer,intake,kit,clipboard,draft}`; `song-edit/docs/buffer.md` holds the choices. Gone from TypeScript: `bufferReads`,
+`clipWindowText`, `rackBuilder`, `projectPaths`, `editorPaths`, `localTargets`, `openInEditor`, `sequenceEdit`, `moduleBehind`, `scalarField`,
+`curveDraft`, `clipboard`, the editor's `cursor.ts`, the scans of `entityValues`, `previewTriggers` and `sliceSymbols`, and `noteGrid/notes.ts`'s
+read and write. What stays, and what moves it:
+
+| module | why it stays |
+|---|---|
+| `presetOrder.ts` | an order for people is the browser's collator; the module has no locale table |
+| `clipFiles.ts`' `fileClip`, `timelineDrop.ts`' `dropReport` and `videoTake.ts`' `pickVideoMime` | the upload round trips, a sentence in the page's words, and `MediaRecorder` |
+| `sliceSymbols.ts`' colours and extension, `entityValues.ts` and `previewTriggers.ts`' span mapping | CodeMirror's own edits decide where a span now sits |
+| the resolvers of a typed name (`resolveEntry`, `resolveEditorFile`...) in `k7-wasm/src/paths.ts` | scoring is one `fuzzyScores` call per pool; the tie between equal scores is the collator's |
+| `norm` | a one-line string replace the path rules' callers loop over |
+| `RackBuilder.tsx`' sentences | Rust answers `rb.*` message keys and their parameters |
+
+Two behaviours differ on purpose from the TypeScript they replace, neither reachable from the page's own calls: a clip window written
+from a non-finite `from` deletes the key (the old write failed on the printer and left the text), and `@meta/constructor` is no input
+(the old lookup found the prototype's own `constructor`). A dropped file's accents are folded by the page before Rust reads the name.
+The proofs: the old TypeScript tests (17 files, 196 tests) first ran unchanged against the Rust calls through shims, then became
+Rust tests (55 in `song-edit/tests`, 17 in `k7x`, 11 through the ABI in `k7-wasm`). A differential then ran main's frozen twins against the
+facades on 2,011,229 generated inputs (1,173,543 of them answering something) over 84 functions: path kinds with the loose dot, the case
+fold of an entity file, JavaScript whitespace in `headTokens`, scalar fields with escapes, resolvers over random pools, a clip window
+read and written on random grids, slice racks with quoted and astral names, the buffer's reads, drop plans over accented and
+slash-ridden names, the rack builder's sentences and kit text, the clipboard, curve drafts with half-typed times, 80,000 random and
+27,899 real-file prefixes of the cursor scan, tokens and ▶ lines through random CodeMirror edits, and the note grid's seam; no
+difference but the two above. The bed does not drive the rack builder's pad drops, so those rest on the shims and the differential.
 
 **Tests.** A moved function's TS tests become Rust `#[test]`s with the same inputs and expected
 values; a large table becomes a JSON vector file the Rust test reads. During the milestone the TS

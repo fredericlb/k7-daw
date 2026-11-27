@@ -69,7 +69,7 @@ completion is asked for.
 
 ## Where the cursor sits in a .k7x file
 
-`src/k7x/cursor.ts` is a scan of the text before the cursor, not a parse, because completion runs
+`apps/k7-daw-wasm/k7x/src/cursor.rs` (`@studio/k7-wasm/buffer`) is a scan of the text before the cursor, not a parse, because completion runs
 on text the k7x parser refuses — an open bracket, a half-typed key. The scan only needs the
 brackets still open: a call's `(` makes the cursor that key's value, `{` an object's keys until
 `:`, `[` a list's items, and a word at a value position the head of a chain whose keys sit under

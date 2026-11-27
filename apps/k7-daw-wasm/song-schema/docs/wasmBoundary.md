@@ -74,7 +74,7 @@ the resolved curve.
 
 | op or export | args → answer | called |
 |---|---|---|
-| `curve.preview` | `{spec, num, den, n?, playhead?}` → `CurvePreview` | per draft change by the curve editor (`apps/k7-daw-frontend/src/curveDraft.ts`): one call where it made three |
+| `curve.preview` | `{spec, num, den, n?, playhead?}` → `CurvePreview` | per draft change by the curve editor (`@studio/k7-wasm/draft`): one call where it made three |
 | `curve.open` | `{spec, num, den, n?}` → `{handle, preview}` | once per spec by the graph's curve card (`apps/k7-daw-frontend/packages/ui-chains-react/src/widgets/Spark.tsx`) |
 | `k7_curve_playhead` | `handle, beat` → x, y or none | every frame, every card, while the song plays |
 | `curve.close` | `{handle}` → `null` | when the card unmounts or its spec changes |

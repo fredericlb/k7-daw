@@ -23,4 +23,4 @@ pub use print::{
 pub use scope::Scope;
 pub use sugared::{Sugar, SugarPart, apply_sugared};
 pub use tree::{EntryTree, MapTree, Tree};
-pub use value::{Value, js_number, js_trim, json_text, same};
+pub use value::{Value, is_js_space, js_number, js_trim, json_text, same};

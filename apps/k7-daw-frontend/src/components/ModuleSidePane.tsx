@@ -3,6 +3,7 @@
 // and edited — side by side. A small self-contained editor (its own buffer, its own autosave),
 // because the popin's main pane is THE editor instance and its undo history must stay its own.
 
+import { rackKeyOf, toProjectRelative } from "@studio/k7-wasm/paths";
 import { showToast } from "@studio/project-shell/toast";
 import { useAutosave } from "@studio/ui-editor/autosave";
 import type { FileContent, Hints } from "@studio/web-protocol";
@@ -10,7 +11,6 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { api } from "../api";
 import type { SetStatus } from "../hooks/useLogs";
 import { m } from "../paraglide/messages.js";
-import { rackKeyOf, toProjectRelative } from "../projectPaths";
 import { rackSliceRanges, setSliceWindow } from "../sliceSymbols";
 import type { PreviewReq, WebClip, WebProject } from "../types";
 import { EditorPane } from "./EditorPane";

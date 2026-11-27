@@ -2,8 +2,8 @@
 // menu item runs (see EditorHandle), including the confirm a delete asks for; the `fs` verbs
 // take TREE ENTRIES, folders included, where `ui file` takes only what the editor can open.
 
+import { headTokens, resolveEntry } from "@studio/k7-wasm/paths";
 import type { PaletteArg } from "../../components/CommandBar";
-import { headTokens, resolveEntry } from "../../localTargets";
 import { m } from "../../paraglide/messages.js";
 import type { LocalCommand, LocalCtx } from "./context";
 

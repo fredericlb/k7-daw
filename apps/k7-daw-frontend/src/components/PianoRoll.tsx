@@ -8,6 +8,12 @@
 // Drawn by the Editor bottom panel and, when a clip is clicked, where the graph is (ClipView).
 
 import {
+  copyNotes,
+  droppedCount,
+  notesInRegion,
+  pasteNotes,
+} from "@studio/k7-wasm/clipboard";
+import {
   cellBox,
   colSpan,
   groupOffset,
@@ -34,12 +40,6 @@ import {
   useRef,
   useState,
 } from "react";
-import {
-  copyNotes,
-  droppedCount,
-  notesInRegion,
-  pasteNotes,
-} from "../clipboard";
 import { clipLoop, playedZone } from "../clipLoop";
 import type { MenuCtx } from "../contextMenu";
 import type { ClipGridHandle, OnGridSelection } from "../gridCaret";

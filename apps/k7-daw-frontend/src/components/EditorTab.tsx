@@ -8,8 +8,36 @@
 import { redo, redoDepth, undo, undoDepth } from "@codemirror/commands";
 import { Transaction } from "@codemirror/state";
 import type { EditorView } from "@codemirror/view";
+import {
+  clipWindowBand,
+  NO_READS,
+  readBuffer,
+  readScalarField,
+} from "@studio/k7-wasm/buffer";
 import { LIBRARIES_DIR } from "@studio/k7-wasm/consts";
-import { editVideo, listVideoPlacements } from "@studio/k7-wasm/text";
+import {
+  allEntries,
+  fileStem,
+  findUseRack,
+  inActiveProject,
+  isAudioClipFile,
+  isClipFile,
+  isSeqFile,
+  isTrackFile,
+  isVideoTrackFile,
+  moduleBehind,
+  norm,
+  projectDir,
+  rackKeyOf,
+  resolveGutterSource,
+  textFiles,
+  toProjectRelative,
+} from "@studio/k7-wasm/paths";
+import {
+  editClipWindow,
+  editVideo,
+  listVideoPlacements,
+} from "@studio/k7-wasm/text";
 import { askConfirm } from "@studio/project-shell/ask";
 import { isStaleWrite } from "@studio/project-shell/files";
 import { showToast } from "@studio/project-shell/toast";
@@ -36,36 +64,12 @@ import {
   useState,
 } from "react";
 import { api } from "../api";
-import { NO_READS, readBuffer } from "../bufferReads";
 import { chainOps, filterOps, processLine } from "../clipOps";
-import { clipWindowBand, setClipWindowText } from "../clipWindowText";
-import {
-  allEntries,
-  findUseRack,
-  gridOf,
-  isAudioClipFile,
-  resolveGutterSource,
-  textFiles,
-} from "../editorPaths";
 import { useDiskSync } from "../hooks/useDiskSync";
 import { useDocPerRevision } from "../hooks/useDocPerRevision";
 import { type LibraryAssemblyRow, libraryOfPath } from "../libraryTree";
-import { moduleBehind } from "../moduleBehind";
 import { m } from "../paraglide/messages.js";
-import {
-  fileStem,
-  inActiveProject,
-  isClipFile,
-  isSeqFile,
-  isTrackFile,
-  isVideoTrackFile,
-  norm,
-  projectDir,
-  rackKeyOf,
-  toProjectRelative,
-} from "../projectPaths";
 import { movedTheTree, movedTheVocabulary } from "../reloadScope";
-import { readScalarField } from "../scalarField";
 import { type EditFocus, keepIfSame } from "../shellEquality";
 import { rackSliceRanges, setSliceWindow } from "../sliceSymbols";
 import { useShell, useVerbs } from "../state/shellStore";
@@ -115,6 +119,13 @@ export interface EditorHandle {
   /** Re-read the module LIBRARIES — on the handle, because the other writer of one is the module builder upstairs. */
   refreshLibraries: () => void;
 }
+
+/** The grid a clip's window is read and written on, defaulted rather than optional: an edge spelled in SECONDS needs no grid at all. */
+const gridOf = (p: WebProject | null | undefined) => ({
+  tempo: p?.tempo || 120,
+  num: p?.timeSigNumerator || 4,
+  den: p?.timeSigDenominator || 4,
+});
 
 // The hints before the first answer: every list empty, so completion offers nothing rather than failing.
 /** The placements a picture lane's text lists; none while it does not read. */
@@ -294,7 +305,7 @@ function EditorTabView({
     const stem = fileStem(p);
     const item: MinimapItem | null =
       // A file of ANOTHER project in this workspace points at nothing here: the minimap draws the
-      // one the engine holds, and its ids are that project's — projectPaths.ts.
+      // one the engine holds, and its ids are that project's — @studio/k7-wasm/paths.
       !file || file.binary || !inActiveProject(p, activeProject)
         ? null
         : isClipFile(p) || isSeqFile(p)
@@ -1447,11 +1458,13 @@ function EditorTabView({
                             if (!file || file.binary) return;
                             const next =
                               symbol === "clip" && canWindowEdit
-                                ? setClipWindowText(
-                                    file.content,
-                                    from,
-                                    to,
-                                    gridOf(audioClip?.project),
+                                ? editTextBy(file.content, (t) =>
+                                    editClipWindow(
+                                      t,
+                                      from,
+                                      to,
+                                      gridOf(audioClip?.project),
+                                    ),
                                   )
                                 : setSliceWindow(
                                     file.content,

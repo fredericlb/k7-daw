@@ -330,14 +330,14 @@ Two smaller rules, both the timeline's:
 coordinates relative to the rectangle's corner, so the copy's START lands where the caret is and every
 note keeps its distance from it. On the ROLL a paste keeps each note's own **pitch** and takes only the
 time from the caret: you click where the phrase should go, and a melody or a drum pattern pasted
-elsewhere is the same phrase, not one transposed to whichever row the click fell on. `src/clipboard.ts` is the arithmetic,
+elsewhere is the same phrase, not one transposed to whichever row the click fell on. `apps/k7-daw-wasm/song-edit/src/clipboard.rs` is the arithmetic (`@studio/k7-wasm/clipboard`),
 pure and tested.
 
 **With no rectangle drawn, the caret is one.** A caret is already pointing at something, so it is
 treated as the smallest rectangle there is: one cell in a grid — the note or step under it — and
 on a lane, where the unit is a clip rather than a grid step, the **placement** under it, taken
 over its own length. `cellBox` in `gridCaret.ts` is the grid half; `TimelineTab`'s `copy` is the
-lane half, and both feed the same `clipboard.ts` path a drawn rectangle feeds.
+lane half, and both feed the same clipboard path a drawn rectangle feeds.
 
 That matters rather than being a nicety: answering a `v` rectangle and nothing else, with a key
 *conditional on one being drawn*, means selecting an event by clicking it and pressing Ctrl+C does
@@ -402,7 +402,7 @@ shell's side because the pane is what knows which notes or events the box holds.
 Four `sequence notes …` verbs — remove, transpose, quantize, velocity — take a rectangle rather
 than one note, which is why they are plural. Their address is the box the roll already draws:
 two keys inclusive and a half-open beat span, and a note is in when it STARTS inside, which is
-`notesInRegion` in `clipboard.ts` — the rule stated once, so copying and deleting cannot disagree
+`notes_in_region` in `clipboard.rs` — the rule stated once, so copying and deleting cannot disagree
 about the same box.
 
 Each is **one pass over the file** and therefore one journal entry.

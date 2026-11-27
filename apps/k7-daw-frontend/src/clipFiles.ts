@@ -4,34 +4,21 @@
 // A name already taken by DIFFERENT bytes is not reused: the clip gets the next free id. See
 // apps/k7-daw-frontend/docs/timeline.md, "Same name, different file".
 
-import { parse } from "@studio/k7-wasm/k7x";
+import {
+  candidateIds,
+  clipDecl,
+  declaredSource,
+  MAX_SUFFIX,
+} from "@studio/k7-wasm/intake";
+import { projectDir } from "@studio/k7-wasm/paths";
 import { mediaUrl } from "@studio/project-shell/fileApi";
 import { api } from "./api";
-import { projectDir } from "./projectPaths";
-import { clipDecl } from "./timelineDrop";
 
 /** What filing one clip did — the id it was filed under, and `reused` when that clip was already there with these bytes. */
 export interface FiledClip {
   id: string;
   reused: boolean;
 }
-
-/** How many `-n` suffixes are tried before giving up: a project holding fifty files called `take` has another problem. */
-const MAX_SUFFIX = 50;
-
-/** The `source` a declaration names, or null when it has none or does not read. */
-export function declaredSource(text: string): string | null {
-  try {
-    const source = parse(text).source;
-    return typeof source === "string" ? source : null;
-  } catch {
-    return null;
-  }
-}
-
-/** The candidate ids for `id`, in order: itself, then `id-2`, `id-3`… */
-export const candidateIds = (id: string, n = MAX_SUFFIX): string[] =>
-  Array.from({ length: n }, (_, i) => (i === 0 ? id : `${id}-${i + 1}`));
 
 /** How many bytes a drop or a take carries, whichever form it arrives in. */
 const sizeOfBytes = (b: Blob | ArrayBuffer): number =>

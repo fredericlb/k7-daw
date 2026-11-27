@@ -3,20 +3,25 @@
 // A second reader mistake: an answer is the operation's value itself; only an error has a wrapper, and the status says which.
 
 pub mod address;
+pub mod buffer;
 pub mod chains;
+pub mod clipboard;
 pub mod curve;
 pub mod desk;
+pub mod draft;
 pub mod engine;
 pub mod eyes;
 pub mod fields;
 pub mod file;
 pub mod gesture;
 pub mod git;
+pub mod intake;
 pub mod k7x;
 pub mod k7x_edit;
 pub mod media;
 pub mod module;
 pub mod panel;
+pub mod paths;
 pub mod picture;
 pub mod reads;
 pub mod records;
@@ -25,6 +30,7 @@ pub mod schema;
 pub mod song;
 pub mod stems;
 pub mod text;
+pub mod text_buffer;
 pub mod text_desk;
 pub mod text_lane;
 pub mod timecode;
@@ -104,6 +110,11 @@ impl Session {
             "text" => text::dispatch(decode(input)?, out),
             "widget" | "flow" | "lane" | "bindings" | "place" | "graph" => chains::dispatch(decode(input)?, out),
             "schema" => schema::dispatch(decode(input)?, out),
+            "buffer" => buffer::dispatch(decode(input)?, out),
+            "clipboard" => clipboard::dispatch(decode(input)?, out),
+            "draft" => draft::dispatch(decode(input)?, out),
+            "intake" | "kit" => intake::dispatch(decode(input)?, out),
+            "paths" => paths::dispatch(decode(input)?, out),
             "timecode" => timecode::dispatch(decode(input)?, out),
             "fields" => fields::dispatch(decode(input)?, out),
             "module" => module::dispatch(decode(input)?, out),

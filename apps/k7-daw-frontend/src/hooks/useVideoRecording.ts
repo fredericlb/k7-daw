@@ -6,6 +6,12 @@
 
 import type { EngineStore } from "@studio/engine-browser/store";
 import { lensOpener } from "@studio/k7-plugins/video/camera/opener";
+import {
+  extForMime,
+  fileStamp,
+  placeLine,
+  takeId,
+} from "@studio/k7-wasm/intake";
 import { useUnsavedGuard } from "@studio/ui-editor/unsaved";
 import { type Lens, releaseLens } from "@studio/ui-eyes/camera";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -19,7 +25,6 @@ import {
   recoverSpools,
   type Spool,
 } from "../takeSpool";
-import { extForMime, fileStamp, placeLine, takeId } from "../videoTake";
 
 export function useVideoRecording(opts: {
   store: EngineStore;

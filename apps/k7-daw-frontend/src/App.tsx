@@ -18,10 +18,12 @@ import {
   preloadOutputPicture,
   ViewportTab,
 } from "@studio/k7-plugins/video";
+import type { MaybeClipboard } from "@studio/k7-wasm/clipboard";
 import { type PendingEdit, pendingOf } from "@studio/k7-wasm/edit";
 import { commandNameOf as nameOfLine } from "@studio/k7-wasm/menu";
 // The leaf with no `node:fs` in it — a browser may ask what a path names without dragging the loader in.
 import { moduleKeyFromPath } from "@studio/k7-wasm/module";
+import { resolveEditorFile } from "@studio/k7-wasm/paths";
 import { beatsToPosition, parsePosition } from "@studio/k7-wasm/timecode";
 import type { ReferenceTrack } from "@studio/k7-wasm/types";
 import { orderCommands, prefsView, stepSentence } from "@studio/k7-wasm/ui";
@@ -69,7 +71,6 @@ import { useAndroidBusy } from "./androidBusy";
 import { aiOrganize, api, engines, moduleStore } from "./api";
 import { go } from "./appNav";
 import { DECK_ICONS, STUDIO_ICONS } from "./chainsIcons";
-import type { MaybeClipboard } from "./clipboard";
 import { shownNamers } from "./clipNameWords";
 import type { CommandPrefs } from "./commandPrefs";
 import type { AudioClipHandle } from "./components/AudioClipPanel";
@@ -179,7 +180,6 @@ import { midiInDeviceFor, midiInLanes, midiInPlayed } from "./midiIn";
 import { MultiTap } from "./multiTap";
 import { chainRefFromCreate, wireCommand } from "./nodeInsert";
 import { noteSpans } from "./noteSpans";
-import { resolveEditorFile } from "./openInEditor";
 import { buildPaletteCommands, commandNameOf, makeListArg } from "./palette";
 import { PaneVisible } from "./paneVisible";
 import { m } from "./paraglide/messages.js";
@@ -200,6 +200,7 @@ import { createStatusLine } from "./statusLine";
 import { eventIdOf, takesEventOf } from "./takes";
 // The shell's BROWSER composition point: k7's builtin plugins register their pane drawers here (apps/k7-daw-frontend/packages/k7-sdk/docs/sdk.md).
 import "./plugins";
+import { entityFile, fileStem } from "@studio/k7-wasm/paths";
 import { cfg } from "@studio/project-shell/fileApi";
 import { Backdrop } from "@studio/ui/backdrop";
 import { placeSubject, placeWarnings, warningSentence } from "./engineWarnings";
@@ -216,7 +217,6 @@ import { isProblemLine } from "./logProblems";
 import { guardSwipeBack } from "./noSwipeBack";
 import { PaneBoundary } from "./PaneBoundary";
 import { useAnyPopin, usePopin } from "./popins";
-import { entityFile, fileStem } from "./projectPaths";
 import { SHELL_SCOPE } from "./queries/client";
 import { graphQuery, seedGraph, useGraph } from "./queries/graph";
 import { rememberCommand } from "./recentCommands";

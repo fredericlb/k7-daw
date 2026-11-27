@@ -972,7 +972,7 @@ glyph, because a 14px icon in a 4px row is not a smaller icon, it is a different
 Dragging audio or video off the OS onto a lane does three things, in the one order that works:
 the bytes go into the project's `clips/`, a `clips/<id>.k7x` declares each one, and only then is
 each **placed** — `event add` on an audio lane, `picture add` on a picture one. The plan is
-`timelineDrop.ts`, pure; the three round trips are `hooks/useTimelineDrop.ts`.
+`apps/k7-daw-wasm/song-edit/src/intake.rs`, pure (`@studio/k7-wasm/intake`); the three round trips are `hooks/useTimelineDrop.ts`.
 
 A drop onto a picture lane then runs **`picture sound <lane>`**, once per lane, so the footage
 arrives with its sound, which the engine plays on the picture lane's own `#audio` half
@@ -1007,7 +1007,7 @@ refuses to clobber (409).
 Phones and recorders reuse names — `IMG_0042.MOV`, `Recording.m4a` — and every name in a script a
 path cannot hold reduces to `clip`. So a taken id is reused only when it is the SAME file: its
 declaration names this very upload, and the file on disk is these bytes, measured by size (a `HEAD`
-on `/media`, `clipFiles.ts`). Anything else — other bytes, `song.mp3` after `song.wav` — files under
+on `/media`, `src/clipFiles.ts`). Anything else — other bytes, `song.mp3` after `song.wav` — files under
 the next free id, `kick-2`, and the drop places THAT. Placing the old file under a new file's name
 was the one outcome worse than a duplicate: the song plays something else and nothing says so. Two
 files of one drop that reduce to the same id are told apart before anything is uploaded
@@ -1025,7 +1025,7 @@ later, rather than on top of it.
 Audio walks down the lanes instead: the first on the lane you dropped on, the second on the next
 lane **of the same kind**, and so on — stems dropped together are parts played at once. What runs
 out of lanes is left rather than folded onto the last one — the rule a paste already follows
-(`clipboard.ts`). A file of the *other* kind is declared without being placed, since it is in the
+(`clipboard.rs`). A file of the *other* kind is declared without being placed, since it is in the
 project wanting a lane rather than being a mistake. Only a file that is neither audio nor video is
 refused outright, by name.
 

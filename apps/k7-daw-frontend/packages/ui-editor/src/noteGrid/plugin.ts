@@ -7,7 +7,8 @@ import {
   type WindowSpan,
   windowSpan,
 } from "@studio/k7-wasm/rules";
-import { type Note, type RackInfo, readSequence, writeNotes } from "./notes";
+import { readSequenceNotes, writeSequenceNotes } from "@studio/k7-wasm/text";
+import type { Note, RackInfo } from "./notes";
 import { renderRollGrid } from "./RollGrid";
 
 function buildRackInfo(rack: RackHint | undefined): RackInfo | null {
@@ -64,7 +65,7 @@ export function mountSeqGrid(
   let content = opts.content;
 
   const render = () => {
-    const read = readSequence(content);
+    const read = readSequenceNotes(content);
     if (!read) {
       container.replaceChildren(); // no notes list (not a sequence) — leave it empty
       return;
@@ -72,7 +73,7 @@ export function mountSeqGrid(
     const { notes, useRack } = read;
     const rack = buildRackInfo(useRack ? opts.racks?.[useRack] : undefined);
     const onGridChange = (next: Note[]) => {
-      const text = writeNotes(content, next);
+      const text = writeSequenceNotes(content, next);
       if (text !== null) opts.onChange(text);
     };
     const win = docWindow(content, notes);

@@ -1,9 +1,8 @@
 // entityValues.ts (k7x) — every string value of a k7x buffer with the field it belongs to, and every key with its path.
-// A value inside a list inherits the key above it, so `in(["melody", "pad"])` resolves like `track("melody")`.
-// Shared by entityLinks and the tests; the offsets are the buffer's own, quotes excluded (docs/k7xTree.md).
+// The scan is Rust's (`buffer.value_tokens`); what stays here is the buffer's own coordinates: a span mapped through the edits since the tree (docs/k7xTree.md).
 
 import type { EditorState } from "@codemirror/state";
-import { walk } from "@studio/k7-wasm/k7x";
+import { keyTokensOf, valueTokensOf } from "@studio/k7-wasm/buffer";
 import { mapSpan, treeOf } from "./tree";
 
 export interface ValueToken {
@@ -26,14 +25,9 @@ export interface KeyToken {
   key: string;
 }
 
-const keysOf = (path: readonly (string | number)[]): string[] =>
-  path.filter((s): s is string => typeof s === "string");
-
 /** The inner span of a quoted source: one character off each end when the text is quoted. */
-const inner = (text: string, from: number, to: number) =>
-  /^["'`]/.test(text.slice(from, from + 1)) && to - from >= 2
-    ? { from: from + 1, to: to - 1 }
-    : { from, to };
+const inner = (quoted: boolean, from: number, to: number) =>
+  quoted ? { from: from + 1, to: to - 1 } : { from, to };
 
 /** Every non-empty string value in the buffer, with its field and the keys above it. */
 export function valueTokens(state: EditorState): ValueToken[] {
@@ -41,19 +35,16 @@ export function valueTokens(state: EditorState): ValueToken[] {
   if (!tree.root) return [];
   const text = state.doc.toString();
   const out: ValueToken[] = [];
-  walk(tree.root, (node, path) => {
-    if (node.kind !== "scalar" || typeof node.value !== "string") return;
-    if (!node.value) return;
-    const span = mapSpan(tree, node.start, node.end, text);
-    if (!span) return;
-    const keys = keysOf(path);
+  for (const t of valueTokensOf(tree.text)) {
+    const span = mapSpan(tree, t.from, t.to, text);
+    if (!span) continue;
     out.push({
-      ...inner(text, span.from, span.to),
-      field: keys.length ? keys[keys.length - 1] : null,
-      keyPath: keys,
-      value: node.value,
+      ...inner(t.quoted, span.from, span.to),
+      field: t.field,
+      keyPath: t.keyPath,
+      value: t.value,
     });
-  });
+  }
   return out;
 }
 
@@ -63,15 +54,14 @@ export function keyTokens(state: EditorState): KeyToken[] {
   if (!tree.root) return [];
   const text = state.doc.toString();
   const out: KeyToken[] = [];
-  walk(tree.root, (_node, path, entry) => {
-    if (!entry?.key) return;
-    const span = mapSpan(tree, entry.keyStart, entry.keyEnd, text);
-    if (!span) return;
+  for (const t of keyTokensOf(tree.text)) {
+    const span = mapSpan(tree, t.from, t.to, text);
+    if (!span) continue;
     out.push({
-      ...inner(text, span.from, span.to),
-      keyPath: keysOf(path).slice(0, -1),
-      key: entry.key,
+      ...inner(t.quoted, span.from, span.to),
+      keyPath: t.keyPath,
+      key: t.key,
     });
-  });
+  }
   return out.sort((a, b) => a.from - b.from);
 }

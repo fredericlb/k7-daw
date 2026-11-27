@@ -2,8 +2,8 @@
 // Which keys and values apply is the schema's answer either way; only WHERE the cursor sits differs (docs/completion.md).
 
 import type { Completion, CompletionSource } from "@codemirror/autocomplete";
+import { k7xCursor } from "@studio/k7-wasm/buffer";
 import type { YamlVocabulary } from "../yaml/completions";
-import { k7xCursor } from "./cursor";
 
 /** Complete keys and values in a k7x document: a value is a string, so it is offered quoted unless typed inside quotes. */
 export function k7xCompletions(vocab: YamlVocabulary): CompletionSource {

@@ -1,19 +1,20 @@
 import { EditorState } from "@codemirror/state";
 import { EditorView } from "@codemirror/view";
+import { wasmReady } from "@studio/k7-wasm/boot";
 import { parse } from "@studio/k7-wasm/k7x";
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 import {
   SLICE_COLORS,
-  scanSlices,
   setSliceWindow,
   sliceColor,
   sliceSymbolColors,
 } from "./sliceSymbols";
 
-// A slice drag rewrites two NUMBERS of a k7x rack, so what is pinned is that the spans address them and the write touches nothing else.
+// Where the symbols sit and what a drag rewrites are Rust's and pinned there; what stays here is the editor's colours and the buffer write's seam.
 
-/** Cut the doc at a reported range: what a colour would cover. */
-const at = (doc: string, r: [number, number]) => doc.slice(r[0], r[1]);
+beforeAll(async () => {
+  await wasmReady();
+});
 
 const SLICE = `// a break, sliced
 rack({
@@ -26,69 +27,13 @@ rack({
 })
 `;
 
-describe("scanSlices", () => {
-  it("finds each symbol with its window", () => {
-    const out = scanSlices(SLICE);
-    expect(out?.map((s) => [s.symbol, s.from, s.to])).toEqual([
-      ["BD", 0, 0.5],
-      ["SN", 0.5, 1.25],
-    ]);
-  });
-
-  it("reports ranges that address exactly the number, nothing around it", () => {
-    const out = scanSlices(SLICE) ?? [];
-    expect(at(SLICE, out[0].fromRange)).toBe("0");
-    expect(at(SLICE, out[0].toRange)).toBe("0.5");
-    expect(at(SLICE, out[1].fromRange)).toBe("0.5");
-    expect(at(SLICE, out[1].toRange)).toBe("1.25");
-  });
-
-  it("reports the symbol NAME's range, quotes excluded", () => {
-    const out = scanSlices(SLICE) ?? [];
-    expect(at(SLICE, out[0].keyRange)).toBe("BD");
-    const quoted = SLICE.replace("SN:", '"S N":');
-    expect(at(quoted, (scanSlices(quoted) ?? [])[1].keyRange)).toBe("S N");
-  });
-
-  it("is null for a samples rack — those symbols name clips, not windows", () => {
-    expect(
-      scanSlices(
-        'rack({ rack_type: "samples", symbols: { BD: { note: 36, clip: "kick" } } })\n',
-      ),
-    ).toBe(null);
-  });
-
-  it("is null for a module with no rack at all", () => {
-    expect(scanSlices('plugin({ type: "internal", name: "4osc" })\n')).toBe(
-      null,
-    );
-  });
-
-  it("is null while the file doesn't parse, rather than guessing", () => {
-    expect(
-      scanSlices('rack({ rack_type: "slice", symbols: { BD: { from:'),
-    ).toBe(null);
-  });
-});
-
 describe("setSliceWindow — what the dock's drag commits", () => {
-  it("rewrites exactly the two numbers, one line, and the comment stays", () => {
+  it("rewrites the two numbers of one symbol in the buffer's text", () => {
     const out = setSliceWindow(SLICE, "SN", 0.5374, 1) ?? "";
     expect(out).toContain("SN: { note: 38, from: 0.5374, to: 1 },");
-    expect(out).toContain("BD: { note: 36, from: 0, to: 0.5 },");
-    expect(out).toContain("// a break, sliced");
-    const changed = out
-      .split("\n")
-      .filter((l, i) => l !== SLICE.split("\n")[i]);
-    expect(changed).toHaveLength(1);
-  });
-
-  it("rounds to 0.1 ms, so a drag's float noise never lands in the file", () => {
-    const out = setSliceWindow(SLICE, "BD", 0.123456789, 0.5) ?? "";
     expect(
-      (parse(out).rack as { symbols: { BD: { from: number } } }).symbols.BD
-        .from,
-    ).toBe(0.1235);
+      (parse(out).rack as { symbols: { BD: { to: number } } }).symbols.BD.to,
+    ).toBe(0.5);
   });
 
   it("answers null when the buffer holds no such symbol — a stray drag writes nowhere", () => {

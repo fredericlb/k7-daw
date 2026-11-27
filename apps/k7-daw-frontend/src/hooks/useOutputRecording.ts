@@ -6,6 +6,8 @@
 
 import { type EngineStore, useStoreState } from "@studio/engine-browser/store";
 import { OUTPUT_RECORDER_ID } from "@studio/k7-wasm/consts";
+import { extForMime, fileStamp } from "@studio/k7-wasm/intake";
+import { projectDir } from "@studio/k7-wasm/paths";
 import { mediaUrl } from "@studio/project-shell/fileApi";
 import { useUnsavedGuard } from "@studio/ui-editor/unsaved";
 import type { RealtimeDriver } from "@studio/ui-eyes/realtime";
@@ -13,14 +15,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { api } from "../api";
 import { downloadBlob } from "../downloadBlob";
 import { m } from "../paraglide/messages.js";
-import { projectDir } from "../projectPaths";
 import {
   closeTake,
   openScratch,
   recordToSpool,
   type Spool,
 } from "../takeSpool";
-import { extForMime, fileStamp } from "../videoTake";
 
 /** The frame rate the picture is captured at: the viewport's own would be the compositor's, which follows the screen. */
 const CAPTURE_FPS = 30;

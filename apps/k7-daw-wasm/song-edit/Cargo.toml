@@ -15,7 +15,13 @@ song = { path = "../song", default-features = false }
 sha2 = "0.10"
 song-schema = { path = "../song-schema" }
 indexmap = "2"
+serde = { version = "1", features = ["derive"] }
 serde_json = { version = "1", features = ["preserve_order", "float_roundtrip"] }
+ts-rs = { version = "11", optional = true }
+
+[features]
+# The types of the intake, the kit and the buffer reads cross the ABI: k7-wasm's bindings binary writes their TypeScript.
+ts = ["dep:ts-rs", "song-schema/ts", "song/ts"]
 
 [dev-dependencies]
 

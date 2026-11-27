@@ -11,6 +11,8 @@ mod schema_tests;
 #[cfg(test)]
 mod tests;
 #[cfg(test)]
+mod tests_buffer;
+#[cfg(test)]
 mod tests_desk;
 #[cfg(test)]
 mod tests_eyes;

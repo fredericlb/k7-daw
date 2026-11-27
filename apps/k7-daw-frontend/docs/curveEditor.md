@@ -53,7 +53,7 @@ Ctrl+Z. Switching the shape keeps the other shapes' fields in the draft, so tryi
 coming back to the sine loses nothing — only what is picked is written.
 
 **The preview is one call into Rust, and the graph's curve card draws the same picture** — `draftPreview`
-in `apps/k7-daw-frontend/src/curveDraft.ts` asks `@studio/k7-wasm` for the span, the lines and the grid at once.
+in `@studio/k7-wasm/draft` (`apps/k7-daw-wasm/song-edit/src/curve_draft.rs`) asks `@studio/k7-wasm` for the span, the lines and the grid at once.
 The module is `apps/k7-daw-wasm/song-schema`, the arithmetic the compiler bakes the
 engine's breakpoints with, in `apps/k7-daw-wasm/song/src/curves/bake.rs`; a sweep holds the preview to it
 (`apps/k7-daw-wasm/song-schema/docs/wasmBoundary.md`). A drawn curve is drawn over its bars (four, or past the last point), an oscillator over
@@ -86,5 +86,5 @@ The list is `src/components/CurveConditions.tsx`.
 **An existing curve opens from the graph.** `WebGraph.curves` carries each curve's whole definition
 (`spec`), so `ui curve <id>` reads it there rather than locating and parsing the file in the browser.
 
-The draft and its arithmetic are `src/curveDraft.ts`, tested on their own; the popin is
+The draft and its arithmetic are `apps/k7-daw-wasm/song-edit/src/curve_draft.rs`, reached through `@studio/k7-wasm/draft` and tested in Rust; the popin is
 `src/components/CurveEditor.tsx`, the picture `CurvePlot.tsx`, the envelope's knobs are the kit's `Knob` (`@studio/ui/knob`), Shift-dragged finely.

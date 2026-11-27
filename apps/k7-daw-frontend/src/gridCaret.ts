@@ -1,7 +1,7 @@
 // gridCaret.ts — what the shell drives on whichever clip grid is on screen, and the grid's own cell types.
 // The caret's and the rectangle's arithmetic is apps/k7-daw-wasm/gesture/src/grid_caret.rs, reached through @studio/k7-wasm/gesture.
 
-import type { Clipboard, MaybeClipboard } from "./clipboard";
+import type { Clipboard, MaybeClipboard } from "@studio/k7-wasm/clipboard";
 
 export type {
   GridBounds,

@@ -6,6 +6,8 @@ import type {
   AssemblyOp,
   AssemblyRead,
   ChainRead,
+  ClipGrid,
+  GridNote,
   K7Change,
   LibraryPins,
   MixCues,
@@ -13,6 +15,7 @@ import type {
   MixViewRead,
   PlaylistOp,
   SequenceOp,
+  SequenceRead,
   TextAnswer,
   VideoOp,
   VideoPlacement,
@@ -23,12 +26,14 @@ export type {
   AssemblyRead,
   ChainItem,
   ChainRead,
+  GridNote,
   LibraryPins,
   MixCues,
   MixOp,
   MixViewRead,
   PlaylistOp,
   SequenceOp,
+  SequenceRead,
   VideoOp,
   VideoPlacement,
 } from "./types/index.ts";
@@ -124,3 +129,37 @@ export const applySugared = (
   text: string,
   after: unknown,
 ): TextEdit => edited(ask("sugar_apply", { path, text, after }));
+
+/** Sets a clip file's `from` and `to` in the buffer, each edge spelled as it was; `from` 0 and a `to` of null leave their key out. */
+export const editClipWindow = (
+  text: string,
+  from: number,
+  to: number,
+  grid: ClipGrid,
+): TextEdit =>
+  edited(
+    ask("clip_window", {
+      text,
+      from: Number.isFinite(from) ? from : undefined,
+      to: Number.isFinite(to) ? to : undefined,
+      grid,
+    }),
+  );
+
+/** Sets one slice symbol's `from` and `to` in the buffer; `results` is false when no such symbol is there. */
+export const editSliceWindow = (
+  text: string,
+  symbol: string,
+  from: number,
+  to: number,
+): TextEdit => edited(ask("slice_window", { text, symbol, from, to }));
+
+/** A sequence's notes, expanded, and the rack it names; null while the text does not read or has no notes list. */
+export const readSequenceNotes = (text: string): SequenceRead | null =>
+  ask("notes_read", { text });
+
+/** The whole notes list written back, each note's pad effects carried from the note it was; null when the text does not read. */
+export const writeSequenceNotes = (
+  text: string,
+  notes: readonly GridNote[],
+): string | null => ask("notes_write", { text, notes: [...notes] });

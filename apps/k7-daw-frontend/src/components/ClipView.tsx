@@ -5,15 +5,15 @@
 // reaches it: `WaveformView` draws the same picture and can act on none of it.
 
 import { DEFAULT_METRONOME_LEVEL } from "@studio/engine-protocol/build";
+import { fileStem } from "@studio/k7-wasm/paths";
 import { seqWindowFromText, windowSpan } from "@studio/k7-wasm/rules";
+import { readSequenceNotes } from "@studio/k7-wasm/text";
 import { beatsToPosition } from "@studio/k7-wasm/timecode";
 import { DockStatus } from "@studio/ui/editor-dock";
-import { readSequence } from "@studio/ui-editor/note-grid/notes";
 import { type ComponentProps, type RefObject, useMemo } from "react";
 import type { MenuCtx } from "../contextMenu";
 import type { ClipGridHandle, OnGridSelection } from "../gridCaret";
 import { m } from "../paraglide/messages.js";
-import { fileStem } from "../projectPaths";
 import { usePaneGraph } from "../queries/graph";
 import { usePaneProjectDoc } from "../queries/projectDoc";
 import { rackFor, rackKeyNames } from "../rackFor";
@@ -120,7 +120,7 @@ function SeqRoll({
   const { doc: project } = usePaneProjectDoc(useReloadKey());
 
   const notes = useMemo<WebNote[]>(() => {
-    return (readSequence(content)?.notes ?? []).map((n) => ({
+    return (readSequenceNotes(content)?.notes ?? []).map((n) => ({
       time: n.t,
       duration: n.d,
       key: n.k,

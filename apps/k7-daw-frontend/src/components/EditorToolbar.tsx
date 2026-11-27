@@ -2,6 +2,12 @@
 // popin, the module builder's door, a clip's Process menu, and the save state in place of a Save
 // button — and the bar that says the open file moved on disk under an edit. See ../../docs/shell.md.
 
+import {
+  isClipFile,
+  isModuleFile,
+  moduleFileOf,
+  projectDir,
+} from "@studio/k7-wasm/paths";
 import { docPattern } from "@studio/k7-wasm/schema";
 import { Button } from "@studio/ui/button";
 import { Choice } from "@studio/ui/choice";
@@ -16,12 +22,6 @@ import { cn } from "@studio/ui/lib/utils";
 import { Spinner } from "@studio/ui/spinner";
 import type { AutosaveStatus } from "@studio/ui-editor/autosave";
 import { m } from "../paraglide/messages.js";
-import {
-  isClipFile,
-  isModuleFile,
-  moduleFileOf,
-  projectDir,
-} from "../projectPaths";
 import { needsAttention, saveLabel } from "../saveLabel";
 import type { FileContent, FileNode } from "../types";
 import { Breadcrumb } from "./Breadcrumb";

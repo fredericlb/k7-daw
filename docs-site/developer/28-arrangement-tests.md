@@ -28,12 +28,12 @@ source comment or a Markdown page naming a file that is not there.
 | `timelineMode.test.ts` | The derived mode, and that a pending move does not own the keys. |
 | `clipboard.test.ts` | Copy by start, relative coordinates, paste offsets, dropped rows, carried placement fields. |
 | `pendingEdits.test.ts` | What each one-shot line predicts on the lanes. |
-| `timelineDrop.test.ts`, `fileDrop.test.ts` | Kind by extension, clip id, lane walking, the report; accepting a file drag. |
+| `apps/k7-daw-wasm/song-edit/tests/buffer_intake.rs`, `fileDrop.test.ts` | Kind by extension, clip id, lane walking; accepting a file drag. |
 | `rows.test.ts` | The row model. |
 | `historyMarks.test.ts` | Which lanes, clips and nodes a journal step lights. |
 | `keys.test.ts`, `commandFill.test.ts`, `contextMenu.test.ts` | Key resolution, caret answers for a command's form, menus derived from the catalogue. |
 | `clipLoop.test.ts`, `clipInstances.test.ts`, `clipEnvelope.test.ts`, `clipOps.test.ts` | Loop marks, repeated material, the activity envelope, process lines. |
-| `curveDraft.test.ts` | Curve drafts. |
+| `apps/k7-daw-wasm/song-edit/tests/clipboard_draft.rs` | Curve drafts and the clipboard. |
 | `takes.test.ts`, `midiTake.test.ts`, `midiIn.test.ts`, `webmidi.test.ts`, `laneInput.test.ts`, `transportPanic.test.ts` | Comp lines and spans, the take counter, MIDI take trimming, device matching, inputs, the double-stop panic. |
 | `exportArgs.test.ts`, `gainTrim.test.ts`, `mixerStrips.test.ts`, `apps/k7-daw-frontend/src/mastering/controls.test.ts` | Export syntax, the Fix trim, strip order, the mastering control list. |
 
