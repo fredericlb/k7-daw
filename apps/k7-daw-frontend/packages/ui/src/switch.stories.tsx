@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Label } from "./label";
 import { Switch } from "./switch";
 
 const meta = {
@@ -21,7 +20,7 @@ export const Labelled: Story = {
   render: () => (
     <div className="flex items-center gap-3">
       <Switch id="metronome" defaultChecked />
-      <Label htmlFor="metronome">Metronome</Label>
+      <label htmlFor="metronome">Metronome</label>
     </div>
   ),
 };

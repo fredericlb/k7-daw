@@ -12,14 +12,12 @@
     "./badge": "./src/badge.tsx",
     "./card": "./src/card.tsx",
     "./input": "./src/input.tsx",
-    "./textarea": "./src/textarea.tsx",
     "./file-tree": "./src/file-tree.tsx",
     "./icons": "./src/icons.ts",
     "./icons/all": "./src/icons-all.ts",
     "./popover": "./src/popover.tsx",
     "./select": "./src/select.tsx",
     "./switch": "./src/switch.tsx",
-    "./table": "./src/table.tsx",
     "./tabs": "./src/tabs.tsx",
     "./dialog": "./src/dialog.tsx",
     "./dev-perf": "./src/dev-perf.ts",
@@ -43,8 +41,6 @@
     "./track-toggle": "./src/track-toggle.tsx",
     "./backdrop": "./src/backdrop.tsx",
     "./checkbox": "./src/checkbox.tsx",
-    "./field": "./src/field.tsx",
-    "./label": "./src/label.tsx",
     "./modal-focus": "./src/modal-focus.ts"
   },
   "peerDependencies": {

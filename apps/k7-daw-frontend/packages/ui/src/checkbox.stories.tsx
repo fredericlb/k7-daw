@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Checkbox } from "./checkbox";
-import { Label } from "./label";
 
 const meta = {
   title: "UI/Checkbox",
@@ -21,7 +20,7 @@ export const WithLabel: Story = {
   render: (args) => (
     <div className="flex items-center gap-2">
       <Checkbox {...args} id="notify" />
-      <Label htmlFor="notify">Notify collaborators</Label>
+      <label htmlFor="notify">Notify collaborators</label>
     </div>
   ),
 };

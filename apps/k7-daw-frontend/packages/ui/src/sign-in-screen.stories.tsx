@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { Button } from "./button";
-import { FrediverseMark } from "./frediverse-mark";
 import { LocalePicker } from "./locale-picker";
 import { SignInScreen } from "./sign-in-screen";
 
@@ -14,7 +13,6 @@ const meta = {
     description: "Sign in with your frediverse account.",
     children: (
       <Button className="w-full">
-        <FrediverseMark size="sm" />
         Sign in
       </Button>
     ),
