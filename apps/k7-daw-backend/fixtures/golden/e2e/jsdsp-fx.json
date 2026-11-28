@@ -1,9 +1,6 @@
 {
   "project": "e2e/jsdsp-fx.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "jsdsp-fx",
     "tempo": 120,
@@ -43,38 +40,10 @@
             "loopStart": 0,
             "loopEnd": 0,
             "notes": [
-              {
-                "time": 0,
-                "duration": 1,
-                "key": 60,
-                "vel": 0.8,
-                "channel": 0,
-                "rel": 1
-              },
-              {
-                "time": 1,
-                "duration": 1,
-                "key": 64,
-                "vel": 1,
-                "channel": 0,
-                "rel": 1
-              },
-              {
-                "time": 2,
-                "duration": 1,
-                "key": 67,
-                "vel": 1,
-                "channel": 0,
-                "rel": 1
-              },
-              {
-                "time": 3,
-                "duration": 1,
-                "key": 72,
-                "vel": 1,
-                "channel": 0,
-                "rel": 1
-              }
+              {"time": 0, "duration": 1, "key": 60, "vel": 0.8, "channel": 0, "rel": 1},
+              {"time": 1, "duration": 1, "key": 64, "vel": 1, "channel": 0, "rel": 1},
+              {"time": 2, "duration": 1, "key": 67, "vel": 1, "channel": 0, "rel": 1},
+              {"time": 3, "duration": 1, "key": 72, "vel": 1, "channel": 0, "rel": 1}
             ]
           }
         ],
@@ -87,9 +56,7 @@
             "presetSave": "<ws>/e2e/jsdsp-fx.k7/nodes/lead.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@output-volume": 0
-            }
+            "params": {"@output-volume": 0}
           },
           {
             "id": "melody:chorus",
@@ -100,14 +67,7 @@
             "presetSave": "<ws>/e2e/jsdsp-fx.k7/nodes/chorus.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "Depth": 3,
-              "Speed": 1,
-              "Width": 0.5,
-              "@mix": 0.5,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"Depth": 3, "Speed": 1, "Width": 0.5, "@mix": 0.5, "@input-volume": 0, "@output-volume": 0}
           },
           {
             "id": "melody:phaser",
@@ -118,14 +78,7 @@
             "presetSave": "<ws>/e2e/jsdsp-fx.k7/nodes/phaser.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "Depth": 5,
-              "Rate": 0.4,
-              "Feedback": 0.7,
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"Depth": 5, "Rate": 0.4, "Feedback": 0.7, "@mix": 1, "@input-volume": 0, "@output-volume": 0}
           },
           {
             "id": "melody:drive",
@@ -136,12 +89,7 @@
             "presetSave": "<ws>/e2e/jsdsp-fx.k7/nodes/drive.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "Amount": 0,
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"Amount": 0, "@mix": 1, "@input-volume": 0, "@output-volume": 0}
           },
           {
             "id": "melody:wah",
@@ -152,11 +100,7 @@
             "presetSave": "<ws>/e2e/jsdsp-fx.k7/nodes/wah.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -165,16 +109,9 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
@@ -184,12 +121,8 @@
           {
             "module": "lead",
             "uses": "@workspace/instruments/fourosc",
-            "stage": [
-              "@output-volume"
-            ],
-            "events": [
-              "note-on"
-            ],
+            "stage": ["@output-volume"],
+            "events": ["note-on"],
             "category": "instruments",
             "emits": "audio",
             "stub": false,
@@ -198,58 +131,20 @@
               "cols": 4,
               "rows": 2,
               "widgets": {
-                "title": {
-                  "type": "label",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "text": "4OSC"
-                },
-                "cutoff": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 1,
-                  "label": "Cutoff",
-                  "bind": "Filter Freq",
-                  "min": 0,
-                  "max": 135.076232
-                },
-                "res": {
-                  "type": "knob",
-                  "col": 1,
-                  "row": 1,
-                  "label": "Res",
-                  "bind": "Filter Resonance",
-                  "min": 0,
-                  "max": 100
-                },
-                "level": {
-                  "type": "slider",
-                  "col": 2,
-                  "row": 1,
-                  "label": "Level",
-                  "bind": "Level",
-                  "min": -100,
-                  "max": 0
-                }
+                "title": {"type": "label", "col": 0, "row": 0, "colSpan": 2, "text": "4OSC"},
+                "cutoff": {"type": "knob", "col": 0, "row": 1, "label": "Cutoff", "bind": "Filter Freq", "min": 0, "max": 135.076232},
+                "res": {"type": "knob", "col": 1, "row": 1, "label": "Res", "bind": "Filter Resonance", "min": 0, "max": 100},
+                "level": {"type": "slider", "col": 2, "row": 1, "label": "Level", "bind": "Level", "min": -100, "max": 0}
               }
             },
             "params": {},
-            "defaults": {
-              "Filter Freq": 69,
-              "Filter Resonance": 0.5,
-              "Level": 0
-            },
+            "defaults": {"Filter Freq": 69, "Filter Resonance": 0.5, "Level": 0},
             "pluginId": "melody:lead"
           },
           {
             "module": "chorus",
             "uses": "@k7-core/audio/chorus",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -258,138 +153,34 @@
               "cols": 8,
               "rows": 4,
               "widgets": {
-                "mod_section": {
-                  "type": "group",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 6,
-                  "rowSpan": 2,
-                  "label": "MOD",
-                  "color": "#3d7dff26"
-                },
-                "speed": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Speed",
-                  "bind": "Speed",
-                  "min": 0,
-                  "max": 10
-                },
-                "depth": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Depth",
-                  "bind": "Depth",
-                  "min": 0,
-                  "max": 20
-                },
-                "width": {
-                  "type": "knob",
-                  "col": 4,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Width",
-                  "bind": "Width",
-                  "min": 0,
-                  "max": 1
-                },
-                "sweep": {
-                  "type": "lcdscreen",
-                  "col": 0,
-                  "row": 2,
-                  "colSpan": 8,
-                  "rowSpan": 2
-                }
+                "mod_section": {"type": "group", "col": 0, "row": 0, "colSpan": 6, "rowSpan": 2, "label": "MOD", "color": "#3d7dff26"},
+                "speed": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Speed", "bind": "Speed", "min": 0, "max": 10},
+                "depth": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Depth", "bind": "Depth", "min": 0, "max": 20},
+                "width": {"type": "knob", "col": 4, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Width", "bind": "Width", "min": 0, "max": 1},
+                "sweep": {"type": "lcdscreen", "col": 0, "row": 2, "colSpan": 8, "rowSpan": 2}
               },
               "script": "// chorus-classic — the delay sweep over one second: Depth milliseconds either side, Speed cycles a second.\n\nconst SWEEP = \"#3d7dff\";\nconst GRID = \"#6b6b6b\";\nconst FONT = \"8px ui-monospace, monospace\";\nconst MAX_DEPTH = 20;\n\nconst clamp01 = (v) => (v < 0 ? 0 : v > 1 ? 1 : v);\n\nexport default {\n  sweep(lcd) {\n    const { ctx, width: W, height: H, params, output, state, now } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n\n    const pad = 6;\n    const top = 13;\n    const w = Math.max(1, W - pad * 2);\n    const h = Math.max(1, H - top - pad);\n    const mid = top + h / 2;\n    const amp = h / 2 - 1;\n\n    const speed = Math.max(0, params[\"Speed\"] ?? 1);\n    const depth = Math.max(0, Math.min(MAX_DEPTH, params[\"Depth\"] ?? 3));\n\n    ctx.strokeStyle = GRID;\n    ctx.lineWidth = 1;\n    ctx.beginPath();\n    ctx.moveTo(pad, Math.round(mid) + 0.5);\n    ctx.lineTo(W - pad, Math.round(mid) + 0.5);\n    ctx.stroke();\n\n    // The sweep scrolls while audio leaves the module, and stands still otherwise.\n    const out = Array.isArray(output) && output.length ? clamp01(output[output.length - 1] ?? 0) : 0;\n    state.out = (state.out ?? 0) * 0.7 + out * 0.3;\n    const phase = state.out > 0.02 ? (now / 1000) * speed : 0;\n    ctx.strokeStyle = SWEEP;\n    ctx.beginPath();\n    for (let i = 0; i <= w; i++) {\n      const y = mid - Math.sin(2 * Math.PI * (speed * (i / w) + phase)) * amp * (depth / MAX_DEPTH);\n      if (i === 0) ctx.moveTo(pad + i, y);\n      else ctx.lineTo(pad + i, y);\n    }\n    ctx.stroke();\n\n    ctx.fillStyle = SWEEP;\n    ctx.textAlign = \"left\";\n    ctx.fillText(`${speed.toFixed(1)} HZ`, pad, 9);\n    ctx.fillStyle = GRID;\n    ctx.textAlign = \"right\";\n    ctx.fillText(`±${depth.toFixed(1)} MS  1 S`, W - pad, 9);\n  },\n};\n",
               "vertical": {
                 "cols": 4,
                 "rows": 6,
                 "widgets": {
-                  "mod_section": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 4,
-                    "rowSpan": 4,
-                    "label": "MOD",
-                    "color": "#3d7dff26"
-                  },
-                  "speed": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Speed",
-                    "bind": "Speed",
-                    "min": 0,
-                    "max": 10
-                  },
-                  "depth": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Depth",
-                    "bind": "Depth",
-                    "min": 0,
-                    "max": 20
-                  },
-                  "width": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Width",
-                    "bind": "Width",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "sweep": {
-                    "type": "lcdscreen",
-                    "col": 0,
-                    "row": 4,
-                    "colSpan": 4,
-                    "rowSpan": 2
-                  }
+                  "mod_section": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 4, "label": "MOD", "color": "#3d7dff26"},
+                  "speed": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Speed", "bind": "Speed", "min": 0, "max": 10},
+                  "depth": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Depth", "bind": "Depth", "min": 0, "max": 20},
+                  "width": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Width", "bind": "Width", "min": 0, "max": 1},
+                  "sweep": {"type": "lcdscreen", "col": 0, "row": 4, "colSpan": 4, "rowSpan": 2}
                 }
               }
             },
-            "engines": [
-              "airwindows",
-              "chorus-ensemble",
-              "classic",
-              "ensemble",
-              "melt",
-              "one-knob"
-            ],
+            "engines": ["airwindows", "chorus-ensemble", "classic", "ensemble", "melt", "one-knob"],
             "engine": "classic",
-            "params": {
-              "Depth": 3,
-              "Speed": 1,
-              "Width": 0.5,
-              "@mix": 0.5
-            },
+            "params": {"Depth": 3, "Speed": 1, "Width": 0.5, "@mix": 0.5},
             "pluginId": "melody:chorus"
           },
           {
             "module": "phaser",
             "uses": "@k7-core/audio/phaser",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -398,118 +189,31 @@
               "cols": 6,
               "rows": 2,
               "widgets": {
-                "phase_section": {
-                  "type": "group",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 6,
-                  "rowSpan": 2,
-                  "label": "PHASE",
-                  "color": "#3d7dff26"
-                },
-                "rate": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Rate",
-                  "bind": "Rate",
-                  "min": 0,
-                  "max": 10
-                },
-                "depth": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Depth",
-                  "bind": "Depth",
-                  "min": 0,
-                  "max": 10
-                },
-                "feedback": {
-                  "type": "knob",
-                  "col": 4,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Fdbk",
-                  "bind": "Feedback",
-                  "min": 0,
-                  "max": 1
-                }
+                "phase_section": {"type": "group", "col": 0, "row": 0, "colSpan": 6, "rowSpan": 2, "label": "PHASE", "color": "#3d7dff26"},
+                "rate": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Rate", "bind": "Rate", "min": 0, "max": 10},
+                "depth": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Depth", "bind": "Depth", "min": 0, "max": 10},
+                "feedback": {"type": "knob", "col": 4, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Fdbk", "bind": "Feedback", "min": 0, "max": 1}
               },
               "vertical": {
                 "cols": 4,
                 "rows": 4,
                 "widgets": {
-                  "phase_section": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 4,
-                    "rowSpan": 4,
-                    "label": "PHASE",
-                    "color": "#3d7dff26"
-                  },
-                  "rate": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Rate",
-                    "bind": "Rate",
-                    "min": 0,
-                    "max": 10
-                  },
-                  "depth": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Depth",
-                    "bind": "Depth",
-                    "min": 0,
-                    "max": 10
-                  },
-                  "feedback": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Fdbk",
-                    "bind": "Feedback",
-                    "min": 0,
-                    "max": 1
-                  }
+                  "phase_section": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 4, "label": "PHASE", "color": "#3d7dff26"},
+                  "rate": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Rate", "bind": "Rate", "min": 0, "max": 10},
+                  "depth": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Depth", "bind": "Depth", "min": 0, "max": 10},
+                  "feedback": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Fdbk", "bind": "Feedback", "min": 0, "max": 1}
                 }
               }
             },
-            "engines": [
-              "classic",
-              "one-knob"
-            ],
+            "engines": ["classic", "one-knob"],
             "engine": "classic",
-            "params": {
-              "Depth": 5,
-              "Rate": 0.4,
-              "Feedback": 0.7
-            },
+            "params": {"Depth": 5, "Rate": 0.4, "Feedback": 0.7},
             "pluginId": "melody:phaser"
           },
           {
             "module": "drive",
             "uses": "@k7-core/audio/overdrive",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -518,84 +222,28 @@
               "cols": 6,
               "rows": 3,
               "widgets": {
-                "amount": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Amount",
-                  "bind": "Amount",
-                  "min": 0,
-                  "max": 100
-                },
-                "curve": {
-                  "type": "lcdscreen",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 4,
-                  "rowSpan": 2
-                }
+                "amount": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Amount", "bind": "Amount", "min": 0, "max": 100},
+                "curve": {"type": "lcdscreen", "col": 2, "row": 0, "colSpan": 4, "rowSpan": 2}
               },
               "script": "// overdrive — one screen: the exact transfer curve dsp.k7x runs, tanh(drive·x) with its makeup gain.\n\nconst DRIVE = \"#ff6a1a\";\nconst GRID = \"#6b6b6b\";\nconst INK = \"#ffffff\";\nconst FONT = \"8px ui-monospace, monospace\";\n\nconst clamp01 = (v) => (v < 0 ? 0 : v > 1 ? 1 : v);\n\n/** The curve for Amount 0..100, the same law and makeup ramp as dsp.k7x. */\nfunction shaper(amount) {\n  const drive = 1 + 49 * clamp01(amount / 100);\n  const makeup = 1.313 + (1 - 1.313) * clamp01((drive - 1) / 3);\n  return { drive, fn: (x) => Math.tanh(drive * x) * makeup };\n}\n\nexport default {\n  curve(lcd) {\n    const { ctx, width: W, height: H, params, input } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n\n    const pad = 5;\n    const top = 13;\n    const h = Math.max(1, H - top - pad);\n    const w = Math.max(1, Math.min(W - pad * 2, h * 2.2));\n    const x0 = (W - w) / 2;\n    const { drive, fn } = shaper(Number(params[\"Amount\"] ?? 0));\n    const px = (x) => x0 + ((x + 1) / 2) * w;\n    const py = (y) => top + h - ((Math.max(-1.2, Math.min(1.2, y)) + 1) / 2) * h;\n\n    ctx.strokeStyle = GRID;\n    ctx.lineWidth = 1;\n    ctx.beginPath();\n    ctx.moveTo(px(-1), py(-1));\n    ctx.lineTo(px(1), py(1));\n    ctx.moveTo(x0, Math.round(py(0)) + 0.5);\n    ctx.lineTo(x0 + w, Math.round(py(0)) + 0.5);\n    ctx.stroke();\n\n    ctx.strokeStyle = DRIVE;\n    ctx.beginPath();\n    for (let i = 0; i <= 64; i++) {\n      const x = -1 + (2 * i) / 64;\n      if (i === 0) ctx.moveTo(px(x), py(fn(x)));\n      else ctx.lineTo(px(x), py(fn(x)));\n    }\n    ctx.stroke();\n\n    // Where the loudest recent input sits on the curve, when there is any.\n    const n = Array.isArray(input) ? input.length : 0;\n    if (n > 0) {\n      const a = Math.max(0, Math.min(1, Number(input[n - 1]) || 0));\n      if (a > 1e-4) {\n        ctx.fillStyle = INK;\n        ctx.beginPath();\n        ctx.arc(px(a), py(fn(a)), 2.5, 0, Math.PI * 2);\n        ctx.fill();\n      }\n    }\n\n    ctx.textAlign = \"left\";\n    ctx.fillStyle = DRIVE;\n    ctx.fillText(`DRIVE x${drive.toFixed(drive < 10 ? 1 : 0)}`, pad, 9);\n  },\n};\n",
               "vertical": {
                 "cols": 4,
                 "rows": 5,
                 "widgets": {
-                  "amount": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Amount",
-                    "bind": "Amount",
-                    "min": 0,
-                    "max": 100
-                  },
-                  "curve": {
-                    "type": "lcdscreen",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 4,
-                    "rowSpan": 2
-                  }
+                  "amount": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Amount", "bind": "Amount", "min": 0, "max": 100},
+                  "curve": {"type": "lcdscreen", "col": 0, "row": 2, "colSpan": 4, "rowSpan": 2}
                 }
               }
             },
-            "engines": [
-              "bass-drive",
-              "coils",
-              "cojones",
-              "density",
-              "drive",
-              "dyno",
-              "facet",
-              "focus",
-              "high-impact",
-              "loud",
-              "mojo",
-              "nc-17",
-              "one-knob",
-              "purest-drive",
-              "spiral",
-              "spiral-2",
-              "un-box"
-            ],
+            "engines": ["bass-drive", "coils", "cojones", "density", "drive", "dyno", "facet", "focus", "high-impact", "loud", "mojo", "nc-17", "one-knob", "purest-drive", "spiral", "spiral-2", "un-box"],
             "engine": "one-knob",
-            "params": {
-              "Amount": 0
-            },
+            "params": {"Amount": 0},
             "pluginId": "melody:drive"
           },
           {
             "module": "wah",
             "uses": "@k7-core/audio/auto-wah",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -604,218 +252,32 @@
               "cols": 10,
               "rows": 4,
               "widgets": {
-                "filter": {
-                  "type": "group",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 4,
-                  "rowSpan": 4,
-                  "label": "FILTER",
-                  "color": "#3d7dff26"
-                },
-                "low": {
-                  "type": "fader",
-                  "col": 0,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "Low",
-                  "bind": "Low",
-                  "min": 60,
-                  "max": 8000,
-                  "curve": "log"
-                },
-                "high": {
-                  "type": "fader",
-                  "col": 1,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "High",
-                  "bind": "High",
-                  "min": 60,
-                  "max": 8000,
-                  "curve": "log"
-                },
-                "res": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Res",
-                  "bind": "Resonance",
-                  "min": 0.5,
-                  "max": 20,
-                  "curve": "log"
-                },
-                "down": {
-                  "type": "toggle",
-                  "col": 2,
-                  "row": 2,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Down",
-                  "bind": "Direction"
-                },
-                "env": {
-                  "type": "group",
-                  "col": 4,
-                  "row": 0,
-                  "colSpan": 6,
-                  "rowSpan": 2,
-                  "label": "ENV",
-                  "color": "#3ec96b26"
-                },
-                "sens": {
-                  "type": "knob",
-                  "col": 4,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Sens",
-                  "bind": "Sensitivity",
-                  "min": 0,
-                  "max": 1
-                },
-                "attack": {
-                  "type": "knob",
-                  "col": 6,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Attack",
-                  "bind": "Attack",
-                  "min": 0.1,
-                  "max": 200,
-                  "curve": "log"
-                },
-                "release": {
-                  "type": "knob",
-                  "col": 8,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Release",
-                  "bind": "Release",
-                  "min": 1,
-                  "max": 1000,
-                  "curve": "log"
-                },
-                "sweep": {
-                  "type": "lcdscreen",
-                  "col": 4,
-                  "row": 2,
-                  "colSpan": 6,
-                  "rowSpan": 2
-                }
+                "filter": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 4, "label": "FILTER", "color": "#3d7dff26"},
+                "low": {"type": "fader", "col": 0, "row": 0, "rowSpan": 4, "label": "Low", "bind": "Low", "min": 60, "max": 8000, "curve": "log"},
+                "high": {"type": "fader", "col": 1, "row": 0, "rowSpan": 4, "label": "High", "bind": "High", "min": 60, "max": 8000, "curve": "log"},
+                "res": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Res", "bind": "Resonance", "min": 0.5, "max": 20, "curve": "log"},
+                "down": {"type": "toggle", "col": 2, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Down", "bind": "Direction"},
+                "env": {"type": "group", "col": 4, "row": 0, "colSpan": 6, "rowSpan": 2, "label": "ENV", "color": "#3ec96b26"},
+                "sens": {"type": "knob", "col": 4, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Sens", "bind": "Sensitivity", "min": 0, "max": 1},
+                "attack": {"type": "knob", "col": 6, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Attack", "bind": "Attack", "min": 0.1, "max": 200, "curve": "log"},
+                "release": {"type": "knob", "col": 8, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Release", "bind": "Release", "min": 1, "max": 1000, "curve": "log"},
+                "sweep": {"type": "lcdscreen", "col": 4, "row": 2, "colSpan": 6, "rowSpan": 2}
               },
               "script": "// auto-wah — the reach from Low to High, and the band pass where the playing level puts it now.\n\nconst FONT = \"8px ui-monospace, monospace\";\nconst BLUE = \"#3d7dff\";\nconst GREEN = \"#3ec96b\";\nconst ORANGE = \"#ff6a1a\";\nconst GREY = \"#6b6b6b\";\nconst WHITE = \"#ffffff\";\nconst F_LO = 20;\nconst F_HI = 20000;\n\nconst num = (v, d) => (typeof v === \"number\" && Number.isFinite(v) ? v : d);\nconst clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);\nconst hz = (f) => (f >= 1000 ? `${(f / 1000).toFixed(f >= 10000 ? 0 : 1)}K` : `${Math.round(f)}`);\n\n// dB of the analog section (b0 s^2 + b1 s + b2) / (a0 s^2 + a1 s + a2) at s = jx.\nfunction sect(b, a, x) {\n  const nr = b[2] - b[0] * x * x;\n  const ni = b[1] * x;\n  const dr = a[2] - a[0] * x * x;\n  const di = a[1] * x;\n  const n = Math.max(1e-30, nr * nr + ni * ni);\n  const d = Math.max(1e-30, dr * dr + di * di);\n  return 10 * Math.log10(n / d);\n}\n\nconst LP = (q) => [[0, 0, 1], [1, 1 / Math.max(0.01, q), 1]];\nconst HP = (q) => [[1, 0, 0], [1, 1 / Math.max(0.01, q), 1]];\nconst BP = (q) => [[0, 1 / Math.max(0.01, q), 0], [1, 1 / Math.max(0.01, q), 1]];\nconst NOTCH = (q) => [[1, 0, 1], [1, 1 / Math.max(0.01, q), 1]];\n\n// dB of one second-order shape at frequency f for a corner fc.\nconst shape = (s, f, fc) => sect(s[0], s[1], f / Math.max(1e-6, fc));\n\nfunction glass(ctx, W, H) {\n  ctx.fillStyle = \"#000\";\n  ctx.fillRect(0, 0, W, H);\n  ctx.font = FONT;\n  ctx.lineWidth = 1;\n}\n\nconst frame = (W, H) => ({ x: 6, y: 13, w: Math.max(1, W - 12), h: Math.max(1, H - 19) });\nconst xOf = (b, f) => b.x + (Math.log(clamp(f, F_LO, F_HI) / F_LO) / Math.log(F_HI / F_LO)) * b.w;\nconst fOf = (b, px) => F_LO * (F_HI / F_LO) ** ((px - b.x) / Math.max(1, b.w));\nconst yOf = (b, db, lo, hi) => b.y + (1 - (clamp(db, lo, hi) - lo) / Math.max(1e-6, hi - lo)) * b.h;\n\n// The 0 dB line and a tick at 100 Hz, 1 kHz and 10 kHz.\nfunction grid(ctx, b, lo, hi) {\n  ctx.strokeStyle = GREY;\n  ctx.beginPath();\n  const y0 = Math.round(yOf(b, 0, lo, hi)) + 0.5;\n  ctx.moveTo(b.x, y0);\n  ctx.lineTo(b.x + b.w, y0);\n  for (const f of [100, 1000, 10000]) {\n    const x = Math.round(xOf(b, f)) + 0.5;\n    ctx.moveTo(x, b.y + b.h - 3);\n    ctx.lineTo(x, b.y + b.h);\n  }\n  ctx.stroke();\n}\n\nfunction curve(ctx, b, dbAt, lo, hi, color) {\n  ctx.strokeStyle = color;\n  ctx.beginPath();\n  for (let px = b.x; px <= b.x + b.w; px++) {\n    const y = yOf(b, dbAt(fOf(b, px)), lo, hi);\n    if (px === b.x) ctx.moveTo(px, y);\n    else ctx.lineTo(px, y);\n  }\n  ctx.stroke();\n}\n\nfunction dot(ctx, x, y, color) {\n  ctx.fillStyle = color;\n  ctx.beginPath();\n  ctx.arc(x, y, 2.5, 0, Math.PI * 2);\n  ctx.fill();\n}\n\nfunction text(ctx, s, x, y, color, align) {\n  ctx.fillStyle = color;\n  ctx.textAlign = align;\n  ctx.fillText(s, x, y);\n}\n\nexport default {\n  sweep(lcd) {\n    const { ctx, width: W, height: H, params, input } = lcd;\n    glass(ctx, W, H);\n    const b = frame(W, H);\n    let lo = clamp(num(params[\"Low\"], 200), 60, 8000);\n    let hi = clamp(num(params[\"High\"], 2400), 60, 8000);\n    if (hi < lo) [lo, hi] = [hi, lo];\n    const sens = clamp(num(params[\"Sensitivity\"], 0.5), 0, 1);\n    const q = clamp(num(params[\"Resonance\"], 4), 0.5, 20);\n    const down = num(params[\"Direction\"], 0) >= 0.5;\n    // The playing level against the sensitivity's floor, as the DSP maps it: -60 dB turned up, -15 dB turned down.\n    const last = Array.isArray(input) && input.length ? clamp(num(input[input.length - 1], 0), 0, 1) : 0;\n    const envDb = 20 * Math.log10(Math.max(1e-6, last));\n    const floor = -60 + 45 * sens;\n    const up = clamp((envDb - floor) / Math.max(1e-6, -floor), 0, 1);\n    const travel = down ? 1 - up : up;\n    const fc = lo * (hi / lo) ** travel;\n    // The span the wah can reach, between its two ends.\n    const x0 = xOf(b, lo);\n    const x1 = xOf(b, hi);\n    ctx.fillStyle = \"#3d7dff26\";\n    ctx.fillRect(x0, b.y, Math.max(1, x1 - x0), b.h);\n    ctx.strokeStyle = BLUE;\n    ctx.beginPath();\n    ctx.moveTo(Math.round(x0) + 0.5, b.y);\n    ctx.lineTo(Math.round(x0) + 0.5, b.y + b.h);\n    ctx.moveTo(Math.round(x1) + 0.5, b.y);\n    ctx.lineTo(Math.round(x1) + 0.5, b.y + b.h);\n    ctx.stroke();\n    grid(ctx, b, -30, 6);\n    curve(ctx, b, (f) => shape(BP(q), f, fc), -30, 6, ORANGE);\n    dot(ctx, xOf(b, fc), yOf(b, 0, -30, 6), GREEN);\n    text(ctx, down ? \"SWEEP DOWN\" : \"SWEEP UP\", b.x, 9, GREY, \"left\");\n    text(ctx, `${hz(fc)} HZ`, W - 6, 9, GREEN, \"right\");\n  },\n};\n",
               "vertical": {
                 "cols": 4,
                 "rows": 10,
                 "widgets": {
-                  "filter": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 4,
-                    "rowSpan": 4,
-                    "label": "FILTER",
-                    "color": "#3d7dff26"
-                  },
-                  "low": {
-                    "type": "fader",
-                    "col": 0,
-                    "row": 0,
-                    "rowSpan": 4,
-                    "label": "Low",
-                    "bind": "Low",
-                    "min": 60,
-                    "max": 8000,
-                    "curve": "log"
-                  },
-                  "high": {
-                    "type": "fader",
-                    "col": 1,
-                    "row": 0,
-                    "rowSpan": 4,
-                    "label": "High",
-                    "bind": "High",
-                    "min": 60,
-                    "max": 8000,
-                    "curve": "log"
-                  },
-                  "res": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Res",
-                    "bind": "Resonance",
-                    "min": 0.5,
-                    "max": 20,
-                    "curve": "log"
-                  },
-                  "down": {
-                    "type": "toggle",
-                    "col": 2,
-                    "row": 2,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Down",
-                    "bind": "Direction"
-                  },
-                  "env": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 4,
-                    "colSpan": 4,
-                    "rowSpan": 4,
-                    "label": "ENV",
-                    "color": "#3ec96b26"
-                  },
-                  "sens": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 4,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Sens",
-                    "bind": "Sensitivity",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "attack": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 4,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Attack",
-                    "bind": "Attack",
-                    "min": 0.1,
-                    "max": 200,
-                    "curve": "log"
-                  },
-                  "release": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 6,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Release",
-                    "bind": "Release",
-                    "min": 1,
-                    "max": 1000,
-                    "curve": "log"
-                  },
-                  "sweep": {
-                    "type": "lcdscreen",
-                    "col": 0,
-                    "row": 8,
-                    "colSpan": 4,
-                    "rowSpan": 2
-                  }
+                  "filter": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 4, "label": "FILTER", "color": "#3d7dff26"},
+                  "low": {"type": "fader", "col": 0, "row": 0, "rowSpan": 4, "label": "Low", "bind": "Low", "min": 60, "max": 8000, "curve": "log"},
+                  "high": {"type": "fader", "col": 1, "row": 0, "rowSpan": 4, "label": "High", "bind": "High", "min": 60, "max": 8000, "curve": "log"},
+                  "res": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Res", "bind": "Resonance", "min": 0.5, "max": 20, "curve": "log"},
+                  "down": {"type": "toggle", "col": 2, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Down", "bind": "Direction"},
+                  "env": {"type": "group", "col": 0, "row": 4, "colSpan": 4, "rowSpan": 4, "label": "ENV", "color": "#3ec96b26"},
+                  "sens": {"type": "knob", "col": 0, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "Sens", "bind": "Sensitivity", "min": 0, "max": 1},
+                  "attack": {"type": "knob", "col": 2, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "Attack", "bind": "Attack", "min": 0.1, "max": 200, "curve": "log"},
+                  "release": {"type": "knob", "col": 0, "row": 6, "colSpan": 2, "rowSpan": 2, "label": "Release", "bind": "Release", "min": 1, "max": 1000, "curve": "log"},
+                  "sweep": {"type": "lcdscreen", "col": 0, "row": 8, "colSpan": 4, "rowSpan": 2}
                 }
               }
             },
@@ -823,45 +285,15 @@
             "pluginId": "melody:wah"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
-      }
+      "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}]}
     },
-    "tracks": [
-      "melody"
-    ],
+    "tracks": ["melody"],
     "videoTracks": [],
-    "trackColors": {
-      "melody": "#8b8f98"
-    },
-    "trackSignals": {
-      "melody": "midi"
-    },
-    "trackClips": {
-      "melody": [
-        {
-          "ref": "melody",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "midi"
-        }
-      ]
-    },
+    "trackColors": {"melody": "#8b8f98"},
+    "trackSignals": {"melody": "midi"},
+    "trackClips": {"melody": [{"ref": "melody", "start": 0, "tc": "1:1", "len": 4, "kind": "midi"}]},
     "modules": {},
     "warnings": []
   },

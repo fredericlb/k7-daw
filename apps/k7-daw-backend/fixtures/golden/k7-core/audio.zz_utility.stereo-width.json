@@ -1,9 +1,6 @@
 {
   "project": "k7-core/audio.zz_utility.stereo-width.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "audio.zz_utility.stereo-width",
     "tempo": 120,
@@ -54,11 +51,7 @@
             "presetSave": "<ws>/k7-core/audio.zz_utility.stereo-width.k7/nodes/fx.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -104,11 +97,7 @@
             "presetSave": "<ws>/k7-core/audio.zz_utility.stereo-width.k7/nodes/fx-stereo-fx.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -154,11 +143,7 @@
             "presetSave": "<ws>/k7-core/audio.zz_utility.stereo-width.k7/nodes/fx-wider.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -167,16 +152,9 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
@@ -186,11 +164,7 @@
           {
             "module": "fx",
             "uses": "@k7-core/audio/zz_utility/stereo-width",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -199,45 +173,17 @@
               "cols": 4,
               "rows": 2,
               "widgets": {
-                "width": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Width",
-                  "bind": "Width",
-                  "min": 0,
-                  "max": 1
-                },
-                "center": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Center",
-                  "bind": "Center",
-                  "min": 0,
-                  "max": 1
-                }
+                "width": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Width", "bind": "Width", "min": 0, "max": 1},
+                "center": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Center", "bind": "Center", "min": 0, "max": 1}
               }
             },
-            "engines": [
-              "stereo-fx",
-              "wider"
-            ],
+            "engines": ["stereo-fx", "wider"],
             "engine": "wider",
             "params": {},
             "pluginId": "drums:fx"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-stereo-fx": {
         "from": "drums-stereo-fx",
@@ -245,11 +191,7 @@
           {
             "module": "fx-stereo-fx",
             "uses": "@k7-core/audio/zz_utility/stereo-width",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -258,95 +200,27 @@
               "cols": 6,
               "rows": 2,
               "widgets": {
-                "wide": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Wide",
-                  "bind": "Wide",
-                  "min": 0,
-                  "max": 1
-                },
-                "mono_bass": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Mono Bs",
-                  "bind": "MonoBs",
-                  "min": 0,
-                  "max": 1
-                },
-                "squish": {
-                  "type": "knob",
-                  "col": 4,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Squish",
-                  "bind": "CSquish",
-                  "min": 0,
-                  "max": 1
-                }
+                "wide": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Wide", "bind": "Wide", "min": 0, "max": 1},
+                "mono_bass": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Mono Bs", "bind": "MonoBs", "min": 0, "max": 1},
+                "squish": {"type": "knob", "col": 4, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Squish", "bind": "CSquish", "min": 0, "max": 1}
               },
               "vertical": {
                 "cols": 4,
                 "rows": 4,
                 "widgets": {
-                  "wide": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Wide",
-                    "bind": "Wide",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "mono_bass": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Mono Bs",
-                    "bind": "MonoBs",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "squish": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Squish",
-                    "bind": "CSquish",
-                    "min": 0,
-                    "max": 1
-                  }
+                  "wide": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Wide", "bind": "Wide", "min": 0, "max": 1},
+                  "mono_bass": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Mono Bs", "bind": "MonoBs", "min": 0, "max": 1},
+                  "squish": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Squish", "bind": "CSquish", "min": 0, "max": 1}
                 }
               }
             },
-            "engines": [
-              "stereo-fx",
-              "wider"
-            ],
+            "engines": ["stereo-fx", "wider"],
             "engine": "stereo-fx",
             "params": {},
             "pluginId": "drums-stereo-fx:fx-stereo-fx"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-wider": {
         "from": "drums-wider",
@@ -354,11 +228,7 @@
           {
             "module": "fx-wider",
             "uses": "@k7-core/audio/zz_utility/stereo-width",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -367,101 +237,28 @@
               "cols": 4,
               "rows": 2,
               "widgets": {
-                "width": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Width",
-                  "bind": "Width",
-                  "min": 0,
-                  "max": 1
-                },
-                "center": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Center",
-                  "bind": "Center",
-                  "min": 0,
-                  "max": 1
-                }
+                "width": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Width", "bind": "Width", "min": 0, "max": 1},
+                "center": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Center", "bind": "Center", "min": 0, "max": 1}
               }
             },
-            "engines": [
-              "stereo-fx",
-              "wider"
-            ],
+            "engines": ["stereo-fx", "wider"],
             "engine": "wider",
             "params": {},
             "pluginId": "drums-wider:fx-wider"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
-      }
+      "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}]}
     },
-    "tracks": [
-      "drums",
-      "drums-stereo-fx",
-      "drums-wider"
-    ],
+    "tracks": ["drums", "drums-stereo-fx", "drums-wider"],
     "videoTracks": [],
-    "trackColors": {
-      "drums": "#af1d26",
-      "drums-stereo-fx": "#dd322c",
-      "drums-wider": "#e57361"
-    },
-    "trackSignals": {
-      "drums": "audio",
-      "drums-stereo-fx": "audio",
-      "drums-wider": "audio"
-    },
+    "trackColors": {"drums": "#af1d26", "drums-stereo-fx": "#dd322c", "drums-wider": "#e57361"},
+    "trackSignals": {"drums": "audio", "drums-stereo-fx": "audio", "drums-wider": "audio"},
     "trackClips": {
-      "drums": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-stereo-fx": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-wider": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ]
+      "drums": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-stereo-fx": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-wider": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}]
     },
     "modules": {},
     "warnings": []

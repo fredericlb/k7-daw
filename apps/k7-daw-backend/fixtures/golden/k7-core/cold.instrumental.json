@@ -1,9 +1,6 @@
 {
   "project": "k7-core/cold.instrumental.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "cold.instrumental",
     "tempo": 120,
@@ -52,16 +49,9 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
@@ -71,13 +61,8 @@
           {
             "module": "fx",
             "uses": "@k7-core/cold/instrumental",
-            "modelDownload": {
-              "file": "htdemucs_fp16weights.onnx",
-              "url": "https://huggingface.co/StemSplitio/htdemucs-onnx/resolve/main/htdemucs_fp16weights.onnx"
-            },
-            "assets": {
-              "onnx": "htdemucs_fp16weights.onnx"
-            },
+            "modelDownload": {"file": "htdemucs_fp16weights.onnx", "url": "https://huggingface.co/StemSplitio/htdemucs-onnx/resolve/main/htdemucs_fp16weights.onnx"},
+            "assets": {"onnx": "htdemucs_fp16weights.onnx"},
             "category": "cold",
             "emits": "audio",
             "stub": false,
@@ -86,94 +71,31 @@
               "cols": 1,
               "rows": 1,
               "widgets": {
-                "drums": {
-                  "type": "label",
-                  "col": 0,
-                  "row": 0,
-                  "label": "drums"
-                },
-                "bass": {
-                  "type": "label",
-                  "col": 1,
-                  "row": 0,
-                  "label": "bass"
-                },
-                "other": {
-                  "type": "label",
-                  "col": 2,
-                  "row": 0,
-                  "label": "other"
-                },
-                "vocals": {
-                  "type": "label",
-                  "col": 3,
-                  "row": 0,
-                  "label": "vocals"
-                },
-                "instrumental": {
-                  "type": "label",
-                  "col": 0,
-                  "row": 0,
-                  "label": "instrumental"
-                }
+                "drums": {"type": "label", "col": 0, "row": 0, "label": "drums"},
+                "bass": {"type": "label", "col": 1, "row": 0, "label": "bass"},
+                "other": {"type": "label", "col": 2, "row": 0, "label": "other"},
+                "vocals": {"type": "label", "col": 3, "row": 0, "label": "vocals"},
+                "instrumental": {"type": "label", "col": 0, "row": 0, "label": "instrumental"}
               }
             },
-            "params": {
-              "onnx": "htdemucs_fp16weights.onnx"
-            }
+            "params": {"onnx": "htdemucs_fp16weights.onnx"}
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
-      }
+      "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}]}
     },
-    "tracks": [
-      "drums"
-    ],
+    "tracks": ["drums"],
     "videoTracks": [],
-    "trackColors": {
-      "drums": "#dd322c"
-    },
-    "trackSignals": {
-      "drums": "audio"
-    },
-    "trackClips": {
-      "drums": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ]
-    },
+    "trackColors": {"drums": "#dd322c"},
+    "trackSignals": {"drums": "audio"},
+    "trackClips": {"drums": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}]},
     "modules": {},
-    "warnings": [
-      "module 'fx': onnx 'htdemucs_fp16weights.onnx' is not in this module's assets/"
-    ],
+    "warnings": ["module 'fx': onnx 'htdemucs_fp16weights.onnx' is not in this module's assets/"],
     "issues": [
       {
         "code": "moduleAssetMissing",
-        "params": {
-          "module": "fx",
-          "param": "onnx",
-          "ref": "htdemucs_fp16weights.onnx"
-        },
+        "params": {"module": "fx", "param": "onnx", "ref": "htdemucs_fp16weights.onnx"},
         "text": "module 'fx': onnx 'htdemucs_fp16weights.onnx' is not in this module's assets/"
       }
     ]

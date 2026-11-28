@@ -1,9 +1,6 @@
 {
   "project": "k7-core/audio.zz_utility.de-esser.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "audio.zz_utility.de-esser",
     "tempo": 120,
@@ -54,11 +51,7 @@
             "presetSave": "<ws>/k7-core/audio.zz_utility.de-esser.k7/nodes/fx.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -104,11 +97,7 @@
             "presetSave": "<ws>/k7-core/audio.zz_utility.de-esser.k7/nodes/fx-de-bess.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -154,11 +143,7 @@
             "presetSave": "<ws>/k7-core/audio.zz_utility.de-esser.k7/nodes/fx-de-ess.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -167,16 +152,9 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
@@ -186,11 +164,7 @@
           {
             "module": "fx",
             "uses": "@k7-core/audio/zz_utility/de-esser",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -199,175 +173,35 @@
               "cols": 6,
               "rows": 4,
               "widgets": {
-                "detect": {
-                  "type": "group",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 4,
-                  "rowSpan": 2,
-                  "label": "DET",
-                  "color": "#3ec96b22"
-                },
-                "sense": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Sense",
-                  "bind": "Sense",
-                  "min": 0,
-                  "max": 1
-                },
-                "sharp": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Sharp",
-                  "bind": "Sharp",
-                  "min": 0,
-                  "max": 1
-                },
-                "cut": {
-                  "type": "group",
-                  "col": 0,
-                  "row": 2,
-                  "colSpan": 6,
-                  "rowSpan": 2,
-                  "label": "CUT",
-                  "color": "#ff6a1a22"
-                },
-                "intense": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 2,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Intense",
-                  "bind": "Intense",
-                  "min": 0,
-                  "max": 1
-                },
-                "depth": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 2,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Depth",
-                  "bind": "Depth",
-                  "min": 0,
-                  "max": 1
-                },
-                "filter": {
-                  "type": "knob",
-                  "col": 4,
-                  "row": 2,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Filter",
-                  "bind": "Filter",
-                  "min": 0,
-                  "max": 1
-                }
+                "detect": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 2, "label": "DET", "color": "#3ec96b22"},
+                "sense": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Sense", "bind": "Sense", "min": 0, "max": 1},
+                "sharp": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Sharp", "bind": "Sharp", "min": 0, "max": 1},
+                "cut": {"type": "group", "col": 0, "row": 2, "colSpan": 6, "rowSpan": 2, "label": "CUT", "color": "#ff6a1a22"},
+                "intense": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Intense", "bind": "Intense", "min": 0, "max": 1},
+                "depth": {"type": "knob", "col": 2, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Depth", "bind": "Depth", "min": 0, "max": 1},
+                "filter": {"type": "knob", "col": 4, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Filter", "bind": "Filter", "min": 0, "max": 1}
               },
               "vertical": {
                 "cols": 4,
                 "rows": 6,
                 "widgets": {
-                  "detect": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 4,
-                    "rowSpan": 2,
-                    "label": "DET",
-                    "color": "#3ec96b22"
-                  },
-                  "sense": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Sense",
-                    "bind": "Sense",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "sharp": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Sharp",
-                    "bind": "Sharp",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "cut": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 4,
-                    "rowSpan": 4,
-                    "label": "CUT",
-                    "color": "#ff6a1a22"
-                  },
-                  "intense": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Intense",
-                    "bind": "Intense",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "depth": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 2,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Depth",
-                    "bind": "Depth",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "filter": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 4,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Filter",
-                    "bind": "Filter",
-                    "min": 0,
-                    "max": 1
-                  }
+                  "detect": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 2, "label": "DET", "color": "#3ec96b22"},
+                  "sense": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Sense", "bind": "Sense", "min": 0, "max": 1},
+                  "sharp": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Sharp", "bind": "Sharp", "min": 0, "max": 1},
+                  "cut": {"type": "group", "col": 0, "row": 2, "colSpan": 4, "rowSpan": 4, "label": "CUT", "color": "#ff6a1a22"},
+                  "intense": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Intense", "bind": "Intense", "min": 0, "max": 1},
+                  "depth": {"type": "knob", "col": 2, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Depth", "bind": "Depth", "min": 0, "max": 1},
+                  "filter": {"type": "knob", "col": 0, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "Filter", "bind": "Filter", "min": 0, "max": 1}
                 }
               }
             },
-            "engines": [
-              "de-bess",
-              "de-ess"
-            ],
+            "engines": ["de-bess", "de-ess"],
             "engine": "de-bess",
             "params": {},
             "pluginId": "drums:fx"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-de-bess": {
         "from": "drums-de-bess",
@@ -375,11 +209,7 @@
           {
             "module": "fx-de-bess",
             "uses": "@k7-core/audio/zz_utility/de-esser",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -388,175 +218,35 @@
               "cols": 6,
               "rows": 4,
               "widgets": {
-                "detect": {
-                  "type": "group",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 4,
-                  "rowSpan": 2,
-                  "label": "DET",
-                  "color": "#3ec96b22"
-                },
-                "sense": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Sense",
-                  "bind": "Sense",
-                  "min": 0,
-                  "max": 1
-                },
-                "sharp": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Sharp",
-                  "bind": "Sharp",
-                  "min": 0,
-                  "max": 1
-                },
-                "cut": {
-                  "type": "group",
-                  "col": 0,
-                  "row": 2,
-                  "colSpan": 6,
-                  "rowSpan": 2,
-                  "label": "CUT",
-                  "color": "#ff6a1a22"
-                },
-                "intense": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 2,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Intense",
-                  "bind": "Intense",
-                  "min": 0,
-                  "max": 1
-                },
-                "depth": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 2,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Depth",
-                  "bind": "Depth",
-                  "min": 0,
-                  "max": 1
-                },
-                "filter": {
-                  "type": "knob",
-                  "col": 4,
-                  "row": 2,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Filter",
-                  "bind": "Filter",
-                  "min": 0,
-                  "max": 1
-                }
+                "detect": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 2, "label": "DET", "color": "#3ec96b22"},
+                "sense": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Sense", "bind": "Sense", "min": 0, "max": 1},
+                "sharp": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Sharp", "bind": "Sharp", "min": 0, "max": 1},
+                "cut": {"type": "group", "col": 0, "row": 2, "colSpan": 6, "rowSpan": 2, "label": "CUT", "color": "#ff6a1a22"},
+                "intense": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Intense", "bind": "Intense", "min": 0, "max": 1},
+                "depth": {"type": "knob", "col": 2, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Depth", "bind": "Depth", "min": 0, "max": 1},
+                "filter": {"type": "knob", "col": 4, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Filter", "bind": "Filter", "min": 0, "max": 1}
               },
               "vertical": {
                 "cols": 4,
                 "rows": 6,
                 "widgets": {
-                  "detect": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 4,
-                    "rowSpan": 2,
-                    "label": "DET",
-                    "color": "#3ec96b22"
-                  },
-                  "sense": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Sense",
-                    "bind": "Sense",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "sharp": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Sharp",
-                    "bind": "Sharp",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "cut": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 4,
-                    "rowSpan": 4,
-                    "label": "CUT",
-                    "color": "#ff6a1a22"
-                  },
-                  "intense": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Intense",
-                    "bind": "Intense",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "depth": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 2,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Depth",
-                    "bind": "Depth",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "filter": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 4,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Filter",
-                    "bind": "Filter",
-                    "min": 0,
-                    "max": 1
-                  }
+                  "detect": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 2, "label": "DET", "color": "#3ec96b22"},
+                  "sense": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Sense", "bind": "Sense", "min": 0, "max": 1},
+                  "sharp": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Sharp", "bind": "Sharp", "min": 0, "max": 1},
+                  "cut": {"type": "group", "col": 0, "row": 2, "colSpan": 4, "rowSpan": 4, "label": "CUT", "color": "#ff6a1a22"},
+                  "intense": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Intense", "bind": "Intense", "min": 0, "max": 1},
+                  "depth": {"type": "knob", "col": 2, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Depth", "bind": "Depth", "min": 0, "max": 1},
+                  "filter": {"type": "knob", "col": 0, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "Filter", "bind": "Filter", "min": 0, "max": 1}
                 }
               }
             },
-            "engines": [
-              "de-bess",
-              "de-ess"
-            ],
+            "engines": ["de-bess", "de-ess"],
             "engine": "de-bess",
             "params": {},
             "pluginId": "drums-de-bess:fx-de-bess"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-de-ess": {
         "from": "drums-de-ess",
@@ -564,11 +254,7 @@
           {
             "module": "fx-de-ess",
             "uses": "@k7-core/audio/zz_utility/de-esser",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -577,151 +263,38 @@
               "cols": 6,
               "rows": 2,
               "widgets": {
-                "intense": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Intense",
-                  "bind": "Intense",
-                  "min": 0,
-                  "max": 1
-                },
-                "max_ds": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Max DS",
-                  "bind": "Max DS",
-                  "min": 0,
-                  "max": 1
-                },
-                "freq": {
-                  "type": "knob",
-                  "col": 4,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Freq",
-                  "bind": "Freq",
-                  "min": 0,
-                  "max": 1
-                }
+                "intense": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Intense", "bind": "Intense", "min": 0, "max": 1},
+                "max_ds": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Max DS", "bind": "Max DS", "min": 0, "max": 1},
+                "freq": {"type": "knob", "col": 4, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Freq", "bind": "Freq", "min": 0, "max": 1}
               },
               "vertical": {
                 "cols": 4,
                 "rows": 4,
                 "widgets": {
-                  "intense": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Intense",
-                    "bind": "Intense",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "max_ds": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Max DS",
-                    "bind": "Max DS",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "freq": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Freq",
-                    "bind": "Freq",
-                    "min": 0,
-                    "max": 1
-                  }
+                  "intense": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Intense", "bind": "Intense", "min": 0, "max": 1},
+                  "max_ds": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Max DS", "bind": "Max DS", "min": 0, "max": 1},
+                  "freq": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Freq", "bind": "Freq", "min": 0, "max": 1}
                 }
               }
             },
-            "engines": [
-              "de-bess",
-              "de-ess"
-            ],
+            "engines": ["de-bess", "de-ess"],
             "engine": "de-ess",
             "params": {},
             "pluginId": "drums-de-ess:fx-de-ess"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
-      }
+      "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}]}
     },
-    "tracks": [
-      "drums",
-      "drums-de-bess",
-      "drums-de-ess"
-    ],
+    "tracks": ["drums", "drums-de-bess", "drums-de-ess"],
     "videoTracks": [],
-    "trackColors": {
-      "drums": "#af1d26",
-      "drums-de-bess": "#dd322c",
-      "drums-de-ess": "#e57361"
-    },
-    "trackSignals": {
-      "drums": "audio",
-      "drums-de-bess": "audio",
-      "drums-de-ess": "audio"
-    },
+    "trackColors": {"drums": "#af1d26", "drums-de-bess": "#dd322c", "drums-de-ess": "#e57361"},
+    "trackSignals": {"drums": "audio", "drums-de-bess": "audio", "drums-de-ess": "audio"},
     "trackClips": {
-      "drums": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-de-bess": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-de-ess": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ]
+      "drums": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-de-bess": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-de-ess": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}]
     },
     "modules": {},
     "warnings": []

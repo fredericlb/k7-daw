@@ -8,42 +8,11 @@
         "module": "Warm",
         "moduleText": "plugin: \"lv2:warm\"\nlabel: \"Warm — saturation\"\n",
         "params": [
-          {
-            "name": "Gain",
-            "meta": {
-              "min": 0,
-              "max": 1
-            }
-          },
-          {
-            "name": "Tone",
-            "meta": {
-              "min": 0,
-              "max": 1,
-              "def": 0.5
-            },
-            "value": "0.5"
-          },
+          {"name": "Gain", "meta": {"min": 0, "max": 1}},
+          {"name": "Tone", "meta": {"min": 0, "max": 1, "def": 0.5}, "value": "0.5"},
           {
             "name": "Mode",
-            "meta": {
-              "min": 0,
-              "max": 2,
-              "states": [
-                {
-                  "label": "Soft",
-                  "value": 0
-                },
-                {
-                  "label": "Hard",
-                  "value": 1
-                },
-                {
-                  "label": "Fuzz",
-                  "value": 2
-                }
-              ]
-            }
+            "meta": {"min": 0, "max": 2, "states": [{"label": "Soft", "value": 0}, {"label": "Hard", "value": 1}, {"label": "Fuzz", "value": 2}]}
           }
         ],
         "uiText": "",
@@ -54,9 +23,7 @@
       "replies": [
         {
           "status": 200,
-          "headers": {
-            "content-type": "text/event-stream; charset=utf-8"
-          },
+          "headers": {"content-type": "text/event-stream; charset=utf-8"},
           "body": "event: message_start\ndata: {\"type\":\"message_start\",\"message\":{\"id\":\"msg_vector\",\"type\":\"message\",\"role\":\"assistant\",\"model\":\"claude-vector\",\"content\":[],\"stop_reason\":null,\"stop_sequence\":null,\"usage\":{\"input_tokens\":1200,\"output_tokens\":1}}}\n\nevent: ping\ndata: {\"type\":\"ping\"}\n\nevent: content_block_start\ndata: {\"type\":\"content_block_start\",\"index\":0,\"content_block\":{\"type\":\"thinking\",\"thinking\":\"\",\"signature\":\"\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"Two knobs side by side, \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"a screen under them.\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"signature_delta\",\"signature\":\"c2lnbmF0dXJl\"}}\n\nevent: content_block_stop\ndata: {\"type\":\"content_block_stop\",\"index\":0}\n\nevent: content_block_start\ndata: {\"type\":\"content_block_start\",\"index\":1,\"content_block\":{\"type\":\"text\",\"text\":\"\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"{\\\"header\\\":\\\"Warm — a warm saturator\\\",\\\"panel\\\":{\\\"cols\\\":4,\\\"rows\\\":4,\\\"widgets\\\":[{\\\"id\\\":\\\"gain\\\",\\\"type\\\":\\\"knob\\\",\\\"col\\\":0,\\\"row\\\":0,\\\"colSpan\\\":2,\\\"rowSpan\\\":2,\\\"bind\\\":\\\"Gain\\\",\\\"min\\\":0,\\\"max\\\":1},{\\\"id\\\":\\\"tone\\\",\\\"type\\\":\\\"knob\\\",\\\"col\\\":2,\\\"row\\\":0,\\\"colSpan\\\":2,\\\"rowSpan\\\":2,\\\"bind\\\":\\\"Tone\\\",\\\"min\\\":0,\\\"max\\\":1},{\\\"id\\\":\\\"mode\\\",\\\"type\\\":\\\"dropdown\\\",\\\"col\\\":0,\\\"row\\\":2,\\\"colSpan\\\":4,\\\"rowSpan\\\":1,\\\"bind\\\":\\\"Mode\\\",\\\"options\\\":[{\\\"label\\\":\\\"Soft\\\",\\\"value\\\":0},{\\\"label\\\":\\\"Hard\\\",\\\"value\\\":1},{\\\"label\\\":\\\"Fuzz\\\",\\\"value\\\":2}]},{\\\"id\\\":\\\"scope\\\",\\\"type\\\":\\\"lcdscreen\\\",\\\"col\\\":0,\\\"row\\\":3,\\\"colSpan\\\":4,\\\"rowSpan\\\":1}]},\\\"widgets_js\\\":\\\"```js\\\\nexport default {\\\\n  scope(lcd) {\\\\n    lcd.clear();\\\\n  },\\\\n};\\\\n```\\\",\\\"notes\\\":\\\"Gain and tone up top, the mode under them, the scope below — é…🎛. The screen \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. \\\"}\"}}\n\nevent: content_block_stop\ndata: {\"type\":\"content_block_stop\",\"index\":1}\n\nevent: message_delta\ndata: {\"type\":\"message_delta\",\"delta\":{\"stop_reason\":\"end_turn\",\"stop_sequence\":null},\"usage\":{\"output_tokens\":900}}\n\nevent: message_stop\ndata: {\"type\":\"message_stop\"}\n\n",
           "split": 97,
           "end": "close"
@@ -88,42 +55,11 @@
         "module": "Warm",
         "moduleText": "plugin: \"lv2:warm\"\nlabel: \"Warm — saturation\"\n",
         "params": [
-          {
-            "name": "Gain",
-            "meta": {
-              "min": 0,
-              "max": 1
-            }
-          },
-          {
-            "name": "Tone",
-            "meta": {
-              "min": 0,
-              "max": 1,
-              "def": 0.5
-            },
-            "value": "0.5"
-          },
+          {"name": "Gain", "meta": {"min": 0, "max": 1}},
+          {"name": "Tone", "meta": {"min": 0, "max": 1, "def": 0.5}, "value": "0.5"},
           {
             "name": "Mode",
-            "meta": {
-              "min": 0,
-              "max": 2,
-              "states": [
-                {
-                  "label": "Soft",
-                  "value": 0
-                },
-                {
-                  "label": "Hard",
-                  "value": 1
-                },
-                {
-                  "label": "Fuzz",
-                  "value": 2
-                }
-              ]
-            }
+            "meta": {"min": 0, "max": 2, "states": [{"label": "Soft", "value": 0}, {"label": "Hard", "value": 1}, {"label": "Fuzz", "value": 2}]}
           }
         ],
         "uiText": "cols(4)\nrows(2)\nwidgets({})\n",
@@ -135,18 +71,14 @@
       "replies": [
         {
           "status": 200,
-          "headers": {
-            "content-type": "text/event-stream; charset=utf-8"
-          },
+          "headers": {"content-type": "text/event-stream; charset=utf-8"},
           "body": "event: message_start\ndata: {\"type\":\"message_start\",\"message\":{\"id\":\"msg_vector\",\"type\":\"message\",\"role\":\"assistant\",\"model\":\"claude-vector\",\"content\":[],\"stop_reason\":null,\"stop_sequence\":null,\"usage\":{\"input_tokens\":1200,\"output_tokens\":1}}}\n\nevent: ping\ndata: {\"type\":\"ping\"}\n\nevent: content_block_start\ndata: {\"type\":\"content_block_start\",\"index\":0,\"content_block\":{\"type\":\"thinking\",\"thinking\":\"\",\"signature\":\"\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"Two knobs side by side, \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"a screen under them.\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"signature_delta\",\"signature\":\"c2lnbmF0dXJl\"}}\n\nevent: content_block_stop\ndata: {\"type\":\"content_block_stop\",\"index\":0}\n\nevent: content_block_start\ndata: {\"type\":\"content_block_start\",\"index\":1,\"content_block\":{\"type\":\"text\",\"text\":\"\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"{\\\"header\\\":\\\"Warm — a warm saturator\\\",\\\"panel\\\":{\\\"cols\\\":4,\\\"rows\\\":4,\\\"widgets\\\":[{\\\"id\\\":\\\"gain\\\",\\\"type\\\":\\\"knob\\\",\\\"col\\\":0,\\\"row\\\":0,\\\"colSpan\\\":2,\\\"rowSpan\\\":2,\\\"bind\\\":\\\"Gain\\\",\\\"min\\\":0,\\\"max\\\":1},{\\\"id\\\":\\\"tone\\\",\\\"type\\\":\\\"knob\\\",\\\"col\\\":2,\\\"row\\\":0,\\\"colSpan\\\":2,\\\"rowSpan\\\":2,\\\"bind\\\":\\\"Nope\\\",\\\"min\\\":0,\\\"max\\\":1},{\\\"id\\\":\\\"mode\\\",\\\"type\\\":\\\"dropdown\\\",\\\"col\\\":0,\\\"row\\\":2,\\\"colSpan\\\":4,\\\"rowSpan\\\":1,\\\"bind\\\":\\\"Mode\\\",\\\"options\\\":[{\\\"label\\\":\\\"Soft\\\",\\\"value\\\":0},{\\\"label\\\":\\\"Hard\\\",\\\"value\\\":1},{\\\"label\\\":\\\"Fuzz\\\",\\\"value\\\":2}]},{\\\"id\\\":\\\"scope\\\",\\\"type\\\":\\\"lcdscreen\\\",\\\"col\\\":0,\\\"row\\\":3,\\\"colSpan\\\":4,\\\"rowSpan\\\":1}]},\\\"widgets_js\\\":\\\"```js\\\\nexport default {\\\\n  scope(lcd) {\\\\n    lcd.clear();\\\\n  },\\\\n};\\\\n```\\\",\\\"notes\\\":\\\"Gain and tone up top, the mode under them, the scope below — é…🎛. The screen \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. \\\"}\"}}\n\nevent: content_block_stop\ndata: {\"type\":\"content_block_stop\",\"index\":1}\n\nevent: message_delta\ndata: {\"type\":\"message_delta\",\"delta\":{\"stop_reason\":\"end_turn\",\"stop_sequence\":null},\"usage\":{\"output_tokens\":900}}\n\nevent: message_stop\ndata: {\"type\":\"message_stop\"}\n\n",
           "split": 97,
           "end": "close"
         },
         {
           "status": 200,
-          "headers": {
-            "content-type": "text/event-stream; charset=utf-8"
-          },
+          "headers": {"content-type": "text/event-stream; charset=utf-8"},
           "body": "event: message_start\ndata: {\"type\":\"message_start\",\"message\":{\"id\":\"msg_vector\",\"type\":\"message\",\"role\":\"assistant\",\"model\":\"claude-vector\",\"content\":[],\"stop_reason\":null,\"stop_sequence\":null,\"usage\":{\"input_tokens\":1200,\"output_tokens\":1}}}\n\nevent: ping\ndata: {\"type\":\"ping\"}\n\nevent: content_block_start\ndata: {\"type\":\"content_block_start\",\"index\":0,\"content_block\":{\"type\":\"thinking\",\"thinking\":\"\",\"signature\":\"\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"Two knobs side by side, \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"a screen under them.\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"signature_delta\",\"signature\":\"c2lnbmF0dXJl\"}}\n\nevent: content_block_stop\ndata: {\"type\":\"content_block_stop\",\"index\":0}\n\nevent: content_block_start\ndata: {\"type\":\"content_block_start\",\"index\":1,\"content_block\":{\"type\":\"text\",\"text\":\"\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"{\\\"header\\\":\\\"Warm — a warm saturator\\\",\\\"panel\\\":{\\\"cols\\\":4,\\\"rows\\\":4,\\\"widgets\\\":[{\\\"id\\\":\\\"gain\\\",\\\"type\\\":\\\"knob\\\",\\\"col\\\":0,\\\"row\\\":0,\\\"colSpan\\\":2,\\\"rowSpan\\\":2,\\\"bind\\\":\\\"Gain\\\",\\\"min\\\":0,\\\"max\\\":1},{\\\"id\\\":\\\"tone\\\",\\\"type\\\":\\\"knob\\\",\\\"col\\\":2,\\\"row\\\":0,\\\"colSpan\\\":2,\\\"rowSpan\\\":2,\\\"bind\\\":\\\"Tone\\\",\\\"min\\\":0,\\\"max\\\":1},{\\\"id\\\":\\\"mode\\\",\\\"type\\\":\\\"dropdown\\\",\\\"col\\\":0,\\\"row\\\":2,\\\"colSpan\\\":4,\\\"rowSpan\\\":1,\\\"bind\\\":\\\"Mode\\\",\\\"options\\\":[{\\\"label\\\":\\\"Soft\\\",\\\"value\\\":0},{\\\"label\\\":\\\"Hard\\\",\\\"value\\\":1},{\\\"label\\\":\\\"Fuzz\\\",\\\"value\\\":2}]},{\\\"id\\\":\\\"scope\\\",\\\"type\\\":\\\"lcdscreen\\\",\\\"col\\\":0,\\\"row\\\":3,\\\"colSpan\\\":4,\\\"rowSpan\\\":1}]},\\\"widgets_js\\\":\\\"```js\\\\nexport default {\\\\n  scope(lcd) {\\\\n    lcd.clear();\\\\n  },\\\\n};\\\\n```\\\",\\\"notes\\\":\\\"Gain and tone up top, the mode under them, the scope below — é…🎛. The screen \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. \\\"}\"}}\n\nevent: content_block_stop\ndata: {\"type\":\"content_block_stop\",\"index\":1}\n\nevent: message_delta\ndata: {\"type\":\"message_delta\",\"delta\":{\"stop_reason\":\"end_turn\",\"stop_sequence\":null},\"usage\":{\"output_tokens\":900}}\n\nevent: message_stop\ndata: {\"type\":\"message_stop\"}\n\n",
           "split": 97,
           "end": "close"
@@ -192,42 +124,11 @@
         "module": "Warm",
         "moduleText": "plugin: \"lv2:warm\"\nlabel: \"Warm — saturation\"\n",
         "params": [
-          {
-            "name": "Gain",
-            "meta": {
-              "min": 0,
-              "max": 1
-            }
-          },
-          {
-            "name": "Tone",
-            "meta": {
-              "min": 0,
-              "max": 1,
-              "def": 0.5
-            },
-            "value": "0.5"
-          },
+          {"name": "Gain", "meta": {"min": 0, "max": 1}},
+          {"name": "Tone", "meta": {"min": 0, "max": 1, "def": 0.5}, "value": "0.5"},
           {
             "name": "Mode",
-            "meta": {
-              "min": 0,
-              "max": 2,
-              "states": [
-                {
-                  "label": "Soft",
-                  "value": 0
-                },
-                {
-                  "label": "Hard",
-                  "value": 1
-                },
-                {
-                  "label": "Fuzz",
-                  "value": 2
-                }
-              ]
-            }
+            "meta": {"min": 0, "max": 2, "states": [{"label": "Soft", "value": 0}, {"label": "Hard", "value": 1}, {"label": "Fuzz", "value": 2}]}
           }
         ],
         "uiText": "",
@@ -238,18 +139,14 @@
       "replies": [
         {
           "status": 200,
-          "headers": {
-            "content-type": "text/event-stream; charset=utf-8"
-          },
+          "headers": {"content-type": "text/event-stream; charset=utf-8"},
           "body": "event: message_start\ndata: {\"type\":\"message_start\",\"message\":{\"id\":\"msg_vector\",\"type\":\"message\",\"role\":\"assistant\",\"model\":\"claude-vector\",\"content\":[],\"stop_reason\":null,\"stop_sequence\":null,\"usage\":{\"input_tokens\":1200,\"output_tokens\":1}}}\n\nevent: ping\ndata: {\"type\":\"ping\"}\n\nevent: content_block_start\ndata: {\"type\":\"content_block_start\",\"index\":0,\"content_block\":{\"type\":\"thinking\",\"thinking\":\"\",\"signature\":\"\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"Two knobs side by side, \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"a screen under them.\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"signature_delta\",\"signature\":\"c2lnbmF0dXJl\"}}\n\nevent: content_block_stop\ndata: {\"type\":\"content_block_stop\",\"index\":0}\n\nevent: content_block_start\ndata: {\"type\":\"content_block_start\",\"index\":1,\"content_block\":{\"type\":\"text\",\"text\":\"\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"Sorry, here is the panel: {\"}}\n\nevent: content_block_stop\ndata: {\"type\":\"content_block_stop\",\"index\":1}\n\nevent: message_delta\ndata: {\"type\":\"message_delta\",\"delta\":{\"stop_reason\":\"end_turn\",\"stop_sequence\":null},\"usage\":{\"output_tokens\":900}}\n\nevent: message_stop\ndata: {\"type\":\"message_stop\"}\n\n",
           "split": 97,
           "end": "close"
         },
         {
           "status": 200,
-          "headers": {
-            "content-type": "text/event-stream; charset=utf-8"
-          },
+          "headers": {"content-type": "text/event-stream; charset=utf-8"},
           "body": "event: message_start\ndata: {\"type\":\"message_start\",\"message\":{\"id\":\"msg_vector\",\"type\":\"message\",\"role\":\"assistant\",\"model\":\"claude-vector\",\"content\":[],\"stop_reason\":null,\"stop_sequence\":null,\"usage\":{\"input_tokens\":1200,\"output_tokens\":1}}}\n\nevent: ping\ndata: {\"type\":\"ping\"}\n\nevent: content_block_start\ndata: {\"type\":\"content_block_start\",\"index\":0,\"content_block\":{\"type\":\"thinking\",\"thinking\":\"\",\"signature\":\"\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"Two knobs side by side, \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"a screen under them.\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"signature_delta\",\"signature\":\"c2lnbmF0dXJl\"}}\n\nevent: content_block_stop\ndata: {\"type\":\"content_block_stop\",\"index\":0}\n\nevent: content_block_start\ndata: {\"type\":\"content_block_start\",\"index\":1,\"content_block\":{\"type\":\"text\",\"text\":\"\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"{\\\"header\\\":\\\"Warm — a warm saturator\\\",\\\"panel\\\":{\\\"cols\\\":4,\\\"rows\\\":4,\\\"widgets\\\":[{\\\"id\\\":\\\"gain\\\",\\\"type\\\":\\\"knob\\\",\\\"col\\\":0,\\\"row\\\":0,\\\"colSpan\\\":2,\\\"rowSpan\\\":2,\\\"bind\\\":\\\"Gain\\\",\\\"min\\\":0,\\\"max\\\":1},{\\\"id\\\":\\\"tone\\\",\\\"type\\\":\\\"knob\\\",\\\"col\\\":2,\\\"row\\\":0,\\\"colSpan\\\":2,\\\"rowSpan\\\":2,\\\"bind\\\":\\\"Tone\\\",\\\"min\\\":0,\\\"max\\\":1},{\\\"id\\\":\\\"mode\\\",\\\"type\\\":\\\"dropdown\\\",\\\"col\\\":0,\\\"row\\\":2,\\\"colSpan\\\":4,\\\"rowSpan\\\":1,\\\"bind\\\":\\\"Mode\\\",\\\"options\\\":[{\\\"label\\\":\\\"Soft\\\",\\\"value\\\":0},{\\\"label\\\":\\\"Hard\\\",\\\"value\\\":1},{\\\"label\\\":\\\"Fuzz\\\",\\\"value\\\":2}]},{\\\"id\\\":\\\"scope\\\",\\\"type\\\":\\\"lcdscreen\\\",\\\"col\\\":0,\\\"row\\\":3,\\\"colSpan\\\":4,\\\"rowSpan\\\":1}]},\\\"widgets_js\\\":\\\"```js\\\\nexport default {\\\\n  scope(lcd) {\\\\n    lcd.clear();\\\\n  },\\\\n};\\\\n```\\\",\\\"notes\\\":\\\"Gain and tone up top, the mode under them, the scope below — é…🎛. The screen \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. \\\"}\"}}\n\nevent: content_block_stop\ndata: {\"type\":\"content_block_stop\",\"index\":1}\n\nevent: message_delta\ndata: {\"type\":\"message_delta\",\"delta\":{\"stop_reason\":\"end_turn\",\"stop_sequence\":null},\"usage\":{\"output_tokens\":900}}\n\nevent: message_stop\ndata: {\"type\":\"message_stop\"}\n\n",
           "split": 97,
           "end": "close"
@@ -295,42 +192,11 @@
         "module": "Warm",
         "moduleText": "plugin: \"lv2:warm\"\nlabel: \"Warm — saturation\"\n",
         "params": [
-          {
-            "name": "Gain",
-            "meta": {
-              "min": 0,
-              "max": 1
-            }
-          },
-          {
-            "name": "Tone",
-            "meta": {
-              "min": 0,
-              "max": 1,
-              "def": 0.5
-            },
-            "value": "0.5"
-          },
+          {"name": "Gain", "meta": {"min": 0, "max": 1}},
+          {"name": "Tone", "meta": {"min": 0, "max": 1, "def": 0.5}, "value": "0.5"},
           {
             "name": "Mode",
-            "meta": {
-              "min": 0,
-              "max": 2,
-              "states": [
-                {
-                  "label": "Soft",
-                  "value": 0
-                },
-                {
-                  "label": "Hard",
-                  "value": 1
-                },
-                {
-                  "label": "Fuzz",
-                  "value": 2
-                }
-              ]
-            }
+            "meta": {"min": 0, "max": 2, "states": [{"label": "Soft", "value": 0}, {"label": "Hard", "value": 1}, {"label": "Fuzz", "value": 2}]}
           }
         ],
         "uiText": "",
@@ -341,18 +207,14 @@
       "replies": [
         {
           "status": 200,
-          "headers": {
-            "content-type": "text/event-stream; charset=utf-8"
-          },
+          "headers": {"content-type": "text/event-stream; charset=utf-8"},
           "body": "event: message_start\ndata: {\"type\":\"message_start\",\"message\":{\"id\":\"msg_vector\",\"type\":\"message\",\"role\":\"assistant\",\"model\":\"claude-vector\",\"content\":[],\"stop_reason\":null,\"stop_sequence\":null,\"usage\":{\"input_tokens\":1200,\"output_tokens\":1}}}\n\nevent: ping\ndata: {\"type\":\"ping\"}\n\nevent: content_block_start\ndata: {\"type\":\"content_block_start\",\"index\":0,\"content_block\":{\"type\":\"thinking\",\"thinking\":\"\",\"signature\":\"\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"Two knobs side by side, \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"a screen under them.\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"signature_delta\",\"signature\":\"c2lnbmF0dXJl\"}}\n\nevent: content_block_stop\ndata: {\"type\":\"content_block_stop\",\"index\":0}\n\nevent: content_block_start\ndata: {\"type\":\"content_block_start\",\"index\":1,\"content_block\":{\"type\":\"text\",\"text\":\"\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"{\\\"header\\\":\\\"Warm — a warm saturator\\\",\\\"panel\\\":{\\\"cols\\\":4,\\\"rows\\\":4,\\\"widgets\\\":[{\\\"id\\\":\\\"gain\\\",\\\"type\\\":\\\"knob\\\",\\\"col\\\":0,\\\"row\\\":0,\\\"colSpan\\\":2,\\\"rowSpan\\\":2,\\\"bind\\\":\\\"Gain\\\",\\\"min\\\":0,\\\"max\\\":1},{\\\"id\\\":\\\"tone\\\",\\\"type\\\":\\\"knob\\\",\\\"col\\\":2,\\\"row\\\":0,\\\"colSpan\\\":2,\\\"rowSpan\\\":2,\\\"bind\\\":\\\"Nope\\\",\\\"min\\\":0,\\\"max\\\":1},{\\\"id\\\":\\\"mode\\\",\\\"type\\\":\\\"dropdown\\\",\\\"col\\\":0,\\\"row\\\":2,\\\"colSpan\\\":4,\\\"rowSpan\\\":1,\\\"bind\\\":\\\"Mode\\\",\\\"options\\\":[{\\\"label\\\":\\\"Soft\\\",\\\"value\\\":0},{\\\"label\\\":\\\"Hard\\\",\\\"value\\\":1},{\\\"label\\\":\\\"Fuzz\\\",\\\"value\\\":2}]},{\\\"id\\\":\\\"scope\\\",\\\"type\\\":\\\"lcdscreen\\\",\\\"col\\\":0,\\\"row\\\":3,\\\"colSpan\\\":4,\\\"rowSpan\\\":1}]},\\\"widgets_js\\\":\\\"```js\\\\nexport default {\\\\n  scope(lcd) {\\\\n    lcd.clear();\\\\n  },\\\\n};\\\\n```\\\",\\\"notes\\\":\\\"Gain and tone up top, the mode under them, the scope below — é…🎛. The screen \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. \\\"}\"}}\n\nevent: content_block_stop\ndata: {\"type\":\"content_block_stop\",\"index\":1}\n\nevent: message_delta\ndata: {\"type\":\"message_delta\",\"delta\":{\"stop_reason\":\"end_turn\",\"stop_sequence\":null},\"usage\":{\"output_tokens\":900}}\n\nevent: message_stop\ndata: {\"type\":\"message_stop\"}\n\n",
           "split": 97,
           "end": "close"
         },
         {
           "status": 200,
-          "headers": {
-            "content-type": "text/event-stream; charset=utf-8"
-          },
+          "headers": {"content-type": "text/event-stream; charset=utf-8"},
           "body": "event: message_start\ndata: {\"type\":\"message_start\",\"message\":{\"id\":\"msg_vector\",\"type\":\"message\",\"role\":\"assistant\",\"model\":\"claude-vector\",\"content\":[],\"stop_reason\":null,\"stop_sequence\":null,\"usage\":{\"input_tokens\":1200,\"output_tokens\":1}}}\n\nevent: ping\ndata: {\"type\":\"ping\"}\n\nevent: content_block_start\ndata: {\"type\":\"content_block_start\",\"index\":0,\"content_block\":{\"type\":\"thinking\",\"thinking\":\"\",\"signature\":\"\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"Two knobs side by side, \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"a screen under them.\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"signature_delta\",\"signature\":\"c2lnbmF0dXJl\"}}\n\nevent: content_block_stop\ndata: {\"type\":\"content_block_stop\",\"index\":0}\n\nevent: content_block_start\ndata: {\"type\":\"content_block_start\",\"index\":1,\"content_block\":{\"type\":\"text\",\"text\":\"\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"{\\\"header\\\":\\\"Warm — a warm saturator\\\",\\\"panel\\\":{\\\"cols\\\":4,\\\"rows\\\":4,\\\"widgets\\\":[{\\\"id\\\":\\\"gain\\\",\\\"type\\\":\\\"knob\\\",\\\"col\\\":0,\\\"row\\\":0,\\\"colSpan\\\":2,\\\"rowSpan\\\":2,\\\"bind\\\":\\\"Gain\\\",\\\"min\\\":0,\\\"max\\\":1},{\\\"id\\\":\\\"tone\\\",\\\"type\\\":\\\"knob\\\",\\\"col\\\":2,\\\"row\\\":0,\\\"colSpan\\\":2,\\\"rowSpan\\\":2,\\\"bind\\\":\\\"Nada\\\",\\\"min\\\":0,\\\"max\\\":1},{\\\"id\\\":\\\"mode\\\",\\\"type\\\":\\\"dropdown\\\",\\\"col\\\":0,\\\"row\\\":2,\\\"colSpan\\\":4,\\\"rowSpan\\\":1,\\\"bind\\\":\\\"Mode\\\",\\\"options\\\":[{\\\"label\\\":\\\"Soft\\\",\\\"value\\\":0},{\\\"label\\\":\\\"Hard\\\",\\\"value\\\":1},{\\\"label\\\":\\\"Fuzz\\\",\\\"value\\\":2}]},{\\\"id\\\":\\\"scope\\\",\\\"type\\\":\\\"lcdscreen\\\",\\\"col\\\":0,\\\"row\\\":3,\\\"colSpan\\\":4,\\\"rowSpan\\\":1}]},\\\"widgets_js\\\":\\\"```js\\\\nexport default {\\\\n  scope(lcd) {\\\\n    lcd.clear();\\\\n  },\\\\n};\\\\n```\\\",\\\"notes\\\":\\\"Gain and tone up top, the mode under them, the scope below — é…🎛. The screen \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. \\\"}\"}}\n\nevent: content_block_stop\ndata: {\"type\":\"content_block_stop\",\"index\":1}\n\nevent: message_delta\ndata: {\"type\":\"message_delta\",\"delta\":{\"stop_reason\":\"end_turn\",\"stop_sequence\":null},\"usage\":{\"output_tokens\":900}}\n\nevent: message_stop\ndata: {\"type\":\"message_stop\"}\n\n",
           "split": 97,
           "end": "close"
@@ -398,42 +260,11 @@
         "module": "Warm",
         "moduleText": "plugin: \"lv2:warm\"\nlabel: \"Warm — saturation\"\n",
         "params": [
-          {
-            "name": "Gain",
-            "meta": {
-              "min": 0,
-              "max": 1
-            }
-          },
-          {
-            "name": "Tone",
-            "meta": {
-              "min": 0,
-              "max": 1,
-              "def": 0.5
-            },
-            "value": "0.5"
-          },
+          {"name": "Gain", "meta": {"min": 0, "max": 1}},
+          {"name": "Tone", "meta": {"min": 0, "max": 1, "def": 0.5}, "value": "0.5"},
           {
             "name": "Mode",
-            "meta": {
-              "min": 0,
-              "max": 2,
-              "states": [
-                {
-                  "label": "Soft",
-                  "value": 0
-                },
-                {
-                  "label": "Hard",
-                  "value": 1
-                },
-                {
-                  "label": "Fuzz",
-                  "value": 2
-                }
-              ]
-            }
+            "meta": {"min": 0, "max": 2, "states": [{"label": "Soft", "value": 0}, {"label": "Hard", "value": 1}, {"label": "Fuzz", "value": 2}]}
           }
         ],
         "uiText": "",
@@ -444,9 +275,7 @@
       "replies": [
         {
           "status": 200,
-          "headers": {
-            "content-type": "text/event-stream; charset=utf-8"
-          },
+          "headers": {"content-type": "text/event-stream; charset=utf-8"},
           "body": "event: message_start\ndata: {\"type\":\"message_start\",\"message\":{\"id\":\"msg_vector\",\"type\":\"message\",\"role\":\"assistant\",\"model\":\"claude-vector\",\"content\":[],\"stop_reason\":null,\"stop_sequence\":null,\"usage\":{\"input_tokens\":1200,\"output_tokens\":1}}}\n\nevent: ping\ndata: {\"type\":\"ping\"}\n\nevent: content_block_start\ndata: {\"type\":\"content_block_start\",\"index\":0,\"content_block\":{\"type\":\"thinking\",\"thinking\":\"\",\"signature\":\"\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"Two knobs side by side, \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"a screen under them.\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"signature_delta\",\"signature\":\"c2lnbmF0dXJl\"}}\n\nevent: content_block_stop\ndata: {\"type\":\"content_block_stop\",\"index\":0}\n\nevent: content_block_start\ndata: {\"type\":\"content_block_start\",\"index\":1,\"content_block\":{\"type\":\"text\",\"text\":\"\"}}\n\nevent: content_block_stop\ndata: {\"type\":\"content_block_stop\",\"index\":1}\n\nevent: message_delta\ndata: {\"type\":\"message_delta\",\"delta\":{\"stop_reason\":\"refusal\",\"stop_sequence\":null,\"stop_details\":{\"type\":\"refusal\",\"explanation\":\"not a panel\"}},\"usage\":{\"output_tokens\":900}}\n\nevent: message_stop\ndata: {\"type\":\"message_stop\"}\n\n",
           "split": 97,
           "end": "close"
@@ -478,42 +307,11 @@
         "module": "Warm",
         "moduleText": "plugin: \"lv2:warm\"\nlabel: \"Warm — saturation\"\n",
         "params": [
-          {
-            "name": "Gain",
-            "meta": {
-              "min": 0,
-              "max": 1
-            }
-          },
-          {
-            "name": "Tone",
-            "meta": {
-              "min": 0,
-              "max": 1,
-              "def": 0.5
-            },
-            "value": "0.5"
-          },
+          {"name": "Gain", "meta": {"min": 0, "max": 1}},
+          {"name": "Tone", "meta": {"min": 0, "max": 1, "def": 0.5}, "value": "0.5"},
           {
             "name": "Mode",
-            "meta": {
-              "min": 0,
-              "max": 2,
-              "states": [
-                {
-                  "label": "Soft",
-                  "value": 0
-                },
-                {
-                  "label": "Hard",
-                  "value": 1
-                },
-                {
-                  "label": "Fuzz",
-                  "value": 2
-                }
-              ]
-            }
+            "meta": {"min": 0, "max": 2, "states": [{"label": "Soft", "value": 0}, {"label": "Hard", "value": 1}, {"label": "Fuzz", "value": 2}]}
           }
         ],
         "uiText": "",
@@ -524,9 +322,7 @@
       "replies": [
         {
           "status": 200,
-          "headers": {
-            "content-type": "text/event-stream; charset=utf-8"
-          },
+          "headers": {"content-type": "text/event-stream; charset=utf-8"},
           "body": "event: message_start\ndata: {\"type\":\"message_start\",\"message\":{\"id\":\"msg_vector\",\"type\":\"message\",\"role\":\"assistant\",\"model\":\"claude-vector\",\"content\":[],\"stop_reason\":null,\"stop_sequence\":null,\"usage\":{\"input_tokens\":1200,\"output_tokens\":1}}}\n\nevent: ping\ndata: {\"type\":\"ping\"}\n\nevent: content_block_start\ndata: {\"type\":\"content_block_start\",\"index\":0,\"content_block\":{\"type\":\"thinking\",\"thinking\":\"\",\"signature\":\"\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"Two knobs side by side, \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"a screen under them.\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"signature_delta\",\"signature\":\"c2lnbmF0dXJl\"}}\n\nevent: content_block_stop\ndata: {\"type\":\"content_block_stop\",\"index\":0}\n\nevent: content_block_start\ndata: {\"type\":\"content_block_start\",\"index\":1,\"content_block\":{\"type\":\"text\",\"text\":\"\"}}\n\nevent: content_block_stop\ndata: {\"type\":\"content_block_stop\",\"index\":1}\n\nevent: message_delta\ndata: {\"type\":\"message_delta\",\"delta\":{\"stop_reason\":\"refusal\",\"stop_sequence\":null},\"usage\":{\"output_tokens\":900}}\n\nevent: message_stop\ndata: {\"type\":\"message_stop\"}\n\n",
           "split": 97,
           "end": "close"
@@ -558,42 +354,11 @@
         "module": "Warm",
         "moduleText": "plugin: \"lv2:warm\"\nlabel: \"Warm — saturation\"\n",
         "params": [
-          {
-            "name": "Gain",
-            "meta": {
-              "min": 0,
-              "max": 1
-            }
-          },
-          {
-            "name": "Tone",
-            "meta": {
-              "min": 0,
-              "max": 1,
-              "def": 0.5
-            },
-            "value": "0.5"
-          },
+          {"name": "Gain", "meta": {"min": 0, "max": 1}},
+          {"name": "Tone", "meta": {"min": 0, "max": 1, "def": 0.5}, "value": "0.5"},
           {
             "name": "Mode",
-            "meta": {
-              "min": 0,
-              "max": 2,
-              "states": [
-                {
-                  "label": "Soft",
-                  "value": 0
-                },
-                {
-                  "label": "Hard",
-                  "value": 1
-                },
-                {
-                  "label": "Fuzz",
-                  "value": 2
-                }
-              ]
-            }
+            "meta": {"min": 0, "max": 2, "states": [{"label": "Soft", "value": 0}, {"label": "Hard", "value": 1}, {"label": "Fuzz", "value": 2}]}
           }
         ],
         "uiText": "",
@@ -604,9 +369,7 @@
       "replies": [
         {
           "status": 200,
-          "headers": {
-            "content-type": "text/event-stream; charset=utf-8"
-          },
+          "headers": {"content-type": "text/event-stream; charset=utf-8"},
           "body": "event: message_start\ndata: {\"type\":\"message_start\",\"message\":{\"id\":\"msg_vector\",\"type\":\"message\",\"role\":\"assistant\",\"model\":\"claude-vector\",\"content\":[],\"stop_reason\":null,\"stop_sequence\":null,\"usage\":{\"input_tokens\":1200,\"output_tokens\":1}}}\n\nevent: ping\ndata: {\"type\":\"ping\"}\n\nevent: content_block_start\ndata: {\"type\":\"content_block_start\",\"index\":0,\"content_block\":{\"type\":\"thinking\",\"thinking\":\"\",\"signature\":\"\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"Two knobs side by side, \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"a screen under them.\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"signature_delta\",\"signature\":\"c2lnbmF0dXJl\"}}\n\nevent: content_block_stop\ndata: {\"type\":\"content_block_stop\",\"index\":0}\n\nevent: content_block_start\ndata: {\"type\":\"content_block_start\",\"index\":1,\"content_block\":{\"type\":\"text\",\"text\":\"\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"{\\\"header\\\": \\\"cut\"}}\n\nevent: content_block_stop\ndata: {\"type\":\"content_block_stop\",\"index\":1}\n\nevent: message_delta\ndata: {\"type\":\"message_delta\",\"delta\":{\"stop_reason\":\"max_tokens\",\"stop_sequence\":null},\"usage\":{\"output_tokens\":900}}\n\nevent: message_stop\ndata: {\"type\":\"message_stop\"}\n\n",
           "split": 97,
           "end": "close"
@@ -638,42 +401,11 @@
         "module": "Warm",
         "moduleText": "plugin: \"lv2:warm\"\nlabel: \"Warm — saturation\"\n",
         "params": [
-          {
-            "name": "Gain",
-            "meta": {
-              "min": 0,
-              "max": 1
-            }
-          },
-          {
-            "name": "Tone",
-            "meta": {
-              "min": 0,
-              "max": 1,
-              "def": 0.5
-            },
-            "value": "0.5"
-          },
+          {"name": "Gain", "meta": {"min": 0, "max": 1}},
+          {"name": "Tone", "meta": {"min": 0, "max": 1, "def": 0.5}, "value": "0.5"},
           {
             "name": "Mode",
-            "meta": {
-              "min": 0,
-              "max": 2,
-              "states": [
-                {
-                  "label": "Soft",
-                  "value": 0
-                },
-                {
-                  "label": "Hard",
-                  "value": 1
-                },
-                {
-                  "label": "Fuzz",
-                  "value": 2
-                }
-              ]
-            }
+            "meta": {"min": 0, "max": 2, "states": [{"label": "Soft", "value": 0}, {"label": "Hard", "value": 1}, {"label": "Fuzz", "value": 2}]}
           }
         ],
         "uiText": "",
@@ -684,9 +416,7 @@
       "replies": [
         {
           "status": 400,
-          "headers": {
-            "content-type": "application/json"
-          },
+          "headers": {"content-type": "application/json"},
           "body": "{\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"max_tokens: too many\"}}",
           "split": 4096,
           "end": "close"
@@ -718,42 +448,11 @@
         "module": "Warm",
         "moduleText": "plugin: \"lv2:warm\"\nlabel: \"Warm — saturation\"\n",
         "params": [
-          {
-            "name": "Gain",
-            "meta": {
-              "min": 0,
-              "max": 1
-            }
-          },
-          {
-            "name": "Tone",
-            "meta": {
-              "min": 0,
-              "max": 1,
-              "def": 0.5
-            },
-            "value": "0.5"
-          },
+          {"name": "Gain", "meta": {"min": 0, "max": 1}},
+          {"name": "Tone", "meta": {"min": 0, "max": 1, "def": 0.5}, "value": "0.5"},
           {
             "name": "Mode",
-            "meta": {
-              "min": 0,
-              "max": 2,
-              "states": [
-                {
-                  "label": "Soft",
-                  "value": 0
-                },
-                {
-                  "label": "Hard",
-                  "value": 1
-                },
-                {
-                  "label": "Fuzz",
-                  "value": 2
-                }
-              ]
-            }
+            "meta": {"min": 0, "max": 2, "states": [{"label": "Soft", "value": 0}, {"label": "Hard", "value": 1}, {"label": "Fuzz", "value": 2}]}
           }
         ],
         "uiText": "",
@@ -761,17 +460,7 @@
         "mode": "reset",
         "direction": ""
       },
-      "replies": [
-        {
-          "status": 403,
-          "headers": {
-            "content-type": "application/json"
-          },
-          "body": "forbidden here",
-          "split": 4096,
-          "end": "close"
-        }
-      ],
+      "replies": [{"status": 403, "headers": {"content-type": "application/json"}, "body": "forbidden here", "split": 4096, "end": "close"}],
       "upstream": [
         {
           "method": "POST",
@@ -798,42 +487,11 @@
         "module": "Warm",
         "moduleText": "plugin: \"lv2:warm\"\nlabel: \"Warm — saturation\"\n",
         "params": [
-          {
-            "name": "Gain",
-            "meta": {
-              "min": 0,
-              "max": 1
-            }
-          },
-          {
-            "name": "Tone",
-            "meta": {
-              "min": 0,
-              "max": 1,
-              "def": 0.5
-            },
-            "value": "0.5"
-          },
+          {"name": "Gain", "meta": {"min": 0, "max": 1}},
+          {"name": "Tone", "meta": {"min": 0, "max": 1, "def": 0.5}, "value": "0.5"},
           {
             "name": "Mode",
-            "meta": {
-              "min": 0,
-              "max": 2,
-              "states": [
-                {
-                  "label": "Soft",
-                  "value": 0
-                },
-                {
-                  "label": "Hard",
-                  "value": 1
-                },
-                {
-                  "label": "Fuzz",
-                  "value": 2
-                }
-              ]
-            }
+            "meta": {"min": 0, "max": 2, "states": [{"label": "Soft", "value": 0}, {"label": "Hard", "value": 1}, {"label": "Fuzz", "value": 2}]}
           }
         ],
         "uiText": "",
@@ -844,19 +502,14 @@
       "replies": [
         {
           "status": 529,
-          "headers": {
-            "content-type": "application/json",
-            "retry-after-ms": "20"
-          },
+          "headers": {"content-type": "application/json", "retry-after-ms": "20"},
           "body": "{\"type\":\"error\",\"error\":{\"type\":\"overloaded_error\",\"message\":\"Overloaded\"}}",
           "split": 4096,
           "end": "close"
         },
         {
           "status": 200,
-          "headers": {
-            "content-type": "text/event-stream; charset=utf-8"
-          },
+          "headers": {"content-type": "text/event-stream; charset=utf-8"},
           "body": "event: message_start\ndata: {\"type\":\"message_start\",\"message\":{\"id\":\"msg_vector\",\"type\":\"message\",\"role\":\"assistant\",\"model\":\"claude-vector\",\"content\":[],\"stop_reason\":null,\"stop_sequence\":null,\"usage\":{\"input_tokens\":1200,\"output_tokens\":1}}}\n\nevent: ping\ndata: {\"type\":\"ping\"}\n\nevent: content_block_start\ndata: {\"type\":\"content_block_start\",\"index\":0,\"content_block\":{\"type\":\"thinking\",\"thinking\":\"\",\"signature\":\"\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"Two knobs side by side, \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"a screen under them.\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"signature_delta\",\"signature\":\"c2lnbmF0dXJl\"}}\n\nevent: content_block_stop\ndata: {\"type\":\"content_block_stop\",\"index\":0}\n\nevent: content_block_start\ndata: {\"type\":\"content_block_start\",\"index\":1,\"content_block\":{\"type\":\"text\",\"text\":\"\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"{\\\"header\\\":\\\"Warm — a warm saturator\\\",\\\"panel\\\":{\\\"cols\\\":4,\\\"rows\\\":4,\\\"widgets\\\":[{\\\"id\\\":\\\"gain\\\",\\\"type\\\":\\\"knob\\\",\\\"col\\\":0,\\\"row\\\":0,\\\"colSpan\\\":2,\\\"rowSpan\\\":2,\\\"bind\\\":\\\"Gain\\\",\\\"min\\\":0,\\\"max\\\":1},{\\\"id\\\":\\\"tone\\\",\\\"type\\\":\\\"knob\\\",\\\"col\\\":2,\\\"row\\\":0,\\\"colSpan\\\":2,\\\"rowSpan\\\":2,\\\"bind\\\":\\\"Tone\\\",\\\"min\\\":0,\\\"max\\\":1},{\\\"id\\\":\\\"mode\\\",\\\"type\\\":\\\"dropdown\\\",\\\"col\\\":0,\\\"row\\\":2,\\\"colSpan\\\":4,\\\"rowSpan\\\":1,\\\"bind\\\":\\\"Mode\\\",\\\"options\\\":[{\\\"label\\\":\\\"Soft\\\",\\\"value\\\":0},{\\\"label\\\":\\\"Hard\\\",\\\"value\\\":1},{\\\"label\\\":\\\"Fuzz\\\",\\\"value\\\":2}]},{\\\"id\\\":\\\"scope\\\",\\\"type\\\":\\\"lcdscreen\\\",\\\"col\\\":0,\\\"row\\\":3,\\\"colSpan\\\":4,\\\"rowSpan\\\":1}]},\\\"widgets_js\\\":\\\"```js\\\\nexport default {\\\\n  scope(lcd) {\\\\n    lcd.clear();\\\\n  },\\\\n};\\\\n```\\\",\\\"notes\\\":\\\"Gain and tone up top, the mode under them, the scope below — é…🎛. The screen \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. \\\"}\"}}\n\nevent: content_block_stop\ndata: {\"type\":\"content_block_stop\",\"index\":1}\n\nevent: message_delta\ndata: {\"type\":\"message_delta\",\"delta\":{\"stop_reason\":\"end_turn\",\"stop_sequence\":null},\"usage\":{\"output_tokens\":900}}\n\nevent: message_stop\ndata: {\"type\":\"message_stop\"}\n\n",
           "split": 97,
           "end": "close"
@@ -902,42 +555,11 @@
         "module": "Warm",
         "moduleText": "plugin: \"lv2:warm\"\nlabel: \"Warm — saturation\"\n",
         "params": [
-          {
-            "name": "Gain",
-            "meta": {
-              "min": 0,
-              "max": 1
-            }
-          },
-          {
-            "name": "Tone",
-            "meta": {
-              "min": 0,
-              "max": 1,
-              "def": 0.5
-            },
-            "value": "0.5"
-          },
+          {"name": "Gain", "meta": {"min": 0, "max": 1}},
+          {"name": "Tone", "meta": {"min": 0, "max": 1, "def": 0.5}, "value": "0.5"},
           {
             "name": "Mode",
-            "meta": {
-              "min": 0,
-              "max": 2,
-              "states": [
-                {
-                  "label": "Soft",
-                  "value": 0
-                },
-                {
-                  "label": "Hard",
-                  "value": 1
-                },
-                {
-                  "label": "Fuzz",
-                  "value": 2
-                }
-              ]
-            }
+            "meta": {"min": 0, "max": 2, "states": [{"label": "Soft", "value": 0}, {"label": "Hard", "value": 1}, {"label": "Fuzz", "value": 2}]}
           }
         ],
         "uiText": "",
@@ -948,9 +570,7 @@
       "replies": [
         {
           "status": 200,
-          "headers": {
-            "content-type": "text/event-stream; charset=utf-8"
-          },
+          "headers": {"content-type": "text/event-stream; charset=utf-8"},
           "body": "event: message_start\ndata: {\"type\":\"message_start\",\"message\":{\"id\":\"msg_vector\",\"type\":\"message\",\"role\":\"assistant\",\"model\":\"claude-vector\",\"content\":[],\"stop_reason\":null,\"stop_sequence\":null,\"usage\":{\"input_tokens\":1200,\"output_tokens\":1}}}\n\nevent: ping\ndata: {\"type\":\"ping\"}\n\nevent: content_block_start\ndata: {\"type\":\"content_block_start\",\"index\":0,\"content_block\":{\"type\":\"thinking\",\"thinking\":\"\",\"signature\":\"\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"Two knobs side by side, \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"a screen under them.\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"signature_delta\",\"signature\":\"c2lnbmF0dXJl\"}}\n\nevent: content_block_stop\ndata: {\"type\":\"content_block_stop\",\"index\":0}\n\nevent: content_block_start\ndata: {\"type\":\"content_block_start\",\"index\":1,\"content_block\":{\"type\":\"text\",\"text\":\"\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"{\\\"header\\\":\\\"Warm — a warm saturator\\\",\\\"panel\\\":{\\\"cols\\\":4,\\\"rows\\\":4,\\\"widgets\\\":[{\\\"id\\\":\\\"gain\\\",\\\"type\\\":\\\"knob\\\",\\\"col\\\":0,\\\"row\\\":0,\\\"colSpan\\\":2,\\\"rowSpan\\\":2,\\\"bind\\\":\\\"Gain\\\",\\\"min\\\":0,\\\"max\\\":1},{\\\"id\\\":\\\"tone\\\",\\\"type\\\":\\\"knob\\\",\\\"col\\\":2,\\\"row\\\":0,\\\"colSpan\\\":2,\\\"rowSpan\\\":2,\\\"bind\\\":\\\"Tone\\\",\\\"min\\\":0,\\\"max\\\":1},{\\\"id\\\":\\\"mode\\\",\\\"type\\\":\\\"dropdown\\\",\\\"col\\\":0,\\\"row\\\":2,\\\"colSpan\\\":4,\\\"rowSpan\\\":1,\\\"bind\\\":\\\"Mode\\\",\\\"options\\\":[{\\\"label\\\":\\\"Soft\\\",\\\"value\\\":0},{\\\"label\\\":\\\"Hard\\\",\\\"value\\\":1},{\\\"label\\\":\\\"Fuzz\\\",\\\"value\\\":2}]},{\\\"id\\\":\\\"scope\\\",\\\"type\\\":\\\"lcdscreen\\\",\\\"col\\\":0,\\\"row\\\":3,\\\"colSpan\\\":4,\\\"rowSpan\\\":1}]},\\\"widgets_js\\\":\\\"```js\\\\nexport default {\\\\n  scope(lcd) {\\\\n    lcd.clear();\\\\n  },\\\\n};\\\\n```\\\",\\\"notes\\\":\\\"Gain and tone up top, the mode under them, the scope below — é…🎛. The screen \"}}\n\nevent: error\ndata: {\"type\":\"error\",\"error\":{\"type\":\"overloaded_error\",\"message\":\"Overloaded\"}}\n\n",
           "split": 97,
           "end": "close"
@@ -982,42 +602,11 @@
         "module": "Warm",
         "moduleText": "plugin: \"lv2:warm\"\nlabel: \"Warm — saturation\"\n",
         "params": [
-          {
-            "name": "Gain",
-            "meta": {
-              "min": 0,
-              "max": 1
-            }
-          },
-          {
-            "name": "Tone",
-            "meta": {
-              "min": 0,
-              "max": 1,
-              "def": 0.5
-            },
-            "value": "0.5"
-          },
+          {"name": "Gain", "meta": {"min": 0, "max": 1}},
+          {"name": "Tone", "meta": {"min": 0, "max": 1, "def": 0.5}, "value": "0.5"},
           {
             "name": "Mode",
-            "meta": {
-              "min": 0,
-              "max": 2,
-              "states": [
-                {
-                  "label": "Soft",
-                  "value": 0
-                },
-                {
-                  "label": "Hard",
-                  "value": 1
-                },
-                {
-                  "label": "Fuzz",
-                  "value": 2
-                }
-              ]
-            }
+            "meta": {"min": 0, "max": 2, "states": [{"label": "Soft", "value": 0}, {"label": "Hard", "value": 1}, {"label": "Fuzz", "value": 2}]}
           }
         ],
         "uiText": "",
@@ -1028,9 +617,7 @@
       "replies": [
         {
           "status": 200,
-          "headers": {
-            "content-type": "text/event-stream; charset=utf-8"
-          },
+          "headers": {"content-type": "text/event-stream; charset=utf-8"},
           "body": "event: message_start\ndata: {\"type\":\"message_start\",\"message\":{\"id\":\"msg_vector\",\"type\":\"message\",\"role\":\"assistant\",\"model\":\"claude-vector\",\"content\":[],\"stop_reason\":null,\"stop_sequence\":null,\"usage\":{\"input_tokens\":1200,\"output_tokens\":1}}}\n\nevent: ping\ndata: {\"type\":\"ping\"}\n\nevent: content_block_start\ndata: {\"type\":\"content_block_start\",\"index\":0,\"content_block\":{\"type\":\"thinking\",\"thinking\":\"\",\"signature\":\"\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"Two knobs side by side, \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"a screen under them.\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"signature_delta\",\"signature\":\"c2lnbmF0dXJl\"}}\n\nevent: content_block_stop\ndata: {\"type\":\"content_block_stop\",\"index\":0}\n\nevent: content_block_start\ndata: {\"type\":\"content_block_start\",\"index\":1,\"content_block\":{\"type\":\"text\",\"text\":\"\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"{\\\"header\\\":\\\"Warm — a warm saturator\\\",\\\"panel\\\":{\\\"cols\\\":4,\\\"rows\\\":4,\\\"widgets\\\":[{\\\"id\\\":\\\"gain\\\",\\\"type\\\":\\\"knob\\\",\\\"col\\\":0,\\\"row\\\":0,\\\"colSpan\\\":2,\\\"rowSpan\\\":2,\\\"bind\\\":\\\"Gain\\\",\\\"min\\\":0,\\\"max\\\":1},{\\\"id\\\":\\\"tone\\\",\\\"type\\\":\\\"knob\\\",\\\"col\\\":2,\\\"row\\\":0,\\\"colSpan\\\":2,\\\"rowSpan\\\":2,\\\"bind\\\":\\\"Tone\\\",\\\"min\\\":0,\\\"max\\\":1},{\\\"id\\\":\\\"mode\\\",\\\"type\\\":\\\"dropdown\\\",\\\"col\\\":0,\\\"row\\\":2,\\\"colSpan\\\":4,\\\"rowSpan\\\":1,\\\"bind\\\":\\\"Mode\\\",\\\"options\\\":[{\\\"label\\\":\\\"Soft\\\",\\\"value\\\":0},{\\\"label\\\":\\\"Hard\\\",\\\"value\\\":1},{\\\"label\\\":\\\"Fuzz\\\",\\\"value\\\":2}]},{\\\"id\\\":\\\"scope\\\",\\\"type\\\":\\\"lcdscreen\\\",\\\"col\\\":0,\\\"row\\\":3,\\\"colSpan\\\":4,\\\"rowSpan\\\":1}]},\\\"widgets_js\\\":\\\"```js\\\\nexport default {\\\\n  scope(lcd) {\\\\n    lcd.clear();\\\\n  },\\\\n};\\\\n```\\\",\\\"notes\\\":\\\"Gain and tone up top, the mode under them, the scope below — é…🎛. The screen \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen \"}}\n\n",
           "split": 97,
           "end": "cut"
@@ -1062,42 +649,11 @@
         "module": "Warm",
         "moduleText": "plugin: \"lv2:warm\"\nlabel: \"Warm — saturation\"\n",
         "params": [
-          {
-            "name": "Gain",
-            "meta": {
-              "min": 0,
-              "max": 1
-            }
-          },
-          {
-            "name": "Tone",
-            "meta": {
-              "min": 0,
-              "max": 1,
-              "def": 0.5
-            },
-            "value": "0.5"
-          },
+          {"name": "Gain", "meta": {"min": 0, "max": 1}},
+          {"name": "Tone", "meta": {"min": 0, "max": 1, "def": 0.5}, "value": "0.5"},
           {
             "name": "Mode",
-            "meta": {
-              "min": 0,
-              "max": 2,
-              "states": [
-                {
-                  "label": "Soft",
-                  "value": 0
-                },
-                {
-                  "label": "Hard",
-                  "value": 1
-                },
-                {
-                  "label": "Fuzz",
-                  "value": 2
-                }
-              ]
-            }
+            "meta": {"min": 0, "max": 2, "states": [{"label": "Soft", "value": 0}, {"label": "Hard", "value": 1}, {"label": "Fuzz", "value": 2}]}
           }
         ],
         "uiText": "",
@@ -1108,9 +664,7 @@
       "replies": [
         {
           "status": 200,
-          "headers": {
-            "content-type": "text/event-stream; charset=utf-8"
-          },
+          "headers": {"content-type": "text/event-stream; charset=utf-8"},
           "body": "event: message_start\ndata: {\"type\":\"message_start\",\"message\":{\"id\":\"msg_vector\",\"type\":\"message\",\"role\":\"assistant\",\"model\":\"claude-vector\",\"content\":[],\"stop_reason\":null,\"stop_sequence\":null,\"usage\":{\"input_tokens\":1200,\"output_tokens\":1}}}\n\nevent: ping\ndata: {\"type\":\"ping\"}\n\nevent: content_block_start\ndata: {\"type\":\"content_block_start\",\"index\":0,\"content_block\":{\"type\":\"thinking\",\"thinking\":\"\",\"signature\":\"\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"Two knobs side by side, \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"a screen under them.\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"signature_delta\",\"signature\":\"c2lnbmF0dXJl\"}}\n\nevent: content_block_stop\ndata: {\"type\":\"content_block_stop\",\"index\":0}\n\nevent: content_block_start\ndata: {\"type\":\"content_block_start\",\"index\":1,\"content_block\":{\"type\":\"text\",\"text\":\"\"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"{\\\"header\\\":\\\"Warm — a warm saturator\\\",\\\"panel\\\":{\\\"cols\\\":4,\\\"rows\\\":4,\\\"widgets\\\":[{\\\"id\\\":\\\"gain\\\",\\\"type\\\":\\\"knob\\\",\\\"col\\\":0,\\\"row\\\":0,\\\"colSpan\\\":2,\\\"rowSpan\\\":2,\\\"bind\\\":\\\"Gain\\\",\\\"min\\\":0,\\\"max\\\":1},{\\\"id\\\":\\\"tone\\\",\\\"type\\\":\\\"knob\\\",\\\"col\\\":2,\\\"row\\\":0,\\\"colSpan\\\":2,\\\"rowSpan\\\":2,\\\"bind\\\":\\\"Tone\\\",\\\"min\\\":0,\\\"max\\\":1},{\\\"id\\\":\\\"mode\\\",\\\"type\\\":\\\"dropdown\\\",\\\"col\\\":0,\\\"row\\\":2,\\\"colSpan\\\":4,\\\"rowSpan\\\":1,\\\"bind\\\":\\\"Mode\\\",\\\"options\\\":[{\\\"label\\\":\\\"Soft\\\",\\\"value\\\":0},{\\\"label\\\":\\\"Hard\\\",\\\"value\\\":1},{\\\"label\\\":\\\"Fuzz\\\",\\\"value\\\":2}]},{\\\"id\\\":\\\"scope\\\",\\\"type\\\":\\\"lcdscreen\\\",\\\"col\\\":0,\\\"row\\\":3,\\\"colSpan\\\":4,\\\"rowSpan\\\":1}]},\\\"widgets_js\\\":\\\"```js\\\\nexport default {\\\\n  scope(lcd) {\\\\n    lcd.clear();\\\\n  },\\\\n};\\\\n```\\\",\\\"notes\\\":\\\"Gain and tone up top, the mode under them, the scope below — é…🎛. The screen \"}}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen draws the curve. The screen \"}}\n\n",
           "split": 97,
           "end": "close"
@@ -1142,42 +696,11 @@
         "module": "Warm",
         "moduleText": "plugin: \"lv2:warm\"\nlabel: \"Warm — saturation\"\n",
         "params": [
-          {
-            "name": "Gain",
-            "meta": {
-              "min": 0,
-              "max": 1
-            }
-          },
-          {
-            "name": "Tone",
-            "meta": {
-              "min": 0,
-              "max": 1,
-              "def": 0.5
-            },
-            "value": "0.5"
-          },
+          {"name": "Gain", "meta": {"min": 0, "max": 1}},
+          {"name": "Tone", "meta": {"min": 0, "max": 1, "def": 0.5}, "value": "0.5"},
           {
             "name": "Mode",
-            "meta": {
-              "min": 0,
-              "max": 2,
-              "states": [
-                {
-                  "label": "Soft",
-                  "value": 0
-                },
-                {
-                  "label": "Hard",
-                  "value": 1
-                },
-                {
-                  "label": "Fuzz",
-                  "value": 2
-                }
-              ]
-            }
+            "meta": {"min": 0, "max": 2, "states": [{"label": "Soft", "value": 0}, {"label": "Hard", "value": 1}, {"label": "Fuzz", "value": 2}]}
           }
         ],
         "uiText": "",
@@ -1185,17 +708,7 @@
         "mode": "reset",
         "direction": ""
       },
-      "replies": [
-        {
-          "status": 200,
-          "headers": {
-            "content-type": "text/event-stream; charset=utf-8"
-          },
-          "body": "",
-          "split": 97,
-          "end": "close"
-        }
-      ],
+      "replies": [{"status": 200, "headers": {"content-type": "text/event-stream; charset=utf-8"}, "body": "", "split": 97, "end": "close"}],
       "upstream": [
         {
           "method": "POST",
@@ -1222,42 +735,11 @@
         "module": "Warm",
         "moduleText": "plugin: \"lv2:warm\"\nlabel: \"Warm — saturation\"\n",
         "params": [
-          {
-            "name": "Gain",
-            "meta": {
-              "min": 0,
-              "max": 1
-            }
-          },
-          {
-            "name": "Tone",
-            "meta": {
-              "min": 0,
-              "max": 1,
-              "def": 0.5
-            },
-            "value": "0.5"
-          },
+          {"name": "Gain", "meta": {"min": 0, "max": 1}},
+          {"name": "Tone", "meta": {"min": 0, "max": 1, "def": 0.5}, "value": "0.5"},
           {
             "name": "Mode",
-            "meta": {
-              "min": 0,
-              "max": 2,
-              "states": [
-                {
-                  "label": "Soft",
-                  "value": 0
-                },
-                {
-                  "label": "Hard",
-                  "value": 1
-                },
-                {
-                  "label": "Fuzz",
-                  "value": 2
-                }
-              ]
-            }
+            "meta": {"min": 0, "max": 2, "states": [{"label": "Soft", "value": 0}, {"label": "Hard", "value": 1}, {"label": "Fuzz", "value": 2}]}
           }
         ],
         "uiText": "cols(4)\nrows(2)\nwidgets({})\n",
@@ -1274,15 +756,7 @@
     {
       "name": "a body zod refuses",
       "model": "claude-opus-5",
-      "request": {
-        "module": "",
-        "params": [
-          {
-            "name": 3
-          }
-        ],
-        "mode": "remix"
-      },
+      "request": {"module": "", "params": [{"name": 3}], "mode": "remix"},
       "replies": [],
       "upstream": [],
       "status": 400,

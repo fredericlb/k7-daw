@@ -1,9 +1,6 @@
 {
   "project": "k7-core/instruments.synth.art-jup-8-v4.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "instruments.synth.art-jup-8-v4",
     "tempo": 120,
@@ -43,30 +40,9 @@
             "loopStart": 0,
             "loopEnd": 0,
             "notes": [
-              {
-                "time": 0,
-                "duration": 1,
-                "key": 60,
-                "vel": 0.8,
-                "channel": 0,
-                "rel": 1
-              },
-              {
-                "time": 1,
-                "duration": 1,
-                "key": 64,
-                "vel": 1,
-                "channel": 0,
-                "rel": 1
-              },
-              {
-                "time": 2,
-                "duration": 2,
-                "key": 67,
-                "vel": 1,
-                "channel": 0,
-                "rel": 1
-              }
+              {"time": 0, "duration": 1, "key": 60, "vel": 0.8, "channel": 0, "rel": 1},
+              {"time": 1, "duration": 1, "key": 64, "vel": 1, "channel": 0, "rel": 1},
+              {"time": 2, "duration": 2, "key": 67, "vel": 1, "channel": 0, "rel": 1}
             ]
           }
         ],
@@ -77,16 +53,9 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
@@ -96,12 +65,8 @@
           {
             "module": "fx",
             "uses": "@k7-core/instruments/synth/art-jup-8-v4",
-            "stage": [
-              "@output-volume"
-            ],
-            "events": [
-              "note-on"
-            ],
+            "stage": ["@output-volume"],
+            "events": ["note-on"],
             "category": "instruments",
             "emits": "audio",
             "stub": true,
@@ -114,15 +79,7 @@
                 {
                   "name": "Synth",
                   "widgets": {
-                    "osc": {
-                      "type": "group",
-                      "col": 0,
-                      "row": 0,
-                      "colSpan": 10,
-                      "rowSpan": 4,
-                      "label": "OSC",
-                      "color": "#3d7dff26"
-                    },
+                    "osc": {"type": "group", "col": 0, "row": 0, "colSpan": 10, "rowSpan": 4, "label": "OSC", "color": "#3d7dff26"},
                     "v1_wave": {
                       "type": "dropdown",
                       "col": 0,
@@ -131,22 +88,10 @@
                       "label": "Wave 1",
                       "bind": "VCO 1 Waveform",
                       "options": [
-                        {
-                          "label": "Triangle",
-                          "value": 0
-                        },
-                        {
-                          "label": "Saw",
-                          "value": 0.3333333333333333
-                        },
-                        {
-                          "label": "Rectangle",
-                          "value": 0.6666666666666666
-                        },
-                        {
-                          "label": "Square",
-                          "value": 1
-                        }
+                        {"label": "Triangle", "value": 0},
+                        {"label": "Saw", "value": 0.3333333333333333},
+                        {"label": "Rectangle", "value": 0.6666666666666666},
+                        {"label": "Square", "value": 1}
                       ]
                     },
                     "v1_oct": {
@@ -157,22 +102,10 @@
                       "label": "Oct 1",
                       "bind": "VCO 1 Coarse",
                       "options": [
-                        {
-                          "label": "16'",
-                          "value": 0
-                        },
-                        {
-                          "label": "8'",
-                          "value": 0.3333333333333333
-                        },
-                        {
-                          "label": "4'",
-                          "value": 0.6666666666666666
-                        },
-                        {
-                          "label": "2'",
-                          "value": 1
-                        }
+                        {"label": "16'", "value": 0},
+                        {"label": "8'", "value": 0.3333333333333333},
+                        {"label": "4'", "value": 0.6666666666666666},
+                        {"label": "2'", "value": 1}
                       ]
                     },
                     "v2_wave": {
@@ -183,22 +116,10 @@
                       "label": "Wave 2",
                       "bind": "VCO 2 Waveform",
                       "options": [
-                        {
-                          "label": "Sine",
-                          "value": 0
-                        },
-                        {
-                          "label": "Saw",
-                          "value": 0.3333333333333333
-                        },
-                        {
-                          "label": "Rectangle",
-                          "value": 0.6666666666666666
-                        },
-                        {
-                          "label": "Noise",
-                          "value": 1
-                        }
+                        {"label": "Sine", "value": 0},
+                        {"label": "Saw", "value": 0.3333333333333333},
+                        {"label": "Rectangle", "value": 0.6666666666666666},
+                        {"label": "Noise", "value": 1}
                       ]
                     },
                     "v2_semi": {
@@ -209,154 +130,43 @@
                       "label": "Semi 2",
                       "bind": "VCO 2 Coarse",
                       "options": [
-                        {
-                          "label": "-12",
-                          "value": 0
-                        },
-                        {
-                          "label": "-11",
-                          "value": 0.027777777777777776
-                        },
-                        {
-                          "label": "-10",
-                          "value": 0.05555555555555555
-                        },
-                        {
-                          "label": "-9",
-                          "value": 0.08333333333333333
-                        },
-                        {
-                          "label": "-8",
-                          "value": 0.1111111111111111
-                        },
-                        {
-                          "label": "-7",
-                          "value": 0.1388888888888889
-                        },
-                        {
-                          "label": "-6",
-                          "value": 0.16666666666666666
-                        },
-                        {
-                          "label": "-5",
-                          "value": 0.19444444444444445
-                        },
-                        {
-                          "label": "-4",
-                          "value": 0.2222222222222222
-                        },
-                        {
-                          "label": "-3",
-                          "value": 0.25
-                        },
-                        {
-                          "label": "-2",
-                          "value": 0.2777777777777778
-                        },
-                        {
-                          "label": "-1",
-                          "value": 0.3055555555555556
-                        },
-                        {
-                          "label": "0",
-                          "value": 0.3333333333333333
-                        },
-                        {
-                          "label": "1",
-                          "value": 0.3611111111111111
-                        },
-                        {
-                          "label": "2",
-                          "value": 0.3888888888888889
-                        },
-                        {
-                          "label": "3",
-                          "value": 0.4166666666666667
-                        },
-                        {
-                          "label": "4",
-                          "value": 0.4444444444444444
-                        },
-                        {
-                          "label": "5",
-                          "value": 0.4722222222222222
-                        },
-                        {
-                          "label": "6",
-                          "value": 0.5
-                        },
-                        {
-                          "label": "7",
-                          "value": 0.5277777777777778
-                        },
-                        {
-                          "label": "8",
-                          "value": 0.5555555555555556
-                        },
-                        {
-                          "label": "9",
-                          "value": 0.5833333333333334
-                        },
-                        {
-                          "label": "10",
-                          "value": 0.6111111111111112
-                        },
-                        {
-                          "label": "11",
-                          "value": 0.6388888888888888
-                        },
-                        {
-                          "label": "12",
-                          "value": 0.6666666666666666
-                        },
-                        {
-                          "label": "13",
-                          "value": 0.6944444444444444
-                        },
-                        {
-                          "label": "14",
-                          "value": 0.7222222222222222
-                        },
-                        {
-                          "label": "15",
-                          "value": 0.75
-                        },
-                        {
-                          "label": "16",
-                          "value": 0.7777777777777778
-                        },
-                        {
-                          "label": "17",
-                          "value": 0.8055555555555556
-                        },
-                        {
-                          "label": "18",
-                          "value": 0.8333333333333334
-                        },
-                        {
-                          "label": "19",
-                          "value": 0.8611111111111112
-                        },
-                        {
-                          "label": "20",
-                          "value": 0.8888888888888888
-                        },
-                        {
-                          "label": "21",
-                          "value": 0.9166666666666666
-                        },
-                        {
-                          "label": "22",
-                          "value": 0.9444444444444444
-                        },
-                        {
-                          "label": "23",
-                          "value": 0.9722222222222222
-                        },
-                        {
-                          "label": "24",
-                          "value": 1
-                        }
+                        {"label": "-12", "value": 0},
+                        {"label": "-11", "value": 0.027777777777777776},
+                        {"label": "-10", "value": 0.05555555555555555},
+                        {"label": "-9", "value": 0.08333333333333333},
+                        {"label": "-8", "value": 0.1111111111111111},
+                        {"label": "-7", "value": 0.1388888888888889},
+                        {"label": "-6", "value": 0.16666666666666666},
+                        {"label": "-5", "value": 0.19444444444444445},
+                        {"label": "-4", "value": 0.2222222222222222},
+                        {"label": "-3", "value": 0.25},
+                        {"label": "-2", "value": 0.2777777777777778},
+                        {"label": "-1", "value": 0.3055555555555556},
+                        {"label": "0", "value": 0.3333333333333333},
+                        {"label": "1", "value": 0.3611111111111111},
+                        {"label": "2", "value": 0.3888888888888889},
+                        {"label": "3", "value": 0.4166666666666667},
+                        {"label": "4", "value": 0.4444444444444444},
+                        {"label": "5", "value": 0.4722222222222222},
+                        {"label": "6", "value": 0.5},
+                        {"label": "7", "value": 0.5277777777777778},
+                        {"label": "8", "value": 0.5555555555555556},
+                        {"label": "9", "value": 0.5833333333333334},
+                        {"label": "10", "value": 0.6111111111111112},
+                        {"label": "11", "value": 0.6388888888888888},
+                        {"label": "12", "value": 0.6666666666666666},
+                        {"label": "13", "value": 0.6944444444444444},
+                        {"label": "14", "value": 0.7222222222222222},
+                        {"label": "15", "value": 0.75},
+                        {"label": "16", "value": 0.7777777777777778},
+                        {"label": "17", "value": 0.8055555555555556},
+                        {"label": "18", "value": 0.8333333333333334},
+                        {"label": "19", "value": 0.8611111111111112},
+                        {"label": "20", "value": 0.8888888888888888},
+                        {"label": "21", "value": 0.9166666666666666},
+                        {"label": "22", "value": 0.9444444444444444},
+                        {"label": "23", "value": 0.9722222222222222},
+                        {"label": "24", "value": 1}
                       ]
                     },
                     "vco_sync": {
@@ -366,20 +176,7 @@
                       "colSpan": 2,
                       "label": "Sync",
                       "bind": "VCO Sync",
-                      "options": [
-                        {
-                          "label": "VCO 1",
-                          "value": 0
-                        },
-                        {
-                          "label": "Off",
-                          "value": 0.5
-                        },
-                        {
-                          "label": "VCO 2",
-                          "value": 1
-                        }
-                      ]
+                      "options": [{"label": "VCO 1", "value": 0}, {"label": "Off", "value": 0.5}, {"label": "VCO 2", "value": 1}]
                     },
                     "pw_mode": {
                       "type": "dropdown",
@@ -388,20 +185,7 @@
                       "colSpan": 2,
                       "label": "PW Src",
                       "bind": "VCO Pulse-Width Mode",
-                      "options": [
-                        {
-                          "label": "Env1 Mode",
-                          "value": 0
-                        },
-                        {
-                          "label": "Manual",
-                          "value": 0.5
-                        },
-                        {
-                          "label": "LFO Mode",
-                          "value": 1
-                        }
-                      ]
+                      "options": [{"label": "Env1 Mode", "value": 0}, {"label": "Manual", "value": 0.5}, {"label": "LFO Mode", "value": 1}]
                     },
                     "v2_range": {
                       "type": "dropdown",
@@ -410,16 +194,7 @@
                       "colSpan": 2,
                       "label": "Range 2",
                       "bind": "VCO 2 Low Freq",
-                      "options": [
-                        {
-                          "label": "Norm",
-                          "value": 0
-                        },
-                        {
-                          "label": "Low",
-                          "value": 1
-                        }
-                      ]
+                      "options": [{"label": "Norm", "value": 0}, {"label": "Low", "value": 1}]
                     },
                     "mod_dest": {
                       "type": "dropdown",
@@ -428,96 +203,15 @@
                       "colSpan": 2,
                       "label": "Mod Dest",
                       "bind": "VCO Mod Select",
-                      "options": [
-                        {
-                          "label": "VCO 2",
-                          "value": 0
-                        },
-                        {
-                          "label": "VCO 1&2",
-                          "value": 0.5
-                        },
-                        {
-                          "label": "VCO 1",
-                          "value": 1
-                        }
-                      ]
+                      "options": [{"label": "VCO 2", "value": 0}, {"label": "VCO 1&2", "value": 0.5}, {"label": "VCO 1", "value": 1}]
                     },
-                    "v2_fine": {
-                      "type": "knob",
-                      "col": 0,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Fine",
-                      "bind": "VCO 2 Fine tune",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "xmod": {
-                      "type": "knob",
-                      "col": 2,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "X-Mod",
-                      "bind": "VCO Cross Modulation",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "pwm": {
-                      "type": "knob",
-                      "col": 4,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "PW",
-                      "bind": "VCO Pulse-Width Modulation",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "balance": {
-                      "type": "knob",
-                      "col": 6,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Balance",
-                      "bind": "Source Mix",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "vco_lfo": {
-                      "type": "knob",
-                      "col": 8,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "LFO",
-                      "bind": "VCO LFO Modulation",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "vco_env": {
-                      "type": "knob",
-                      "col": 8,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Env",
-                      "bind": "VCO Envelope Modulation",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "voice": {
-                      "type": "group",
-                      "col": 10,
-                      "row": 0,
-                      "colSpan": 4,
-                      "rowSpan": 3,
-                      "label": "VOICE",
-                      "color": "#6b6b6b33"
-                    },
+                    "v2_fine": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Fine", "bind": "VCO 2 Fine tune", "min": 0, "max": 1},
+                    "xmod": {"type": "knob", "col": 2, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "X-Mod", "bind": "VCO Cross Modulation", "min": 0, "max": 1},
+                    "pwm": {"type": "knob", "col": 4, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "PW", "bind": "VCO Pulse-Width Modulation", "min": 0, "max": 1},
+                    "balance": {"type": "knob", "col": 6, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Balance", "bind": "Source Mix", "min": 0, "max": 1},
+                    "vco_lfo": {"type": "knob", "col": 8, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "LFO", "bind": "VCO LFO Modulation", "min": 0, "max": 1},
+                    "vco_env": {"type": "knob", "col": 8, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Env", "bind": "VCO Envelope Modulation", "min": 0, "max": 1},
+                    "voice": {"type": "group", "col": 10, "row": 0, "colSpan": 4, "rowSpan": 3, "label": "VOICE", "color": "#6b6b6b33"},
                     "assign": {
                       "type": "dropdown",
                       "col": 10,
@@ -526,22 +220,10 @@
                       "label": "Assign",
                       "bind": "Voice Assign",
                       "options": [
-                        {
-                          "label": "Solo",
-                          "value": 0
-                        },
-                        {
-                          "label": "Unison",
-                          "value": 0.3333333333333333
-                        },
-                        {
-                          "label": "Poly 1",
-                          "value": 0.6666666666666666
-                        },
-                        {
-                          "label": "Poly 2",
-                          "value": 1
-                        }
+                        {"label": "Solo", "value": 0},
+                        {"label": "Unison", "value": 0.3333333333333333},
+                        {"label": "Poly 1", "value": 0.6666666666666666},
+                        {"label": "Poly 2", "value": 1}
                       ]
                     },
                     "porta_on": {
@@ -551,53 +233,16 @@
                       "colSpan": 2,
                       "label": "Porta",
                       "bind": "Portamento ON/OFF",
-                      "options": [
-                        {
-                          "label": "Off",
-                          "value": 0
-                        },
-                        {
-                          "label": "On",
-                          "value": 1
-                        }
-                      ]
+                      "options": [{"label": "Off", "value": 0}, {"label": "On", "value": 1}]
                     },
-                    "glide": {
-                      "type": "knob",
-                      "col": 10,
-                      "row": 1,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Glide",
-                      "bind": "Portamento",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "detune": {
-                      "type": "knob",
-                      "col": 12,
-                      "row": 1,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Detune",
-                      "bind": "Unison Detune",
-                      "min": 0,
-                      "max": 1
-                    }
+                    "glide": {"type": "knob", "col": 10, "row": 1, "colSpan": 2, "rowSpan": 2, "label": "Glide", "bind": "Portamento", "min": 0, "max": 1},
+                    "detune": {"type": "knob", "col": 12, "row": 1, "colSpan": 2, "rowSpan": 2, "label": "Detune", "bind": "Unison Detune", "min": 0, "max": 1}
                   }
                 },
                 {
                   "name": "Filter",
                   "widgets": {
-                    "vcf": {
-                      "type": "group",
-                      "col": 0,
-                      "row": 0,
-                      "colSpan": 12,
-                      "rowSpan": 4,
-                      "label": "VCF",
-                      "color": "#ff6a1a22"
-                    },
+                    "vcf": {"type": "group", "col": 0, "row": 0, "colSpan": 12, "rowSpan": 4, "label": "VCF", "color": "#ff6a1a22"},
                     "slope": {
                       "type": "dropdown",
                       "col": 0,
@@ -605,16 +250,7 @@
                       "colSpan": 2,
                       "label": "Slope",
                       "bind": "VCF slope",
-                      "options": [
-                        {
-                          "label": "12db",
-                          "value": 0
-                        },
-                        {
-                          "label": "24db",
-                          "value": 1
-                        }
-                      ]
+                      "options": [{"label": "12db", "value": 0}, {"label": "24db", "value": 1}]
                     },
                     "vcf_src": {
                       "type": "dropdown",
@@ -623,213 +259,36 @@
                       "colSpan": 2,
                       "label": "Env Src",
                       "bind": "VCF Envelope Selector",
-                      "options": [
-                        {
-                          "label": "Env1",
-                          "value": 0
-                        },
-                        {
-                          "label": "Env2",
-                          "value": 1
-                        }
-                      ]
+                      "options": [{"label": "Env1", "value": 0}, {"label": "Env2", "value": 1}]
                     },
-                    "hpf": {
-                      "type": "knob",
-                      "col": 0,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "HPF",
-                      "bind": "HPF Cutoff",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "cutoff": {
-                      "type": "knob",
-                      "col": 2,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Cutoff",
-                      "bind": "VCF Cutoff",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "res": {
-                      "type": "knob",
-                      "col": 4,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Res",
-                      "bind": "VCF Resonance",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "vcf_env": {
-                      "type": "knob",
-                      "col": 2,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Env Amt",
-                      "bind": "VCF Envelope Modulation",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "vcf_kybd": {
-                      "type": "knob",
-                      "col": 4,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Kybd",
-                      "bind": "VCF KYBD Follow Amount",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "vcf_lfo": {
-                      "type": "knob",
-                      "col": 6,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "LFO",
-                      "bind": "VCF LFO 1 Modulation Amount",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "vcf_screen": {
-                      "type": "lcdscreen",
-                      "col": 8,
-                      "row": 0,
-                      "colSpan": 4,
-                      "rowSpan": 4
-                    }
+                    "hpf": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "HPF", "bind": "HPF Cutoff", "min": 0, "max": 1},
+                    "cutoff": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Cutoff", "bind": "VCF Cutoff", "min": 0, "max": 1},
+                    "res": {"type": "knob", "col": 4, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Res", "bind": "VCF Resonance", "min": 0, "max": 1},
+                    "vcf_env": {"type": "knob", "col": 2, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Env Amt", "bind": "VCF Envelope Modulation", "min": 0, "max": 1},
+                    "vcf_kybd": {"type": "knob", "col": 4, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Kybd", "bind": "VCF KYBD Follow Amount", "min": 0, "max": 1},
+                    "vcf_lfo": {"type": "knob", "col": 6, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "LFO", "bind": "VCF LFO 1 Modulation Amount", "min": 0, "max": 1},
+                    "vcf_screen": {"type": "lcdscreen", "col": 8, "row": 0, "colSpan": 4, "rowSpan": 4}
                   }
                 },
                 {
                   "name": "Env",
                   "widgets": {
-                    "env": {
-                      "type": "group",
-                      "col": 0,
-                      "row": 0,
-                      "colSpan": 8,
-                      "rowSpan": 4,
-                      "label": "ENV",
-                      "color": "#3ec96b22"
-                    },
-                    "e1_a": {
-                      "type": "knob",
-                      "col": 0,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Atk 1",
-                      "bind": "Envelope 1 Attack",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "e1_d": {
-                      "type": "knob",
-                      "col": 2,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Dec 1",
-                      "bind": "Envelope 1 Decay",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "e1_s": {
-                      "type": "knob",
-                      "col": 4,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Sus 1",
-                      "bind": "Envelope 1 Sustain",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "e1_r": {
-                      "type": "knob",
-                      "col": 6,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Rel 1",
-                      "bind": "Envelope 1 Release",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "e2_a": {
-                      "type": "knob",
-                      "col": 0,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Atk 2",
-                      "bind": "Envelope 2 Attack",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "e2_d": {
-                      "type": "knob",
-                      "col": 2,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Dec 2",
-                      "bind": "Envelope 2 Decay",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "e2_s": {
-                      "type": "knob",
-                      "col": 4,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Sus 2",
-                      "bind": "Envelope 2 Sustain",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "e2_r": {
-                      "type": "knob",
-                      "col": 6,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Rel 2",
-                      "bind": "Envelope 2 Release",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "env_screen": {
-                      "type": "lcdscreen",
-                      "col": 8,
-                      "row": 0,
-                      "colSpan": 4,
-                      "rowSpan": 4
-                    }
+                    "env": {"type": "group", "col": 0, "row": 0, "colSpan": 8, "rowSpan": 4, "label": "ENV", "color": "#3ec96b22"},
+                    "e1_a": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Atk 1", "bind": "Envelope 1 Attack", "min": 0, "max": 1},
+                    "e1_d": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Dec 1", "bind": "Envelope 1 Decay", "min": 0, "max": 1},
+                    "e1_s": {"type": "knob", "col": 4, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Sus 1", "bind": "Envelope 1 Sustain", "min": 0, "max": 1},
+                    "e1_r": {"type": "knob", "col": 6, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Rel 1", "bind": "Envelope 1 Release", "min": 0, "max": 1},
+                    "e2_a": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Atk 2", "bind": "Envelope 2 Attack", "min": 0, "max": 1},
+                    "e2_d": {"type": "knob", "col": 2, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Dec 2", "bind": "Envelope 2 Decay", "min": 0, "max": 1},
+                    "e2_s": {"type": "knob", "col": 4, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Sus 2", "bind": "Envelope 2 Sustain", "min": 0, "max": 1},
+                    "e2_r": {"type": "knob", "col": 6, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Rel 2", "bind": "Envelope 2 Release", "min": 0, "max": 1},
+                    "env_screen": {"type": "lcdscreen", "col": 8, "row": 0, "colSpan": 4, "rowSpan": 4}
                   }
                 },
                 {
                   "name": "Mod",
                   "widgets": {
-                    "lfo": {
-                      "type": "group",
-                      "col": 0,
-                      "row": 0,
-                      "colSpan": 6,
-                      "rowSpan": 3,
-                      "label": "LFO",
-                      "color": "#ffffff14"
-                    },
+                    "lfo": {"type": "group", "col": 0, "row": 0, "colSpan": 6, "rowSpan": 3, "label": "LFO", "color": "#ffffff14"},
                     "lfo_wave": {
                       "type": "dropdown",
                       "col": 0,
@@ -838,22 +297,10 @@
                       "label": "Wave",
                       "bind": "LFO Wave Shape",
                       "options": [
-                        {
-                          "label": "Sine",
-                          "value": 0
-                        },
-                        {
-                          "label": "Saw",
-                          "value": 0.3333333333333333
-                        },
-                        {
-                          "label": "Square",
-                          "value": 0.6666666666666666
-                        },
-                        {
-                          "label": "Noise",
-                          "value": 1
-                        }
+                        {"label": "Sine", "value": 0},
+                        {"label": "Saw", "value": 0.3333333333333333},
+                        {"label": "Square", "value": 0.6666666666666666},
+                        {"label": "Noise", "value": 1}
                       ]
                     },
                     "lfo_sync": {
@@ -863,16 +310,7 @@
                       "colSpan": 2,
                       "label": "Sync",
                       "bind": "LFO Sync",
-                      "options": [
-                        {
-                          "label": "Hz",
-                          "value": 0
-                        },
-                        {
-                          "label": "Sync",
-                          "value": 1
-                        }
-                      ]
+                      "options": [{"label": "Hz", "value": 0}, {"label": "Sync", "value": 1}]
                     },
                     "lfo_div": {
                       "type": "dropdown",
@@ -882,137 +320,33 @@
                       "label": "Div",
                       "bind": "LFO Rate (Sync)",
                       "options": [
-                        {
-                          "label": "8",
-                          "value": 0
-                        },
-                        {
-                          "label": "6",
-                          "value": 0.05263157894736842
-                        },
-                        {
-                          "label": "4",
-                          "value": 0.10526315789473684
-                        },
-                        {
-                          "label": "3",
-                          "value": 0.15789473684210525
-                        },
-                        {
-                          "label": "2",
-                          "value": 0.21052631578947367
-                        },
-                        {
-                          "label": "3/2",
-                          "value": 0.2631578947368421
-                        },
-                        {
-                          "label": "1",
-                          "value": 0.3157894736842105
-                        },
-                        {
-                          "label": "3/4",
-                          "value": 0.3684210526315789
-                        },
-                        {
-                          "label": "1/2",
-                          "value": 0.42105263157894735
-                        },
-                        {
-                          "label": "3/8",
-                          "value": 0.47368421052631576
-                        },
-                        {
-                          "label": "1/3",
-                          "value": 0.5263157894736842
-                        },
-                        {
-                          "label": "5/16",
-                          "value": 0.5789473684210527
-                        },
-                        {
-                          "label": "1/4",
-                          "value": 0.631578947368421
-                        },
-                        {
-                          "label": "3/16",
-                          "value": 0.6842105263157895
-                        },
-                        {
-                          "label": "1/6",
-                          "value": 0.7368421052631579
-                        },
-                        {
-                          "label": "1/8",
-                          "value": 0.7894736842105263
-                        },
-                        {
-                          "label": "1/12",
-                          "value": 0.8421052631578947
-                        },
-                        {
-                          "label": "1/16",
-                          "value": 0.8947368421052632
-                        },
-                        {
-                          "label": "1/24",
-                          "value": 0.9473684210526315
-                        },
-                        {
-                          "label": "1/32",
-                          "value": 1
-                        }
+                        {"label": "8", "value": 0},
+                        {"label": "6", "value": 0.05263157894736842},
+                        {"label": "4", "value": 0.10526315789473684},
+                        {"label": "3", "value": 0.15789473684210525},
+                        {"label": "2", "value": 0.21052631578947367},
+                        {"label": "3/2", "value": 0.2631578947368421},
+                        {"label": "1", "value": 0.3157894736842105},
+                        {"label": "3/4", "value": 0.3684210526315789},
+                        {"label": "1/2", "value": 0.42105263157894735},
+                        {"label": "3/8", "value": 0.47368421052631576},
+                        {"label": "1/3", "value": 0.5263157894736842},
+                        {"label": "5/16", "value": 0.5789473684210527},
+                        {"label": "1/4", "value": 0.631578947368421},
+                        {"label": "3/16", "value": 0.6842105263157895},
+                        {"label": "1/6", "value": 0.7368421052631579},
+                        {"label": "1/8", "value": 0.7894736842105263},
+                        {"label": "1/12", "value": 0.8421052631578947},
+                        {"label": "1/16", "value": 0.8947368421052632},
+                        {"label": "1/24", "value": 0.9473684210526315},
+                        {"label": "1/32", "value": 1}
                       ]
                     },
-                    "lfo_rate": {
-                      "type": "knob",
-                      "col": 0,
-                      "row": 1,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Rate",
-                      "bind": "LFO Rate (Unsync)",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "lfo_delay": {
-                      "type": "knob",
-                      "col": 2,
-                      "row": 1,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Delay",
-                      "bind": "LFO Delay",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "lfo_vca": {
-                      "type": "knob",
-                      "col": 4,
-                      "row": 1,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Trem",
-                      "bind": "VCA LFO 1 Modulation Amount",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "lfo_screen": {
-                      "type": "lcdscreen",
-                      "col": 6,
-                      "row": 0,
-                      "colSpan": 4,
-                      "rowSpan": 3
-                    },
-                    "lever": {
-                      "type": "group",
-                      "col": 10,
-                      "row": 0,
-                      "colSpan": 6,
-                      "rowSpan": 3,
-                      "label": "LEVER",
-                      "color": "#ffffff14"
-                    },
+                    "lfo_rate": {"type": "knob", "col": 0, "row": 1, "colSpan": 2, "rowSpan": 2, "label": "Rate", "bind": "LFO Rate (Unsync)", "min": 0, "max": 1},
+                    "lfo_delay": {"type": "knob", "col": 2, "row": 1, "colSpan": 2, "rowSpan": 2, "label": "Delay", "bind": "LFO Delay", "min": 0, "max": 1},
+                    "lfo_vca": {"type": "knob", "col": 4, "row": 1, "colSpan": 2, "rowSpan": 2, "label": "Trem", "bind": "VCA LFO 1 Modulation Amount", "min": 0, "max": 1},
+                    "lfo_screen": {"type": "lcdscreen", "col": 6, "row": 0, "colSpan": 4, "rowSpan": 3},
+                    "lever": {"type": "group", "col": 10, "row": 0, "colSpan": 6, "rowSpan": 3, "label": "LEVER", "color": "#ffffff14"},
                     "lev_vco_on": {
                       "type": "dropdown",
                       "col": 10,
@@ -1020,16 +354,7 @@
                       "colSpan": 2,
                       "label": "Vib",
                       "bind": "LFO MOD VCO ON/OFF",
-                      "options": [
-                        {
-                          "label": "Off",
-                          "value": 0
-                        },
-                        {
-                          "label": "On",
-                          "value": 1
-                        }
-                      ]
+                      "options": [{"label": "Off", "value": 0}, {"label": "On", "value": 1}]
                     },
                     "lev_vcf_on": {
                       "type": "dropdown",
@@ -1038,16 +363,7 @@
                       "colSpan": 2,
                       "label": "Wah",
                       "bind": "LFO MOD VCF ON/OFF",
-                      "options": [
-                        {
-                          "label": "Off",
-                          "value": 0
-                        },
-                        {
-                          "label": "On",
-                          "value": 1
-                        }
-                      ]
+                      "options": [{"label": "Off", "value": 0}, {"label": "On", "value": 1}]
                     },
                     "bend_vco": {
                       "type": "dropdown",
@@ -1057,155 +373,42 @@
                       "label": "Bend",
                       "bind": "Bender VCO Amount",
                       "options": [
-                        {
-                          "label": "+/- 0 semi-tone",
-                          "value": 0
-                        },
-                        {
-                          "label": "+/- 1 semi-tone",
-                          "value": 0.041666666666666664
-                        },
-                        {
-                          "label": "+/- 2 semi-tones",
-                          "value": 0.08333333333333333
-                        },
-                        {
-                          "label": "+/- 3 semi-tones",
-                          "value": 0.125
-                        },
-                        {
-                          "label": "+/- 4 semi-tones",
-                          "value": 0.16666666666666666
-                        },
-                        {
-                          "label": "+/- 5 semi-tones",
-                          "value": 0.20833333333333334
-                        },
-                        {
-                          "label": "+/- 6 semi-tones",
-                          "value": 0.25
-                        },
-                        {
-                          "label": "+/- 7 semi-tones",
-                          "value": 0.2916666666666667
-                        },
-                        {
-                          "label": "+/- 8 semi-tones",
-                          "value": 0.3333333333333333
-                        },
-                        {
-                          "label": "+/- 9 semi-tones",
-                          "value": 0.375
-                        },
-                        {
-                          "label": "+/- 10 semi-tones",
-                          "value": 0.4166666666666667
-                        },
-                        {
-                          "label": "+/- 11 semi-tones",
-                          "value": 0.4583333333333333
-                        },
-                        {
-                          "label": "+/- 12 semi-tones",
-                          "value": 0.5
-                        },
-                        {
-                          "label": "+/- 13 semi-tones",
-                          "value": 0.5416666666666666
-                        },
-                        {
-                          "label": "+/- 14 semi-tones",
-                          "value": 0.5833333333333334
-                        },
-                        {
-                          "label": "+/- 15 semi-tones",
-                          "value": 0.625
-                        },
-                        {
-                          "label": "+/- 16 semi-tones",
-                          "value": 0.6666666666666666
-                        },
-                        {
-                          "label": "+/- 17 semi-tones",
-                          "value": 0.7083333333333334
-                        },
-                        {
-                          "label": "+/- 18 semi-tones",
-                          "value": 0.75
-                        },
-                        {
-                          "label": "+/- 19 semi-tones",
-                          "value": 0.7916666666666666
-                        },
-                        {
-                          "label": "+/- 20 semi-tones",
-                          "value": 0.8333333333333334
-                        },
-                        {
-                          "label": "+/- 21 semi-tones",
-                          "value": 0.875
-                        },
-                        {
-                          "label": "+/- 22 semi-tones",
-                          "value": 0.9166666666666666
-                        },
-                        {
-                          "label": "+/- 23 semi-tones",
-                          "value": 0.9583333333333334
-                        },
-                        {
-                          "label": "+/- 24 semi-tones",
-                          "value": 1
-                        }
+                        {"label": "+/- 0 semi-tone", "value": 0},
+                        {"label": "+/- 1 semi-tone", "value": 0.041666666666666664},
+                        {"label": "+/- 2 semi-tones", "value": 0.08333333333333333},
+                        {"label": "+/- 3 semi-tones", "value": 0.125},
+                        {"label": "+/- 4 semi-tones", "value": 0.16666666666666666},
+                        {"label": "+/- 5 semi-tones", "value": 0.20833333333333334},
+                        {"label": "+/- 6 semi-tones", "value": 0.25},
+                        {"label": "+/- 7 semi-tones", "value": 0.2916666666666667},
+                        {"label": "+/- 8 semi-tones", "value": 0.3333333333333333},
+                        {"label": "+/- 9 semi-tones", "value": 0.375},
+                        {"label": "+/- 10 semi-tones", "value": 0.4166666666666667},
+                        {"label": "+/- 11 semi-tones", "value": 0.4583333333333333},
+                        {"label": "+/- 12 semi-tones", "value": 0.5},
+                        {"label": "+/- 13 semi-tones", "value": 0.5416666666666666},
+                        {"label": "+/- 14 semi-tones", "value": 0.5833333333333334},
+                        {"label": "+/- 15 semi-tones", "value": 0.625},
+                        {"label": "+/- 16 semi-tones", "value": 0.6666666666666666},
+                        {"label": "+/- 17 semi-tones", "value": 0.7083333333333334},
+                        {"label": "+/- 18 semi-tones", "value": 0.75},
+                        {"label": "+/- 19 semi-tones", "value": 0.7916666666666666},
+                        {"label": "+/- 20 semi-tones", "value": 0.8333333333333334},
+                        {"label": "+/- 21 semi-tones", "value": 0.875},
+                        {"label": "+/- 22 semi-tones", "value": 0.9166666666666666},
+                        {"label": "+/- 23 semi-tones", "value": 0.9583333333333334},
+                        {"label": "+/- 24 semi-tones", "value": 1}
                       ]
                     },
-                    "lev_vco": {
-                      "type": "knob",
-                      "col": 10,
-                      "row": 1,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Vib Amt",
-                      "bind": "LFO MOD VCO Amount",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "lev_vcf": {
-                      "type": "knob",
-                      "col": 12,
-                      "row": 1,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Wah Amt",
-                      "bind": "LFO MOD VCF Amount",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "bend_vcf": {
-                      "type": "knob",
-                      "col": 14,
-                      "row": 1,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Bend F",
-                      "bind": "Bender VCF Amount",
-                      "min": 0,
-                      "max": 1
-                    }
+                    "lev_vco": {"type": "knob", "col": 10, "row": 1, "colSpan": 2, "rowSpan": 2, "label": "Vib Amt", "bind": "LFO MOD VCO Amount", "min": 0, "max": 1},
+                    "lev_vcf": {"type": "knob", "col": 12, "row": 1, "colSpan": 2, "rowSpan": 2, "label": "Wah Amt", "bind": "LFO MOD VCF Amount", "min": 0, "max": 1},
+                    "bend_vcf": {"type": "knob", "col": 14, "row": 1, "colSpan": 2, "rowSpan": 2, "label": "Bend F", "bind": "Bender VCF Amount", "min": 0, "max": 1}
                   }
                 },
                 {
                   "name": "Arp",
                   "widgets": {
-                    "arp": {
-                      "type": "group",
-                      "col": 0,
-                      "row": 0,
-                      "colSpan": 8,
-                      "rowSpan": 2,
-                      "label": "ARP",
-                      "color": "#6b6b6b33"
-                    },
+                    "arp": {"type": "group", "col": 0, "row": 0, "colSpan": 8, "rowSpan": 2, "label": "ARP", "color": "#6b6b6b33"},
                     "arp_on": {
                       "type": "dropdown",
                       "col": 0,
@@ -1213,16 +416,7 @@
                       "colSpan": 2,
                       "label": "Arp",
                       "bind": "Arpeggiator ON/OFF",
-                      "options": [
-                        {
-                          "label": "Off",
-                          "value": 0
-                        },
-                        {
-                          "label": "On",
-                          "value": 1
-                        }
-                      ]
+                      "options": [{"label": "Off", "value": 0}, {"label": "On", "value": 1}]
                     },
                     "arp_mode": {
                       "type": "dropdown",
@@ -1232,34 +426,13 @@
                       "label": "Mode",
                       "bind": "Arpeggiator Mode",
                       "options": [
-                        {
-                          "label": "Up",
-                          "value": 0
-                        },
-                        {
-                          "label": "Down",
-                          "value": 0.16666666666666666
-                        },
-                        {
-                          "label": "Ordered",
-                          "value": 0.3333333333333333
-                        },
-                        {
-                          "label": "Reversed",
-                          "value": 0.5
-                        },
-                        {
-                          "label": "Inc",
-                          "value": 0.6666666666666666
-                        },
-                        {
-                          "label": "Exc",
-                          "value": 0.8333333333333334
-                        },
-                        {
-                          "label": "Random",
-                          "value": 1
-                        }
+                        {"label": "Up", "value": 0},
+                        {"label": "Down", "value": 0.16666666666666666},
+                        {"label": "Ordered", "value": 0.3333333333333333},
+                        {"label": "Reversed", "value": 0.5},
+                        {"label": "Inc", "value": 0.6666666666666666},
+                        {"label": "Exc", "value": 0.8333333333333334},
+                        {"label": "Random", "value": 1}
                       ]
                     },
                     "arp_range": {
@@ -1270,22 +443,10 @@
                       "label": "Octaves",
                       "bind": "Arpeggiator Octave Range",
                       "options": [
-                        {
-                          "label": "1",
-                          "value": 0
-                        },
-                        {
-                          "label": "2",
-                          "value": 0.3333333333333333
-                        },
-                        {
-                          "label": "3",
-                          "value": 0.6666666666666666
-                        },
-                        {
-                          "label": "4",
-                          "value": 1
-                        }
+                        {"label": "1", "value": 0},
+                        {"label": "2", "value": 0.3333333333333333},
+                        {"label": "3", "value": 0.6666666666666666},
+                        {"label": "4", "value": 1}
                       ]
                     },
                     "arp_hold": {
@@ -1295,16 +456,7 @@
                       "colSpan": 2,
                       "label": "Hold",
                       "bind": "Hold",
-                      "options": [
-                        {
-                          "label": "Off",
-                          "value": 0
-                        },
-                        {
-                          "label": "On",
-                          "value": 1
-                        }
-                      ]
+                      "options": [{"label": "Off", "value": 0}, {"label": "On", "value": 1}]
                     },
                     "arp_sync": {
                       "type": "dropdown",
@@ -1313,16 +465,7 @@
                       "colSpan": 2,
                       "label": "Sync",
                       "bind": "Arpeggiator Sync",
-                      "options": [
-                        {
-                          "label": "Hz",
-                          "value": 0
-                        },
-                        {
-                          "label": "Sync",
-                          "value": 1
-                        }
-                      ]
+                      "options": [{"label": "Hz", "value": 0}, {"label": "Sync", "value": 1}]
                     },
                     "arp_div": {
                       "type": "dropdown",
@@ -1332,113 +475,28 @@
                       "label": "Div",
                       "bind": "Arpeggiator Rate (Synced)",
                       "options": [
-                        {
-                          "label": "1 Bar",
-                          "value": 0
-                        },
-                        {
-                          "label": "3/4 Bar",
-                          "value": 0.06666666666666667
-                        },
-                        {
-                          "label": "1/2 Bar",
-                          "value": 0.13333333333333333
-                        },
-                        {
-                          "label": "3/8 Bar",
-                          "value": 0.2
-                        },
-                        {
-                          "label": "1/3 Bar",
-                          "value": 0.26666666666666666
-                        },
-                        {
-                          "label": "5/16 Bar",
-                          "value": 0.3333333333333333
-                        },
-                        {
-                          "label": "1/4 Bar",
-                          "value": 0.4
-                        },
-                        {
-                          "label": "3/16 Bar",
-                          "value": 0.4666666666666667
-                        },
-                        {
-                          "label": "1/6 Bar",
-                          "value": 0.5333333333333333
-                        },
-                        {
-                          "label": "1/8 Bar",
-                          "value": 0.6
-                        },
-                        {
-                          "label": "1/12 Bar",
-                          "value": 0.6666666666666666
-                        },
-                        {
-                          "label": "1/16 Bar",
-                          "value": 0.7333333333333333
-                        },
-                        {
-                          "label": "1/24 Bar",
-                          "value": 0.8
-                        },
-                        {
-                          "label": "1/32 Bar",
-                          "value": 0.8666666666666667
-                        },
-                        {
-                          "label": "1/48 Bar",
-                          "value": 0.9333333333333333
-                        },
-                        {
-                          "label": "1/64 Bar",
-                          "value": 1
-                        }
+                        {"label": "1 Bar", "value": 0},
+                        {"label": "3/4 Bar", "value": 0.06666666666666667},
+                        {"label": "1/2 Bar", "value": 0.13333333333333333},
+                        {"label": "3/8 Bar", "value": 0.2},
+                        {"label": "1/3 Bar", "value": 0.26666666666666666},
+                        {"label": "5/16 Bar", "value": 0.3333333333333333},
+                        {"label": "1/4 Bar", "value": 0.4},
+                        {"label": "3/16 Bar", "value": 0.4666666666666667},
+                        {"label": "1/6 Bar", "value": 0.5333333333333333},
+                        {"label": "1/8 Bar", "value": 0.6},
+                        {"label": "1/12 Bar", "value": 0.6666666666666666},
+                        {"label": "1/16 Bar", "value": 0.7333333333333333},
+                        {"label": "1/24 Bar", "value": 0.8},
+                        {"label": "1/32 Bar", "value": 0.8666666666666667},
+                        {"label": "1/48 Bar", "value": 0.9333333333333333},
+                        {"label": "1/64 Bar", "value": 1}
                       ]
                     },
-                    "arp_rate": {
-                      "type": "number",
-                      "col": 6,
-                      "row": 1,
-                      "colSpan": 2,
-                      "label": "Rate",
-                      "bind": "Arpeggiator Rate (Unsync)",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "amp": {
-                      "type": "group",
-                      "col": 8,
-                      "row": 0,
-                      "colSpan": 8,
-                      "rowSpan": 2,
-                      "label": "AMP",
-                      "color": "#3ec96b22"
-                    },
-                    "vca_env": {
-                      "type": "knob",
-                      "col": 8,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "VCA Env",
-                      "bind": "VCA Envelope 2 Mod Amount ",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "spread": {
-                      "type": "knob",
-                      "col": 10,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Spread",
-                      "bind": "Pan Spread",
-                      "min": 0,
-                      "max": 1
-                    },
+                    "arp_rate": {"type": "number", "col": 6, "row": 1, "colSpan": 2, "label": "Rate", "bind": "Arpeggiator Rate (Unsync)", "min": 0, "max": 1},
+                    "amp": {"type": "group", "col": 8, "row": 0, "colSpan": 8, "rowSpan": 2, "label": "AMP", "color": "#3ec96b22"},
+                    "vca_env": {"type": "knob", "col": 8, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "VCA Env", "bind": "VCA Envelope 2 Mod Amount ", "min": 0, "max": 1},
+                    "spread": {"type": "knob", "col": 10, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Spread", "bind": "Pan Spread", "min": 0, "max": 1},
                     "e1_pol": {
                       "type": "dropdown",
                       "col": 12,
@@ -1446,16 +504,7 @@
                       "colSpan": 2,
                       "label": "Inv 1",
                       "bind": "Envelope 1 Polarity",
-                      "options": [
-                        {
-                          "label": "Off",
-                          "value": 0
-                        },
-                        {
-                          "label": "On",
-                          "value": 1
-                        }
-                      ]
+                      "options": [{"label": "Off", "value": 0}, {"label": "On", "value": 1}]
                     },
                     "e1_kf": {
                       "type": "dropdown",
@@ -1464,16 +513,7 @@
                       "colSpan": 2,
                       "label": "Kf 1",
                       "bind": "Envelope 1 KYBD Follow",
-                      "options": [
-                        {
-                          "label": "Off",
-                          "value": 0
-                        },
-                        {
-                          "label": "On",
-                          "value": 1
-                        }
-                      ]
+                      "options": [{"label": "Off", "value": 0}, {"label": "On", "value": 1}]
                     },
                     "drift": {
                       "type": "dropdown",
@@ -1483,22 +523,10 @@
                       "label": "Drift",
                       "bind": "Dispersion",
                       "options": [
-                        {
-                          "label": "1",
-                          "value": 0
-                        },
-                        {
-                          "label": "2",
-                          "value": 0.3333333333333333
-                        },
-                        {
-                          "label": "3",
-                          "value": 0.6666666666666666
-                        },
-                        {
-                          "label": "Custom",
-                          "value": 1
-                        }
+                        {"label": "1", "value": 0},
+                        {"label": "2", "value": 0.3333333333333333},
+                        {"label": "3", "value": 0.6666666666666666},
+                        {"label": "Custom", "value": 1}
                       ]
                     },
                     "e2_kf": {
@@ -1508,16 +536,7 @@
                       "colSpan": 2,
                       "label": "Kf 2",
                       "bind": "Envelope 2 KYBD Follow",
-                      "options": [
-                        {
-                          "label": "Off",
-                          "value": 0
-                        },
-                        {
-                          "label": "On",
-                          "value": 1
-                        }
-                      ]
+                      "options": [{"label": "Off", "value": 0}, {"label": "On", "value": 1}]
                     }
                   }
                 }
@@ -1531,15 +550,7 @@
                   {
                     "name": "Synth",
                     "widgets": {
-                      "osc": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 0,
-                        "colSpan": 4,
-                        "rowSpan": 10,
-                        "label": "OSC",
-                        "color": "#3d7dff26"
-                      },
+                      "osc": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 10, "label": "OSC", "color": "#3d7dff26"},
                       "v1_wave": {
                         "type": "dropdown",
                         "col": 0,
@@ -1548,22 +559,10 @@
                         "label": "Wave 1",
                         "bind": "VCO 1 Waveform",
                         "options": [
-                          {
-                            "label": "Triangle",
-                            "value": 0
-                          },
-                          {
-                            "label": "Saw",
-                            "value": 0.3333333333333333
-                          },
-                          {
-                            "label": "Rectangle",
-                            "value": 0.6666666666666666
-                          },
-                          {
-                            "label": "Square",
-                            "value": 1
-                          }
+                          {"label": "Triangle", "value": 0},
+                          {"label": "Saw", "value": 0.3333333333333333},
+                          {"label": "Rectangle", "value": 0.6666666666666666},
+                          {"label": "Square", "value": 1}
                         ]
                       },
                       "v1_oct": {
@@ -1574,22 +573,10 @@
                         "label": "Oct 1",
                         "bind": "VCO 1 Coarse",
                         "options": [
-                          {
-                            "label": "16'",
-                            "value": 0
-                          },
-                          {
-                            "label": "8'",
-                            "value": 0.3333333333333333
-                          },
-                          {
-                            "label": "4'",
-                            "value": 0.6666666666666666
-                          },
-                          {
-                            "label": "2'",
-                            "value": 1
-                          }
+                          {"label": "16'", "value": 0},
+                          {"label": "8'", "value": 0.3333333333333333},
+                          {"label": "4'", "value": 0.6666666666666666},
+                          {"label": "2'", "value": 1}
                         ]
                       },
                       "v2_wave": {
@@ -1600,22 +587,10 @@
                         "label": "Wave 2",
                         "bind": "VCO 2 Waveform",
                         "options": [
-                          {
-                            "label": "Sine",
-                            "value": 0
-                          },
-                          {
-                            "label": "Saw",
-                            "value": 0.3333333333333333
-                          },
-                          {
-                            "label": "Rectangle",
-                            "value": 0.6666666666666666
-                          },
-                          {
-                            "label": "Noise",
-                            "value": 1
-                          }
+                          {"label": "Sine", "value": 0},
+                          {"label": "Saw", "value": 0.3333333333333333},
+                          {"label": "Rectangle", "value": 0.6666666666666666},
+                          {"label": "Noise", "value": 1}
                         ]
                       },
                       "v2_semi": {
@@ -1626,154 +601,43 @@
                         "label": "Semi 2",
                         "bind": "VCO 2 Coarse",
                         "options": [
-                          {
-                            "label": "-12",
-                            "value": 0
-                          },
-                          {
-                            "label": "-11",
-                            "value": 0.027777777777777776
-                          },
-                          {
-                            "label": "-10",
-                            "value": 0.05555555555555555
-                          },
-                          {
-                            "label": "-9",
-                            "value": 0.08333333333333333
-                          },
-                          {
-                            "label": "-8",
-                            "value": 0.1111111111111111
-                          },
-                          {
-                            "label": "-7",
-                            "value": 0.1388888888888889
-                          },
-                          {
-                            "label": "-6",
-                            "value": 0.16666666666666666
-                          },
-                          {
-                            "label": "-5",
-                            "value": 0.19444444444444445
-                          },
-                          {
-                            "label": "-4",
-                            "value": 0.2222222222222222
-                          },
-                          {
-                            "label": "-3",
-                            "value": 0.25
-                          },
-                          {
-                            "label": "-2",
-                            "value": 0.2777777777777778
-                          },
-                          {
-                            "label": "-1",
-                            "value": 0.3055555555555556
-                          },
-                          {
-                            "label": "0",
-                            "value": 0.3333333333333333
-                          },
-                          {
-                            "label": "1",
-                            "value": 0.3611111111111111
-                          },
-                          {
-                            "label": "2",
-                            "value": 0.3888888888888889
-                          },
-                          {
-                            "label": "3",
-                            "value": 0.4166666666666667
-                          },
-                          {
-                            "label": "4",
-                            "value": 0.4444444444444444
-                          },
-                          {
-                            "label": "5",
-                            "value": 0.4722222222222222
-                          },
-                          {
-                            "label": "6",
-                            "value": 0.5
-                          },
-                          {
-                            "label": "7",
-                            "value": 0.5277777777777778
-                          },
-                          {
-                            "label": "8",
-                            "value": 0.5555555555555556
-                          },
-                          {
-                            "label": "9",
-                            "value": 0.5833333333333334
-                          },
-                          {
-                            "label": "10",
-                            "value": 0.6111111111111112
-                          },
-                          {
-                            "label": "11",
-                            "value": 0.6388888888888888
-                          },
-                          {
-                            "label": "12",
-                            "value": 0.6666666666666666
-                          },
-                          {
-                            "label": "13",
-                            "value": 0.6944444444444444
-                          },
-                          {
-                            "label": "14",
-                            "value": 0.7222222222222222
-                          },
-                          {
-                            "label": "15",
-                            "value": 0.75
-                          },
-                          {
-                            "label": "16",
-                            "value": 0.7777777777777778
-                          },
-                          {
-                            "label": "17",
-                            "value": 0.8055555555555556
-                          },
-                          {
-                            "label": "18",
-                            "value": 0.8333333333333334
-                          },
-                          {
-                            "label": "19",
-                            "value": 0.8611111111111112
-                          },
-                          {
-                            "label": "20",
-                            "value": 0.8888888888888888
-                          },
-                          {
-                            "label": "21",
-                            "value": 0.9166666666666666
-                          },
-                          {
-                            "label": "22",
-                            "value": 0.9444444444444444
-                          },
-                          {
-                            "label": "23",
-                            "value": 0.9722222222222222
-                          },
-                          {
-                            "label": "24",
-                            "value": 1
-                          }
+                          {"label": "-12", "value": 0},
+                          {"label": "-11", "value": 0.027777777777777776},
+                          {"label": "-10", "value": 0.05555555555555555},
+                          {"label": "-9", "value": 0.08333333333333333},
+                          {"label": "-8", "value": 0.1111111111111111},
+                          {"label": "-7", "value": 0.1388888888888889},
+                          {"label": "-6", "value": 0.16666666666666666},
+                          {"label": "-5", "value": 0.19444444444444445},
+                          {"label": "-4", "value": 0.2222222222222222},
+                          {"label": "-3", "value": 0.25},
+                          {"label": "-2", "value": 0.2777777777777778},
+                          {"label": "-1", "value": 0.3055555555555556},
+                          {"label": "0", "value": 0.3333333333333333},
+                          {"label": "1", "value": 0.3611111111111111},
+                          {"label": "2", "value": 0.3888888888888889},
+                          {"label": "3", "value": 0.4166666666666667},
+                          {"label": "4", "value": 0.4444444444444444},
+                          {"label": "5", "value": 0.4722222222222222},
+                          {"label": "6", "value": 0.5},
+                          {"label": "7", "value": 0.5277777777777778},
+                          {"label": "8", "value": 0.5555555555555556},
+                          {"label": "9", "value": 0.5833333333333334},
+                          {"label": "10", "value": 0.6111111111111112},
+                          {"label": "11", "value": 0.6388888888888888},
+                          {"label": "12", "value": 0.6666666666666666},
+                          {"label": "13", "value": 0.6944444444444444},
+                          {"label": "14", "value": 0.7222222222222222},
+                          {"label": "15", "value": 0.75},
+                          {"label": "16", "value": 0.7777777777777778},
+                          {"label": "17", "value": 0.8055555555555556},
+                          {"label": "18", "value": 0.8333333333333334},
+                          {"label": "19", "value": 0.8611111111111112},
+                          {"label": "20", "value": 0.8888888888888888},
+                          {"label": "21", "value": 0.9166666666666666},
+                          {"label": "22", "value": 0.9444444444444444},
+                          {"label": "23", "value": 0.9722222222222222},
+                          {"label": "24", "value": 1}
                         ]
                       },
                       "vco_sync": {
@@ -1783,20 +647,7 @@
                         "colSpan": 2,
                         "label": "Sync",
                         "bind": "VCO Sync",
-                        "options": [
-                          {
-                            "label": "VCO 1",
-                            "value": 0
-                          },
-                          {
-                            "label": "Off",
-                            "value": 0.5
-                          },
-                          {
-                            "label": "VCO 2",
-                            "value": 1
-                          }
-                        ]
+                        "options": [{"label": "VCO 1", "value": 0}, {"label": "Off", "value": 0.5}, {"label": "VCO 2", "value": 1}]
                       },
                       "pw_mode": {
                         "type": "dropdown",
@@ -1805,20 +656,7 @@
                         "colSpan": 2,
                         "label": "PW Src",
                         "bind": "VCO Pulse-Width Mode",
-                        "options": [
-                          {
-                            "label": "Env1 Mode",
-                            "value": 0
-                          },
-                          {
-                            "label": "Manual",
-                            "value": 0.5
-                          },
-                          {
-                            "label": "LFO Mode",
-                            "value": 1
-                          }
-                        ]
+                        "options": [{"label": "Env1 Mode", "value": 0}, {"label": "Manual", "value": 0.5}, {"label": "LFO Mode", "value": 1}]
                       },
                       "v2_range": {
                         "type": "dropdown",
@@ -1827,16 +665,7 @@
                         "colSpan": 2,
                         "label": "Range 2",
                         "bind": "VCO 2 Low Freq",
-                        "options": [
-                          {
-                            "label": "Norm",
-                            "value": 0
-                          },
-                          {
-                            "label": "Low",
-                            "value": 1
-                          }
-                        ]
+                        "options": [{"label": "Norm", "value": 0}, {"label": "Low", "value": 1}]
                       },
                       "mod_dest": {
                         "type": "dropdown",
@@ -1845,96 +674,15 @@
                         "colSpan": 2,
                         "label": "Mod Dest",
                         "bind": "VCO Mod Select",
-                        "options": [
-                          {
-                            "label": "VCO 2",
-                            "value": 0
-                          },
-                          {
-                            "label": "VCO 1&2",
-                            "value": 0.5
-                          },
-                          {
-                            "label": "VCO 1",
-                            "value": 1
-                          }
-                        ]
+                        "options": [{"label": "VCO 2", "value": 0}, {"label": "VCO 1&2", "value": 0.5}, {"label": "VCO 1", "value": 1}]
                       },
-                      "v2_fine": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 4,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Fine",
-                        "bind": "VCO 2 Fine tune",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "xmod": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 4,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "X-Mod",
-                        "bind": "VCO Cross Modulation",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "pwm": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 6,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "PW",
-                        "bind": "VCO Pulse-Width Modulation",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "balance": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 6,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Balance",
-                        "bind": "Source Mix",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "vco_lfo": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 8,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "LFO",
-                        "bind": "VCO LFO Modulation",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "vco_env": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 8,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Env",
-                        "bind": "VCO Envelope Modulation",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "voice": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 10,
-                        "colSpan": 4,
-                        "rowSpan": 3,
-                        "label": "VOICE",
-                        "color": "#6b6b6b33"
-                      },
+                      "v2_fine": {"type": "knob", "col": 0, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "Fine", "bind": "VCO 2 Fine tune", "min": 0, "max": 1},
+                      "xmod": {"type": "knob", "col": 2, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "X-Mod", "bind": "VCO Cross Modulation", "min": 0, "max": 1},
+                      "pwm": {"type": "knob", "col": 0, "row": 6, "colSpan": 2, "rowSpan": 2, "label": "PW", "bind": "VCO Pulse-Width Modulation", "min": 0, "max": 1},
+                      "balance": {"type": "knob", "col": 2, "row": 6, "colSpan": 2, "rowSpan": 2, "label": "Balance", "bind": "Source Mix", "min": 0, "max": 1},
+                      "vco_lfo": {"type": "knob", "col": 0, "row": 8, "colSpan": 2, "rowSpan": 2, "label": "LFO", "bind": "VCO LFO Modulation", "min": 0, "max": 1},
+                      "vco_env": {"type": "knob", "col": 2, "row": 8, "colSpan": 2, "rowSpan": 2, "label": "Env", "bind": "VCO Envelope Modulation", "min": 0, "max": 1},
+                      "voice": {"type": "group", "col": 0, "row": 10, "colSpan": 4, "rowSpan": 3, "label": "VOICE", "color": "#6b6b6b33"},
                       "assign": {
                         "type": "dropdown",
                         "col": 0,
@@ -1943,22 +691,10 @@
                         "label": "Assign",
                         "bind": "Voice Assign",
                         "options": [
-                          {
-                            "label": "Solo",
-                            "value": 0
-                          },
-                          {
-                            "label": "Unison",
-                            "value": 0.3333333333333333
-                          },
-                          {
-                            "label": "Poly 1",
-                            "value": 0.6666666666666666
-                          },
-                          {
-                            "label": "Poly 2",
-                            "value": 1
-                          }
+                          {"label": "Solo", "value": 0},
+                          {"label": "Unison", "value": 0.3333333333333333},
+                          {"label": "Poly 1", "value": 0.6666666666666666},
+                          {"label": "Poly 2", "value": 1}
                         ]
                       },
                       "porta_on": {
@@ -1968,60 +704,17 @@
                         "colSpan": 2,
                         "label": "Porta",
                         "bind": "Portamento ON/OFF",
-                        "options": [
-                          {
-                            "label": "Off",
-                            "value": 0
-                          },
-                          {
-                            "label": "On",
-                            "value": 1
-                          }
-                        ]
+                        "options": [{"label": "Off", "value": 0}, {"label": "On", "value": 1}]
                       },
-                      "glide": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 11,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Glide",
-                        "bind": "Portamento",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "detune": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 11,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Detune",
-                        "bind": "Unison Detune",
-                        "min": 0,
-                        "max": 1
-                      }
+                      "glide": {"type": "knob", "col": 0, "row": 11, "colSpan": 2, "rowSpan": 2, "label": "Glide", "bind": "Portamento", "min": 0, "max": 1},
+                      "detune": {"type": "knob", "col": 2, "row": 11, "colSpan": 2, "rowSpan": 2, "label": "Detune", "bind": "Unison Detune", "min": 0, "max": 1}
                     }
                   },
                   {
                     "name": "Filter",
                     "widgets": {
-                      "vcf": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 0,
-                        "colSpan": 4,
-                        "rowSpan": 9,
-                        "label": "VCF",
-                        "color": "#ff6a1a22"
-                      },
-                      "vcf_screen": {
-                        "type": "lcdscreen",
-                        "col": 0,
-                        "row": 0,
-                        "colSpan": 4,
-                        "rowSpan": 2
-                      },
+                      "vcf": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 9, "label": "VCF", "color": "#ff6a1a22"},
+                      "vcf_screen": {"type": "lcdscreen", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 2},
                       "slope": {
                         "type": "dropdown",
                         "col": 0,
@@ -2029,16 +722,7 @@
                         "colSpan": 2,
                         "label": "Slope",
                         "bind": "VCF slope",
-                        "options": [
-                          {
-                            "label": "12db",
-                            "value": 0
-                          },
-                          {
-                            "label": "24db",
-                            "value": 1
-                          }
-                        ]
+                        "options": [{"label": "12db", "value": 0}, {"label": "24db", "value": 1}]
                       },
                       "vcf_src": {
                         "type": "dropdown",
@@ -2047,206 +731,35 @@
                         "colSpan": 2,
                         "label": "Env Src",
                         "bind": "VCF Envelope Selector",
-                        "options": [
-                          {
-                            "label": "Env1",
-                            "value": 0
-                          },
-                          {
-                            "label": "Env2",
-                            "value": 1
-                          }
-                        ]
+                        "options": [{"label": "Env1", "value": 0}, {"label": "Env2", "value": 1}]
                       },
-                      "cutoff": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 3,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Cutoff",
-                        "bind": "VCF Cutoff",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "res": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 3,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Res",
-                        "bind": "VCF Resonance",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "vcf_env": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 5,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Env Amt",
-                        "bind": "VCF Envelope Modulation",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "vcf_kybd": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 5,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Kybd",
-                        "bind": "VCF KYBD Follow Amount",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "hpf": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 7,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "HPF",
-                        "bind": "HPF Cutoff",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "vcf_lfo": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 7,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "LFO",
-                        "bind": "VCF LFO 1 Modulation Amount",
-                        "min": 0,
-                        "max": 1
-                      }
+                      "cutoff": {"type": "knob", "col": 0, "row": 3, "colSpan": 2, "rowSpan": 2, "label": "Cutoff", "bind": "VCF Cutoff", "min": 0, "max": 1},
+                      "res": {"type": "knob", "col": 2, "row": 3, "colSpan": 2, "rowSpan": 2, "label": "Res", "bind": "VCF Resonance", "min": 0, "max": 1},
+                      "vcf_env": {"type": "knob", "col": 0, "row": 5, "colSpan": 2, "rowSpan": 2, "label": "Env Amt", "bind": "VCF Envelope Modulation", "min": 0, "max": 1},
+                      "vcf_kybd": {"type": "knob", "col": 2, "row": 5, "colSpan": 2, "rowSpan": 2, "label": "Kybd", "bind": "VCF KYBD Follow Amount", "min": 0, "max": 1},
+                      "hpf": {"type": "knob", "col": 0, "row": 7, "colSpan": 2, "rowSpan": 2, "label": "HPF", "bind": "HPF Cutoff", "min": 0, "max": 1},
+                      "vcf_lfo": {"type": "knob", "col": 2, "row": 7, "colSpan": 2, "rowSpan": 2, "label": "LFO", "bind": "VCF LFO 1 Modulation Amount", "min": 0, "max": 1}
                     }
                   },
                   {
                     "name": "Env",
                     "widgets": {
-                      "env": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 0,
-                        "colSpan": 4,
-                        "rowSpan": 8,
-                        "label": "ENV",
-                        "color": "#3ec96b22"
-                      },
-                      "e1_a": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 0,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Atk 1",
-                        "bind": "Envelope 1 Attack",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "e1_d": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 0,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Dec 1",
-                        "bind": "Envelope 1 Decay",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "e1_s": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 2,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Sus 1",
-                        "bind": "Envelope 1 Sustain",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "e1_r": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 2,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Rel 1",
-                        "bind": "Envelope 1 Release",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "e2_a": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 4,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Atk 2",
-                        "bind": "Envelope 2 Attack",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "e2_d": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 4,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Dec 2",
-                        "bind": "Envelope 2 Decay",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "e2_s": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 6,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Sus 2",
-                        "bind": "Envelope 2 Sustain",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "e2_r": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 6,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Rel 2",
-                        "bind": "Envelope 2 Release",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "env_screen": {
-                        "type": "lcdscreen",
-                        "col": 0,
-                        "row": 8,
-                        "colSpan": 4,
-                        "rowSpan": 3
-                      }
+                      "env": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 8, "label": "ENV", "color": "#3ec96b22"},
+                      "e1_a": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Atk 1", "bind": "Envelope 1 Attack", "min": 0, "max": 1},
+                      "e1_d": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Dec 1", "bind": "Envelope 1 Decay", "min": 0, "max": 1},
+                      "e1_s": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Sus 1", "bind": "Envelope 1 Sustain", "min": 0, "max": 1},
+                      "e1_r": {"type": "knob", "col": 2, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Rel 1", "bind": "Envelope 1 Release", "min": 0, "max": 1},
+                      "e2_a": {"type": "knob", "col": 0, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "Atk 2", "bind": "Envelope 2 Attack", "min": 0, "max": 1},
+                      "e2_d": {"type": "knob", "col": 2, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "Dec 2", "bind": "Envelope 2 Decay", "min": 0, "max": 1},
+                      "e2_s": {"type": "knob", "col": 0, "row": 6, "colSpan": 2, "rowSpan": 2, "label": "Sus 2", "bind": "Envelope 2 Sustain", "min": 0, "max": 1},
+                      "e2_r": {"type": "knob", "col": 2, "row": 6, "colSpan": 2, "rowSpan": 2, "label": "Rel 2", "bind": "Envelope 2 Release", "min": 0, "max": 1},
+                      "env_screen": {"type": "lcdscreen", "col": 0, "row": 8, "colSpan": 4, "rowSpan": 3}
                     }
                   },
                   {
                     "name": "Mod",
                     "widgets": {
-                      "lfo": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 0,
-                        "colSpan": 4,
-                        "rowSpan": 6,
-                        "label": "LFO",
-                        "color": "#ffffff14"
-                      },
+                      "lfo": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 6, "label": "LFO", "color": "#ffffff14"},
                       "lfo_wave": {
                         "type": "dropdown",
                         "col": 0,
@@ -2255,22 +768,10 @@
                         "label": "Wave",
                         "bind": "LFO Wave Shape",
                         "options": [
-                          {
-                            "label": "Sine",
-                            "value": 0
-                          },
-                          {
-                            "label": "Saw",
-                            "value": 0.3333333333333333
-                          },
-                          {
-                            "label": "Square",
-                            "value": 0.6666666666666666
-                          },
-                          {
-                            "label": "Noise",
-                            "value": 1
-                          }
+                          {"label": "Sine", "value": 0},
+                          {"label": "Saw", "value": 0.3333333333333333},
+                          {"label": "Square", "value": 0.6666666666666666},
+                          {"label": "Noise", "value": 1}
                         ]
                       },
                       "lfo_sync": {
@@ -2280,16 +781,7 @@
                         "colSpan": 2,
                         "label": "Sync",
                         "bind": "LFO Sync",
-                        "options": [
-                          {
-                            "label": "Hz",
-                            "value": 0
-                          },
-                          {
-                            "label": "Sync",
-                            "value": 1
-                          }
-                        ]
+                        "options": [{"label": "Hz", "value": 0}, {"label": "Sync", "value": 1}]
                       },
                       "lfo_div": {
                         "type": "dropdown",
@@ -2299,137 +791,33 @@
                         "label": "Div",
                         "bind": "LFO Rate (Sync)",
                         "options": [
-                          {
-                            "label": "8",
-                            "value": 0
-                          },
-                          {
-                            "label": "6",
-                            "value": 0.05263157894736842
-                          },
-                          {
-                            "label": "4",
-                            "value": 0.10526315789473684
-                          },
-                          {
-                            "label": "3",
-                            "value": 0.15789473684210525
-                          },
-                          {
-                            "label": "2",
-                            "value": 0.21052631578947367
-                          },
-                          {
-                            "label": "3/2",
-                            "value": 0.2631578947368421
-                          },
-                          {
-                            "label": "1",
-                            "value": 0.3157894736842105
-                          },
-                          {
-                            "label": "3/4",
-                            "value": 0.3684210526315789
-                          },
-                          {
-                            "label": "1/2",
-                            "value": 0.42105263157894735
-                          },
-                          {
-                            "label": "3/8",
-                            "value": 0.47368421052631576
-                          },
-                          {
-                            "label": "1/3",
-                            "value": 0.5263157894736842
-                          },
-                          {
-                            "label": "5/16",
-                            "value": 0.5789473684210527
-                          },
-                          {
-                            "label": "1/4",
-                            "value": 0.631578947368421
-                          },
-                          {
-                            "label": "3/16",
-                            "value": 0.6842105263157895
-                          },
-                          {
-                            "label": "1/6",
-                            "value": 0.7368421052631579
-                          },
-                          {
-                            "label": "1/8",
-                            "value": 0.7894736842105263
-                          },
-                          {
-                            "label": "1/12",
-                            "value": 0.8421052631578947
-                          },
-                          {
-                            "label": "1/16",
-                            "value": 0.8947368421052632
-                          },
-                          {
-                            "label": "1/24",
-                            "value": 0.9473684210526315
-                          },
-                          {
-                            "label": "1/32",
-                            "value": 1
-                          }
+                          {"label": "8", "value": 0},
+                          {"label": "6", "value": 0.05263157894736842},
+                          {"label": "4", "value": 0.10526315789473684},
+                          {"label": "3", "value": 0.15789473684210525},
+                          {"label": "2", "value": 0.21052631578947367},
+                          {"label": "3/2", "value": 0.2631578947368421},
+                          {"label": "1", "value": 0.3157894736842105},
+                          {"label": "3/4", "value": 0.3684210526315789},
+                          {"label": "1/2", "value": 0.42105263157894735},
+                          {"label": "3/8", "value": 0.47368421052631576},
+                          {"label": "1/3", "value": 0.5263157894736842},
+                          {"label": "5/16", "value": 0.5789473684210527},
+                          {"label": "1/4", "value": 0.631578947368421},
+                          {"label": "3/16", "value": 0.6842105263157895},
+                          {"label": "1/6", "value": 0.7368421052631579},
+                          {"label": "1/8", "value": 0.7894736842105263},
+                          {"label": "1/12", "value": 0.8421052631578947},
+                          {"label": "1/16", "value": 0.8947368421052632},
+                          {"label": "1/24", "value": 0.9473684210526315},
+                          {"label": "1/32", "value": 1}
                         ]
                       },
-                      "lfo_rate": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 2,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Rate",
-                        "bind": "LFO Rate (Unsync)",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "lfo_delay": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 2,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Delay",
-                        "bind": "LFO Delay",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "lfo_vca": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 4,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Trem",
-                        "bind": "VCA LFO 1 Modulation Amount",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "lfo_screen": {
-                        "type": "lcdscreen",
-                        "col": 0,
-                        "row": 6,
-                        "colSpan": 4,
-                        "rowSpan": 2
-                      },
-                      "lever": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 8,
-                        "colSpan": 4,
-                        "rowSpan": 6,
-                        "label": "LEVER",
-                        "color": "#ffffff14"
-                      },
+                      "lfo_rate": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Rate", "bind": "LFO Rate (Unsync)", "min": 0, "max": 1},
+                      "lfo_delay": {"type": "knob", "col": 2, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Delay", "bind": "LFO Delay", "min": 0, "max": 1},
+                      "lfo_vca": {"type": "knob", "col": 0, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "Trem", "bind": "VCA LFO 1 Modulation Amount", "min": 0, "max": 1},
+                      "lfo_screen": {"type": "lcdscreen", "col": 0, "row": 6, "colSpan": 4, "rowSpan": 2},
+                      "lever": {"type": "group", "col": 0, "row": 8, "colSpan": 4, "rowSpan": 6, "label": "LEVER", "color": "#ffffff14"},
                       "lev_vco_on": {
                         "type": "dropdown",
                         "col": 0,
@@ -2437,16 +825,7 @@
                         "colSpan": 2,
                         "label": "Vib",
                         "bind": "LFO MOD VCO ON/OFF",
-                        "options": [
-                          {
-                            "label": "Off",
-                            "value": 0
-                          },
-                          {
-                            "label": "On",
-                            "value": 1
-                          }
-                        ]
+                        "options": [{"label": "Off", "value": 0}, {"label": "On", "value": 1}]
                       },
                       "lev_vcf_on": {
                         "type": "dropdown",
@@ -2455,16 +834,7 @@
                         "colSpan": 2,
                         "label": "Wah",
                         "bind": "LFO MOD VCF ON/OFF",
-                        "options": [
-                          {
-                            "label": "Off",
-                            "value": 0
-                          },
-                          {
-                            "label": "On",
-                            "value": 1
-                          }
-                        ]
+                        "options": [{"label": "Off", "value": 0}, {"label": "On", "value": 1}]
                       },
                       "bend_vco": {
                         "type": "dropdown",
@@ -2474,155 +844,42 @@
                         "label": "Bend",
                         "bind": "Bender VCO Amount",
                         "options": [
-                          {
-                            "label": "+/- 0 semi-tone",
-                            "value": 0
-                          },
-                          {
-                            "label": "+/- 1 semi-tone",
-                            "value": 0.041666666666666664
-                          },
-                          {
-                            "label": "+/- 2 semi-tones",
-                            "value": 0.08333333333333333
-                          },
-                          {
-                            "label": "+/- 3 semi-tones",
-                            "value": 0.125
-                          },
-                          {
-                            "label": "+/- 4 semi-tones",
-                            "value": 0.16666666666666666
-                          },
-                          {
-                            "label": "+/- 5 semi-tones",
-                            "value": 0.20833333333333334
-                          },
-                          {
-                            "label": "+/- 6 semi-tones",
-                            "value": 0.25
-                          },
-                          {
-                            "label": "+/- 7 semi-tones",
-                            "value": 0.2916666666666667
-                          },
-                          {
-                            "label": "+/- 8 semi-tones",
-                            "value": 0.3333333333333333
-                          },
-                          {
-                            "label": "+/- 9 semi-tones",
-                            "value": 0.375
-                          },
-                          {
-                            "label": "+/- 10 semi-tones",
-                            "value": 0.4166666666666667
-                          },
-                          {
-                            "label": "+/- 11 semi-tones",
-                            "value": 0.4583333333333333
-                          },
-                          {
-                            "label": "+/- 12 semi-tones",
-                            "value": 0.5
-                          },
-                          {
-                            "label": "+/- 13 semi-tones",
-                            "value": 0.5416666666666666
-                          },
-                          {
-                            "label": "+/- 14 semi-tones",
-                            "value": 0.5833333333333334
-                          },
-                          {
-                            "label": "+/- 15 semi-tones",
-                            "value": 0.625
-                          },
-                          {
-                            "label": "+/- 16 semi-tones",
-                            "value": 0.6666666666666666
-                          },
-                          {
-                            "label": "+/- 17 semi-tones",
-                            "value": 0.7083333333333334
-                          },
-                          {
-                            "label": "+/- 18 semi-tones",
-                            "value": 0.75
-                          },
-                          {
-                            "label": "+/- 19 semi-tones",
-                            "value": 0.7916666666666666
-                          },
-                          {
-                            "label": "+/- 20 semi-tones",
-                            "value": 0.8333333333333334
-                          },
-                          {
-                            "label": "+/- 21 semi-tones",
-                            "value": 0.875
-                          },
-                          {
-                            "label": "+/- 22 semi-tones",
-                            "value": 0.9166666666666666
-                          },
-                          {
-                            "label": "+/- 23 semi-tones",
-                            "value": 0.9583333333333334
-                          },
-                          {
-                            "label": "+/- 24 semi-tones",
-                            "value": 1
-                          }
+                          {"label": "+/- 0 semi-tone", "value": 0},
+                          {"label": "+/- 1 semi-tone", "value": 0.041666666666666664},
+                          {"label": "+/- 2 semi-tones", "value": 0.08333333333333333},
+                          {"label": "+/- 3 semi-tones", "value": 0.125},
+                          {"label": "+/- 4 semi-tones", "value": 0.16666666666666666},
+                          {"label": "+/- 5 semi-tones", "value": 0.20833333333333334},
+                          {"label": "+/- 6 semi-tones", "value": 0.25},
+                          {"label": "+/- 7 semi-tones", "value": 0.2916666666666667},
+                          {"label": "+/- 8 semi-tones", "value": 0.3333333333333333},
+                          {"label": "+/- 9 semi-tones", "value": 0.375},
+                          {"label": "+/- 10 semi-tones", "value": 0.4166666666666667},
+                          {"label": "+/- 11 semi-tones", "value": 0.4583333333333333},
+                          {"label": "+/- 12 semi-tones", "value": 0.5},
+                          {"label": "+/- 13 semi-tones", "value": 0.5416666666666666},
+                          {"label": "+/- 14 semi-tones", "value": 0.5833333333333334},
+                          {"label": "+/- 15 semi-tones", "value": 0.625},
+                          {"label": "+/- 16 semi-tones", "value": 0.6666666666666666},
+                          {"label": "+/- 17 semi-tones", "value": 0.7083333333333334},
+                          {"label": "+/- 18 semi-tones", "value": 0.75},
+                          {"label": "+/- 19 semi-tones", "value": 0.7916666666666666},
+                          {"label": "+/- 20 semi-tones", "value": 0.8333333333333334},
+                          {"label": "+/- 21 semi-tones", "value": 0.875},
+                          {"label": "+/- 22 semi-tones", "value": 0.9166666666666666},
+                          {"label": "+/- 23 semi-tones", "value": 0.9583333333333334},
+                          {"label": "+/- 24 semi-tones", "value": 1}
                         ]
                       },
-                      "lev_vco": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 10,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Vib Amt",
-                        "bind": "LFO MOD VCO Amount",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "lev_vcf": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 10,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Wah Amt",
-                        "bind": "LFO MOD VCF Amount",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "bend_vcf": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 12,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Bend F",
-                        "bind": "Bender VCF Amount",
-                        "min": 0,
-                        "max": 1
-                      }
+                      "lev_vco": {"type": "knob", "col": 0, "row": 10, "colSpan": 2, "rowSpan": 2, "label": "Vib Amt", "bind": "LFO MOD VCO Amount", "min": 0, "max": 1},
+                      "lev_vcf": {"type": "knob", "col": 2, "row": 10, "colSpan": 2, "rowSpan": 2, "label": "Wah Amt", "bind": "LFO MOD VCF Amount", "min": 0, "max": 1},
+                      "bend_vcf": {"type": "knob", "col": 0, "row": 12, "colSpan": 2, "rowSpan": 2, "label": "Bend F", "bind": "Bender VCF Amount", "min": 0, "max": 1}
                     }
                   },
                   {
                     "name": "Arp",
                     "widgets": {
-                      "arp": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 0,
-                        "colSpan": 4,
-                        "rowSpan": 4,
-                        "label": "ARP",
-                        "color": "#6b6b6b33"
-                      },
+                      "arp": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 4, "label": "ARP", "color": "#6b6b6b33"},
                       "arp_on": {
                         "type": "dropdown",
                         "col": 0,
@@ -2630,16 +887,7 @@
                         "colSpan": 2,
                         "label": "Arp",
                         "bind": "Arpeggiator ON/OFF",
-                        "options": [
-                          {
-                            "label": "Off",
-                            "value": 0
-                          },
-                          {
-                            "label": "On",
-                            "value": 1
-                          }
-                        ]
+                        "options": [{"label": "Off", "value": 0}, {"label": "On", "value": 1}]
                       },
                       "arp_mode": {
                         "type": "dropdown",
@@ -2649,34 +897,13 @@
                         "label": "Mode",
                         "bind": "Arpeggiator Mode",
                         "options": [
-                          {
-                            "label": "Up",
-                            "value": 0
-                          },
-                          {
-                            "label": "Down",
-                            "value": 0.16666666666666666
-                          },
-                          {
-                            "label": "Ordered",
-                            "value": 0.3333333333333333
-                          },
-                          {
-                            "label": "Reversed",
-                            "value": 0.5
-                          },
-                          {
-                            "label": "Inc",
-                            "value": 0.6666666666666666
-                          },
-                          {
-                            "label": "Exc",
-                            "value": 0.8333333333333334
-                          },
-                          {
-                            "label": "Random",
-                            "value": 1
-                          }
+                          {"label": "Up", "value": 0},
+                          {"label": "Down", "value": 0.16666666666666666},
+                          {"label": "Ordered", "value": 0.3333333333333333},
+                          {"label": "Reversed", "value": 0.5},
+                          {"label": "Inc", "value": 0.6666666666666666},
+                          {"label": "Exc", "value": 0.8333333333333334},
+                          {"label": "Random", "value": 1}
                         ]
                       },
                       "arp_range": {
@@ -2687,22 +914,10 @@
                         "label": "Octaves",
                         "bind": "Arpeggiator Octave Range",
                         "options": [
-                          {
-                            "label": "1",
-                            "value": 0
-                          },
-                          {
-                            "label": "2",
-                            "value": 0.3333333333333333
-                          },
-                          {
-                            "label": "3",
-                            "value": 0.6666666666666666
-                          },
-                          {
-                            "label": "4",
-                            "value": 1
-                          }
+                          {"label": "1", "value": 0},
+                          {"label": "2", "value": 0.3333333333333333},
+                          {"label": "3", "value": 0.6666666666666666},
+                          {"label": "4", "value": 1}
                         ]
                       },
                       "arp_hold": {
@@ -2712,16 +927,7 @@
                         "colSpan": 2,
                         "label": "Hold",
                         "bind": "Hold",
-                        "options": [
-                          {
-                            "label": "Off",
-                            "value": 0
-                          },
-                          {
-                            "label": "On",
-                            "value": 1
-                          }
-                        ]
+                        "options": [{"label": "Off", "value": 0}, {"label": "On", "value": 1}]
                       },
                       "arp_sync": {
                         "type": "dropdown",
@@ -2730,27 +936,9 @@
                         "colSpan": 2,
                         "label": "Sync",
                         "bind": "Arpeggiator Sync",
-                        "options": [
-                          {
-                            "label": "Hz",
-                            "value": 0
-                          },
-                          {
-                            "label": "Sync",
-                            "value": 1
-                          }
-                        ]
+                        "options": [{"label": "Hz", "value": 0}, {"label": "Sync", "value": 1}]
                       },
-                      "arp_rate": {
-                        "type": "number",
-                        "col": 2,
-                        "row": 2,
-                        "colSpan": 2,
-                        "label": "Rate",
-                        "bind": "Arpeggiator Rate (Unsync)",
-                        "min": 0,
-                        "max": 1
-                      },
+                      "arp_rate": {"type": "number", "col": 2, "row": 2, "colSpan": 2, "label": "Rate", "bind": "Arpeggiator Rate (Unsync)", "min": 0, "max": 1},
                       "arp_div": {
                         "type": "dropdown",
                         "col": 0,
@@ -2759,103 +947,27 @@
                         "label": "Div",
                         "bind": "Arpeggiator Rate (Synced)",
                         "options": [
-                          {
-                            "label": "1 Bar",
-                            "value": 0
-                          },
-                          {
-                            "label": "3/4 Bar",
-                            "value": 0.06666666666666667
-                          },
-                          {
-                            "label": "1/2 Bar",
-                            "value": 0.13333333333333333
-                          },
-                          {
-                            "label": "3/8 Bar",
-                            "value": 0.2
-                          },
-                          {
-                            "label": "1/3 Bar",
-                            "value": 0.26666666666666666
-                          },
-                          {
-                            "label": "5/16 Bar",
-                            "value": 0.3333333333333333
-                          },
-                          {
-                            "label": "1/4 Bar",
-                            "value": 0.4
-                          },
-                          {
-                            "label": "3/16 Bar",
-                            "value": 0.4666666666666667
-                          },
-                          {
-                            "label": "1/6 Bar",
-                            "value": 0.5333333333333333
-                          },
-                          {
-                            "label": "1/8 Bar",
-                            "value": 0.6
-                          },
-                          {
-                            "label": "1/12 Bar",
-                            "value": 0.6666666666666666
-                          },
-                          {
-                            "label": "1/16 Bar",
-                            "value": 0.7333333333333333
-                          },
-                          {
-                            "label": "1/24 Bar",
-                            "value": 0.8
-                          },
-                          {
-                            "label": "1/32 Bar",
-                            "value": 0.8666666666666667
-                          },
-                          {
-                            "label": "1/48 Bar",
-                            "value": 0.9333333333333333
-                          },
-                          {
-                            "label": "1/64 Bar",
-                            "value": 1
-                          }
+                          {"label": "1 Bar", "value": 0},
+                          {"label": "3/4 Bar", "value": 0.06666666666666667},
+                          {"label": "1/2 Bar", "value": 0.13333333333333333},
+                          {"label": "3/8 Bar", "value": 0.2},
+                          {"label": "1/3 Bar", "value": 0.26666666666666666},
+                          {"label": "5/16 Bar", "value": 0.3333333333333333},
+                          {"label": "1/4 Bar", "value": 0.4},
+                          {"label": "3/16 Bar", "value": 0.4666666666666667},
+                          {"label": "1/6 Bar", "value": 0.5333333333333333},
+                          {"label": "1/8 Bar", "value": 0.6},
+                          {"label": "1/12 Bar", "value": 0.6666666666666666},
+                          {"label": "1/16 Bar", "value": 0.7333333333333333},
+                          {"label": "1/24 Bar", "value": 0.8},
+                          {"label": "1/32 Bar", "value": 0.8666666666666667},
+                          {"label": "1/48 Bar", "value": 0.9333333333333333},
+                          {"label": "1/64 Bar", "value": 1}
                         ]
                       },
-                      "amp": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 4,
-                        "colSpan": 4,
-                        "rowSpan": 4,
-                        "label": "AMP",
-                        "color": "#3ec96b22"
-                      },
-                      "vca_env": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 4,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "VCA Env",
-                        "bind": "VCA Envelope 2 Mod Amount ",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "spread": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 4,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Spread",
-                        "bind": "Pan Spread",
-                        "min": 0,
-                        "max": 1
-                      },
+                      "amp": {"type": "group", "col": 0, "row": 4, "colSpan": 4, "rowSpan": 4, "label": "AMP", "color": "#3ec96b22"},
+                      "vca_env": {"type": "knob", "col": 0, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "VCA Env", "bind": "VCA Envelope 2 Mod Amount ", "min": 0, "max": 1},
+                      "spread": {"type": "knob", "col": 2, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "Spread", "bind": "Pan Spread", "min": 0, "max": 1},
                       "e1_pol": {
                         "type": "dropdown",
                         "col": 0,
@@ -2863,16 +975,7 @@
                         "colSpan": 2,
                         "label": "Inv 1",
                         "bind": "Envelope 1 Polarity",
-                        "options": [
-                          {
-                            "label": "Off",
-                            "value": 0
-                          },
-                          {
-                            "label": "On",
-                            "value": 1
-                          }
-                        ]
+                        "options": [{"label": "Off", "value": 0}, {"label": "On", "value": 1}]
                       },
                       "e1_kf": {
                         "type": "dropdown",
@@ -2881,16 +984,7 @@
                         "colSpan": 2,
                         "label": "Kf 1",
                         "bind": "Envelope 1 KYBD Follow",
-                        "options": [
-                          {
-                            "label": "Off",
-                            "value": 0
-                          },
-                          {
-                            "label": "On",
-                            "value": 1
-                          }
-                        ]
+                        "options": [{"label": "Off", "value": 0}, {"label": "On", "value": 1}]
                       },
                       "drift": {
                         "type": "dropdown",
@@ -2900,22 +994,10 @@
                         "label": "Drift",
                         "bind": "Dispersion",
                         "options": [
-                          {
-                            "label": "1",
-                            "value": 0
-                          },
-                          {
-                            "label": "2",
-                            "value": 0.3333333333333333
-                          },
-                          {
-                            "label": "3",
-                            "value": 0.6666666666666666
-                          },
-                          {
-                            "label": "Custom",
-                            "value": 1
-                          }
+                          {"label": "1", "value": 0},
+                          {"label": "2", "value": 0.3333333333333333},
+                          {"label": "3", "value": 0.6666666666666666},
+                          {"label": "Custom", "value": 1}
                         ]
                       },
                       "e2_kf": {
@@ -2925,16 +1007,7 @@
                         "colSpan": 2,
                         "label": "Kf 2",
                         "bind": "Envelope 2 KYBD Follow",
-                        "options": [
-                          {
-                            "label": "Off",
-                            "value": 0
-                          },
-                          {
-                            "label": "On",
-                            "value": 1
-                          }
-                        ]
+                        "options": [{"label": "Off", "value": 0}, {"label": "On", "value": 1}]
                       }
                     }
                   }
@@ -2944,45 +1017,15 @@
             "params": {}
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
-      }
+      "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}]}
     },
-    "tracks": [
-      "melody"
-    ],
+    "tracks": ["melody"],
     "videoTracks": [],
-    "trackColors": {
-      "melody": "#9a5ad3"
-    },
-    "trackSignals": {
-      "melody": "midi"
-    },
-    "trackClips": {
-      "melody": [
-        {
-          "ref": "melody",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "midi"
-        }
-      ]
-    },
+    "trackColors": {"melody": "#9a5ad3"},
+    "trackSignals": {"melody": "midi"},
+    "trackClips": {"melody": [{"ref": "melody", "start": 0, "tc": "1:1", "len": 4, "kind": "midi"}]},
     "modules": {},
     "warnings": []
   },

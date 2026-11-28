@@ -1,9 +1,6 @@
 {
   "project": "k7-core/instruments.keys.piano.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "instruments.keys.piano",
     "tempo": 120,
@@ -43,30 +40,9 @@
             "loopStart": 0,
             "loopEnd": 0,
             "notes": [
-              {
-                "time": 0,
-                "duration": 1,
-                "key": 60,
-                "vel": 0.8,
-                "channel": 0,
-                "rel": 1
-              },
-              {
-                "time": 1,
-                "duration": 1,
-                "key": 64,
-                "vel": 1,
-                "channel": 0,
-                "rel": 1
-              },
-              {
-                "time": 2,
-                "duration": 2,
-                "key": 67,
-                "vel": 1,
-                "channel": 0,
-                "rel": 1
-              }
+              {"time": 0, "duration": 1, "key": 60, "vel": 0.8, "channel": 0, "rel": 1},
+              {"time": 1, "duration": 1, "key": 64, "vel": 1, "channel": 0, "rel": 1},
+              {"time": 2, "duration": 2, "key": 67, "vel": 1, "channel": 0, "rel": 1}
             ]
           }
         ],
@@ -80,9 +56,7 @@
             "presetSave": "<ws>/k7-core/instruments.keys.piano.k7/nodes/fx.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@output-volume": 0
-            }
+            "params": {"@output-volume": 0}
           }
         ],
         "sends": [],
@@ -91,16 +65,9 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
@@ -110,12 +77,8 @@
           {
             "module": "fx",
             "uses": "@k7-core/instruments/keys/piano",
-            "stage": [
-              "@output-volume"
-            ],
-            "events": [
-              "note-on"
-            ],
+            "stage": ["@output-volume"],
+            "events": ["note-on"],
             "category": "instruments",
             "emits": "audio",
             "stub": false,
@@ -124,75 +87,24 @@
               "cols": 4,
               "rows": 2,
               "widgets": {
-                "volume": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Volume",
-                  "bind": "Volume",
-                  "min": -40,
-                  "max": 12
-                },
-                "credit": {
-                  "type": "label",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Salamander Grand Piano · A. Holm · CC BY 3.0"
-                }
+                "volume": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Volume", "bind": "Volume", "min": -40, "max": 12},
+                "credit": {"type": "label", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Salamander Grand Piano · A. Holm · CC BY 3.0"}
               }
             },
-            "params": {
-              "sfz": "@instruments/salamander-grand-piano/Salamander Grand Piano V3.sfz"
-            },
-            "defaults": {
-              "Volume": 0
-            },
+            "params": {"sfz": "@instruments/salamander-grand-piano/Salamander Grand Piano V3.sfz"},
+            "defaults": {"Volume": 0},
             "pluginId": "melody:fx"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
-      }
+      "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}]}
     },
-    "tracks": [
-      "melody"
-    ],
+    "tracks": ["melody"],
     "videoTracks": [],
-    "trackColors": {
-      "melody": "#3a87df"
-    },
-    "trackSignals": {
-      "melody": "midi"
-    },
-    "trackClips": {
-      "melody": [
-        {
-          "ref": "melody",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "midi"
-        }
-      ]
-    },
+    "trackColors": {"melody": "#3a87df"},
+    "trackSignals": {"melody": "midi"},
+    "trackClips": {"melody": [{"ref": "melody", "start": 0, "tc": "1:1", "len": 4, "kind": "midi"}]},
     "modules": {},
     "warnings": []
   },

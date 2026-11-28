@@ -1,9 +1,6 @@
 {
   "project": "k7-core/audio.transient.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "audio.transient",
     "tempo": 120,
@@ -54,11 +51,7 @@
             "presetSave": "<ws>/k7-core/audio.transient.k7/nodes/fx.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -104,11 +97,7 @@
             "presetSave": "<ws>/k7-core/audio.transient.k7/nodes/fx-point.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -154,11 +143,7 @@
             "presetSave": "<ws>/k7-core/audio.transient.k7/nodes/fx-swell.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -167,16 +152,9 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
@@ -186,11 +164,7 @@
           {
             "module": "fx",
             "uses": "@k7-core/audio/transient",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -199,45 +173,17 @@
               "cols": 4,
               "rows": 2,
               "widgets": {
-                "point": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Point",
-                  "bind": "Point",
-                  "min": 0,
-                  "max": 1
-                },
-                "speed": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Speed",
-                  "bind": "Reaction Speed",
-                  "min": 0,
-                  "max": 1
-                }
+                "point": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Point", "bind": "Point", "min": 0, "max": 1},
+                "speed": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Speed", "bind": "Reaction Speed", "min": 0, "max": 1}
               }
             },
-            "engines": [
-              "point",
-              "swell"
-            ],
+            "engines": ["point", "swell"],
             "engine": "point",
             "params": {},
             "pluginId": "drums:fx"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-point": {
         "from": "drums-point",
@@ -245,11 +191,7 @@
           {
             "module": "fx-point",
             "uses": "@k7-core/audio/transient",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -258,45 +200,17 @@
               "cols": 4,
               "rows": 2,
               "widgets": {
-                "point": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Point",
-                  "bind": "Point",
-                  "min": 0,
-                  "max": 1
-                },
-                "speed": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Speed",
-                  "bind": "Reaction Speed",
-                  "min": 0,
-                  "max": 1
-                }
+                "point": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Point", "bind": "Point", "min": 0, "max": 1},
+                "speed": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Speed", "bind": "Reaction Speed", "min": 0, "max": 1}
               }
             },
-            "engines": [
-              "point",
-              "swell"
-            ],
+            "engines": ["point", "swell"],
             "engine": "point",
             "params": {},
             "pluginId": "drums-point:fx-point"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-swell": {
         "from": "drums-swell",
@@ -304,11 +218,7 @@
           {
             "module": "fx-swell",
             "uses": "@k7-core/audio/transient",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -317,101 +227,28 @@
               "cols": 4,
               "rows": 2,
               "widgets": {
-                "thresh": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Thresh",
-                  "bind": "Thresh",
-                  "min": 0,
-                  "max": 1
-                },
-                "swell": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Swell",
-                  "bind": "Swell",
-                  "min": 0,
-                  "max": 1
-                }
+                "thresh": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Thresh", "bind": "Thresh", "min": 0, "max": 1},
+                "swell": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Swell", "bind": "Swell", "min": 0, "max": 1}
               }
             },
-            "engines": [
-              "point",
-              "swell"
-            ],
+            "engines": ["point", "swell"],
             "engine": "swell",
             "params": {},
             "pluginId": "drums-swell:fx-swell"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
-      }
+      "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}]}
     },
-    "tracks": [
-      "drums",
-      "drums-point",
-      "drums-swell"
-    ],
+    "tracks": ["drums", "drums-point", "drums-swell"],
     "videoTracks": [],
-    "trackColors": {
-      "drums": "#af1d26",
-      "drums-point": "#dd322c",
-      "drums-swell": "#e57361"
-    },
-    "trackSignals": {
-      "drums": "audio",
-      "drums-point": "audio",
-      "drums-swell": "audio"
-    },
+    "trackColors": {"drums": "#af1d26", "drums-point": "#dd322c", "drums-swell": "#e57361"},
+    "trackSignals": {"drums": "audio", "drums-point": "audio", "drums-swell": "audio"},
     "trackClips": {
-      "drums": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-point": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-swell": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ]
+      "drums": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-point": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-swell": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}]
     },
     "modules": {},
     "warnings": []

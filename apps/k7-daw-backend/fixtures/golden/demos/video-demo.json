@@ -2,15 +2,7 @@
   "project": "demos/video-demo.k7",
   "repairs": {
     "log": [],
-    "files": [
-      "chains/box_layer.k7x",
-      "chains/dot_layer.k7x",
-      "chains/glow.k7x",
-      "chains/master.k7x",
-      "chains/pip.k7x",
-      "chains/title_layer.k7x",
-      "project.k7x"
-    ]
+    "files": ["chains/box_layer.k7x", "chains/dot_layer.k7x", "chains/glow.k7x", "chains/master.k7x", "chains/pip.k7x", "chains/title_layer.k7x", "project.k7x"]
   },
   "engine": {
     "name": "video-demo",
@@ -74,16 +66,9 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
@@ -94,21 +79,9 @@
             "module": "00000000-0000-4000-8000-000000000001",
             "uses": "@meta/shaders/video-mixer",
             "place": "box_layer · step 3",
-            "inputs": [
-              {
-                "name": "in",
-                "type": "video"
-              },
-              {
-                "name": "audio",
-                "type": "audio",
-                "mandatory": false
-              }
-            ],
+            "inputs": [{"name": "in", "type": "video"}, {"name": "audio", "type": "audio", "mandatory": false}],
             "shader": "video-mixer",
-            "shaders": [
-              "video-mixer"
-            ],
+            "shaders": ["video-mixer"],
             "category": "shaders",
             "emits": "video",
             "stub": false,
@@ -117,66 +90,16 @@
               "cols": 2,
               "rows": 4,
               "widgets": {
-                "red": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "rowSpan": 2,
-                  "label": "Red",
-                  "bind": "P1",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "green": {
-                  "type": "knob",
-                  "col": 1,
-                  "row": 0,
-                  "rowSpan": 2,
-                  "label": "Green",
-                  "bind": "P2",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "blue": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 2,
-                  "rowSpan": 2,
-                  "label": "Blue",
-                  "bind": "P3",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "transparency": {
-                  "type": "knob",
-                  "col": 1,
-                  "row": 2,
-                  "rowSpan": 2,
-                  "label": "Transparency",
-                  "bind": "P4",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                }
+                "red": {"type": "knob", "col": 0, "row": 0, "rowSpan": 2, "label": "Red", "bind": "P1", "min": 0, "max": 1, "step": 0.01},
+                "green": {"type": "knob", "col": 1, "row": 0, "rowSpan": 2, "label": "Green", "bind": "P2", "min": 0, "max": 1, "step": 0.01},
+                "blue": {"type": "knob", "col": 0, "row": 2, "rowSpan": 2, "label": "Blue", "bind": "P3", "min": 0, "max": 1, "step": 0.01},
+                "transparency": {"type": "knob", "col": 1, "row": 2, "rowSpan": 2, "label": "Transparency", "bind": "P4", "min": 0, "max": 1, "step": 0.01}
               }
             },
-            "params": {
-              "P1": 1,
-              "P2": 1,
-              "P3": 1,
-              "P4": 0
-            }
+            "params": {"P1": 1, "P2": 1, "P3": 1, "P4": 0}
           }
         ],
-        "out": [
-          {
-            "to": "RENDER",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "RENDER", "gain": 1}]
       },
       "dot_layer": {
         "from": "dot_layer",
@@ -185,21 +108,9 @@
             "module": "00000000-0000-4000-8000-000000000002",
             "uses": "@meta/shaders/video-mixer",
             "place": "dot_layer · step 3",
-            "inputs": [
-              {
-                "name": "in",
-                "type": "video"
-              },
-              {
-                "name": "audio",
-                "type": "audio",
-                "mandatory": false
-              }
-            ],
+            "inputs": [{"name": "in", "type": "video"}, {"name": "audio", "type": "audio", "mandatory": false}],
             "shader": "video-mixer",
-            "shaders": [
-              "video-mixer"
-            ],
+            "shaders": ["video-mixer"],
             "category": "shaders",
             "emits": "video",
             "stub": false,
@@ -208,81 +119,18 @@
               "cols": 2,
               "rows": 4,
               "widgets": {
-                "red": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "rowSpan": 2,
-                  "label": "Red",
-                  "bind": "P1",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "green": {
-                  "type": "knob",
-                  "col": 1,
-                  "row": 0,
-                  "rowSpan": 2,
-                  "label": "Green",
-                  "bind": "P2",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "blue": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 2,
-                  "rowSpan": 2,
-                  "label": "Blue",
-                  "bind": "P3",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "transparency": {
-                  "type": "knob",
-                  "col": 1,
-                  "row": 2,
-                  "rowSpan": 2,
-                  "label": "Transparency",
-                  "bind": "P4",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                }
+                "red": {"type": "knob", "col": 0, "row": 0, "rowSpan": 2, "label": "Red", "bind": "P1", "min": 0, "max": 1, "step": 0.01},
+                "green": {"type": "knob", "col": 1, "row": 0, "rowSpan": 2, "label": "Green", "bind": "P2", "min": 0, "max": 1, "step": 0.01},
+                "blue": {"type": "knob", "col": 0, "row": 2, "rowSpan": 2, "label": "Blue", "bind": "P3", "min": 0, "max": 1, "step": 0.01},
+                "transparency": {"type": "knob", "col": 1, "row": 2, "rowSpan": 2, "label": "Transparency", "bind": "P4", "min": 0, "max": 1, "step": 0.01}
               }
             },
-            "params": {
-              "P1": 1,
-              "P2": 1,
-              "P3": 1,
-              "P4": 0
-            }
+            "params": {"P1": 1, "P2": 1, "P3": 1, "P4": 0}
           }
         ],
-        "out": [
-          {
-            "to": "RENDER",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "RENDER", "gain": 1}]
       },
-      "drums": {
-        "from": "drums",
-        "use": [],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          },
-          {
-            "to": "078a9886-bfac-42a4-9a04-1bf1dfdb7378#audio",
-            "gain": 1
-          }
-        ]
-      },
+      "drums": {"from": "drums", "use": [], "out": [{"to": "MIX", "gain": 1}, {"to": "078a9886-bfac-42a4-9a04-1bf1dfdb7378#audio", "gain": 1}]},
       "main": {
         "from": "main",
         "use": [
@@ -290,22 +138,9 @@
             "module": "078a9886-bfac-42a4-9a04-1bf1dfdb7378",
             "uses": "@workspace/shaders/glow",
             "place": "glow · step 1",
-            "inputs": [
-              {
-                "name": "in",
-                "type": "video"
-              },
-              {
-                "name": "audio",
-                "type": "audio",
-                "mandatory": false
-              }
-            ],
+            "inputs": [{"name": "in", "type": "video"}, {"name": "audio", "type": "audio", "mandatory": false}],
             "shader": "pulse",
-            "shaders": [
-              "pulse",
-              "ripple"
-            ],
+            "shaders": ["pulse", "ripple"],
             "category": "shaders",
             "emits": "video",
             "stub": false,
@@ -314,77 +149,22 @@
               "cols": 4,
               "rows": 2,
               "widgets": {
-                "pick": {
-                  "type": "dropdown",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 4,
-                  "bind": "@shader"
-                },
-                "p1": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 1,
-                  "bind": "P1",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "p2": {
-                  "type": "knob",
-                  "col": 1,
-                  "row": 1,
-                  "bind": "P2",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "p3": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 1,
-                  "bind": "P3",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "p4": {
-                  "type": "knob",
-                  "col": 3,
-                  "row": 1,
-                  "bind": "P4",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                }
+                "pick": {"type": "dropdown", "col": 0, "row": 0, "colSpan": 4, "bind": "@shader"},
+                "p1": {"type": "knob", "col": 0, "row": 1, "bind": "P1", "min": 0, "max": 1, "step": 0.01},
+                "p2": {"type": "knob", "col": 1, "row": 1, "bind": "P2", "min": 0, "max": 1, "step": 0.01},
+                "p3": {"type": "knob", "col": 2, "row": 1, "bind": "P3", "min": 0, "max": 1, "step": 0.01},
+                "p4": {"type": "knob", "col": 3, "row": 1, "bind": "P4", "min": 0, "max": 1, "step": 0.01}
               }
             },
-            "params": {
-              "P1": 0.6,
-              "P2": 0.35,
-              "P3": 0,
-              "P4": 0
-            }
+            "params": {"P1": 0.6, "P2": 0.35, "P3": 0, "P4": 0}
           },
           {
             "module": "00000000-0000-4000-8000-000000000003",
             "uses": "@meta/shaders/video-mixer",
             "place": "glow · step 2",
-            "inputs": [
-              {
-                "name": "in",
-                "type": "video"
-              },
-              {
-                "name": "audio",
-                "type": "audio",
-                "mandatory": false
-              }
-            ],
+            "inputs": [{"name": "in", "type": "video"}, {"name": "audio", "type": "audio", "mandatory": false}],
             "shader": "video-mixer",
-            "shaders": [
-              "video-mixer"
-            ],
+            "shaders": ["video-mixer"],
             "category": "shaders",
             "emits": "video",
             "stub": false,
@@ -393,91 +173,19 @@
               "cols": 2,
               "rows": 4,
               "widgets": {
-                "red": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "rowSpan": 2,
-                  "label": "Red",
-                  "bind": "P1",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "green": {
-                  "type": "knob",
-                  "col": 1,
-                  "row": 0,
-                  "rowSpan": 2,
-                  "label": "Green",
-                  "bind": "P2",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "blue": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 2,
-                  "rowSpan": 2,
-                  "label": "Blue",
-                  "bind": "P3",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "transparency": {
-                  "type": "knob",
-                  "col": 1,
-                  "row": 2,
-                  "rowSpan": 2,
-                  "label": "Transparency",
-                  "bind": "P4",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                }
+                "red": {"type": "knob", "col": 0, "row": 0, "rowSpan": 2, "label": "Red", "bind": "P1", "min": 0, "max": 1, "step": 0.01},
+                "green": {"type": "knob", "col": 1, "row": 0, "rowSpan": 2, "label": "Green", "bind": "P2", "min": 0, "max": 1, "step": 0.01},
+                "blue": {"type": "knob", "col": 0, "row": 2, "rowSpan": 2, "label": "Blue", "bind": "P3", "min": 0, "max": 1, "step": 0.01},
+                "transparency": {"type": "knob", "col": 1, "row": 2, "rowSpan": 2, "label": "Transparency", "bind": "P4", "min": 0, "max": 1, "step": 0.01}
               }
             },
-            "params": {
-              "P1": 1,
-              "P2": 1,
-              "P3": 1,
-              "P4": 0
-            }
+            "params": {"P1": 1, "P2": 1, "P3": 1, "P4": 0}
           }
         ],
-        "out": [
-          {
-            "to": "RENDER",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "RENDER", "gain": 1}]
       },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          },
-          {
-            "to": "RENDER#audio",
-            "gain": 1
-          }
-        ]
-      },
-      "RENDER": {
-        "from": "RENDER",
-        "use": [],
-        "out": [
-          {
-            "to": "VIDEO_OUT",
-            "gain": 1
-          }
-        ]
-      },
+      "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}, {"to": "RENDER#audio", "gain": 1}]},
+      "RENDER": {"from": "RENDER", "use": [], "out": [{"to": "VIDEO_OUT", "gain": 1}]},
       "pip": {
         "from": "pip",
         "use": [
@@ -485,21 +193,9 @@
             "module": "00000000-0000-4000-8000-000000000004",
             "uses": "@meta/shaders/video-mixer",
             "place": "pip · step 2",
-            "inputs": [
-              {
-                "name": "in",
-                "type": "video"
-              },
-              {
-                "name": "audio",
-                "type": "audio",
-                "mandatory": false
-              }
-            ],
+            "inputs": [{"name": "in", "type": "video"}, {"name": "audio", "type": "audio", "mandatory": false}],
             "shader": "video-mixer",
-            "shaders": [
-              "video-mixer"
-            ],
+            "shaders": ["video-mixer"],
             "category": "shaders",
             "emits": "video",
             "stub": false,
@@ -508,66 +204,16 @@
               "cols": 2,
               "rows": 4,
               "widgets": {
-                "red": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "rowSpan": 2,
-                  "label": "Red",
-                  "bind": "P1",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "green": {
-                  "type": "knob",
-                  "col": 1,
-                  "row": 0,
-                  "rowSpan": 2,
-                  "label": "Green",
-                  "bind": "P2",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "blue": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 2,
-                  "rowSpan": 2,
-                  "label": "Blue",
-                  "bind": "P3",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "transparency": {
-                  "type": "knob",
-                  "col": 1,
-                  "row": 2,
-                  "rowSpan": 2,
-                  "label": "Transparency",
-                  "bind": "P4",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                }
+                "red": {"type": "knob", "col": 0, "row": 0, "rowSpan": 2, "label": "Red", "bind": "P1", "min": 0, "max": 1, "step": 0.01},
+                "green": {"type": "knob", "col": 1, "row": 0, "rowSpan": 2, "label": "Green", "bind": "P2", "min": 0, "max": 1, "step": 0.01},
+                "blue": {"type": "knob", "col": 0, "row": 2, "rowSpan": 2, "label": "Blue", "bind": "P3", "min": 0, "max": 1, "step": 0.01},
+                "transparency": {"type": "knob", "col": 1, "row": 2, "rowSpan": 2, "label": "Transparency", "bind": "P4", "min": 0, "max": 1, "step": 0.01}
               }
             },
-            "params": {
-              "P1": 1,
-              "P2": 1,
-              "P3": 1,
-              "P4": 0
-            }
+            "params": {"P1": 1, "P2": 1, "P3": 1, "P4": 0}
           }
         ],
-        "out": [
-          {
-            "to": "RENDER",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "RENDER", "gain": 1}]
       },
       "title_layer": {
         "from": "title_layer",
@@ -576,21 +222,9 @@
             "module": "00000000-0000-4000-8000-000000000005",
             "uses": "@meta/shaders/video-mixer",
             "place": "title_layer · step 3",
-            "inputs": [
-              {
-                "name": "in",
-                "type": "video"
-              },
-              {
-                "name": "audio",
-                "type": "audio",
-                "mandatory": false
-              }
-            ],
+            "inputs": [{"name": "in", "type": "video"}, {"name": "audio", "type": "audio", "mandatory": false}],
             "shader": "video-mixer",
-            "shaders": [
-              "video-mixer"
-            ],
+            "shaders": ["video-mixer"],
             "category": "shaders",
             "emits": "video",
             "stub": false,
@@ -599,66 +233,16 @@
               "cols": 2,
               "rows": 4,
               "widgets": {
-                "red": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "rowSpan": 2,
-                  "label": "Red",
-                  "bind": "P1",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "green": {
-                  "type": "knob",
-                  "col": 1,
-                  "row": 0,
-                  "rowSpan": 2,
-                  "label": "Green",
-                  "bind": "P2",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "blue": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 2,
-                  "rowSpan": 2,
-                  "label": "Blue",
-                  "bind": "P3",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "transparency": {
-                  "type": "knob",
-                  "col": 1,
-                  "row": 2,
-                  "rowSpan": 2,
-                  "label": "Transparency",
-                  "bind": "P4",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                }
+                "red": {"type": "knob", "col": 0, "row": 0, "rowSpan": 2, "label": "Red", "bind": "P1", "min": 0, "max": 1, "step": 0.01},
+                "green": {"type": "knob", "col": 1, "row": 0, "rowSpan": 2, "label": "Green", "bind": "P2", "min": 0, "max": 1, "step": 0.01},
+                "blue": {"type": "knob", "col": 0, "row": 2, "rowSpan": 2, "label": "Blue", "bind": "P3", "min": 0, "max": 1, "step": 0.01},
+                "transparency": {"type": "knob", "col": 1, "row": 2, "rowSpan": 2, "label": "Transparency", "bind": "P4", "min": 0, "max": 1, "step": 0.01}
               }
             },
-            "params": {
-              "P1": 1,
-              "P2": 1,
-              "P3": 1,
-              "P4": 0
-            }
+            "params": {"P1": 1, "P2": 1, "P3": 1, "P4": 0}
           }
         ],
-        "out": [
-          {
-            "to": "RENDER",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "RENDER", "gain": 1}]
       },
       "c3abff25-19a8-49b0-9dd2-d7661d118d3e": {
         "use": [
@@ -670,20 +254,10 @@
             "emits": "video",
             "stub": false,
             "hasNativePluginUI": false,
-            "params": {
-              "x": 448,
-              "y": 220,
-              "w": 384,
-              "h": 280
-            }
+            "params": {"x": 448, "y": 220, "w": 384, "h": 280}
           }
         ],
-        "out": [
-          {
-            "to": "box_layer",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "box_layer", "gain": 1}]
       },
       "7edb9a61-859c-4eaf-87f4-811bb8c33b7b": {
         "use": [
@@ -695,19 +269,10 @@
             "emits": "video",
             "stub": false,
             "hasNativePluginUI": false,
-            "params": {
-              "x": 240,
-              "y": 180,
-              "r": 120
-            }
+            "params": {"x": 240, "y": 180, "r": 120}
           }
         ],
-        "out": [
-          {
-            "to": "dot_layer",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "dot_layer", "gain": 1}]
       },
       "3663c123-f41a-40d0-9a42-27b538d4faf8": {
         "use": [
@@ -715,21 +280,9 @@
             "module": "3663c123-f41a-40d0-9a42-27b538d4faf8",
             "uses": "@workspace/shaders/iris",
             "place": "main › iris · step 1",
-            "inputs": [
-              {
-                "name": "in",
-                "type": "video"
-              },
-              {
-                "name": "audio",
-                "type": "audio",
-                "mandatory": false
-              }
-            ],
+            "inputs": [{"name": "in", "type": "video"}, {"name": "audio", "type": "audio", "mandatory": false}],
             "shader": "iris",
-            "shaders": [
-              "iris"
-            ],
+            "shaders": ["iris"],
             "category": "shaders",
             "emits": "video",
             "stub": false,
@@ -738,65 +291,17 @@
               "cols": 4,
               "rows": 2,
               "widgets": {
-                "pick": {
-                  "type": "dropdown",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 4,
-                  "bind": "@shader"
-                },
-                "p1": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 1,
-                  "bind": "P1",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "p2": {
-                  "type": "knob",
-                  "col": 1,
-                  "row": 1,
-                  "bind": "P2",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "p3": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 1,
-                  "bind": "P3",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "p4": {
-                  "type": "knob",
-                  "col": 3,
-                  "row": 1,
-                  "bind": "P4",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                }
+                "pick": {"type": "dropdown", "col": 0, "row": 0, "colSpan": 4, "bind": "@shader"},
+                "p1": {"type": "knob", "col": 0, "row": 1, "bind": "P1", "min": 0, "max": 1, "step": 0.01},
+                "p2": {"type": "knob", "col": 1, "row": 1, "bind": "P2", "min": 0, "max": 1, "step": 0.01},
+                "p3": {"type": "knob", "col": 2, "row": 1, "bind": "P3", "min": 0, "max": 1, "step": 0.01},
+                "p4": {"type": "knob", "col": 3, "row": 1, "bind": "P4", "min": 0, "max": 1, "step": 0.01}
               }
             },
-            "params": {
-              "P1": 0.15,
-              "P2": 0,
-              "P3": 0,
-              "P4": 0
-            }
+            "params": {"P1": 0.15, "P2": 0, "P3": 0, "P4": 0}
           }
         ],
-        "out": [
-          {
-            "to": "main",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "main", "gain": 1}]
       },
       "310cef51-7f88-4f1f-80f1-fa41d0bd0fea": {
         "use": [
@@ -808,37 +313,16 @@
             "emits": "video",
             "stub": false,
             "hasNativePluginUI": false,
-            "params": {
-              "x": 40,
-              "y": 560,
-              "font_size": 72
-            }
+            "params": {"x": 40, "y": 560, "font_size": 72}
           }
         ],
-        "out": [
-          {
-            "to": "title_layer",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "title_layer", "gain": 1}]
       }
     },
-    "tracks": [
-      "drums"
-    ],
-    "videoTracks": [
-      "box_layer",
-      "dot_layer",
-      "main",
-      "pip",
-      "title_layer"
-    ],
-    "trackColors": {
-      "drums": "#dd322c"
-    },
-    "trackSignals": {
-      "drums": "audio"
-    },
+    "tracks": ["drums"],
+    "videoTracks": ["box_layer", "dot_layer", "main", "pip", "title_layer"],
+    "trackColors": {"drums": "#dd322c"},
+    "trackSignals": {"drums": "audio"},
     "stacks": [],
     "trackMixers": {
       "box_layer": "00000000-0000-4000-8000-000000000001",
@@ -848,41 +332,16 @@
       "title_layer": "00000000-0000-4000-8000-000000000005"
     },
     "trackClips": {
-      "drums": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        },
-        {
-          "ref": "snare",
-          "start": 8,
-          "tc": "3:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ]
+      "drums": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}, {"ref": "snare", "start": 8, "tc": "3:1", "len": 4, "kind": "audio"}]
     },
     "modules": {},
     "warnings": []
   },
   "video": {
     "doc": {
-      "rowOrder": [
-        "drums",
-        "title_layer",
-        "dot_layer",
-        "box_layer",
-        "pip",
-        "main"
-      ],
+      "rowOrder": ["drums", "title_layer", "dot_layer", "box_layer", "pip", "main"],
       "name": "video-demo",
-      "viewport": [
-        1280,
-        720
-      ],
+      "viewport": [1280, 720],
       "fps": 30,
       "videoTracks": [
         {
@@ -896,14 +355,7 @@
           "w": 1280,
           "h": 720,
           "clips": [
-            {
-              "id": "counter",
-              "name": "counter",
-              "source": "<ws>/demos/video-demo.k7/clips/counter.mp4",
-              "start": 0,
-              "length": 4,
-              "sourceFrom": 0
-            },
+            {"id": "counter", "name": "counter", "source": "<ws>/demos/video-demo.k7/clips/counter.mp4", "start": 0, "length": 4, "sourceFrom": 0},
             {
               "id": "bars",
               "name": "bars",
@@ -911,11 +363,7 @@
               "start": 3,
               "length": 5,
               "sourceFrom": 1.5,
-              "fadeIn": {
-                "over": 1,
-                "with": "over",
-                "chain": "3663c123-f41a-40d0-9a42-27b538d4faf8"
-              }
+              "fadeIn": {"over": 1, "with": "over", "chain": "3663c123-f41a-40d0-9a42-27b538d4faf8"}
             }
           ],
           "shapes": [],
@@ -925,12 +373,7 @@
               "type": "shader",
               "name": "078a9886-bfac-42a4-9a04-1bf1dfdb7378",
               "enabled": true,
-              "params": {
-                "P1": 0.6,
-                "P2": 0.35,
-                "P3": 0,
-                "P4": 0
-              },
+              "params": {"P1": 0.6, "P2": 0.35, "P3": 0, "P4": 0},
               "shader": {
                 "name": "pulse",
                 "vertex": "#version 300 es\n// The vertex stage every full-target pass wants: `aUnit` is the unit quad the compositor binds,\n// and a pass covers the whole of what it draws into — so this maps (0,0)..(1,1) onto clip space\n// and hands the fragment the same 0..1 as its texture coordinate.\n//\n// It is a separate file, and duplicated per shader on purpose: a shader is the PAIR, and the day\n// one wants to move its geometry it needs this file to itself rather than a shared one it would\n// have to fork. See apps/k7-daw-frontend/packages/song-video/docs/shaders.md.\nin vec2 aUnit;\nout vec2 vUV;\n\nvoid main() {\n  vUV = aUnit;\n  gl_Position = vec4(aUnit * 2.0 - 1.0, 0.0, 1.0);\n}\n",
@@ -943,12 +386,7 @@
               "type": "shader",
               "name": "00000000-0000-4000-8000-000000000003",
               "enabled": true,
-              "params": {
-                "P1": 1,
-                "P2": 1,
-                "P3": 1,
-                "P4": 0
-              },
+              "params": {"P1": 1, "P2": 1, "P3": 1, "P4": 0},
               "shader": {
                 "name": "video-mixer",
                 "vertex": "#version 300 es\n// The full-target vertex stage every pass uses: the unit quad onto clip space, its 0..1 as the UV.\nin vec2 aUnit;\nout vec2 vUV;\n\nvoid main() {\n  vUV = aUnit;\n  gl_Position = vec4(aUnit * 2.0 - 1.0, 0.0, 1.0);\n}\n",
@@ -967,16 +405,7 @@
           "y": 540,
           "w": 320,
           "h": 180,
-          "clips": [
-            {
-              "id": "bars",
-              "name": "bars",
-              "source": "<ws>/demos/video-demo.k7/clips/bars.mp4",
-              "start": 0,
-              "length": 8,
-              "sourceFrom": 0
-            }
-          ],
+          "clips": [{"id": "bars", "name": "bars", "source": "<ws>/demos/video-demo.k7/clips/bars.mp4", "start": 0, "length": 8, "sourceFrom": 0}],
           "shapes": [],
           "plugins": [
             {
@@ -984,12 +413,7 @@
               "type": "shader",
               "name": "00000000-0000-4000-8000-000000000004",
               "enabled": true,
-              "params": {
-                "P1": 1,
-                "P2": 1,
-                "P3": 1,
-                "P4": 0
-              },
+              "params": {"P1": 1, "P2": 1, "P3": 1, "P4": 0},
               "shader": {
                 "name": "video-mixer",
                 "vertex": "#version 300 es\n// The full-target vertex stage every pass uses: the unit quad onto clip space, its 0..1 as the UV.\nin vec2 aUnit;\nout vec2 vUV;\n\nvoid main() {\n  vUV = aUnit;\n  gl_Position = vec4(aUnit * 2.0 - 1.0, 0.0, 1.0);\n}\n",
@@ -1008,39 +432,15 @@
           "y": 0,
           "w": 1280,
           "h": 720,
-          "clips": [
-            {
-              "id": "",
-              "name": "",
-              "source": "",
-              "start": 0,
-              "length": 4,
-              "sourceFrom": 0
-            }
-          ],
-          "shapes": [
-            {
-              "id": "c3abff25-19a8-49b0-9dd2-d7661d118d3e",
-              "type": "square",
-              "x": 448,
-              "y": 220,
-              "w": 384,
-              "h": 280,
-              "color": "#e2b53acc"
-            }
-          ],
+          "clips": [{"id": "", "name": "", "source": "", "start": 0, "length": 4, "sourceFrom": 0}],
+          "shapes": [{"id": "c3abff25-19a8-49b0-9dd2-d7661d118d3e", "type": "square", "x": 448, "y": 220, "w": 384, "h": 280, "color": "#e2b53acc"}],
           "plugins": [
             {
               "id": "box_layer:0",
               "type": "shader",
               "name": "00000000-0000-4000-8000-000000000001",
               "enabled": true,
-              "params": {
-                "P1": 1,
-                "P2": 1,
-                "P3": 1,
-                "P4": 0
-              },
+              "params": {"P1": 1, "P2": 1, "P3": 1, "P4": 0},
               "shader": {
                 "name": "video-mixer",
                 "vertex": "#version 300 es\n// The full-target vertex stage every pass uses: the unit quad onto clip space, its 0..1 as the UV.\nin vec2 aUnit;\nout vec2 vUV;\n\nvoid main() {\n  vUV = aUnit;\n  gl_Position = vec4(aUnit * 2.0 - 1.0, 0.0, 1.0);\n}\n",
@@ -1059,38 +459,15 @@
           "y": 0,
           "w": 1280,
           "h": 720,
-          "clips": [
-            {
-              "id": "",
-              "name": "",
-              "source": "",
-              "start": 2,
-              "length": 4,
-              "sourceFrom": 0
-            }
-          ],
-          "shapes": [
-            {
-              "id": "7edb9a61-859c-4eaf-87f4-811bb8c33b7b",
-              "type": "circle",
-              "x": 240,
-              "y": 180,
-              "r": 120,
-              "color": "#e2564ecc"
-            }
-          ],
+          "clips": [{"id": "", "name": "", "source": "", "start": 2, "length": 4, "sourceFrom": 0}],
+          "shapes": [{"id": "7edb9a61-859c-4eaf-87f4-811bb8c33b7b", "type": "circle", "x": 240, "y": 180, "r": 120, "color": "#e2564ecc"}],
           "plugins": [
             {
               "id": "dot_layer:0",
               "type": "shader",
               "name": "00000000-0000-4000-8000-000000000002",
               "enabled": true,
-              "params": {
-                "P1": 1,
-                "P2": 1,
-                "P3": 1,
-                "P4": 0
-              },
+              "params": {"P1": 1, "P2": 1, "P3": 1, "P4": 0},
               "shader": {
                 "name": "video-mixer",
                 "vertex": "#version 300 es\n// The full-target vertex stage every pass uses: the unit quad onto clip space, its 0..1 as the UV.\nin vec2 aUnit;\nout vec2 vUV;\n\nvoid main() {\n  vUV = aUnit;\n  gl_Position = vec4(aUnit * 2.0 - 1.0, 0.0, 1.0);\n}\n",
@@ -1109,27 +486,9 @@
           "y": 0,
           "w": 1280,
           "h": 720,
-          "clips": [
-            {
-              "id": "",
-              "name": "",
-              "source": "",
-              "start": 4,
-              "length": 4,
-              "sourceFrom": 0
-            }
-          ],
+          "clips": [{"id": "", "name": "", "source": "", "start": 4, "length": 4, "sourceFrom": 0}],
           "shapes": [
-            {
-              "id": "310cef51-7f88-4f1f-80f1-fa41d0bd0fea",
-              "type": "text",
-              "content": "k7",
-              "font": "sans-serif",
-              "fontSize": 72,
-              "x": 40,
-              "y": 560,
-              "color": "#ffffff"
-            }
+            {"id": "310cef51-7f88-4f1f-80f1-fa41d0bd0fea", "type": "text", "content": "k7", "font": "sans-serif", "fontSize": 72, "x": 40, "y": 560, "color": "#ffffff"}
           ],
           "plugins": [
             {
@@ -1137,12 +496,7 @@
               "type": "shader",
               "name": "00000000-0000-4000-8000-000000000005",
               "enabled": true,
-              "params": {
-                "P1": 1,
-                "P2": 1,
-                "P3": 1,
-                "P4": 0
-              },
+              "params": {"P1": 1, "P2": 1, "P3": 1, "P4": 0},
               "shader": {
                 "name": "video-mixer",
                 "vertex": "#version 300 es\n// The full-target vertex stage every pass uses: the unit quad onto clip space, its 0..1 as the UV.\nin vec2 aUnit;\nout vec2 vUV;\n\nvoid main() {\n  vUV = aUnit;\n  gl_Position = vec4(aUnit * 2.0 - 1.0, 0.0, 1.0);\n}\n",
@@ -1163,12 +517,7 @@
             "type": "shader",
             "name": "3663c123-f41a-40d0-9a42-27b538d4faf8",
             "enabled": true,
-            "params": {
-              "P1": 0.15,
-              "P2": 0,
-              "P3": 0,
-              "P4": 0
-            },
+            "params": {"P1": 0.15, "P2": 0, "P3": 0, "P4": 0},
             "shader": {
               "name": "iris",
               "vertex": "#version 300 es\n// The vertex stage every full-target pass wants: `aUnit` is the unit quad the compositor binds,\n// and a pass covers the whole of what it draws into — so this maps (0,0)..(1,1) onto clip space\n// and hands the fragment the same 0..1 as its texture coordinate.\n//\n// It is a separate file, and duplicated per shader on purpose: a shader is the PAIR, and the day\n// one wants to move its geometry it needs this file to itself rather than a shared one it would\n// have to fork. See apps/k7-daw-frontend/packages/song-video/docs/shaders.md.\nin vec2 aUnit;\nout vec2 vUV;\n\nvoid main() {\n  vUV = aUnit;\n  gl_Position = vec4(aUnit * 2.0 - 1.0, 0.0, 1.0);\n}\n",
@@ -1179,9 +528,6 @@
       },
       "warnings": []
     },
-    "errors": {
-      "errors": [],
-      "diagnostics": []
-    }
+    "errors": {"errors": [], "diagnostics": []}
   }
 }

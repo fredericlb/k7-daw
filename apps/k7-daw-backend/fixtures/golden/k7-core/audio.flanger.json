@@ -1,9 +1,6 @@
 {
   "project": "k7-core/audio.flanger.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "audio.flanger",
     "tempo": 120,
@@ -55,11 +52,7 @@
             "presetSave": "<ws>/k7-core/audio.flanger.k7/nodes/fx.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -68,16 +61,9 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
@@ -87,11 +73,7 @@
           {
             "module": "fx",
             "uses": "@k7-core/audio/flanger",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -100,152 +82,26 @@
               "cols": 8,
               "rows": 4,
               "widgets": {
-                "lfo_section": {
-                  "type": "group",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 4,
-                  "rowSpan": 2,
-                  "label": "LFO",
-                  "color": "#3d7dff26"
-                },
-                "rate": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Rate",
-                  "bind": "Rate",
-                  "min": 0.05,
-                  "max": 10,
-                  "curve": "log"
-                },
-                "depth": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Depth",
-                  "bind": "Depth",
-                  "min": 0,
-                  "max": 8
-                },
-                "comb_section": {
-                  "type": "group",
-                  "col": 4,
-                  "row": 0,
-                  "colSpan": 4,
-                  "rowSpan": 2,
-                  "label": "COMB",
-                  "color": "#ff6a1a26"
-                },
-                "centre": {
-                  "type": "knob",
-                  "col": 4,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Centre",
-                  "bind": "Centre",
-                  "min": 0.5,
-                  "max": 12
-                },
-                "feedback": {
-                  "type": "knob",
-                  "col": 6,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Fdbk",
-                  "bind": "Feedback",
-                  "min": 0,
-                  "max": 0.9
-                },
-                "comb": {
-                  "type": "lcdscreen",
-                  "col": 0,
-                  "row": 2,
-                  "colSpan": 8,
-                  "rowSpan": 2
-                }
+                "lfo_section": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 2, "label": "LFO", "color": "#3d7dff26"},
+                "rate": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Rate", "bind": "Rate", "min": 0.05, "max": 10, "curve": "log"},
+                "depth": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Depth", "bind": "Depth", "min": 0, "max": 8},
+                "comb_section": {"type": "group", "col": 4, "row": 0, "colSpan": 4, "rowSpan": 2, "label": "COMB", "color": "#ff6a1a26"},
+                "centre": {"type": "knob", "col": 4, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Centre", "bind": "Centre", "min": 0.5, "max": 12},
+                "feedback": {"type": "knob", "col": 6, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Fdbk", "bind": "Feedback", "min": 0, "max": 0.9},
+                "comb": {"type": "lcdscreen", "col": 0, "row": 2, "colSpan": 8, "rowSpan": 2}
               },
               "script": "// flanger — the feedback comb's response at the sweep's centre, with its two extremes and the live position.\n\nconst LIVE = \"#ff6a1a\";\nconst CENTRE = \"#ffffff\";\nconst GRID = \"#6b6b6b\";\nconst FONT = \"8px ui-monospace, monospace\";\nconst F_LO = 20;\nconst F_HI = 20000;\nconst DB_FLOOR = -30;\n\nconst clamp01 = (v) => (v < 0 ? 0 : v > 1 ? 1 : v);\n\n// Wet path of dsp.k7x: y = x + z^-D x / (1 - g z^-D), so |H| = |1 + (1-g)e^-jθ| / |1 - g e^-jθ|, in dB below its peak.\nfunction combDb(f, tauMs, g) {\n  const th = 2 * Math.PI * f * (tauMs / 1000);\n  const c = Math.cos(th);\n  const s = Math.sin(th);\n  const k = 1 - g;\n  const num = Math.hypot(1 + k * c, k * s);\n  const den = Math.max(1e-6, Math.hypot(1 - g * c, g * s));\n  const peak = (1 + k) / Math.max(1e-6, 1 - g);\n  const mag = num / den / Math.max(1e-6, peak);\n  return Math.max(DB_FLOOR, 20 * Math.log10(Math.max(1e-6, mag)));\n}\n\nfunction curve(ctx, pad, top, w, h, tauMs, g) {\n  ctx.beginPath();\n  for (let i = 0; i <= w; i++) {\n    const f = F_LO * (F_HI / F_LO) ** (i / w);\n    const y = top + (combDb(f, tauMs, g) / DB_FLOOR) * h;\n    if (i === 0) ctx.moveTo(pad + i, y);\n    else ctx.lineTo(pad + i, y);\n  }\n  ctx.stroke();\n}\n\nexport default {\n  comb(lcd) {\n    const { ctx, width: W, height: H, params, output, state, now } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n    ctx.lineWidth = 1;\n\n    const pad = 6;\n    const top = 14;\n    const w = Math.max(1, W - pad * 2);\n    const h = Math.max(1, H - top - pad);\n\n    const rate = Math.max(0, params[\"Rate\"] ?? 0.4);\n    const depth = Math.max(0, params[\"Depth\"] ?? 3);\n    const centre = Math.max(0.05, params[\"Centre\"] ?? 5);\n    const g = Math.max(0, Math.min(0.9, params[\"Feedback\"] ?? 0.5));\n    const lo = Math.max(0.05, centre - depth);\n    const hi = centre + depth;\n\n    // The two ends of the sweep, faint.\n    ctx.strokeStyle = GRID;\n    curve(ctx, pad, top, w, h, lo, g);\n    curve(ctx, pad, top, w, h, hi, g);\n\n    // The comb where the LFO is now while audio flows; at rest, the centre.\n    const out = Array.isArray(output) && output.length ? clamp01(output[output.length - 1] ?? 0) : 0;\n    state.out = (state.out ?? 0) * 0.7 + out * 0.3;\n    const moving = state.out > 0.02;\n    const tau = moving ? Math.max(0.05, centre + depth * Math.sin(2 * Math.PI * rate * (now / 1000))) : centre;\n    ctx.strokeStyle = moving ? LIVE : CENTRE;\n    curve(ctx, pad, top, w, h, tau, g);\n\n    ctx.fillStyle = CENTRE;\n    ctx.textAlign = \"left\";\n    ctx.fillText(`${centre.toFixed(1)} ±${depth.toFixed(1)} MS`, pad, 9);\n    ctx.fillStyle = GRID;\n    ctx.textAlign = \"right\";\n    ctx.fillText(`${rate.toFixed(2)} HZ  FB ${Math.round(g * 100)}%`, W - pad, 9);\n  },\n};\n",
               "vertical": {
                 "cols": 4,
                 "rows": 6,
                 "widgets": {
-                  "lfo_section": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 4,
-                    "rowSpan": 2,
-                    "label": "LFO",
-                    "color": "#3d7dff26"
-                  },
-                  "rate": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Rate",
-                    "bind": "Rate",
-                    "min": 0.05,
-                    "max": 10,
-                    "curve": "log"
-                  },
-                  "depth": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Depth",
-                    "bind": "Depth",
-                    "min": 0,
-                    "max": 8
-                  },
-                  "comb_section": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 4,
-                    "rowSpan": 2,
-                    "label": "COMB",
-                    "color": "#ff6a1a26"
-                  },
-                  "centre": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Centre",
-                    "bind": "Centre",
-                    "min": 0.5,
-                    "max": 12
-                  },
-                  "feedback": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 2,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Fdbk",
-                    "bind": "Feedback",
-                    "min": 0,
-                    "max": 0.9
-                  },
-                  "comb": {
-                    "type": "lcdscreen",
-                    "col": 0,
-                    "row": 4,
-                    "colSpan": 4,
-                    "rowSpan": 2
-                  }
+                  "lfo_section": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 2, "label": "LFO", "color": "#3d7dff26"},
+                  "rate": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Rate", "bind": "Rate", "min": 0.05, "max": 10, "curve": "log"},
+                  "depth": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Depth", "bind": "Depth", "min": 0, "max": 8},
+                  "comb_section": {"type": "group", "col": 0, "row": 2, "colSpan": 4, "rowSpan": 2, "label": "COMB", "color": "#ff6a1a26"},
+                  "centre": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Centre", "bind": "Centre", "min": 0.5, "max": 12},
+                  "feedback": {"type": "knob", "col": 2, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Fdbk", "bind": "Feedback", "min": 0, "max": 0.9},
+                  "comb": {"type": "lcdscreen", "col": 0, "row": 4, "colSpan": 4, "rowSpan": 2}
                 }
               }
             },
@@ -253,45 +109,15 @@
             "pluginId": "drums:fx"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
-      }
+      "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}]}
     },
-    "tracks": [
-      "drums"
-    ],
+    "tracks": ["drums"],
     "videoTracks": [],
-    "trackColors": {
-      "drums": "#dd322c"
-    },
-    "trackSignals": {
-      "drums": "audio"
-    },
-    "trackClips": {
-      "drums": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ]
-    },
+    "trackColors": {"drums": "#dd322c"},
+    "trackSignals": {"drums": "audio"},
+    "trackClips": {"drums": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}]},
     "modules": {},
     "warnings": []
   },

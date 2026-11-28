@@ -1,9 +1,6 @@
 {
   "project": "k7-core/audio.vinyl.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "audio.vinyl",
     "tempo": 120,
@@ -54,11 +51,7 @@
             "presetSave": "<ws>/k7-core/audio.vinyl.k7/nodes/fx.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -104,11 +97,7 @@
             "presetSave": "<ws>/k7-core/audio.vinyl.k7/nodes/fx-crunchy-groove-wear.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -154,11 +143,7 @@
             "presetSave": "<ws>/k7-core/audio.vinyl.k7/nodes/fx-groove-wear.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -167,16 +152,9 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
@@ -186,11 +164,7 @@
           {
             "module": "fx",
             "uses": "@k7-core/audio/vinyl",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -198,35 +172,15 @@
             "ui": {
               "cols": 3,
               "rows": 3,
-              "widgets": {
-                "wear": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 3,
-                  "rowSpan": 3,
-                  "label": "Wear",
-                  "bind": "Wear",
-                  "min": 0,
-                  "max": 1
-                }
-              }
+              "widgets": {"wear": {"type": "knob", "col": 0, "row": 0, "colSpan": 3, "rowSpan": 3, "label": "Wear", "bind": "Wear", "min": 0, "max": 1}}
             },
-            "engines": [
-              "crunchy-groove-wear",
-              "groove-wear"
-            ],
+            "engines": ["crunchy-groove-wear", "groove-wear"],
             "engine": "groove-wear",
             "params": {},
             "pluginId": "drums:fx"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-crunchy-groove-wear": {
         "from": "drums-crunchy-groove-wear",
@@ -234,11 +188,7 @@
           {
             "module": "fx-crunchy-groove-wear",
             "uses": "@k7-core/audio/vinyl",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -247,45 +197,17 @@
               "cols": 4,
               "rows": 2,
               "widgets": {
-                "freq": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Freq",
-                  "bind": "Freq",
-                  "min": 0,
-                  "max": 1
-                },
-                "apply": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Apply",
-                  "bind": "Apply",
-                  "min": 0,
-                  "max": 1
-                }
+                "freq": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Freq", "bind": "Freq", "min": 0, "max": 1},
+                "apply": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Apply", "bind": "Apply", "min": 0, "max": 1}
               }
             },
-            "engines": [
-              "crunchy-groove-wear",
-              "groove-wear"
-            ],
+            "engines": ["crunchy-groove-wear", "groove-wear"],
             "engine": "crunchy-groove-wear",
             "params": {},
             "pluginId": "drums-crunchy-groove-wear:fx-crunchy-groove-wear"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-groove-wear": {
         "from": "drums-groove-wear",
@@ -293,11 +215,7 @@
           {
             "module": "fx-groove-wear",
             "uses": "@k7-core/audio/vinyl",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -305,91 +223,26 @@
             "ui": {
               "cols": 3,
               "rows": 3,
-              "widgets": {
-                "wear": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 3,
-                  "rowSpan": 3,
-                  "label": "Wear",
-                  "bind": "Wear",
-                  "min": 0,
-                  "max": 1
-                }
-              }
+              "widgets": {"wear": {"type": "knob", "col": 0, "row": 0, "colSpan": 3, "rowSpan": 3, "label": "Wear", "bind": "Wear", "min": 0, "max": 1}}
             },
-            "engines": [
-              "crunchy-groove-wear",
-              "groove-wear"
-            ],
+            "engines": ["crunchy-groove-wear", "groove-wear"],
             "engine": "groove-wear",
             "params": {},
             "pluginId": "drums-groove-wear:fx-groove-wear"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
-      }
+      "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}]}
     },
-    "tracks": [
-      "drums",
-      "drums-crunchy-groove-wear",
-      "drums-groove-wear"
-    ],
+    "tracks": ["drums", "drums-crunchy-groove-wear", "drums-groove-wear"],
     "videoTracks": [],
-    "trackColors": {
-      "drums": "#af1d26",
-      "drums-crunchy-groove-wear": "#dd322c",
-      "drums-groove-wear": "#e57361"
-    },
-    "trackSignals": {
-      "drums": "audio",
-      "drums-crunchy-groove-wear": "audio",
-      "drums-groove-wear": "audio"
-    },
+    "trackColors": {"drums": "#af1d26", "drums-crunchy-groove-wear": "#dd322c", "drums-groove-wear": "#e57361"},
+    "trackSignals": {"drums": "audio", "drums-crunchy-groove-wear": "audio", "drums-groove-wear": "audio"},
     "trackClips": {
-      "drums": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-crunchy-groove-wear": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-groove-wear": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ]
+      "drums": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-crunchy-groove-wear": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-groove-wear": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}]
     },
     "modules": {},
     "warnings": []

@@ -1,13 +1,6 @@
 {
   "project": "k7-core/shaders.look.k7",
-  "repairs": {
-    "log": [],
-    "files": [
-      "graph.k7x",
-      "nodes/mix-pic.k7x",
-      "project.k7x"
-    ]
-  },
+  "repairs": {"log": [], "files": ["graph.k7x", "nodes/mix-pic.k7x", "project.k7x"]},
   "engine": {
     "name": "shaders.look",
     "tempo": 120,
@@ -20,16 +13,9 @@
     "tracks": [],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
@@ -39,65 +25,22 @@
           {
             "module": "fx",
             "uses": "@k7-core/shaders/look",
-            "inputs": [
-              {
-                "name": "in",
-                "type": "video"
-              },
-              {
-                "name": "audio",
-                "type": "audio",
-                "mandatory": false
-              }
-            ],
+            "inputs": [{"name": "in", "type": "video"}, {"name": "audio", "type": "audio", "mandatory": false}],
             "shader": "look",
-            "shaders": [
-              "look"
-            ],
+            "shaders": ["look"],
             "category": "shaders",
             "emits": "video",
             "stub": false,
             "hasNativePluginUI": false,
-            "ui": {
-              "cols": 1,
-              "rows": 1,
-              "widgets": {
-                "strength": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "bind": "P1",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                }
-              }
-            },
-            "params": {
-              "P1": 1,
-              "P2": 0,
-              "P3": 0,
-              "P4": 0
-            }
+            "ui": {"cols": 1, "rows": 1, "widgets": {"strength": {"type": "knob", "col": 0, "row": 0, "bind": "P1", "min": 0, "max": 1, "step": 0.01}}},
+            "params": {"P1": 1, "P2": 0, "P3": 0, "P4": 0}
           },
           {
             "module": "mix-pic",
             "uses": "@meta/shaders/video-mixer",
-            "inputs": [
-              {
-                "name": "in",
-                "type": "video"
-              },
-              {
-                "name": "audio",
-                "type": "audio",
-                "mandatory": false
-              }
-            ],
+            "inputs": [{"name": "in", "type": "video"}, {"name": "audio", "type": "audio", "mandatory": false}],
             "shader": "video-mixer",
-            "shaders": [
-              "video-mixer"
-            ],
+            "shaders": ["video-mixer"],
             "category": "shaders",
             "emits": "video",
             "stub": false,
@@ -106,111 +49,32 @@
               "cols": 2,
               "rows": 4,
               "widgets": {
-                "red": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "rowSpan": 2,
-                  "label": "Red",
-                  "bind": "P1",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "green": {
-                  "type": "knob",
-                  "col": 1,
-                  "row": 0,
-                  "rowSpan": 2,
-                  "label": "Green",
-                  "bind": "P2",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "blue": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 2,
-                  "rowSpan": 2,
-                  "label": "Blue",
-                  "bind": "P3",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "transparency": {
-                  "type": "knob",
-                  "col": 1,
-                  "row": 2,
-                  "rowSpan": 2,
-                  "label": "Transparency",
-                  "bind": "P4",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                }
+                "red": {"type": "knob", "col": 0, "row": 0, "rowSpan": 2, "label": "Red", "bind": "P1", "min": 0, "max": 1, "step": 0.01},
+                "green": {"type": "knob", "col": 1, "row": 0, "rowSpan": 2, "label": "Green", "bind": "P2", "min": 0, "max": 1, "step": 0.01},
+                "blue": {"type": "knob", "col": 0, "row": 2, "rowSpan": 2, "label": "Blue", "bind": "P3", "min": 0, "max": 1, "step": 0.01},
+                "transparency": {"type": "knob", "col": 1, "row": 2, "rowSpan": 2, "label": "Transparency", "bind": "P4", "min": 0, "max": 1, "step": 0.01}
               }
             },
-            "params": {
-              "P1": 1,
-              "P2": 1,
-              "P3": 1,
-              "P4": 0
-            }
+            "params": {"P1": 1, "P2": 1, "P3": 1, "P4": 0}
           }
         ],
-        "out": [
-          {
-            "to": "RENDER",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "RENDER", "gain": 1}]
       },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          },
-          {
-            "to": "RENDER#audio",
-            "gain": 1
-          }
-        ]
-      },
-      "RENDER": {
-        "from": "RENDER",
-        "use": [],
-        "out": [
-          {
-            "to": "VIDEO_OUT",
-            "gain": 1
-          }
-        ]
-      }
+      "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}, {"to": "RENDER#audio", "gain": 1}]},
+      "RENDER": {"from": "RENDER", "use": [], "out": [{"to": "VIDEO_OUT", "gain": 1}]}
     },
     "tracks": [],
-    "videoTracks": [
-      "pic"
-    ],
+    "videoTracks": ["pic"],
     "trackColors": {},
     "trackSignals": {},
-    "trackMixers": {
-      "pic": "mix-pic"
-    },
+    "trackMixers": {"pic": "mix-pic"},
     "modules": {},
     "warnings": []
   },
   "video": {
     "doc": {
       "name": "shaders.look",
-      "viewport": [
-        1280,
-        720
-      ],
+      "viewport": [1280, 720],
       "fps": 30,
       "videoTracks": [
         {
@@ -231,12 +95,7 @@
               "type": "shader",
               "name": "fx",
               "enabled": true,
-              "params": {
-                "P1": 1,
-                "P2": 0,
-                "P3": 0,
-                "P4": 0
-              },
+              "params": {"P1": 1, "P2": 0, "P3": 0, "P4": 0},
               "shader": {
                 "name": "look",
                 "vertex": "#version 300 es\n// The full-target vertex stage every pass uses: the unit quad onto clip space, its 0..1 as the UV.\nin vec2 aUnit;\nout vec2 vUV;\n\nvoid main() {\n  vUV = aUnit;\n  gl_Position = vec4(aUnit * 2.0 - 1.0, 0.0, 1.0);\n}\n",
@@ -248,12 +107,7 @@
               "type": "shader",
               "name": "mix-pic",
               "enabled": true,
-              "params": {
-                "P1": 1,
-                "P2": 1,
-                "P3": 1,
-                "P4": 0
-              },
+              "params": {"P1": 1, "P2": 1, "P3": 1, "P4": 0},
               "shader": {
                 "name": "video-mixer",
                 "vertex": "#version 300 es\n// The full-target vertex stage every pass uses: the unit quad onto clip space, its 0..1 as the UV.\nin vec2 aUnit;\nout vec2 vUV;\n\nvoid main() {\n  vUV = aUnit;\n  gl_Position = vec4(aUnit * 2.0 - 1.0, 0.0, 1.0);\n}\n",
@@ -270,9 +124,6 @@
       "stretches": {},
       "warnings": []
     },
-    "errors": {
-      "errors": [],
-      "diagnostics": []
-    }
+    "errors": {"errors": [], "diagnostics": []}
   }
 }

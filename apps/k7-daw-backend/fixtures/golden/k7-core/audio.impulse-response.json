@@ -1,9 +1,6 @@
 {
   "project": "k7-core/audio.impulse-response.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "audio.impulse-response",
     "tempo": 120,
@@ -54,11 +51,7 @@
             "presetSave": "<ws>/k7-core/audio.impulse-response.k7/nodes/fx.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -67,16 +60,9 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
@@ -86,11 +72,7 @@
           {
             "module": "fx",
             "uses": "@k7-core/audio/impulse-response",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -99,145 +81,37 @@
               "cols": 6,
               "rows": 4,
               "widgets": {
-                "low_cut": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Lo Cut",
-                  "bind": "Low Cut",
-                  "min": 3.486816406,
-                  "max": 135.0762329
-                },
-                "high_cut": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Hi Cut",
-                  "bind": "High Cut",
-                  "min": 3.486816406,
-                  "max": 135.0762329
-                },
-                "filter_q": {
-                  "type": "knob",
-                  "col": 4,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Q",
-                  "bind": "Filter Q",
-                  "min": 0.1000000015,
-                  "max": 14,
-                  "curve": "log"
-                },
-                "band": {
-                  "type": "lcdscreen",
-                  "col": 0,
-                  "row": 2,
-                  "colSpan": 6,
-                  "rowSpan": 2
-                }
+                "low_cut": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Lo Cut", "bind": "Low Cut", "min": 3.486816406, "max": 135.0762329},
+                "high_cut": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Hi Cut", "bind": "High Cut", "min": 3.486816406, "max": 135.0762329},
+                "filter_q": {"type": "knob", "col": 4, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Q", "bind": "Filter Q", "min": 0.1000000015, "max": 14, "curve": "log"},
+                "band": {"type": "lcdscreen", "col": 0, "row": 2, "colSpan": 6, "rowSpan": 2}
               },
               "script": "// impulse-response — the band left to the tail: a high-pass at Low Cut and a low-pass at High Cut, both at Filter Q.\n\nconst LOW = \"#3ec96b\";\nconst HIGH = \"#3d7dff\";\nconst BAND = \"#ffffff\";\nconst GRID = \"#6b6b6b\";\nconst FONT = \"8px ui-monospace, monospace\";\nconst F_LO = 10;\nconst F_HI = 20000;\nconst DB_FLOOR = -36;\nconst DB_TOP = 12;\n\n// The cutoffs are MIDI note numbers: 3.49 is 10 Hz and 135.08 is 20 kHz.\nconst noteHz = (n) => 440 * 2 ** ((n - 69) / 12);\n\n// Second-order magnitudes at f for a corner f0 and a Q.\nfunction lp(f, f0, q) {\n  const r = f / f0;\n  return 1 / Math.max(1e-9, Math.hypot(1 - r * r, r / q));\n}\nfunction hp(f, f0, q) {\n  const r = f / f0;\n  return (r * r) / Math.max(1e-9, Math.hypot(1 - r * r, r / q));\n}\n\nconst fmtHz = (f) => (f >= 1000 ? `${(f / 1000).toFixed(1)}K` : `${Math.round(f)}`);\n\nexport default {\n  band(lcd) {\n    const { ctx, width: W, height: H, params } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n    ctx.lineWidth = 1;\n\n    const pad = 6;\n    const top = 13;\n    const w = Math.max(1, W - pad * 2);\n    const h = Math.max(1, H - top - pad);\n    const lowHz = noteHz(params[\"Low Cut\"] ?? 3.486816406);\n    const highHz = noteHz(params[\"High Cut\"] ?? 135.0762329);\n    const q = Math.max(0.1, params[\"Filter Q\"] ?? 0.7071);\n    const xOf = (f) => pad + (Math.log(f / F_LO) / Math.log(F_HI / F_LO)) * w;\n    const yOf = (db) => top + ((DB_TOP - Math.max(DB_FLOOR, Math.min(DB_TOP, db))) / (DB_TOP - DB_FLOOR)) * h;\n\n    // The 0 dB line.\n    ctx.strokeStyle = GRID;\n    ctx.beginPath();\n    ctx.moveTo(pad, Math.round(yOf(0)) + 0.5);\n    ctx.lineTo(W - pad, Math.round(yOf(0)) + 0.5);\n    ctx.stroke();\n\n    ctx.strokeStyle = BAND;\n    ctx.beginPath();\n    for (let i = 0; i <= w; i++) {\n      const f = F_LO * (F_HI / F_LO) ** (i / w);\n      const mag = hp(f, lowHz, q) * lp(f, highHz, q);\n      const y = yOf(20 * Math.log10(Math.max(1e-9, mag)));\n      if (i === 0) ctx.moveTo(pad + i, y);\n      else ctx.lineTo(pad + i, y);\n    }\n    ctx.stroke();\n\n    // A dot on each corner, in its knob's colour.\n    const dot = (f, color) => {\n      const x = Math.max(pad, Math.min(W - pad, xOf(f)));\n      ctx.fillStyle = color;\n      ctx.beginPath();\n      ctx.arc(x, yOf(0), 2.5, 0, Math.PI * 2);\n      ctx.fill();\n    };\n    dot(lowHz, LOW);\n    dot(highHz, HIGH);\n\n    ctx.textAlign = \"left\";\n    ctx.fillStyle = LOW;\n    ctx.fillText(`${fmtHz(lowHz)} HZ`, pad, 9);\n    ctx.textAlign = \"right\";\n    ctx.fillStyle = HIGH;\n    ctx.fillText(`${fmtHz(highHz)} HZ`, W - pad, 9);\n  },\n};\n",
               "vertical": {
                 "cols": 4,
                 "rows": 6,
                 "widgets": {
-                  "low_cut": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Lo Cut",
-                    "bind": "Low Cut",
-                    "min": 3.486816406,
-                    "max": 135.0762329
-                  },
-                  "high_cut": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Hi Cut",
-                    "bind": "High Cut",
-                    "min": 3.486816406,
-                    "max": 135.0762329
-                  },
-                  "filter_q": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Q",
-                    "bind": "Filter Q",
-                    "min": 0.1000000015,
-                    "max": 14,
-                    "curve": "log"
-                  },
-                  "band": {
-                    "type": "lcdscreen",
-                    "col": 0,
-                    "row": 4,
-                    "colSpan": 4,
-                    "rowSpan": 2
-                  }
+                  "low_cut": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Lo Cut", "bind": "Low Cut", "min": 3.486816406, "max": 135.0762329},
+                  "high_cut": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Hi Cut", "bind": "High Cut", "min": 3.486816406, "max": 135.0762329},
+                  "filter_q": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Q", "bind": "Filter Q", "min": 0.1000000015, "max": 14, "curve": "log"},
+                  "band": {"type": "lcdscreen", "col": 0, "row": 4, "colSpan": 4, "rowSpan": 2}
                 }
               }
             },
             "params": {},
-            "defaults": {
-              "Low Cut": 3.486820221,
-              "High Cut": 135.0762329,
-              "Filter Q": 0.7071067691
-            },
+            "defaults": {"Low Cut": 3.486820221, "High Cut": 135.0762329, "Filter Q": 0.7071067691},
             "pluginId": "drums:fx"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
-      }
+      "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}]}
     },
-    "tracks": [
-      "drums"
-    ],
+    "tracks": ["drums"],
     "videoTracks": [],
-    "trackColors": {
-      "drums": "#dd322c"
-    },
-    "trackSignals": {
-      "drums": "audio"
-    },
-    "trackClips": {
-      "drums": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ]
-    },
+    "trackColors": {"drums": "#dd322c"},
+    "trackSignals": {"drums": "audio"},
+    "trackClips": {"drums": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}]},
     "modules": {},
     "warnings": []
   },

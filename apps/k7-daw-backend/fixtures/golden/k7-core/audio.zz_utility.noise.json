@@ -1,9 +1,6 @@
 {
   "project": "k7-core/audio.zz_utility.noise.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "audio.zz_utility.noise",
     "tempo": 120,
@@ -54,11 +51,7 @@
             "presetSave": "<ws>/k7-core/audio.zz_utility.noise.k7/nodes/fx.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -67,16 +60,9 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
@@ -86,11 +72,7 @@
           {
             "module": "fx",
             "uses": "@k7-core/audio/zz_utility/noise",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -99,157 +81,25 @@
               "cols": 10,
               "rows": 3,
               "widgets": {
-                "filt": {
-                  "type": "group",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 4,
-                  "rowSpan": 2,
-                  "label": "FILT",
-                  "color": "#3ec96b22"
-                },
-                "low_cut": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "LowCut",
-                  "bind": "LowCut",
-                  "min": 0,
-                  "max": 1
-                },
-                "high_cut": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "HighCut",
-                  "bind": "HighCut",
-                  "min": 0,
-                  "max": 1
-                },
-                "shape": {
-                  "type": "group",
-                  "col": 4,
-                  "row": 0,
-                  "colSpan": 6,
-                  "rowSpan": 2,
-                  "label": "SHAPE",
-                  "color": "#ffffff14"
-                },
-                "lshape": {
-                  "type": "knob",
-                  "col": 4,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "LShape",
-                  "bind": "LShape",
-                  "min": 0,
-                  "max": 1
-                },
-                "decay": {
-                  "type": "knob",
-                  "col": 6,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Decay",
-                  "bind": "Decay",
-                  "min": 0,
-                  "max": 1
-                },
-                "distance": {
-                  "type": "knob",
-                  "col": 8,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Dist",
-                  "bind": "Distnc",
-                  "min": 0,
-                  "max": 1
-                }
+                "filt": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 2, "label": "FILT", "color": "#3ec96b22"},
+                "low_cut": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "LowCut", "bind": "LowCut", "min": 0, "max": 1},
+                "high_cut": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "HighCut", "bind": "HighCut", "min": 0, "max": 1},
+                "shape": {"type": "group", "col": 4, "row": 0, "colSpan": 6, "rowSpan": 2, "label": "SHAPE", "color": "#ffffff14"},
+                "lshape": {"type": "knob", "col": 4, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "LShape", "bind": "LShape", "min": 0, "max": 1},
+                "decay": {"type": "knob", "col": 6, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Decay", "bind": "Decay", "min": 0, "max": 1},
+                "distance": {"type": "knob", "col": 8, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Dist", "bind": "Distnc", "min": 0, "max": 1}
               },
               "vertical": {
                 "cols": 4,
                 "rows": 6,
                 "widgets": {
-                  "filt": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 4,
-                    "rowSpan": 2,
-                    "label": "FILT",
-                    "color": "#3ec96b22"
-                  },
-                  "low_cut": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "LowCut",
-                    "bind": "LowCut",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "high_cut": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "HighCut",
-                    "bind": "HighCut",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "shape": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 4,
-                    "rowSpan": 4,
-                    "label": "SHAPE",
-                    "color": "#ffffff14"
-                  },
-                  "lshape": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "LShape",
-                    "bind": "LShape",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "decay": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 2,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Decay",
-                    "bind": "Decay",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "distance": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 4,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Dist",
-                    "bind": "Distnc",
-                    "min": 0,
-                    "max": 1
-                  }
+                  "filt": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 2, "label": "FILT", "color": "#3ec96b22"},
+                  "low_cut": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "LowCut", "bind": "LowCut", "min": 0, "max": 1},
+                  "high_cut": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "HighCut", "bind": "HighCut", "min": 0, "max": 1},
+                  "shape": {"type": "group", "col": 0, "row": 2, "colSpan": 4, "rowSpan": 4, "label": "SHAPE", "color": "#ffffff14"},
+                  "lshape": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "LShape", "bind": "LShape", "min": 0, "max": 1},
+                  "decay": {"type": "knob", "col": 2, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Decay", "bind": "Decay", "min": 0, "max": 1},
+                  "distance": {"type": "knob", "col": 0, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "Dist", "bind": "Distnc", "min": 0, "max": 1}
                 }
               }
             },
@@ -257,45 +107,15 @@
             "pluginId": "drums:fx"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
-      }
+      "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}]}
     },
-    "tracks": [
-      "drums"
-    ],
+    "tracks": ["drums"],
     "videoTracks": [],
-    "trackColors": {
-      "drums": "#dd322c"
-    },
-    "trackSignals": {
-      "drums": "audio"
-    },
-    "trackClips": {
-      "drums": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ]
-    },
+    "trackColors": {"drums": "#dd322c"},
+    "trackSignals": {"drums": "audio"},
+    "trackClips": {"drums": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}]},
     "modules": {},
     "warnings": []
   },

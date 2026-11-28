@@ -1,9 +1,6 @@
 {
   "project": "k7-core/audio.clipper.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "audio.clipper",
     "tempo": 120,
@@ -54,11 +51,7 @@
             "presetSave": "<ws>/k7-core/audio.clipper.k7/nodes/fx.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -104,11 +97,7 @@
             "presetSave": "<ws>/k7-core/audio.clipper.k7/nodes/fx-adclip-7.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -154,11 +143,7 @@
             "presetSave": "<ws>/k7-core/audio.clipper.k7/nodes/fx-clip-only.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -204,11 +189,7 @@
             "presetSave": "<ws>/k7-core/audio.clipper.k7/nodes/fx-crystal.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -254,11 +235,7 @@
             "presetSave": "<ws>/k7-core/audio.clipper.k7/nodes/fx-one-corner-clip.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -267,16 +244,9 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
@@ -286,11 +256,7 @@
           {
             "module": "fx",
             "uses": "@k7-core/audio/clipper",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -299,137 +265,31 @@
               "cols": 8,
               "rows": 2,
               "widgets": {
-                "clip_grp": {
-                  "type": "group",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 6,
-                  "rowSpan": 2,
-                  "label": "CLIP",
-                  "color": "#ff6a1a26"
-                },
-                "boost": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Boost",
-                  "bind": "Boost",
-                  "min": 0,
-                  "max": 1
-                },
-                "soften": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Soften",
-                  "bind": "Soften",
-                  "min": 0,
-                  "max": 1
-                },
-                "enhance": {
-                  "type": "knob",
-                  "col": 4,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Enhance",
-                  "bind": "Enhance",
-                  "min": 0,
-                  "max": 1
-                },
-                "mode": {
-                  "type": "knob",
-                  "col": 6,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Mode",
-                  "bind": "Mode",
-                  "min": 0,
-                  "max": 1
-                }
+                "clip_grp": {"type": "group", "col": 0, "row": 0, "colSpan": 6, "rowSpan": 2, "label": "CLIP", "color": "#ff6a1a26"},
+                "boost": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Boost", "bind": "Boost", "min": 0, "max": 1},
+                "soften": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Soften", "bind": "Soften", "min": 0, "max": 1},
+                "enhance": {"type": "knob", "col": 4, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Enhance", "bind": "Enhance", "min": 0, "max": 1},
+                "mode": {"type": "knob", "col": 6, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Mode", "bind": "Mode", "min": 0, "max": 1}
               },
               "vertical": {
                 "cols": 4,
                 "rows": 6,
                 "widgets": {
-                  "clip_grp": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 4,
-                    "rowSpan": 4,
-                    "label": "CLIP",
-                    "color": "#ff6a1a26"
-                  },
-                  "boost": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Boost",
-                    "bind": "Boost",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "soften": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Soften",
-                    "bind": "Soften",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "enhance": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Enhance",
-                    "bind": "Enhance",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "mode": {
-                    "type": "knob",
-                    "col": 1,
-                    "row": 4,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Mode",
-                    "bind": "Mode",
-                    "min": 0,
-                    "max": 1
-                  }
+                  "clip_grp": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 4, "label": "CLIP", "color": "#ff6a1a26"},
+                  "boost": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Boost", "bind": "Boost", "min": 0, "max": 1},
+                  "soften": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Soften", "bind": "Soften", "min": 0, "max": 1},
+                  "enhance": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Enhance", "bind": "Enhance", "min": 0, "max": 1},
+                  "mode": {"type": "knob", "col": 1, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "Mode", "bind": "Mode", "min": 0, "max": 1}
                 }
               }
             },
-            "engines": [
-              "adclip-7",
-              "clip-only",
-              "crystal",
-              "one-corner-clip"
-            ],
+            "engines": ["adclip-7", "clip-only", "crystal", "one-corner-clip"],
             "engine": "adclip-7",
             "params": {},
             "pluginId": "drums:fx"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-adclip-7": {
         "from": "drums-adclip-7",
@@ -437,11 +297,7 @@
           {
             "module": "fx-adclip-7",
             "uses": "@k7-core/audio/clipper",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -450,137 +306,31 @@
               "cols": 8,
               "rows": 2,
               "widgets": {
-                "clip_grp": {
-                  "type": "group",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 6,
-                  "rowSpan": 2,
-                  "label": "CLIP",
-                  "color": "#ff6a1a26"
-                },
-                "boost": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Boost",
-                  "bind": "Boost",
-                  "min": 0,
-                  "max": 1
-                },
-                "soften": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Soften",
-                  "bind": "Soften",
-                  "min": 0,
-                  "max": 1
-                },
-                "enhance": {
-                  "type": "knob",
-                  "col": 4,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Enhance",
-                  "bind": "Enhance",
-                  "min": 0,
-                  "max": 1
-                },
-                "mode": {
-                  "type": "knob",
-                  "col": 6,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Mode",
-                  "bind": "Mode",
-                  "min": 0,
-                  "max": 1
-                }
+                "clip_grp": {"type": "group", "col": 0, "row": 0, "colSpan": 6, "rowSpan": 2, "label": "CLIP", "color": "#ff6a1a26"},
+                "boost": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Boost", "bind": "Boost", "min": 0, "max": 1},
+                "soften": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Soften", "bind": "Soften", "min": 0, "max": 1},
+                "enhance": {"type": "knob", "col": 4, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Enhance", "bind": "Enhance", "min": 0, "max": 1},
+                "mode": {"type": "knob", "col": 6, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Mode", "bind": "Mode", "min": 0, "max": 1}
               },
               "vertical": {
                 "cols": 4,
                 "rows": 6,
                 "widgets": {
-                  "clip_grp": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 4,
-                    "rowSpan": 4,
-                    "label": "CLIP",
-                    "color": "#ff6a1a26"
-                  },
-                  "boost": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Boost",
-                    "bind": "Boost",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "soften": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Soften",
-                    "bind": "Soften",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "enhance": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Enhance",
-                    "bind": "Enhance",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "mode": {
-                    "type": "knob",
-                    "col": 1,
-                    "row": 4,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Mode",
-                    "bind": "Mode",
-                    "min": 0,
-                    "max": 1
-                  }
+                  "clip_grp": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 4, "label": "CLIP", "color": "#ff6a1a26"},
+                  "boost": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Boost", "bind": "Boost", "min": 0, "max": 1},
+                  "soften": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Soften", "bind": "Soften", "min": 0, "max": 1},
+                  "enhance": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Enhance", "bind": "Enhance", "min": 0, "max": 1},
+                  "mode": {"type": "knob", "col": 1, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "Mode", "bind": "Mode", "min": 0, "max": 1}
                 }
               }
             },
-            "engines": [
-              "adclip-7",
-              "clip-only",
-              "crystal",
-              "one-corner-clip"
-            ],
+            "engines": ["adclip-7", "clip-only", "crystal", "one-corner-clip"],
             "engine": "adclip-7",
             "params": {},
             "pluginId": "drums-adclip-7:fx-adclip-7"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-clip-only": {
         "from": "drums-clip-only",
@@ -588,37 +338,19 @@
           {
             "module": "fx-clip-only",
             "uses": "@k7-core/audio/clipper",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
             "hasNativePluginUI": false,
-            "ui": {
-              "cols": 1,
-              "rows": 1,
-              "widgets": {}
-            },
-            "engines": [
-              "adclip-7",
-              "clip-only",
-              "crystal",
-              "one-corner-clip"
-            ],
+            "ui": {"cols": 1, "rows": 1, "widgets": {}},
+            "engines": ["adclip-7", "clip-only", "crystal", "one-corner-clip"],
             "engine": "clip-only",
             "params": {},
             "pluginId": "drums-clip-only:fx-clip-only"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-crystal": {
         "from": "drums-crystal",
@@ -626,11 +358,7 @@
           {
             "module": "fx-crystal",
             "uses": "@k7-core/audio/clipper",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -639,97 +367,27 @@
               "cols": 6,
               "rows": 2,
               "widgets": {
-                "hard": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Hard",
-                  "bind": "Hardnss",
-                  "min": 0,
-                  "max": 1
-                },
-                "person": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Person",
-                  "bind": "Personl",
-                  "min": 0,
-                  "max": 1
-                },
-                "drive": {
-                  "type": "knob",
-                  "col": 4,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Drive",
-                  "bind": "Drive",
-                  "min": 0,
-                  "max": 1
-                }
+                "hard": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Hard", "bind": "Hardnss", "min": 0, "max": 1},
+                "person": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Person", "bind": "Personl", "min": 0, "max": 1},
+                "drive": {"type": "knob", "col": 4, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Drive", "bind": "Drive", "min": 0, "max": 1}
               },
               "vertical": {
                 "cols": 4,
                 "rows": 4,
                 "widgets": {
-                  "hard": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Hard",
-                    "bind": "Hardnss",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "person": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Person",
-                    "bind": "Personl",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "drive": {
-                    "type": "knob",
-                    "col": 1,
-                    "row": 2,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Drive",
-                    "bind": "Drive",
-                    "min": 0,
-                    "max": 1
-                  }
+                  "hard": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Hard", "bind": "Hardnss", "min": 0, "max": 1},
+                  "person": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Person", "bind": "Personl", "min": 0, "max": 1},
+                  "drive": {"type": "knob", "col": 1, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Drive", "bind": "Drive", "min": 0, "max": 1}
                 }
               }
             },
-            "engines": [
-              "adclip-7",
-              "clip-only",
-              "crystal",
-              "one-corner-clip"
-            ],
+            "engines": ["adclip-7", "clip-only", "crystal", "one-corner-clip"],
             "engine": "crystal",
             "params": {},
             "pluginId": "drums-crystal:fx-crystal"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-one-corner-clip": {
         "from": "drums-one-corner-clip",
@@ -737,11 +395,7 @@
           {
             "module": "fx-one-corner-clip",
             "uses": "@k7-core/audio/clipper",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -750,210 +404,45 @@
               "cols": 6,
               "rows": 4,
               "widgets": {
-                "clip": {
-                  "type": "lcdscreen",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 6,
-                  "rowSpan": 2
-                },
-                "clip_grp": {
-                  "type": "group",
-                  "col": 0,
-                  "row": 2,
-                  "colSpan": 6,
-                  "rowSpan": 2,
-                  "label": "CLIP",
-                  "color": "#ff6a1a26"
-                },
-                "pos_thr": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 2,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Pos",
-                  "bind": "Pos Thr",
-                  "min": 0,
-                  "max": 1
-                },
-                "neg_thr": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 2,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Neg",
-                  "bind": "Neg Thr",
-                  "min": 0,
-                  "max": 1
-                },
-                "voicing": {
-                  "type": "knob",
-                  "col": 4,
-                  "row": 2,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Voicing",
-                  "bind": "Voicing",
-                  "min": 0,
-                  "max": 1
-                }
+                "clip": {"type": "lcdscreen", "col": 0, "row": 0, "colSpan": 6, "rowSpan": 2},
+                "clip_grp": {"type": "group", "col": 0, "row": 2, "colSpan": 6, "rowSpan": 2, "label": "CLIP", "color": "#ff6a1a26"},
+                "pos_thr": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Pos", "bind": "Pos Thr", "min": 0, "max": 1},
+                "neg_thr": {"type": "knob", "col": 2, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Neg", "bind": "Neg Thr", "min": 0, "max": 1},
+                "voicing": {"type": "knob", "col": 4, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Voicing", "bind": "Voicing", "min": 0, "max": 1}
               },
               "script": "// clip — one sine cycle cut at its positive and negative ceilings; the heights are relative, not calibrated dB.\nexport default {\n  clip(lcd) {\n    const { ctx, width: W, height: H, params } = lcd;\n    const clamp = (v) => Math.max(0, Math.min(1, typeof v === \"number\" ? v : 0.5));\n    const pos = 0.15 + 0.85 * clamp(params[\"Pos Thr\"]), neg = 0.15 + 0.85 * clamp(params[\"Neg Thr\"]);\n    const mid = H / 2, amp = Math.max(1, H / 2 - 6);\n    ctx.fillStyle = \"#000\"; ctx.fillRect(0, 0, W, H);\n    ctx.lineWidth = 1; ctx.strokeStyle = \"#6b6b6b\";\n    ctx.setLineDash([1, 3]); ctx.beginPath(); ctx.moveTo(0, mid); ctx.lineTo(W, mid); ctx.stroke();\n    ctx.beginPath();\n    for (let i = 0; i <= 96; i++) { const x = (i / 96) * W, y = mid - Math.sin((i / 96) * Math.PI * 2) * amp; if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); }\n    ctx.stroke(); ctx.setLineDash([]);\n    ctx.strokeStyle = \"#ff6a1a\"; ctx.beginPath(); ctx.moveTo(0, mid - pos * amp); ctx.lineTo(W, mid - pos * amp); ctx.stroke();\n    ctx.strokeStyle = \"#3d7dff\"; ctx.beginPath(); ctx.moveTo(0, mid + neg * amp); ctx.lineTo(W, mid + neg * amp); ctx.stroke();\n    ctx.strokeStyle = \"#ffffff\"; ctx.beginPath();\n    for (let i = 0; i <= 96; i++) { const x = (i / 96) * W, s = Math.sin((i / 96) * Math.PI * 2); const v = Math.max(-neg, Math.min(pos, s)); const y = mid - v * amp; if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); }\n    ctx.stroke();\n    ctx.font = \"8px ui-monospace, monospace\"; ctx.textBaseline = \"top\";\n    ctx.fillStyle = \"#ff6a1a\"; ctx.fillText(\"POS\", 2, 1);\n    ctx.textBaseline = \"bottom\"; ctx.fillStyle = \"#3d7dff\"; ctx.fillText(\"NEG\", 2, H - 1);\n  },\n};\n",
               "vertical": {
                 "cols": 4,
                 "rows": 6,
                 "widgets": {
-                  "clip": {
-                    "type": "lcdscreen",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 4,
-                    "rowSpan": 2
-                  },
-                  "clip_grp": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 4,
-                    "rowSpan": 4,
-                    "label": "CLIP",
-                    "color": "#ff6a1a26"
-                  },
-                  "pos_thr": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Pos",
-                    "bind": "Pos Thr",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "neg_thr": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 2,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Neg",
-                    "bind": "Neg Thr",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "voicing": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 4,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Voicing",
-                    "bind": "Voicing",
-                    "min": 0,
-                    "max": 1
-                  }
+                  "clip": {"type": "lcdscreen", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 2},
+                  "clip_grp": {"type": "group", "col": 0, "row": 2, "colSpan": 4, "rowSpan": 4, "label": "CLIP", "color": "#ff6a1a26"},
+                  "pos_thr": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Pos", "bind": "Pos Thr", "min": 0, "max": 1},
+                  "neg_thr": {"type": "knob", "col": 2, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Neg", "bind": "Neg Thr", "min": 0, "max": 1},
+                  "voicing": {"type": "knob", "col": 0, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "Voicing", "bind": "Voicing", "min": 0, "max": 1}
                 }
               }
             },
-            "engines": [
-              "adclip-7",
-              "clip-only",
-              "crystal",
-              "one-corner-clip"
-            ],
+            "engines": ["adclip-7", "clip-only", "crystal", "one-corner-clip"],
             "engine": "one-corner-clip",
             "params": {},
             "pluginId": "drums-one-corner-clip:fx-one-corner-clip"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
-      }
+      "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}]}
     },
-    "tracks": [
-      "drums",
-      "drums-adclip-7",
-      "drums-clip-only",
-      "drums-crystal",
-      "drums-one-corner-clip"
-    ],
+    "tracks": ["drums", "drums-adclip-7", "drums-clip-only", "drums-crystal", "drums-one-corner-clip"],
     "videoTracks": [],
-    "trackColors": {
-      "drums": "#af1d26",
-      "drums-adclip-7": "#ca2124",
-      "drums-clip-only": "#dd322c",
-      "drums-crystal": "#e15447",
-      "drums-one-corner-clip": "#e57361"
-    },
-    "trackSignals": {
-      "drums": "audio",
-      "drums-adclip-7": "audio",
-      "drums-clip-only": "audio",
-      "drums-crystal": "audio",
-      "drums-one-corner-clip": "audio"
-    },
+    "trackColors": {"drums": "#af1d26", "drums-adclip-7": "#ca2124", "drums-clip-only": "#dd322c", "drums-crystal": "#e15447", "drums-one-corner-clip": "#e57361"},
+    "trackSignals": {"drums": "audio", "drums-adclip-7": "audio", "drums-clip-only": "audio", "drums-crystal": "audio", "drums-one-corner-clip": "audio"},
     "trackClips": {
-      "drums": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-adclip-7": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-clip-only": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-crystal": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-one-corner-clip": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ]
+      "drums": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-adclip-7": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-clip-only": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-crystal": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-one-corner-clip": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}]
     },
     "modules": {},
     "warnings": []

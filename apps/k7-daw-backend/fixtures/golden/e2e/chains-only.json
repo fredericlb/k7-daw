@@ -1,9 +1,6 @@
 {
   "project": "e2e/chains-only.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "chains-only",
     "tempo": 120,
@@ -20,11 +17,7 @@
         "presetSave": "",
         "role": "",
         "enabled": true,
-        "params": {
-          "@mix": 1,
-          "@input-volume": 0,
-          "@output-volume": 0
-        }
+        "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
       }
     ],
     "recordDir": "<ws>/e2e/chains-only.k7/clips",
@@ -67,11 +60,7 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
   "errors": {
     "errors": [],
@@ -87,49 +76,12 @@
   },
   "freezes": [],
   "graph": {
-    "chains": {
-      "drums": {
-        "from": "drums",
-        "use": [],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
-      },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
-      }
-    },
-    "tracks": [
-      "drums"
-    ],
+    "chains": {"drums": {"from": "drums", "use": [], "out": [{"to": "MIX", "gain": 1}]}, "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}]}},
+    "tracks": ["drums"],
     "videoTracks": [],
-    "trackColors": {
-      "drums": "#dd322c"
-    },
-    "trackSignals": {
-      "drums": "audio"
-    },
-    "trackClips": {
-      "drums": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ]
-    },
+    "trackColors": {"drums": "#dd322c"},
+    "trackSignals": {"drums": "audio"},
+    "trackClips": {"drums": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}]},
     "modules": {},
     "warnings": []
   },

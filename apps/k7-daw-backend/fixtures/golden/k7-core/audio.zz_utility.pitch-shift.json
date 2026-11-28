@@ -1,9 +1,6 @@
 {
   "project": "k7-core/audio.zz_utility.pitch-shift.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "audio.zz_utility.pitch-shift",
     "tempo": 120,
@@ -54,12 +51,7 @@
             "presetSave": "<ws>/k7-core/audio.zz_utility.pitch-shift.k7/nodes/fx.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "semitones up": 0,
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"semitones up": 0, "@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -68,16 +60,9 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
@@ -87,11 +72,7 @@
           {
             "module": "fx",
             "uses": "@k7-core/audio/zz_utility/pitch-shift",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -100,68 +81,23 @@
               "cols": 3,
               "rows": 3,
               "widgets": {
-                "semitones": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 3,
-                  "rowSpan": 3,
-                  "label": "Semi",
-                  "bind": "Semitones",
-                  "min": -24,
-                  "max": 24,
-                  "step": 1
-                }
+                "semitones": {"type": "knob", "col": 0, "row": 0, "colSpan": 3, "rowSpan": 3, "label": "Semi", "bind": "Semitones", "min": -24, "max": 24, "step": 1}
               }
             },
-            "params": {
-              "semitones up": 0
-            },
-            "defaults": {
-              "Semitones": 0
-            },
+            "params": {"semitones up": 0},
+            "defaults": {"Semitones": 0},
             "pluginId": "drums:fx"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
-      }
+      "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}]}
     },
-    "tracks": [
-      "drums"
-    ],
+    "tracks": ["drums"],
     "videoTracks": [],
-    "trackColors": {
-      "drums": "#dd322c"
-    },
-    "trackSignals": {
-      "drums": "audio"
-    },
-    "trackClips": {
-      "drums": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ]
-    },
+    "trackColors": {"drums": "#dd322c"},
+    "trackSignals": {"drums": "audio"},
+    "trackClips": {"drums": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}]},
     "modules": {},
     "warnings": []
   },

@@ -1,9 +1,6 @@
 {
   "project": "k7-core/audio.highpass.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "audio.highpass",
     "tempo": 120,
@@ -54,11 +51,7 @@
             "presetSave": "<ws>/k7-core/audio.highpass.k7/nodes/fx.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -104,11 +97,7 @@
             "presetSave": "<ws>/k7-core/audio.highpass.k7/nodes/fx-airwindows.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -154,11 +143,7 @@
             "presetSave": "<ws>/k7-core/audio.highpass.k7/nodes/fx-airwindows-2.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -204,11 +189,7 @@
             "presetSave": "<ws>/k7-core/audio.highpass.k7/nodes/fx-hermepass.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -255,12 +236,7 @@
             "presetSave": "<ws>/k7-core/audio.highpass.k7/nodes/fx-one-knob.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "Amount": 0,
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"Amount": 0, "@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -269,16 +245,9 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
@@ -288,11 +257,7 @@
           {
             "module": "fx",
             "uses": "@k7-core/audio/highpass",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -301,97 +266,27 @@
               "cols": 6,
               "rows": 2,
               "widgets": {
-                "freq": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Freq",
-                  "bind": "Hipass",
-                  "min": 0,
-                  "max": 1
-                },
-                "tight": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Tight",
-                  "bind": "Ls/Tite",
-                  "min": 0,
-                  "max": 1
-                },
-                "poles": {
-                  "type": "knob",
-                  "col": 4,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Poles",
-                  "bind": "Poles",
-                  "min": 0,
-                  "max": 1
-                }
+                "freq": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Freq", "bind": "Hipass", "min": 0, "max": 1},
+                "tight": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Tight", "bind": "Ls/Tite", "min": 0, "max": 1},
+                "poles": {"type": "knob", "col": 4, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Poles", "bind": "Poles", "min": 0, "max": 1}
               },
               "vertical": {
                 "cols": 4,
                 "rows": 4,
                 "widgets": {
-                  "freq": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Freq",
-                    "bind": "Hipass",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "tight": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Tight",
-                    "bind": "Ls/Tite",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "poles": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Poles",
-                    "bind": "Poles",
-                    "min": 0,
-                    "max": 1
-                  }
+                  "freq": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Freq", "bind": "Hipass", "min": 0, "max": 1},
+                  "tight": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Tight", "bind": "Ls/Tite", "min": 0, "max": 1},
+                  "poles": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Poles", "bind": "Poles", "min": 0, "max": 1}
                 }
               }
             },
-            "engines": [
-              "airwindows",
-              "airwindows-2",
-              "hermepass",
-              "one-knob"
-            ],
+            "engines": ["airwindows", "airwindows-2", "hermepass", "one-knob"],
             "engine": "airwindows-2",
             "params": {},
             "pluginId": "drums:fx"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-airwindows": {
         "from": "drums-airwindows",
@@ -399,11 +294,7 @@
           {
             "module": "fx-airwindows",
             "uses": "@k7-core/audio/highpass",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -412,47 +303,17 @@
               "cols": 4,
               "rows": 2,
               "widgets": {
-                "freq": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Freq",
-                  "bind": "Highpass",
-                  "min": 0,
-                  "max": 1
-                },
-                "tight": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Tight",
-                  "bind": "Loose/Tight",
-                  "min": 0,
-                  "max": 1
-                }
+                "freq": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Freq", "bind": "Highpass", "min": 0, "max": 1},
+                "tight": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Tight", "bind": "Loose/Tight", "min": 0, "max": 1}
               }
             },
-            "engines": [
-              "airwindows",
-              "airwindows-2",
-              "hermepass",
-              "one-knob"
-            ],
+            "engines": ["airwindows", "airwindows-2", "hermepass", "one-knob"],
             "engine": "airwindows",
             "params": {},
             "pluginId": "drums-airwindows:fx-airwindows"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-airwindows-2": {
         "from": "drums-airwindows-2",
@@ -460,11 +321,7 @@
           {
             "module": "fx-airwindows-2",
             "uses": "@k7-core/audio/highpass",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -473,97 +330,27 @@
               "cols": 6,
               "rows": 2,
               "widgets": {
-                "freq": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Freq",
-                  "bind": "Hipass",
-                  "min": 0,
-                  "max": 1
-                },
-                "tight": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Tight",
-                  "bind": "Ls/Tite",
-                  "min": 0,
-                  "max": 1
-                },
-                "poles": {
-                  "type": "knob",
-                  "col": 4,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Poles",
-                  "bind": "Poles",
-                  "min": 0,
-                  "max": 1
-                }
+                "freq": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Freq", "bind": "Hipass", "min": 0, "max": 1},
+                "tight": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Tight", "bind": "Ls/Tite", "min": 0, "max": 1},
+                "poles": {"type": "knob", "col": 4, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Poles", "bind": "Poles", "min": 0, "max": 1}
               },
               "vertical": {
                 "cols": 4,
                 "rows": 4,
                 "widgets": {
-                  "freq": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Freq",
-                    "bind": "Hipass",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "tight": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Tight",
-                    "bind": "Ls/Tite",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "poles": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Poles",
-                    "bind": "Poles",
-                    "min": 0,
-                    "max": 1
-                  }
+                  "freq": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Freq", "bind": "Hipass", "min": 0, "max": 1},
+                  "tight": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Tight", "bind": "Ls/Tite", "min": 0, "max": 1},
+                  "poles": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Poles", "bind": "Poles", "min": 0, "max": 1}
                 }
               }
             },
-            "engines": [
-              "airwindows",
-              "airwindows-2",
-              "hermepass",
-              "one-knob"
-            ],
+            "engines": ["airwindows", "airwindows-2", "hermepass", "one-knob"],
             "engine": "airwindows-2",
             "params": {},
             "pluginId": "drums-airwindows-2:fx-airwindows-2"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-hermepass": {
         "from": "drums-hermepass",
@@ -571,11 +358,7 @@
           {
             "module": "fx-hermepass",
             "uses": "@k7-core/audio/highpass",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -584,47 +367,17 @@
               "cols": 4,
               "rows": 2,
               "widgets": {
-                "cutoff": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Cutoff",
-                  "bind": "Cutoff",
-                  "min": 0,
-                  "max": 1
-                },
-                "slope": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Slope",
-                  "bind": "Slope",
-                  "min": 0,
-                  "max": 1
-                }
+                "cutoff": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Cutoff", "bind": "Cutoff", "min": 0, "max": 1},
+                "slope": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Slope", "bind": "Slope", "min": 0, "max": 1}
               }
             },
-            "engines": [
-              "airwindows",
-              "airwindows-2",
-              "hermepass",
-              "one-knob"
-            ],
+            "engines": ["airwindows", "airwindows-2", "hermepass", "one-knob"],
             "engine": "hermepass",
             "params": {},
             "pluginId": "drums-hermepass:fx-hermepass"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-one-knob": {
         "from": "drums-one-knob",
@@ -632,11 +385,7 @@
           {
             "module": "fx-one-knob",
             "uses": "@k7-core/audio/highpass",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -645,150 +394,39 @@
               "cols": 8,
               "rows": 2,
               "widgets": {
-                "amount": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Amount",
-                  "bind": "Amount",
-                  "min": 0,
-                  "max": 100
-                },
-                "response": {
-                  "type": "lcdscreen",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 6,
-                  "rowSpan": 2
-                }
+                "amount": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Amount", "bind": "Amount", "min": 0, "max": 100},
+                "response": {"type": "lcdscreen", "col": 2, "row": 0, "colSpan": 6, "rowSpan": 2}
               },
               "script": "// highpass — the response at the corner Amount sets, 20 Hz at 0 up to 20 kHz at 100.\n\nconst FONT = \"8px ui-monospace, monospace\";\nconst BLUE = \"#3d7dff\";\nconst GREEN = \"#3ec96b\";\nconst ORANGE = \"#ff6a1a\";\nconst GREY = \"#6b6b6b\";\nconst WHITE = \"#ffffff\";\nconst F_LO = 20;\nconst F_HI = 20000;\n\nconst num = (v, d) => (typeof v === \"number\" && Number.isFinite(v) ? v : d);\nconst clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);\nconst hz = (f) => (f >= 1000 ? `${(f / 1000).toFixed(f >= 10000 ? 0 : 1)}K` : `${Math.round(f)}`);\n\n// dB of the analog section (b0 s^2 + b1 s + b2) / (a0 s^2 + a1 s + a2) at s = jx.\nfunction sect(b, a, x) {\n  const nr = b[2] - b[0] * x * x;\n  const ni = b[1] * x;\n  const dr = a[2] - a[0] * x * x;\n  const di = a[1] * x;\n  const n = Math.max(1e-30, nr * nr + ni * ni);\n  const d = Math.max(1e-30, dr * dr + di * di);\n  return 10 * Math.log10(n / d);\n}\n\nconst LP = (q) => [[0, 0, 1], [1, 1 / Math.max(0.01, q), 1]];\nconst HP = (q) => [[1, 0, 0], [1, 1 / Math.max(0.01, q), 1]];\nconst BP = (q) => [[0, 1 / Math.max(0.01, q), 0], [1, 1 / Math.max(0.01, q), 1]];\nconst NOTCH = (q) => [[1, 0, 1], [1, 1 / Math.max(0.01, q), 1]];\n\n// dB of one second-order shape at frequency f for a corner fc.\nconst shape = (s, f, fc) => sect(s[0], s[1], f / Math.max(1e-6, fc));\n\nfunction glass(ctx, W, H) {\n  ctx.fillStyle = \"#000\";\n  ctx.fillRect(0, 0, W, H);\n  ctx.font = FONT;\n  ctx.lineWidth = 1;\n}\n\nconst frame = (W, H) => ({ x: 6, y: 13, w: Math.max(1, W - 12), h: Math.max(1, H - 19) });\nconst xOf = (b, f) => b.x + (Math.log(clamp(f, F_LO, F_HI) / F_LO) / Math.log(F_HI / F_LO)) * b.w;\nconst fOf = (b, px) => F_LO * (F_HI / F_LO) ** ((px - b.x) / Math.max(1, b.w));\nconst yOf = (b, db, lo, hi) => b.y + (1 - (clamp(db, lo, hi) - lo) / Math.max(1e-6, hi - lo)) * b.h;\n\n// The 0 dB line and a tick at 100 Hz, 1 kHz and 10 kHz.\nfunction grid(ctx, b, lo, hi) {\n  ctx.strokeStyle = GREY;\n  ctx.beginPath();\n  const y0 = Math.round(yOf(b, 0, lo, hi)) + 0.5;\n  ctx.moveTo(b.x, y0);\n  ctx.lineTo(b.x + b.w, y0);\n  for (const f of [100, 1000, 10000]) {\n    const x = Math.round(xOf(b, f)) + 0.5;\n    ctx.moveTo(x, b.y + b.h - 3);\n    ctx.lineTo(x, b.y + b.h);\n  }\n  ctx.stroke();\n}\n\nfunction curve(ctx, b, dbAt, lo, hi, color) {\n  ctx.strokeStyle = color;\n  ctx.beginPath();\n  for (let px = b.x; px <= b.x + b.w; px++) {\n    const y = yOf(b, dbAt(fOf(b, px)), lo, hi);\n    if (px === b.x) ctx.moveTo(px, y);\n    else ctx.lineTo(px, y);\n  }\n  ctx.stroke();\n}\n\nfunction dot(ctx, x, y, color) {\n  ctx.fillStyle = color;\n  ctx.beginPath();\n  ctx.arc(x, y, 2.5, 0, Math.PI * 2);\n  ctx.fill();\n}\n\nfunction text(ctx, s, x, y, color, align) {\n  ctx.fillStyle = color;\n  ctx.textAlign = align;\n  ctx.fillText(s, x, y);\n}\n\nexport default {\n  response(lcd) {\n    const { ctx, width: W, height: H, params } = lcd;\n    glass(ctx, W, H);\n    const b = frame(W, H);\n    const t = clamp(num(params[\"Amount\"], 0), 0, 100) / 100;\n    const fc = 20 * (20000 / 20) ** t;\n    grid(ctx, b, -30, 12);\n    curve(ctx, b, (f) => shape(HP(1), f, fc), -30, 12, BLUE);\n    dot(ctx, xOf(b, fc), yOf(b, 0, -30, 12), BLUE);\n    text(ctx, \"HIGH PASS\", b.x, 9, GREY, \"left\");\n    text(ctx, `${hz(fc)} HZ`, W - 6, 9, BLUE, \"right\");\n  },\n};\n",
               "vertical": {
                 "cols": 4,
                 "rows": 4,
                 "widgets": {
-                  "amount": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Amount",
-                    "bind": "Amount",
-                    "min": 0,
-                    "max": 100
-                  },
-                  "response": {
-                    "type": "lcdscreen",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 4,
-                    "rowSpan": 2
-                  }
+                  "amount": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Amount", "bind": "Amount", "min": 0, "max": 100},
+                  "response": {"type": "lcdscreen", "col": 0, "row": 2, "colSpan": 4, "rowSpan": 2}
                 }
               }
             },
-            "engines": [
-              "airwindows",
-              "airwindows-2",
-              "hermepass",
-              "one-knob"
-            ],
+            "engines": ["airwindows", "airwindows-2", "hermepass", "one-knob"],
             "engine": "one-knob",
-            "params": {
-              "Amount": 0
-            },
+            "params": {"Amount": 0},
             "pluginId": "drums-one-knob:fx-one-knob"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
-      }
+      "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}]}
     },
-    "tracks": [
-      "drums",
-      "drums-airwindows",
-      "drums-airwindows-2",
-      "drums-hermepass",
-      "drums-one-knob"
-    ],
+    "tracks": ["drums", "drums-airwindows", "drums-airwindows-2", "drums-hermepass", "drums-one-knob"],
     "videoTracks": [],
-    "trackColors": {
-      "drums": "#af1d26",
-      "drums-airwindows": "#ca2124",
-      "drums-airwindows-2": "#dd322c",
-      "drums-hermepass": "#e15447",
-      "drums-one-knob": "#e57361"
-    },
-    "trackSignals": {
-      "drums": "audio",
-      "drums-airwindows": "audio",
-      "drums-airwindows-2": "audio",
-      "drums-hermepass": "audio",
-      "drums-one-knob": "audio"
-    },
+    "trackColors": {"drums": "#af1d26", "drums-airwindows": "#ca2124", "drums-airwindows-2": "#dd322c", "drums-hermepass": "#e15447", "drums-one-knob": "#e57361"},
+    "trackSignals": {"drums": "audio", "drums-airwindows": "audio", "drums-airwindows-2": "audio", "drums-hermepass": "audio", "drums-one-knob": "audio"},
     "trackClips": {
-      "drums": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-airwindows": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-airwindows-2": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-hermepass": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-one-knob": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ]
+      "drums": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-airwindows": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-airwindows-2": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-hermepass": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-one-knob": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}]
     },
     "modules": {},
     "warnings": []

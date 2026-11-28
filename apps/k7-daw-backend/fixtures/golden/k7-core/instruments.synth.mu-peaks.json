@@ -1,9 +1,6 @@
 {
   "project": "k7-core/instruments.synth.mu-peaks.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "instruments.synth.mu-peaks",
     "tempo": 120,
@@ -43,30 +40,9 @@
             "loopStart": 0,
             "loopEnd": 0,
             "notes": [
-              {
-                "time": 0,
-                "duration": 1,
-                "key": 60,
-                "vel": 0.8,
-                "channel": 0,
-                "rel": 1
-              },
-              {
-                "time": 1,
-                "duration": 1,
-                "key": 64,
-                "vel": 1,
-                "channel": 0,
-                "rel": 1
-              },
-              {
-                "time": 2,
-                "duration": 2,
-                "key": 67,
-                "vel": 1,
-                "channel": 0,
-                "rel": 1
-              }
+              {"time": 0, "duration": 1, "key": 60, "vel": 0.8, "channel": 0, "rel": 1},
+              {"time": 1, "duration": 1, "key": 64, "vel": 1, "channel": 0, "rel": 1},
+              {"time": 2, "duration": 2, "key": 67, "vel": 1, "channel": 0, "rel": 1}
             ]
           }
         ],
@@ -79,9 +55,7 @@
             "presetSave": "<ws>/k7-core/instruments.synth.mu-peaks.k7/nodes/fx.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@output-volume": 0
-            }
+            "params": {"@output-volume": 0}
           }
         ],
         "sends": [],
@@ -90,16 +64,9 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
@@ -109,12 +76,8 @@
           {
             "module": "fx",
             "uses": "@k7-core/instruments/synth/mu-peaks",
-            "stage": [
-              "@output-volume"
-            ],
-            "events": [
-              "note-on"
-            ],
+            "stage": ["@output-volume"],
+            "events": ["note-on"],
             "category": "instruments",
             "emits": "audio",
             "stub": false,
@@ -123,344 +86,44 @@
               "cols": 18,
               "rows": 4,
               "widgets": {
-                "kick": {
-                  "type": "group",
-                  "col": 6,
-                  "row": 0,
-                  "colSpan": 4,
-                  "rowSpan": 4,
-                  "label": "KICK",
-                  "color": "#ff6a1a26"
-                },
-                "kick_pitch": {
-                  "type": "knob",
-                  "col": 6,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Pitch",
-                  "bind": "Kick pitch",
-                  "min": 0,
-                  "max": 1
-                },
-                "kick_punch": {
-                  "type": "knob",
-                  "col": 8,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Punch",
-                  "bind": "Kick punch",
-                  "min": 0,
-                  "max": 1
-                },
-                "kick_tone": {
-                  "type": "knob",
-                  "col": 6,
-                  "row": 2,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Tone",
-                  "bind": "Kick tone",
-                  "min": 0,
-                  "max": 1
-                },
-                "kick_decay": {
-                  "type": "knob",
-                  "col": 8,
-                  "row": 2,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Decay",
-                  "bind": "Kick decay",
-                  "min": 0,
-                  "max": 1
-                },
-                "snare": {
-                  "type": "group",
-                  "col": 10,
-                  "row": 0,
-                  "colSpan": 4,
-                  "rowSpan": 4,
-                  "label": "SNARE",
-                  "color": "#3d7dff26"
-                },
-                "snare_pitch": {
-                  "type": "knob",
-                  "col": 10,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Pitch",
-                  "bind": "Snare pitch",
-                  "min": 0,
-                  "max": 1
-                },
-                "snare_snappy": {
-                  "type": "knob",
-                  "col": 12,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Snappy",
-                  "bind": "Snare snappy",
-                  "min": 0,
-                  "max": 1
-                },
-                "snare_tone": {
-                  "type": "knob",
-                  "col": 10,
-                  "row": 2,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Tone",
-                  "bind": "Snare tone",
-                  "min": 0,
-                  "max": 1
-                },
-                "snare_decay": {
-                  "type": "knob",
-                  "col": 12,
-                  "row": 2,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Decay",
-                  "bind": "Snare decay",
-                  "min": 0,
-                  "max": 1
-                },
-                "fm": {
-                  "type": "group",
-                  "col": 14,
-                  "row": 0,
-                  "colSpan": 4,
-                  "rowSpan": 4,
-                  "label": "FM",
-                  "color": "#3ec96b26"
-                },
-                "fm_pitch": {
-                  "type": "knob",
-                  "col": 14,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Pitch",
-                  "bind": "FM drum pitch",
-                  "min": 0,
-                  "max": 1
-                },
-                "fm_amount": {
-                  "type": "knob",
-                  "col": 16,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "FM",
-                  "bind": "FM drum FM",
-                  "min": 0,
-                  "max": 1
-                },
-                "fm_noise": {
-                  "type": "knob",
-                  "col": 14,
-                  "row": 2,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Noise",
-                  "bind": "FM drum noise",
-                  "min": 0,
-                  "max": 1
-                },
-                "fm_decay": {
-                  "type": "knob",
-                  "col": 16,
-                  "row": 2,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Decay",
-                  "bind": "FM drum decay",
-                  "min": 0,
-                  "max": 1
-                },
-                "drums": {
-                  "type": "lcdscreen",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 6,
-                  "rowSpan": 4
-                }
+                "kick": {"type": "group", "col": 6, "row": 0, "colSpan": 4, "rowSpan": 4, "label": "KICK", "color": "#ff6a1a26"},
+                "kick_pitch": {"type": "knob", "col": 6, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Pitch", "bind": "Kick pitch", "min": 0, "max": 1},
+                "kick_punch": {"type": "knob", "col": 8, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Punch", "bind": "Kick punch", "min": 0, "max": 1},
+                "kick_tone": {"type": "knob", "col": 6, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Tone", "bind": "Kick tone", "min": 0, "max": 1},
+                "kick_decay": {"type": "knob", "col": 8, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Decay", "bind": "Kick decay", "min": 0, "max": 1},
+                "snare": {"type": "group", "col": 10, "row": 0, "colSpan": 4, "rowSpan": 4, "label": "SNARE", "color": "#3d7dff26"},
+                "snare_pitch": {"type": "knob", "col": 10, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Pitch", "bind": "Snare pitch", "min": 0, "max": 1},
+                "snare_snappy": {"type": "knob", "col": 12, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Snappy", "bind": "Snare snappy", "min": 0, "max": 1},
+                "snare_tone": {"type": "knob", "col": 10, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Tone", "bind": "Snare tone", "min": 0, "max": 1},
+                "snare_decay": {"type": "knob", "col": 12, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Decay", "bind": "Snare decay", "min": 0, "max": 1},
+                "fm": {"type": "group", "col": 14, "row": 0, "colSpan": 4, "rowSpan": 4, "label": "FM", "color": "#3ec96b26"},
+                "fm_pitch": {"type": "knob", "col": 14, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Pitch", "bind": "FM drum pitch", "min": 0, "max": 1},
+                "fm_amount": {"type": "knob", "col": 16, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "FM", "bind": "FM drum FM", "min": 0, "max": 1},
+                "fm_noise": {"type": "knob", "col": 14, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Noise", "bind": "FM drum noise", "min": 0, "max": 1},
+                "fm_decay": {"type": "knob", "col": 16, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Decay", "bind": "FM drum decay", "min": 0, "max": 1},
+                "drums": {"type": "lcdscreen", "col": 0, "row": 0, "colSpan": 6, "rowSpan": 4}
               },
               "script": "// mu-peaks screens — one strip drawing the three drum voices as the hit they would make.\nconst FONT = \"8px ui-monospace, monospace\";\nconst ORANGE = \"#ff6a1a\";\nconst BLUE = \"#3d7dff\";\nconst GREEN = \"#3ec96b\";\nconst GREY = \"#6b6b6b\";\n\nfunction num(p, k, d) {\n  const v = p ? p[k] : undefined;\n  return typeof v === \"number\" && Number.isFinite(v) ? v : d;\n}\nfunction clamp(v, a, b) {\n  return Math.min(b, Math.max(a, v));\n}\nfunction noise(i) {\n  const x = Math.sin(i * 12.9898 + 78.233) * 43758.5453;\n  return (x - Math.floor(x)) * 2 - 1;\n}\n\n// Draws one voice: sample(t) returns [value, envelope] for t in 0..1.\nfunction voice(ctx, x0, w, top, h, name, color, sample) {\n  const mid = top + h / 2 + 4;\n  const half = Math.max(1, h / 2 - 8);\n  ctx.strokeStyle = GREY;\n  ctx.lineWidth = 1;\n  ctx.beginPath();\n  ctx.moveTo(x0 + 4, Math.round(mid) + 0.5);\n  ctx.lineTo(x0 + w - 4, Math.round(mid) + 0.5);\n  ctx.stroke();\n  const n = Math.max(2, Math.floor(w - 8));\n  ctx.strokeStyle = color;\n  ctx.beginPath();\n  for (let i = 0; i < n; i++) {\n    const [v] = sample(i / (n - 1), i);\n    const y = mid - clamp(v, -1, 1) * half;\n    if (i === 0) ctx.moveTo(x0 + 4 + i, y);\n    else ctx.lineTo(x0 + 4 + i, y);\n  }\n  ctx.stroke();\n  ctx.strokeStyle = \"#ffffff\";\n  ctx.globalAlpha = 0.5;\n  ctx.beginPath();\n  for (let i = 0; i < n; i++) {\n    const [, e] = sample(i / (n - 1), i);\n    const y = mid - clamp(e, 0, 1) * half;\n    if (i === 0) ctx.moveTo(x0 + 4 + i, y);\n    else ctx.lineTo(x0 + 4 + i, y);\n  }\n  ctx.stroke();\n  ctx.globalAlpha = 1;\n  ctx.font = FONT;\n  ctx.fillStyle = color;\n  ctx.textAlign = \"left\";\n  ctx.fillText(name, x0 + 6, top + 10);\n}\n\n// Integrates a frequency curve into a phase table so pitch sweeps draw correctly.\nfunction phases(n, freq) {\n  const out = new Array(n);\n  let ph = 0;\n  for (let i = 0; i < n; i++) {\n    out[i] = ph;\n    ph += (2 * Math.PI * freq(i / Math.max(1, n - 1))) / Math.max(1, n - 1);\n  }\n  return out;\n}\n\nexport default {\n  drums(lcd) {\n    const { ctx, width: W, height: H, params: p } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    const cw = W / 3;\n    const n = Math.max(2, Math.floor(cw - 8));\n\n    const kPitch = num(p, \"Kick pitch\", 0.5);\n    const kPunch = num(p, \"Kick punch\", 0.6);\n    const kTone = num(p, \"Kick tone\", 0.5);\n    const kDecay = num(p, \"Kick decay\", 0.5);\n    const kPh = phases(n, (t) => (2 + kPitch * 5) * (1 + kPunch * 5 * Math.exp(-t / 0.04)));\n    voice(ctx, 0, cw, 0, H, \"KICK\", ORANGE, (t, i) => {\n      const e = Math.exp(-t / (0.06 + kDecay * 0.6));\n      const ph = kPh[i] ?? 0;\n      return [e * (Math.sin(ph) + kTone * 0.35 * Math.sin(ph * 3)), e];\n    });\n\n    const sPitch = num(p, \"Snare pitch\", 0.5);\n    const sSnap = num(p, \"Snare snappy\", 0.5);\n    const sTone = num(p, \"Snare tone\", 0.5);\n    const sDecay = num(p, \"Snare decay\", 0.5);\n    const sF = 5 + sPitch * 8;\n    voice(ctx, cw, cw, 0, H, \"SNARE\", BLUE, (t, i) => {\n      const body = Math.exp(-t / (0.04 + sDecay * 0.25));\n      const hiss = sSnap * Math.exp(-t / (0.03 + sDecay * 0.45));\n      const tw = 2 * Math.PI * sF * t;\n      const tone = (1 - sTone) * Math.sin(tw) + sTone * Math.sin(tw * 1.59);\n      return [0.7 * body * tone + 0.6 * hiss * noise(i), Math.min(1, Math.max(body, hiss))];\n    });\n\n    const fPitch = num(p, \"FM drum pitch\", 0.5);\n    const fFm = num(p, \"FM drum FM\", 0.5);\n    const fNoise = num(p, \"FM drum noise\", 0.2);\n    const fDecay = num(p, \"FM drum decay\", 0.5);\n    const fF = 3 + fPitch * 9;\n    voice(ctx, 2 * cw, cw, 0, H, \"FM\", GREEN, (t, i) => {\n      const e = Math.exp(-t / (0.05 + fDecay * 0.6));\n      const tw = 2 * Math.PI * fF * t;\n      const v = Math.sin(tw + fFm * 5 * e * Math.sin(tw * 1.41)) * (1 - fNoise * 0.6) + fNoise * noise(i + 999);\n      return [e * v, e];\n    });\n\n    ctx.strokeStyle = GREY;\n    ctx.lineWidth = 1;\n    for (const x of [cw, 2 * cw]) {\n      ctx.beginPath();\n      ctx.moveTo(Math.round(x) + 0.5, 4);\n      ctx.lineTo(Math.round(x) + 0.5, H - 4);\n      ctx.stroke();\n    }\n  },\n};\n",
               "vertical": {
                 "cols": 4,
                 "rows": 15,
                 "widgets": {
-                  "drums": {
-                    "type": "lcdscreen",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 4,
-                    "rowSpan": 3
-                  },
-                  "kick": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 3,
-                    "colSpan": 4,
-                    "rowSpan": 4,
-                    "label": "KICK",
-                    "color": "#ff6a1a26"
-                  },
-                  "kick_pitch": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 3,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Pitch",
-                    "bind": "Kick pitch",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "kick_tone": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 5,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Tone",
-                    "bind": "Kick tone",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "kick_punch": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 3,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Punch",
-                    "bind": "Kick punch",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "kick_decay": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 5,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Decay",
-                    "bind": "Kick decay",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "snare": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 7,
-                    "colSpan": 4,
-                    "rowSpan": 4,
-                    "label": "SNARE",
-                    "color": "#3d7dff26"
-                  },
-                  "snare_pitch": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 7,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Pitch",
-                    "bind": "Snare pitch",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "snare_tone": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 9,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Tone",
-                    "bind": "Snare tone",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "snare_snappy": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 7,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Snappy",
-                    "bind": "Snare snappy",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "snare_decay": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 9,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Decay",
-                    "bind": "Snare decay",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "fm": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 11,
-                    "colSpan": 4,
-                    "rowSpan": 4,
-                    "label": "FM",
-                    "color": "#3ec96b26"
-                  },
-                  "fm_pitch": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 11,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Pitch",
-                    "bind": "FM drum pitch",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "fm_noise": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 13,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Noise",
-                    "bind": "FM drum noise",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "fm_amount": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 11,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "FM",
-                    "bind": "FM drum FM",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "fm_decay": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 13,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Decay",
-                    "bind": "FM drum decay",
-                    "min": 0,
-                    "max": 1
-                  }
+                  "drums": {"type": "lcdscreen", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 3},
+                  "kick": {"type": "group", "col": 0, "row": 3, "colSpan": 4, "rowSpan": 4, "label": "KICK", "color": "#ff6a1a26"},
+                  "kick_pitch": {"type": "knob", "col": 0, "row": 3, "colSpan": 2, "rowSpan": 2, "label": "Pitch", "bind": "Kick pitch", "min": 0, "max": 1},
+                  "kick_tone": {"type": "knob", "col": 0, "row": 5, "colSpan": 2, "rowSpan": 2, "label": "Tone", "bind": "Kick tone", "min": 0, "max": 1},
+                  "kick_punch": {"type": "knob", "col": 2, "row": 3, "colSpan": 2, "rowSpan": 2, "label": "Punch", "bind": "Kick punch", "min": 0, "max": 1},
+                  "kick_decay": {"type": "knob", "col": 2, "row": 5, "colSpan": 2, "rowSpan": 2, "label": "Decay", "bind": "Kick decay", "min": 0, "max": 1},
+                  "snare": {"type": "group", "col": 0, "row": 7, "colSpan": 4, "rowSpan": 4, "label": "SNARE", "color": "#3d7dff26"},
+                  "snare_pitch": {"type": "knob", "col": 0, "row": 7, "colSpan": 2, "rowSpan": 2, "label": "Pitch", "bind": "Snare pitch", "min": 0, "max": 1},
+                  "snare_tone": {"type": "knob", "col": 0, "row": 9, "colSpan": 2, "rowSpan": 2, "label": "Tone", "bind": "Snare tone", "min": 0, "max": 1},
+                  "snare_snappy": {"type": "knob", "col": 2, "row": 7, "colSpan": 2, "rowSpan": 2, "label": "Snappy", "bind": "Snare snappy", "min": 0, "max": 1},
+                  "snare_decay": {"type": "knob", "col": 2, "row": 9, "colSpan": 2, "rowSpan": 2, "label": "Decay", "bind": "Snare decay", "min": 0, "max": 1},
+                  "fm": {"type": "group", "col": 0, "row": 11, "colSpan": 4, "rowSpan": 4, "label": "FM", "color": "#3ec96b26"},
+                  "fm_pitch": {"type": "knob", "col": 0, "row": 11, "colSpan": 2, "rowSpan": 2, "label": "Pitch", "bind": "FM drum pitch", "min": 0, "max": 1},
+                  "fm_noise": {"type": "knob", "col": 0, "row": 13, "colSpan": 2, "rowSpan": 2, "label": "Noise", "bind": "FM drum noise", "min": 0, "max": 1},
+                  "fm_amount": {"type": "knob", "col": 2, "row": 11, "colSpan": 2, "rowSpan": 2, "label": "FM", "bind": "FM drum FM", "min": 0, "max": 1},
+                  "fm_decay": {"type": "knob", "col": 2, "row": 13, "colSpan": 2, "rowSpan": 2, "label": "Decay", "bind": "FM drum decay", "min": 0, "max": 1}
                 }
               }
             },
@@ -482,45 +145,15 @@
             "pluginId": "melody:fx"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
-      }
+      "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}]}
     },
-    "tracks": [
-      "melody"
-    ],
+    "tracks": ["melody"],
     "videoTracks": [],
-    "trackColors": {
-      "melody": "#9a5ad3"
-    },
-    "trackSignals": {
-      "melody": "midi"
-    },
-    "trackClips": {
-      "melody": [
-        {
-          "ref": "melody",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "midi"
-        }
-      ]
-    },
+    "trackColors": {"melody": "#9a5ad3"},
+    "trackSignals": {"melody": "midi"},
+    "trackClips": {"melody": [{"ref": "melody", "start": 0, "tc": "1:1", "len": 4, "kind": "midi"}]},
     "modules": {},
     "warnings": []
   },

@@ -1,9 +1,6 @@
 {
   "project": "k7-core/audio.reverb.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "audio.reverb",
     "tempo": 120,
@@ -54,11 +51,7 @@
             "presetSave": "<ws>/k7-core/audio.reverb.k7/nodes/fx.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -104,11 +97,7 @@
             "presetSave": "<ws>/k7-core/audio.reverb.k7/nodes/fx-mv.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -154,11 +143,7 @@
             "presetSave": "<ws>/k7-core/audio.reverb.k7/nodes/fx-nonlinear-space.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -204,11 +189,7 @@
             "presetSave": "<ws>/k7-core/audio.reverb.k7/nodes/fx-pocket-verbs.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -254,11 +235,7 @@
             "presetSave": "<ws>/k7-core/audio.reverb.k7/nodes/fx-star-child.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -304,11 +281,7 @@
             "presetSave": "<ws>/k7-core/audio.reverb.k7/nodes/fx-tracktion.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -317,16 +290,9 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
@@ -336,11 +302,7 @@
           {
             "module": "fx",
             "uses": "@k7-core/audio/reverb",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -349,155 +311,35 @@
               "cols": 8,
               "rows": 4,
               "widgets": {
-                "room_section": {
-                  "type": "group",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 6,
-                  "rowSpan": 2,
-                  "label": "ROOM",
-                  "color": "#ff6a1a26"
-                },
-                "room_size": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Size",
-                  "bind": "Room Size",
-                  "min": 0,
-                  "max": 1
-                },
-                "damping": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Damp",
-                  "bind": "Damping",
-                  "min": 0,
-                  "max": 1
-                },
-                "width": {
-                  "type": "knob",
-                  "col": 4,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Width",
-                  "bind": "Width",
-                  "min": 0,
-                  "max": 1
-                },
-                "freeze": {
-                  "type": "toggle",
-                  "col": 6,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Freeze",
-                  "bind": "Freeze"
-                },
-                "tail": {
-                  "type": "lcdscreen",
-                  "col": 0,
-                  "row": 2,
-                  "colSpan": 8,
-                  "rowSpan": 2
-                }
+                "room_section": {"type": "group", "col": 0, "row": 0, "colSpan": 6, "rowSpan": 2, "label": "ROOM", "color": "#ff6a1a26"},
+                "room_size": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Size", "bind": "Room Size", "min": 0, "max": 1},
+                "damping": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Damp", "bind": "Damping", "min": 0, "max": 1},
+                "width": {"type": "knob", "col": 4, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Width", "bind": "Width", "min": 0, "max": 1},
+                "freeze": {"type": "toggle", "col": 6, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Freeze", "bind": "Freeze"},
+                "tail": {"type": "lcdscreen", "col": 0, "row": 2, "colSpan": 8, "rowSpan": 2}
               },
               "script": "// reverb — the tail's decay in dB, lows and highs apart, from Freeverb's comb feedback and damping.\n\nconst LOW = \"#ffffff\";\nconst HIGH = \"#3d7dff\";\nconst FROZEN = \"#ff6a1a\";\nconst GRID = \"#6b6b6b\";\nconst FONT = \"8px ui-monospace, monospace\";\nconst DB_FLOOR = -60;\n// Freeverb's mean comb length, about 1400 samples at 44.1 kHz.\nconst COMB_S = 0.0317;\n\nconst clamp01 = (v) => (v < 0 ? 0 : v > 1 ? 1 : v);\n\n// Seconds for a loop gain g to fall 60 dB, one comb pass at a time.\nconst rt60 = (g) => (g >= 0.9999 ? Infinity : (3 * COMB_S) / Math.max(1e-6, -Math.log10(Math.max(1e-6, g))));\n\nexport default {\n  tail(lcd) {\n    const { ctx, width: W, height: H, params } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n    ctx.lineWidth = 1;\n\n    const pad = 6;\n    const top = 14;\n    const w = Math.max(1, W - pad * 2);\n    const h = Math.max(1, H - top - pad);\n\n    // JUCE: feedback = size · 0.28 + 0.7, damp = damping · 0.4, and Freeze at 0.5 or above holds the loop at 1.\n    const frozen = (params[\"Freeze\"] ?? 0) >= 0.5;\n    const size = clamp01(params[\"Room Size\"] ?? 0.3);\n    const damp = clamp01(params[\"Damping\"] ?? 0.5) * 0.4;\n    const gLow = frozen ? 1 : size * 0.28 + 0.7;\n    const gHigh = frozen ? 1 : gLow * ((1 - damp) / (1 + damp));\n    const rtLow = rt60(gLow);\n    const rtHigh = rt60(gHigh);\n    const windowS = Number.isFinite(rtLow) ? Math.max(0.5, rtLow * 1.2) : 4;\n\n    ctx.strokeStyle = GRID;\n    ctx.beginPath();\n    ctx.moveTo(pad, top + h - 0.5);\n    ctx.lineTo(W - pad, top + h - 0.5);\n    ctx.stroke();\n\n    const line = (rt, color) => {\n      ctx.strokeStyle = color;\n      ctx.beginPath();\n      for (let i = 0; i <= w; i += 2) {\n        const s = (i / w) * windowS;\n        const db = Number.isFinite(rt) ? Math.max(DB_FLOOR, (-60 * s) / Math.max(1e-6, rt)) : 0;\n        const y = top + (db / DB_FLOOR) * (h - 1);\n        if (i === 0) ctx.moveTo(pad + i, y);\n        else ctx.lineTo(pad + i, y);\n      }\n      ctx.stroke();\n    };\n    line(rtHigh, frozen ? FROZEN : HIGH);\n    line(rtLow, frozen ? FROZEN : LOW);\n\n    ctx.textAlign = \"left\";\n    ctx.font = \"bold 11px ui-monospace, monospace\";\n    ctx.fillStyle = frozen ? FROZEN : LOW;\n    ctx.fillText(frozen ? \"FREEZE\" : `${rtLow.toFixed(1)} S`, pad, 11);\n    ctx.font = FONT;\n    ctx.textAlign = \"right\";\n    ctx.fillStyle = HIGH;\n    ctx.fillText(frozen ? \"∞\" : `HIGH ${rtHigh.toFixed(1)} S`, W - pad, 10);\n  },\n};\n",
               "vertical": {
                 "cols": 4,
                 "rows": 6,
                 "widgets": {
-                  "room_section": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 4,
-                    "rowSpan": 4,
-                    "label": "ROOM",
-                    "color": "#ff6a1a26"
-                  },
-                  "room_size": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Size",
-                    "bind": "Room Size",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "damping": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Damp",
-                    "bind": "Damping",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "width": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Width",
-                    "bind": "Width",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "freeze": {
-                    "type": "toggle",
-                    "col": 2,
-                    "row": 2,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Freeze",
-                    "bind": "Freeze"
-                  },
-                  "tail": {
-                    "type": "lcdscreen",
-                    "col": 0,
-                    "row": 4,
-                    "colSpan": 4,
-                    "rowSpan": 2
-                  }
+                  "room_section": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 4, "label": "ROOM", "color": "#ff6a1a26"},
+                  "room_size": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Size", "bind": "Room Size", "min": 0, "max": 1},
+                  "damping": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Damp", "bind": "Damping", "min": 0, "max": 1},
+                  "width": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Width", "bind": "Width", "min": 0, "max": 1},
+                  "freeze": {"type": "toggle", "col": 2, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Freeze", "bind": "Freeze"},
+                  "tail": {"type": "lcdscreen", "col": 0, "row": 4, "colSpan": 4, "rowSpan": 2}
                 }
               }
             },
-            "engines": [
-              "tracktion",
-              "mv",
-              "nonlinear-space",
-              "pocket-verbs",
-              "star-child"
-            ],
+            "engines": ["tracktion", "mv", "nonlinear-space", "pocket-verbs", "star-child"],
             "engine": "tracktion",
             "params": {},
-            "defaults": {
-              "Room Size": 0.3000000119,
-              "Damping": 0.5,
-              "Width": 1,
-              "Freeze": 0
-            },
+            "defaults": {"Room Size": 0.3000000119, "Damping": 0.5, "Width": 1, "Freeze": 0},
             "pluginId": "drums:fx"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-mv": {
         "from": "drums-mv",
@@ -505,11 +347,7 @@
           {
             "module": "fx-mv",
             "uses": "@k7-core/audio/reverb",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -518,98 +356,27 @@
               "cols": 6,
               "rows": 2,
               "widgets": {
-                "depth": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Depth",
-                  "bind": "Depth",
-                  "min": 0,
-                  "max": 1
-                },
-                "bright": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Bright",
-                  "bind": "Bright",
-                  "min": 0,
-                  "max": 1
-                },
-                "regen": {
-                  "type": "knob",
-                  "col": 4,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Regen",
-                  "bind": "Regen",
-                  "min": 0,
-                  "max": 1
-                }
+                "depth": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Depth", "bind": "Depth", "min": 0, "max": 1},
+                "bright": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Bright", "bind": "Bright", "min": 0, "max": 1},
+                "regen": {"type": "knob", "col": 4, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Regen", "bind": "Regen", "min": 0, "max": 1}
               },
               "vertical": {
                 "cols": 4,
                 "rows": 4,
                 "widgets": {
-                  "depth": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Depth",
-                    "bind": "Depth",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "bright": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Bright",
-                    "bind": "Bright",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "regen": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Regen",
-                    "bind": "Regen",
-                    "min": 0,
-                    "max": 1
-                  }
+                  "depth": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Depth", "bind": "Depth", "min": 0, "max": 1},
+                  "bright": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Bright", "bind": "Bright", "min": 0, "max": 1},
+                  "regen": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Regen", "bind": "Regen", "min": 0, "max": 1}
                 }
               }
             },
-            "engines": [
-              "tracktion",
-              "mv",
-              "nonlinear-space",
-              "pocket-verbs",
-              "star-child"
-            ],
+            "engines": ["tracktion", "mv", "nonlinear-space", "pocket-verbs", "star-child"],
             "engine": "mv",
             "params": {},
             "pluginId": "drums-mv:fx-mv"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-nonlinear-space": {
         "from": "drums-nonlinear-space",
@@ -617,11 +384,7 @@
           {
             "module": "fx-nonlinear-space",
             "uses": "@k7-core/audio/reverb",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -630,174 +393,35 @@
               "cols": 6,
               "rows": 4,
               "widgets": {
-                "space_section": {
-                  "type": "group",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 6,
-                  "rowSpan": 2,
-                  "label": "SPACE",
-                  "color": "#ff6a1a26"
-                },
-                "smp_rate": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "SmpRate",
-                  "bind": "SmpRate",
-                  "min": 0,
-                  "max": 1
-                },
-                "liveness": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Live",
-                  "bind": "Livenes",
-                  "min": 0,
-                  "max": 1
-                },
-                "nonlin": {
-                  "type": "knob",
-                  "col": 4,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Nonlin",
-                  "bind": "Nonlin",
-                  "min": 0,
-                  "max": 1
-                },
-                "tone_section": {
-                  "type": "group",
-                  "col": 0,
-                  "row": 2,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "TONE",
-                  "color": "#3ec96b26"
-                },
-                "bass": {
-                  "type": "fader",
-                  "col": 0,
-                  "row": 2,
-                  "rowSpan": 2,
-                  "label": "Bass",
-                  "bind": "Bass",
-                  "min": 0,
-                  "max": 1
-                },
-                "treble": {
-                  "type": "fader",
-                  "col": 1,
-                  "row": 2,
-                  "rowSpan": 2,
-                  "label": "Treble",
-                  "bind": "Treble",
-                  "min": 0,
-                  "max": 1
-                }
+                "space_section": {"type": "group", "col": 0, "row": 0, "colSpan": 6, "rowSpan": 2, "label": "SPACE", "color": "#ff6a1a26"},
+                "smp_rate": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "SmpRate", "bind": "SmpRate", "min": 0, "max": 1},
+                "liveness": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Live", "bind": "Livenes", "min": 0, "max": 1},
+                "nonlin": {"type": "knob", "col": 4, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Nonlin", "bind": "Nonlin", "min": 0, "max": 1},
+                "tone_section": {"type": "group", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "TONE", "color": "#3ec96b26"},
+                "bass": {"type": "fader", "col": 0, "row": 2, "rowSpan": 2, "label": "Bass", "bind": "Bass", "min": 0, "max": 1},
+                "treble": {"type": "fader", "col": 1, "row": 2, "rowSpan": 2, "label": "Treble", "bind": "Treble", "min": 0, "max": 1}
               },
               "vertical": {
                 "cols": 4,
                 "rows": 7,
                 "widgets": {
-                  "space_section": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 4,
-                    "rowSpan": 4,
-                    "label": "SPACE",
-                    "color": "#ff6a1a26"
-                  },
-                  "smp_rate": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "SmpRate",
-                    "bind": "SmpRate",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "liveness": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Live",
-                    "bind": "Livenes",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "nonlin": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Nonlin",
-                    "bind": "Nonlin",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "tone_section": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 4,
-                    "colSpan": 2,
-                    "rowSpan": 3,
-                    "label": "TONE",
-                    "color": "#3ec96b26"
-                  },
-                  "bass": {
-                    "type": "fader",
-                    "col": 0,
-                    "row": 4,
-                    "rowSpan": 3,
-                    "label": "Bass",
-                    "bind": "Bass",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "treble": {
-                    "type": "fader",
-                    "col": 1,
-                    "row": 4,
-                    "rowSpan": 3,
-                    "label": "Treble",
-                    "bind": "Treble",
-                    "min": 0,
-                    "max": 1
-                  }
+                  "space_section": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 4, "label": "SPACE", "color": "#ff6a1a26"},
+                  "smp_rate": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "SmpRate", "bind": "SmpRate", "min": 0, "max": 1},
+                  "liveness": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Live", "bind": "Livenes", "min": 0, "max": 1},
+                  "nonlin": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Nonlin", "bind": "Nonlin", "min": 0, "max": 1},
+                  "tone_section": {"type": "group", "col": 0, "row": 4, "colSpan": 2, "rowSpan": 3, "label": "TONE", "color": "#3ec96b26"},
+                  "bass": {"type": "fader", "col": 0, "row": 4, "rowSpan": 3, "label": "Bass", "bind": "Bass", "min": 0, "max": 1},
+                  "treble": {"type": "fader", "col": 1, "row": 4, "rowSpan": 3, "label": "Treble", "bind": "Treble", "min": 0, "max": 1}
                 }
               }
             },
-            "engines": [
-              "tracktion",
-              "mv",
-              "nonlinear-space",
-              "pocket-verbs",
-              "star-child"
-            ],
+            "engines": ["tracktion", "mv", "nonlinear-space", "pocket-verbs", "star-child"],
             "engine": "nonlinear-space",
             "params": {},
             "pluginId": "drums-nonlinear-space:fx-nonlinear-space"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-pocket-verbs": {
         "from": "drums-pocket-verbs",
@@ -805,11 +429,7 @@
           {
             "module": "fx-pocket-verbs",
             "uses": "@k7-core/audio/reverb",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -818,98 +438,27 @@
               "cols": 6,
               "rows": 2,
               "widgets": {
-                "type": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Type",
-                  "bind": "Type",
-                  "min": 0,
-                  "max": 1
-                },
-                "size": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Size",
-                  "bind": "Size",
-                  "min": 0,
-                  "max": 1
-                },
-                "gating": {
-                  "type": "knob",
-                  "col": 4,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Gate",
-                  "bind": "Gating",
-                  "min": 0,
-                  "max": 1
-                }
+                "type": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Type", "bind": "Type", "min": 0, "max": 1},
+                "size": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Size", "bind": "Size", "min": 0, "max": 1},
+                "gating": {"type": "knob", "col": 4, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Gate", "bind": "Gating", "min": 0, "max": 1}
               },
               "vertical": {
                 "cols": 4,
                 "rows": 4,
                 "widgets": {
-                  "type": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Type",
-                    "bind": "Type",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "size": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Size",
-                    "bind": "Size",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "gating": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Gate",
-                    "bind": "Gating",
-                    "min": 0,
-                    "max": 1
-                  }
+                  "type": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Type", "bind": "Type", "min": 0, "max": 1},
+                  "size": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Size", "bind": "Size", "min": 0, "max": 1},
+                  "gating": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Gate", "bind": "Gating", "min": 0, "max": 1}
                 }
               }
             },
-            "engines": [
-              "tracktion",
-              "mv",
-              "nonlinear-space",
-              "pocket-verbs",
-              "star-child"
-            ],
+            "engines": ["tracktion", "mv", "nonlinear-space", "pocket-verbs", "star-child"],
             "engine": "pocket-verbs",
             "params": {},
             "pluginId": "drums-pocket-verbs:fx-pocket-verbs"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-star-child": {
         "from": "drums-star-child",
@@ -917,11 +466,7 @@
           {
             "module": "fx-star-child",
             "uses": "@k7-core/audio/reverb",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -930,48 +475,17 @@
               "cols": 4,
               "rows": 2,
               "widgets": {
-                "sustain": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Sustain",
-                  "bind": "Sustain",
-                  "min": 0,
-                  "max": 1
-                },
-                "grain": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Grain",
-                  "bind": "Grain",
-                  "min": 0,
-                  "max": 1
-                }
+                "sustain": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Sustain", "bind": "Sustain", "min": 0, "max": 1},
+                "grain": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Grain", "bind": "Grain", "min": 0, "max": 1}
               }
             },
-            "engines": [
-              "tracktion",
-              "mv",
-              "nonlinear-space",
-              "pocket-verbs",
-              "star-child"
-            ],
+            "engines": ["tracktion", "mv", "nonlinear-space", "pocket-verbs", "star-child"],
             "engine": "star-child",
             "params": {},
             "pluginId": "drums-star-child:fx-star-child"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-tracktion": {
         "from": "drums-tracktion",
@@ -979,11 +493,7 @@
           {
             "module": "fx-tracktion",
             "uses": "@k7-core/audio/reverb",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -992,247 +502,49 @@
               "cols": 8,
               "rows": 4,
               "widgets": {
-                "room_section": {
-                  "type": "group",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 6,
-                  "rowSpan": 2,
-                  "label": "ROOM",
-                  "color": "#ff6a1a26"
-                },
-                "room_size": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Size",
-                  "bind": "Room Size",
-                  "min": 0,
-                  "max": 1
-                },
-                "damping": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Damp",
-                  "bind": "Damping",
-                  "min": 0,
-                  "max": 1
-                },
-                "width": {
-                  "type": "knob",
-                  "col": 4,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Width",
-                  "bind": "Width",
-                  "min": 0,
-                  "max": 1
-                },
-                "freeze": {
-                  "type": "toggle",
-                  "col": 6,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Freeze",
-                  "bind": "Freeze"
-                },
-                "tail": {
-                  "type": "lcdscreen",
-                  "col": 0,
-                  "row": 2,
-                  "colSpan": 8,
-                  "rowSpan": 2
-                }
+                "room_section": {"type": "group", "col": 0, "row": 0, "colSpan": 6, "rowSpan": 2, "label": "ROOM", "color": "#ff6a1a26"},
+                "room_size": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Size", "bind": "Room Size", "min": 0, "max": 1},
+                "damping": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Damp", "bind": "Damping", "min": 0, "max": 1},
+                "width": {"type": "knob", "col": 4, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Width", "bind": "Width", "min": 0, "max": 1},
+                "freeze": {"type": "toggle", "col": 6, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Freeze", "bind": "Freeze"},
+                "tail": {"type": "lcdscreen", "col": 0, "row": 2, "colSpan": 8, "rowSpan": 2}
               },
               "script": "// reverb — the tail's decay in dB, lows and highs apart, from Freeverb's comb feedback and damping.\n\nconst LOW = \"#ffffff\";\nconst HIGH = \"#3d7dff\";\nconst FROZEN = \"#ff6a1a\";\nconst GRID = \"#6b6b6b\";\nconst FONT = \"8px ui-monospace, monospace\";\nconst DB_FLOOR = -60;\n// Freeverb's mean comb length, about 1400 samples at 44.1 kHz.\nconst COMB_S = 0.0317;\n\nconst clamp01 = (v) => (v < 0 ? 0 : v > 1 ? 1 : v);\n\n// Seconds for a loop gain g to fall 60 dB, one comb pass at a time.\nconst rt60 = (g) => (g >= 0.9999 ? Infinity : (3 * COMB_S) / Math.max(1e-6, -Math.log10(Math.max(1e-6, g))));\n\nexport default {\n  tail(lcd) {\n    const { ctx, width: W, height: H, params } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n    ctx.lineWidth = 1;\n\n    const pad = 6;\n    const top = 14;\n    const w = Math.max(1, W - pad * 2);\n    const h = Math.max(1, H - top - pad);\n\n    // JUCE: feedback = size · 0.28 + 0.7, damp = damping · 0.4, and Freeze at 0.5 or above holds the loop at 1.\n    const frozen = (params[\"Freeze\"] ?? 0) >= 0.5;\n    const size = clamp01(params[\"Room Size\"] ?? 0.3);\n    const damp = clamp01(params[\"Damping\"] ?? 0.5) * 0.4;\n    const gLow = frozen ? 1 : size * 0.28 + 0.7;\n    const gHigh = frozen ? 1 : gLow * ((1 - damp) / (1 + damp));\n    const rtLow = rt60(gLow);\n    const rtHigh = rt60(gHigh);\n    const windowS = Number.isFinite(rtLow) ? Math.max(0.5, rtLow * 1.2) : 4;\n\n    ctx.strokeStyle = GRID;\n    ctx.beginPath();\n    ctx.moveTo(pad, top + h - 0.5);\n    ctx.lineTo(W - pad, top + h - 0.5);\n    ctx.stroke();\n\n    const line = (rt, color) => {\n      ctx.strokeStyle = color;\n      ctx.beginPath();\n      for (let i = 0; i <= w; i += 2) {\n        const s = (i / w) * windowS;\n        const db = Number.isFinite(rt) ? Math.max(DB_FLOOR, (-60 * s) / Math.max(1e-6, rt)) : 0;\n        const y = top + (db / DB_FLOOR) * (h - 1);\n        if (i === 0) ctx.moveTo(pad + i, y);\n        else ctx.lineTo(pad + i, y);\n      }\n      ctx.stroke();\n    };\n    line(rtHigh, frozen ? FROZEN : HIGH);\n    line(rtLow, frozen ? FROZEN : LOW);\n\n    ctx.textAlign = \"left\";\n    ctx.font = \"bold 11px ui-monospace, monospace\";\n    ctx.fillStyle = frozen ? FROZEN : LOW;\n    ctx.fillText(frozen ? \"FREEZE\" : `${rtLow.toFixed(1)} S`, pad, 11);\n    ctx.font = FONT;\n    ctx.textAlign = \"right\";\n    ctx.fillStyle = HIGH;\n    ctx.fillText(frozen ? \"∞\" : `HIGH ${rtHigh.toFixed(1)} S`, W - pad, 10);\n  },\n};\n",
               "vertical": {
                 "cols": 4,
                 "rows": 6,
                 "widgets": {
-                  "room_section": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 4,
-                    "rowSpan": 4,
-                    "label": "ROOM",
-                    "color": "#ff6a1a26"
-                  },
-                  "room_size": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Size",
-                    "bind": "Room Size",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "damping": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Damp",
-                    "bind": "Damping",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "width": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Width",
-                    "bind": "Width",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "freeze": {
-                    "type": "toggle",
-                    "col": 2,
-                    "row": 2,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Freeze",
-                    "bind": "Freeze"
-                  },
-                  "tail": {
-                    "type": "lcdscreen",
-                    "col": 0,
-                    "row": 4,
-                    "colSpan": 4,
-                    "rowSpan": 2
-                  }
+                  "room_section": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 4, "label": "ROOM", "color": "#ff6a1a26"},
+                  "room_size": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Size", "bind": "Room Size", "min": 0, "max": 1},
+                  "damping": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Damp", "bind": "Damping", "min": 0, "max": 1},
+                  "width": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Width", "bind": "Width", "min": 0, "max": 1},
+                  "freeze": {"type": "toggle", "col": 2, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Freeze", "bind": "Freeze"},
+                  "tail": {"type": "lcdscreen", "col": 0, "row": 4, "colSpan": 4, "rowSpan": 2}
                 }
               }
             },
-            "engines": [
-              "tracktion",
-              "mv",
-              "nonlinear-space",
-              "pocket-verbs",
-              "star-child"
-            ],
+            "engines": ["tracktion", "mv", "nonlinear-space", "pocket-verbs", "star-child"],
             "engine": "tracktion",
             "params": {},
-            "defaults": {
-              "Room Size": 0.3000000119,
-              "Damping": 0.5,
-              "Width": 1,
-              "Freeze": 0
-            },
+            "defaults": {"Room Size": 0.3000000119, "Damping": 0.5, "Width": 1, "Freeze": 0},
             "pluginId": "drums-tracktion:fx-tracktion"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
-      }
+      "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}]}
     },
-    "tracks": [
-      "drums",
-      "drums-mv",
-      "drums-nonlinear-space",
-      "drums-pocket-verbs",
-      "drums-star-child",
-      "drums-tracktion"
-    ],
+    "tracks": ["drums", "drums-mv", "drums-nonlinear-space", "drums-pocket-verbs", "drums-star-child", "drums-tracktion"],
     "videoTracks": [],
-    "trackColors": {
-      "drums": "#af1d26",
-      "drums-mv": "#c42024",
-      "drums-nonlinear-space": "#da2623",
-      "drums-pocket-verbs": "#de4037",
-      "drums-star-child": "#e25a4c",
-      "drums-tracktion": "#e57361"
-    },
-    "trackSignals": {
-      "drums": "audio",
-      "drums-mv": "audio",
-      "drums-nonlinear-space": "audio",
-      "drums-pocket-verbs": "audio",
-      "drums-star-child": "audio",
-      "drums-tracktion": "audio"
-    },
+    "trackColors": {"drums": "#af1d26", "drums-mv": "#c42024", "drums-nonlinear-space": "#da2623", "drums-pocket-verbs": "#de4037", "drums-star-child": "#e25a4c", "drums-tracktion": "#e57361"},
+    "trackSignals": {"drums": "audio", "drums-mv": "audio", "drums-nonlinear-space": "audio", "drums-pocket-verbs": "audio", "drums-star-child": "audio", "drums-tracktion": "audio"},
     "trackClips": {
-      "drums": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-mv": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-nonlinear-space": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-pocket-verbs": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-star-child": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-tracktion": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ]
+      "drums": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-mv": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-nonlinear-space": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-pocket-verbs": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-star-child": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-tracktion": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}]
     },
     "modules": {},
     "warnings": []

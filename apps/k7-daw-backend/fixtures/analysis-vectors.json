@@ -1,17 +1,13 @@
 {
  "batch": 100000,
  "exp": [
-  "644a7fa4d243cf62e346f6049ec25273faf0795c28fdc4ca09de972b2658955d",
-  "c6f138b7d863a349104bf7a0ed5252ed8c23149407a025647d5df19c33aea42d",
-  "96d6a80801df0de3f983739863399561280a67ca8fdf25437dbf7bda4928c5cd",
-  "aa7c2a2012259a5c003cc0f848b318d20d6942f24c08427bd43524de61a0d0b1",
+  "644a7fa4d243cf62e346f6049ec25273faf0795c28fdc4ca09de972b2658955d", "c6f138b7d863a349104bf7a0ed5252ed8c23149407a025647d5df19c33aea42d",
+  "96d6a80801df0de3f983739863399561280a67ca8fdf25437dbf7bda4928c5cd", "aa7c2a2012259a5c003cc0f848b318d20d6942f24c08427bd43524de61a0d0b1",
   "9728c521fd739aa9ff9223cc7407282f17da4e5378b0ea61a2ae6faf03e9489c"
  ],
  "log2": [
-  "ddb5059f5bf0bec2369014a69c79d720c0dd515b8b56e3f6ae56eef0689d1ee2",
-  "57bb714b3c406f8840272565b369d6be44cf7a71a37181162f9d040fbf55cb09",
-  "59d381fd0b4a99026f5be2c183b1e932a6d9771c9bdc991a764b76f13aa0459e",
-  "883cf98b901791c8f93e61b893d554c500df50f5815441105de31342747dba28",
+  "ddb5059f5bf0bec2369014a69c79d720c0dd515b8b56e3f6ae56eef0689d1ee2", "57bb714b3c406f8840272565b369d6be44cf7a71a37181162f9d040fbf55cb09",
+  "59d381fd0b4a99026f5be2c183b1e932a6d9771c9bdc991a764b76f13aa0459e", "883cf98b901791c8f93e61b893d554c500df50f5815441105de31342747dba28",
   "448dccb9a92f62c1bf8c43fbb96e3a091e3f49ecd6b5217256052583188797c4"
  ],
  "files": [
@@ -78,14 +74,7 @@
    "bpm": 0,
    "transients": 0
   },
-  {
-   "name": "no-frames",
-   "wav": "8b8fbafe8679076454429756fa72f11d5f442c87381cc6a4285451d826a9e629",
-   "error": "cannot open <source>: no audio decoded"
-  },
-  {
-   "name": "song.yaml",
-   "error": "cannot open <source>: unsupported format: unsupported feature: core (probe): no suitable format reader found"
-  }
+  {"name": "no-frames", "wav": "8b8fbafe8679076454429756fa72f11d5f442c87381cc6a4285451d826a9e629", "error": "cannot open <source>: no audio decoded"},
+  {"name": "song.yaml", "error": "cannot open <source>: unsupported format: unsupported feature: core (probe): no suitable format reader found"}
  ]
 }

@@ -1,9 +1,6 @@
 {
   "project": "e2e/mastering.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "mastering",
     "tempo": 120,
@@ -20,11 +17,7 @@
         "presetSave": "<ws>/e2e/mastering.k7/nodes/master.vstpreset",
         "role": "",
         "enabled": true,
-        "params": {
-          "@mix": 1,
-          "@input-volume": 0,
-          "@output-volume": 0
-        }
+        "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
       }
     ],
     "recordDir": "<ws>/e2e/mastering.k7/clips",
@@ -81,40 +74,20 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
-      "drums": {
-        "from": "drums",
-        "use": [],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
-      },
+      "drums": {"from": "drums", "use": [], "out": [{"to": "MIX", "gain": 1}]},
       "MIX": {
         "from": "MIX",
         "use": [
           {
             "module": "master",
             "uses": "@engine/quick-master",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -123,41 +96,15 @@
             "pluginId": "MIX:master"
           }
         ],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "OUT", "gain": 1}]
       }
     },
-    "tracks": [
-      "drums"
-    ],
+    "tracks": ["drums"],
     "videoTracks": [],
-    "trackColors": {
-      "drums": "#dd322c"
-    },
-    "trackSignals": {
-      "drums": "audio"
-    },
+    "trackColors": {"drums": "#dd322c"},
+    "trackSignals": {"drums": "audio"},
     "trackClips": {
-      "drums": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        },
-        {
-          "ref": "snare",
-          "start": 1,
-          "tc": "1:2",
-          "len": 4,
-          "kind": "audio"
-        }
-      ]
+      "drums": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}, {"ref": "snare", "start": 1, "tc": "1:2", "len": 4, "kind": "audio"}]
     },
     "modules": {},
     "warnings": []

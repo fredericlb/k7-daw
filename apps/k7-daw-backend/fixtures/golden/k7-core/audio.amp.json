@@ -1,9 +1,6 @@
 {
   "project": "k7-core/audio.amp.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "audio.amp",
     "tempo": 120,
@@ -54,11 +51,7 @@
             "presetSave": "<ws>/k7-core/audio.amp.k7/nodes/fx.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -104,11 +97,7 @@
             "presetSave": "<ws>/k7-core/audio.amp.k7/nodes/fx-nam.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -117,16 +106,9 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
@@ -136,86 +118,53 @@
           {
             "module": "fx",
             "uses": "@k7-core/audio/amp",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "assetChoices": [
-              "@k7-core/Ampeg SVT Pro 3 - Ribbon.nam",
-              "@k7-core/Fender Bassman 30/Fender Bassman 30  - V_B_M_T_G - 5_5_5_5_-.nam",
+              "@k7-core/Ampeg SVT Pro 3 - Ribbon.nam", "@k7-core/Fender Bassman 30/Fender Bassman 30  - V_B_M_T_G - 5_5_5_5_-.nam",
               "@k7-core/Fender Bassman 30/Fender Bassman 30  - V_B_M_T_G - 6_4_5_6_1.nam",
               "@k7-core/Fender Bassman 30/Fender Bassman 30  - V_B_M_T_G - 6_5_5_5_-.nam",
               "@k7-core/Fender Bassman 30/Fender Bassman 30  - V_B_M_T_G - 6_5_5_7_2.nam",
               "@k7-core/Fender Bassman 30/Fender Bassman 30  - V_B_M_T_G - 6_5_5_7_6.nam",
-              "@k7-core/Fender Bassman 30/Fender Bassman 30 - V_B_M_T_G - 6_5_5_7_-.nam",
-              "@k7-core/Marshall JCM 800 SC20 Full Rig.nam",
-              "@k7-core/Mesa M-Pulse 750 into Peavey 215/01 CH1 CLEAN G3.nam",
-              "@k7-core/Mesa M-Pulse 750 into Peavey 215/02 CH1 CLEAN G5.nam",
-              "@k7-core/Mesa M-Pulse 750 into Peavey 215/03 CH2 OD G3.nam",
-              "@k7-core/Mesa M-Pulse 750 into Peavey 215/05 CH2 OD G8.nam",
-              "@k7-core/aida-x deer ink studios/tw40_blues_deluxe_deerinkstudios.json",
-              "@k7-core/aida-x deer ink studios/tw40_blues_solo_deerinkstudios.json",
+              "@k7-core/Fender Bassman 30/Fender Bassman 30 - V_B_M_T_G - 6_5_5_7_-.nam", "@k7-core/Marshall JCM 800 SC20 Full Rig.nam",
+              "@k7-core/Mesa M-Pulse 750 into Peavey 215/01 CH1 CLEAN G3.nam", "@k7-core/Mesa M-Pulse 750 into Peavey 215/02 CH1 CLEAN G5.nam",
+              "@k7-core/Mesa M-Pulse 750 into Peavey 215/03 CH2 OD G3.nam", "@k7-core/Mesa M-Pulse 750 into Peavey 215/05 CH2 OD G8.nam",
+              "@k7-core/aida-x deer ink studios/tw40_blues_deluxe_deerinkstudios.json", "@k7-core/aida-x deer ink studios/tw40_blues_solo_deerinkstudios.json",
               "@k7-core/aida-x deer ink studios/tw40_british_lead_deerinkstudios.json",
               "@k7-core/aida-x deer ink studios/tw40_british_rhythm_deerinkstudios.json",
               "@k7-core/aida-x deer ink studios/tw40_california_clean_deerinkstudios.json",
               "@k7-core/aida-x deer ink studios/tw40_california_crunch_deerinkstudios.json",
               "@k7-core/fender super reverb/Fender Super Reverb_ EQ Flat, Volume 3, AKG 414.nam",
               "@k7-core/fender super reverb/Fender Super Reverb_ EQ Flat, Volume 3, sm57 and AKG 414.nam",
-              "@k7-core/fender super reverb/Fender Super Reverb_ EQ Flat, Volume 3, sm57.nam",
-              "@k7-core/guitarml proteus/6505Plus_Red_DirectOut.json",
-              "@k7-core/guitarml proteus/Barber_GC_GainKnob.json",
-              "@k7-core/guitarml proteus/Benson_Chimaira_pedal_GainKnob.json",
-              "@k7-core/guitarml proteus/BlackstarHT40_AmpClean.json",
-              "@k7-core/guitarml proteus/BlackstarHT40_AmpHighGain.json",
-              "@k7-core/guitarml proteus/BlackstarHT40_GainKnob_SM57mic.json",
-              "@k7-core/guitarml proteus/BluesJrAmp_VolKnob.json",
-              "@k7-core/guitarml proteus/Bogner_EcstasyBlue_GainKnob.json",
-              "@k7-core/guitarml proteus/BossMT2_PedalHighGain.json",
-              "@k7-core/guitarml proteus/DS1_fromVideo.json",
-              "@k7-core/guitarml proteus/DumbleKit_HighG_DirectOut.json",
-              "@k7-core/guitarml proteus/DumbleKit_LowG_DirectOut.json",
-              "@k7-core/guitarml proteus/EthosLeadChan_GainKnob.json",
-              "@k7-core/guitarml proteus/FriedmanSmallBox_GainKnob.json",
-              "@k7-core/guitarml proteus/GoatPedal_HighGain.json",
-              "@k7-core/guitarml proteus/LittleBigMuff_HighGainPedal.json",
-              "@k7-core/guitarml proteus/MXR78_pedal_DistKnob.json",
-              "@k7-core/guitarml proteus/MatchlessSC30_Ch1_DirectOut.json",
-              "@k7-core/guitarml proteus/MesaIICplus_Drive8_5EQoff.json",
-              "@k7-core/guitarml proteus/MesaMiniRec_HighGain_DirectOut.json",
-              "@k7-core/guitarml proteus/Mesa_IICplus_DriveKnob_DirectOut.json",
-              "@k7-core/guitarml proteus/Mooer_CaliMkIV_GainKnob.json",
-              "@k7-core/guitarml proteus/PlexiBreed_JTM_pedal.json",
-              "@k7-core/guitarml proteus/PrincetonAmp_Clean.json",
-              "@k7-core/guitarml proteus/ProcoRatPedal_HighGain.json",
-              "@k7-core/guitarml proteus/ProteinBlue_pedal_DriveKnob.json",
-              "@k7-core/guitarml proteus/ProteinGreen_pedal_DriveKnob.json",
-              "@k7-core/guitarml proteus/RevvG4_Red_DriveKnob.json",
-              "@k7-core/guitarml proteus/RockmanAcoustic_Pedal.json",
-              "@k7-core/guitarml proteus/RockmanXPR_HighGain.json",
-              "@k7-core/guitarml proteus/Splawn_OD_FractalFM3_HighGain.json",
-              "@k7-core/guitarml proteus/Supro_Bold_DriveKnob.json",
-              "@k7-core/guitarml proteus/SweetCream_pedal_GainKnob.json",
-              "@k7-core/guitarml proteus/TS9_DriveKnob.json",
-              "@k7-core/guitarml proteus/TS9_HighDrive.json",
-              "@k7-core/guitarml proteus/UA_RubyKC_BoostKnob.json",
-              "@k7-core/guitarml proteus/Victory_CountessOD_GainKnob.json",
-              "@k7-core/guitarml proteus/XComp_Pedal.json",
-              "@k7-core/guitarml proteus/XoticBB_pedal_GainKnob.json",
+              "@k7-core/fender super reverb/Fender Super Reverb_ EQ Flat, Volume 3, sm57.nam", "@k7-core/guitarml proteus/6505Plus_Red_DirectOut.json",
+              "@k7-core/guitarml proteus/Barber_GC_GainKnob.json", "@k7-core/guitarml proteus/Benson_Chimaira_pedal_GainKnob.json",
+              "@k7-core/guitarml proteus/BlackstarHT40_AmpClean.json", "@k7-core/guitarml proteus/BlackstarHT40_AmpHighGain.json",
+              "@k7-core/guitarml proteus/BlackstarHT40_GainKnob_SM57mic.json", "@k7-core/guitarml proteus/BluesJrAmp_VolKnob.json",
+              "@k7-core/guitarml proteus/Bogner_EcstasyBlue_GainKnob.json", "@k7-core/guitarml proteus/BossMT2_PedalHighGain.json",
+              "@k7-core/guitarml proteus/DS1_fromVideo.json", "@k7-core/guitarml proteus/DumbleKit_HighG_DirectOut.json",
+              "@k7-core/guitarml proteus/DumbleKit_LowG_DirectOut.json", "@k7-core/guitarml proteus/EthosLeadChan_GainKnob.json",
+              "@k7-core/guitarml proteus/FriedmanSmallBox_GainKnob.json", "@k7-core/guitarml proteus/GoatPedal_HighGain.json",
+              "@k7-core/guitarml proteus/LittleBigMuff_HighGainPedal.json", "@k7-core/guitarml proteus/MXR78_pedal_DistKnob.json",
+              "@k7-core/guitarml proteus/MatchlessSC30_Ch1_DirectOut.json", "@k7-core/guitarml proteus/MesaIICplus_Drive8_5EQoff.json",
+              "@k7-core/guitarml proteus/MesaMiniRec_HighGain_DirectOut.json", "@k7-core/guitarml proteus/Mesa_IICplus_DriveKnob_DirectOut.json",
+              "@k7-core/guitarml proteus/Mooer_CaliMkIV_GainKnob.json", "@k7-core/guitarml proteus/PlexiBreed_JTM_pedal.json",
+              "@k7-core/guitarml proteus/PrincetonAmp_Clean.json", "@k7-core/guitarml proteus/ProcoRatPedal_HighGain.json",
+              "@k7-core/guitarml proteus/ProteinBlue_pedal_DriveKnob.json", "@k7-core/guitarml proteus/ProteinGreen_pedal_DriveKnob.json",
+              "@k7-core/guitarml proteus/RevvG4_Red_DriveKnob.json", "@k7-core/guitarml proteus/RockmanAcoustic_Pedal.json",
+              "@k7-core/guitarml proteus/RockmanXPR_HighGain.json", "@k7-core/guitarml proteus/Splawn_OD_FractalFM3_HighGain.json",
+              "@k7-core/guitarml proteus/Supro_Bold_DriveKnob.json", "@k7-core/guitarml proteus/SweetCream_pedal_GainKnob.json",
+              "@k7-core/guitarml proteus/TS9_DriveKnob.json", "@k7-core/guitarml proteus/TS9_HighDrive.json",
+              "@k7-core/guitarml proteus/UA_RubyKC_BoostKnob.json", "@k7-core/guitarml proteus/Victory_CountessOD_GainKnob.json",
+              "@k7-core/guitarml proteus/XComp_Pedal.json", "@k7-core/guitarml proteus/XoticBB_pedal_GainKnob.json",
               "@k7-core/roland jc 120b/Roland JC 120B Jazz Chorus_ Bright Off - SM57 & Royer 101.nam",
               "@k7-core/roland jc 120b/Roland JC 120B Jazz Chorus_ Bright Off, Royer 101.nam",
               "@k7-core/roland jc 120b/Roland JC 120B Jazz Chorus_ Bright Off, SM57.nam",
               "@k7-core/roland jc 120b/Roland JC 120B Jazz Chorus_ Bright On, Royer R-101 & SM57.nam",
               "@k7-core/roland jc 120b/Roland JC 120B Jazz Chorus_ Bright On, Royer R-101.nam",
-              "@k7-core/roland jc 120b/Roland JC 120B Jazz Chorus_ Bright On, SM57.nam",
-              "@k7-core/two rocks/Two-Rock_Studio Overdrive_SM7b_All Flat_Clean+.nam",
-              "@k7-core/two rocks/Two-Rock_Studio Overdrive_SM7b_All Flat_Clean.nam",
-              "@k7-core/two rocks/Two-Rock_Studio Overdrive_SM7b_All Flat_Crunch+.nam",
+              "@k7-core/roland jc 120b/Roland JC 120B Jazz Chorus_ Bright On, SM57.nam", "@k7-core/two rocks/Two-Rock_Studio Overdrive_SM7b_All Flat_Clean+.nam",
+              "@k7-core/two rocks/Two-Rock_Studio Overdrive_SM7b_All Flat_Clean.nam", "@k7-core/two rocks/Two-Rock_Studio Overdrive_SM7b_All Flat_Crunch+.nam",
               "@k7-core/two rocks/Two-Rock_Studio Overdrive_SM7b_All Flat_Crunch.nam",
-              "@k7-core/two rocks/Two-Rock_Studio Overdrive_SM7b_All Flat_Overdrive.nam",
-              "@k7-core/fender deluxe verb/DELUXE REVERB OXFORD - BIG - 48 24.wav",
-              "@k7-core/fender deluxe verb/DELUXE REVERB OXFORD - BIG.wav",
-              "@k7-core/fender deluxe verb/DELUXE REVERB OXFORD - LEAN - 48 24.wav",
+              "@k7-core/two rocks/Two-Rock_Studio Overdrive_SM7b_All Flat_Overdrive.nam", "@k7-core/fender deluxe verb/DELUXE REVERB OXFORD - BIG - 48 24.wav",
+              "@k7-core/fender deluxe verb/DELUXE REVERB OXFORD - BIG.wav", "@k7-core/fender deluxe verb/DELUXE REVERB OXFORD - LEAN - 48 24.wav",
               "@k7-core/fender deluxe verb/DELUXE REVERB OXFORD - LEAN.wav"
             ],
             "category": "audio",
@@ -226,177 +175,37 @@
               "cols": 12,
               "rows": 4,
               "widgets": {
-                "model": {
-                  "type": "filepicker",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 5,
-                  "label": "Model",
-                  "bind": "model"
-                },
-                "cabinet": {
-                  "type": "filepicker",
-                  "col": 5,
-                  "row": 0,
-                  "colSpan": 5,
-                  "label": "Cabinet",
-                  "bind": "ir"
-                },
-                "norm": {
-                  "type": "toggle",
-                  "col": 10,
-                  "row": 0,
-                  "colSpan": 2,
-                  "label": "Normalize",
-                  "bind": "Normalize"
-                },
-                "knobs": {
-                  "type": "group",
-                  "col": 0,
-                  "row": 1,
-                  "colSpan": 6,
-                  "rowSpan": 2,
-                  "label": "AMP",
-                  "color": "#ff6a1a26"
-                },
-                "knob_1": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 1,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Knob 1",
-                  "bind": "Knob 1",
-                  "min": 0,
-                  "max": 1
-                },
-                "knob_2": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 1,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Knob 2",
-                  "bind": "Knob 2",
-                  "min": 0,
-                  "max": 1
-                },
-                "knob_3": {
-                  "type": "knob",
-                  "col": 4,
-                  "row": 1,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Knob 3",
-                  "bind": "Knob 3",
-                  "min": 0,
-                  "max": 1
-                },
-                "screen": {
-                  "type": "lcdscreen",
-                  "col": 6,
-                  "row": 1,
-                  "colSpan": 6,
-                  "rowSpan": 3
-                }
+                "model": {"type": "filepicker", "col": 0, "row": 0, "colSpan": 5, "label": "Model", "bind": "model"},
+                "cabinet": {"type": "filepicker", "col": 5, "row": 0, "colSpan": 5, "label": "Cabinet", "bind": "ir"},
+                "norm": {"type": "toggle", "col": 10, "row": 0, "colSpan": 2, "label": "Normalize", "bind": "Normalize"},
+                "knobs": {"type": "group", "col": 0, "row": 1, "colSpan": 6, "rowSpan": 2, "label": "AMP", "color": "#ff6a1a26"},
+                "knob_1": {"type": "knob", "col": 0, "row": 1, "colSpan": 2, "rowSpan": 2, "label": "Knob 1", "bind": "Knob 1", "min": 0, "max": 1},
+                "knob_2": {"type": "knob", "col": 2, "row": 1, "colSpan": 2, "rowSpan": 2, "label": "Knob 2", "bind": "Knob 2", "min": 0, "max": 1},
+                "knob_3": {"type": "knob", "col": 4, "row": 1, "colSpan": 2, "rowSpan": 2, "label": "Knob 3", "bind": "Knob 3", "min": 0, "max": 1},
+                "screen": {"type": "lcdscreen", "col": 6, "row": 1, "colSpan": 6, "rowSpan": 3}
               },
               "script": "const IN_COLOR = \"#3d7dff\";\nconst OUT_COLOR = \"#3ec96b\";\nconst FONT = \"8px ui-monospace, monospace\";\n\nfunction envelope(ctx, data, len, x0, w, mid, half, color, fill) {\n  if (!data || data.length === 0) return;\n  const step = w / (len - 1 || 1);\n  const offset = len - data.length;\n  ctx.beginPath();\n  for (let i = 0; i < data.length; i++) {\n    const x = x0 + (offset + i) * step;\n    const v = Math.min(1, Math.max(0, data[i] ?? 0)) * half;\n    if (i === 0) ctx.moveTo(x, mid - v);\n    else ctx.lineTo(x, mid - v);\n  }\n  for (let i = data.length - 1; i >= 0; i--) {\n    const x = x0 + (offset + i) * step;\n    const v = Math.min(1, Math.max(0, data[i] ?? 0)) * half;\n    ctx.lineTo(x, mid + v);\n  }\n  ctx.closePath();\n  if (fill) {\n    ctx.fillStyle = color;\n    ctx.globalAlpha = 0.35;\n    ctx.fill();\n    ctx.globalAlpha = 1;\n  }\n  ctx.strokeStyle = color;\n  ctx.lineWidth = 1;\n  ctx.stroke();\n}\n\nfunction db(v) {\n  return `${v > 0 ? \"+\" : \"\"}${v.toFixed(1)}dB`;\n}\n\nfunction screen(lcd) {\n  const { ctx, width: W, height: H, params, input, output, color } = lcd;\n  ctx.fillStyle = \"#000\";\n  ctx.fillRect(0, 0, W, H);\n  ctx.font = FONT;\n  ctx.textBaseline = \"alphabetic\";\n\n  const x0 = 4;\n  const w = Math.max(1, W - 8);\n  const top = 14;\n  const bottom = H - 14;\n  const mid = (top + bottom) / 2;\n  const half = Math.max(1, (bottom - top) / 2);\n\n  // Centre line, then input under output so the processed signal reads on top.\n  ctx.strokeStyle = \"#6b6b6b\";\n  ctx.lineWidth = 1;\n  ctx.beginPath();\n  ctx.moveTo(x0, Math.round(mid) + 0.5);\n  ctx.lineTo(x0 + w, Math.round(mid) + 0.5);\n  ctx.stroke();\n\n  const inp = Array.isArray(input) ? input : [];\n  const out = Array.isArray(output) ? output : [];\n  const len = Math.max(inp.length, out.length);\n  if (len > 0) {\n    envelope(ctx, inp, len, x0, w, mid, half, IN_COLOR, true);\n    envelope(ctx, out, len, x0, w, mid, half, OUT_COLOR, false);\n  } else {\n    ctx.fillStyle = color.dim;\n    ctx.textAlign = \"center\";\n    ctx.fillText(\"NO AUDIO\", W / 2, mid - 4);\n    ctx.textAlign = \"left\";\n  }\n\n  ctx.fillStyle = IN_COLOR;\n  ctx.fillText(\"IN\", 4, 10);\n  ctx.fillStyle = OUT_COLOR;\n  ctx.fillText(\"OUT\", 22, 10);\n\n  // The levels are the engine's own stage now, drawn in the card's footer; the plugin's are held.\n  const gainIn = params[\"@input-volume\"] ?? 0;\n  const gainOut = params[\"@output-volume\"] ?? 0;\n  const norm = (params[\"Normalize\"] ?? 1) >= 0.5;\n  ctx.fillStyle = IN_COLOR;\n  ctx.fillText(`IN ${db(gainIn)}`, 4, H - 4);\n  ctx.fillStyle = OUT_COLOR;\n  ctx.textAlign = \"center\";\n  ctx.fillText(`OUT ${db(gainOut)}`, W / 2, H - 4);\n  ctx.fillStyle = norm ? \"#ffffff\" : \"#6b6b6b\";\n  ctx.textAlign = \"right\";\n  ctx.fillText(`NORM ${norm ? \"ON\" : \"OFF\"}`, W - 4, H - 4);\n  ctx.textAlign = \"left\";\n}\n\nexport default {\n  screen,\n  screen_wide: screen,\n  // Only the knobs the loaded model was trained with; none (a .nam) gives the screen the whole width.\n  visible({ ampModel }) {\n    // No model read yet (none loaded, the builder's preview): the knob layout, every knob shown.\n    if (!ampModel) return { screen_wide: false };\n    const n = ampModel.knobs;\n    return {\n      knobs: n > 0,\n      knob_1: n >= 1,\n      knob_2: n >= 2,\n      knob_3: n >= 3,\n      screen: n > 0,\n      screen_wide: n === 0,\n    };\n  },\n};\n",
               "vertical": {
                 "cols": 4,
                 "rows": 10,
                 "widgets": {
-                  "model": {
-                    "type": "filepicker",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 4,
-                    "label": "Model",
-                    "bind": "model"
-                  },
-                  "cabinet": {
-                    "type": "filepicker",
-                    "col": 0,
-                    "row": 1,
-                    "colSpan": 4,
-                    "label": "Cabinet",
-                    "bind": "ir"
-                  },
-                  "norm": {
-                    "type": "toggle",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 2,
-                    "label": "Normalize",
-                    "bind": "Normalize"
-                  },
-                  "knobs": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 3,
-                    "colSpan": 4,
-                    "rowSpan": 4,
-                    "label": "AMP",
-                    "color": "#ff6a1a26"
-                  },
-                  "knob_1": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 3,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Knob 1",
-                    "bind": "Knob 1",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "knob_2": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 3,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Knob 2",
-                    "bind": "Knob 2",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "knob_3": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 5,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Knob 3",
-                    "bind": "Knob 3",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "screen": {
-                    "type": "lcdscreen",
-                    "col": 0,
-                    "row": 7,
-                    "colSpan": 4,
-                    "rowSpan": 3
-                  }
+                  "model": {"type": "filepicker", "col": 0, "row": 0, "colSpan": 4, "label": "Model", "bind": "model"},
+                  "cabinet": {"type": "filepicker", "col": 0, "row": 1, "colSpan": 4, "label": "Cabinet", "bind": "ir"},
+                  "norm": {"type": "toggle", "col": 0, "row": 2, "colSpan": 2, "label": "Normalize", "bind": "Normalize"},
+                  "knobs": {"type": "group", "col": 0, "row": 3, "colSpan": 4, "rowSpan": 4, "label": "AMP", "color": "#ff6a1a26"},
+                  "knob_1": {"type": "knob", "col": 0, "row": 3, "colSpan": 2, "rowSpan": 2, "label": "Knob 1", "bind": "Knob 1", "min": 0, "max": 1},
+                  "knob_2": {"type": "knob", "col": 2, "row": 3, "colSpan": 2, "rowSpan": 2, "label": "Knob 2", "bind": "Knob 2", "min": 0, "max": 1},
+                  "knob_3": {"type": "knob", "col": 0, "row": 5, "colSpan": 2, "rowSpan": 2, "label": "Knob 3", "bind": "Knob 3", "min": 0, "max": 1},
+                  "screen": {"type": "lcdscreen", "col": 0, "row": 7, "colSpan": 4, "rowSpan": 3}
                 }
               }
             },
             "params": {},
-            "defaults": {
-              "Normalize": 1,
-              "Knob 1": 0.5,
-              "Knob 2": 0.5,
-              "Knob 3": 0.5
-            },
+            "defaults": {"Normalize": 1, "Knob 1": 0.5, "Knob 2": 0.5, "Knob 3": 0.5},
             "pluginId": "drums:fx"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-nam": {
         "from": "drums-nam",
@@ -404,86 +213,53 @@
           {
             "module": "fx-nam",
             "uses": "@k7-core/audio/amp",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "assetChoices": [
-              "@k7-core/Ampeg SVT Pro 3 - Ribbon.nam",
-              "@k7-core/Fender Bassman 30/Fender Bassman 30  - V_B_M_T_G - 5_5_5_5_-.nam",
+              "@k7-core/Ampeg SVT Pro 3 - Ribbon.nam", "@k7-core/Fender Bassman 30/Fender Bassman 30  - V_B_M_T_G - 5_5_5_5_-.nam",
               "@k7-core/Fender Bassman 30/Fender Bassman 30  - V_B_M_T_G - 6_4_5_6_1.nam",
               "@k7-core/Fender Bassman 30/Fender Bassman 30  - V_B_M_T_G - 6_5_5_5_-.nam",
               "@k7-core/Fender Bassman 30/Fender Bassman 30  - V_B_M_T_G - 6_5_5_7_2.nam",
               "@k7-core/Fender Bassman 30/Fender Bassman 30  - V_B_M_T_G - 6_5_5_7_6.nam",
-              "@k7-core/Fender Bassman 30/Fender Bassman 30 - V_B_M_T_G - 6_5_5_7_-.nam",
-              "@k7-core/Marshall JCM 800 SC20 Full Rig.nam",
-              "@k7-core/Mesa M-Pulse 750 into Peavey 215/01 CH1 CLEAN G3.nam",
-              "@k7-core/Mesa M-Pulse 750 into Peavey 215/02 CH1 CLEAN G5.nam",
-              "@k7-core/Mesa M-Pulse 750 into Peavey 215/03 CH2 OD G3.nam",
-              "@k7-core/Mesa M-Pulse 750 into Peavey 215/05 CH2 OD G8.nam",
-              "@k7-core/aida-x deer ink studios/tw40_blues_deluxe_deerinkstudios.json",
-              "@k7-core/aida-x deer ink studios/tw40_blues_solo_deerinkstudios.json",
+              "@k7-core/Fender Bassman 30/Fender Bassman 30 - V_B_M_T_G - 6_5_5_7_-.nam", "@k7-core/Marshall JCM 800 SC20 Full Rig.nam",
+              "@k7-core/Mesa M-Pulse 750 into Peavey 215/01 CH1 CLEAN G3.nam", "@k7-core/Mesa M-Pulse 750 into Peavey 215/02 CH1 CLEAN G5.nam",
+              "@k7-core/Mesa M-Pulse 750 into Peavey 215/03 CH2 OD G3.nam", "@k7-core/Mesa M-Pulse 750 into Peavey 215/05 CH2 OD G8.nam",
+              "@k7-core/aida-x deer ink studios/tw40_blues_deluxe_deerinkstudios.json", "@k7-core/aida-x deer ink studios/tw40_blues_solo_deerinkstudios.json",
               "@k7-core/aida-x deer ink studios/tw40_british_lead_deerinkstudios.json",
               "@k7-core/aida-x deer ink studios/tw40_british_rhythm_deerinkstudios.json",
               "@k7-core/aida-x deer ink studios/tw40_california_clean_deerinkstudios.json",
               "@k7-core/aida-x deer ink studios/tw40_california_crunch_deerinkstudios.json",
               "@k7-core/fender super reverb/Fender Super Reverb_ EQ Flat, Volume 3, AKG 414.nam",
               "@k7-core/fender super reverb/Fender Super Reverb_ EQ Flat, Volume 3, sm57 and AKG 414.nam",
-              "@k7-core/fender super reverb/Fender Super Reverb_ EQ Flat, Volume 3, sm57.nam",
-              "@k7-core/guitarml proteus/6505Plus_Red_DirectOut.json",
-              "@k7-core/guitarml proteus/Barber_GC_GainKnob.json",
-              "@k7-core/guitarml proteus/Benson_Chimaira_pedal_GainKnob.json",
-              "@k7-core/guitarml proteus/BlackstarHT40_AmpClean.json",
-              "@k7-core/guitarml proteus/BlackstarHT40_AmpHighGain.json",
-              "@k7-core/guitarml proteus/BlackstarHT40_GainKnob_SM57mic.json",
-              "@k7-core/guitarml proteus/BluesJrAmp_VolKnob.json",
-              "@k7-core/guitarml proteus/Bogner_EcstasyBlue_GainKnob.json",
-              "@k7-core/guitarml proteus/BossMT2_PedalHighGain.json",
-              "@k7-core/guitarml proteus/DS1_fromVideo.json",
-              "@k7-core/guitarml proteus/DumbleKit_HighG_DirectOut.json",
-              "@k7-core/guitarml proteus/DumbleKit_LowG_DirectOut.json",
-              "@k7-core/guitarml proteus/EthosLeadChan_GainKnob.json",
-              "@k7-core/guitarml proteus/FriedmanSmallBox_GainKnob.json",
-              "@k7-core/guitarml proteus/GoatPedal_HighGain.json",
-              "@k7-core/guitarml proteus/LittleBigMuff_HighGainPedal.json",
-              "@k7-core/guitarml proteus/MXR78_pedal_DistKnob.json",
-              "@k7-core/guitarml proteus/MatchlessSC30_Ch1_DirectOut.json",
-              "@k7-core/guitarml proteus/MesaIICplus_Drive8_5EQoff.json",
-              "@k7-core/guitarml proteus/MesaMiniRec_HighGain_DirectOut.json",
-              "@k7-core/guitarml proteus/Mesa_IICplus_DriveKnob_DirectOut.json",
-              "@k7-core/guitarml proteus/Mooer_CaliMkIV_GainKnob.json",
-              "@k7-core/guitarml proteus/PlexiBreed_JTM_pedal.json",
-              "@k7-core/guitarml proteus/PrincetonAmp_Clean.json",
-              "@k7-core/guitarml proteus/ProcoRatPedal_HighGain.json",
-              "@k7-core/guitarml proteus/ProteinBlue_pedal_DriveKnob.json",
-              "@k7-core/guitarml proteus/ProteinGreen_pedal_DriveKnob.json",
-              "@k7-core/guitarml proteus/RevvG4_Red_DriveKnob.json",
-              "@k7-core/guitarml proteus/RockmanAcoustic_Pedal.json",
-              "@k7-core/guitarml proteus/RockmanXPR_HighGain.json",
-              "@k7-core/guitarml proteus/Splawn_OD_FractalFM3_HighGain.json",
-              "@k7-core/guitarml proteus/Supro_Bold_DriveKnob.json",
-              "@k7-core/guitarml proteus/SweetCream_pedal_GainKnob.json",
-              "@k7-core/guitarml proteus/TS9_DriveKnob.json",
-              "@k7-core/guitarml proteus/TS9_HighDrive.json",
-              "@k7-core/guitarml proteus/UA_RubyKC_BoostKnob.json",
-              "@k7-core/guitarml proteus/Victory_CountessOD_GainKnob.json",
-              "@k7-core/guitarml proteus/XComp_Pedal.json",
-              "@k7-core/guitarml proteus/XoticBB_pedal_GainKnob.json",
+              "@k7-core/fender super reverb/Fender Super Reverb_ EQ Flat, Volume 3, sm57.nam", "@k7-core/guitarml proteus/6505Plus_Red_DirectOut.json",
+              "@k7-core/guitarml proteus/Barber_GC_GainKnob.json", "@k7-core/guitarml proteus/Benson_Chimaira_pedal_GainKnob.json",
+              "@k7-core/guitarml proteus/BlackstarHT40_AmpClean.json", "@k7-core/guitarml proteus/BlackstarHT40_AmpHighGain.json",
+              "@k7-core/guitarml proteus/BlackstarHT40_GainKnob_SM57mic.json", "@k7-core/guitarml proteus/BluesJrAmp_VolKnob.json",
+              "@k7-core/guitarml proteus/Bogner_EcstasyBlue_GainKnob.json", "@k7-core/guitarml proteus/BossMT2_PedalHighGain.json",
+              "@k7-core/guitarml proteus/DS1_fromVideo.json", "@k7-core/guitarml proteus/DumbleKit_HighG_DirectOut.json",
+              "@k7-core/guitarml proteus/DumbleKit_LowG_DirectOut.json", "@k7-core/guitarml proteus/EthosLeadChan_GainKnob.json",
+              "@k7-core/guitarml proteus/FriedmanSmallBox_GainKnob.json", "@k7-core/guitarml proteus/GoatPedal_HighGain.json",
+              "@k7-core/guitarml proteus/LittleBigMuff_HighGainPedal.json", "@k7-core/guitarml proteus/MXR78_pedal_DistKnob.json",
+              "@k7-core/guitarml proteus/MatchlessSC30_Ch1_DirectOut.json", "@k7-core/guitarml proteus/MesaIICplus_Drive8_5EQoff.json",
+              "@k7-core/guitarml proteus/MesaMiniRec_HighGain_DirectOut.json", "@k7-core/guitarml proteus/Mesa_IICplus_DriveKnob_DirectOut.json",
+              "@k7-core/guitarml proteus/Mooer_CaliMkIV_GainKnob.json", "@k7-core/guitarml proteus/PlexiBreed_JTM_pedal.json",
+              "@k7-core/guitarml proteus/PrincetonAmp_Clean.json", "@k7-core/guitarml proteus/ProcoRatPedal_HighGain.json",
+              "@k7-core/guitarml proteus/ProteinBlue_pedal_DriveKnob.json", "@k7-core/guitarml proteus/ProteinGreen_pedal_DriveKnob.json",
+              "@k7-core/guitarml proteus/RevvG4_Red_DriveKnob.json", "@k7-core/guitarml proteus/RockmanAcoustic_Pedal.json",
+              "@k7-core/guitarml proteus/RockmanXPR_HighGain.json", "@k7-core/guitarml proteus/Splawn_OD_FractalFM3_HighGain.json",
+              "@k7-core/guitarml proteus/Supro_Bold_DriveKnob.json", "@k7-core/guitarml proteus/SweetCream_pedal_GainKnob.json",
+              "@k7-core/guitarml proteus/TS9_DriveKnob.json", "@k7-core/guitarml proteus/TS9_HighDrive.json",
+              "@k7-core/guitarml proteus/UA_RubyKC_BoostKnob.json", "@k7-core/guitarml proteus/Victory_CountessOD_GainKnob.json",
+              "@k7-core/guitarml proteus/XComp_Pedal.json", "@k7-core/guitarml proteus/XoticBB_pedal_GainKnob.json",
               "@k7-core/roland jc 120b/Roland JC 120B Jazz Chorus_ Bright Off - SM57 & Royer 101.nam",
               "@k7-core/roland jc 120b/Roland JC 120B Jazz Chorus_ Bright Off, Royer 101.nam",
               "@k7-core/roland jc 120b/Roland JC 120B Jazz Chorus_ Bright Off, SM57.nam",
               "@k7-core/roland jc 120b/Roland JC 120B Jazz Chorus_ Bright On, Royer R-101 & SM57.nam",
               "@k7-core/roland jc 120b/Roland JC 120B Jazz Chorus_ Bright On, Royer R-101.nam",
-              "@k7-core/roland jc 120b/Roland JC 120B Jazz Chorus_ Bright On, SM57.nam",
-              "@k7-core/two rocks/Two-Rock_Studio Overdrive_SM7b_All Flat_Clean+.nam",
-              "@k7-core/two rocks/Two-Rock_Studio Overdrive_SM7b_All Flat_Clean.nam",
-              "@k7-core/two rocks/Two-Rock_Studio Overdrive_SM7b_All Flat_Crunch+.nam",
+              "@k7-core/roland jc 120b/Roland JC 120B Jazz Chorus_ Bright On, SM57.nam", "@k7-core/two rocks/Two-Rock_Studio Overdrive_SM7b_All Flat_Clean+.nam",
+              "@k7-core/two rocks/Two-Rock_Studio Overdrive_SM7b_All Flat_Clean.nam", "@k7-core/two rocks/Two-Rock_Studio Overdrive_SM7b_All Flat_Crunch+.nam",
               "@k7-core/two rocks/Two-Rock_Studio Overdrive_SM7b_All Flat_Crunch.nam",
-              "@k7-core/two rocks/Two-Rock_Studio Overdrive_SM7b_All Flat_Overdrive.nam",
-              "@k7-core/fender deluxe verb/DELUXE REVERB OXFORD - BIG - 48 24.wav",
-              "@k7-core/fender deluxe verb/DELUXE REVERB OXFORD - BIG.wav",
-              "@k7-core/fender deluxe verb/DELUXE REVERB OXFORD - LEAN - 48 24.wav",
+              "@k7-core/two rocks/Two-Rock_Studio Overdrive_SM7b_All Flat_Overdrive.nam", "@k7-core/fender deluxe verb/DELUXE REVERB OXFORD - BIG - 48 24.wav",
+              "@k7-core/fender deluxe verb/DELUXE REVERB OXFORD - BIG.wav", "@k7-core/fender deluxe verb/DELUXE REVERB OXFORD - LEAN - 48 24.wav",
               "@k7-core/fender deluxe verb/DELUXE REVERB OXFORD - LEAN.wav"
             ],
             "category": "audio",
@@ -494,221 +270,47 @@
               "cols": 12,
               "rows": 4,
               "widgets": {
-                "model": {
-                  "type": "filepicker",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 5,
-                  "label": "Model",
-                  "bind": "model"
-                },
-                "cabinet": {
-                  "type": "filepicker",
-                  "col": 5,
-                  "row": 0,
-                  "colSpan": 5,
-                  "label": "Cabinet",
-                  "bind": "ir"
-                },
-                "norm": {
-                  "type": "toggle",
-                  "col": 10,
-                  "row": 0,
-                  "colSpan": 2,
-                  "label": "Normalize",
-                  "bind": "Normalize"
-                },
-                "knobs": {
-                  "type": "group",
-                  "col": 0,
-                  "row": 1,
-                  "colSpan": 6,
-                  "rowSpan": 2,
-                  "label": "AMP",
-                  "color": "#ff6a1a26"
-                },
-                "knob_1": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 1,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Knob 1",
-                  "bind": "Knob 1",
-                  "min": 0,
-                  "max": 1
-                },
-                "knob_2": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 1,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Knob 2",
-                  "bind": "Knob 2",
-                  "min": 0,
-                  "max": 1
-                },
-                "knob_3": {
-                  "type": "knob",
-                  "col": 4,
-                  "row": 1,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Knob 3",
-                  "bind": "Knob 3",
-                  "min": 0,
-                  "max": 1
-                },
-                "screen": {
-                  "type": "lcdscreen",
-                  "col": 6,
-                  "row": 1,
-                  "colSpan": 6,
-                  "rowSpan": 3
-                }
+                "model": {"type": "filepicker", "col": 0, "row": 0, "colSpan": 5, "label": "Model", "bind": "model"},
+                "cabinet": {"type": "filepicker", "col": 5, "row": 0, "colSpan": 5, "label": "Cabinet", "bind": "ir"},
+                "norm": {"type": "toggle", "col": 10, "row": 0, "colSpan": 2, "label": "Normalize", "bind": "Normalize"},
+                "knobs": {"type": "group", "col": 0, "row": 1, "colSpan": 6, "rowSpan": 2, "label": "AMP", "color": "#ff6a1a26"},
+                "knob_1": {"type": "knob", "col": 0, "row": 1, "colSpan": 2, "rowSpan": 2, "label": "Knob 1", "bind": "Knob 1", "min": 0, "max": 1},
+                "knob_2": {"type": "knob", "col": 2, "row": 1, "colSpan": 2, "rowSpan": 2, "label": "Knob 2", "bind": "Knob 2", "min": 0, "max": 1},
+                "knob_3": {"type": "knob", "col": 4, "row": 1, "colSpan": 2, "rowSpan": 2, "label": "Knob 3", "bind": "Knob 3", "min": 0, "max": 1},
+                "screen": {"type": "lcdscreen", "col": 6, "row": 1, "colSpan": 6, "rowSpan": 3}
               },
               "script": "const IN_COLOR = \"#3d7dff\";\nconst OUT_COLOR = \"#3ec96b\";\nconst FONT = \"8px ui-monospace, monospace\";\n\nfunction envelope(ctx, data, len, x0, w, mid, half, color, fill) {\n  if (!data || data.length === 0) return;\n  const step = w / (len - 1 || 1);\n  const offset = len - data.length;\n  ctx.beginPath();\n  for (let i = 0; i < data.length; i++) {\n    const x = x0 + (offset + i) * step;\n    const v = Math.min(1, Math.max(0, data[i] ?? 0)) * half;\n    if (i === 0) ctx.moveTo(x, mid - v);\n    else ctx.lineTo(x, mid - v);\n  }\n  for (let i = data.length - 1; i >= 0; i--) {\n    const x = x0 + (offset + i) * step;\n    const v = Math.min(1, Math.max(0, data[i] ?? 0)) * half;\n    ctx.lineTo(x, mid + v);\n  }\n  ctx.closePath();\n  if (fill) {\n    ctx.fillStyle = color;\n    ctx.globalAlpha = 0.35;\n    ctx.fill();\n    ctx.globalAlpha = 1;\n  }\n  ctx.strokeStyle = color;\n  ctx.lineWidth = 1;\n  ctx.stroke();\n}\n\nfunction db(v) {\n  return `${v > 0 ? \"+\" : \"\"}${v.toFixed(1)}dB`;\n}\n\nfunction screen(lcd) {\n  const { ctx, width: W, height: H, params, input, output, color } = lcd;\n  ctx.fillStyle = \"#000\";\n  ctx.fillRect(0, 0, W, H);\n  ctx.font = FONT;\n  ctx.textBaseline = \"alphabetic\";\n\n  const x0 = 4;\n  const w = Math.max(1, W - 8);\n  const top = 14;\n  const bottom = H - 14;\n  const mid = (top + bottom) / 2;\n  const half = Math.max(1, (bottom - top) / 2);\n\n  // Centre line, then input under output so the processed signal reads on top.\n  ctx.strokeStyle = \"#6b6b6b\";\n  ctx.lineWidth = 1;\n  ctx.beginPath();\n  ctx.moveTo(x0, Math.round(mid) + 0.5);\n  ctx.lineTo(x0 + w, Math.round(mid) + 0.5);\n  ctx.stroke();\n\n  const inp = Array.isArray(input) ? input : [];\n  const out = Array.isArray(output) ? output : [];\n  const len = Math.max(inp.length, out.length);\n  if (len > 0) {\n    envelope(ctx, inp, len, x0, w, mid, half, IN_COLOR, true);\n    envelope(ctx, out, len, x0, w, mid, half, OUT_COLOR, false);\n  } else {\n    ctx.fillStyle = color.dim;\n    ctx.textAlign = \"center\";\n    ctx.fillText(\"NO AUDIO\", W / 2, mid - 4);\n    ctx.textAlign = \"left\";\n  }\n\n  ctx.fillStyle = IN_COLOR;\n  ctx.fillText(\"IN\", 4, 10);\n  ctx.fillStyle = OUT_COLOR;\n  ctx.fillText(\"OUT\", 22, 10);\n\n  // The levels are the engine's own stage now, drawn in the card's footer; the plugin's are held.\n  const gainIn = params[\"@input-volume\"] ?? 0;\n  const gainOut = params[\"@output-volume\"] ?? 0;\n  const norm = (params[\"Normalize\"] ?? 1) >= 0.5;\n  ctx.fillStyle = IN_COLOR;\n  ctx.fillText(`IN ${db(gainIn)}`, 4, H - 4);\n  ctx.fillStyle = OUT_COLOR;\n  ctx.textAlign = \"center\";\n  ctx.fillText(`OUT ${db(gainOut)}`, W / 2, H - 4);\n  ctx.fillStyle = norm ? \"#ffffff\" : \"#6b6b6b\";\n  ctx.textAlign = \"right\";\n  ctx.fillText(`NORM ${norm ? \"ON\" : \"OFF\"}`, W - 4, H - 4);\n  ctx.textAlign = \"left\";\n}\n\nexport default {\n  screen,\n  screen_wide: screen,\n  // Only the knobs the loaded model was trained with; none (a .nam) gives the screen the whole width.\n  visible({ ampModel }) {\n    // No model read yet (none loaded, the builder's preview): the knob layout, every knob shown.\n    if (!ampModel) return { screen_wide: false };\n    const n = ampModel.knobs;\n    return {\n      knobs: n > 0,\n      knob_1: n >= 1,\n      knob_2: n >= 2,\n      knob_3: n >= 3,\n      screen: n > 0,\n      screen_wide: n === 0,\n    };\n  },\n};\n",
               "vertical": {
                 "cols": 4,
                 "rows": 10,
                 "widgets": {
-                  "model": {
-                    "type": "filepicker",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 4,
-                    "label": "Model",
-                    "bind": "model"
-                  },
-                  "cabinet": {
-                    "type": "filepicker",
-                    "col": 0,
-                    "row": 1,
-                    "colSpan": 4,
-                    "label": "Cabinet",
-                    "bind": "ir"
-                  },
-                  "norm": {
-                    "type": "toggle",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 2,
-                    "label": "Normalize",
-                    "bind": "Normalize"
-                  },
-                  "knobs": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 3,
-                    "colSpan": 4,
-                    "rowSpan": 4,
-                    "label": "AMP",
-                    "color": "#ff6a1a26"
-                  },
-                  "knob_1": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 3,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Knob 1",
-                    "bind": "Knob 1",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "knob_2": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 3,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Knob 2",
-                    "bind": "Knob 2",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "knob_3": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 5,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Knob 3",
-                    "bind": "Knob 3",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "screen": {
-                    "type": "lcdscreen",
-                    "col": 0,
-                    "row": 7,
-                    "colSpan": 4,
-                    "rowSpan": 3
-                  }
+                  "model": {"type": "filepicker", "col": 0, "row": 0, "colSpan": 4, "label": "Model", "bind": "model"},
+                  "cabinet": {"type": "filepicker", "col": 0, "row": 1, "colSpan": 4, "label": "Cabinet", "bind": "ir"},
+                  "norm": {"type": "toggle", "col": 0, "row": 2, "colSpan": 2, "label": "Normalize", "bind": "Normalize"},
+                  "knobs": {"type": "group", "col": 0, "row": 3, "colSpan": 4, "rowSpan": 4, "label": "AMP", "color": "#ff6a1a26"},
+                  "knob_1": {"type": "knob", "col": 0, "row": 3, "colSpan": 2, "rowSpan": 2, "label": "Knob 1", "bind": "Knob 1", "min": 0, "max": 1},
+                  "knob_2": {"type": "knob", "col": 2, "row": 3, "colSpan": 2, "rowSpan": 2, "label": "Knob 2", "bind": "Knob 2", "min": 0, "max": 1},
+                  "knob_3": {"type": "knob", "col": 0, "row": 5, "colSpan": 2, "rowSpan": 2, "label": "Knob 3", "bind": "Knob 3", "min": 0, "max": 1},
+                  "screen": {"type": "lcdscreen", "col": 0, "row": 7, "colSpan": 4, "rowSpan": 3}
                 }
               }
             },
             "params": {},
-            "defaults": {
-              "Normalize": 1,
-              "Knob 1": 0.5,
-              "Knob 2": 0.5,
-              "Knob 3": 0.5
-            },
+            "defaults": {"Normalize": 1, "Knob 1": 0.5, "Knob 2": 0.5, "Knob 3": 0.5},
             "pluginId": "drums-nam:fx-nam"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
-      }
+      "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}]}
     },
-    "tracks": [
-      "drums",
-      "drums-nam"
-    ],
+    "tracks": ["drums", "drums-nam"],
     "videoTracks": [],
-    "trackColors": {
-      "drums": "#af1d26",
-      "drums-nam": "#e57361"
-    },
-    "trackSignals": {
-      "drums": "audio",
-      "drums-nam": "audio"
-    },
+    "trackColors": {"drums": "#af1d26", "drums-nam": "#e57361"},
+    "trackSignals": {"drums": "audio", "drums-nam": "audio"},
     "trackClips": {
-      "drums": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-nam": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ]
+      "drums": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-nam": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}]
     },
     "modules": {},
     "warnings": []

@@ -1,78 +1,29 @@
 {
   "project": "e2e/broken-unresolved.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": null,
-  "errors": {
-    "errors": [
-      "unresolved reference(s):\n  - module 'ghost': extends unknown module '@workspace/audio/does-not-exist'"
-    ],
-    "diagnostics": []
-  },
+  "errors": {"errors": ["unresolved reference(s):\n  - module 'ghost': extends unknown module '@workspace/audio/does-not-exist'"], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
       "drums": {
         "from": "drums",
-        "use": [
-          {
-            "module": "ghost",
-            "uses": "@workspace/audio/does-not-exist",
-            "stub": true,
-            "hasNativePluginUI": false,
-            "params": {}
-          }
-        ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "use": [{"module": "ghost", "uses": "@workspace/audio/does-not-exist", "stub": true, "hasNativePluginUI": false, "params": {}}],
+        "out": [{"to": "MIX", "gain": 1}]
       },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
-      }
+      "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}]}
     },
-    "tracks": [
-      "drums"
-    ],
+    "tracks": ["drums"],
     "videoTracks": [],
     "trackColors": {},
-    "trackSignals": {
-      "drums": "audio"
-    },
-    "trackClips": {
-      "drums": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "kind": "audio"
-        }
-      ]
-    },
+    "trackSignals": {"drums": "audio"},
+    "trackClips": {"drums": [{"ref": "kick", "start": 0, "tc": "1:1", "kind": "audio"}]},
     "modules": {},
-    "warnings": [
-      "chain 'drums': module 'ghost' extends unknown module '@workspace/audio/does-not-exist'"
-    ],
+    "warnings": ["chain 'drums': module 'ghost' extends unknown module '@workspace/audio/does-not-exist'"],
     "issues": [
       {
         "code": "chainExtendsUnknown",
-        "params": {
-          "chain": "drums",
-          "module": "ghost",
-          "base": "@workspace/audio/does-not-exist"
-        },
+        "params": {"chain": "drums", "module": "ghost", "base": "@workspace/audio/does-not-exist"},
         "text": "chain 'drums': module 'ghost' extends unknown module '@workspace/audio/does-not-exist'"
       }
     ]

@@ -1,9 +1,6 @@
 {
   "project": "e2e/transformers.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "transformers",
     "tempo": 120,
@@ -43,38 +40,10 @@
             "loopStart": 0,
             "loopEnd": 0,
             "notes": [
-              {
-                "time": 0,
-                "duration": 1,
-                "key": 60,
-                "vel": 0.8,
-                "channel": 0,
-                "rel": 1
-              },
-              {
-                "time": 1,
-                "duration": 1,
-                "key": 64,
-                "vel": 1,
-                "channel": 0,
-                "rel": 1
-              },
-              {
-                "time": 2,
-                "duration": 1,
-                "key": 67,
-                "vel": 1,
-                "channel": 0,
-                "rel": 1
-              },
-              {
-                "time": 3,
-                "duration": 1,
-                "key": 72,
-                "vel": 1,
-                "channel": 0,
-                "rel": 1
-              }
+              {"time": 0, "duration": 1, "key": 60, "vel": 0.8, "channel": 0, "rel": 1},
+              {"time": 1, "duration": 1, "key": 64, "vel": 1, "channel": 0, "rel": 1},
+              {"time": 2, "duration": 1, "key": 67, "vel": 1, "channel": 0, "rel": 1},
+              {"time": 3, "duration": 1, "key": 72, "vel": 1, "channel": 0, "rel": 1}
             ]
           }
         ],
@@ -87,11 +56,7 @@
             "presetSave": "<ws>/e2e/transformers.k7/nodes/arp.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "Rate": 6,
-              "Octaves": 1,
-              "Direction": 0
-            }
+            "params": {"Rate": 6, "Octaves": 1, "Direction": 0}
           },
           {
             "id": "melody:repeat",
@@ -102,11 +67,7 @@
             "presetSave": "<ws>/e2e/transformers.k7/nodes/repeat.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "Count": 1,
-              "Division": 0.5,
-              "Gate": 0.5
-            }
+            "params": {"Count": 1, "Division": 0.5, "Gate": 0.5}
           },
           {
             "id": "melody:transpose",
@@ -117,9 +78,7 @@
             "presetSave": "<ws>/e2e/transformers.k7/nodes/transpose.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "Semitones": 0
-            }
+            "params": {"Semitones": 0}
           },
           {
             "id": "melody:lead",
@@ -129,9 +88,7 @@
             "presetSave": "<ws>/e2e/transformers.k7/nodes/lead.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@output-volume": 0
-            }
+            "params": {"@output-volume": 0}
           }
         ],
         "sends": [],
@@ -140,16 +97,9 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
@@ -175,38 +125,14 @@
                   "label": "Cadence",
                   "bind": "Rate",
                   "options": [
-                    {
-                      "label": "1/1",
-                      "value": 0
-                    },
-                    {
-                      "label": "1/2",
-                      "value": 1
-                    },
-                    {
-                      "label": "1/4",
-                      "value": 2
-                    },
-                    {
-                      "label": "1/4T",
-                      "value": 3
-                    },
-                    {
-                      "label": "1/8",
-                      "value": 4
-                    },
-                    {
-                      "label": "1/8T",
-                      "value": 5
-                    },
-                    {
-                      "label": "1/16",
-                      "value": 6
-                    },
-                    {
-                      "label": "1/32",
-                      "value": 7
-                    }
+                    {"label": "1/1", "value": 0},
+                    {"label": "1/2", "value": 1},
+                    {"label": "1/4", "value": 2},
+                    {"label": "1/4T", "value": 3},
+                    {"label": "1/8", "value": 4},
+                    {"label": "1/8T", "value": 5},
+                    {"label": "1/16", "value": 6},
+                    {"label": "1/32", "value": 7}
                   ]
                 },
                 "octaves": {
@@ -216,24 +142,7 @@
                   "colSpan": 2,
                   "label": "Octaves",
                   "bind": "Octaves",
-                  "options": [
-                    {
-                      "label": "1",
-                      "value": 1
-                    },
-                    {
-                      "label": "2",
-                      "value": 2
-                    },
-                    {
-                      "label": "3",
-                      "value": 3
-                    },
-                    {
-                      "label": "4",
-                      "value": 4
-                    }
-                  ]
+                  "options": [{"label": "1", "value": 1}, {"label": "2", "value": 2}, {"label": "3", "value": 3}, {"label": "4", "value": 4}]
                 },
                 "direction": {
                   "type": "dropdown",
@@ -243,35 +152,14 @@
                   "label": "Sens",
                   "bind": "Direction",
                   "options": [
-                    {
-                      "label": "Montante",
-                      "value": 0
-                    },
-                    {
-                      "label": "Descendante",
-                      "value": 1
-                    },
-                    {
-                      "label": "Aller-retour",
-                      "value": 2
-                    },
-                    {
-                      "label": "Aléatoire",
-                      "value": 3
-                    },
-                    {
-                      "label": "Custom",
-                      "value": 4
-                    }
+                    {"label": "Montante", "value": 0},
+                    {"label": "Descendante", "value": 1},
+                    {"label": "Aller-retour", "value": 2},
+                    {"label": "Aléatoire", "value": 3},
+                    {"label": "Custom", "value": 4}
                   ]
                 },
-                "pattern": {
-                  "type": "lcdscreen",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 6,
-                  "rowSpan": 4
-                }
+                "pattern": {"type": "lcdscreen", "col": 2, "row": 0, "colSpan": 6, "rowSpan": 4}
               },
               "script": "// Screen for the arpeggiator: the step grid Custom plays, with a preset pictured on the same grid.\n// Columns are steps, rows are slots of the held chord — slot 1, the lowest note, at the bottom —\n// stacking up through the octaves. Under each step, its velocity bar, then its gate bar.\n// A preset depends on the chord, so it is pictured for a 4-note one. Editing a preset (a cell or a bar)\n// turns it into Custom, starting from what was shown (engine docs/arpeggiator.md).\n\nconst MAX = 16;\nconst CHORD = 4;\nconst NAMES = [\"UP\", \"DOWN\", \"UP-DOWN\", \"RANDOM\", \"CUSTOM\"];\nconst CUSTOM = 4;\nconst HEAD = 11;\nconst STRIP = 7;\n// One bar row's height, and the gap above it.\nconst BAR = 16;\nconst GAP = 3;\n// What an untouched step carries, and the span a gate may take — the plugin's own numbers.\nconst VEL_DEFAULT = 1;\nconst GATE_DEFAULT = 0.5;\nconst GATE_MIN = 0.05;\nconst GATE_MAX = 0.95;\nconst FONT = \"8px ui-monospace, monospace\";\n\nfunction clamp(v, lo, hi) {\n  return Math.max(lo, Math.min(hi, Number.isFinite(v) ? v : lo));\n}\n\n// The default the engine gives an untouched step: `up` over eight slots.\nconst stepDefault = (i) => (i % 8) + 1;\n\nfunction octavesOf(p) {\n  return clamp(Math.round(p.Octaves ?? 1), 1, 4);\n}\n\n// Enough rows for the chord across its octaves, never fewer than eight so a drawing has room.\nfunction rowsOf(p) {\n  return Math.min(MAX, Math.max(8, CHORD * octavesOf(p)));\n}\n\n// The steps a preset walks for a CHORD-note chord, as the engine's noteFor walks them.\nfunction presetSteps(dir, oct) {\n  const count = CHORD * oct;\n  const out = [];\n  if (dir === 1) for (let i = 0; i < count; i++) out.push(count - i);\n  else if (dir === 2) {\n    const period = count > 1 ? 2 * count - 2 : 1;\n    for (let j = 0; j < period; j++) out.push((j < count ? j : period - j) + 1);\n  } else if (dir === 3) {\n    // The engine's xorshift and seed, so the picture is one random walk it could play.\n    let s = 0x9e3779b9 >>> 0;\n    for (let i = 0; i < count; i++) {\n      s = (s ^ (s << 13)) >>> 0;\n      s = (s ^ (s >>> 17)) >>> 0;\n      s = (s ^ (s << 5)) >>> 0;\n      out.push((s % count) + 1);\n    }\n  } else for (let i = 0; i < count; i++) out.push(i + 1);\n  return out.slice(0, MAX);\n}\n\n// What the grid shows: the drawn steps under Custom, else the preset's walk at the default levels.\nfunction patternOf(p) {\n  const dir = Math.round(p.Direction ?? 0);\n  if (dir === CUSTOM) {\n    const steps = [];\n    const vel = [];\n    const gate = [];\n    for (let i = 0; i < MAX; i++) {\n      steps.push(Math.round(p[`Step ${i + 1}`] ?? stepDefault(i)));\n      vel.push(clamp(p[`Velocity ${i + 1}`] ?? VEL_DEFAULT, 0, 1));\n      gate.push(clamp(p[`Gate ${i + 1}`] ?? GATE_DEFAULT, GATE_MIN, GATE_MAX));\n    }\n    return { dir, steps, vel, gate, length: clamp(Math.round(p.Steps ?? 8), 1, MAX) };\n  }\n  const walk = presetSteps(dir, octavesOf(p));\n  const steps = [];\n  for (let i = 0; i < MAX; i++) steps.push(walk[i] ?? 0);\n  return {\n    dir,\n    steps,\n    vel: Array(MAX).fill(VEL_DEFAULT),\n    gate: Array(MAX).fill(GATE_DEFAULT),\n    length: walk.length,\n  };\n}\n\n// Where everything sits: a title line, the grid, the length strip, then the velocity and gate bars.\nfunction layout(W, H, rows) {\n  const x0 = 3;\n  const y0 = HEAD;\n  const cw = (W - 6) / MAX;\n  const rh = (H - HEAD - STRIP - 2 * (BAR + GAP) - 3) / rows;\n  const stripY = y0 + rows * rh + 2;\n  const velY = stripY + STRIP + GAP;\n  return { x0, y0, cw, rh, stripY, velY, gateY: velY + BAR + GAP };\n}\n\n// A bar's 0..1 fill for a value, and the value under a pointer height — the gate spans its own range.\nconst gateFill = (g) => (g - GATE_MIN) / (GATE_MAX - GATE_MIN);\nconst barValue = (top, y) => clamp(1 - (y - top) / BAR, 0, 1);\n\nfunction drawBar(ctx, x, w, top, fill, lit, color) {\n  ctx.strokeStyle = color.dim;\n  ctx.strokeRect(Math.round(x) + 0.5, Math.round(top) + 0.5, Math.max(1, w - 1), BAR - 1);\n  const h = Math.round((BAR - 2) * clamp(fill, 0, 1));\n  if (h <= 0) return;\n  ctx.fillStyle = lit;\n  ctx.fillRect(Math.round(x) + 1, Math.round(top) + BAR - 1 - h, Math.max(1, w - 2), h);\n}\n\nfunction draw(lcd) {\n  const { ctx, width: W, height: H, params: p, color } = lcd;\n  if (W < 60 || H < 40) return;\n  const rows = rowsOf(p);\n  const g = layout(W, H, rows);\n  const pat = patternOf(p);\n\n  ctx.font = FONT;\n  ctx.textBaseline = \"top\";\n  ctx.fillStyle = color.ink;\n  ctx.textAlign = \"left\";\n  ctx.fillText(NAMES[pat.dir] ?? \"UP\", 3, 1);\n  ctx.fillStyle = color.dim;\n  ctx.textAlign = \"right\";\n  // While a bar is dragged, the right of the title says what it is set to.\n  const e = lcd.state.edit;\n  const shown =\n    e && (e.mode === \"velocity\" || e.mode === \"gate\") && e.col != null\n      ? `${e.col + 1}: ${e.mode === \"velocity\" ? \"VEL\" : \"GATE\"} ${Math.round((e.mode === \"velocity\" ? e.vel : e.gate)[e.col] * 100)}%`\n      : pat.dir === CUSTOM\n        ? `${pat.length} STEPS`\n        : `AS FOR ${CHORD} NOTES`;\n  ctx.fillText(shown, W - 3, 1);\n\n  for (let c = 0; c < MAX; c++) {\n    const x = g.x0 + c * g.cw;\n    const live = c < pat.length;\n    // The cell outlines: faint past the pattern's end, a bar line every four steps.\n    ctx.strokeStyle = live ? color.dim : \"rgba(184,240,160,0.08)\";\n    ctx.lineWidth = 1;\n    for (let r = 0; r < rows; r++)\n      ctx.strokeRect(Math.round(x) + 0.5, Math.round(g.y0 + r * g.rh) + 0.5, Math.max(1, g.cw - 1), Math.max(1, g.rh - 1));\n    if (c % 4 === 0) {\n      ctx.fillStyle = color.dim;\n      ctx.fillRect(Math.round(x), g.y0, 1, rows * g.rh);\n    }\n    const slot = pat.steps[c];\n    if (live && slot > 0) {\n      const r = rows - Math.min(slot, rows);\n      ctx.fillStyle = pat.dir === CUSTOM ? color.glow : color.ink;\n      ctx.fillRect(Math.round(x) + 1, Math.round(g.y0 + r * g.rh) + 1, Math.max(1, g.cw - 2), Math.max(1, g.rh - 2));\n    }\n    // The length strip: lit up to the last step, so dragging it reads as dragging the end.\n    ctx.fillStyle = live ? color.ink : \"rgba(184,240,160,0.12)\";\n    ctx.fillRect(Math.round(x) + 1, Math.round(g.stripY), Math.max(1, g.cw - 2), STRIP - 2);\n    // Its velocity, then its gate — bright when drawn, dim on a preset, faint past the end.\n    const lit = !live ? \"rgba(184,240,160,0.12)\" : pat.dir === CUSTOM ? color.glow : color.dim;\n    drawBar(ctx, x, g.cw, g.velY, pat.vel[c], lit, color);\n    drawBar(ctx, x, g.cw, g.gateY, gateFill(pat.gate[c]), lit, color);\n  }\n}\n\n// The cell under the pointer, the strip, or a bar with the value at that height; null outside.\nfunction hit(lcd, ev) {\n  const rows = rowsOf(lcd.params);\n  const g = layout(lcd.width, lcd.height, rows);\n  const col = Math.floor((ev.x - g.x0) / g.cw);\n  if (col < 0 || col >= MAX) return null;\n  if (ev.y >= g.gateY - GAP / 2) return { col, bar: \"gate\", value: barValue(g.gateY, ev.y) };\n  if (ev.y >= g.velY - GAP / 2) return { col, bar: \"velocity\", value: barValue(g.velY, ev.y) };\n  if (ev.y >= g.stripY - 1) return { col, strip: true };\n  const r = Math.floor((ev.y - g.y0) / g.rh);\n  if (r < 0 || r >= rows) return null;\n  return { col, slot: rows - r };\n}\n\n// The first edit of a gesture on a preset makes it Custom, holding what the screen was showing.\nfunction begin(lcd) {\n  const pat = patternOf(lcd.params);\n  if (pat.dir !== CUSTOM) {\n    lcd.set(\"Direction\", CUSTOM);\n    lcd.set(\"Steps\", pat.length);\n    for (let i = 0; i < MAX; i++) {\n      lcd.set(`Step ${i + 1}`, pat.steps[i]);\n      lcd.set(`Velocity ${i + 1}`, pat.vel[i]);\n      lcd.set(`Gate ${i + 1}`, pat.gate[i]);\n    }\n  }\n  lcd.state.edit = {\n    steps: pat.steps.slice(),\n    vel: pat.vel.slice(),\n    gate: pat.gate.slice(),\n    length: pat.length,\n    mode: null,\n    col: null,\n  };\n}\n\n// A bar dragged: the step under the pointer takes the height, so a sweep across draws a curve.\nfunction setLevel(lcd, at) {\n  const e = lcd.state.edit;\n  e.col = at.col;\n  if (e.mode === \"velocity\") {\n    const v = Math.round(at.value * 100) / 100;\n    if (e.vel[at.col] !== v) {\n      e.vel[at.col] = v;\n      lcd.set(`Velocity ${at.col + 1}`, v);\n    }\n  } else {\n    const v = Math.round((GATE_MIN + at.value * (GATE_MAX - GATE_MIN)) * 100) / 100;\n    if (e.gate[at.col] !== v) {\n      e.gate[at.col] = v;\n      lcd.set(`Gate ${at.col + 1}`, v);\n    }\n  }\n}\n\nfunction setStep(lcd, col, value) {\n  const e = lcd.state.edit;\n  if (e.steps[col] !== value) {\n    e.steps[col] = value;\n    lcd.set(`Step ${col + 1}`, value);\n  }\n  // Drawing past the end lengthens the pattern to reach it.\n  if (value > 0 && col + 1 > e.length) setLength(lcd, col + 1);\n}\n\nfunction setLength(lcd, length) {\n  const e = lcd.state.edit;\n  if (e.length === length) return;\n  e.length = length;\n  lcd.set(\"Steps\", length);\n}\n\nfunction pointer(lcd, ev) {\n  if (ev.type === \"up\") {\n    lcd.state.edit = null;\n    return true;\n  }\n  const at = hit(lcd, ev);\n  if (ev.type === \"down\") {\n    if (!at) return true;\n    begin(lcd);\n    const e = lcd.state.edit;\n    // A press on a lit cell erases along the drag; anywhere else it paints that row. A bar sets levels.\n    e.mode = at.bar ?? (at.strip ? \"length\" : e.steps[at.col] === at.slot ? \"erase\" : \"paint\");\n  }\n  const e = lcd.state.edit;\n  if (!e || !at) return true;\n  if (e.mode === \"velocity\" || e.mode === \"gate\") {\n    // Off the bars, the pointer still steers the column; its height clamps to the bar's ends.\n    const g = layout(lcd.width, lcd.height, rowsOf(lcd.params));\n    const top = e.mode === \"velocity\" ? g.velY : g.gateY;\n    setLevel(lcd, { col: at.col, value: barValue(top, ev.y) });\n  } else if (e.mode === \"length\") setLength(lcd, at.col + 1);\n  else if (!at.strip && !at.bar) setStep(lcd, at.col, e.mode === \"erase\" ? 0 : at.slot);\n  return true;\n}\n\nexport default {\n  pattern: { draw, pointer },\n};\n",
               "vertical": {
@@ -286,38 +174,14 @@
                     "label": "Cadence",
                     "bind": "Rate",
                     "options": [
-                      {
-                        "label": "1/1",
-                        "value": 0
-                      },
-                      {
-                        "label": "1/2",
-                        "value": 1
-                      },
-                      {
-                        "label": "1/4",
-                        "value": 2
-                      },
-                      {
-                        "label": "1/4T",
-                        "value": 3
-                      },
-                      {
-                        "label": "1/8",
-                        "value": 4
-                      },
-                      {
-                        "label": "1/8T",
-                        "value": 5
-                      },
-                      {
-                        "label": "1/16",
-                        "value": 6
-                      },
-                      {
-                        "label": "1/32",
-                        "value": 7
-                      }
+                      {"label": "1/1", "value": 0},
+                      {"label": "1/2", "value": 1},
+                      {"label": "1/4", "value": 2},
+                      {"label": "1/4T", "value": 3},
+                      {"label": "1/8", "value": 4},
+                      {"label": "1/8T", "value": 5},
+                      {"label": "1/16", "value": 6},
+                      {"label": "1/32", "value": 7}
                     ]
                   },
                   "octaves": {
@@ -327,24 +191,7 @@
                     "colSpan": 2,
                     "label": "Octaves",
                     "bind": "Octaves",
-                    "options": [
-                      {
-                        "label": "1",
-                        "value": 1
-                      },
-                      {
-                        "label": "2",
-                        "value": 2
-                      },
-                      {
-                        "label": "3",
-                        "value": 3
-                      },
-                      {
-                        "label": "4",
-                        "value": 4
-                      }
-                    ]
+                    "options": [{"label": "1", "value": 1}, {"label": "2", "value": 2}, {"label": "3", "value": 3}, {"label": "4", "value": 4}]
                   },
                   "direction": {
                     "type": "dropdown",
@@ -354,48 +201,19 @@
                     "label": "Sens",
                     "bind": "Direction",
                     "options": [
-                      {
-                        "label": "Montante",
-                        "value": 0
-                      },
-                      {
-                        "label": "Descendante",
-                        "value": 1
-                      },
-                      {
-                        "label": "Aller-retour",
-                        "value": 2
-                      },
-                      {
-                        "label": "Aléatoire",
-                        "value": 3
-                      },
-                      {
-                        "label": "Custom",
-                        "value": 4
-                      }
+                      {"label": "Montante", "value": 0},
+                      {"label": "Descendante", "value": 1},
+                      {"label": "Aller-retour", "value": 2},
+                      {"label": "Aléatoire", "value": 3},
+                      {"label": "Custom", "value": 4}
                     ]
                   },
-                  "pattern": {
-                    "type": "lcdscreen",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 4,
-                    "rowSpan": 4
-                  }
+                  "pattern": {"type": "lcdscreen", "col": 0, "row": 2, "colSpan": 4, "rowSpan": 4}
                 }
               }
             },
-            "params": {
-              "Rate": 6,
-              "Octaves": 1,
-              "Direction": 0
-            },
-            "defaults": {
-              "Rate": 6,
-              "Octaves": 1,
-              "Direction": 0
-            },
+            "params": {"Rate": 6, "Octaves": 1, "Direction": 0},
+            "defaults": {"Rate": 6, "Octaves": 1, "Direction": 0},
             "pluginId": "melody:arp"
           },
           {
@@ -409,15 +227,7 @@
               "cols": 10,
               "rows": 4,
               "widgets": {
-                "repeats": {
-                  "type": "group",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 3,
-                  "rowSpan": 3,
-                  "label": "REPEATS",
-                  "color": "#ff8a1a1f"
-                },
+                "repeats": {"type": "group", "col": 0, "row": 0, "colSpan": 3, "rowSpan": 3, "label": "REPEATS", "color": "#ff8a1a1f"},
                 "count": {
                   "type": "dropdown",
                   "col": 0,
@@ -426,38 +236,14 @@
                   "label": "Count",
                   "bind": "Count",
                   "options": [
-                    {
-                      "label": "1",
-                      "value": 1
-                    },
-                    {
-                      "label": "2",
-                      "value": 2
-                    },
-                    {
-                      "label": "3",
-                      "value": 3
-                    },
-                    {
-                      "label": "4",
-                      "value": 4
-                    },
-                    {
-                      "label": "5",
-                      "value": 5
-                    },
-                    {
-                      "label": "6",
-                      "value": 6
-                    },
-                    {
-                      "label": "7",
-                      "value": 7
-                    },
-                    {
-                      "label": "8",
-                      "value": 8
-                    }
+                    {"label": "1", "value": 1},
+                    {"label": "2", "value": 2},
+                    {"label": "3", "value": 3},
+                    {"label": "4", "value": 4},
+                    {"label": "5", "value": 5},
+                    {"label": "6", "value": 6},
+                    {"label": "7", "value": 7},
+                    {"label": "8", "value": 8}
                   ]
                 },
                 "division": {
@@ -468,70 +254,19 @@
                   "label": "Division",
                   "bind": "Division",
                   "options": [
-                    {
-                      "label": "1/1",
-                      "value": 4
-                    },
-                    {
-                      "label": "1/2",
-                      "value": 2
-                    },
-                    {
-                      "label": "1/4",
-                      "value": 1
-                    },
-                    {
-                      "label": "1/4T",
-                      "value": 0.667
-                    },
-                    {
-                      "label": "1/8",
-                      "value": 0.5
-                    },
-                    {
-                      "label": "1/8T",
-                      "value": 0.333
-                    },
-                    {
-                      "label": "1/16",
-                      "value": 0.25
-                    },
-                    {
-                      "label": "1/32",
-                      "value": 0.125
-                    }
+                    {"label": "1/1", "value": 4},
+                    {"label": "1/2", "value": 2},
+                    {"label": "1/4", "value": 1},
+                    {"label": "1/4T", "value": 0.667},
+                    {"label": "1/8", "value": 0.5},
+                    {"label": "1/8T", "value": 0.333},
+                    {"label": "1/16", "value": 0.25},
+                    {"label": "1/32", "value": 0.125}
                   ]
                 },
-                "gate": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 1,
-                  "label": "Gate",
-                  "bind": "Gate",
-                  "min": 0.05,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "decay": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "label": "Decay",
-                  "bind": "Decay",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "chance": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 2,
-                  "label": "Chance",
-                  "bind": "Chance",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
+                "gate": {"type": "knob", "col": 2, "row": 1, "label": "Gate", "bind": "Gate", "min": 0.05, "max": 1, "step": 0.01},
+                "decay": {"type": "knob", "col": 2, "row": 0, "label": "Decay", "bind": "Decay", "min": 0, "max": 1, "step": 0.01},
+                "chance": {"type": "knob", "col": 2, "row": 2, "label": "Chance", "bind": "Chance", "min": 0, "max": 1, "step": 0.01},
                 "pattern": {
                   "type": "dropdown",
                   "col": 0,
@@ -539,125 +274,25 @@
                   "colSpan": 2,
                   "label": "Pattern",
                   "bind": "Pattern",
-                  "options": [
-                    {
-                      "label": "None",
-                      "value": 0
-                    },
-                    {
-                      "label": "Burst",
-                      "value": 1
-                    },
-                    {
-                      "label": "Euclid",
-                      "value": 2
-                    }
-                  ]
+                  "options": [{"label": "None", "value": 0}, {"label": "Burst", "value": 1}, {"label": "Euclid", "value": 2}]
                 },
-                "rhythm": {
-                  "type": "lcdscreen",
-                  "col": 3,
-                  "row": 0,
-                  "colSpan": 4,
-                  "rowSpan": 3
-                },
-                "pattern_grp": {
-                  "type": "group",
-                  "col": 7,
-                  "row": 0,
-                  "colSpan": 3,
-                  "label": "PATTERN",
-                  "color": "#ffd04a1a"
-                },
-                "length": {
-                  "type": "knob",
-                  "col": 7,
-                  "row": 0,
-                  "label": "Length",
-                  "bind": "Length",
-                  "min": 1,
-                  "max": 32,
-                  "step": 1
-                },
-                "density": {
-                  "type": "knob",
-                  "col": 8,
-                  "row": 0,
-                  "label": "Density",
-                  "bind": "Density",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "rotate": {
-                  "type": "knob",
-                  "col": 9,
-                  "row": 0,
-                  "label": "Rotate",
-                  "bind": "Rotate",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "accents_grp": {
-                  "type": "group",
-                  "col": 7,
-                  "row": 1,
-                  "colSpan": 3,
-                  "rowSpan": 3,
-                  "label": "ACCENTS",
-                  "color": "#ffffff12"
-                },
-                "accents": {
-                  "type": "knob",
-                  "col": 8,
-                  "row": 1,
-                  "label": "Count",
-                  "bind": "Accents",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "low": {
-                  "type": "fader",
-                  "col": 9,
-                  "row": 1,
-                  "rowSpan": 3,
-                  "label": "Lo Vel",
-                  "bind": "Low",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "opposite": {
-                  "type": "toggle",
-                  "col": 8,
-                  "row": 2,
-                  "label": "Opposite",
-                  "bind": "Opposite"
-                },
-                "keep": {
-                  "type": "toggle",
-                  "col": 8,
-                  "row": 3,
-                  "label": "Keep",
-                  "bind": "Keep"
-                }
+                "rhythm": {"type": "lcdscreen", "col": 3, "row": 0, "colSpan": 4, "rowSpan": 3},
+                "pattern_grp": {"type": "group", "col": 7, "row": 0, "colSpan": 3, "label": "PATTERN", "color": "#ffd04a1a"},
+                "length": {"type": "knob", "col": 7, "row": 0, "label": "Length", "bind": "Length", "min": 1, "max": 32, "step": 1},
+                "density": {"type": "knob", "col": 8, "row": 0, "label": "Density", "bind": "Density", "min": 0, "max": 1, "step": 0.01},
+                "rotate": {"type": "knob", "col": 9, "row": 0, "label": "Rotate", "bind": "Rotate", "min": 0, "max": 1, "step": 0.01},
+                "accents_grp": {"type": "group", "col": 7, "row": 1, "colSpan": 3, "rowSpan": 3, "label": "ACCENTS", "color": "#ffffff12"},
+                "accents": {"type": "knob", "col": 8, "row": 1, "label": "Count", "bind": "Accents", "min": 0, "max": 1, "step": 0.01},
+                "low": {"type": "fader", "col": 9, "row": 1, "rowSpan": 3, "label": "Lo Vel", "bind": "Low", "min": 0, "max": 1, "step": 0.01},
+                "opposite": {"type": "toggle", "col": 8, "row": 2, "label": "Opposite", "bind": "Opposite"},
+                "keep": {"type": "toggle", "col": 8, "row": 3, "label": "Keep", "bind": "Keep"}
               },
               "script": "// Screen for the note repeater: the rhythm as spokes round a centre, one per step of the cycle,\n// step 1 at twelve o'clock. A hit is a long spoke, an accented one the brightest; a rest is short.\n// Drag up/down for the density, left/right to rotate it, shift-drag left/right for its length.\n// The maths is the engine's (apps/k7-daw-engine/k7-runtime/engine/NoteSteps.h), so the picture is what plays.\n\nconst MODES = [\"EVERY STEP\", \"BURST\", \"EUCLID\"];\nconst EUCLID = 2;\nconst FONT = \"8px ui-monospace, monospace\";\n// Pixels of drag for the whole 0..1 range of density or rotate.\nconst DRAG_SPAN = 120;\n// Pixels of shift-drag per step of length.\nconst STEP_PX = 8;\n\nfunction clamp(v, lo, hi) {\n  return Math.max(lo, Math.min(hi, Number.isFinite(v) ? v : lo));\n}\n\n// The rule as the params set it, read the way the engine reads its inputs.\nfunction ruleOf(p) {\n  const mode = Math.round(clamp(p.Pattern ?? 0, 0, 2));\n  const n = Math.round(clamp(p.Length ?? 16, 1, 32));\n  const share = (s, of) => clamp(Math.round(clamp(s, 0, 1) * of), 0, of);\n  return {\n    mode,\n    n,\n    k: mode === 0 ? n : share(p.Density ?? 0.5, n),\n    r: Math.round(clamp(p.Rotate ?? 0, 0, 1) * n) % n,\n    accents: clamp(p.Accents ?? 1, 0, 1),\n    low: clamp(p.Low ?? 0.5, 0, 1),\n    opposite: (p.Opposite ?? 0) >= 0.5,\n    keep: (p.Keep ?? 0) >= 0.5,\n    chance: clamp(p.Chance ?? 1, 0, 1),\n    share,\n  };\n}\n\nfunction euclid(i, k, n) {\n  if (k <= 0 || n <= 0) return false;\n  if (k >= n) return true;\n  return (i * k) % n < k;\n}\n\nconst turned = (s, i) => (((i % s.n) + s.n - s.r) % s.n);\n\nfunction hit(s, i) {\n  if (s.mode === 1) return turned(s, i) < s.k;\n  if (s.mode === EUCLID) return euclid(turned(s, i), s.k, s.n);\n  return true;\n}\n\nfunction accented(s, i) {\n  let on;\n  if (s.keep) on = euclid(turned(s, i), s.share(s.accents, s.n), s.n);\n  else {\n    let j = 0;\n    for (let t = 0; t < i; t++) if (hit(s, t)) j++;\n    on = s.k > 0 && euclid(j, s.share(s.accents, s.k), s.k);\n  }\n  return on !== s.opposite;\n}\n\nfunction draw(lcd) {\n  const { ctx, width: W, height: H, params: p, color } = lcd;\n  if (W < 50 || H < 40) return;\n  const s = ruleOf(p);\n  const cx = W / 2;\n  const cy = H / 2 + 4;\n  const R = Math.min(W / 2, H / 2 - 6) - 6;\n\n  ctx.lineCap = \"round\";\n  for (let i = 0; i < s.n; i++) {\n    const a = -Math.PI / 2 + (2 * Math.PI * i) / s.n;\n    const on = hit(s, i);\n    const acc = on && accented(s, i);\n    // A spoke's length is its loudness: an accent full, a plain hit at the low level, a rest short.\n    const len = on ? R * (acc ? 1 : 0.35 + 0.65 * s.low) : R * 0.45;\n    ctx.strokeStyle = on ? (acc ? color.glow : color.ink) : color.dim;\n    ctx.lineWidth = on ? 2 : 1;\n    // A chance under one fades every hit by it: the spoke plays that often.\n    ctx.globalAlpha = on ? 0.35 + 0.65 * s.chance : 1;\n    ctx.beginPath();\n    ctx.moveTo(cx, cy);\n    ctx.lineTo(cx + Math.cos(a) * len, cy + Math.sin(a) * len);\n    ctx.stroke();\n  }\n  ctx.globalAlpha = 1;\n\n  ctx.font = FONT;\n  ctx.textBaseline = \"top\";\n  ctx.fillStyle = color.ink;\n  ctx.textAlign = \"left\";\n  ctx.fillText(MODES[s.mode], 3, 2);\n  ctx.textAlign = \"right\";\n  ctx.fillText(`${s.k} / ${s.n}`, W - 3, 2);\n  ctx.fillStyle = color.dim;\n  ctx.textBaseline = \"bottom\";\n  ctx.textAlign = \"left\";\n  if (s.r) ctx.fillText(`ROT ${s.r}`, 3, H - 2);\n  ctx.textAlign = \"right\";\n  if (s.chance < 1) ctx.fillText(`${Math.round(s.chance * 100)}%`, W - 3, H - 2);\n}\n\nfunction pointer(lcd, ev) {\n  const p = lcd.params;\n  if (ev.type === \"up\") {\n    lcd.state.drag = null;\n    return true;\n  }\n  if (ev.type === \"down\" && ev.shift) {\n    // Shift: the drag is the LENGTH, left shorter and right longer, and nothing else moves.\n    lcd.state.drag = { x: ev.x, length: Math.round(clamp(p.Length ?? 16, 1, 32)) };\n    return true;\n  }\n  if (ev.type === \"down\") {\n    // Every step has no density to drag: the first gesture makes it a Euclid, from where it was.\n    if (Math.round(p.Pattern ?? 0) === 0) lcd.set(\"Pattern\", EUCLID);\n    lcd.state.drag = {\n      x: ev.x,\n      y: ev.y,\n      density: clamp(p.Density ?? 0.5, 0, 1),\n      rotate: clamp(p.Rotate ?? 0, 0, 1),\n    };\n    return true;\n  }\n  const d = lcd.state.drag;\n  if (!d) return true;\n  if (d.length !== undefined) {\n    const next = clamp(d.length + Math.round((ev.x - d.x) / STEP_PX), 1, 32);\n    if (next !== Math.round(p.Length ?? 16)) lcd.set(\"Length\", next);\n    return true;\n  }\n  const density = clamp(d.density + (d.y - ev.y) / DRAG_SPAN, 0, 1);\n  // Rotate wraps rather than stops: a turn past the last step is the first one again.\n  const rotate = (((d.rotate + (ev.x - d.x) / DRAG_SPAN) % 1) + 1) % 1;\n  lcd.set(\"Density\", Math.round(density * 100) / 100);\n  lcd.set(\"Rotate\", Math.round(rotate * 100) / 100);\n  return true;\n}\n\nexport default {\n  rhythm: { draw, pointer },\n};\n",
               "vertical": {
                 "cols": 4,
                 "rows": 10,
                 "widgets": {
-                  "repeats": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 4,
-                    "rowSpan": 3,
-                    "label": "REPEATS",
-                    "color": "#ff8a1a1f"
-                  },
+                  "repeats": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 3, "label": "REPEATS", "color": "#ff8a1a1f"},
                   "division": {
                     "type": "dropdown",
                     "col": 0,
@@ -666,38 +301,14 @@
                     "label": "Division",
                     "bind": "Division",
                     "options": [
-                      {
-                        "label": "1/1",
-                        "value": 4
-                      },
-                      {
-                        "label": "1/2",
-                        "value": 2
-                      },
-                      {
-                        "label": "1/4",
-                        "value": 1
-                      },
-                      {
-                        "label": "1/4T",
-                        "value": 0.667
-                      },
-                      {
-                        "label": "1/8",
-                        "value": 0.5
-                      },
-                      {
-                        "label": "1/8T",
-                        "value": 0.333
-                      },
-                      {
-                        "label": "1/16",
-                        "value": 0.25
-                      },
-                      {
-                        "label": "1/32",
-                        "value": 0.125
-                      }
+                      {"label": "1/1", "value": 4},
+                      {"label": "1/2", "value": 2},
+                      {"label": "1/4", "value": 1},
+                      {"label": "1/4T", "value": 0.667},
+                      {"label": "1/8", "value": 0.5},
+                      {"label": "1/8T", "value": 0.333},
+                      {"label": "1/16", "value": 0.25},
+                      {"label": "1/32", "value": 0.125}
                     ]
                   },
                   "count": {
@@ -708,38 +319,14 @@
                     "label": "Count",
                     "bind": "Count",
                     "options": [
-                      {
-                        "label": "1",
-                        "value": 1
-                      },
-                      {
-                        "label": "2",
-                        "value": 2
-                      },
-                      {
-                        "label": "3",
-                        "value": 3
-                      },
-                      {
-                        "label": "4",
-                        "value": 4
-                      },
-                      {
-                        "label": "5",
-                        "value": 5
-                      },
-                      {
-                        "label": "6",
-                        "value": 6
-                      },
-                      {
-                        "label": "7",
-                        "value": 7
-                      },
-                      {
-                        "label": "8",
-                        "value": 8
-                      }
+                      {"label": "1", "value": 1},
+                      {"label": "2", "value": 2},
+                      {"label": "3", "value": 3},
+                      {"label": "4", "value": 4},
+                      {"label": "5", "value": 5},
+                      {"label": "6", "value": 6},
+                      {"label": "7", "value": 7},
+                      {"label": "8", "value": 8}
                     ]
                   },
                   "pattern": {
@@ -749,148 +336,25 @@
                     "colSpan": 2,
                     "label": "Pattern",
                     "bind": "Pattern",
-                    "options": [
-                      {
-                        "label": "None",
-                        "value": 0
-                      },
-                      {
-                        "label": "Burst",
-                        "value": 1
-                      },
-                      {
-                        "label": "Euclid",
-                        "value": 2
-                      }
-                    ]
+                    "options": [{"label": "None", "value": 0}, {"label": "Burst", "value": 1}, {"label": "Euclid", "value": 2}]
                   },
-                  "decay": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 0,
-                    "label": "Decay",
-                    "bind": "Decay",
-                    "min": 0,
-                    "max": 1,
-                    "step": 0.01
-                  },
-                  "gate": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 1,
-                    "label": "Gate",
-                    "bind": "Gate",
-                    "min": 0.05,
-                    "max": 1,
-                    "step": 0.01
-                  },
-                  "chance": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 2,
-                    "label": "Chance",
-                    "bind": "Chance",
-                    "min": 0,
-                    "max": 1,
-                    "step": 0.01
-                  },
-                  "rhythm": {
-                    "type": "lcdscreen",
-                    "col": 0,
-                    "row": 3,
-                    "colSpan": 4,
-                    "rowSpan": 3
-                  },
-                  "pattern_grp": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 6,
-                    "colSpan": 4,
-                    "label": "PATTERN",
-                    "color": "#ffd04a1a"
-                  },
-                  "length": {
-                    "type": "knob",
-                    "col": 1,
-                    "row": 6,
-                    "label": "Length",
-                    "bind": "Length",
-                    "min": 1,
-                    "max": 32,
-                    "step": 1
-                  },
-                  "density": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 6,
-                    "label": "Density",
-                    "bind": "Density",
-                    "min": 0,
-                    "max": 1,
-                    "step": 0.01
-                  },
-                  "rotate": {
-                    "type": "knob",
-                    "col": 3,
-                    "row": 6,
-                    "label": "Rotate",
-                    "bind": "Rotate",
-                    "min": 0,
-                    "max": 1,
-                    "step": 0.01
-                  },
-                  "accents_grp": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 7,
-                    "colSpan": 4,
-                    "rowSpan": 3,
-                    "label": "ACCENTS",
-                    "color": "#ffffff12"
-                  },
-                  "accents": {
-                    "type": "knob",
-                    "col": 1,
-                    "row": 7,
-                    "label": "Count",
-                    "bind": "Accents",
-                    "min": 0,
-                    "max": 1,
-                    "step": 0.01
-                  },
-                  "opposite": {
-                    "type": "toggle",
-                    "col": 1,
-                    "row": 8,
-                    "label": "Opposite",
-                    "bind": "Opposite"
-                  },
-                  "keep": {
-                    "type": "toggle",
-                    "col": 1,
-                    "row": 9,
-                    "label": "Keep",
-                    "bind": "Keep"
-                  },
-                  "low": {
-                    "type": "fader",
-                    "col": 3,
-                    "row": 7,
-                    "rowSpan": 3,
-                    "label": "Lo Vel",
-                    "bind": "Low",
-                    "min": 0,
-                    "max": 1,
-                    "step": 0.01
-                  }
+                  "decay": {"type": "knob", "col": 2, "row": 0, "label": "Decay", "bind": "Decay", "min": 0, "max": 1, "step": 0.01},
+                  "gate": {"type": "knob", "col": 2, "row": 1, "label": "Gate", "bind": "Gate", "min": 0.05, "max": 1, "step": 0.01},
+                  "chance": {"type": "knob", "col": 2, "row": 2, "label": "Chance", "bind": "Chance", "min": 0, "max": 1, "step": 0.01},
+                  "rhythm": {"type": "lcdscreen", "col": 0, "row": 3, "colSpan": 4, "rowSpan": 3},
+                  "pattern_grp": {"type": "group", "col": 0, "row": 6, "colSpan": 4, "label": "PATTERN", "color": "#ffd04a1a"},
+                  "length": {"type": "knob", "col": 1, "row": 6, "label": "Length", "bind": "Length", "min": 1, "max": 32, "step": 1},
+                  "density": {"type": "knob", "col": 2, "row": 6, "label": "Density", "bind": "Density", "min": 0, "max": 1, "step": 0.01},
+                  "rotate": {"type": "knob", "col": 3, "row": 6, "label": "Rotate", "bind": "Rotate", "min": 0, "max": 1, "step": 0.01},
+                  "accents_grp": {"type": "group", "col": 0, "row": 7, "colSpan": 4, "rowSpan": 3, "label": "ACCENTS", "color": "#ffffff12"},
+                  "accents": {"type": "knob", "col": 1, "row": 7, "label": "Count", "bind": "Accents", "min": 0, "max": 1, "step": 0.01},
+                  "opposite": {"type": "toggle", "col": 1, "row": 8, "label": "Opposite", "bind": "Opposite"},
+                  "keep": {"type": "toggle", "col": 1, "row": 9, "label": "Keep", "bind": "Keep"},
+                  "low": {"type": "fader", "col": 3, "row": 7, "rowSpan": 3, "label": "Lo Vel", "bind": "Low", "min": 0, "max": 1, "step": 0.01}
                 }
               }
             },
-            "params": {
-              "Count": 1,
-              "Division": 0.5,
-              "Gate": 0.5
-            },
+            "params": {"Count": 1, "Division": 0.5, "Gate": 0.5},
             "pluginId": "melody:repeat"
           },
           {
@@ -904,39 +368,19 @@
               "cols": 2,
               "rows": 2,
               "widgets": {
-                "semitones": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Demi-tons",
-                  "bind": "Semitones",
-                  "min": -24,
-                  "max": 24,
-                  "step": 1
-                }
+                "semitones": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Demi-tons", "bind": "Semitones", "min": -24, "max": 24, "step": 1}
               }
             },
-            "engines": [
-              "tracktion",
-              "pitch-shift"
-            ],
+            "engines": ["tracktion", "pitch-shift"],
             "engine": "pitch-shift",
-            "params": {
-              "Semitones": 0
-            },
+            "params": {"Semitones": 0},
             "pluginId": "melody:transpose"
           },
           {
             "module": "lead",
             "uses": "@workspace/instruments/fourosc",
-            "stage": [
-              "@output-volume"
-            ],
-            "events": [
-              "note-on"
-            ],
+            "stage": ["@output-volume"],
+            "events": ["note-on"],
             "category": "instruments",
             "emits": "audio",
             "stub": false,
@@ -945,90 +389,26 @@
               "cols": 4,
               "rows": 2,
               "widgets": {
-                "title": {
-                  "type": "label",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "text": "4OSC"
-                },
-                "cutoff": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 1,
-                  "label": "Cutoff",
-                  "bind": "Filter Freq",
-                  "min": 0,
-                  "max": 135.076232
-                },
-                "res": {
-                  "type": "knob",
-                  "col": 1,
-                  "row": 1,
-                  "label": "Res",
-                  "bind": "Filter Resonance",
-                  "min": 0,
-                  "max": 100
-                },
-                "level": {
-                  "type": "slider",
-                  "col": 2,
-                  "row": 1,
-                  "label": "Level",
-                  "bind": "Level",
-                  "min": -100,
-                  "max": 0
-                }
+                "title": {"type": "label", "col": 0, "row": 0, "colSpan": 2, "text": "4OSC"},
+                "cutoff": {"type": "knob", "col": 0, "row": 1, "label": "Cutoff", "bind": "Filter Freq", "min": 0, "max": 135.076232},
+                "res": {"type": "knob", "col": 1, "row": 1, "label": "Res", "bind": "Filter Resonance", "min": 0, "max": 100},
+                "level": {"type": "slider", "col": 2, "row": 1, "label": "Level", "bind": "Level", "min": -100, "max": 0}
               }
             },
             "params": {},
-            "defaults": {
-              "Filter Freq": 69,
-              "Filter Resonance": 0.5,
-              "Level": 0
-            },
+            "defaults": {"Filter Freq": 69, "Filter Resonance": 0.5, "Level": 0},
             "pluginId": "melody:lead"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
-      }
+      "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}]}
     },
-    "tracks": [
-      "melody"
-    ],
+    "tracks": ["melody"],
     "videoTracks": [],
-    "trackColors": {
-      "melody": "#9a5ad3"
-    },
-    "trackSignals": {
-      "melody": "midi"
-    },
-    "trackClips": {
-      "melody": [
-        {
-          "ref": "melody",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "midi"
-        }
-      ]
-    },
+    "trackColors": {"melody": "#9a5ad3"},
+    "trackSignals": {"melody": "midi"},
+    "trackClips": {"melody": [{"ref": "melody", "start": 0, "tc": "1:1", "len": 4, "kind": "midi"}]},
     "modules": {},
     "warnings": []
   },

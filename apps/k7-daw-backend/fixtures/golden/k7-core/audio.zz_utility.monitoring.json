@@ -1,9 +1,6 @@
 {
   "project": "k7-core/audio.zz_utility.monitoring.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "audio.zz_utility.monitoring",
     "tempo": 120,
@@ -54,11 +51,7 @@
             "presetSave": "<ws>/k7-core/audio.zz_utility.monitoring.k7/nodes/fx.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -104,11 +97,7 @@
             "presetSave": "<ws>/k7-core/audio.zz_utility.monitoring.k7/nodes/fx-lefto-mono.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -154,11 +143,7 @@
             "presetSave": "<ws>/k7-core/audio.zz_utility.monitoring.k7/nodes/fx-mo-noam.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -204,11 +189,7 @@
             "presetSave": "<ws>/k7-core/audio.zz_utility.monitoring.k7/nodes/fx-monitoring.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -254,11 +235,7 @@
             "presetSave": "<ws>/k7-core/audio.zz_utility.monitoring.k7/nodes/fx-peaks-only.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -304,11 +281,7 @@
             "presetSave": "<ws>/k7-core/audio.zz_utility.monitoring.k7/nodes/fx-righto-mono.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -354,11 +327,7 @@
             "presetSave": "<ws>/k7-core/audio.zz_utility.monitoring.k7/nodes/fx-slew-only.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -404,11 +373,7 @@
             "presetSave": "<ws>/k7-core/audio.zz_utility.monitoring.k7/nodes/fx-subs-only.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -417,16 +382,9 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
@@ -436,11 +394,7 @@
           {
             "module": "fx",
             "uses": "@k7-core/audio/zz_utility/monitoring",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -448,40 +402,15 @@
             "ui": {
               "cols": 3,
               "rows": 3,
-              "widgets": {
-                "mode": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 3,
-                  "rowSpan": 3,
-                  "label": "Mode",
-                  "bind": "Monitor",
-                  "min": 0,
-                  "max": 1
-                }
-              }
+              "widgets": {"mode": {"type": "knob", "col": 0, "row": 0, "colSpan": 3, "rowSpan": 3, "label": "Mode", "bind": "Monitor", "min": 0, "max": 1}}
             },
-            "engines": [
-              "lefto-mono",
-              "mo-noam",
-              "monitoring",
-              "peaks-only",
-              "righto-mono",
-              "slew-only",
-              "subs-only"
-            ],
+            "engines": ["lefto-mono", "mo-noam", "monitoring", "peaks-only", "righto-mono", "slew-only", "subs-only"],
             "engine": "monitoring",
             "params": {},
             "pluginId": "drums:fx"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-lefto-mono": {
         "from": "drums-lefto-mono",
@@ -489,40 +418,19 @@
           {
             "module": "fx-lefto-mono",
             "uses": "@k7-core/audio/zz_utility/monitoring",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
             "hasNativePluginUI": false,
-            "ui": {
-              "cols": 1,
-              "rows": 1,
-              "widgets": {}
-            },
-            "engines": [
-              "lefto-mono",
-              "mo-noam",
-              "monitoring",
-              "peaks-only",
-              "righto-mono",
-              "slew-only",
-              "subs-only"
-            ],
+            "ui": {"cols": 1, "rows": 1, "widgets": {}},
+            "engines": ["lefto-mono", "mo-noam", "monitoring", "peaks-only", "righto-mono", "slew-only", "subs-only"],
             "engine": "lefto-mono",
             "params": {},
             "pluginId": "drums-lefto-mono:fx-lefto-mono"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-mo-noam": {
         "from": "drums-mo-noam",
@@ -530,11 +438,7 @@
           {
             "module": "fx-mo-noam",
             "uses": "@k7-core/audio/zz_utility/monitoring",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -542,40 +446,15 @@
             "ui": {
               "cols": 3,
               "rows": 3,
-              "widgets": {
-                "mode": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 3,
-                  "rowSpan": 3,
-                  "label": "Mode",
-                  "bind": "Monotor",
-                  "min": 0,
-                  "max": 1
-                }
-              }
+              "widgets": {"mode": {"type": "knob", "col": 0, "row": 0, "colSpan": 3, "rowSpan": 3, "label": "Mode", "bind": "Monotor", "min": 0, "max": 1}}
             },
-            "engines": [
-              "lefto-mono",
-              "mo-noam",
-              "monitoring",
-              "peaks-only",
-              "righto-mono",
-              "slew-only",
-              "subs-only"
-            ],
+            "engines": ["lefto-mono", "mo-noam", "monitoring", "peaks-only", "righto-mono", "slew-only", "subs-only"],
             "engine": "mo-noam",
             "params": {},
             "pluginId": "drums-mo-noam:fx-mo-noam"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-monitoring": {
         "from": "drums-monitoring",
@@ -583,11 +462,7 @@
           {
             "module": "fx-monitoring",
             "uses": "@k7-core/audio/zz_utility/monitoring",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -595,40 +470,15 @@
             "ui": {
               "cols": 3,
               "rows": 3,
-              "widgets": {
-                "mode": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 3,
-                  "rowSpan": 3,
-                  "label": "Mode",
-                  "bind": "Monitor",
-                  "min": 0,
-                  "max": 1
-                }
-              }
+              "widgets": {"mode": {"type": "knob", "col": 0, "row": 0, "colSpan": 3, "rowSpan": 3, "label": "Mode", "bind": "Monitor", "min": 0, "max": 1}}
             },
-            "engines": [
-              "lefto-mono",
-              "mo-noam",
-              "monitoring",
-              "peaks-only",
-              "righto-mono",
-              "slew-only",
-              "subs-only"
-            ],
+            "engines": ["lefto-mono", "mo-noam", "monitoring", "peaks-only", "righto-mono", "slew-only", "subs-only"],
             "engine": "monitoring",
             "params": {},
             "pluginId": "drums-monitoring:fx-monitoring"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-peaks-only": {
         "from": "drums-peaks-only",
@@ -636,40 +486,19 @@
           {
             "module": "fx-peaks-only",
             "uses": "@k7-core/audio/zz_utility/monitoring",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
             "hasNativePluginUI": false,
-            "ui": {
-              "cols": 1,
-              "rows": 1,
-              "widgets": {}
-            },
-            "engines": [
-              "lefto-mono",
-              "mo-noam",
-              "monitoring",
-              "peaks-only",
-              "righto-mono",
-              "slew-only",
-              "subs-only"
-            ],
+            "ui": {"cols": 1, "rows": 1, "widgets": {}},
+            "engines": ["lefto-mono", "mo-noam", "monitoring", "peaks-only", "righto-mono", "slew-only", "subs-only"],
             "engine": "peaks-only",
             "params": {},
             "pluginId": "drums-peaks-only:fx-peaks-only"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-righto-mono": {
         "from": "drums-righto-mono",
@@ -677,40 +506,19 @@
           {
             "module": "fx-righto-mono",
             "uses": "@k7-core/audio/zz_utility/monitoring",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
             "hasNativePluginUI": false,
-            "ui": {
-              "cols": 1,
-              "rows": 1,
-              "widgets": {}
-            },
-            "engines": [
-              "lefto-mono",
-              "mo-noam",
-              "monitoring",
-              "peaks-only",
-              "righto-mono",
-              "slew-only",
-              "subs-only"
-            ],
+            "ui": {"cols": 1, "rows": 1, "widgets": {}},
+            "engines": ["lefto-mono", "mo-noam", "monitoring", "peaks-only", "righto-mono", "slew-only", "subs-only"],
             "engine": "righto-mono",
             "params": {},
             "pluginId": "drums-righto-mono:fx-righto-mono"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-slew-only": {
         "from": "drums-slew-only",
@@ -718,40 +526,19 @@
           {
             "module": "fx-slew-only",
             "uses": "@k7-core/audio/zz_utility/monitoring",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
             "hasNativePluginUI": false,
-            "ui": {
-              "cols": 1,
-              "rows": 1,
-              "widgets": {}
-            },
-            "engines": [
-              "lefto-mono",
-              "mo-noam",
-              "monitoring",
-              "peaks-only",
-              "righto-mono",
-              "slew-only",
-              "subs-only"
-            ],
+            "ui": {"cols": 1, "rows": 1, "widgets": {}},
+            "engines": ["lefto-mono", "mo-noam", "monitoring", "peaks-only", "righto-mono", "slew-only", "subs-only"],
             "engine": "slew-only",
             "params": {},
             "pluginId": "drums-slew-only:fx-slew-only"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-subs-only": {
         "from": "drums-subs-only",
@@ -759,156 +546,35 @@
           {
             "module": "fx-subs-only",
             "uses": "@k7-core/audio/zz_utility/monitoring",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
             "hasNativePluginUI": false,
-            "ui": {
-              "cols": 1,
-              "rows": 1,
-              "widgets": {}
-            },
-            "engines": [
-              "lefto-mono",
-              "mo-noam",
-              "monitoring",
-              "peaks-only",
-              "righto-mono",
-              "slew-only",
-              "subs-only"
-            ],
+            "ui": {"cols": 1, "rows": 1, "widgets": {}},
+            "engines": ["lefto-mono", "mo-noam", "monitoring", "peaks-only", "righto-mono", "slew-only", "subs-only"],
             "engine": "subs-only",
             "params": {},
             "pluginId": "drums-subs-only:fx-subs-only"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
-      }
+      "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}]}
     },
-    "tracks": [
-      "drums",
-      "drums-lefto-mono",
-      "drums-mo-noam",
-      "drums-monitoring",
-      "drums-peaks-only",
-      "drums-righto-mono",
-      "drums-slew-only",
-      "drums-subs-only"
-    ],
+    "tracks": ["drums", "drums-lefto-mono", "drums-mo-noam", "drums-monitoring", "drums-peaks-only", "drums-righto-mono", "drums-slew-only", "drums-subs-only"],
     "videoTracks": [],
-    "trackColors": {
-      "drums": "#af1d26",
-      "drums-lefto-mono": "#be1f25",
-      "drums-mo-noam": "#ce2123",
-      "drums-monitoring": "#dc2825",
-      "drums-peaks-only": "#de3c34",
-      "drums-righto-mono": "#e04f43",
-      "drums-slew-only": "#e36152",
-      "drums-subs-only": "#e57361"
-    },
-    "trackSignals": {
-      "drums": "audio",
-      "drums-lefto-mono": "audio",
-      "drums-mo-noam": "audio",
-      "drums-monitoring": "audio",
-      "drums-peaks-only": "audio",
-      "drums-righto-mono": "audio",
-      "drums-slew-only": "audio",
-      "drums-subs-only": "audio"
-    },
+    "trackColors": {"drums": "#af1d26", "drums-lefto-mono": "#be1f25", "drums-mo-noam": "#ce2123", "drums-monitoring": "#dc2825", "drums-peaks-only": "#de3c34", "drums-righto-mono": "#e04f43", "drums-slew-only": "#e36152", "drums-subs-only": "#e57361"},
+    "trackSignals": {"drums": "audio", "drums-lefto-mono": "audio", "drums-mo-noam": "audio", "drums-monitoring": "audio", "drums-peaks-only": "audio", "drums-righto-mono": "audio", "drums-slew-only": "audio", "drums-subs-only": "audio"},
     "trackClips": {
-      "drums": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-lefto-mono": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-mo-noam": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-monitoring": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-peaks-only": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-righto-mono": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-slew-only": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-subs-only": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ]
+      "drums": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-lefto-mono": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-mo-noam": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-monitoring": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-peaks-only": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-righto-mono": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-slew-only": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-subs-only": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}]
     },
     "modules": {},
     "warnings": []

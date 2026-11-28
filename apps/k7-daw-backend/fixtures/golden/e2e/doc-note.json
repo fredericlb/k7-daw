@@ -1,9 +1,6 @@
 {
   "project": "e2e/doc-note.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "doc-note",
     "tempo": 120,
@@ -52,70 +49,21 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
-      "drums": {
-        "from": "drums",
-        "use": [],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          },
-          {
-            "to": "about-drums",
-            "gain": 1
-          }
-        ]
-      },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
-      }
+      "drums": {"from": "drums", "use": [], "out": [{"to": "MIX", "gain": 1}, {"to": "about-drums", "gain": 1}]},
+      "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}]}
     },
-    "tracks": [
-      "drums"
-    ],
+    "tracks": ["drums"],
     "videoTracks": [],
-    "trackColors": {
-      "drums": "#dd322c"
-    },
-    "trackSignals": {
-      "drums": "audio"
-    },
-    "trackClips": {
-      "drums": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ]
-    },
-    "modules": {
-      "about-drums": {
-        "content": "E2E note: this text is drawn on the graph, wired from the drums lane."
-      }
-    },
+    "trackColors": {"drums": "#dd322c"},
+    "trackSignals": {"drums": "audio"},
+    "trackClips": {"drums": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}]},
+    "modules": {"about-drums": {"content": "E2E note: this text is drawn on the graph, wired from the drums lane."}},
     "warnings": []
   },
   "video": null

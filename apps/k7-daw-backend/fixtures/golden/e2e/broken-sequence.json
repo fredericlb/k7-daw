@@ -1,14 +1,9 @@
 {
   "project": "e2e/broken-sequence.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": null,
   "errors": {
-    "errors": [
-      "unresolved reference(s):\n  - track 'melody': sequence 'melody' failed to load — sequences/melody.k7x: notes.0.v: Too big: expected number to be <=1"
-    ],
+    "errors": ["unresolved reference(s):\n  - track 'melody': sequence 'melody' failed to load — sequences/melody.k7x: notes.0.v: Too big: expected number to be <=1"],
     "diagnostics": []
   },
   "freezes": [],
@@ -20,12 +15,8 @@
           {
             "module": "lead",
             "uses": "@workspace/instruments/fourosc",
-            "stage": [
-              "@output-volume"
-            ],
-            "events": [
-              "note-on"
-            ],
+            "stage": ["@output-volume"],
+            "events": ["note-on"],
             "category": "instruments",
             "emits": "audio",
             "stub": false,
@@ -34,101 +25,29 @@
               "cols": 4,
               "rows": 2,
               "widgets": {
-                "title": {
-                  "type": "label",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "text": "4OSC"
-                },
-                "cutoff": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 1,
-                  "label": "Cutoff",
-                  "bind": "Filter Freq",
-                  "min": 0,
-                  "max": 135.076232
-                },
-                "res": {
-                  "type": "knob",
-                  "col": 1,
-                  "row": 1,
-                  "label": "Res",
-                  "bind": "Filter Resonance",
-                  "min": 0,
-                  "max": 100
-                },
-                "level": {
-                  "type": "slider",
-                  "col": 2,
-                  "row": 1,
-                  "label": "Level",
-                  "bind": "Level",
-                  "min": -100,
-                  "max": 0
-                }
+                "title": {"type": "label", "col": 0, "row": 0, "colSpan": 2, "text": "4OSC"},
+                "cutoff": {"type": "knob", "col": 0, "row": 1, "label": "Cutoff", "bind": "Filter Freq", "min": 0, "max": 135.076232},
+                "res": {"type": "knob", "col": 1, "row": 1, "label": "Res", "bind": "Filter Resonance", "min": 0, "max": 100},
+                "level": {"type": "slider", "col": 2, "row": 1, "label": "Level", "bind": "Level", "min": -100, "max": 0}
               }
             },
             "params": {},
-            "defaults": {
-              "Filter Freq": 69,
-              "Filter Resonance": 0.5,
-              "Level": 0
-            },
+            "defaults": {"Filter Freq": 69, "Filter Resonance": 0.5, "Level": 0},
             "pluginId": "melody:lead"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
-      }
+      "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}]}
     },
-    "tracks": [
-      "melody"
-    ],
+    "tracks": ["melody"],
     "videoTracks": [],
     "trackColors": {},
-    "trackSignals": {
-      "melody": "audio"
-    },
-    "trackClips": {
-      "melody": [
-        {
-          "ref": "melody",
-          "start": 0,
-          "tc": "1:1",
-          "kind": "missing"
-        }
-      ]
-    },
+    "trackSignals": {"melody": "audio"},
+    "trackClips": {"melody": [{"ref": "melody", "start": 0, "tc": "1:1", "kind": "missing"}]},
     "modules": {},
-    "warnings": [
-      "track 'melody': clip/sequence 'melody' not found"
-    ],
-    "issues": [
-      {
-        "code": "trackClipMissing",
-        "params": {
-          "track": "melody",
-          "ref": "melody"
-        },
-        "text": "track 'melody': clip/sequence 'melody' not found"
-      }
-    ]
+    "warnings": ["track 'melody': clip/sequence 'melody' not found"],
+    "issues": [{"code": "trackClipMissing", "params": {"track": "melody", "ref": "melody"}, "text": "track 'melody': clip/sequence 'melody' not found"}]
   },
   "video": null
 }
