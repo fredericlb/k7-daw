@@ -8,6 +8,6 @@ import type { ScheduleArgs } from "./ScheduleArgs";
  */
 export type EyesRequest =
   | { op: "eyes.schedule"; args: ScheduleArgs }
-  | { op: "eyes.builtins"; args: Record<string, never> }
+  | { op: "eyes.builtins" }
   | { op: "eyes.match_camera"; args: LensArgs }
   | { op: "eyes.cube"; args: CubeArgs };

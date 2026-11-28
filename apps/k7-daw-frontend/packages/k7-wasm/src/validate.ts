@@ -1,14 +1,11 @@
 // validate.ts — can the compiler read this text? The Rust reader that decodes a file for the compile judges the editor's buffer.
 // A reader would get wrong that an issue holds the reader's FIRST finding only, its columns in UTF-16 units as CodeMirror counts.
 
-import { call } from "./abi.ts";
-import type { ModuleIssue, Validity } from "./types/index.ts";
+import { validateFile } from "./ops/file.ts";
+import type { Validity } from "./types/index.ts";
 
-export type { ModuleIssue, Validity };
-
-/** Is `text` a document the compiler could read at `path`? A newer format first, then syntax, then the schema. */
-export const validateFile = (path: string, text: string): Validity =>
-  call<Validity>({ op: "file.validate", args: { path, text } });
+export type { ModuleIssue, Validity } from "./types/index.ts";
+export { validateFile };
 
 /** Can the compiler read this text as a module's panel file, a `ui.k7x` beside its module? */
 export const validatePanel = (text: string): Validity =>

@@ -1,8 +1,11 @@
-// bindings — writes the TypeScript type of everything that crosses the ABI into a folder, plus its index.ts, and the constants file.
+// bindings — writes the TypeScript type of everything that crosses the ABI into a folder, plus its index.ts, the constants file
+// and the typed wrapper of each JSON op (facade.rs).
 // A reader would get wrong that it deletes the folder first: a type that no longer exists must not linger there.
 
 mod consts;
 mod desk_consts;
+mod facade;
+mod facades;
 
 use gesture::roll_drag::GroupMove;
 use gesture::ruler::RulerTick;
@@ -360,11 +363,14 @@ fn export_edit(dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
 }
 
 fn main() -> ExitCode {
-    let (Some(dir), Some(consts)) = (std::env::args().nth(1), std::env::args().nth(2)) else {
-        eprintln!("usage: bindings <types dir> <consts file>");
+    let mut args = std::env::args().skip(1);
+    let (Some(dir), Some(consts), Some(ops)) = (args.next(), args.next(), args.next()) else {
+        eprintln!("usage: bindings <types dir> <consts file> <ops dir>");
         return ExitCode::from(2);
     };
-    let done = write_types(Path::new(&dir)).and_then(|()| Ok(fs::write(&consts, consts::text())?));
+    let done = write_types(Path::new(&dir))
+        .and_then(|()| Ok(fs::write(&consts, consts::text())?))
+        .and_then(|()| facade::write_facades(Path::new(&ops), Path::new(&dir), &facades::all()));
     match done {
         Ok(()) => ExitCode::SUCCESS,
         Err(e) => {

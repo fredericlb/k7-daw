@@ -28,7 +28,7 @@ fn a_schedule_is_asked_for_by_clips_and_answers_camel_case() {
 
 #[test]
 fn the_builtins_are_the_dissolve_and_the_over() {
-    let (status, v) = run(&mut Session::new(), &json!({ "op": "eyes.builtins", "args": {} }));
+    let (status, v) = run(&mut Session::new(), &json!({ "op": "eyes.builtins" }));
     assert_eq!(status, OK);
     let names: Vec<&str> = v.as_object().unwrap().keys().map(String::as_str).collect();
     assert_eq!(names, ["dissolve", "over"]);

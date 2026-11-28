@@ -2,9 +2,9 @@
 // A reader would get wrong that bytes cross as base64: a head is 64 kB at most and a strip a few kilobytes, once per take or tile.
 
 import { call } from "./abi.ts";
-import type { TimeSpan } from "./types/index.ts";
 
 export { DEFAULT_TRIM_DB } from "./consts.generated.ts";
+export * from "./ops/media.ts";
 export type { TimeSpan } from "./types/index.ts";
 
 const toBase64 = (bytes: Uint8Array): string => {
@@ -16,18 +16,6 @@ const toBase64 = (bytes: Uint8Array): string => {
 
 const fromBase64 = (text: string): Uint8Array =>
   Uint8Array.from(atob(text), (c) => c.charCodeAt(0));
-
-/** The span of an envelope above a gate in dBFS, in seconds, caged to `within`; null when nothing sounds. */
-export const trimWindow = (
-  env: readonly number[],
-  seconds: number,
-  gateDb: number,
-  within?: TimeSpan | null,
-): TimeSpan | null =>
-  call<TimeSpan | null>({
-    op: "media.trimWindow",
-    args: { env, seconds, gateDb, within: within ?? null },
-  });
 
 /** `bytes` replaces the first `consumed` bytes of the take; consumed 0 means it already had a duration. */
 export interface WebmPatch {

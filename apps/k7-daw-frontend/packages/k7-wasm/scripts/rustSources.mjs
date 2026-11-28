@@ -64,11 +64,15 @@ export function rustSourceHash(root = ROOT) {
   return hashOf(all, root);
 }
 
-/** One hash over src/types/ and src/consts.generated.ts, as the bindings binary and biome left them. */
+/** One hash over src/types/, src/ops/ and src/consts.generated.ts, as the bindings binary and biome left them. */
 export function typesHash() {
   const src = join(PKG, "src");
   return hashOf(
-    [...files(join(src, "types")), join(src, "consts.generated.ts")],
+    [
+      ...files(join(src, "types")),
+      ...files(join(src, "ops")),
+      join(src, "consts.generated.ts"),
+    ],
     src,
   );
 }

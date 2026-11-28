@@ -46,7 +46,7 @@ pub enum EyesRequest {
     Schedule(ScheduleArgs),
     /// The two transitions the compositor owns, by name.
     #[serde(rename = "eyes.builtins")]
-    Builtins {},
+    Builtins,
     /// Which lens a label names among the machine's devices, and why a fallback was taken.
     #[serde(rename = "eyes.match_camera")]
     MatchCamera(LensArgs),
@@ -58,7 +58,7 @@ pub enum EyesRequest {
 pub fn dispatch(floats: &mut Vec<f32>, request: EyesRequest, out: &mut Vec<u8>) -> Result<(), WasmError> {
     match request {
         EyesRequest::Schedule(a) => write(out, &schedule(&a.clips)),
-        EyesRequest::Builtins {} => write(out, &builtins()),
+        EyesRequest::Builtins => write(out, &builtins()),
         EyesRequest::MatchCamera(a) => write(out, &match_camera(&a.label, &a.devices)),
         EyesRequest::Cube(a) => {
             let cube = parse_cube(&a.text).map_err(WasmError::bad_request)?;

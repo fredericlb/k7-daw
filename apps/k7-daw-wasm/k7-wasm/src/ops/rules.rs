@@ -12,8 +12,13 @@ use song_edit::seq_window::{SeqWindow as Window, WindowSpan as Span, seq_window_
 #[cfg_attr(feature = "ts", derive(ts_rs::TS))]
 pub struct SeqWindowArgs {
     pub text: String,
-    pub num: f64,
-    pub den: f64,
+    /// The meter, 4/4 when left out.
+    #[serde(default)]
+    #[cfg_attr(feature = "ts", ts(optional))]
+    pub num: Option<f64>,
+    #[serde(default)]
+    #[cfg_attr(feature = "ts", ts(optional))]
+    pub den: Option<f64>,
 }
 
 /// The window a sequence states, in beats: `to` is null for "wherever the notes end".
@@ -57,7 +62,7 @@ pub fn dispatch(request: RulesRequest, out: &mut Vec<u8>) -> Result<(), WasmErro
     match request {
         RulesRequest::SeqWindow(a) => write(
             out,
-            &seq_window_from_text(&a.text, a.num, a.den).map(|w| SeqWindowDto { from: w.from, to: w.to }),
+            &seq_window_from_text(&a.text, a.num.unwrap_or(4.0), a.den.unwrap_or(4.0)).map(|w| SeqWindowDto { from: w.from, to: w.to }),
         ),
         RulesRequest::WindowSpan(a) => write(
             out,

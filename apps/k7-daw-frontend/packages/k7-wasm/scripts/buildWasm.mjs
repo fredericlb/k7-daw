@@ -1,4 +1,4 @@
-// buildWasm.mjs — builds the facade for wasm32 into src/k7Wasm.wasm, writes the types and constants it carries, and stamps the hashes.
+// buildWasm.mjs — builds the facade for wasm32 into src/k7Wasm.wasm, writes the types, constants and op wrappers it carries, and stamps the hashes.
 // A reader would get wrong why the module is checked in: a page's build and node's tests read it with no cargo on the machine.
 
 import { execFileSync } from "node:child_process";
@@ -12,6 +12,7 @@ const RUST = join(ROOT, CRATES[0]);
 const TARGET = "wasm32-unknown-unknown";
 const TYPES = join(PKG, "src", "types");
 const CONSTS = join(PKG, "src", "consts.generated.ts");
+const OPS = join(PKG, "src", "ops");
 const MODULE = join(PKG, "src", "k7Wasm.wasm");
 // A target folder is named with --target-dir, never CARGO_TARGET_DIR, which sccache hashes.
 // A folder of its own under the shared one: waveform is a cdylib, whose unhashed rlib the two modules would overwrite.
@@ -56,6 +57,7 @@ execFileSync(
     "--",
     TYPES,
     CONSTS,
+    OPS,
   ],
   { cwd: RUST, stdio: "inherit" },
 );
@@ -68,6 +70,17 @@ execFileSync(
     "--write",
     TYPES,
     CONSTS,
+  ],
+  { cwd: ROOT, stdio: "inherit" },
+);
+// The op wrappers get `check`, which also sorts their imports the way biome orders them.
+execFileSync(
+  process.execPath,
+  [
+    join(ROOT, "node_modules", "@biomejs", "biome", "bin", "biome"),
+    "check",
+    "--write",
+    OPS,
   ],
   { cwd: ROOT, stdio: "inherit" },
 );
