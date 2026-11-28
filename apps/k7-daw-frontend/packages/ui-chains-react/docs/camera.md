@@ -83,7 +83,7 @@ so is the translation, which is why no zoom enters that arithmetic.
 On a touch screen **one finger never moves the camera**; two fingers pan it and zoom it, the
 per-track row as much as the full graph. A card's header held then dragged moves the card, a tap
 selects it, and a swipe on empty space does nothing (`@studio/ui-timeline/hold`): a camera that
-followed one finger made every stray swipe a lost view. A mouse still drags the empty canvas.
+follows one finger turns every stray swipe into a lost view. A mouse still drags the empty canvas.
 
 The gesture uses **touch events** rather than the pointer flow the rest of the file runs on: that
 flow drives node drags, widget drags and cable draws, and a second finger arriving mid-gesture

@@ -107,7 +107,7 @@ the listener is `passive: false`; a plain wheel returns before that and scrolls 
 ## Two fingers on a touchscreen
 
 **An editing surface moves under two fingers only; one finger moves nothing.** Its clips, notes and
-cards are what a finger lands on, so a surface that scrolled under one finger read every stray swipe
+cards are what a finger lands on, so a surface that scrolls under one finger reads every stray swipe
 either as a pan or as a drag of whatever it began on. With the count of fingers deciding, one finger
 is a tap or a hold (`hold.ts`, and `apps/k7-daw-frontend/docs/timeline.md`, "A finger holds, then
 drags"), and two are the view.

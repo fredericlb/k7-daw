@@ -882,15 +882,15 @@ A **shape** lane gets no button: it has no input to record.
 ## A finger holds, then drags
 
 **On a touch screen the lanes move under two fingers only.** Their midpoint scrolls the lanes and
-their spread zooms; one finger scrolls nothing. Clips fill most of a lane, so a lane that scrolled
-under one finger was a lane where a stray swipe either moved the view or, landing on a clip, moved
-the clip: the two readings of one gesture are kept apart by the number of fingers.
+their spread zooms; one finger scrolls nothing. Clips fill most of a lane, so under one finger a
+swipe would be read both as a pan and as a drag of the clip it lands on: the number of fingers keeps
+the two readings apart.
 
 **Every drag on the timeline starts by a hold when a finger makes it**, so a swipe that was meant
 as nothing does nothing. A finger that stays 300 ms where it landed *arms* the drag
 (`@studio/ui-timeline/hold`), with a short vibration where the device has one; one that moves first
 does nothing at all, and a second finger landing before the hold is the start of a two-finger pan.
-A mouse or a pen arms at once, and a trackpad's two-finger slide is the wheel, as before.
+A mouse or a pen arms at once, and a trackpad's two-finger slide is the wheel.
 
 It covers a clip, its two edges, its fades, a lane's header (reorder), a picture shot and an
 automation point. On an **empty cell**, a hold then a drag draws the range rectangle that Shift
