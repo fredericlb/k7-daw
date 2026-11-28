@@ -63,17 +63,6 @@ export const framedBy = (widgets: Widgets, group: WebWidget): string[] =>
 export const groupOf = (widgets: Widgets, id: string): string | null =>
   call<string | null>({ op: "panel.group_of", args: { widgets, id } });
 
-/** Every way a set of widgets drawn TOGETHER can break a grid: out of bounds, or on top of another. */
-export const gridIssues = (
-  grid: Pick<WebModuleUI, "cols" | "rows">,
-  where: string,
-  widgets: readonly [string, WebWidget][],
-): string[] =>
-  call<string[]>({
-    op: "panel.grid_issues",
-    args: { cols: grid.cols, rows: grid.rows, where, widgets: [...widgets] },
-  });
-
 /** Every way a panel's two shapes break the rules: sizes, the twin's own geometry, and controls one shape lacks. */
 export const twinIssues = (ui: WebModuleUI): string[] =>
   call<string[]>({ op: "panel.twin_issues", args: { ui } });
@@ -338,7 +327,3 @@ export const checkAiResult = (
       ctx: ctx ?? {},
     },
   });
-
-/** The model's raw answer read off its JSON text and printed as `ui.k7x`; null when it is not the promised shape. */
-export const readAiAnswer = (text: string): AiResult | null =>
-  call<AiResult | null>({ op: "panel.ai_read_answer", args: { text } });

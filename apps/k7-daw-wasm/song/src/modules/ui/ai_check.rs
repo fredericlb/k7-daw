@@ -560,5 +560,9 @@ pub fn check_ai_result(res: &AiResult, bind_names: &[String], ctx: &AiContext) -
 mod tests;
 
 #[cfg(test)]
+#[path = "ai_cases_tests.rs"]
+mod cases_tests;
+
+#[cfg(test)]
 #[path = "ai_rules_tests.rs"]
 mod rules_tests;

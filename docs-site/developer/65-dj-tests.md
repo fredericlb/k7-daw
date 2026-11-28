@@ -44,10 +44,10 @@ From the root, `npm run test` runs `scripts/workspaces.mjs test`, which runs the
 
 | Test | Holds |
 |---|---|
-| `apps/k7-daw-frontend/packages/k7-wasm/src/textDesk.test.ts` | Parsing and the text edits (append, remove, move), every refused shape. |
+| `apps/k7-daw-wasm/k7-wasm/src/tests_text_desk.rs` | Parsing and the text edits (append, remove, move), every refused shape. |
 | `apps/k7-daw-backend/packages/k7-file-service/tests/all/listings_workspace.rs` | Which files of `_references/` a listing offers. |
 | `apps/k7-daw-wasm/song-schema/src/stems.rs` | Stem names and node naming. |
-| `apps/k7-daw-frontend/packages/k7-wasm/src/textDesk.test.ts` | The cue sheet: reading, and writing markers into the text. |
+| `apps/k7-daw-wasm/k7-wasm/src/tests_text_desk.rs` | The cue sheet: reading, and writing markers into the text. |
 | `apps/k7-daw-wasm/song-edit/tests/replay_lane/main.rs` | The mix and live scaffolds compile and wire what they say. |
 | `apps/k7-daw-wasm/song/tests/all/assemblies.rs` | The deck assembly; migrations giving old sets a new set's files. |
 | `apps/k7-daw-wasm/verbs/tests/playlists.rs`, `playlistStems.test.ts`, `systemOnnx.test.ts` | The verbs. |

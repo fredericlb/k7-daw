@@ -27,7 +27,15 @@ mod tests_page_rules;
 #[cfg(test)]
 mod tests_rules;
 #[cfg(test)]
+mod tests_support;
+#[cfg(test)]
 mod tests_text;
+#[cfg(test)]
+mod tests_text_desk;
+#[cfg(test)]
+mod tests_text_sequence;
+#[cfg(test)]
+mod tests_text_video;
 pub mod typed;
 pub mod typed_desk;
 pub mod typed_editors;

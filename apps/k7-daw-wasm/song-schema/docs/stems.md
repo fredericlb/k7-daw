@@ -30,7 +30,7 @@ to be a track of its own. `stemLane`, `stemPlatter` and `stemControl` are the vo
 are here rather than in `scaffoldSet` because the desk has to recognise the lanes the scaffold wrote
 — and a browser package cannot import a scaffold that writes files.
 
-`stemLaneOf` is the reverse of `stemLane`, and the desk's way in: it is handed a compiled document
+`stem_lane_of` is the reverse of `stemLane`, and the desk's way in: it is handed a compiled document
 and has to tell a stem lane from the record's without knowing how the graph was written.
 
 ## How loud a part plays: the PLATTER's own gain

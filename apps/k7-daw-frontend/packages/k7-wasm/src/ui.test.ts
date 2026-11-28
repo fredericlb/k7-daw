@@ -3,7 +3,7 @@
 import { describe, expect, it } from "vitest";
 import {
   emptyBarRows,
-  fuzzyScore,
+  fuzzyScores,
   rankCommands,
   rankOptions,
   setCommandPref,
@@ -39,8 +39,9 @@ describe("the bar's rankings over the real catalogue", () => {
 
 describe("what crosses the ABI", () => {
   it("scores a subsequence and refuses what is not one", () => {
-    expect(fuzzyScore("tm", "track mute")).toBeGreaterThan(0);
-    expect(fuzzyScore("xyz", "track mute")).toBe(-1);
+    const [near, far] = fuzzyScores("tm", ["track mute", "xyz"]);
+    expect(near).toBeGreaterThan(0);
+    expect(far).toBe(-1);
   });
 
   it("ranks options on the label as on the value", () => {

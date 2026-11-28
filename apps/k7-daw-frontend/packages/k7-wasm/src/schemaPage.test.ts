@@ -10,12 +10,9 @@ import { LIBRARY_LEVEL, RACK_ADD_BIND, RACK_BIND } from "./consts.generated.ts";
 import { rackAddBind, rackAddBindAt, rackBindSymbol } from "./rackBinds.ts";
 import {
   builtinPluginFor,
-  CAPTION_SOURCE,
   docPattern,
   IMAGE_SOURCE,
   isPresetName,
-  placementStartOf,
-  VIDEO_SOURCE,
 } from "./schema.ts";
 
 beforeAll(async () => {
@@ -34,19 +31,9 @@ describe("docPattern", () => {
 });
 
 describe("a clip's source", () => {
-  it("is a picture, a still or captions by its extension", () => {
-    expect(VIDEO_SOURCE.test("a/b.MP4")).toBe(true);
+  it("is a still by its extension", () => {
     expect(IMAGE_SOURCE.test("a.jpeg")).toBe(true);
-    expect(CAPTION_SOURCE.test("a.vtt")).toBe(true);
-    expect(VIDEO_SOURCE.test("a.wav")).toBe(false);
-  });
-});
-
-describe("a placement id", () => {
-  it("names its start, a repeat's `#n` aside", () => {
-    expect(placementStartOf("riff@16.5")).toBe(16.5);
-    expect(placementStartOf("verse@8>kick@0#3")).toBe(0);
-    expect(placementStartOf("riff")).toBeNaN();
+    expect(IMAGE_SOURCE.test("a.wav")).toBe(false);
   });
 });
 

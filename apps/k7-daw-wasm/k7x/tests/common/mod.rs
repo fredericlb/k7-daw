@@ -1,6 +1,6 @@
 // common — what the vector tests share: a JSON reader that keeps key order, the value decoding and the op runner.
 // A reader would get wrong why there is no serde_json: its maps lose the order a vector's objects were written in.
-#![allow(dead_code)]
+#![allow(dead_code, unused_macros)]
 
 use k7x::edit::{
     Document, EditError, PathSeg, StringifyOptions, Value, WriteOptions, apply_sugared, js_number,
@@ -366,4 +366,48 @@ pub fn fnv(s: &str) -> String {
         h2 = (h2 ^ u32::from(c)).wrapping_mul(0x85eb_ca6b);
     }
     format!("{h1:08x}{h2:08x}")
+}
+
+// ---- the hand-written document tests' shorthand ----
+
+pub trait Seg {
+    fn seg(self) -> PathSeg;
+}
+impl Seg for &str {
+    fn seg(self) -> PathSeg {
+        PathSeg::Key(self.to_owned())
+    }
+}
+impl Seg for usize {
+    fn seg(self) -> PathSeg {
+        PathSeg::Index(self)
+    }
+}
+macro_rules! p {
+    ($($x:expr),* $(,)?) => { [$($crate::common::Seg::seg($x)),*] };
+}
+
+pub fn v(json: &str) -> Value {
+    value_of(&parse_json(json))
+}
+
+pub fn edit(text: &str, f: impl FnOnce(&mut Document)) -> String {
+    let mut d = Document::new(text);
+    f(&mut d);
+    d.text().to_owned()
+}
+
+pub const INLINE: WriteOptions = WriteOptions { inline: true };
+pub const PLAIN: WriteOptions = WriteOptions { inline: false };
+
+pub fn set(d: &mut Document, path: &[PathSeg], value: &str) {
+    d.set_in(path, &v(value), PLAIN).unwrap();
+}
+
+pub fn data(text: &str) -> Value {
+    k7x::edit::parse(text).unwrap()
+}
+
+pub fn lines(l: &[&str]) -> Vec<String> {
+    l.iter().map(|s| (*s).to_owned()).collect()
 }

@@ -64,12 +64,8 @@ export const conditionProblem = (condition: DraftCondition): string | null =>
 export const durationProblem = (draft: CurveDraft): string | null =>
   ask("duration_problem", { draft });
 
-/** How many bars the plot spans for a song-time curve: four, or past the last drawn point. */
-export const spanBars = (draft: CurveDraft, num: number, den: number): number =>
-  ask("span_bars", { draft, num, den });
-
 /** The whole picture in one call: span, solid and faded lines, beat lines. */
-export const draftPreview = (
+const draftPreview = (
   draft: CurveDraft,
   num: number,
   den: number,

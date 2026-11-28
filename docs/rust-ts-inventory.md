@@ -109,6 +109,19 @@ verbs branch merges, M3c meanwhile (it waits on nothing but decision 5). Wave 4:
 once the song twins merge. Wave 5: M5a, M5b, M5c. About 155 agent-hours of building, five waves,
 plus one review per milestone.
 
+**W6c, as built.** `packages/k7-wasm/src` holds 1,205 lines of tests (it held 4,668): a facade keeps one test that proves a call reaches
+the module and answers its shape, and the rules are Rust's. The k7x document editor and printer are pinned in `k7x/tests/document_*.rs` and
+`read_print.rs`; the text writers (lane, sequence, cue sheet, playlist, pins, assembly, chain, short forms) in `k7-wasm/src/tests_text_*.rs`, which
+call the ops by name through `tests_support.rs`; the editor's check, the events and `project.layers` in `song/tests/all/files_validate_cases.rs`;
+AI organize and the param rows in `song/src/modules/ui/ai_cases_tests.rs` and `rows_tests.rs`; the order of the completions in
+`song/tests/all/views_fields_order.rs`; the timecode and the curve odds and ends in `song-schema` and `k7-wasm/src/tests.rs`. The TS tests that stay
+test TypeScript: the typed-call marshalling (`gesture`), the build scripts (`build`), the tree cells (`k7x/ast`), the resolvers that pick by the browser's
+collator (`paths`), the handle's healing (`curve`), the facades' maps in and out (`chains`, `schemaPage`, `ui`). The facade exports with no caller but a
+test are deleted (`curvePreview`, `editSequence`, `sequenceData`, `readChain`, `applySugared`, `readAiAnswer`, `gridIssues`, `placementStartOf`, the
+constants of the ruler and `fuzzyScore` among them); the exports whose only caller is another package's test (`familyOf`, `isPlumbing`, `isBlend`,
+`groupParams`, `validatePanel`, `toAlphas`, `verbCatalogue`) and the typed gesture calls whose Rust export would have to go with them
+(`dragOffset`, `snapPosition`, `clampKey`, `keyOffset`) stay for the facade generator.
+
 **M4c, as built.** The panel's rules are the song crate's `modules/ui` (`apps/k7-daw-wasm/song/src/modules/ui`): `geometry` (groups, cells,
 the two layouts), `edit` (tabs, clipboard, retype), `auto` (the proposal from a parameter list, its pattern table matched by `rx`, a 150-line matcher
 for the few JavaScript regular expressions it keeps as written), `write` (a panel read from and printed to its k7x text, the fewest edits, a widget a

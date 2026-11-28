@@ -59,12 +59,6 @@ export const previewTriggersOf = (text: string): PreviewTrigger[] =>
 export const scanSlices = (text: string): SliceSym[] | null =>
   ask("slices", { text });
 
-type Edge = number | string;
-
-/** The edges a clip file states at its root, as written; an empty object when the text does not read. */
-export const scanClipWindow = (text: string): { from?: Edge; to?: Edge } =>
-  ask("clip_window", { text });
-
 /** The window as ONE band to draw over the source: HOLLOW with neither edge written, since the edges are still the HANDLES. */
 export function clipWindowBand(
   text: string,
