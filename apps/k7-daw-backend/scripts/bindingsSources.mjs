@@ -19,6 +19,7 @@ const INPUTS = [
   "apps/k7-daw-wasm/song-schema/src",
   "apps/k7-daw-backend/packages/k7-file-service/src/wire",
   "apps/k7-daw-backend/packages/k7-front/src/routes/cameras/wire.rs",
+  "apps/k7-daw-backend/packages/k7-front/src/routes/lan/peers.rs",
   "apps/k7-daw-backend/packages/k7-front/src/bindings.rs",
   "apps/k7-daw-backend/packages/k7-runtime-server/Cargo.toml",
   "apps/k7-daw-backend/packages/k7-runtime-server/src/wire",

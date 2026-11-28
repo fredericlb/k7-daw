@@ -178,6 +178,8 @@ fn write_types(dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
     chains::flow::NodeFlow::export_all_to(dir)?;
     #[cfg(feature = "verbs")]
     export_ui(dir)?;
+    #[cfg(feature = "verbs")]
+    verbs::picture::Doc::export_all_to(dir)?;
     song::doc::ProjectDoc::export_all_to(dir)?;
     song::views::web::WebProject::export_all_to(dir)?;
     song::reads::Blanks::export_all_to(dir)?;

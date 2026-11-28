@@ -163,7 +163,6 @@ can depend on. What stays, and what each needs:
 
 | module | why it stays | what moves it |
 |---|---|---|
-| `web-protocol/paths.ts` | its callers are the song twins | their deletion (rust-song-twins); then it is unused |
 | `clipEnvelope.ts` | not a twin of `wfSig`: it keys what the page holds, `wfSig` what the service holds | the service sending its signature with the waveform |
 | `engineSession.ts` | address parsing around a one-line slug; `session_of` takes a workspace root, not an address | M5c's project address grammar |
 | `engineTaken.ts` | a three-flag decision over React state, called on render | stays |
@@ -751,7 +750,6 @@ are grouped by folder and extension, with the reasons they stay.
 | web-protocol/compat.ts | 50 | MOVE | backend route /project-compat (k7-front files/service/routes.rs) already scores; page ... | score is computed in Rust already; TS twin |
 | web-protocol/engineAccess.ts | 146 | STAY 116 / MOVE 30 | constants of the wire; backoff (~20) MOVE optional | header names/budgets could be generated as consts; low value |
 | web-protocol/machineTypes.ts | 122 | GENERATE | ts-rs on k7-file-service listings + k7-supervisor stem jobs | 13 types |
-| web-protocol/paths.ts | 56 | MOVE | k7-file-service/src/paths.rs (exists) -> k7-wasm op or drop browser use | lexical confinement; Rust side exists |
 | web-protocol/performance.ts | 93 | MOVE | k7-supervisor/src/performance.rs: send the score on the heartbeat | the format/describe strings (~20) STAY (i18n) |
 | web-protocol/playlists.ts | 13 | GENERATE | ts-rs on k7-file-service playlists reply |  |
 | web-protocol/projects.ts | 355 | MOVE | new address module in k7-front (or k7-wasm op): launch/address grammar | contract between backend and page; ~55 lines of page-path constants STAY |
@@ -801,3 +799,5 @@ are grouped by folder and extension, with the reasons they stay.
 
 
 **W6d, as built.** The 205 cases of the 15 `ui-chains` test files over the build, the rows, the stacks, the seams and the layout are cases of the `chains` crate: `apps/k7-daw-wasm/chains/src/tests/` (14 files, 182 tests added, the crate now 304; each holds the TypeScript case's inputs and expectations, the cards and cables read as the JSON the page receives). Seven of the TS files are gone (`buildSums`, `trackClips`, `eventPlugs`, `assembly`, `verticalLayout`, `moduleRank`, `moduleRowLane`); `buildLanes.test.ts` is `rackBinds.test.ts`, two cases over `k7-wasm`'s TypeScript bind helpers. What stays in TypeScript is what the TS does: the facades' own halves (the page's option names, ranks and spacing put on the cards, `sortFolderLists`, `withOpenTabs`, the glued marks on a row), the socket and cable geometry of `jacks.test.ts`, and `modulePreview.ts`'s own logic (11 cases; the module is TypeScript, only its build-dependent cases moved). 32 cases stay of 205; the 15 files lose about 2,960 test lines and the crate gains about 3,130.
+
+**W6a, as built.** `web-protocol/paths.ts` and its test are gone (its rules are `k7-file-service/src/paths.rs`), and so are the unused exports of `services.ts` (the table of ports, their parser and the loopback test; `PORTS_GLOBAL` and `serviceUrl` stay). The picture's `WebVideo*` types and `WebShape` are generated from `apps/k7-daw-wasm/verbs/src/picture/doc.rs` (ts-rs, with the eyes scene types for fades, keys, transitions and shapes), `Diagnostic` is the generated one, and `LanPeer` is the front's `PeerView`. What stays by hand: `K7Prefs`, `AuthUser`, `LocalApp`, `LanHello` and the `syncHistory` shapes, whose routes build their answers with `json!` and so have no struct to derive from. About 290 lines of TypeScript and 117 of tests out, 35 lines of Rust in.

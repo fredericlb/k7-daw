@@ -90,6 +90,7 @@ fn web_protocol(dir: &Path) -> Result<(), ts_rs::ExportError> {
     w::ModuleLibrary::export_all_to(dir)?;
     w::PlaylistInfo::export_all_to(dir)?;
     w::ProjectResource::export_all_to(dir)?;
+    k7_front::lan_wire::PeerView::export_all_to(dir)?;
     Ok(())
 }
 

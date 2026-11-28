@@ -1,4 +1,4 @@
-//! paths.rs — node's lexical path model, function for function: `js/node/path.ts` and `web-protocol/paths.ts`.
+//! paths.rs — node's lexical path model, function for function: `js/node/path.ts` and its `isWithin`/`isPlainSegment` rules.
 //! Strings only, no filesystem and no `cfg!`: `\` reads as `/` on every host, a `C:/` root exists on every host.
 //! What a reader gets wrong: this is never `std::path`; `C:/x` on a Mac is an escape, as node answers it (1020).
 

@@ -16,7 +16,6 @@
 
 | module | why it stays |
 |---|---|
-| `web-protocol/paths.ts` | its callers are the song twins and the engine tunnel, which go with their own plans; a call into the module from the pure `song-schema` TypeScript would add a dependency cycle for code that is being deleted |
 | `src/clipEnvelope.ts`, `src/engineSession.ts` | not twins: the cache key folds what the page holds, not what the service's `wfSig` folds, and `engineSession` is address parsing around a one-line slug |
 | `src/components/engineTaken.ts` | a three-flag decision over React state, called on render |
 | `lcdSounds`, `libraryTree`, `historyMarks`, `surfaceRows`, `paneInUse` | no Rust function answers them yet: they are ports, not twin replacements |

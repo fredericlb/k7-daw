@@ -1,4 +1,4 @@
-//! Confinement, as `hubConfinement.test.ts` and `@studio/web-protocol/paths` hold it.
+//! Confinement, as `hubConfinement.test.ts` and `k7-file-service`'s `paths.rs` hold it.
 
 use super::*;
 

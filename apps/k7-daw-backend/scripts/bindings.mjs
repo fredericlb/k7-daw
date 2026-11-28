@@ -30,12 +30,12 @@ execFileSync(
   { cwd: BACKEND, stdio: "inherit" },
 );
 const folders = TARGETS.map((t) => join(PACKAGES, t, "generated"));
-// The generated files pass `npm run lint` as written.
+// The generated files pass `npm run lint` as written: `check` also sorts ts-rs's imports the way biome orders them.
 execFileSync(
   process.execPath,
   [
     join(ROOT, "node_modules", "@biomejs", "biome", "bin", "biome"),
-    "format",
+    "check",
     "--write",
     ...folders,
   ],

@@ -6,7 +6,7 @@ use std::path::Path;
 
 use serde_json::{Map, Value};
 
-/// `isLoopbackHost` of `@studio/web-protocol/services`: a URL's hostname, brackets and all for IPv6.
+/// Whether a hostname is loopback: a URL's hostname, brackets and all for IPv6.
 pub fn is_loopback_host(hostname: &str) -> bool {
     if hostname == "localhost" || hostname == "[::1]" {
         return true;

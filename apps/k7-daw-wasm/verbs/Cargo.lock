@@ -65,6 +65,7 @@ dependencies = [
  "indexmap",
  "serde",
  "serde_json",
+ "ts-rs",
 ]
 
 [[package]]

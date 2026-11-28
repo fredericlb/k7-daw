@@ -52,7 +52,7 @@ fn is_windows_path(p: &str) -> bool {
     (b.len() >= 2 && b[0].is_ascii_alphabetic() && b[1] == b':') || p.starts_with("\\\\")
 }
 
-/// `isWithin` of `@studio/web-protocol/paths`: `root` itself or below it, the separator honoured.
+/// `is_within` of `k7-file-service`'s `paths.rs`: `root` itself or below it, the separator honoured.
 pub fn is_within(root: &str, path: &str) -> bool {
     if root.is_empty() || path.is_empty() {
         return false;
