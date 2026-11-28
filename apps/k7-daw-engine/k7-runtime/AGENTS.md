@@ -141,12 +141,8 @@ server/
   ios/EngineEmbed.cpp    the iOS app's: serve, quit, the log tag, and the device closed while the app is idle behind another (docs/ios.md)
 
 scripts/               Node harnesses that drive a running engine, not build steps
-  two-sessions.ts        two sessions on one engine stay separate
-  track-delta.ts         `tracks` amends the document a session holds, and refuses the rest
-  supersede-probe.ts     a burst of knob writes or of documents ends on the LAST one, and a fence keeps its place (apps/k7-daw-backend/packages/k7-runtime-server/docs/supersede.md)
   recorder-probe.ts      a recorder node's take stays WHOLE while documents rebuild the graph around it — undamaged,
                          and its wav as long as the clock said (docs/recorder.md)
-  list-sessions.ts       an engine's sessions, and drop-session, over the control socket
   broadcast-sessions.mjs per-session streaming
   gen-strudel-bundle.mjs bundle @studio/song-strudel's engineEntry.ts into engine/strudel/strudel.bundle.js,
                          the script PatternPlugin runs. A GENERATOR, output committed: run it after

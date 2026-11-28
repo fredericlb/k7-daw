@@ -67,6 +67,9 @@ midly.workspace = true
 zip.workspace = true
 
 ts-rs = { workspace = true, optional = true }
+# Only for the types: the engine's frames and the supervisor's snapshot are exported by the bindings binary, never linked in a shipped build.
+k7-runtime-server = { path = "../k7-runtime-server", optional = true }
+k7-supervisor = { path = "../k7-supervisor", optional = true }
 
 [dev-dependencies]
 # The machine's tunnel agent, which the hub's suite (`tests/tunnel`) dials the real hub with (`docs/engine.md`, "The testbed").
@@ -80,7 +83,7 @@ tokio = { workspace = true, features = ["test-util"] }
 
 [features]
 # The TypeScript types of the wire structs, written by the `bindings` binary (docs/ts-types.md).
-ts = ["dep:ts-rs", "song/ts", "k7-file-service/ts"]
+ts = ["dep:ts-rs", "song/ts", "k7-file-service/ts", "dep:k7-runtime-server", "k7-runtime-server/ts", "dep:k7-supervisor", "k7-supervisor/ts"]
 # The engine testbed's clock and stubs, for the TypeScript suites run against Rust (docs/engine.md).
 test-hooks = ["k7-engine/test-hooks"]
 

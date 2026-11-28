@@ -2,60 +2,21 @@
 // the supervisor's latest picture, pushed over /api/local/engine/events, and the few commands a page may send.
 // A server or a phone's backend runs none, and the probe says so. See ../../docs/localApp.md.
 
+import type { HostState } from "@studio/engine-protocol/generated";
 import { showToast } from "@studio/project-shell/toast";
 import { useEffect, useState } from "react";
 import { useLocalApp } from "../localApp";
 import { m } from "../paraglide/messages.js";
 
-/** What this page draws of the supervisor's snapshot (apps/k7-daw-backend/packages/k7-supervisor/schema/hostProtocol.schema.json). */
-export interface DesktopEngineSnapshot {
-  status: "stopped" | "running" | "error";
-  error?: string;
-  userStopped: boolean;
-  engineId: string;
-  enginePort: number;
-  lastHeartbeatOk: boolean;
-  pluginCount?: number;
-  plugins?: { name: string; format: string; manufacturer: string }[];
-  audioDevices?: {
-    name: string;
-    deviceType: string;
-    current: boolean;
-    currentInput: boolean;
-    /** The open device's channel counts, on its own row; absent or 0 on the others. */
-    inputs?: number;
-    outputs?: number;
-  }[];
-  audioPriority?: string[];
-  /** Whether a device on this network drives the engine unpaired; absent from an older supervisor. */
-  lanOpen?: boolean;
-  /** The k7 servers this engine is listed at; one from the environment is not removable. */
-  instances?: { url: string; removable?: boolean }[];
-  instanceCheck?: { state?: string; url?: string; message?: string } | null;
-  instruments?: {
-    name: string;
-    label: string;
-    bytes: number;
-    wanted: boolean;
-    installed: boolean;
-  }[];
-  downloads?: {
-    name: string;
-    received: number;
-    total: number;
-    phase: "queued" | "downloading" | "unpacking" | "failed";
-    error?: string;
-  }[];
-  /** The frozen chains this machine keeps compiled, and the one it plays with nobody attached (../../docs/slots.md). */
-  slots?: {
-    id: string;
-    name: string;
-    chain: string;
-    savedAt: string;
-    footswitch?: number | null;
-  }[];
-  enabledSlot?: string | null;
-}
+/** What this page draws of the supervisor's snapshot: the fields every supervisor sends, the rest optional for an older one. */
+type Always =
+  | "status"
+  | "userStopped"
+  | "engineId"
+  | "enginePort"
+  | "lastHeartbeatOk";
+export type DesktopEngineSnapshot = Pick<HostState, Always> &
+  Partial<Omit<HostState, Always>>;
 
 /** One instrument as the Downloads section draws it: the catalogue row and where its download stands. */
 export interface InstrumentRow {

@@ -139,4 +139,4 @@ npm run test:all --workspace k7-runtime
 
 `apps/k7-daw-engine/k7-runtime/scripts/run-tests.mjs` never configures a preset (configuring fetches everything). An unconfigured tree **skips** loudly with the command to fix it. Set `STUDIO_MOTEUR_PRESET` to choose the preset.
 
-The TypeScript probes in `apps/k7-daw-engine/k7-runtime/scripts/` (`render-once.ts`, `load-probe.ts`, `two-sessions.ts`, `turntable-latency.ts` and others) drive a **running** engine or the render path from `npx tsx`; they are measuring tools, not tests.
+The TypeScript probes in `apps/k7-daw-engine/k7-runtime/scripts/` (`render-once.ts`, `load-probe.ts`, `turntable-latency.ts` and others) drive a **running** engine or the render path from `npx tsx`; they are measuring tools, not tests.

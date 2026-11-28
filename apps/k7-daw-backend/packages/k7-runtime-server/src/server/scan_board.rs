@@ -10,11 +10,14 @@ use std::time::{Duration, Instant};
 pub const SAY_EVERY: Duration = Duration::from_millis(250);
 
 /// One answer to "is this engine scanning, and how far along": what `plugin-scan` carries.
-#[derive(Clone, Debug, Default, PartialEq, Eq)]
+#[derive(Clone, Debug, Default, PartialEq, Eq, serde::Serialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS))]
+#[cfg_attr(feature = "ts", ts(rename = "PluginScanStatus"))]
 pub struct Status {
     pub scanning: bool,
     pub done: i32,
     pub total: i32,
+    /// The file being LOADED, "" while files are only stat'ed.
     pub current: String,
     /// Scans this process has finished: a client that saw N is told N+1 is the catalogue to read again.
     pub version: i32,

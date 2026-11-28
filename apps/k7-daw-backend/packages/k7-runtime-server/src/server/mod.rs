@@ -22,7 +22,7 @@ mod project;
 mod render;
 pub mod scan_board;
 pub mod state;
-mod state_frame;
+pub mod state_frame;
 pub mod supersede;
 mod transport;
 mod whoami;

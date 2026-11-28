@@ -145,7 +145,7 @@ document once and moves it into the baseline; the diff still walks the whole son
 
 No `busy` and no `applied` come back. This path is incremental by construction, and announcing a
 changeset six times a second would drown the one that matters — the full-document path still
-announces its own. `apps/k7-daw-engine/k7-runtime/scripts/track-delta.ts` exercises the three answers.
+announces its own. `tests/all/project_socket.rs` exercises the answers.
 
 ### The numbers are bounded where they arrive
 
@@ -265,7 +265,7 @@ message — the same test that earns it a `[client] connected` line — and send
 sockets alone. A plain `broadcast` here makes every socket on the port decode every session's
 meters and waveform envelopes before its own `forSession` drops them; and since the idle divider
 above is *per session*, one session playing keeps every other session's tabs awake at 20 Hz. On a
-machine holding three sessions (`apps/k7-daw-engine/k7-runtime/scripts/two-sessions.ts`, which counts frames on a raw socket)
+machine holding three sessions (`tests/all/server_state.rs` counts frames on a raw socket)
 that is 200 frames received per socket in nine seconds, 34 of them wanted.
 
 The test is deliberately not `role: "driver"` — the file service declares nothing (its link would

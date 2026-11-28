@@ -115,9 +115,6 @@ ws.on("open", async () => {
     console.log(
       "    inconnue est jeté sans erreur, et la mesure ressemble alors à une bonne nouvelle.",
     );
-    console.log(
-      `  Vérifiez avec : npx tsx apps/k7-daw-engine/k7-runtime/scripts/list-sessions.ts 8765 --peek`,
-    );
   }
 
   for (const id of IDS)

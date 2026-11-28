@@ -83,7 +83,7 @@ whose place is the page's engine rules, `apps/k7-daw-wasm/song-schema/src/engine
 
 ### C5 — dead code
 
-`probeLocalEngine()`, `EngineLookup.ambiguous`, `RELOOK_MS` outside its own file:
+`EngineLookup.ambiguous`, `RELOOK_MS` outside its own file:
 zero callers outside tests. The streaming instrumentation described in `streaming.md`
 (jitter, drift, `dropped`) is exposed by no screen.
 
@@ -142,7 +142,7 @@ Ordered by value/risk ratio.
 
 ### Batch 4 — C5's dead code
 
-`probeLocalEngine`, `EngineLookup.ambiguous` and the streaming instrumentation no screen reads:
+`EngineLookup.ambiguous` and the streaming instrumentation no screen reads:
 delete, or give each a caller.
 
 ### Batch 5 — the lifecycle tests

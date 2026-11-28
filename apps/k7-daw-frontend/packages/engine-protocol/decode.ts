@@ -3,78 +3,28 @@
 // The Node client and the browser one read these, so a field one of them drops is a field both
 // drop. No node and no DOM imports: it runs on either side.
 
-import type {
-  EngineLoad,
-  EngineState,
-  RecorderState,
-  WaveformEnvelope,
-} from "./types.ts";
+import type { EngineState, IoLevelsReply, PluginScanStatus } from "./generated";
 
-/** One plugin the engine's scan knows about — the installed catalogue, not an instance. */
-export interface PluginInfo {
-  name: string;
-  format: string;
-  manufacturer: string;
-  instrument: boolean;
-  role: "instrument" | "audioEffect" | "midiEffect";
-  /** What KIND of effect it is, lower case, '' when unknown — an external plugin reports whatever its vendor wrote. */
-  category?: string;
-  id: string;
-}
-
-/** One parameter of an installed plugin TYPE, in `@studio/song`'s `BuiltinParam` shape so one panel generator reads both. */
-export interface PluginParamInfo {
-  name: string;
-  min: number;
-  max: number;
-  def?: number;
-  states?: { label: string; value: number }[];
-}
-
-/** One wave input the engine can route a track FROM; `channels` is 1-based and matched EXACTLY. */
-export interface EngineInputDevice {
-  name: string;
-  channels: number[];
-  enabled: boolean;
-}
+export type {
+  EngineInputDevice,
+  PluginInfo,
+  PluginParamInfo,
+  PluginScanStatus,
+} from "./generated";
 
 /** Peak dB per channel set asked for, in order, plus the master output — the `io-levels` reply. */
-export interface IoLevels {
-  inputs: number[];
-  master: number;
-  /** The tuner's reading per input, in the same order: Hz, or 0 when nothing convincing was heard. */
-  pitches: number[];
-  /** How periodic each window was, 0..1 — an uncertain note is shown faded rather than hidden. */
-  clarity: number[];
-  /** The interface's own grouping — the one thing that explains a channel that exists and meters nothing. */
-  devices: EngineInputDevice[];
-}
+export type IoLevels = Pick<
+  IoLevelsReply,
+  "inputs" | "master" | "pitches" | "clarity" | "devices"
+>;
 
 /** A `state` frame as it arrives: every field may be absent, an older engine sending fewer. */
-export interface StateFrame {
-  playing?: boolean;
-  playhead?: number;
-  loop?: { on?: boolean; start?: number; end?: number };
-  levels?: number[];
-  inputLevels?: number[];
-  armed?: string[];
-  recordEnabled?: boolean;
-  master?: number;
-  masterClipped?: boolean;
-  waveform?: Record<string, WaveformEnvelope[]>;
-  platters?: Record<string, number>;
-  recorders?: Record<string, RecorderState>;
-  load?: EngineLoad;
-}
+export type StateFrame = Partial<Omit<EngineState, "loop">> & {
+  loop?: Partial<NonNullable<EngineState["loop"]>>;
+};
 
 /** An `io-levels` reply as it arrives. */
-export interface IoLevelsFrame {
-  inputs?: number[];
-  master?: number;
-  pitches?: number[];
-  clarity?: number[];
-  devices?: EngineInputDevice[];
-}
+export type IoLevelsFrame = Partial<IoLevelsReply>;
 
 /** A `state` frame with every field filled; `loop` and `load` stay absent when the frame carries none. */
 export function decodeState(m: StateFrame): EngineState {
@@ -114,17 +64,6 @@ export function decodeIoLevels(m: IoLevelsFrame): IoLevels {
     clarity: m.clarity ?? [],
     devices: m.devices ?? [],
   };
-}
-
-/** Where the engine's plugin scan stands — a `plugin-scan` frame; `total` is 0 while the folders are still listed. */
-export interface PluginScanStatus {
-  scanning: boolean;
-  done: number;
-  total: number;
-  /** The file being LOADED, "" while files are only stat'ed. */
-  current: string;
-  /** Scans this engine process has finished; it moves when one ends. */
-  version: number;
 }
 
 /** A `plugin-scan` frame read defensively, or null when it is not one — apps/k7-daw-backend/packages/k7-runtime-server/docs/protocol.md. */
