@@ -114,7 +114,7 @@ export function DeviceFlow({
       ) : state.phase === "waiting" ? (
         <>
           <p className="type-label">{m["git.gh.codeTitle"]()}</p>
-          <code className="select-all rounded-xl border border-(--k7-hairline-strong) bg-(--k7-row) px-4 py-3 text-center type-mono-value text-2xl tracking-widest">
+          <code className="rounded-xl border border-(--k7-hairline-strong) bg-(--k7-row) px-4 py-3 text-center type-mono-value text-2xl tracking-widest">
             {state.code}
           </code>
           <div className="flex flex-wrap gap-2">

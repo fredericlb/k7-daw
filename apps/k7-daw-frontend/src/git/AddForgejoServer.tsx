@@ -23,7 +23,7 @@ function CopyLine({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
   return (
     <div className="flex items-center gap-2">
-      <code className="min-w-0 flex-1 select-all truncate rounded-xl border border-(--k7-hairline-strong) bg-(--k7-row) px-3 py-2 type-mono-value">
+      <code className="min-w-0 flex-1 truncate rounded-xl border border-(--k7-hairline-strong) bg-(--k7-row) px-3 py-2 type-mono-value">
         {text}
       </code>
       <Button

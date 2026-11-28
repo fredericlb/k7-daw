@@ -1776,6 +1776,14 @@ field drives (`aria-activedescendant`), so its rows are never in the tab order. 
 SURFACE (the ruler, a waveform, the roll's grid, a lane's body, a clip) is not focusable either: its
 keyboard is the shell's own keys, the timeline's caret among them, which reach the same commands.
 
+## The browser selects nothing
+
+The page is an instrument, not a document: a drag across a lane, a held finger on a clip or a double click on a name
+selects nothing, and a long press brings no callout (`src/index.css`, `user-select: none` and `-webkit-touch-callout:
+none` on `html`). What is typed into stays selectable: `input`, `textarea` and every `contenteditable`, the editor's
+CodeMirror included, which draws its own selection. A value meant to be copied has a copy button, never a selectable
+text.
+
 ## The service worker, and the scope it cannot avoid
 
 **The worker is the SHARED preset's** — every frediverse app gets one, from `@studio/vite-config`, whose

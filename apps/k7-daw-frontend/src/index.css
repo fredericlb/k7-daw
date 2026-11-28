@@ -99,6 +99,17 @@
     background: var(--k7-ground);
     color: var(--k7-text);
   }
+  /* Nothing on the page is selected by the browser, a field being typed in excepted; a held finger gets no callout either (docs/shell.md). */
+  html {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+  :where(input, textarea, [contenteditable=""], [contenteditable="true"], [contenteditable="plaintext-only"]) {
+    -webkit-user-select: text;
+    user-select: text;
+    -webkit-touch-callout: default;
+  }
   /* A keyboard user must see where focus is: one ring for every focusable thing, at zero
      specificity so a component's own focus-visible style still wins (docs/shell.md). */
   :where(button, [role="button"], [role="option"], a, summary, [tabindex]:not([tabindex="-1"])):focus-visible {
