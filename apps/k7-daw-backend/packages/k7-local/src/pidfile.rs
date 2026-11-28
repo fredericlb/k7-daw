@@ -188,7 +188,12 @@ pub fn alive(pid: u32) -> bool {
         proc_stat(pid)
             .is_some_and(|fields| !matches!(fields.first().map(String::as_str), Some("Z" | "X")))
     }
-    #[cfg(not(any(windows, target_os = "linux", target_os = "android")))]
+    // An iOS app has no `ps` and sees no process but its own, in which the engine and the supervisor both run.
+    #[cfg(target_os = "ios")]
+    {
+        pid == std::process::id()
+    }
+    #[cfg(not(any(windows, target_os = "linux", target_os = "android", target_os = "ios")))]
     {
         // `ps -p` answers for another user's process too, where `kill -0` would be refused.
         output("/bin/ps", &["-o", "pid=", "-p", &pid.to_string()])

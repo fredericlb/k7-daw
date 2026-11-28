@@ -290,6 +290,9 @@ libgit2 is linked into `libk7_embed.a` with its own transports (`apps/k7-daw-bac
   App Store itself is not submitted to.
 - **No in-app updates**: a tester installs a new build from TestFlight, and a build expires after 90 days.
 - **Stem separation is on the CPU**, ONNX Runtime linked statically (`apps/k7-daw-backend/packages/k7-supervisor/docs/supervisor.md`, "A cut on a phone"); a cut's time and memory on a phone are not measured.
+- **A process is alive only when it is the app itself**: an iOS app has no `ps` and sees no other process, so
+  `k7-local`'s `pidfile::alive` compares the pid with its own; the simulator runs on macOS, where `ps` answers, so only
+  a device shows a mistake there (the engine declared gone two seconds after each start).
 - **No picture render, `ffmpeg`, whisper or `--decode`**: no app may start a process; each member that needs one says so (above).
 
 ## What was measured
