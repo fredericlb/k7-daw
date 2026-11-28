@@ -50,6 +50,8 @@ async function swipe(page: Page, at: Pt, fingers: number, dx: number) {
 }
 
 test("one finger scrolls no lane; two fingers scroll them", async ({ k7 }) => {
+  // The project's first load alone may take most of the default 30 s on a loaded Mac.
+  test.setTimeout(90_000);
   const page = await k7.open(`/@local/${WS}/${PROJECT}`);
   await expect(
     page.getByRole("button", { name: "mute melody", exact: true }),
