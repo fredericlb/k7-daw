@@ -1,10 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  type ClipNameWords,
-  clipNameParts,
-  clipShownName,
-  laneNamer,
-} from "./clipNames";
+import { type ClipNameWords, clipShownName, laneNamer } from "./clipNames";
 
 const words: ClipNameWords = {
   take: ({ lane, bar }) => `${lane} take · bar ${bar}`,
@@ -15,35 +10,6 @@ const lanes = laneNamer([
   { id: "track-7", name: "da.drums" },
   { id: "my lane", name: "" },
 ]);
-
-describe("clipNameParts", () => {
-  it("reads a take's lane and bar, and a processed copy's number", () => {
-    expect(clipNameParts("track-1_9.1_261030T172747")).toEqual({
-      kind: "take",
-      lane: "track-1",
-      bar: 9,
-    });
-    expect(clipNameParts("track-1_1.1_261030T172747-2@32")).toEqual({
-      kind: "take",
-      lane: "track-1",
-      bar: 1,
-      copy: 2,
-    });
-  });
-  it("reads a sequence's lane and number, through a nested placement id", () => {
-    expect(clipNameParts("verse@0>track-7-seq-1@4")).toEqual({
-      kind: "sequence",
-      lane: "track-7",
-      n: 1,
-    });
-  });
-  it("leaves an authored name alone", () => {
-    expect(clipNameParts("intro_gtr@8")).toEqual({
-      kind: "named",
-      name: "intro_gtr",
-    });
-  });
-});
 
 describe("clipShownName", () => {
   it("names a take by its lane's label and its bar", () => {

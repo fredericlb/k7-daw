@@ -29,6 +29,8 @@ mod tests_rules;
 #[cfg(test)]
 mod tests_support;
 #[cfg(test)]
+mod tests_template;
+#[cfg(test)]
 mod tests_text;
 #[cfg(test)]
 mod tests_text_desk;

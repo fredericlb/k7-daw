@@ -47,30 +47,6 @@ const videoTrack = (id: string): WebVideoTrack => ({
   shapes: [],
 });
 
-describe("projectRows", () => {
-  it("nests a group's members under a header placed where the first sits", () => {
-    const rows = projectRows({ groups: [group("drums")] }, [
-      track({ id: "bass" }),
-      track({ id: "kick", group: "drums" }),
-      track({ id: "snare", group: "drums" }),
-    ]);
-    expect(rows.map(rowKey)).toEqual([
-      "track:bass",
-      "group:drums",
-      "track:kick",
-      "track:snare",
-    ]);
-  });
-
-  it("draws a track whose group does not exist as a plain lane", () => {
-    // The surfaces show what the song HAS, not what it should: a dangling pointer is something to see, not to hide.
-    const rows = projectRows({ groups: [] }, [
-      track({ id: "kick", group: "gone" }),
-    ]);
-    expect(rows.map(rowKey)).toEqual(["track:kick"]);
-  });
-});
-
 describe("rowTarget", () => {
   it("names the track behind a lane", () => {
     const row: Row = {
@@ -119,74 +95,6 @@ describe("rowTarget", () => {
   });
 });
 
-describe("a song that carries picture", () => {
-  it("puts the video lanes last, front layer FIRST", () => {
-    // The picture document is bottom-first, so the rows reverse it: a row above another means IN FRONT of it.
-    const rows = projectRows(
-      { groups: [] },
-      [track({ id: "bass" })],
-      [videoTrack("main"), videoTrack("pip")], // compiled bottom-first: main is behind pip
-    );
-    expect(rows.map(rowKey)).toEqual(["track:bass", "video:pip", "video:main"]);
-  });
-
-  it("puts each picture row where `trackOrder` puts it among the sound rows", () => {
-    const rows = projectRows(
-      { groups: [] },
-      [track({ id: "drums" }), track({ id: "bass" })],
-      [videoTrack("main"), videoTrack("pip")],
-      {},
-      ["pip", "drums", "main", "bass"],
-    );
-    expect(rows.map(rowKey)).toEqual([
-      "video:pip",
-      "track:drums",
-      "video:main",
-      "track:bass",
-    ]);
-  });
-
-  it("never splits a group or a lane from its automation, and keeps an unlisted picture last", () => {
-    const rows = projectRows(
-      { groups: [group("kit")] },
-      [
-        track({ id: "kick", group: "kit" }),
-        track({ id: "snare#audio", group: "kit" }),
-        track({ id: "bass" }),
-      ],
-      [videoTrack("main"), videoTrack("loose")],
-      { bass: [{ param: "gain" } as never] },
-      ["kick", "main", "snare", "bass"],
-    );
-    expect(rows.map(rowKey)).toEqual([
-      "group:kit",
-      "track:kick",
-      "track:snare#audio",
-      "video:main",
-      "track:bass",
-      "auto:bass:gain",
-      "video:loose",
-    ]);
-  });
-
-  it("tells a video lane from an audio lane of the same name", () => {
-    // A song is one folder, so `main` can be both a track and a layer: the key is prefixed by kind for exactly this.
-    const rows = projectRows(
-      { groups: [] },
-      [track({ id: "main" })],
-      [videoTrack("main")],
-    );
-    expect(rows.map(rowKey)).toEqual(["track:main", "video:main"]);
-  });
-
-  it("is the plain row list when the song has no picture", () => {
-    // The argument is defaulted, so every caller that predates picture reads unchanged.
-    expect(
-      projectRows({ groups: [] }, [track({ id: "bass" })]).map(rowKey),
-    ).toEqual(["track:bass"]);
-  });
-});
-
 describe("an automation row", () => {
   const lane = (param: string) => ({
     track: "gtr",
@@ -196,23 +104,20 @@ describe("an automation row", () => {
     points: [{ time: "1:1:1", value: 0.5 }],
   });
 
-  it("sits under its lane", () => {
-    // A curve is part of what the lane is playing; reading down a lane you meet its sound before its history.
-    const gtr = track({ id: "gtr" });
-    const rows = projectRows({ groups: [] }, [gtr], [], {
-      gtr: [lane("Level")],
-    });
-    expect(rows.map(rowKey)).toEqual(["track:gtr", "auto:gtr:Level"]);
-  });
-
-  it("is keyed by PARAM — one knob, one curve, so that names it uniquely", () => {
-    const rows = projectRows({ groups: [] }, [track({ id: "gtr" })], [], {
-      gtr: [lane("Level"), lane("Filter Freq")],
-    });
+  it("is keyed by PARAM and the page's own objects come back in the rows the module orders", () => {
+    const rows = projectRows(
+      { groups: [group("kit")] },
+      [track({ id: "kick", group: "kit" }), track({ id: "gtr" })],
+      [videoTrack("cam")],
+      { gtr: [lane("Level"), lane("Filter Freq")] },
+    );
     expect(rows.map(rowKey)).toEqual([
+      "group:kit",
+      "track:kick",
       "track:gtr",
       "auto:gtr:Level",
       "auto:gtr:Filter Freq",
+      "video:cam",
     ]);
   });
 
@@ -229,12 +134,6 @@ describe("an automation row", () => {
       gtr: [lane("Level")],
     });
     expect(isCellRow(rows[1] as Row)).toBe(false);
-  });
-
-  it("adds nothing to a project that automates nothing", () => {
-    expect(
-      projectRows({ groups: [] }, [track({ id: "gtr" })]).map(rowKey),
-    ).toEqual(["track:gtr"]);
   });
 });
 

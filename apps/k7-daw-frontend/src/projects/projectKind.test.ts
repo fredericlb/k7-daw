@@ -4,19 +4,8 @@ import { describe, expect, it } from "vitest";
 import { editedAgo, shapeOfSurfaces } from "./projectKind";
 
 describe("shapeOfSurfaces", () => {
-  it("reads each archetype back from the surfaces it scaffolds", () => {
-    expect(shapeOfSurfaces(["timeline"])).toBe("arrangement");
-    expect(shapeOfSurfaces(["turntables"])).toBe("mix");
-    expect(shapeOfSurfaces(["timeline", "viewport"])).toBe("video");
-    expect(shapeOfSurfaces(["viewport"])).toBe("live-video");
-    expect(shapeOfSurfaces([])).toBe("live");
-  });
-
-  it("lets a desk win over a timeline, a set being what declares one", () => {
+  it("reaches the module (the archetypes are song reads.rs)", () => {
     expect(shapeOfSurfaces(["timeline", "turntables"])).toBe("mix");
-  });
-
-  it("says nothing when an older service sent no surfaces", () => {
     expect(shapeOfSurfaces(undefined)).toBeNull();
   });
 });

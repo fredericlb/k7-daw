@@ -44,116 +44,14 @@ const graph = (): WebGraph =>
   }) as unknown as WebGraph;
 
 describe("rackHits", () => {
-  it("gives a rack the notes of the lane feeding its chain, in arrangement beats", () => {
+  it("reaches the module (the rules are song reads_ports_rack.rs) and answers empty before the project lands", () => {
     const hits = rackHits(
       project([{ time: 1, duration: 2, key: 36 }], 4),
       graph(),
     );
-    // The clip starts at beat 4 and the note one beat into it: beat 5, for two beats.
     expect(hits.kit).toEqual([{ from: 5, to: 7, key: 36 }]);
-  });
-
-  it("floors a very short note, so a drum hit does not flash between two frames", () => {
-    const hits = rackHits(
-      project([{ time: 0, duration: 0.05, key: 36 }]),
-      graph(),
-    );
-    expect(hits.kit?.[0].to).toBe(MIN_FLASH_BEATS);
-  });
-
-  it("tiles a LOOPED event's window across its placed length, as the engine plays it", () => {
-    const looped = {
-      tempo: 120,
-      tracks: [
-        {
-          id: "beat",
-          clips: [
-            {
-              id: "c",
-              type: "midi",
-              start: 8,
-              // Window [4, 6) of the source, played 2.5 times: the third pass is cut at its middle.
-              length: 5,
-              loopStart: 4,
-              loopEnd: 6,
-              notes: [
-                { time: 0, duration: 1, key: 40 }, // before the window: never plays
-                { time: 4, duration: 1, key: 36 },
-                { time: 5, duration: 1, key: 38 },
-              ],
-            },
-          ],
-        },
-      ],
-    } as unknown as WebProject;
-    const hits = rackHits(looped, graph());
-    expect(hits.kit?.map((h) => [h.from, h.key])).toEqual([
-      [8, 36],
-      [9, 38],
-      [10, 36],
-      [11, 38],
-      [12, 36],
-    ]);
-    expect(litAt(hits.kit ?? [], 10.5)).toEqual(new Set([36]));
-  });
-
-  it("gives nothing to a chain with no rack, and nothing for a lane with no notes", () => {
-    expect(rackHits(project([]), graph())).toEqual({});
-    const noRack = {
-      chains: { beat: { from: "beat", use: [{ module: "amp" }], out: [] } },
-    } as unknown as WebGraph;
-    expect(
-      rackHits(project([{ time: 0, duration: 1, key: 36 }]), noRack),
-    ).toEqual({});
-  });
-
-  it("answers an empty map before the project or the graph has landed", () => {
     expect(rackHits(null, graph())).toEqual({});
     expect(rackHits(project([]), null)).toEqual({});
-  });
-
-  it("sorts a module reached from TWO chains as one list, not two runs", () => {
-    /** The bug this pins: two sorted runs back to back, and `litAt` stops at the first note that has not begun — the end of the FIRST. */
-    const twoLanes = {
-      tempo: 120,
-      tracks: [
-        {
-          id: "late",
-          clips: [
-            {
-              id: "l",
-              type: "midi",
-              start: 8,
-              notes: [{ time: 0, duration: 1, key: 38 }],
-            },
-          ],
-        },
-        {
-          id: "early",
-          clips: [
-            {
-              id: "e",
-              type: "midi",
-              start: 0,
-              notes: [{ time: 0, duration: 1, key: 36 }],
-            },
-          ],
-        },
-      ],
-    } as unknown as WebProject;
-    const rack = [{ symbol: "BD", note: 36 }];
-    const bothIntoKit = {
-      chains: {
-        late: { from: "late", use: [{ module: "kit", rack }], out: [] },
-        early: { from: "early", use: [{ module: "kit", rack }], out: [] },
-      },
-    } as unknown as WebGraph;
-
-    const hits = rackHits(twoLanes, bothIntoKit);
-    expect(hits.kit.map((h) => h.from)).toEqual([0, 8]);
-    // …and the note of the lane that sorted second is reachable, which is what broke.
-    expect([...litAt(hits.kit, 0)]).toEqual([36]);
-    expect([...litAt(hits.kit, 8)]).toEqual([38]);
   });
 });
 

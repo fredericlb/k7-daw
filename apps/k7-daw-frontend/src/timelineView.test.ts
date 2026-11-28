@@ -30,20 +30,10 @@ describe("timelineView", () => {
   it("falls back to the song when the timeline is gone", () => {
     expect(timelineView(song, "chorus").doc).toBe(song);
   });
-});
 
-describe("followRename", () => {
-  it("keeps an open timeline that is still there", () => {
-    expect(followRename("verse", ["verse"], ["verse", "chorus"])).toBe("verse");
-  });
-
-  it("follows the one that replaced it", () => {
+  it("follows a rename through the module (the rule is song reads.rs)", () => {
     expect(
       followRename("verse", ["verse", "chorus"], ["chorus", "verse-a"]),
     ).toBe("verse-a");
-  });
-
-  it("goes back to Main when it was removed", () => {
-    expect(followRename("verse", ["verse", "chorus"], ["chorus"])).toBeNull();
   });
 });
