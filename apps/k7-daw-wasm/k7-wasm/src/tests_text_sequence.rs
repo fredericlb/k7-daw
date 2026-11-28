@@ -35,7 +35,7 @@ fn a_short_form_is_read_as_the_notes_it_expands_to() {
         d["notes"],
         json!([{"t": 0, "d": 1, "k": 60}, {"t": 1, "d": 1, "k": 64}])
     );
-    assert!(refused("text.sequence_data", json!({"text": "notes(["})).len() > 0);
+    assert!(!refused("text.sequence_data", json!({"text": "notes(["})).is_empty());
 }
 
 #[test]

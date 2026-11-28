@@ -384,7 +384,7 @@ impl Seg for usize {
     }
 }
 macro_rules! p {
-    ($($x:expr),* $(,)?) => { vec![$($crate::common::Seg::seg($x)),*] };
+    ($($x:expr),* $(,)?) => { [$($crate::common::Seg::seg($x)),*] };
 }
 
 pub fn v(json: &str) -> Value {

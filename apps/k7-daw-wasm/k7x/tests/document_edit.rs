@@ -221,39 +221,37 @@ fn delete_in_removes_an_entrys_whole_line_a_statement_and_a_chain_call() {
         )),
         EDITED.replace("automations([])\n", "")
     );
-    let del = |text: &str, path: Vec<PathSeg>| {
-        edit(text, |d| assert!(d.delete_in(&path, false).unwrap()))
-    };
+    let del =
+        |text: &str, path: &[PathSeg]| edit(text, |d| assert!(d.delete_in(path, false).unwrap()));
     assert_eq!(
-        del("s([a(1).b(2).c(3)])", p!["s", 0usize, "b"]),
+        del("s([a(1).b(2).c(3)])", &p!["s", 0usize, "b"]),
         "s([a(1).c(3)])"
     );
     assert_eq!(
-        del("s([a(1).b(2).c(3)])", p!["s", 0usize, "a"]),
+        del("s([a(1).b(2).c(3)])", &p!["s", 0usize, "a"]),
         "s([b(2).c(3)])"
     );
     assert_eq!(
         del(
             "s([\n  a(1)\n    .b(2)\n    .c(3),\n])",
-            p!["s", 0usize, "b"]
+            &p!["s", 0usize, "b"]
         ),
         "s([\n  a(1)\n    .c(3),\n])"
     );
     assert_eq!(
-        del("s([a(1), b(2)])", p!["s", 1usize, "b"]),
+        del("s([a(1), b(2)])", &p!["s", 1usize, "b"]),
         "s([a(1), {}])"
     );
 }
 
 #[test]
 fn delete_in_removes_list_items_with_their_commas_and_says_when_nothing_was_there() {
-    let del = |text: &str, path: Vec<PathSeg>| {
-        edit(text, |d| assert!(d.delete_in(&path, false).unwrap()))
-    };
-    assert_eq!(del("l([1, 2, 3])", p!["l", 1usize]), "l([1, 3])");
-    assert_eq!(del("l([1, 2, 3])", p!["l", 2usize]), "l([1, 2])");
-    assert_eq!(del("l([1])", p!["l", 0usize]), "l([])");
-    assert_eq!(del("l(1, 2)", p!["l", 0usize]), "l([2])");
+    let del =
+        |text: &str, path: &[PathSeg]| edit(text, |d| assert!(d.delete_in(path, false).unwrap()));
+    assert_eq!(del("l([1, 2, 3])", &p!["l", 1usize]), "l([1, 3])");
+    assert_eq!(del("l([1, 2, 3])", &p!["l", 2usize]), "l([1, 2])");
+    assert_eq!(del("l([1])", &p!["l", 0usize]), "l([])");
+    assert_eq!(del("l(1, 2)", &p!["l", 0usize]), "l([2])");
     let mut d = Document::new(EDITED);
     assert!(!d.delete_in(&p!["nope"], false).unwrap());
     assert_eq!(d.text(), EDITED);
