@@ -1160,8 +1160,8 @@ slow" you feel with two fingers. Ten times the coefficient makes a pinch track t
 leaves the wheel as it was. The pinch delta is CLAMPED first because browsers disagree about the
 units they report a pinch in, and one answering in hundreds would jump a decade in a single event.
 
-A two-finger spread is measured against the spread the gesture STARTED at (`usePinch`, in
-`@studio/ui-timeline/pinch`), not the previous frame: a ratio of ratios accumulates rounding, so you
+A two-finger spread is measured against the spread the gesture STARTED at (`useTwoFingers`, in
+`@studio/ui-timeline/twoFingers`), not the previous frame: a ratio of ratios accumulates rounding, so you
 would pinch out and back in without returning where you began.
 
 ## The module builder's preview graph

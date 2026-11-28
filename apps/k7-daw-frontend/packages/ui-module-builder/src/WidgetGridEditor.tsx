@@ -43,6 +43,8 @@ import {
 import { cn } from "@studio/ui/lib/utils";
 import { Spinner } from "@studio/ui/spinner";
 import { usePointerFollow } from "@studio/ui-timeline/drag";
+import { holdFollow } from "@studio/ui-timeline/hold";
+import { useTwoFingerScroll } from "@studio/ui-timeline/twoFingers";
 import { useCallback, useRef, useState } from "react";
 import { GridMenu } from "./GridMenu";
 import type { ModuleUI, Widget, WidgetType } from "./moduleUi";
@@ -112,6 +114,9 @@ export function WidgetGridEditor({
   // The widget a parameter is currently hovering over, so it can light up as the target.
   const [dropTarget, setDropTarget] = useState<string | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
+  // The canvas scrolls under two fingers on a touch screen; one finger is left to the widgets (@studio/ui-timeline/twoFingers).
+  const canvasRef = useRef<HTMLDivElement>(null);
+  useTwoFingerScroll(canvasRef);
   // Which gesture is live, so pointermove knows whether it's moving or resizing.
   const drag = useRef<{
     id: string;
@@ -399,14 +404,18 @@ export function WidgetGridEditor({
         : { id, mode: "resize", anchor: cornerAnchor(w, mode) };
     // A cancelled gesture puts the panel back as it was at the press, having written nothing.
     const before = ui;
-    follow(e, {
-      move: (ev) => moveRef.current(ev),
-      end: endDrag,
-      cancel: () => {
-        if (drag.current?.moved) onChange(before);
-        drag.current = null;
-      },
-    });
+    // A finger holds before the widget moves, so a stray swipe on the canvas moves nothing (@studio/ui-timeline/hold).
+    follow(
+      e,
+      holdFollow(e, {
+        move: (ev) => moveRef.current(ev),
+        end: endDrag,
+        cancel: () => {
+          if (drag.current?.moved) onChange(before);
+          drag.current = null;
+        },
+      }),
+    );
   };
   const endDrag = () => {
     // A click that never moved the group it grabbed was meant for the widget under it.
@@ -500,6 +509,7 @@ export function WidgetGridEditor({
           }}
         />
         <div
+          ref={canvasRef}
           className="min-h-0 flex-1 overflow-auto p-4"
           onPointerDown={() => setSelected(null)}
         >

@@ -4,6 +4,7 @@
 import { jackRef } from "@studio/ui-chains/cables";
 import type { GraphNode } from "@studio/ui-chains/graph";
 import { usePointerFollow } from "@studio/ui-timeline/drag";
+import { holdFollow } from "@studio/ui-timeline/hold";
 import { type RefObject, useCallback, useRef } from "react";
 import type { Cam } from "./camera";
 import type { ChainsCallbacks } from "./domChainsProps";
@@ -108,7 +109,8 @@ export function useNodeDrag({
         rebuildCables.current();
         paintRef.current();
       };
-      follow(e, { move: onMove, end: onUp, cancel: onCancel });
+      // A finger holds before the card moves, so a stray swipe drags nothing (@studio/ui-timeline/hold).
+      follow(e, holdFollow(e, { move: onMove, end: onUp, cancel: onCancel }));
     },
     [follow],
   );

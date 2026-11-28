@@ -78,12 +78,16 @@ Panning moves the camera **with the fingers, 1:1, with no glide** — the same r
 cancels a zoom still in flight, exactly as a pointer-down does. The deltas are screen pixels and
 so is the translation, which is why no zoom enters that arithmetic.
 
-## A pinch, where there is no wheel at all
+## Two fingers, where there is no wheel at all
 
-The touchscreen gesture uses **touch events** rather than the pointer flow the rest of the file
-runs on: that flow drives node drags, widget drags and cable draws, and a second finger arriving
-mid-gesture would be read as a second drag. Here the rule is simply "two fingers means zoom", and
-the pan in progress is dropped.
+On a touch screen **one finger never moves the camera**; two fingers pan it and zoom it, the
+per-track row as much as the full graph. A card's header held then dragged moves the card, a tap
+selects it, and a swipe on empty space does nothing (`@studio/ui-timeline/hold`): a camera that
+follows one finger turns every stray swipe into a lost view. A mouse still drags the empty canvas.
+
+The gesture uses **touch events** rather than the pointer flow the rest of the file runs on: that
+flow drives node drags, widget drags and cable draws, and a second finger arriving mid-gesture
+would be read as a second drag. On a ROW the fingers walk along it and never move it vertically.
 
 It is measured from the camera the gesture STARTED on rather than frame to frame, because a ratio
 of ratios accumulates rounding — pinch out and back in, and you would not land where you began.

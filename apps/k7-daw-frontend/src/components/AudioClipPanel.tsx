@@ -23,7 +23,7 @@ import { cn } from "@studio/ui/lib/utils";
 import { followPointer } from "@studio/ui-timeline/drag";
 import { useElementSize } from "@studio/ui-timeline/measure";
 import { wheelFactor, wheelZooms } from "@studio/ui-timeline/panZoom";
-import { usePinch } from "@studio/ui-timeline/pinch";
+import { useTwoFingers } from "@studio/ui-timeline/twoFingers";
 import {
   type RefObject,
   useCallback,
@@ -36,7 +36,6 @@ import {
 import { api } from "../api";
 import { clamp } from "../clamp";
 import { chainOps, filterOps, processLine } from "../clipOps";
-import { useLatest } from "../hooks/useLatest";
 import { useLiveEnvelope } from "../hooks/useLiveEnvelope";
 import { cursorOf } from "../modeIcons";
 import { m } from "../paraglide/messages.js";
@@ -359,9 +358,7 @@ export function AudioClipPanel({
     [reach, tempo, beatsPerBar],
   );
 
-  // What is shown RIGHT NOW, for the pinch to measure from: the gesture outlives any render, so its baseline cannot live in a closure.
-  const shownRef = useLatest(win.shown);
-  // …and where the window actually SITS, in bars into the reach — the CLAMPED start, not `asked`, and a ref for the same reason.
+  // Where the window actually SITS, in bars into the reach — the CLAMPED start, not `asked`: a gesture outlives any render.
   const atRef = useRef({ start: 0, bars: 1 });
   atRef.current = {
     start: win.barSec > 0 ? (win.view.start - reach.from) / win.barSec : 0,
@@ -415,17 +412,25 @@ export function AudioClipPanel({
     };
   }, [rolling, wf]);
 
-  // Two fingers on the wave: the bars shown at the start over the spread's ratio, anchored at their midpoint.
-  usePinch(
+  // Two fingers on the wave: the bars shown at the start over the spread's ratio, the bar they landed on carried by their midpoint.
+  useTwoFingers(
     waveBox,
     {
-      onStart: () => (rolling || !wf ? false : shownRef.current),
-      onPinch: (bars, ratio, c) => {
-        const el = waveBox.current;
-        if (el) zoomTo(() => bars / ratio, c.x, el);
+      onStart: () => (rolling || !wf ? false : { ...atRef.current }),
+      onMove: (s, f) => {
+        const r = waveBox.current?.getBoundingClientRect();
+        if (!r || r.width <= 0) return;
+        const fracAt = (x: number) => clamp((x - r.left) / r.width, 0, 1);
+        const held = s.start + fracAt(f.origin.x) * s.bars;
+        const now = fracAt(f.origin.x + f.dx);
+        setAsked((a) => {
+          const cur = barWindow(reach, a.bars, tempo, beatsPerBar, a.start);
+          const bars = clamp(s.bars / f.ratio, 1, cur.allBars);
+          return { bars, start: held - now * bars };
+        });
       },
     },
-    [rolling, wf],
+    [rolling, wf, reach, tempo, beatsPerBar],
   );
 
   return (

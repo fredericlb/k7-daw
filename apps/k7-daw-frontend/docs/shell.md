@@ -1745,6 +1745,14 @@ Being a phone is a question of SIZE, not of pointer (`useIsMobile.ts`): an iPad 
 layout. What a touch screen of any size does need is the right-click, and a finger held still is one
 (`longPress.ts`, [contextMenu.md](contextMenu.md)).
 
+**On a touch screen, the editing surfaces move under two fingers, never one**: the timeline, the piano
+roll, the waveform strips, the take panel, the chains graph and a lane's row, the panel builder's grid
+and the DJ desk's row. There one finger taps (a click), holds then drags (a move), or holds in place
+(the menu), and a swipe it makes by mistake moves and scrolls nothing. Everything without movable
+things — settings, lists, the library, menus, dialogs, the docs, the text editor — keeps one-finger
+scrolling, because there a swipe has nothing else it could mean. A mouse, a pen and a trackpad are
+unchanged ([timeline.md](timeline.md), "A finger holds, then drags").
+
 **A field is 16px on a coarse pointer** (`index.css`, unlayered so it beats every size utility): iOS
 WebKit zooms the page into any focused field under 16px and leaves it zoomed. The phone's overflow
 menu is a plain dialog of buttons, not an ARIA menu: it takes focus on opening, on the pane in use, and

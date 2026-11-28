@@ -271,7 +271,8 @@ export function usePointerGestures({
       e.preventDefault();
       return;
     }
-    if (fixedRef.current) return;
+    // One finger moves no camera: a touch screen pans with two (useChainsCamera), so a stray swipe leaves the view where it is.
+    if (fixedRef.current || e.pointerType === "touch") return;
     flight.current = null;
     // Grabbing the canvas ends any zoom still in flight: you are steering now — docs/camera.md.
     goal.current.k = cam.current.k;

@@ -19,6 +19,7 @@ import {
   MIN_ZOOM,
   sameLod,
   settleCam,
+  twoFingerCam,
   wheelFactor,
   wheelPixels,
   ZOOM_HALF_LIFE,
@@ -66,6 +67,25 @@ describe("wheelFactor", () => {
     expect(wheelFactor(-5000, 0, 800, true)).toBeLessThan(1.7);
     expect(wheelFactor(5000, 0, 800, true)).toBeGreaterThan(0.6);
     expect(wheelFactor(0, 0, 800, true)).toBe(1);
+  });
+});
+
+describe("twoFingerCam", () => {
+  it("the world point the fingers landed on follows their midpoint, zoomed or not", () => {
+    const from: Cam = { x: -120, y: 40, k: 0.8 };
+    const [px, py, dx, dy] = [300, 210, 45, -30];
+    const world = { x: (px - from.x) / from.k, y: (py - from.y) / from.k };
+    for (const k of [0.8, 1.6]) {
+      const c = twoFingerCam(from, k, px, py, dx, dy, false);
+      expect((px + dx - c.x) / c.k).toBeCloseTo(world.x, 10);
+      expect((py + dy - c.y) / c.k).toBeCloseTo(world.y, 10);
+    }
+  });
+
+  it("on a ROW, the per-track view, two fingers walk along it and never move it vertically", () => {
+    const from: Cam = { x: 10, y: 25, k: 1.2 };
+    const c = twoFingerCam(from, from.k, 200, 60, -80, 140, true);
+    expect(c).toEqual({ x: -70, y: 25, k: 1.2 });
   });
 });
 
