@@ -9,7 +9,7 @@ const ROOT = join(import.meta.dirname, "..", "..", "..");
 export const PACKAGES = join(ROOT, "apps", "k7-daw-frontend", "packages");
 
 /** The folders under packages/ the binary writes `generated/` into (`src/bindings.rs`'s list). */
-export const TARGETS = ["graph-model", "web-protocol"];
+export const TARGETS = ["engine-protocol", "graph-model", "web-protocol"];
 
 /** The crates whose structs derive the types, and the binary that exports them, from the repo root. */
 const INPUTS = [
@@ -21,6 +21,12 @@ const INPUTS = [
   "apps/k7-daw-backend/packages/k7-front/src/routes/cameras/wire.rs",
   "apps/k7-daw-backend/packages/k7-front/src/routes/lan/peers.rs",
   "apps/k7-daw-backend/packages/k7-front/src/bindings.rs",
+  "apps/k7-daw-backend/packages/k7-runtime-server/Cargo.toml",
+  "apps/k7-daw-backend/packages/k7-runtime-server/src/wire",
+  "apps/k7-daw-backend/packages/k7-runtime-server/src/server/state_frame.rs",
+  "apps/k7-daw-backend/packages/k7-runtime-server/src/server/scan_board.rs",
+  "apps/k7-daw-backend/packages/k7-runtime-server/src/engine/plugins.rs",
+  "apps/k7-daw-backend/packages/k7-supervisor/src/protocol/wire.rs",
 ];
 
 function files(path) {

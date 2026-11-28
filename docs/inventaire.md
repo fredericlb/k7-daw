@@ -106,15 +106,12 @@ other plumbing stays reachable by relative import inside the package.
 
 ## 2. Genuinely orphaned — nothing reaches it
 
-| what | where | note |
-|---|---|---|
-| `probeLocalEngine` | `apps/k7-daw-frontend/packages/engine-browser/src/probe.ts` | the registry does this work. Deleting a loopback probe nothing replays is to be decided, not left to rot. |
+No file or function is orphaned today.
 
 ### SYMBOLS, not files
 
 The file lives, the function does not: nobody pronounces that name anywhere, not even the file
-declaring it. From pass 4, over `apps/`; `probeLocalEngine`, above, is
-not repeated. Pass 4 finds nothing else but the named stories of the `*.stories.tsx` files, which
+declaring it. From pass 4, over `apps/`: it finds nothing but the named stories of the `*.stories.tsx` files, which
 Storybook reads by export rather than by name.
 
 | symbol | where | note |

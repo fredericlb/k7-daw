@@ -1,6 +1,6 @@
 // broadcast-sessions.mjs — the proof that the AUDIO is per session: two projects under two
 // session ids on one engine, two listeners, each hearing only the one it subscribed for.
-// Raw JSON on purpose, so it tests the engine alone; two-sessions.ts covers the clients.
+// Raw JSON on purpose, so it tests the engine alone.
 //   node apps/k7-daw-engine/k7-runtime/scripts/broadcast-sessions.mjs   (engine on :8833)
 
 import WebSocket from "ws";

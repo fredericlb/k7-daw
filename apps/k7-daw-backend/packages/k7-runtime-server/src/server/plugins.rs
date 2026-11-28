@@ -9,9 +9,10 @@ use super::msg::Malformed;
 use super::plugin_scan::{When, detached, plugins_json, scan_in_background, status_json};
 use super::supersede::superseded;
 use crate::engine::Mt;
-use crate::engine::state::ParamInfo;
 use crate::log::say;
-use serde_json::{Map, Value, json};
+use crate::wire::frames::{ParamMeta, PluginParamInfo, PluginParamList, PluginParams, tagged};
+use serde_json::json;
+use std::collections::BTreeMap;
 
 pub fn add(t: &mut HandlerTable) {
     t.add(&["plugin-scan"], scan_status);
@@ -88,36 +89,6 @@ fn list_or_rescan(r: &Request) -> Result<(), Malformed> {
     Ok(())
 }
 
-/// What a control needs to draw itself, `def` only when the plugin publishes a default.
-fn range_json(p: &ParamInfo) -> Map<String, Value> {
-    let mut one = Map::new();
-    one.insert("min".into(), json!(p.min));
-    one.insert("max".into(), json!(p.max));
-    if let Some(def) = p.default {
-        one.insert("def".into(), json!(def));
-    }
-    if !p.states.is_empty() {
-        one.insert("states".into(), states_json(&p.states));
-    }
-    one
-}
-
-/// A parameter of a plugin TYPE: its name and its range.
-fn spec_json(p: &ParamInfo) -> Value {
-    let mut one = range_json(p);
-    one.insert("name".into(), json!(p.name));
-    Value::Object(one)
-}
-
-fn states_json(states: &[(String, f64)]) -> Value {
-    Value::Array(
-        states
-            .iter()
-            .map(|(label, value)| json!({"label": label, "value": value}))
-            .collect(),
-    )
-}
-
 /// Every parameter of an installed plugin TYPE, by instantiating it and asking: it runs detached like a scan and
 /// broadcasts its reply, behind one of four slots.
 fn list_plugin_params(r: &Request) -> Result<(), Malformed> {
@@ -135,17 +106,24 @@ fn list_plugin_params(r: &Request) -> Result<(), Malformed> {
         // The slot goes back however the load ends, a panic included.
         let _slot = slot;
         let found = ctx.engine.api().plugin_params_of(&format, &id);
-        let params: Vec<Value> = found.iter().flatten().map(spec_json).collect();
+        let params: Vec<PluginParamInfo> =
+            found.iter().flatten().map(PluginParamInfo::from).collect();
         let what = match &found {
             Some(_) => format!("{} parameters", params.len()),
             None => "could not be loaded".to_string(),
         };
         say!("[plugin-param-list] {id}: {what}");
         // `found` carries what an empty array cannot: could not load, versus loaded and publishes nothing.
-        ctx.broadcast(
-            &json!({"type": "plugin-param-list", "format": format, "id": id,
-                              "found": found.is_some(), "params": params}),
-        );
+        let found = found.is_some();
+        ctx.broadcast(&tagged(
+            "plugin-param-list",
+            &PluginParamList {
+                format,
+                id,
+                found,
+                params,
+            },
+        ));
     });
     Ok(())
 }
@@ -275,16 +253,18 @@ fn get_params(r: &Request) -> Result<(), Malformed> {
     let (ctx, session) = (r.ctx.clone(), r.session.clone());
     r.ctx.engine.post(move |mt: Mt<'_>| {
         ticket.started();
-        let mut params = Map::new();
-        let mut meta = Map::new();
+        let mut params = BTreeMap::new();
+        let mut meta = BTreeMap::new();
         for p in mt.plugin_param_infos(&session, &id) {
-            params.insert(p.name.clone(), json!(p.value));
-            meta.insert(p.name.clone(), Value::Object(range_json(&p)));
+            params.insert(p.name.clone(), p.value);
+            meta.insert(p.name.clone(), ParamMeta::from(&p));
         }
-        ctx.broadcast_to(
-            &session,
-            json!({"type": "plugin-params", "id": id, "params": params, "meta": meta}),
-        );
+        let reply = PluginParams {
+            id,
+            params,
+            meta: Some(meta),
+        };
+        ctx.broadcast_to(&session, tagged("plugin-params", &reply));
     });
     Ok(())
 }
@@ -299,11 +279,7 @@ fn list_presets(r: &Request) -> Result<(), Malformed> {
     let (ctx, session) = (r.ctx.clone(), r.session.clone());
     r.ctx.engine.post(move |mt: Mt<'_>| {
         ticket.started();
-        let rows: Vec<Value> = mt
-            .list_presets(&session, &module)
-            .into_iter()
-            .map(|p| json!({"name": p.name, "source": p.source, "index": p.index, "path": p.path}))
-            .collect();
+        let rows = mt.list_presets(&session, &module);
         ctx.broadcast_to(
             &session,
             json!({"type": "presets", "module": module, "presets": rows}),

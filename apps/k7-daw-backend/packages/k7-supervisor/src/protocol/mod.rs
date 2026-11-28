@@ -4,6 +4,7 @@
 //! is held to its fixtures byte for byte (`tests/all/protocol.rs`).
 
 mod snapshot;
+pub mod wire;
 
 pub use snapshot::*;
 

@@ -81,7 +81,7 @@ describe("a frame nothing else would notice", () => {
   });
 
   it("gets through when a take is finished, and when one is cleared", () => {
-    const take = { file: "a.wav", seconds: 4 };
+    const take = { file: "a.wav", seconds: 4, damaged: false };
     expect(
       notifications([
         { ...IDLE, recorders: { rec: rec({ takes: [] }) } },

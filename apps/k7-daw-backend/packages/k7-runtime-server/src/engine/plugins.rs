@@ -114,14 +114,20 @@ impl K7PluginsApi {
 
 unsafe impl Sync for K7PluginsApi {}
 
-/// One installed plugin of the catalogue.
-#[derive(Clone, Debug, Default, PartialEq, Eq)]
+/// One installed plugin of the catalogue; the page's `PluginInfo` is generated from it.
+#[derive(Clone, Debug, Default, PartialEq, Eq, serde::Serialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS))]
 pub struct PluginInfo {
     pub name: String,
     pub format: String,
     pub manufacturer: String,
     pub instrument: bool,
+    #[cfg_attr(
+        feature = "ts",
+        ts(type = "\"instrument\" | \"audioEffect\" | \"midiEffect\"")
+    )]
     pub role: String,
+    /// What KIND of effect it is, lower case, '' when unknown — an external plugin reports whatever its vendor wrote.
     pub category: String,
     pub id: String,
 }
@@ -134,12 +140,17 @@ pub struct PluginInstance {
     pub has_native_ui: bool,
 }
 
-/// A selectable preset: `source` is "program" (by `index`) or "file" (by `path`).
-#[derive(Clone, Debug, PartialEq, Eq)]
+/// A selectable preset, discovered by the ENGINE in the plugin or authored by the user; the page's `PresetInfo`.
+#[derive(Clone, Debug, PartialEq, Eq, serde::Serialize)]
+#[cfg_attr(feature = "ts", derive(ts_rs::TS))]
+#[cfg_attr(feature = "ts", ts(rename = "PresetInfo"))]
 pub struct Preset {
     pub name: String,
+    #[cfg_attr(feature = "ts", ts(type = "\"program\" | \"file\" | \"user\""))]
     pub source: String,
+    /// Program-list index (source "program"), else -1.
     pub index: i32,
+    /// Absolute preset path (source "file" | "user"), else "".
     pub path: String,
 }
 

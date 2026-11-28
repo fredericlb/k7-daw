@@ -136,20 +136,16 @@ An incremental apply that FIXES a plugin leaves its old line in the set until th
 the engine does not know which earlier complaint a change answers. Setting a preset or opening an
 editor warns under a `WarningScope` but no `BuildScope`, so those stay one-off messages.
 
-## The two harnesses that check all this
+## What checks all this
 
-`scripts/two-sessions.ts` and `scripts/list-sessions.ts` are the only coverage these rules have,
-and they are worth reading before changing anything above.
+The Rust server's tests over the fake engine (`apps/k7-daw-backend/packages/k7-runtime-server/tests/all/`: `server_socket.rs`,
+`project_socket.rs`, `supersede.rs`) are the coverage these rules have; read them before changing anything above. They count
+`state` frames BY the session they name on a raw socket, since the ordinary clients cannot show that: `forSession` drops another
+project's frames before the event fires, so a client sees the same thing whether the engine addressed its frames or shouted
+them at everyone. What the wire costs — a decode and a discard per frame, per tab, per session on the machine — is only
+visible on the raw socket, which sends `hello` as the browser client does, since that is what declares a session.
 
-`two-sessions.ts` drives two projects at once and then opens a **raw socket** that counts `state`
-frames BY the session they name. The ordinary clients cannot show that: `forSession` drops another
-project's frames before the event fires, so a client sees the same thing whether the engine
-addressed its frames or shouted them at everyone. What the wire costs — a decode and a discard per
-frame, per tab, per session on the machine — is only visible on the raw socket. It sends `hello`
-exactly as the browser client does, since that is what declares a session; a socket that sends
-nothing declares nothing, which is the probe case its last count covers.
-
-Three regressions it exists to catch:
+Three regressions they exist to catch:
 
 - **Record-enable is SESSION state.** As a process-global, arming k7 lights the module builder's record light
   and rolling either one records into both.
@@ -160,18 +156,11 @@ Three regressions it exists to catch:
   other project's meters to throw them away, and one session playing keeps every other session's
   tabs awake past their own idle divider.
 
-Its body is wrapped in a function rather than using top-level await, because `apps/k7-daw-engine/k7-runtime`
-declares no `"type": "module"` and tsx transforms it to CJS, where a bare await is a syntax error.
-
-`list-sessions.ts` is **read-only against a REAL engine**: it must not send projects or drop
-anyone's session, which is the difference between a diagnostic and a way to lose the song somebody
-is working on. It connects the way the supervisor does — on the DEFAULT session, driving nothing
-and asking about everyone — which is why `list-sessions` carries no session field at all. It asks
-everything the supervisor polls BEFORE listing, because that is the regression it guards: should reading
-ever CREATE again, those queries conjure a `""` session which then appears in the supervisor's own
-session list, reported by the process that has just invented it. It asks through
-`EngineControl`, the way `apps/k7-daw-backend/packages/k7-supervisor/src/engine_client/mod.rs` does: one question at a
-time, each waiting for its typed reply.
+A read of the engine's sessions must not create one: the supervisor polls on the DEFAULT session, driving nothing and
+asking about everyone, which is why `list-sessions` carries no session field at all. Should reading ever CREATE again,
+those queries conjure a `""` session which then appears in the supervisor's own session list, reported by the process that
+has just invented it. The supervisor asks through `apps/k7-daw-backend/packages/k7-supervisor/src/engine_client/mod.rs`:
+one question at a time, each waiting for its typed reply.
 
 ## When a session goes away
 

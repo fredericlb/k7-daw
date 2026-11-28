@@ -307,6 +307,17 @@ a bench showing its call cost; a GENERATE milestone's proof is `tsc` over every 
 generated file checked fresh by `npm run rebuild:generated`. M2c's proof is the four conformance
 specs passing on the Rust supervisor.
 
+**W6b, as built.** The engine's frames are serde structs, and the page's types are generated from them: `EngineState` and its parts from
+`k7-runtime-server/src/server/state_frame.rs`, `IoLevelsReply`, `PluginParams`, `ParamMeta`, `PluginParamInfo` from `src/wire/frames.rs`,
+`PluginInfo`, `PresetInfo` and `PluginScanStatus` from the structs the server already held, and the supervisor's `HostState` from
+`k7-supervisor/src/protocol/wire.rs`; all land in `engine-protocol/generated/` through the bindings binary (`@studio/engine-protocol/generated`).
+`types.ts` and `decode.ts` keep only `TransportAction`, the decoders and the filled-or-absent aliases (`StateFrame`, `IoLevelsFrame`, `IoLevels`);
+`DesktopEngineSnapshot` is `HostState` with the fields an older supervisor may omit made optional. Gone: `probeLocalEngine` and the probes
+`supersede-probe`, `two-sessions`, `list-sessions` and `track-delta` (the Rust tests over the fake engine cover them). About 790 hand-written
+lines of TypeScript out (549 of them the four probes), 1,100 generated lines in, 700 of Rust. Proof: the state frame, the plugin replies and `io-levels`
+are held to the C++ fixtures byte for byte (`fixtures/state_frame.txt`, `plugin_replies.txt`, `tests/all/machine_socket.rs`), and the supervisor's snapshot to its
+two schema fixtures plus `schema/fixtures/state-edges.txt`, captured from the hand-written writer before it was replaced.
+
 ## Decisions for the user
 
 | # | decision | options | recommendation |
@@ -750,7 +761,7 @@ are grouped by folder and extension, with the reasons they stay.
 | web-protocol/types.ts | 11 | GENERATE | re-export index of generated types | becomes an index over generated/ |
 | web-protocol/workspaceTypes.ts | 332 | GENERATE | ts-rs on k7-file-service / k7-front reply structs (no ts-rs in backend yet) | 29 types; 1 const STAY |
 | engine-browser/src/*.ts (18 files) | 2789 | STAY |  | browser WebSocket client, external stores, registry fetches, Web Audio; rAF playhead prediction, per frame; per audio ... |
-| engine-client/src/*.ts (5 files) | 489 | STAY |  | Node engine client for k7-runtime dev scripts (list-sessions, two-sessions, platter-node-probe) + ... |
+| engine-client/src/*.ts (5 files) | 489 | STAY |  | Node engine client for k7-runtime dev scripts (platter-node-probe and others) + ... |
 | engine-protocol/*.ts (4 files) | 381 | STAY |  | reply decoding on the browser socket; types part GENERATE with types.ts; binary frame header decode, per audio frame ... |
 | env/src/index.ts | 169 | STAY |  | dev env.yaml reader for e2e + dev-front.mjs (build tooling) |
 | http-client/src/*.ts (3 files) | 285 | STAY |  | fetch/XHR upload progress, download list |

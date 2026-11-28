@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "type": "module",
   "private": true,
-  "description": "The engine wire protocol: the state frames (.) and the compiled project document (./project), both types-only and erased at runtime, plus the two subpaths that emit code \u2014 constructors for that document (./build), the binary audio-broadcast frame (./stream), the decoders and outbox both clients share (./decode), and the wire's version (./version).",
+  "description": "The engine wire protocol: the state frames (.) and the compiled project document (./project), both types-only and erased at runtime, plus the two subpaths that emit code — constructors for that document (./build), the binary audio-broadcast frame (./stream), the decoders and outbox both clients share (./decode), and the wire's version (./version); ./generated holds the types the engine's and the supervisor's Rust structs write.",
   "types": "./types.ts",
   "exports": {
     ".": "./types.ts",
@@ -12,7 +12,8 @@
     "./sessions": "./sessions.ts",
     "./decode": "./decode.ts",
     "./stream": "./stream.ts",
-    "./version": "./version.ts"
+    "./version": "./version.ts",
+    "./generated": "./generated/index.ts"
   },
   "scripts": {
     "test": "vitest run",

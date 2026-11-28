@@ -9,8 +9,28 @@ use ts_rs::TS;
 type Exports = fn(&Path) -> Result<(), ts_rs::ExportError>;
 
 /// A package and the roots whose types land in its `generated/` folder, each export walking its own dependencies.
-const PACKAGES: &[(&str, Exports)] =
-    &[("graph-model", graph_model), ("web-protocol", web_protocol)];
+const PACKAGES: &[(&str, Exports)] = &[
+    ("engine-protocol", engine_protocol),
+    ("graph-model", graph_model),
+    ("web-protocol", web_protocol),
+];
+
+fn engine_protocol(dir: &Path) -> Result<(), ts_rs::ExportError> {
+    use k7_runtime_server::engine::plugins::{PluginInfo, Preset};
+    use k7_runtime_server::server::scan_board::Status;
+    use k7_runtime_server::server::state_frame::EngineStateFrame;
+    use k7_runtime_server::wire::frames::{IoLevelsFrame, PluginParamInfo, PluginParams};
+    use k7_supervisor::protocol::wire::HostState;
+    EngineStateFrame::export_all_to(dir)?;
+    IoLevelsFrame::export_all_to(dir)?;
+    PluginInfo::export_all_to(dir)?;
+    PluginParamInfo::export_all_to(dir)?;
+    PluginParams::export_all_to(dir)?;
+    Preset::export_all_to(dir)?;
+    Status::export_all_to(dir)?;
+    HostState::export_all_to(dir)?;
+    Ok(())
+}
 
 fn graph_model(dir: &Path) -> Result<(), ts_rs::ExportError> {
     song::graph::view::web::WebGraph::export_all_to(dir)
