@@ -412,3 +412,7 @@ mod tests {
         assert!(k.iter().find(|t| t.key == "a b").unwrap().quoted);
     }
 }
+
+#[cfg(test)]
+#[path = "tokens_cases_tests.rs"]
+mod cases_tests;
