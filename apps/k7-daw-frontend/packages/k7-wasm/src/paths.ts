@@ -3,8 +3,10 @@
 
 import { call } from "./abi.ts";
 import { materialRefOf } from "./schema.ts";
-import type { FileTreeNode, PathRule, TreeEntry } from "./types/index.ts";
+import type { PathRule } from "./types/index.ts";
 import { fuzzyScores } from "./ui.ts";
+
+export * from "./ops/paths.ts";
 
 export type { FileTreeNode as FileNode, TreeEntry } from "./types/index.ts";
 
@@ -37,54 +39,6 @@ export const isVideoTrackFile = (
 /** A module file the BUILDER opens: both trees, since the builder edits both. */
 export const isModuleFile = (path: string): boolean => is("module", path);
 
-/** The chain-`use` key a file answers to in `hints.racks`: a module's folder name or a NODE's stem. */
-export const rackKeyOf = (path: string): string | null =>
-  ask("rack_key", { path });
-
-/** The file in `files` that IS `<folder>/<id>`, or null: a lookup and not a search. */
-export const entityFile = (
-  files: string[],
-  folder: string,
-  id: string,
-): string | null => ask("entity_file", { files, folder, id });
-
-/** A file's id: its name without the folder or the extension. */
-export const fileStem = (path: string): string => ask("stem", { path });
-
-/** A project folder, slashed and without a trailing `/`; "" when there is none or it is the workspace itself. */
-export const projectDir = (activeProject: string | null): string =>
-  ask("project_dir", { project: activeProject });
-
-/** A workspace-relative path made relative to the project folder, or merely slashed when it lies outside it. */
-export const toProjectRelative = (
-  path: string,
-  activeProject: string | null,
-): string => ask("relative", { path, project: activeProject });
-
-/** Is this path inside the project the ENGINE holds? */
-export const inActiveProject = (
-  path: string,
-  activeProject: string | null,
-): boolean => ask("in_project", { path, project: activeProject });
-
-/** The generic module file beside `rel`: a node's sibling. */
-export const moduleFileOf = (rel: string): string =>
-  ask("module_file_of", { path: rel });
-
-/** The last segment of a path: the name a rename starts from. */
-export const baseName = (path: string): string => ask("base", { path });
-
-/** A line split into its leading `n` tokens and the rest, so a name with spaces survives. */
-export const headTokens = (rest: string, n: number): string[] =>
-  ask("head_tokens", { rest, n });
-
-/** A gutter source where the COMPILER puts it: a rack's sits beside its file, a clip's at the project root. */
-export const resolveGutterSource = (
-  source: string,
-  file: string,
-  project: string | null,
-): string => ask("gutter", { source, file, project });
-
 /** Enough of the hints to resolve: the "kind:name" path map and the root it is relative to. */
 export interface PathHints {
   paths: Record<string, string>;
@@ -103,22 +57,6 @@ export const moduleBehind = (
     projectRoot: hints.projectRoot,
     own: ownPath ?? undefined,
   });
-
-/** A clip file's kind: audio unless its source ends in a picture extension; a half-typed file answers. */
-export const isAudioClipFile = (text: string): boolean =>
-  ask("audio_clip", { text });
-
-/** The rack module a sequence names via `use_rack`, so a slice rack can dock its source waveform. */
-export const findUseRack = (text: string): string | null =>
-  ask("use_rack", { text });
-
-/** The tree flattened to openable text paths: binaries can't be shown. */
-export const textFiles = (nodes: FileTreeNode[]): string[] =>
-  ask("text_files", { nodes });
-
-/** EVERY path the tree holds, folders included and binaries kept: what a `file …` command may name. */
-export const allEntries = (nodes: FileTreeNode[]): TreeEntry[] =>
-  ask("entries", { nodes });
 
 /** The pool's best fuzzy match, or null: the highest score, ties by the collator. */
 function topScore(q: string, pool: readonly string[]): string | null {

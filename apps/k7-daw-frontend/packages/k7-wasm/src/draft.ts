@@ -5,13 +5,13 @@ import { call, K7WasmError } from "./abi.ts";
 import type {
   CurveDraft,
   CurvePreview,
-  CurveSpec,
   DraftCondition,
   DraftPoint,
   DraftShape,
   DraftWhen,
-  ParamKind,
 } from "./types/index.ts";
+
+export * from "./ops/draft.ts";
 
 export type {
   CurveDraft,
@@ -33,10 +33,6 @@ export const DRAFT_WHENS: readonly DraftWhen[] = [
   "event",
 ];
 
-/** The shapes a param of this kind can follow: a number every curve but on/off, a boolean on/off alone. */
-export const shapesFor = (kind?: ParamKind): DraftShape[] =>
-  ask("shapes_for", { kind });
-
 /** Whether the shape is made of points drawn by hand: the custom curve and the on/off. */
 export const isDrawnShape = (s: DraftShape): boolean =>
   s === "custom" || s === "onoff";
@@ -44,25 +40,6 @@ export const isDrawnShape = (s: DraftShape): boolean =>
 /** A new condition's fields, before the person picks anything. */
 export const newCondition = (event = "Note On"): DraftCondition =>
   ask("new_condition", { event });
-
-/** The draft a curve opens on: its own fields over the defaults, or the defaults alone for a new one. */
-export const draftOf = (spec?: CurveSpec): CurveDraft => ask("of", { spec });
-
-/** The fields `curve set` writes: the spec, the polarity only when not the default, the conditions when there are any. */
-export const fieldsOf = (draft: CurveDraft): Record<string, unknown> =>
-  ask("fields", { draft });
-
-/** Why the draft cannot be saved yet, or null: the first of its conditions that cannot be written. */
-export const conditionsProblem = (draft: CurveDraft): string | null =>
-  ask("conditions_problem", { draft });
-
-/** Why one condition cannot be written, or null: a moment that is not a timecode, an event with no name. */
-export const conditionProblem = (condition: DraftCondition): string | null =>
-  ask("condition_problem", { condition });
-
-/** Why the duration cannot be saved, or null. */
-export const durationProblem = (draft: CurveDraft): string | null =>
-  ask("duration_problem", { draft });
 
 /** The whole picture in one call: span, solid and faded lines, beat lines. */
 const draftPreview = (
@@ -103,13 +80,3 @@ export const pointAt = (
   den: number,
   binary = false,
 ): DraftPoint => ask("point_at", { x, unit, spanBeats, num, den, binary });
-
-/** The points in time order, one per moment: the later write wins, as `curve point add` sets rather than duplicates. */
-export const withPoint = (
-  points: readonly DraftPoint[],
-  point: DraftPoint,
-  num: number,
-  den: number,
-  replacing?: string,
-): DraftPoint[] =>
-  ask("with_point", { points: [...points], point, num, den, replacing });

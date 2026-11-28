@@ -2,12 +2,9 @@
 // A reader would get wrong that a note or an event is IN a rectangle when it STARTS inside: copying and deleting share `notesInRegion`.
 
 import { call } from "./abi.ts";
-import type {
-  Clipboard,
-  EventAttrs,
-  PastedEvent,
-  PastedNote,
-} from "./types/index.ts";
+import type { Clipboard, EventAttrs } from "./types/index.ts";
+
+export * from "./ops/clipboard.ts";
 
 export type {
   Clipboard,
@@ -72,13 +69,6 @@ export const copyNotes = (
     to,
   });
 
-/** …and back out at a caret: anything pushed off the keyboard is DROPPED, not clamped. */
-export const pasteNotes = (
-  clip: Clipboard,
-  topKey: number,
-  at: number,
-): PastedNote[] => ask("paste_notes", { clip, topKey, at });
-
 /** The events inside a rectangle of lanes × beats, relative to its corner, taken by START like the notes. */
 export const copyEvents = (
   rows: readonly {
@@ -94,14 +84,3 @@ export const copyEvents = (
     from,
     to,
   });
-
-/** …and back out onto real lanes: as many as the paste can reach, the rest dropped. */
-export const pasteEvents = (
-  clip: Clipboard,
-  lanes: readonly string[],
-  at: number,
-): PastedEvent[] => ask("paste_events", { clip, lanes: [...lanes], at });
-
-/** How many of a paste's items would be dropped for not fitting: what the status line reports. */
-export const droppedCount = (kept: number, clip: Clipboard): number =>
-  ask("dropped", { kept, clip });

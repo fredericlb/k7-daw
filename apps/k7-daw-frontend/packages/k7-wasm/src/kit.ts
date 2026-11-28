@@ -3,12 +3,9 @@
 
 import { call } from "./abi.ts";
 import { KIT_GRID } from "./consts.generated.ts";
-import type {
-  KitDestination,
-  KitGrid,
-  RackIssue,
-  RackPad,
-} from "./types/index.ts";
+import type { KitGrid, RackIssue, RackPad } from "./types/index.ts";
+
+export * from "./ops/kit.ts";
 
 export type { KitDestination, RackIssue, RackPad } from "./types/index.ts";
 
@@ -34,28 +31,6 @@ export const cellsInNoteOrder = (): { row: number; col: number }[] =>
 export const padNote = (row: number, col: number): number =>
   cells().find((c) => c.row === row && c.col === col)?.note ?? Number.NaN;
 
-/** A pad's default symbol: the file's stem, upper-cased and squeezed to the characters a symbol is addressed by. */
-export const defaultSymbol = (fileName: string): string =>
-  ask("default_symbol", { fileName });
-
-/** Which library's sampler a kit extends: `@k7-core`'s first, else any library's; null when none holds one. */
-export const rackModuleRef = (baseModules: readonly string[]): string | null =>
-  ask("module_ref", { baseModules: [...baseModules] });
-
-/** The folder the samples are uploaded into, workspace-relative. */
-export const kitUploadDir = (
-  dest: KitDestination,
-  kit: string,
-  project: string,
-): string => ask("upload_dir", { dest, kit, project });
-
-/** The name a tap writes for one of them: `@project/<kit>/<file>` or `@<library>/<kit>/<file>`. */
-export const kitSampleRef = (
-  dest: KitDestination,
-  kit: string,
-  file: string,
-): string => ask("sample_ref", { dest, kit, file });
-
 /** What stops a CREATE, as message keys with their parameters. */
 export const rackIssues = (
   name: string,
@@ -64,11 +39,3 @@ export const rackIssues = (
   hasRack = true,
 ): RackIssue[] =>
   ask("issues", { name, pads: [...pads], taken: [...taken], hasRack });
-
-/** The KIT node the builder writes, as k7x: a node of the sampler, one tap per pad, one per line. */
-export const buildKitNode = (
-  name: string,
-  pads: readonly RackPad[],
-  dest: KitDestination,
-  rackRef: string,
-): string => ask("node", { name, pads: [...pads], dest, rackRef });
