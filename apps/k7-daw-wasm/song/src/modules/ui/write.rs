@@ -417,3 +417,7 @@ pub fn read_params(text: &str) -> Map<String, Value> {
     }
     out
 }
+
+#[cfg(test)]
+#[path = "write_tests.rs"]
+mod tests;

@@ -50,30 +50,6 @@ describe("reading", () => {
     });
   });
 
-  it("gives an empty grid for a file with no ui, and doesn't call it malformed", () => {
-    expect(readUi(BARE).widgets).toEqual({});
-    expect(hasMalformedUi(BARE)).toBe(false); // the grid may create one
-    expect(hasParsableUi(BARE)).toBe(false);
-  });
-
-  it("calls a ui the schema refuses MALFORMED, so the pane stays read-only", () => {
-    // Silently replacing text it misread is the one thing the editor must not do.
-    const bad = 'ui({ cols: 4, rows: 2, widgets: { w1: { type: "nope" } } })\n';
-    expect(hasParsableUi(bad)).toBe(false);
-    expect(hasMalformedUi(bad)).toBe(true);
-  });
-
-  it("reads params as text, as written, including one the schema would refuse", () => {
-    // The pane only displays them, so a value that will not load should still be visible.
-    expect(readParams(MODULE)).toEqual({
-      "Filter Freq": "90",
-      Level: "-12.0",
-    });
-    expect(readParams('params({ Drive: "loud" })\n')).toEqual({
-      Drive: "loud",
-    });
-  });
-
   it("reads the extends ref, and nothing when there is none", () => {
     expect(extendsRefOf(MODULE)).toBe("instruments/fourosc");
     expect(extendsRefOf('plugin({ name: "4osc" })\n')).toBe(null);
@@ -105,107 +81,21 @@ describe("the plugin a module declares", () => {
 });
 
 describe("writing", () => {
-  it("moves a knob as a one-line diff, every other line byte-identical", () => {
+  // The panel's rules and their cases are the song crate's (modules/ui/write_tests.rs).
+  it("moves a knob as a one-line diff through the facade, and refuses an unparsed buffer", () => {
     const ui = readUi(MODULE);
     ui.widgets.w1.col = 2;
     const before = MODULE.split("\n");
-    const after = writeUi(MODULE, ui).split("\n");
-    expect(after).toHaveLength(before.length);
-    const changed = after.filter((l, i) => l !== before[i]);
+    const changed = writeUi(MODULE, ui)
+      .split("\n")
+      .filter((l, i) => l !== before[i]);
     expect(changed).toEqual([
       '    w1: { type: "knob", col: 2, row: 0, bind: "Filter Freq", min: 0, max: 1 },',
     ]);
-  });
-
-  it("keeps a comment inside the block", () => {
-    const ui = readUi(MODULE);
-    ui.widgets.w2 = { type: "toggle", col: 2, row: 0, bind: "Level" };
-    const after = writeUi(MODULE, ui);
-    expect(after).toContain("    // the one knob\n");
-    expect(after).toContain(
-      '    w2: { type: "toggle", col: 2, row: 0, bind: "Level" },\n',
-    );
-  });
-
-  it("creates the block when the file has none", () => {
-    const after = writeUi(BARE, {
-      cols: 2,
-      rows: 1,
-      widgets: { a: { type: "toggle", col: 0, row: 0, bind: "Mute" } },
-    });
-    expect(after.startsWith(BARE)).toBe(true);
-    expect(after).toContain(
-      'a: { type: "toggle", col: 0, row: 0, bind: "Mute" }',
-    );
-    expect(readUi(after).widgets.a).toMatchObject({
-      type: "toggle",
-      bind: "Mute",
-    });
-  });
-
-  it("drops the defaults, so the block stays as terse as a hand-written one", () => {
-    const after = writeUi("", {
-      cols: 2,
-      rows: 1,
-      widgets: {
-        a: { type: "knob", col: 0, row: 0, colSpan: 1, rowSpan: 1, label: "" },
-      },
-    });
-    expect(after).not.toContain("colSpan");
-    expect(after).not.toContain("rowSpan");
-    expect(after).not.toContain("label");
-  });
-
-  it("drops a range when the widget is retyped to a kind that can't carry one", () => {
-    // THE bug: retype a knob to a toggle and the range must not travel, or the file stops loading.
-    const after = writeUi("", {
-      cols: 2,
-      rows: 1,
-      widgets: {
-        a: { type: "toggle", col: 0, row: 0, bind: "Mute", min: 0, max: 1 },
-      },
-    });
-    expect(after).not.toContain("min");
-    expect(after).not.toContain("max");
-    expect(hasParsableUi(after)).toBe(true); // …and the result loads
-  });
-
-  it("round-trips: read, write, read gives the same model", () => {
-    const once = readUi(MODULE);
-    const twice = readUi(writeUi(MODULE, once));
-    expect(twice).toEqual(once);
-  });
-
-  it("is stable — writing an unchanged model changes nothing", () => {
-    expect(writeUi(MODULE, readUi(MODULE))).toBe(MODULE);
-  });
-
-  it("writes the panel's tabs in order, each widget still on one line", () => {
-    const after = writeUi("", {
-      cols: 4,
-      rows: 2,
-      widgets: {},
-      tabs: [
-        {
-          name: "Osc",
-          widgets: { k: { type: "knob", col: 0, row: 0, bind: "Mix" } },
-        },
-        { name: "Filter", widgets: {} },
-      ],
-    });
-    expect(after).toMatch(/name\("Osc"\)[\s\S]*name\("Filter"\)/);
-    expect(after).toContain('k: { type: "knob", col: 0, row: 0, bind: "Mix" }');
-    expect(readUi(after).tabs?.map((t) => t.name)).toEqual(["Osc", "Filter"]);
-  });
-
-  it("writes no `tabs` for a panel without them", () => {
-    expect(writeUi("", { cols: 2, rows: 1, widgets: {} })).not.toContain(
-      "tabs",
-    );
-  });
-
-  it("hands a buffer that does not parse back unchanged", () => {
     expect(writeUi("ui({", readUi(MODULE))).toBe("ui({");
+    expect(hasParsableUi(MODULE)).toBe(true);
+    expect(hasMalformedUi(MODULE)).toBe(false);
+    expect(readParams(MODULE)).toEqual({ "Filter Freq": "90", Level: "-12.0" });
   });
 });
 

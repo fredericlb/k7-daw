@@ -377,3 +377,7 @@ mod tests {
         assert!(is_droppable_project("A.DAWPROJECT"));
     }
 }
+
+#[cfg(test)]
+#[path = "address_tests.rs"]
+mod cases_tests;
