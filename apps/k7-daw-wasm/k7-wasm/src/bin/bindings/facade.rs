@@ -27,17 +27,35 @@ pub struct Op {
 
 /// A wrapper whose parameters are the fields of `A`, answering the TypeScript type `answer`.
 pub fn op<A: TS>(name: &'static str, op: &'static str, answer: &'static str, doc: &'static str) -> Op {
-    Op { name, op, args: Args::Fields(A::inline), answer, doc }
+    Op {
+        name,
+        op,
+        args: Args::Fields(A::inline),
+        answer,
+        doc,
+    }
 }
 
 /// A wrapper that takes the args struct `A` whole.
 pub fn whole<A: TS>(name: &'static str, op: &'static str, answer: &'static str, doc: &'static str) -> Op {
-    Op { name, op, args: Args::Whole(A::name), answer, doc }
+    Op {
+        name,
+        op,
+        args: Args::Whole(A::name),
+        answer,
+        doc,
+    }
 }
 
 /// A wrapper with no parameter.
 pub fn bare(name: &'static str, op: &'static str, answer: &'static str, doc: &'static str) -> Op {
-    Op { name, op, args: Args::Bare, answer, doc }
+    Op {
+        name,
+        op,
+        args: Args::Bare,
+        answer,
+        doc,
+    }
 }
 
 /// One generated module: its file name, the request enums its op names are checked against, its wrappers.
@@ -53,9 +71,42 @@ pub fn facade(module: &'static str, requests: Vec<String>, ops: Vec<Op>) -> Faca
 }
 
 const RESERVED: &[&str] = &[
-    "break", "case", "catch", "class", "const", "continue", "debugger", "default", "delete", "do", "else", "enum", "export",
-    "extends", "false", "finally", "for", "function", "if", "import", "in", "instanceof", "new", "null", "return", "super",
-    "switch", "this", "throw", "true", "try", "typeof", "var", "void", "while", "with",
+    "break",
+    "case",
+    "catch",
+    "class",
+    "const",
+    "continue",
+    "debugger",
+    "default",
+    "delete",
+    "do",
+    "else",
+    "enum",
+    "export",
+    "extends",
+    "false",
+    "finally",
+    "for",
+    "function",
+    "if",
+    "import",
+    "in",
+    "instanceof",
+    "new",
+    "null",
+    "return",
+    "super",
+    "switch",
+    "this",
+    "throw",
+    "true",
+    "try",
+    "typeof",
+    "var",
+    "void",
+    "while",
+    "with",
 ];
 
 struct Param {
@@ -81,7 +132,10 @@ fn split_top(text: &str, seps: &[char]) -> Vec<String> {
         }
     }
     out.push(cur);
-    out.into_iter().map(|s| s.trim().to_owned()).filter(|s| !s.is_empty()).collect()
+    out.into_iter()
+        .map(|s| s.trim().to_owned())
+        .filter(|s| !s.is_empty())
+        .collect()
 }
 
 /// Drops the `/** … */` docs ts-rs writes into an inline struct.
@@ -97,24 +151,35 @@ fn strip_docs(text: &str) -> String {
 }
 
 /// The fields of an inline struct (`{ a: T, b?: U, }`), as parameters; trailing nullable ones may be left out.
-fn params(op: &str, inline: &str) -> Vec<Param> {
+fn params(op: &str, inline: &str) -> Result<Vec<Param>, String> {
     let body = strip_docs(inline);
     let body = body.trim();
     let inner = body
         .strip_prefix('{')
         .and_then(|b| b.strip_suffix('}'))
-        .unwrap_or_else(|| panic!("{op}: args are not a plain struct: {body}"));
+        .ok_or_else(|| format!("{op}: args are not a plain struct: {body}"))?;
     let mut out: Vec<Param> = split_top(inner, &[',', ';'])
         .into_iter()
         .map(|field| {
-            let (key, ty) = field.split_once(':').unwrap_or_else(|| panic!("{op}: bad field {field}"));
+            let (key, ty) = field
+                .split_once(':')
+                .ok_or_else(|| format!("{op}: bad field {field}"))?;
             let key = key.trim();
             let optional = key.ends_with('?');
             let key = key.trim_end_matches('?').trim_matches('"').to_owned();
-            let name = if RESERVED.contains(&key.as_str()) { format!("{key}_") } else { key.clone() };
-            Param { field: key, name, ty: ty.trim().replace("Array<", "ReadonlyArray<"), optional }
+            let name = if RESERVED.contains(&key.as_str()) {
+                format!("{key}_")
+            } else {
+                key.clone()
+            };
+            Ok(Param {
+                field: key,
+                name,
+                ty: ty.trim().replace("Array<", "ReadonlyArray<"),
+                optional,
+            })
         })
-        .collect();
+        .collect::<Result<_, String>>()?;
     let mut tail = true;
     for p in out.iter_mut().rev() {
         // An optional field is an `Option`, which reads a null as well as a missing key.
@@ -129,7 +194,7 @@ fn params(op: &str, inline: &str) -> Vec<Param> {
             p.optional = false;
         }
     }
-    out
+    Ok(out)
 }
 
 /// The capitalised names a type text mentions.
@@ -147,7 +212,7 @@ fn idents(text: &str, into: &mut Vec<String>) {
     }
 }
 
-fn render(f: &Facade, types: &Path) -> String {
+fn render(f: &Facade, types: &Path) -> Result<String, String> {
     let mut names = f.requests.clone();
     let mut body = String::new();
     for o in &f.ops {
@@ -160,7 +225,7 @@ fn render(f: &Facade, types: &Path) -> String {
                 (format!("args: {ty}"), ", args".to_owned())
             }
             Args::Fields(inline) => {
-                let ps = params(o.op, &inline());
+                let ps = params(o.op, &inline())?;
                 let sig: Vec<String> = ps
                     .iter()
                     .map(|p| {
@@ -170,7 +235,13 @@ fn render(f: &Facade, types: &Path) -> String {
                     .collect();
                 let fields: Vec<String> = ps
                     .iter()
-                    .map(|p| if p.name == p.field { p.name.clone() } else { format!("{}: {}", p.field, p.name) })
+                    .map(|p| {
+                        if p.name == p.field {
+                            p.name.clone()
+                        } else {
+                            format!("{}: {}", p.field, p.name)
+                        }
+                    })
                     .collect();
                 (sig.join(", "), format!(", {{ {} }}", fields.join(", ")))
             }
@@ -185,7 +256,7 @@ fn render(f: &Facade, types: &Path) -> String {
     names.sort_by(|a, b| crate::biome_order(a, b));
     names.dedup();
     let requests = f.requests.join(" | ");
-    format!(
+    Ok(format!(
         "// {m}.ts — GENERATED by bindings/facade.rs from bindings/facades/: one typed wrapper per op. Do not edit.\n\
          // The op names are checked against the Rust request enums: a renamed op fails the type check here.\n\n\
          import {{ call }} from \"../abi.ts\";\n\
@@ -194,7 +265,7 @@ fn render(f: &Facade, types: &Path) -> String {
          const ask = <R>(op: Op, args?: object): R => call<R>({{ op, args }});\n{body}",
         m = f.module,
         imports = names.join(", "),
-    )
+    ))
 }
 
 /// Writes every facade into `dir`, emptied first so a module no table names does not linger.
@@ -204,7 +275,7 @@ pub fn write_facades(dir: &Path, types: &Path, facades: &[Facade]) -> Result<(),
     }
     fs::create_dir_all(dir)?;
     for f in facades {
-        fs::write(dir.join(format!("{}.ts", f.module)), render(f, types))?;
+        fs::write(dir.join(format!("{}.ts", f.module)), render(f, types)?)?;
     }
     Ok(())
 }

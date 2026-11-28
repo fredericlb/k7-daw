@@ -7,8 +7,7 @@ use gesture::bar_window::{BarSpan, FRAME_MARGIN_BARS, anchor_bars, bar_window, f
 use gesture::clip_playhead::{ActWindow, clip_playhead};
 use gesture::grid_caret::{Bounds, Cell, cell_box, clamp_cell, col_span, move_cell, sel_box, song_seconds_of_col};
 use gesture::roll_drag::{
-    GroupNote, RollDrag, RollMode, drag_moved, draw_span, group_offset, moves_pitch, t_span,
-    vel_at,
+    GroupNote, RollDrag, RollMode, drag_moved, draw_span, group_offset, moves_pitch, t_span, vel_at,
 };
 use gesture::roll_fit::{Loop, Note, roll_fit};
 use gesture::snap::{SnapMode, free_snap, move_offset, snap_mode, snap_to};

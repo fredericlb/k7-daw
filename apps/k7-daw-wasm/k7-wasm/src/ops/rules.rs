@@ -62,7 +62,8 @@ pub fn dispatch(request: RulesRequest, out: &mut Vec<u8>) -> Result<(), WasmErro
     match request {
         RulesRequest::SeqWindow(a) => write(
             out,
-            &seq_window_from_text(&a.text, a.num.unwrap_or(4.0), a.den.unwrap_or(4.0)).map(|w| SeqWindowDto { from: w.from, to: w.to }),
+            &seq_window_from_text(&a.text, a.num.unwrap_or(4.0), a.den.unwrap_or(4.0))
+                .map(|w| SeqWindowDto { from: w.from, to: w.to }),
         ),
         RulesRequest::WindowSpan(a) => write(
             out,

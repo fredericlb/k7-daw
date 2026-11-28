@@ -10,5 +10,8 @@ use crate::facade::Facade;
 
 /// Every generated module.
 pub fn all() -> Vec<Facade> {
-    [small::all(), files::all(), editor::all(), views::all()].into_iter().flatten().collect()
+    [small::all(), files::all(), editor::all(), views::all()]
+        .into_iter()
+        .flatten()
+        .collect()
 }

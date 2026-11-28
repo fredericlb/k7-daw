@@ -7,7 +7,7 @@ use ts_rs::TS;
 
 #[rustfmt::skip]
 pub fn all() -> Vec<Facade> {
-    let mut all = vec![
+    let all = vec![
         facade("schema", vec![schema::SchemaRequest::name()], vec![
             op::<schema::RefArgs>("isEngineRef", "schema.is_engine_ref", "boolean", "Is this ref the engine's: `@engine` or anything under it, never `@engineering`."),
             op::<schema::NameArgs>("isLibraryName", "schema.is_library_name", "boolean", "Can a library be called this?"),
@@ -64,7 +64,7 @@ pub fn all() -> Vec<Facade> {
         ]),
     ];
     #[cfg(feature = "verbs")]
-    all.extend(verbs());
+    let all = all.into_iter().chain(verbs()).collect();
     all
 }
 
