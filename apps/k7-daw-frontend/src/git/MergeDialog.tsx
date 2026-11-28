@@ -1,7 +1,6 @@
 // MergeDialog.tsx — the Conflict screen, a full screen over the project: the list of conflicts, the open one's two sides and choice.
 // The editors are read-only meanwhile (gitLock.ts); the choices are the person's alone, sent only on Finish merge.
 
-import { showToast } from "@studio/project-shell/toast";
 import { Button } from "@studio/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@studio/ui/dialog";
 import { ChevronLeft, ChevronRight } from "@studio/ui/icons";
@@ -73,14 +72,13 @@ export function MergeDialog({
     ordered[0];
 
   const where = [workspace, from].filter(Boolean).join(" · ");
-  const run = async (f: () => Promise<unknown>, merged = false) => {
+  const run = async (f: () => Promise<unknown>) => {
     setBusy(true);
     setError("");
     try {
       await f();
       onDone();
       onClose();
-      if (merged) showToast({ title: m["git.pulledMerged"](), message: where });
     } catch (e) {
       setError(explain(e));
     } finally {
@@ -88,7 +86,7 @@ export function MergeDialog({
     }
   };
   const finish = () =>
-    t && run(() => git.resolve(t, workspace, resolveChoices(s)), true);
+    t && run(() => git.resolve(t, workspace, resolveChoices(s)));
   const abort = () => t && run(() => git.abort(t, workspace));
 
   const left = remaining(s);

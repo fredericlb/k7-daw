@@ -1149,7 +1149,6 @@ function EditorTabView({
         ? m["status.editor.uploadedSkipped"]({ uploaded, skipped })
         : uploaded;
       setStatus(msg);
-      if (added > 0) showToast({ message: msg, variant: "success" });
     },
     [refresh, refreshLibraries, onChanged, setStatus],
   );

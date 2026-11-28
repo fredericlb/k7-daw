@@ -21,7 +21,6 @@ const rows = (parse(readFileSync(YAML, "utf8")) ?? [])
     ...(Array.isArray(c.surfaces) ? { surfaces: c.surfaces.map(String) } : {}),
     ...(Array.isArray(c.menu) ? { menu: c.menu.map(String) } : {}),
     ...(c.confirm === true ? { confirm: true } : {}),
-    ...(c.quiet === true ? { quiet: true } : {}),
     args: (Array.isArray(c.args) ? c.args : []).map((a) => ({
       name: String(a?.name ?? ""),
       ...(a?.type !== undefined ? { type: String(a.type) } : {}),

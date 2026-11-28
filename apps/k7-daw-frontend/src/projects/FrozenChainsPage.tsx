@@ -5,7 +5,6 @@
 
 import { askConfirm, askText } from "@studio/project-shell/ask";
 import { launchUrl } from "@studio/project-shell/launch";
-import { showToast } from "@studio/project-shell/toast";
 import { Button } from "@studio/ui/button";
 import { Chip } from "@studio/ui/chip";
 import { EmptyState } from "@studio/ui/empty-state";
@@ -189,19 +188,9 @@ export function FrozenChainsSection({ files }: { files: AccountFiles | null }) {
     try {
       if (t.kind === "here") {
         await accountFiles.saveSlot(files, c.ref);
-        showToast({ message: m["frozen.slotSaved"]({ ref: c.ref }) });
         return;
       }
-      showToast({
-        message: m["frozen.slotSending"]({ host: t.engine.hostname }),
-      });
       await engineSlots.save(t.engine, c.ref);
-      showToast({
-        message: m["frozen.slotSavedOn"]({
-          ref: c.ref,
-          host: t.engine.hostname,
-        }),
-      });
     } catch (e) {
       setError((e as Error).message);
     }

@@ -165,6 +165,7 @@ async function run(t: GitTransport, workspace: string, hooks: SaveHooks) {
       end({
         title: m["git.save.done"](),
         message: m["git.save.doneLocal"]({ message, files }),
+        variant: "success",
       });
       return;
     }
@@ -181,6 +182,7 @@ async function run(t: GitTransport, workspace: string, hooks: SaveHooks) {
       message: pushOnly
         ? m["git.save.donePushOnly"]({ target })
         : m["git.save.doneSent"]({ message, files, target }),
+      variant: "success",
     });
   } catch (e) {
     announceGitMoved(workspace);

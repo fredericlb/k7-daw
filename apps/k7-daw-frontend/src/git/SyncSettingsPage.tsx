@@ -2,7 +2,6 @@
 // A host without large-file storage is said after the connection, not refused: the push is what it refuses.
 
 import { askNotice } from "@studio/project-shell/ask";
-import { showToast } from "@studio/project-shell/toast";
 import { useEffect, useState } from "react";
 import { m } from "../paraglide/messages.js";
 import type { PickedRepo } from "./ForgePicker";
@@ -51,10 +50,6 @@ export function SyncSettingsPage({
     announceGitMoved(workspace);
     onConnected();
     const remote = remoteName(done.remote || r.url);
-    showToast({
-      title: m["git.connectedTitle"](),
-      message: m["git.connectedToast"]({ workspace, remote }),
-    });
     onClose();
     if (done.lfsWarning)
       void askNotice({

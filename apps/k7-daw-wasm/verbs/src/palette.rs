@@ -51,9 +51,6 @@ pub struct CommandInfo {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[cfg_attr(feature = "ts", ts(optional))]
     pub confirm: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[cfg_attr(feature = "ts", ts(optional))]
-    pub quiet: Option<bool>,
 }
 
 /// The display class of an argument: its provider's, else `choice` for a literal set, else its shape, else `text`.
@@ -135,7 +132,6 @@ fn info_of(spec: &Spec, problems: &mut Vec<String>) -> CommandInfo {
         args: spec.args.iter().map(|a| arg_info(&spec.command, a, problems)).collect(),
         menu: spec.menu.as_ref().map(|w| menu_list(&spec.command, w, problems)),
         confirm: spec.confirm.then_some(true),
-        quiet: spec.quiet.then_some(true),
     }
 }
 

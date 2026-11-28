@@ -12,7 +12,6 @@ import { useEffect } from "react";
 import type { GitTransport } from "../git/gitApi";
 import { openConflict } from "../git/gitScreens";
 import { type BarView, barView } from "../git/gitState";
-import { pulledSentence } from "../git/pulledSentence";
 import { save, useSaving } from "../git/saveAct";
 import type { GitHandle } from "../git/useGitState";
 import { m } from "../paraglide/messages.js";
@@ -51,11 +50,7 @@ export function HeaderGit({
   useEffect(() => {
     if (g.pulled === "conflicts") openConflict(workspace);
   }, [g.pulled, workspace]);
-  // What a pull came to, and what failed, are said as toasts: the header holds no sentence.
-  useEffect(() => {
-    const said = pulledSentence(g.pulled);
-    if (said) showToast({ message: said });
-  }, [g.pulled]);
+  // What failed is said as a toast; a pull that went through is seen in the files (docs/toast.md).
   useEffect(() => {
     if (g.failure) showToast({ message: g.failure, variant: "error" });
   }, [g.failure]);

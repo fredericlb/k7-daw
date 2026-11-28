@@ -13,5 +13,4 @@ export type CommandInfo = {
   args: Array<CommandArg>;
   menu?: Array<MenuEntity>;
   confirm?: boolean;
-  quiet?: boolean;
 };

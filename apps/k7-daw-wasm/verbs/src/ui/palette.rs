@@ -272,7 +272,6 @@ mod tests {
             args: vec![],
             menu: None,
             confirm: None,
-            quiet: None,
         }
     }
 

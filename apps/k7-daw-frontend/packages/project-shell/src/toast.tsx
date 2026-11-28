@@ -92,7 +92,7 @@ export function showToast(opts: {
   progress?: ToastProgress;
   dismissible?: boolean;
 }): number {
-  const variant = opts.variant ?? "success";
+  const variant = opts.variant ?? "neutral";
   const t: ToastItem = {
     id: nextId++,
     message: opts.message,

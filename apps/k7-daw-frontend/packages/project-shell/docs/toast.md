@@ -10,9 +10,11 @@
   success (5 s); an error stays until it is dismissed, since one nobody read did not happen.
   Warning and error are `role="alert"`. Hovering or focusing a toast holds it, and the region is
   mounted even when empty.
-- A command marked `quiet:` in the catalogue (`apps/k7-daw-wasm/verbs/commands.yaml`) raises no success
-  toast: creating, inserting, replacing or deleting a node and applying a preset show in the graph
-  itself, and a toast for each would bury the ones that say something. A refusal still has its warning.
+- **A success is said by a process only**: the end of one this page saw running (`watchProcessEnds`,
+  `docs/processes.md` of the frontend) and the end of a toast with progress (a git save). An edit, a
+  command, an undo, an upload or a pull that went through shows in what changed, and a toast for each
+  would bury the ones that say something; a refusal or a failure still has its toast. So
+  `showToast` defaults to **neutral**, and `success` is asked for by name.
 - `dismissible: false` takes the close button away from a toast that states a standing condition
   (the engine link is down): the code dismisses it when the condition ends.
 - **neutral**: no judgement, with an optional `progress` (a 6 px bar, and `34 / 120` in mono when

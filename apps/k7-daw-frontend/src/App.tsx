@@ -20,7 +20,6 @@ import {
 } from "@studio/k7-plugins/video";
 import type { MaybeClipboard } from "@studio/k7-wasm/clipboard";
 import { type PendingEdit, pendingOf } from "@studio/k7-wasm/edit";
-import { commandNameOf as nameOfLine } from "@studio/k7-wasm/menu";
 // The leaf with no `node:fs` in it — a browser may ask what a path names without dragging the loader in.
 import { moduleKeyFromPath } from "@studio/k7-wasm/module";
 import { resolveEditorFile } from "@studio/k7-wasm/paths";
@@ -730,7 +729,10 @@ export default function App({
   const historyDeps = useMemo<HistoryDeps>(
     () => ({
       openFile: (p) => editorRef.current?.open(p),
-      notify: (message, variant) => showToast({ message, variant }),
+      // An undone step is seen on screen; only a failure is a toast (docs/toast.md).
+      notify: (message, variant) => {
+        if (variant === "error") showToast({ message, variant });
+      },
       confirmProcess,
       currentFile: () => editorRef.current?.currentFile() ?? null,
       onApplied: bumpReload,
@@ -1847,18 +1849,9 @@ export default function App({
         if (refused) setRefusal(said);
         else setStatus(said);
         // What a command said ("copied 1 event(s)") is a toast; the bare "Ran: …" echo is not worth one, nor a `quiet:` command's success.
-        const name = nameOfLine(
-          s,
-          cmdCatalogue.current.map((c) => c.command),
-        );
-        const quiet = cmdCatalogue.current.find(
-          (c) => c.command === name,
-        )?.quiet;
-        if (output.length && (refused || !quiet))
-          showToast({
-            message: said,
-            variant: refused ? "warning" : "success",
-          });
+        // A command that went through is seen in what changed; only a refusal is a toast (docs/toast.md).
+        if (output.length && refused)
+          showToast({ message: said, variant: "warning" });
         settle(!refused);
         for (const o of output) pushLog(refused ? "refused" : "info", o);
         // The graph the service built while we waited — the answer for the reload below, so for the NEXT key.
@@ -1987,14 +1980,9 @@ export default function App({
   });
   // A project with no timeline records what it sends out — OUT's sound, RENDER's picture — from the bar's one button.
   // A phone draws no status line, so there what filing a take came to is a toast (docs/shell.md).
-  const sayToast = useCallback<SetStatus>(
-    (text, level) =>
-      showToast({
-        message: text,
-        variant: level === "error" ? "error" : undefined,
-      }),
-    [],
-  );
+  const sayToast = useCallback<SetStatus>((text, level) => {
+    if (level === "error") showToast({ message: text, variant: "error" });
+  }, []);
   const output = useOutputRecording({
     store,
     engine: () => engineRef.current ?? null,
@@ -2458,7 +2446,10 @@ export default function App({
                   : m["processes.toastFailed"]({ label: p.label }),
                 variant: "error",
               }
-            : { message: m["processes.toastDone"]({ label: p.label }) },
+            : {
+                message: m["processes.toastDone"]({ label: p.label }),
+                variant: "success",
+              },
         ),
       ),
     [],
