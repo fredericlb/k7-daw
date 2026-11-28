@@ -338,3 +338,7 @@ pub fn auto_organize(params: &[AutoParam]) -> Value {
 #[cfg(test)]
 #[path = "auto_tests.rs"]
 mod tests;
+
+#[cfg(test)]
+#[path = "auto_cases_tests.rs"]
+mod cases_tests;
