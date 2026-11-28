@@ -1,9 +1,6 @@
 {
   "project": "e2e/clip-loop.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "clip-loop",
     "tempo": 120,
@@ -43,9 +40,7 @@
             "loopStart": 0,
             "loopEnd": 1,
             "notes": [],
-            "event": {
-              "loop": 4
-            },
+            "event": {"loop": 4},
             "sourceTo": 0.5
           }
         ],
@@ -56,61 +51,17 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
-    "chains": {
-      "drums": {
-        "from": "drums",
-        "use": [],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
-      },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
-      }
-    },
-    "tracks": [
-      "drums"
-    ],
+    "chains": {"drums": {"from": "drums", "use": [], "out": [{"to": "MIX", "gain": 1}]}, "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}]}},
+    "tracks": ["drums"],
     "videoTracks": [],
-    "trackColors": {
-      "drums": "#dd322c"
-    },
-    "trackSignals": {
-      "drums": "audio"
-    },
-    "trackClips": {
-      "drums": [
-        {
-          "ref": "kick-beat",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ]
-    },
+    "trackColors": {"drums": "#dd322c"},
+    "trackSignals": {"drums": "audio"},
+    "trackClips": {"drums": [{"ref": "kick-beat", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}]},
     "modules": {},
     "warnings": []
   },

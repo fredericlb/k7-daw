@@ -1,9 +1,6 @@
 {
   "project": "k7-core/audio.pafnuty.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "audio.pafnuty",
     "tempo": 120,
@@ -54,11 +51,7 @@
             "presetSave": "<ws>/k7-core/audio.pafnuty.k7/nodes/fx.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -67,16 +60,9 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
@@ -86,11 +72,7 @@
           {
             "module": "fx",
             "uses": "@k7-core/audio/pafnuty",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -99,260 +81,36 @@
               "cols": 12,
               "rows": 4,
               "widgets": {
-                "h2": {
-                  "type": "fader",
-                  "col": 0,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "2nd",
-                  "bind": "Second",
-                  "min": 0,
-                  "max": 1
-                },
-                "h3": {
-                  "type": "fader",
-                  "col": 1,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "3rd",
-                  "bind": "Third",
-                  "min": 0,
-                  "max": 1
-                },
-                "h4": {
-                  "type": "fader",
-                  "col": 2,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "4th",
-                  "bind": "Fourth",
-                  "min": 0,
-                  "max": 1
-                },
-                "h5": {
-                  "type": "fader",
-                  "col": 3,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "5th",
-                  "bind": "Fifth",
-                  "min": 0,
-                  "max": 1
-                },
-                "h6": {
-                  "type": "fader",
-                  "col": 4,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "6th",
-                  "bind": "Sixth",
-                  "min": 0,
-                  "max": 1
-                },
-                "h7": {
-                  "type": "fader",
-                  "col": 5,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "7th",
-                  "bind": "Seventh",
-                  "min": 0,
-                  "max": 1
-                },
-                "h8": {
-                  "type": "fader",
-                  "col": 6,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "8th",
-                  "bind": "Eighth",
-                  "min": 0,
-                  "max": 1
-                },
-                "h9": {
-                  "type": "fader",
-                  "col": 7,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "9th",
-                  "bind": "Ninth",
-                  "min": 0,
-                  "max": 1
-                },
-                "h10": {
-                  "type": "fader",
-                  "col": 8,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "10th",
-                  "bind": "Tenth",
-                  "min": 0,
-                  "max": 1
-                },
-                "h11": {
-                  "type": "fader",
-                  "col": 9,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "11th",
-                  "bind": "Elevnth",
-                  "min": 0,
-                  "max": 1
-                },
-                "h12": {
-                  "type": "fader",
-                  "col": 10,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "12th",
-                  "bind": "Twelvth",
-                  "min": 0,
-                  "max": 1
-                },
-                "h13": {
-                  "type": "fader",
-                  "col": 11,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "13th",
-                  "bind": "Thirtnh",
-                  "min": 0,
-                  "max": 1
-                }
+                "h2": {"type": "fader", "col": 0, "row": 0, "rowSpan": 4, "label": "2nd", "bind": "Second", "min": 0, "max": 1},
+                "h3": {"type": "fader", "col": 1, "row": 0, "rowSpan": 4, "label": "3rd", "bind": "Third", "min": 0, "max": 1},
+                "h4": {"type": "fader", "col": 2, "row": 0, "rowSpan": 4, "label": "4th", "bind": "Fourth", "min": 0, "max": 1},
+                "h5": {"type": "fader", "col": 3, "row": 0, "rowSpan": 4, "label": "5th", "bind": "Fifth", "min": 0, "max": 1},
+                "h6": {"type": "fader", "col": 4, "row": 0, "rowSpan": 4, "label": "6th", "bind": "Sixth", "min": 0, "max": 1},
+                "h7": {"type": "fader", "col": 5, "row": 0, "rowSpan": 4, "label": "7th", "bind": "Seventh", "min": 0, "max": 1},
+                "h8": {"type": "fader", "col": 6, "row": 0, "rowSpan": 4, "label": "8th", "bind": "Eighth", "min": 0, "max": 1},
+                "h9": {"type": "fader", "col": 7, "row": 0, "rowSpan": 4, "label": "9th", "bind": "Ninth", "min": 0, "max": 1},
+                "h10": {"type": "fader", "col": 8, "row": 0, "rowSpan": 4, "label": "10th", "bind": "Tenth", "min": 0, "max": 1},
+                "h11": {"type": "fader", "col": 9, "row": 0, "rowSpan": 4, "label": "11th", "bind": "Elevnth", "min": 0, "max": 1},
+                "h12": {"type": "fader", "col": 10, "row": 0, "rowSpan": 4, "label": "12th", "bind": "Twelvth", "min": 0, "max": 1},
+                "h13": {"type": "fader", "col": 11, "row": 0, "rowSpan": 4, "label": "13th", "bind": "Thirtnh", "min": 0, "max": 1}
               },
               "vertical": {
                 "cols": 4,
                 "rows": 9,
                 "widgets": {
-                  "harm_section": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 4,
-                    "rowSpan": 9,
-                    "label": "HARM",
-                    "color": "#3ec96b26"
-                  },
-                  "h2": {
-                    "type": "fader",
-                    "col": 0,
-                    "row": 0,
-                    "rowSpan": 3,
-                    "label": "2nd",
-                    "bind": "Second",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "h3": {
-                    "type": "fader",
-                    "col": 1,
-                    "row": 0,
-                    "rowSpan": 3,
-                    "label": "3rd",
-                    "bind": "Third",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "h4": {
-                    "type": "fader",
-                    "col": 2,
-                    "row": 0,
-                    "rowSpan": 3,
-                    "label": "4th",
-                    "bind": "Fourth",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "h5": {
-                    "type": "fader",
-                    "col": 3,
-                    "row": 0,
-                    "rowSpan": 3,
-                    "label": "5th",
-                    "bind": "Fifth",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "h6": {
-                    "type": "fader",
-                    "col": 0,
-                    "row": 3,
-                    "rowSpan": 3,
-                    "label": "6th",
-                    "bind": "Sixth",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "h7": {
-                    "type": "fader",
-                    "col": 1,
-                    "row": 3,
-                    "rowSpan": 3,
-                    "label": "7th",
-                    "bind": "Seventh",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "h8": {
-                    "type": "fader",
-                    "col": 2,
-                    "row": 3,
-                    "rowSpan": 3,
-                    "label": "8th",
-                    "bind": "Eighth",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "h9": {
-                    "type": "fader",
-                    "col": 3,
-                    "row": 3,
-                    "rowSpan": 3,
-                    "label": "9th",
-                    "bind": "Ninth",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "h10": {
-                    "type": "fader",
-                    "col": 0,
-                    "row": 6,
-                    "rowSpan": 3,
-                    "label": "10th",
-                    "bind": "Tenth",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "h11": {
-                    "type": "fader",
-                    "col": 1,
-                    "row": 6,
-                    "rowSpan": 3,
-                    "label": "11th",
-                    "bind": "Elevnth",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "h12": {
-                    "type": "fader",
-                    "col": 2,
-                    "row": 6,
-                    "rowSpan": 3,
-                    "label": "12th",
-                    "bind": "Twelvth",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "h13": {
-                    "type": "fader",
-                    "col": 3,
-                    "row": 6,
-                    "rowSpan": 3,
-                    "label": "13th",
-                    "bind": "Thirtnh",
-                    "min": 0,
-                    "max": 1
-                  }
+                  "harm_section": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 9, "label": "HARM", "color": "#3ec96b26"},
+                  "h2": {"type": "fader", "col": 0, "row": 0, "rowSpan": 3, "label": "2nd", "bind": "Second", "min": 0, "max": 1},
+                  "h3": {"type": "fader", "col": 1, "row": 0, "rowSpan": 3, "label": "3rd", "bind": "Third", "min": 0, "max": 1},
+                  "h4": {"type": "fader", "col": 2, "row": 0, "rowSpan": 3, "label": "4th", "bind": "Fourth", "min": 0, "max": 1},
+                  "h5": {"type": "fader", "col": 3, "row": 0, "rowSpan": 3, "label": "5th", "bind": "Fifth", "min": 0, "max": 1},
+                  "h6": {"type": "fader", "col": 0, "row": 3, "rowSpan": 3, "label": "6th", "bind": "Sixth", "min": 0, "max": 1},
+                  "h7": {"type": "fader", "col": 1, "row": 3, "rowSpan": 3, "label": "7th", "bind": "Seventh", "min": 0, "max": 1},
+                  "h8": {"type": "fader", "col": 2, "row": 3, "rowSpan": 3, "label": "8th", "bind": "Eighth", "min": 0, "max": 1},
+                  "h9": {"type": "fader", "col": 3, "row": 3, "rowSpan": 3, "label": "9th", "bind": "Ninth", "min": 0, "max": 1},
+                  "h10": {"type": "fader", "col": 0, "row": 6, "rowSpan": 3, "label": "10th", "bind": "Tenth", "min": 0, "max": 1},
+                  "h11": {"type": "fader", "col": 1, "row": 6, "rowSpan": 3, "label": "11th", "bind": "Elevnth", "min": 0, "max": 1},
+                  "h12": {"type": "fader", "col": 2, "row": 6, "rowSpan": 3, "label": "12th", "bind": "Twelvth", "min": 0, "max": 1},
+                  "h13": {"type": "fader", "col": 3, "row": 6, "rowSpan": 3, "label": "13th", "bind": "Thirtnh", "min": 0, "max": 1}
                 }
               }
             },
@@ -360,45 +118,15 @@
             "pluginId": "drums:fx"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
-      }
+      "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}]}
     },
-    "tracks": [
-      "drums"
-    ],
+    "tracks": ["drums"],
     "videoTracks": [],
-    "trackColors": {
-      "drums": "#dd322c"
-    },
-    "trackSignals": {
-      "drums": "audio"
-    },
-    "trackClips": {
-      "drums": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ]
-    },
+    "trackColors": {"drums": "#dd322c"},
+    "trackSignals": {"drums": "audio"},
+    "trackClips": {"drums": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}]},
     "modules": {},
     "warnings": []
   },

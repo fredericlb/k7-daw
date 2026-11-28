@@ -1,9 +1,6 @@
 {
   "project": "k7-core/audio.zz_utility.vca.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "audio.zz_utility.vca",
     "tempo": 120,
@@ -54,11 +51,7 @@
             "presetSave": "<ws>/k7-core/audio.zz_utility.vca.k7/nodes/fx.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -104,11 +97,7 @@
             "presetSave": "<ws>/k7-core/audio.zz_utility.vca.k7/nodes/fx-bit-shift-gain.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -154,11 +143,7 @@
             "presetSave": "<ws>/k7-core/audio.zz_utility.vca.k7/nodes/fx-purest-gain.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -204,11 +189,7 @@
             "presetSave": "<ws>/k7-core/audio.zz_utility.vca.k7/nodes/fx-tracktion.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -217,16 +198,9 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
@@ -236,11 +210,7 @@
           {
             "module": "fx",
             "uses": "@k7-core/audio/zz_utility/vca",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -248,39 +218,16 @@
             "ui": {
               "cols": 3,
               "rows": 3,
-              "widgets": {
-                "vca": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 3,
-                  "rowSpan": 3,
-                  "label": "VCA",
-                  "bind": "VCA",
-                  "min": 0,
-                  "max": 1
-                }
-              }
+              "widgets": {"vca": {"type": "knob", "col": 0, "row": 0, "colSpan": 3, "rowSpan": 3, "label": "VCA", "bind": "VCA", "min": 0, "max": 1}}
             },
-            "engines": [
-              "tracktion",
-              "bit-shift-gain",
-              "purest-gain"
-            ],
+            "engines": ["tracktion", "bit-shift-gain", "purest-gain"],
             "engine": "tracktion",
             "params": {},
-            "defaults": {
-              "VCA": 0.7408182025
-            },
+            "defaults": {"VCA": 0.7408182025},
             "pluginId": "drums:fx"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-bit-shift-gain": {
         "from": "drums-bit-shift-gain",
@@ -288,11 +235,7 @@
           {
             "module": "fx-bit-shift-gain",
             "uses": "@k7-core/audio/zz_utility/vca",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -301,35 +244,16 @@
               "cols": 3,
               "rows": 3,
               "widgets": {
-                "bitshift": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 3,
-                  "rowSpan": 3,
-                  "label": "Shift",
-                  "bind": "BitShift",
-                  "min": 0,
-                  "max": 1
-                }
+                "bitshift": {"type": "knob", "col": 0, "row": 0, "colSpan": 3, "rowSpan": 3, "label": "Shift", "bind": "BitShift", "min": 0, "max": 1}
               }
             },
-            "engines": [
-              "tracktion",
-              "bit-shift-gain",
-              "purest-gain"
-            ],
+            "engines": ["tracktion", "bit-shift-gain", "purest-gain"],
             "engine": "bit-shift-gain",
             "params": {},
             "pluginId": "drums-bit-shift-gain:fx-bit-shift-gain"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-purest-gain": {
         "from": "drums-purest-gain",
@@ -337,11 +261,7 @@
           {
             "module": "fx-purest-gain",
             "uses": "@k7-core/audio/zz_utility/vca",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -350,55 +270,18 @@
               "cols": 4,
               "rows": 2,
               "widgets": {
-                "gain_grp": {
-                  "type": "group",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 4,
-                  "rowSpan": 2,
-                  "label": "GAIN",
-                  "color": "#3d7dff26"
-                },
-                "gain": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Gain",
-                  "bind": "Gain",
-                  "min": 0,
-                  "max": 1
-                },
-                "slow_fade": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Fade",
-                  "bind": "Slow Fade",
-                  "min": 0,
-                  "max": 1
-                }
+                "gain_grp": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 2, "label": "GAIN", "color": "#3d7dff26"},
+                "gain": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Gain", "bind": "Gain", "min": 0, "max": 1},
+                "slow_fade": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Fade", "bind": "Slow Fade", "min": 0, "max": 1}
               }
             },
-            "engines": [
-              "tracktion",
-              "bit-shift-gain",
-              "purest-gain"
-            ],
+            "engines": ["tracktion", "bit-shift-gain", "purest-gain"],
             "engine": "purest-gain",
             "params": {},
             "pluginId": "drums-purest-gain:fx-purest-gain"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-tracktion": {
         "from": "drums-tracktion",
@@ -406,11 +289,7 @@
           {
             "module": "fx-tracktion",
             "uses": "@k7-core/audio/zz_utility/vca",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -418,107 +297,28 @@
             "ui": {
               "cols": 3,
               "rows": 3,
-              "widgets": {
-                "vca": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 3,
-                  "rowSpan": 3,
-                  "label": "VCA",
-                  "bind": "VCA",
-                  "min": 0,
-                  "max": 1
-                }
-              }
+              "widgets": {"vca": {"type": "knob", "col": 0, "row": 0, "colSpan": 3, "rowSpan": 3, "label": "VCA", "bind": "VCA", "min": 0, "max": 1}}
             },
-            "engines": [
-              "tracktion",
-              "bit-shift-gain",
-              "purest-gain"
-            ],
+            "engines": ["tracktion", "bit-shift-gain", "purest-gain"],
             "engine": "tracktion",
             "params": {},
-            "defaults": {
-              "VCA": 0.7408182025
-            },
+            "defaults": {"VCA": 0.7408182025},
             "pluginId": "drums-tracktion:fx-tracktion"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
-      }
+      "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}]}
     },
-    "tracks": [
-      "drums",
-      "drums-bit-shift-gain",
-      "drums-purest-gain",
-      "drums-tracktion"
-    ],
+    "tracks": ["drums", "drums-bit-shift-gain", "drums-purest-gain", "drums-tracktion"],
     "videoTracks": [],
-    "trackColors": {
-      "drums": "#af1d26",
-      "drums-bit-shift-gain": "#d32222",
-      "drums-purest-gain": "#e0493e",
-      "drums-tracktion": "#e57361"
-    },
-    "trackSignals": {
-      "drums": "audio",
-      "drums-bit-shift-gain": "audio",
-      "drums-purest-gain": "audio",
-      "drums-tracktion": "audio"
-    },
+    "trackColors": {"drums": "#af1d26", "drums-bit-shift-gain": "#d32222", "drums-purest-gain": "#e0493e", "drums-tracktion": "#e57361"},
+    "trackSignals": {"drums": "audio", "drums-bit-shift-gain": "audio", "drums-purest-gain": "audio", "drums-tracktion": "audio"},
     "trackClips": {
-      "drums": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-bit-shift-gain": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-purest-gain": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-tracktion": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ]
+      "drums": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-bit-shift-gain": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-purest-gain": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-tracktion": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}]
     },
     "modules": {},
     "warnings": []

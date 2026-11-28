@@ -1,9 +1,6 @@
 {
   "project": "k7-core/audio.gate.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "audio.gate",
     "tempo": 120,
@@ -54,11 +51,7 @@
             "presetSave": "<ws>/k7-core/audio.gate.k7/nodes/fx.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -104,11 +97,7 @@
             "presetSave": "<ws>/k7-core/audio.gate.k7/nodes/fx-de-hiss.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -154,11 +143,7 @@
             "presetSave": "<ws>/k7-core/audio.gate.k7/nodes/fx-gatelope.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -204,11 +189,7 @@
             "presetSave": "<ws>/k7-core/audio.gate.k7/nodes/fx-soft-gate.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -217,16 +198,9 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
@@ -236,11 +210,7 @@
           {
             "module": "fx",
             "uses": "@k7-core/audio/gate",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -249,96 +219,27 @@
               "cols": 6,
               "rows": 2,
               "widgets": {
-                "thresh": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Thresh",
-                  "bind": "Thresh",
-                  "min": 0,
-                  "max": 1
-                },
-                "darken": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Darken",
-                  "bind": "Darken",
-                  "min": 0,
-                  "max": 1
-                },
-                "silence": {
-                  "type": "knob",
-                  "col": 4,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Silence",
-                  "bind": "Silence",
-                  "min": 0,
-                  "max": 1
-                }
+                "thresh": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Thresh", "bind": "Thresh", "min": 0, "max": 1},
+                "darken": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Darken", "bind": "Darken", "min": 0, "max": 1},
+                "silence": {"type": "knob", "col": 4, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Silence", "bind": "Silence", "min": 0, "max": 1}
               },
               "vertical": {
                 "cols": 4,
                 "rows": 4,
                 "widgets": {
-                  "thresh": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Thresh",
-                    "bind": "Thresh",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "darken": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Darken",
-                    "bind": "Darken",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "silence": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Silence",
-                    "bind": "Silence",
-                    "min": 0,
-                    "max": 1
-                  }
+                  "thresh": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Thresh", "bind": "Thresh", "min": 0, "max": 1},
+                  "darken": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Darken", "bind": "Darken", "min": 0, "max": 1},
+                  "silence": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Silence", "bind": "Silence", "min": 0, "max": 1}
                 }
               }
             },
-            "engines": [
-              "de-hiss",
-              "gatelope",
-              "soft-gate"
-            ],
+            "engines": ["de-hiss", "gatelope", "soft-gate"],
             "engine": "soft-gate",
             "params": {},
             "pluginId": "drums:fx"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-de-hiss": {
         "from": "drums-de-hiss",
@@ -346,11 +247,7 @@
           {
             "module": "fx-de-hiss",
             "uses": "@k7-core/audio/gate",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -358,36 +255,15 @@
             "ui": {
               "cols": 3,
               "rows": 3,
-              "widgets": {
-                "thresh": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 3,
-                  "rowSpan": 3,
-                  "label": "Thresh",
-                  "bind": "Thresh",
-                  "min": 0,
-                  "max": 1
-                }
-              }
+              "widgets": {"thresh": {"type": "knob", "col": 0, "row": 0, "colSpan": 3, "rowSpan": 3, "label": "Thresh", "bind": "Thresh", "min": 0, "max": 1}}
             },
-            "engines": [
-              "de-hiss",
-              "gatelope",
-              "soft-gate"
-            ],
+            "engines": ["de-hiss", "gatelope", "soft-gate"],
             "engine": "de-hiss",
             "params": {},
             "pluginId": "drums-de-hiss:fx-de-hiss"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-gatelope": {
         "from": "drums-gatelope",
@@ -395,11 +271,7 @@
           {
             "module": "fx-gatelope",
             "uses": "@k7-core/audio/gate",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -408,86 +280,21 @@
               "cols": 4,
               "rows": 4,
               "widgets": {
-                "gate_grp": {
-                  "type": "group",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 4,
-                  "rowSpan": 2,
-                  "label": "GATE",
-                  "color": "#3d7dff26"
-                },
-                "thresh": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Thresh",
-                  "bind": "Thresh",
-                  "min": 0,
-                  "max": 1
-                },
-                "attack": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Attack",
-                  "bind": "AttackS",
-                  "min": 0,
-                  "max": 1
-                },
-                "sus_grp": {
-                  "type": "group",
-                  "col": 0,
-                  "row": 2,
-                  "colSpan": 4,
-                  "rowSpan": 2,
-                  "label": "SUS",
-                  "color": "#3ec96b26"
-                },
-                "bass_sus": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 2,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Bass",
-                  "bind": "BassSus",
-                  "min": 0,
-                  "max": 1
-                },
-                "treb_sus": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 2,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Treble",
-                  "bind": "TrebSus",
-                  "min": 0,
-                  "max": 1
-                }
+                "gate_grp": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 2, "label": "GATE", "color": "#3d7dff26"},
+                "thresh": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Thresh", "bind": "Thresh", "min": 0, "max": 1},
+                "attack": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Attack", "bind": "AttackS", "min": 0, "max": 1},
+                "sus_grp": {"type": "group", "col": 0, "row": 2, "colSpan": 4, "rowSpan": 2, "label": "SUS", "color": "#3ec96b26"},
+                "bass_sus": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Bass", "bind": "BassSus", "min": 0, "max": 1},
+                "treb_sus": {"type": "knob", "col": 2, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Treble", "bind": "TrebSus", "min": 0, "max": 1}
               }
             },
-            "engines": [
-              "de-hiss",
-              "gatelope",
-              "soft-gate"
-            ],
+            "engines": ["de-hiss", "gatelope", "soft-gate"],
             "engine": "gatelope",
             "params": {},
             "pluginId": "drums-gatelope:fx-gatelope"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-soft-gate": {
         "from": "drums-soft-gate",
@@ -495,11 +302,7 @@
           {
             "module": "fx-soft-gate",
             "uses": "@k7-core/audio/gate",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -508,164 +311,39 @@
               "cols": 6,
               "rows": 2,
               "widgets": {
-                "thresh": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Thresh",
-                  "bind": "Thresh",
-                  "min": 0,
-                  "max": 1
-                },
-                "darken": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Darken",
-                  "bind": "Darken",
-                  "min": 0,
-                  "max": 1
-                },
-                "silence": {
-                  "type": "knob",
-                  "col": 4,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Silence",
-                  "bind": "Silence",
-                  "min": 0,
-                  "max": 1
-                }
+                "thresh": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Thresh", "bind": "Thresh", "min": 0, "max": 1},
+                "darken": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Darken", "bind": "Darken", "min": 0, "max": 1},
+                "silence": {"type": "knob", "col": 4, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Silence", "bind": "Silence", "min": 0, "max": 1}
               },
               "vertical": {
                 "cols": 4,
                 "rows": 4,
                 "widgets": {
-                  "thresh": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Thresh",
-                    "bind": "Thresh",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "darken": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Darken",
-                    "bind": "Darken",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "silence": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Silence",
-                    "bind": "Silence",
-                    "min": 0,
-                    "max": 1
-                  }
+                  "thresh": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Thresh", "bind": "Thresh", "min": 0, "max": 1},
+                  "darken": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Darken", "bind": "Darken", "min": 0, "max": 1},
+                  "silence": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Silence", "bind": "Silence", "min": 0, "max": 1}
                 }
               }
             },
-            "engines": [
-              "de-hiss",
-              "gatelope",
-              "soft-gate"
-            ],
+            "engines": ["de-hiss", "gatelope", "soft-gate"],
             "engine": "soft-gate",
             "params": {},
             "pluginId": "drums-soft-gate:fx-soft-gate"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
-      }
+      "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}]}
     },
-    "tracks": [
-      "drums",
-      "drums-de-hiss",
-      "drums-gatelope",
-      "drums-soft-gate"
-    ],
+    "tracks": ["drums", "drums-de-hiss", "drums-gatelope", "drums-soft-gate"],
     "videoTracks": [],
-    "trackColors": {
-      "drums": "#af1d26",
-      "drums-de-hiss": "#d32222",
-      "drums-gatelope": "#e0493e",
-      "drums-soft-gate": "#e57361"
-    },
-    "trackSignals": {
-      "drums": "audio",
-      "drums-de-hiss": "audio",
-      "drums-gatelope": "audio",
-      "drums-soft-gate": "audio"
-    },
+    "trackColors": {"drums": "#af1d26", "drums-de-hiss": "#d32222", "drums-gatelope": "#e0493e", "drums-soft-gate": "#e57361"},
+    "trackSignals": {"drums": "audio", "drums-de-hiss": "audio", "drums-gatelope": "audio", "drums-soft-gate": "audio"},
     "trackClips": {
-      "drums": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-de-hiss": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-gatelope": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-soft-gate": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ]
+      "drums": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-de-hiss": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-gatelope": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-soft-gate": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}]
     },
     "modules": {},
     "warnings": []

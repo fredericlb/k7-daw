@@ -1,9 +1,6 @@
 {
   "project": "k7-core/audio.zz_utility.crossfade.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "audio.zz_utility.crossfade",
     "tempo": 120,
@@ -55,11 +52,7 @@
             "presetSave": "<ws>/k7-core/audio.zz_utility.crossfade.k7/nodes/fx.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "Mix": 0.5,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"Mix": 0.5, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -68,16 +61,9 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
@@ -87,21 +73,8 @@
           {
             "module": "fx",
             "uses": "@k7-core/audio/zz_utility/crossfade",
-            "stage": [
-              "@input-volume",
-              "@output-volume"
-            ],
-            "inputs": [
-              {
-                "name": "a",
-                "type": "audio"
-              },
-              {
-                "name": "b",
-                "type": "audio",
-                "mandatory": false
-              }
-            ],
+            "stage": ["@input-volume", "@output-volume"],
+            "inputs": [{"name": "a", "type": "audio"}, {"name": "b", "type": "audio", "mandatory": false}],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -110,75 +83,24 @@
               "cols": 3,
               "rows": 2,
               "widgets": {
-                "a": {
-                  "type": "label",
-                  "col": 0,
-                  "row": 0,
-                  "label": "A"
-                },
-                "mix": {
-                  "type": "fader",
-                  "col": 1,
-                  "row": 0,
-                  "rowSpan": 2,
-                  "label": "Mix",
-                  "bind": "Mix",
-                  "min": 0,
-                  "max": 1
-                },
-                "b": {
-                  "type": "label",
-                  "col": 2,
-                  "row": 0,
-                  "label": "B"
-                }
+                "a": {"type": "label", "col": 0, "row": 0, "label": "A"},
+                "mix": {"type": "fader", "col": 1, "row": 0, "rowSpan": 2, "label": "Mix", "bind": "Mix", "min": 0, "max": 1},
+                "b": {"type": "label", "col": 2, "row": 0, "label": "B"}
               }
             },
-            "params": {
-              "Mix": 0.5
-            },
+            "params": {"Mix": 0.5},
             "pluginId": "drums:fx"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
-      }
+      "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}]}
     },
-    "tracks": [
-      "drums"
-    ],
+    "tracks": ["drums"],
     "videoTracks": [],
-    "trackColors": {
-      "drums": "#dd322c"
-    },
-    "trackSignals": {
-      "drums": "audio"
-    },
-    "trackClips": {
-      "drums": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ]
-    },
+    "trackColors": {"drums": "#dd322c"},
+    "trackSignals": {"drums": "audio"},
+    "trackClips": {"drums": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}]},
     "modules": {},
     "warnings": []
   },

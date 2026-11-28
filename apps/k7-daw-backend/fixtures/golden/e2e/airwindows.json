@@ -1,9 +1,6 @@
 {
   "project": "e2e/airwindows.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "airwindows",
     "tempo": 120,
@@ -54,38 +51,10 @@
             "loopStart": 0,
             "loopEnd": 0,
             "notes": [
-              {
-                "time": 0,
-                "duration": 1,
-                "key": 60,
-                "vel": 0.8,
-                "channel": 0,
-                "rel": 1
-              },
-              {
-                "time": 1,
-                "duration": 1,
-                "key": 64,
-                "vel": 1,
-                "channel": 0,
-                "rel": 1
-              },
-              {
-                "time": 2,
-                "duration": 1,
-                "key": 67,
-                "vel": 1,
-                "channel": 0,
-                "rel": 1
-              },
-              {
-                "time": 3,
-                "duration": 1,
-                "key": 72,
-                "vel": 1,
-                "channel": 0,
-                "rel": 1
-              }
+              {"time": 0, "duration": 1, "key": 60, "vel": 0.8, "channel": 0, "rel": 1},
+              {"time": 1, "duration": 1, "key": 64, "vel": 1, "channel": 0, "rel": 1},
+              {"time": 2, "duration": 1, "key": 67, "vel": 1, "channel": 0, "rel": 1},
+              {"time": 3, "duration": 1, "key": 72, "vel": 1, "channel": 0, "rel": 1}
             ]
           }
         ],
@@ -98,9 +67,7 @@
             "presetSave": "<ws>/e2e/airwindows.k7/nodes/lead.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@output-volume": 0
-            }
+            "params": {"@output-volume": 0}
           },
           {
             "id": "melody:tape",
@@ -110,11 +77,7 @@
             "presetSave": "<ws>/e2e/airwindows.k7/nodes/tape.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           },
           {
             "id": "melody:chorus",
@@ -124,11 +87,7 @@
             "presetSave": "<ws>/e2e/airwindows.k7/nodes/chorus.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 0.5,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 0.5, "@input-volume": 0, "@output-volume": 0}
           },
           {
             "id": "melody:channel",
@@ -147,16 +106,9 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
@@ -166,12 +118,8 @@
           {
             "module": "lead",
             "uses": "@workspace/instruments/fourosc",
-            "stage": [
-              "@output-volume"
-            ],
-            "events": [
-              "note-on"
-            ],
+            "stage": ["@output-volume"],
+            "events": ["note-on"],
             "category": "instruments",
             "emits": "audio",
             "stub": false,
@@ -180,58 +128,20 @@
               "cols": 4,
               "rows": 2,
               "widgets": {
-                "title": {
-                  "type": "label",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "text": "4OSC"
-                },
-                "cutoff": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 1,
-                  "label": "Cutoff",
-                  "bind": "Filter Freq",
-                  "min": 0,
-                  "max": 135.076232
-                },
-                "res": {
-                  "type": "knob",
-                  "col": 1,
-                  "row": 1,
-                  "label": "Res",
-                  "bind": "Filter Resonance",
-                  "min": 0,
-                  "max": 100
-                },
-                "level": {
-                  "type": "slider",
-                  "col": 2,
-                  "row": 1,
-                  "label": "Level",
-                  "bind": "Level",
-                  "min": -100,
-                  "max": 0
-                }
+                "title": {"type": "label", "col": 0, "row": 0, "colSpan": 2, "text": "4OSC"},
+                "cutoff": {"type": "knob", "col": 0, "row": 1, "label": "Cutoff", "bind": "Filter Freq", "min": 0, "max": 135.076232},
+                "res": {"type": "knob", "col": 1, "row": 1, "label": "Res", "bind": "Filter Resonance", "min": 0, "max": 100},
+                "level": {"type": "slider", "col": 2, "row": 1, "label": "Level", "bind": "Level", "min": -100, "max": 0}
               }
             },
             "params": {},
-            "defaults": {
-              "Filter Freq": 69,
-              "Filter Resonance": 0.5,
-              "Level": 0
-            },
+            "defaults": {"Filter Freq": 69, "Filter Resonance": 0.5, "Level": 0},
             "pluginId": "melody:lead"
           },
           {
             "module": "tape",
             "uses": "@k7-core/audio/tape",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -240,78 +150,15 @@
               "cols": 4,
               "rows": 4,
               "widgets": {
-                "sat": {
-                  "type": "group",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 4,
-                  "rowSpan": 2,
-                  "label": "SAT",
-                  "color": "#ff6a1a26"
-                },
-                "louder": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Louder",
-                  "bind": "Louder",
-                  "min": 0,
-                  "max": 1
-                },
-                "softer": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Softer",
-                  "bind": "Softer",
-                  "min": 0,
-                  "max": 1
-                },
-                "tape": {
-                  "type": "group",
-                  "col": 0,
-                  "row": 2,
-                  "colSpan": 4,
-                  "rowSpan": 2,
-                  "label": "TAPE",
-                  "color": "#3d7dff26"
-                },
-                "fatter": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 2,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Fatter",
-                  "bind": "Fatter",
-                  "min": 0,
-                  "max": 1
-                },
-                "flutter": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 2,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Flutter",
-                  "bind": "Flutter",
-                  "min": 0,
-                  "max": 1
-                }
+                "sat": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 2, "label": "SAT", "color": "#ff6a1a26"},
+                "louder": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Louder", "bind": "Louder", "min": 0, "max": 1},
+                "softer": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Softer", "bind": "Softer", "min": 0, "max": 1},
+                "tape": {"type": "group", "col": 0, "row": 2, "colSpan": 4, "rowSpan": 2, "label": "TAPE", "color": "#3d7dff26"},
+                "fatter": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Fatter", "bind": "Fatter", "min": 0, "max": 1},
+                "flutter": {"type": "knob", "col": 2, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Flutter", "bind": "Flutter", "min": 0, "max": 1}
               }
             },
-            "engines": [
-              "drum-slam",
-              "from-tape",
-              "iron-oxide-5",
-              "iron-oxide-classic",
-              "tape-fat",
-              "to-tape-5"
-            ],
+            "engines": ["drum-slam", "from-tape", "iron-oxide-5", "iron-oxide-classic", "tape-fat", "to-tape-5"],
             "engine": "to-tape-5",
             "params": {},
             "pluginId": "melody:tape"
@@ -319,11 +166,7 @@
           {
             "module": "chorus",
             "uses": "@k7-core/audio/chorus",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -332,42 +175,13 @@
               "cols": 4,
               "rows": 2,
               "widgets": {
-                "speed": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Speed",
-                  "bind": "Speed",
-                  "min": 0,
-                  "max": 1
-                },
-                "range": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Range",
-                  "bind": "Range",
-                  "min": 0,
-                  "max": 1
-                }
+                "speed": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Speed", "bind": "Speed", "min": 0, "max": 1},
+                "range": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Range", "bind": "Range", "min": 0, "max": 1}
               }
             },
-            "engines": [
-              "airwindows",
-              "chorus-ensemble",
-              "classic",
-              "ensemble",
-              "melt",
-              "one-knob"
-            ],
+            "engines": ["airwindows", "chorus-ensemble", "classic", "ensemble", "melt", "one-knob"],
             "engine": "airwindows",
-            "params": {
-              "@mix": 0.5
-            },
+            "params": {"@mix": 0.5},
             "pluginId": "melody:chorus"
           },
           {
@@ -377,21 +191,12 @@
             "emits": "audio",
             "stub": false,
             "hasNativePluginUI": false,
-            "ui": {
-              "cols": 1,
-              "rows": 1,
-              "widgets": {}
-            },
+            "ui": {"cols": 1, "rows": 1, "widgets": {}},
             "params": {},
             "pluginId": "melody:channel"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "MIX": {
         "from": "MIX",
@@ -403,44 +208,19 @@
             "emits": "audio",
             "stub": false,
             "hasNativePluginUI": false,
-            "ui": {
-              "cols": 1,
-              "rows": 1,
-              "widgets": {}
-            },
+            "ui": {"cols": 1, "rows": 1, "widgets": {}},
             "params": {},
             "pluginId": "MIX:buss"
           }
         ],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "OUT", "gain": 1}]
       }
     },
-    "tracks": [
-      "melody"
-    ],
+    "tracks": ["melody"],
     "videoTracks": [],
-    "trackColors": {
-      "melody": "#8b8f98"
-    },
-    "trackSignals": {
-      "melody": "midi"
-    },
-    "trackClips": {
-      "melody": [
-        {
-          "ref": "melody",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "midi"
-        }
-      ]
-    },
+    "trackColors": {"melody": "#8b8f98"},
+    "trackSignals": {"melody": "midi"},
+    "trackClips": {"melody": [{"ref": "melody", "start": 0, "tc": "1:1", "len": 4, "kind": "midi"}]},
     "modules": {},
     "warnings": []
   },

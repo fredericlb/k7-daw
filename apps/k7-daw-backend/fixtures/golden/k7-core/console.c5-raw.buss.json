@@ -1,9 +1,6 @@
 {
   "project": "k7-core/console.c5-raw.buss.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "console.c5-raw.buss",
     "tempo": 120,
@@ -63,29 +60,13 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
-      "drums": {
-        "from": "drums",
-        "use": [],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
-      },
+      "drums": {"from": "drums", "use": [], "out": [{"to": "MIX", "gain": 1}]},
       "MIX": {
         "from": "MIX",
         "use": [
@@ -99,53 +80,20 @@
             "ui": {
               "cols": 3,
               "rows": 3,
-              "widgets": {
-                "center": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 3,
-                  "rowSpan": 3,
-                  "label": "Center",
-                  "bind": "Center",
-                  "min": 0,
-                  "max": 1
-                }
-              }
+              "widgets": {"center": {"type": "knob", "col": 0, "row": 0, "colSpan": 3, "rowSpan": 3, "label": "Center", "bind": "Center", "min": 0, "max": 1}}
             },
             "params": {},
             "pluginId": "MIX:fx"
           }
         ],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "OUT", "gain": 1}]
       }
     },
-    "tracks": [
-      "drums"
-    ],
+    "tracks": ["drums"],
     "videoTracks": [],
-    "trackColors": {
-      "drums": "#dd322c"
-    },
-    "trackSignals": {
-      "drums": "audio"
-    },
-    "trackClips": {
-      "drums": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ]
-    },
+    "trackColors": {"drums": "#dd322c"},
+    "trackSignals": {"drums": "audio"},
+    "trackClips": {"drums": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}]},
     "modules": {},
     "warnings": []
   },

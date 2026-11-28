@@ -1,9 +1,6 @@
 {
   "project": "k7-core/audio.eq.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "audio.eq",
     "tempo": 120,
@@ -120,11 +117,7 @@
             "presetSave": "<ws>/k7-core/audio.eq.k7/nodes/fx-air.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -170,11 +163,7 @@
             "presetSave": "<ws>/k7-core/audio.eq.k7/nodes/fx-airwindows.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -220,11 +209,7 @@
             "presetSave": "<ws>/k7-core/audio.eq.k7/nodes/fx-aura.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -270,11 +255,7 @@
             "presetSave": "<ws>/k7-core/audio.eq.k7/nodes/fx-energy.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -386,11 +367,7 @@
             "presetSave": "<ws>/k7-core/audio.eq.k7/nodes/fx-purest-air.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -436,11 +413,7 @@
             "presetSave": "<ws>/k7-core/audio.eq.k7/nodes/fx-reseq.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -486,11 +459,7 @@
             "presetSave": "<ws>/k7-core/audio.eq.k7/nodes/fx-tone-slant.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -536,18 +505,7 @@
             "presetSave": "<ws>/k7-core/audio.eq.k7/nodes/fx-tracktion.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "Low-shelf gain": 0,
-              "Mid gain 1": 0,
-              "High-shelf gain": 0,
-              "Low-shelf freq": 200,
-              "Mid freq 1": 1000,
-              "High-shelf freq": 6000,
-              "Mid gain 2": 0,
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"Low-shelf gain": 0, "Mid gain 1": 0, "High-shelf gain": 0, "Low-shelf freq": 200, "Mid freq 1": 1000, "High-shelf freq": 6000, "Mid gain 2": 0, "@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -556,16 +514,9 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
@@ -575,11 +526,7 @@
           {
             "module": "fx",
             "uses": "@k7-core/audio/eq",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -588,420 +535,58 @@
               "cols": 16,
               "rows": 4,
               "widgets": {
-                "eq": {
-                  "type": "lcdscreen",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 6,
-                  "rowSpan": 4
-                },
-                "low_band": {
-                  "type": "group",
-                  "col": 6,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 4,
-                  "label": "LOW",
-                  "color": "#ff6a1a26"
-                },
-                "low_gain": {
-                  "type": "fader",
-                  "col": 6,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "Gain",
-                  "bind": "Low Gain",
-                  "min": -18,
-                  "max": 18,
-                  "step": 0.1
-                },
-                "low_freq": {
-                  "type": "knob",
-                  "col": 7,
-                  "row": 0,
-                  "label": "Freq",
-                  "bind": "Low Freq",
-                  "min": 20,
-                  "max": 1000
-                },
-                "low_q": {
-                  "type": "knob",
-                  "col": 7,
-                  "row": 1,
-                  "label": "Q",
-                  "bind": "Low Q",
-                  "min": 0.3,
-                  "max": 2
-                },
-                "lowmid_band": {
-                  "type": "group",
-                  "col": 8,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 4,
-                  "label": "LO MID",
-                  "color": "#ffc93d26"
-                },
-                "lowmid_gain": {
-                  "type": "fader",
-                  "col": 8,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "Gain",
-                  "bind": "Low Mid Gain",
-                  "min": -18,
-                  "max": 18,
-                  "step": 0.1
-                },
-                "lowmid_freq": {
-                  "type": "knob",
-                  "col": 9,
-                  "row": 0,
-                  "label": "Freq",
-                  "bind": "Low Mid Freq",
-                  "min": 40,
-                  "max": 4000
-                },
-                "lowmid_q": {
-                  "type": "knob",
-                  "col": 9,
-                  "row": 1,
-                  "label": "Q",
-                  "bind": "Low Mid Q",
-                  "min": 0.1,
-                  "max": 10
-                },
-                "mid_band": {
-                  "type": "group",
-                  "col": 10,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 4,
-                  "label": "MID",
-                  "color": "#3ec96b26"
-                },
-                "mid_gain": {
-                  "type": "fader",
-                  "col": 10,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "Gain",
-                  "bind": "Mid Gain",
-                  "min": -18,
-                  "max": 18,
-                  "step": 0.1
-                },
-                "mid_freq": {
-                  "type": "knob",
-                  "col": 11,
-                  "row": 0,
-                  "label": "Freq",
-                  "bind": "Mid Freq",
-                  "min": 200,
-                  "max": 8000
-                },
-                "mid_q": {
-                  "type": "knob",
-                  "col": 11,
-                  "row": 1,
-                  "label": "Q",
-                  "bind": "Mid Q",
-                  "min": 0.1,
-                  "max": 10
-                },
-                "highmid_band": {
-                  "type": "group",
-                  "col": 12,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 4,
-                  "label": "HI MID",
-                  "color": "#3d7dff26"
-                },
-                "highmid_gain": {
-                  "type": "fader",
-                  "col": 12,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "Gain",
-                  "bind": "High Mid Gain",
-                  "min": -18,
-                  "max": 18,
-                  "step": 0.1
-                },
-                "highmid_freq": {
-                  "type": "knob",
-                  "col": 13,
-                  "row": 0,
-                  "label": "Freq",
-                  "bind": "High Mid Freq",
-                  "min": 800,
-                  "max": 16000
-                },
-                "highmid_q": {
-                  "type": "knob",
-                  "col": 13,
-                  "row": 1,
-                  "label": "Q",
-                  "bind": "High Mid Q",
-                  "min": 0.1,
-                  "max": 10
-                },
-                "high_band": {
-                  "type": "group",
-                  "col": 14,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 4,
-                  "label": "HIGH",
-                  "color": "#b35cff26"
-                },
-                "high_gain": {
-                  "type": "fader",
-                  "col": 14,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "Gain",
-                  "bind": "High Gain",
-                  "min": -18,
-                  "max": 18,
-                  "step": 0.1
-                },
-                "high_freq": {
-                  "type": "knob",
-                  "col": 15,
-                  "row": 0,
-                  "label": "Freq",
-                  "bind": "High Freq",
-                  "min": 1000,
-                  "max": 20000
-                },
-                "high_q": {
-                  "type": "knob",
-                  "col": 15,
-                  "row": 1,
-                  "label": "Q",
-                  "bind": "High Q",
-                  "min": 0.3,
-                  "max": 2
-                }
+                "eq": {"type": "lcdscreen", "col": 0, "row": 0, "colSpan": 6, "rowSpan": 4},
+                "low_band": {"type": "group", "col": 6, "row": 0, "colSpan": 2, "rowSpan": 4, "label": "LOW", "color": "#ff6a1a26"},
+                "low_gain": {"type": "fader", "col": 6, "row": 0, "rowSpan": 4, "label": "Gain", "bind": "Low Gain", "min": -18, "max": 18, "step": 0.1},
+                "low_freq": {"type": "knob", "col": 7, "row": 0, "label": "Freq", "bind": "Low Freq", "min": 20, "max": 1000},
+                "low_q": {"type": "knob", "col": 7, "row": 1, "label": "Q", "bind": "Low Q", "min": 0.3, "max": 2},
+                "lowmid_band": {"type": "group", "col": 8, "row": 0, "colSpan": 2, "rowSpan": 4, "label": "LO MID", "color": "#ffc93d26"},
+                "lowmid_gain": {"type": "fader", "col": 8, "row": 0, "rowSpan": 4, "label": "Gain", "bind": "Low Mid Gain", "min": -18, "max": 18, "step": 0.1},
+                "lowmid_freq": {"type": "knob", "col": 9, "row": 0, "label": "Freq", "bind": "Low Mid Freq", "min": 40, "max": 4000},
+                "lowmid_q": {"type": "knob", "col": 9, "row": 1, "label": "Q", "bind": "Low Mid Q", "min": 0.1, "max": 10},
+                "mid_band": {"type": "group", "col": 10, "row": 0, "colSpan": 2, "rowSpan": 4, "label": "MID", "color": "#3ec96b26"},
+                "mid_gain": {"type": "fader", "col": 10, "row": 0, "rowSpan": 4, "label": "Gain", "bind": "Mid Gain", "min": -18, "max": 18, "step": 0.1},
+                "mid_freq": {"type": "knob", "col": 11, "row": 0, "label": "Freq", "bind": "Mid Freq", "min": 200, "max": 8000},
+                "mid_q": {"type": "knob", "col": 11, "row": 1, "label": "Q", "bind": "Mid Q", "min": 0.1, "max": 10},
+                "highmid_band": {"type": "group", "col": 12, "row": 0, "colSpan": 2, "rowSpan": 4, "label": "HI MID", "color": "#3d7dff26"},
+                "highmid_gain": {"type": "fader", "col": 12, "row": 0, "rowSpan": 4, "label": "Gain", "bind": "High Mid Gain", "min": -18, "max": 18, "step": 0.1},
+                "highmid_freq": {"type": "knob", "col": 13, "row": 0, "label": "Freq", "bind": "High Mid Freq", "min": 800, "max": 16000},
+                "highmid_q": {"type": "knob", "col": 13, "row": 1, "label": "Q", "bind": "High Mid Q", "min": 0.1, "max": 10},
+                "high_band": {"type": "group", "col": 14, "row": 0, "colSpan": 2, "rowSpan": 4, "label": "HIGH", "color": "#b35cff26"},
+                "high_gain": {"type": "fader", "col": 14, "row": 0, "rowSpan": 4, "label": "Gain", "bind": "High Gain", "min": -18, "max": 18, "step": 0.1},
+                "high_freq": {"type": "knob", "col": 15, "row": 0, "label": "Freq", "bind": "High Freq", "min": 1000, "max": 20000},
+                "high_q": {"type": "knob", "col": 15, "row": 1, "label": "Q", "bind": "High Q", "min": 0.3, "max": 2}
               },
               "script": "// Parametric EQ — the five bands' summed response over the signal in and out, and the bands' points to drag.\n// Interactive: drag a point for frequency and gain (shift is fine), alt-drag it up/down for Q, alt-click resets its gain.\n\nconst FONT = \"8px ui-monospace, monospace\";\nconst GREY = \"#6b6b6b\";\nconst WHITE = \"#ffffff\";\nconst F_LO = 20;\nconst F_HI = 20000;\nconst DB = 18;\nconst SR = 48000;\nconst HIT_PX = 14;\n// Pixels of alt-drag that double a band's Q.\nconst Q_PX = 70;\n\n// Name, filter, frequency range and default, Q range and default, colour — dsp.k7x keeps the same table.\nconst BANDS = [\n  [\"Low\", \"lowshelf\", 20, 1000, 100, 0.3, 2, 0.707, \"#ff6a1a\"],\n  [\"Low Mid\", \"peak\", 40, 4000, 300, 0.1, 10, 1, \"#ffc93d\"],\n  [\"Mid\", \"peak\", 200, 8000, 1000, 0.1, 10, 1, \"#3ec96b\"],\n  [\"High Mid\", \"peak\", 800, 16000, 3500, 0.1, 10, 1, \"#3d7dff\"],\n  [\"High\", \"highshelf\", 1000, 20000, 8000, 0.3, 2, 0.707, \"#b35cff\"],\n];\n\nconst num = (v, d) => (typeof v === \"number\" && Number.isFinite(v) ? v : d);\nconst clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);\nconst hz = (f) => (f >= 1000 ? `${(f / 1000).toFixed(f >= 10000 ? 1 : 2)}K` : `${Math.round(f)}`);\n\n// Each band as it is set now, missing params falling back to the defaults.\nfunction bandsOf(params) {\n  return BANDS.map(([name, mode, fLo, fHi, fDef, qLo, qHi, qDef, color]) => ({\n    name,\n    mode,\n    fLo,\n    fHi,\n    qLo,\n    qHi,\n    color,\n    f: clamp(num(params[`${name} Freq`], fDef), fLo, fHi),\n    g: clamp(num(params[`${name} Gain`], 0), -DB, DB),\n    q: clamp(num(params[`${name} Q`], qDef), qLo, qHi),\n  }));\n}\n\n// The engine's own coefficients (JUCE's IIRCoefficients), as [b0, b1, b2, a0, a1, a2].\nfunction coeffs(band) {\n  const A = Math.sqrt(10 ** (band.g / 20));\n  const w = (2 * Math.PI * clamp(band.f, 20, SR * 0.45)) / SR;\n  const c = Math.cos(w);\n  const s = Math.sin(w);\n  if (band.mode === \"peak\") {\n    const al = s / (2 * band.q);\n    return [1 + al * A, -2 * c, 1 - al * A, 1 + al / A, -2 * c, 1 - al / A];\n  }\n  const be = (s * Math.sqrt(A)) / band.q;\n  const am = A - 1;\n  const ap = A + 1;\n  if (band.mode === \"lowshelf\")\n    return [A * (ap - am * c + be), 2 * A * (am - ap * c), A * (ap - am * c - be), ap + am * c + be, -2 * (am + ap * c), ap + am * c - be];\n  return [A * (ap + am * c + be), -2 * A * (am + ap * c), A * (ap + am * c - be), ap - am * c + be, 2 * (am - ap * c), ap - am * c - be];\n}\n\n// dB of one biquad at frequency f, from |H(e^jw)|.\nfunction dbAt(k, f) {\n  const w = (2 * Math.PI * f) / SR;\n  const c1 = Math.cos(w);\n  const s1 = Math.sin(w);\n  const c2 = Math.cos(2 * w);\n  const s2 = Math.sin(2 * w);\n  const nr = k[0] + k[1] * c1 + k[2] * c2;\n  const ni = k[1] * s1 + k[2] * s2;\n  const dr = k[3] + k[4] * c1 + k[5] * c2;\n  const di = k[4] * s1 + k[5] * s2;\n  return 10 * Math.log10(Math.max(1e-30, nr * nr + ni * ni) / Math.max(1e-30, dr * dr + di * di));\n}\n\nconst frame = (W, H) => ({ x: 4, y: 13, w: Math.max(1, W - 8), h: Math.max(1, H - 17) });\nconst xOf = (b, f) => b.x + (Math.log(clamp(f, F_LO, F_HI) / F_LO) / Math.log(F_HI / F_LO)) * b.w;\nconst fOf = (b, px) => F_LO * (F_HI / F_LO) ** ((px - b.x) / Math.max(1, b.w));\nconst yOf = (b, db) => b.y + (1 - (clamp(db, -DB, DB) + DB) / (2 * DB)) * b.h;\nconst dbOf = (b, py) => DB - ((py - b.y) / Math.max(1, b.h)) * 2 * DB;\n\n// The band whose point is nearest (x, y), within `reach` pixels, else -1.\nfunction nearest(b, bands, x, y, reach) {\n  let best = -1;\n  let bestD = reach;\n  bands.forEach((band, i) => {\n    const d = Math.hypot(xOf(b, band.f) - x, yOf(b, band.g) - y);\n    if (d <= bestD) {\n      best = i;\n      bestD = d;\n    }\n  });\n  return best;\n}\n\n// The signal as a mirrored envelope, newest at the right edge, one history point per pixel.\nfunction envelope(ctx, b, points, fill) {\n  const n = Math.min(points.length, Math.floor(b.w));\n  if (n < 2) return;\n  const mid = b.y + b.h / 2;\n  const half = b.h / 2;\n  const hOf = (p) => clamp((20 * Math.log10(Math.max(1e-6, p)) + 48) / 48, 0, 1) * half;\n  const x0 = b.x + b.w - n;\n  ctx.fillStyle = fill;\n  ctx.beginPath();\n  ctx.moveTo(x0, mid);\n  for (let i = 0; i < n; i++) ctx.lineTo(x0 + i, mid - hOf(points[points.length - n + i]));\n  for (let i = n - 1; i >= 0; i--) ctx.lineTo(x0 + i, mid + hOf(points[points.length - n + i]));\n  ctx.closePath();\n  ctx.fill();\n}\n\nfunction grid(ctx, b) {\n  ctx.strokeStyle = \"#222\";\n  ctx.beginPath();\n  for (const f of [50, 100, 200, 500, 1000, 2000, 5000, 10000]) {\n    const x = Math.round(xOf(b, f)) + 0.5;\n    ctx.moveTo(x, b.y);\n    ctx.lineTo(x, b.y + b.h);\n  }\n  for (const db of [-12, -6, 6, 12]) {\n    const y = Math.round(yOf(b, db)) + 0.5;\n    ctx.moveTo(b.x, y);\n    ctx.lineTo(b.x + b.w, y);\n  }\n  ctx.stroke();\n  ctx.strokeStyle = GREY;\n  ctx.beginPath();\n  const y0 = Math.round(yOf(b, 0)) + 0.5;\n  ctx.moveTo(b.x, y0);\n  ctx.lineTo(b.x + b.w, y0);\n  ctx.stroke();\n}\n\nfunction curve(ctx, b, dbFn, color, width) {\n  ctx.strokeStyle = color;\n  ctx.lineWidth = width;\n  ctx.beginPath();\n  for (let px = b.x; px <= b.x + b.w; px++) {\n    const y = yOf(b, dbFn(fOf(b, px)));\n    if (px === b.x) ctx.moveTo(px, y);\n    else ctx.lineTo(px, y);\n  }\n  ctx.stroke();\n  ctx.lineWidth = 1;\n}\n\nfunction text(ctx, s, x, y, color, align) {\n  ctx.fillStyle = color;\n  ctx.textAlign = align;\n  ctx.fillText(s, x, y);\n}\n\nexport default {\n  eq: {\n    draw(lcd) {\n      const { ctx, width: W, height: H, params, state } = lcd;\n      ctx.fillStyle = \"#000\";\n      ctx.fillRect(0, 0, W, H);\n      ctx.font = FONT;\n      ctx.lineWidth = 1;\n      const b = frame(W, H);\n      const bands = bandsOf(params);\n      const ks = bands.map(coeffs);\n      const sel = typeof state.sel === \"number\" && bands[state.sel] ? state.sel : -1;\n\n      envelope(ctx, b, lcd.input, \"rgba(255,255,255,0.10)\");\n      envelope(ctx, b, lcd.output, \"rgba(62,201,107,0.22)\");\n      grid(ctx, b);\n      if (sel >= 0) {\n        ctx.globalAlpha = 0.6;\n        curve(ctx, b, (f) => dbAt(ks[sel], f), bands[sel].color, 1);\n        ctx.globalAlpha = 1;\n      }\n      curve(ctx, b, (f) => ks.reduce((sum, k) => sum + dbAt(k, f), 0), WHITE, 1.5);\n\n      bands.forEach((band, i) => {\n        const x = xOf(b, band.f);\n        const y = yOf(b, band.g);\n        ctx.fillStyle = band.color;\n        ctx.beginPath();\n        ctx.arc(x, y, i === sel ? 4 : 3, 0, Math.PI * 2);\n        ctx.fill();\n        if (i === sel) {\n          ctx.strokeStyle = WHITE;\n          ctx.beginPath();\n          ctx.arc(x, y, 6, 0, Math.PI * 2);\n          ctx.stroke();\n        }\n      });\n\n      if (sel >= 0) {\n        const band = bands[sel];\n        const g = `${band.g > 0 ? \"+\" : \"\"}${band.g.toFixed(1)} DB`;\n        text(ctx, band.name.toUpperCase(), b.x, 9, band.color, \"left\");\n        text(ctx, `${hz(band.f)} HZ  ${g}  Q ${band.q.toFixed(2)}`, W - 4, 9, WHITE, \"right\");\n      } else {\n        text(ctx, \"PARAMETRIC EQ\", b.x, 9, WHITE, \"left\");\n        text(ctx, \"DRAG A POINT\", W - 4, 9, GREY, \"right\");\n      }\n    },\n\n    pointer(lcd, ev) {\n      const { width: W, height: H, params, state } = lcd;\n      const b = frame(W, H);\n      const bands = bandsOf(params);\n      if (ev.type === \"down\") {\n        const i = nearest(b, bands, ev.x, ev.y, HIT_PX);\n        state.sel = i;\n        state.drag = null;\n        if (i < 0) return false;\n        // Alt: a drag is the Q, and a click that never moves resets the gain — decided on release.\n        if (ev.alt) {\n          state.drag = { q: true, y0: ev.y, q0: bands[i].q, moved: false };\n          return true;\n        }\n        state.drag = { x0: ev.x, y0: ev.y, px: xOf(b, bands[i].f), py: yOf(b, bands[i].g) };\n        return true;\n      }\n      if (ev.type === \"move\") {\n        const d = state.drag;\n        const band = bands[state.sel];\n        if (!d || !band) return false;\n        const fine = ev.shift ? 0.25 : 1;\n        if (d.q) {\n          // Up narrows it: a doubling of Q every 70 px, a quarter of that with shift.\n          const q = clamp(d.q0 * Math.pow(2, ((d.y0 - ev.y) * fine) / Q_PX), band.qLo, band.qHi);\n          d.moved = d.moved || Math.abs(ev.y - d.y0) > 2;\n          lcd.set(`${band.name} Q`, Math.round(q * 100) / 100);\n          return true;\n        }\n        const f = clamp(fOf(b, d.px + (ev.x - d.x0) * fine), band.fLo, band.fHi);\n        const g = clamp(dbOf(b, d.py + (ev.y - d.y0) * fine), -DB, DB);\n        lcd.set(`${band.name} Freq`, Number(f.toPrecision(4)));\n        lcd.set(`${band.name} Gain`, Math.round(g * 10) / 10);\n        return true;\n      }\n      // Up: an alt-click that never moved resets the gain.\n      const d = state.drag;\n      const band = bands[state.sel];\n      if (d && d.q && !d.moved && band) lcd.set(`${band.name} Gain`, 0);\n      state.drag = null;\n      return true;\n    },\n  },\n};\n",
               "vertical": {
                 "cols": 4,
                 "rows": 15,
                 "widgets": {
-                  "eq": {
-                    "type": "lcdscreen",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 4,
-                    "rowSpan": 3
-                  },
-                  "low_band": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 3,
-                    "colSpan": 2,
-                    "rowSpan": 4,
-                    "label": "LOW",
-                    "color": "#ff6a1a26"
-                  },
-                  "low_gain": {
-                    "type": "fader",
-                    "col": 0,
-                    "row": 3,
-                    "rowSpan": 4,
-                    "label": "Gain",
-                    "bind": "Low Gain",
-                    "min": -18,
-                    "max": 18,
-                    "step": 0.1
-                  },
-                  "low_freq": {
-                    "type": "knob",
-                    "col": 1,
-                    "row": 3,
-                    "label": "Freq",
-                    "bind": "Low Freq",
-                    "min": 20,
-                    "max": 1000
-                  },
-                  "low_q": {
-                    "type": "knob",
-                    "col": 1,
-                    "row": 4,
-                    "label": "Q",
-                    "bind": "Low Q",
-                    "min": 0.3,
-                    "max": 2
-                  },
-                  "lowmid_band": {
-                    "type": "group",
-                    "col": 2,
-                    "row": 3,
-                    "colSpan": 2,
-                    "rowSpan": 4,
-                    "label": "LO MID",
-                    "color": "#ffc93d26"
-                  },
-                  "lowmid_gain": {
-                    "type": "fader",
-                    "col": 2,
-                    "row": 3,
-                    "rowSpan": 4,
-                    "label": "Gain",
-                    "bind": "Low Mid Gain",
-                    "min": -18,
-                    "max": 18,
-                    "step": 0.1
-                  },
-                  "lowmid_freq": {
-                    "type": "knob",
-                    "col": 3,
-                    "row": 3,
-                    "label": "Freq",
-                    "bind": "Low Mid Freq",
-                    "min": 40,
-                    "max": 4000
-                  },
-                  "lowmid_q": {
-                    "type": "knob",
-                    "col": 3,
-                    "row": 4,
-                    "label": "Q",
-                    "bind": "Low Mid Q",
-                    "min": 0.1,
-                    "max": 10
-                  },
-                  "mid_band": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 7,
-                    "colSpan": 2,
-                    "rowSpan": 4,
-                    "label": "MID",
-                    "color": "#3ec96b26"
-                  },
-                  "mid_gain": {
-                    "type": "fader",
-                    "col": 0,
-                    "row": 7,
-                    "rowSpan": 4,
-                    "label": "Gain",
-                    "bind": "Mid Gain",
-                    "min": -18,
-                    "max": 18,
-                    "step": 0.1
-                  },
-                  "mid_freq": {
-                    "type": "knob",
-                    "col": 1,
-                    "row": 7,
-                    "label": "Freq",
-                    "bind": "Mid Freq",
-                    "min": 200,
-                    "max": 8000
-                  },
-                  "mid_q": {
-                    "type": "knob",
-                    "col": 1,
-                    "row": 8,
-                    "label": "Q",
-                    "bind": "Mid Q",
-                    "min": 0.1,
-                    "max": 10
-                  },
-                  "highmid_band": {
-                    "type": "group",
-                    "col": 2,
-                    "row": 7,
-                    "colSpan": 2,
-                    "rowSpan": 4,
-                    "label": "HI MID",
-                    "color": "#3d7dff26"
-                  },
-                  "highmid_gain": {
-                    "type": "fader",
-                    "col": 2,
-                    "row": 7,
-                    "rowSpan": 4,
-                    "label": "Gain",
-                    "bind": "High Mid Gain",
-                    "min": -18,
-                    "max": 18,
-                    "step": 0.1
-                  },
-                  "highmid_freq": {
-                    "type": "knob",
-                    "col": 3,
-                    "row": 7,
-                    "label": "Freq",
-                    "bind": "High Mid Freq",
-                    "min": 800,
-                    "max": 16000
-                  },
-                  "highmid_q": {
-                    "type": "knob",
-                    "col": 3,
-                    "row": 8,
-                    "label": "Q",
-                    "bind": "High Mid Q",
-                    "min": 0.1,
-                    "max": 10
-                  },
-                  "high_band": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 11,
-                    "colSpan": 2,
-                    "rowSpan": 4,
-                    "label": "HIGH",
-                    "color": "#b35cff26"
-                  },
-                  "high_gain": {
-                    "type": "fader",
-                    "col": 0,
-                    "row": 11,
-                    "rowSpan": 4,
-                    "label": "Gain",
-                    "bind": "High Gain",
-                    "min": -18,
-                    "max": 18,
-                    "step": 0.1
-                  },
-                  "high_freq": {
-                    "type": "knob",
-                    "col": 1,
-                    "row": 11,
-                    "label": "Freq",
-                    "bind": "High Freq",
-                    "min": 1000,
-                    "max": 20000
-                  },
-                  "high_q": {
-                    "type": "knob",
-                    "col": 1,
-                    "row": 12,
-                    "label": "Q",
-                    "bind": "High Q",
-                    "min": 0.3,
-                    "max": 2
-                  }
+                  "eq": {"type": "lcdscreen", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 3},
+                  "low_band": {"type": "group", "col": 0, "row": 3, "colSpan": 2, "rowSpan": 4, "label": "LOW", "color": "#ff6a1a26"},
+                  "low_gain": {"type": "fader", "col": 0, "row": 3, "rowSpan": 4, "label": "Gain", "bind": "Low Gain", "min": -18, "max": 18, "step": 0.1},
+                  "low_freq": {"type": "knob", "col": 1, "row": 3, "label": "Freq", "bind": "Low Freq", "min": 20, "max": 1000},
+                  "low_q": {"type": "knob", "col": 1, "row": 4, "label": "Q", "bind": "Low Q", "min": 0.3, "max": 2},
+                  "lowmid_band": {"type": "group", "col": 2, "row": 3, "colSpan": 2, "rowSpan": 4, "label": "LO MID", "color": "#ffc93d26"},
+                  "lowmid_gain": {"type": "fader", "col": 2, "row": 3, "rowSpan": 4, "label": "Gain", "bind": "Low Mid Gain", "min": -18, "max": 18, "step": 0.1},
+                  "lowmid_freq": {"type": "knob", "col": 3, "row": 3, "label": "Freq", "bind": "Low Mid Freq", "min": 40, "max": 4000},
+                  "lowmid_q": {"type": "knob", "col": 3, "row": 4, "label": "Q", "bind": "Low Mid Q", "min": 0.1, "max": 10},
+                  "mid_band": {"type": "group", "col": 0, "row": 7, "colSpan": 2, "rowSpan": 4, "label": "MID", "color": "#3ec96b26"},
+                  "mid_gain": {"type": "fader", "col": 0, "row": 7, "rowSpan": 4, "label": "Gain", "bind": "Mid Gain", "min": -18, "max": 18, "step": 0.1},
+                  "mid_freq": {"type": "knob", "col": 1, "row": 7, "label": "Freq", "bind": "Mid Freq", "min": 200, "max": 8000},
+                  "mid_q": {"type": "knob", "col": 1, "row": 8, "label": "Q", "bind": "Mid Q", "min": 0.1, "max": 10},
+                  "highmid_band": {"type": "group", "col": 2, "row": 7, "colSpan": 2, "rowSpan": 4, "label": "HI MID", "color": "#3d7dff26"},
+                  "highmid_gain": {"type": "fader", "col": 2, "row": 7, "rowSpan": 4, "label": "Gain", "bind": "High Mid Gain", "min": -18, "max": 18, "step": 0.1},
+                  "highmid_freq": {"type": "knob", "col": 3, "row": 7, "label": "Freq", "bind": "High Mid Freq", "min": 800, "max": 16000},
+                  "highmid_q": {"type": "knob", "col": 3, "row": 8, "label": "Q", "bind": "High Mid Q", "min": 0.1, "max": 10},
+                  "high_band": {"type": "group", "col": 0, "row": 11, "colSpan": 2, "rowSpan": 4, "label": "HIGH", "color": "#b35cff26"},
+                  "high_gain": {"type": "fader", "col": 0, "row": 11, "rowSpan": 4, "label": "Gain", "bind": "High Gain", "min": -18, "max": 18, "step": 0.1},
+                  "high_freq": {"type": "knob", "col": 1, "row": 11, "label": "Freq", "bind": "High Freq", "min": 1000, "max": 20000},
+                  "high_q": {"type": "knob", "col": 1, "row": 12, "label": "Q", "bind": "High Q", "min": 0.3, "max": 2}
                 }
               }
             },
-            "engines": [
-              "tracktion",
-              "air",
-              "airwindows",
-              "aura",
-              "energy",
-              "parametric",
-              "purest-air",
-              "reseq",
-              "tone-slant"
-            ],
+            "engines": ["tracktion", "air", "airwindows", "aura", "energy", "parametric", "purest-air", "reseq", "tone-slant"],
             "engine": "parametric",
             "params": {
               "Low Freq": 100,
@@ -1023,12 +608,7 @@
             "pluginId": "drums:fx"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-air": {
         "from": "drums-air",
@@ -1036,11 +616,7 @@
           {
             "module": "fx-air",
             "uses": "@k7-core/audio/eq",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -1049,136 +625,31 @@
               "cols": 5,
               "rows": 3,
               "widgets": {
-                "taps_section": {
-                  "type": "group",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 3,
-                  "rowSpan": 3,
-                  "label": "AIR",
-                  "color": "#3ec96b26"
-                },
-                "tap_11k": {
-                  "type": "fader",
-                  "col": 0,
-                  "row": 0,
-                  "rowSpan": 3,
-                  "label": "11K",
-                  "bind": "11K tap",
-                  "min": 0,
-                  "max": 1
-                },
-                "tap_15k": {
-                  "type": "fader",
-                  "col": 1,
-                  "row": 0,
-                  "rowSpan": 3,
-                  "label": "15K",
-                  "bind": "15K tap",
-                  "min": 0,
-                  "max": 1
-                },
-                "tap_22k": {
-                  "type": "fader",
-                  "col": 2,
-                  "row": 0,
-                  "rowSpan": 3,
-                  "label": "22K",
-                  "bind": "22K tap",
-                  "min": 0,
-                  "max": 1
-                },
-                "q": {
-                  "type": "knob",
-                  "col": 3,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 3,
-                  "label": "Q",
-                  "bind": "filters Q",
-                  "min": 0,
-                  "max": 1
-                }
+                "taps_section": {"type": "group", "col": 0, "row": 0, "colSpan": 3, "rowSpan": 3, "label": "AIR", "color": "#3ec96b26"},
+                "tap_11k": {"type": "fader", "col": 0, "row": 0, "rowSpan": 3, "label": "11K", "bind": "11K tap", "min": 0, "max": 1},
+                "tap_15k": {"type": "fader", "col": 1, "row": 0, "rowSpan": 3, "label": "15K", "bind": "15K tap", "min": 0, "max": 1},
+                "tap_22k": {"type": "fader", "col": 2, "row": 0, "rowSpan": 3, "label": "22K", "bind": "22K tap", "min": 0, "max": 1},
+                "q": {"type": "knob", "col": 3, "row": 0, "colSpan": 2, "rowSpan": 3, "label": "Q", "bind": "filters Q", "min": 0, "max": 1}
               },
               "vertical": {
                 "cols": 4,
                 "rows": 5,
                 "widgets": {
-                  "taps_section": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 3,
-                    "rowSpan": 3,
-                    "label": "AIR",
-                    "color": "#3ec96b26"
-                  },
-                  "tap_11k": {
-                    "type": "fader",
-                    "col": 0,
-                    "row": 0,
-                    "rowSpan": 3,
-                    "label": "11K",
-                    "bind": "11K tap",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "tap_15k": {
-                    "type": "fader",
-                    "col": 1,
-                    "row": 0,
-                    "rowSpan": 3,
-                    "label": "15K",
-                    "bind": "15K tap",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "tap_22k": {
-                    "type": "fader",
-                    "col": 2,
-                    "row": 0,
-                    "rowSpan": 3,
-                    "label": "22K",
-                    "bind": "22K tap",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "q": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 3,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Q",
-                    "bind": "filters Q",
-                    "min": 0,
-                    "max": 1
-                  }
+                  "taps_section": {"type": "group", "col": 0, "row": 0, "colSpan": 3, "rowSpan": 3, "label": "AIR", "color": "#3ec96b26"},
+                  "tap_11k": {"type": "fader", "col": 0, "row": 0, "rowSpan": 3, "label": "11K", "bind": "11K tap", "min": 0, "max": 1},
+                  "tap_15k": {"type": "fader", "col": 1, "row": 0, "rowSpan": 3, "label": "15K", "bind": "15K tap", "min": 0, "max": 1},
+                  "tap_22k": {"type": "fader", "col": 2, "row": 0, "rowSpan": 3, "label": "22K", "bind": "22K tap", "min": 0, "max": 1},
+                  "q": {"type": "knob", "col": 0, "row": 3, "colSpan": 2, "rowSpan": 2, "label": "Q", "bind": "filters Q", "min": 0, "max": 1}
                 }
               }
             },
-            "engines": [
-              "tracktion",
-              "air",
-              "airwindows",
-              "aura",
-              "energy",
-              "parametric",
-              "purest-air",
-              "reseq",
-              "tone-slant"
-            ],
+            "engines": ["tracktion", "air", "airwindows", "aura", "energy", "parametric", "purest-air", "reseq", "tone-slant"],
             "engine": "air",
             "params": {},
             "pluginId": "drums-air:fx-air"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-airwindows": {
         "from": "drums-airwindows",
@@ -1186,11 +657,7 @@
           {
             "module": "fx-airwindows",
             "uses": "@k7-core/audio/eq",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -1199,220 +666,39 @@
               "cols": 7,
               "rows": 4,
               "widgets": {
-                "tone_section": {
-                  "type": "group",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 5,
-                  "rowSpan": 4,
-                  "label": "TONE",
-                  "color": "#3ec96b26"
-                },
-                "bass": {
-                  "type": "fader",
-                  "col": 0,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "Bass",
-                  "bind": "Bass",
-                  "min": 0,
-                  "max": 1
-                },
-                "mid": {
-                  "type": "fader",
-                  "col": 1,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "Mid",
-                  "bind": "Mid",
-                  "min": 0,
-                  "max": 1
-                },
-                "treble": {
-                  "type": "fader",
-                  "col": 2,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "Treble",
-                  "bind": "Treble",
-                  "min": 0,
-                  "max": 1
-                },
-                "bass_freq": {
-                  "type": "knob",
-                  "col": 3,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "BassFrq",
-                  "bind": "BassFrq",
-                  "min": 0,
-                  "max": 1
-                },
-                "treb_freq": {
-                  "type": "knob",
-                  "col": 3,
-                  "row": 2,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "TrebFrq",
-                  "bind": "TrebFrq",
-                  "min": 0,
-                  "max": 1
-                },
-                "filter_section": {
-                  "type": "group",
-                  "col": 5,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 4,
-                  "label": "FILTER",
-                  "color": "#3d7dff26"
-                },
-                "hipass": {
-                  "type": "knob",
-                  "col": 5,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Hipass",
-                  "bind": "Hipass",
-                  "min": 0,
-                  "max": 1
-                },
-                "lowpass": {
-                  "type": "knob",
-                  "col": 5,
-                  "row": 2,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Lowpass",
-                  "bind": "Lowpass",
-                  "min": 0,
-                  "max": 1
-                }
+                "tone_section": {"type": "group", "col": 0, "row": 0, "colSpan": 5, "rowSpan": 4, "label": "TONE", "color": "#3ec96b26"},
+                "bass": {"type": "fader", "col": 0, "row": 0, "rowSpan": 4, "label": "Bass", "bind": "Bass", "min": 0, "max": 1},
+                "mid": {"type": "fader", "col": 1, "row": 0, "rowSpan": 4, "label": "Mid", "bind": "Mid", "min": 0, "max": 1},
+                "treble": {"type": "fader", "col": 2, "row": 0, "rowSpan": 4, "label": "Treble", "bind": "Treble", "min": 0, "max": 1},
+                "bass_freq": {"type": "knob", "col": 3, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "BassFrq", "bind": "BassFrq", "min": 0, "max": 1},
+                "treb_freq": {"type": "knob", "col": 3, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "TrebFrq", "bind": "TrebFrq", "min": 0, "max": 1},
+                "filter_section": {"type": "group", "col": 5, "row": 0, "colSpan": 2, "rowSpan": 4, "label": "FILTER", "color": "#3d7dff26"},
+                "hipass": {"type": "knob", "col": 5, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Hipass", "bind": "Hipass", "min": 0, "max": 1},
+                "lowpass": {"type": "knob", "col": 5, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Lowpass", "bind": "Lowpass", "min": 0, "max": 1}
               },
               "vertical": {
                 "cols": 4,
                 "rows": 7,
                 "widgets": {
-                  "tone_section": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 4,
-                    "rowSpan": 5,
-                    "label": "TONE",
-                    "color": "#3ec96b26"
-                  },
-                  "bass_freq": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "BassFrq",
-                    "bind": "BassFrq",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "treb_freq": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "TrebFrq",
-                    "bind": "TrebFrq",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "bass": {
-                    "type": "fader",
-                    "col": 0,
-                    "row": 2,
-                    "rowSpan": 3,
-                    "label": "Bass",
-                    "bind": "Bass",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "mid": {
-                    "type": "fader",
-                    "col": 1,
-                    "row": 2,
-                    "rowSpan": 3,
-                    "label": "Mid",
-                    "bind": "Mid",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "treble": {
-                    "type": "fader",
-                    "col": 2,
-                    "row": 2,
-                    "rowSpan": 3,
-                    "label": "Treble",
-                    "bind": "Treble",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "filter_section": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 5,
-                    "colSpan": 4,
-                    "rowSpan": 2,
-                    "label": "FILTER",
-                    "color": "#3d7dff26"
-                  },
-                  "hipass": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 5,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Hipass",
-                    "bind": "Hipass",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "lowpass": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 5,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Lowpass",
-                    "bind": "Lowpass",
-                    "min": 0,
-                    "max": 1
-                  }
+                  "tone_section": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 5, "label": "TONE", "color": "#3ec96b26"},
+                  "bass_freq": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "BassFrq", "bind": "BassFrq", "min": 0, "max": 1},
+                  "treb_freq": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "TrebFrq", "bind": "TrebFrq", "min": 0, "max": 1},
+                  "bass": {"type": "fader", "col": 0, "row": 2, "rowSpan": 3, "label": "Bass", "bind": "Bass", "min": 0, "max": 1},
+                  "mid": {"type": "fader", "col": 1, "row": 2, "rowSpan": 3, "label": "Mid", "bind": "Mid", "min": 0, "max": 1},
+                  "treble": {"type": "fader", "col": 2, "row": 2, "rowSpan": 3, "label": "Treble", "bind": "Treble", "min": 0, "max": 1},
+                  "filter_section": {"type": "group", "col": 0, "row": 5, "colSpan": 4, "rowSpan": 2, "label": "FILTER", "color": "#3d7dff26"},
+                  "hipass": {"type": "knob", "col": 0, "row": 5, "colSpan": 2, "rowSpan": 2, "label": "Hipass", "bind": "Hipass", "min": 0, "max": 1},
+                  "lowpass": {"type": "knob", "col": 2, "row": 5, "colSpan": 2, "rowSpan": 2, "label": "Lowpass", "bind": "Lowpass", "min": 0, "max": 1}
                 }
               }
             },
-            "engines": [
-              "tracktion",
-              "air",
-              "airwindows",
-              "aura",
-              "energy",
-              "parametric",
-              "purest-air",
-              "reseq",
-              "tone-slant"
-            ],
+            "engines": ["tracktion", "air", "airwindows", "aura", "energy", "parametric", "purest-air", "reseq", "tone-slant"],
             "engine": "airwindows",
             "params": {},
             "pluginId": "drums-airwindows:fx-airwindows"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-aura": {
         "from": "drums-aura",
@@ -1420,11 +706,7 @@
           {
             "module": "fx-aura",
             "uses": "@k7-core/audio/eq",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -1433,41 +715,16 @@
               "cols": 2,
               "rows": 3,
               "widgets": {
-                "voicing": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Voicing",
-                  "bind": "Voicing",
-                  "min": 0,
-                  "max": 1
-                }
+                "voicing": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Voicing", "bind": "Voicing", "min": 0, "max": 1}
               }
             },
-            "engines": [
-              "tracktion",
-              "air",
-              "airwindows",
-              "aura",
-              "energy",
-              "parametric",
-              "purest-air",
-              "reseq",
-              "tone-slant"
-            ],
+            "engines": ["tracktion", "air", "airwindows", "aura", "energy", "parametric", "purest-air", "reseq", "tone-slant"],
             "engine": "aura",
             "params": {},
             "pluginId": "drums-aura:fx-aura"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-energy": {
         "from": "drums-energy",
@@ -1475,11 +732,7 @@
           {
             "module": "fx-energy",
             "uses": "@k7-core/audio/eq",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -1488,223 +741,40 @@
               "cols": 8,
               "rows": 4,
               "widgets": {
-                "bands": {
-                  "type": "group",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 8,
-                  "rowSpan": 4,
-                  "label": "BANDS",
-                  "color": "#3ec96b26"
-                },
-                "snarl": {
-                  "type": "fader",
-                  "col": 0,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "Snarl",
-                  "bind": "Snarl",
-                  "min": 0,
-                  "max": 1
-                },
-                "yowr": {
-                  "type": "fader",
-                  "col": 1,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "Yowr",
-                  "bind": "Yowr",
-                  "min": 0,
-                  "max": 1
-                },
-                "chug": {
-                  "type": "fader",
-                  "col": 2,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "Chug",
-                  "bind": "Chug",
-                  "min": 0,
-                  "max": 1
-                },
-                "scrape": {
-                  "type": "fader",
-                  "col": 3,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "Scrape",
-                  "bind": "Scrape",
-                  "min": 0,
-                  "max": 1
-                },
-                "fizz": {
-                  "type": "fader",
-                  "col": 4,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "Fizz",
-                  "bind": "Fizz",
-                  "min": 0,
-                  "max": 1
-                },
-                "rat": {
-                  "type": "fader",
-                  "col": 5,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "Rat",
-                  "bind": "Rat",
-                  "min": 0,
-                  "max": 1
-                },
-                "glitter": {
-                  "type": "fader",
-                  "col": 6,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "Glitter",
-                  "bind": "Glitter",
-                  "min": 0,
-                  "max": 1
-                },
-                "hiss": {
-                  "type": "fader",
-                  "col": 7,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "Hiss",
-                  "bind": "Hiss",
-                  "min": 0,
-                  "max": 1
-                }
+                "bands": {"type": "group", "col": 0, "row": 0, "colSpan": 8, "rowSpan": 4, "label": "BANDS", "color": "#3ec96b26"},
+                "snarl": {"type": "fader", "col": 0, "row": 0, "rowSpan": 4, "label": "Snarl", "bind": "Snarl", "min": 0, "max": 1},
+                "yowr": {"type": "fader", "col": 1, "row": 0, "rowSpan": 4, "label": "Yowr", "bind": "Yowr", "min": 0, "max": 1},
+                "chug": {"type": "fader", "col": 2, "row": 0, "rowSpan": 4, "label": "Chug", "bind": "Chug", "min": 0, "max": 1},
+                "scrape": {"type": "fader", "col": 3, "row": 0, "rowSpan": 4, "label": "Scrape", "bind": "Scrape", "min": 0, "max": 1},
+                "fizz": {"type": "fader", "col": 4, "row": 0, "rowSpan": 4, "label": "Fizz", "bind": "Fizz", "min": 0, "max": 1},
+                "rat": {"type": "fader", "col": 5, "row": 0, "rowSpan": 4, "label": "Rat", "bind": "Rat", "min": 0, "max": 1},
+                "glitter": {"type": "fader", "col": 6, "row": 0, "rowSpan": 4, "label": "Glitter", "bind": "Glitter", "min": 0, "max": 1},
+                "hiss": {"type": "fader", "col": 7, "row": 0, "rowSpan": 4, "label": "Hiss", "bind": "Hiss", "min": 0, "max": 1}
               },
               "vertical": {
                 "cols": 4,
                 "rows": 6,
                 "widgets": {
-                  "bands_low": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 4,
-                    "rowSpan": 3,
-                    "label": "LOW",
-                    "color": "#3ec96b26"
-                  },
-                  "snarl": {
-                    "type": "fader",
-                    "col": 0,
-                    "row": 0,
-                    "rowSpan": 3,
-                    "label": "Snarl",
-                    "bind": "Snarl",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "yowr": {
-                    "type": "fader",
-                    "col": 1,
-                    "row": 0,
-                    "rowSpan": 3,
-                    "label": "Yowr",
-                    "bind": "Yowr",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "chug": {
-                    "type": "fader",
-                    "col": 2,
-                    "row": 0,
-                    "rowSpan": 3,
-                    "label": "Chug",
-                    "bind": "Chug",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "scrape": {
-                    "type": "fader",
-                    "col": 3,
-                    "row": 0,
-                    "rowSpan": 3,
-                    "label": "Scrape",
-                    "bind": "Scrape",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "bands_high": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 3,
-                    "colSpan": 4,
-                    "rowSpan": 3,
-                    "label": "HIGH",
-                    "color": "#3ec96b26"
-                  },
-                  "fizz": {
-                    "type": "fader",
-                    "col": 0,
-                    "row": 3,
-                    "rowSpan": 3,
-                    "label": "Fizz",
-                    "bind": "Fizz",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "rat": {
-                    "type": "fader",
-                    "col": 1,
-                    "row": 3,
-                    "rowSpan": 3,
-                    "label": "Rat",
-                    "bind": "Rat",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "glitter": {
-                    "type": "fader",
-                    "col": 2,
-                    "row": 3,
-                    "rowSpan": 3,
-                    "label": "Glitter",
-                    "bind": "Glitter",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "hiss": {
-                    "type": "fader",
-                    "col": 3,
-                    "row": 3,
-                    "rowSpan": 3,
-                    "label": "Hiss",
-                    "bind": "Hiss",
-                    "min": 0,
-                    "max": 1
-                  }
+                  "bands_low": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 3, "label": "LOW", "color": "#3ec96b26"},
+                  "snarl": {"type": "fader", "col": 0, "row": 0, "rowSpan": 3, "label": "Snarl", "bind": "Snarl", "min": 0, "max": 1},
+                  "yowr": {"type": "fader", "col": 1, "row": 0, "rowSpan": 3, "label": "Yowr", "bind": "Yowr", "min": 0, "max": 1},
+                  "chug": {"type": "fader", "col": 2, "row": 0, "rowSpan": 3, "label": "Chug", "bind": "Chug", "min": 0, "max": 1},
+                  "scrape": {"type": "fader", "col": 3, "row": 0, "rowSpan": 3, "label": "Scrape", "bind": "Scrape", "min": 0, "max": 1},
+                  "bands_high": {"type": "group", "col": 0, "row": 3, "colSpan": 4, "rowSpan": 3, "label": "HIGH", "color": "#3ec96b26"},
+                  "fizz": {"type": "fader", "col": 0, "row": 3, "rowSpan": 3, "label": "Fizz", "bind": "Fizz", "min": 0, "max": 1},
+                  "rat": {"type": "fader", "col": 1, "row": 3, "rowSpan": 3, "label": "Rat", "bind": "Rat", "min": 0, "max": 1},
+                  "glitter": {"type": "fader", "col": 2, "row": 3, "rowSpan": 3, "label": "Glitter", "bind": "Glitter", "min": 0, "max": 1},
+                  "hiss": {"type": "fader", "col": 3, "row": 3, "rowSpan": 3, "label": "Hiss", "bind": "Hiss", "min": 0, "max": 1}
                 }
               }
             },
-            "engines": [
-              "tracktion",
-              "air",
-              "airwindows",
-              "aura",
-              "energy",
-              "parametric",
-              "purest-air",
-              "reseq",
-              "tone-slant"
-            ],
+            "engines": ["tracktion", "air", "airwindows", "aura", "energy", "parametric", "purest-air", "reseq", "tone-slant"],
             "engine": "energy",
             "params": {},
             "pluginId": "drums-energy:fx-energy"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-parametric": {
         "from": "drums-parametric",
@@ -1712,11 +782,7 @@
           {
             "module": "fx-parametric",
             "uses": "@k7-core/audio/eq",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -1725,420 +791,58 @@
               "cols": 16,
               "rows": 4,
               "widgets": {
-                "eq": {
-                  "type": "lcdscreen",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 6,
-                  "rowSpan": 4
-                },
-                "low_band": {
-                  "type": "group",
-                  "col": 6,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 4,
-                  "label": "LOW",
-                  "color": "#ff6a1a26"
-                },
-                "low_gain": {
-                  "type": "fader",
-                  "col": 6,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "Gain",
-                  "bind": "Low Gain",
-                  "min": -18,
-                  "max": 18,
-                  "step": 0.1
-                },
-                "low_freq": {
-                  "type": "knob",
-                  "col": 7,
-                  "row": 0,
-                  "label": "Freq",
-                  "bind": "Low Freq",
-                  "min": 20,
-                  "max": 1000
-                },
-                "low_q": {
-                  "type": "knob",
-                  "col": 7,
-                  "row": 1,
-                  "label": "Q",
-                  "bind": "Low Q",
-                  "min": 0.3,
-                  "max": 2
-                },
-                "lowmid_band": {
-                  "type": "group",
-                  "col": 8,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 4,
-                  "label": "LO MID",
-                  "color": "#ffc93d26"
-                },
-                "lowmid_gain": {
-                  "type": "fader",
-                  "col": 8,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "Gain",
-                  "bind": "Low Mid Gain",
-                  "min": -18,
-                  "max": 18,
-                  "step": 0.1
-                },
-                "lowmid_freq": {
-                  "type": "knob",
-                  "col": 9,
-                  "row": 0,
-                  "label": "Freq",
-                  "bind": "Low Mid Freq",
-                  "min": 40,
-                  "max": 4000
-                },
-                "lowmid_q": {
-                  "type": "knob",
-                  "col": 9,
-                  "row": 1,
-                  "label": "Q",
-                  "bind": "Low Mid Q",
-                  "min": 0.1,
-                  "max": 10
-                },
-                "mid_band": {
-                  "type": "group",
-                  "col": 10,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 4,
-                  "label": "MID",
-                  "color": "#3ec96b26"
-                },
-                "mid_gain": {
-                  "type": "fader",
-                  "col": 10,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "Gain",
-                  "bind": "Mid Gain",
-                  "min": -18,
-                  "max": 18,
-                  "step": 0.1
-                },
-                "mid_freq": {
-                  "type": "knob",
-                  "col": 11,
-                  "row": 0,
-                  "label": "Freq",
-                  "bind": "Mid Freq",
-                  "min": 200,
-                  "max": 8000
-                },
-                "mid_q": {
-                  "type": "knob",
-                  "col": 11,
-                  "row": 1,
-                  "label": "Q",
-                  "bind": "Mid Q",
-                  "min": 0.1,
-                  "max": 10
-                },
-                "highmid_band": {
-                  "type": "group",
-                  "col": 12,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 4,
-                  "label": "HI MID",
-                  "color": "#3d7dff26"
-                },
-                "highmid_gain": {
-                  "type": "fader",
-                  "col": 12,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "Gain",
-                  "bind": "High Mid Gain",
-                  "min": -18,
-                  "max": 18,
-                  "step": 0.1
-                },
-                "highmid_freq": {
-                  "type": "knob",
-                  "col": 13,
-                  "row": 0,
-                  "label": "Freq",
-                  "bind": "High Mid Freq",
-                  "min": 800,
-                  "max": 16000
-                },
-                "highmid_q": {
-                  "type": "knob",
-                  "col": 13,
-                  "row": 1,
-                  "label": "Q",
-                  "bind": "High Mid Q",
-                  "min": 0.1,
-                  "max": 10
-                },
-                "high_band": {
-                  "type": "group",
-                  "col": 14,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 4,
-                  "label": "HIGH",
-                  "color": "#b35cff26"
-                },
-                "high_gain": {
-                  "type": "fader",
-                  "col": 14,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "Gain",
-                  "bind": "High Gain",
-                  "min": -18,
-                  "max": 18,
-                  "step": 0.1
-                },
-                "high_freq": {
-                  "type": "knob",
-                  "col": 15,
-                  "row": 0,
-                  "label": "Freq",
-                  "bind": "High Freq",
-                  "min": 1000,
-                  "max": 20000
-                },
-                "high_q": {
-                  "type": "knob",
-                  "col": 15,
-                  "row": 1,
-                  "label": "Q",
-                  "bind": "High Q",
-                  "min": 0.3,
-                  "max": 2
-                }
+                "eq": {"type": "lcdscreen", "col": 0, "row": 0, "colSpan": 6, "rowSpan": 4},
+                "low_band": {"type": "group", "col": 6, "row": 0, "colSpan": 2, "rowSpan": 4, "label": "LOW", "color": "#ff6a1a26"},
+                "low_gain": {"type": "fader", "col": 6, "row": 0, "rowSpan": 4, "label": "Gain", "bind": "Low Gain", "min": -18, "max": 18, "step": 0.1},
+                "low_freq": {"type": "knob", "col": 7, "row": 0, "label": "Freq", "bind": "Low Freq", "min": 20, "max": 1000},
+                "low_q": {"type": "knob", "col": 7, "row": 1, "label": "Q", "bind": "Low Q", "min": 0.3, "max": 2},
+                "lowmid_band": {"type": "group", "col": 8, "row": 0, "colSpan": 2, "rowSpan": 4, "label": "LO MID", "color": "#ffc93d26"},
+                "lowmid_gain": {"type": "fader", "col": 8, "row": 0, "rowSpan": 4, "label": "Gain", "bind": "Low Mid Gain", "min": -18, "max": 18, "step": 0.1},
+                "lowmid_freq": {"type": "knob", "col": 9, "row": 0, "label": "Freq", "bind": "Low Mid Freq", "min": 40, "max": 4000},
+                "lowmid_q": {"type": "knob", "col": 9, "row": 1, "label": "Q", "bind": "Low Mid Q", "min": 0.1, "max": 10},
+                "mid_band": {"type": "group", "col": 10, "row": 0, "colSpan": 2, "rowSpan": 4, "label": "MID", "color": "#3ec96b26"},
+                "mid_gain": {"type": "fader", "col": 10, "row": 0, "rowSpan": 4, "label": "Gain", "bind": "Mid Gain", "min": -18, "max": 18, "step": 0.1},
+                "mid_freq": {"type": "knob", "col": 11, "row": 0, "label": "Freq", "bind": "Mid Freq", "min": 200, "max": 8000},
+                "mid_q": {"type": "knob", "col": 11, "row": 1, "label": "Q", "bind": "Mid Q", "min": 0.1, "max": 10},
+                "highmid_band": {"type": "group", "col": 12, "row": 0, "colSpan": 2, "rowSpan": 4, "label": "HI MID", "color": "#3d7dff26"},
+                "highmid_gain": {"type": "fader", "col": 12, "row": 0, "rowSpan": 4, "label": "Gain", "bind": "High Mid Gain", "min": -18, "max": 18, "step": 0.1},
+                "highmid_freq": {"type": "knob", "col": 13, "row": 0, "label": "Freq", "bind": "High Mid Freq", "min": 800, "max": 16000},
+                "highmid_q": {"type": "knob", "col": 13, "row": 1, "label": "Q", "bind": "High Mid Q", "min": 0.1, "max": 10},
+                "high_band": {"type": "group", "col": 14, "row": 0, "colSpan": 2, "rowSpan": 4, "label": "HIGH", "color": "#b35cff26"},
+                "high_gain": {"type": "fader", "col": 14, "row": 0, "rowSpan": 4, "label": "Gain", "bind": "High Gain", "min": -18, "max": 18, "step": 0.1},
+                "high_freq": {"type": "knob", "col": 15, "row": 0, "label": "Freq", "bind": "High Freq", "min": 1000, "max": 20000},
+                "high_q": {"type": "knob", "col": 15, "row": 1, "label": "Q", "bind": "High Q", "min": 0.3, "max": 2}
               },
               "script": "// Parametric EQ — the five bands' summed response over the signal in and out, and the bands' points to drag.\n// Interactive: drag a point for frequency and gain (shift is fine), alt-drag it up/down for Q, alt-click resets its gain.\n\nconst FONT = \"8px ui-monospace, monospace\";\nconst GREY = \"#6b6b6b\";\nconst WHITE = \"#ffffff\";\nconst F_LO = 20;\nconst F_HI = 20000;\nconst DB = 18;\nconst SR = 48000;\nconst HIT_PX = 14;\n// Pixels of alt-drag that double a band's Q.\nconst Q_PX = 70;\n\n// Name, filter, frequency range and default, Q range and default, colour — dsp.k7x keeps the same table.\nconst BANDS = [\n  [\"Low\", \"lowshelf\", 20, 1000, 100, 0.3, 2, 0.707, \"#ff6a1a\"],\n  [\"Low Mid\", \"peak\", 40, 4000, 300, 0.1, 10, 1, \"#ffc93d\"],\n  [\"Mid\", \"peak\", 200, 8000, 1000, 0.1, 10, 1, \"#3ec96b\"],\n  [\"High Mid\", \"peak\", 800, 16000, 3500, 0.1, 10, 1, \"#3d7dff\"],\n  [\"High\", \"highshelf\", 1000, 20000, 8000, 0.3, 2, 0.707, \"#b35cff\"],\n];\n\nconst num = (v, d) => (typeof v === \"number\" && Number.isFinite(v) ? v : d);\nconst clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);\nconst hz = (f) => (f >= 1000 ? `${(f / 1000).toFixed(f >= 10000 ? 1 : 2)}K` : `${Math.round(f)}`);\n\n// Each band as it is set now, missing params falling back to the defaults.\nfunction bandsOf(params) {\n  return BANDS.map(([name, mode, fLo, fHi, fDef, qLo, qHi, qDef, color]) => ({\n    name,\n    mode,\n    fLo,\n    fHi,\n    qLo,\n    qHi,\n    color,\n    f: clamp(num(params[`${name} Freq`], fDef), fLo, fHi),\n    g: clamp(num(params[`${name} Gain`], 0), -DB, DB),\n    q: clamp(num(params[`${name} Q`], qDef), qLo, qHi),\n  }));\n}\n\n// The engine's own coefficients (JUCE's IIRCoefficients), as [b0, b1, b2, a0, a1, a2].\nfunction coeffs(band) {\n  const A = Math.sqrt(10 ** (band.g / 20));\n  const w = (2 * Math.PI * clamp(band.f, 20, SR * 0.45)) / SR;\n  const c = Math.cos(w);\n  const s = Math.sin(w);\n  if (band.mode === \"peak\") {\n    const al = s / (2 * band.q);\n    return [1 + al * A, -2 * c, 1 - al * A, 1 + al / A, -2 * c, 1 - al / A];\n  }\n  const be = (s * Math.sqrt(A)) / band.q;\n  const am = A - 1;\n  const ap = A + 1;\n  if (band.mode === \"lowshelf\")\n    return [A * (ap - am * c + be), 2 * A * (am - ap * c), A * (ap - am * c - be), ap + am * c + be, -2 * (am + ap * c), ap + am * c - be];\n  return [A * (ap + am * c + be), -2 * A * (am + ap * c), A * (ap + am * c - be), ap - am * c + be, 2 * (am - ap * c), ap - am * c - be];\n}\n\n// dB of one biquad at frequency f, from |H(e^jw)|.\nfunction dbAt(k, f) {\n  const w = (2 * Math.PI * f) / SR;\n  const c1 = Math.cos(w);\n  const s1 = Math.sin(w);\n  const c2 = Math.cos(2 * w);\n  const s2 = Math.sin(2 * w);\n  const nr = k[0] + k[1] * c1 + k[2] * c2;\n  const ni = k[1] * s1 + k[2] * s2;\n  const dr = k[3] + k[4] * c1 + k[5] * c2;\n  const di = k[4] * s1 + k[5] * s2;\n  return 10 * Math.log10(Math.max(1e-30, nr * nr + ni * ni) / Math.max(1e-30, dr * dr + di * di));\n}\n\nconst frame = (W, H) => ({ x: 4, y: 13, w: Math.max(1, W - 8), h: Math.max(1, H - 17) });\nconst xOf = (b, f) => b.x + (Math.log(clamp(f, F_LO, F_HI) / F_LO) / Math.log(F_HI / F_LO)) * b.w;\nconst fOf = (b, px) => F_LO * (F_HI / F_LO) ** ((px - b.x) / Math.max(1, b.w));\nconst yOf = (b, db) => b.y + (1 - (clamp(db, -DB, DB) + DB) / (2 * DB)) * b.h;\nconst dbOf = (b, py) => DB - ((py - b.y) / Math.max(1, b.h)) * 2 * DB;\n\n// The band whose point is nearest (x, y), within `reach` pixels, else -1.\nfunction nearest(b, bands, x, y, reach) {\n  let best = -1;\n  let bestD = reach;\n  bands.forEach((band, i) => {\n    const d = Math.hypot(xOf(b, band.f) - x, yOf(b, band.g) - y);\n    if (d <= bestD) {\n      best = i;\n      bestD = d;\n    }\n  });\n  return best;\n}\n\n// The signal as a mirrored envelope, newest at the right edge, one history point per pixel.\nfunction envelope(ctx, b, points, fill) {\n  const n = Math.min(points.length, Math.floor(b.w));\n  if (n < 2) return;\n  const mid = b.y + b.h / 2;\n  const half = b.h / 2;\n  const hOf = (p) => clamp((20 * Math.log10(Math.max(1e-6, p)) + 48) / 48, 0, 1) * half;\n  const x0 = b.x + b.w - n;\n  ctx.fillStyle = fill;\n  ctx.beginPath();\n  ctx.moveTo(x0, mid);\n  for (let i = 0; i < n; i++) ctx.lineTo(x0 + i, mid - hOf(points[points.length - n + i]));\n  for (let i = n - 1; i >= 0; i--) ctx.lineTo(x0 + i, mid + hOf(points[points.length - n + i]));\n  ctx.closePath();\n  ctx.fill();\n}\n\nfunction grid(ctx, b) {\n  ctx.strokeStyle = \"#222\";\n  ctx.beginPath();\n  for (const f of [50, 100, 200, 500, 1000, 2000, 5000, 10000]) {\n    const x = Math.round(xOf(b, f)) + 0.5;\n    ctx.moveTo(x, b.y);\n    ctx.lineTo(x, b.y + b.h);\n  }\n  for (const db of [-12, -6, 6, 12]) {\n    const y = Math.round(yOf(b, db)) + 0.5;\n    ctx.moveTo(b.x, y);\n    ctx.lineTo(b.x + b.w, y);\n  }\n  ctx.stroke();\n  ctx.strokeStyle = GREY;\n  ctx.beginPath();\n  const y0 = Math.round(yOf(b, 0)) + 0.5;\n  ctx.moveTo(b.x, y0);\n  ctx.lineTo(b.x + b.w, y0);\n  ctx.stroke();\n}\n\nfunction curve(ctx, b, dbFn, color, width) {\n  ctx.strokeStyle = color;\n  ctx.lineWidth = width;\n  ctx.beginPath();\n  for (let px = b.x; px <= b.x + b.w; px++) {\n    const y = yOf(b, dbFn(fOf(b, px)));\n    if (px === b.x) ctx.moveTo(px, y);\n    else ctx.lineTo(px, y);\n  }\n  ctx.stroke();\n  ctx.lineWidth = 1;\n}\n\nfunction text(ctx, s, x, y, color, align) {\n  ctx.fillStyle = color;\n  ctx.textAlign = align;\n  ctx.fillText(s, x, y);\n}\n\nexport default {\n  eq: {\n    draw(lcd) {\n      const { ctx, width: W, height: H, params, state } = lcd;\n      ctx.fillStyle = \"#000\";\n      ctx.fillRect(0, 0, W, H);\n      ctx.font = FONT;\n      ctx.lineWidth = 1;\n      const b = frame(W, H);\n      const bands = bandsOf(params);\n      const ks = bands.map(coeffs);\n      const sel = typeof state.sel === \"number\" && bands[state.sel] ? state.sel : -1;\n\n      envelope(ctx, b, lcd.input, \"rgba(255,255,255,0.10)\");\n      envelope(ctx, b, lcd.output, \"rgba(62,201,107,0.22)\");\n      grid(ctx, b);\n      if (sel >= 0) {\n        ctx.globalAlpha = 0.6;\n        curve(ctx, b, (f) => dbAt(ks[sel], f), bands[sel].color, 1);\n        ctx.globalAlpha = 1;\n      }\n      curve(ctx, b, (f) => ks.reduce((sum, k) => sum + dbAt(k, f), 0), WHITE, 1.5);\n\n      bands.forEach((band, i) => {\n        const x = xOf(b, band.f);\n        const y = yOf(b, band.g);\n        ctx.fillStyle = band.color;\n        ctx.beginPath();\n        ctx.arc(x, y, i === sel ? 4 : 3, 0, Math.PI * 2);\n        ctx.fill();\n        if (i === sel) {\n          ctx.strokeStyle = WHITE;\n          ctx.beginPath();\n          ctx.arc(x, y, 6, 0, Math.PI * 2);\n          ctx.stroke();\n        }\n      });\n\n      if (sel >= 0) {\n        const band = bands[sel];\n        const g = `${band.g > 0 ? \"+\" : \"\"}${band.g.toFixed(1)} DB`;\n        text(ctx, band.name.toUpperCase(), b.x, 9, band.color, \"left\");\n        text(ctx, `${hz(band.f)} HZ  ${g}  Q ${band.q.toFixed(2)}`, W - 4, 9, WHITE, \"right\");\n      } else {\n        text(ctx, \"PARAMETRIC EQ\", b.x, 9, WHITE, \"left\");\n        text(ctx, \"DRAG A POINT\", W - 4, 9, GREY, \"right\");\n      }\n    },\n\n    pointer(lcd, ev) {\n      const { width: W, height: H, params, state } = lcd;\n      const b = frame(W, H);\n      const bands = bandsOf(params);\n      if (ev.type === \"down\") {\n        const i = nearest(b, bands, ev.x, ev.y, HIT_PX);\n        state.sel = i;\n        state.drag = null;\n        if (i < 0) return false;\n        // Alt: a drag is the Q, and a click that never moves resets the gain — decided on release.\n        if (ev.alt) {\n          state.drag = { q: true, y0: ev.y, q0: bands[i].q, moved: false };\n          return true;\n        }\n        state.drag = { x0: ev.x, y0: ev.y, px: xOf(b, bands[i].f), py: yOf(b, bands[i].g) };\n        return true;\n      }\n      if (ev.type === \"move\") {\n        const d = state.drag;\n        const band = bands[state.sel];\n        if (!d || !band) return false;\n        const fine = ev.shift ? 0.25 : 1;\n        if (d.q) {\n          // Up narrows it: a doubling of Q every 70 px, a quarter of that with shift.\n          const q = clamp(d.q0 * Math.pow(2, ((d.y0 - ev.y) * fine) / Q_PX), band.qLo, band.qHi);\n          d.moved = d.moved || Math.abs(ev.y - d.y0) > 2;\n          lcd.set(`${band.name} Q`, Math.round(q * 100) / 100);\n          return true;\n        }\n        const f = clamp(fOf(b, d.px + (ev.x - d.x0) * fine), band.fLo, band.fHi);\n        const g = clamp(dbOf(b, d.py + (ev.y - d.y0) * fine), -DB, DB);\n        lcd.set(`${band.name} Freq`, Number(f.toPrecision(4)));\n        lcd.set(`${band.name} Gain`, Math.round(g * 10) / 10);\n        return true;\n      }\n      // Up: an alt-click that never moved resets the gain.\n      const d = state.drag;\n      const band = bands[state.sel];\n      if (d && d.q && !d.moved && band) lcd.set(`${band.name} Gain`, 0);\n      state.drag = null;\n      return true;\n    },\n  },\n};\n",
               "vertical": {
                 "cols": 4,
                 "rows": 15,
                 "widgets": {
-                  "eq": {
-                    "type": "lcdscreen",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 4,
-                    "rowSpan": 3
-                  },
-                  "low_band": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 3,
-                    "colSpan": 2,
-                    "rowSpan": 4,
-                    "label": "LOW",
-                    "color": "#ff6a1a26"
-                  },
-                  "low_gain": {
-                    "type": "fader",
-                    "col": 0,
-                    "row": 3,
-                    "rowSpan": 4,
-                    "label": "Gain",
-                    "bind": "Low Gain",
-                    "min": -18,
-                    "max": 18,
-                    "step": 0.1
-                  },
-                  "low_freq": {
-                    "type": "knob",
-                    "col": 1,
-                    "row": 3,
-                    "label": "Freq",
-                    "bind": "Low Freq",
-                    "min": 20,
-                    "max": 1000
-                  },
-                  "low_q": {
-                    "type": "knob",
-                    "col": 1,
-                    "row": 4,
-                    "label": "Q",
-                    "bind": "Low Q",
-                    "min": 0.3,
-                    "max": 2
-                  },
-                  "lowmid_band": {
-                    "type": "group",
-                    "col": 2,
-                    "row": 3,
-                    "colSpan": 2,
-                    "rowSpan": 4,
-                    "label": "LO MID",
-                    "color": "#ffc93d26"
-                  },
-                  "lowmid_gain": {
-                    "type": "fader",
-                    "col": 2,
-                    "row": 3,
-                    "rowSpan": 4,
-                    "label": "Gain",
-                    "bind": "Low Mid Gain",
-                    "min": -18,
-                    "max": 18,
-                    "step": 0.1
-                  },
-                  "lowmid_freq": {
-                    "type": "knob",
-                    "col": 3,
-                    "row": 3,
-                    "label": "Freq",
-                    "bind": "Low Mid Freq",
-                    "min": 40,
-                    "max": 4000
-                  },
-                  "lowmid_q": {
-                    "type": "knob",
-                    "col": 3,
-                    "row": 4,
-                    "label": "Q",
-                    "bind": "Low Mid Q",
-                    "min": 0.1,
-                    "max": 10
-                  },
-                  "mid_band": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 7,
-                    "colSpan": 2,
-                    "rowSpan": 4,
-                    "label": "MID",
-                    "color": "#3ec96b26"
-                  },
-                  "mid_gain": {
-                    "type": "fader",
-                    "col": 0,
-                    "row": 7,
-                    "rowSpan": 4,
-                    "label": "Gain",
-                    "bind": "Mid Gain",
-                    "min": -18,
-                    "max": 18,
-                    "step": 0.1
-                  },
-                  "mid_freq": {
-                    "type": "knob",
-                    "col": 1,
-                    "row": 7,
-                    "label": "Freq",
-                    "bind": "Mid Freq",
-                    "min": 200,
-                    "max": 8000
-                  },
-                  "mid_q": {
-                    "type": "knob",
-                    "col": 1,
-                    "row": 8,
-                    "label": "Q",
-                    "bind": "Mid Q",
-                    "min": 0.1,
-                    "max": 10
-                  },
-                  "highmid_band": {
-                    "type": "group",
-                    "col": 2,
-                    "row": 7,
-                    "colSpan": 2,
-                    "rowSpan": 4,
-                    "label": "HI MID",
-                    "color": "#3d7dff26"
-                  },
-                  "highmid_gain": {
-                    "type": "fader",
-                    "col": 2,
-                    "row": 7,
-                    "rowSpan": 4,
-                    "label": "Gain",
-                    "bind": "High Mid Gain",
-                    "min": -18,
-                    "max": 18,
-                    "step": 0.1
-                  },
-                  "highmid_freq": {
-                    "type": "knob",
-                    "col": 3,
-                    "row": 7,
-                    "label": "Freq",
-                    "bind": "High Mid Freq",
-                    "min": 800,
-                    "max": 16000
-                  },
-                  "highmid_q": {
-                    "type": "knob",
-                    "col": 3,
-                    "row": 8,
-                    "label": "Q",
-                    "bind": "High Mid Q",
-                    "min": 0.1,
-                    "max": 10
-                  },
-                  "high_band": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 11,
-                    "colSpan": 2,
-                    "rowSpan": 4,
-                    "label": "HIGH",
-                    "color": "#b35cff26"
-                  },
-                  "high_gain": {
-                    "type": "fader",
-                    "col": 0,
-                    "row": 11,
-                    "rowSpan": 4,
-                    "label": "Gain",
-                    "bind": "High Gain",
-                    "min": -18,
-                    "max": 18,
-                    "step": 0.1
-                  },
-                  "high_freq": {
-                    "type": "knob",
-                    "col": 1,
-                    "row": 11,
-                    "label": "Freq",
-                    "bind": "High Freq",
-                    "min": 1000,
-                    "max": 20000
-                  },
-                  "high_q": {
-                    "type": "knob",
-                    "col": 1,
-                    "row": 12,
-                    "label": "Q",
-                    "bind": "High Q",
-                    "min": 0.3,
-                    "max": 2
-                  }
+                  "eq": {"type": "lcdscreen", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 3},
+                  "low_band": {"type": "group", "col": 0, "row": 3, "colSpan": 2, "rowSpan": 4, "label": "LOW", "color": "#ff6a1a26"},
+                  "low_gain": {"type": "fader", "col": 0, "row": 3, "rowSpan": 4, "label": "Gain", "bind": "Low Gain", "min": -18, "max": 18, "step": 0.1},
+                  "low_freq": {"type": "knob", "col": 1, "row": 3, "label": "Freq", "bind": "Low Freq", "min": 20, "max": 1000},
+                  "low_q": {"type": "knob", "col": 1, "row": 4, "label": "Q", "bind": "Low Q", "min": 0.3, "max": 2},
+                  "lowmid_band": {"type": "group", "col": 2, "row": 3, "colSpan": 2, "rowSpan": 4, "label": "LO MID", "color": "#ffc93d26"},
+                  "lowmid_gain": {"type": "fader", "col": 2, "row": 3, "rowSpan": 4, "label": "Gain", "bind": "Low Mid Gain", "min": -18, "max": 18, "step": 0.1},
+                  "lowmid_freq": {"type": "knob", "col": 3, "row": 3, "label": "Freq", "bind": "Low Mid Freq", "min": 40, "max": 4000},
+                  "lowmid_q": {"type": "knob", "col": 3, "row": 4, "label": "Q", "bind": "Low Mid Q", "min": 0.1, "max": 10},
+                  "mid_band": {"type": "group", "col": 0, "row": 7, "colSpan": 2, "rowSpan": 4, "label": "MID", "color": "#3ec96b26"},
+                  "mid_gain": {"type": "fader", "col": 0, "row": 7, "rowSpan": 4, "label": "Gain", "bind": "Mid Gain", "min": -18, "max": 18, "step": 0.1},
+                  "mid_freq": {"type": "knob", "col": 1, "row": 7, "label": "Freq", "bind": "Mid Freq", "min": 200, "max": 8000},
+                  "mid_q": {"type": "knob", "col": 1, "row": 8, "label": "Q", "bind": "Mid Q", "min": 0.1, "max": 10},
+                  "highmid_band": {"type": "group", "col": 2, "row": 7, "colSpan": 2, "rowSpan": 4, "label": "HI MID", "color": "#3d7dff26"},
+                  "highmid_gain": {"type": "fader", "col": 2, "row": 7, "rowSpan": 4, "label": "Gain", "bind": "High Mid Gain", "min": -18, "max": 18, "step": 0.1},
+                  "highmid_freq": {"type": "knob", "col": 3, "row": 7, "label": "Freq", "bind": "High Mid Freq", "min": 800, "max": 16000},
+                  "highmid_q": {"type": "knob", "col": 3, "row": 8, "label": "Q", "bind": "High Mid Q", "min": 0.1, "max": 10},
+                  "high_band": {"type": "group", "col": 0, "row": 11, "colSpan": 2, "rowSpan": 4, "label": "HIGH", "color": "#b35cff26"},
+                  "high_gain": {"type": "fader", "col": 0, "row": 11, "rowSpan": 4, "label": "Gain", "bind": "High Gain", "min": -18, "max": 18, "step": 0.1},
+                  "high_freq": {"type": "knob", "col": 1, "row": 11, "label": "Freq", "bind": "High Freq", "min": 1000, "max": 20000},
+                  "high_q": {"type": "knob", "col": 1, "row": 12, "label": "Q", "bind": "High Q", "min": 0.3, "max": 2}
                 }
               }
             },
-            "engines": [
-              "tracktion",
-              "air",
-              "airwindows",
-              "aura",
-              "energy",
-              "parametric",
-              "purest-air",
-              "reseq",
-              "tone-slant"
-            ],
+            "engines": ["tracktion", "air", "airwindows", "aura", "energy", "parametric", "purest-air", "reseq", "tone-slant"],
             "engine": "parametric",
             "params": {
               "Low Freq": 100,
@@ -2160,12 +864,7 @@
             "pluginId": "drums-parametric:fx-parametric"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-purest-air": {
         "from": "drums-purest-air",
@@ -2173,11 +872,7 @@
           {
             "module": "fx-purest-air",
             "uses": "@k7-core/audio/eq",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -2186,52 +881,17 @@
               "cols": 4,
               "rows": 2,
               "widgets": {
-                "boost": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Boost",
-                  "bind": "Boost",
-                  "min": 0,
-                  "max": 1
-                },
-                "limit": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Limit",
-                  "bind": "Limit",
-                  "min": 0,
-                  "max": 1
-                }
+                "boost": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Boost", "bind": "Boost", "min": 0, "max": 1},
+                "limit": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Limit", "bind": "Limit", "min": 0, "max": 1}
               }
             },
-            "engines": [
-              "tracktion",
-              "air",
-              "airwindows",
-              "aura",
-              "energy",
-              "parametric",
-              "purest-air",
-              "reseq",
-              "tone-slant"
-            ],
+            "engines": ["tracktion", "air", "airwindows", "aura", "energy", "parametric", "purest-air", "reseq", "tone-slant"],
             "engine": "purest-air",
             "params": {},
             "pluginId": "drums-purest-air:fx-purest-air"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-reseq": {
         "from": "drums-reseq",
@@ -2239,11 +899,7 @@
           {
             "module": "fx-reseq",
             "uses": "@k7-core/audio/eq",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -2252,196 +908,37 @@
               "cols": 8,
               "rows": 4,
               "widgets": {
-                "reso_1": {
-                  "type": "fader",
-                  "col": 0,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "1",
-                  "bind": "Reso 1",
-                  "min": 0,
-                  "max": 1
-                },
-                "reso_2": {
-                  "type": "fader",
-                  "col": 1,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "2",
-                  "bind": "Reso 2",
-                  "min": 0,
-                  "max": 1
-                },
-                "reso_3": {
-                  "type": "fader",
-                  "col": 2,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "3",
-                  "bind": "Reso 3",
-                  "min": 0,
-                  "max": 1
-                },
-                "reso_4": {
-                  "type": "fader",
-                  "col": 3,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "4",
-                  "bind": "Reso 4",
-                  "min": 0,
-                  "max": 1
-                },
-                "reso_5": {
-                  "type": "fader",
-                  "col": 4,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "5",
-                  "bind": "Reso 5",
-                  "min": 0,
-                  "max": 1
-                },
-                "reso_6": {
-                  "type": "fader",
-                  "col": 5,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "6",
-                  "bind": "Reso 6",
-                  "min": 0,
-                  "max": 1
-                },
-                "reso_7": {
-                  "type": "fader",
-                  "col": 6,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "7",
-                  "bind": "Reso 7",
-                  "min": 0,
-                  "max": 1
-                },
-                "reso_8": {
-                  "type": "fader",
-                  "col": 7,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "8",
-                  "bind": "Reso 8",
-                  "min": 0,
-                  "max": 1
-                }
+                "reso_1": {"type": "fader", "col": 0, "row": 0, "rowSpan": 4, "label": "1", "bind": "Reso 1", "min": 0, "max": 1},
+                "reso_2": {"type": "fader", "col": 1, "row": 0, "rowSpan": 4, "label": "2", "bind": "Reso 2", "min": 0, "max": 1},
+                "reso_3": {"type": "fader", "col": 2, "row": 0, "rowSpan": 4, "label": "3", "bind": "Reso 3", "min": 0, "max": 1},
+                "reso_4": {"type": "fader", "col": 3, "row": 0, "rowSpan": 4, "label": "4", "bind": "Reso 4", "min": 0, "max": 1},
+                "reso_5": {"type": "fader", "col": 4, "row": 0, "rowSpan": 4, "label": "5", "bind": "Reso 5", "min": 0, "max": 1},
+                "reso_6": {"type": "fader", "col": 5, "row": 0, "rowSpan": 4, "label": "6", "bind": "Reso 6", "min": 0, "max": 1},
+                "reso_7": {"type": "fader", "col": 6, "row": 0, "rowSpan": 4, "label": "7", "bind": "Reso 7", "min": 0, "max": 1},
+                "reso_8": {"type": "fader", "col": 7, "row": 0, "rowSpan": 4, "label": "8", "bind": "Reso 8", "min": 0, "max": 1}
               },
               "vertical": {
                 "cols": 4,
                 "rows": 8,
                 "widgets": {
-                  "reso_1": {
-                    "type": "fader",
-                    "col": 0,
-                    "row": 0,
-                    "rowSpan": 4,
-                    "label": "1",
-                    "bind": "Reso 1",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "reso_2": {
-                    "type": "fader",
-                    "col": 1,
-                    "row": 0,
-                    "rowSpan": 4,
-                    "label": "2",
-                    "bind": "Reso 2",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "reso_3": {
-                    "type": "fader",
-                    "col": 2,
-                    "row": 0,
-                    "rowSpan": 4,
-                    "label": "3",
-                    "bind": "Reso 3",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "reso_4": {
-                    "type": "fader",
-                    "col": 3,
-                    "row": 0,
-                    "rowSpan": 4,
-                    "label": "4",
-                    "bind": "Reso 4",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "reso_5": {
-                    "type": "fader",
-                    "col": 0,
-                    "row": 4,
-                    "rowSpan": 4,
-                    "label": "5",
-                    "bind": "Reso 5",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "reso_6": {
-                    "type": "fader",
-                    "col": 1,
-                    "row": 4,
-                    "rowSpan": 4,
-                    "label": "6",
-                    "bind": "Reso 6",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "reso_7": {
-                    "type": "fader",
-                    "col": 2,
-                    "row": 4,
-                    "rowSpan": 4,
-                    "label": "7",
-                    "bind": "Reso 7",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "reso_8": {
-                    "type": "fader",
-                    "col": 3,
-                    "row": 4,
-                    "rowSpan": 4,
-                    "label": "8",
-                    "bind": "Reso 8",
-                    "min": 0,
-                    "max": 1
-                  }
+                  "reso_1": {"type": "fader", "col": 0, "row": 0, "rowSpan": 4, "label": "1", "bind": "Reso 1", "min": 0, "max": 1},
+                  "reso_2": {"type": "fader", "col": 1, "row": 0, "rowSpan": 4, "label": "2", "bind": "Reso 2", "min": 0, "max": 1},
+                  "reso_3": {"type": "fader", "col": 2, "row": 0, "rowSpan": 4, "label": "3", "bind": "Reso 3", "min": 0, "max": 1},
+                  "reso_4": {"type": "fader", "col": 3, "row": 0, "rowSpan": 4, "label": "4", "bind": "Reso 4", "min": 0, "max": 1},
+                  "reso_5": {"type": "fader", "col": 0, "row": 4, "rowSpan": 4, "label": "5", "bind": "Reso 5", "min": 0, "max": 1},
+                  "reso_6": {"type": "fader", "col": 1, "row": 4, "rowSpan": 4, "label": "6", "bind": "Reso 6", "min": 0, "max": 1},
+                  "reso_7": {"type": "fader", "col": 2, "row": 4, "rowSpan": 4, "label": "7", "bind": "Reso 7", "min": 0, "max": 1},
+                  "reso_8": {"type": "fader", "col": 3, "row": 4, "rowSpan": 4, "label": "8", "bind": "Reso 8", "min": 0, "max": 1}
                 }
               }
             },
-            "engines": [
-              "tracktion",
-              "air",
-              "airwindows",
-              "aura",
-              "energy",
-              "parametric",
-              "purest-air",
-              "reseq",
-              "tone-slant"
-            ],
+            "engines": ["tracktion", "air", "airwindows", "aura", "energy", "parametric", "purest-air", "reseq", "tone-slant"],
             "engine": "reseq",
             "params": {},
             "pluginId": "drums-reseq:fx-reseq"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-tone-slant": {
         "from": "drums-tone-slant",
@@ -2449,11 +946,7 @@
           {
             "module": "fx-tone-slant",
             "uses": "@k7-core/audio/eq",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -2462,52 +955,17 @@
               "cols": 4,
               "rows": 2,
               "widgets": {
-                "voicing": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Voicing",
-                  "bind": "Voicing",
-                  "min": 0,
-                  "max": 1
-                },
-                "highs": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Highs",
-                  "bind": "Highs",
-                  "min": 0,
-                  "max": 1
-                }
+                "voicing": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Voicing", "bind": "Voicing", "min": 0, "max": 1},
+                "highs": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Highs", "bind": "Highs", "min": 0, "max": 1}
               }
             },
-            "engines": [
-              "tracktion",
-              "air",
-              "airwindows",
-              "aura",
-              "energy",
-              "parametric",
-              "purest-air",
-              "reseq",
-              "tone-slant"
-            ],
+            "engines": ["tracktion", "air", "airwindows", "aura", "energy", "parametric", "purest-air", "reseq", "tone-slant"],
             "engine": "tone-slant",
             "params": {},
             "pluginId": "drums-tone-slant:fx-tone-slant"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-tracktion": {
         "from": "drums-tracktion",
@@ -2515,11 +973,7 @@
           {
             "module": "fx-tracktion",
             "uses": "@k7-core/audio/eq",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -2528,172 +982,37 @@
               "cols": 9,
               "rows": 4,
               "widgets": {
-                "eq": {
-                  "type": "group",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 3,
-                  "rowSpan": 4,
-                  "label": "EQ",
-                  "color": "#3ec96b26"
-                },
-                "low": {
-                  "type": "fader",
-                  "col": 0,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "Low",
-                  "bind": "Low-shelf gain",
-                  "min": -20,
-                  "max": 20,
-                  "step": 0.1
-                },
-                "mid": {
-                  "type": "fader",
-                  "col": 1,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "Mid",
-                  "bind": "Mid gain 1",
-                  "min": -20,
-                  "max": 20,
-                  "step": 0.1
-                },
-                "high": {
-                  "type": "fader",
-                  "col": 2,
-                  "row": 0,
-                  "rowSpan": 4,
-                  "label": "High",
-                  "bind": "High-shelf gain",
-                  "min": -20,
-                  "max": 20,
-                  "step": 0.1
-                },
-                "response": {
-                  "type": "lcdscreen",
-                  "col": 3,
-                  "row": 0,
-                  "colSpan": 6,
-                  "rowSpan": 4
-                }
+                "eq": {"type": "group", "col": 0, "row": 0, "colSpan": 3, "rowSpan": 4, "label": "EQ", "color": "#3ec96b26"},
+                "low": {"type": "fader", "col": 0, "row": 0, "rowSpan": 4, "label": "Low", "bind": "Low-shelf gain", "min": -20, "max": 20, "step": 0.1},
+                "mid": {"type": "fader", "col": 1, "row": 0, "rowSpan": 4, "label": "Mid", "bind": "Mid gain 1", "min": -20, "max": 20, "step": 0.1},
+                "high": {"type": "fader", "col": 2, "row": 0, "rowSpan": 4, "label": "High", "bind": "High-shelf gain", "min": -20, "max": 20, "step": 0.1},
+                "response": {"type": "lcdscreen", "col": 3, "row": 0, "colSpan": 6, "rowSpan": 4}
               },
               "script": "// eq3 — the summed curve of the shelves and peaks at their set frequencies and gains.\n\nconst FONT = \"8px ui-monospace, monospace\";\nconst BLUE = \"#3d7dff\";\nconst GREEN = \"#3ec96b\";\nconst ORANGE = \"#ff6a1a\";\nconst GREY = \"#6b6b6b\";\nconst WHITE = \"#ffffff\";\nconst F_LO = 20;\nconst F_HI = 20000;\n\nconst num = (v, d) => (typeof v === \"number\" && Number.isFinite(v) ? v : d);\nconst clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);\nconst hz = (f) => (f >= 1000 ? `${(f / 1000).toFixed(f >= 10000 ? 0 : 1)}K` : `${Math.round(f)}`);\n\n// dB of the analog section (b0 s^2 + b1 s + b2) / (a0 s^2 + a1 s + a2) at s = jx.\nfunction sect(b, a, x) {\n  const nr = b[2] - b[0] * x * x;\n  const ni = b[1] * x;\n  const dr = a[2] - a[0] * x * x;\n  const di = a[1] * x;\n  const n = Math.max(1e-30, nr * nr + ni * ni);\n  const d = Math.max(1e-30, dr * dr + di * di);\n  return 10 * Math.log10(n / d);\n}\n\nconst LP = (q) => [[0, 0, 1], [1, 1 / Math.max(0.01, q), 1]];\nconst HP = (q) => [[1, 0, 0], [1, 1 / Math.max(0.01, q), 1]];\nconst BP = (q) => [[0, 1 / Math.max(0.01, q), 0], [1, 1 / Math.max(0.01, q), 1]];\nconst NOTCH = (q) => [[1, 0, 1], [1, 1 / Math.max(0.01, q), 1]];\n\n// dB of one second-order shape at frequency f for a corner fc.\nconst shape = (s, f, fc) => sect(s[0], s[1], f / Math.max(1e-6, fc));\n\nfunction glass(ctx, W, H) {\n  ctx.fillStyle = \"#000\";\n  ctx.fillRect(0, 0, W, H);\n  ctx.font = FONT;\n  ctx.lineWidth = 1;\n}\n\nconst frame = (W, H) => ({ x: 6, y: 13, w: Math.max(1, W - 12), h: Math.max(1, H - 19) });\nconst xOf = (b, f) => b.x + (Math.log(clamp(f, F_LO, F_HI) / F_LO) / Math.log(F_HI / F_LO)) * b.w;\nconst fOf = (b, px) => F_LO * (F_HI / F_LO) ** ((px - b.x) / Math.max(1, b.w));\nconst yOf = (b, db, lo, hi) => b.y + (1 - (clamp(db, lo, hi) - lo) / Math.max(1e-6, hi - lo)) * b.h;\n\n// The 0 dB line and a tick at 100 Hz, 1 kHz and 10 kHz.\nfunction grid(ctx, b, lo, hi) {\n  ctx.strokeStyle = GREY;\n  ctx.beginPath();\n  const y0 = Math.round(yOf(b, 0, lo, hi)) + 0.5;\n  ctx.moveTo(b.x, y0);\n  ctx.lineTo(b.x + b.w, y0);\n  for (const f of [100, 1000, 10000]) {\n    const x = Math.round(xOf(b, f)) + 0.5;\n    ctx.moveTo(x, b.y + b.h - 3);\n    ctx.lineTo(x, b.y + b.h);\n  }\n  ctx.stroke();\n}\n\nfunction curve(ctx, b, dbAt, lo, hi, color) {\n  ctx.strokeStyle = color;\n  ctx.beginPath();\n  for (let px = b.x; px <= b.x + b.w; px++) {\n    const y = yOf(b, dbAt(fOf(b, px)), lo, hi);\n    if (px === b.x) ctx.moveTo(px, y);\n    else ctx.lineTo(px, y);\n  }\n  ctx.stroke();\n}\n\nfunction dot(ctx, x, y, color) {\n  ctx.fillStyle = color;\n  ctx.beginPath();\n  ctx.arc(x, y, 2.5, 0, Math.PI * 2);\n  ctx.fill();\n}\n\nfunction text(ctx, s, x, y, color, align) {\n  ctx.fillStyle = color;\n  ctx.textAlign = align;\n  ctx.fillText(s, x, y);\n}\n\n// A shelf's or a peak's gain as the amplitude A of the RBJ cookbook.\nconst amp = (db) => 10 ** (db / 40);\nconst lowShelf = (A, q) => [[A, (A * Math.sqrt(A)) / q, A * A], [A, Math.sqrt(A) / q, 1]];\nconst highShelf = (A, q) => [[A * A, (A * Math.sqrt(A)) / q, A], [1, Math.sqrt(A) / q, A]];\nconst peak = (A, q) => [[1, A / q, 1], [1, 1 / (A * q), 1]];\n\nexport default {\n  response(lcd) {\n    const { ctx, width: W, height: H, params } = lcd;\n    glass(ctx, W, H);\n    const b = frame(W, H);\n    const p = (n, d) => num(params[n], d);\n    const q = (n) => clamp(p(n, 0.5), 0.1, 4);\n    const bands = [\n      [lowShelf, p(\"Low-shelf freq\", 200), p(\"Low-shelf gain\", 0), q(\"Low-shelf Q\"), GREEN],\n      [peak, p(\"Mid freq 1\", 1000), p(\"Mid gain 1\", 0), q(\"Mid Q 1\"), WHITE],\n      [peak, p(\"Mid freq 2\", 5000), p(\"Mid gain 2\", 0), q(\"Mid Q 2\"), GREY],\n      [highShelf, p(\"High-shelf freq\", 6000), p(\"High-shelf gain\", 0), q(\"High-shelf Q\"), BLUE],\n    ];\n    const at = (f) => {\n      let db = 0;\n      for (const [make, fc, g, bq] of bands) db += shape(make(amp(g), bq), f, Math.max(20, fc));\n      return db;\n    };\n    grid(ctx, b, -24, 24);\n    curve(ctx, b, at, -24, 24, WHITE);\n    // The second mid is held flat by module.k7x, so its dot shows only once someone moves it.\n    for (const [, fc, g, , color] of bands) if (color !== GREY || g !== 0) dot(ctx, xOf(b, fc), yOf(b, at(fc), -24, 24), color);\n    text(ctx, \"EQ\", b.x, 9, GREY, \"left\");\n    const gl = bands[0][2];\n    const gm = bands[1][2];\n    const gh = bands[3][2];\n    const sg = (g) => `${g > 0 ? \"+\" : \"\"}${g.toFixed(1)}`;\n    text(ctx, sg(gl), W - 70, 9, GREEN, \"right\");\n    text(ctx, sg(gm), W - 38, 9, WHITE, \"right\");\n    text(ctx, sg(gh), W - 6, 9, BLUE, \"right\");\n  },\n};\n",
               "vertical": {
                 "cols": 4,
                 "rows": 6,
                 "widgets": {
-                  "response": {
-                    "type": "lcdscreen",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 4,
-                    "rowSpan": 2
-                  },
-                  "eq": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 4,
-                    "rowSpan": 4,
-                    "label": "EQ",
-                    "color": "#3ec96b26"
-                  },
-                  "low": {
-                    "type": "fader",
-                    "col": 1,
-                    "row": 2,
-                    "rowSpan": 4,
-                    "label": "Low",
-                    "bind": "Low-shelf gain",
-                    "min": -20,
-                    "max": 20,
-                    "step": 0.1
-                  },
-                  "mid": {
-                    "type": "fader",
-                    "col": 2,
-                    "row": 2,
-                    "rowSpan": 4,
-                    "label": "Mid",
-                    "bind": "Mid gain 1",
-                    "min": -20,
-                    "max": 20,
-                    "step": 0.1
-                  },
-                  "high": {
-                    "type": "fader",
-                    "col": 3,
-                    "row": 2,
-                    "rowSpan": 4,
-                    "label": "High",
-                    "bind": "High-shelf gain",
-                    "min": -20,
-                    "max": 20,
-                    "step": 0.1
-                  }
+                  "response": {"type": "lcdscreen", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 2},
+                  "eq": {"type": "group", "col": 0, "row": 2, "colSpan": 4, "rowSpan": 4, "label": "EQ", "color": "#3ec96b26"},
+                  "low": {"type": "fader", "col": 1, "row": 2, "rowSpan": 4, "label": "Low", "bind": "Low-shelf gain", "min": -20, "max": 20, "step": 0.1},
+                  "mid": {"type": "fader", "col": 2, "row": 2, "rowSpan": 4, "label": "Mid", "bind": "Mid gain 1", "min": -20, "max": 20, "step": 0.1},
+                  "high": {"type": "fader", "col": 3, "row": 2, "rowSpan": 4, "label": "High", "bind": "High-shelf gain", "min": -20, "max": 20, "step": 0.1}
                 }
               }
             },
-            "engines": [
-              "tracktion",
-              "air",
-              "airwindows",
-              "aura",
-              "energy",
-              "parametric",
-              "purest-air",
-              "reseq",
-              "tone-slant"
-            ],
+            "engines": ["tracktion", "air", "airwindows", "aura", "energy", "parametric", "purest-air", "reseq", "tone-slant"],
             "engine": "tracktion",
-            "params": {
-              "Low-shelf gain": 0,
-              "Mid gain 1": 0,
-              "High-shelf gain": 0,
-              "Low-shelf freq": 200,
-              "Mid freq 1": 1000,
-              "High-shelf freq": 6000,
-              "Mid gain 2": 0
-            },
-            "defaults": {
-              "Low-shelf gain": 0,
-              "Mid gain 1": 0,
-              "High-shelf gain": 0
-            },
+            "params": {"Low-shelf gain": 0, "Mid gain 1": 0, "High-shelf gain": 0, "Low-shelf freq": 200, "Mid freq 1": 1000, "High-shelf freq": 6000, "Mid gain 2": 0},
+            "defaults": {"Low-shelf gain": 0, "Mid gain 1": 0, "High-shelf gain": 0},
             "pluginId": "drums-tracktion:fx-tracktion"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
-      }
+      "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}]}
     },
-    "tracks": [
-      "drums",
-      "drums-air",
-      "drums-airwindows",
-      "drums-aura",
-      "drums-energy",
-      "drums-parametric",
-      "drums-purest-air",
-      "drums-reseq",
-      "drums-tone-slant",
-      "drums-tracktion"
-    ],
+    "tracks": ["drums", "drums-air", "drums-airwindows", "drums-aura", "drums-energy", "drums-parametric", "drums-purest-air", "drums-reseq", "drums-tone-slant", "drums-tracktion"],
     "videoTracks": [],
     "trackColors": {
       "drums": "#af1d26",
@@ -2720,96 +1039,16 @@
       "drums-tracktion": "audio"
     },
     "trackClips": {
-      "drums": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-air": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-airwindows": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-aura": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-energy": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-parametric": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-purest-air": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-reseq": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-tone-slant": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-tracktion": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ]
+      "drums": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-air": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-airwindows": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-aura": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-energy": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-parametric": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-purest-air": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-reseq": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-tone-slant": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-tracktion": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}]
     },
     "modules": {},
     "warnings": []

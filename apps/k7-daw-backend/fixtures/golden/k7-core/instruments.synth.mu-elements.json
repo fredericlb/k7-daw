@@ -1,9 +1,6 @@
 {
   "project": "k7-core/instruments.synth.mu-elements.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "instruments.synth.mu-elements",
     "tempo": 120,
@@ -43,30 +40,9 @@
             "loopStart": 0,
             "loopEnd": 0,
             "notes": [
-              {
-                "time": 0,
-                "duration": 1,
-                "key": 60,
-                "vel": 0.8,
-                "channel": 0,
-                "rel": 1
-              },
-              {
-                "time": 1,
-                "duration": 1,
-                "key": 64,
-                "vel": 1,
-                "channel": 0,
-                "rel": 1
-              },
-              {
-                "time": 2,
-                "duration": 2,
-                "key": 67,
-                "vel": 1,
-                "channel": 0,
-                "rel": 1
-              }
+              {"time": 0, "duration": 1, "key": 60, "vel": 0.8, "channel": 0, "rel": 1},
+              {"time": 1, "duration": 1, "key": 64, "vel": 1, "channel": 0, "rel": 1},
+              {"time": 2, "duration": 2, "key": 67, "vel": 1, "channel": 0, "rel": 1}
             ]
           }
         ],
@@ -79,9 +55,7 @@
             "presetSave": "<ws>/k7-core/instruments.synth.mu-elements.k7/nodes/fx.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@output-volume": 0
-            }
+            "params": {"@output-volume": 0}
           }
         ],
         "sends": [],
@@ -90,16 +64,9 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
@@ -109,23 +76,9 @@
           {
             "module": "fx",
             "uses": "@k7-core/instruments/synth/mu-elements",
-            "stage": [
-              "@output-volume"
-            ],
-            "inputs": [
-              {
-                "name": "midi",
-                "type": "midi"
-              },
-              {
-                "name": "in",
-                "type": "audio",
-                "mandatory": false
-              }
-            ],
-            "events": [
-              "note-on"
-            ],
+            "stage": ["@output-volume"],
+            "inputs": [{"name": "midi", "type": "midi"}, {"name": "in", "type": "audio", "mandatory": false}],
+            "events": ["note-on"],
             "category": "instruments",
             "emits": "audio",
             "stub": false,
@@ -145,143 +98,20 @@
                       "colSpan": 6,
                       "label": "Input",
                       "bind": "Input",
-                      "options": [
-                        {
-                          "label": "strike",
-                          "value": 0
-                        },
-                        {
-                          "label": "blow",
-                          "value": 1
-                        },
-                        {
-                          "label": "both",
-                          "value": 2
-                        }
-                      ]
+                      "options": [{"label": "strike", "value": 0}, {"label": "blow", "value": 1}, {"label": "both", "value": 2}]
                     },
-                    "exciter": {
-                      "type": "lcdscreen",
-                      "col": 0,
-                      "row": 1,
-                      "colSpan": 6,
-                      "rowSpan": 3
-                    },
-                    "bow_group": {
-                      "type": "group",
-                      "col": 6,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 4,
-                      "label": "BOW",
-                      "color": "#ff6a1a26"
-                    },
-                    "bow": {
-                      "type": "knob",
-                      "col": 6,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Bow",
-                      "bind": "Bow",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "bow_timbre": {
-                      "type": "knob",
-                      "col": 6,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Timbre",
-                      "bind": "Bow timbre",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "blow_group": {
-                      "type": "group",
-                      "col": 8,
-                      "row": 0,
-                      "colSpan": 4,
-                      "rowSpan": 4,
-                      "label": "BLOW",
-                      "color": "#3d7dff26"
-                    },
-                    "blow": {
-                      "type": "knob",
-                      "col": 8,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Blow",
-                      "bind": "Blow",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "blow_timbre": {
-                      "type": "knob",
-                      "col": 10,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Timbre",
-                      "bind": "Blow timbre",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "flow": {
-                      "type": "knob",
-                      "col": 8,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Flow",
-                      "bind": "Flow",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "strike_group": {
-                      "type": "group",
-                      "col": 12,
-                      "row": 0,
-                      "colSpan": 4,
-                      "rowSpan": 4,
-                      "label": "STRIKE",
-                      "color": "#ff3b3026"
-                    },
-                    "strike": {
-                      "type": "knob",
-                      "col": 12,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Strike",
-                      "bind": "Strike",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "strike_timbre": {
-                      "type": "knob",
-                      "col": 14,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Timbre",
-                      "bind": "Strike timbre",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "mallet": {
-                      "type": "knob",
-                      "col": 12,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Mallet",
-                      "bind": "Mallet",
-                      "min": 0,
-                      "max": 1
-                    }
+                    "exciter": {"type": "lcdscreen", "col": 0, "row": 1, "colSpan": 6, "rowSpan": 3},
+                    "bow_group": {"type": "group", "col": 6, "row": 0, "colSpan": 2, "rowSpan": 4, "label": "BOW", "color": "#ff6a1a26"},
+                    "bow": {"type": "knob", "col": 6, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Bow", "bind": "Bow", "min": 0, "max": 1},
+                    "bow_timbre": {"type": "knob", "col": 6, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Timbre", "bind": "Bow timbre", "min": 0, "max": 1},
+                    "blow_group": {"type": "group", "col": 8, "row": 0, "colSpan": 4, "rowSpan": 4, "label": "BLOW", "color": "#3d7dff26"},
+                    "blow": {"type": "knob", "col": 8, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Blow", "bind": "Blow", "min": 0, "max": 1},
+                    "blow_timbre": {"type": "knob", "col": 10, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Timbre", "bind": "Blow timbre", "min": 0, "max": 1},
+                    "flow": {"type": "knob", "col": 8, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Flow", "bind": "Flow", "min": 0, "max": 1},
+                    "strike_group": {"type": "group", "col": 12, "row": 0, "colSpan": 4, "rowSpan": 4, "label": "STRIKE", "color": "#ff3b3026"},
+                    "strike": {"type": "knob", "col": 12, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Strike", "bind": "Strike", "min": 0, "max": 1},
+                    "strike_timbre": {"type": "knob", "col": 14, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Timbre", "bind": "Strike timbre", "min": 0, "max": 1},
+                    "mallet": {"type": "knob", "col": 12, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Mallet", "bind": "Mallet", "min": 0, "max": 1}
                   }
                 },
                 {
@@ -295,127 +125,22 @@
                       "label": "Model",
                       "bind": "Model",
                       "options": [
-                        {
-                          "label": "Modal",
-                          "value": 0
-                        },
-                        {
-                          "label": "String",
-                          "value": 1
-                        },
-                        {
-                          "label": "Strings",
-                          "value": 2
-                        },
-                        {
-                          "label": "Ominous",
-                          "value": 3
-                        }
+                        {"label": "Modal", "value": 0},
+                        {"label": "String", "value": 1},
+                        {"label": "Strings", "value": 2},
+                        {"label": "Ominous", "value": 3}
                       ]
                     },
-                    "resonator": {
-                      "type": "lcdscreen",
-                      "col": 0,
-                      "row": 1,
-                      "colSpan": 6,
-                      "rowSpan": 3
-                    },
-                    "res_group": {
-                      "type": "group",
-                      "col": 6,
-                      "row": 0,
-                      "colSpan": 6,
-                      "rowSpan": 4,
-                      "label": "RES",
-                      "color": "#3ec96b26"
-                    },
-                    "geometry": {
-                      "type": "knob",
-                      "col": 6,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Geom",
-                      "bind": "Geometry",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "brightness": {
-                      "type": "knob",
-                      "col": 8,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Bright",
-                      "bind": "Brightness",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "damping": {
-                      "type": "knob",
-                      "col": 10,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Damp",
-                      "bind": "Damping",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "position": {
-                      "type": "knob",
-                      "col": 6,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Pos",
-                      "bind": "Position",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "space": {
-                      "type": "knob",
-                      "col": 8,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Space",
-                      "bind": "Space",
-                      "min": 0,
-                      "max": 2
-                    },
-                    "play_group": {
-                      "type": "group",
-                      "col": 12,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 4,
-                      "label": "PLAY",
-                      "color": "#6b6b6b33"
-                    },
-                    "contour": {
-                      "type": "knob",
-                      "col": 12,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Contour",
-                      "bind": "Contour",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "transpose": {
-                      "type": "knob",
-                      "col": 12,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Transp",
-                      "bind": "Transpose",
-                      "min": -24,
-                      "max": 24,
-                      "step": 1
-                    }
+                    "resonator": {"type": "lcdscreen", "col": 0, "row": 1, "colSpan": 6, "rowSpan": 3},
+                    "res_group": {"type": "group", "col": 6, "row": 0, "colSpan": 6, "rowSpan": 4, "label": "RES", "color": "#3ec96b26"},
+                    "geometry": {"type": "knob", "col": 6, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Geom", "bind": "Geometry", "min": 0, "max": 1},
+                    "brightness": {"type": "knob", "col": 8, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Bright", "bind": "Brightness", "min": 0, "max": 1},
+                    "damping": {"type": "knob", "col": 10, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Damp", "bind": "Damping", "min": 0, "max": 1},
+                    "position": {"type": "knob", "col": 6, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Pos", "bind": "Position", "min": 0, "max": 1},
+                    "space": {"type": "knob", "col": 8, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Space", "bind": "Space", "min": 0, "max": 2},
+                    "play_group": {"type": "group", "col": 12, "row": 0, "colSpan": 2, "rowSpan": 4, "label": "PLAY", "color": "#6b6b6b33"},
+                    "contour": {"type": "knob", "col": 12, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Contour", "bind": "Contour", "min": 0, "max": 1},
+                    "transpose": {"type": "knob", "col": 12, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Transp", "bind": "Transpose", "min": -24, "max": 24, "step": 1}
                   }
                 }
               ],
@@ -435,143 +160,20 @@
                         "colSpan": 4,
                         "label": "Input",
                         "bind": "Input",
-                        "options": [
-                          {
-                            "label": "strike",
-                            "value": 0
-                          },
-                          {
-                            "label": "blow",
-                            "value": 1
-                          },
-                          {
-                            "label": "both",
-                            "value": 2
-                          }
-                        ]
+                        "options": [{"label": "strike", "value": 0}, {"label": "blow", "value": 1}, {"label": "both", "value": 2}]
                       },
-                      "exciter": {
-                        "type": "lcdscreen",
-                        "col": 0,
-                        "row": 1,
-                        "colSpan": 4,
-                        "rowSpan": 3
-                      },
-                      "bow_group": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 4,
-                        "colSpan": 4,
-                        "rowSpan": 2,
-                        "label": "BOW",
-                        "color": "#ff6a1a26"
-                      },
-                      "bow": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 4,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Bow",
-                        "bind": "Bow",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "bow_timbre": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 4,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Timbre",
-                        "bind": "Bow timbre",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "blow_group": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 6,
-                        "colSpan": 4,
-                        "rowSpan": 4,
-                        "label": "BLOW",
-                        "color": "#3d7dff26"
-                      },
-                      "blow": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 6,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Blow",
-                        "bind": "Blow",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "blow_timbre": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 6,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Timbre",
-                        "bind": "Blow timbre",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "flow": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 8,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Flow",
-                        "bind": "Flow",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "strike_group": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 10,
-                        "colSpan": 4,
-                        "rowSpan": 4,
-                        "label": "STRIKE",
-                        "color": "#ff3b3026"
-                      },
-                      "strike": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 10,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Strike",
-                        "bind": "Strike",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "strike_timbre": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 10,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Timbre",
-                        "bind": "Strike timbre",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "mallet": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 12,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Mallet",
-                        "bind": "Mallet",
-                        "min": 0,
-                        "max": 1
-                      }
+                      "exciter": {"type": "lcdscreen", "col": 0, "row": 1, "colSpan": 4, "rowSpan": 3},
+                      "bow_group": {"type": "group", "col": 0, "row": 4, "colSpan": 4, "rowSpan": 2, "label": "BOW", "color": "#ff6a1a26"},
+                      "bow": {"type": "knob", "col": 0, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "Bow", "bind": "Bow", "min": 0, "max": 1},
+                      "bow_timbre": {"type": "knob", "col": 2, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "Timbre", "bind": "Bow timbre", "min": 0, "max": 1},
+                      "blow_group": {"type": "group", "col": 0, "row": 6, "colSpan": 4, "rowSpan": 4, "label": "BLOW", "color": "#3d7dff26"},
+                      "blow": {"type": "knob", "col": 0, "row": 6, "colSpan": 2, "rowSpan": 2, "label": "Blow", "bind": "Blow", "min": 0, "max": 1},
+                      "blow_timbre": {"type": "knob", "col": 2, "row": 6, "colSpan": 2, "rowSpan": 2, "label": "Timbre", "bind": "Blow timbre", "min": 0, "max": 1},
+                      "flow": {"type": "knob", "col": 0, "row": 8, "colSpan": 2, "rowSpan": 2, "label": "Flow", "bind": "Flow", "min": 0, "max": 1},
+                      "strike_group": {"type": "group", "col": 0, "row": 10, "colSpan": 4, "rowSpan": 4, "label": "STRIKE", "color": "#ff3b3026"},
+                      "strike": {"type": "knob", "col": 0, "row": 10, "colSpan": 2, "rowSpan": 2, "label": "Strike", "bind": "Strike", "min": 0, "max": 1},
+                      "strike_timbre": {"type": "knob", "col": 2, "row": 10, "colSpan": 2, "rowSpan": 2, "label": "Timbre", "bind": "Strike timbre", "min": 0, "max": 1},
+                      "mallet": {"type": "knob", "col": 0, "row": 12, "colSpan": 2, "rowSpan": 2, "label": "Mallet", "bind": "Mallet", "min": 0, "max": 1}
                     }
                   },
                   {
@@ -585,127 +187,22 @@
                         "label": "Model",
                         "bind": "Model",
                         "options": [
-                          {
-                            "label": "Modal",
-                            "value": 0
-                          },
-                          {
-                            "label": "String",
-                            "value": 1
-                          },
-                          {
-                            "label": "Strings",
-                            "value": 2
-                          },
-                          {
-                            "label": "Ominous",
-                            "value": 3
-                          }
+                          {"label": "Modal", "value": 0},
+                          {"label": "String", "value": 1},
+                          {"label": "Strings", "value": 2},
+                          {"label": "Ominous", "value": 3}
                         ]
                       },
-                      "resonator": {
-                        "type": "lcdscreen",
-                        "col": 0,
-                        "row": 1,
-                        "colSpan": 4,
-                        "rowSpan": 3
-                      },
-                      "res_group": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 4,
-                        "colSpan": 4,
-                        "rowSpan": 6,
-                        "label": "RES",
-                        "color": "#3ec96b26"
-                      },
-                      "geometry": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 4,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Geom",
-                        "bind": "Geometry",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "brightness": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 4,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Bright",
-                        "bind": "Brightness",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "damping": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 6,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Damp",
-                        "bind": "Damping",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "position": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 6,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Pos",
-                        "bind": "Position",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "space": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 8,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Space",
-                        "bind": "Space",
-                        "min": 0,
-                        "max": 2
-                      },
-                      "play_group": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 10,
-                        "colSpan": 4,
-                        "rowSpan": 2,
-                        "label": "PLAY",
-                        "color": "#6b6b6b33"
-                      },
-                      "contour": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 10,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Contour",
-                        "bind": "Contour",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "transpose": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 10,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Transp",
-                        "bind": "Transpose",
-                        "min": -24,
-                        "max": 24,
-                        "step": 1
-                      }
+                      "resonator": {"type": "lcdscreen", "col": 0, "row": 1, "colSpan": 4, "rowSpan": 3},
+                      "res_group": {"type": "group", "col": 0, "row": 4, "colSpan": 4, "rowSpan": 6, "label": "RES", "color": "#3ec96b26"},
+                      "geometry": {"type": "knob", "col": 0, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "Geom", "bind": "Geometry", "min": 0, "max": 1},
+                      "brightness": {"type": "knob", "col": 2, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "Bright", "bind": "Brightness", "min": 0, "max": 1},
+                      "damping": {"type": "knob", "col": 0, "row": 6, "colSpan": 2, "rowSpan": 2, "label": "Damp", "bind": "Damping", "min": 0, "max": 1},
+                      "position": {"type": "knob", "col": 2, "row": 6, "colSpan": 2, "rowSpan": 2, "label": "Pos", "bind": "Position", "min": 0, "max": 1},
+                      "space": {"type": "knob", "col": 0, "row": 8, "colSpan": 2, "rowSpan": 2, "label": "Space", "bind": "Space", "min": 0, "max": 2},
+                      "play_group": {"type": "group", "col": 0, "row": 10, "colSpan": 4, "rowSpan": 2, "label": "PLAY", "color": "#6b6b6b33"},
+                      "contour": {"type": "knob", "col": 0, "row": 10, "colSpan": 2, "rowSpan": 2, "label": "Contour", "bind": "Contour", "min": 0, "max": 1},
+                      "transpose": {"type": "knob", "col": 2, "row": 10, "colSpan": 2, "rowSpan": 2, "label": "Transp", "bind": "Transpose", "min": -24, "max": 24, "step": 1}
                     }
                   }
                 ]
@@ -734,45 +231,15 @@
             "pluginId": "melody:fx"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
-      }
+      "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}]}
     },
-    "tracks": [
-      "melody"
-    ],
+    "tracks": ["melody"],
     "videoTracks": [],
-    "trackColors": {
-      "melody": "#9a5ad3"
-    },
-    "trackSignals": {
-      "melody": "midi"
-    },
-    "trackClips": {
-      "melody": [
-        {
-          "ref": "melody",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "midi"
-        }
-      ]
-    },
+    "trackColors": {"melody": "#9a5ad3"},
+    "trackSignals": {"melody": "midi"},
+    "trackClips": {"melody": [{"ref": "melody", "start": 0, "tc": "1:1", "len": 4, "kind": "midi"}]},
     "modules": {},
     "warnings": []
   },

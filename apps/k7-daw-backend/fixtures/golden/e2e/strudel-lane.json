@@ -1,9 +1,6 @@
 {
   "project": "e2e/strudel-lane.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "strudel-lane",
     "tempo": 120,
@@ -43,15 +40,10 @@
             "patternSource": "// \"Pad\" lands on the pad lane, \"Kit\" on the kit lane; bd/hh/sn resolve to the bundled samples.\nstack(\n  note(\"c e g c5\").s(\"sawtooth\").slow(2).label(\"Pad\"),\n  sound(\"bd hh sn hh\").label(\"Kit\"),\n)\n",
             "patternLabel": "kit",
             "patternCatchAll": true,
-            "patternClaimed": [
-              "kit",
-              "pad"
-            ],
+            "patternClaimed": ["kit", "pad"],
             "patternPlays": "both",
             "patternOnly": true,
-            "patternBanks": [
-              "<ws>/e2e/strudel-lane.k7/samples"
-            ]
+            "patternBanks": ["<ws>/e2e/strudel-lane.k7/samples"]
           }
         ],
         "sends": [],
@@ -86,15 +78,10 @@
             "patternSource": "// \"Pad\" lands on the pad lane, \"Kit\" on the kit lane; bd/hh/sn resolve to the bundled samples.\nstack(\n  note(\"c e g c5\").s(\"sawtooth\").slow(2).label(\"Pad\"),\n  sound(\"bd hh sn hh\").label(\"Kit\"),\n)\n",
             "patternLabel": "pad",
             "patternCatchAll": false,
-            "patternClaimed": [
-              "kit",
-              "pad"
-            ],
+            "patternClaimed": ["kit", "pad"],
             "patternPlays": "notes",
             "patternOnly": true,
-            "patternBanks": [
-              "<ws>/e2e/strudel-lane.k7/samples"
-            ]
+            "patternBanks": ["<ws>/e2e/strudel-lane.k7/samples"]
           },
           {
             "id": "pad:synth",
@@ -104,9 +91,7 @@
             "presetSave": "<ws>/e2e/strudel-lane.k7/nodes/synth.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@output-volume": 0
-            }
+            "params": {"@output-volume": 0}
           }
         ],
         "sends": [],
@@ -115,16 +100,9 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
@@ -135,12 +113,8 @@
           {
             "module": "synth",
             "uses": "@workspace/instruments/fourosc",
-            "stage": [
-              "@output-volume"
-            ],
-            "events": [
-              "note-on"
-            ],
+            "stage": ["@output-volume"],
+            "events": ["note-on"],
             "category": "instruments",
             "emits": "audio",
             "stub": false,
@@ -149,92 +123,26 @@
               "cols": 4,
               "rows": 2,
               "widgets": {
-                "title": {
-                  "type": "label",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "text": "4OSC"
-                },
-                "cutoff": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 1,
-                  "label": "Cutoff",
-                  "bind": "Filter Freq",
-                  "min": 0,
-                  "max": 135.076232
-                },
-                "res": {
-                  "type": "knob",
-                  "col": 1,
-                  "row": 1,
-                  "label": "Res",
-                  "bind": "Filter Resonance",
-                  "min": 0,
-                  "max": 100
-                },
-                "level": {
-                  "type": "slider",
-                  "col": 2,
-                  "row": 1,
-                  "label": "Level",
-                  "bind": "Level",
-                  "min": -100,
-                  "max": 0
-                }
+                "title": {"type": "label", "col": 0, "row": 0, "colSpan": 2, "text": "4OSC"},
+                "cutoff": {"type": "knob", "col": 0, "row": 1, "label": "Cutoff", "bind": "Filter Freq", "min": 0, "max": 135.076232},
+                "res": {"type": "knob", "col": 1, "row": 1, "label": "Res", "bind": "Filter Resonance", "min": 0, "max": 100},
+                "level": {"type": "slider", "col": 2, "row": 1, "label": "Level", "bind": "Level", "min": -100, "max": 0}
               }
             },
             "params": {},
-            "defaults": {
-              "Filter Freq": 69,
-              "Filter Resonance": 0.5,
-              "Level": 0
-            },
+            "defaults": {"Filter Freq": 69, "Filter Resonance": 0.5, "Level": 0},
             "pluginId": "pad:synth"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
-      "kit": {
-        "from": "kit",
-        "use": [],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
-      },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
-      }
+      "kit": {"from": "kit", "use": [], "out": [{"to": "MIX", "gain": 1}]},
+      "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}]}
     },
-    "tracks": [
-      "kit",
-      "pad"
-    ],
+    "tracks": ["kit", "pad"],
     "videoTracks": [],
-    "trackColors": {
-      "kit": "#dd322c",
-      "pad": "#9a5ad3"
-    },
-    "trackSignals": {
-      "kit": "audio",
-      "pad": "audio"
-    },
+    "trackColors": {"kit": "#dd322c", "pad": "#9a5ad3"},
+    "trackSignals": {"kit": "audio", "pad": "audio"},
     "modules": {},
     "warnings": []
   },

@@ -1,9 +1,6 @@
 {
   "project": "k7-core/audio.bitcrush.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "audio.bitcrush",
     "tempo": 120,
@@ -54,11 +51,7 @@
             "presetSave": "<ws>/k7-core/audio.bitcrush.k7/nodes/fx.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -104,11 +97,7 @@
             "presetSave": "<ws>/k7-core/audio.bitcrush.k7/nodes/fx-bit-glitter.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -154,13 +143,7 @@
             "presetSave": "<ws>/k7-core/audio.bitcrush.k7/nodes/fx-de-rez.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "Rez": 1,
-              "Rate": 1,
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"Rez": 1, "Rate": 1, "@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -206,11 +189,7 @@
             "presetSave": "<ws>/k7-core/audio.bitcrush.k7/nodes/fx-de-rez-2.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@mix": 1,
-              "@input-volume": 0,
-              "@output-volume": 0
-            }
+            "params": {"@mix": 1, "@input-volume": 0, "@output-volume": 0}
           }
         ],
         "sends": [],
@@ -219,16 +198,9 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
@@ -238,11 +210,7 @@
           {
             "module": "fx",
             "uses": "@k7-core/audio/bitcrush",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -251,129 +219,32 @@
               "cols": 9,
               "rows": 2,
               "widgets": {
-                "rez_screen": {
-                  "type": "lcdscreen",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 3,
-                  "rowSpan": 2
-                },
-                "crush": {
-                  "type": "group",
-                  "col": 3,
-                  "row": 0,
-                  "colSpan": 6,
-                  "rowSpan": 2,
-                  "label": "CRUSH",
-                  "color": "#ff6a1a22"
-                },
-                "rate": {
-                  "type": "knob",
-                  "col": 3,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Rate",
-                  "bind": "Rate",
-                  "min": 0,
-                  "max": 1
-                },
-                "rez": {
-                  "type": "knob",
-                  "col": 5,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Rez",
-                  "bind": "Rez",
-                  "min": 0,
-                  "max": 1
-                },
-                "hard": {
-                  "type": "knob",
-                  "col": 7,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Hard",
-                  "bind": "Hard",
-                  "min": 0,
-                  "max": 1
-                }
+                "rez_screen": {"type": "lcdscreen", "col": 0, "row": 0, "colSpan": 3, "rowSpan": 2},
+                "crush": {"type": "group", "col": 3, "row": 0, "colSpan": 6, "rowSpan": 2, "label": "CRUSH", "color": "#ff6a1a22"},
+                "rate": {"type": "knob", "col": 3, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Rate", "bind": "Rate", "min": 0, "max": 1},
+                "rez": {"type": "knob", "col": 5, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Rez", "bind": "Rez", "min": 0, "max": 1},
+                "hard": {"type": "knob", "col": 7, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Hard", "bind": "Hard", "min": 0, "max": 1}
               },
               "script": "// de-rez-2 screens — a sine through the crusher: Rate thins the samples held, Rez coarsens the steps.\nconst FONT = \"8px ui-monospace, monospace\";\n\nexport default {\n  rez_screen(lcd) {\n    const { ctx, width: W, height: H, params } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    const rate = Math.min(1, Math.max(0, params[\"Rate\"] ?? 1));\n    const rez = Math.min(1, Math.max(0, params[\"Rez\"] ?? 1));\n    // DeRez2 keeps rate^3 of the samples and quantizes to steps of (1 - rez)^3 / 3.\n    const keep = Math.max(0.0005, Math.pow(rate, 3));\n    const step = Math.pow(1 - rez, 3) / 3;\n    const mid = H / 2;\n    const amp = Math.max(1, H / 2 - 10);\n    const cycles = 2;\n    const n = Math.max(2, Math.round(W));\n    ctx.strokeStyle = \"#6b6b6b\";\n    ctx.lineWidth = 1;\n    ctx.beginPath();\n    for (let i = 0; i <= n; i++) {\n      const x = (i / n) * W;\n      const y = mid - Math.sin((i / n) * cycles * 2 * Math.PI) * amp;\n      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);\n    }\n    ctx.stroke();\n    const period = Math.max(1, 1 / keep);\n    const samples = 64;\n    ctx.strokeStyle = \"#ff6a1a\";\n    ctx.beginPath();\n    let held = 0;\n    let acc = period;\n    for (let i = 0; i <= n; i++) {\n      if (acc >= period) {\n        acc -= period;\n        const v = Math.sin((i / n) * cycles * 2 * Math.PI);\n        held = step > 0.0001 ? Math.round(v / step) * step : v;\n      }\n      acc += samples / n;\n      const x = (i / n) * W;\n      const y = mid - Math.max(-1, Math.min(1, held)) * amp;\n      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);\n    }\n    ctx.stroke();\n    ctx.fillStyle = \"#ffffff\";\n    ctx.font = FONT;\n    ctx.fillText(\"RATE \" + Math.round(rate * 100) + \"  REZ \" + Math.round(rez * 100), 3, 9);\n  },\n};\n",
               "vertical": {
                 "cols": 4,
                 "rows": 6,
                 "widgets": {
-                  "rez_screen": {
-                    "type": "lcdscreen",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 4,
-                    "rowSpan": 2
-                  },
-                  "crush": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 4,
-                    "rowSpan": 4,
-                    "label": "CRUSH",
-                    "color": "#ff6a1a22"
-                  },
-                  "rate": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Rate",
-                    "bind": "Rate",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "rez": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 2,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Rez",
-                    "bind": "Rez",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "hard": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 4,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Hard",
-                    "bind": "Hard",
-                    "min": 0,
-                    "max": 1
-                  }
+                  "rez_screen": {"type": "lcdscreen", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 2},
+                  "crush": {"type": "group", "col": 0, "row": 2, "colSpan": 4, "rowSpan": 4, "label": "CRUSH", "color": "#ff6a1a22"},
+                  "rate": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Rate", "bind": "Rate", "min": 0, "max": 1},
+                  "rez": {"type": "knob", "col": 2, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Rez", "bind": "Rez", "min": 0, "max": 1},
+                  "hard": {"type": "knob", "col": 0, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "Hard", "bind": "Hard", "min": 0, "max": 1}
                 }
               }
             },
-            "engines": [
-              "bit-glitter",
-              "de-rez",
-              "de-rez-2"
-            ],
+            "engines": ["bit-glitter", "de-rez", "de-rez-2"],
             "engine": "de-rez-2",
             "params": {},
             "pluginId": "drums:fx"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-bit-glitter": {
         "from": "drums-bit-glitter",
@@ -381,11 +252,7 @@
           {
             "module": "fx-bit-glitter",
             "uses": "@k7-core/audio/bitcrush",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -394,67 +261,26 @@
               "cols": 8,
               "rows": 2,
               "widgets": {
-                "glitter": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Glitter",
-                  "bind": "Glitter",
-                  "min": 0,
-                  "max": 1
-                },
-                "grit": {
-                  "type": "lcdscreen",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 6,
-                  "rowSpan": 2
-                }
+                "glitter": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Glitter", "bind": "Glitter", "min": 0, "max": 1},
+                "grit": {"type": "lcdscreen", "col": 2, "row": 0, "colSpan": 6, "rowSpan": 2}
               },
               "script": "// bit-glitter — a sine redrawn as the coarse steps Glitter asks for, and the live output over it.\n\nconst CLEAN = \"#6b6b6b\";\nconst GRIT = \"#ff6a1a\";\nconst OUT = \"#ffffff\";\nconst FONT = \"8px ui-monospace, monospace\";\n\nconst clamp01 = (v) => (v < 0 ? 0 : v > 1 ? 1 : v);\n\nexport default {\n  grit(lcd) {\n    const { ctx, width: W, height: H, params, output } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n\n    const pad = 6;\n    const top = 13;\n    const w = Math.max(1, W - pad * 2);\n    const h = Math.max(1, H - top - pad);\n    const mid = top + h / 2;\n    const amp = h / 2 - 1;\n    const glitter = clamp01(params[\"Glitter\"] ?? 0.5);\n\n    // The clean sine, faint, for the steps to be read against.\n    ctx.strokeStyle = CLEAN;\n    ctx.lineWidth = 1;\n    ctx.beginPath();\n    for (let i = 0; i <= w; i++) {\n      const y = mid - Math.sin((i / w) * Math.PI * 4) * amp;\n      if (i === 0) ctx.moveTo(pad + i, y);\n      else ctx.lineTo(pad + i, y);\n    }\n    ctx.stroke();\n\n    // The same sine, held and quantised more coarsely as Glitter rises — its character, not the plugin's exact law.\n    const hold = Math.max(1, Math.round(1 + glitter * 18));\n    const levels = Math.max(2, Math.round(32 - glitter * 28));\n    ctx.strokeStyle = GRIT;\n    ctx.beginPath();\n    for (let i = 0; i <= w; i += hold) {\n      const v = Math.sin((i / w) * Math.PI * 4);\n      const q = Math.round(v * (levels / 2)) / (levels / 2);\n      const y = mid - q * amp;\n      if (i === 0) ctx.moveTo(pad, y);\n      else ctx.lineTo(pad + i, y);\n      ctx.lineTo(pad + Math.min(w, i + hold), y);\n    }\n    ctx.stroke();\n\n    // The live output as a thin bar along the bottom, so a running module reads as one.\n    const out = Array.isArray(output) && output.length ? clamp01(output[output.length - 1] ?? 0) : 0;\n    if (out > 0.01) {\n      ctx.fillStyle = OUT;\n      ctx.fillRect(pad, H - 3, w * out, 2);\n    }\n\n    ctx.fillStyle = GRIT;\n    ctx.textAlign = \"left\";\n    ctx.fillText(`GLITTER ${Math.round(glitter * 100)}`, pad, 9);\n  },\n};\n",
               "vertical": {
                 "cols": 4,
                 "rows": 4,
                 "widgets": {
-                  "glitter": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Glitter",
-                    "bind": "Glitter",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "grit": {
-                    "type": "lcdscreen",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 4,
-                    "rowSpan": 2
-                  }
+                  "glitter": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Glitter", "bind": "Glitter", "min": 0, "max": 1},
+                  "grit": {"type": "lcdscreen", "col": 0, "row": 2, "colSpan": 4, "rowSpan": 2}
                 }
               }
             },
-            "engines": [
-              "bit-glitter",
-              "de-rez",
-              "de-rez-2"
-            ],
+            "engines": ["bit-glitter", "de-rez", "de-rez-2"],
             "engine": "bit-glitter",
             "params": {},
             "pluginId": "drums-bit-glitter:fx-bit-glitter"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-de-rez": {
         "from": "drums-de-rez",
@@ -462,11 +288,7 @@
           {
             "module": "fx-de-rez",
             "uses": "@k7-core/audio/bitcrush",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -475,92 +297,28 @@
               "cols": 10,
               "rows": 2,
               "widgets": {
-                "rez": {
-                  "type": "knob",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Rez",
-                  "bind": "Rez",
-                  "min": 0,
-                  "max": 1
-                },
-                "rate": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Rate",
-                  "bind": "Rate",
-                  "min": 0,
-                  "max": 1
-                },
-                "steps": {
-                  "type": "lcdscreen",
-                  "col": 4,
-                  "row": 0,
-                  "colSpan": 6,
-                  "rowSpan": 2
-                }
+                "rez": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Rez", "bind": "Rez", "min": 0, "max": 1},
+                "rate": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Rate", "bind": "Rate", "min": 0, "max": 1},
+                "steps": {"type": "lcdscreen", "col": 4, "row": 0, "colSpan": 6, "rowSpan": 2}
               },
               "script": "// bitcrush — a sine as De Rez leaves it: fewer levels as Rez drops, each sample held longer as Rate does.\n\nconst CLEAN = \"#6b6b6b\";\nconst REZ = \"#ff6a1a\";\nconst RATE = \"#3d7dff\";\nconst FONT = \"8px ui-monospace, monospace\";\n\nconst clamp01 = (v) => (v < 0 ? 0 : v > 1 ? 1 : v);\n\nexport default {\n  steps(lcd) {\n    const { ctx, width: W, height: H, params, output } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n\n    const pad = 6;\n    const top = 13;\n    const w = Math.max(1, W - pad * 2);\n    const h = Math.max(1, H - top - pad);\n    const mid = top + h / 2;\n    const amp = h / 2 - 1;\n    const rez = clamp01(params[\"Rez\"] ?? 1);\n    const rate = clamp01(params[\"Rate\"] ?? 1);\n\n    // The clean sine, faint, for the steps to be read against.\n    ctx.strokeStyle = CLEAN;\n    ctx.lineWidth = 1;\n    ctx.beginPath();\n    for (let i = 0; i <= w; i++) {\n      const y = mid - Math.sin((i / w) * Math.PI * 4) * amp;\n      if (i === 0) ctx.moveTo(pad + i, y);\n      else ctx.lineTo(pad + i, y);\n    }\n    ctx.stroke();\n\n    // Rez 1 is the file's own resolution, 0 about two levels; Rate 1 a sample per pixel, 0 one every twenty-four.\n    const bits = 1 + rez * 15;\n    const levels = Math.max(2, Math.round(2 ** Math.min(bits, 8)));\n    const hold = Math.max(1, Math.round(1 + (1 - rate) * 23));\n    ctx.strokeStyle = REZ;\n    ctx.beginPath();\n    for (let i = 0; i <= w; i += hold) {\n      const v = Math.sin((i / w) * Math.PI * 4);\n      const q = Math.round(((v + 1) / 2) * (levels - 1)) / (levels - 1) * 2 - 1;\n      const y = mid - q * amp;\n      if (i === 0) ctx.moveTo(pad, y);\n      else ctx.lineTo(pad + i, y);\n      ctx.lineTo(pad + Math.min(w, i + hold), y);\n    }\n    ctx.stroke();\n\n    // The live output as a thin bar along the bottom, so a running module reads as one.\n    const out = Array.isArray(output) && output.length ? clamp01(output[output.length - 1] ?? 0) : 0;\n    if (out > 0.01) {\n      ctx.fillStyle = \"#ffffff\";\n      ctx.fillRect(pad, H - 3, w * out, 2);\n    }\n\n    ctx.textAlign = \"left\";\n    ctx.fillStyle = REZ;\n    ctx.fillText(`${Math.round(bits)} BIT`, pad, 9);\n    ctx.fillStyle = RATE;\n    ctx.textAlign = \"right\";\n    ctx.fillText(hold > 1 ? `RATE /${hold}` : \"RATE FULL\", W - pad, 9);\n  },\n};\n",
               "vertical": {
                 "cols": 4,
                 "rows": 4,
                 "widgets": {
-                  "rez": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Rez",
-                    "bind": "Rez",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "rate": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 0,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Rate",
-                    "bind": "Rate",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "steps": {
-                    "type": "lcdscreen",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 4,
-                    "rowSpan": 2
-                  }
+                  "rez": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Rez", "bind": "Rez", "min": 0, "max": 1},
+                  "rate": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Rate", "bind": "Rate", "min": 0, "max": 1},
+                  "steps": {"type": "lcdscreen", "col": 0, "row": 2, "colSpan": 4, "rowSpan": 2}
                 }
               }
             },
-            "engines": [
-              "bit-glitter",
-              "de-rez",
-              "de-rez-2"
-            ],
+            "engines": ["bit-glitter", "de-rez", "de-rez-2"],
             "engine": "de-rez",
-            "params": {
-              "Rez": 1,
-              "Rate": 1
-            },
+            "params": {"Rez": 1, "Rate": 1},
             "pluginId": "drums-de-rez:fx-de-rez"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "drums-de-rez-2": {
         "from": "drums-de-rez-2",
@@ -568,11 +326,7 @@
           {
             "module": "fx-de-rez-2",
             "uses": "@k7-core/audio/bitcrush",
-            "stage": [
-              "@input-volume",
-              "@mix",
-              "@output-volume"
-            ],
+            "stage": ["@input-volume", "@mix", "@output-volume"],
             "category": "audio",
             "emits": "audio",
             "stub": false,
@@ -581,197 +335,44 @@
               "cols": 9,
               "rows": 2,
               "widgets": {
-                "rez_screen": {
-                  "type": "lcdscreen",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 3,
-                  "rowSpan": 2
-                },
-                "crush": {
-                  "type": "group",
-                  "col": 3,
-                  "row": 0,
-                  "colSpan": 6,
-                  "rowSpan": 2,
-                  "label": "CRUSH",
-                  "color": "#ff6a1a22"
-                },
-                "rate": {
-                  "type": "knob",
-                  "col": 3,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Rate",
-                  "bind": "Rate",
-                  "min": 0,
-                  "max": 1
-                },
-                "rez": {
-                  "type": "knob",
-                  "col": 5,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Rez",
-                  "bind": "Rez",
-                  "min": 0,
-                  "max": 1
-                },
-                "hard": {
-                  "type": "knob",
-                  "col": 7,
-                  "row": 0,
-                  "colSpan": 2,
-                  "rowSpan": 2,
-                  "label": "Hard",
-                  "bind": "Hard",
-                  "min": 0,
-                  "max": 1
-                }
+                "rez_screen": {"type": "lcdscreen", "col": 0, "row": 0, "colSpan": 3, "rowSpan": 2},
+                "crush": {"type": "group", "col": 3, "row": 0, "colSpan": 6, "rowSpan": 2, "label": "CRUSH", "color": "#ff6a1a22"},
+                "rate": {"type": "knob", "col": 3, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Rate", "bind": "Rate", "min": 0, "max": 1},
+                "rez": {"type": "knob", "col": 5, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Rez", "bind": "Rez", "min": 0, "max": 1},
+                "hard": {"type": "knob", "col": 7, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Hard", "bind": "Hard", "min": 0, "max": 1}
               },
               "script": "// de-rez-2 screens — a sine through the crusher: Rate thins the samples held, Rez coarsens the steps.\nconst FONT = \"8px ui-monospace, monospace\";\n\nexport default {\n  rez_screen(lcd) {\n    const { ctx, width: W, height: H, params } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    const rate = Math.min(1, Math.max(0, params[\"Rate\"] ?? 1));\n    const rez = Math.min(1, Math.max(0, params[\"Rez\"] ?? 1));\n    // DeRez2 keeps rate^3 of the samples and quantizes to steps of (1 - rez)^3 / 3.\n    const keep = Math.max(0.0005, Math.pow(rate, 3));\n    const step = Math.pow(1 - rez, 3) / 3;\n    const mid = H / 2;\n    const amp = Math.max(1, H / 2 - 10);\n    const cycles = 2;\n    const n = Math.max(2, Math.round(W));\n    ctx.strokeStyle = \"#6b6b6b\";\n    ctx.lineWidth = 1;\n    ctx.beginPath();\n    for (let i = 0; i <= n; i++) {\n      const x = (i / n) * W;\n      const y = mid - Math.sin((i / n) * cycles * 2 * Math.PI) * amp;\n      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);\n    }\n    ctx.stroke();\n    const period = Math.max(1, 1 / keep);\n    const samples = 64;\n    ctx.strokeStyle = \"#ff6a1a\";\n    ctx.beginPath();\n    let held = 0;\n    let acc = period;\n    for (let i = 0; i <= n; i++) {\n      if (acc >= period) {\n        acc -= period;\n        const v = Math.sin((i / n) * cycles * 2 * Math.PI);\n        held = step > 0.0001 ? Math.round(v / step) * step : v;\n      }\n      acc += samples / n;\n      const x = (i / n) * W;\n      const y = mid - Math.max(-1, Math.min(1, held)) * amp;\n      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);\n    }\n    ctx.stroke();\n    ctx.fillStyle = \"#ffffff\";\n    ctx.font = FONT;\n    ctx.fillText(\"RATE \" + Math.round(rate * 100) + \"  REZ \" + Math.round(rez * 100), 3, 9);\n  },\n};\n",
               "vertical": {
                 "cols": 4,
                 "rows": 6,
                 "widgets": {
-                  "rez_screen": {
-                    "type": "lcdscreen",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 4,
-                    "rowSpan": 2
-                  },
-                  "crush": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 4,
-                    "rowSpan": 4,
-                    "label": "CRUSH",
-                    "color": "#ff6a1a22"
-                  },
-                  "rate": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 2,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Rate",
-                    "bind": "Rate",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "rez": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 2,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Rez",
-                    "bind": "Rez",
-                    "min": 0,
-                    "max": 1
-                  },
-                  "hard": {
-                    "type": "knob",
-                    "col": 0,
-                    "row": 4,
-                    "colSpan": 2,
-                    "rowSpan": 2,
-                    "label": "Hard",
-                    "bind": "Hard",
-                    "min": 0,
-                    "max": 1
-                  }
+                  "rez_screen": {"type": "lcdscreen", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 2},
+                  "crush": {"type": "group", "col": 0, "row": 2, "colSpan": 4, "rowSpan": 4, "label": "CRUSH", "color": "#ff6a1a22"},
+                  "rate": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Rate", "bind": "Rate", "min": 0, "max": 1},
+                  "rez": {"type": "knob", "col": 2, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Rez", "bind": "Rez", "min": 0, "max": 1},
+                  "hard": {"type": "knob", "col": 0, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "Hard", "bind": "Hard", "min": 0, "max": 1}
                 }
               }
             },
-            "engines": [
-              "bit-glitter",
-              "de-rez",
-              "de-rez-2"
-            ],
+            "engines": ["bit-glitter", "de-rez", "de-rez-2"],
             "engine": "de-rez-2",
             "params": {},
             "pluginId": "drums-de-rez-2:fx-de-rez-2"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
-      }
+      "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}]}
     },
-    "tracks": [
-      "drums",
-      "drums-bit-glitter",
-      "drums-de-rez",
-      "drums-de-rez-2"
-    ],
+    "tracks": ["drums", "drums-bit-glitter", "drums-de-rez", "drums-de-rez-2"],
     "videoTracks": [],
-    "trackColors": {
-      "drums": "#af1d26",
-      "drums-bit-glitter": "#d32222",
-      "drums-de-rez": "#e0493e",
-      "drums-de-rez-2": "#e57361"
-    },
-    "trackSignals": {
-      "drums": "audio",
-      "drums-bit-glitter": "audio",
-      "drums-de-rez": "audio",
-      "drums-de-rez-2": "audio"
-    },
+    "trackColors": {"drums": "#af1d26", "drums-bit-glitter": "#d32222", "drums-de-rez": "#e0493e", "drums-de-rez-2": "#e57361"},
+    "trackSignals": {"drums": "audio", "drums-bit-glitter": "audio", "drums-de-rez": "audio", "drums-de-rez-2": "audio"},
     "trackClips": {
-      "drums": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-bit-glitter": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-de-rez": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ],
-      "drums-de-rez-2": [
-        {
-          "ref": "kick",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "audio"
-        }
-      ]
+      "drums": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-bit-glitter": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-de-rez": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}],
+      "drums-de-rez-2": [{"ref": "kick", "start": 0, "tc": "1:1", "len": 4, "kind": "audio"}]
     },
     "modules": {},
     "warnings": []

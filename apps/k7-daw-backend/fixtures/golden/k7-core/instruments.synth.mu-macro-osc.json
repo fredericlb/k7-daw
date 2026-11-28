@@ -1,9 +1,6 @@
 {
   "project": "k7-core/instruments.synth.mu-macro-osc.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "instruments.synth.mu-macro-osc",
     "tempo": 120,
@@ -43,30 +40,9 @@
             "loopStart": 0,
             "loopEnd": 0,
             "notes": [
-              {
-                "time": 0,
-                "duration": 1,
-                "key": 60,
-                "vel": 0.8,
-                "channel": 0,
-                "rel": 1
-              },
-              {
-                "time": 1,
-                "duration": 1,
-                "key": 64,
-                "vel": 1,
-                "channel": 0,
-                "rel": 1
-              },
-              {
-                "time": 2,
-                "duration": 2,
-                "key": 67,
-                "vel": 1,
-                "channel": 0,
-                "rel": 1
-              }
+              {"time": 0, "duration": 1, "key": 60, "vel": 0.8, "channel": 0, "rel": 1},
+              {"time": 1, "duration": 1, "key": 64, "vel": 1, "channel": 0, "rel": 1},
+              {"time": 2, "duration": 2, "key": 67, "vel": 1, "channel": 0, "rel": 1}
             ]
           }
         ],
@@ -79,9 +55,7 @@
             "presetSave": "<ws>/k7-core/instruments.synth.mu-macro-osc.k7/nodes/fx-braids.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@output-volume": 0
-            }
+            "params": {"@output-volume": 0}
           }
         ],
         "sends": [],
@@ -116,30 +90,9 @@
             "loopStart": 0,
             "loopEnd": 0,
             "notes": [
-              {
-                "time": 0,
-                "duration": 1,
-                "key": 60,
-                "vel": 0.8,
-                "channel": 0,
-                "rel": 1
-              },
-              {
-                "time": 1,
-                "duration": 1,
-                "key": 64,
-                "vel": 1,
-                "channel": 0,
-                "rel": 1
-              },
-              {
-                "time": 2,
-                "duration": 2,
-                "key": 67,
-                "vel": 1,
-                "channel": 0,
-                "rel": 1
-              }
+              {"time": 0, "duration": 1, "key": 60, "vel": 0.8, "channel": 0, "rel": 1},
+              {"time": 1, "duration": 1, "key": 64, "vel": 1, "channel": 0, "rel": 1},
+              {"time": 2, "duration": 2, "key": 67, "vel": 1, "channel": 0, "rel": 1}
             ]
           }
         ],
@@ -152,9 +105,7 @@
             "presetSave": "<ws>/k7-core/instruments.synth.mu-macro-osc.k7/nodes/fx-plaits.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@output-volume": 0
-            }
+            "params": {"@output-volume": 0}
           }
         ],
         "sends": [],
@@ -189,30 +140,9 @@
             "loopStart": 0,
             "loopEnd": 0,
             "notes": [
-              {
-                "time": 0,
-                "duration": 1,
-                "key": 60,
-                "vel": 0.8,
-                "channel": 0,
-                "rel": 1
-              },
-              {
-                "time": 1,
-                "duration": 1,
-                "key": 64,
-                "vel": 1,
-                "channel": 0,
-                "rel": 1
-              },
-              {
-                "time": 2,
-                "duration": 2,
-                "key": 67,
-                "vel": 1,
-                "channel": 0,
-                "rel": 1
-              }
+              {"time": 0, "duration": 1, "key": 60, "vel": 0.8, "channel": 0, "rel": 1},
+              {"time": 1, "duration": 1, "key": 64, "vel": 1, "channel": 0, "rel": 1},
+              {"time": 2, "duration": 2, "key": 67, "vel": 1, "channel": 0, "rel": 1}
             ]
           }
         ],
@@ -225,9 +155,7 @@
             "presetSave": "<ws>/k7-core/instruments.synth.mu-macro-osc.k7/nodes/fx.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@output-volume": 0
-            }
+            "params": {"@output-volume": 0}
           }
         ],
         "sends": [],
@@ -236,16 +164,9 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
@@ -255,12 +176,8 @@
           {
             "module": "fx",
             "uses": "@k7-core/instruments/synth/mu-macro-osc",
-            "stage": [
-              "@output-volume"
-            ],
-            "events": [
-              "note-on"
-            ],
+            "stage": ["@output-volume"],
+            "events": ["note-on"],
             "category": "instruments",
             "emits": "audio",
             "stub": false,
@@ -281,238 +198,50 @@
                       "label": "Model",
                       "bind": "Model",
                       "options": [
-                        {
-                          "label": "VA + filter",
-                          "value": 0
-                        },
-                        {
-                          "label": "Phase distortion",
-                          "value": 1
-                        },
-                        {
-                          "label": "6-op FM 1",
-                          "value": 2
-                        },
-                        {
-                          "label": "6-op FM 2",
-                          "value": 3
-                        },
-                        {
-                          "label": "6-op FM 3",
-                          "value": 4
-                        },
-                        {
-                          "label": "Wave terrain",
-                          "value": 5
-                        },
-                        {
-                          "label": "String machine",
-                          "value": 6
-                        },
-                        {
-                          "label": "Chiptune",
-                          "value": 7
-                        },
-                        {
-                          "label": "Virtual analog",
-                          "value": 8
-                        },
-                        {
-                          "label": "Waveshaping",
-                          "value": 9
-                        },
-                        {
-                          "label": "2-op FM",
-                          "value": 10
-                        },
-                        {
-                          "label": "Granular formant",
-                          "value": 11
-                        },
-                        {
-                          "label": "Harmonic",
-                          "value": 12
-                        },
-                        {
-                          "label": "Wavetable",
-                          "value": 13
-                        },
-                        {
-                          "label": "Chords",
-                          "value": 14
-                        },
-                        {
-                          "label": "Speech",
-                          "value": 15
-                        },
-                        {
-                          "label": "Swarm",
-                          "value": 16
-                        },
-                        {
-                          "label": "Filtered noise",
-                          "value": 17
-                        },
-                        {
-                          "label": "Particle noise",
-                          "value": 18
-                        },
-                        {
-                          "label": "Inharmonic string",
-                          "value": 19
-                        },
-                        {
-                          "label": "Modal resonator",
-                          "value": 20
-                        },
-                        {
-                          "label": "Bass drum",
-                          "value": 21
-                        },
-                        {
-                          "label": "Snare drum",
-                          "value": 22
-                        },
-                        {
-                          "label": "Hi-hat",
-                          "value": 23
-                        }
+                        {"label": "VA + filter", "value": 0},
+                        {"label": "Phase distortion", "value": 1},
+                        {"label": "6-op FM 1", "value": 2},
+                        {"label": "6-op FM 2", "value": 3},
+                        {"label": "6-op FM 3", "value": 4},
+                        {"label": "Wave terrain", "value": 5},
+                        {"label": "String machine", "value": 6},
+                        {"label": "Chiptune", "value": 7},
+                        {"label": "Virtual analog", "value": 8},
+                        {"label": "Waveshaping", "value": 9},
+                        {"label": "2-op FM", "value": 10},
+                        {"label": "Granular formant", "value": 11},
+                        {"label": "Harmonic", "value": 12},
+                        {"label": "Wavetable", "value": 13},
+                        {"label": "Chords", "value": 14},
+                        {"label": "Speech", "value": 15},
+                        {"label": "Swarm", "value": 16},
+                        {"label": "Filtered noise", "value": 17},
+                        {"label": "Particle noise", "value": 18},
+                        {"label": "Inharmonic string", "value": 19},
+                        {"label": "Modal resonator", "value": 20},
+                        {"label": "Bass drum", "value": 21},
+                        {"label": "Snare drum", "value": 22},
+                        {"label": "Hi-hat", "value": 23}
                       ]
                     },
-                    "osc": {
-                      "type": "lcdscreen",
-                      "col": 0,
-                      "row": 1,
-                      "colSpan": 6,
-                      "rowSpan": 3
-                    },
-                    "osc_group": {
-                      "type": "group",
-                      "col": 6,
-                      "row": 0,
-                      "colSpan": 4,
-                      "rowSpan": 4,
-                      "label": "OSC",
-                      "color": "#3d7dff26"
-                    },
-                    "harmonics": {
-                      "type": "knob",
-                      "col": 6,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Harm",
-                      "bind": "Harmonics",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "timbre": {
-                      "type": "knob",
-                      "col": 8,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Timbre",
-                      "bind": "Timbre",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "morph": {
-                      "type": "knob",
-                      "col": 6,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Morph",
-                      "bind": "Morph",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "mod_group": {
-                      "type": "group",
-                      "col": 10,
-                      "row": 0,
-                      "colSpan": 4,
-                      "rowSpan": 4,
-                      "label": "MOD",
-                      "color": "#ff3b3026"
-                    },
-                    "timbre_env": {
-                      "type": "knob",
-                      "col": 10,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "T.Env",
-                      "bind": "Timbre env",
-                      "min": -1,
-                      "max": 1
-                    },
-                    "morph_env": {
-                      "type": "knob",
-                      "col": 12,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "M.Env",
-                      "bind": "Morph env",
-                      "min": -1,
-                      "max": 1
-                    },
-                    "pitch_env": {
-                      "type": "knob",
-                      "col": 10,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "P.Env",
-                      "bind": "Pitch env",
-                      "min": -1,
-                      "max": 1
-                    }
+                    "osc": {"type": "lcdscreen", "col": 0, "row": 1, "colSpan": 6, "rowSpan": 3},
+                    "osc_group": {"type": "group", "col": 6, "row": 0, "colSpan": 4, "rowSpan": 4, "label": "OSC", "color": "#3d7dff26"},
+                    "harmonics": {"type": "knob", "col": 6, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Harm", "bind": "Harmonics", "min": 0, "max": 1},
+                    "timbre": {"type": "knob", "col": 8, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Timbre", "bind": "Timbre", "min": 0, "max": 1},
+                    "morph": {"type": "knob", "col": 6, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Morph", "bind": "Morph", "min": 0, "max": 1},
+                    "mod_group": {"type": "group", "col": 10, "row": 0, "colSpan": 4, "rowSpan": 4, "label": "MOD", "color": "#ff3b3026"},
+                    "timbre_env": {"type": "knob", "col": 10, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "T.Env", "bind": "Timbre env", "min": -1, "max": 1},
+                    "morph_env": {"type": "knob", "col": 12, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "M.Env", "bind": "Morph env", "min": -1, "max": 1},
+                    "pitch_env": {"type": "knob", "col": 10, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "P.Env", "bind": "Pitch env", "min": -1, "max": 1}
                   }
                 },
                 {
                   "name": "LPG",
                   "widgets": {
-                    "lpg": {
-                      "type": "lcdscreen",
-                      "col": 0,
-                      "row": 0,
-                      "colSpan": 4,
-                      "rowSpan": 4
-                    },
-                    "lpg_group": {
-                      "type": "group",
-                      "col": 4,
-                      "row": 0,
-                      "colSpan": 4,
-                      "rowSpan": 3,
-                      "label": "LPG",
-                      "color": "#ff6a1a26"
-                    },
-                    "decay": {
-                      "type": "knob",
-                      "col": 4,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Decay",
-                      "bind": "Decay",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "colour": {
-                      "type": "knob",
-                      "col": 6,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Colour",
-                      "bind": "LPG colour",
-                      "min": 0,
-                      "max": 1
-                    },
+                    "lpg": {"type": "lcdscreen", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 4},
+                    "lpg_group": {"type": "group", "col": 4, "row": 0, "colSpan": 4, "rowSpan": 3, "label": "LPG", "color": "#ff6a1a26"},
+                    "decay": {"type": "knob", "col": 4, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Decay", "bind": "Decay", "min": 0, "max": 1},
+                    "colour": {"type": "knob", "col": 6, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Colour", "bind": "LPG colour", "min": 0, "max": 1},
                     "envelope": {
                       "type": "dropdown",
                       "col": 4,
@@ -520,50 +249,11 @@
                       "colSpan": 4,
                       "label": "Env",
                       "bind": "Envelope",
-                      "options": [
-                        {
-                          "label": "gate",
-                          "value": 0
-                        },
-                        {
-                          "label": "ping",
-                          "value": 1
-                        }
-                      ]
+                      "options": [{"label": "gate", "value": 0}, {"label": "ping", "value": 1}]
                     },
-                    "voice_group": {
-                      "type": "group",
-                      "col": 8,
-                      "row": 0,
-                      "colSpan": 4,
-                      "rowSpan": 2,
-                      "label": "VOICE",
-                      "color": "#6b6b6b33"
-                    },
-                    "transpose": {
-                      "type": "knob",
-                      "col": 8,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Transp",
-                      "bind": "Transpose",
-                      "min": -24,
-                      "max": 24,
-                      "step": 1
-                    },
-                    "voices": {
-                      "type": "knob",
-                      "col": 10,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Voices",
-                      "bind": "Voices",
-                      "min": 1,
-                      "max": 8,
-                      "step": 1
-                    }
+                    "voice_group": {"type": "group", "col": 8, "row": 0, "colSpan": 4, "rowSpan": 2, "label": "VOICE", "color": "#6b6b6b33"},
+                    "transpose": {"type": "knob", "col": 8, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Transp", "bind": "Transpose", "min": -24, "max": 24, "step": 1},
+                    "voices": {"type": "knob", "col": 10, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Voices", "bind": "Voices", "min": 1, "max": 8, "step": 1}
                   }
                 }
               ],
@@ -584,238 +274,50 @@
                         "label": "Model",
                         "bind": "Model",
                         "options": [
-                          {
-                            "label": "VA + filter",
-                            "value": 0
-                          },
-                          {
-                            "label": "Phase distortion",
-                            "value": 1
-                          },
-                          {
-                            "label": "6-op FM 1",
-                            "value": 2
-                          },
-                          {
-                            "label": "6-op FM 2",
-                            "value": 3
-                          },
-                          {
-                            "label": "6-op FM 3",
-                            "value": 4
-                          },
-                          {
-                            "label": "Wave terrain",
-                            "value": 5
-                          },
-                          {
-                            "label": "String machine",
-                            "value": 6
-                          },
-                          {
-                            "label": "Chiptune",
-                            "value": 7
-                          },
-                          {
-                            "label": "Virtual analog",
-                            "value": 8
-                          },
-                          {
-                            "label": "Waveshaping",
-                            "value": 9
-                          },
-                          {
-                            "label": "2-op FM",
-                            "value": 10
-                          },
-                          {
-                            "label": "Granular formant",
-                            "value": 11
-                          },
-                          {
-                            "label": "Harmonic",
-                            "value": 12
-                          },
-                          {
-                            "label": "Wavetable",
-                            "value": 13
-                          },
-                          {
-                            "label": "Chords",
-                            "value": 14
-                          },
-                          {
-                            "label": "Speech",
-                            "value": 15
-                          },
-                          {
-                            "label": "Swarm",
-                            "value": 16
-                          },
-                          {
-                            "label": "Filtered noise",
-                            "value": 17
-                          },
-                          {
-                            "label": "Particle noise",
-                            "value": 18
-                          },
-                          {
-                            "label": "Inharmonic string",
-                            "value": 19
-                          },
-                          {
-                            "label": "Modal resonator",
-                            "value": 20
-                          },
-                          {
-                            "label": "Bass drum",
-                            "value": 21
-                          },
-                          {
-                            "label": "Snare drum",
-                            "value": 22
-                          },
-                          {
-                            "label": "Hi-hat",
-                            "value": 23
-                          }
+                          {"label": "VA + filter", "value": 0},
+                          {"label": "Phase distortion", "value": 1},
+                          {"label": "6-op FM 1", "value": 2},
+                          {"label": "6-op FM 2", "value": 3},
+                          {"label": "6-op FM 3", "value": 4},
+                          {"label": "Wave terrain", "value": 5},
+                          {"label": "String machine", "value": 6},
+                          {"label": "Chiptune", "value": 7},
+                          {"label": "Virtual analog", "value": 8},
+                          {"label": "Waveshaping", "value": 9},
+                          {"label": "2-op FM", "value": 10},
+                          {"label": "Granular formant", "value": 11},
+                          {"label": "Harmonic", "value": 12},
+                          {"label": "Wavetable", "value": 13},
+                          {"label": "Chords", "value": 14},
+                          {"label": "Speech", "value": 15},
+                          {"label": "Swarm", "value": 16},
+                          {"label": "Filtered noise", "value": 17},
+                          {"label": "Particle noise", "value": 18},
+                          {"label": "Inharmonic string", "value": 19},
+                          {"label": "Modal resonator", "value": 20},
+                          {"label": "Bass drum", "value": 21},
+                          {"label": "Snare drum", "value": 22},
+                          {"label": "Hi-hat", "value": 23}
                         ]
                       },
-                      "osc": {
-                        "type": "lcdscreen",
-                        "col": 0,
-                        "row": 1,
-                        "colSpan": 4,
-                        "rowSpan": 3
-                      },
-                      "osc_group": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 4,
-                        "colSpan": 4,
-                        "rowSpan": 4,
-                        "label": "OSC",
-                        "color": "#3d7dff26"
-                      },
-                      "harmonics": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 4,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Harm",
-                        "bind": "Harmonics",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "timbre": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 4,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Timbre",
-                        "bind": "Timbre",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "morph": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 6,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Morph",
-                        "bind": "Morph",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "mod_group": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 8,
-                        "colSpan": 4,
-                        "rowSpan": 4,
-                        "label": "MOD",
-                        "color": "#ff3b3026"
-                      },
-                      "timbre_env": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 8,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "T.Env",
-                        "bind": "Timbre env",
-                        "min": -1,
-                        "max": 1
-                      },
-                      "morph_env": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 8,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "M.Env",
-                        "bind": "Morph env",
-                        "min": -1,
-                        "max": 1
-                      },
-                      "pitch_env": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 10,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "P.Env",
-                        "bind": "Pitch env",
-                        "min": -1,
-                        "max": 1
-                      }
+                      "osc": {"type": "lcdscreen", "col": 0, "row": 1, "colSpan": 4, "rowSpan": 3},
+                      "osc_group": {"type": "group", "col": 0, "row": 4, "colSpan": 4, "rowSpan": 4, "label": "OSC", "color": "#3d7dff26"},
+                      "harmonics": {"type": "knob", "col": 0, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "Harm", "bind": "Harmonics", "min": 0, "max": 1},
+                      "timbre": {"type": "knob", "col": 2, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "Timbre", "bind": "Timbre", "min": 0, "max": 1},
+                      "morph": {"type": "knob", "col": 0, "row": 6, "colSpan": 2, "rowSpan": 2, "label": "Morph", "bind": "Morph", "min": 0, "max": 1},
+                      "mod_group": {"type": "group", "col": 0, "row": 8, "colSpan": 4, "rowSpan": 4, "label": "MOD", "color": "#ff3b3026"},
+                      "timbre_env": {"type": "knob", "col": 0, "row": 8, "colSpan": 2, "rowSpan": 2, "label": "T.Env", "bind": "Timbre env", "min": -1, "max": 1},
+                      "morph_env": {"type": "knob", "col": 2, "row": 8, "colSpan": 2, "rowSpan": 2, "label": "M.Env", "bind": "Morph env", "min": -1, "max": 1},
+                      "pitch_env": {"type": "knob", "col": 0, "row": 10, "colSpan": 2, "rowSpan": 2, "label": "P.Env", "bind": "Pitch env", "min": -1, "max": 1}
                     }
                   },
                   {
                     "name": "LPG",
                     "widgets": {
-                      "lpg": {
-                        "type": "lcdscreen",
-                        "col": 0,
-                        "row": 0,
-                        "colSpan": 4,
-                        "rowSpan": 3
-                      },
-                      "lpg_group": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 3,
-                        "colSpan": 4,
-                        "rowSpan": 3,
-                        "label": "LPG",
-                        "color": "#ff6a1a26"
-                      },
-                      "decay": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 3,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Decay",
-                        "bind": "Decay",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "colour": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 3,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Colour",
-                        "bind": "LPG colour",
-                        "min": 0,
-                        "max": 1
-                      },
+                      "lpg": {"type": "lcdscreen", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 3},
+                      "lpg_group": {"type": "group", "col": 0, "row": 3, "colSpan": 4, "rowSpan": 3, "label": "LPG", "color": "#ff6a1a26"},
+                      "decay": {"type": "knob", "col": 0, "row": 3, "colSpan": 2, "rowSpan": 2, "label": "Decay", "bind": "Decay", "min": 0, "max": 1},
+                      "colour": {"type": "knob", "col": 2, "row": 3, "colSpan": 2, "rowSpan": 2, "label": "Colour", "bind": "LPG colour", "min": 0, "max": 1},
                       "envelope": {
                         "type": "dropdown",
                         "col": 0,
@@ -823,84 +325,24 @@
                         "colSpan": 4,
                         "label": "Env",
                         "bind": "Envelope",
-                        "options": [
-                          {
-                            "label": "gate",
-                            "value": 0
-                          },
-                          {
-                            "label": "ping",
-                            "value": 1
-                          }
-                        ]
+                        "options": [{"label": "gate", "value": 0}, {"label": "ping", "value": 1}]
                       },
-                      "voice_group": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 6,
-                        "colSpan": 4,
-                        "rowSpan": 2,
-                        "label": "VOICE",
-                        "color": "#6b6b6b33"
-                      },
-                      "transpose": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 6,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Transp",
-                        "bind": "Transpose",
-                        "min": -24,
-                        "max": 24,
-                        "step": 1
-                      },
-                      "voices": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 6,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Voices",
-                        "bind": "Voices",
-                        "min": 1,
-                        "max": 8,
-                        "step": 1
-                      }
+                      "voice_group": {"type": "group", "col": 0, "row": 6, "colSpan": 4, "rowSpan": 2, "label": "VOICE", "color": "#6b6b6b33"},
+                      "transpose": {"type": "knob", "col": 0, "row": 6, "colSpan": 2, "rowSpan": 2, "label": "Transp", "bind": "Transpose", "min": -24, "max": 24, "step": 1},
+                      "voices": {"type": "knob", "col": 2, "row": 6, "colSpan": 2, "rowSpan": 2, "label": "Voices", "bind": "Voices", "min": 1, "max": 8, "step": 1}
                     }
                   }
                 ]
               }
             },
-            "engines": [
-              "braids",
-              "plaits"
-            ],
+            "engines": ["braids", "plaits"],
             "engine": "plaits",
             "params": {},
-            "defaults": {
-              "Model": 8,
-              "Harmonics": 0.5,
-              "Timbre": 0.5,
-              "Morph": 0.5,
-              "Pitch env": 0,
-              "Timbre env": 0,
-              "Morph env": 0,
-              "Decay": 0.5,
-              "LPG colour": 0.5,
-              "Envelope": 0,
-              "Voices": 8,
-              "Transpose": 0
-            },
+            "defaults": {"Model": 8, "Harmonics": 0.5, "Timbre": 0.5, "Morph": 0.5, "Pitch env": 0, "Timbre env": 0, "Morph env": 0, "Decay": 0.5, "LPG colour": 0.5, "Envelope": 0, "Voices": 8, "Transpose": 0},
             "pluginId": "melody:fx"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "melody-braids": {
         "from": "melody-braids",
@@ -908,12 +350,8 @@
           {
             "module": "fx-braids",
             "uses": "@k7-core/instruments/synth/mu-macro-osc",
-            "stage": [
-              "@output-volume"
-            ],
-            "events": [
-              "note-on"
-            ],
+            "stage": ["@output-volume"],
+            "events": ["note-on"],
             "category": "instruments",
             "emits": "audio",
             "stub": false,
@@ -926,15 +364,7 @@
                 {
                   "name": "OSC",
                   "widgets": {
-                    "osc_group": {
-                      "type": "group",
-                      "col": 0,
-                      "row": 0,
-                      "colSpan": 10,
-                      "rowSpan": 4,
-                      "label": "OSC",
-                      "color": "#3d7dff26"
-                    },
+                    "osc_group": {"type": "group", "col": 0, "row": 0, "colSpan": 10, "rowSpan": 4, "label": "OSC", "color": "#3d7dff26"},
                     "shape": {
                       "type": "dropdown",
                       "col": 0,
@@ -943,357 +373,75 @@
                       "label": "Shape",
                       "bind": "Shape",
                       "options": [
-                        {
-                          "label": "CSaw",
-                          "value": 0
-                        },
-                        {
-                          "label": "Morph",
-                          "value": 1
-                        },
-                        {
-                          "label": "Saw/square",
-                          "value": 2
-                        },
-                        {
-                          "label": "Fold",
-                          "value": 3
-                        },
-                        {
-                          "label": "Buzz",
-                          "value": 4
-                        },
-                        {
-                          "label": "Square sub",
-                          "value": 5
-                        },
-                        {
-                          "label": "Saw sub",
-                          "value": 6
-                        },
-                        {
-                          "label": "Square sync",
-                          "value": 7
-                        },
-                        {
-                          "label": "Saw sync",
-                          "value": 8
-                        },
-                        {
-                          "label": "Triple saw",
-                          "value": 9
-                        },
-                        {
-                          "label": "Triple square",
-                          "value": 10
-                        },
-                        {
-                          "label": "Triple triangle",
-                          "value": 11
-                        },
-                        {
-                          "label": "Triple sine",
-                          "value": 12
-                        },
-                        {
-                          "label": "Ring mod",
-                          "value": 13
-                        },
-                        {
-                          "label": "Saw swarm",
-                          "value": 14
-                        },
-                        {
-                          "label": "Saw comb",
-                          "value": 15
-                        },
-                        {
-                          "label": "Toy",
-                          "value": 16
-                        },
-                        {
-                          "label": "Digital LPF",
-                          "value": 17
-                        },
-                        {
-                          "label": "Digital peak",
-                          "value": 18
-                        },
-                        {
-                          "label": "Digital BPF",
-                          "value": 19
-                        },
-                        {
-                          "label": "Digital HPF",
-                          "value": 20
-                        },
-                        {
-                          "label": "Vosim",
-                          "value": 21
-                        },
-                        {
-                          "label": "Vowel",
-                          "value": 22
-                        },
-                        {
-                          "label": "Vowel FOF",
-                          "value": 23
-                        },
-                        {
-                          "label": "Harmonics",
-                          "value": 24
-                        },
-                        {
-                          "label": "FM",
-                          "value": 25
-                        },
-                        {
-                          "label": "Feedback FM",
-                          "value": 26
-                        },
-                        {
-                          "label": "Chaotic FM",
-                          "value": 27
-                        },
-                        {
-                          "label": "Plucked",
-                          "value": 28
-                        },
-                        {
-                          "label": "Bowed",
-                          "value": 29
-                        },
-                        {
-                          "label": "Blown",
-                          "value": 30
-                        },
-                        {
-                          "label": "Fluted",
-                          "value": 31
-                        },
-                        {
-                          "label": "Struck bell",
-                          "value": 32
-                        },
-                        {
-                          "label": "Struck drum",
-                          "value": 33
-                        },
-                        {
-                          "label": "Kick",
-                          "value": 34
-                        },
-                        {
-                          "label": "Cymbal",
-                          "value": 35
-                        },
-                        {
-                          "label": "Snare",
-                          "value": 36
-                        },
-                        {
-                          "label": "Wavetables",
-                          "value": 37
-                        },
-                        {
-                          "label": "Wave map",
-                          "value": 38
-                        },
-                        {
-                          "label": "Wave line",
-                          "value": 39
-                        },
-                        {
-                          "label": "Paraphonic",
-                          "value": 40
-                        },
-                        {
-                          "label": "Filtered noise",
-                          "value": 41
-                        },
-                        {
-                          "label": "Twin peaks noise",
-                          "value": 42
-                        },
-                        {
-                          "label": "Clocked noise",
-                          "value": 43
-                        },
-                        {
-                          "label": "Granular cloud",
-                          "value": 44
-                        },
-                        {
-                          "label": "Particle noise",
-                          "value": 45
-                        },
-                        {
-                          "label": "Digital modulation",
-                          "value": 46
-                        }
+                        {"label": "CSaw", "value": 0},
+                        {"label": "Morph", "value": 1},
+                        {"label": "Saw/square", "value": 2},
+                        {"label": "Fold", "value": 3},
+                        {"label": "Buzz", "value": 4},
+                        {"label": "Square sub", "value": 5},
+                        {"label": "Saw sub", "value": 6},
+                        {"label": "Square sync", "value": 7},
+                        {"label": "Saw sync", "value": 8},
+                        {"label": "Triple saw", "value": 9},
+                        {"label": "Triple square", "value": 10},
+                        {"label": "Triple triangle", "value": 11},
+                        {"label": "Triple sine", "value": 12},
+                        {"label": "Ring mod", "value": 13},
+                        {"label": "Saw swarm", "value": 14},
+                        {"label": "Saw comb", "value": 15},
+                        {"label": "Toy", "value": 16},
+                        {"label": "Digital LPF", "value": 17},
+                        {"label": "Digital peak", "value": 18},
+                        {"label": "Digital BPF", "value": 19},
+                        {"label": "Digital HPF", "value": 20},
+                        {"label": "Vosim", "value": 21},
+                        {"label": "Vowel", "value": 22},
+                        {"label": "Vowel FOF", "value": 23},
+                        {"label": "Harmonics", "value": 24},
+                        {"label": "FM", "value": 25},
+                        {"label": "Feedback FM", "value": 26},
+                        {"label": "Chaotic FM", "value": 27},
+                        {"label": "Plucked", "value": 28},
+                        {"label": "Bowed", "value": 29},
+                        {"label": "Blown", "value": 30},
+                        {"label": "Fluted", "value": 31},
+                        {"label": "Struck bell", "value": 32},
+                        {"label": "Struck drum", "value": 33},
+                        {"label": "Kick", "value": 34},
+                        {"label": "Cymbal", "value": 35},
+                        {"label": "Snare", "value": 36},
+                        {"label": "Wavetables", "value": 37},
+                        {"label": "Wave map", "value": 38},
+                        {"label": "Wave line", "value": 39},
+                        {"label": "Paraphonic", "value": 40},
+                        {"label": "Filtered noise", "value": 41},
+                        {"label": "Twin peaks noise", "value": 42},
+                        {"label": "Clocked noise", "value": 43},
+                        {"label": "Granular cloud", "value": 44},
+                        {"label": "Particle noise", "value": 45},
+                        {"label": "Digital modulation", "value": 46}
                       ]
                     },
-                    "wave": {
-                      "type": "lcdscreen",
-                      "col": 0,
-                      "row": 1,
-                      "colSpan": 6,
-                      "rowSpan": 3
-                    },
-                    "timbre": {
-                      "type": "knob",
-                      "col": 6,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Timbre",
-                      "bind": "Timbre",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "color": {
-                      "type": "knob",
-                      "col": 8,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Color",
-                      "bind": "Color",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "timbre_env": {
-                      "type": "knob",
-                      "col": 6,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "T.Env",
-                      "bind": "Timbre env",
-                      "min": -1,
-                      "max": 1
-                    },
-                    "color_env": {
-                      "type": "knob",
-                      "col": 8,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "C.Env",
-                      "bind": "Color env",
-                      "min": -1,
-                      "max": 1
-                    },
-                    "voice_group": {
-                      "type": "group",
-                      "col": 10,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 4,
-                      "label": "VOICE",
-                      "color": "#6b6b6b33"
-                    },
-                    "transpose": {
-                      "type": "knob",
-                      "col": 10,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Transp",
-                      "bind": "Transpose",
-                      "min": -24,
-                      "max": 24,
-                      "step": 1
-                    },
-                    "voices": {
-                      "type": "knob",
-                      "col": 10,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Voices",
-                      "bind": "Voices",
-                      "min": 1,
-                      "max": 8,
-                      "step": 1
-                    }
+                    "wave": {"type": "lcdscreen", "col": 0, "row": 1, "colSpan": 6, "rowSpan": 3},
+                    "timbre": {"type": "knob", "col": 6, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Timbre", "bind": "Timbre", "min": 0, "max": 1},
+                    "color": {"type": "knob", "col": 8, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Color", "bind": "Color", "min": 0, "max": 1},
+                    "timbre_env": {"type": "knob", "col": 6, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "T.Env", "bind": "Timbre env", "min": -1, "max": 1},
+                    "color_env": {"type": "knob", "col": 8, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "C.Env", "bind": "Color env", "min": -1, "max": 1},
+                    "voice_group": {"type": "group", "col": 10, "row": 0, "colSpan": 2, "rowSpan": 4, "label": "VOICE", "color": "#6b6b6b33"},
+                    "transpose": {"type": "knob", "col": 10, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Transp", "bind": "Transpose", "min": -24, "max": 24, "step": 1},
+                    "voices": {"type": "knob", "col": 10, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Voices", "bind": "Voices", "min": 1, "max": 8, "step": 1}
                   }
                 },
                 {
                   "name": "ENV",
                   "widgets": {
-                    "env_group": {
-                      "type": "group",
-                      "col": 0,
-                      "row": 0,
-                      "colSpan": 8,
-                      "rowSpan": 4,
-                      "label": "ENV",
-                      "color": "#ff6a1a26"
-                    },
-                    "env": {
-                      "type": "lcdscreen",
-                      "col": 0,
-                      "row": 0,
-                      "colSpan": 4,
-                      "rowSpan": 4
-                    },
-                    "attack": {
-                      "type": "knob",
-                      "col": 4,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Attack",
-                      "bind": "Attack",
-                      "min": 0.001000000047,
-                      "max": 2,
-                      "curve": "log"
-                    },
-                    "decay": {
-                      "type": "knob",
-                      "col": 6,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Decay",
-                      "bind": "Decay",
-                      "min": 0.004999999888,
-                      "max": 4,
-                      "curve": "log"
-                    },
-                    "sustain": {
-                      "type": "knob",
-                      "col": 4,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Sustain",
-                      "bind": "Sustain",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "release": {
-                      "type": "knob",
-                      "col": 6,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Release",
-                      "bind": "Release",
-                      "min": 0.004999999888,
-                      "max": 8,
-                      "curve": "log"
-                    },
-                    "lofi_group": {
-                      "type": "group",
-                      "col": 8,
-                      "row": 0,
-                      "colSpan": 4,
-                      "rowSpan": 2,
-                      "label": "LOFI",
-                      "color": "#ff3b3026"
-                    },
+                    "env_group": {"type": "group", "col": 0, "row": 0, "colSpan": 8, "rowSpan": 4, "label": "ENV", "color": "#ff6a1a26"},
+                    "env": {"type": "lcdscreen", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 4},
+                    "attack": {"type": "knob", "col": 4, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Attack", "bind": "Attack", "min": 0.001000000047, "max": 2, "curve": "log"},
+                    "decay": {"type": "knob", "col": 6, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Decay", "bind": "Decay", "min": 0.004999999888, "max": 4, "curve": "log"},
+                    "sustain": {"type": "knob", "col": 4, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Sustain", "bind": "Sustain", "min": 0, "max": 1},
+                    "release": {"type": "knob", "col": 6, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Release", "bind": "Release", "min": 0.004999999888, "max": 8, "curve": "log"},
+                    "lofi_group": {"type": "group", "col": 8, "row": 0, "colSpan": 4, "rowSpan": 2, "label": "LOFI", "color": "#ff3b3026"},
                     "bits": {
                       "type": "dropdown",
                       "col": 8,
@@ -1302,34 +450,13 @@
                       "label": "Bits",
                       "bind": "Bits",
                       "options": [
-                        {
-                          "label": "2 bits",
-                          "value": 0
-                        },
-                        {
-                          "label": "3 bits",
-                          "value": 1
-                        },
-                        {
-                          "label": "4 bits",
-                          "value": 2
-                        },
-                        {
-                          "label": "6 bits",
-                          "value": 3
-                        },
-                        {
-                          "label": "8 bits",
-                          "value": 4
-                        },
-                        {
-                          "label": "12 bits",
-                          "value": 5
-                        },
-                        {
-                          "label": "16 bits",
-                          "value": 6
-                        }
+                        {"label": "2 bits", "value": 0},
+                        {"label": "3 bits", "value": 1},
+                        {"label": "4 bits", "value": 2},
+                        {"label": "6 bits", "value": 3},
+                        {"label": "8 bits", "value": 4},
+                        {"label": "12 bits", "value": 5},
+                        {"label": "16 bits", "value": 6}
                       ]
                     },
                     "rate": {
@@ -1340,34 +467,13 @@
                       "label": "Rate",
                       "bind": "Sample rate",
                       "options": [
-                        {
-                          "label": "4 kHz",
-                          "value": 0
-                        },
-                        {
-                          "label": "8 kHz",
-                          "value": 1
-                        },
-                        {
-                          "label": "16 kHz",
-                          "value": 2
-                        },
-                        {
-                          "label": "24 kHz",
-                          "value": 3
-                        },
-                        {
-                          "label": "32 kHz",
-                          "value": 4
-                        },
-                        {
-                          "label": "48 kHz",
-                          "value": 5
-                        },
-                        {
-                          "label": "96 kHz",
-                          "value": 6
-                        }
+                        {"label": "4 kHz", "value": 0},
+                        {"label": "8 kHz", "value": 1},
+                        {"label": "16 kHz", "value": 2},
+                        {"label": "24 kHz", "value": 3},
+                        {"label": "32 kHz", "value": 4},
+                        {"label": "48 kHz", "value": 5},
+                        {"label": "96 kHz", "value": 6}
                       ]
                     }
                   }
@@ -1382,15 +488,7 @@
                   {
                     "name": "OSC",
                     "widgets": {
-                      "osc_group": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 0,
-                        "colSpan": 4,
-                        "rowSpan": 7,
-                        "label": "OSC",
-                        "color": "#3d7dff26"
-                      },
+                      "osc_group": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 7, "label": "OSC", "color": "#3d7dff26"},
                       "shape": {
                         "type": "dropdown",
                         "col": 0,
@@ -1399,357 +497,75 @@
                         "label": "Shape",
                         "bind": "Shape",
                         "options": [
-                          {
-                            "label": "CSaw",
-                            "value": 0
-                          },
-                          {
-                            "label": "Morph",
-                            "value": 1
-                          },
-                          {
-                            "label": "Saw/square",
-                            "value": 2
-                          },
-                          {
-                            "label": "Fold",
-                            "value": 3
-                          },
-                          {
-                            "label": "Buzz",
-                            "value": 4
-                          },
-                          {
-                            "label": "Square sub",
-                            "value": 5
-                          },
-                          {
-                            "label": "Saw sub",
-                            "value": 6
-                          },
-                          {
-                            "label": "Square sync",
-                            "value": 7
-                          },
-                          {
-                            "label": "Saw sync",
-                            "value": 8
-                          },
-                          {
-                            "label": "Triple saw",
-                            "value": 9
-                          },
-                          {
-                            "label": "Triple square",
-                            "value": 10
-                          },
-                          {
-                            "label": "Triple triangle",
-                            "value": 11
-                          },
-                          {
-                            "label": "Triple sine",
-                            "value": 12
-                          },
-                          {
-                            "label": "Ring mod",
-                            "value": 13
-                          },
-                          {
-                            "label": "Saw swarm",
-                            "value": 14
-                          },
-                          {
-                            "label": "Saw comb",
-                            "value": 15
-                          },
-                          {
-                            "label": "Toy",
-                            "value": 16
-                          },
-                          {
-                            "label": "Digital LPF",
-                            "value": 17
-                          },
-                          {
-                            "label": "Digital peak",
-                            "value": 18
-                          },
-                          {
-                            "label": "Digital BPF",
-                            "value": 19
-                          },
-                          {
-                            "label": "Digital HPF",
-                            "value": 20
-                          },
-                          {
-                            "label": "Vosim",
-                            "value": 21
-                          },
-                          {
-                            "label": "Vowel",
-                            "value": 22
-                          },
-                          {
-                            "label": "Vowel FOF",
-                            "value": 23
-                          },
-                          {
-                            "label": "Harmonics",
-                            "value": 24
-                          },
-                          {
-                            "label": "FM",
-                            "value": 25
-                          },
-                          {
-                            "label": "Feedback FM",
-                            "value": 26
-                          },
-                          {
-                            "label": "Chaotic FM",
-                            "value": 27
-                          },
-                          {
-                            "label": "Plucked",
-                            "value": 28
-                          },
-                          {
-                            "label": "Bowed",
-                            "value": 29
-                          },
-                          {
-                            "label": "Blown",
-                            "value": 30
-                          },
-                          {
-                            "label": "Fluted",
-                            "value": 31
-                          },
-                          {
-                            "label": "Struck bell",
-                            "value": 32
-                          },
-                          {
-                            "label": "Struck drum",
-                            "value": 33
-                          },
-                          {
-                            "label": "Kick",
-                            "value": 34
-                          },
-                          {
-                            "label": "Cymbal",
-                            "value": 35
-                          },
-                          {
-                            "label": "Snare",
-                            "value": 36
-                          },
-                          {
-                            "label": "Wavetables",
-                            "value": 37
-                          },
-                          {
-                            "label": "Wave map",
-                            "value": 38
-                          },
-                          {
-                            "label": "Wave line",
-                            "value": 39
-                          },
-                          {
-                            "label": "Paraphonic",
-                            "value": 40
-                          },
-                          {
-                            "label": "Filtered noise",
-                            "value": 41
-                          },
-                          {
-                            "label": "Twin peaks noise",
-                            "value": 42
-                          },
-                          {
-                            "label": "Clocked noise",
-                            "value": 43
-                          },
-                          {
-                            "label": "Granular cloud",
-                            "value": 44
-                          },
-                          {
-                            "label": "Particle noise",
-                            "value": 45
-                          },
-                          {
-                            "label": "Digital modulation",
-                            "value": 46
-                          }
+                          {"label": "CSaw", "value": 0},
+                          {"label": "Morph", "value": 1},
+                          {"label": "Saw/square", "value": 2},
+                          {"label": "Fold", "value": 3},
+                          {"label": "Buzz", "value": 4},
+                          {"label": "Square sub", "value": 5},
+                          {"label": "Saw sub", "value": 6},
+                          {"label": "Square sync", "value": 7},
+                          {"label": "Saw sync", "value": 8},
+                          {"label": "Triple saw", "value": 9},
+                          {"label": "Triple square", "value": 10},
+                          {"label": "Triple triangle", "value": 11},
+                          {"label": "Triple sine", "value": 12},
+                          {"label": "Ring mod", "value": 13},
+                          {"label": "Saw swarm", "value": 14},
+                          {"label": "Saw comb", "value": 15},
+                          {"label": "Toy", "value": 16},
+                          {"label": "Digital LPF", "value": 17},
+                          {"label": "Digital peak", "value": 18},
+                          {"label": "Digital BPF", "value": 19},
+                          {"label": "Digital HPF", "value": 20},
+                          {"label": "Vosim", "value": 21},
+                          {"label": "Vowel", "value": 22},
+                          {"label": "Vowel FOF", "value": 23},
+                          {"label": "Harmonics", "value": 24},
+                          {"label": "FM", "value": 25},
+                          {"label": "Feedback FM", "value": 26},
+                          {"label": "Chaotic FM", "value": 27},
+                          {"label": "Plucked", "value": 28},
+                          {"label": "Bowed", "value": 29},
+                          {"label": "Blown", "value": 30},
+                          {"label": "Fluted", "value": 31},
+                          {"label": "Struck bell", "value": 32},
+                          {"label": "Struck drum", "value": 33},
+                          {"label": "Kick", "value": 34},
+                          {"label": "Cymbal", "value": 35},
+                          {"label": "Snare", "value": 36},
+                          {"label": "Wavetables", "value": 37},
+                          {"label": "Wave map", "value": 38},
+                          {"label": "Wave line", "value": 39},
+                          {"label": "Paraphonic", "value": 40},
+                          {"label": "Filtered noise", "value": 41},
+                          {"label": "Twin peaks noise", "value": 42},
+                          {"label": "Clocked noise", "value": 43},
+                          {"label": "Granular cloud", "value": 44},
+                          {"label": "Particle noise", "value": 45},
+                          {"label": "Digital modulation", "value": 46}
                         ]
                       },
-                      "wave": {
-                        "type": "lcdscreen",
-                        "col": 0,
-                        "row": 1,
-                        "colSpan": 4,
-                        "rowSpan": 2
-                      },
-                      "timbre": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 3,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Timbre",
-                        "bind": "Timbre",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "color": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 3,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Color",
-                        "bind": "Color",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "timbre_env": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 5,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "T.Env",
-                        "bind": "Timbre env",
-                        "min": -1,
-                        "max": 1
-                      },
-                      "color_env": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 5,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "C.Env",
-                        "bind": "Color env",
-                        "min": -1,
-                        "max": 1
-                      },
-                      "voice_group": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 7,
-                        "colSpan": 4,
-                        "rowSpan": 2,
-                        "label": "VOICE",
-                        "color": "#6b6b6b33"
-                      },
-                      "transpose": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 7,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Transp",
-                        "bind": "Transpose",
-                        "min": -24,
-                        "max": 24,
-                        "step": 1
-                      },
-                      "voices": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 7,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Voices",
-                        "bind": "Voices",
-                        "min": 1,
-                        "max": 8,
-                        "step": 1
-                      }
+                      "wave": {"type": "lcdscreen", "col": 0, "row": 1, "colSpan": 4, "rowSpan": 2},
+                      "timbre": {"type": "knob", "col": 0, "row": 3, "colSpan": 2, "rowSpan": 2, "label": "Timbre", "bind": "Timbre", "min": 0, "max": 1},
+                      "color": {"type": "knob", "col": 2, "row": 3, "colSpan": 2, "rowSpan": 2, "label": "Color", "bind": "Color", "min": 0, "max": 1},
+                      "timbre_env": {"type": "knob", "col": 0, "row": 5, "colSpan": 2, "rowSpan": 2, "label": "T.Env", "bind": "Timbre env", "min": -1, "max": 1},
+                      "color_env": {"type": "knob", "col": 2, "row": 5, "colSpan": 2, "rowSpan": 2, "label": "C.Env", "bind": "Color env", "min": -1, "max": 1},
+                      "voice_group": {"type": "group", "col": 0, "row": 7, "colSpan": 4, "rowSpan": 2, "label": "VOICE", "color": "#6b6b6b33"},
+                      "transpose": {"type": "knob", "col": 0, "row": 7, "colSpan": 2, "rowSpan": 2, "label": "Transp", "bind": "Transpose", "min": -24, "max": 24, "step": 1},
+                      "voices": {"type": "knob", "col": 2, "row": 7, "colSpan": 2, "rowSpan": 2, "label": "Voices", "bind": "Voices", "min": 1, "max": 8, "step": 1}
                     }
                   },
                   {
                     "name": "ENV",
                     "widgets": {
-                      "env_group": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 0,
-                        "colSpan": 4,
-                        "rowSpan": 7,
-                        "label": "ENV",
-                        "color": "#ff6a1a26"
-                      },
-                      "env": {
-                        "type": "lcdscreen",
-                        "col": 0,
-                        "row": 0,
-                        "colSpan": 4,
-                        "rowSpan": 3
-                      },
-                      "attack": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 3,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Attack",
-                        "bind": "Attack",
-                        "min": 0.001000000047,
-                        "max": 2,
-                        "curve": "log"
-                      },
-                      "decay": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 3,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Decay",
-                        "bind": "Decay",
-                        "min": 0.004999999888,
-                        "max": 4,
-                        "curve": "log"
-                      },
-                      "sustain": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 5,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Sustain",
-                        "bind": "Sustain",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "release": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 5,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Release",
-                        "bind": "Release",
-                        "min": 0.004999999888,
-                        "max": 8,
-                        "curve": "log"
-                      },
-                      "lofi_group": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 7,
-                        "colSpan": 4,
-                        "rowSpan": 2,
-                        "label": "LOFI",
-                        "color": "#ff3b3026"
-                      },
+                      "env_group": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 7, "label": "ENV", "color": "#ff6a1a26"},
+                      "env": {"type": "lcdscreen", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 3},
+                      "attack": {"type": "knob", "col": 0, "row": 3, "colSpan": 2, "rowSpan": 2, "label": "Attack", "bind": "Attack", "min": 0.001000000047, "max": 2, "curve": "log"},
+                      "decay": {"type": "knob", "col": 2, "row": 3, "colSpan": 2, "rowSpan": 2, "label": "Decay", "bind": "Decay", "min": 0.004999999888, "max": 4, "curve": "log"},
+                      "sustain": {"type": "knob", "col": 0, "row": 5, "colSpan": 2, "rowSpan": 2, "label": "Sustain", "bind": "Sustain", "min": 0, "max": 1},
+                      "release": {"type": "knob", "col": 2, "row": 5, "colSpan": 2, "rowSpan": 2, "label": "Release", "bind": "Release", "min": 0.004999999888, "max": 8, "curve": "log"},
+                      "lofi_group": {"type": "group", "col": 0, "row": 7, "colSpan": 4, "rowSpan": 2, "label": "LOFI", "color": "#ff3b3026"},
                       "bits": {
                         "type": "dropdown",
                         "col": 0,
@@ -1758,34 +574,13 @@
                         "label": "Bits",
                         "bind": "Bits",
                         "options": [
-                          {
-                            "label": "2 bits",
-                            "value": 0
-                          },
-                          {
-                            "label": "3 bits",
-                            "value": 1
-                          },
-                          {
-                            "label": "4 bits",
-                            "value": 2
-                          },
-                          {
-                            "label": "6 bits",
-                            "value": 3
-                          },
-                          {
-                            "label": "8 bits",
-                            "value": 4
-                          },
-                          {
-                            "label": "12 bits",
-                            "value": 5
-                          },
-                          {
-                            "label": "16 bits",
-                            "value": 6
-                          }
+                          {"label": "2 bits", "value": 0},
+                          {"label": "3 bits", "value": 1},
+                          {"label": "4 bits", "value": 2},
+                          {"label": "6 bits", "value": 3},
+                          {"label": "8 bits", "value": 4},
+                          {"label": "12 bits", "value": 5},
+                          {"label": "16 bits", "value": 6}
                         ]
                       },
                       "rate": {
@@ -1796,34 +591,13 @@
                         "label": "Rate",
                         "bind": "Sample rate",
                         "options": [
-                          {
-                            "label": "4 kHz",
-                            "value": 0
-                          },
-                          {
-                            "label": "8 kHz",
-                            "value": 1
-                          },
-                          {
-                            "label": "16 kHz",
-                            "value": 2
-                          },
-                          {
-                            "label": "24 kHz",
-                            "value": 3
-                          },
-                          {
-                            "label": "32 kHz",
-                            "value": 4
-                          },
-                          {
-                            "label": "48 kHz",
-                            "value": 5
-                          },
-                          {
-                            "label": "96 kHz",
-                            "value": 6
-                          }
+                          {"label": "4 kHz", "value": 0},
+                          {"label": "8 kHz", "value": 1},
+                          {"label": "16 kHz", "value": 2},
+                          {"label": "24 kHz", "value": 3},
+                          {"label": "32 kHz", "value": 4},
+                          {"label": "48 kHz", "value": 5},
+                          {"label": "96 kHz", "value": 6}
                         ]
                       }
                     }
@@ -1831,36 +605,14 @@
                 ]
               }
             },
-            "engines": [
-              "braids",
-              "plaits"
-            ],
+            "engines": ["braids", "plaits"],
             "engine": "braids",
             "params": {},
-            "defaults": {
-              "Shape": 0,
-              "Timbre": 0.5,
-              "Color": 0.5,
-              "Attack": 0.002000000095,
-              "Decay": 0.3000000119,
-              "Sustain": 0.8000000119,
-              "Release": 0.3000000119,
-              "Timbre env": 0,
-              "Color env": 0,
-              "Bits": 6,
-              "Sample rate": 6,
-              "Voices": 8,
-              "Transpose": 0
-            },
+            "defaults": {"Shape": 0, "Timbre": 0.5, "Color": 0.5, "Attack": 0.002000000095, "Decay": 0.3000000119, "Sustain": 0.8000000119, "Release": 0.3000000119, "Timbre env": 0, "Color env": 0, "Bits": 6, "Sample rate": 6, "Voices": 8, "Transpose": 0},
             "pluginId": "melody-braids:fx-braids"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
       "melody-plaits": {
         "from": "melody-plaits",
@@ -1868,12 +620,8 @@
           {
             "module": "fx-plaits",
             "uses": "@k7-core/instruments/synth/mu-macro-osc",
-            "stage": [
-              "@output-volume"
-            ],
-            "events": [
-              "note-on"
-            ],
+            "stage": ["@output-volume"],
+            "events": ["note-on"],
             "category": "instruments",
             "emits": "audio",
             "stub": false,
@@ -1894,238 +642,50 @@
                       "label": "Model",
                       "bind": "Model",
                       "options": [
-                        {
-                          "label": "VA + filter",
-                          "value": 0
-                        },
-                        {
-                          "label": "Phase distortion",
-                          "value": 1
-                        },
-                        {
-                          "label": "6-op FM 1",
-                          "value": 2
-                        },
-                        {
-                          "label": "6-op FM 2",
-                          "value": 3
-                        },
-                        {
-                          "label": "6-op FM 3",
-                          "value": 4
-                        },
-                        {
-                          "label": "Wave terrain",
-                          "value": 5
-                        },
-                        {
-                          "label": "String machine",
-                          "value": 6
-                        },
-                        {
-                          "label": "Chiptune",
-                          "value": 7
-                        },
-                        {
-                          "label": "Virtual analog",
-                          "value": 8
-                        },
-                        {
-                          "label": "Waveshaping",
-                          "value": 9
-                        },
-                        {
-                          "label": "2-op FM",
-                          "value": 10
-                        },
-                        {
-                          "label": "Granular formant",
-                          "value": 11
-                        },
-                        {
-                          "label": "Harmonic",
-                          "value": 12
-                        },
-                        {
-                          "label": "Wavetable",
-                          "value": 13
-                        },
-                        {
-                          "label": "Chords",
-                          "value": 14
-                        },
-                        {
-                          "label": "Speech",
-                          "value": 15
-                        },
-                        {
-                          "label": "Swarm",
-                          "value": 16
-                        },
-                        {
-                          "label": "Filtered noise",
-                          "value": 17
-                        },
-                        {
-                          "label": "Particle noise",
-                          "value": 18
-                        },
-                        {
-                          "label": "Inharmonic string",
-                          "value": 19
-                        },
-                        {
-                          "label": "Modal resonator",
-                          "value": 20
-                        },
-                        {
-                          "label": "Bass drum",
-                          "value": 21
-                        },
-                        {
-                          "label": "Snare drum",
-                          "value": 22
-                        },
-                        {
-                          "label": "Hi-hat",
-                          "value": 23
-                        }
+                        {"label": "VA + filter", "value": 0},
+                        {"label": "Phase distortion", "value": 1},
+                        {"label": "6-op FM 1", "value": 2},
+                        {"label": "6-op FM 2", "value": 3},
+                        {"label": "6-op FM 3", "value": 4},
+                        {"label": "Wave terrain", "value": 5},
+                        {"label": "String machine", "value": 6},
+                        {"label": "Chiptune", "value": 7},
+                        {"label": "Virtual analog", "value": 8},
+                        {"label": "Waveshaping", "value": 9},
+                        {"label": "2-op FM", "value": 10},
+                        {"label": "Granular formant", "value": 11},
+                        {"label": "Harmonic", "value": 12},
+                        {"label": "Wavetable", "value": 13},
+                        {"label": "Chords", "value": 14},
+                        {"label": "Speech", "value": 15},
+                        {"label": "Swarm", "value": 16},
+                        {"label": "Filtered noise", "value": 17},
+                        {"label": "Particle noise", "value": 18},
+                        {"label": "Inharmonic string", "value": 19},
+                        {"label": "Modal resonator", "value": 20},
+                        {"label": "Bass drum", "value": 21},
+                        {"label": "Snare drum", "value": 22},
+                        {"label": "Hi-hat", "value": 23}
                       ]
                     },
-                    "osc": {
-                      "type": "lcdscreen",
-                      "col": 0,
-                      "row": 1,
-                      "colSpan": 6,
-                      "rowSpan": 3
-                    },
-                    "osc_group": {
-                      "type": "group",
-                      "col": 6,
-                      "row": 0,
-                      "colSpan": 4,
-                      "rowSpan": 4,
-                      "label": "OSC",
-                      "color": "#3d7dff26"
-                    },
-                    "harmonics": {
-                      "type": "knob",
-                      "col": 6,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Harm",
-                      "bind": "Harmonics",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "timbre": {
-                      "type": "knob",
-                      "col": 8,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Timbre",
-                      "bind": "Timbre",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "morph": {
-                      "type": "knob",
-                      "col": 6,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Morph",
-                      "bind": "Morph",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "mod_group": {
-                      "type": "group",
-                      "col": 10,
-                      "row": 0,
-                      "colSpan": 4,
-                      "rowSpan": 4,
-                      "label": "MOD",
-                      "color": "#ff3b3026"
-                    },
-                    "timbre_env": {
-                      "type": "knob",
-                      "col": 10,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "T.Env",
-                      "bind": "Timbre env",
-                      "min": -1,
-                      "max": 1
-                    },
-                    "morph_env": {
-                      "type": "knob",
-                      "col": 12,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "M.Env",
-                      "bind": "Morph env",
-                      "min": -1,
-                      "max": 1
-                    },
-                    "pitch_env": {
-                      "type": "knob",
-                      "col": 10,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "P.Env",
-                      "bind": "Pitch env",
-                      "min": -1,
-                      "max": 1
-                    }
+                    "osc": {"type": "lcdscreen", "col": 0, "row": 1, "colSpan": 6, "rowSpan": 3},
+                    "osc_group": {"type": "group", "col": 6, "row": 0, "colSpan": 4, "rowSpan": 4, "label": "OSC", "color": "#3d7dff26"},
+                    "harmonics": {"type": "knob", "col": 6, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Harm", "bind": "Harmonics", "min": 0, "max": 1},
+                    "timbre": {"type": "knob", "col": 8, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Timbre", "bind": "Timbre", "min": 0, "max": 1},
+                    "morph": {"type": "knob", "col": 6, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Morph", "bind": "Morph", "min": 0, "max": 1},
+                    "mod_group": {"type": "group", "col": 10, "row": 0, "colSpan": 4, "rowSpan": 4, "label": "MOD", "color": "#ff3b3026"},
+                    "timbre_env": {"type": "knob", "col": 10, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "T.Env", "bind": "Timbre env", "min": -1, "max": 1},
+                    "morph_env": {"type": "knob", "col": 12, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "M.Env", "bind": "Morph env", "min": -1, "max": 1},
+                    "pitch_env": {"type": "knob", "col": 10, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "P.Env", "bind": "Pitch env", "min": -1, "max": 1}
                   }
                 },
                 {
                   "name": "LPG",
                   "widgets": {
-                    "lpg": {
-                      "type": "lcdscreen",
-                      "col": 0,
-                      "row": 0,
-                      "colSpan": 4,
-                      "rowSpan": 4
-                    },
-                    "lpg_group": {
-                      "type": "group",
-                      "col": 4,
-                      "row": 0,
-                      "colSpan": 4,
-                      "rowSpan": 3,
-                      "label": "LPG",
-                      "color": "#ff6a1a26"
-                    },
-                    "decay": {
-                      "type": "knob",
-                      "col": 4,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Decay",
-                      "bind": "Decay",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "colour": {
-                      "type": "knob",
-                      "col": 6,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Colour",
-                      "bind": "LPG colour",
-                      "min": 0,
-                      "max": 1
-                    },
+                    "lpg": {"type": "lcdscreen", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 4},
+                    "lpg_group": {"type": "group", "col": 4, "row": 0, "colSpan": 4, "rowSpan": 3, "label": "LPG", "color": "#ff6a1a26"},
+                    "decay": {"type": "knob", "col": 4, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Decay", "bind": "Decay", "min": 0, "max": 1},
+                    "colour": {"type": "knob", "col": 6, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Colour", "bind": "LPG colour", "min": 0, "max": 1},
                     "envelope": {
                       "type": "dropdown",
                       "col": 4,
@@ -2133,50 +693,11 @@
                       "colSpan": 4,
                       "label": "Env",
                       "bind": "Envelope",
-                      "options": [
-                        {
-                          "label": "gate",
-                          "value": 0
-                        },
-                        {
-                          "label": "ping",
-                          "value": 1
-                        }
-                      ]
+                      "options": [{"label": "gate", "value": 0}, {"label": "ping", "value": 1}]
                     },
-                    "voice_group": {
-                      "type": "group",
-                      "col": 8,
-                      "row": 0,
-                      "colSpan": 4,
-                      "rowSpan": 2,
-                      "label": "VOICE",
-                      "color": "#6b6b6b33"
-                    },
-                    "transpose": {
-                      "type": "knob",
-                      "col": 8,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Transp",
-                      "bind": "Transpose",
-                      "min": -24,
-                      "max": 24,
-                      "step": 1
-                    },
-                    "voices": {
-                      "type": "knob",
-                      "col": 10,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Voices",
-                      "bind": "Voices",
-                      "min": 1,
-                      "max": 8,
-                      "step": 1
-                    }
+                    "voice_group": {"type": "group", "col": 8, "row": 0, "colSpan": 4, "rowSpan": 2, "label": "VOICE", "color": "#6b6b6b33"},
+                    "transpose": {"type": "knob", "col": 8, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Transp", "bind": "Transpose", "min": -24, "max": 24, "step": 1},
+                    "voices": {"type": "knob", "col": 10, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Voices", "bind": "Voices", "min": 1, "max": 8, "step": 1}
                   }
                 }
               ],
@@ -2197,238 +718,50 @@
                         "label": "Model",
                         "bind": "Model",
                         "options": [
-                          {
-                            "label": "VA + filter",
-                            "value": 0
-                          },
-                          {
-                            "label": "Phase distortion",
-                            "value": 1
-                          },
-                          {
-                            "label": "6-op FM 1",
-                            "value": 2
-                          },
-                          {
-                            "label": "6-op FM 2",
-                            "value": 3
-                          },
-                          {
-                            "label": "6-op FM 3",
-                            "value": 4
-                          },
-                          {
-                            "label": "Wave terrain",
-                            "value": 5
-                          },
-                          {
-                            "label": "String machine",
-                            "value": 6
-                          },
-                          {
-                            "label": "Chiptune",
-                            "value": 7
-                          },
-                          {
-                            "label": "Virtual analog",
-                            "value": 8
-                          },
-                          {
-                            "label": "Waveshaping",
-                            "value": 9
-                          },
-                          {
-                            "label": "2-op FM",
-                            "value": 10
-                          },
-                          {
-                            "label": "Granular formant",
-                            "value": 11
-                          },
-                          {
-                            "label": "Harmonic",
-                            "value": 12
-                          },
-                          {
-                            "label": "Wavetable",
-                            "value": 13
-                          },
-                          {
-                            "label": "Chords",
-                            "value": 14
-                          },
-                          {
-                            "label": "Speech",
-                            "value": 15
-                          },
-                          {
-                            "label": "Swarm",
-                            "value": 16
-                          },
-                          {
-                            "label": "Filtered noise",
-                            "value": 17
-                          },
-                          {
-                            "label": "Particle noise",
-                            "value": 18
-                          },
-                          {
-                            "label": "Inharmonic string",
-                            "value": 19
-                          },
-                          {
-                            "label": "Modal resonator",
-                            "value": 20
-                          },
-                          {
-                            "label": "Bass drum",
-                            "value": 21
-                          },
-                          {
-                            "label": "Snare drum",
-                            "value": 22
-                          },
-                          {
-                            "label": "Hi-hat",
-                            "value": 23
-                          }
+                          {"label": "VA + filter", "value": 0},
+                          {"label": "Phase distortion", "value": 1},
+                          {"label": "6-op FM 1", "value": 2},
+                          {"label": "6-op FM 2", "value": 3},
+                          {"label": "6-op FM 3", "value": 4},
+                          {"label": "Wave terrain", "value": 5},
+                          {"label": "String machine", "value": 6},
+                          {"label": "Chiptune", "value": 7},
+                          {"label": "Virtual analog", "value": 8},
+                          {"label": "Waveshaping", "value": 9},
+                          {"label": "2-op FM", "value": 10},
+                          {"label": "Granular formant", "value": 11},
+                          {"label": "Harmonic", "value": 12},
+                          {"label": "Wavetable", "value": 13},
+                          {"label": "Chords", "value": 14},
+                          {"label": "Speech", "value": 15},
+                          {"label": "Swarm", "value": 16},
+                          {"label": "Filtered noise", "value": 17},
+                          {"label": "Particle noise", "value": 18},
+                          {"label": "Inharmonic string", "value": 19},
+                          {"label": "Modal resonator", "value": 20},
+                          {"label": "Bass drum", "value": 21},
+                          {"label": "Snare drum", "value": 22},
+                          {"label": "Hi-hat", "value": 23}
                         ]
                       },
-                      "osc": {
-                        "type": "lcdscreen",
-                        "col": 0,
-                        "row": 1,
-                        "colSpan": 4,
-                        "rowSpan": 3
-                      },
-                      "osc_group": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 4,
-                        "colSpan": 4,
-                        "rowSpan": 4,
-                        "label": "OSC",
-                        "color": "#3d7dff26"
-                      },
-                      "harmonics": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 4,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Harm",
-                        "bind": "Harmonics",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "timbre": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 4,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Timbre",
-                        "bind": "Timbre",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "morph": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 6,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Morph",
-                        "bind": "Morph",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "mod_group": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 8,
-                        "colSpan": 4,
-                        "rowSpan": 4,
-                        "label": "MOD",
-                        "color": "#ff3b3026"
-                      },
-                      "timbre_env": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 8,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "T.Env",
-                        "bind": "Timbre env",
-                        "min": -1,
-                        "max": 1
-                      },
-                      "morph_env": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 8,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "M.Env",
-                        "bind": "Morph env",
-                        "min": -1,
-                        "max": 1
-                      },
-                      "pitch_env": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 10,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "P.Env",
-                        "bind": "Pitch env",
-                        "min": -1,
-                        "max": 1
-                      }
+                      "osc": {"type": "lcdscreen", "col": 0, "row": 1, "colSpan": 4, "rowSpan": 3},
+                      "osc_group": {"type": "group", "col": 0, "row": 4, "colSpan": 4, "rowSpan": 4, "label": "OSC", "color": "#3d7dff26"},
+                      "harmonics": {"type": "knob", "col": 0, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "Harm", "bind": "Harmonics", "min": 0, "max": 1},
+                      "timbre": {"type": "knob", "col": 2, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "Timbre", "bind": "Timbre", "min": 0, "max": 1},
+                      "morph": {"type": "knob", "col": 0, "row": 6, "colSpan": 2, "rowSpan": 2, "label": "Morph", "bind": "Morph", "min": 0, "max": 1},
+                      "mod_group": {"type": "group", "col": 0, "row": 8, "colSpan": 4, "rowSpan": 4, "label": "MOD", "color": "#ff3b3026"},
+                      "timbre_env": {"type": "knob", "col": 0, "row": 8, "colSpan": 2, "rowSpan": 2, "label": "T.Env", "bind": "Timbre env", "min": -1, "max": 1},
+                      "morph_env": {"type": "knob", "col": 2, "row": 8, "colSpan": 2, "rowSpan": 2, "label": "M.Env", "bind": "Morph env", "min": -1, "max": 1},
+                      "pitch_env": {"type": "knob", "col": 0, "row": 10, "colSpan": 2, "rowSpan": 2, "label": "P.Env", "bind": "Pitch env", "min": -1, "max": 1}
                     }
                   },
                   {
                     "name": "LPG",
                     "widgets": {
-                      "lpg": {
-                        "type": "lcdscreen",
-                        "col": 0,
-                        "row": 0,
-                        "colSpan": 4,
-                        "rowSpan": 3
-                      },
-                      "lpg_group": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 3,
-                        "colSpan": 4,
-                        "rowSpan": 3,
-                        "label": "LPG",
-                        "color": "#ff6a1a26"
-                      },
-                      "decay": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 3,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Decay",
-                        "bind": "Decay",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "colour": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 3,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Colour",
-                        "bind": "LPG colour",
-                        "min": 0,
-                        "max": 1
-                      },
+                      "lpg": {"type": "lcdscreen", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 3},
+                      "lpg_group": {"type": "group", "col": 0, "row": 3, "colSpan": 4, "rowSpan": 3, "label": "LPG", "color": "#ff6a1a26"},
+                      "decay": {"type": "knob", "col": 0, "row": 3, "colSpan": 2, "rowSpan": 2, "label": "Decay", "bind": "Decay", "min": 0, "max": 1},
+                      "colour": {"type": "knob", "col": 2, "row": 3, "colSpan": 2, "rowSpan": 2, "label": "Colour", "bind": "LPG colour", "min": 0, "max": 1},
                       "envelope": {
                         "type": "dropdown",
                         "col": 0,
@@ -2436,140 +769,35 @@
                         "colSpan": 4,
                         "label": "Env",
                         "bind": "Envelope",
-                        "options": [
-                          {
-                            "label": "gate",
-                            "value": 0
-                          },
-                          {
-                            "label": "ping",
-                            "value": 1
-                          }
-                        ]
+                        "options": [{"label": "gate", "value": 0}, {"label": "ping", "value": 1}]
                       },
-                      "voice_group": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 6,
-                        "colSpan": 4,
-                        "rowSpan": 2,
-                        "label": "VOICE",
-                        "color": "#6b6b6b33"
-                      },
-                      "transpose": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 6,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Transp",
-                        "bind": "Transpose",
-                        "min": -24,
-                        "max": 24,
-                        "step": 1
-                      },
-                      "voices": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 6,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Voices",
-                        "bind": "Voices",
-                        "min": 1,
-                        "max": 8,
-                        "step": 1
-                      }
+                      "voice_group": {"type": "group", "col": 0, "row": 6, "colSpan": 4, "rowSpan": 2, "label": "VOICE", "color": "#6b6b6b33"},
+                      "transpose": {"type": "knob", "col": 0, "row": 6, "colSpan": 2, "rowSpan": 2, "label": "Transp", "bind": "Transpose", "min": -24, "max": 24, "step": 1},
+                      "voices": {"type": "knob", "col": 2, "row": 6, "colSpan": 2, "rowSpan": 2, "label": "Voices", "bind": "Voices", "min": 1, "max": 8, "step": 1}
                     }
                   }
                 ]
               }
             },
-            "engines": [
-              "braids",
-              "plaits"
-            ],
+            "engines": ["braids", "plaits"],
             "engine": "plaits",
             "params": {},
-            "defaults": {
-              "Model": 8,
-              "Harmonics": 0.5,
-              "Timbre": 0.5,
-              "Morph": 0.5,
-              "Pitch env": 0,
-              "Timbre env": 0,
-              "Morph env": 0,
-              "Decay": 0.5,
-              "LPG colour": 0.5,
-              "Envelope": 0,
-              "Voices": 8,
-              "Transpose": 0
-            },
+            "defaults": {"Model": 8, "Harmonics": 0.5, "Timbre": 0.5, "Morph": 0.5, "Pitch env": 0, "Timbre env": 0, "Morph env": 0, "Decay": 0.5, "LPG colour": 0.5, "Envelope": 0, "Voices": 8, "Transpose": 0},
             "pluginId": "melody-plaits:fx-plaits"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
-      }
+      "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}]}
     },
-    "tracks": [
-      "melody",
-      "melody-braids",
-      "melody-plaits"
-    ],
+    "tracks": ["melody", "melody-braids", "melody-plaits"],
     "videoTracks": [],
-    "trackColors": {
-      "melody": "#c38ee1",
-      "melody-braids": "#6c31b9",
-      "melody-plaits": "#9a5ad3"
-    },
-    "trackSignals": {
-      "melody": "midi",
-      "melody-braids": "midi",
-      "melody-plaits": "midi"
-    },
+    "trackColors": {"melody": "#c38ee1", "melody-braids": "#6c31b9", "melody-plaits": "#9a5ad3"},
+    "trackSignals": {"melody": "midi", "melody-braids": "midi", "melody-plaits": "midi"},
     "trackClips": {
-      "melody": [
-        {
-          "ref": "melody",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "midi"
-        }
-      ],
-      "melody-braids": [
-        {
-          "ref": "melody",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "midi"
-        }
-      ],
-      "melody-plaits": [
-        {
-          "ref": "melody",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "midi"
-        }
-      ]
+      "melody": [{"ref": "melody", "start": 0, "tc": "1:1", "len": 4, "kind": "midi"}],
+      "melody-braids": [{"ref": "melody", "start": 0, "tc": "1:1", "len": 4, "kind": "midi"}],
+      "melody-plaits": [{"ref": "melody", "start": 0, "tc": "1:1", "len": 4, "kind": "midi"}]
     },
     "modules": {},
     "warnings": []

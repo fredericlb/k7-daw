@@ -1,9 +1,6 @@
 {
   "project": "k7-core/transformers.note-repeat.k7",
-  "repairs": {
-    "log": [],
-    "files": []
-  },
+  "repairs": {"log": [], "files": []},
   "engine": {
     "name": "transformers.note-repeat",
     "tempo": 120,
@@ -43,30 +40,9 @@
             "loopStart": 0,
             "loopEnd": 0,
             "notes": [
-              {
-                "time": 0,
-                "duration": 1,
-                "key": 60,
-                "vel": 0.8,
-                "channel": 0,
-                "rel": 1
-              },
-              {
-                "time": 1,
-                "duration": 1,
-                "key": 64,
-                "vel": 1,
-                "channel": 0,
-                "rel": 1
-              },
-              {
-                "time": 2,
-                "duration": 2,
-                "key": 67,
-                "vel": 1,
-                "channel": 0,
-                "rel": 1
-              }
+              {"time": 0, "duration": 1, "key": 60, "vel": 0.8, "channel": 0, "rel": 1},
+              {"time": 1, "duration": 1, "key": 64, "vel": 1, "channel": 0, "rel": 1},
+              {"time": 2, "duration": 2, "key": 67, "vel": 1, "channel": 0, "rel": 1}
             ]
           }
         ],
@@ -80,11 +56,7 @@
             "presetSave": "<ws>/k7-core/transformers.note-repeat.k7/nodes/fx.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "Count": 1,
-              "Division": 0.5,
-              "Gate": 0.5
-            }
+            "params": {"Count": 1, "Division": 0.5, "Gate": 0.5}
           },
           {
             "id": "melody:synth",
@@ -94,9 +66,7 @@
             "presetSave": "<ws>/k7-core/transformers.note-repeat.k7/nodes/synth.vstpreset",
             "role": "",
             "enabled": true,
-            "params": {
-              "@output-volume": 0
-            }
+            "params": {"@output-volume": 0}
           }
         ],
         "sends": [],
@@ -105,16 +75,9 @@
     ],
     "groups": [],
     "markers": [],
-    "settings": {
-      "metronome": false,
-      "metronomeLevel": 0.6,
-      "countIn": 1
-    }
+    "settings": {"metronome": false, "metronomeLevel": 0.6, "countIn": 1}
   },
-  "errors": {
-    "errors": [],
-    "diagnostics": []
-  },
+  "errors": {"errors": [], "diagnostics": []},
   "freezes": [],
   "graph": {
     "chains": {
@@ -132,15 +95,7 @@
               "cols": 10,
               "rows": 4,
               "widgets": {
-                "repeats": {
-                  "type": "group",
-                  "col": 0,
-                  "row": 0,
-                  "colSpan": 3,
-                  "rowSpan": 3,
-                  "label": "REPEATS",
-                  "color": "#ff8a1a1f"
-                },
+                "repeats": {"type": "group", "col": 0, "row": 0, "colSpan": 3, "rowSpan": 3, "label": "REPEATS", "color": "#ff8a1a1f"},
                 "count": {
                   "type": "dropdown",
                   "col": 0,
@@ -149,38 +104,14 @@
                   "label": "Count",
                   "bind": "Count",
                   "options": [
-                    {
-                      "label": "1",
-                      "value": 1
-                    },
-                    {
-                      "label": "2",
-                      "value": 2
-                    },
-                    {
-                      "label": "3",
-                      "value": 3
-                    },
-                    {
-                      "label": "4",
-                      "value": 4
-                    },
-                    {
-                      "label": "5",
-                      "value": 5
-                    },
-                    {
-                      "label": "6",
-                      "value": 6
-                    },
-                    {
-                      "label": "7",
-                      "value": 7
-                    },
-                    {
-                      "label": "8",
-                      "value": 8
-                    }
+                    {"label": "1", "value": 1},
+                    {"label": "2", "value": 2},
+                    {"label": "3", "value": 3},
+                    {"label": "4", "value": 4},
+                    {"label": "5", "value": 5},
+                    {"label": "6", "value": 6},
+                    {"label": "7", "value": 7},
+                    {"label": "8", "value": 8}
                   ]
                 },
                 "division": {
@@ -191,70 +122,19 @@
                   "label": "Division",
                   "bind": "Division",
                   "options": [
-                    {
-                      "label": "1/1",
-                      "value": 4
-                    },
-                    {
-                      "label": "1/2",
-                      "value": 2
-                    },
-                    {
-                      "label": "1/4",
-                      "value": 1
-                    },
-                    {
-                      "label": "1/4T",
-                      "value": 0.667
-                    },
-                    {
-                      "label": "1/8",
-                      "value": 0.5
-                    },
-                    {
-                      "label": "1/8T",
-                      "value": 0.333
-                    },
-                    {
-                      "label": "1/16",
-                      "value": 0.25
-                    },
-                    {
-                      "label": "1/32",
-                      "value": 0.125
-                    }
+                    {"label": "1/1", "value": 4},
+                    {"label": "1/2", "value": 2},
+                    {"label": "1/4", "value": 1},
+                    {"label": "1/4T", "value": 0.667},
+                    {"label": "1/8", "value": 0.5},
+                    {"label": "1/8T", "value": 0.333},
+                    {"label": "1/16", "value": 0.25},
+                    {"label": "1/32", "value": 0.125}
                   ]
                 },
-                "gate": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 1,
-                  "label": "Gate",
-                  "bind": "Gate",
-                  "min": 0.05,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "decay": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 0,
-                  "label": "Decay",
-                  "bind": "Decay",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "chance": {
-                  "type": "knob",
-                  "col": 2,
-                  "row": 2,
-                  "label": "Chance",
-                  "bind": "Chance",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
+                "gate": {"type": "knob", "col": 2, "row": 1, "label": "Gate", "bind": "Gate", "min": 0.05, "max": 1, "step": 0.01},
+                "decay": {"type": "knob", "col": 2, "row": 0, "label": "Decay", "bind": "Decay", "min": 0, "max": 1, "step": 0.01},
+                "chance": {"type": "knob", "col": 2, "row": 2, "label": "Chance", "bind": "Chance", "min": 0, "max": 1, "step": 0.01},
                 "pattern": {
                   "type": "dropdown",
                   "col": 0,
@@ -262,125 +142,25 @@
                   "colSpan": 2,
                   "label": "Pattern",
                   "bind": "Pattern",
-                  "options": [
-                    {
-                      "label": "None",
-                      "value": 0
-                    },
-                    {
-                      "label": "Burst",
-                      "value": 1
-                    },
-                    {
-                      "label": "Euclid",
-                      "value": 2
-                    }
-                  ]
+                  "options": [{"label": "None", "value": 0}, {"label": "Burst", "value": 1}, {"label": "Euclid", "value": 2}]
                 },
-                "rhythm": {
-                  "type": "lcdscreen",
-                  "col": 3,
-                  "row": 0,
-                  "colSpan": 4,
-                  "rowSpan": 3
-                },
-                "pattern_grp": {
-                  "type": "group",
-                  "col": 7,
-                  "row": 0,
-                  "colSpan": 3,
-                  "label": "PATTERN",
-                  "color": "#ffd04a1a"
-                },
-                "length": {
-                  "type": "knob",
-                  "col": 7,
-                  "row": 0,
-                  "label": "Length",
-                  "bind": "Length",
-                  "min": 1,
-                  "max": 32,
-                  "step": 1
-                },
-                "density": {
-                  "type": "knob",
-                  "col": 8,
-                  "row": 0,
-                  "label": "Density",
-                  "bind": "Density",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "rotate": {
-                  "type": "knob",
-                  "col": 9,
-                  "row": 0,
-                  "label": "Rotate",
-                  "bind": "Rotate",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "accents_grp": {
-                  "type": "group",
-                  "col": 7,
-                  "row": 1,
-                  "colSpan": 3,
-                  "rowSpan": 3,
-                  "label": "ACCENTS",
-                  "color": "#ffffff12"
-                },
-                "accents": {
-                  "type": "knob",
-                  "col": 8,
-                  "row": 1,
-                  "label": "Count",
-                  "bind": "Accents",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "low": {
-                  "type": "fader",
-                  "col": 9,
-                  "row": 1,
-                  "rowSpan": 3,
-                  "label": "Lo Vel",
-                  "bind": "Low",
-                  "min": 0,
-                  "max": 1,
-                  "step": 0.01
-                },
-                "opposite": {
-                  "type": "toggle",
-                  "col": 8,
-                  "row": 2,
-                  "label": "Opposite",
-                  "bind": "Opposite"
-                },
-                "keep": {
-                  "type": "toggle",
-                  "col": 8,
-                  "row": 3,
-                  "label": "Keep",
-                  "bind": "Keep"
-                }
+                "rhythm": {"type": "lcdscreen", "col": 3, "row": 0, "colSpan": 4, "rowSpan": 3},
+                "pattern_grp": {"type": "group", "col": 7, "row": 0, "colSpan": 3, "label": "PATTERN", "color": "#ffd04a1a"},
+                "length": {"type": "knob", "col": 7, "row": 0, "label": "Length", "bind": "Length", "min": 1, "max": 32, "step": 1},
+                "density": {"type": "knob", "col": 8, "row": 0, "label": "Density", "bind": "Density", "min": 0, "max": 1, "step": 0.01},
+                "rotate": {"type": "knob", "col": 9, "row": 0, "label": "Rotate", "bind": "Rotate", "min": 0, "max": 1, "step": 0.01},
+                "accents_grp": {"type": "group", "col": 7, "row": 1, "colSpan": 3, "rowSpan": 3, "label": "ACCENTS", "color": "#ffffff12"},
+                "accents": {"type": "knob", "col": 8, "row": 1, "label": "Count", "bind": "Accents", "min": 0, "max": 1, "step": 0.01},
+                "low": {"type": "fader", "col": 9, "row": 1, "rowSpan": 3, "label": "Lo Vel", "bind": "Low", "min": 0, "max": 1, "step": 0.01},
+                "opposite": {"type": "toggle", "col": 8, "row": 2, "label": "Opposite", "bind": "Opposite"},
+                "keep": {"type": "toggle", "col": 8, "row": 3, "label": "Keep", "bind": "Keep"}
               },
               "script": "// Screen for the note repeater: the rhythm as spokes round a centre, one per step of the cycle,\n// step 1 at twelve o'clock. A hit is a long spoke, an accented one the brightest; a rest is short.\n// Drag up/down for the density, left/right to rotate it, shift-drag left/right for its length.\n// The maths is the engine's (apps/k7-daw-engine/k7-runtime/engine/NoteSteps.h), so the picture is what plays.\n\nconst MODES = [\"EVERY STEP\", \"BURST\", \"EUCLID\"];\nconst EUCLID = 2;\nconst FONT = \"8px ui-monospace, monospace\";\n// Pixels of drag for the whole 0..1 range of density or rotate.\nconst DRAG_SPAN = 120;\n// Pixels of shift-drag per step of length.\nconst STEP_PX = 8;\n\nfunction clamp(v, lo, hi) {\n  return Math.max(lo, Math.min(hi, Number.isFinite(v) ? v : lo));\n}\n\n// The rule as the params set it, read the way the engine reads its inputs.\nfunction ruleOf(p) {\n  const mode = Math.round(clamp(p.Pattern ?? 0, 0, 2));\n  const n = Math.round(clamp(p.Length ?? 16, 1, 32));\n  const share = (s, of) => clamp(Math.round(clamp(s, 0, 1) * of), 0, of);\n  return {\n    mode,\n    n,\n    k: mode === 0 ? n : share(p.Density ?? 0.5, n),\n    r: Math.round(clamp(p.Rotate ?? 0, 0, 1) * n) % n,\n    accents: clamp(p.Accents ?? 1, 0, 1),\n    low: clamp(p.Low ?? 0.5, 0, 1),\n    opposite: (p.Opposite ?? 0) >= 0.5,\n    keep: (p.Keep ?? 0) >= 0.5,\n    chance: clamp(p.Chance ?? 1, 0, 1),\n    share,\n  };\n}\n\nfunction euclid(i, k, n) {\n  if (k <= 0 || n <= 0) return false;\n  if (k >= n) return true;\n  return (i * k) % n < k;\n}\n\nconst turned = (s, i) => (((i % s.n) + s.n - s.r) % s.n);\n\nfunction hit(s, i) {\n  if (s.mode === 1) return turned(s, i) < s.k;\n  if (s.mode === EUCLID) return euclid(turned(s, i), s.k, s.n);\n  return true;\n}\n\nfunction accented(s, i) {\n  let on;\n  if (s.keep) on = euclid(turned(s, i), s.share(s.accents, s.n), s.n);\n  else {\n    let j = 0;\n    for (let t = 0; t < i; t++) if (hit(s, t)) j++;\n    on = s.k > 0 && euclid(j, s.share(s.accents, s.k), s.k);\n  }\n  return on !== s.opposite;\n}\n\nfunction draw(lcd) {\n  const { ctx, width: W, height: H, params: p, color } = lcd;\n  if (W < 50 || H < 40) return;\n  const s = ruleOf(p);\n  const cx = W / 2;\n  const cy = H / 2 + 4;\n  const R = Math.min(W / 2, H / 2 - 6) - 6;\n\n  ctx.lineCap = \"round\";\n  for (let i = 0; i < s.n; i++) {\n    const a = -Math.PI / 2 + (2 * Math.PI * i) / s.n;\n    const on = hit(s, i);\n    const acc = on && accented(s, i);\n    // A spoke's length is its loudness: an accent full, a plain hit at the low level, a rest short.\n    const len = on ? R * (acc ? 1 : 0.35 + 0.65 * s.low) : R * 0.45;\n    ctx.strokeStyle = on ? (acc ? color.glow : color.ink) : color.dim;\n    ctx.lineWidth = on ? 2 : 1;\n    // A chance under one fades every hit by it: the spoke plays that often.\n    ctx.globalAlpha = on ? 0.35 + 0.65 * s.chance : 1;\n    ctx.beginPath();\n    ctx.moveTo(cx, cy);\n    ctx.lineTo(cx + Math.cos(a) * len, cy + Math.sin(a) * len);\n    ctx.stroke();\n  }\n  ctx.globalAlpha = 1;\n\n  ctx.font = FONT;\n  ctx.textBaseline = \"top\";\n  ctx.fillStyle = color.ink;\n  ctx.textAlign = \"left\";\n  ctx.fillText(MODES[s.mode], 3, 2);\n  ctx.textAlign = \"right\";\n  ctx.fillText(`${s.k} / ${s.n}`, W - 3, 2);\n  ctx.fillStyle = color.dim;\n  ctx.textBaseline = \"bottom\";\n  ctx.textAlign = \"left\";\n  if (s.r) ctx.fillText(`ROT ${s.r}`, 3, H - 2);\n  ctx.textAlign = \"right\";\n  if (s.chance < 1) ctx.fillText(`${Math.round(s.chance * 100)}%`, W - 3, H - 2);\n}\n\nfunction pointer(lcd, ev) {\n  const p = lcd.params;\n  if (ev.type === \"up\") {\n    lcd.state.drag = null;\n    return true;\n  }\n  if (ev.type === \"down\" && ev.shift) {\n    // Shift: the drag is the LENGTH, left shorter and right longer, and nothing else moves.\n    lcd.state.drag = { x: ev.x, length: Math.round(clamp(p.Length ?? 16, 1, 32)) };\n    return true;\n  }\n  if (ev.type === \"down\") {\n    // Every step has no density to drag: the first gesture makes it a Euclid, from where it was.\n    if (Math.round(p.Pattern ?? 0) === 0) lcd.set(\"Pattern\", EUCLID);\n    lcd.state.drag = {\n      x: ev.x,\n      y: ev.y,\n      density: clamp(p.Density ?? 0.5, 0, 1),\n      rotate: clamp(p.Rotate ?? 0, 0, 1),\n    };\n    return true;\n  }\n  const d = lcd.state.drag;\n  if (!d) return true;\n  if (d.length !== undefined) {\n    const next = clamp(d.length + Math.round((ev.x - d.x) / STEP_PX), 1, 32);\n    if (next !== Math.round(p.Length ?? 16)) lcd.set(\"Length\", next);\n    return true;\n  }\n  const density = clamp(d.density + (d.y - ev.y) / DRAG_SPAN, 0, 1);\n  // Rotate wraps rather than stops: a turn past the last step is the first one again.\n  const rotate = (((d.rotate + (ev.x - d.x) / DRAG_SPAN) % 1) + 1) % 1;\n  lcd.set(\"Density\", Math.round(density * 100) / 100);\n  lcd.set(\"Rotate\", Math.round(rotate * 100) / 100);\n  return true;\n}\n\nexport default {\n  rhythm: { draw, pointer },\n};\n",
               "vertical": {
                 "cols": 4,
                 "rows": 10,
                 "widgets": {
-                  "repeats": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 0,
-                    "colSpan": 4,
-                    "rowSpan": 3,
-                    "label": "REPEATS",
-                    "color": "#ff8a1a1f"
-                  },
+                  "repeats": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 3, "label": "REPEATS", "color": "#ff8a1a1f"},
                   "division": {
                     "type": "dropdown",
                     "col": 0,
@@ -389,38 +169,14 @@
                     "label": "Division",
                     "bind": "Division",
                     "options": [
-                      {
-                        "label": "1/1",
-                        "value": 4
-                      },
-                      {
-                        "label": "1/2",
-                        "value": 2
-                      },
-                      {
-                        "label": "1/4",
-                        "value": 1
-                      },
-                      {
-                        "label": "1/4T",
-                        "value": 0.667
-                      },
-                      {
-                        "label": "1/8",
-                        "value": 0.5
-                      },
-                      {
-                        "label": "1/8T",
-                        "value": 0.333
-                      },
-                      {
-                        "label": "1/16",
-                        "value": 0.25
-                      },
-                      {
-                        "label": "1/32",
-                        "value": 0.125
-                      }
+                      {"label": "1/1", "value": 4},
+                      {"label": "1/2", "value": 2},
+                      {"label": "1/4", "value": 1},
+                      {"label": "1/4T", "value": 0.667},
+                      {"label": "1/8", "value": 0.5},
+                      {"label": "1/8T", "value": 0.333},
+                      {"label": "1/16", "value": 0.25},
+                      {"label": "1/32", "value": 0.125}
                     ]
                   },
                   "count": {
@@ -431,38 +187,14 @@
                     "label": "Count",
                     "bind": "Count",
                     "options": [
-                      {
-                        "label": "1",
-                        "value": 1
-                      },
-                      {
-                        "label": "2",
-                        "value": 2
-                      },
-                      {
-                        "label": "3",
-                        "value": 3
-                      },
-                      {
-                        "label": "4",
-                        "value": 4
-                      },
-                      {
-                        "label": "5",
-                        "value": 5
-                      },
-                      {
-                        "label": "6",
-                        "value": 6
-                      },
-                      {
-                        "label": "7",
-                        "value": 7
-                      },
-                      {
-                        "label": "8",
-                        "value": 8
-                      }
+                      {"label": "1", "value": 1},
+                      {"label": "2", "value": 2},
+                      {"label": "3", "value": 3},
+                      {"label": "4", "value": 4},
+                      {"label": "5", "value": 5},
+                      {"label": "6", "value": 6},
+                      {"label": "7", "value": 7},
+                      {"label": "8", "value": 8}
                     ]
                   },
                   "pattern": {
@@ -472,159 +204,32 @@
                     "colSpan": 2,
                     "label": "Pattern",
                     "bind": "Pattern",
-                    "options": [
-                      {
-                        "label": "None",
-                        "value": 0
-                      },
-                      {
-                        "label": "Burst",
-                        "value": 1
-                      },
-                      {
-                        "label": "Euclid",
-                        "value": 2
-                      }
-                    ]
+                    "options": [{"label": "None", "value": 0}, {"label": "Burst", "value": 1}, {"label": "Euclid", "value": 2}]
                   },
-                  "decay": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 0,
-                    "label": "Decay",
-                    "bind": "Decay",
-                    "min": 0,
-                    "max": 1,
-                    "step": 0.01
-                  },
-                  "gate": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 1,
-                    "label": "Gate",
-                    "bind": "Gate",
-                    "min": 0.05,
-                    "max": 1,
-                    "step": 0.01
-                  },
-                  "chance": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 2,
-                    "label": "Chance",
-                    "bind": "Chance",
-                    "min": 0,
-                    "max": 1,
-                    "step": 0.01
-                  },
-                  "rhythm": {
-                    "type": "lcdscreen",
-                    "col": 0,
-                    "row": 3,
-                    "colSpan": 4,
-                    "rowSpan": 3
-                  },
-                  "pattern_grp": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 6,
-                    "colSpan": 4,
-                    "label": "PATTERN",
-                    "color": "#ffd04a1a"
-                  },
-                  "length": {
-                    "type": "knob",
-                    "col": 1,
-                    "row": 6,
-                    "label": "Length",
-                    "bind": "Length",
-                    "min": 1,
-                    "max": 32,
-                    "step": 1
-                  },
-                  "density": {
-                    "type": "knob",
-                    "col": 2,
-                    "row": 6,
-                    "label": "Density",
-                    "bind": "Density",
-                    "min": 0,
-                    "max": 1,
-                    "step": 0.01
-                  },
-                  "rotate": {
-                    "type": "knob",
-                    "col": 3,
-                    "row": 6,
-                    "label": "Rotate",
-                    "bind": "Rotate",
-                    "min": 0,
-                    "max": 1,
-                    "step": 0.01
-                  },
-                  "accents_grp": {
-                    "type": "group",
-                    "col": 0,
-                    "row": 7,
-                    "colSpan": 4,
-                    "rowSpan": 3,
-                    "label": "ACCENTS",
-                    "color": "#ffffff12"
-                  },
-                  "accents": {
-                    "type": "knob",
-                    "col": 1,
-                    "row": 7,
-                    "label": "Count",
-                    "bind": "Accents",
-                    "min": 0,
-                    "max": 1,
-                    "step": 0.01
-                  },
-                  "opposite": {
-                    "type": "toggle",
-                    "col": 1,
-                    "row": 8,
-                    "label": "Opposite",
-                    "bind": "Opposite"
-                  },
-                  "keep": {
-                    "type": "toggle",
-                    "col": 1,
-                    "row": 9,
-                    "label": "Keep",
-                    "bind": "Keep"
-                  },
-                  "low": {
-                    "type": "fader",
-                    "col": 3,
-                    "row": 7,
-                    "rowSpan": 3,
-                    "label": "Lo Vel",
-                    "bind": "Low",
-                    "min": 0,
-                    "max": 1,
-                    "step": 0.01
-                  }
+                  "decay": {"type": "knob", "col": 2, "row": 0, "label": "Decay", "bind": "Decay", "min": 0, "max": 1, "step": 0.01},
+                  "gate": {"type": "knob", "col": 2, "row": 1, "label": "Gate", "bind": "Gate", "min": 0.05, "max": 1, "step": 0.01},
+                  "chance": {"type": "knob", "col": 2, "row": 2, "label": "Chance", "bind": "Chance", "min": 0, "max": 1, "step": 0.01},
+                  "rhythm": {"type": "lcdscreen", "col": 0, "row": 3, "colSpan": 4, "rowSpan": 3},
+                  "pattern_grp": {"type": "group", "col": 0, "row": 6, "colSpan": 4, "label": "PATTERN", "color": "#ffd04a1a"},
+                  "length": {"type": "knob", "col": 1, "row": 6, "label": "Length", "bind": "Length", "min": 1, "max": 32, "step": 1},
+                  "density": {"type": "knob", "col": 2, "row": 6, "label": "Density", "bind": "Density", "min": 0, "max": 1, "step": 0.01},
+                  "rotate": {"type": "knob", "col": 3, "row": 6, "label": "Rotate", "bind": "Rotate", "min": 0, "max": 1, "step": 0.01},
+                  "accents_grp": {"type": "group", "col": 0, "row": 7, "colSpan": 4, "rowSpan": 3, "label": "ACCENTS", "color": "#ffffff12"},
+                  "accents": {"type": "knob", "col": 1, "row": 7, "label": "Count", "bind": "Accents", "min": 0, "max": 1, "step": 0.01},
+                  "opposite": {"type": "toggle", "col": 1, "row": 8, "label": "Opposite", "bind": "Opposite"},
+                  "keep": {"type": "toggle", "col": 1, "row": 9, "label": "Keep", "bind": "Keep"},
+                  "low": {"type": "fader", "col": 3, "row": 7, "rowSpan": 3, "label": "Lo Vel", "bind": "Low", "min": 0, "max": 1, "step": 0.01}
                 }
               }
             },
-            "params": {
-              "Count": 1,
-              "Division": 0.5,
-              "Gate": 0.5
-            },
+            "params": {"Count": 1, "Division": 0.5, "Gate": 0.5},
             "pluginId": "melody:fx"
           },
           {
             "module": "synth",
             "uses": "@k7-core/instruments/k7-4osc",
-            "stage": [
-              "@output-volume"
-            ],
-            "events": [
-              "note-on"
-            ],
+            "stage": ["@output-volume"],
+            "events": ["note-on"],
             "category": "instruments",
             "emits": "audio",
             "stub": false,
@@ -637,15 +242,7 @@
                 {
                   "name": "OSC1-2",
                   "widgets": {
-                    "osc1_grp": {
-                      "type": "group",
-                      "col": 0,
-                      "row": 0,
-                      "colSpan": 12,
-                      "rowSpan": 2,
-                      "label": "OSC1",
-                      "color": "#3d7dff26"
-                    },
+                    "osc1_grp": {"type": "group", "col": 0, "row": 0, "colSpan": 12, "rowSpan": 2, "label": "OSC1", "color": "#3d7dff26"},
                     "wave1": {
                       "type": "dropdown",
                       "col": 0,
@@ -654,112 +251,22 @@
                       "label": "Wave",
                       "bind": "Wave Shape 1",
                       "options": [
-                        {
-                          "label": "None",
-                          "value": 0
-                        },
-                        {
-                          "label": "Sine",
-                          "value": 1
-                        },
-                        {
-                          "label": "Triangle",
-                          "value": 2
-                        },
-                        {
-                          "label": "Saw up",
-                          "value": 3
-                        },
-                        {
-                          "label": "Saw down",
-                          "value": 4
-                        },
-                        {
-                          "label": "Square",
-                          "value": 5
-                        },
-                        {
-                          "label": "Random",
-                          "value": 6
-                        }
+                        {"label": "None", "value": 0},
+                        {"label": "Sine", "value": 1},
+                        {"label": "Triangle", "value": 2},
+                        {"label": "Saw up", "value": 3},
+                        {"label": "Saw down", "value": 4},
+                        {"label": "Square", "value": 5},
+                        {"label": "Random", "value": 6}
                       ]
                     },
-                    "voices1": {
-                      "type": "number",
-                      "col": 0,
-                      "row": 1,
-                      "colSpan": 2,
-                      "label": "Voices",
-                      "bind": "Voices 1",
-                      "min": 1,
-                      "max": 8,
-                      "step": 1
-                    },
-                    "tune1": {
-                      "type": "knob",
-                      "col": 2,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Tune",
-                      "bind": "Tune 1",
-                      "min": -36,
-                      "max": 36,
-                      "step": 1
-                    },
-                    "fine1": {
-                      "type": "knob",
-                      "col": 4,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Fine",
-                      "bind": "Fine Tune 1",
-                      "min": -100,
-                      "max": 100
-                    },
-                    "level1": {
-                      "type": "knob",
-                      "col": 6,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Level",
-                      "bind": "Level 1",
-                      "min": -100,
-                      "max": 0
-                    },
-                    "pw1": {
-                      "type": "knob",
-                      "col": 8,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "PW",
-                      "bind": "Pulse Width 1",
-                      "min": 0.01,
-                      "max": 0.99
-                    },
-                    "detune1": {
-                      "type": "knob",
-                      "col": 10,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Detune",
-                      "bind": "Detune 1",
-                      "min": 0,
-                      "max": 0.5
-                    },
-                    "osc2_grp": {
-                      "type": "group",
-                      "col": 0,
-                      "row": 2,
-                      "colSpan": 12,
-                      "rowSpan": 2,
-                      "label": "OSC2",
-                      "color": "#3d7dff26"
-                    },
+                    "voices1": {"type": "number", "col": 0, "row": 1, "colSpan": 2, "label": "Voices", "bind": "Voices 1", "min": 1, "max": 8, "step": 1},
+                    "tune1": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Tune", "bind": "Tune 1", "min": -36, "max": 36, "step": 1},
+                    "fine1": {"type": "knob", "col": 4, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Fine", "bind": "Fine Tune 1", "min": -100, "max": 100},
+                    "level1": {"type": "knob", "col": 6, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Level", "bind": "Level 1", "min": -100, "max": 0},
+                    "pw1": {"type": "knob", "col": 8, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "PW", "bind": "Pulse Width 1", "min": 0.01, "max": 0.99},
+                    "detune1": {"type": "knob", "col": 10, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Detune", "bind": "Detune 1", "min": 0, "max": 0.5},
+                    "osc2_grp": {"type": "group", "col": 0, "row": 2, "colSpan": 12, "rowSpan": 2, "label": "OSC2", "color": "#3d7dff26"},
                     "wave2": {
                       "type": "dropdown",
                       "col": 0,
@@ -768,124 +275,28 @@
                       "label": "Wave",
                       "bind": "Wave Shape 2",
                       "options": [
-                        {
-                          "label": "None",
-                          "value": 0
-                        },
-                        {
-                          "label": "Sine",
-                          "value": 1
-                        },
-                        {
-                          "label": "Triangle",
-                          "value": 2
-                        },
-                        {
-                          "label": "Saw up",
-                          "value": 3
-                        },
-                        {
-                          "label": "Saw down",
-                          "value": 4
-                        },
-                        {
-                          "label": "Square",
-                          "value": 5
-                        },
-                        {
-                          "label": "Random",
-                          "value": 6
-                        }
+                        {"label": "None", "value": 0},
+                        {"label": "Sine", "value": 1},
+                        {"label": "Triangle", "value": 2},
+                        {"label": "Saw up", "value": 3},
+                        {"label": "Saw down", "value": 4},
+                        {"label": "Square", "value": 5},
+                        {"label": "Random", "value": 6}
                       ]
                     },
-                    "voices2": {
-                      "type": "number",
-                      "col": 0,
-                      "row": 3,
-                      "colSpan": 2,
-                      "label": "Voices",
-                      "bind": "Voices 2",
-                      "min": 1,
-                      "max": 8,
-                      "step": 1
-                    },
-                    "tune2": {
-                      "type": "knob",
-                      "col": 2,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Tune",
-                      "bind": "Tune 2",
-                      "min": -36,
-                      "max": 36,
-                      "step": 1
-                    },
-                    "fine2": {
-                      "type": "knob",
-                      "col": 4,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Fine",
-                      "bind": "Fine Tune 2",
-                      "min": -100,
-                      "max": 100
-                    },
-                    "level2": {
-                      "type": "knob",
-                      "col": 6,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Level",
-                      "bind": "Level 2",
-                      "min": -100,
-                      "max": 0
-                    },
-                    "pw2": {
-                      "type": "knob",
-                      "col": 8,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "PW",
-                      "bind": "Pulse Width 2",
-                      "min": 0.01,
-                      "max": 0.99
-                    },
-                    "detune2": {
-                      "type": "knob",
-                      "col": 10,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Detune",
-                      "bind": "Detune 2",
-                      "min": 0,
-                      "max": 0.5
-                    },
-                    "osc_screen": {
-                      "type": "lcdscreen",
-                      "col": 12,
-                      "row": 0,
-                      "colSpan": 4,
-                      "rowSpan": 4
-                    }
+                    "voices2": {"type": "number", "col": 0, "row": 3, "colSpan": 2, "label": "Voices", "bind": "Voices 2", "min": 1, "max": 8, "step": 1},
+                    "tune2": {"type": "knob", "col": 2, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Tune", "bind": "Tune 2", "min": -36, "max": 36, "step": 1},
+                    "fine2": {"type": "knob", "col": 4, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Fine", "bind": "Fine Tune 2", "min": -100, "max": 100},
+                    "level2": {"type": "knob", "col": 6, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Level", "bind": "Level 2", "min": -100, "max": 0},
+                    "pw2": {"type": "knob", "col": 8, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "PW", "bind": "Pulse Width 2", "min": 0.01, "max": 0.99},
+                    "detune2": {"type": "knob", "col": 10, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Detune", "bind": "Detune 2", "min": 0, "max": 0.5},
+                    "osc_screen": {"type": "lcdscreen", "col": 12, "row": 0, "colSpan": 4, "rowSpan": 4}
                   }
                 },
                 {
                   "name": "OSC3-4",
                   "widgets": {
-                    "osc3_grp": {
-                      "type": "group",
-                      "col": 0,
-                      "row": 0,
-                      "colSpan": 12,
-                      "rowSpan": 2,
-                      "label": "OSC3",
-                      "color": "#3d7dff26"
-                    },
+                    "osc3_grp": {"type": "group", "col": 0, "row": 0, "colSpan": 12, "rowSpan": 2, "label": "OSC3", "color": "#3d7dff26"},
                     "wave3": {
                       "type": "dropdown",
                       "col": 0,
@@ -894,112 +305,22 @@
                       "label": "Wave",
                       "bind": "Wave Shape 3",
                       "options": [
-                        {
-                          "label": "None",
-                          "value": 0
-                        },
-                        {
-                          "label": "Sine",
-                          "value": 1
-                        },
-                        {
-                          "label": "Triangle",
-                          "value": 2
-                        },
-                        {
-                          "label": "Saw up",
-                          "value": 3
-                        },
-                        {
-                          "label": "Saw down",
-                          "value": 4
-                        },
-                        {
-                          "label": "Square",
-                          "value": 5
-                        },
-                        {
-                          "label": "Random",
-                          "value": 6
-                        }
+                        {"label": "None", "value": 0},
+                        {"label": "Sine", "value": 1},
+                        {"label": "Triangle", "value": 2},
+                        {"label": "Saw up", "value": 3},
+                        {"label": "Saw down", "value": 4},
+                        {"label": "Square", "value": 5},
+                        {"label": "Random", "value": 6}
                       ]
                     },
-                    "voices3": {
-                      "type": "number",
-                      "col": 0,
-                      "row": 1,
-                      "colSpan": 2,
-                      "label": "Voices",
-                      "bind": "Voices 3",
-                      "min": 1,
-                      "max": 8,
-                      "step": 1
-                    },
-                    "tune3": {
-                      "type": "knob",
-                      "col": 2,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Tune",
-                      "bind": "Tune 3",
-                      "min": -36,
-                      "max": 36,
-                      "step": 1
-                    },
-                    "fine3": {
-                      "type": "knob",
-                      "col": 4,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Fine",
-                      "bind": "Fine Tune 3",
-                      "min": -100,
-                      "max": 100
-                    },
-                    "level3": {
-                      "type": "knob",
-                      "col": 6,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Level",
-                      "bind": "Level 3",
-                      "min": -100,
-                      "max": 0
-                    },
-                    "pw3": {
-                      "type": "knob",
-                      "col": 8,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "PW",
-                      "bind": "Pulse Width 3",
-                      "min": 0.01,
-                      "max": 0.99
-                    },
-                    "detune3": {
-                      "type": "knob",
-                      "col": 10,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Detune",
-                      "bind": "Detune 3",
-                      "min": 0,
-                      "max": 0.5
-                    },
-                    "osc4_grp": {
-                      "type": "group",
-                      "col": 0,
-                      "row": 2,
-                      "colSpan": 12,
-                      "rowSpan": 2,
-                      "label": "OSC4",
-                      "color": "#3d7dff26"
-                    },
+                    "voices3": {"type": "number", "col": 0, "row": 1, "colSpan": 2, "label": "Voices", "bind": "Voices 3", "min": 1, "max": 8, "step": 1},
+                    "tune3": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Tune", "bind": "Tune 3", "min": -36, "max": 36, "step": 1},
+                    "fine3": {"type": "knob", "col": 4, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Fine", "bind": "Fine Tune 3", "min": -100, "max": 100},
+                    "level3": {"type": "knob", "col": 6, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Level", "bind": "Level 3", "min": -100, "max": 0},
+                    "pw3": {"type": "knob", "col": 8, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "PW", "bind": "Pulse Width 3", "min": 0.01, "max": 0.99},
+                    "detune3": {"type": "knob", "col": 10, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Detune", "bind": "Detune 3", "min": 0, "max": 0.5},
+                    "osc4_grp": {"type": "group", "col": 0, "row": 2, "colSpan": 12, "rowSpan": 2, "label": "OSC4", "color": "#3d7dff26"},
                     "wave4": {
                       "type": "dropdown",
                       "col": 0,
@@ -1008,117 +329,27 @@
                       "label": "Wave",
                       "bind": "Wave Shape 4",
                       "options": [
-                        {
-                          "label": "None",
-                          "value": 0
-                        },
-                        {
-                          "label": "Sine",
-                          "value": 1
-                        },
-                        {
-                          "label": "Triangle",
-                          "value": 2
-                        },
-                        {
-                          "label": "Saw up",
-                          "value": 3
-                        },
-                        {
-                          "label": "Saw down",
-                          "value": 4
-                        },
-                        {
-                          "label": "Square",
-                          "value": 5
-                        },
-                        {
-                          "label": "Random",
-                          "value": 6
-                        }
+                        {"label": "None", "value": 0},
+                        {"label": "Sine", "value": 1},
+                        {"label": "Triangle", "value": 2},
+                        {"label": "Saw up", "value": 3},
+                        {"label": "Saw down", "value": 4},
+                        {"label": "Square", "value": 5},
+                        {"label": "Random", "value": 6}
                       ]
                     },
-                    "voices4": {
-                      "type": "number",
-                      "col": 0,
-                      "row": 3,
-                      "colSpan": 2,
-                      "label": "Voices",
-                      "bind": "Voices 4",
-                      "min": 1,
-                      "max": 8,
-                      "step": 1
-                    },
-                    "tune4": {
-                      "type": "knob",
-                      "col": 2,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Tune",
-                      "bind": "Tune 4",
-                      "min": -36,
-                      "max": 36,
-                      "step": 1
-                    },
-                    "fine4": {
-                      "type": "knob",
-                      "col": 4,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Fine",
-                      "bind": "Fine Tune 4",
-                      "min": -100,
-                      "max": 100
-                    },
-                    "level4": {
-                      "type": "knob",
-                      "col": 6,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Level",
-                      "bind": "Level 4",
-                      "min": -100,
-                      "max": 0
-                    },
-                    "pw4": {
-                      "type": "knob",
-                      "col": 8,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "PW",
-                      "bind": "Pulse Width 4",
-                      "min": 0.01,
-                      "max": 0.99
-                    },
-                    "detune4": {
-                      "type": "knob",
-                      "col": 10,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Detune",
-                      "bind": "Detune 4",
-                      "min": 0,
-                      "max": 0.5
-                    }
+                    "voices4": {"type": "number", "col": 0, "row": 3, "colSpan": 2, "label": "Voices", "bind": "Voices 4", "min": 1, "max": 8, "step": 1},
+                    "tune4": {"type": "knob", "col": 2, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Tune", "bind": "Tune 4", "min": -36, "max": 36, "step": 1},
+                    "fine4": {"type": "knob", "col": 4, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Fine", "bind": "Fine Tune 4", "min": -100, "max": 100},
+                    "level4": {"type": "knob", "col": 6, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Level", "bind": "Level 4", "min": -100, "max": 0},
+                    "pw4": {"type": "knob", "col": 8, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "PW", "bind": "Pulse Width 4", "min": 0.01, "max": 0.99},
+                    "detune4": {"type": "knob", "col": 10, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Detune", "bind": "Detune 4", "min": 0, "max": 0.5}
                   }
                 },
                 {
                   "name": "FILTER",
                   "widgets": {
-                    "flt_grp": {
-                      "type": "group",
-                      "col": 0,
-                      "row": 0,
-                      "colSpan": 6,
-                      "rowSpan": 4,
-                      "label": "FILTER",
-                      "color": "#ff6a1a26"
-                    },
+                    "flt_grp": {"type": "group", "col": 0, "row": 0, "colSpan": 6, "rowSpan": 4, "label": "FILTER", "color": "#ff6a1a26"},
                     "flt_type": {
                       "type": "dropdown",
                       "col": 0,
@@ -1127,26 +358,11 @@
                       "label": "Type",
                       "bind": "Filter Type",
                       "options": [
-                        {
-                          "label": "Off",
-                          "value": 0
-                        },
-                        {
-                          "label": "Low-pass",
-                          "value": 1
-                        },
-                        {
-                          "label": "High-pass",
-                          "value": 2
-                        },
-                        {
-                          "label": "Band-pass",
-                          "value": 3
-                        },
-                        {
-                          "label": "Notch",
-                          "value": 4
-                        }
+                        {"label": "Off", "value": 0},
+                        {"label": "Low-pass", "value": 1},
+                        {"label": "High-pass", "value": 2},
+                        {"label": "Band-pass", "value": 3},
+                        {"label": "Notch", "value": 4}
                       ]
                     },
                     "flt_slope": {
@@ -1156,209 +372,31 @@
                       "colSpan": 2,
                       "label": "Slope",
                       "bind": "Filter Slope",
-                      "options": [
-                        {
-                          "label": "12 dB/oct",
-                          "value": 12
-                        },
-                        {
-                          "label": "24 dB/oct",
-                          "value": 24
-                        }
-                      ]
+                      "options": [{"label": "12 dB/oct", "value": 12}, {"label": "24 dB/oct", "value": 24}]
                     },
-                    "cutoff": {
-                      "type": "knob",
-                      "col": 2,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Cutoff",
-                      "bind": "Filter Freq",
-                      "min": 0,
-                      "max": 135.0762329
-                    },
-                    "res": {
-                      "type": "knob",
-                      "col": 4,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Res",
-                      "bind": "Filter Resonance",
-                      "min": 0,
-                      "max": 100
-                    },
-                    "flt_env": {
-                      "type": "knob",
-                      "col": 0,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Env",
-                      "bind": "Filter Amount",
-                      "min": -1,
-                      "max": 1
-                    },
-                    "flt_key": {
-                      "type": "knob",
-                      "col": 2,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Key",
-                      "bind": "Filter Key",
-                      "min": 0,
-                      "max": 100
-                    },
-                    "flt_vel": {
-                      "type": "knob",
-                      "col": 4,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Vel",
-                      "bind": "Filter Velocity",
-                      "min": 0,
-                      "max": 100
-                    },
-                    "filter_screen": {
-                      "type": "lcdscreen",
-                      "col": 6,
-                      "row": 0,
-                      "colSpan": 4,
-                      "rowSpan": 4
-                    },
-                    "fenv_grp": {
-                      "type": "group",
-                      "col": 10,
-                      "row": 0,
-                      "colSpan": 4,
-                      "rowSpan": 4,
-                      "label": "FENV",
-                      "color": "#3ec96b26"
-                    },
-                    "f_attack": {
-                      "type": "knob",
-                      "col": 10,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Attack",
-                      "bind": "Filter Attack",
-                      "min": 0,
-                      "max": 60
-                    },
-                    "f_decay": {
-                      "type": "knob",
-                      "col": 12,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Decay",
-                      "bind": "Filter Decay",
-                      "min": 0,
-                      "max": 60
-                    },
-                    "f_sustain": {
-                      "type": "knob",
-                      "col": 10,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Sustain",
-                      "bind": "Filter Sustain",
-                      "min": 0,
-                      "max": 100
-                    },
-                    "f_release": {
-                      "type": "knob",
-                      "col": 12,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Release",
-                      "bind": "Filter Release",
-                      "min": 0,
-                      "max": 60
-                    }
+                    "cutoff": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Cutoff", "bind": "Filter Freq", "min": 0, "max": 135.0762329},
+                    "res": {"type": "knob", "col": 4, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Res", "bind": "Filter Resonance", "min": 0, "max": 100},
+                    "flt_env": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Env", "bind": "Filter Amount", "min": -1, "max": 1},
+                    "flt_key": {"type": "knob", "col": 2, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Key", "bind": "Filter Key", "min": 0, "max": 100},
+                    "flt_vel": {"type": "knob", "col": 4, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Vel", "bind": "Filter Velocity", "min": 0, "max": 100},
+                    "filter_screen": {"type": "lcdscreen", "col": 6, "row": 0, "colSpan": 4, "rowSpan": 4},
+                    "fenv_grp": {"type": "group", "col": 10, "row": 0, "colSpan": 4, "rowSpan": 4, "label": "FENV", "color": "#3ec96b26"},
+                    "f_attack": {"type": "knob", "col": 10, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Attack", "bind": "Filter Attack", "min": 0, "max": 60},
+                    "f_decay": {"type": "knob", "col": 12, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Decay", "bind": "Filter Decay", "min": 0, "max": 60},
+                    "f_sustain": {"type": "knob", "col": 10, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Sustain", "bind": "Filter Sustain", "min": 0, "max": 100},
+                    "f_release": {"type": "knob", "col": 12, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Release", "bind": "Filter Release", "min": 0, "max": 60}
                   }
                 },
                 {
                   "name": "AMP",
                   "widgets": {
-                    "aenv_grp": {
-                      "type": "group",
-                      "col": 0,
-                      "row": 0,
-                      "colSpan": 4,
-                      "rowSpan": 4,
-                      "label": "AENV",
-                      "color": "#3ec96b26"
-                    },
-                    "a_attack": {
-                      "type": "knob",
-                      "col": 0,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Attack",
-                      "bind": "Amp Attack",
-                      "min": 0.001,
-                      "max": 60,
-                      "curve": "log"
-                    },
-                    "a_decay": {
-                      "type": "knob",
-                      "col": 2,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Decay",
-                      "bind": "Amp Decay",
-                      "min": 0.001,
-                      "max": 60,
-                      "curve": "log"
-                    },
-                    "a_sustain": {
-                      "type": "knob",
-                      "col": 0,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Sustain",
-                      "bind": "Amp Sustain",
-                      "min": 0,
-                      "max": 100
-                    },
-                    "a_release": {
-                      "type": "knob",
-                      "col": 2,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Release",
-                      "bind": "Amp Release",
-                      "min": 0.001,
-                      "max": 60,
-                      "curve": "log"
-                    },
-                    "env_screen": {
-                      "type": "lcdscreen",
-                      "col": 4,
-                      "row": 0,
-                      "colSpan": 6,
-                      "rowSpan": 4
-                    },
-                    "voice_grp": {
-                      "type": "group",
-                      "col": 10,
-                      "row": 0,
-                      "colSpan": 6,
-                      "rowSpan": 4,
-                      "label": "VOICE",
-                      "color": "#6b6b6b26"
-                    },
+                    "aenv_grp": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 4, "label": "AENV", "color": "#3ec96b26"},
+                    "a_attack": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Attack", "bind": "Amp Attack", "min": 0.001, "max": 60, "curve": "log"},
+                    "a_decay": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Decay", "bind": "Amp Decay", "min": 0.001, "max": 60, "curve": "log"},
+                    "a_sustain": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Sustain", "bind": "Amp Sustain", "min": 0, "max": 100},
+                    "a_release": {"type": "knob", "col": 2, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Release", "bind": "Amp Release", "min": 0.001, "max": 60, "curve": "log"},
+                    "env_screen": {"type": "lcdscreen", "col": 4, "row": 0, "colSpan": 6, "rowSpan": 4},
+                    "voice_grp": {"type": "group", "col": 10, "row": 0, "colSpan": 6, "rowSpan": 4, "label": "VOICE", "color": "#6b6b6b26"},
                     "voice_mode": {
                       "type": "dropdown",
                       "col": 10,
@@ -1366,79 +404,18 @@
                       "colSpan": 2,
                       "label": "Mode",
                       "bind": "Voice Mode",
-                      "options": [
-                        {
-                          "label": "Mono",
-                          "value": 0
-                        },
-                        {
-                          "label": "Legato",
-                          "value": 1
-                        },
-                        {
-                          "label": "Poly",
-                          "value": 2
-                        }
-                      ]
+                      "options": [{"label": "Mono", "value": 0}, {"label": "Legato", "value": 1}, {"label": "Poly", "value": 2}]
                     },
-                    "voices": {
-                      "type": "number",
-                      "col": 10,
-                      "row": 1,
-                      "colSpan": 2,
-                      "label": "Voices",
-                      "bind": "Voices",
-                      "min": 1,
-                      "max": 32,
-                      "step": 1
-                    },
-                    "glide": {
-                      "type": "knob",
-                      "col": 12,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Glide",
-                      "bind": "Legato",
-                      "min": 0,
-                      "max": 500
-                    },
-                    "amp_vel": {
-                      "type": "knob",
-                      "col": 14,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Vel",
-                      "bind": "Amp Velocity",
-                      "min": 0,
-                      "max": 100
-                    },
-                    "analog": {
-                      "type": "knob",
-                      "col": 12,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Analog",
-                      "bind": "Amp Analog",
-                      "min": 0,
-                      "max": 1
-                    }
+                    "voices": {"type": "number", "col": 10, "row": 1, "colSpan": 2, "label": "Voices", "bind": "Voices", "min": 1, "max": 32, "step": 1},
+                    "glide": {"type": "knob", "col": 12, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Glide", "bind": "Legato", "min": 0, "max": 500},
+                    "amp_vel": {"type": "knob", "col": 14, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Vel", "bind": "Amp Velocity", "min": 0, "max": 100},
+                    "analog": {"type": "knob", "col": 12, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Analog", "bind": "Amp Analog", "min": 0, "max": 1}
                   }
                 },
                 {
                   "name": "MOD",
                   "widgets": {
-                    "lfo1_grp": {
-                      "type": "group",
-                      "col": 0,
-                      "row": 0,
-                      "colSpan": 6,
-                      "rowSpan": 2,
-                      "label": "LFO1",
-                      "color": "#3d7dff26"
-                    },
+                    "lfo1_grp": {"type": "group", "col": 0, "row": 0, "colSpan": 6, "rowSpan": 2, "label": "LFO1", "color": "#3d7dff26"},
                     "lfo1_shape": {
                       "type": "dropdown",
                       "col": 0,
@@ -1447,67 +424,18 @@
                       "label": "Shape",
                       "bind": "LFO Shape 1",
                       "options": [
-                        {
-                          "label": "None",
-                          "value": 0
-                        },
-                        {
-                          "label": "Sine",
-                          "value": 1
-                        },
-                        {
-                          "label": "Triangle",
-                          "value": 2
-                        },
-                        {
-                          "label": "Saw up",
-                          "value": 3
-                        },
-                        {
-                          "label": "Saw down",
-                          "value": 4
-                        },
-                        {
-                          "label": "Square",
-                          "value": 5
-                        },
-                        {
-                          "label": "Random",
-                          "value": 6
-                        }
+                        {"label": "None", "value": 0},
+                        {"label": "Sine", "value": 1},
+                        {"label": "Triangle", "value": 2},
+                        {"label": "Saw up", "value": 3},
+                        {"label": "Saw down", "value": 4},
+                        {"label": "Square", "value": 5},
+                        {"label": "Random", "value": 6}
                       ]
                     },
-                    "lfo1_rate": {
-                      "type": "knob",
-                      "col": 2,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Rate",
-                      "bind": "Rate 1",
-                      "min": 0,
-                      "max": 500
-                    },
-                    "lfo1_depth": {
-                      "type": "knob",
-                      "col": 4,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Depth",
-                      "bind": "Depth 1",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "lfo2_grp": {
-                      "type": "group",
-                      "col": 0,
-                      "row": 2,
-                      "colSpan": 6,
-                      "rowSpan": 2,
-                      "label": "LFO2",
-                      "color": "#3d7dff26"
-                    },
+                    "lfo1_rate": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Rate", "bind": "Rate 1", "min": 0, "max": 500},
+                    "lfo1_depth": {"type": "knob", "col": 4, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Depth", "bind": "Depth 1", "min": 0, "max": 1},
+                    "lfo2_grp": {"type": "group", "col": 0, "row": 2, "colSpan": 6, "rowSpan": 2, "label": "LFO2", "color": "#3d7dff26"},
                     "lfo2_shape": {
                       "type": "dropdown",
                       "col": 0,
@@ -1516,360 +444,50 @@
                       "label": "Shape",
                       "bind": "LFO Shape 2",
                       "options": [
-                        {
-                          "label": "None",
-                          "value": 0
-                        },
-                        {
-                          "label": "Sine",
-                          "value": 1
-                        },
-                        {
-                          "label": "Triangle",
-                          "value": 2
-                        },
-                        {
-                          "label": "Saw up",
-                          "value": 3
-                        },
-                        {
-                          "label": "Saw down",
-                          "value": 4
-                        },
-                        {
-                          "label": "Square",
-                          "value": 5
-                        },
-                        {
-                          "label": "Random",
-                          "value": 6
-                        }
+                        {"label": "None", "value": 0},
+                        {"label": "Sine", "value": 1},
+                        {"label": "Triangle", "value": 2},
+                        {"label": "Saw up", "value": 3},
+                        {"label": "Saw down", "value": 4},
+                        {"label": "Square", "value": 5},
+                        {"label": "Random", "value": 6}
                       ]
                     },
-                    "lfo2_rate": {
-                      "type": "knob",
-                      "col": 2,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Rate",
-                      "bind": "Rate 2",
-                      "min": 0,
-                      "max": 500
-                    },
-                    "lfo2_depth": {
-                      "type": "knob",
-                      "col": 4,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Depth",
-                      "bind": "Depth 2",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "menv1_grp": {
-                      "type": "group",
-                      "col": 6,
-                      "row": 0,
-                      "colSpan": 8,
-                      "rowSpan": 2,
-                      "label": "MOD1",
-                      "color": "#3ec96b26"
-                    },
-                    "m1_attack": {
-                      "type": "knob",
-                      "col": 6,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Attack",
-                      "bind": "Mod Attack 1",
-                      "min": 0,
-                      "max": 60
-                    },
-                    "m1_decay": {
-                      "type": "knob",
-                      "col": 8,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Decay",
-                      "bind": "Mod Decay 1",
-                      "min": 0,
-                      "max": 60
-                    },
-                    "m1_sustain": {
-                      "type": "knob",
-                      "col": 10,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Sustain",
-                      "bind": "Mod Sustain 1",
-                      "min": 0,
-                      "max": 100
-                    },
-                    "m1_release": {
-                      "type": "knob",
-                      "col": 12,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Release",
-                      "bind": "Mod Release 1",
-                      "min": 0.001,
-                      "max": 60,
-                      "curve": "log"
-                    },
-                    "menv2_grp": {
-                      "type": "group",
-                      "col": 6,
-                      "row": 2,
-                      "colSpan": 8,
-                      "rowSpan": 2,
-                      "label": "MOD2",
-                      "color": "#3ec96b26"
-                    },
-                    "m2_attack": {
-                      "type": "knob",
-                      "col": 6,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Attack",
-                      "bind": "Mod Attack 2",
-                      "min": 0,
-                      "max": 60
-                    },
-                    "m2_decay": {
-                      "type": "knob",
-                      "col": 8,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Decay",
-                      "bind": "Mod Decay 2",
-                      "min": 0,
-                      "max": 60
-                    },
-                    "m2_sustain": {
-                      "type": "knob",
-                      "col": 10,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Sustain",
-                      "bind": "Mod Sustain 2",
-                      "min": 0,
-                      "max": 100
-                    },
-                    "m2_release": {
-                      "type": "knob",
-                      "col": 12,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Release",
-                      "bind": "Mod Release 2",
-                      "min": 0.001,
-                      "max": 60,
-                      "curve": "log"
-                    },
-                    "mod_screen": {
-                      "type": "lcdscreen",
-                      "col": 14,
-                      "row": 0,
-                      "colSpan": 4,
-                      "rowSpan": 4
-                    }
+                    "lfo2_rate": {"type": "knob", "col": 2, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Rate", "bind": "Rate 2", "min": 0, "max": 500},
+                    "lfo2_depth": {"type": "knob", "col": 4, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Depth", "bind": "Depth 2", "min": 0, "max": 1},
+                    "menv1_grp": {"type": "group", "col": 6, "row": 0, "colSpan": 8, "rowSpan": 2, "label": "MOD1", "color": "#3ec96b26"},
+                    "m1_attack": {"type": "knob", "col": 6, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Attack", "bind": "Mod Attack 1", "min": 0, "max": 60},
+                    "m1_decay": {"type": "knob", "col": 8, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Decay", "bind": "Mod Decay 1", "min": 0, "max": 60},
+                    "m1_sustain": {"type": "knob", "col": 10, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Sustain", "bind": "Mod Sustain 1", "min": 0, "max": 100},
+                    "m1_release": {"type": "knob", "col": 12, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Release", "bind": "Mod Release 1", "min": 0.001, "max": 60, "curve": "log"},
+                    "menv2_grp": {"type": "group", "col": 6, "row": 2, "colSpan": 8, "rowSpan": 2, "label": "MOD2", "color": "#3ec96b26"},
+                    "m2_attack": {"type": "knob", "col": 6, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Attack", "bind": "Mod Attack 2", "min": 0, "max": 60},
+                    "m2_decay": {"type": "knob", "col": 8, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Decay", "bind": "Mod Decay 2", "min": 0, "max": 60},
+                    "m2_sustain": {"type": "knob", "col": 10, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Sustain", "bind": "Mod Sustain 2", "min": 0, "max": 100},
+                    "m2_release": {"type": "knob", "col": 12, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Release", "bind": "Mod Release 2", "min": 0.001, "max": 60, "curve": "log"},
+                    "mod_screen": {"type": "lcdscreen", "col": 14, "row": 0, "colSpan": 4, "rowSpan": 4}
                   }
                 },
                 {
                   "name": "FX",
                   "widgets": {
-                    "drive": {
-                      "type": "knob",
-                      "col": 0,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Drive",
-                      "bind": "Distortion",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "chorus_grp": {
-                      "type": "group",
-                      "col": 2,
-                      "row": 0,
-                      "colSpan": 4,
-                      "rowSpan": 4,
-                      "label": "CHORUS",
-                      "bind": "Chorus On",
-                      "color": "#3d7dff26"
-                    },
-                    "ch_speed": {
-                      "type": "knob",
-                      "col": 2,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Speed",
-                      "bind": "Speed",
-                      "min": 0.1,
-                      "max": 10,
-                      "curve": "log"
-                    },
-                    "ch_depth": {
-                      "type": "knob",
-                      "col": 4,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Depth",
-                      "bind": "Depth",
-                      "min": 0.1,
-                      "max": 20,
-                      "curve": "log"
-                    },
-                    "ch_width": {
-                      "type": "knob",
-                      "col": 2,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Width",
-                      "bind": "Width",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "ch_mix": {
-                      "type": "knob",
-                      "col": 4,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Mix",
-                      "bind": "Mix",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "delay_grp": {
-                      "type": "group",
-                      "col": 6,
-                      "row": 0,
-                      "colSpan": 4,
-                      "rowSpan": 4,
-                      "label": "DELAY",
-                      "bind": "Delay On",
-                      "color": "#3ec96b26"
-                    },
-                    "dl_time": {
-                      "type": "knob",
-                      "col": 6,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Time",
-                      "bind": "Delay",
-                      "min": 0,
-                      "max": 4
-                    },
-                    "dl_fb": {
-                      "type": "knob",
-                      "col": 8,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Fdbk",
-                      "bind": "Feedback",
-                      "min": -100,
-                      "max": 0
-                    },
-                    "dl_xfeed": {
-                      "type": "knob",
-                      "col": 6,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "X-Feed",
-                      "bind": "Crossfeed",
-                      "min": -100,
-                      "max": 0
-                    },
-                    "dl_mix": {
-                      "type": "knob",
-                      "col": 8,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Mix",
-                      "bind": "Mix #2",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "rev_grp": {
-                      "type": "group",
-                      "col": 10,
-                      "row": 0,
-                      "colSpan": 4,
-                      "rowSpan": 4,
-                      "label": "REVERB",
-                      "bind": "Reverb On",
-                      "color": "#ffffff1a"
-                    },
-                    "rv_size": {
-                      "type": "knob",
-                      "col": 10,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Size",
-                      "bind": "Size",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "rv_damp": {
-                      "type": "knob",
-                      "col": 12,
-                      "row": 0,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Damp",
-                      "bind": "Damping",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "rv_width": {
-                      "type": "knob",
-                      "col": 10,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Width",
-                      "bind": "Width #2",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "rv_mix": {
-                      "type": "knob",
-                      "col": 12,
-                      "row": 2,
-                      "colSpan": 2,
-                      "rowSpan": 2,
-                      "label": "Mix",
-                      "bind": "Mix #3",
-                      "min": 0,
-                      "max": 1
-                    },
-                    "fx_screen": {
-                      "type": "lcdscreen",
-                      "col": 14,
-                      "row": 0,
-                      "colSpan": 4,
-                      "rowSpan": 4
-                    }
+                    "drive": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Drive", "bind": "Distortion", "min": 0, "max": 1},
+                    "chorus_grp": {"type": "group", "col": 2, "row": 0, "colSpan": 4, "rowSpan": 4, "label": "CHORUS", "bind": "Chorus On", "color": "#3d7dff26"},
+                    "ch_speed": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Speed", "bind": "Speed", "min": 0.1, "max": 10, "curve": "log"},
+                    "ch_depth": {"type": "knob", "col": 4, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Depth", "bind": "Depth", "min": 0.1, "max": 20, "curve": "log"},
+                    "ch_width": {"type": "knob", "col": 2, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Width", "bind": "Width", "min": 0, "max": 1},
+                    "ch_mix": {"type": "knob", "col": 4, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Mix", "bind": "Mix", "min": 0, "max": 1},
+                    "delay_grp": {"type": "group", "col": 6, "row": 0, "colSpan": 4, "rowSpan": 4, "label": "DELAY", "bind": "Delay On", "color": "#3ec96b26"},
+                    "dl_time": {"type": "knob", "col": 6, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Time", "bind": "Delay", "min": 0, "max": 4},
+                    "dl_fb": {"type": "knob", "col": 8, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Fdbk", "bind": "Feedback", "min": -100, "max": 0},
+                    "dl_xfeed": {"type": "knob", "col": 6, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "X-Feed", "bind": "Crossfeed", "min": -100, "max": 0},
+                    "dl_mix": {"type": "knob", "col": 8, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Mix", "bind": "Mix #2", "min": 0, "max": 1},
+                    "rev_grp": {"type": "group", "col": 10, "row": 0, "colSpan": 4, "rowSpan": 4, "label": "REVERB", "bind": "Reverb On", "color": "#ffffff1a"},
+                    "rv_size": {"type": "knob", "col": 10, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Size", "bind": "Size", "min": 0, "max": 1},
+                    "rv_damp": {"type": "knob", "col": 12, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Damp", "bind": "Damping", "min": 0, "max": 1},
+                    "rv_width": {"type": "knob", "col": 10, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Width", "bind": "Width #2", "min": 0, "max": 1},
+                    "rv_mix": {"type": "knob", "col": 12, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Mix", "bind": "Mix #3", "min": 0, "max": 1},
+                    "fx_screen": {"type": "lcdscreen", "col": 14, "row": 0, "colSpan": 4, "rowSpan": 4}
                   }
                 }
               ],
@@ -1882,15 +500,7 @@
                   {
                     "name": "OSC1-2",
                     "widgets": {
-                      "osc1_grp": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 0,
-                        "colSpan": 4,
-                        "rowSpan": 6,
-                        "label": "OSC1",
-                        "color": "#3d7dff26"
-                      },
+                      "osc1_grp": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 6, "label": "OSC1", "color": "#3d7dff26"},
                       "wave1": {
                         "type": "dropdown",
                         "col": 0,
@@ -1899,112 +509,22 @@
                         "label": "Wave",
                         "bind": "Wave Shape 1",
                         "options": [
-                          {
-                            "label": "None",
-                            "value": 0
-                          },
-                          {
-                            "label": "Sine",
-                            "value": 1
-                          },
-                          {
-                            "label": "Triangle",
-                            "value": 2
-                          },
-                          {
-                            "label": "Saw up",
-                            "value": 3
-                          },
-                          {
-                            "label": "Saw down",
-                            "value": 4
-                          },
-                          {
-                            "label": "Square",
-                            "value": 5
-                          },
-                          {
-                            "label": "Random",
-                            "value": 6
-                          }
+                          {"label": "None", "value": 0},
+                          {"label": "Sine", "value": 1},
+                          {"label": "Triangle", "value": 2},
+                          {"label": "Saw up", "value": 3},
+                          {"label": "Saw down", "value": 4},
+                          {"label": "Square", "value": 5},
+                          {"label": "Random", "value": 6}
                         ]
                       },
-                      "voices1": {
-                        "type": "number",
-                        "col": 0,
-                        "row": 1,
-                        "colSpan": 2,
-                        "label": "Voices",
-                        "bind": "Voices 1",
-                        "min": 1,
-                        "max": 8,
-                        "step": 1
-                      },
-                      "tune1": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 0,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Tune",
-                        "bind": "Tune 1",
-                        "min": -36,
-                        "max": 36,
-                        "step": 1
-                      },
-                      "fine1": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 2,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Fine",
-                        "bind": "Fine Tune 1",
-                        "min": -100,
-                        "max": 100
-                      },
-                      "level1": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 2,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Level",
-                        "bind": "Level 1",
-                        "min": -100,
-                        "max": 0
-                      },
-                      "pw1": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 4,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "PW",
-                        "bind": "Pulse Width 1",
-                        "min": 0.01,
-                        "max": 0.99
-                      },
-                      "detune1": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 4,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Detune",
-                        "bind": "Detune 1",
-                        "min": 0,
-                        "max": 0.5
-                      },
-                      "osc2_grp": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 6,
-                        "colSpan": 4,
-                        "rowSpan": 6,
-                        "label": "OSC2",
-                        "color": "#3d7dff26"
-                      },
+                      "voices1": {"type": "number", "col": 0, "row": 1, "colSpan": 2, "label": "Voices", "bind": "Voices 1", "min": 1, "max": 8, "step": 1},
+                      "tune1": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Tune", "bind": "Tune 1", "min": -36, "max": 36, "step": 1},
+                      "fine1": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Fine", "bind": "Fine Tune 1", "min": -100, "max": 100},
+                      "level1": {"type": "knob", "col": 2, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Level", "bind": "Level 1", "min": -100, "max": 0},
+                      "pw1": {"type": "knob", "col": 0, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "PW", "bind": "Pulse Width 1", "min": 0.01, "max": 0.99},
+                      "detune1": {"type": "knob", "col": 2, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "Detune", "bind": "Detune 1", "min": 0, "max": 0.5},
+                      "osc2_grp": {"type": "group", "col": 0, "row": 6, "colSpan": 4, "rowSpan": 6, "label": "OSC2", "color": "#3d7dff26"},
                       "wave2": {
                         "type": "dropdown",
                         "col": 0,
@@ -2013,124 +533,28 @@
                         "label": "Wave",
                         "bind": "Wave Shape 2",
                         "options": [
-                          {
-                            "label": "None",
-                            "value": 0
-                          },
-                          {
-                            "label": "Sine",
-                            "value": 1
-                          },
-                          {
-                            "label": "Triangle",
-                            "value": 2
-                          },
-                          {
-                            "label": "Saw up",
-                            "value": 3
-                          },
-                          {
-                            "label": "Saw down",
-                            "value": 4
-                          },
-                          {
-                            "label": "Square",
-                            "value": 5
-                          },
-                          {
-                            "label": "Random",
-                            "value": 6
-                          }
+                          {"label": "None", "value": 0},
+                          {"label": "Sine", "value": 1},
+                          {"label": "Triangle", "value": 2},
+                          {"label": "Saw up", "value": 3},
+                          {"label": "Saw down", "value": 4},
+                          {"label": "Square", "value": 5},
+                          {"label": "Random", "value": 6}
                         ]
                       },
-                      "voices2": {
-                        "type": "number",
-                        "col": 0,
-                        "row": 7,
-                        "colSpan": 2,
-                        "label": "Voices",
-                        "bind": "Voices 2",
-                        "min": 1,
-                        "max": 8,
-                        "step": 1
-                      },
-                      "tune2": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 6,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Tune",
-                        "bind": "Tune 2",
-                        "min": -36,
-                        "max": 36,
-                        "step": 1
-                      },
-                      "fine2": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 8,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Fine",
-                        "bind": "Fine Tune 2",
-                        "min": -100,
-                        "max": 100
-                      },
-                      "level2": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 8,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Level",
-                        "bind": "Level 2",
-                        "min": -100,
-                        "max": 0
-                      },
-                      "pw2": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 10,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "PW",
-                        "bind": "Pulse Width 2",
-                        "min": 0.01,
-                        "max": 0.99
-                      },
-                      "detune2": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 10,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Detune",
-                        "bind": "Detune 2",
-                        "min": 0,
-                        "max": 0.5
-                      },
-                      "osc_screen": {
-                        "type": "lcdscreen",
-                        "col": 0,
-                        "row": 12,
-                        "colSpan": 4,
-                        "rowSpan": 2
-                      }
+                      "voices2": {"type": "number", "col": 0, "row": 7, "colSpan": 2, "label": "Voices", "bind": "Voices 2", "min": 1, "max": 8, "step": 1},
+                      "tune2": {"type": "knob", "col": 2, "row": 6, "colSpan": 2, "rowSpan": 2, "label": "Tune", "bind": "Tune 2", "min": -36, "max": 36, "step": 1},
+                      "fine2": {"type": "knob", "col": 0, "row": 8, "colSpan": 2, "rowSpan": 2, "label": "Fine", "bind": "Fine Tune 2", "min": -100, "max": 100},
+                      "level2": {"type": "knob", "col": 2, "row": 8, "colSpan": 2, "rowSpan": 2, "label": "Level", "bind": "Level 2", "min": -100, "max": 0},
+                      "pw2": {"type": "knob", "col": 0, "row": 10, "colSpan": 2, "rowSpan": 2, "label": "PW", "bind": "Pulse Width 2", "min": 0.01, "max": 0.99},
+                      "detune2": {"type": "knob", "col": 2, "row": 10, "colSpan": 2, "rowSpan": 2, "label": "Detune", "bind": "Detune 2", "min": 0, "max": 0.5},
+                      "osc_screen": {"type": "lcdscreen", "col": 0, "row": 12, "colSpan": 4, "rowSpan": 2}
                     }
                   },
                   {
                     "name": "OSC3-4",
                     "widgets": {
-                      "osc3_grp": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 0,
-                        "colSpan": 4,
-                        "rowSpan": 6,
-                        "label": "OSC3",
-                        "color": "#3d7dff26"
-                      },
+                      "osc3_grp": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 6, "label": "OSC3", "color": "#3d7dff26"},
                       "wave3": {
                         "type": "dropdown",
                         "col": 0,
@@ -2139,112 +563,22 @@
                         "label": "Wave",
                         "bind": "Wave Shape 3",
                         "options": [
-                          {
-                            "label": "None",
-                            "value": 0
-                          },
-                          {
-                            "label": "Sine",
-                            "value": 1
-                          },
-                          {
-                            "label": "Triangle",
-                            "value": 2
-                          },
-                          {
-                            "label": "Saw up",
-                            "value": 3
-                          },
-                          {
-                            "label": "Saw down",
-                            "value": 4
-                          },
-                          {
-                            "label": "Square",
-                            "value": 5
-                          },
-                          {
-                            "label": "Random",
-                            "value": 6
-                          }
+                          {"label": "None", "value": 0},
+                          {"label": "Sine", "value": 1},
+                          {"label": "Triangle", "value": 2},
+                          {"label": "Saw up", "value": 3},
+                          {"label": "Saw down", "value": 4},
+                          {"label": "Square", "value": 5},
+                          {"label": "Random", "value": 6}
                         ]
                       },
-                      "voices3": {
-                        "type": "number",
-                        "col": 0,
-                        "row": 1,
-                        "colSpan": 2,
-                        "label": "Voices",
-                        "bind": "Voices 3",
-                        "min": 1,
-                        "max": 8,
-                        "step": 1
-                      },
-                      "tune3": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 0,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Tune",
-                        "bind": "Tune 3",
-                        "min": -36,
-                        "max": 36,
-                        "step": 1
-                      },
-                      "fine3": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 2,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Fine",
-                        "bind": "Fine Tune 3",
-                        "min": -100,
-                        "max": 100
-                      },
-                      "level3": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 2,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Level",
-                        "bind": "Level 3",
-                        "min": -100,
-                        "max": 0
-                      },
-                      "pw3": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 4,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "PW",
-                        "bind": "Pulse Width 3",
-                        "min": 0.01,
-                        "max": 0.99
-                      },
-                      "detune3": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 4,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Detune",
-                        "bind": "Detune 3",
-                        "min": 0,
-                        "max": 0.5
-                      },
-                      "osc4_grp": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 6,
-                        "colSpan": 4,
-                        "rowSpan": 6,
-                        "label": "OSC4",
-                        "color": "#3d7dff26"
-                      },
+                      "voices3": {"type": "number", "col": 0, "row": 1, "colSpan": 2, "label": "Voices", "bind": "Voices 3", "min": 1, "max": 8, "step": 1},
+                      "tune3": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Tune", "bind": "Tune 3", "min": -36, "max": 36, "step": 1},
+                      "fine3": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Fine", "bind": "Fine Tune 3", "min": -100, "max": 100},
+                      "level3": {"type": "knob", "col": 2, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Level", "bind": "Level 3", "min": -100, "max": 0},
+                      "pw3": {"type": "knob", "col": 0, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "PW", "bind": "Pulse Width 3", "min": 0.01, "max": 0.99},
+                      "detune3": {"type": "knob", "col": 2, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "Detune", "bind": "Detune 3", "min": 0, "max": 0.5},
+                      "osc4_grp": {"type": "group", "col": 0, "row": 6, "colSpan": 4, "rowSpan": 6, "label": "OSC4", "color": "#3d7dff26"},
                       "wave4": {
                         "type": "dropdown",
                         "col": 0,
@@ -2253,117 +587,27 @@
                         "label": "Wave",
                         "bind": "Wave Shape 4",
                         "options": [
-                          {
-                            "label": "None",
-                            "value": 0
-                          },
-                          {
-                            "label": "Sine",
-                            "value": 1
-                          },
-                          {
-                            "label": "Triangle",
-                            "value": 2
-                          },
-                          {
-                            "label": "Saw up",
-                            "value": 3
-                          },
-                          {
-                            "label": "Saw down",
-                            "value": 4
-                          },
-                          {
-                            "label": "Square",
-                            "value": 5
-                          },
-                          {
-                            "label": "Random",
-                            "value": 6
-                          }
+                          {"label": "None", "value": 0},
+                          {"label": "Sine", "value": 1},
+                          {"label": "Triangle", "value": 2},
+                          {"label": "Saw up", "value": 3},
+                          {"label": "Saw down", "value": 4},
+                          {"label": "Square", "value": 5},
+                          {"label": "Random", "value": 6}
                         ]
                       },
-                      "voices4": {
-                        "type": "number",
-                        "col": 0,
-                        "row": 7,
-                        "colSpan": 2,
-                        "label": "Voices",
-                        "bind": "Voices 4",
-                        "min": 1,
-                        "max": 8,
-                        "step": 1
-                      },
-                      "tune4": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 6,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Tune",
-                        "bind": "Tune 4",
-                        "min": -36,
-                        "max": 36,
-                        "step": 1
-                      },
-                      "fine4": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 8,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Fine",
-                        "bind": "Fine Tune 4",
-                        "min": -100,
-                        "max": 100
-                      },
-                      "level4": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 8,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Level",
-                        "bind": "Level 4",
-                        "min": -100,
-                        "max": 0
-                      },
-                      "pw4": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 10,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "PW",
-                        "bind": "Pulse Width 4",
-                        "min": 0.01,
-                        "max": 0.99
-                      },
-                      "detune4": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 10,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Detune",
-                        "bind": "Detune 4",
-                        "min": 0,
-                        "max": 0.5
-                      }
+                      "voices4": {"type": "number", "col": 0, "row": 7, "colSpan": 2, "label": "Voices", "bind": "Voices 4", "min": 1, "max": 8, "step": 1},
+                      "tune4": {"type": "knob", "col": 2, "row": 6, "colSpan": 2, "rowSpan": 2, "label": "Tune", "bind": "Tune 4", "min": -36, "max": 36, "step": 1},
+                      "fine4": {"type": "knob", "col": 0, "row": 8, "colSpan": 2, "rowSpan": 2, "label": "Fine", "bind": "Fine Tune 4", "min": -100, "max": 100},
+                      "level4": {"type": "knob", "col": 2, "row": 8, "colSpan": 2, "rowSpan": 2, "label": "Level", "bind": "Level 4", "min": -100, "max": 0},
+                      "pw4": {"type": "knob", "col": 0, "row": 10, "colSpan": 2, "rowSpan": 2, "label": "PW", "bind": "Pulse Width 4", "min": 0.01, "max": 0.99},
+                      "detune4": {"type": "knob", "col": 2, "row": 10, "colSpan": 2, "rowSpan": 2, "label": "Detune", "bind": "Detune 4", "min": 0, "max": 0.5}
                     }
                   },
                   {
                     "name": "FILTER",
                     "widgets": {
-                      "flt_grp": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 0,
-                        "colSpan": 4,
-                        "rowSpan": 6,
-                        "label": "FILTER",
-                        "color": "#ff6a1a26"
-                      },
+                      "flt_grp": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 6, "label": "FILTER", "color": "#ff6a1a26"},
                       "flt_type": {
                         "type": "dropdown",
                         "col": 0,
@@ -2372,26 +616,11 @@
                         "label": "Type",
                         "bind": "Filter Type",
                         "options": [
-                          {
-                            "label": "Off",
-                            "value": 0
-                          },
-                          {
-                            "label": "Low-pass",
-                            "value": 1
-                          },
-                          {
-                            "label": "High-pass",
-                            "value": 2
-                          },
-                          {
-                            "label": "Band-pass",
-                            "value": 3
-                          },
-                          {
-                            "label": "Notch",
-                            "value": 4
-                          }
+                          {"label": "Off", "value": 0},
+                          {"label": "Low-pass", "value": 1},
+                          {"label": "High-pass", "value": 2},
+                          {"label": "Band-pass", "value": 3},
+                          {"label": "Notch", "value": 4}
                         ]
                       },
                       "flt_slope": {
@@ -2401,209 +630,31 @@
                         "colSpan": 2,
                         "label": "Slope",
                         "bind": "Filter Slope",
-                        "options": [
-                          {
-                            "label": "12 dB/oct",
-                            "value": 12
-                          },
-                          {
-                            "label": "24 dB/oct",
-                            "value": 24
-                          }
-                        ]
+                        "options": [{"label": "12 dB/oct", "value": 12}, {"label": "24 dB/oct", "value": 24}]
                       },
-                      "cutoff": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 0,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Cutoff",
-                        "bind": "Filter Freq",
-                        "min": 0,
-                        "max": 135.0762329
-                      },
-                      "res": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 2,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Res",
-                        "bind": "Filter Resonance",
-                        "min": 0,
-                        "max": 100
-                      },
-                      "flt_env": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 2,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Env",
-                        "bind": "Filter Amount",
-                        "min": -1,
-                        "max": 1
-                      },
-                      "flt_key": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 4,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Key",
-                        "bind": "Filter Key",
-                        "min": 0,
-                        "max": 100
-                      },
-                      "flt_vel": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 4,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Vel",
-                        "bind": "Filter Velocity",
-                        "min": 0,
-                        "max": 100
-                      },
-                      "filter_screen": {
-                        "type": "lcdscreen",
-                        "col": 0,
-                        "row": 6,
-                        "colSpan": 4,
-                        "rowSpan": 2
-                      },
-                      "fenv_grp": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 8,
-                        "colSpan": 4,
-                        "rowSpan": 4,
-                        "label": "FENV",
-                        "color": "#3ec96b26"
-                      },
-                      "f_attack": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 8,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Attack",
-                        "bind": "Filter Attack",
-                        "min": 0,
-                        "max": 60
-                      },
-                      "f_decay": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 8,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Decay",
-                        "bind": "Filter Decay",
-                        "min": 0,
-                        "max": 60
-                      },
-                      "f_sustain": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 10,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Sustain",
-                        "bind": "Filter Sustain",
-                        "min": 0,
-                        "max": 100
-                      },
-                      "f_release": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 10,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Release",
-                        "bind": "Filter Release",
-                        "min": 0,
-                        "max": 60
-                      }
+                      "cutoff": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Cutoff", "bind": "Filter Freq", "min": 0, "max": 135.0762329},
+                      "res": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Res", "bind": "Filter Resonance", "min": 0, "max": 100},
+                      "flt_env": {"type": "knob", "col": 2, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Env", "bind": "Filter Amount", "min": -1, "max": 1},
+                      "flt_key": {"type": "knob", "col": 0, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "Key", "bind": "Filter Key", "min": 0, "max": 100},
+                      "flt_vel": {"type": "knob", "col": 2, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "Vel", "bind": "Filter Velocity", "min": 0, "max": 100},
+                      "filter_screen": {"type": "lcdscreen", "col": 0, "row": 6, "colSpan": 4, "rowSpan": 2},
+                      "fenv_grp": {"type": "group", "col": 0, "row": 8, "colSpan": 4, "rowSpan": 4, "label": "FENV", "color": "#3ec96b26"},
+                      "f_attack": {"type": "knob", "col": 0, "row": 8, "colSpan": 2, "rowSpan": 2, "label": "Attack", "bind": "Filter Attack", "min": 0, "max": 60},
+                      "f_decay": {"type": "knob", "col": 2, "row": 8, "colSpan": 2, "rowSpan": 2, "label": "Decay", "bind": "Filter Decay", "min": 0, "max": 60},
+                      "f_sustain": {"type": "knob", "col": 0, "row": 10, "colSpan": 2, "rowSpan": 2, "label": "Sustain", "bind": "Filter Sustain", "min": 0, "max": 100},
+                      "f_release": {"type": "knob", "col": 2, "row": 10, "colSpan": 2, "rowSpan": 2, "label": "Release", "bind": "Filter Release", "min": 0, "max": 60}
                     }
                   },
                   {
                     "name": "AMP",
                     "widgets": {
-                      "aenv_grp": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 0,
-                        "colSpan": 4,
-                        "rowSpan": 4,
-                        "label": "AENV",
-                        "color": "#3ec96b26"
-                      },
-                      "a_attack": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 0,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Attack",
-                        "bind": "Amp Attack",
-                        "min": 0.001,
-                        "max": 60,
-                        "curve": "log"
-                      },
-                      "a_decay": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 0,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Decay",
-                        "bind": "Amp Decay",
-                        "min": 0.001,
-                        "max": 60,
-                        "curve": "log"
-                      },
-                      "a_sustain": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 2,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Sustain",
-                        "bind": "Amp Sustain",
-                        "min": 0,
-                        "max": 100
-                      },
-                      "a_release": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 2,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Release",
-                        "bind": "Amp Release",
-                        "min": 0.001,
-                        "max": 60,
-                        "curve": "log"
-                      },
-                      "env_screen": {
-                        "type": "lcdscreen",
-                        "col": 0,
-                        "row": 4,
-                        "colSpan": 4,
-                        "rowSpan": 3
-                      },
-                      "voice_grp": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 7,
-                        "colSpan": 4,
-                        "rowSpan": 4,
-                        "label": "VOICE",
-                        "color": "#6b6b6b26"
-                      },
+                      "aenv_grp": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 4, "label": "AENV", "color": "#3ec96b26"},
+                      "a_attack": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Attack", "bind": "Amp Attack", "min": 0.001, "max": 60, "curve": "log"},
+                      "a_decay": {"type": "knob", "col": 2, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Decay", "bind": "Amp Decay", "min": 0.001, "max": 60, "curve": "log"},
+                      "a_sustain": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Sustain", "bind": "Amp Sustain", "min": 0, "max": 100},
+                      "a_release": {"type": "knob", "col": 2, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Release", "bind": "Amp Release", "min": 0.001, "max": 60, "curve": "log"},
+                      "env_screen": {"type": "lcdscreen", "col": 0, "row": 4, "colSpan": 4, "rowSpan": 3},
+                      "voice_grp": {"type": "group", "col": 0, "row": 7, "colSpan": 4, "rowSpan": 4, "label": "VOICE", "color": "#6b6b6b26"},
                       "voice_mode": {
                         "type": "dropdown",
                         "col": 0,
@@ -2611,79 +662,18 @@
                         "colSpan": 2,
                         "label": "Mode",
                         "bind": "Voice Mode",
-                        "options": [
-                          {
-                            "label": "Mono",
-                            "value": 0
-                          },
-                          {
-                            "label": "Legato",
-                            "value": 1
-                          },
-                          {
-                            "label": "Poly",
-                            "value": 2
-                          }
-                        ]
+                        "options": [{"label": "Mono", "value": 0}, {"label": "Legato", "value": 1}, {"label": "Poly", "value": 2}]
                       },
-                      "voices": {
-                        "type": "number",
-                        "col": 0,
-                        "row": 8,
-                        "colSpan": 2,
-                        "label": "Voices",
-                        "bind": "Voices",
-                        "min": 1,
-                        "max": 32,
-                        "step": 1
-                      },
-                      "glide": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 7,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Glide",
-                        "bind": "Legato",
-                        "min": 0,
-                        "max": 500
-                      },
-                      "amp_vel": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 9,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Vel",
-                        "bind": "Amp Velocity",
-                        "min": 0,
-                        "max": 100
-                      },
-                      "analog": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 9,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Analog",
-                        "bind": "Amp Analog",
-                        "min": 0,
-                        "max": 1
-                      }
+                      "voices": {"type": "number", "col": 0, "row": 8, "colSpan": 2, "label": "Voices", "bind": "Voices", "min": 1, "max": 32, "step": 1},
+                      "glide": {"type": "knob", "col": 2, "row": 7, "colSpan": 2, "rowSpan": 2, "label": "Glide", "bind": "Legato", "min": 0, "max": 500},
+                      "amp_vel": {"type": "knob", "col": 0, "row": 9, "colSpan": 2, "rowSpan": 2, "label": "Vel", "bind": "Amp Velocity", "min": 0, "max": 100},
+                      "analog": {"type": "knob", "col": 2, "row": 9, "colSpan": 2, "rowSpan": 2, "label": "Analog", "bind": "Amp Analog", "min": 0, "max": 1}
                     }
                   },
                   {
                     "name": "MOD",
                     "widgets": {
-                      "lfo1_grp": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 0,
-                        "colSpan": 4,
-                        "rowSpan": 3,
-                        "label": "LFO1",
-                        "color": "#3d7dff26"
-                      },
+                      "lfo1_grp": {"type": "group", "col": 0, "row": 0, "colSpan": 4, "rowSpan": 3, "label": "LFO1", "color": "#3d7dff26"},
                       "lfo1_shape": {
                         "type": "dropdown",
                         "col": 0,
@@ -2692,67 +682,18 @@
                         "label": "Shape",
                         "bind": "LFO Shape 1",
                         "options": [
-                          {
-                            "label": "None",
-                            "value": 0
-                          },
-                          {
-                            "label": "Sine",
-                            "value": 1
-                          },
-                          {
-                            "label": "Triangle",
-                            "value": 2
-                          },
-                          {
-                            "label": "Saw up",
-                            "value": 3
-                          },
-                          {
-                            "label": "Saw down",
-                            "value": 4
-                          },
-                          {
-                            "label": "Square",
-                            "value": 5
-                          },
-                          {
-                            "label": "Random",
-                            "value": 6
-                          }
+                          {"label": "None", "value": 0},
+                          {"label": "Sine", "value": 1},
+                          {"label": "Triangle", "value": 2},
+                          {"label": "Saw up", "value": 3},
+                          {"label": "Saw down", "value": 4},
+                          {"label": "Square", "value": 5},
+                          {"label": "Random", "value": 6}
                         ]
                       },
-                      "lfo1_rate": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 1,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Rate",
-                        "bind": "Rate 1",
-                        "min": 0,
-                        "max": 500
-                      },
-                      "lfo1_depth": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 1,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Depth",
-                        "bind": "Depth 1",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "lfo2_grp": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 3,
-                        "colSpan": 4,
-                        "rowSpan": 3,
-                        "label": "LFO2",
-                        "color": "#3d7dff26"
-                      },
+                      "lfo1_rate": {"type": "knob", "col": 0, "row": 1, "colSpan": 2, "rowSpan": 2, "label": "Rate", "bind": "Rate 1", "min": 0, "max": 500},
+                      "lfo1_depth": {"type": "knob", "col": 2, "row": 1, "colSpan": 2, "rowSpan": 2, "label": "Depth", "bind": "Depth 1", "min": 0, "max": 1},
+                      "lfo2_grp": {"type": "group", "col": 0, "row": 3, "colSpan": 4, "rowSpan": 3, "label": "LFO2", "color": "#3d7dff26"},
                       "lfo2_shape": {
                         "type": "dropdown",
                         "col": 0,
@@ -2761,360 +702,50 @@
                         "label": "Shape",
                         "bind": "LFO Shape 2",
                         "options": [
-                          {
-                            "label": "None",
-                            "value": 0
-                          },
-                          {
-                            "label": "Sine",
-                            "value": 1
-                          },
-                          {
-                            "label": "Triangle",
-                            "value": 2
-                          },
-                          {
-                            "label": "Saw up",
-                            "value": 3
-                          },
-                          {
-                            "label": "Saw down",
-                            "value": 4
-                          },
-                          {
-                            "label": "Square",
-                            "value": 5
-                          },
-                          {
-                            "label": "Random",
-                            "value": 6
-                          }
+                          {"label": "None", "value": 0},
+                          {"label": "Sine", "value": 1},
+                          {"label": "Triangle", "value": 2},
+                          {"label": "Saw up", "value": 3},
+                          {"label": "Saw down", "value": 4},
+                          {"label": "Square", "value": 5},
+                          {"label": "Random", "value": 6}
                         ]
                       },
-                      "lfo2_rate": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 4,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Rate",
-                        "bind": "Rate 2",
-                        "min": 0,
-                        "max": 500
-                      },
-                      "lfo2_depth": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 4,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Depth",
-                        "bind": "Depth 2",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "menv1_grp": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 6,
-                        "colSpan": 4,
-                        "rowSpan": 4,
-                        "label": "MOD1",
-                        "color": "#3ec96b26"
-                      },
-                      "m1_attack": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 6,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Attack",
-                        "bind": "Mod Attack 1",
-                        "min": 0,
-                        "max": 60
-                      },
-                      "m1_decay": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 6,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Decay",
-                        "bind": "Mod Decay 1",
-                        "min": 0,
-                        "max": 60
-                      },
-                      "m1_sustain": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 8,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Sustain",
-                        "bind": "Mod Sustain 1",
-                        "min": 0,
-                        "max": 100
-                      },
-                      "m1_release": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 8,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Release",
-                        "bind": "Mod Release 1",
-                        "min": 0.001,
-                        "max": 60,
-                        "curve": "log"
-                      },
-                      "menv2_grp": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 10,
-                        "colSpan": 4,
-                        "rowSpan": 4,
-                        "label": "MOD2",
-                        "color": "#3ec96b26"
-                      },
-                      "m2_attack": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 10,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Attack",
-                        "bind": "Mod Attack 2",
-                        "min": 0,
-                        "max": 60
-                      },
-                      "m2_decay": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 10,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Decay",
-                        "bind": "Mod Decay 2",
-                        "min": 0,
-                        "max": 60
-                      },
-                      "m2_sustain": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 12,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Sustain",
-                        "bind": "Mod Sustain 2",
-                        "min": 0,
-                        "max": 100
-                      },
-                      "m2_release": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 12,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Release",
-                        "bind": "Mod Release 2",
-                        "min": 0.001,
-                        "max": 60,
-                        "curve": "log"
-                      },
-                      "mod_screen": {
-                        "type": "lcdscreen",
-                        "col": 0,
-                        "row": 14,
-                        "colSpan": 4,
-                        "rowSpan": 3
-                      }
+                      "lfo2_rate": {"type": "knob", "col": 0, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "Rate", "bind": "Rate 2", "min": 0, "max": 500},
+                      "lfo2_depth": {"type": "knob", "col": 2, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "Depth", "bind": "Depth 2", "min": 0, "max": 1},
+                      "menv1_grp": {"type": "group", "col": 0, "row": 6, "colSpan": 4, "rowSpan": 4, "label": "MOD1", "color": "#3ec96b26"},
+                      "m1_attack": {"type": "knob", "col": 0, "row": 6, "colSpan": 2, "rowSpan": 2, "label": "Attack", "bind": "Mod Attack 1", "min": 0, "max": 60},
+                      "m1_decay": {"type": "knob", "col": 2, "row": 6, "colSpan": 2, "rowSpan": 2, "label": "Decay", "bind": "Mod Decay 1", "min": 0, "max": 60},
+                      "m1_sustain": {"type": "knob", "col": 0, "row": 8, "colSpan": 2, "rowSpan": 2, "label": "Sustain", "bind": "Mod Sustain 1", "min": 0, "max": 100},
+                      "m1_release": {"type": "knob", "col": 2, "row": 8, "colSpan": 2, "rowSpan": 2, "label": "Release", "bind": "Mod Release 1", "min": 0.001, "max": 60, "curve": "log"},
+                      "menv2_grp": {"type": "group", "col": 0, "row": 10, "colSpan": 4, "rowSpan": 4, "label": "MOD2", "color": "#3ec96b26"},
+                      "m2_attack": {"type": "knob", "col": 0, "row": 10, "colSpan": 2, "rowSpan": 2, "label": "Attack", "bind": "Mod Attack 2", "min": 0, "max": 60},
+                      "m2_decay": {"type": "knob", "col": 2, "row": 10, "colSpan": 2, "rowSpan": 2, "label": "Decay", "bind": "Mod Decay 2", "min": 0, "max": 60},
+                      "m2_sustain": {"type": "knob", "col": 0, "row": 12, "colSpan": 2, "rowSpan": 2, "label": "Sustain", "bind": "Mod Sustain 2", "min": 0, "max": 100},
+                      "m2_release": {"type": "knob", "col": 2, "row": 12, "colSpan": 2, "rowSpan": 2, "label": "Release", "bind": "Mod Release 2", "min": 0.001, "max": 60, "curve": "log"},
+                      "mod_screen": {"type": "lcdscreen", "col": 0, "row": 14, "colSpan": 4, "rowSpan": 3}
                     }
                   },
                   {
                     "name": "FX",
                     "widgets": {
-                      "drive": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 0,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Drive",
-                        "bind": "Distortion",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "chorus_grp": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 2,
-                        "colSpan": 4,
-                        "rowSpan": 4,
-                        "label": "CHORUS",
-                        "bind": "Chorus On",
-                        "color": "#3d7dff26"
-                      },
-                      "ch_speed": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 2,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Speed",
-                        "bind": "Speed",
-                        "min": 0.1,
-                        "max": 10,
-                        "curve": "log"
-                      },
-                      "ch_depth": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 2,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Depth",
-                        "bind": "Depth",
-                        "min": 0.1,
-                        "max": 20,
-                        "curve": "log"
-                      },
-                      "ch_width": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 4,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Width",
-                        "bind": "Width",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "ch_mix": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 4,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Mix",
-                        "bind": "Mix",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "delay_grp": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 6,
-                        "colSpan": 4,
-                        "rowSpan": 4,
-                        "label": "DELAY",
-                        "bind": "Delay On",
-                        "color": "#3ec96b26"
-                      },
-                      "dl_time": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 6,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Time",
-                        "bind": "Delay",
-                        "min": 0,
-                        "max": 4
-                      },
-                      "dl_fb": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 6,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Fdbk",
-                        "bind": "Feedback",
-                        "min": -100,
-                        "max": 0
-                      },
-                      "dl_xfeed": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 8,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "X-Feed",
-                        "bind": "Crossfeed",
-                        "min": -100,
-                        "max": 0
-                      },
-                      "dl_mix": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 8,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Mix",
-                        "bind": "Mix #2",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "rev_grp": {
-                        "type": "group",
-                        "col": 0,
-                        "row": 10,
-                        "colSpan": 4,
-                        "rowSpan": 4,
-                        "label": "REVERB",
-                        "bind": "Reverb On",
-                        "color": "#ffffff1a"
-                      },
-                      "rv_size": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 10,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Size",
-                        "bind": "Size",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "rv_damp": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 10,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Damp",
-                        "bind": "Damping",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "rv_width": {
-                        "type": "knob",
-                        "col": 0,
-                        "row": 12,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Width",
-                        "bind": "Width #2",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "rv_mix": {
-                        "type": "knob",
-                        "col": 2,
-                        "row": 12,
-                        "colSpan": 2,
-                        "rowSpan": 2,
-                        "label": "Mix",
-                        "bind": "Mix #3",
-                        "min": 0,
-                        "max": 1
-                      },
-                      "fx_screen": {
-                        "type": "lcdscreen",
-                        "col": 0,
-                        "row": 14,
-                        "colSpan": 4,
-                        "rowSpan": 3
-                      }
+                      "drive": {"type": "knob", "col": 0, "row": 0, "colSpan": 2, "rowSpan": 2, "label": "Drive", "bind": "Distortion", "min": 0, "max": 1},
+                      "chorus_grp": {"type": "group", "col": 0, "row": 2, "colSpan": 4, "rowSpan": 4, "label": "CHORUS", "bind": "Chorus On", "color": "#3d7dff26"},
+                      "ch_speed": {"type": "knob", "col": 0, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Speed", "bind": "Speed", "min": 0.1, "max": 10, "curve": "log"},
+                      "ch_depth": {"type": "knob", "col": 2, "row": 2, "colSpan": 2, "rowSpan": 2, "label": "Depth", "bind": "Depth", "min": 0.1, "max": 20, "curve": "log"},
+                      "ch_width": {"type": "knob", "col": 0, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "Width", "bind": "Width", "min": 0, "max": 1},
+                      "ch_mix": {"type": "knob", "col": 2, "row": 4, "colSpan": 2, "rowSpan": 2, "label": "Mix", "bind": "Mix", "min": 0, "max": 1},
+                      "delay_grp": {"type": "group", "col": 0, "row": 6, "colSpan": 4, "rowSpan": 4, "label": "DELAY", "bind": "Delay On", "color": "#3ec96b26"},
+                      "dl_time": {"type": "knob", "col": 0, "row": 6, "colSpan": 2, "rowSpan": 2, "label": "Time", "bind": "Delay", "min": 0, "max": 4},
+                      "dl_fb": {"type": "knob", "col": 2, "row": 6, "colSpan": 2, "rowSpan": 2, "label": "Fdbk", "bind": "Feedback", "min": -100, "max": 0},
+                      "dl_xfeed": {"type": "knob", "col": 0, "row": 8, "colSpan": 2, "rowSpan": 2, "label": "X-Feed", "bind": "Crossfeed", "min": -100, "max": 0},
+                      "dl_mix": {"type": "knob", "col": 2, "row": 8, "colSpan": 2, "rowSpan": 2, "label": "Mix", "bind": "Mix #2", "min": 0, "max": 1},
+                      "rev_grp": {"type": "group", "col": 0, "row": 10, "colSpan": 4, "rowSpan": 4, "label": "REVERB", "bind": "Reverb On", "color": "#ffffff1a"},
+                      "rv_size": {"type": "knob", "col": 0, "row": 10, "colSpan": 2, "rowSpan": 2, "label": "Size", "bind": "Size", "min": 0, "max": 1},
+                      "rv_damp": {"type": "knob", "col": 2, "row": 10, "colSpan": 2, "rowSpan": 2, "label": "Damp", "bind": "Damping", "min": 0, "max": 1},
+                      "rv_width": {"type": "knob", "col": 0, "row": 12, "colSpan": 2, "rowSpan": 2, "label": "Width", "bind": "Width #2", "min": 0, "max": 1},
+                      "rv_mix": {"type": "knob", "col": 2, "row": 12, "colSpan": 2, "rowSpan": 2, "label": "Mix", "bind": "Mix #3", "min": 0, "max": 1},
+                      "fx_screen": {"type": "lcdscreen", "col": 0, "row": 14, "colSpan": 4, "rowSpan": 3}
                     }
                   }
                 ]
@@ -3204,45 +835,15 @@
             "pluginId": "melody:synth"
           }
         ],
-        "out": [
-          {
-            "to": "MIX",
-            "gain": 1
-          }
-        ]
+        "out": [{"to": "MIX", "gain": 1}]
       },
-      "MIX": {
-        "from": "MIX",
-        "use": [],
-        "out": [
-          {
-            "to": "OUT",
-            "gain": 1
-          }
-        ]
-      }
+      "MIX": {"from": "MIX", "use": [], "out": [{"to": "OUT", "gain": 1}]}
     },
-    "tracks": [
-      "melody"
-    ],
+    "tracks": ["melody"],
     "videoTracks": [],
-    "trackColors": {
-      "melody": "#8b8f98"
-    },
-    "trackSignals": {
-      "melody": "midi"
-    },
-    "trackClips": {
-      "melody": [
-        {
-          "ref": "melody",
-          "start": 0,
-          "tc": "1:1",
-          "len": 4,
-          "kind": "midi"
-        }
-      ]
-    },
+    "trackColors": {"melody": "#8b8f98"},
+    "trackSignals": {"melody": "midi"},
+    "trackClips": {"melody": [{"ref": "melody", "start": 0, "tc": "1:1", "len": 4, "kind": "midi"}]},
     "modules": {},
     "warnings": []
   },
