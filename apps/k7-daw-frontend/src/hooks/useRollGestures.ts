@@ -19,6 +19,7 @@ import {
   velAt,
 } from "@studio/k7-wasm/gesture";
 import { usePointerFollow } from "@studio/ui-timeline/drag";
+import { holdFollow } from "@studio/ui-timeline/hold";
 import { type RefObject, useRef, useState } from "react";
 import type { MenuCtx } from "../contextMenu";
 import { m } from "../paraglide/messages.js";
@@ -169,7 +170,7 @@ export function useRollGestures({
       grid.placeCaret(cellAtEvent(e));
       const feed = grid.beginDrag(cellAtEvent(e));
       // The rectangle stays as drawn whichever way the gesture ends.
-      follow(e, { move: (ev) => feed(cellAtEvent(ev)) });
+      follow(e, holdFollow(e, { move: (ev) => feed(cellAtEvent(ev)) }));
       return;
     }
     // A press is where you are: the caret follows it, before the draw and whether or not the roll can write.
@@ -208,7 +209,8 @@ export function useRollGestures({
       drag.current = null;
       setDraft(null);
     };
-    follow(e, { move, end: up, cancel });
+    // A finger holds before it draws a length, so a stray swipe writes no note; a tap still writes one cell (@studio/ui-timeline/hold).
+    follow(e, holdFollow(e, { move, end: up, cancel }));
   };
 
   /** --- drag a note's VELOCITY: the WHITE LINE is the handle, 0 at the bottom edge and 1 at the top, taken with pointer CAPTURE. */
@@ -354,11 +356,15 @@ export function useRollGestures({
     }
     // The note's own row, which the velocity gesture reads against; the pointer is followed on the window and a cancel drops it.
     const top = (127 - n.key) * rowH;
-    follow(e, {
-      move: (ev) => live.current.move(ev, top),
-      end: () => live.current.end(true),
-      cancel: () => live.current.end(false),
-    });
+    // A finger holds before the note moves, so a stray swipe drags nothing (@studio/ui-timeline/hold).
+    follow(
+      e,
+      holdFollow(e, {
+        move: (ev) => live.current.move(ev, top),
+        end: () => live.current.end(true),
+        cancel: () => live.current.end(false),
+      }),
+    );
   };
 
   const onNotePointerMove = (e: PointerEvent, top: number) => {

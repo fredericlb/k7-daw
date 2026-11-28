@@ -10,7 +10,8 @@
     "./ticks": "./src/ticks.ts",
     "./lanes": "./src/lanes.ts",
     "./drag": "./src/drag.ts",
-    "./pinch": "./src/pinch.ts",
+    "./twoFingers": "./src/twoFingers.ts",
+    "./hold": "./src/hold.ts",
     "./measure": "./src/measure.ts"
   },
   "scripts": {

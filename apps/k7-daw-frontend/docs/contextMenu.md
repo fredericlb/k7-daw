@@ -314,6 +314,8 @@ cancels ours, one that arrives after is dropped, so a press never opens two menu
 
 A drag the timeline arms by holding (`docs/timeline.md`, "A finger holds, then drags") takes the
 press over: it cancels this long press, and opens the menu itself when the hold is released in place.
-`holdToArm` (`src/holdDrag.ts`) does that for every hold, on the element the finger pressed, unless the caller
-answers the release itself: a surface that arms a drag by holding cannot lose its menu by leaving the hook out.
+`holdToArm` and `holdFollow` (`@studio/ui-timeline/hold`) do that for every hold, on the element the finger pressed,
+unless the caller answers the release itself: a surface that arms a drag by holding cannot lose its menu by leaving
+the hook out. Every editing surface does — the timeline, the piano roll, the chains graph, the panel builder's grid —
+since there one finger only taps or holds, and the view moves under two.
 

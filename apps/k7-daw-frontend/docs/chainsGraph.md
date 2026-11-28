@@ -349,14 +349,15 @@ and everything above or below it is empty, so a gesture that could slide the lin
 has one useful direction out of two. A mouse has no horizontal delta to offer, so its notch
 drives x here; the cards, the cables and the zoom itself are untouched.
 
-Two fingers on a touchscreen are read from touch events rather than through the pointer flow:
-that flow drives node drags, widget drags and cable draws, and a second finger arriving mid-drag
-would be read as a second drag. Here the rule is simply "two fingers means zoom" — the pan in
-progress is dropped, and the gesture is measured from the camera it STARTED on.
+On a touchscreen one finger moves no camera: **two fingers pan and zoom** it, on the full graph
+and on a lane's row alike, measured from the camera the gesture STARTED on. They are read from touch
+events rather than through the pointer flow, which drives node drags, widget drags and cable draws,
+where a second finger arriving mid-drag would be read as a second drag. A card moves under one
+finger only after a hold (`@studio/ui-timeline/hold`).
 
 `.dgx` carries `touch-action: none`. This surface pans and zooms itself and scrolls nothing, so
-there is nothing to hand back to the browser; without it a one-finger drag scrolls the page and
-cancels the pan mid-gesture, and two fingers zoom the page instead of the graph.
+there is nothing to hand back to the browser; without it a one-finger drag scrolls the page, and
+two fingers zoom the page instead of the graph.
 
 ## The Graph's actions live in the bar, and the lane's chain in the dock
 

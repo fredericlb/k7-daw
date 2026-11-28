@@ -57,6 +57,7 @@ import {
 import { cn } from "@studio/ui/lib/utils";
 import type { TrackToggleKind } from "@studio/ui/track-toggle";
 import { usePointerFollow } from "@studio/ui-timeline/drag";
+import { holdToArm, openMenuAt } from "@studio/ui-timeline/hold";
 import {
   GUTTER_DESKTOP,
   MARKER_COLOR,
@@ -99,7 +100,6 @@ import {
   TIMELINE_MIME,
 } from "../fileDrop";
 import type { PasteResult } from "../gridCaret";
-import { holdToArm, openMenuAt } from "../holdDrag";
 import { useEdgeResize, useFadeDrag } from "../hooks/useEdgeDrags";
 import { useLatest } from "../hooks/useLatest";
 import type { ResourceDropEvent } from "../hooks/useTimelineDrop";
@@ -1022,7 +1022,7 @@ function TimelineTabView({
       // A cancel drops the lane where it was: the next click elsewhere must not complete the move.
       const grab = () =>
         follow(e, { move: onMove, end: onUp, cancel: () => setRowDrag(null) });
-      // A finger holds first, so the gutter still scrolls the lanes until then (holdDrag.ts).
+      // A finger holds first, so a stray swipe on the gutter reorders nothing (@studio/ui-timeline/hold).
       holdToArm(e, { arm: grab }, e.currentTarget as HTMLElement);
     },
     [readOnly, onReorder, rows, follow],
@@ -1255,7 +1255,7 @@ function TimelineTabView({
         setSel(null);
         setMove(mv);
       };
-      // A finger holds before the grab (so a drag on a clip still scrolls the lane); a tap selects, a hold released in place opens the menu.
+      // A finger holds before the grab (a stray swipe moves no clip); a tap selects, a hold released in place opens the menu.
       if (e.pointerType !== "touch" || !movable) return start();
       holdToArm(
         e,
@@ -3445,7 +3445,7 @@ function TimelineTabView({
                         DBLCLICK_MS
                       )
                         onEmptyClick?.();
-                      // A finger holds on an empty cell, then drags: that draws the range (holdDrag.ts).
+                      // A finger holds on an empty cell, then drags: that draws the range (@studio/ui-timeline/hold).
                       if (e.pointerType === "touch")
                         holdToArm(e, {
                           arm: () =>

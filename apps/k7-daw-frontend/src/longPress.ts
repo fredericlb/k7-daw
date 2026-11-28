@@ -4,6 +4,8 @@
 // The one thing a reader would get wrong: the click that follows is swallowed only when a handler
 // took the menu (preventDefault), so a slow tap on a plain button still clicks.
 
+import { setHoldArmedHook, type Timers } from "@studio/ui-timeline/hold";
+
 export const LONG_PRESS_MS = 500;
 export const LONG_PRESS_SLOP_PX = 10;
 /** How long after the release the stray click may still arrive — iOS sends it late. */
@@ -17,13 +19,6 @@ export interface PressPoint {
   clientY: number;
   target: EventTarget | null;
 }
-
-export interface Timers {
-  set: (fn: () => void, ms: number) => unknown;
-  clear: (handle: unknown) => void;
-  now: () => number;
-}
-
 /** Fires once per press; answers whether a handler took the menu. */
 export type FireMenu = (x: number, y: number, target: EventTarget) => boolean;
 
@@ -107,10 +102,8 @@ export class LongPressTracker {
 
 let installed: LongPressTracker | null = null;
 
-/** The hold-to-drag gestures (holdDrag.ts) call this when they arm, so the 500 ms menu does not follow. */
-export function suppressLongPress(): void {
-  installed?.suppress();
-}
+// The hold-to-drag gestures (@studio/ui-timeline/hold) call this when they arm, so the 500 ms menu does not follow.
+setHoldArmedHook(() => installed?.suppress());
 
 const isEditable = (t: EventTarget | null): boolean =>
   t instanceof Element &&

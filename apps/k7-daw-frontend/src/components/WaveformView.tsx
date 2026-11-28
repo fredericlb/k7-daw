@@ -6,6 +6,7 @@
 
 import { Play, Volume2, X } from "@studio/ui/icons";
 import { usePointerFollow } from "@studio/ui-timeline/drag";
+import { holdFollow } from "@studio/ui-timeline/hold";
 import { useElementSize } from "@studio/ui-timeline/measure";
 import { useHZoom, usePanScroll } from "@studio/ui-timeline/panZoom";
 import {
@@ -114,26 +115,30 @@ export function WaveformView({
       dragRef.current = null;
       setDrag(null);
     };
-    follow(e, {
-      move: (ev) => {
-        const cur = dragRef.current;
-        const sec = secAt(ev.clientX);
-        if (!cur || sec == null) return;
-        const nd =
-          cur.edge === "from"
-            ? { ...cur, from: Math.min(sec, cur.to - MIN) }
-            : { ...cur, to: Math.max(sec, cur.from + MIN) };
-        dragRef.current = nd;
-        setDrag(nd);
-      },
-      end: () => {
-        const cur = dragRef.current;
-        if (cur && onSliceEdit)
-          onSliceEdit(cur.symbol, roundSec(cur.from), roundSec(cur.to));
-        stop();
-      },
-      cancel: stop,
-    });
+    // A finger holds before the edge moves, so a stray swipe trims nothing (@studio/ui-timeline/hold).
+    follow(
+      e,
+      holdFollow(e, {
+        move: (ev) => {
+          const cur = dragRef.current;
+          const sec = secAt(ev.clientX);
+          if (!cur || sec == null) return;
+          const nd =
+            cur.edge === "from"
+              ? { ...cur, from: Math.min(sec, cur.to - MIN) }
+              : { ...cur, to: Math.max(sec, cur.from + MIN) };
+          dragRef.current = nd;
+          setDrag(nd);
+        },
+        end: () => {
+          const cur = dragRef.current;
+          if (cur && onSliceEdit)
+            onSliceEdit(cur.symbol, roundSec(cur.from), roundSec(cur.to));
+          stop();
+        },
+        cancel: stop,
+      }),
+    );
   };
 
   // The MATERIAL's identity, not the clip's: `clip trim` rewrites the window and leaves the id alone (src/clipEnvelope.ts).

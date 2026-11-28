@@ -13,6 +13,7 @@ import { Button } from "@studio/ui/button";
 import { Card } from "@studio/ui/card";
 import { AudioLines, Music, RefreshCw } from "@studio/ui/icons";
 import type { RecordDrag } from "@studio/ui/record-drag";
+import { useTwoFingerScroll } from "@studio/ui-timeline/twoFingers";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { CodeText } from "../../CodeText";
 import { m } from "../../paraglide/messages.js";
@@ -176,6 +177,8 @@ export function MixView({
 
   /** What each deck draws, decided by the room the decks row has — measured, not told: ../../docs/deskLayout.md. */
   const deckRow = useRef<HTMLDivElement>(null);
+  // On a phone the row scrolls sideways under two fingers only: one finger on the desk is always a control.
+  useTwoFingerScroll(deckRow);
   // The stem block only costs height when there is no record for it to sit beside — ../../docs/deskLayout.md.
   const stemLive = decks.stemLive("deckA") || decks.stemLive("deckB");
   // …and the echo costs the STRIP a row, on the same "either deck wires one" rule.

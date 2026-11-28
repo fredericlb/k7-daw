@@ -9,8 +9,8 @@ import {
   videoDragIsStill,
   videoDragMove,
 } from "@studio/k7-wasm/gesture";
+import { holdToArm } from "@studio/ui-timeline/hold";
 import { type RefObject, useCallback, useEffect, useState } from "react";
-import { holdToArm } from "../holdDrag";
 import { m } from "../paraglide/messages.js";
 import { pictureToolLine, type Tool } from "../timelineTools";
 import type { WebVideoTrack } from "../types";
@@ -110,7 +110,7 @@ export function useVideoDrag({
           moved: false,
         });
       };
-      // A finger holds before the grab starts, so a drag on a shot still scrolls the lane until then (holdDrag.ts).
+      // A finger holds before the grab starts, so a stray swipe on a shot moves nothing (@studio/ui-timeline/hold).
       holdToArm(e, { arm: grab }, el);
     },
     [onToolLine, setStatus, toolRef, ppbRef, bpsRef, unitRef],

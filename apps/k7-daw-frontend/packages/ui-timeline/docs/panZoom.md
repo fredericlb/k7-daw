@@ -106,22 +106,35 @@ the listener is `passive: false`; a plain wheel returns before that and scrolls 
 
 ## Two fingers on a touchscreen
 
-`usePinch(ref, { onStart, onPinch(start, ratio, centre) })` is the one hook for it: `onStart` takes the
-baseline (a zoom, a camera, a bar count) or refuses the gesture, `onPinch` gets the spread's ratio
-against the start. The pane zoom, the take panel and the chains camera each bring their own clamp.
+**An editing surface moves under two fingers only; one finger moves nothing.** Its clips, notes and
+cards are what a finger lands on, so a surface that scrolled under one finger read every stray swipe
+either as a pan or as a drag of whatever it began on. With the count of fingers deciding, one finger
+is a tap or a hold (`hold.ts`, and `apps/k7-daw-frontend/docs/timeline.md`, "A finger holds, then
+drags"), and two are the view.
 
-Touch events rather than pointer events, deliberately: this container SCROLLS, and the browser
-claims a pointer the moment it decides a drag is a scroll — a pinch woven into the pointer flow dies
-to a `pointercancel` half-way through. A non-passive `touchmove` that `preventDefault`s for the
-length of the gesture is what holds the browser off.
+`useTwoFingers(ref, { onStart, onMove(start, frame) })` is the one hook for it (`twoFingers.ts`):
+`onStart` takes the baseline (a zoom and a scroll, a camera, a bar window) or refuses the gesture,
+`onMove` gets the midpoint's travel and the spread's ratio, both against the START. `useHZoom` mounts
+it, and `useTwoFingerScroll` is the same for a container that only scrolls. Each surface brings its
+own clamp.
 
-The zoom is measured against the one the gesture STARTED from, not frame to frame: a ratio of ratios
-accumulates rounding, and pinching out then back in would not return where it began.
+- **`touch-action: none` is set by the hook**, not left to each caller's stylesheet: one finger is
+  not the browser's to scroll with. A list nested in the surface still scrolls under one finger,
+  since the property stops at the nearest scroll container, which is why the hook cancels a
+  `touchmove` only while two fingers are its own.
+- **Measured from the start, not frame to frame**: a ratio of ratios accumulates rounding, and
+  pinching out and back in would not return where it began. The pan is the same — a scroll from
+  the one the gesture began on — so the zoom anchors where the fingers LANDED and the pan carries
+  that point to where they are.
+- **The zoom waits for 4% of spread** (`PINCH_SLOP`): a pan whose fingers waver would otherwise
+  re-lay a whole timeline every frame for a zoom nobody asked for.
+- **Touch events rather than pointer events**: the pointer flow is where each finger's own drag
+  lives, and a gesture of two fingers read there would be two drags.
+- **A drag already armed by a hold owns the touch**: no two-finger gesture starts under it
+  (`holdTwoFingers`), and a second finger landing BEFORE the hold cancels the hold instead.
 
-`touch-action: pan-x pan-y` is set by the hook rather than left to each caller's stylesheet.
-Panning stays the browser's — it scrolls this container far better than we would — but the pinch is
-ours, and that value says exactly that. A surface that mounts this hook and forgets the rule gets a
-gesture the browser silently swallows, with nothing on screen to explain it.
+There is no momentum: the fingers are the motion, and a glide would be a counterfeit of the
+browser's.
 
 ## Middle-drag panning
 
@@ -140,7 +153,7 @@ stopping the event, so child clicks still work.
 ## The graph shares the rule and the pinch
 
 The chains graph (`apps/k7-daw-frontend/packages/ui-chains-react/src/camera.ts`) answers the
-wheel-vs-trackpad question the same way and takes its pinch from `wheelFactor` and `usePinch` here.
+wheel-vs-trackpad question the same way and takes its pinch from `wheelFactor` and `useTwoFingers` here.
 It keeps its own NOTCH rate — a detent scales by its delta there, where a pane takes a step — and
 its own camera arithmetic, because a pane here scrolls and the graph translates. The rule is
 recorded in `docs/inventaire.md` and tested on both sides so it cannot drift in silence.

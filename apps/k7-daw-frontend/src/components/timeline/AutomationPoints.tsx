@@ -2,8 +2,8 @@
 // The one thing a reader would get wrong: a point's value is 0 to 1 top to bottom, and every edit is a `curve point` verb, never local state.
 
 import { cn } from "@studio/ui/lib/utils";
+import { holdToArm } from "@studio/ui-timeline/hold";
 import { useState } from "react";
-import { holdToArm } from "../../holdDrag";
 import { m } from "../../paraglide/messages.js";
 
 export interface AutoPoint {
@@ -115,7 +115,7 @@ export function AutomationPoints({
             if (readOnly || e.button !== 0) return;
             const el = e.currentTarget;
             const pointerId = e.pointerId;
-            // A finger holds first, so the lane still scrolls under it until then (holdDrag.ts).
+            // A finger holds first, so a stray swipe moves no point (@studio/ui-timeline/hold).
             holdToArm(
               e,
               {

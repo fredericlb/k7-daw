@@ -1,7 +1,7 @@
 // panZoom.ts — navigation for the media panes, which scale to FIT by default (so there is
 // nothing to scroll until you zoom). useHZoom scales horizontally, anchored so the point under
-// the cursor stays put — by trackpad pinch, by Cmd/Ctrl+wheel and by two fingers (usePinch); a bare wheel
-// or a trackpad slide is the browser's scroll (wheelZooms). The arithmetic is Rust's (@studio/k7-wasm/gestureTicks);
+// the cursor stays put — by trackpad pinch, by Cmd/Ctrl+wheel and by two fingers (useTwoFingers, which also pan); a bare wheel
+// or a trackpad slide is the browser's scroll (wheelZooms), and one finger scrolls nothing. The arithmetic is Rust's (@studio/k7-wasm/gestureTicks);
 // usePanScroll pans on a MIDDLE-mouse drag — not Space-drag, because Space is the transport
 // toggle in every app that mounts these.
 // Unit-free on purpose: the caller multiplies its own lane width, in beats or in seconds.
@@ -24,7 +24,7 @@ import {
   useState,
 } from "react";
 import { useElementSize } from "./measure";
-import { usePinch } from "./pinch";
+import { useTwoFingers } from "./twoFingers";
 
 export { isMouseWheel, isZoomWheel, wheelFactor, zoomCeiling };
 
@@ -101,25 +101,42 @@ export function useHZoom(
     };
     // Passive:false so preventDefault can stop the browser's page zoom on the pinch.
     el.addEventListener("wheel", onWheel, { passive: false });
-
-    // Panning stays the browser's and the pinch is ours; set HERE, not in each caller's stylesheet.
-    const hadTouchAction = el.style.touchAction;
-    el.style.touchAction = "pan-x pan-y";
-
-    return () => {
-      el.removeEventListener("wheel", onWheel);
-      el.style.touchAction = hadTouchAction;
-    };
+    return () => el.removeEventListener("wheel", onWheel);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ref, min, ceiling, zoomAt, ...deps]);
 
-  // Two fingers: the zoom at the start times the spread's ratio, kept to the pane's own limits.
-  usePinch(
+  // Two fingers: the start's zoom times the spread's ratio, anchored where they landed, and the scroll carried by their midpoint.
+  useTwoFingers(
     ref,
     {
-      onStart: () => zoomRef.current,
-      onPinch: (z0, ratio, c) =>
-        zoomAt(pinchZoomTo(z0, ratio, 1, min, ceiling), c.x),
+      onStart: () => {
+        const el = ref.current;
+        if (!el) return false;
+        return {
+          zoom: zoomRef.current,
+          left: el.scrollLeft,
+          top: el.scrollTop,
+        };
+      },
+      onMove: (s, f) => {
+        const el = ref.current;
+        if (!el) return;
+        const next =
+          f.ratio === 1
+            ? s.zoom
+            : pinchZoomTo(s.zoom, f.ratio, 1, min, ceiling);
+        const offsetX = f.origin.x - el.getBoundingClientRect().left;
+        const left =
+          anchoredScrollLeft(s.left, offsetX, gutter, s.zoom, next) - f.dx;
+        el.scrollTop = s.top - f.dy;
+        // A width still to render takes the scroll after it, as a zoom does; otherwise the scroll is set now.
+        if (next === zoomRef.current && pendingLeft.current == null)
+          el.scrollLeft = left;
+        else {
+          pendingLeft.current = left;
+          setZoom(next);
+        }
+      },
     },
     deps,
   );

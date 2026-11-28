@@ -1,10 +1,10 @@
-// useChainsCamera.ts — the camera's frame loop, the wheel and the pinch, and the flights a
+// useChainsCamera.ts — the camera's frame loop, the wheel and the two fingers, and the flights a
 // double-click or the minimap asks for. Bound once and writing only refs, so no gesture costs a
 // render; the numbers themselves are camera.ts — docs/camera.md.
 
 import type { GraphNode } from "@studio/ui-chains/graph";
 import { isMouseWheel, isZoomWheel } from "@studio/ui-timeline/panZoom";
-import { usePinch } from "@studio/ui-timeline/pinch";
+import { useTwoFingers } from "@studio/ui-timeline/twoFingers";
 import {
   type Dispatch,
   type RefObject,
@@ -22,6 +22,7 @@ import {
   type Lod,
   lodFor,
   sameLod,
+  twoFingerCam,
   wheelFactor,
   wheelPixels,
   zoomAbout,
@@ -244,26 +245,29 @@ export function useChainsCamera({
     };
   }, []);
 
-  // Two fingers where there is no wheel at all, absolute from the camera the gesture started with — docs/camera.md.
+  // Two fingers pan the camera and zoom it on a touch screen, absolute from the camera the gesture started with — docs/camera.md.
   // biome-ignore lint/correctness/useExhaustiveDependencies: the inputs are refs and setters DomChains hands in, stable for its lifetime.
-  usePinch<Cam>(
+  useTwoFingers<Cam>(
     hostRef,
     {
       onStart: () => {
         if (fixedRef.current) return false;
         flight.current = null;
-        pan.current = null; // a pinch is not a pan, whatever the first finger had started
+        pan.current = null; // two fingers are the camera's, whatever a mouse had started
         setPanning(false);
         return { ...cam.current };
       },
-      onPinch: (from, ratio, c) => {
+      onMove: (from, f) => {
         const r = hostRef.current?.getBoundingClientRect();
         if (!r) return;
         userMoved.current = true;
-        // From the gesture's OWN starting camera, which is what makes the whole pinch absolute.
+        // From the gesture's OWN starting camera, which is what makes the whole gesture absolute.
+        const k = f.ratio === 1 ? from.k : clampZoom(from.k * f.ratio);
+        const ox = f.origin.x - r.left;
+        const oy = f.origin.y - r.top;
         Object.assign(
           cam.current,
-          zoomAbout(from, clampZoom(from.k * ratio), c.x - r.left, c.y - r.top),
+          twoFingerCam(from, k, ox, oy, f.dx, f.dy, !!rowRef.current),
         );
         Object.assign(goal.current, cam.current);
         kick.current();

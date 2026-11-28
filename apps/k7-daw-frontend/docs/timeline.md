@@ -881,11 +881,16 @@ A **shape** lane gets no button: it has no input to record.
 
 ## A finger holds, then drags
 
-**Every drag on the timeline starts by a hold when a finger makes it.** The lane scrolls under a
-finger, and clips fill most of a lane, so a clip that took every press would leave nothing to pan with.
-A finger that stays 300 ms where it landed *arms* the drag (`src/holdDrag.ts`), with a short
-vibration where the device has one; one that moves first is left to the scroll. A mouse or a pen
-arms at once, as before.
+**On a touch screen the lanes move under two fingers only.** Their midpoint scrolls the lanes and
+their spread zooms; one finger scrolls nothing. Clips fill most of a lane, so a lane that scrolled
+under one finger was a lane where a stray swipe either moved the view or, landing on a clip, moved
+the clip: the two readings of one gesture are kept apart by the number of fingers.
+
+**Every drag on the timeline starts by a hold when a finger makes it**, so a swipe that was meant
+as nothing does nothing. A finger that stays 300 ms where it landed *arms* the drag
+(`@studio/ui-timeline/hold`), with a short vibration where the device has one; one that moves first
+does nothing at all, and a second finger landing before the hold is the start of a two-finger pan.
+A mouse or a pen arms at once, and a trackpad's two-finger slide is the wheel, as before.
 
 It covers a clip, its two edges, its fades, a lane's header (reorder), a picture shot and an
 automation point. On an **empty cell**, a hold then a drag draws the range rectangle that Shift
@@ -1152,11 +1157,10 @@ claims a pointer the moment it decides a drag is a scroll, so a pinch woven into
 dies to a `pointercancel` half-way through. A non-passive `touchmove` that preventDefaults for
 the length of the gesture is what holds the browser off.
 
-The hook also sets `touch-action: pan-x pan-y` on the container itself. Panning stays the
-browser's — it scrolls this far better than we would — and that value says exactly that while
-taking the pinch back. Set by the hook rather than left to each caller's stylesheet, because a
-surface that mounts it and forgets the rule gets a gesture the browser silently swallows, with
-nothing on screen to explain it.
+The same two fingers pan: their midpoint carries the scroll while their spread zooms, and the
+container reads `touch-action: none`, set by the hook, because one finger scrolls nothing here
+("A finger holds, then drags"). The zoom stays at 1 until the spread has changed by 4%, so a pan
+whose fingers waver does not re-lay the lanes on every frame.
 
 `wheelFactor` is exported and tested. The graph's `camera.ts` takes the pinch rate from it and keeps
 only its own notch (a detent scales by its delta there, where a pane takes a step).

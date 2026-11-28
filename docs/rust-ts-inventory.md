@@ -439,7 +439,6 @@ are grouped by folder and extension, with the reasons they stay.
 | src/headphonesHint.ts | 29 | MOVE 10 / STAY 19 | song graph read | localStorage stays |
 | src/historyMarks.ts | 74 | MOVED |  | built in M6f: see "M6f, as built" |
 | src/historySource.ts | 19 | STAY |  | view offers |
-| src/holdDrag.ts | 155 | STAY |  | pointer events |
 | src/i18n.ts | 10 | STAY |  |  |
 | src/keys.ts | 286 | STAY |  | key bindings table; UI host's |
 | src/laneInput.ts | 24 | MOVE | song graph read (runCarriesInput exists server-side) | twin |
@@ -805,6 +804,8 @@ are grouped by folder and extension, with the reasons they stay.
 | ui-mini-player/src/*.tsx (4 files) | 636 | STAY |  | React bar + Media Session API |
 | ui-mini-player/src/*.ts (3 files) | 209 | STAY |  | React bar + Media Session API |
 | ui-timeline/src/*.ts (2 files) | 121 | STAY |  | pointer drag, lane geometry constants |
+| ui-timeline/src/hold.ts | 318 | STAY |  | pointer events; the hold state machine is bookkeeping, no arithmetic |
+| ui-timeline/src/twoFingers.ts | 157 | STAY |  | touch events; a midpoint and a ratio, too small to cross the wasm ABI per move |
 | ui-waveform/src/*.tsx (2 files) | 920 | STAY |  | Canvas waveform drawing |
 | ui-waveform/src/*.ts (4 files) | 162 | STAY |  | Canvas waveform drawing |
 | ui/src/*.tsx (41 files) | 4596 | STAY |  | UI kit (shadcn), DataTransfer, focus, long press |
