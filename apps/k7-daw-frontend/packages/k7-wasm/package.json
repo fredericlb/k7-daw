@@ -44,7 +44,10 @@
     "./kit": "./src/kit.ts",
     "./clipboard": "./src/clipboard.ts",
     "./draft": "./src/draft.ts",
-    "./reads": "./src/reads.ts"
+    "./reads": "./src/reads.ts",
+    "./surfaces": "./src/surfaces.ts",
+    "./nodes": "./src/nodes.ts",
+    "./library": "./src/library.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",

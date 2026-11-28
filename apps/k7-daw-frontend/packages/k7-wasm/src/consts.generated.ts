@@ -339,6 +339,137 @@ export const KIT_GRID = 4;
 /** A rack's first pad note: C1, General MIDI's kick. */
 export const RACK_FIRST_NOTE = 36;
 
+/** The three parts of the quick-master node, in the order the signal meets them. */
+export const MASTER_PARTS = ["comp", "spread", "limiter"] as const;
+
+/** The mastering surface's controls in signal order: the vocabulary a surface mapping is keyed by. */
+export const MASTER_CONTROLS = [
+  {
+    id: "comp.lowCut",
+    part: "comp",
+    range: [0.0, 300.0],
+    home: 0.0,
+    step: 1.0,
+    unit: "Hz",
+    wants:
+      "the quick-master module — its low cut on the mid, before it compresses",
+    optional: true,
+  },
+  {
+    id: "comp.low",
+    part: "comp",
+    range: [0.0, 100.0],
+    home: 0.0,
+    step: 1.0,
+    unit: "%",
+    wants: "the SAME module — how much it compresses the lows",
+  },
+  {
+    id: "comp.mid",
+    part: "comp",
+    range: [0.0, 100.0],
+    home: 0.0,
+    step: 1.0,
+    unit: "%",
+    wants: "the SAME module — how much on the mids",
+  },
+  {
+    id: "comp.high",
+    part: "comp",
+    range: [0.0, 100.0],
+    home: 0.0,
+    step: 1.0,
+    unit: "%",
+    wants: "the SAME module — how much on the highs",
+  },
+  {
+    id: "comp.lowFreq",
+    part: "comp",
+    range: [40.0, 500.0],
+    home: 180.0,
+    step: 1.0,
+    unit: "Hz",
+    wants: "the SAME module — the crossover between lows and mids",
+  },
+  {
+    id: "comp.highFreq",
+    part: "comp",
+    range: [800.0, 8000.0],
+    home: 3000.0,
+    step: 10.0,
+    unit: "Hz",
+    wants: "the SAME module — the crossover between mids and highs",
+  },
+  {
+    id: "spread.width",
+    part: "spread",
+    range: [0.0, 200.0],
+    home: 100.0,
+    step: 1.0,
+    unit: "%",
+    wants: "the SAME module — the stereo width",
+  },
+  {
+    id: "spread.bassMono",
+    part: "spread",
+    range: [0.0, 300.0],
+    home: 0.0,
+    step: 1.0,
+    unit: "Hz",
+    wants:
+      "the SAME module — the frequency below which the bass is brought to the centre",
+  },
+  {
+    id: "limiter.hfLimit",
+    part: "limiter",
+    range: [0.0, 100.0],
+    home: 0.0,
+    step: 1.0,
+    unit: "%",
+    wants:
+      "the SAME module — its HF limit, what it takes off the fastest highs",
+    optional: true,
+  },
+  {
+    id: "limiter.drive",
+    part: "limiter",
+    range: [0.0, 12.0],
+    home: 0.0,
+    step: 0.1,
+    unit: "dB",
+    wants: "the SAME module — the limiter's input gain",
+  },
+  {
+    id: "limiter.ceiling",
+    part: "limiter",
+    range: [-12.0, 0.0],
+    home: 0.0,
+    step: 0.1,
+    unit: "dB",
+    wants: "the SAME module — its ceiling",
+  },
+  {
+    id: "limiter.release",
+    part: "limiter",
+    range: [10.0, 500.0],
+    home: 120.0,
+    step: 1.0,
+    unit: "ms",
+    wants: "the SAME module — its release time",
+  },
+  {
+    id: "limiter.output",
+    part: "limiter",
+    range: [0.0, 2.0],
+    home: 0.0,
+    step: 1.0,
+    unit: "",
+    wants: "the SAME module — its output word length, float, 24-bit or 16-bit",
+    optional: true,
+    choices: ["Float", "24-bit", "16-bit"],
+  },
+] as const;
+
 /** The two fixed levels a module can live at. */
 export const FIXED_NAMESPACES = ["engine", "workspace"] as const;
 

@@ -1,14 +1,16 @@
-// controls.ts — what a `mastering` surface has knobs for: ten controls in three groups, one
-// group per part of the node it is a picture of. The vocabulary a `surfaces/<id>.k7x` mapping
-// is keyed by; `@studio/song` accepts any key and this is the list that is actually drawn.
+// controls.ts — what a `mastering` surface has knobs for: the controls in three groups, one per part of the quick-master node.
+// The table is Rust's (`MASTER_CONTROLS`, in the chains crate); only the translated labels are here, keyed by the control's id.
 // See ../../docs/mastering.md.
 
 import { unmappedControls as unmapped } from "@studio/k7-wasm/chains";
+import { MASTER_PARTS, MASTER_CONTROLS as TABLE } from "@studio/k7-wasm/consts";
+import { masterModules } from "@studio/k7-wasm/surfaces";
 import type { MixView } from "@studio/k7-wasm/text";
 import { m } from "../paraglide/messages.js";
 
+export { MASTER_PARTS };
+
 /** The three appliances inside one quick-master node, in the order the signal meets them. */
-export const MASTER_PARTS = ["comp", "spread", "limiter"] as const;
 export type MasterPart = (typeof MASTER_PARTS)[number];
 
 export const PART_LABEL: Record<MasterPart, () => string> = {
@@ -27,9 +29,9 @@ export interface MasterControl {
   /** Where the knob sits when nothing is known yet — never 0, which is a real value on most of these. */
   home: number;
   step: number;
-  /** Printed after the value — cosmetic, and the reason every number here is readable against a meter rather than against itself. */
+  /** Printed after the value — cosmetic. */
   unit: string;
-  /** The note the scaffold prints beside the empty line — kept next to the control it is about. */
+  /** The note the scaffold prints beside the empty line. */
   wants: string;
   /** Not required by the gate: a surface written before it existed still draws (docs/mastering.md). */
   optional?: true;
@@ -37,146 +39,26 @@ export interface MasterControl {
   choices?: readonly string[];
 }
 
-/** The ten, in signal order — with NO normalisation anywhere on this surface, so a number can be checked against a meter (docs/mastering.md). */
-export const MASTER_CONTROLS: readonly MasterControl[] = [
-  {
-    id: "comp.lowCut",
-    label: () => m["master.lowCut"](),
-    part: "comp",
-    range: [0, 300],
-    home: 0,
-    step: 1,
-    unit: "Hz",
-    wants:
-      "the quick-master module — its low cut on the mid, before it compresses",
-    optional: true,
-  },
-  {
-    id: "comp.low",
-    label: () => m["master.low"](),
-    part: "comp",
-    range: [0, 100],
-    home: 0,
-    step: 1,
-    unit: "%",
-    wants: "the SAME module — how much it compresses the lows",
-  },
-  {
-    id: "comp.mid",
-    label: () => m["master.mid"](),
-    part: "comp",
-    range: [0, 100],
-    home: 0,
-    step: 1,
-    unit: "%",
-    wants: "the SAME module — how much on the mids",
-  },
-  {
-    id: "comp.high",
-    label: () => m["master.high"](),
-    part: "comp",
-    range: [0, 100],
-    home: 0,
-    step: 1,
-    unit: "%",
-    wants: "the SAME module — how much on the highs",
-  },
-  {
-    id: "comp.lowFreq",
-    label: () => m["master.lowCross"](),
-    part: "comp",
-    range: [40, 500],
-    home: 180,
-    step: 1,
-    unit: "Hz",
-    wants: "the SAME module — the crossover between lows and mids",
-  },
-  {
-    id: "comp.highFreq",
-    label: () => m["master.highCross"](),
-    part: "comp",
-    range: [800, 8000],
-    home: 3000,
-    step: 10,
-    unit: "Hz",
-    wants: "the SAME module — the crossover between mids and highs",
-  },
-  {
-    id: "spread.width",
-    label: () => m["master.width"](),
-    part: "spread",
-    range: [0, 200],
-    home: 100,
-    step: 1,
-    unit: "%",
-    wants: "the SAME module — the stereo width",
-  },
-  {
-    id: "spread.bassMono",
-    label: () => m["master.bassMono"](),
-    part: "spread",
-    range: [0, 300],
-    home: 0,
-    step: 1,
-    unit: "Hz",
-    wants:
-      "the SAME module — the frequency below which the bass is brought to the centre",
-  },
-  {
-    id: "limiter.hfLimit",
-    label: () => m["master.hfLimit"](),
-    part: "limiter",
-    range: [0, 100],
-    home: 0,
-    step: 1,
-    unit: "%",
-    wants:
-      "the SAME module — its HF limit, what it takes off the fastest highs",
-    optional: true,
-  },
-  {
-    id: "limiter.drive",
-    label: () => m["master.drive"](),
-    part: "limiter",
-    range: [0, 12],
-    home: 0,
-    step: 0.1,
-    unit: "dB",
-    wants: "the SAME module — the limiter's input gain",
-  },
-  {
-    id: "limiter.ceiling",
-    label: () => m["master.ceiling"](),
-    part: "limiter",
-    range: [-12, 0],
-    home: 0,
-    step: 0.1,
-    unit: "dB",
-    wants: "the SAME module — its ceiling",
-  },
-  {
-    id: "limiter.release",
-    label: () => m["master.release"](),
-    part: "limiter",
-    range: [10, 500],
-    home: 120,
-    step: 1,
-    unit: "ms",
-    wants: "the SAME module — its release time",
-  },
-  {
-    id: "limiter.output",
-    label: () => m["master.output"](),
-    part: "limiter",
-    range: [0, 2],
-    home: 0,
-    step: 1,
-    unit: "",
-    wants: "the SAME module — its output word length, float, 24-bit or 16-bit",
-    optional: true,
-    choices: ["Float", "24-bit", "16-bit"],
-  },
-];
+const LABELS: Record<string, () => string> = {
+  "comp.lowCut": () => m["master.lowCut"](),
+  "comp.low": () => m["master.low"](),
+  "comp.mid": () => m["master.mid"](),
+  "comp.high": () => m["master.high"](),
+  "comp.lowFreq": () => m["master.lowCross"](),
+  "comp.highFreq": () => m["master.highCross"](),
+  "spread.width": () => m["master.width"](),
+  "spread.bassMono": () => m["master.bassMono"](),
+  "limiter.hfLimit": () => m["master.hfLimit"](),
+  "limiter.drive": () => m["master.drive"](),
+  "limiter.ceiling": () => m["master.ceiling"](),
+  "limiter.release": () => m["master.release"](),
+  "limiter.output": () => m["master.output"](),
+};
+
+/** The controls in signal order, with NO normalisation anywhere on this surface, so a number can be checked against a meter. */
+export const MASTER_CONTROLS: readonly MasterControl[] = (
+  TABLE as unknown as readonly Omit<MasterControl, "label">[]
+).map((c) => ({ ...c, label: LABELS[c.id] }));
 
 export const masterControl = (id: string): MasterControl | undefined =>
   MASTER_CONTROLS.find((c) => c.id === id);
@@ -192,12 +74,5 @@ export function unmappedControls(
 }
 
 /** The modules this surface's mapping names, deduplicated — more than one is legal, and worth SAYING rather than refusing. */
-export function mappedModules(mapping: MixView | undefined): string[] {
-  return [
-    ...new Set(
-      Object.values(mapping ?? {})
-        .map((b) => b?.module)
-        .filter((m): m is string => !!m),
-    ),
-  ];
-}
+export const mappedModules = (mapping: MixView | undefined): string[] =>
+  masterModules(mapping);

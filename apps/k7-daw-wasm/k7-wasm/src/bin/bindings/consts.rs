@@ -336,6 +336,16 @@ fn plain() -> Vec<[String; 3]> {
             &json!(n::RACK_FIRST_NOTE),
         ),
         export(
+            "The three parts of the quick-master node, in the order the signal meets them.",
+            "MASTER_PARTS",
+            &json!(chains::master_controls::MASTER_PARTS),
+        ),
+        export(
+            "The mastering surface's controls in signal order: the vocabulary a surface mapping is keyed by.",
+            "MASTER_CONTROLS",
+            &json!(chains::master_controls::MASTER_CONTROLS),
+        ),
+        export(
             "The two fixed levels a module can live at.",
             "FIXED_NAMESPACES",
             &json!(n::FIXED_NAMESPACES),

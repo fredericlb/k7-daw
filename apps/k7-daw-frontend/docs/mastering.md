@@ -26,7 +26,7 @@ Three files, and they are the whole surface:
 
 | | |
 |---|---|
-| `src/mastering/controls.ts` | the ten ids, their parts, their fallback ranges and units |
+| `src/mastering/controls.ts` | the labels of the controls; the ten ids, their parts, their fallback ranges and units are `apps/k7-daw-wasm/chains/src/master_controls.rs` |
 | `src/mastering/bindings.ts` | the join to the compiled chains, and what a slider draws |
 | `src/components/MasteringTab.tsx` | the screen |
 

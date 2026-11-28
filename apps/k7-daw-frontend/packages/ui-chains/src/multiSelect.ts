@@ -1,11 +1,28 @@
-// multiSelect.ts — several nodes selected at once (Shift+click), and which of them a control LINKS:
-// when every selected node is a use of the same ref on the same engine, a control moved on one moves
-// on all of them by the same TRAVEL, each from where it stood. Pure, so the rule is tested without a DOM.
-// A Shift+drag over empty space selects every module card its rectangle touches (`nodesInBox`).
+// multiSelect.ts — several nodes selected at once (Shift+click), and which of them a control LINKS: the rules are Rust's (the chains crate).
+// A control moved on one node of a selection of one ref on one engine moves on all of them by the same TRAVEL, each from where it stood.
 // The one thing a reader would get wrong: a mixed selection links NOTHING — no partial fan-out.
 
 import type { PageWidget } from "@studio/graph-model";
+import {
+  nodesInBox as inBox,
+  linkedNodeNames,
+  type SelectNode,
+  toggleSelection as toggle,
+} from "@studio/k7-wasm/nodes";
 import { type GraphNode, widgetDenorm } from "./graph";
+
+/** A card as the rules read it: its kind, name, ref, engine, baked state and box — nothing of its panel crosses. */
+const slim = (n: GraphNode): SelectNode => ({
+  kind: n.kind,
+  module: n.module,
+  uses: n.uses as string | undefined,
+  engine: n.engine as string | undefined,
+  frozen: n.frozen,
+  x: n.x,
+  y: n.y,
+  w: n.w,
+  h: n.h,
+});
 
 /** Shift+click on `name`: the selection with it toggled, the single selection it grew from counted in. */
 export function toggleSelection(
@@ -13,9 +30,7 @@ export function toggleSelection(
   primary: string | null,
   name: string,
 ): ReadonlySet<string> {
-  const next = new Set(current.size ? current : primary ? [primary] : []);
-  if (!next.delete(name)) next.add(name);
-  return next;
+  return new Set(toggle([...current], primary, name));
 }
 
 /** The OTHER selected nodes a control on `n` drives too — none unless all share one ref and one engine. */
@@ -24,17 +39,11 @@ export function linkedNodes(
   selection: ReadonlySet<string>,
   n: GraphNode,
 ): GraphNode[] {
-  if (selection.size < 2 || !n.module || !selection.has(n.module)) return [];
-  const picked = nodes.filter(
-    (m) => m.kind === "module" && !!m.module && selection.has(m.module),
+  if (selection.size < 2) return [];
+  const names = new Set(
+    linkedNodeNames(nodes.map(slim), [...selection], slim(n)),
   );
-  // Every selected name must be a node here: one that is not (a chain, a lane) makes the selection mixed.
-  if (picked.length !== selection.size) return [];
-  const same = picked.every(
-    (m) => !!m.uses && m.uses === n.uses && m.engine === n.engine,
-  );
-  // A baked module has no plugin in the engine; it is left out rather than spoiling the rest.
-  return same ? picked.filter((m) => m !== n && !m.frozen) : [];
+  return nodes.filter((m) => m.kind === "module" && names.has(m.module ?? ""));
 }
 
 /** A linked control's value: its own start moved by the TRAVEL of the one in hand (`t0` → `t`, 0..1 of the throw), clamped. */
@@ -52,19 +61,5 @@ export function nodesInBox(
   nodes: readonly GraphNode[],
   box: { x0: number; y0: number; x1: number; y1: number },
 ): string[] {
-  const left = Math.min(box.x0, box.x1);
-  const right = Math.max(box.x0, box.x1);
-  const top = Math.min(box.y0, box.y1);
-  const bottom = Math.max(box.y0, box.y1);
-  return nodes
-    .filter(
-      (n) =>
-        n.kind === "module" &&
-        !!n.module &&
-        n.x < right &&
-        n.x + n.w > left &&
-        n.y < bottom &&
-        n.y + n.h > top,
-    )
-    .map((n) => n.module as string);
+  return inBox(nodes.map(slim), box);
 }

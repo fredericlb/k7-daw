@@ -1,9 +1,9 @@
-// historyMarks.ts — what a History panel row LIGHTS on the graph and the timeline: the lanes,
-// clips, chains and nodes its changed files name. Read off the paths, project-relative, since a
-// commit carries nothing else; a journal step's label may also name the very node it moved.
-// Pure, so which file lights what is pinned by a test rather than by looking.
+// historyMarks.ts — what a History panel row LIGHTS on the graph and the timeline: the lanes, clips, chains and nodes its files name.
+// The marks are read off the paths in Rust (the chains crate's history_marks); what stays here is the sets the surfaces test against.
+// The one thing a reader would get wrong: the sets come back as lists in Rust, and a node is lit by its lane, its own name or its chain.
 
 import type { WebGraph } from "@studio/graph-model";
+import { historyMarksOf } from "@studio/k7-wasm/surfaces";
 
 /** What one row touched, by the names the two surfaces draw with. */
 export interface HistoryMark {
@@ -14,36 +14,28 @@ export interface HistoryMark {
   modules: ReadonlySet<string>;
 }
 
-const stem = (file: string) => file.replace(/\.[^./]+$/, "");
-
 /** The marks for one step or commit: `paths` project-relative, `label` a journal step's command line. */
 export function historyMarks(
   paths: readonly string[],
   label = "",
   graph?: WebGraph | null,
 ): HistoryMark {
-  const lanes = new Set<string>();
-  const clips = new Set<string>();
-  const chains = new Set<string>();
-  const modules = new Set<string>();
-  // A command line names its node bare or quoted: `node param "e490…" "ir" …`.
-  const words = new Set(label.split(/\s+/).map((w) => w.replace(/^"|"$/g, "")));
-  for (const p of paths) {
-    const [dir, ...rest] = p.split("/");
-    const file = rest.join("/");
-    if (!file) continue;
-    if (dir === "tracks") lanes.add(stem(file));
-    else if (dir === "sequences" || dir === "clips") clips.add(stem(file));
-    else if (dir === "chains") {
-      const chain = stem(file);
-      const named = (graph?.chains?.[chain]?.use ?? [])
-        .map((st) => st.module)
-        .filter((m): m is string => !!m && words.has(m));
-      if (named.length) for (const m of named) modules.add(m);
-      else chains.add(chain);
-    }
-  }
-  return { lanes, clips, chains, modules };
+  // Only each chain's node names cross: a command line names a node, nothing else of the graph.
+  const chains = Object.entries(graph?.chains ?? {}).map(([name, c]) => [
+    name,
+    { use: c.use.map((s) => ({ module: s.module })) },
+  ]);
+  const m = historyMarksOf(
+    paths,
+    label,
+    graph ? { chains: Object.fromEntries(chains) } : undefined,
+  );
+  return {
+    lanes: new Set(m.lanes),
+    clips: new Set(m.clips),
+    chains: new Set(m.chains),
+    modules: new Set(m.modules),
+  };
 }
 
 /** Whether a graph card is one `mark` lights: its lane, its own name, or the chain it is in. */

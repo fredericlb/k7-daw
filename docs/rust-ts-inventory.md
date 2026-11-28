@@ -167,7 +167,6 @@ can depend on. What stays, and what each needs:
 | `engineSession.ts` | address parsing around a one-line slug; `session_of` takes a workspace root, not an address | M5c's project address grammar |
 | `engineTaken.ts` | a three-flag decision over React state, called on render | stays |
 | `lcdSounds`' WAV decode | the waveform module is embedded by the Rust front, the page does not load it | a decode route in the file service |
-| `libraryTree`, `historyMarks`, `surfaceRows`, `paneInUse` | no Rust function answers them: ports, not replacements | M4a (doc reads), M3c (git), M5c |
 
 **M3a, as built.** The bar's, the menus' and the edits' rules are the `verbs` crate's `ui` module (`apps/k7-daw-wasm/verbs/docs/verbs/ui.md`),
 reached by the `ui.*`, `edit.*` and `menu.*` ops, which the browser's module carries by building with the crate's `verbs` feature
@@ -213,6 +212,15 @@ the platter, sync, keylock, nudge, click-deck, crossfade, scratch and rebuild ru
 through linear, log, stepped and mirrored widgets; 300 playlists), all equal. One difference is accepted: the grid's `cos`, `sin`, `atan2` and `hypot` are Rust's, not V8's;
 61 % of 20,000 random grids are bit-identical and the worst gap is 7e-16, so a `confident` flag could flip only on the exact edge of its threshold. 55 Rust tests in the crate
 (the old tests' cases, seconds in debug), 6 in `k7-wasm`.
+
+**M6f, as built.** The page's leftover rules went to the crates that own them: `chains` holds `select` (multiSelect), `shown_name`, `group_edge`, `anchor_right`, `master_controls` (the
+mastering strip's table, printed into `consts.generated.ts` as `MASTER_CONTROLS` and `MASTER_PARTS`), `surface_rows`, `pane_in_use` and `history_marks`; `song-edit` holds `library_tree`.
+The page reaches them through three facades in `@studio/k7-wasm` (`surfaces`, `nodes`, `library`) and the op families of the same names. Gone from TypeScript: 641 lines of
+logic and 817 of tests, with 209 and 148 kept as the files' glue and one wiring test per facade, plus 158 lines of new facades; about 2,700 lines of Rust and Rust tests were added.
+Kept in TypeScript, and why: the people-order sort of every list `libraryTree` sends (the browser's collator), the devices' locale order and each address's spelling in `surfaceRows`
+(`lanSurfaceUrl`), the labels of the mastering controls (translated messages), `nodeMarked`, `isEmptyMark` and `nodePredicate` (set tests over Rust's lists, run per card), `linkedValue`
+(one `widgetDenorm` call), the `#port` suffix of `shownNamesOf`, and `graph-model/panel.ts` (a generic lookup over objects the page already holds, run per frame; `Panel::all_widgets`
+and `has_tabs` are its Rust twin, now tested).
 
 **M2b, as built.** Eleven modules and the rulers' ladder went (about 1,100 lines of logic, 1,800 of
 tests; the page keeps `timelineTools.ts` (the tool names, their labels and the words of a note),
@@ -416,7 +424,7 @@ are grouped by folder and extension, with the reasons they stay.
 | src/graphWarnings.ts | 67 | STAY |  | i18n of Rust warning codes |
 | src/gridCaret.ts | 120 | MOVE | gesture crate (new, k7-daw-wasm/gesture; typed export, no JSON) | per key/pointer |
 | src/headphonesHint.ts | 29 | MOVE 10 / STAY 19 | song graph read | localStorage stays |
-| src/historyMarks.ts | 74 | MOVE | k7-git/k7-sync history answer | paths->marks |
+| src/historyMarks.ts | 74 | MOVED |  | built in M6f: see "M6f, as built" |
 | src/historySource.ts | 19 | STAY |  | view offers |
 | src/holdDrag.ts | 155 | STAY |  | pointer events |
 | src/i18n.ts | 10 | STAY |  |  |
@@ -425,7 +433,7 @@ are grouped by folder and extension, with the reasons they stay.
 | src/latestAnswer.ts | 17 | STAY |  | async ordering |
 | src/lcdSounds.ts | 144 | MOVE 70 / STAY 74 | waveform crate decoders (WASM) | decodeWav twin; fetch/cache stays |
 | src/leaveAsk.ts | 20 | STAY |  |  |
-| src/libraryTree.ts | 240 | MOVE 180 / STAY 60 | k7-libraries route answer | tree shaping |
+| src/libraryTree.ts | 240 | MOVED |  | built in M6f: see "M6f, as built" |
 | src/listenHere.ts | 32 | STAY |  | per-browser pref; setListenHere unused export |
 | src/localApp.ts | 34 | GENERATE 6 / STAY 28 | GENERATE LocalApp |  |
 | src/localCommands.ts | 42 | STAY |  | shell gate |
@@ -435,7 +443,7 @@ are grouped by folder and extension, with the reasons they stay.
 | src/longPress.ts | 171 | STAY |  | pointer events |
 | src/lucideIcons.ts | 62 | STAY |  | icons |
 | src/mastering/bindings.ts | 97 | MOVE | song crate (k7-daw-wasm/song), a read on the compiled doc views (viewBindings) | join with ui-chains/bindings |
-| src/mastering/controls.ts | 203 | MOVE | song crate (k7-daw-wasm/song), a read on the compiled doc views (vocabulary) | mostly a table |
+| src/mastering/controls.ts | 203 | MOVED |  | built in M6f: see "M6f, as built" |
 | src/mediaSeconds.ts | 55 | STAY |  | browser media metadata |
 | src/menuConfirm.ts | 19 | STAY |  |  |
 | src/menuTabs.ts | 57 | MOVE | verbs crate (k7-daw-wasm/verbs: catalogue/compl.) | with contextMenu |
@@ -496,8 +504,8 @@ are grouped by folder and extension, with the reasons they stay.
 | src/stepSentence.ts | 68 | MOVE 40 / STAY 28 | verbs crate (k7-daw-wasm/verbs: catalogue/compl.) | words stay |
 | src/surfacePanes.ts | 100 | STAY |  | React registry |
 | src/surfaces/lanApi.ts | 80 | GENERATE 30 / STAY 50 | GENERATE LanPeer/LanHello from k7-lan | route client |
-| src/surfaces/paneInUse.ts | 61 | MOVE | k7-lan presence answer | small rules |
-| src/surfaces/surfaceRows.ts | 134 | MOVE | k7-lan route answer | filter order |
+| src/surfaces/paneInUse.ts | 61 | MOVED |  | built in M6f: see "M6f, as built" |
+| src/surfaces/surfaceRows.ts | 134 | MOVED |  | built in M6f: see "M6f, as built" |
 | src/syncHistory.ts | 110 | GENERATE 23 / STAY 87 | GENERATE from k7-sync | route client |
 | src/takeCounter.ts | 43 | MOVE | gesture crate (new, k7-daw-wasm/gesture; typed export, no JSON) | per frame while recording |
 | src/takeSpool.ts | 202 | STAY |  | OPFS/MediaRecorder |
@@ -642,7 +650,7 @@ are grouped by folder and extension, with the reasons they stay.
 | ui-chains-react/src/useEdgeGestures.ts | 304 | STAY 250 / MOVE 54 |  | pointer hook; what a drop lands as (54) MOVE to chains |
 | ui-chains-react/src/useWidgetDrag.ts | 363 | STAY 300 / MOVE 63 |  | drag hook; override reconcile rule (63) MOVE |
 | ui-chains-react/src/widgetTarget.ts | 203 | MOVE | new crate k7-daw-wasm/chains (k7-wasm op chains_build) | what a widget actuates and which value wins; read per render: one call per graph, not per widget |
-| ui-chains/src/anchorRight.ts | 39 | MOVE | new crate k7-daw-wasm/chains (k7-wasm op chains_build) |  |
+| ui-chains/src/anchorRight.ts | 39 | MOVED |  | built in M6f: see "M6f, as built" |
 | ui-chains/src/assembly.ts | 251 | MOVE | new crate k7-daw-wasm/chains (k7-wasm op chains_build) |  |
 | ui-chains/src/automationDepth.ts | 55 | MOVE | new crate k7-daw-wasm/chains (k7-wasm op chains_build) | mirrors EditBuilder.cpp rule |
 | ui-chains/src/bindings.ts | 173 | MOVE | new crate k7-daw-wasm/chains (k7-wasm op chains_build) | shared by desk mixBindings and src/hooks/useMidiControl |
@@ -657,14 +665,14 @@ are grouped by folder and extension, with the reasons they stay.
 | ui-chains/src/graphLayout.ts | 440 | MOVE | new crate k7-daw-wasm/chains (k7-wasm op chains_build) + graph-layout crate | dagre: whole file depends on it; blocked by layout-crate decision |
 | ui-chains/src/graphNode.ts | 279 | GENERATE | ts-rs from chains crate node/edge structs | types + carryStep (29 lines MOVE) |
 | ui-chains/src/gridFit.ts | 203 | MOVE | new crate k7-daw-wasm/chains (k7-wasm op chains_build) |  |
-| ui-chains/src/groupEdge.ts | 40 | MOVE | new crate k7-daw-wasm/chains (k7-wasm op chains_build) |  |
+| ui-chains/src/groupEdge.ts | 40 | MOVED |  | built in M6f: see "M6f, as built" |
 | ui-chains/src/modulePreview.ts | 122 | MOVE | new crate k7-daw-wasm/chains (k7-wasm op chains_build) |  |
 | ui-chains/src/moduleRow.ts | 322 | MOVE | new crate k7-daw-wasm/chains (k7-wasm op chains_build) | dagre unused here |
-| ui-chains/src/multiSelect.ts | 70 | MOVE | new crate k7-daw-wasm/chains (k7-wasm op chains_build) | linked travel read on pointer move: scalar |
+| ui-chains/src/multiSelect.ts | 70 | MOVED |  | built in M6f: see "M6f, as built" |
 | ui-chains/src/nodeUIs.ts | 432 | MOVE | new crate k7-daw-wasm/chains (k7-wasm op chains_build) | built-in card panels |
 | ui-chains/src/patchGesture.ts | 18 | MOVE | new crate k7-daw-wasm/chains (k7-wasm op chains_build) |  |
 | ui-chains/src/rowSeams.ts | 152 | MOVE | new crate k7-daw-wasm/chains (k7-wasm op chains_build) |  |
-| ui-chains/src/shownName.ts | 40 | MOVE | new crate k7-daw-wasm/chains (k7-wasm op chains_build) |  |
+| ui-chains/src/shownName.ts | 40 | MOVED |  | built in M6f: see "M6f, as built" |
 | ui-chains/src/stackLayout.ts | 197 | MOVE | new crate k7-daw-wasm/chains (k7-wasm op chains_build) | no dagre |
 | ui-chains/src/subgraph.ts | 90 | MOVE | new crate k7-daw-wasm/chains (k7-wasm op chains_build) | pure WebGraph read; song graph views may cover it |
 | ui-chains/src/widgetValue.ts | 74 | MOVE | new crate k7-daw-wasm/chains (k7-wasm op chains_build) | called per pointer move during a drag: scalar call, no JSON |
@@ -726,7 +734,7 @@ are grouped by folder and extension, with the reasons they stay.
 | engine-tunnel/testBadFrame.ts | 45 | DELETE |  | TS reference tunnel agent + harness. Importers: e2e/src/standInEngine.ts (4 conformance specs) and its own ... |
 | engine-tunnel/testCore.ts | 434 | DELETE |  | TS reference tunnel agent + harness. Importers: e2e/src/standInEngine.ts (4 conformance specs) and its own ... |
 | engine-tunnel/upgrade.ts | 48 | DELETE |  | TS reference tunnel agent + harness. Importers: e2e/src/standInEngine.ts (4 conformance specs) and its own ... |
-| graph-model/panel.ts | 23 | MOVE | song crate modules/panels.rs | lookup over every tab; small |
+| graph-model/panel.ts | 23 | STAY |  | the Rust twin is `Panel::all_widgets` and `has_tabs`; see "M6f, as built" |
 | graph-model/types.ts | 430 | GENERATE | song crate graph/view/web.rs ALREADY derives ts-rs (35 derives): export and import | ~30 lines of shared values (port separator, categories) STAY or generated consts |
 | recorder/src/webmDuration.ts | 239 | MOVE | waveform crate webm.rs/webm_write.rs: patch Duration in the header bytes (wasm op over ... | binary format = Rust rule; Blob slicing stays in TS (~20) |
 | take-render/src/materialRender.ts | 135 | DELETE |  | only @studio/commands (deleted on the verbs branch); Rust verbs material_render.rs does it |
