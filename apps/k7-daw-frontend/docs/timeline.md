@@ -1121,7 +1121,8 @@ and only a lane holding events takes it.
 
 Opening a timeline also AUDITIONS it: the pane sends `timeline play <id>` and seeks to 0, so the
 engine plays that timeline alone from its start and the playhead reads its own time; back on the
-song, a bare `timeline play`. What it plays through is the song lane it is placed on, so a
+song, a bare `timeline play`. A project opens on the song, which the engine already plays, so the pane
+sends nothing then: an opening that waited on the engine's load would else end as a process, with its toast. What it plays through is the song lane it is placed on, so a
 timeline's lanes draw no meter, arm, mute or solo of their own, and no markers or automation rows.
 
 Its PICTURE lanes are drawn, from `WebVideoProject.timelines`, at the timeline's own seconds: they are

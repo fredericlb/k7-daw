@@ -567,11 +567,23 @@ function TimelineTabView({
   );
   // The engine plays what the pane shows: the open timeline alone from its start, else the song (timeline play).
   const onTimelinePlay = cmds.timelinePlay;
+  // The song is what a project opens on, so only a CHANGE of timeline is sent; a pane leaving one gives the song back.
+  const sentTimeline = useRef<string | null>(null);
   useEffect(() => {
     if (readOnly || !onTimelinePlay) return;
+    if (openTimeline === sentTimeline.current) return;
+    sentTimeline.current = openTimeline;
     onTimelinePlay(openTimeline);
     if (openTimeline) onSeek?.(0);
   }, [openTimeline, onTimelinePlay, readOnly, onSeek]);
+  const playRef = useRef(onTimelinePlay);
+  playRef.current = onTimelinePlay;
+  useEffect(
+    () => () => {
+      if (sentTimeline.current !== null) playRef.current?.(null);
+    },
+    [],
+  );
   // A renamed timeline stays open under its new name; a removed one gives the pane back to Main.
   const timelineIds = useMemo(
     () => (songDoc?.timelines ?? []).map((t) => t.id),
