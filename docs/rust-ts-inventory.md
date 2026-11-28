@@ -119,8 +119,8 @@ test TypeScript: the typed-call marshalling (`gesture`), the build scripts (`bui
 collator (`paths`), the handle's healing (`curve`), the facades' maps in and out (`chains`, `schemaPage`, `ui`). The facade exports with no caller but a
 test are deleted (`curvePreview`, `editSequence`, `sequenceData`, `readChain`, `applySugared`, `readAiAnswer`, `gridIssues`, `placementStartOf`, the
 constants of the ruler and `fuzzyScore` among them); the exports whose only caller is another package's test (`familyOf`, `isPlumbing`, `isBlend`,
-`groupParams`, `validatePanel`, `toAlphas`, `verbCatalogue`) and the typed gesture calls whose Rust export would have to go with them
-(`dragOffset`, `snapPosition`, `clampKey`, `keyOffset`) stay for the facade generator.
+`groupParams`, `validatePanel`, `toAlphas`, `verbCatalogue`) stay; the typed gesture calls `dragOffset`, `snapPosition`, `clampKey`
+and `keyOffset` are gone with their Rust exports (W6g).
 
 **M4c, as built.** The panel's rules are the song crate's `modules/ui` (`apps/k7-daw-wasm/song/src/modules/ui`): `geometry` (groups, cells,
 the two layouts), `edit` (tabs, clipboard, retype), `auto` (the proposal from a parameter list, its pattern table matched by `rx`, a 150-line matcher

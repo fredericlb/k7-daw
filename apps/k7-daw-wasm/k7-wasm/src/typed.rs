@@ -7,11 +7,11 @@ use gesture::bar_window::{BarSpan, FRAME_MARGIN_BARS, anchor_bars, bar_window, f
 use gesture::clip_playhead::{ActWindow, clip_playhead};
 use gesture::grid_caret::{Bounds, Cell, cell_box, clamp_cell, col_span, move_cell, sel_box, song_seconds_of_col};
 use gesture::roll_drag::{
-    GroupNote, RollDrag, RollMode, clamp_key, drag_moved, draw_span, group_offset, key_offset, moves_pitch, t_span,
+    GroupNote, RollDrag, RollMode, drag_moved, draw_span, group_offset, moves_pitch, t_span,
     vel_at,
 };
 use gesture::roll_fit::{Loop, Note, roll_fit};
-use gesture::snap::{SnapMode, drag_offset, free_snap, move_offset, snap_mode, snap_position, snap_to};
+use gesture::snap::{SnapMode, free_snap, move_offset, snap_mode, snap_to};
 use gesture::take_counter::{Phase, bar_beat, recording_from, take_counter};
 use gesture::video_drag::{Shot, VideoMode, VideoSnap, video_drag_edits, video_drag_is_still, video_drag_move};
 
@@ -66,16 +66,6 @@ pub extern "C" fn k7_g_snap_mode(shift: f64, ctrl: f64, meta: f64) -> f64 {
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn k7_g_drag_offset(dx: f64, ppb: f64, step: f64, orig_start: f64) -> f64 {
-    drag_offset(dx, ppb, step, orig_start)
-}
-
-#[unsafe(no_mangle)]
-pub extern "C" fn k7_g_snap_position(orig: f64, delta: f64, step: f64, mode: f64) -> f64 {
-    snap_position(orig, delta, step, SnapMode::from_code(mode))
-}
-
-#[unsafe(no_mangle)]
 pub extern "C" fn k7_g_move_offset(dx: f64, ppb: f64, step: f64, orig_start: f64, mode: f64) -> f64 {
     move_offset(dx, ppb, step, orig_start, SnapMode::from_code(mode))
 }
@@ -100,22 +90,12 @@ pub extern "C" fn k7_g_roll_drag_moved(mode: f64, key: f64, time: f64, dur: f64,
     yes(drag_moved(&roll(mode, key, time, dur, d_beats, d_keys)))
 }
 
-#[unsafe(no_mangle)]
-pub extern "C" fn k7_g_clamp_key(k: f64) -> f64 {
-    clamp_key(k)
-}
-
 /// Scalars: from, to.
 #[unsafe(no_mangle)]
 pub extern "C" fn k7_g_draw_span(a: f64, b: f64, step: f64, origin: f64, free_len: f64) -> u32 {
     let (from, to) = draw_span(a, b, step, origin, free_len);
     set_scalars(&[from, to]);
     OK
-}
-
-#[unsafe(no_mangle)]
-pub extern "C" fn k7_g_key_offset(dy: f64, row_h: f64) -> f64 {
-    key_offset(dy, row_h)
 }
 
 #[unsafe(no_mangle)]

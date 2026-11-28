@@ -47,29 +47,6 @@ export function snapTo(v: number, step: number): number {
   }
 }
 
-/** How far a clip drag has travelled in beats: the OFFSET snaps, not the position. */
-export const dragOffset = (
-  dx: number,
-  ppb: number,
-  step: number,
-  origStart: number,
-): number => run((x) => x.k7_g_drag_offset(dx, ppb, step, origStart));
-
-/** Where a position dragged from `orig` by `delta` beats lands, under `mode`, on a grid of `step` beats. */
-export function snapPosition(
-  orig: number,
-  delta: number,
-  step: number,
-  mode: SnapMode,
-): number {
-  const x = typed();
-  try {
-    return x.k7_g_snap_position(orig, delta, step, MODE_CODE[mode]);
-  } catch (e) {
-    return trapped(e);
-  }
-}
-
 /** A clip move's offset in beats under `mode`, never before the song's start. */
 export function moveOffset(
   dx: number,
@@ -157,9 +134,6 @@ export const dragMoved = (t: RollDrag): boolean =>
       ) !== 0,
   );
 
-/** Onto the keyboard rather than off it: a note dragged past either end stops at it. */
-export const clampKey = (k: number): number => run((x) => x.k7_g_clamp_key(k));
-
 /** The span a draw gesture covers in beats: the CELLS it was dragged across. */
 export function drawSpan(
   a: number,
@@ -174,10 +148,6 @@ export function drawSpan(
     return { from: s[0] as number, to: s[1] as number };
   });
 }
-
-/** How far a pointer has travelled in ROWS, positive up. */
-export const keyOffset = (dy: number, rowH: number): number =>
-  run((x) => x.k7_g_key_offset(dy, rowH));
 
 /** A velocity from where the pointer sits INSIDE a note's row: 0 at its bottom edge, 1 at its top. */
 export const velAt = (yInRow: number, rowH: number): number =>

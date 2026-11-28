@@ -29,6 +29,8 @@ import type {
   Tabbed,
 } from "./types/index.ts";
 
+export * from "./ops/panel.ts";
+
 export type {
   AiContext,
   AiEvent,
@@ -51,10 +53,6 @@ export type PageRef = number | null;
 
 // ---- groups and the grid ------------------------------------------------
 
-/** Whether two widgets COLLIDE: they overlap, unless one is a group wholly framing the other (never two groups). */
-export const clash = (a: WebWidget, b: WebWidget): boolean =>
-  call<boolean>({ op: "panel.clash", args: { a, b } });
-
 /** The ids of the widgets `group` frames: every non-group wholly inside its box. */
 export const framedBy = (widgets: Widgets, group: WebWidget): string[] =>
   call<string[]>({ op: "panel.framed_by", args: { widgets, group } });
@@ -62,23 +60,6 @@ export const framedBy = (widgets: Widgets, group: WebWidget): string[] =>
 /** The id of the group that frames widget `id`, or null; at most one, since groups never overlap. */
 export const groupOf = (widgets: Widgets, id: string): string | null =>
   call<string | null>({ op: "panel.group_of", args: { widgets, id } });
-
-/** Every way a panel's two shapes break the rules: sizes, the twin's own geometry, and controls one shape lacks. */
-export const twinIssues = (ui: WebModuleUI): string[] =>
-  call<string[]>({ op: "panel.twin_issues", args: { ui } });
-
-/** A first VERTICAL layout from the panel: every control at its size, packed into 4 columns in reading order. */
-export const reflowNarrow = (
-  ui: WebModuleUI,
-): NonNullable<WebModuleUI["vertical"]> =>
-  call<NonNullable<WebModuleUI["vertical"]>>({
-    op: "panel.reflow_narrow",
-    args: { ui },
-  });
-
-/** The vertical layout's tabs brought in line with the panel's. */
-export const alignTabs = (ui: WebModuleUI): WebModuleUI =>
-  call<WebModuleUI>({ op: "panel.align_tabs", args: { ui } });
 
 /** A widget's span: a missing or short one is one cell. */
 export const span = (n?: number): number => Math.max(1, n ?? 1);
@@ -96,10 +77,6 @@ export const firstFree = (
 /** A resize handle, named by the corner it sits on. */
 export type Corner = "nw" | "ne" | "sw" | "se";
 export const CORNERS: Corner[] = ["nw", "ne", "sw", "se"];
-
-/** The cell a corner's resize keeps still: the widget's OPPOSITE corner cell. */
-export const cornerAnchor = (w: WebWidget, corner: Corner): Cell =>
-  call<Cell>({ op: "panel.corner_anchor", args: { w, corner } });
 
 /** The box spanning two cells, whichever way round they are. */
 export function boxBetween(
@@ -136,21 +113,9 @@ export const pageIn = (ui: WebModuleUI, at: PageRef | undefined): PageRef =>
 export const widgetsAt = (ui: WebModuleUI, at: PageRef): Widgets =>
   call<Widgets>({ op: "panel.widgets_at", args: { ui, at } });
 
-/** `ui` with the map at `at` replaced; the other tabs are untouched. */
-export const writeWidgetsAt = (
-  ui: WebModuleUI,
-  at: PageRef,
-  next: Widgets,
-): WebModuleUI =>
-  call<WebModuleUI>({ op: "panel.write_widgets_at", args: { ui, at, next } });
-
 /** Every widget id on the panel, every tab's included. */
 export const panelIds = (ui: WebModuleUI): Set<string> =>
   new Set(call<string[]>({ op: "panel.panel_ids", args: { ui } }));
-
-/** A tab added at the end; the FIRST one added makes two. */
-export const addTab = (ui: WebModuleUI): Tabbed =>
-  call<Tabbed>({ op: "panel.add_tab", args: { ui } });
 
 /** Tab `at` removed with its widgets; down to one, the list folds away. */
 export const removeTab = (ui: WebModuleUI, at: number): WebModuleUI =>
@@ -169,14 +134,6 @@ export const moveTab = (ui: WebModuleUI, at: number, by: -1 | 1): Tabbed =>
   call<Tabbed>({ op: "panel.move_tab", args: { ui, at, by } });
 
 // ---- the clipboard -------------------------------------------------------
-
-/** The ids a cut or a copy of `id` takes: a group brings what it frames, first in the list. */
-export const clipIds = (widgets: Widgets, id: string): string[] =>
-  call<string[]>({ op: "panel.clip_ids", args: { widgets, id } });
-
-/** A copy of `id` (and, for a group, its members), moved so the block starts at cell 0,0. */
-export const copyWidgets = (widgets: Widgets, id: string): Clip | null =>
-  call<Clip | null>({ op: "panel.copy_widgets", args: { widgets, id } });
 
 /** `widgets` with `clip` dropped at `at`, pulled back inside the grid; `first` is the block's head, to select. */
 export const pasteWidgets = (
@@ -220,29 +177,6 @@ export function retype(
 
 // ---- auto layout ----------------------------------------------------------
 
-/** Which family a parameter's NAME suggests. */
-export const familyOf = (name: string): string =>
-  call<string>({ op: "panel.family_of", args: { name } });
-
-/** Whether a parameter is plumbing the proposal skips. */
-export const isPlumbing = (name: string): boolean =>
-  call<boolean>({ op: "panel.is_plumbing", args: { name } });
-
-/** Whether a parameter is the module's OWN blend: the test is the FAMILY, not the word. */
-export const isBlend = (name: string): boolean =>
-  call<boolean>({ op: "panel.is_blend", args: { name } });
-
-/** The pages that got something, never a `drop` one, in the table's own order. */
-export const groupParams = (params: readonly AutoParam[]): Page[] =>
-  call<Page[]>({ op: "panel.group_params", args: { params: [...params] } });
-
-/** A whole panel proposed from a parameter list, in both its shapes. */
-export const autoOrganize = (params: readonly AutoParam[]): WebModuleUI =>
-  call<WebModuleUI>({
-    op: "panel.auto_organize",
-    args: { params: [...params] },
-  });
-
 // ---- a panel in its file ---------------------------------------------------
 
 /** The `ui(…)` block of a module file (or, with `file`, the panel a whole `ui.k7x` declares), and whether a stated panel is unreadable. */
@@ -252,14 +186,6 @@ export const readUi = (text: string, file = false): PanelRead =>
 /** The text rewritten from the model with the fewest edits, a widget a line; a buffer that does not parse comes back unchanged. */
 export const writeUi = (text: string, ui: WebModuleUI, file = false): string =>
   call<string>({ op: "panel.write_ui", args: { text, ui, file } });
-
-/** The `params(…)` block as name to value as TEXT, never numbers: `1.0` stays `1.0`. */
-export const readParams = (content: string): Record<string, string> =>
-  call<Record<string, string>>({ op: "panel.read_params", args: { content } });
-
-/** The same values as numbers; anything that is not one is left out. */
-export const paramValues = (content: string): Record<string, number> =>
-  call<Record<string, number>>({ op: "panel.param_values", args: { content } });
 
 /** Every addressable param unioned from all the sources, in the order met: the page sorts them with its own collator. */
 export const paramRows = (
@@ -290,18 +216,6 @@ export const checkLayout = (
   });
 
 // ---- AI organize ---------------------------------------------------------
-
-/** The per-module half of the prompt: everything that changes between two requests. */
-export const aiUserPrompt = (req: AiRequest): string =>
-  call<string>({ op: "panel.ai_user_prompt", args: { req } });
-
-/** The builder, the widgets, the screen contract and the design brief: what any answer, API or files, is designed by. */
-export const aiDesignBrief = (): string =>
-  call<string>({ op: "panel.ai_brief" });
-
-/** Whether a panel file lays anything out: the question that decides whether there is a layout to update. */
-export const hasLayout = (uiText: string): boolean =>
-  call<boolean>({ op: "panel.has_layout", args: { uiText } });
 
 /** Every bind a proposed panel may carry: the params, and on a rack module its taps. */
 export const bindableNames = (req: {

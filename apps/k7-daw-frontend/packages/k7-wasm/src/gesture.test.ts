@@ -18,7 +18,6 @@ import {
   rollPoint,
   selBox,
   snapMode,
-  snapPosition,
   snapTo,
   takeCounter,
   tSpan,
@@ -43,7 +42,6 @@ describe("the typed calls read back as the page expects", () => {
     expect(snapMode({ shiftKey: false, ctrlKey: true, metaKey: false })).toBe(
       "relative",
     );
-    expect(snapPosition(2.3, 1.4, 1, "grid")).toBe(4);
     expect(moveOffset(-100, 10, 1, 2.3, "relative")).toBeCloseTo(-2, 9);
     expect(
       tSpan({ key: 60, time: 4, dur: 1, mode: "move", dBeats: 2, dKeys: 3 }),

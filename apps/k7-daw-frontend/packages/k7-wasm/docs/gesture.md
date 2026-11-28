@@ -22,3 +22,4 @@
 | `DRAG_SLOP` (the 4 px that tell a click from a drag) | an interaction threshold of the page |
 | The tools' names and labels (`TOOLS`, `TOOL_LABEL`) | the strip's tooltips are words, and `Tool` is generated from the Rust enum so a missing label fails the type check |
 | `gridCaret.ts`: the handle the shell drives (`ClipGridHandle`, `PasteResult`) | commands over React state, not arithmetic |
+| The typed calls' wrappers (`gesture*.ts`), written by hand while the JSON ops' are generated | an `extern "C"` signature is not visible to the bindings binary without parsing the source, and most wrappers reshape: a code for a mode, NaN for none, an answer read from the scalars or the f64 output, an array written into the input first |
