@@ -422,9 +422,9 @@ void EngineHost::suspendAudio(bool suspended) {
     else warn("the audio interface could not be reopened");
 }
 
-// Android only: a device that underran since the last check moves up ONE buffer size, up to kMaxXRunBufferMs — docs/android.md.
+// On a phone or a tablet: a device that underran since the last check moves up ONE buffer size, up to kMaxXRunBufferMs — docs/android.md, docs/ios.md.
 void EngineHost::checkXRuns() {
-#if JUCE_ANDROID
+#if JUCE_ANDROID || JUCE_IOS
     auto& dm = impl_->engine.getDeviceManager();
     auto& jdm = dm.deviceManager;
     auto* dev = jdm.getCurrentAudioDevice();
