@@ -6,5 +6,5 @@ export type VideoListArgs = {
   /**
    * The key path of the lane inside the file; empty when the file is the lane.
    */
-  at: Array<Seg>;
+  at?: Array<Seg>;
 };

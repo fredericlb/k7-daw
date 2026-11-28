@@ -2,15 +2,9 @@
 // A reader would get wrong that a span is the TREE's: map it through the edits made since the text was parsed before it is used (ui-editor's tree.ts).
 
 import { call } from "./abi.ts";
-import type {
-  BufferReads,
-  ClipGrid,
-  K7xCursor,
-  KeyToken,
-  PreviewTrigger,
-  SliceSym,
-  ValueToken,
-} from "./types/index.ts";
+import type { BufferReads, ClipGrid } from "./types/index.ts";
+
+export * from "./ops/buffer.ts";
 
 export type {
   BufferReads,
@@ -31,33 +25,6 @@ export const NO_READS: BufferReads = {
   io: null,
   channels: null,
 };
-
-/** The three reads (a slice rack, an input's io, its channels): one parse, and none when the text cannot hold the keys they look for. */
-export const readBuffer = (text: string, path: string): BufferReads =>
-  ask("reads", { text, path });
-
-/** Where the cursor sits in key terms, read from the text BEFORE it by a tolerant scan: completion runs on half-written text. */
-export const k7xCursor = (text: string): K7xCursor => ask("cursor", { text });
-
-/** A string field's value, a call's `key("v")` or an object's `key: "v"`, found by a scan so a half-typed file still answers. */
-export const readScalarField = (text: string, key: string): string | null =>
-  ask("scalar", { text, key });
-
-/** Every non-empty string value of the tree with its field; empty for a text that does not read. */
-export const valueTokensOf = (text: string): ValueToken[] =>
-  ask("value_tokens", { text });
-
-/** Every non-empty map key of the tree with the keys above it; empty for a text that does not read. */
-export const keyTokensOf = (text: string): KeyToken[] =>
-  ask("key_tokens", { text });
-
-/** The lines that earn a ▶, spans in the tree's coordinates, a slice after the source it belongs to. */
-export const previewTriggersOf = (text: string): PreviewTrigger[] =>
-  ask("preview_triggers", { text });
-
-/** Each slice symbol's window and where its numbers and name sit; null for a file that is no slice rack or does not parse. */
-export const scanSlices = (text: string): SliceSym[] | null =>
-  ask("slices", { text });
 
 /** The window as ONE band to draw over the source: HOLLOW with neither edge written, since the edges are still the HANDLES. */
 export function clipWindowBand(

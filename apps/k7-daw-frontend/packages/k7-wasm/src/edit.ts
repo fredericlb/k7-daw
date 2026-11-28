@@ -25,6 +25,7 @@ export {
   TIMELINE_FORMATS,
   VIDEO_FORMATS,
 } from "./consts.generated.ts";
+export * from "./ops/edit.ts";
 
 export type {
   ChangedFile,
@@ -43,10 +44,6 @@ export type {
 
 // ---- project export ---------------------------------------------------------
 
-/** Read the rest of a `project export` line, or null when it says nothing this understands. */
-export const parseExportAsk = (rest: string): ExportAsk | null =>
-  call<ExportAsk | null>({ op: "edit.parse_export_ask", args: { rest } });
-
 /** The command line the share panel runs for the tracks zip. */
 export const tracksLine = (timeline?: string): string =>
   call<string>({
@@ -55,14 +52,6 @@ export const tracksLine = (timeline?: string): string =>
   });
 
 // ---- what a sent line is expected to do --------------------------------------
-
-/** The edits `line` makes: none for any other verb, or for a line that does not parse. */
-export const pendingOf = (
-  line: string,
-  num: number,
-  den: number,
-): PendingEdit[] =>
-  call<PendingEdit[]>({ op: "edit.pending_of", args: { line, num, den } });
 
 type PatchedClip = {
   start: number;
@@ -115,49 +104,7 @@ export const pendingSplitAt = (
 
 // ---- which routes a reload concerns -----------------------------------------
 
-/** Whether a reload that wrote `files` (null: unknown) concerns `scope`. */
-export const reloadMoved = (
-  scope: Scope,
-  files: readonly ChangedFile[] | null,
-): boolean =>
-  call<boolean>({
-    op: "edit.reload_moved",
-    args: { scope, files: files ? [...files] : null },
-  });
-
 // ---- the graph's `+` --------------------------------------------------------
-
-/** The lane a `+` on this arrow drops onto, or null on the bare canvas. */
-export const laneOfArrow = (
-  graph: GraphNames,
-  before: string | null | undefined,
-): string | null =>
-  call<string | null>({
-    op: "edit.lane_of_arrow",
-    args: { graph, before: before ?? null },
-  });
-
-/** What a node of `module` dropped on this arrow should be called. */
-export const nodeNameFor = (
-  graph: GraphNames,
-  module: string,
-  before: string | null,
-): string =>
-  call<string>({
-    op: "edit.node_name_for",
-    args: { graph, module, before },
-  });
-
-/** What a chain should name, given the creating command that just ran: a node is named by its file alone. */
-export const chainRefFromCreate = (line: string): string | null =>
-  call<string | null>({ op: "edit.chain_ref_from_create", args: { line } });
-
-/** The line the `+` pre-writes: `node new`, ending where the node's name goes. */
-export const createForGraphCommand = (kind: string, name: string): string =>
-  call<string>({
-    op: "edit.create_for_graph_command",
-    args: { kind, name },
-  });
 
 /** The catalogue ref that rides on the line, which the node extends directly. */
 export const nodeNewRefArg = (catalogueRef?: string): string =>
@@ -166,44 +113,6 @@ export const nodeNewRefArg = (catalogueRef?: string): string =>
     args: catalogueRef ? { catalogueRef } : {},
   });
 
-/** Where the node that line makes should go: a splice on an arrow, and on the bare canvas only the pin, and only with a point. */
-export const wireCommand = (
-  node: string,
-  at: PendingInsert | null,
-  spawn?: Spawn | null,
-): string | null =>
-  call<string | null>({
-    op: "edit.wire_command",
-    args: { node, at, spawn: spawn ?? null },
-  });
-
 // ---- lines two surfaces spell alike -----------------------------------------
-
-/** The chains filtered on the whole ref: an empty search is every chain rather than none. */
-export const filterOps = (ops: string[], search: string): string[] =>
-  call<string[]>({ op: "edit.filter_ops", args: { ops, search } });
-
-/** The command line that runs a library chain over one clip. */
-export const processLine = (clip: string, chain: string): string =>
-  call<string>({ op: "edit.process_line", args: { clip, chain } });
-
-/** The records a set list's line may name: every audio file but a `stems/` folder's, sorted. */
-export const playlistRefs = (files: readonly string[]): string[] =>
-  call<string[]>({ op: "edit.playlist_refs", args: { files: [...files] } });
-
-/** The fields a set list's file may carry at `path`. */
-export const playlistFieldsAt = (path: readonly string[]): string[] =>
-  call<string[]>({ op: "edit.playlist_fields_at", args: { path: [...path] } });
-
-/** The values a set list's field may take, over the records. */
-export const playlistValuesAt = (
-  refs: readonly string[],
-  path: readonly string[],
-  field: string,
-): string[] =>
-  call<string[]>({
-    op: "edit.playlist_values_at",
-    args: { refs: [...refs], path: [...path], field },
-  });
 
 // ---- the merge's gate -------------------------------------------------------

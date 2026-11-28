@@ -24,6 +24,7 @@ export {
   MAX_RECENT,
   MENU_ENTITIES,
 } from "./consts.generated.ts";
+export * from "./ops/ui.ts";
 
 export type {
   ArgOption,
@@ -81,16 +82,6 @@ export function rankOptions(
   }).indices.map((i) => options[i] as ArgOption);
 }
 
-/** `/complete`'s whole lines as one field's options: the prefix sliced back off, deduped, labels kept. */
-export const optionsFromCompletions = (
-  full: readonly Completion[],
-  prefix: string,
-): ArgOption[] =>
-  call<ArgOption[]>({
-    op: "ui.options_from_completions",
-    args: { full: [...full], prefix },
-  });
-
 /** What the bar lists with nothing typed: recents the catalogue still holds, then the starters it holds. */
 export function emptyBarRows<C extends { canonical: string }>(
   commands: readonly C[],
@@ -147,10 +138,6 @@ export const canRun = (
     op: "ui.can_run",
     args: { args: formArgs(args), values: [...values] },
   });
-
-/** The line's arguments, trailing blanks dropped; a blank in the middle is kept. */
-export const lineArgs = (values: readonly string[]): string[] =>
-  call<string[]>({ op: "ui.line_args", args: { values: [...values] } });
 
 /** The next field after `from`; the last one stays put. */
 export const nextField = (args: readonly ArgLike[], from: number): number =>

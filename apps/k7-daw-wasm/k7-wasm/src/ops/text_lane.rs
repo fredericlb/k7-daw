@@ -48,7 +48,8 @@ pub struct VideoListArgs {
     pub text: String,
     /// The key path of the lane inside the file; empty when the file is the lane.
     #[serde(default)]
-    pub at: Vec<Seg>,
+    #[cfg_attr(feature = "ts", ts(optional))]
+    pub at: Option<Vec<Seg>>,
 }
 
 /// One edit of a lane, named as the writer it runs.
@@ -115,7 +116,7 @@ pub struct VideoArgs {
 
 pub(super) fn video_list(a: &VideoListArgs) -> Vec<VideoPlacement> {
     let mut doc = Document::new(&a.text);
-    let scope = doc.at(&path(&a.at));
+    let scope = doc.at(&path(a.at.as_deref().unwrap_or_default()));
     list_shots(&scope)
         .into_iter()
         .map(|s| VideoPlacement {

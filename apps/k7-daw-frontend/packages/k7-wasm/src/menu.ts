@@ -3,27 +3,16 @@
 
 import { call } from "./abi.ts";
 import type {
-  ArgSource,
-  CommandInfo,
   Danger,
   Focus,
-  HomeRow,
-  Item,
-  LocalCommand,
-  MenuCtx,
-  MenuTarget,
-  NodeMenuTarget,
-  PaletteRow,
-  Parsed,
   Position,
   Resolved,
-  ShellLists,
   TabGroup,
-  Text,
   WorkspaceRef,
 } from "./types/index.ts";
 
 export { MENU_ENTITIES } from "./consts.generated.ts";
+export * from "./ops/menu.ts";
 
 export type {
   ArgClass,
@@ -47,26 +36,6 @@ export type {
   Text,
   WorkspaceRef,
 } from "./types/index.ts";
-
-/** The right-click's rows for a context, derived from the catalogue; empty means "do not open a menu here". */
-export const contextMenuItems = (
-  ctx: MenuCtx,
-  commands: readonly CommandInfo[],
-  prefs: object,
-  locale: string,
-): Item[] =>
-  call<Item[]>({
-    op: "menu.context_menu",
-    args: { ctx, commands: [...commands], prefs, locale },
-  });
-
-/** A module the engine provides has no file anywhere: its context says `ambient`. */
-export const withAmbient = (ctx: MenuCtx): MenuCtx =>
-  call<MenuCtx>({ op: "menu.with_ambient", args: { ctx } });
-
-/** What a menu is on: the entity, and how its name is made; null for a context that names nothing. */
-export const menuTargetOf = (ctx: MenuCtx): MenuTarget | null =>
-  call<MenuTarget | null>({ op: "menu.target", args: { ctx } });
 
 type Row = { verb: string; confirm?: boolean };
 const rowsOf = (items: readonly Row[]) =>
@@ -103,21 +72,6 @@ export function dangerLast<T extends Row>(
 export const moveFocus = (key: string, at: number, n: number): number | null =>
   call<Focus>({ op: "menu.move_focus", args: { key, at, n } }).at;
 
-/** A lane's gutter menu: its module's other attribute sets, and its freeze. */
-export const nodeMenuItems = (target: NodeMenuTarget): Item[] =>
-  call<Item[]>({ op: "menu.node_menu", args: { target } });
-
-/** The palette's full catalogue: the backend's commands plus the shell's own, each sentence resolved by the locale. */
-export const buildCommands = (
-  backend: readonly CommandInfo[],
-  locals: readonly LocalCommand[],
-  locale: string,
-): PaletteRow[] =>
-  call<PaletteRow[]>({
-    op: "menu.build_commands",
-    args: { backend: [...backend], locals: [...locals], locale },
-  });
-
 /** Which command a canonical line runs: the longest name that prefixes it. */
 export const commandNameOf = (
   line: string,
@@ -128,27 +82,7 @@ export const commandNameOf = (
     args: { line, commands: [...commands] },
   }).canonical;
 
-/** Where a field's whole vocabulary comes from: a list known here, or the backend's completion of this line. */
-export const argSource = (
-  canonical: string,
-  prior: readonly string[],
-  lists: ShellLists,
-  entryArgIsFile: boolean,
-): ArgSource =>
-  call<ArgSource>({
-    op: "menu.arg_source",
-    args: { canonical, prior: [...prior], lists, entryArgIsFile },
-  });
-
 // ---- the home page ----------------------------------------------------------
-
-/** The home page's catalogue, each sentence resolved by the locale. */
-export const homeCatalogue = (locale: string): HomeRow[] =>
-  call<HomeRow[]>({ op: "menu.home_catalogue", args: { locale } });
-
-/** Which command a home line is: nothing, none of this screen's, or a command and the rest of the line. */
-export const homeParse = (line: string): Parsed =>
-  call<Parsed>({ op: "menu.home_parse", args: { line } });
 
 type HomeCtx = {
   workspaces: WorkspaceRef[];
@@ -169,10 +103,6 @@ export const homeFindProject = (
 ): number | null =>
   call<Position>({ op: "menu.home_find_project", args: { workspace, name } })
     .index;
-
-/** The message refusing a project no workspace holds, naming the ones there are. */
-export const homeGripe = (workspace: WorkspaceRef, name: string): Text =>
-  call<Text>({ op: "menu.home_gripe", args: { workspace, name } });
 
 /** One param's whole vocabulary for the home page's open field. */
 export const homeArgValues = (

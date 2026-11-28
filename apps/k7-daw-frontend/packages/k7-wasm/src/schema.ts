@@ -4,16 +4,9 @@
 
 import { call } from "./abi.ts";
 import { DOC_EXT_SRC, IMAGE_EXTS } from "./consts.generated.ts";
-import type {
-  BuiltinPluginInfo,
-  CompSpan,
-  EngineModule,
-  Key,
-  Playlist,
-  Signal,
-  Task,
-  TimelineLane,
-} from "./types/index.ts";
+import type { BuiltinPluginInfo, EngineModule, Signal } from "./types/index.ts";
+
+export * from "./ops/schema.ts";
 
 export type {
   BuiltinParam,
@@ -50,18 +43,6 @@ export const moduleStatusOf = (
   return ask("module_status_of", { status: typeof s === "string" ? s : null });
 };
 
-/** Is this ref the engine's: `@engine` or anything under it, never `@engineering`. */
-export const isEngineRef = (ref: string): boolean =>
-  ask("is_engine_ref", { ref });
-
-/** Can a library be called this? */
-export const isLibraryName = (name: string): boolean =>
-  ask("is_library_name", { name });
-
-/** Is `path` a file a library's `family` folder holds? */
-export const isLibraryFileOf = (family: string, path: string): boolean =>
-  ask("is_library_file_of", { family, path });
-
 /** How a scanned plugin becomes a module, null when its name leaves no slug. */
 export const engineModuleOf = (p: {
   name: string;
@@ -91,10 +72,6 @@ export const builtinPluginFor = (
       }) ?? undefined)
     : undefined;
 
-/** Is this a name a preset can have: its file's name, held to what every filesystem agrees on. */
-export const isPresetName = (name: string): boolean =>
-  ask("is_preset_name", { name });
-
 /** A regex matching `prefix` (pattern source) followed by the document extension at the end. */
 export const docPattern = (prefix: string, flags = "i"): RegExp =>
   new RegExp(`${prefix}${DOC_EXT_SRC}$`, flags);
@@ -105,14 +82,6 @@ const ending = (exts: readonly string[]): RegExp =>
 /** A clip is a STILL when its source ends in one of the image extensions. */
 export const IMAGE_SOURCE = ending(IMAGE_EXTS);
 
-/** A name ending in the document extension `.k7x`, any case. */
-export const isDocFile = (name: string): boolean =>
-  ask("is_doc_file", { name });
-
-/** `name` without its document extension; any other name unchanged. */
-export const stripDocExt = (name: string): string =>
-  ask("strip_doc_ext", { name });
-
 /** The first free `<owner>_<what>_<n>`, counting from 1: `taken` lists the names already used. */
 export const instanceName = (
   what: string,
@@ -120,37 +89,6 @@ export const instanceName = (
   taken: Iterable<string>,
 ): string =>
   ask("instance_name", { what, owner: owner ?? null, taken: [...taken] });
-
-/** The value of keys sorted by time at `t`: held before the first and after the last, eased between. */
-export const valueAt = (keys: readonly Key[], t: number): number =>
-  ask("value_at", { keys, t });
-
-/** The material a placement id names: the last `@` before a number, a repeat's `#n` aside. */
-export const materialRefOf = (nestedId: string): string =>
-  ask("material_ref_of", { id: nestedId });
-
-/** The timeline and lane an address `<timeline>><lane>` names, or null for a project lane. */
-export const timelineLaneOf = (id: string): TimelineLane | null =>
-  ask("timeline_lane_of", { id });
-
-/** A workspace playlist's k7x text, or null when it does not read: an unreadable file is not an empty one. */
-export const parsePlaylist = (text: string): Playlist | null =>
-  ask("parse_playlist", { text });
-
-/** A playlist name as the workspace path holding it, null for one that would leave the folder. */
-export const playlistPathOf = (name: string): string | null =>
-  ask("playlist_path_of", { name });
-
-/** Every task line of a `TODOS.md`, in order. */
-export const parseTasks = (text: string): Task[] =>
-  ask("parse_tasks", { text });
-
-/** The comp with `span` laid over it: what it covers is taken from every other span, the base's own dropped. */
-export const setCompSpan = (
-  comp: readonly CompSpan[],
-  span: CompSpan,
-  baseRef: string,
-): CompSpan[] => ask("set_comp_span", { comp, span, baseRef });
 
 /** The timeline beats that source seconds land on, in one call; extrapolates along the end segments. */
 const beatsAtSources = (
