@@ -2119,5 +2119,9 @@
   "git.fj.expired": "La connexion a expiré.",
   "git.fj.denied": "La connexion a été refusée sur {server}.",
   "git.fj.failed": "La connexion a échoué : {error}",
-  "git.fj.taken": "Un dépôt nommé {name} existe déjà sur {server}."
+  "git.fj.taken": "Un dépôt nommé {name} existe déjà sur {server}.",
+  "history.rollback": "Revenir à cet état",
+  "history.rollbackUndo": "Annuler les {count} modifications faites après celle-ci ? Vous pourrez les rétablir depuis cette liste.",
+  "history.rollbackRedo": "Rétablir les {count} modifications annulées jusqu'à celle-ci ?",
+  "history.rollbackConfirm": "Revenir"
 }

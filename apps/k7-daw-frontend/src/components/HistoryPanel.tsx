@@ -1,7 +1,7 @@
 // HistoryPanel.tsx — the History half of Tasks & history, in three segments: Edits (the undo journal's
 // steps, newest first), Workspace (the sync history, syncHistory.ts) and Commits (git's, step 6's list).
 // A step reads as its command's sentence (stepSentence.ts), the raw line staying its tooltip.
-// Hovering a journal row lights what it touched (historyMarks.ts); the journal changes nothing.
+// Hovering a journal row lights what it touched (historyMarks.ts); its button goes back to that state (HistoryRollback.tsx).
 // Restoring is the one write here, and it is a sync edit like any other: apps/k7-daw-backend/docs/files/history.md.
 
 import { askConfirm, askText } from "@studio/project-shell/ask";
@@ -15,6 +15,7 @@ import {
   RotateCcw,
   Undo2,
 } from "@studio/ui/icons";
+import { cn } from "@studio/ui/lib/utils";
 import { RowButton, RowGroup } from "@studio/ui/row-group";
 import { SectionHeading } from "@studio/ui/section-heading";
 import type { HistoryListEntry } from "@studio/web-protocol";
@@ -31,7 +32,7 @@ import type { GitTransport } from "../git/gitApi";
 import type { GitState } from "../git/gitTypes";
 import { onSavesList, takeSavesList } from "../git/savesList";
 import { type HistoryMark, historyMarks } from "../historyMarks";
-import { historyOffers, restoredKept } from "../historySource";
+import { historyOffers, restoredKept, rollbackTo } from "../historySource";
 import { useQuietWrites, useRevision } from "../hooks/useRevision";
 import { m } from "../paraglide/messages.js";
 import { getLocale } from "../paraglide/runtime.js";
@@ -42,6 +43,7 @@ import {
   type SyncChange,
   type SyncHistory,
 } from "../syncHistory";
+import { RollbackButton } from "./HistoryRollback";
 import { PanelError } from "./PanelError";
 
 /** The 6 px dot that stands for an edit. */
@@ -64,6 +66,7 @@ export function HistoryPanel({
   git = null,
   gitTransport = null,
   onMark,
+  onRollback,
 }: {
   /** The workspace's git state: with a repository the panel offers a third list, the saves. */
   git?: GitState | null;
@@ -72,6 +75,8 @@ export function HistoryPanel({
   describe?: (label: string) => string;
   /** What the hovered row touched, or null when none is — the graph and the timeline light it. */
   onMark: (mark: HistoryMark | null) => void;
+  /** Walk the journal `steps` undos (or redos) back to a row's state; absent, rows offer no rollback. */
+  onRollback?: (redo: boolean, steps: number) => Promise<void>;
 }) {
   const [steps, setSteps] = useState<HistoryListEntry[]>([]);
   const [list, setList] = useState<"edits" | "workspace" | "commits">(() =>
@@ -171,6 +176,7 @@ export function HistoryPanel({
         {rows.map((r, i) => {
           const newDay = i === 0 || day(rows[i - 1].ts) !== day(r.ts);
           const { paths, label, undone } = r;
+          const walk = rollbackTo(rows, r.id);
           return (
             <div key={r.id}>
               {newDay && (
@@ -179,24 +185,37 @@ export function HistoryPanel({
                 </SectionHeading>
               )}
               <RowGroup>
-                <RowButton
-                  title={`${label}\n${paths.join("\n")}`}
-                  className={undone ? "opacity-50" : undefined}
-                  icon={undone ? <Undo2 /> : <Dot />}
-                  selected={lit === r.id}
-                  trailing={
-                    <span className="type-mono-value text-fg-3">
-                      {time(r.ts)}
-                    </span>
-                  }
-                  onMouseEnter={() =>
-                    light(r.id, historyMarks(paths, label, graph))
-                  }
-                  onFocus={() => light(r.id, historyMarks(paths, label, graph))}
-                  onClick={() => light(r.id, historyMarks(paths, label, graph))}
-                >
-                  {describe ? describe(label) : label}
-                </RowButton>
+                <div className="flex items-center">
+                  <RowButton
+                    title={`${label}\n${paths.join("\n")}`}
+                    className={cn("min-w-0 flex-1", undone && "opacity-50")}
+                    icon={undone ? <Undo2 /> : <Dot />}
+                    selected={lit === r.id}
+                    trailing={
+                      <span className="type-mono-value text-fg-3">
+                        {time(r.ts)}
+                      </span>
+                    }
+                    onMouseEnter={() =>
+                      light(r.id, historyMarks(paths, label, graph))
+                    }
+                    onFocus={() =>
+                      light(r.id, historyMarks(paths, label, graph))
+                    }
+                    onClick={() =>
+                      light(r.id, historyMarks(paths, label, graph))
+                    }
+                  >
+                    {describe ? describe(label) : label}
+                  </RowButton>
+                  {onRollback && walk.steps > 0 && (
+                    <RollbackButton
+                      redo={walk.redo}
+                      steps={walk.steps}
+                      onConfirm={() => onRollback(walk.redo, walk.steps)}
+                    />
+                  )}
+                </div>
               </RowGroup>
             </div>
           );

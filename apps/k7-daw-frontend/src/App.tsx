@@ -749,6 +749,14 @@ export default function App({
     }),
     [confirmProcess, bumpReload],
   );
+  // A rollback is that many undos (or redos) in a row, each still in the journal (HistoryRollback.tsx).
+  const rollback = useCallback(
+    async (redo: boolean, steps: number) => {
+      for (let i = 0; i < steps; i++)
+        await (redo ? runRedo(historyDeps) : runUndo(historyDeps));
+    },
+    [historyDeps],
+  );
   // Live plugin params go to an EXTERNAL store: at ~20 Hz a top-level setState would re-render the app each frame.
   const pluginParamsStore = useRef(new PluginParamsStore()).current;
   // The backend command catalogue (canonical name + trailing param names), for the step-by-step palette. Fetched once.
@@ -3324,6 +3332,7 @@ export default function App({
                 git={gitHandle.state}
                 gitTransport={gitTransport}
                 onMark={setHistoryMark}
+                onRollback={rollback}
               />
             </PaneBoundary>
           </>

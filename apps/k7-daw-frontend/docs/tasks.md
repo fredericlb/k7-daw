@@ -81,6 +81,11 @@ The panel's first segment switches Tasks and History; History has its own three,
 journal), Workspace (the sync history) and Commits (git's list, offered only under git). One
 segment shows one list, since two stacked lists leave each half a panel high.
 
+An Edits row goes back to the song's state right after it: its button asks in a bubble beside it, then
+undoes every later edit one by one (or redoes the undone ones up to it). Nothing is lost: the edits it
+walks over stay in the list, undone, and the same button brings them back. A bubble rather than a
+dialog, because the question is about that row and the answer is one tap away from it.
+
 ## Processes are not tasks
 
 The panel lists no process. What runs is the spinner's bubble at the app's top right
