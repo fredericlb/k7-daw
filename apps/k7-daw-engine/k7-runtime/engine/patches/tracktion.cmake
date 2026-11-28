@@ -122,3 +122,15 @@ studio_replace("${ssd}"
 studio_replace("${ssd}"
     "    if (juce::Desktop::getInstance().isHeadless())\n        return;\n"
     "    if (studioScreenIsTheApps || juce::Desktop::getInstance().isHeadless())   // studio\n        return;\n")
+
+# The render workers never became real-time: the upgrade ran on the CREATING thread, and on macOS only, so the page's work preempted them on an iPad (docs/renderPool.md).
+set(pools "modules/tracktion_graph/tracktion_graph/tracktion_NodePlayerThreadPools.cpp")
+studio_replace("${pools}"
+    "threads.emplace_back ([this] { runThread(); });"
+    "threads.emplace_back ([this, rtOpts] { tryToUpgradeCurrentThreadToRealtime (rtOpts); runThread(); });   // studio: each worker upgrades itself")
+studio_replace("${pools}"
+    "setThreadPriority (threads.back(), 10);\n            tryToUpgradeCurrentThreadToRealtime (rtOpts);"
+    "setThreadPriority (threads.back(), 10);   // studio: not the creating thread, which is no audio thread")
+studio_replace("modules/tracktion_graph/utilities/tracktion_Threads.cpp"
+    "#if JUCE_MAC\n    template<typename Type>"
+    "#if JUCE_MAC || JUCE_IOS   // studio: an iPad's workers are time-constrained too\n    template<typename Type>")

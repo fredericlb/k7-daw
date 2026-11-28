@@ -15,6 +15,8 @@ a spin in front of it. `ServerBehaviour` (`engine/EngineHostImpl.h`) says otherw
 | threads, phone | **`min(cores, 4)`** | a typical big.LITTLE chip has four big cores; one thread per core puts the LITTLE ones to spinning |
 | strategy, desktop | `lightweightSemHybrid`, Tracktion's own | at four threads the strategies are within noise of each other |
 | strategy, phone | **`semaphore`** | a worker that spins burns battery and the big cores' thermal budget, at every one of Oboe's short bursts |
+| workers, Apple | **time-constrained, each upgrading itself** (`engine/patches/tracktion.cmake`) | Tracktion upgraded the thread that CREATES the pool, and on macOS only: an iPad's workers stayed ordinary threads the page's work preempted, heard as clicks under a touch |
+| audio workgroup, iOS | **joined** (`enableAudioWorkgroup`) | the workers then share the device thread's deadline and cores; macOS keeps Tracktion's default (off) until it is measured there |
 
 **The phone rows are unmeasured.** They follow the desktop's lesson (the waiting is the cost) and a phone's
 constraints (battery, heat, cores that are not alike), not a run on a device. Four is a guess at the big
