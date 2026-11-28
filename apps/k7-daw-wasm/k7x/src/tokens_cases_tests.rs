@@ -52,8 +52,14 @@ fn a_key_is_never_taken_for_a_value() {
 
 #[test]
 fn a_list_hands_its_field_to_each_value_in_either_call_form() {
-    assert_eq!(pairs("in([\"pad\", \"bass\"])\n"), strs(&["in=pad", "in=bass"]));
-    assert_eq!(pairs("in(\"pad\", \"bass\")\n"), strs(&["in=pad", "in=bass"]));
+    assert_eq!(
+        pairs("in([\"pad\", \"bass\"])\n"),
+        strs(&["in=pad", "in=bass"])
+    );
+    assert_eq!(
+        pairs("in(\"pad\", \"bass\")\n"),
+        strs(&["in=pad", "in=bass"])
+    );
 }
 
 #[test]

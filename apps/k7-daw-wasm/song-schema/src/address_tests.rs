@@ -42,10 +42,7 @@ fn a_surface_hangs_off_the_project_and_names_it() {
     let at = external_of(&launch_path("band", "winter.k7"), "desk");
     assert_eq!(at, "/band/winter.k7/@external/desk");
     // The project parses as it did without the surface below it.
-    assert_eq!(
-        launch(&at),
-        Some(("band".to_owned(), "winter.k7".to_owned()))
-    );
+    assert_eq!(launch(&at), Some(("band".to_owned(), "winter.k7".to_owned())));
     assert_eq!(project_basename(&at, "/"), "/band/winter.k7");
 }
 
@@ -53,10 +50,7 @@ fn a_surface_hangs_off_the_project_and_names_it() {
 fn a_surface_is_read_back_by_name_not_by_position() {
     let at = |p: &str| parse_external(p, "/");
     assert_eq!(at("/band/winter.k7/@external/desk").as_deref(), Some("desk"));
-    assert_eq!(
-        at("/band/songs/winter.k7/@external/desk").as_deref(),
-        Some("desk")
-    );
+    assert_eq!(at("/band/songs/winter.k7/@external/desk").as_deref(), Some("desk"));
     assert_eq!(at("/band/@external/desk").as_deref(), Some("desk"));
 }
 
@@ -120,10 +114,7 @@ fn the_bench_is_one_project_and_a_library_chain_in_front_of_it_is_the_only_extra
 fn the_benchs_address_survives_the_round_trip_the_home_page_makes_it_take() {
     let at = launch_path(BENCH_REPO, &bench_project(Some("vocals/warm")));
     let back = parse_launch(&at, "/").unwrap();
-    assert_eq!(
-        bench_chain_of(&back.project),
-        Some(Some("vocals/warm".to_owned()))
-    );
+    assert_eq!(bench_chain_of(&back.project), Some(Some("vocals/warm".to_owned())));
     let bare = parse_launch(&launch_path(BENCH_REPO, BENCH_PROJECT), "/").unwrap();
     assert_eq!(bare.repo, BENCH_REPO);
     assert!(bench_chain_of(&bare.project).is_some());
@@ -141,10 +132,7 @@ fn a_local_project_ends_by_the_ordinary_rule_and_splits_into_workspace_and_proje
         Some(("Examples".to_owned(), "synth-demo.k7".to_owned()))
     );
     // A workspace that IS a project: `.` is what parse_launch answers when a repository is one.
-    assert_eq!(
-        target("hiver.k7"),
-        Some(("hiver.k7".to_owned(), ".".to_owned()))
-    );
+    assert_eq!(target("hiver.k7"), Some(("hiver.k7".to_owned(), ".".to_owned())));
     assert_eq!(
         target("Examples/albums/hiver.k7"),
         Some(("Examples".to_owned(), "albums/hiver.k7".to_owned()))
@@ -164,10 +152,7 @@ fn a_local_address_round_trips_its_own_encoding() {
     assert_eq!(at, "/@local/mes%20projets/hiver.k7");
     let back = parse_launch(&at, "/").unwrap();
     let t = local_target(&back.project).unwrap();
-    assert_eq!(
-        (t.workspace.as_str(), t.project.as_str()),
-        ("mes projets", "hiver.k7")
-    );
+    assert_eq!((t.workspace.as_str(), t.project.as_str()), ("mes projets", "hiver.k7"));
     // A single-project workspace names itself once.
     let whole = local_project_path("hiver.k7", ".");
     assert_eq!(whole, "/@local/hiver.k7");

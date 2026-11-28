@@ -84,7 +84,12 @@ fn moving_a_knob_is_a_one_line_diff_and_every_other_line_is_byte_identical() {
     let before: Vec<&str> = MODULE.split('\n').collect();
     let after: Vec<&str> = after.split('\n').collect();
     assert_eq!(after.len(), before.len());
-    let changed: Vec<&&str> = after.iter().enumerate().filter(|(i, l)| **l != before[*i]).map(|(_, l)| l).collect();
+    let changed: Vec<&&str> = after
+        .iter()
+        .enumerate()
+        .filter(|(i, l)| **l != before[*i])
+        .map(|(_, l)| l)
+        .collect();
     assert_eq!(
         changed,
         [&"    w1: { type: \"knob\", col: 2, row: 0, bind: \"Filter Freq\", min: 0, max: 1 },"]
@@ -102,7 +107,8 @@ fn a_comment_inside_the_block_is_kept() {
 
 #[test]
 fn the_block_is_created_when_the_file_has_none() {
-    let ui = json!({ "cols": 2, "rows": 1, "widgets": { "a": { "type": "toggle", "col": 0, "row": 0, "bind": "Mute" } } });
+    let ui =
+        json!({ "cols": 2, "rows": 1, "widgets": { "a": { "type": "toggle", "col": 0, "row": 0, "bind": "Mute" } } });
     let after = write(BARE, &ui);
     assert!(after.starts_with(BARE));
     assert!(after.contains("a: { type: \"toggle\", col: 0, row: 0, bind: \"Mute\" }"));
@@ -148,7 +154,12 @@ fn the_tabs_are_written_in_order_each_widget_still_on_one_line() {
     let (osc, filter) = (after.find("name(\"Osc\")"), after.find("name(\"Filter\")"));
     assert!(osc.is_some() && filter.is_some() && osc < filter);
     assert!(after.contains("k: { type: \"knob\", col: 0, row: 0, bind: \"Mix\" }"));
-    let names: Vec<Value> = ui_of(&after)["tabs"].as_array().unwrap().iter().map(|t| t["name"].clone()).collect();
+    let names: Vec<Value> = ui_of(&after)["tabs"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .map(|t| t["name"].clone())
+        .collect();
     assert_eq!(names, [json!("Osc"), json!("Filter")]);
 }
 

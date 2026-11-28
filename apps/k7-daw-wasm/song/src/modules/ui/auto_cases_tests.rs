@@ -1,9 +1,9 @@
 // auto_cases_tests.rs — what Auto organize proposes, case by case; the cases are the old TypeScript tests' inputs (autoLayout.test.ts).
 
-use crate::modules::ui::geometry::twin_issues;
-use crate::modules::ui::write::to_k7;
 use super::*;
 use crate::files::validate_file;
+use crate::modules::ui::geometry::twin_issues;
+use crate::modules::ui::write::to_k7;
 use k7x::edit::{StringifyOptions, stringify};
 
 fn p(name: &str) -> AutoParam {
@@ -25,10 +25,7 @@ fn ranged(name: &str, min: f64, max: f64) -> AutoParam {
 }
 
 fn states(name: &str, labels: &[(&str, i64)]) -> AutoParam {
-    let all = labels
-        .iter()
-        .map(|(l, v)| json!({ "label": l, "value": v }))
-        .collect();
+    let all = labels.iter().map(|(l, v)| json!({ "label": l, "value": v })).collect();
     AutoParam {
         name: name.to_owned(),
         meta: Some(AutoMeta {
@@ -163,8 +160,14 @@ fn the_modules_own_blend_is_told_from_an_effects_and_decides_a_position_not_a_pa
         assert!(!is_blend(n), "{n}");
     }
     let groups = group_params(&plain(&["Mix", "Reverb Dry/Wet", "@pan"]));
-    assert_eq!(groups.iter().map(|g| g.page.as_str()).collect::<Vec<_>>(), ["Reverb", "Mix"]);
-    assert_eq!(groups[1].params.iter().map(|x| x.name.as_str()).collect::<Vec<_>>(), ["Mix"]);
+    assert_eq!(
+        groups.iter().map(|g| g.page.as_str()).collect::<Vec<_>>(),
+        ["Reverb", "Mix"]
+    );
+    assert_eq!(
+        groups[1].params.iter().map(|x| x.name.as_str()).collect::<Vec<_>>(),
+        ["Mix"]
+    );
 }
 
 fn proposed() -> (Vec<AutoParam>, Value) {
@@ -188,7 +191,10 @@ fn every_parameter_is_on_one_tab_of_the_panel_and_every_widget_has_its_own_id() 
     let mut want: Vec<String> = params.iter().map(|x| x.name.clone()).collect();
     want.sort();
     assert_eq!(got, want);
-    let ids: Vec<String> = pages_of(&ui).into_iter().flat_map(|(_, w)| w.into_iter().map(|(k, _)| k)).collect();
+    let ids: Vec<String> = pages_of(&ui)
+        .into_iter()
+        .flat_map(|(_, w)| w.into_iter().map(|(k, _)| k))
+        .collect();
     let mut unique = ids.clone();
     unique.sort();
     unique.dedup();
@@ -209,7 +215,10 @@ fn the_tabs_are_a_column_beside_the_grid_so_one_starts_on_row_zero() {
 fn a_knob_carries_its_own_range_and_a_named_setting_is_a_dropdown() {
     let (_, ui) = proposed();
     let cutoff = bound(&page(&ui, "Filter"), "Filter Cutoff").clone();
-    assert_eq!((&cutoff["type"], &cutoff["min"], &cutoff["max"]), (&json!("knob"), &json!(20.0), &json!(20000.0)));
+    assert_eq!(
+        (&cutoff["type"], &cutoff["min"], &cutoff["max"]),
+        (&json!("knob"), &json!(20.0), &json!(20000.0))
+    );
     let other = page(&ui, "Other");
     let lid = bound(&other, "Lid Position");
     assert_eq!(lid["type"], "dropdown");
@@ -266,7 +275,12 @@ fn the_engines_blend_replaces_the_plugins_and_stays_out_of_the_panel() {
 #[test]
 fn the_engines_levels_are_the_footers_and_replace_the_plugins_input_and_output() {
     let ui = auto_organize(&plain(&["Drive", "Input", "Output", "@input-volume", "@output-volume"])).to_string();
-    for gone in ["@input-volume", "@output-volume", "\"bind\":\"Input\"", "\"bind\":\"Output\""] {
+    for gone in [
+        "@input-volume",
+        "@output-volume",
+        "\"bind\":\"Input\"",
+        "\"bind\":\"Output\"",
+    ] {
         assert!(!ui.contains(gone), "{gone}");
     }
 }
@@ -287,7 +301,12 @@ fn knobs_lay_out_two_by_two_and_a_dropdown_is_the_slots_width_and_one_row() {
 fn a_page_is_never_taller_than_four_rows_and_a_long_one_wraps_onto_a_second() {
     let ui = auto_organize(&knobs(30, "Filter"));
     assert!(ui["rows"].as_u64().unwrap() <= LAYOUT_MAX as u64);
-    let tabs: Vec<&str> = ui["tabs"].as_array().unwrap().iter().filter_map(|t| t["name"].as_str()).collect();
+    let tabs: Vec<&str> = ui["tabs"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .filter_map(|t| t["name"].as_str())
+        .collect();
     assert_eq!(tabs, ["Filter", "Filter 2", "Filter 3"]);
 }
 
@@ -307,7 +326,10 @@ fn base_comes_first_and_the_blend_last_in_both_shapes() {
     params.push(states("@base", &[("none", 0)]));
     params.extend(knobs(6, "Filter"));
     let ui = auto_organize(&params);
-    let mix: Vec<String> = page(&ui, "Mix").iter().filter_map(|w| w["bind"].as_str().map(str::to_owned)).collect();
+    let mix: Vec<String> = page(&ui, "Mix")
+        .iter()
+        .filter_map(|w| w["bind"].as_str().map(str::to_owned))
+        .collect();
     assert_eq!(mix, ["Dry", "Wet"]);
     assert!(twin_issues(&ui).is_empty());
 }
