@@ -55,6 +55,10 @@ struct ServerBehaviour : te::EngineBehaviour {
         : pool(RenderPool::fromEnv(juce::SystemStats::getNumCpus(), kRenderMachine,
                                    std::getenv("STUDIO_ENGINE_AUDIO_THREADS"), std::getenv("STUDIO_ENGINE_AUDIO_POOL"))) {
         te::EditPlaybackContext::setThreadPoolStrategy(pool.strategy);
+#if JUCE_IOS
+        // The workers join the device's audio workgroup, so iOS schedules them with its own audio thread (docs/renderPool.md).
+        te::EditPlaybackContext::enableAudioWorkgroup(true);
+#endif
         std::cerr << "[audio] render pool: " << pool.threads << " threads, strategy " << pool.strategy << "\n";
     }
     bool autoInitialiseDeviceManager() override { return false; }
