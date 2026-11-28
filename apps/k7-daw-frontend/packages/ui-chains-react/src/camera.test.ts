@@ -87,6 +87,15 @@ describe("twoFingerCam", () => {
     const c = twoFingerCam(from, from.k, 200, 60, -80, 140, true);
     expect(c).toEqual({ x: -70, y: 25, k: 1.2 });
   });
+
+  it("on a ROW, a pinch zooms nothing: the fingers only walk", () => {
+    const from: Cam = { x: 10, y: 25, k: 1.2 };
+    expect(twoFingerCam(from, 2.4, 200, 60, -80, 0, true)).toEqual({
+      x: -70,
+      y: 25,
+      k: 1.2,
+    });
+  });
 });
 
 describe("zoomAbout", () => {

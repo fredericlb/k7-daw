@@ -84,7 +84,7 @@ export function zoomAbout(cam: Cam, k: number, px: number, py: number): Cam {
   return { k, x: px - (px - cam.x) * f, y: py - (py - cam.y) * f };
 }
 
-/** Two fingers from the camera they started on: zoomed about where they landed, then carried by their midpoint, across only on a ROW. */
+/** Two fingers from the camera they started on: zoomed about where they landed, then carried by their midpoint; a ROW only walks across, at its own zoom. */
 export function twoFingerCam(
   from: Cam,
   k: number,
@@ -94,8 +94,9 @@ export function twoFingerCam(
   dy: number,
   row: boolean,
 ): Cam {
+  if (row) return { k: from.k, x: from.x + dx, y: from.y };
   const z = zoomAbout(from, k, px, py);
-  return { k, x: z.x + dx, y: row ? z.y : z.y + dy };
+  return { k, x: z.x + dx, y: z.y + dy };
 }
 
 // The fraction of the remaining distance to cover in `dt` ms — two half-lives always halve twice.

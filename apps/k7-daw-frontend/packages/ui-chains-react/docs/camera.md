@@ -80,14 +80,15 @@ so is the translation, which is why no zoom enters that arithmetic.
 
 ## Two fingers, where there is no wheel at all
 
-On a touch screen **one finger never moves the camera**; two fingers pan it and zoom it, the
-per-track row as much as the full graph. A card's header held then dragged moves the card, a tap
+On a touch screen **one finger never moves the camera**; two fingers pan it and zoom it on the full
+graph, and on the per-track row they only walk along it: a row keeps its zoom under a pinch, as it
+does under the wheel and the keys, since its cards are laid out for the lane's height. A card's header held then dragged moves the card, a tap
 selects it, and a swipe on empty space does nothing (`@studio/ui-timeline/hold`): a camera that
 follows one finger turns every stray swipe into a lost view. A mouse still drags the empty canvas.
 
 The gesture uses **touch events** rather than the pointer flow the rest of the file runs on: that
 flow drives node drags, widget drags and cable draws, and a second finger arriving mid-gesture
-would be read as a second drag. On a ROW the fingers walk along it and never move it vertically.
+would be read as a second drag.
 
 It is measured from the camera the gesture STARTED on rather than frame to frame, because a ratio
 of ratios accumulates rounding — pinch out and back in, and you would not land where you began.
