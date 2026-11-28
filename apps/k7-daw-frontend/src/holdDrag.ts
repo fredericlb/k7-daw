@@ -18,7 +18,7 @@ export interface HoldHooks {
   arm: () => void;
   /** A touch released before the hold elapsed, without moving: a tap. */
   tap?: () => void;
-  /** An armed hold released where it was pressed, without having dragged: open the menu here. */
+  /** An armed hold released where it was pressed, without having dragged; holdToArm opens the menu there when left out. */
   release?: (x: number, y: number) => void;
 }
 
@@ -115,7 +115,13 @@ export function holdToArm(
     window.removeEventListener("touchmove", block);
     el.style.touchAction = previous;
   };
-  const gesture = new HoldGesture(origin, hooks, realTimers, () => {
+  // The hold took the app-wide long press, so it gives the menu back: on the element the finger pressed, its own handler first.
+  const pressed = press.target instanceof Element ? press.target : el;
+  const withMenu: HoldHooks = {
+    ...hooks,
+    release: hooks.release ?? ((x, y) => openMenuAt(pressed, x, y)),
+  };
+  const gesture = new HoldGesture(origin, withMenu, realTimers, () => {
     // The long press is ours now: it must not also open its menu at 500 ms.
     suppressLongPress();
     window.addEventListener("touchmove", block, { passive: false });

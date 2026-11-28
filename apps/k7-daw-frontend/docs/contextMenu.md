@@ -314,4 +314,6 @@ cancels ours, one that arrives after is dropped, so a press never opens two menu
 
 A drag the timeline arms by holding (`docs/timeline.md`, "A finger holds, then drags") takes the
 press over: it cancels this long press, and opens the menu itself when the hold is released in place.
+`holdToArm` (`src/holdDrag.ts`) does that for every hold, on the element the finger pressed, unless the caller
+answers the release itself: a surface that arms a drag by holding cannot lose its menu by leaving the hook out.
 
