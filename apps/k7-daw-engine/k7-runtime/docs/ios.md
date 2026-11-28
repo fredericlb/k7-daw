@@ -105,6 +105,11 @@ change is one `[host] audio session` line with the category, the options, `mixWi
 the simulator, which has no remote to press them: `xcrun simctl spawn booted notifyutil -p rocks.k7.daw.test.media-arm`,
 then `...test.remote.<action>`.
 
+**The buffer grows when the device underruns**, as on Android (`docs/android.md`, "The buffer"): the engine asks for
+256 frames, `checkXRuns` reads JUCE's underrun count once a second, and a count that moved takes the buffer up one size,
+up to 40 ms, with an `[audio] N underruns at X frames` line. A busy page (a touch redrawing the timeline) takes CPU from
+the render threads, and an underrun is heard as a click; a longer buffer is the trade the log makes visible.
+
 ## Busy: the hold is the default, and its release is the decision
 
 iOS keeps an app with background audio running for as long as its audio device runs. The engine's device always
